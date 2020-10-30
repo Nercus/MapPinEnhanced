@@ -1,0 +1,12 @@
+## Interface: 90001
+## Author: Nerc
+## Title: MapPinEnhanced
+## Version: 0.1a
+## Notes: Enhance the functionality of the map pin
+## OptionalDeps: HereBeDragons-2.0
+
+libs\HereBeDragons\LibStub\LibStub.lua
+libs\HereBeDragons\HereBeDragons-2.0.lua
+libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
+
+MapPinEnhanced.lua
