@@ -35,7 +35,7 @@ local function CreatePin(x, y, mapID, emit)
     end
     local function Untrack()
         tracked = false
-        self.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
+        pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
     end
     local function Supertrack()
         blockevent = true
@@ -126,7 +126,7 @@ local function PinManager()
     end
     local function SupertrackClosest()
         local pin = nil
-        for i, p in iparis(pins) do
+        for i, p in ipairs(pins) do
             if IsCloser(p, pin) then
                 pin = p
             end
