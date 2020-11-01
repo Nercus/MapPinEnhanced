@@ -103,6 +103,9 @@ local function CreatePin(x, y, mapID, emit)
         RemoveFromMap = RemoveFromMap,
         IsTracked = IsTracked,
         FormatHyperlink = FormatHyperlink,
+        x = x,
+        y = y,
+        mapID = mapID,
     }
 end
 
@@ -142,7 +145,8 @@ local function PinManager()
         if pin then pin.Supertrack() end
     end
     local function AddPin(x, y, mapID)
-        local pin = CreatePin(x, y, mapID, function(e)
+        local pin
+        pin = CreatePin(x, y, mapID, function(e)
             if e == "remove" then
                 RemovePin(pin)
                 SupertrackClosest()
@@ -150,9 +154,6 @@ local function PinManager()
                 SupertrackClosest()
             end
         end)
-        pin.mapID = mapID
-        pin.x = x
-        pin.y = y
         pin.ShowOnMap()
         pins[#pins + 1] = pin
         SupertrackClosest()
