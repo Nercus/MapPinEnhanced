@@ -55,6 +55,9 @@ local function CreatePin(x, y, mapID, emit)
     local function IsTracked()
         return tracked
     end
+    local function FormatHyperlink()
+        return "|Hworldmap:" .. mapID .. ":" .. (Round(x*10000)) .. ":" .. (Round(y*10000)) .. "|h[" .. "|A:Waypoint-MapPin-Untracked:19:19|a".. " MPH Map Pin Location]|h" -- TODO: Set Text Color
+    end
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
     pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -66,7 +69,8 @@ local function CreatePin(x, y, mapID, emit)
             if IsControlKeyDown() then
                 emit("remove")
             elseif IsShiftKeyDown() then
-                -- TODO: Share pin via Chat Message
+                local link = FormatHyperlink()
+                ChatEdit_InsertLink(link)
             else
                 ToggleTracked()
             end
@@ -98,11 +102,13 @@ local function CreatePin(x, y, mapID, emit)
         ShowOnMap = ShowOnMap,
         RemoveFromMap = RemoveFromMap,
         IsTracked = IsTracked,
+        FormatHyperlink = FormatHyperlink,
     }
 end
 
 local function DistanceFromPlayer(pin)
-    return 1234 -- TODO
+    local PlayerZonePosition = {hbd:GetPlayerZonePosition()}
+    return (hbd:GetZoneDistance(PlayerZonePosition[3], PlayerZonePosition[1], PlayerZonePosition[2], pin.mapID, pin.x, pin.y))
 end
 
 local function IsCloser(pin, ref)
@@ -112,6 +118,8 @@ local function IsCloser(pin, ref)
         return true
     end
 end
+
+-- TODO: Read from Hyperlink (use Blizz code)
 
 local function PinManager()
     local pins = {}
@@ -124,7 +132,7 @@ local function PinManager()
             end
         end
     end
-    local function SupertrackClosest()
+    local function SupertrackClosest() -- TODO: Block supertracking first pin
         local pin = nil
         for i, p in ipairs(pins) do
             if IsCloser(p, pin) then
@@ -142,6 +150,9 @@ local function PinManager()
                 SupertrackClosest()
             end
         end)
+        pin.mapID = mapID
+        pin.x = x
+        pin.y = y
         pin.ShowOnMap()
         pins[#pins + 1] = pin
         SupertrackClosest()
@@ -155,6 +166,8 @@ local function PinManager()
     end
     return {
         AddPin = AddPin,
+        RemovePin = RemovePin,
+        RestorePin = RestorePin,
     }
 end
 
