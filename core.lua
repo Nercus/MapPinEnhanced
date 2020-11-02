@@ -7,12 +7,6 @@ local hbd = LibStub("HereBeDragons-2.0")
 local hbdp = LibStub("HereBeDragons-Pins-2.0")
 
 local C_Map = C_Map
-local C_Navigation = C_Navigation
-
--- C_Navigation.GetDistance()
-
--- HBD:GetWorldDistance(instanceID, oX, oY, dX, dY)
--- HBD:GetPlayerWorldPosition()
 
 local MPH_MapOverlayFrame = CreateFrame("Frame", "MPH_MapOverlayFrame", WorldMapFrame.BorderFrame)
 MPH_MapOverlayFrame:SetFrameStrata("HIGH")
@@ -20,6 +14,29 @@ MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
 local blockevent = false
+
+----------------------------------------------------
+-- Very WIP version of HideBlizzWaypoint()
+-- Change Acquiration of WaypointFrame (no iteration)
+----------------------------------------------------
+
+local function HideBlizzWaypoint()
+    local kids = {WorldMapFrame.ScrollContainer.Child:GetChildren()}
+    local frame
+    for i,k in pairs(kids) do
+        if k.Icon then
+            frame = k
+            break
+        end
+    end
+    if frame ~= nil then
+        frame:Hide()
+        frame:EnableMouse(false)
+    end
+end
+HideBlizzWaypoint()
+
+C_Map.SetUserWaypoint({uiMapID = mapID, position = CreateVector2D(x, y), z = nil})
 
 local function CreatePin(x, y, mapID, emit)
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
@@ -56,7 +73,7 @@ local function CreatePin(x, y, mapID, emit)
         return tracked
     end
     local function FormatHyperlink()
-        return "|Hworldmap:" .. mapID .. ":" .. (Round(x*10000)) .. ":" .. (Round(y*10000)) .. "|h[" .. "|A:Waypoint-MapPin-Untracked:19:19|a".. " MPH Map Pin Location]|h" -- TODO: Set Text Color
+        return "|cffffff00|Hworldmap:" .. mapID .. ":" .. (Round(x*10000)) .. ":" .. (Round(y*10000)) .. "|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location]|h|r"
     end
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
