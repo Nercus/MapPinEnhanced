@@ -20,25 +20,27 @@ local blockevent = false
 -- Change Acquiration of WaypointFrame (no iteration)
 ----------------------------------------------------
 
-local function HideBlizzWaypoint()
+function HideBlizzWaypoint()
     local kids = {WorldMapFrame.ScrollContainer.Child:GetChildren()}
-    local frame
+    local blizz_waypoint
     for i,k in pairs(kids) do
         if k.Icon then
-            frame = k
+            blizz_waypoint = k
             break
         end
     end
-    if frame ~= nil then
-        frame:Hide()
-        frame:EnableMouse(false)
+    if blizz_waypoint ~= nil then
+        blizz_waypoint:Hide()
+        blizz_waypoint:EnableMouse(false)
+        blizz_waypoint.Icon:Hide()
+        blizz_waypoint.Highlight:Hide()
     end
 end
-HideBlizzWaypoint()
 
-C_Map.SetUserWaypoint({uiMapID = mapID, position = CreateVector2D(x, y), z = nil})
+--C_Map.SetUserWaypoint({uiMapID = mapID, position = CreateVector2D(x, y), z = nil})
 
 local function CreatePin(x, y, mapID, emit)
+    HideBlizzWaypoint()
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
     pin:SetSize(30, 30)
     pin:EnableMouse(true)
