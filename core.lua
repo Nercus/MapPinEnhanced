@@ -15,32 +15,12 @@ MPH_MapOverlayFrame:SetAllPoints(true)
 
 local blockevent = false
 
-----------------------------------------------------
--- Very WIP version of HideBlizzWaypoint()
--- Change Acquiration of WaypointFrame (no iteration)
-----------------------------------------------------
-
-function HideBlizzWaypoint()
-    local kids = {WorldMapFrame.ScrollContainer.Child:GetChildren()}
-    local blizz_waypoint
-    for i,k in pairs(kids) do
-        if k.Icon then
-            blizz_waypoint = k
-            break
-        end
-    end
-    if blizz_waypoint ~= nil then
-        blizz_waypoint:Hide()
-        blizz_waypoint:EnableMouse(false)
-        blizz_waypoint.Icon:Hide()
-        blizz_waypoint.Highlight:Hide()
-    end
+function WaypointLocationPinMixin:OnAcquired()
+    self:SetAlpha(0);
+    self:EnableMouse(false);
 end
 
---C_Map.SetUserWaypoint({uiMapID = mapID, position = CreateVector2D(x, y), z = nil})
-
 local function CreatePin(x, y, mapID, emit)
-    HideBlizzWaypoint()
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
     pin:SetSize(30, 30)
     pin:EnableMouse(true)
@@ -59,7 +39,7 @@ local function CreatePin(x, y, mapID, emit)
     local function Supertrack()
         blockevent = true
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
-        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true) -- BUG: Autosupertracking Waypoint doesn't work
         blockevent = false
     end
     local function ToggleTracked()
@@ -75,7 +55,11 @@ local function CreatePin(x, y, mapID, emit)
         return tracked
     end
     local function FormatHyperlink()
-        return "|cffffff00|Hworldmap:" .. mapID .. ":" .. (Round(x*10000)) .. ":" .. (Round(y*10000)) .. "|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location]|h|r"
+        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
+            mapID,
+            x * 10000,
+            y * 10000,
+            MAP_PIN_HYPERLINK)
     end
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
@@ -93,6 +77,9 @@ local function CreatePin(x, y, mapID, emit)
             else
                 ToggleTracked()
             end
+        elseif arg1 == "RightButton" then
+            -- TODO: Open Dropdown with options: Remove this point, Remove All points
+            print(arg1)
         end
         self:SetPoint("CENTER", 2, -2)
     end)
@@ -100,13 +87,14 @@ local function CreatePin(x, y, mapID, emit)
         self:SetPoint("CENTER", 0, 0)
     end)
     pin:SetScript("OnEnter", function(self, motion)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:ClearLines()
-        GameTooltip:AddLine("|cFFFF7D0AKrillidi|r ist besonders flauschig!")
-        GameTooltip:Show()
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4);
+        GameTooltip_SetTitle(GameTooltip, MAP_PIN_SHARING .. " (Map Pin Enhanced)");
+        GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
+        GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
+        GameTooltip:Show();
     end)
     pin:SetScript("OnLeave", function(self, motion)
-        GameTooltip:Hide()
+        GameTooltip:Hide();
     end)
 
     local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
@@ -145,16 +133,7 @@ end
 
 local function PinManager()
     local pins = {}
-    local function RemovePin(pin)
-        pin.RemoveFromMap()
-        for i, p in ipairs(pins) do
-            if p == pin then
-                pins[i] = pins[#pins]
-                pins[#pins] = nil
-            end
-        end
-    end
-    local function SupertrackClosest() -- TODO: Block supertracking first pin
+    local function SupertrackClosest()
         local pin = nil
         for i, p in ipairs(pins) do
             if IsCloser(p, pin) then
@@ -163,19 +142,28 @@ local function PinManager()
         end
         if pin then pin.Supertrack() end
     end
+    local function RemovePin(pin)
+        pin.RemoveFromMap()
+        for i, p in ipairs(pins) do
+            if p == pin then
+                pins[i] = pins[#pins]
+                pins[#pins] = nil
+                C_Map.ClearUserWaypoint()
+                SupertrackClosest()
+            end
+        end
+    end
     local function AddPin(x, y, mapID)
         local pin
         pin = CreatePin(x, y, mapID, function(e)
             if e == "remove" then
                 RemovePin(pin)
                 SupertrackClosest()
-            elseif e == "tracked" then
-                SupertrackClosest()
             end
         end)
         pin.ShowOnMap()
         pins[#pins + 1] = pin
-        SupertrackClosest()
+        pin.Supertrack()
     end
     local function RestorePin()
         for i, p in ipairs(pins) do
@@ -204,8 +192,8 @@ end
 local function OnEvent(self, event, ...)
     print(self, event, ...)
     if blockevent then return end
-
     local userwaypoint = C_Map.GetUserWaypoint()
+    -- TODO: Block if pin already exists
     if userwaypoint then
         blockevent = true
         C_Map.ClearUserWaypoint()
