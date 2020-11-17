@@ -31,17 +31,17 @@ local function CreatePin(x, y, mapID, emit)
     local function Track()
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
+        blockevent = true
+        C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        blockevent = false
     end
     local function Untrack()
         tracked = false
         pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
+        C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     end
-    local function Supertrack()
-        blockevent = true
-        C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
-        C_SuperTrack.SetSuperTrackedUserWaypoint(true) -- BUG: Autosupertracking Waypoint doesn't work
-        blockevent = false
-    end
+
     local function ToggleTracked()
         if tracked then Untrack() else Track() end
     end
@@ -105,7 +105,6 @@ local function CreatePin(x, y, mapID, emit)
         Untrack = Untrack,
         Track = Track,
         ToggleTracked = ToggleTracked,
-        Supertrack = Supertrack,
         ShowOnMap = ShowOnMap,
         RemoveFromMap = RemoveFromMap,
         IsTracked = IsTracked,
@@ -129,8 +128,6 @@ local function IsCloser(pin, ref)
     end
 end
 
--- TODO: Read from Hyperlink (use Blizz code)
-
 local function PinManager()
     local pins = {}
     local function SupertrackClosest()
@@ -140,7 +137,7 @@ local function PinManager()
                 pin = p
             end
         end
-        if pin then pin.Supertrack() end
+        if pin then pin.Track() end
     end
     local function RemovePin(pin)
         pin.RemoveFromMap()
@@ -150,6 +147,13 @@ local function PinManager()
                 pins[#pins] = nil
                 C_Map.ClearUserWaypoint()
                 SupertrackClosest()
+            end
+        end
+    end
+    local function UntrackPins(pin)
+        for i, p in ipairs(pins) do
+            if p.IsTracked() and p ~= pin then
+                p.Untrack()
             end
         end
     end
@@ -163,7 +167,8 @@ local function PinManager()
         end)
         pin.ShowOnMap()
         pins[#pins + 1] = pin
-        pin.Supertrack()
+        UntrackPins(pin)
+        pin.Track()
     end
     local function RestorePin()
         for i, p in ipairs(pins) do
@@ -172,16 +177,18 @@ local function PinManager()
             end
         end
     end
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
         RestorePin = RestorePin,
+        UntrackPins = UntrackPins,
     }
 end
 
 local pinManager = PinManager()
 
-function MPH:AddWaypoint(x, y, mapID) -- TODO: Add options table (tracked_icon, untracked_icon, highlight_texture, title, description, tracked, persistent(?))
+function MPH:AddWaypoint(x, y, mapID)
     if x and y and mapID then
         pinManager.AddPin(x, y, mapID)
     else
@@ -190,8 +197,9 @@ function MPH:AddWaypoint(x, y, mapID) -- TODO: Add options table (tracked_icon, 
 end
 
 local function OnEvent(self, event, ...)
-    print(self, event, ...)
+    --print(self, event, ...)
     if blockevent then return end
+    print(self, event, ...)
     local userwaypoint = C_Map.GetUserWaypoint()
     -- TODO: Block if pin already exists
     if userwaypoint then
