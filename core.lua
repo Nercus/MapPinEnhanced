@@ -13,6 +13,10 @@ MPH_MapOverlayFrame:SetFrameStrata("HIGH")
 MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
+
+--ViragDevTool_AddData(hbd.mapData)
+
+
 local blockevent = false
 
 function WaypointLocationPinMixin:OnAcquired()
@@ -124,7 +128,7 @@ local function DistanceFromPlayer(pin)
 end
 
 local function IsCloser(pin, ref)
-    if ref then
+    if ref and DistanceFromPlayer(pin) and DistanceFromPlayer(ref) then
         return DistanceFromPlayer(pin) < DistanceFromPlayer(ref)
     else
         return true
@@ -227,6 +231,7 @@ end
 local function OnEvent(self, event, ...)
     --print(self, event, ...)
     if event == "USER_WAYPOINT_UPDATED" then
+
         if blockevent then return end
         print(self, event, ...)
         local userwaypoint = C_Map.GetUserWaypoint()
