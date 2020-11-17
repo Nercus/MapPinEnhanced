@@ -16,8 +16,9 @@ MPH_MapOverlayFrame:SetAllPoints(true)
 local blockevent = false
 
 function WaypointLocationPinMixin:OnAcquired()
-    self:SetAlpha(0);
-    self:EnableMouse(false);
+    self:SetAlpha(0)
+    self:EnableMouse(false)
+    --print("aquire", C_SuperTrack.IsSuperTrackingUserWaypoint())
 end
 
 local function CreatePin(x, y, mapID, emit)
@@ -26,7 +27,7 @@ local function CreatePin(x, y, mapID, emit)
     pin:EnableMouse(true)
     pin:SetMouseClickEnabled(true)
 
-    local tracked = true
+    local tracked = false
 
     local function Track()
         tracked = true
@@ -34,16 +35,18 @@ local function CreatePin(x, y, mapID, emit)
         blockevent = true
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        --print("track", C_SuperTrack.IsSuperTrackingUserWaypoint())
         blockevent = false
     end
     local function Untrack()
         tracked = false
+        --print("untrack", C_SuperTrack.IsSuperTrackingUserWaypoint())
         pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     end
 
     local function ToggleTracked()
-        if tracked then Untrack() else Track() end
+        if tracked then Untrack() else emit("track") end
     end
     local function ShowOnMap()
         hbdp:AddWorldMapIconMap(addon, pin, mapID, x, y, 3)
@@ -87,14 +90,14 @@ local function CreatePin(x, y, mapID, emit)
         self:SetPoint("CENTER", 0, 0)
     end)
     pin:SetScript("OnEnter", function(self, motion)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4);
-        GameTooltip_SetTitle(GameTooltip, MAP_PIN_SHARING .. " (Map Pin Enhanced)");
-        GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
-        GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
-        GameTooltip:Show();
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
+        GameTooltip_SetTitle(GameTooltip, MAP_PIN_SHARING .. " (Map Pin Enhanced)")
+        GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
+        GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
+        GameTooltip:Show()
     end)
     pin:SetScript("OnLeave", function(self, motion)
-        GameTooltip:Hide();
+        GameTooltip:Hide()
     end)
 
     local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
@@ -150,26 +153,41 @@ local function PinManager()
             end
         end
     end
-    local function UntrackPins(pin)
+
+    local function UntrackPins()
         for i, p in ipairs(pins) do
-            if p.IsTracked() and p ~= pin then
+            if p.IsTracked() then
                 p.Untrack()
             end
         end
     end
+
     local function AddPin(x, y, mapID)
+        for i, p in ipairs(pins) do
+            if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
+                print("Pin Already exists")
+                UntrackPins()
+                p.Track()
+                return
+            end
+        end
+
         local pin
         pin = CreatePin(x, y, mapID, function(e)
             if e == "remove" then
                 RemovePin(pin)
                 SupertrackClosest()
+            elseif e == "track" then
+                UntrackPins()
+                pin.Track()
             end
         end)
         pin.ShowOnMap()
         pins[#pins + 1] = pin
-        UntrackPins(pin)
+        UntrackPins()
         pin.Track()
     end
+
     local function RestorePin()
         for i, p in ipairs(pins) do
             if p.SupertrackClosest() then
@@ -178,11 +196,21 @@ local function PinManager()
         end
     end
 
+    local function RefreshTracking()
+        for i, p in ipairs(pins) do
+            if p.IsTracked() then
+                C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+            end
+        end
+    end
+
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
         RestorePin = RestorePin,
         UntrackPins = UntrackPins,
+        RefreshTracking = RefreshTracking,
     }
 end
 
@@ -198,18 +226,27 @@ end
 
 local function OnEvent(self, event, ...)
     --print(self, event, ...)
-    if blockevent then return end
-    print(self, event, ...)
-    local userwaypoint = C_Map.GetUserWaypoint()
-    -- TODO: Block if pin already exists
-    if userwaypoint then
-        blockevent = true
-        C_Map.ClearUserWaypoint()
-        blockevent = false
-        MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+    if event == "USER_WAYPOINT_UPDATED" then
+        if blockevent then return end
+        print(self, event, ...)
+        local userwaypoint = C_Map.GetUserWaypoint()
+        -- TODO: Block if pin already exists
+        if userwaypoint then
+            blockevent = true
+            C_Map.ClearUserWaypoint()
+            blockevent = false
+            MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+        end
+    elseif event == "SUPER_TRACKING_CHANGED" then
+        if not C_SuperTrack.IsSuperTrackingUserWaypoint() then --workaround
+            pinManager.RefreshTracking()
+            --C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        end
+        --print("supertrackevent", C_SuperTrack.IsSuperTrackingUserWaypoint())
     end
 end
 
 local f = CreateFrame("Frame")
+f:RegisterEvent("SUPER_TRACKING_CHANGED")
 f:RegisterEvent("USER_WAYPOINT_UPDATED")
 f:SetScript("OnEvent", OnEvent)
