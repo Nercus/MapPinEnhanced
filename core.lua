@@ -13,16 +13,19 @@ MPH_MapOverlayFrame:SetFrameStrata("HIGH")
 MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
-
---ViragDevTool_AddData(hbd.mapData)
-
+local mapData = hbd.mapData -- Data is localized
 
 local blockevent = false
 
 function WaypointLocationPinMixin:OnAcquired()
+    self:UseFrameLevelType("PIN_FRAME_LEVEL_WAYPOINT_LOCATION");
+	if C_SuperTrack.IsSuperTrackingUserWaypoint() then
+		self.Icon:SetAtlas("Waypoint-MapPin-Tracked");
+	else
+		self.Icon:SetAtlas("Waypoint-MapPin-Untracked");
+	end
     self:SetAlpha(0)
     self:EnableMouse(false)
-    --print("aquire", C_SuperTrack.IsSuperTrackingUserWaypoint())
 end
 
 local function CreatePin(x, y, mapID, emit)
@@ -39,12 +42,10 @@ local function CreatePin(x, y, mapID, emit)
         blockevent = true
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-        --print("track", C_SuperTrack.IsSuperTrackingUserWaypoint())
         blockevent = false
     end
     local function Untrack()
         tracked = false
-        --print("untrack", C_SuperTrack.IsSuperTrackingUserWaypoint())
         pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     end
@@ -84,9 +85,6 @@ local function CreatePin(x, y, mapID, emit)
             else
                 ToggleTracked()
             end
-        elseif arg1 == "RightButton" then
-            -- TODO: Open Dropdown with options: Remove this point, Remove All points
-            print(arg1)
         end
         self:SetPoint("CENTER", 2, -2)
     end)
@@ -140,6 +138,7 @@ local function PinManager()
     local function SupertrackClosest()
         local pin = nil
         for i, p in ipairs(pins) do
+            if p.IsTracked() then return end
             if IsCloser(p, pin) then
                 pin = p
             end
@@ -229,29 +228,42 @@ function MPH:AddWaypoint(x, y, mapID)
 end
 
 local function OnEvent(self, event, ...)
-    --print(self, event, ...)
     if event == "USER_WAYPOINT_UPDATED" then
-
         if blockevent then return end
         print(self, event, ...)
         local userwaypoint = C_Map.GetUserWaypoint()
-        -- TODO: Block if pin already exists
         if userwaypoint then
+            local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
+            if superTrackedQuestID ~= 0 then
+                if C_QuestLog.IsWorldQuest(superTrackedQuestID) then
+                    C_QuestLog.RemoveWorldQuestWatch(superTrackedQuestID)
+                else
+                    C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
+                end
+            end
             blockevent = true
             C_Map.ClearUserWaypoint()
             blockevent = false
             MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
     elseif event == "SUPER_TRACKING_CHANGED" then
-        if not C_SuperTrack.IsSuperTrackingUserWaypoint() then --workaround
-            pinManager.RefreshTracking()
-            --C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        print(self, event, ...)
+        if C_SuperTrack.IsSuperTrackingQuest() then
+            pinManager.UntrackPins()
+            C_SuperTrack.SetSuperTrackedUserWaypoint(false)
+            C_Map.ClearUserWaypoint()
+        else
+            if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
+                pinManager.RefreshTracking()
+            end
         end
-        --print("supertrackevent", C_SuperTrack.IsSuperTrackingUserWaypoint())
     end
 end
+
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("SUPER_TRACKING_CHANGED")
 f:RegisterEvent("USER_WAYPOINT_UPDATED")
+-- f:RegisterEvent("NAVIGATION_FRAME_CREATED")
+-- f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
 f:SetScript("OnEvent", OnEvent)
