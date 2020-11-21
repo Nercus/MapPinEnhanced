@@ -13,4 +13,3 @@ libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
 core.lua
 supertracked.lua
 SuperTrackedFrame.xml
-objectivetracker.lua

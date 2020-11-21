@@ -13,16 +13,31 @@ MPH_MapOverlayFrame:SetFrameStrata("HIGH")
 MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
+local MPH_Frame = CreateFrame ("frame", "MPH_ScreenPanel", UIParent, "BackdropTemplate")
+MPH_Frame:SetSize (235, 500)
+MPH_Frame:SetFrameStrata ("LOW")
+--MPH_Frame:SetBackdrop ({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16}) -- Debug
+
+
+local MPH_ObjectiveTrackerHeader = CreateFrame ("frame", "MPH_ObjectiveTrackerHeader", MPH_Frame, "ObjectiveTrackerHeaderTemplate")
+MPH_ObjectiveTrackerHeader.Text:SetText ("Map Pins")
+
+local MPH_QuestHolder = CreateFrame ("frame", "MPH_QuestHolder", MPH_Frame, "BackdropTemplate")
+MPH_QuestHolder:SetAllPoints()
+--MPH_QuestHolder:SetBackdrop ({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16})
+
+local pool = {}
+
 local mapData = hbd.mapData -- Data is localized
 
 local blockevent = false
 
 function WaypointLocationPinMixin:OnAcquired()
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_WAYPOINT_LOCATION");
+    self:UseFrameLevelType("PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
 	if C_SuperTrack.IsSuperTrackingUserWaypoint() then
-		self.Icon:SetAtlas("Waypoint-MapPin-Tracked");
+		self.Icon:SetAtlas("Waypoint-MapPin-Tracked")
 	else
-		self.Icon:SetAtlas("Waypoint-MapPin-Untracked");
+		self.Icon:SetAtlas("Waypoint-MapPin-Untracked")
 	end
     self:SetAlpha(0)
     self:EnableMouse(false)
@@ -207,6 +222,9 @@ local function PinManager()
         end
     end
 
+    local function PinData()
+        return pins
+    end
 
     return {
         AddPin = AddPin,
@@ -214,10 +232,111 @@ local function PinManager()
         RestorePin = RestorePin,
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
+        PinData = PinData
     }
 end
 
 local pinManager = PinManager()
+
+
+
+function CreateTrackerWidget(index) -- TODO: Mouse Interaction (Change Text color and Icon Hightlight on Mouseover / LeftClick to track / SHift + LC to print to chat / Rightclick to remove)
+    if pool[index] then return pool[index] end
+
+    local w = CreateFrame("button", "MPH_Tracker" .. index, MPH_QuestHolder, "BackdropTemplate")
+    w:SetSize(235, 30)
+    w.Icon = w:CreateTexture (nil, "artwork")
+	w.Icon:SetPoint ("right", w, "left", 12, 0)
+	w.Icon:SetSize(30, 30)
+    w.Title = w:CreateFontString(nil,"ARTWORK", "GameFontNormalMed3")
+    w.Title:SetPoint ("left", w, "left", 15, 0)
+    pool[index] = w
+    return w
+end
+
+local function MPH_ObjectiveTracker()
+
+    local color_header = OBJECTIVE_TRACKER_COLOR["Header"]
+    local color_headerhighlight = OBJECTIVE_TRACKER_COLOR["HeaderHighlight"]
+    local TrackerHeight
+
+    local function UpdateHeader()
+        local tracker = ObjectiveTrackerFrame
+
+        if (not tracker.initialized) then
+            return
+        end
+        local y = 0
+	    for i = 1, #tracker.MODULES do
+            local module = tracker.MODULES [i]
+            if (module.Header:IsShown()) then
+                y = y + module.contentsHeight
+            end
+        end
+        if (tracker.collapsed) then
+            TrackerHeight = 20
+        else
+            TrackerHeight = y
+        end
+
+        MPH_ScreenPanel:ClearAllPoints()
+
+        MPH_ObjectiveTrackerHeader:ClearAllPoints()
+        MPH_ObjectiveTrackerHeader:SetPoint("bottom", MPH_Frame, "top", 0, -20)
+        MPH_ObjectiveTrackerHeader:Show()
+        MPH_ObjectiveTrackerHeader.MinimizeButton:Hide() -- temporary
+
+        for i = 1, tracker:GetNumPoints() do
+            local point, relativeTo, relativePoint, xOfs, yOfs = tracker:GetPoint (i)
+            MPH_ScreenPanel:SetPoint(point, relativeTo, relativePoint, -10 + xOfs, yOfs - TrackerHeight - 20)
+        end
+
+        MPH_ObjectiveTrackerHeader:ClearAllPoints()
+        MPH_ObjectiveTrackerHeader:SetPoint ("bottom", MPH_Frame, "top", 0, -20)
+    end
+
+    local function UpdateWidgets()
+        local pins = pinManager.PinData()
+        if #pins == 0 then
+            MPH_QuestHolder:Hide()
+            MPH_ObjectiveTrackerHeader:Hide()
+            return
+        end
+        MPH_QuestHolder:Show()
+        local nextWidget = 1
+        local y = -30
+        for index, pin in ipairs(pins) do -- TODO: If necessary: Don't iterate only if track is changed
+            local info = C_Map.GetMapInfo(pin.mapID)
+            local widget = CreateTrackerWidget(nextWidget)
+            widget:ClearAllPoints()
+            widget:SetPoint ("topleft", MPH_Frame, "topleft", 0, y)
+            if pin.IsTracked() then
+                widget.Icon:SetAtlas("Waypoint-MapPin-Tracked")
+            else
+                widget.Icon:SetAtlas("Waypoint-MapPin-Untracked")
+            end
+            widget.Title:SetText(info.name .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
+            widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
+            widget:Show()
+            y = y - 35
+            nextWidget = nextWidget + 1
+        end
+
+        for i = nextWidget, #pool do
+            pool[i]:Hide()
+        end
+    end
+
+    return {
+        UpdateHeader = UpdateHeader,
+        UpdateWidgets = UpdateWidgets
+    }
+end
+
+local MPH_ObjectiveTracker = MPH_ObjectiveTracker()
+
+
+
 
 function MPH:AddWaypoint(x, y, mapID)
     if x and y and mapID then
@@ -246,6 +365,8 @@ local function OnEvent(self, event, ...)
             blockevent = false
             MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
+        MPH_ObjectiveTracker.UpdateHeader()
+        MPH_ObjectiveTracker.UpdateWidgets()
     elseif event == "SUPER_TRACKING_CHANGED" then
         print(self, event, ...)
         if C_SuperTrack.IsSuperTrackingQuest() then
@@ -257,6 +378,7 @@ local function OnEvent(self, event, ...)
                 pinManager.RefreshTracking()
             end
         end
+        MPH_ObjectiveTracker.UpdateWidgets()
     end
 end
 
@@ -267,3 +389,9 @@ f:RegisterEvent("USER_WAYPOINT_UPDATED")
 -- f:RegisterEvent("NAVIGATION_FRAME_CREATED")
 -- f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
 f:SetScript("OnEvent", OnEvent)
+
+
+hooksecurefunc ("ObjectiveTracker_Update", function (reason, id)
+    MPH_ObjectiveTracker.UpdateHeader()
+    MPH_ObjectiveTracker.UpdateWidgets()
+end)
