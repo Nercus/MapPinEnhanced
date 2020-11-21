@@ -16,15 +16,13 @@ MPH_MapOverlayFrame:SetAllPoints(true)
 local MPH_Frame = CreateFrame ("frame", "MPH_ScreenPanel", UIParent, "BackdropTemplate")
 MPH_Frame:SetSize (235, 500)
 MPH_Frame:SetFrameStrata ("LOW")
---MPH_Frame:SetBackdrop ({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16}) -- Debug
-
 
 local MPH_ObjectiveTrackerHeader = CreateFrame ("frame", "MPH_ObjectiveTrackerHeader", MPH_Frame, "ObjectiveTrackerHeaderTemplate")
 MPH_ObjectiveTrackerHeader.Text:SetText ("Map Pins")
 
 local MPH_QuestHolder = CreateFrame ("frame", "MPH_QuestHolder", MPH_Frame, "BackdropTemplate")
 MPH_QuestHolder:SetAllPoints()
---MPH_QuestHolder:SetBackdrop ({bgFile = "Interface\\Tooltips\\UI-Tooltip-Background", tile = true, tileSize = 16})
+
 
 local pool = {}
 
@@ -150,7 +148,7 @@ end
 
 local function PinManager()
     local pins = {}
-    local function SupertrackClosest()
+    local function SupertrackClosest() -- TODO: Only track closes if on same map
         local pin = nil
         for i, p in ipairs(pins) do
             if p.IsTracked() then return end
@@ -244,12 +242,19 @@ function CreateTrackerWidget(index) -- TODO: Mouse Interaction (Change Text colo
     if pool[index] then return pool[index] end
 
     local w = CreateFrame("button", "MPH_Tracker" .. index, MPH_QuestHolder, "BackdropTemplate")
-    w:SetSize(235, 30)
-    w.Icon = w:CreateTexture (nil, "artwork")
+    w:SetSize(235, 25)
+    w:EnableMouse(true)
+    w:SetMouseClickEnabled(true)
+    w.Icon = w:CreateTexture (nil, "BORDER")
 	w.Icon:SetPoint ("right", w, "left", 12, 0)
-	w.Icon:SetSize(30, 30)
-    w.Title = w:CreateFontString(nil,"ARTWORK", "GameFontNormalMed3")
-    w.Title:SetPoint ("left", w, "left", 15, 0)
+	w.Icon:SetSize(25, 25)
+    w.Title = w:CreateFontString(nil,"BORDER", "GameFontNormalMed3")
+    w.Title:SetPoint ("left", w, "left", 17, 0)
+    w.Icon:SetBlendMode("BLEND")
+    w.Icon.highlightTexture = w:CreateTexture(nil, "HIGHLIGHT")
+    w.Icon.highlightTexture:SetAllPoints(w.Icon)
+    w.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
+
     pool[index] = w
     return w
 end
@@ -304,7 +309,7 @@ local function MPH_ObjectiveTracker()
         end
         MPH_QuestHolder:Show()
         local nextWidget = 1
-        local y = -30
+        local y = -25
         for index, pin in ipairs(pins) do -- TODO: If necessary: Don't iterate only if track is changed
             local info = C_Map.GetMapInfo(pin.mapID)
             local widget = CreateTrackerWidget(nextWidget)
@@ -315,10 +320,18 @@ local function MPH_ObjectiveTracker()
             else
                 widget.Icon:SetAtlas("Waypoint-MapPin-Untracked")
             end
+            widget.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
             widget.Title:SetText(info.name .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
             widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
+            widget:SetScript("OnMouseDown", function(self, arg1)
+                if arg1 == "LeftButton" then
+                    pin.ToggleTracked()
+                else
+                    pinManager.RemovePin(pin)
+                end
+            end)
             widget:Show()
-            y = y - 35
+            y = y - 27
             nextWidget = nextWidget + 1
         end
 
@@ -391,7 +404,7 @@ f:RegisterEvent("USER_WAYPOINT_UPDATED")
 f:SetScript("OnEvent", OnEvent)
 
 
-hooksecurefunc ("ObjectiveTracker_Update", function (reason, id)
+hooksecurefunc ("ObjectiveTracker_Update", function (reason, id) --TODO: Better update function for Objective Tracker
     MPH_ObjectiveTracker.UpdateHeader()
     MPH_ObjectiveTracker.UpdateWidgets()
 end)
