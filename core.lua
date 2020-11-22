@@ -26,7 +26,50 @@ MPH_QuestHolder:SetAllPoints()
 
 local pool = {}
 
-local mapData = hbd.mapData -- Data is localized
+local HBDmapData = hbd.mapData -- Data is localized
+local mapDataID = {}
+
+
+do
+    for mapID in pairs(HBDmapData) do
+        local mapType = HBDmapData[mapID].mapType
+        if mapType == Enum.UIMapType.Zone or mapType == Enum.UIMapType.Continent or mapType == Enum.UIMapType.Micro then
+            local name = HBDmapData[mapID].name
+            if name and mapDataID[name] then
+                if type(mapDataID[name]) ~= "table" then
+                    mapDataID[name] = {mapDataID[name]}
+                end
+                table.insert(mapDataID[name], mapID)
+            else
+                mapDataID[name] = mapID
+            end
+            mapDataID["#" .. mapID] = mapID
+        end
+    end
+    local newEntries = {}
+    for name, mapID in pairs(mapDataID) do
+        if type(mapID) == "table" then
+            mapDataID[name] = nil
+            for _, mapId in pairs(mapID) do
+                local parent = HBDmapData[mapId].parent
+                local parentName = (parent and (parent > 0) and HBDmapData[parent].name)
+                if parentName then
+                    if not newEntries[name .. ":" .. parentName] then
+                        newEntries[name .. ":" .. parentName] = mapId
+                    else
+                        newEntries[name .. ":" .. tostring(mapId)] = mapId
+                    end
+                end
+            end
+        end
+    end
+    for name, mapID in pairs(newEntries) do
+        mapDataID[name] = mapID
+    end
+end
+
+
+
 
 local blockevent = false
 
@@ -71,7 +114,9 @@ local function CreatePin(x, y, mapID, emit)
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
         blockevent = true
-        C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y))
+        print(mapID, x, y)
+        print(type(mapID), type(x), type(y))
+        C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y, 0))
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
         blockevent = false
     end
@@ -341,14 +386,15 @@ local function MPH_ObjectiveTracker()
             local widget = CreateTrackerWidget(nextWidget)
             widget:ClearAllPoints()
             widget:SetPoint ("topleft", MPH_Frame, "topleft", 0, y)
+            widget.Title:SetText(info.name .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
             if pin.IsTracked() then
                 widget.Icon:SetAtlas("Waypoint-MapPin-Tracked")
+                widget.Title:SetTextColor(color_headerhighlight.r, color_headerhighlight.g, color_headerhighlight.b)
             else
+                widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
                 widget.Icon:SetAtlas("Waypoint-MapPin-Untracked")
             end
             widget.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
-            widget.Title:SetText(info.name .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
-            widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
             widget:SetScript("OnMouseDown", function(self, arg1)
                 if arg1 == "LeftButton" then
                     if IsShiftKeyDown() then
@@ -369,7 +415,9 @@ local function MPH_ObjectiveTracker()
                 widget.Title:SetTextColor(color_headerhighlight.r, color_headerhighlight.g, color_headerhighlight.b)
             end)
             widget:SetScript("OnLeave", function(self, motion)
-                widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
+                if not pin.IsTracked() then
+                    widget.Title:SetTextColor(color_header.r, color_header.g, color_header.b)
+                end
             end)
             widget:Show()
             y = y - 27
@@ -392,8 +440,70 @@ local MPH_ObjectiveTracker = MPH_ObjectiveTracker()
 function MPH:AddWaypoint(x, y, mapID)
     if x and y and mapID then
         pinManager.AddPin(x, y, mapID)
+        MPH_ObjectiveTracker.UpdateWidgets()
     else
         error("x, y or mapID missing")
+    end
+end
+
+if not IsAddOnLoaded ("TomTom") then
+    SLASH_MPH1 = "/way"
+end
+SLASH_MPH2 = "/pin"
+SLASH_MPH3 = "/mph"
+
+
+local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
+local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
+
+SlashCmdList["MPH"] = function(msg)
+    local slashx
+    local slashy
+    local slashmapid
+
+    msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
+    local tokens = {}
+    for token in msg:gmatch("%S+") do table.insert(tokens, token) end
+
+    if tokens[1] and not tonumber(tokens[1]) then
+        print("with zone name")
+        local zoneEnd
+        for idx = 1, #tokens do
+            local token = tokens[idx]
+            if tonumber(token) then
+                zoneEnd = idx - 1
+                break
+            end
+        end
+
+        if not zoneEnd then
+            return
+        end
+
+        local zone = table.concat(tokens, " ", 1, zoneEnd)
+        local x,y,_ = select(zoneEnd + 1, unpack(tokens))
+
+        slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
+        slashmapid = mapDataID[zone]
+
+        --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
+
+        if slashx and slashy and slashmapid then
+            MPH:AddWaypoint(slashx, slashy, slashmapid)
+        end
+    elseif tokens[1] and tonumber(tokens[1]) then
+        slashmapid = C_Map.GetBestMapForUnit("player")
+        slashx, slashy = unpack(tokens)
+        if slashx and slashy and slashmapid then
+            slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
+            if slashx and slashy and slashmapid then
+                MPH:AddWaypoint(slashx, slashy, slashmapid)
+            end
+        else
+            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+        end
+    else
+        DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
     end
 end
 
@@ -428,7 +538,9 @@ local function OnEvent(self, event, ...)
             end
         end
     elseif event == "PLAYER_LOGIN" then
-        print(self, event, ...)
+        C_Map.ClearUserWaypoint()
+    else
+        --print(self, event, ...)
     end
 end
 
@@ -447,14 +559,12 @@ local function OnUpdate(self, elapsed)
 end
 
 
-
-
 local f = CreateFrame("Frame")
 f:RegisterEvent("SUPER_TRACKING_CHANGED")
 f:RegisterEvent("USER_WAYPOINT_UPDATED")
 f:RegisterEvent("PLAYER_LOGIN")
--- f:RegisterEvent("NAVIGATION_FRAME_CREATED")
--- f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+f:RegisterEvent("NAVIGATION_FRAME_CREATED")
+f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
 f:SetScript("OnEvent", OnEvent)
 f:SetScript("OnUpdate", OnUpdate)
 
