@@ -238,7 +238,7 @@ local pinManager = PinManager()
 
 
 
-function CreateTrackerWidget(index) -- TODO: Mouse Interaction (Change Text color and Icon Hightlight on Mouseover / LeftClick to track / SHift + LC to print to chat / Rightclick to remove)
+function CreateTrackerWidget(index)
     if pool[index] then return pool[index] end
 
     local w = CreateFrame("button", "MPH_Tracker" .. index, MPH_QuestHolder, "BackdropTemplate")
@@ -246,10 +246,10 @@ function CreateTrackerWidget(index) -- TODO: Mouse Interaction (Change Text colo
     w:EnableMouse(true)
     w:SetMouseClickEnabled(true)
     w.Icon = w:CreateTexture (nil, "BORDER")
-	w.Icon:SetPoint ("right", w, "left", 12, 0)
+	w.Icon:SetPoint ("right", w, "left", 20, 0)
 	w.Icon:SetSize(25, 25)
     w.Title = w:CreateFontString(nil,"BORDER", "GameFontNormalMed3")
-    w.Title:SetPoint ("left", w, "left", 17, 0)
+    w.Title:SetPoint ("left", w, "left", 23, 0)
     w.Icon:SetBlendMode("BLEND")
     w.Icon.highlightTexture = w:CreateTexture(nil, "HIGHLIGHT")
     w.Icon.highlightTexture:SetAllPoints(w.Icon)
@@ -325,19 +325,34 @@ local function MPH_ObjectiveTracker()
             widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
             widget:SetScript("OnMouseDown", function(self, arg1)
                 if arg1 == "LeftButton" then
-                    pin.ToggleTracked()
+                    if IsShiftKeyDown() then
+                        local link = pin.FormatHyperlink()
+                        ChatEdit_InsertLink(link)
+                    elseif IsControlKeyDown() then
+                        pinManager.RemovePin(pin)
+                        UpdateWidgets()
+                    else
+                        pin.ToggleTracked()
+                    end
                 else
                     pinManager.RemovePin(pin)
+                    UpdateWidgets()
                 end
+            end)
+            widget:SetScript("OnEnter", function(self, motion)
+                widget.Title:SetTextColor(color_headerhighlight.r, color_headerhighlight.g, color_headerhighlight.b)
+            end)
+            widget:SetScript("OnLeave", function(self, motion)
+                widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
             end)
             widget:Show()
             y = y - 27
             nextWidget = nextWidget + 1
         end
-
         for i = nextWidget, #pool do
             pool[i]:Hide()
         end
+        UpdateHeader()
     end
 
     return {
@@ -347,9 +362,6 @@ local function MPH_ObjectiveTracker()
 end
 
 local MPH_ObjectiveTracker = MPH_ObjectiveTracker()
-
-
-
 
 function MPH:AddWaypoint(x, y, mapID)
     if x and y and mapID then
@@ -362,7 +374,7 @@ end
 local function OnEvent(self, event, ...)
     if event == "USER_WAYPOINT_UPDATED" then
         if blockevent then return end
-        print(self, event, ...)
+        --print(self, event, ...)
         local userwaypoint = C_Map.GetUserWaypoint()
         if userwaypoint then
             local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
@@ -378,10 +390,8 @@ local function OnEvent(self, event, ...)
             blockevent = false
             MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
-        MPH_ObjectiveTracker.UpdateHeader()
-        MPH_ObjectiveTracker.UpdateWidgets()
     elseif event == "SUPER_TRACKING_CHANGED" then
-        print(self, event, ...)
+        --print(self, event, ...)
         if C_SuperTrack.IsSuperTrackingQuest() then
             pinManager.UntrackPins()
             C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -391,7 +401,6 @@ local function OnEvent(self, event, ...)
                 pinManager.RefreshTracking()
             end
         end
-        MPH_ObjectiveTracker.UpdateWidgets()
     end
 end
 
