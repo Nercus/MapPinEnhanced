@@ -238,21 +238,18 @@ local function PinManager()
         end
     end
 
+    local function RemoveTrackedPin()
+        for i, p in ipairs(pins) do
+            if p.IsTracked() then
+                RemovePin(p)
+                return
+            end
+        end
+    end
+
     local function PinData()
         return pins
     end
-
-    hooksecurefunc(SuperTrackedFrameMixin, "GetTargetAlpha", function() -- TODO: Throttle update
-        local distance = C_Navigation.GetDistance()
-        if distance < 5 and distance > 0 then
-            for i, p in ipairs(pins) do
-                if p.IsTracked() then
-                    RemovePin(p)
-                    return
-                end
-            end
-        end
-    end)
 
     return {
         AddPin = AddPin,
@@ -260,13 +257,12 @@ local function PinManager()
         RestorePin = RestorePin,
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
+        RemoveTrackedPin = RemoveTrackedPin,
         PinData = PinData
     }
 end
 
 local pinManager = PinManager()
-
-
 
 function CreateTrackerWidget(index)
     if pool[index] then return pool[index] end
@@ -436,6 +432,22 @@ local function OnEvent(self, event, ...)
     end
 end
 
+local ONUPDATE_INTERVAL = 0.3
+local TimeSinceLastUpdate = 0
+
+local function OnUpdate(self, elapsed)
+    TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
+	if TimeSinceLastUpdate >= ONUPDATE_INTERVAL then
+		TimeSinceLastUpdate = 0
+        local distance = C_Navigation.GetDistance()
+        if distance < 5 and distance > 0 then
+           pinManager.RemoveTrackedPin()
+        end
+    end
+end
+
+
+
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("SUPER_TRACKING_CHANGED")
@@ -444,6 +456,7 @@ f:RegisterEvent("PLAYER_LOGIN")
 -- f:RegisterEvent("NAVIGATION_FRAME_CREATED")
 -- f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
 f:SetScript("OnEvent", OnEvent)
+f:SetScript("OnUpdate", OnUpdate)
 
 
 hooksecurefunc ("ObjectiveTracker_Update", function(...) --TODO: Better update function for Objective Tracker
