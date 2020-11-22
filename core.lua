@@ -75,7 +75,7 @@ local function CreatePin(x, y, mapID, emit)
     local function IsTracked()
         return tracked
     end
-    local function FormatHyperlink()
+    local function FormatHyperlink() -- TODO: Investigate if it's possible to change the "MAP_PIN_HYPERLINK" to include info
         return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
             mapID,
             x * 10000,
