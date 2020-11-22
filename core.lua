@@ -114,8 +114,6 @@ local function CreatePin(x, y, mapID, emit)
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
         blockevent = true
-        print(mapID, x, y)
-        print(type(mapID), type(x), type(y))
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y, 0))
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
         blockevent = false
