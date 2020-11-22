@@ -30,6 +30,8 @@ local mapData = hbd.mapData -- Data is localized
 
 local blockevent = false
 
+--------------------------
+------ UI Functions ------
 function WaypointLocationPinMixin:OnAcquired()
     self:UseFrameLevelType("PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
 	if C_SuperTrack.IsSuperTrackingUserWaypoint() then
@@ -40,6 +42,22 @@ function WaypointLocationPinMixin:OnAcquired()
     self:SetAlpha(0)
     self:EnableMouse(false)
 end
+
+function SuperTrackedFrameMixin:GetTargetAlpha()
+    local distance = C_Navigation.GetDistance()
+    if distance > 10 then
+        return 1
+    else
+        if distance < 5 then
+            return 0
+        else
+            return distance / 10
+        end
+    end
+end
+--------------------------
+
+
 
 local function CreatePin(x, y, mapID, emit)
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
@@ -224,6 +242,18 @@ local function PinManager()
         return pins
     end
 
+    hooksecurefunc(SuperTrackedFrameMixin, "GetTargetAlpha", function() -- TODO: Throttle update
+        local distance = C_Navigation.GetDistance()
+        if distance < 5 and distance > 0 then
+            for i, p in ipairs(pins) do
+                if p.IsTracked() then
+                    RemovePin(p)
+                    return
+                end
+            end
+        end
+    end)
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -401,6 +431,8 @@ local function OnEvent(self, event, ...)
                 pinManager.RefreshTracking()
             end
         end
+    elseif event == "PLAYER_LOGIN" then
+        print(self, event, ...)
     end
 end
 
@@ -408,12 +440,13 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("SUPER_TRACKING_CHANGED")
 f:RegisterEvent("USER_WAYPOINT_UPDATED")
+f:RegisterEvent("PLAYER_LOGIN")
 -- f:RegisterEvent("NAVIGATION_FRAME_CREATED")
 -- f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
 f:SetScript("OnEvent", OnEvent)
 
 
-hooksecurefunc ("ObjectiveTracker_Update", function (reason, id) --TODO: Better update function for Objective Tracker
+hooksecurefunc ("ObjectiveTracker_Update", function(...) --TODO: Better update function for Objective Tracker
     MPH_ObjectiveTracker.UpdateHeader()
     MPH_ObjectiveTracker.UpdateWidgets()
 end)
