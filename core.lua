@@ -72,7 +72,7 @@ end
 
 
 local blockevent = false
-
+local WQT_hooked = false
 --------------------------
 ------ UI Functions ------
 function WaypointLocationPinMixin:OnAcquired()
@@ -347,12 +347,20 @@ local function MPH_ObjectiveTracker()
                 y = y + module.contentsHeight
             end
         end
+        local additional_offset = 1
+        if IsAddOnLoaded("WorldQuestTracker") then
+            if WorldQuestTrackerAddon.QuestTrackList then
+                additional_offset = additional_offset + #WorldQuestTrackerAddon.QuestTrackList
+            end
+        end
+        if additional_offset == 1 then
+            additional_offset = 0
+        end
         if (tracker.collapsed) then
             TrackerHeight = 20
         else
             TrackerHeight = y
         end
-
         MPH_ScreenPanel:ClearAllPoints()
 
         MPH_ObjectiveTrackerHeader:ClearAllPoints()
@@ -362,8 +370,9 @@ local function MPH_ObjectiveTracker()
 
         for i = 1, tracker:GetNumPoints() do
             local point, relativeTo, relativePoint, xOfs, yOfs = tracker:GetPoint (i)
-            MPH_ScreenPanel:SetPoint(point, relativeTo, relativePoint, -10 + xOfs, yOfs - TrackerHeight - 20)
+            MPH_ScreenPanel:SetPoint(point, relativeTo, relativePoint, -10 + xOfs, yOfs - TrackerHeight - 35 * additional_offset - 20)
         end
+
 
         MPH_ObjectiveTrackerHeader:ClearAllPoints()
         MPH_ObjectiveTrackerHeader:SetPoint ("bottom", MPH_Frame, "top", 0, -20)
@@ -537,6 +546,12 @@ local function OnEvent(self, event, ...)
         end
     elseif event == "PLAYER_LOGIN" then
         C_Map.ClearUserWaypoint()
+        if IsAddOnLoaded("WorldQuestTracker") and not WQT_hooked then
+            hooksecurefunc(WorldQuestTrackerAddon, "RefreshTrackerAnchor", function(...)
+                MPH_ObjectiveTracker.UpdateWidgets()
+            end)
+            WQT_hooked = true
+        end
     else
         --print(self, event, ...)
     end
@@ -568,6 +583,5 @@ f:SetScript("OnUpdate", OnUpdate)
 
 
 hooksecurefunc ("ObjectiveTracker_Update", function(...) --TODO: Better update function for Objective Tracker
-    MPH_ObjectiveTracker.UpdateHeader()
     MPH_ObjectiveTracker.UpdateWidgets()
 end)
