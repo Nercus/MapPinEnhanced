@@ -446,6 +446,9 @@ local MPH_ObjectiveTracker = MPH_ObjectiveTracker()
 
 function MPH:AddWaypoint(x, y, mapID)
     if x and y and mapID then
+        if not C_Map.CanSetUserWaypointOnMap(mapID) then
+            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00 Arrow to Pin does not work here!|r')
+        end
         pinManager.AddPin(x, y, mapID)
         MPH_ObjectiveTracker.UpdateWidgets()
     else
@@ -473,7 +476,6 @@ SlashCmdList["MPH"] = function(msg)
     for token in msg:gmatch("%S+") do table.insert(tokens, token) end
 
     if tokens[1] and not tonumber(tokens[1]) then
-        print("with zone name")
         local zoneEnd
         for idx = 1, #tokens do
             local token = tokens[idx]
