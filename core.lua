@@ -492,7 +492,7 @@ SlashCmdList["MPH"] = function(msg)
         local zone = table.concat(tokens, " ", 1, zoneEnd)
         local x,y,_ = select(zoneEnd + 1, unpack(tokens))
 
-        slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
+        slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
         slashmapid = mapDataID[zone]
 
         --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
