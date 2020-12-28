@@ -44,7 +44,7 @@ function MapPinEnhanced:OnInitialize()
     end
 end
 
-local blockevent_UWU = false
+local blockWAYPOINTevent = false
 function MapPinEnhanced:OnEnable()
     -- Register Events
     self:RegisterEvent("SUPER_TRACKING_CHANGED")
@@ -110,10 +110,10 @@ local function CreatePin(x, y, mapID, emit)
     local function Track()
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
-        blockevent = true
+        blockWAYPOINTevent = true
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y, 0))
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-        blockevent = false
+        blockWAYPOINTevent = false
     end
     local function Untrack()
         tracked = false
@@ -324,7 +324,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
-    if blockevent then return end
+    if blockWAYPOINTevent then return end
         --print(self, event, ...)
         local userwaypoint = C_Map.GetUserWaypoint()
         if userwaypoint then
@@ -336,9 +336,9 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
                     C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
                 end
             end
-            blockevent = true
+            blockWAYPOINTevent = true
             C_Map.ClearUserWaypoint()
-            blockevent = false
+            blockWAYPOINTevent = false
             MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
 end
