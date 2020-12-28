@@ -311,7 +311,6 @@ function MapPinEnhanced:AddWaypoint(x, y, mapID)
     end
 end
 
-
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
     if C_SuperTrack.IsSuperTrackingQuest() then
         pinManager.UntrackPins()
@@ -346,4 +345,64 @@ end
 
 function MapPinEnhanced:PLAYER_LOGIN()
     C_Map.ClearUserWaypoint()
+end
+
+
+if not TomTomLoaded then
+    SLASH_MPH1 = "/way"
+end
+SLASH_MPH2 = "/pin"
+SLASH_MPH3 = "/mph"
+
+local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
+local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
+
+SlashCmdList["MPH"] = function(msg)
+    local slashx
+    local slashy
+    local slashmapid
+
+    msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
+    local tokens = {}
+    for token in msg:gmatch("%S+") do table.insert(tokens, token) end
+
+    if tokens[1] and not tonumber(tokens[1]) then
+        local zoneEnd
+        for idx = 1, #tokens do
+            local token = tokens[idx]
+            if tonumber(token) then
+                zoneEnd = idx - 1
+                break
+            end
+        end
+
+        if not zoneEnd then
+            return
+        end
+
+        local zone = table.concat(tokens, " ", 1, zoneEnd)
+        local x,y,_ = select(zoneEnd + 1, unpack(tokens))
+
+        slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
+        slashmapid = mapDataID[zone]
+
+        --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
+
+        if slashx and slashy and slashmapid then
+            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid)
+        end
+    elseif tokens[1] and tonumber(tokens[1]) then
+        slashmapid = C_Map.GetBestMapForUnit("player")
+        slashx, slashy = unpack(tokens)
+        if slashx and slashy and slashmapid then
+            slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
+            if slashx and slashy and slashmapid then
+                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid)
+            end
+        else
+            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+        end
+    else
+        DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+    end
 end
