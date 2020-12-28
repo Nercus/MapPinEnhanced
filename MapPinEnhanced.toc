@@ -1,15 +1,13 @@
 ## Interface: 90002
 ## Author: Nerc
 ## Title: MapPinEnhanced
-## Version: 0.1a
-## Notes: Enhance the functionality of the map pin
-## SavedVariables: MPHDB
-## SavedVariablesPerCharacter: MPHDBChr
+## Version: 0.2a
+## Notes: Enhances the functionality of the map pin
+## SavedVariables: MapPinEnhancedDB
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
 
-libs\HereBeDragons\LibStub\LibStub.lua
-libs\HereBeDragons\CallbackHandler-1.0\CallbackHandler-1.0.lua
-libs\HereBeDragons\HereBeDragons-2.0.lua
-libs\HereBeDragons\HereBeDragons-Pins-2.0.lua
+embeds.xml
 
 core.lua
 SuperTrackedFrame.xml

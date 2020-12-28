@@ -1,36 +1,12 @@
-local addonName, addon = ...
-local MPH = addon
+MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced", "AceConsole-3.0", "AceEvent-3.0")
 
-_G.MPH = MPH
+local HBD = LibStub("HereBeDragons-2.0")
+local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
-local hbd = LibStub("HereBeDragons-2.0")
-local hbdp = LibStub("HereBeDragons-Pins-2.0")
-
-local C_Map = C_Map
-
-local MPH_MapOverlayFrame = CreateFrame("Frame", "MPH_MapOverlayFrame", WorldMapFrame.BorderFrame)
-MPH_MapOverlayFrame:SetFrameStrata("HIGH")
-MPH_MapOverlayFrame:SetFrameLevel(9000)
-MPH_MapOverlayFrame:SetAllPoints(true)
-
-local MPH_Frame = CreateFrame ("frame", "MPH_ScreenPanel", UIParent, "BackdropTemplate")
-MPH_Frame:SetSize (235, 500)
-MPH_Frame:SetFrameStrata ("LOW")
-
-local MPH_ObjectiveTrackerHeader = CreateFrame ("frame", "MPH_ObjectiveTrackerHeader", MPH_Frame, "ObjectiveTrackerHeaderTemplate")
-MPH_ObjectiveTrackerHeader.Text:SetText ("Map Pins")
-
-local MPH_QuestHolder = CreateFrame ("frame", "MPH_QuestHolder", MPH_Frame, "BackdropTemplate")
-MPH_QuestHolder:SetAllPoints()
-
-
-local pool = {}
-
-local HBDmapData = hbd.mapData -- Data is localized
 local mapDataID = {}
-
-
-do
+function MapPinEnhanced:OnInitialize()
+    -- Restructure Map Data
+    local HBDmapData = HBD.mapData -- Data is localized
     for mapID in pairs(HBDmapData) do
         local mapType = HBDmapData[mapID].mapType
         if mapType == Enum.UIMapType.Zone or mapType == Enum.UIMapType.Continent or mapType == Enum.UIMapType.Micro then
@@ -68,11 +44,33 @@ do
     end
 end
 
+local blockevent_UWU = false
+function MapPinEnhanced:OnEnable()
+    -- Register Events
+    self:RegisterEvent("SUPER_TRACKING_CHANGED")
+    self:RegisterEvent("USER_WAYPOINT_UPDATED")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
+    self:RegisterEvent("PLAYER_LOGIN")
+end
 
 
+local PinFramePool = {}
+local MPH_MapOverlayFrame = CreateFrame("Frame", "MPH_MapOverlayFrame", WorldMapFrame.BorderFrame)
+MPH_MapOverlayFrame:SetFrameStrata("HIGH")
+MPH_MapOverlayFrame:SetFrameLevel(9000)
+MPH_MapOverlayFrame:SetAllPoints(true)
 
-local blockevent = false
-local WQT_hooked = false
+-- Check if TomTom is Loaded
+local TomTomLoaded
+function MapPinEnhanced:PLAYER_ENTERING_WORLD()
+    if IsAddOnLoaded("TomTom") then
+        TomTomLoaded = true
+        self:Print("The usage of /way within MPH is not possible with TomTom enabled.") -- Localize
+    else
+        TomTomLoaded = false
+    end
+end
+
 --------------------------
 ------ UI Functions ------
 function WaypointLocationPinMixin:OnAcquired()
@@ -101,7 +99,6 @@ end
 --------------------------
 
 
-
 local function CreatePin(x, y, mapID, emit)
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
     pin:SetSize(30, 30)
@@ -128,10 +125,10 @@ local function CreatePin(x, y, mapID, emit)
         if tracked then Untrack() else emit("track") end
     end
     local function ShowOnMap()
-        hbdp:AddWorldMapIconMap(addon, pin, mapID, x, y, 3)
+        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
     end
     local function RemoveFromMap()
-        hbdp:RemoveWorldMapIcon(addon, pin)
+        HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
     end
     local function IsTracked()
         return tracked
@@ -195,8 +192,8 @@ local function CreatePin(x, y, mapID, emit)
 end
 
 local function DistanceFromPlayer(pin)
-    local PlayerZonePosition = {hbd:GetPlayerZonePosition()}
-    return (hbd:GetZoneDistance(PlayerZonePosition[3], PlayerZonePosition[1], PlayerZonePosition[2], pin.mapID, pin.x, pin.y))
+    local PlayerZonePosition = {HBD:GetPlayerZonePosition()}
+    return (HBD:GetZoneDistance(PlayerZonePosition[3], PlayerZonePosition[1], PlayerZonePosition[2], pin.mapID, pin.x, pin.y))
 end
 
 local function IsCloser(pin, ref)
@@ -290,10 +287,6 @@ local function PinManager()
         end
     end
 
-    local function PinData()
-        return pins
-    end
-
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -301,224 +294,38 @@ local function PinManager()
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
-        PinData = PinData
     }
 end
 
 local pinManager = PinManager()
 
-function CreateTrackerWidget(index)
-    if pool[index] then return pool[index] end
 
-    local w = CreateFrame("button", "MPH_Tracker" .. index, MPH_QuestHolder, "BackdropTemplate")
-    w:SetSize(235, 25)
-    w:EnableMouse(true)
-    w:SetMouseClickEnabled(true)
-    w.Icon = w:CreateTexture (nil, "BORDER")
-	w.Icon:SetPoint ("right", w, "left", 20, 0)
-	w.Icon:SetSize(25, 25)
-    w.Title = w:CreateFontString(nil,"BORDER", "GameFontNormalMed3")
-    w.Title:SetPoint ("left", w, "left", 23, 0)
-    w.Icon:SetBlendMode("BLEND")
-    w.Icon.highlightTexture = w:CreateTexture(nil, "HIGHLIGHT")
-    w.Icon.highlightTexture:SetAllPoints(w.Icon)
-    w.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
-
-    pool[index] = w
-    return w
-end
-
-local function MPH_ObjectiveTracker()
-
-    local color_header = OBJECTIVE_TRACKER_COLOR["Header"]
-    local color_headerhighlight = OBJECTIVE_TRACKER_COLOR["HeaderHighlight"]
-    local TrackerHeight
-
-    local function UpdateHeader()
-        local tracker = ObjectiveTrackerFrame
-
-        if (not tracker.initialized) then
-            return
-        end
-        local y = 0
-	    for i = 1, #tracker.MODULES do
-            local module = tracker.MODULES [i]
-            if (module.Header:IsShown()) then
-                y = y + module.contentsHeight
-            end
-        end
-        local additional_offset = 1
-        if IsAddOnLoaded("WorldQuestTracker") then
-            if WorldQuestTrackerAddon.QuestTrackList then
-                additional_offset = additional_offset + #WorldQuestTrackerAddon.QuestTrackList
-            end
-        end
-        if additional_offset == 1 then
-            additional_offset = 0
-        end
-        if (tracker.collapsed) then
-            TrackerHeight = 20
-        else
-            TrackerHeight = y
-        end
-        MPH_ScreenPanel:ClearAllPoints()
-
-        MPH_ObjectiveTrackerHeader:ClearAllPoints()
-        MPH_ObjectiveTrackerHeader:SetPoint("bottom", MPH_Frame, "top", 0, -20)
-        MPH_ObjectiveTrackerHeader:Show()
-        MPH_ObjectiveTrackerHeader.MinimizeButton:Hide() -- temporary
-
-        for i = 1, tracker:GetNumPoints() do
-            local point, relativeTo, relativePoint, xOfs, yOfs = tracker:GetPoint (i)
-            MPH_ScreenPanel:SetPoint(point, relativeTo, relativePoint, -10 + xOfs, yOfs - TrackerHeight - 35 * additional_offset - 20)
-        end
-
-
-        MPH_ObjectiveTrackerHeader:ClearAllPoints()
-        MPH_ObjectiveTrackerHeader:SetPoint ("bottom", MPH_Frame, "top", 0, -20)
-    end
-
-    local function UpdateWidgets()
-        local pins = pinManager.PinData()
-        if #pins == 0 then
-            MPH_QuestHolder:Hide()
-            MPH_ObjectiveTrackerHeader:Hide()
-            return
-        end
-        MPH_QuestHolder:Show()
-        local nextWidget = 1
-        local y = -25
-        for index, pin in ipairs(pins) do -- TODO: If necessary: Don't iterate only if track is changed
-            local info = C_Map.GetMapInfo(pin.mapID)
-            local widget = CreateTrackerWidget(nextWidget)
-            widget:ClearAllPoints()
-            widget:SetPoint ("topleft", MPH_Frame, "topleft", 0, y)
-            widget.Title:SetText(info.name .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
-            if pin.IsTracked() then
-                widget.Icon:SetAtlas("Waypoint-MapPin-Tracked")
-                widget.Title:SetTextColor(color_headerhighlight.r, color_headerhighlight.g, color_headerhighlight.b)
-            else
-                widget.Title:SetTextColor (color_header.r, color_header.g, color_header.b)
-                widget.Icon:SetAtlas("Waypoint-MapPin-Untracked")
-            end
-            widget.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
-            widget:SetScript("OnMouseDown", function(self, arg1)
-                if arg1 == "LeftButton" then
-                    if IsShiftKeyDown() then
-                        local link = pin.FormatHyperlink()
-                        ChatEdit_InsertLink(link)
-                    elseif IsControlKeyDown() then
-                        pinManager.RemovePin(pin)
-                        UpdateWidgets()
-                    else
-                        pin.ToggleTracked()
-                    end
-                else
-                    pinManager.RemovePin(pin)
-                    UpdateWidgets()
-                end
-            end)
-            widget:SetScript("OnEnter", function(self, motion)
-                widget.Title:SetTextColor(color_headerhighlight.r, color_headerhighlight.g, color_headerhighlight.b)
-            end)
-            widget:SetScript("OnLeave", function(self, motion)
-                if not pin.IsTracked() then
-                    widget.Title:SetTextColor(color_header.r, color_header.g, color_header.b)
-                end
-            end)
-            widget:Show()
-            y = y - 27
-            nextWidget = nextWidget + 1
-        end
-        for i = nextWidget, #pool do
-            pool[i]:Hide()
-        end
-        UpdateHeader()
-    end
-
-    return {
-        UpdateHeader = UpdateHeader,
-        UpdateWidgets = UpdateWidgets
-    }
-end
-
-local MPH_ObjectiveTracker = MPH_ObjectiveTracker()
-
-function MPH:AddWaypoint(x, y, mapID)
+function MapPinEnhanced:AddWaypoint(x, y, mapID)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
             DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00 Arrow to Pin does not work here!|r')
         end
         pinManager.AddPin(x, y, mapID)
-        MPH_ObjectiveTracker.UpdateWidgets()
     else
         error("x, y or mapID missing")
     end
 end
 
-if not IsAddOnLoaded ("TomTom") then
-    SLASH_MPH1 = "/way"
-end
-SLASH_MPH2 = "/pin"
-SLASH_MPH3 = "/mph"
 
-
-local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
-local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
-
-SlashCmdList["MPH"] = function(msg)
-    local slashx
-    local slashy
-    local slashmapid
-
-    msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
-    local tokens = {}
-    for token in msg:gmatch("%S+") do table.insert(tokens, token) end
-
-    if tokens[1] and not tonumber(tokens[1]) then
-        local zoneEnd
-        for idx = 1, #tokens do
-            local token = tokens[idx]
-            if tonumber(token) then
-                zoneEnd = idx - 1
-                break
-            end
-        end
-
-        if not zoneEnd then
-            return
-        end
-
-        local zone = table.concat(tokens, " ", 1, zoneEnd)
-        local x,y,_ = select(zoneEnd + 1, unpack(tokens))
-
-        slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
-        slashmapid = mapDataID[zone]
-
-        --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
-
-        if slashx and slashy and slashmapid then
-            MPH:AddWaypoint(slashx, slashy, slashmapid)
-        end
-    elseif tokens[1] and tonumber(tokens[1]) then
-        slashmapid = C_Map.GetBestMapForUnit("player")
-        slashx, slashy = unpack(tokens)
-        if slashx and slashy and slashmapid then
-            slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
-            if slashx and slashy and slashmapid then
-                MPH:AddWaypoint(slashx, slashy, slashmapid)
-            end
-        else
-            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
-        end
+function MapPinEnhanced:SUPER_TRACKING_CHANGED()
+    if C_SuperTrack.IsSuperTrackingQuest() then
+        pinManager.UntrackPins()
+        C_SuperTrack.SetSuperTrackedUserWaypoint(false)
+        C_Map.ClearUserWaypoint()
     else
-        DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+        if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
+            pinManager.RefreshTracking()
+        end
     end
 end
 
-local function OnEvent(self, event, ...)
-    if event == "USER_WAYPOINT_UPDATED" then
-        if blockevent then return end
+function MapPinEnhanced:USER_WAYPOINT_UPDATED()
+    if blockevent then return end
         --print(self, event, ...)
         local userwaypoint = C_Map.GetUserWaypoint()
         if userwaypoint then
@@ -533,57 +340,10 @@ local function OnEvent(self, event, ...)
             blockevent = true
             C_Map.ClearUserWaypoint()
             blockevent = false
-            MPH:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+            MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
-    elseif event == "SUPER_TRACKING_CHANGED" then
-        --print(self, event, ...)
-        if C_SuperTrack.IsSuperTrackingQuest() then
-            pinManager.UntrackPins()
-            C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-            C_Map.ClearUserWaypoint()
-        else
-            if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
-                pinManager.RefreshTracking()
-            end
-        end
-    elseif event == "PLAYER_LOGIN" then
-        C_Map.ClearUserWaypoint()
-        if IsAddOnLoaded("WorldQuestTracker") and not WQT_hooked then
-            hooksecurefunc(WorldQuestTrackerAddon, "RefreshTrackerAnchor", function(...)
-                MPH_ObjectiveTracker.UpdateWidgets()
-            end)
-            WQT_hooked = true
-        end
-    else
-        --print(self, event, ...)
-    end
 end
 
-local ONUPDATE_INTERVAL = 0.3
-local TimeSinceLastUpdate = 0
-
-local function OnUpdate(self, elapsed)
-    TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
-	if TimeSinceLastUpdate >= ONUPDATE_INTERVAL then
-		TimeSinceLastUpdate = 0
-        local distance = C_Navigation.GetDistance()
-        if distance < 5 and distance > 0 then
-           pinManager.RemoveTrackedPin()
-        end
-    end
+function MapPinEnhanced:PLAYER_LOGIN()
+    C_Map.ClearUserWaypoint()
 end
-
-
-local f = CreateFrame("Frame")
-f:RegisterEvent("SUPER_TRACKING_CHANGED")
-f:RegisterEvent("USER_WAYPOINT_UPDATED")
-f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("NAVIGATION_FRAME_CREATED")
-f:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
-f:SetScript("OnEvent", OnEvent)
-f:SetScript("OnUpdate", OnUpdate)
-
-
-hooksecurefunc ("ObjectiveTracker_Update", function(...) --TODO: Better update function for Objective Tracker
-    MPH_ObjectiveTracker.UpdateWidgets()
-end)
