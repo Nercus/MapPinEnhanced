@@ -130,6 +130,11 @@ local function CreatePin(x, y, mapID, emit)
     local function RemoveFromMap()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
     end
+
+    local function MoveOnMap(x, y, mapID)
+        HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
+        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
+    end
     local function IsTracked()
         return tracked
     end
@@ -183,6 +188,7 @@ local function CreatePin(x, y, mapID, emit)
         ToggleTracked = ToggleTracked,
         ShowOnMap = ShowOnMap,
         RemoveFromMap = RemoveFromMap,
+        MoveOnMap = MoveOnMap,
         IsTracked = IsTracked,
         FormatHyperlink = FormatHyperlink,
         x = x,
@@ -224,6 +230,7 @@ local function PinManager()
                 pins[#pins] = nil
                 C_Map.ClearUserWaypoint()
                 SupertrackClosest()
+                table.insert(PinFramePool, pin)
             end
         end
     end
@@ -245,18 +252,26 @@ local function PinManager()
                 return
             end
         end
-
+        local ReusedPinFrame = table.remove(PinFramePool)
         local pin
-        pin = CreatePin(x, y, mapID, function(e)
-            if e == "remove" then
-                RemovePin(pin)
-                SupertrackClosest()
-            elseif e == "track" then
-                UntrackPins()
-                pin.Track()
-            end
-        end)
-        pin.ShowOnMap()
+        if not ReusedPinFrame then
+            pin = CreatePin(x, y, mapID, function(e)
+                if e == "remove" then
+                    RemovePin(pin)
+                    SupertrackClosest()
+                elseif e == "track" then
+                    UntrackPins()
+                    pin.Track()
+                end
+            end)
+            pin.ShowOnMap()
+        else
+            pin = ReusedPinFrame
+            pin.x = x
+            pin.y = y
+            pin.mapID = mapID
+            pin.MoveOnMap(x,y,mapID)
+        end
         pins[#pins + 1] = pin
         UntrackPins()
         pin.Track()
