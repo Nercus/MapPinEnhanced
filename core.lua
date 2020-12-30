@@ -74,12 +74,6 @@ end
 --------------------------
 ------ UI Functions ------
 function WaypointLocationPinMixin:OnAcquired()
-    self:UseFrameLevelType("PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
-	if C_SuperTrack.IsSuperTrackingUserWaypoint() then
-		self.Icon:SetAtlas("Waypoint-MapPin-Tracked")
-	else
-		self.Icon:SetAtlas("Waypoint-MapPin-Untracked")
-	end
     self:SetAlpha(0)
     self:EnableMouse(false)
 end
@@ -99,7 +93,7 @@ end
 --------------------------
 
 
-local function CreatePin(x, y, mapID, emit)
+local function CreatePin(x, y, mapID, emit, title)
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
     pin:SetSize(30, 30)
     pin:EnableMouse(true)
@@ -169,7 +163,7 @@ local function CreatePin(x, y, mapID, emit)
     end)
     pin:SetScript("OnEnter", function(self, motion)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-        GameTooltip_SetTitle(GameTooltip, MAP_PIN_SHARING .. " (Map Pin Enhanced)")
+        GameTooltip_SetTitle(GameTooltip, title)
         GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
         GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
         GameTooltip:Show()
@@ -181,6 +175,7 @@ local function CreatePin(x, y, mapID, emit)
     local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(true)
     highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
+
 
     return {
         Untrack = Untrack,
@@ -243,15 +238,23 @@ local function PinManager()
         end
     end
 
-    local function AddPin(x, y, mapID)
+    local function AddPin(x, y, mapID, name)
         for i, p in ipairs(pins) do
             if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
-                print("Pin Already exists")
+                MapPinEnhanced:Print("Pin Already exists")
                 UntrackPins()
                 p.Track()
                 return
             end
         end
+
+        local title
+        if not name then
+            title = "Map Pin"
+        else
+            title = name
+        end
+
         local ReusedPinFrame = table.remove(PinFramePool)
         local pin
         if not ReusedPinFrame then
@@ -263,10 +266,10 @@ local function PinManager()
                     UntrackPins()
                     pin.Track()
                 end
-            end)
+            end, title)
             pin.ShowOnMap()
         else
-            pin = ReusedPinFrame
+            pin = ReusedPinFrame -- TODO: Change Tooltip Title if reused
             pin.x = x
             pin.y = y
             pin.mapID = mapID
@@ -314,13 +317,12 @@ end
 
 local pinManager = PinManager()
 
-
-function MapPinEnhanced:AddWaypoint(x, y, mapID)
+function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00 Arrow to Pin does not work here!|r')
+            MapPinEnhanced:Print('Arrow to Pin does not work here!')
         end
-        pinManager.AddPin(x, y, mapID)
+        pinManager.AddPin(x, y, mapID, name)
     else
         error("x, y or mapID missing")
     end
@@ -340,22 +342,21 @@ end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
     if blockWAYPOINTevent then return end
-        --print(self, event, ...)
-        local userwaypoint = C_Map.GetUserWaypoint()
-        if userwaypoint then
-            local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
-            if superTrackedQuestID ~= 0 then
-                if C_QuestLog.IsWorldQuest(superTrackedQuestID) then
-                    C_QuestLog.RemoveWorldQuestWatch(superTrackedQuestID)
-                else
-                    C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
-                end
+    local userwaypoint = C_Map.GetUserWaypoint()
+    if userwaypoint then
+        local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
+        if superTrackedQuestID ~= 0 then
+            if C_QuestLog.IsWorldQuest(superTrackedQuestID) then
+                C_QuestLog.RemoveWorldQuestWatch(superTrackedQuestID)
+            else
+                C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
             end
-            blockWAYPOINTevent = true
-            C_Map.ClearUserWaypoint()
-            blockWAYPOINTevent = false
-            MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
         end
+        blockWAYPOINTevent = true
+        C_Map.ClearUserWaypoint()
+        blockWAYPOINTevent = false
+        MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+    end
 end
 
 function MapPinEnhanced:PLAYER_LOGIN()
@@ -372,7 +373,7 @@ SLASH_MPH3 = "/mph"
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
 local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
 
-SlashCmdList["MPH"] = function(msg)
+SlashCmdList["MPH"] = function(msg)  -- TODO: Get Title
     local slashx
     local slashy
     local slashmapid
@@ -404,7 +405,7 @@ SlashCmdList["MPH"] = function(msg)
         --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
 
         if slashx and slashy and slashmapid then
-            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid)
+            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid) -- TODO: title
         end
     elseif tokens[1] and tonumber(tokens[1]) then
         slashmapid = C_Map.GetBestMapForUnit("player")
@@ -415,9 +416,9 @@ SlashCmdList["MPH"] = function(msg)
                 MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid)
             end
         else
-            DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+            MapPinEnhanced:Print('Please use the formatting "/way x y" or /way zonename x y')
         end
     else
-        DEFAULT_CHAT_FRAME:AddMessage('|cFFFFFF00Please use the formatting "/way x y" or /way zonename x y|r')
+        MapPinEnhanced:Print('Please use the formatting "/way x y" or "/way zonename x y"')
     end
 end
