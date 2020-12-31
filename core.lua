@@ -15,7 +15,7 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
 		if button == "LeftButton" then
 			print("minimap button left click")
 		elseif button == "RightButton" then
-			print("minimap button right click")
+			MapPinEnhanced:ToggleWindow()
 		end
 	end,
 	OnTooltipShow = function(tt)
@@ -416,17 +416,11 @@ function MapPinEnhanced:PLAYER_LOGIN()
     C_Map.ClearUserWaypoint()
 end
 
-
-if not TomTomLoaded then
-    SLASH_MPH1 = "/way"
-end
-SLASH_MPH2 = "/pin"
-SLASH_MPH3 = "/mph"
-
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
 local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
 
-SlashCmdList["MPH"] = function(msg)  -- TODO: Get Title
+function MapPinEnhanced:ParseInput(msg)
+    print(msg)
     local slashx
     local slashy
     local slashmapid
@@ -474,4 +468,14 @@ SlashCmdList["MPH"] = function(msg)  -- TODO: Get Title
     else
         MapPinEnhanced:Print('Please use the formatting "/way x y" or "/way zonename x y"')
     end
+end
+
+if not TomTomLoaded then
+    SLASH_MPH1 = "/way"
+end
+SLASH_MPH2 = "/pin"
+SLASH_MPH3 = "/mph"
+
+SlashCmdList["MPH"] = function(msg)
+    MapPinEnhanced:ParseInput(msg)
 end
