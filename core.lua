@@ -73,6 +73,7 @@ local function CreatePin(x, y, mapID, emit)
                 emit("remove")
             elseif IsShiftKeyDown() then
                 local link = FormatHyperlink()
+                ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
                 ChatEdit_InsertLink(link)
             else
                 ToggleTracked()
