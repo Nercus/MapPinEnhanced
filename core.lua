@@ -2,9 +2,50 @@ MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced", "AceConsole-
 
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
+local LDBIcon = LibStub("LibDBIcon-1.0")
 
 local mapDataID = {}
+
+-- Broker
+MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
+	type = "data source",
+	text = "MapPinEnhanced",
+	icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
+	OnClick = function(_, button)
+		if button == "LeftButton" then
+			print("minimap button left click")
+		elseif button == "RightButton" then
+			print("minimap button right click")
+		end
+	end,
+	OnTooltipShow = function(tt)
+    tt:AddLine("MapPinEnhanced")
+    tt:AddLine(" ")
+    tt:AddLine("Left-Click to open Pin Tracker")
+    tt:AddLine("Right-Click to open Import Frame")
+    end
+})
+
+
+
+
 function MapPinEnhanced:OnInitialize()
+
+    -- Saved Vars
+    self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", {
+        profile = {
+            minimap = {
+              hide = false,
+            },
+            savedpins = {
+            },
+        },
+    })
+
+    -- Minimap Icon
+    LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
+    MapPinEnhanced:UpdateMinimapButton()
+
     -- Restructure Map Data
     local HBDmapData = HBD.mapData -- Data is localized
     for mapID in pairs(HBDmapData) do
@@ -41,6 +82,14 @@ function MapPinEnhanced:OnInitialize()
     end
     for name, mapID in pairs(newEntries) do
         mapDataID[name] = mapID
+    end
+end
+
+function MapPinEnhanced:UpdateMinimapButton()
+    if (self.db.profile.minimap.hide) then
+        LDBIcon:Hide("MapPinEnhanced")
+    else
+        LDBIcon:Show("MapPinEnhanced")
     end
 end
 
@@ -124,7 +173,6 @@ local function CreatePin(x, y, mapID, emit, title)
     local function RemoveFromMap()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
     end
-
     local function MoveOnMap(x, y, mapID)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
@@ -161,13 +209,16 @@ local function CreatePin(x, y, mapID, emit, title)
     pin:SetScript("OnMouseUp", function(self, arg1)
         self:SetPoint("CENTER", 0, 0)
     end)
-    pin:SetScript("OnEnter", function(self, motion)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-        GameTooltip_SetTitle(GameTooltip, title)
-        GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
-        GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
-        GameTooltip:Show()
-    end)
+    local function SetTooltip(title)
+        pin:SetScript("OnEnter", function(self, motion)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
+            GameTooltip_SetTitle(GameTooltip, title)
+            GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
+            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
+            GameTooltip:Show()
+        end)
+    end
+    SetTooltip(title)
     pin:SetScript("OnLeave", function(self, motion)
         GameTooltip:Hide()
     end)
@@ -175,7 +226,6 @@ local function CreatePin(x, y, mapID, emit, title)
     local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(true)
     highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
-
 
     return {
         Untrack = Untrack,
@@ -186,9 +236,11 @@ local function CreatePin(x, y, mapID, emit, title)
         MoveOnMap = MoveOnMap,
         IsTracked = IsTracked,
         FormatHyperlink = FormatHyperlink,
+        SetTooltip = SetTooltip,
         x = x,
         y = y,
         mapID = mapID,
+        title = title
     }
 end
 
@@ -207,7 +259,7 @@ end
 
 local function PinManager()
     local pins = {}
-    local function SupertrackClosest() -- TODO: Only track closes if on same map
+    local function SupertrackClosest() -- TODO: Only track closest if on same map
         local pin = nil
         for i, p in ipairs(pins) do
             if p.IsTracked() then return end
@@ -269,10 +321,11 @@ local function PinManager()
             end, title)
             pin.ShowOnMap()
         else
-            pin = ReusedPinFrame -- TODO: Change Tooltip Title if reused
+            pin = ReusedPinFrame
             pin.x = x
             pin.y = y
             pin.mapID = mapID
+            pin.SetTooltip(title)
             pin.MoveOnMap(x,y,mapID)
         end
         pins[#pins + 1] = pin
@@ -402,10 +455,10 @@ SlashCmdList["MPH"] = function(msg)  -- TODO: Get Title
         slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
         slashmapid = mapDataID[zone]
 
-        --if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
+        desc = table.concat(tokens, " ", zoneEnd + 3)
 
         if slashx and slashy and slashmapid then
-            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid) -- TODO: title
+            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, desc)
         end
     elseif tokens[1] and tonumber(tokens[1]) then
         slashmapid = C_Map.GetBestMapForUnit("player")
