@@ -1,5 +1,5 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
-local module = core:NewModule("PinTracker")
+local module = core:NewModule("Importbox")
 
 local AceGUI = LibStub("AceGUI-3.0")
 
@@ -13,7 +13,7 @@ local function ParseImport(importstring)
 			elseif string.match(s, "/pin ") then
 				msg = string.gsub(s, "/pin ", "")
 			else
-				core:ParseInput(s)
+				core:Print('Please use the formatting "/way x y" or /way zonename x y')
 			end
 			core:ParseInput(msg)
 		end

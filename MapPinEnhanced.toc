@@ -11,4 +11,5 @@ embeds.xml
 
 core.lua
 importbox.lua
+pintracker.lua
 SuperTrackedFrame.xml

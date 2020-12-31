@@ -26,21 +26,24 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
     end
 })
 
-
+local defaults = {
+    profile = {
+        minimap = {
+            hide = false,
+        },
+        savedpins = {},
+        pintrackerpositon = {
+            x = 0,
+            y = 0,
+        }
+    }
+}
 
 
 function MapPinEnhanced:OnInitialize()
 
     -- Saved Vars
-    self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", {
-        profile = {
-            minimap = {
-              hide = false,
-            },
-            savedpins = {
-            },
-        },
-    })
+    self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
 
     -- Minimap Icon
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
@@ -421,7 +424,7 @@ local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
 local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
 
 function MapPinEnhanced:ParseInput(msg)
-    print(msg)
+    if not msg then return end
     local slashx
     local slashy
     local slashmapid
