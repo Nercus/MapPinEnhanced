@@ -6,9 +6,9 @@ function module:OnInitialize()
     MPH_Frame:SetFrameStrata("BACKGROUND")
     MPH_Frame:SetWidth(235)
     MPH_Frame:SetHeight(500)
-    MPH_Frame:SetPoint("CENTER", core.db.profile.pintrackerpositon.x, core.db.profile.pintrackerpositon.y)
+    MPH_Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", core.db.profile.pintrackerpositon.x, core.db.profile.pintrackerpositon.y-500)
     MPH_Frame:SetClampedToScreen(true)
-    MPH_Frame:Show()
+    MPH_Frame:Hide()
 
     local tex = MPH_Frame:CreateTexture("ARTWORK")
     tex:SetAllPoints()
@@ -43,11 +43,17 @@ function module:OnInitialize()
     MoverButton:SetPoint("right", minimizeButton, "left", 0, 0)
     MoverButton:SetScript("OnClick", function()
         if MPH_Frame.movetexture:IsShown() then
-            local _,_,_,x,y = MPH_Frame:GetPoint()
-            core.db.profile.pintrackerpositon.x = x -- Todo: Save Position correctly in SavVars
-            core.db.profile.pintrackerpositon.y = y
+            local x,y = MPH_Frame:GetLeft(), MPH_Frame:GetTop()
+            MPH_Frame:ClearAllPoints()
             MPH_Frame:SetMovable(false)
             MPH_Frame:EnableMouse(false)
+            if core.db.profile.pintrackerpositon.x ~= x then
+                core.db.profile.pintrackerpositon.x = x
+            end
+            if core.db.profile.pintrackerpositon.y ~= y then
+                core.db.profile.pintrackerpositon.y = y
+            end
+            MPH_Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", core.db.profile.pintrackerpositon.x, core.db.profile.pintrackerpositon.y-500)
             MPH_Frame.movetexture:Hide()
         else
             MPH_Frame:SetMovable(true)
@@ -67,4 +73,12 @@ function module:OnInitialize()
     MPH_ObjectiveTrackerHeader:ClearAllPoints()
     MPH_ObjectiveTrackerHeader:SetPoint("bottom", MPH_Frame, "top", 0, -20)
     MPH_ObjectiveTrackerHeader:Show()
+
+    function core:TogglePinTrackerWindow()
+        if MPH_Frame:IsShown() then
+            MPH_Frame:Hide()
+        else
+            MPH_Frame:Show()
+        end
+    end
 end

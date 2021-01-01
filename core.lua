@@ -13,9 +13,9 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
 	icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
 	OnClick = function(_, button)
 		if button == "LeftButton" then
-			print("minimap button left click")
+			MapPinEnhanced:TogglePinTrackerWindow()
 		elseif button == "RightButton" then
-			MapPinEnhanced:ToggleWindow()
+			MapPinEnhanced:ToggleImportWindow()
 		end
 	end,
 	OnTooltipShow = function(tt)
@@ -112,16 +112,6 @@ MPH_MapOverlayFrame:SetFrameStrata("HIGH")
 MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
--- Check if TomTom is Loaded
-local TomTomLoaded
-function MapPinEnhanced:PLAYER_ENTERING_WORLD()
-    if IsAddOnLoaded("TomTom") then
-        TomTomLoaded = true
-        self:Print("The usage of /way within MPH is not possible with TomTom enabled.") -- Localize
-    else
-        TomTomLoaded = false
-    end
-end
 
 --------------------------
 ------ UI Functions ------
@@ -335,6 +325,7 @@ local function PinManager()
         pins[#pins + 1] = pin
         UntrackPins()
         pin.Track()
+        MapPinEnhanced.db.profile.savedpins = pins
     end
 
     local function RestorePin()
@@ -362,6 +353,12 @@ local function PinManager()
         end
     end
 
+    local function RestoreAllPins()
+        for _,i in ipairs(MapPinEnhanced.db.profile.savedpins) do
+            AddPin(i.x, i.y, i.mapID, i.name)
+        end
+    end
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -369,6 +366,7 @@ local function PinManager()
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
+        RestoreAllPins = RestoreAllPins
     }
 end
 
@@ -418,6 +416,21 @@ end
 
 function MapPinEnhanced:PLAYER_LOGIN()
     C_Map.ClearUserWaypoint()
+end
+
+
+
+local TomTomLoaded
+function MapPinEnhanced:PLAYER_ENTERING_WORLD()
+    pinManager.RestoreAllPins()
+
+    -- Check if TomTom is Loaded
+    if IsAddOnLoaded("TomTom") then
+        TomTomLoaded = true
+        self:Print("The usage of /way within MPH is not possible with TomTom enabled.") -- Localize
+    else
+        TomTomLoaded = false
+    end
 end
 
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"

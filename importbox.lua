@@ -19,7 +19,7 @@ local function ParseImport(importstring)
 		end
 end
 
-function core:ToggleWindow()
+function core:ToggleImportWindow()
     if not module.gui then
 		CreateWindow()
     end
