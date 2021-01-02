@@ -4,6 +4,7 @@ local module = core:NewModule("Importbox")
 local AceGUI = LibStub("AceGUI-3.0")
 
 local function ParseImport(importstring)
+  if not importstring then return end
 	local msg
 		for s in importstring:gmatch("[^\r\n]+") do
 			if string.match(s, "/way ") then
@@ -50,7 +51,7 @@ function CreateWindow()
     local button = AceGUI:Create("Button")
     button:SetText("Import")
     button:SetFullWidth(true)
-    button:SetCallback("OnClick", function() ParseImport(textStore) core:ToggleWindow() end)
+    button:SetCallback("OnClick", function() ParseImport(textStore) core:ToggleImportWindow() end)
     f:AddChild(button)
 
     local edit = AceGUI:Create("MultiLineEditBox")

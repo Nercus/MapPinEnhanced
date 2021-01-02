@@ -9,6 +9,7 @@ function module:OnInitialize()
     MPH_Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", core.db.profile.pintrackerpositon.x, core.db.profile.pintrackerpositon.y-500)
     MPH_Frame:SetClampedToScreen(true)
     MPH_Frame:Hide()
+    module.TrackerFrame = MPH_Frame
 
     local tex = MPH_Frame:CreateTexture("ARTWORK")
     tex:SetAllPoints()
@@ -27,9 +28,9 @@ function module:OnInitialize()
     MPH_ObjectiveTrackerHeader.MinimizeButton:Hide()
     minimizeButton:SetSize(25, 25)
     minimizeButton:SetPoint("topright", MPH_ObjectiveTrackerHeader, "topright", 0, 0)
-    minimizeButton:SetScript("OnClick", function() print("minimize") end)
-    minimizeButton:SetNormalTexture([[Interface\Buttons\UI-Panel-CollapseButton-Up]])
-    minimizeButton:SetPushedTexture([[Interface\Buttons\UI-Panel-CollapseButton-Down]])
+    minimizeButton:SetScript("OnClick", function() MPH_Frame:Hide() end)
+    minimizeButton:SetNormalTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Up]])
+    minimizeButton:SetPushedTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Down]])
     minimizeButton:SetHighlightTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]])
     minimizeButton:SetFrameStrata("LOW")
 
@@ -81,4 +82,48 @@ function module:OnInitialize()
             MPH_Frame:Show()
         end
     end
+end
+
+
+
+function module:CreateObjective(pin)
+    local Objective = CreateFrame("button", nil, module.TrackerFrame, "BackdropTemplate")
+    Objective:SetSize(235, 25)
+    Objective:EnableMouse(true)
+    Objective:SetMouseClickEnabled(true)
+    Objective.Icon = Objective:CreateTexture (nil, "BORDER")
+	Objective.Icon:SetPoint ("right", Objective, "left", 20, 0)
+	Objective.Icon:SetSize(25, 25)
+    Objective.Title = Objective:CreateFontString(nil,"BORDER", "GameFontNormalMed3")
+    Objective.Title:SetPoint ("left", Objective, "left", 23, 0)
+    Objective.Icon:SetBlendMode("BLEND")
+    Objective.Icon.highlightTexture = Objective:CreateTexture(nil, "HIGHLIGHT")
+    Objective.Icon.highlightTexture:SetAllPoints(Objective.Icon)
+    Objective.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
+    return Objective
+end
+
+local ObjectiveFramePool = {}
+function module:UpdateObjective(pin, emit)
+    if emit == "add" then
+        local ReusedObjectiveFrame = table.remove(ObjectiveFramePool)
+        local Objective
+
+        if not ReusedObjectiveFrame then
+            Objective = module:CreateObjective(pin)
+            Objective:ClearAllPoints()
+            Objective:SetPoint("topleft", module.TrackerFrame, "topleft", 0, -25)
+            Objective.Title:SetText(pin.title .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
+            Objective.Icon:SetAtlas("Waypoint-MapPin-Tracked")
+            Objective:Show()
+        else
+            Objective = ReusedObjectiveFrame
+        end
+    elseif emit == "track" then
+    elseif emit == "untrack" then
+    elseif emit == "remove" then
+    end
+
+
+
 end

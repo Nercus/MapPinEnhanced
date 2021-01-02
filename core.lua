@@ -143,7 +143,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local tracked = false
 
-    local function Track()
+    local function Track(x,y,mapID)
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
         blockWAYPOINTevent = true
@@ -261,9 +261,13 @@ local function PinManager()
                 pin = p
             end
         end
-        if pin then pin.Track() end
+        if pin then
+            pin.Track(pin.x, pin.y, pin.mapID)
+            MapPinEnhanced.modules.PinTracker:UpdateObjective(pin, "track")
+        end
     end
     local function RemovePin(pin)
+        MapPinEnhanced.modules.PinTracker:UpdateObjective(pin, "remove")
         pin.RemoveFromMap()
         for i, p in ipairs(pins) do
             if p == pin then
@@ -280,6 +284,7 @@ local function PinManager()
         for i, p in ipairs(pins) do
             if p.IsTracked() then
                 p.Untrack()
+                MapPinEnhanced.modules.PinTracker:UpdateObjective(p, "untrack")
             end
         end
     end
@@ -287,9 +292,10 @@ local function PinManager()
     local function AddPin(x, y, mapID, name)
         for i, p in ipairs(pins) do
             if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
-                MapPinEnhanced:Print("Pin Already exists")
+                --MapPinEnhanced:Print("Pin Already exists")
                 UntrackPins()
-                p.Track()
+                p.Track(x, y, mapID)
+                MapPinEnhanced.modules.PinTracker:UpdateObjective(p, "track")
                 return
             end
         end
@@ -310,7 +316,7 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
-                    pin.Track()
+                    pin.Track(pin.x, pin.y, pin.mapID)
                 end
             end, title)
             pin.ShowOnMap()
@@ -322,9 +328,10 @@ local function PinManager()
             pin.SetTooltip(title)
             pin.MoveOnMap(x,y,mapID)
         end
+        MapPinEnhanced.modules.PinTracker:UpdateObjective(pin, "add")
         pins[#pins + 1] = pin
         UntrackPins()
-        pin.Track()
+        pin.Track(x, y, mapID)
         MapPinEnhanced.db.profile.savedpins = pins
     end
 
@@ -355,9 +362,10 @@ local function PinManager()
 
     local function RestoreAllPins()
         for _,i in ipairs(MapPinEnhanced.db.profile.savedpins) do
-            AddPin(i.x, i.y, i.mapID, i.name)
+            AddPin(i.x, i.y, i.mapID, i.name, i.title)
         end
     end
+
 
     return {
         AddPin = AddPin,
@@ -366,7 +374,7 @@ local function PinManager()
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
-        RestoreAllPins = RestoreAllPins
+        RestoreAllPins = RestoreAllPins,
     }
 end
 
@@ -441,7 +449,7 @@ function MapPinEnhanced:ParseInput(msg)
     local slashx
     local slashy
     local slashmapid
-
+    local slashtitle
     msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
     local tokens = {}
     for token in msg:gmatch("%S+") do table.insert(tokens, token) end
@@ -466,18 +474,19 @@ function MapPinEnhanced:ParseInput(msg)
         slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
         slashmapid = mapDataID[zone]
 
-        desc = table.concat(tokens, " ", zoneEnd + 3)
+        slashtitle = table.concat(tokens, " ", zoneEnd + 3)
 
         if slashx and slashy and slashmapid then
-            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, desc)
+            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
         end
     elseif tokens[1] and tonumber(tokens[1]) then
         slashmapid = C_Map.GetBestMapForUnit("player")
         slashx, slashy = unpack(tokens)
         if slashx and slashy and slashmapid then
             slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
+            slashtitle = table.concat(tokens, " ", 3)
             if slashx and slashy and slashmapid then
-                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid)
+                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
             end
         else
             MapPinEnhanced:Print('Please use the formatting "/way x y" or /way zonename x y')
@@ -496,3 +505,7 @@ SLASH_MPH3 = "/mph"
 SlashCmdList["MPH"] = function(msg)
     MapPinEnhanced:ParseInput(msg)
 end
+
+
+-- Hooking Blizzard functions
+--hooksecurefunc("ClearUserWaypoint", function() print(123) end)
