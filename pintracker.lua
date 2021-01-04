@@ -1,3 +1,4 @@
+-- TODO: Move Pintracker to core.lua
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
 local module = core:NewModule("PinTracker", "AceEvent-3.0")
 
@@ -91,31 +92,37 @@ function module:CreateObjective(pin)
     Objective:SetSize(235, 25)
     Objective:EnableMouse(true)
     Objective:SetMouseClickEnabled(true)
-    Objective.Icon = Objective:CreateTexture (nil, "BORDER")
-	Objective.Icon:SetPoint ("right", Objective, "left", 20, 0)
-	Objective.Icon:SetSize(25, 25)
-    Objective.Title = Objective:CreateFontString(nil,"BORDER", "GameFontNormalMed3")
-    Objective.Title:SetPoint ("left", Objective, "left", 23, 0)
+    Objective.Icon = Objective:CreateTexture (nil, "OVERLAY")
+	Objective.Icon:SetPoint ("right", Objective, "left", 20, -4)
+    Objective.Icon:SetSize(25, 25)
+    -- OBJECTIVE_TRACKER_COLOR
+    Objective.Title = Objective:CreateFontString(nil,"OVERLAY", "GameFontNormalMed3")
+    Objective.Title:SetPoint ("bottomleft", Objective, "left", 20, 3)
+    Objective.Text = Objective:CreateFontString(nil,"OVERLAY", "GameFontHighlightMed2")
+    Objective.Text:SetPoint ("topleft", Objective, "left", 25, 0)
     Objective.Icon:SetBlendMode("BLEND")
     Objective.Icon.highlightTexture = Objective:CreateTexture(nil, "HIGHLIGHT")
     Objective.Icon.highlightTexture:SetAllPoints(Objective.Icon)
     Objective.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
+
     return Objective
 end
 
 local ObjectiveFramePool = {}
+local Objectives = {}
 function module:UpdateObjective(pin, emit)
     if emit == "add" then
         local ReusedObjectiveFrame = table.remove(ObjectiveFramePool)
         local Objective
-
         if not ReusedObjectiveFrame then
             Objective = module:CreateObjective(pin)
             Objective:ClearAllPoints()
-            Objective:SetPoint("topleft", module.TrackerFrame, "topleft", 0, -25)
-            Objective.Title:SetText(pin.title .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
+            Objective:SetPoint("topleft", module.TrackerFrame, "topleft", 0, -35*(#Objectives+1))
+            Objective.Title:SetText(pin.title)
+            Objective.Text:SetText(C_Map.GetMapInfo(pin.mapID)["name"] .. " (" ..  Round(pin.x*100) .. ", " .. Round(pin.y*100) .. ")")
             Objective.Icon:SetAtlas("Waypoint-MapPin-Tracked")
             Objective:Show()
+            table.insert(Objectives, Objective)
         else
             Objective = ReusedObjectiveFrame
         end

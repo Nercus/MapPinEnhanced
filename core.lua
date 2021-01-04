@@ -113,27 +113,6 @@ MPH_MapOverlayFrame:SetFrameLevel(9000)
 MPH_MapOverlayFrame:SetAllPoints(true)
 
 
---------------------------
------- UI Functions ------
-function WaypointLocationPinMixin:OnAcquired()
-    self:SetAlpha(0)
-    self:EnableMouse(false)
-end
-
-function SuperTrackedFrameMixin:GetTargetAlpha()
-    local distance = C_Navigation.GetDistance()
-    if distance > 10 then
-        return 1
-    else
-        if distance < 5 then
-            return 0
-        else
-            return distance / 10
-        end
-    end
-end
---------------------------
-
 
 local function CreatePin(x, y, mapID, emit, title)
     local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
@@ -213,6 +192,7 @@ local function CreatePin(x, y, mapID, emit, title)
         end)
     end
     SetTooltip(title)
+
     pin:SetScript("OnLeave", function(self, motion)
         GameTooltip:Hide()
     end)
@@ -253,17 +233,19 @@ end
 
 local function PinManager()
     local pins = {}
-    local function SupertrackClosest() -- TODO: Only track closest if on same map
-        local pin = nil
-        for i, p in ipairs(pins) do
-            if p.IsTracked() then return end
-            if IsCloser(p, pin) then
-                pin = p
+    local function SupertrackClosest()
+        if not C_SuperTrack.IsSuperTrackingQuest() then
+            local pin = nil
+            for i, p in ipairs(pins) do
+                if p.IsTracked() then return end
+                if IsCloser(p, pin) then
+                    pin = p
+                end
             end
-        end
-        if pin then
-            pin.Track(pin.x, pin.y, pin.mapID)
-            MapPinEnhanced.modules.PinTracker:UpdateObjective(pin, "track")
+            if pin then
+                pin.Track(pin.x, pin.y, pin.mapID)
+                MapPinEnhanced.modules.PinTracker:UpdateObjective(pin, "track")
+            end
         end
     end
     local function RemovePin(pin)
@@ -361,11 +343,10 @@ local function PinManager()
     end
 
     local function RestoreAllPins()
-        for _,i in ipairs(MapPinEnhanced.db.profile.savedpins) do
-            AddPin(i.x, i.y, i.mapID, i.name, i.title)
+        for _,p in ipairs(MapPinEnhanced.db.profile.savedpins) do
+            AddPin(p.x, p.y, p.mapID, p.title)
         end
     end
-
 
     return {
         AddPin = AddPin,
@@ -378,7 +359,7 @@ local function PinManager()
     }
 end
 
-local pinManager = PinManager()
+pinManager = PinManager()
 
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
@@ -507,5 +488,30 @@ SlashCmdList["MPH"] = function(msg)
 end
 
 
+--------------------------
+------ UI Functions ------
+function WaypointLocationPinMixin:OnAcquired()
+    self:SetAlpha(0)
+    self:EnableMouse(false)
+end
+
+function SuperTrackedFrameMixin:GetTargetAlpha()
+    local distance = C_Navigation.GetDistance()
+    if distance > 10 then
+        return 1
+    else
+        if distance < 5 and distance > 0 then
+            if C_Map.HasUserWaypoint() then
+                pinManager.RemoveTrackedPin()
+            end
+            return 0
+        else
+            return distance / 10
+        end
+    end
+end
+--------------------------
+
+
 -- Hooking Blizzard functions
---hooksecurefunc("ClearUserWaypoint", function() print(123) end)
+-- hooksecurefunc(C_Map, "ClearUserWaypoint", function() pinManager.RemoveTrackedPin() end)
