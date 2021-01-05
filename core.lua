@@ -152,7 +152,7 @@ local function CreatePin(x, y, mapID, emit, title)
     local function IsTracked()
         return tracked
     end
-    local function FormatHyperlink() -- TODO: Investigate if it's possible to change the "MAP_PIN_HYPERLINK" to include info
+    local function FormatHyperlink()
         return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(
             mapID,
             x * 10000,
@@ -258,6 +258,7 @@ local function PinManager()
                 C_Map.ClearUserWaypoint()
                 SupertrackClosest()
                 table.insert(PinFramePool, pin)
+                return
             end
         end
     end
@@ -267,6 +268,7 @@ local function PinManager()
             if p.IsTracked() then
                 p.Untrack()
                 MapPinEnhanced.modules.PinTracker:UpdateObjective(p, "untrack")
+                return
             end
         end
     end
@@ -348,6 +350,15 @@ local function PinManager()
         end
     end
 
+    local function RemoveAllPins()
+        for i, pin in ipairs(pins) do
+            pin.RemoveFromMap()
+            C_Map.ClearUserWaypoint()
+            table.insert(PinFramePool, pin)
+            pins[i] = nil
+        end
+    end
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -356,6 +367,7 @@ local function PinManager()
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
         RestoreAllPins = RestoreAllPins,
+        RemoveAllPins = RemoveAllPins
     }
 end
 
@@ -484,6 +496,15 @@ SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
 SlashCmdList["MPH"] = function(msg)
+    if string.match(msg, "removeall") then
+        pinManager.RemoveAllPins()
+    end
+    if string.match(msg, "pintracker") then
+        MapPinEnhanced:TogglePinTrackerWindow()
+    end
+    if string.match(msg, "import") then
+        MapPinEnhanced:ToggleImportWindow()
+    end
     MapPinEnhanced:ParseInput(msg)
 end
 
