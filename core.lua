@@ -720,6 +720,7 @@ SlashCmdList["MPH"] = function(msg)
         MapPinEnhanced:TogglePinTrackerWindow()
     end
     if strmatch(msg, "import") then MapPinEnhanced:ToggleImportWindow() end
+    if strmatch(msg, "minimapbutton") then MapPinEnhanced:UpdateMinimapButton() then end
     MapPinEnhanced:ParseInput(msg)
 end
 
