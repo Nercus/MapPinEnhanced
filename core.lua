@@ -416,9 +416,6 @@ local function CreatePin(x, y, mapID, emit, title)
     end
 
 
-
-
-
     return {
         Untrack = Untrack,
         Track = Track,
@@ -508,7 +505,7 @@ local function PinManager()
         end
 
         local title
-        if not name then
+        if not name or name == "" then
             title = "Map Pin"
         else
             title = name
@@ -690,7 +687,6 @@ function MapPinEnhanced:ParseInput(msg)
         slashmapid = mapDataID[zone]
 
         slashtitle = table.concat(tokens, " ", zoneEnd + 3)
-
         if slashx and slashy and slashmapid then
             MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
         end
@@ -706,11 +702,11 @@ function MapPinEnhanced:ParseInput(msg)
             end
         else
             MapPinEnhanced:Print(
-                'Please use the formatting "/way x y" or /way zonename x y')
+                'Please use the formatting "/way x y"')
         end
     else
         MapPinEnhanced:Print(
-            'Please use the formatting "/way x y" or "/way zonename x y"')
+            'Please use the formatting "/way x y"')
     end
 end
 
