@@ -220,6 +220,15 @@ function MapPinEnhanced:UpdateMinimapButton()
     end
 end
 
+function MapPinEnhanced:ToggleMinimapButton()
+    if (self.db.profile.minimap.hide) then
+        self.db.profile.minimap.hide = false
+    else
+        self.db.profile.minimap.hide = true
+    end
+    MapPinEnhanced:UpdateMinimapButton()
+end
+
 local blockWAYPOINTevent = false
 function MapPinEnhanced:OnEnable()
     -- Register Events
@@ -715,12 +724,13 @@ SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
 SlashCmdList["MPH"] = function(msg)
-    if strmatch(msg, "removeall") then pinManager.RemoveAllPins() end
+    if strmatch(msg, "removeall") then pinManager.RemoveAllPins() return end
     if strmatch(msg, "pintracker") then
         MapPinEnhanced:TogglePinTrackerWindow()
+        return
     end
-    if strmatch(msg, "import") then MapPinEnhanced:ToggleImportWindow() end
-    if strmatch(msg, "minimapbutton") then MapPinEnhanced:UpdateMinimapButton() end
+    if strmatch(msg, "import") then MapPinEnhanced:ToggleImportWindow() return end
+    if strmatch(msg, "minimapbutton") then MapPinEnhanced:ToggleMinimapButton() return end
     MapPinEnhanced:ParseInput(msg)
 end
 
