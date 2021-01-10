@@ -589,7 +589,6 @@ function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
 end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
-    print("SUPER_TRACKING_CHANGED")
     if C_SuperTrack.IsSuperTrackingQuest() then
         pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -602,7 +601,6 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
-    print("USER_WAYPOINT_UPDATED")
     if blockWAYPOINTevent then return end
     local userwaypoint = C_Map.GetUserWaypoint()
     if userwaypoint then
@@ -623,13 +621,11 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
 end
 
 function MapPinEnhanced:PLAYER_LOGIN()
-    print("PLAYER_LOGIN")
     C_Map.ClearUserWaypoint()
 end
 
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
-    print("PLAYER_ENTERING_WORLD")
     pinManager.RestoreAllPins()
 
     -- Check if TomTom is Loaded
