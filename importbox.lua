@@ -4,38 +4,33 @@ local module = core:NewModule("Importbox")
 local AceGUI = LibStub("AceGUI-3.0")
 
 local function ParseImport(importstring)
-  if not importstring then return end
-	local msg
-		for s in importstring:gmatch("[^\r\n]+") do
-			if string.match(s, "/way ") then
-				msg = string.gsub(s, "/way ", "")
-			elseif string.match(s, "/mph ") then
-				msg = string.gsub(s, "/mph ", "")
-			elseif string.match(s, "/pin ") then
-				msg = string.gsub(s, "/pin ", "")
-			else
-				core:Print('Please use the formatting "/way x y" or /way zonename x y')
-			end
-			core:ParseInput(msg)
-		end
+    if not importstring then return end
+    local msg
+    for s in importstring:gmatch("[^\r\n]+") do -- TODO: Make better
+        if string.match(s, "/way ") then
+            msg = string.gsub(s, "/way ", "")
+        elseif string.match(s, "/mph ") then
+            msg = string.gsub(s, "/mph ", "")
+        elseif string.match(s, "/pin ") then
+            msg = string.gsub(s, "/pin ", "")
+        else
+            core:Print('Please use the formatting "/way x y"')
+        end
+        core:ParseInput(msg)
+    end
 end
 
 function core:ToggleImportWindow()
-    if not module.gui then
-		CreateWindow()
-    end
+    if not module.gui then CreateWindow() end
     if module.gui:IsShown() then
-		module.gui:Hide()
+        module.gui:Hide()
     else
-		module.gui:Show()
+        module.gui:Show()
     end
 end
 
-
 function CreateWindow()
-    if module.gui then
-        return
-    end
+    if module.gui then return end
 
     local textStore
 
@@ -47,11 +42,13 @@ function CreateWindow()
     f:SetAutoAdjustHeight(true)
     f:SetTitle("Waypoint Import")
 
-
     local button = AceGUI:Create("Button")
     button:SetText("Import")
     button:SetFullWidth(true)
-    button:SetCallback("OnClick", function() ParseImport(textStore) core:ToggleImportWindow() end)
+    button:SetCallback("OnClick", function()
+        ParseImport(textStore)
+        core:ToggleImportWindow()
+    end)
     f:AddChild(button)
 
     local edit = AceGUI:Create("MultiLineEditBox")
@@ -61,7 +58,8 @@ function CreateWindow()
     edit.button:Hide()
     edit:SetFullHeight(true)
     edit:SetFullWidth(true)
-    edit:SetCallback("OnTextChanged", function(widget, event, text) textStore = text end)
+    edit:SetCallback("OnTextChanged",
+                     function(widget, event, text) textStore = text end)
     module.edit = edit
 
     _G["MapPinEnhanced_ImportFrame"] = f.frame

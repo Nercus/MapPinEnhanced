@@ -231,7 +231,6 @@ end
 
 local PinFramePool = {}
 
-
 local function CreatePin(x, y, mapID, emit, title)
     local titleColor = OBJECTIVE_TRACKER_COLOR["Header"]
     local titleColorH = OBJECTIVE_TRACKER_COLOR["HeaderHighlight"]
@@ -522,7 +521,7 @@ local function PinManager()
         UntrackPins()
         pin.Track(x, y, mapID)
         UpdateTrackerPositions()
-        MapPinEnhanced.db.profile.savedpins = pins
+        MapPinEnhanced.db.profile.savedpins = pins -- TODO: dont save functions
     end
 
     local function RestorePin()
@@ -715,3 +714,6 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:EnableMouse(false)
 end)
 ------------------------
+
+
+-- TODO: New Hook Remove Pin if <5y
