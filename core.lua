@@ -230,11 +230,7 @@ function MapPinEnhanced:OnEnable()
 end
 
 local PinFramePool = {}
-local MPH_MapOverlayFrame = CreateFrame("Frame", "MPH_MapOverlayFrame",
-                                        WorldMapFrame.BorderFrame)
-MPH_MapOverlayFrame:SetFrameStrata("HIGH")
-MPH_MapOverlayFrame:SetFrameLevel(9000)
-MPH_MapOverlayFrame:SetAllPoints(true)
+
 
 local function CreatePin(x, y, mapID, emit, title)
     local titleColor = OBJECTIVE_TRACKER_COLOR["Header"]
@@ -242,7 +238,7 @@ local function CreatePin(x, y, mapID, emit, title)
     local textColor = OBJECTIVE_TRACKER_COLOR["Normal"]
     local textColorH = OBJECTIVE_TRACKER_COLOR["NormalHighlight"]
 
-    local pin = CreateFrame("Button", nil, MPH_MapOverlayFrame)
+    local pin = CreateFrame("Button", nil)
     pin:SetSize(30, 30)
     pin:EnableMouse(true)
     pin:SetMouseClickEnabled(true)
@@ -593,6 +589,7 @@ function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
 end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
+    print("SUPER_TRACKING_CHANGED")
     if C_SuperTrack.IsSuperTrackingQuest() then
         pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -605,6 +602,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
+    print("USER_WAYPOINT_UPDATED")
     if blockWAYPOINTevent then return end
     local userwaypoint = C_Map.GetUserWaypoint()
     if userwaypoint then
@@ -625,11 +623,13 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
 end
 
 function MapPinEnhanced:PLAYER_LOGIN()
+    print("PLAYER_LOGIN")
     C_Map.ClearUserWaypoint()
 end
 
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
+    print("PLAYER_ENTERING_WORLD")
     pinManager.RestoreAllPins()
 
     -- Check if TomTom is Loaded
