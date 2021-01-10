@@ -251,10 +251,20 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local tracked = false
 
+    local minimappin = CreateFrame("Button", nil)
+    minimappin:SetSize(22, 22)
+    minimappin.icon = minimappin:CreateTexture(nil, "BORDER")
+    minimappin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
+    minimappin.icon:SetSize(22, 22)
+    minimappin.icon:SetBlendMode("BLEND")
+    minimappin.icon:SetAllPoints(minimappin)
+
+
     local function Track(x, y, mapID)
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
         objective.Icon:SetAtlas("Waypoint-MapPin-Tracked")
+        minimappin.icon:SetAtlas("Waypoint-MapPin-Tracked")
         blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y,
@@ -267,6 +277,7 @@ local function CreatePin(x, y, mapID, emit, title)
         tracked = false
         pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
         objective.Icon:SetAtlas("Waypoint-MapPin-Untracked")
+        minimappin.icon:SetAtlas("Waypoint-MapPin-Untracked")
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     end
 
@@ -280,15 +291,19 @@ local function CreatePin(x, y, mapID, emit, title)
     local function ShowOnMap()
         objective:Show()
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
     end
     local function RemoveFromMap()
         objective:Hide()
         objective:ClearAllPoints()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
     end
     local function MoveOnMap(x, y, mapID)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
     end
     local function IsTracked()
         return tracked
@@ -299,6 +314,7 @@ local function CreatePin(x, y, mapID, emit, title)
                                                                   y * 10000,
                                                                   MAP_PIN_HYPERLINK)
     end
+
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
     pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -398,6 +414,10 @@ local function CreatePin(x, y, mapID, emit, title)
                                    Round(x * 100) .. ", " .. Round(y * 100) ..
                                    ")")
     end
+
+
+
+
 
     return {
         Untrack = Untrack,
