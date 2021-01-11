@@ -50,8 +50,6 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(
             end
         end,
         OnTooltipShow = function(tt)
-            tt:AddLine("MapPinEnhanced")
-            tt:AddLine(" ")
             tt:AddLine(L["Left-Click LDB"])
             tt:AddLine(L["Right-Click LDB"])
         end
