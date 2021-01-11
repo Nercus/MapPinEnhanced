@@ -7,6 +7,8 @@ local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 local LDBIcon = LibStub("LibDBIcon-1.0")
 
+local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
+
 _G.MPH = MapPinEnhanced
 
 local strmatch = _G.string.match
@@ -50,8 +52,8 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(
         OnTooltipShow = function(tt)
             tt:AddLine("MapPinEnhanced")
             tt:AddLine(" ")
-            tt:AddLine("Left-Click to open Pin Tracker")
-            tt:AddLine("Right-Click to open Import Frame")
+            tt:AddLine(L["Left-Click LDB"])
+            tt:AddLine(L["Right-Click LDB"])
         end
     })
 
@@ -605,7 +607,7 @@ local pinManager = PinManager()
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            MapPinEnhanced:Print('Arrow to Pin does not work here!')
+            MapPinEnhanced:Print(L["Arrow error"])
         end
         pinManager.AddPin(x, y, mapID, name)
     else
@@ -656,8 +658,7 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD()
     -- Check if TomTom is Loaded
     if IsAddOnLoaded("TomTom") then
         TomTomLoaded = true
-        self:Print(
-            "The usage of /way within MPH is not possible with TomTom enabled.") -- Localize
+        self:Print(L["TomTom enabled"]) -- Localize
     else
         TomTomLoaded = false
     end
@@ -710,12 +711,18 @@ function MapPinEnhanced:ParseInput(msg)
                                            slashtitle)
             end
         else
-            MapPinEnhanced:Print(
-                'Please use the formatting "/way x y"')
+            if not TomTomLoaded then
+                MapPinEnhanced:Print(L["Formating error"])
+            else
+                MapPinEnhanced:Print(L["Formating error TomTom"])
+            end
         end
     else
-        MapPinEnhanced:Print(
-            'Please use the formatting "/way x y"')
+        if not TomTomLoaded then
+            MapPinEnhanced:Print(L["Formating error"])
+        else
+            MapPinEnhanced:Print(L["Formating error TomTom"])
+        end
     end
 end
 
@@ -730,7 +737,7 @@ SlashCmdList["MPH"] = function(msg)
         return
     end
     if strmatch(msg, "import") then MapPinEnhanced:ToggleImportWindow() return end
-    if strmatch(msg, "minimapbutton") then MapPinEnhanced:ToggleMinimapButton() return end
+    if strmatch(msg, "minimap") then MapPinEnhanced:ToggleMinimapButton() return end
     MapPinEnhanced:ParseInput(msg)
 end
 

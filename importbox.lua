@@ -3,6 +3,8 @@ local module = core:NewModule("Importbox")
 
 local AceGUI = LibStub("AceGUI-3.0")
 
+local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
+
 local function ParseImport(importstring)
     if not importstring then return end
     local msg
@@ -14,7 +16,7 @@ local function ParseImport(importstring)
         elseif string.match(s, "/pin ") then
             msg = string.gsub(s, "/pin ", "")
         else
-            core:Print('Please use the formatting "/way x y"')
+            core:Print(L["Formating error"])
         end
         core:ParseInput(msg)
     end

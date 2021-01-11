@@ -8,7 +8,7 @@
 ## X-Embeds: Ace3
 
 embeds.xml
+Locales\Locales.xml
 
 core.lua
 importbox.lua
-#SuperTrackedFrame.xml
