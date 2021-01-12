@@ -1,8 +1,5 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapPinEnhanced", "ruRU")
-
 if not L then return end
-
-
 
 L["Left-Click LDB"] = "|cffeda55fЩелкните левой|r  кнопкой мыши, чтобы переключить отслеживание точки на карте."
 L["Right-Click LDB"] = "|cffeda55fЩелкните правой|r кнопкой мыши, чтобы открыть или закрыть окно импорта."

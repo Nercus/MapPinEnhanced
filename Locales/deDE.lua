@@ -1,5 +1,4 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapPinEnhanced", "deDE")
-
 if not L then return end
 
 L["Left-Click LDB"] = "|cffeda55fLinks-Klick|r um den Pin Tracker zu öffnen."

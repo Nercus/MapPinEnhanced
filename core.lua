@@ -29,7 +29,7 @@ local IsShiftKeyDown = _G.IsShiftKeyDown
 local OBJECTIVE_TRACKER_COLOR = _G.OBJECTIVE_TRACKER_COLOR
 local MAP_PIN_HYPERLINK = _G.MAP_PIN_HYPERLINK
 
-local C_Map, C_SuperTrack, C_QuestLog = _G.C_Map, _G.C_SuperTrack, _G.C_QuestLog
+local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack, _G.C_QuestLog, _G.C_Navigation
 local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
 
@@ -473,7 +473,6 @@ local function PinManager()
         if not C_SuperTrack.IsSuperTrackingQuest() then
             local pin = nil
             for _, p in ipairs(pins) do
-                if p.IsTracked() then return end
                 if IsCloser(p, pin) then pin = p end
             end
             if pin then pin.Track(pin.x, pin.y, pin.mapID) end
@@ -745,7 +744,16 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:SetAlpha(0)
     self:EnableMouse(false)
 end)
-------------------------
 
-
--- TODO: New Hook Remove Pin if <5y
+hooksecurefunc(SuperTrackedFrame, "UpdateAlpha", function(self)
+    --self:SetScale(1.3) option to change scale
+    local distance = C_Navigation.GetDistance()
+    if distance <= 7 and distance > 0 then
+        pinManager.RemoveTrackedPin()
+    end
+    if C_Navigation.HasValidScreenPosition() then
+        self:SetAlpha(1.0)
+    else
+        self:SetAlpha(0)
+    end
+end)

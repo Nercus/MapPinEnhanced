@@ -1,4 +1,5 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapPinEnhanced", "enUS", true)
+if not L then return end
 
 L["Left-Click LDB"] = "|cffeda55fLeft-Click|r to toggle the pin tracker."
 L["Right-Click LDB"] = "|cffeda55fRight-Click|r to toggle the import window."
