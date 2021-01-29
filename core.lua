@@ -59,7 +59,8 @@ local defaults = {
     profile = {
         minimap = {hide = false},
         savedpins = {},
-        pintrackerpositon = {x = 0, y = 0}
+        pintrackerpositon = {x = 0, y = 0},
+        saved = {}
     }
 }
 
@@ -241,6 +242,7 @@ end
 local PinFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title)
+    ViragDevTool_AddData(HBD.mapData)
     local titleColor = OBJECTIVE_TRACKER_COLOR["Header"]
     local titleColorH = OBJECTIVE_TRACKER_COLOR["HeaderHighlight"]
     local textColor = OBJECTIVE_TRACKER_COLOR["Normal"]
@@ -745,15 +747,15 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:EnableMouse(false)
 end)
 
-hooksecurefunc(SuperTrackedFrame, "UpdateAlpha", function(self)
-    --self:SetScale(1.3) option to change scale
-    local distance = C_Navigation.GetDistance()
-    if distance <= 7 and distance > 0 then
-        pinManager.RemoveTrackedPin()
-    end
-    if C_Navigation.HasValidScreenPosition() then
-        self:SetAlpha(1.0)
-    else
-        self:SetAlpha(0)
-    end
-end)
+-- TODO: Remove pin if reached (throttle)
+-- hooksecurefunc(SuperTrackedFrame, "UpdateAlpha", function(self)
+--     local distance = C_Navigation.GetDistance()
+--     if distance <= 7 and distance > 0 then
+--         pinManager.RemoveTrackedPin()
+--     end
+--     if C_Navigation.HasValidScreenPosition() then
+--         self:SetAlpha(1.0)
+--     else
+--         self:SetAlpha(0)
+--     end
+-- end)
