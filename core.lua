@@ -1,7 +1,8 @@
 local _G = _G
 local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced",
                                                         "AceConsole-3.0",
-                                                        "AceEvent-3.0")
+                                                        "AceEvent-3.0",
+                                                        "AceTimer-3.0")
 
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
@@ -29,7 +30,9 @@ local IsShiftKeyDown = _G.IsShiftKeyDown
 local OBJECTIVE_TRACKER_COLOR = _G.OBJECTIVE_TRACKER_COLOR
 local MAP_PIN_HYPERLINK = _G.MAP_PIN_HYPERLINK
 
-local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack, _G.C_QuestLog, _G.C_Navigation
+local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack,
+                                                      _G.C_QuestLog,
+                                                      _G.C_Navigation
 local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
 
@@ -237,12 +240,13 @@ function MapPinEnhanced:OnEnable()
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LOGIN")
+
 end
+
 
 local PinFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title)
-    ViragDevTool_AddData(HBD.mapData)
     local titleColor = OBJECTIVE_TRACKER_COLOR["Header"]
     local titleColorH = OBJECTIVE_TRACKER_COLOR["HeaderHighlight"]
     local textColor = OBJECTIVE_TRACKER_COLOR["Normal"]
@@ -270,7 +274,6 @@ local function CreatePin(x, y, mapID, emit, title)
     minimappin.icon:SetBlendMode("BLEND")
     minimappin.icon:SetAllPoints(minimappin)
 
-
     local function Track(x, y, mapID)
         tracked = true
         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -281,7 +284,11 @@ local function CreatePin(x, y, mapID, emit, title)
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y,
                                                                    0))
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+            if not MapPinEnhanced.distanceTimer then
+                MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1)
+            end
         end
+
         blockWAYPOINTevent = false
     end
     local function Untrack()
@@ -302,7 +309,8 @@ local function CreatePin(x, y, mapID, emit, title)
     local function ShowOnMap()
         objective:Show()
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
-        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false,
+                               false)
     end
     local function RemoveFromMap()
         objective:Hide()
@@ -314,18 +322,16 @@ local function CreatePin(x, y, mapID, emit, title)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
         HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
-        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false,
+                               false)
     end
-    local function IsTracked()
-        return tracked
-    end
+    local function IsTracked() return tracked end
     local function FormatHyperlink()
         return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID,
                                                                   x * 10000,
                                                                   y * 10000,
                                                                   MAP_PIN_HYPERLINK)
     end
-
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
     pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -416,16 +422,13 @@ local function CreatePin(x, y, mapID, emit, title)
         if not objective:IsShown() then objective:Show() end
     end
 
-    local function SetObjectiveTitle(title)
-        objective.Title:SetText(title)
-    end
+    local function SetObjectiveTitle(title) objective.Title:SetText(title) end
 
     local function SetObjectiveText(x, y, mapID)
         objective.Text:SetText(HBDmapData[mapID]["name"] .. " (" ..
                                    Round(x * 100) .. ", " .. Round(y * 100) ..
                                    ")")
     end
-
 
     return {
         Untrack = Untrack,
@@ -597,7 +600,7 @@ local function PinManager()
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
         RestoreAllPins = RestoreAllPins,
-        RemoveAllPins = RemoveAllPins
+        RemoveAllPins = RemoveAllPins,
     }
 end
 
@@ -646,9 +649,7 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
     end
 end
 
-function MapPinEnhanced:PLAYER_LOGIN()
-    C_Map.ClearUserWaypoint()
-end
+function MapPinEnhanced:PLAYER_LOGIN() C_Map.ClearUserWaypoint() end
 
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
@@ -730,13 +731,22 @@ SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
 SlashCmdList["MPH"] = function(msg)
-    if strmatch(msg, "removeall") then pinManager.RemoveAllPins() return end
+    if strmatch(msg, "removeall") then
+        pinManager.RemoveAllPins()
+        return
+    end
     if strmatch(msg, "pintracker") then
         MapPinEnhanced:TogglePinTrackerWindow()
         return
     end
-    if strmatch(msg, "import") then MapPinEnhanced:ToggleImportWindow() return end
-    if strmatch(msg, "minimap") then MapPinEnhanced:ToggleMinimapButton() return end
+    if strmatch(msg, "import") then
+        MapPinEnhanced:ToggleImportWindow()
+        return
+    end
+    if strmatch(msg, "minimap") then
+        MapPinEnhanced:ToggleMinimapButton()
+        return
+    end
     MapPinEnhanced:ParseInput(msg)
 end
 
@@ -747,15 +757,22 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:EnableMouse(false)
 end)
 
--- TODO: Remove pin if reached (throttle)
--- hooksecurefunc(SuperTrackedFrame, "UpdateAlpha", function(self)
---     local distance = C_Navigation.GetDistance()
---     if distance <= 7 and distance > 0 then
---         pinManager.RemoveTrackedPin()
---     end
---     if C_Navigation.HasValidScreenPosition() then
---         self:SetAlpha(1.0)
---     else
---         self:SetAlpha(0)
---     end
--- end)
+local superTrackedFrame = _G["SuperTrackedFrame"]
+local oldAlpha = superTrackedFrame.GetTargetAlphaBaseValue
+function SuperTrackedFrame:GetTargetAlphaBaseValue()
+  return 1 or oldAlpha(self)
+end
+
+
+function MapPinEnhanced:DistanceTimer()
+    local distance = C_Navigation.GetDistance()
+    if distance > 0 then
+        if distance <= 7 then
+            pinManager.RemoveTrackedPin()
+        end
+        self.distanceTimer.delay = (0.1*distance^(0.5)) -- distance based throttle
+    end
+    if distance == 0 then
+        self:CancelAllTimers()
+    end
+end
