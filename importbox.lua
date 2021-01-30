@@ -79,7 +79,6 @@ function CreateWindow()
     edit:SetFullWidth(true)
     edit:SetCallback("OnTextChanged", function(widget, event, text)
         textStore = text
-        if text then savebutton:SetDisabled(false) end
     end)
     module.edit = edit
 
