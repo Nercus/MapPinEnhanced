@@ -1,4 +1,4 @@
-package-as: Maö
+package-as: MapPinEnhanced
 
 externals:
     Libs/AceAddon-3.0: https://repos.wowace.com/wow/ace3/trunk/AceAddon-3.0
