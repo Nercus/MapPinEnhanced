@@ -21,7 +21,7 @@ jobs:
 
     # specify the environment variables used by the packager, matching the secrets from the project on GitHub
     env:
-      CF_API_KEY: ${{48ddf9a9-428c-4568-8409-9587ee0be4aa}
+      CF_API_KEY: ${{48ddf9a9-428c-4568-8409-9587ee0be4aa}}
           # "steps" holds a list of all the steps needed to package and release our AddOn
     steps:
 
