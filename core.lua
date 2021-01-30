@@ -551,7 +551,7 @@ local function PinManager()
         UntrackPins()
         pin.Track(x, y, mapID)
         UpdateTrackerPositions()
-        MapPinEnhanced.db.profile.savedpins = pins -- TODO: dont save functions
+        MapPinEnhanced.db.profile.savedpins = pins
     end
 
     local function RestorePin()

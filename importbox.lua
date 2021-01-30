@@ -8,7 +8,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 local function ParseImport(importstring)
     if not importstring then return end
     local msg
-    for s in importstring:gmatch("[^\r\n]+") do -- TODO: Make better
+    for s in importstring:gmatch("[^\r\n]+") do
         if string.match(s, "/way ") then
             msg = string.gsub(s, "/way ", "")
         elseif string.match(s, "/mph ") then
