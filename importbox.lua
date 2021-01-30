@@ -55,38 +55,6 @@ function CreateWindow()
     group1:SetAutoAdjustHeight(true)
     f:AddChild(group1)
 
-    local namebox = AceGUI:Create("EditBox")
-    namebox:DisableButton(false)
-    namebox:SetRelativeWidth(0.5)
-    namebox:SetCallback("OnEnterPressed",
-                        function(widget, event, text) name = text namebox:ClearFocus() end)
-    group1:AddChild(namebox)
-
-    local saveddropdown = AceGUI:Create("Dropdown")
-    saveddropdown:SetRelativeWidth(0.5)
-    saveddropdown:SetMultiselect(false)
-    saveddropdown:SetCallback("OnValueChanged", function(widget, event, key)
-        selectedload = key
-    end)
-    saveddropdown:SetList(saved)
-    group1:AddChild(saveddropdown)
-
-    local savebutton = AceGUI:Create("Button")
-    savebutton:SetRelativeWidth(0.5)
-    savebutton:SetDisabled(true)
-        savebutton:SetText("Save")
-    group1:AddChild(savebutton)
-
-    local loadbutton = AceGUI:Create("Button")
-    loadbutton:SetRelativeWidth(0.25)
-    loadbutton:SetText("Load")
-    group1:AddChild(loadbutton)
-
-    local delbutton = AceGUI:Create("Button")
-    delbutton:SetRelativeWidth(0.25)
-    delbutton:SetText("Delete")
-       group1:AddChild(delbutton)
-
     local button = AceGUI:Create("Button")
     button:SetRelativeWidth(1)
     button:SetText("Import")
@@ -114,29 +82,6 @@ function CreateWindow()
         if text then savebutton:SetDisabled(false) end
     end)
     module.edit = edit
-
-    loadbutton:SetCallback("OnClick", function(widget, event)
-        if selectedload then
-            edit:SetText(saved[selectedload])
-        end
-    end)
-
-
-    delbutton:SetCallback("OnClick", function(widget, event)
-        saved[selectedload] = nil
-        saveddropdown:SetList(saved)
-        saveddropdown:SetText("")
-        edit:SetText("")
-    end)
-
-    savebutton:SetCallback("OnClick", function(widget, event)
-        saved[name] = textStore
-        saveddropdown:SetList(saved)
-        namebox:SetText("")
-        edit:SetText("")
-    end)
-
-    core.db.profile.saved = saved
 
     _G["MapPinEnhanced_ImportFrame"] = f.frame
     table.insert(UISpecialFrames, "MapPinEnhanced_ImportFrame")

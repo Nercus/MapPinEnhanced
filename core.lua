@@ -1,3 +1,6 @@
+
+
+
 local _G = _G
 local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced",
                                                         "AceConsole-3.0",
@@ -63,7 +66,6 @@ local defaults = {
         minimap = {hide = false},
         savedpins = {},
         pintrackerpositon = {x = 0, y = 0},
-        saved = {}
     }
 }
 
