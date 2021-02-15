@@ -286,7 +286,10 @@ local function CreatePin(x, y, mapID, emit, title)
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y,
                                                                    0))
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+
             if not MapPinEnhanced.distanceTimer then
+                MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1)
+            elseif MapPinEnhanced.distanceTimer.cancelled then
                 MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1)
             end
         end
@@ -754,6 +757,20 @@ end
 
 ---- Hooks ------
 
+function MapPinEnhanced:DistanceTimer()
+    local distance = C_Navigation.GetDistance()
+    if distance > 0 then
+        if distance <= 7 then
+            pinManager.RemoveTrackedPin()
+        end
+        -- distance based throttle
+        self.distanceTimer.delay = (0.1*distance^(0.5))
+    end
+    if distance == 0 then
+        self:CancelAllTimers()
+    end
+end
+
 hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:SetAlpha(0)
     self:EnableMouse(false)
@@ -763,18 +780,4 @@ local superTrackedFrame = _G["SuperTrackedFrame"]
 local oldAlpha = superTrackedFrame.GetTargetAlphaBaseValue
 function SuperTrackedFrame:GetTargetAlphaBaseValue()
   return 1 or oldAlpha(self)
-end
-
-
-function MapPinEnhanced:DistanceTimer()
-    local distance = C_Navigation.GetDistance()
-    if distance > 0 then
-        if distance <= 7 then
-            pinManager.RemoveTrackedPin()
-        end
-        self.distanceTimer.delay = (0.1*distance^(0.5)) -- distance based throttle
-    end
-    if distance == 0 then
-        self:CancelAllTimers()
-    end
 end
