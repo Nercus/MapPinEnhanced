@@ -1,4 +1,4 @@
-## Interface: 90002
+## Interface: 90005
 ## Author: Nerc
 ## Title: MapPinEnhanced
 ## Version: 0.3b
