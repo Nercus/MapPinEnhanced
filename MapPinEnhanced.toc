@@ -6,6 +6,7 @@
 ## SavedVariables: MapPinEnhancedDB
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
+## X-Curse-Project-ID: 441677
 
 embeds.xml
 Locales\Locales.xml
