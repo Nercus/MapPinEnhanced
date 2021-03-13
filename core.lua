@@ -283,8 +283,7 @@ local function CreatePin(x, y, mapID, emit, title)
         minimappin.icon:SetAtlas("Waypoint-MapPin-Tracked")
         blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID) then
-            C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y,
-                                                                   0))
+            C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y, 0))
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
 
             if not MapPinEnhanced.distanceTimer then
@@ -483,9 +482,14 @@ local function PinManager()
         if not C_SuperTrack.IsSuperTrackingQuest() then
             local pin = nil
             for _, p in ipairs(pins) do
-                if IsCloser(p, pin) then pin = p end
+                p.Untrack()
+                if IsCloser(p, pin) then
+                    pin = p
+                end
             end
-            if pin then pin.Track(pin.x, pin.y, pin.mapID) end
+            if pin then
+                pin.Track(pin.x, pin.y, pin.mapID)
+            end
         end
     end
     local function RemovePin(pin)
