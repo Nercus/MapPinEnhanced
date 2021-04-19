@@ -22,17 +22,7 @@ local function ParseImport(importstring)
     end
 end
 
-function core:ToggleImportWindow()
-    if not module.gui then CreateWindow() end
-    if module.gui:IsShown() then
-        module.gui:Hide()
-    else
-        module.edit:SetText("")
-        module.gui:Show()
-    end
-end
-
-function CreateWindow()
+local function CreateWindow()
     if module.gui then return end
 
     local saved = core.db.profile.saved
@@ -84,4 +74,15 @@ function CreateWindow()
 
     _G["MapPinEnhanced_ImportFrame"] = f.frame
     table.insert(UISpecialFrames, "MapPinEnhanced_ImportFrame")
+end
+
+
+function core:ToggleImportWindow()
+    if not module.gui then CreateWindow() end
+    if module.gui:IsShown() then
+        module.gui:Hide()
+    else
+        module.edit:SetText("")
+        module.gui:Show()
+    end
 end

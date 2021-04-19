@@ -91,7 +91,7 @@ function MapPinEnhanced:OnInitialize()
     MPH_Frame:Hide()
     self.TrackerFrame = MPH_Frame
 
-    local tex = MPH_Frame:CreateTexture("ARTWORK")
+    local tex = MPH_Frame:CreateTexture(nil, "ARTWORK")
     tex:SetAllPoints()
     tex:SetColorTexture(0, 0, 0, 0.5)
     MPH_Frame.movetexture = tex
@@ -780,8 +780,14 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:EnableMouse(false)
 end)
 
-local superTrackedFrame = _G["SuperTrackedFrame"]
-local oldAlpha = superTrackedFrame.GetTargetAlphaBaseValue
-function SuperTrackedFrame:GetTargetAlphaBaseValue()
-  return 1 or oldAlpha(self)
-end
+
+
+-- Thanks Meorawr on WoWUIDev
+local SetAlpha = SuperTrackedFrame.SetAlpha;
+hooksecurefunc(SuperTrackedFrame, "SetAlpha", function(self)
+    if C_Navigation.HasValidScreenPosition() then
+        SetAlpha(self, 1);
+    end
+end);
+
+-- TODO: Add CheckBox to importbox to disable that
