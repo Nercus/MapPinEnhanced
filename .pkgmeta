@@ -14,6 +14,10 @@ externals:
     Libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
     Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
 
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
 
 ignore:
   - README.md
