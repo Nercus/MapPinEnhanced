@@ -5,6 +5,47 @@ local AceGUI = LibStub("AceGUI-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
+local xpcall = xpcall
+
+
+local function safecall(func, ...)
+	if func then
+		return xpcall(func, errorhandler, ...)
+	end
+end
+
+
+AceGUI:RegisterLayout("customlayout",
+    function(content, children)
+        if children[1] and children[2] and children[3] then
+            -- Editbox
+            children[1]:SetWidth(content:GetWidth() or 0)
+            children[1]:SetHeight(content:GetHeight() or 0)
+            children[1].frame:ClearAllPoints()
+            children[1].frame:SetAllPoints(content)
+            children[1].frame:Show()
+
+            -- Import button
+            children[2]:SetWidth(90)
+            children[2]:SetHeight(25)
+            children[2].frame:ClearAllPoints()
+            children[2].frame:SetPoint("BOTTOMLEFT", content, "TOPRIGHT", -100, -10)
+            children[2].frame:Show()
+
+
+            -- Checkbox
+            children[3].frame:ClearAllPoints()
+            children[3].frame:SetPoint("LEFT", content.obj.statustext:GetParent(), "LEFT", 5, 0)
+            children[3].frame:Show()
+
+
+            safecall(content.obj.LayoutFinished, content.obj, nil, content:GetHeight())
+        end
+    end
+)
+
+
+
 local function ParseImport(importstring)
     if not importstring then return end
     local msg
@@ -22,55 +63,74 @@ local function ParseImport(importstring)
     end
 end
 
+-- Reload Popup
+StaticPopupDialogs["MPH_RELOAD_POPUP"] = {
+    text = "Changing this setting requires that you reload the Interface",
+    button1 = "Reload",
+    button2 = "Cancel",
+    OnAccept = function()
+        ReloadUI()
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+  }
+
+
+
 local function CreateWindow()
     if module.gui then return end
 
-    local saved = core.db.profile.saved
     local textStore
     local name
     local selectedload
+    local db = core.db.profile
+
 
     local f = AceGUI:Create("Frame")
     f:Hide()
     module.gui = f
-    f:SetLayout("flow")
-    f:SetWidth(600)
+    f:SetLayout("customlayout")
+    f:SetWidth(400)
     f:SetAutoAdjustHeight(true)
     f:SetTitle("Waypoint Import")
     f:EnableResize(false)
 
-    local group1 = AceGUI:Create("SimpleGroup")
-    group1:SetLayout("flow")
-    group1:SetFullWidth(true)
-    group1:SetAutoAdjustHeight(true)
-    f:AddChild(group1)
-
-    local button = AceGUI:Create("Button")
-    button:SetRelativeWidth(1)
-    button:SetText("Import")
-    button:SetCallback("OnClick", function()
-        ParseImport(textStore)
-        core:ToggleImportWindow()
-    end)
-    group1:AddChild(button)
-
-    local group2 = AceGUI:Create("SimpleGroup")
-    group2:SetFullWidth(true)
-    group2:SetFullHeight(true)
-    group2:SetLayout("fill")
-    f:AddChild(group2)
-
     local edit = AceGUI:Create("MultiLineEditBox")
-    group2:AddChild(edit)
+    f:AddChild(edit)
     edit.label:SetText("")
     edit:SetText("")
-    edit.button:Hide()
-    edit:SetFullHeight(true)
+    edit:DisableButton(true)
     edit:SetFullWidth(true)
     edit:SetCallback("OnTextChanged", function(widget, event, text)
         textStore = text
     end)
     module.edit = edit
+
+    local button = AceGUI:Create("Button")
+    button:SetRelativeWidth(0.3)
+    button:SetText("Import")
+    button:SetCallback("OnClick", function()
+        ParseImport(textStore)
+        core:ToggleImportWindow()
+    end)
+    f:AddChild(button)
+
+    local checkbox = AceGUI:Create("CheckBox")
+    checkbox:SetValue(true)
+    checkbox:SetLabel("Change Arrow Alpha")
+    checkbox:SetValue(db.options["changedalpha"])
+    checkbox:SetCallback("OnValueChanged", function(widget, event, value)
+        if value == true then
+            db.options["changedalpha"] = true
+        elseif value == false then
+            db.options["changedalpha"] = false
+        end
+        StaticPopup_Show("MPH_RELOAD_POPUP");
+    end)
+    f:AddChild(checkbox)
+
 
     _G["MapPinEnhanced_ImportFrame"] = f.frame
     table.insert(UISpecialFrames, "MapPinEnhanced_ImportFrame")

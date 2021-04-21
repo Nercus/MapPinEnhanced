@@ -66,6 +66,9 @@ local defaults = {
         minimap = {hide = false},
         savedpins = {},
         pintrackerpositon = {x = 0, y = 0},
+        options = {
+            changedalpha = true,
+        },
     }
 }
 
@@ -216,6 +219,18 @@ function MapPinEnhanced:OnInitialize()
     for name, mapID in pairs(newEntries) do mapDataID[name] = mapID end
     wipe(newEntries)
     collectgarbage("collect")
+
+
+
+    -- Thanks Meorawr on WoWUIDev
+    if self.db.profile.options.changedalpha then
+        local SetAlpha = SuperTrackedFrame.SetAlpha;
+        hooksecurefunc(SuperTrackedFrame, "SetAlpha", function(self)
+            if C_Navigation.HasValidScreenPosition() then
+                SetAlpha(self, 1);
+            end
+        end);
+    end
 end
 
 function MapPinEnhanced:UpdateMinimapButton()
@@ -779,15 +794,3 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
     self:SetAlpha(0)
     self:EnableMouse(false)
 end)
-
-
-
--- Thanks Meorawr on WoWUIDev
-local SetAlpha = SuperTrackedFrame.SetAlpha;
-hooksecurefunc(SuperTrackedFrame, "SetAlpha", function(self)
-    if C_Navigation.HasValidScreenPosition() then
-        SetAlpha(self, 1);
-    end
-end);
-
--- TODO: Add CheckBox to importbox to disable that
