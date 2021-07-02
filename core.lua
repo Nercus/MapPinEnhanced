@@ -345,12 +345,6 @@ local function CreatePin(x, y, mapID, emit, title)
                                false)
     end
     local function IsTracked() return tracked end
-    local function FormatHyperlink()
-        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID,
-                                                                  x * 10000,
-                                                                  y * 10000,
-                                                                  MAP_PIN_HYPERLINK)
-    end
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
     pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -362,9 +356,7 @@ local function CreatePin(x, y, mapID, emit, title)
             if IsControlKeyDown() then
                 emit("remove")
             elseif IsShiftKeyDown() then
-                local link = FormatHyperlink()
-                ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
-                ChatEdit_InsertLink(link)
+                emit("hyperlink")
             else
                 ToggleTracked()
             end
@@ -395,9 +387,7 @@ local function CreatePin(x, y, mapID, emit, title)
             if IsControlKeyDown() then
                 emit("remove")
             elseif IsShiftKeyDown() then
-                local link = FormatHyperlink()
-                ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
-                ChatEdit_InsertLink(link)
+                emit("hyperlink")
             else
                 ToggleTracked()
             end
@@ -457,7 +447,6 @@ local function CreatePin(x, y, mapID, emit, title)
         RemoveFromMap = RemoveFromMap,
         MoveOnMap = MoveOnMap,
         IsTracked = IsTracked,
-        FormatHyperlink = FormatHyperlink,
         SetTooltip = SetTooltip,
         SetTrackerPosition = SetTrackerPosition,
         SetObjectiveTitle = SetObjectiveTitle,
@@ -480,6 +469,15 @@ local function IsCloser(pin, ref)
         return DistanceFromPlayer(pin) < DistanceFromPlayer(ref)
     else
         return true
+    end
+end
+
+local function FormatHyperlink(x, y, mapID)
+    if x and y and mapID then
+        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID,
+        x * 10000,
+        y * 10000,
+        MAP_PIN_HYPERLINK)
     end
 end
 
@@ -558,6 +556,10 @@ local function PinManager()
                 elseif e == "track" then
                     UntrackPins()
                     pin.Track(pin.x, pin.y, pin.mapID)
+                elseif e == "hyperlink" then
+                    local link = FormatHyperlink(pin.x, pin.y, pin.mapID)
+                    ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
+                    ChatEdit_InsertLink(link)
                 end
             end, title)
             pin.ShowOnMap()
