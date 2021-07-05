@@ -17,7 +17,7 @@ end
 
 AceGUI:RegisterLayout("customlayout",
     function(content, children)
-        if children[1] and children[2] and children[3] then
+        if children[1] and children[2] and children[3] and children[4] then
             -- Editbox
             children[1]:SetWidth(content:GetWidth() or 0)
             children[1]:SetHeight(content:GetHeight() or 0)
@@ -26,10 +26,10 @@ AceGUI:RegisterLayout("customlayout",
             children[1].frame:Show()
 
             -- Import button
-            children[2]:SetWidth(90)
+            children[2]:SetWidth(85)
             children[2]:SetHeight(25)
             children[2].frame:ClearAllPoints()
-            children[2].frame:SetPoint("BOTTOMLEFT", content, "TOPRIGHT", -100, -10)
+            children[2].frame:SetPoint("BOTTOMLEFT", content, "TOPRIGHT", -90, -12)
             children[2].frame:Show()
 
 
@@ -37,6 +37,12 @@ AceGUI:RegisterLayout("customlayout",
             children[3].frame:ClearAllPoints()
             children[3].frame:SetPoint("LEFT", content.obj.statustext:GetParent(), "LEFT", 5, 0)
             children[3].frame:Show()
+
+            children[4]:SetWidth(85)
+            children[4]:SetHeight(25)
+            children[4].frame:ClearAllPoints()
+            children[4].frame:SetPoint("BOTTOMRIGHT", content, "TOPLEFT", 90, -12)
+            children[4].frame:Show()
 
 
             safecall(content.obj.LayoutFinished, content.obj, nil, content:GetHeight())
@@ -108,14 +114,14 @@ local function CreateWindow()
     end)
     module.edit = edit
 
-    local button = AceGUI:Create("Button")
-    button:SetRelativeWidth(0.3)
-    button:SetText("Import")
-    button:SetCallback("OnClick", function()
+    local importbutton = AceGUI:Create("Button")
+    importbutton:SetRelativeWidth(0.3)
+    importbutton:SetText("Import")
+    importbutton:SetCallback("OnClick", function()
         ParseImport(textStore)
         core:ToggleImportWindow()
     end)
-    f:AddChild(button)
+    f:AddChild(importbutton)
 
     local checkbox = AceGUI:Create("CheckBox")
     checkbox:SetValue(true)
@@ -130,6 +136,14 @@ local function CreateWindow()
         StaticPopup_Show("MPH_RELOAD_POPUP");
     end)
     f:AddChild(checkbox)
+
+    local exportbutton = AceGUI:Create("Button")
+    exportbutton:SetRelativeWidth(0.3)
+    exportbutton:SetText("Export")
+    exportbutton:SetCallback("OnClick", function()
+        edit:SetText(core:ParseExport())
+    end)
+    f:AddChild(exportbutton)
 
 
     _G["MapPinEnhanced_ImportFrame"] = f.frame

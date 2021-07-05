@@ -40,6 +40,7 @@ local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
 
 local mapDataID = {}
+local mapDataIDreverse = {}
 local HBDmapData = HBD.mapData -- Data is localized
 
 -- Broker
@@ -217,6 +218,7 @@ function MapPinEnhanced:OnInitialize()
         end
     end
     for name, mapID in pairs(newEntries) do mapDataID[name] = mapID end
+    for entry, mapID in pairs(mapDataID) do mapDataIDreverse[mapID] = entry end
     wipe(newEntries)
     collectgarbage("collect")
 
@@ -618,6 +620,14 @@ local function PinManager()
         C_Map.ClearUserWaypoint()
     end
 
+    local function GetAllPinData()
+        local t = {}
+        for i, pin in ipairs(pins) do
+            tinsert(t, {pin.x, pin.y, pin.mapID})
+        end
+        return t
+    end
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -627,6 +637,7 @@ local function PinManager()
         RemoveTrackedPin = RemoveTrackedPin,
         RestoreAllPins = RestoreAllPins,
         RemoveAllPins = RemoveAllPins,
+        GetAllPinData = GetAllPinData,
     }
 end
 
@@ -751,6 +762,17 @@ function MapPinEnhanced:ParseInput(msg)
         end
     end
 end
+
+function MapPinEnhanced:ParseExport()
+    local pinData = pinManager.GetAllPinData()
+    local output = ""
+    for _, pin in ipairs(pinData) do
+        local slashcmd = string.format("/way %s %.2f %.2f", mapDataIDreverse[pin[3]], pin[1]*100, pin[2]*100)
+        output = output .. slashcmd .. "\n"
+    end
+    return output
+end
+
 
 if not TomTomLoaded then SLASH_MPH1 = "/way" end
 SLASH_MPH2 = "/pin"
