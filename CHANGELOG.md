@@ -1,2 +1,2 @@
-# Update 1.5
-- Added Export Button to import box
+# Update 1.6
+- Fix some zones not being detected by name

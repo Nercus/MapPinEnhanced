@@ -1,7 +1,7 @@
 ## Interface: 90100
 ## Author: Nerc
 ## Title: MapPinEnhanced
-## Version: 1.4
+## Version: 1.6
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB
 ## OptionalDeps: Ace3
