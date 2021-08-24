@@ -39,7 +39,7 @@ local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack,
 local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
 
-local mapDataID = {}
+
 local mapDataIDreverse = {}
 local HBDmapData = HBD.mapData -- Data is localized
 
@@ -72,6 +72,75 @@ local defaults = {
         },
     }
 }
+
+
+
+local overrides = {
+    [101] = {mapType = Enum.UIMapType.World}, -- Outland
+    [125] = {mapType = Enum.UIMapType.Zone}, -- Dalaran
+    [126] = {mapType = Enum.UIMapType.Micro},
+    [195] = {suffix = "1"}, -- Kaja'mine
+    [196] = {suffix = "2"}, -- Kaja'mine
+    [197] = {suffix = "3"}, -- Kaja'mine
+    [501] = {mapType = Enum.UIMapType.Zone}, -- Dalaran
+    [502] = {mapType = Enum.UIMapType.Micro},
+    [572] = {mapType = Enum.UIMapType.World}, -- Draenor
+    [579] = {suffix = "1"}, -- Lunarfall Excavation
+    [580] = {suffix = "2"}, -- Lunarfall Excavation
+    [581] = {suffix = "3"}, -- Lunarfall Excavation
+    [582] = {mapType = Enum.UIMapType.Zone}, -- Lunarfall
+    [585] = {suffix = "1"}, -- Frostwall Mine
+    [586] = {suffix = "2"}, -- Frostwall Mine
+    [587] = {suffix = "3"}, -- Frostwall Mine
+    [590] = {mapType = Enum.UIMapType.Zone}, -- Frostwall
+    [625] = {mapType = Enum.UIMapType.Orphan}, -- Dalaran
+    [626] = {mapType = Enum.UIMapType.Micro}, -- Dalaran
+    [627] = {mapType = Enum.UIMapType.Zone},
+    [628] = {mapType = Enum.UIMapType.Micro},
+    [629] = {mapType = Enum.UIMapType.Micro},
+    [943] = {suffix = FACTION_HORDE}, -- Arathi Highlands
+    [1044] = {suffix = FACTION_ALLIANCE},
+}
+
+MapPinEnhanced.CZWFromMapID = {}
+function MapPinEnhanced:GetCZWFromMapID(m)
+    local zone, continent, world, map
+    local mapInfo = nil
+
+    if not m then return nil, nil, nil; end
+
+    -- Return the cached CZW
+    if MapPinEnhanced.CZWFromMapID[m] then
+        return unpack(MapPinEnhanced.CZWFromMapID[m])
+    end
+
+    map = m -- Save the original map
+    repeat
+        mapInfo = C_Map.GetMapInfo(m)
+        if not mapInfo then
+            -- No more parents, return what we have
+            MapPinEnhanced.CZWFromMapID[map] = {continent, zone, world}
+            return continent, zone, world
+        end
+        local mapType = (overrides[m] and overrides[m].mapType) or mapInfo.mapType
+        if mapType == Enum.UIMapType.Zone then
+            -- Its a zone map
+            zone = m
+        elseif mapType == Enum.UIMapType.Continent then
+            continent = m
+        elseif (mapType == Enum.UIMapType.World) or (mapType == Enum.UIMapType.Cosmic) then
+            world = m
+            continent = continent or m -- Hack for one continent worlds
+        end
+        m = mapInfo.parentMapID
+    until (m == 0)
+    MapPinEnhanced.CZWFromMapID[map] = {continent, zone, world}
+    return continent, zone, world
+end
+
+MapPinEnhanced.mapDataID = {}
+local mapDataID = MapPinEnhanced.mapDataID
+
 
 function MapPinEnhanced:OnInitialize()
 
@@ -182,32 +251,42 @@ function MapPinEnhanced:OnInitialize()
         end
     end
 
-    -- Restructure Map Data
-    for mapID in pairs(HBDmapData) do
-        local mapType = HBDmapData[mapID].mapType
-        if mapType == Enum.UIMapType.Zone or mapType == Enum.UIMapType.Continent or
-            mapType == Enum.UIMapType.Micro then
-            local name = HBDmapData[mapID].name
-            if name and mapDataID[name] then
-                if type(mapDataID[name]) ~= "table" then
-                    mapDataID[name] = {mapDataID[name]}
-                end
-                tinsert(mapDataID[name], mapID)
-            else
-                mapDataID[name] = mapID
+    -- Structure mapdata like TomTom, Snippet from TomTom Addon
+    for id in pairs(HBDmapData) do
+        local c,z,w = MapPinEnhanced:GetCZWFromMapID(id)
+        local mapType = (overrides[id] and overrides[id].mapType) or HBDmapData[id].mapType
+        if (mapType == Enum.UIMapType.Zone) or
+           (mapType == Enum.UIMapType.Continent) or
+           (mapType == Enum.UIMapType.Micro) then
+            local name = HBDmapData[id].name
+            if (overrides[id] and overrides[id].suffix) then
+                name = name .. " " .. overrides[id].suffix
             end
-            mapDataID["#" .. mapID] = mapID
+            if w then
+                if name and mapDataID[name] then
+                    if type(mapDataID[name]) ~= "table" then
+                        -- convert to table
+                        mapDataID[name] = {mapDataID[name]}
+                    end
+                    table.insert(mapDataID[name], id)
+                else
+                    mapDataID[name] = id
+                end
+            end
+
+            mapDataID["#" .. id] = id
         end
     end
+
     local newEntries = {}
     for name, mapID in pairs(mapDataID) do
         if type(mapID) == "table" then
             mapDataID[name] = nil
-            for _, mapId in pairs(mapID) do
+            for idx, mapId in pairs(mapID) do
                 local parent = HBDmapData[mapId].parent
-                local parentName = (parent and (parent > 0) and
-                                       HBDmapData[parent].name)
+                local parentName = (parent and (parent > 0) and HBDmapData[parent].name)
                 if parentName then
+                    -- We rely on the implicit acending order of mapID's so the lowest one wins
                     if not newEntries[name .. ":" .. parentName] then
                         newEntries[name .. ":" .. parentName] = mapId
                     else
@@ -702,7 +781,8 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD()
 end
 
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
-local rightseparator = "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
+local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
+local function lowergsub(s) return s:lower():gsub("[%s]", "") end
 
 function MapPinEnhanced:ParseInput(msg)
     if not msg then return end
@@ -710,10 +790,10 @@ function MapPinEnhanced:ParseInput(msg)
     local slashy
     local slashmapid
     local slashtitle
-    msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator,
-                                                   rightseparator)
+    msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
     local tokens = {}
-    for token in msg:gmatch("%S+") do tinsert(tokens, token) end
+    for token in msg:gmatch("%S+") do table.insert(tokens, token) end
+
 
     if tokens[1] and not tonumber(tokens[1]) then
         local zoneEnd
@@ -751,14 +831,14 @@ function MapPinEnhanced:ParseInput(msg)
             if not TomTomLoaded then
                 MapPinEnhanced:Print(L["Formating error"])
             else
-                MapPinEnhanced:Print(L["Formating error TomTom"])
+                MapPinEnhanced:Print(L["TomTom is enabled"])
             end
         end
     else
         if not TomTomLoaded then
             MapPinEnhanced:Print(L["Formating error"])
         else
-            MapPinEnhanced:Print(L["Formating error TomTom"])
+            MapPinEnhanced:Print(L["TomTom is enabled"])
         end
     end
 end
