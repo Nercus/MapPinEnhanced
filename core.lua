@@ -7,11 +7,21 @@ local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced",
                                                         "AceEvent-3.0",
                                                         "AceTimer-3.0")
 
+
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 local LDBIcon = LibStub("LibDBIcon-1.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
+
+-- TODO: add navigation based on https://www.curseforge.com/wow/addons/dugi-questing-essential
+-- TODO: Create Scroll in PinTracker
+-- TODO: Add Option window (Change Styling, pin range alpha)
+-- TODO: Add Pinmanager
+-- TODO: Change Textures
+-- TODO: Push TOC
+
+
 
 _G.MPH = MapPinEnhanced
 
