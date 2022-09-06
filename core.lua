@@ -8,8 +8,9 @@ local LDBIcon = LibStub("LibDBIcon-1.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
--- TODO: add navigation based on https://www.curseforge.com/wow/addons/dugi-questing-essential
+-- TODO: add navigation feature
 -- TODO: Limit number of shown pins in pintracker
+-- TODO: Create Scroll in PinTracker
 -- TODO: Add Option window (Change Styling, pin range alpha)
 -- TODO: Add Pinmanager (save presets, delete presets, change presets)
 -- TODO: Change Textures pintracker header
