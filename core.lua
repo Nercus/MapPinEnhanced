@@ -1,12 +1,6 @@
-
-
-
 local _G = _G
-local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced",
-                                                        "AceConsole-3.0",
-                                                        "AceEvent-3.0",
-                                                        "AceTimer-3.0")
-
+local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced", "AceConsole-3.0", "AceEvent-3.0",
+    "AceTimer-3.0")
 
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
@@ -15,13 +9,12 @@ local LDBIcon = LibStub("LibDBIcon-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 -- TODO: add navigation based on https://www.curseforge.com/wow/addons/dugi-questing-essential
--- TODO: Create Scroll in PinTracker
+-- TODO: Limit number of shown pins in pintracker
 -- TODO: Add Option window (Change Styling, pin range alpha)
--- TODO: Add Pinmanager
--- TODO: Change Textures
--- TODO: Push TOC
-
-
+-- TODO: Add Pinmanager (save presets, delete presets, change presets)
+-- TODO: Change Textures pintracker header
+-- TODO: Use SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked
+-- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
 
 _G.MPH = MapPinEnhanced
 
@@ -43,81 +36,143 @@ local IsShiftKeyDown = _G.IsShiftKeyDown
 local OBJECTIVE_TRACKER_COLOR = _G.OBJECTIVE_TRACKER_COLOR
 local MAP_PIN_HYPERLINK = _G.MAP_PIN_HYPERLINK
 
-local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack,
-                                                      _G.C_QuestLog,
-                                                      _G.C_Navigation
+local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack, _G.C_QuestLog, _G.C_Navigation
 local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
-
 
 local mapDataIDreverse = {}
 local HBDmapData = HBD.mapData -- Data is localized
 
+
+function MapPinEnhanced:debug(data, text)
+    if ViragDevTool then
+        ViragDevTool:AddData(data, text)
+    else
+        local d, t = data, text
+        C_Timer.After(1, function()
+            self:debug(d, t)
+        end)
+    end
+end
+
 -- Broker
-MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(
-                           "MapPinEnhanced", {
-        type = "data source",
-        text = "MapPinEnhanced",
-        icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
-        OnClick = function(_, button)
-            if button == "LeftButton" then
-                MapPinEnhanced:TogglePinTrackerWindow()
-            elseif button == "RightButton" then
-                MapPinEnhanced:ToggleImportWindow()
-            end
-        end,
-        OnTooltipShow = function(tt)
-            tt:AddLine(L["Left-Click LDB"])
-            tt:AddLine(L["Right-Click LDB"])
+MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
+    type = "data source",
+    text = "MapPinEnhanced",
+    icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
+    OnClick = function(_, button)
+        if button == "LeftButton" then
+            MapPinEnhanced:TogglePinTrackerWindow()
+        elseif button == "RightButton" then
+            MapPinEnhanced:ToggleImportWindow()
         end
-    })
+    end,
+    OnTooltipShow = function(tt)
+        tt:AddLine(L["Left-Click LDB"])
+        tt:AddLine(L["Right-Click LDB"])
+    end
+})
 
 local defaults = {
     profile = {
-        minimap = {hide = false},
-        savedpins = {},
-        pintrackerpositon = {x = 0, y = 0},
-        options = {
-            changedalpha = true,
+        minimap = {
+            hide = false
         },
+        savedpins = {},
+        pintrackerpositon = {
+            x = 0,
+            y = 0
+        },
+        options = {
+            changedalpha = true
+        }
     }
 }
 
-
-
 local overrides = {
-    [101] = {mapType = Enum.UIMapType.World}, -- Outland
-    [125] = {mapType = Enum.UIMapType.Zone}, -- Dalaran
-    [126] = {mapType = Enum.UIMapType.Micro},
-    [195] = {suffix = "1"}, -- Kaja'mine
-    [196] = {suffix = "2"}, -- Kaja'mine
-    [197] = {suffix = "3"}, -- Kaja'mine
-    [501] = {mapType = Enum.UIMapType.Zone}, -- Dalaran
-    [502] = {mapType = Enum.UIMapType.Micro},
-    [572] = {mapType = Enum.UIMapType.World}, -- Draenor
-    [579] = {suffix = "1"}, -- Lunarfall Excavation
-    [580] = {suffix = "2"}, -- Lunarfall Excavation
-    [581] = {suffix = "3"}, -- Lunarfall Excavation
-    [582] = {mapType = Enum.UIMapType.Zone}, -- Lunarfall
-    [585] = {suffix = "1"}, -- Frostwall Mine
-    [586] = {suffix = "2"}, -- Frostwall Mine
-    [587] = {suffix = "3"}, -- Frostwall Mine
-    [590] = {mapType = Enum.UIMapType.Zone}, -- Frostwall
-    [625] = {mapType = Enum.UIMapType.Orphan}, -- Dalaran
-    [626] = {mapType = Enum.UIMapType.Micro}, -- Dalaran
-    [627] = {mapType = Enum.UIMapType.Zone},
-    [628] = {mapType = Enum.UIMapType.Micro},
-    [629] = {mapType = Enum.UIMapType.Micro},
-    [943] = {suffix = FACTION_HORDE}, -- Arathi Highlands
-    [1044] = {suffix = FACTION_ALLIANCE},
+    [101] = {
+        mapType = Enum.UIMapType.World
+    }, -- Outland
+    [125] = {
+        mapType = Enum.UIMapType.Zone
+    }, -- Dalaran
+    [126] = {
+        mapType = Enum.UIMapType.Micro
+    },
+    [195] = {
+        suffix = "1"
+    }, -- Kaja'mine
+    [196] = {
+        suffix = "2"
+    }, -- Kaja'mine
+    [197] = {
+        suffix = "3"
+    }, -- Kaja'mine
+    [501] = {
+        mapType = Enum.UIMapType.Zone
+    }, -- Dalaran
+    [502] = {
+        mapType = Enum.UIMapType.Micro
+    },
+    [572] = {
+        mapType = Enum.UIMapType.World
+    }, -- Draenor
+    [579] = {
+        suffix = "1"
+    }, -- Lunarfall Excavation
+    [580] = {
+        suffix = "2"
+    }, -- Lunarfall Excavation
+    [581] = {
+        suffix = "3"
+    }, -- Lunarfall Excavation
+    [582] = {
+        mapType = Enum.UIMapType.Zone
+    }, -- Lunarfall
+    [585] = {
+        suffix = "1"
+    }, -- Frostwall Mine
+    [586] = {
+        suffix = "2"
+    }, -- Frostwall Mine
+    [587] = {
+        suffix = "3"
+    }, -- Frostwall Mine
+    [590] = {
+        mapType = Enum.UIMapType.Zone
+    }, -- Frostwall
+    [625] = {
+        mapType = Enum.UIMapType.Orphan
+    }, -- Dalaran
+    [626] = {
+        mapType = Enum.UIMapType.Micro
+    }, -- Dalaran
+    [627] = {
+        mapType = Enum.UIMapType.Zone
+    },
+    [628] = {
+        mapType = Enum.UIMapType.Micro
+    },
+    [629] = {
+        mapType = Enum.UIMapType.Micro
+    },
+    [943] = {
+        suffix = FACTION_HORDE
+    }, -- Arathi Highlands
+    [1044] = {
+        suffix = FACTION_ALLIANCE
+    }
 }
+
 
 MapPinEnhanced.CZWFromMapID = {}
 function MapPinEnhanced:GetCZWFromMapID(m)
     local zone, continent, world, map
     local mapInfo = nil
 
-    if not m then return nil, nil, nil; end
+    if not m then
+        return nil, nil, nil;
+    end
 
     -- Return the cached CZW
     if MapPinEnhanced.CZWFromMapID[m] then
@@ -129,7 +184,7 @@ function MapPinEnhanced:GetCZWFromMapID(m)
         mapInfo = C_Map.GetMapInfo(m)
         if not mapInfo then
             -- No more parents, return what we have
-            MapPinEnhanced.CZWFromMapID[map] = {continent, zone, world}
+            MapPinEnhanced.CZWFromMapID[map] = { continent, zone, world }
             return continent, zone, world
         end
         local mapType = (overrides[m] and overrides[m].mapType) or mapInfo.mapType
@@ -144,13 +199,12 @@ function MapPinEnhanced:GetCZWFromMapID(m)
         end
         m = mapInfo.parentMapID
     until (m == 0)
-    MapPinEnhanced.CZWFromMapID[map] = {continent, zone, world}
+    MapPinEnhanced.CZWFromMapID[map] = { continent, zone, world }
     return continent, zone, world
 end
 
 MapPinEnhanced.mapDataID = {}
 local mapDataID = MapPinEnhanced.mapDataID
-
 
 function MapPinEnhanced:OnInitialize()
 
@@ -158,8 +212,7 @@ function MapPinEnhanced:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
 
     -- Minimap Icon
-    LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker,
-                     self.db.profile.minimap)
+    LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
     MapPinEnhanced:UpdateMinimapButton()
 
     -- Objective Tracker Frame
@@ -180,37 +233,28 @@ function MapPinEnhanced:OnInitialize()
     MPH_Frame.movetexture = tex
     MPH_Frame.movetexture:Hide()
 
-    local MPH_ObjectiveTrackerHeader = CreateFrame("frame",
-                                                   "MPH_ObjectiveTrackerHeader",
-                                                   MPH_Frame,
-                                                   "ObjectiveTrackerHeaderTemplate")
+    local MPH_ObjectiveTrackerHeader = CreateFrame("frame", "MPH_ObjectiveTrackerHeader", MPH_Frame,
+        "ObjectiveTrackerHeaderTemplate")
     MPH_ObjectiveTrackerHeader.Text:SetText("Map Pins")
 
-    local minimizeButton = CreateFrame("button",
-                                       "MPH_QuestsHeaderMinimizeButton",
-                                       MPH_Frame, "BackdropTemplate")
-    local minimizeButtonText = minimizeButton:CreateFontString(nil, "overlay",
-                                                               "GameFontNormal")
+    local minimizeButton = CreateFrame("button", "MPH_QuestsHeaderMinimizeButton", MPH_Frame, "BackdropTemplate")
+    local minimizeButtonText = minimizeButton:CreateFontString(nil, "overlay", "GameFontNormal")
     minimizeButtonText:SetText("Map Pins")
     minimizeButtonText:SetPoint("right", minimizeButton, "left", -3, 1)
     minimizeButtonText:Hide()
     MPH_ObjectiveTrackerHeader.MinimizeButton:Hide()
     minimizeButton:SetSize(25, 25)
-    minimizeButton:SetPoint("topright", MPH_ObjectiveTrackerHeader, "topright",
-                            0, 0)
-    minimizeButton:SetScript("OnClick", function() MPH_Frame:Hide() end)
-    minimizeButton:SetNormalTexture(
-        [[Interface\Buttons\UI-Panel-MinimizeButton-Up]])
-    minimizeButton:SetPushedTexture(
-        [[Interface\Buttons\UI-Panel-MinimizeButton-Down]])
-    minimizeButton:SetHighlightTexture(
-        [[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]])
+    minimizeButton:SetPoint("topright", MPH_ObjectiveTrackerHeader, "topright", 0, 0)
+    minimizeButton:SetScript("OnClick", function()
+        MPH_Frame:Hide()
+    end)
+    minimizeButton:SetNormalTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Up]])
+    minimizeButton:SetPushedTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Down]])
+    minimizeButton:SetHighlightTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]])
     minimizeButton:SetFrameStrata("LOW")
 
-    local MoverButton = CreateFrame("button", "MPH_QuestsHeaderMoverButton",
-                                    MPH_Frame, "BackdropTemplate")
-    local MoverButtonText = MoverButton:CreateFontString(nil, "overlay",
-                                                         "GameFontNormal")
+    local MoverButton = CreateFrame("button", "MPH_QuestsHeaderMoverButton", MPH_Frame, "BackdropTemplate")
+    local MoverButtonText = MoverButton:CreateFontString(nil, "overlay", "GameFontNormal")
     MoverButtonText:SetText("Map Pins")
     MoverButtonText:SetPoint("right", MoverButton, "left", 0, 1)
     MoverButtonText:Hide()
@@ -243,10 +287,8 @@ function MapPinEnhanced:OnInitialize()
         end
     end)
     MoverButton:SetNormalTexture([[Interface\Buttons\UI-Panel-SmallerButton-Up]])
-    MoverButton:SetPushedTexture(
-        [[Interface\Buttons\UI-Panel-SmallerButton-Down]])
-    MoverButton:SetHighlightTexture(
-        [[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]])
+    MoverButton:SetPushedTexture([[Interface\Buttons\UI-Panel-SmallerButton-Down]])
+    MoverButton:SetHighlightTexture([[Interface\Buttons\UI-Panel-MinimizeButton-Highlight]])
     MoverButton:SetFrameStrata("LOW")
 
     MPH_ObjectiveTrackerHeader:ClearAllPoints()
@@ -263,11 +305,10 @@ function MapPinEnhanced:OnInitialize()
 
     -- Structure mapdata like TomTom, Snippet from TomTom Addon
     for id in pairs(HBDmapData) do
-        local c,z,w = MapPinEnhanced:GetCZWFromMapID(id)
+        local c, z, w = MapPinEnhanced:GetCZWFromMapID(id)
         local mapType = (overrides[id] and overrides[id].mapType) or HBDmapData[id].mapType
-        if (mapType == Enum.UIMapType.Zone) or
-           (mapType == Enum.UIMapType.Continent) or
-           (mapType == Enum.UIMapType.Micro) then
+        if (mapType == Enum.UIMapType.Zone) or (mapType == Enum.UIMapType.Continent) or
+            (mapType == Enum.UIMapType.Micro) then
             local name = HBDmapData[id].name
             if (overrides[id] and overrides[id].suffix) then
                 name = name .. " " .. overrides[id].suffix
@@ -276,7 +317,7 @@ function MapPinEnhanced:OnInitialize()
                 if name and mapDataID[name] then
                     if type(mapDataID[name]) ~= "table" then
                         -- convert to table
-                        mapDataID[name] = {mapDataID[name]}
+                        mapDataID[name] = { mapDataID[name] }
                     end
                     table.insert(mapDataID[name], id)
                 else
@@ -306,12 +347,14 @@ function MapPinEnhanced:OnInitialize()
             end
         end
     end
-    for name, mapID in pairs(newEntries) do mapDataID[name] = mapID end
-    for entry, mapID in pairs(mapDataID) do mapDataIDreverse[mapID] = entry end
+    for name, mapID in pairs(newEntries) do
+        mapDataID[name] = mapID
+    end
+    for entry, mapID in pairs(mapDataID) do
+        mapDataIDreverse[mapID] = entry
+    end
     wipe(newEntries)
     collectgarbage("collect")
-
-
 
     -- Thanks Meorawr on WoWUIDev
     if self.db.profile.options.changedalpha then
@@ -351,7 +394,6 @@ function MapPinEnhanced:OnEnable()
 
 end
 
-
 local PinFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title)
@@ -365,8 +407,7 @@ local function CreatePin(x, y, mapID, emit, title)
     pin:EnableMouse(true)
     pin:SetMouseClickEnabled(true)
 
-    local objective = CreateFrame("Button", nil, MapPinEnhanced.TrackerFrame,
-                                  "BackdropTemplate")
+    local objective = CreateFrame("Button", nil, MapPinEnhanced.TrackerFrame, "BackdropTemplate")
     objective:SetSize(235, 25)
     objective:EnableMouse(true)
     objective:SetMouseClickEnabled(true)
@@ -401,6 +442,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
         blockWAYPOINTevent = false
     end
+
     local function Untrack()
         tracked = false
         pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
@@ -416,26 +458,30 @@ local function CreatePin(x, y, mapID, emit, title)
             emit("track")
         end
     end
+
     local function ShowOnMap()
         objective:Show()
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
-        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false,
-                               false)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
     end
+
     local function RemoveFromMap()
         objective:Hide()
         objective:ClearAllPoints()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
         HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
     end
+
     local function MoveOnMap(x, y, mapID)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
         HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
         HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
-        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false,
-                               false)
+        HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
     end
-    local function IsTracked() return tracked end
+
+    local function IsTracked()
+        return tracked
+    end
 
     pin.icon = pin:CreateTexture(nil, "BORDER")
     pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
@@ -454,20 +500,24 @@ local function CreatePin(x, y, mapID, emit, title)
         end
         self:SetPoint("CENTER", 2, -2)
     end)
-    pin:SetScript("OnMouseUp", function(self) self:SetPoint("CENTER", 0, 0) end)
+    pin:SetScript("OnMouseUp", function(self)
+        self:SetPoint("CENTER", 0, 0)
+    end)
     local function SetTooltip(title)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
             GameTooltip_SetTitle(GameTooltip, title)
             GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
-            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE,
-                                       GREEN_FONT_COLOR)
+            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
             GameTooltip:Show()
         end)
     end
+
     SetTooltip(title)
 
-    pin:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    pin:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 
     local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(true)
@@ -489,22 +539,29 @@ local function CreatePin(x, y, mapID, emit, title)
     objective.Icon = objective:CreateTexture(nil, "OVERLAY")
     objective.Icon:SetPoint("right", objective, "left", 20, -4)
     objective.Icon:SetSize(25, 25)
-    objective.Title = objective:CreateFontString(nil, "BORDER",
-                                                 "GameFontNormalMed3")
+    objective.Title = objective:CreateFontString(nil, "BORDER", "GameFontNormalMed3")
     objective.Title:SetTextColor(titleColor.r, titleColor.g, titleColor.b)
     objective.Title:SetPoint("bottomleft", objective, "left", 20, 3)
     objective.Title:SetText(title)
-    objective.Text = objective:CreateFontString(nil, "BORDER",
-                                                "GameFontNormalMed3")
+    objective.Text = objective:CreateFontString(nil, "BORDER", "GameFontNormalMed3")
     objective.Text:SetTextColor(textColor.r, textColor.g, textColor.b)
     objective.Text:SetPoint("topleft", objective, "left", 25, 0)
-    objective.Text:SetText(
-        HBDmapData[mapID]["name"] .. " (" .. Round(x * 100) .. ", " ..
-            Round(y * 100) .. ")")
+    objective.Text:SetWordWrap(true)
+    objective.Text:SetWidth(200)
+    objective.Text:SetJustifyH("LEFT")
+    objective.Text:SetText(HBDmapData[mapID]["name"] .. " (" .. Round(x * 100) .. ", " .. Round(y * 100) .. ")")
     objective.Icon:SetBlendMode("BLEND")
     objective.Icon.highlightTexture = objective:CreateTexture(nil, "HIGHLIGHT")
     objective.Icon.highlightTexture:SetAllPoints(objective.Icon)
     objective.Icon.highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
+
+    objective.navButton = CreateFrame("Button", nil, objective, "UIPanelButtonTemplate")
+    objective.navButton:SetSize(20, 20)
+    objective.navButton:SetPoint("RIGHT", objective, "RIGHT", 0, 0)
+    objective.navButton:SetNormalAtlas("poi-islands-table")
+    objective.navButton:SetScript("OnClick", function()
+        MapPinEnhanced:navigateToPin(x, y, mapID)
+    end)
 
     objective:SetScript("OnEnter", function()
         objective.Title:SetTextColor(titleColorH.r, titleColorH.g, titleColorH.b)
@@ -517,17 +574,18 @@ local function CreatePin(x, y, mapID, emit, title)
     end)
     local function SetTrackerPosition(index)
         objective:ClearAllPoints()
-        objective:SetPoint("topleft", MapPinEnhanced.TrackerFrame, "topleft", 0,
-                           -35 * (index))
-        if not objective:IsShown() then objective:Show() end
+        objective:SetPoint("topleft", MapPinEnhanced.TrackerFrame, "topleft", 0, -35 * (index))
+        if not objective:IsShown() then
+            objective:Show()
+        end
     end
 
-    local function SetObjectiveTitle(title) objective.Title:SetText(title) end
+    local function SetObjectiveTitle(title)
+        objective.Title:SetText(title)
+    end
 
     local function SetObjectiveText(x, y, mapID)
-        objective.Text:SetText(HBDmapData[mapID]["name"] .. " (" ..
-                                   Round(x * 100) .. ", " .. Round(y * 100) ..
-                                   ")")
+        objective.Text:SetText(HBDmapData[mapID]["name"] .. " (" .. Round(x * 100) .. ", " .. Round(y * 100) .. ")")
     end
 
     return {
@@ -550,9 +608,10 @@ local function CreatePin(x, y, mapID, emit, title)
 end
 
 local function DistanceFromPlayer(pin)
-    local PlayerZonePosition = {HBD:GetPlayerZonePosition()}
-    return (HBD:GetZoneDistance(PlayerZonePosition[3], PlayerZonePosition[1],
-                                PlayerZonePosition[2], pin.mapID, pin.x, pin.y))
+    local PlayerZonePosition = { HBD:GetPlayerZonePosition() }
+    return (
+        HBD:GetZoneDistance(PlayerZonePosition[3], PlayerZonePosition[1], PlayerZonePosition[2], pin.mapID, pin.x,
+            pin.y))
 end
 
 local function IsCloser(pin, ref)
@@ -565,23 +624,23 @@ end
 
 local function FormatHyperlink(x, y, mapID)
     if x and y and mapID then
-        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID,
-        x * 10000,
-        y * 10000,
-        MAP_PIN_HYPERLINK)
+        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
     end
 end
 
 local function PinManager()
     local pins = {}
     local function UpdateTrackerPositions()
-        for i, p in ipairs(pins) do p.SetTrackerPosition(i) end
+        for i, p in ipairs(pins) do
+            p.SetTrackerPosition(i)
+        end
         if MapPinEnhanced.TrackerFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         elseif not MapPinEnhanced.TrackerFrame:IsShown() and #pins > 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         end
     end
+
     local function SupertrackClosest()
         if not C_SuperTrack.IsSuperTrackingQuest() then
             local pin = nil
@@ -596,6 +655,7 @@ local function PinManager()
             end
         end
     end
+
     local function RemovePin(pin)
         pin.RemoveFromMap()
         for i, p in ipairs(pins) do
@@ -622,8 +682,7 @@ local function PinManager()
 
     local function AddPin(x, y, mapID, name)
         for _, p in ipairs(pins) do
-            if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID ==
-                p.mapID then
+            if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
                 UntrackPins()
                 p.Track(x, y, mapID)
                 return
@@ -673,7 +732,9 @@ local function PinManager()
 
     local function RestorePin()
         for _, p in ipairs(pins) do
-            if p.SupertrackClosest() then break end
+            if p.SupertrackClosest() then
+                break
+            end
         end
     end
 
@@ -712,7 +773,7 @@ local function PinManager()
     local function GetAllPinData()
         local t = {}
         for i, pin in ipairs(pins) do
-            tinsert(t, {pin.x, pin.y, pin.mapID})
+            tinsert(t, { pin.x, pin.y, pin.mapID })
         end
         return t
     end
@@ -726,7 +787,7 @@ local function PinManager()
         RemoveTrackedPin = RemoveTrackedPin,
         RestoreAllPins = RestoreAllPins,
         RemoveAllPins = RemoveAllPins,
-        GetAllPinData = GetAllPinData,
+        GetAllPinData = GetAllPinData
     }
 end
 
@@ -756,7 +817,9 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
-    if blockWAYPOINTevent then return end
+    if blockWAYPOINTevent then
+        return
+    end
     local userwaypoint = C_Map.GetUserWaypoint()
     if userwaypoint then
         local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
@@ -770,12 +833,13 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
         blockWAYPOINTevent = true
         C_Map.ClearUserWaypoint()
         blockWAYPOINTevent = false
-        MapPinEnhanced:AddWaypoint(userwaypoint.position.x,
-                                   userwaypoint.position.y, userwaypoint.uiMapID)
+        MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
     end
 end
 
-function MapPinEnhanced:PLAYER_LOGIN() C_Map.ClearUserWaypoint() end
+function MapPinEnhanced:PLAYER_LOGIN()
+    C_Map.ClearUserWaypoint()
+end
 
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
@@ -791,19 +855,24 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD()
 end
 
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
-local rightseparator =   "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
-local function lowergsub(s) return s:lower():gsub("[%s]", "") end
+local rightseparator = "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
+local function lowergsub(s)
+    return s:lower():gsub("[%s]", "")
+end
 
 function MapPinEnhanced:ParseInput(msg)
-    if not msg then return end
+    if not msg then
+        return
+    end
     local slashx
     local slashy
     local slashmapid
     local slashtitle
     msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
     local tokens = {}
-    for token in msg:gmatch("%S+") do table.insert(tokens, token) end
-
+    for token in msg:gmatch("%S+") do
+        table.insert(tokens, token)
+    end
 
     if tokens[1] and not tonumber(tokens[1]) then
         local zoneEnd
@@ -815,7 +884,9 @@ function MapPinEnhanced:ParseInput(msg)
             end
         end
 
-        if not zoneEnd then return end
+        if not zoneEnd then
+            return
+        end
 
         local zone = table.concat(tokens, " ", 1, zoneEnd)
         local x, y, _ = select(zoneEnd + 1, unpack(tokens))
@@ -834,8 +905,7 @@ function MapPinEnhanced:ParseInput(msg)
             slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
             slashtitle = table.concat(tokens, " ", 3)
             if slashx and slashy and slashmapid then
-                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid,
-                                           slashtitle)
+                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
             end
         else
             if not TomTomLoaded then
@@ -857,14 +927,15 @@ function MapPinEnhanced:ParseExport()
     local pinData = pinManager.GetAllPinData()
     local output = ""
     for _, pin in ipairs(pinData) do
-        local slashcmd = string.format("/way %s %.2f %.2f", mapDataIDreverse[pin[3]], pin[1]*100, pin[2]*100)
+        local slashcmd = string.format("/way %s %.2f %.2f", mapDataIDreverse[pin[3]], pin[1] * 100, pin[2] * 100)
         output = output .. slashcmd .. "\n"
     end
     return output
 end
 
-
-if not TomTomLoaded then SLASH_MPH1 = "/way" end
+if not TomTomLoaded then
+    SLASH_MPH1 = "/way"
+end
 SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
@@ -897,7 +968,7 @@ function MapPinEnhanced:DistanceTimer()
             pinManager.RemoveTrackedPin()
         end
         -- distance based throttle
-        self.distanceTimer.delay = (0.1*distance^(0.5))
+        self.distanceTimer.delay = (0.1 * distance ^ (0.5))
     end
     if distance == 0 then
         self:CancelAllTimers()

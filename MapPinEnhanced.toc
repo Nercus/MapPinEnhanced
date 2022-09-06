@@ -1,6 +1,6 @@
-## Interface: 90100
+## Interface: 100000
 ## Author: Nerc
-## Title: MapPinEnhanced
+## Title: Map Pin Enhanced
 ## Version: 1.6
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB
@@ -13,3 +13,5 @@ Locales\Locales.xml
 
 core.lua
 importbox.lua
+navigationData.lua
+navigation.lua
