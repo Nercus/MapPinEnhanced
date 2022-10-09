@@ -1,288 +1,191 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
-local module = core:NewModule("Navigation")
+local HBD = LibStub("HereBeDragons-2.0")
 
 
 
--- local function UnpackXY(coord)
---     if type(coord) == "string" then
---         local xString, yString = coord:match("(%d+.%d+),(%d+%.%d+)")
---         if yString then
---             return tonumber(xString) / 100, tonumber(yString) / 100
---         end
---     end
---     if not tonumber(coord) then
---         return
---     end
---     local factor
---     if tonumber(coord) > 99999999 then
---         factor = 2 ^ 16
---     else
---         factor = 10000 -- Handy notes coord
---     end
---     local x, y = floor(coord / factor) / factor, (coord % factor) / factor
---     -- print("GetXY", "x", x, "y", y)
---     return x, y
--- end
-
--- local function getReqs(raw)
---     local returnData = false
---     if not raw then return end
---     local out = {}
---     if string.match(raw, "lvl") then
---         returnData = true
---         out["lvl"] = string.match(raw, "lvl:(%d*)")
---     end
---     if string.match(raw, "notlvl") then
---         returnData = true
---         out["notlvl"] = string.match(raw, "notlvl:(%d*)")
---     end
---     if string.match(raw, "passlvl") then
---         returnData = true
---         out["passlvl"] = string.match(raw, "passlvl:(%d*)")
---     end
---     if string.match(raw, "trank") then
---         returnData = true
---         out["trank"] = string.match(raw, "trank:(%d*)")
---     end
---     if string.match(raw, "qid:(%d*)") then
---         returnData = true
---         out["qid"] = string.match(raw, "qid:(%d*)")
---     end
---     if string.match(raw, "nqid") then
---         returnData = true
---         out["nqid"] = string.match(raw, "nqid:(%d*)")
---     end
---     if string.match(raw, "fac") then
---         returnData = true
---         out["fac"] = string.match(raw, "fac:(%a*)")
---     end
---     if string.match(raw, "rep") then
---         returnData = true
---         local repString = string.match(raw, "rep:(.*)")
---         local standing, fac = strmatch(repString, "^(%d+)%.(.*)$", 1)
---         if standing and fac then
---             out["rep"] = {
---                 ["standing"] = standing,
---                 ["fac"] = fac
---             }
---         end
---     end
---     if string.match(raw, "cls") then
---         returnData = true
---         out["cls"] = string.match(raw, "cls:(%a*)")
---     end
---     if string.match(raw, "rac") then
---         returnData = true
---         out["rac"] = string.match(raw, "rac:(%a*)")
---     end
---     if string.match(raw, "map") then
---         returnData = true
---         out["map"] = string.match(raw, "map:(%d*)")
---     end
---     if string.match(raw, "spell") then
---         returnData = true
---         out["spell"] = string.match(raw, "spell:(%d*)")
---     end
---     if returnData then
---         return out
---     end
-
--- end
-
---     -- transport data
---     for _, j in pairs(fullData.BoatData) do
---         for _, k in pairs(j) do
---             local row = {}
---             local fromMapId, fromFloor, fromLocString, toMapId, toFloor, toLocString, waitTime, type = strsplit(":", k)
---             row.fromMapId = tonumber(fromMapId)
---             row.fromFloor = tonumber(fromFloor)
---             row.fromX, row.fromY = UnpackXY(fromLocString)
---             row.toMapId = tonumber(toMapId)
---             row.toFloor = tonumber(toFloor)
---             row.toX, row.toY = UnpackXY(toLocString)
---             row.waitTime = tonumber(waitTime)
---             row.type = type
---             row.nodeType = "transport"
-
---             local reqs = getReqs(k)
---             if reqs then
---                 row.reqs = reqs
---             end
---             table.insert(newData, row)
---         end
---     end
-
---     -- instance portals
---     for i, j in pairs(fullData.InstancePortals) do
---         local row = {}
---         local fromMapId, fromFloor, fromLocString, toMapId, toFloor, toLocString = strsplit(":", j)
---         row.fromMapId = tonumber(fromMapId)
---         row.fromFloor = tonumber(fromFloor)
---         row.fromX, row.fromY = UnpackXY(fromLocString)
---         row.toMapId = tonumber(toMapId)
---         row.toFloor = tonumber(toFloor)
---         row.toX, row.toY = UnpackXY(toLocString)
-
---         local reqs = getReqs(j)
---         if reqs then
---             row.reqs = reqs
---         end
-
---         row.nodeType = "instance"
---         table.insert(newData, row)
---     end
-
---     for _, j in pairs(fullData.LocalPortalData) do
---         for _, k in pairs(j) do
---             local row = {}
-
---             local _, fromMapId, fromFloor, fromLocString, toMapId, toFloor, toLocString = strsplit(":", k)
---             row.fromMapId = tonumber(fromMapId)
---             row.fromFloor = tonumber(fromFloor)
---             row.fromX, row.fromY = UnpackXY(fromLocString)
---             row.toMapId = tonumber(toMapId)
---             row.toFloor = tonumber(toFloor)
---             row.toX, row.toY = UnpackXY(toLocString)
-
---             local reqs = getReqs(k)
---             if reqs then
---                 row.reqs = reqs
---             end
---             row.nodeType = "portals_local"
---             table.insert(newData, row)
---         end
---     end
-
---     for _, j in pairs(fullData.StaticPortalData) do
---         for _, k in pairs(j) do
---             local row = {}
---             local _, fromMapId, fromFloor, fromLocString, toMapId, toFloor, toLocString = strsplit(":", k)
---             row.fromMapId = tonumber(fromMapId)
---             row.fromFloor = tonumber(fromFloor)
---             row.fromX, row.fromY = UnpackXY(fromLocString)
---             row.toMapId = tonumber(toMapId)
---             row.toFloor = tonumber(toFloor)
---             row.toX, row.toY = UnpackXY(toLocString)
-
---             local reqs = getReqs(k)
---             if reqs then
---                 row.reqs = reqs
---             end
---             row.nodeType = "portals_static"
---             table.insert(newData, row)
---         end
---     end
+local INF = math.huge
+local cachedPaths = nil
 
 
---     -- unbound teleport data key is itemId and first value in string is spellId
---     for _, d in pairs(fullData.UnboundTeleportData) do
---         for itemId, data in pairs(d) do
---             local row = {}
---             local spellId, toMapId, toFloor, toLocString = strsplit(":", data)
---             row.spellId = tonumber(spellId)
---             row.toMapId = tonumber(toMapId)
---             row.toFloor = tonumber(toFloor)
---             row.toX, row.toY = UnpackXY(toLocString)
+local function dist(m1, x1, y1, m2, x2, y2)
+    local distance, _, _ = HBD:GetZoneDistance(m1, x1, y1, m2, x2, y2)
+    if not distance then return 999999 end
+    return distance
+end
 
---             local reqs = getReqs(data)
---             if reqs then
---                 row.reqs = reqs
---             end
---             row.nodeType = "teleportto"
+local function heuristic_cost_estimate(nodeA, nodeB)
+    if nodeA.link and nodeB.link then
+        if nodeA.link == nodeB.link then
+            return 0
+        end
+    elseif nodeB.link then
+        if nodeB.link < 0 then
+            return 0
+        end
+    end
+    return dist(nodeA.mapId, nodeA.x, nodeA.y, nodeB.mapId, nodeB.x, nodeB.y)
+end
 
---             row.itemId = tonumber(itemId)
+local function is_valid_node(node, neighbor)
+    if node.continent == neighbor.continent then
+        return true
+    elseif neighbor.mapId == node.mapId then
+        return true
+    elseif node.link and node.link == neighbor.link and node.link > 0 then
+        return true
+    else
+        return false
+    end
+end
 
---             table.insert(newData, row)
+local function lowest_f_score(set, f_score)
+    local lowest, bestNode = INF, nil
+    for _, node in ipairs(set) do
+        local score = f_score[node]
+        if score < lowest then
+            lowest, bestNode = score, node
+        end
+    end
+    return bestNode
+end
 
---         end
---     end
+local function neighbor_nodes(theNode, nodes)
+    local neighbors = {}
+    for _, node in ipairs(nodes) do
+        if theNode ~= node and is_valid_node(theNode, node) then
+            table.insert(neighbors, node)
+        end
+    end
+    return neighbors
+end
 
---     local tableAsString = "{"
---     for i, j in pairs(newData) do
---         tableAsString = tableAsString .. "[" .. i .. "] = {"
+local function not_in(set, theNode)
 
---         for key, value in pairs(j) do
---             if type(value) == "table" then
---                 tableAsString = tableAsString .. "[\"" .. key .. "\"]" .. " = {"
---                 for k, v in pairs(value) do
---                     local v2
---                     if type(v) == "string" then
---                         v2 = "\"" .. v .. "\""
---                     else
---                         v2 = v
---                     end
---                     tableAsString = tableAsString .. "[\"" .. k .. "\"]" .. " = " .. v2 .. ", "
---                 end
---                 tableAsString = tableAsString .. "}, "
---             else
---                 local v2
---                 if type(value) == "string" then
---                     v2 = "\"" .. value .. "\""
---                 else
---                     v2 = value
---                 end
---                 tableAsString = tableAsString .. "[\"" .. key .. "\"]" .. " = " .. v2 .. ", "
---             end
---         end
---         tableAsString = tableAsString .. "}, "
+    for _, node in ipairs(set) do
+        if node == theNode then return false end
+    end
+    return true
+end
+
+local function remove_node(set, theNode)
+
+    for i, node in ipairs(set) do
+        if node == theNode then
+            set[i] = set[#set]
+            set[#set] = nil
+            break
+        end
+    end
+end
+
+local function unwind_path(flat_path, map, current_node)
+    if map[current_node] then
+        table.insert(flat_path, 1, map[current_node])
+        return unwind_path(flat_path, map, map[current_node])
+    else
+        return flat_path
+    end
+end
+
+local function a_star(start, goal, nodes, valid_node_func)
+
+    local closedset = {}
+    local openset = { start }
+    local came_from = {}
+
+    if valid_node_func then is_valid_node = valid_node_func end
+
+    local g_score, f_score = {}, {}
+    g_score[start] = 0
+    f_score[start] = g_score[start] + heuristic_cost_estimate(start, goal)
+
+    while #openset > 0 do
+
+        local current = lowest_f_score(openset, f_score)
+
+        if current == goal then
+            local path = unwind_path({}, came_from, goal)
+            table.insert(path, goal)
+            return path
+        end
+
+        remove_node(openset, current)
+        table.insert(closedset, current)
+
+        local neighbors = neighbor_nodes(current, nodes)
+        for _, neighbor in ipairs(neighbors) do
+            if not_in(closedset, neighbor) then
+
+                local tentative_g_score = g_score[current] + heuristic_cost_estimate(current, neighbor)
+
+                if not_in(openset, neighbor) or tentative_g_score < g_score[neighbor] then
+                    came_from[neighbor] = current
+                    g_score[neighbor] = tentative_g_score
+                    f_score[neighbor] = g_score[neighbor] + heuristic_cost_estimate(neighbor, goal)
+                    if not_in(openset, neighbor) then
+                        table.insert(openset, neighbor)
+                    end
+                end
+            end
+        end
+    end
+    return nil -- no valid path
+end
+
+local function path(start, goal, nodes, ignore_cache, valid_node_func)
+
+    if not cachedPaths then cachedPaths = {} end
+    if not cachedPaths[start] then
+        cachedPaths[start] = {}
+    elseif cachedPaths[start][goal] and not ignore_cache then
+        return cachedPaths[start][goal]
+    end
+
+    local resPath = a_star(start, goal, nodes, valid_node_func)
+    if not cachedPaths[start][goal] and not ignore_cache then
+        cachedPaths[start][goal] = resPath
+    end
+
+    return resPath
+end
+
+-- TODO: add coroutine with onUpdate Handler
+local sourceIndex
+local targetIndex
+
+local function formatNavigationOnFrame(path)
 
 
-
---         local pin = CreateFrame("Button", nil)
---         pin:SetSize(30, 30)
---         pin.icon = pin:CreateTexture(nil, "BORDER")
---         pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
---         pin.icon:SetSize(30, 30)
---         pin.icon:SetBlendMode("BLEND")
---         pin.icon:SetAllPoints(pin)
---         local function SetTooltip(title)
---             pin:SetScript("OnEnter", function(self)
---                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
---                 GameTooltip_SetTitle(GameTooltip, title)
-
---                 GameTooltip:Show()
---             end)
---         end
-
---         local dataText = ""
---         for key, value in pairs(j) do
---             if value then
---                 if type(value) == "table" then
---                     for k, v in pairs(value) do
---                         dataText = dataText .. key .. "-" .. k .. ": " .. v .. "\n"
---                     end
---                 else
---                     dataText = dataText .. key .. ": " .. value .. "\n"
---             end
---         end
---     end
---     SetTooltip(dataText)
-
---     pin:SetScript("OnLeave", function()
---         GameTooltip:Hide()
---     end)
---     pin:Show()
---     if j.toMapId and j.toX and j.toY then
---         HBDP:AddWorldMapIconMap(core, pin, j.toMapId, j.toX, j.toY, 3)
---     else
---         core:debug(j, "Missing data")
---     end
--- end
--- tableAsString = tableAsString .. "}"
-
--- core:debug(fullData, "fullData")
-
-
-
-
-
-function module:OnInitialize()
-    core:debug(core.NavigationData)
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
-    local sourceX, sourceY = C_Map.GetPlayerMapPosition(sourceMapID, "player"):GetXY()
+    core.NavigationStepFrame:Show()
+    core.NavigationStepFrame.spinner:Play()
     local sourceMapID = C_Map.GetBestMapForUnit("player")
-    -- local data = {["source"] = {targetX, targetY, targetMapID}, ["target"] = {sourceX, sourceY, sourceMapID}}
+    local sourceX, sourceY = C_Map.GetPlayerMapPosition(sourceMapID, "player"):GetXY()
+    local _, _, worldZone = HBD:GetWorldCoordinatesFromZone(sourceX, sourceY, sourceMapID)
+    local _, _, worldZone2 = HBD:GetWorldCoordinatesFromZone(targetX, targetY, targetMapID)
+    local info = C_Map.GetMapInfo(sourceMapID)
+    local info2 = C_Map.GetMapInfo(targetMapID)
+    local data = {
+        ["source"] = { x = sourceX, y = sourceY, mapId = sourceMapID, continent = worldZone, link = -1,
+            ["info"] = info },
+        ["target"] = { x = targetX, y = targetY, mapId = targetMapID, continent = worldZone2, link = -1,
+            ["info"] = info2 }
+    }
+    if sourceIndex then
+        table.remove(core.NavigationData, sourceIndex)
+    end
+    if targetIndex then
+        table.remove(core.NavigationData, targetIndex)
+    end
+    table.insert(core.NavigationData, data.source)
+    sourceIndex = #core.NavigationData
+    table.insert(core.NavigationData, data.target)
+    targetIndex = #core.NavigationData
 
+    local resPath = path(data.source, data.target, core.NavigationData, false, is_valid_node)
+    core.NavigationStepFrame.spinner:Stop()
+    core.NavigationStepFrame.spinnerTexture:Hide()
+    formatNavigationOnFrame(resPath)
 end
