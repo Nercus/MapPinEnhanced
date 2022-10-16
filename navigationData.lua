@@ -2,1158 +2,1611 @@ local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
 local module = core:NewModule("NavigationData")
 
 local NavigationData = {
-	{ ["fromMapId"] = 56, ["type"] = "Boat", ["toX"] = 0.715576171875, ["toMapId"] = 70,
-		["nodeType"] = "transport", ["toY"] = 0.56373596191406, ["waitTime"] = 264, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.0634765625, ["fromY"] = 0.62263488769531, },
-	{ ["fromMapId"] = 97, ["type"] = "Boat", ["toX"] = 0.52285766601562, ["toMapId"] = 62,
-		["nodeType"] = "transport", ["toY"] = 0.89469909667969, ["waitTime"] = 292, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.20384216308594, ["fromY"] = 0.54183959960938, },
-	{ ["fromMapId"] = 62, ["type"] = "Boat", ["toX"] = 0.20384216308594, ["toMapId"] = 97,
-		["nodeType"] = "transport", ["toY"] = 0.54183959960938, ["waitTime"] = 296, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.52285766601562, ["fromY"] = 0.89469909667969, },
-	{ ["fromMapId"] = 210, ["type"] = "Boat", ["toX"] = 0.70146179199219, ["toMapId"] = 10,
-		["nodeType"] = "transport", ["toY"] = 0.73222351074219, ["waitTime"] = 282, ["fromX"] = 0.39083862304688,
-		["fromY"] = 0.67041015625, },
-	{ ["fromMapId"] = 50, ["type"] = "Zeppelin", ["toX"] = 0.52484130859375, ["toMapId"] = 85,
-		["nodeType"] = "transport", ["toY"] = 0.53140258789062, ["waitTime"] = 280, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.37107849121094, ["fromY"] = 0.52389526367188, },
-	{ ["fromMapId"] = 114, ["type"] = "Zeppelin", ["toX"] = 0.44801330566406, ["toMapId"] = 85,
-		["nodeType"] = "transport", ["toY"] = 0.62286376953125, ["waitTime"] = 392, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.41377258300781, ["fromY"] = 0.53611755371094, },
-	{ ["fromMapId"] = 862, ["type"] = "Boat", ["toX"] = 0.7092, ["toMapId"] = 463, ["nodeType"] = "transport",
-		["toY"] = 0.3815, ["waitTime"] = 300, ["reqs"] = { ["fac"] = "Horde", }, ["fromX"] = 0.5808, ["fromY"] = 0.6504, },
-	{ ["fromMapId"] = 1161, ["type"] = "Boat", ["toX"] = 0.2283, ["toMapId"] = 84, ["nodeType"] = "transport",
-		["toY"] = 0.5622, ["waitTime"] = 300, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51308", }, ["fromX"] = 0.775,
-		["fromY"] = 0.2594, },
-	{ ["fromMapId"] = 70, ["type"] = "Boat", ["toX"] = 0.0634765625, ["toMapId"] = 56, ["nodeType"] = "transport",
-		["toY"] = 0.62263488769531, ["waitTime"] = 264, ["reqs"] = { ["fac"] = "Alliance", }, ["fromX"] = 0.715576171875,
-		["fromY"] = 0.56373596191406, },
-	{ ["fromMapId"] = 114, ["type"] = "Boat", ["toX"] = 0.17703247070312, ["toMapId"] = 84,
-		["nodeType"] = "transport", ["toY"] = 0.25837707519531, ["waitTime"] = 315, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.59768676757812, ["fromY"] = 0.69459533691406, },
-	{ ["fromMapId"] = 117, ["type"] = "Boat", ["toX"] = 0.046951293945312, ["toMapId"] = 56,
-		["nodeType"] = "transport", ["toY"] = 0.55833435058594, ["waitTime"] = 541, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.61399841308594, ["fromY"] = 0.626220703125, },
-	{ ["fromMapId"] = 85, ["type"] = "Zeppelin", ["toX"] = 0.60694885253906, ["toMapId"] = 18,
-		["nodeType"] = "transport", ["toY"] = 0.58735656738281, ["waitTime"] = 310, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.50790405273438, ["fromY"] = 0.55856323242188, },
-	{ ["fromMapId"] = 85, ["type"] = "Zeppelin", ["toX"] = 0.37107849121094, ["toMapId"] = 50,
-		["nodeType"] = "transport", ["toY"] = 0.52389526367188, ["waitTime"] = 290, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.52484130859375, ["fromY"] = 0.53140258789062, },
-	{ ["fromMapId"] = 10, ["type"] = "Boat", ["toX"] = 0.39083862304688, ["toMapId"] = 210,
-		["nodeType"] = "transport", ["toY"] = 0.67041015625, ["waitTime"] = 270, ["fromX"] = 0.70146179199219,
-		["fromY"] = 0.73222351074219, },
-	{ ["fromMapId"] = 117, ["type"] = "Zeppelin", ["toX"] = 0.59033203125, ["toMapId"] = 18,
-		["nodeType"] = "transport", ["toY"] = 0.59027099609375, ["waitTime"] = 245, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.77711486816406, ["fromY"] = 0.28282165527344, },
-	{ ["fromMapId"] = 87, ["type"] = "Tram", ["toX"] = 0.69371032714844, ["toMapId"] = 84,
-		["nodeType"] = "transport", ["toY"] = 0.31375122070312, ["waitTime"] = 100, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.76412963867188, ["fromY"] = 0.51225280761719, },
-	{ ["fromMapId"] = 84, ["type"] = "Tram", ["toX"] = 0.76412963867188, ["toMapId"] = 87,
-		["nodeType"] = "transport", ["toY"] = 0.51225280761719, ["waitTime"] = 100, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.69371032714844, ["fromY"] = 0.31375122070312, },
-	{ ["fromMapId"] = 84, ["type"] = "Boat", ["toX"] = 0.59768676757812, ["toMapId"] = 114,
-		["nodeType"] = "transport", ["toY"] = 0.69459533691406, ["waitTime"] = 345, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.17703247070312, ["fromY"] = 0.25837707519531, },
-	{ ["fromMapId"] = 56, ["type"] = "Boat", ["toX"] = 0.61399841308594, ["toMapId"] = 117,
-		["nodeType"] = "transport", ["toY"] = 0.626220703125, ["waitTime"] = 632, ["reqs"] = { ["fac"] = "Alliance", },
-		["fromX"] = 0.046951293945312, ["fromY"] = 0.55833435058594, },
-	{ ["fromMapId"] = 85, ["type"] = "Zeppelin", ["toX"] = 0.41377258300781, ["toMapId"] = 114,
-		["nodeType"] = "transport", ["toY"] = 0.53611755371094, ["waitTime"] = 334, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.44801330566406, ["fromY"] = 0.62286376953125, },
-	{ ["fromMapId"] = 18, ["type"] = "Zeppelin", ["toX"] = 0.77711486816406, ["toMapId"] = 117,
-		["nodeType"] = "transport", ["toY"] = 0.28282165527344, ["waitTime"] = 250, ["reqs"] = { ["fac"] = "Horde", },
-		["fromX"] = 0.59033203125, ["fromY"] = 0.59027099609375, },
-	{ ["fromMapId"] = 115, ["type"] = "Boat", ["toX"] = 0.23497009277344, ["toMapId"] = 117,
-		["nodeType"] = "transport", ["toY"] = 0.57768249511719, ["waitTime"] = 686, ["fromX"] = 0.4962158203125,
-		["fromY"] = 0.78422546386719, },
-	{ ["fromMapId"] = 117, ["type"] = "Boat", ["toX"] = 0.4962158203125, ["toMapId"] = 115,
-		["nodeType"] = "transport", ["toY"] = 0.78422546386719, ["waitTime"] = 682, ["fromX"] = 0.23497009277344,
-		["fromY"] = 0.57768249511719, },
-	{ ["fromMapId"] = 114, ["type"] = "Boat", ["toX"] = 0.47946166992188, ["toMapId"] = 115,
-		["nodeType"] = "transport", ["toY"] = 0.787353515625, ["waitTime"] = 601, ["fromX"] = 0.78892517089844,
-		["fromY"] = 0.53628540039062, },
-	{ ["fromMapId"] = 115, ["type"] = "Boat", ["toX"] = 0.78892517089844, ["toMapId"] = 114,
-		["nodeType"] = "transport", ["toY"] = 0.53628540039062, ["waitTime"] = 611, ["fromX"] = 0.47946166992188,
-		["fromY"] = 0.787353515625, },
-	{ ["fromMapId"] = 534, ["type"] = "B2 Personnel Relocator", ["toX"] = 0.5559, ["toMapId"] = 534,
-		["nodeType"] = "transport", ["toY"] = 0.2717, ["waitTime"] = 29,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "38599", }, ["fromX"] = 0.6002, ["fromY"] = 0.4743, },
-	{ ["fromMapId"] = 534, ["type"] = "Gnomish Flying Machine", ["toX"] = 0.5551, ["toMapId"] = 534,
-		["nodeType"] = "transport", ["toY"] = 0.2729, ["waitTime"] = 29,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "38603", }, ["fromX"] = 0.5767, ["fromY"] = 0.5873, },
-	{ ["fromMapId"] = 627, ["type"] = "Great Eagle", ["toX"] = 0.3664, ["toMapId"] = 739,
-		["nodeType"] = "transport", ["toY"] = 0.2783, ["waitTime"] = 11,
-		["reqs"] = { ["cls"] = "HUNTER", ["qid"] = "40959", }, ["fromX"] = 0.7277, ["fromY"] = 0.413, },
-	{ ["fromMapId"] = 942, ["type"] = "Guide 'Muka Stormbreaker'", ["toX"] = 0.584, ["toMapId"] = 862,
-		["nodeType"] = "transport", ["toY"] = 0.625, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51532", }, ["fromX"] = 0.5143, ["fromY"] = 0.3375, },
-	{ ["fromMapId"] = 942, ["type"] = "Guide 'Grok Seahandle'", ["toX"] = 0.584, ["toMapId"] = 862,
-		["nodeType"] = "transport", ["toY"] = 0.625, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51532", }, ["fromX"] = 0.5198, ["fromY"] = 0.2449, },
-	{ ["fromMapId"] = 896, ["type"] = "Guide 'Swellthrasher'", ["toX"] = 0.584, ["toMapId"] = 862,
-		["nodeType"] = "transport", ["toY"] = 0.625, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51340", }, ["fromX"] = 0.2061, ["fromY"] = 0.4335, },
-	{ ["fromMapId"] = 895, ["type"] = "Guide 'Erul Dawnbrook'", ["toX"] = 0.584, ["toMapId"] = 862,
-		["nodeType"] = "transport", ["toY"] = 0.625, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51589", }, ["fromX"] = 0.8785, ["fromY"] = 0.5119, },
-	{ ["fromMapId"] = 463, ["type"] = "Boat", ["toX"] = 0.5808, ["toMapId"] = 862, ["nodeType"] = "transport",
-		["toY"] = 0.6504, ["waitTime"] = 300, ["reqs"] = { ["fac"] = "Horde", }, ["fromX"] = 0.7092, ["fromY"] = 0.3815, },
-	{ ["fromMapId"] = 1161, ["type"] = "Guide 'Grand Admiral Jes-Tereth'", ["toX"] = 0.356, ["toMapId"] = 864,
-		["nodeType"] = "transport", ["toY"] = 0.3317, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51283", }, ["fromX"] = 0.6792, ["fromY"] = 0.2663, },
-	{ ["fromMapId"] = 1161, ["type"] = "Guide 'Grand Admiral Jes-Tereth'", ["toX"] = 0.6195, ["toMapId"] = 863,
-		["nodeType"] = "transport", ["toY"] = 0.3992, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51088", }, ["fromX"] = 0.6792, ["fromY"] = 0.2663, },
-	{ ["fromMapId"] = 1161, ["type"] = "Guide 'Grand Admiral Jes-Tereth'", ["toX"] = 0.4068, ["toMapId"] = 862,
-		["nodeType"] = "transport", ["toY"] = 0.7086, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51308", }, ["fromX"] = 0.6792, ["fromY"] = 0.2663, },
-	{ ["fromMapId"] = 1462, ["type"] = "Guide 'Captain Krozz'", ["toX"] = 0.7573, ["toMapId"] = 1165,
-		["nodeType"] = "transport", ["toY"] = 0.2132, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "55651", }, ["fromX"] = 0.4184, ["fromY"] = 0.8759, },
-	{ ["fromMapId"] = 1700, ["type"] = "Sinfall Bat Surface Flyer", ["toX"] = 0.2962, ["toMapId"] = 1525,
-		["nodeType"] = "transport", ["toY"] = 0.4251, ["waitTime"] = 1, ["reqs"] = { ["qid"] = "59321", },
-		["fromX"] = 0.6724, ["fromY"] = 0.4729, },
-	{ ["fromMapId"] = 862, ["type"] = "Guide 'Dread Admiral Tattersail'", ["toX"] = 0.2061, ["toMapId"] = 896,
-		["nodeType"] = "transport", ["toY"] = 0.4369, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51340", }, ["fromX"] = 0.5846, ["fromY"] = 0.6299, },
-	{ ["fromMapId"] = 862, ["type"] = "Guide 'Dread Admiral Tattersail'", ["toX"] = 0.5198, ["toMapId"] = 942,
-		["nodeType"] = "transport", ["toY"] = 0.2449, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51532", }, ["fromX"] = 0.5846, ["fromY"] = 0.6299, },
-	{ ["fromMapId"] = 862, ["type"] = "Guide 'Dread Admiral Tattersail'", ["toX"] = 0.882, ["toMapId"] = 895,
-		["nodeType"] = "transport", ["toY"] = 0.5116, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "51589", }, ["fromX"] = 0.5846, ["fromY"] = 0.6299, },
-	{ ["fromMapId"] = 864, ["type"] = "Guide 'Barnard 'The Smasher' Baysworth'", ["toX"] = 0.7022,
-		["toMapId"] = 1161, ["nodeType"] = "transport", ["toY"] = 0.2706, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51283", }, ["fromX"] = 0.3668, ["fromY"] = 0.3424, },
-	{ ["fromMapId"] = 863, ["type"] = "Guide 'Desha Stormwallow'", ["toX"] = 0.7022, ["toMapId"] = 1161,
-		["nodeType"] = "transport", ["toY"] = 0.2706, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51088", }, ["fromX"] = 0.6206, ["fromY"] = 0.4005, },
-	{ ["fromMapId"] = 862, ["type"] = "Guide 'Daria Smithson'", ["toX"] = 0.7022, ["toMapId"] = 1161,
-		["nodeType"] = "transport", ["toY"] = 0.2706, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51308", }, ["fromX"] = 0.4046, ["fromY"] = 0.7104, },
-	{ ["fromMapId"] = 84, ["type"] = "Boat", ["toX"] = 0.775, ["toMapId"] = 1161, ["nodeType"] = "transport",
-		["toY"] = 0.2594, ["waitTime"] = 300, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "51308", }, ["fromX"] = 0.2283,
-		["fromY"] = 0.5622, },
-	{ ["fromMapId"] = 1165, ["type"] = "Guide 'Captain Krozz'", ["toX"] = 0.7573, ["toMapId"] = 1462,
-		["nodeType"] = "transport", ["toY"] = 0.2132, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "55651", }, ["fromX"] = 0.4184, ["fromY"] = 0.8759, },
-	{ ["fromMapId"] = 1462, ["type"] = "Guide 'Captain Krozz'", ["toX"] = 0.4175, ["toMapId"] = 1165,
-		["nodeType"] = "transport", ["toY"] = 0.8743, ["waitTime"] = 20,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "55651", }, ["fromX"] = 0.7548, ["fromY"] = 0.2262, },
-	-- { ["fromX"] = 0.45948791503906, ["toMapId"] = 261, ["toY"] = 0.90559387207031, ["toX"] = 0.47749328613281,
-	-- 	["fromMapId"] = 100, ["fromY"] = 0.51869201660156, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.60549926757812, ["toMapId"] = 277, ["toY"] = 0.16778564453125, ["toX"] = 0.31779479980469,
-	-- 	["fromMapId"] = 249, ["fromY"] = 0.6431884765625, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.19139099121094, ["toMapId"] = 293, ["toY"] = 0.55668640136719, ["toX"] = 0.12149047851562,
-	-- 	["fromMapId"] = 241, ["fromY"] = 0.53839111328125, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.7895, ["toMapId"] = 616, ["toY"] = 0.325, ["toX"] = 0.371, ["fromMapId"] = 33,
-	-- 	["fromY"] = 0.3408, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.76809692382812, ["toMapId"] = 325, ["toY"] = 0.1680908203125, ["toX"] = 0.54119873046875,
-	-- 	["fromMapId"] = 249, ["fromY"] = 0.84548950195312, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5193, ["toMapId"] = 1038, ["toY"] = 0.9541, ["toX"] = 0.679, ["fromMapId"] = 864,
-	-- 	["fromY"] = 0.2516, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.39219665527344, ["toMapId"] = 219, ["toY"] = 0.90948486328125, ["toX"] = 0.56599426269531,
-	-- 	["fromMapId"] = 71, ["fromY"] = 0.21269226074219, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.80899047851562, ["toMapId"] = 453, ["toY"] = 0.20298767089844, ["toX"] = 0.28599548339844,
-	-- 	["fromMapId"] = 390, ["fromY"] = 0.32598876953125, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.846, ["toMapId"] = 936, ["toY"] = 0.3806, ["toX"] = 0.7018, ["fromMapId"] = 895,
-	-- 	["fromY"] = 0.7883, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6115, ["toMapId"] = 713, ["toY"] = 0.8789, ["toX"] = 0.4712, ["fromMapId"] = 630,
-	-- 	["fromY"] = 0.4113, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.54278564453125, ["toMapId"] = 262, ["toY"] = 0.67878723144531, ["toX"] = 0.29679870605469,
-	-- 	["fromMapId"] = 102, ["fromY"] = 0.343994140625, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3404, ["toMapId"] = 294, ["toY"] = 0.5424, ["toX"] = 0.3938, ["fromMapId"] = 241,
-	-- 	["fromY"] = 0.7791, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.44749450683594, ["toMapId"] = 310, ["toY"] = 0.60969543457031, ["toX"] = 0.69459533691406,
-	-- 	["fromMapId"] = 21, ["fromY"] = 0.67788696289062, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5192, ["toMapId"] = 1041, ["toY"] = 0.9056, ["toX"] = 0.4548, ["fromMapId"] = 863,
-	-- 	["fromY"] = 0.6582, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.28469848632812, ["toMapId"] = 132, ["toY"] = 0.79119873046875, ["toX"] = 0.889892578125,
-	-- 	["fromMapId"] = 115, ["fromY"] = 0.51719665527344, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.55299377441406, ["toMapId"] = 279, ["toY"] = 0.59698486328125, ["toX"] = 0.45799255371094,
-	-- 	["fromMapId"] = 11, ["fromY"] = 0.65399169921875, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.596, ["toMapId"] = 621, ["toY"] = 0.557, ["toX"] = 0.724, ["fromMapId"] = 543,
-	-- 	["fromY"] = 0.456, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.751, ["toMapId"] = 172, ["toY"] = 0.5245, ["toX"] = 0.6395, ["fromMapId"] = 118,
-	-- 	["fromY"] = 0.2179, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.75881958007812, ["toMapId"] = 220, ["toY"] = 0.158203125, ["toX"] = 0.49986267089844,
-	-- 	["fromMapId"] = 51, ["fromY"] = 0.45170593261719, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5957, ["toMapId"] = 471, ["toY"] = 0.7409, ["toX"] = 0.7522, ["fromMapId"] = 379,
-	-- 	["fromY"] = 0.3925, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 628, ["fromY"] = 0.4448, ["toY"] = 0.3811, ["toX"] = 0.7537, ["fromX"] = 0.279,
-	-- 	["reqs"] = { ["cls"] = "WARLOCK", }, ["toMapId"] = 717, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3774, ["toMapId"] = 1004, ["toY"] = 0.4746, ["toX"] = 0.8975, ["fromMapId"] = 862,
-	-- 	["fromY"] = 0.3948, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4429931640625, ["toMapId"] = 281, ["fromMapId"] = 68, ["fromY"] = 0.76699829101562,
-	-- 	["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.385, ["toMapId"] = 328, ["toY"] = 0.758, ["toX"] = 0.472, ["fromMapId"] = 249,
-	-- 	["fromY"] = 0.805, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4843, ["toMapId"] = 456, ["toY"] = 0.4934, ["toX"] = 0.9332, ["fromMapId"] = 433,
-	-- 	["fromY"] = 0.6156, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.9901, ["toMapId"] = 974, ["toY"] = 0.5523, ["toX"] = 0.7531, ["fromMapId"] = 895,
-	-- 	["fromY"] = 0.473, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3715, ["toMapId"] = 751, ["toY"] = 0.0635, ["toX"] = 0.2921, ["fromMapId"] = 641,
-	-- 	["fromY"] = 0.5024, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.57279968261719, ["toMapId"] = 133, ["toY"] = 0.72999572753906, ["toX"] = 0.69268798828125,
-	-- 	["fromMapId"] = 117, ["fromY"] = 0.46728515625, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.276, ["toMapId"] = 141, ["toY"] = 0.592, ["toX"] = 0.32, ["fromMapId"] = 114,
-	-- 	["fromY"] = 0.266, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.69088745117188, ["toMapId"] = 297, ["toY"] = 0.93728637695312, ["toX"] = 0.49909973144531,
-	-- 	["fromMapId"] = 249, ["fromY"] = 0.52969360351562, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.25959777832031, ["toMapId"] = 157, ["toY"] = 0.93319702148438, ["toX"] = 0.094390869140625,
-	-- 	["fromMapId"] = 115, ["fromY"] = 0.50898742675781, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3562, ["toMapId"] = 329, ["toY"] = 0.6474, ["toX"] = 0.1068, ["fromMapId"] = 75,
-	-- 	["fromY"] = 0.1576, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6175, ["toMapId"] = 410, ["toY"] = 0.8443, ["toX"] = 0.501, ["fromMapId"] = 75,
-	-- 	["fromY"] = 0.266, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.7013, ["toMapId"] = 213, ["toY"] = 0.07879638671875, ["toX"] = 0.62409973144531,
-	-- 	["fromMapId"] = 86, ["fromY"] = 0.4823, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.16519165039062, ["toMapId"] = 221, ["toY"] = 0.10659790039062, ["toX"] = 0.44288635253906,
-	-- 	["fromMapId"] = 63, ["fromY"] = 0.11029052734375, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.71759033203125, ["toMapId"] = 266, ["toY"] = 0.410888671875, ["toX"] = 0.89588928222656,
-	-- 	["fromMapId"] = 109, ["fromY"] = 0.54928588867188, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.462, ["toMapId"] = 282, ["toY"] = 0.918, ["toX"] = 0.48, ["fromMapId"] = 244,
-	-- 	["fromY"] = 0.479, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6916, ["toMapId"] = 330, ["toY"] = 0.7812, ["toX"] = 0.8187, ["fromMapId"] = 105,
-	-- 	["fromY"] = 0.2381, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.449, ["toMapId"] = 595, ["toY"] = 0.445, ["toX"] = 0.306, ["fromMapId"] = 543,
-	-- 	["fromY"] = 0.135, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.34698486328125, ["toMapId"] = 458, ["toY"] = 0.86898803710938, ["toX"] = 0.64898681640625,
-	-- 	["fromMapId"] = 388, ["fromY"] = 0.81399536132812, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3892, ["toMapId"] = 474, ["toY"] = 0.8945, ["toX"] = 0.3428, ["fromMapId"] = 422,
-	-- 	["fromY"] = 0.3502, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6722, ["toMapId"] = 723, ["toY"] = 0.8317, ["toX"] = 0.5069, ["fromMapId"] = 627,
-	-- 	["fromY"] = 0.6948, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 862, ["fromY"] = 0.5998, ["toY"] = 0.86, ["toX"] = 0.5175, ["fromX"] = 0.5618,
-	-- 	["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 1010, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.70619201660156, ["toMapId"] = 267, ["toY"] = 0.83509826660156, ["toX"] = 0.49409484863281,
-	-- 	["fromMapId"] = 109, ["fromY"] = 0.69779968261719, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.27499389648438, ["toMapId"] = 142, ["toY"] = 0.47579956054688, ["toX"] = 0.61299133300781,
-	-- 	["fromMapId"] = 114, ["fromY"] = 0.25979614257812, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4749, ["toMapId"] = 331, ["toY"] = 0.1804, ["toX"] = 0.6272, ["fromMapId"] = 100,
-	-- 	["fromY"] = 0.5209, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.47589111328125, ["toMapId"] = 347, ["toY"] = 0.70368957519531, ["toX"] = 0.50059509277344,
-	-- 	["fromMapId"] = 100, ["fromY"] = 0.535888671875, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.36698913574219, ["toMapId"] = 443, ["fromMapId"] = 379, ["fromY"] = 0.47499084472656,
-	-- 	["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.36698913574219, ["toMapId"] = 230, ["toY"] = 0.72709655761719, ["toX"] = 0.6702880859375,
-	-- 	["fromMapId"] = 16, ["fromY"] = 0.30099487304688, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.47479248046875, ["toMapId"] = 246, ["toY"] = 0.92808532714844, ["toX"] = 0.61138916015625,
-	-- 	["fromMapId"] = 100, ["fromY"] = 0.52018737792969, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.47648620605469, ["toMapId"] = 300, ["toY"] = 0.18798828125, ["toX"] = 0.23789978027344,
-	-- 	["fromMapId"] = 64, ["fromY"] = 0.23649597167969, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.519, ["toMapId"] = 332, ["toY"] = 0.612, ["toX"] = 0.135, ["fromMapId"] = 102,
-	-- 	["fromY"] = 0.33, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6122, ["toMapId"] = 349, ["toY"] = 0.9001, ["toX"] = 0.4253, ["fromMapId"] = 122,
-	-- 	["fromY"] = 0.3087, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 627, ["fromY"] = 0.4817, ["toY"] = 0.5196, ["toX"] = 0.2992, ["fromX"] = 0.6713,
-	-- 	["reqs"] = { ["cls"] = "SHAMAN", }, ["toMapId"] = 726, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.69099426269531, ["toMapId"] = 476, ["fromMapId"] = 22, ["fromY"] = 0.72898864746094,
-	-- 	["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6362, ["toMapId"] = 508, ["toY"] = 0.2592, ["toX"] = 0.3116, ["fromMapId"] = 504,
-	-- 	["fromY"] = 0.3225, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.74488830566406, ["toMapId"] = 269, ["toY"] = 0.81698608398438, ["toX"] = 0.41259765625,
-	-- 	["fromMapId"] = 109, ["fromY"] = 0.57679748535156, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.2319, ["toMapId"] = 285, ["toY"] = 0.6255, ["toX"] = 0.4689, ["fromMapId"] = 36,
-	-- 	["fromY"] = 0.2646, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.40719604492188, ["toMapId"] = 301, ["toY"] = 0.82969665527344, ["toX"] = 0.69889831542969,
-	-- 	["fromMapId"] = 199, ["fromY"] = 0.94389343261719, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.27609252929688, ["toMapId"] = 317, ["fromMapId"] = 23, ["fromY"] = 0.11628723144531,
-	-- 	["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3389, ["toMapId"] = 1015, ["toY"] = 0.8707, ["toX"] = 0.5137, ["fromMapId"] = 896,
-	-- 	["fromY"] = 0.1314, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.56199645996094, ["toMapId"] = 429, ["toY"] = 0.44999694824219, ["toX"] = 0.31399536132812,
-	-- 	["fromMapId"] = 371, ["fromY"] = 0.57899475097656, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5892, ["toMapId"] = 247, ["toY"] = 0.117, ["toX"] = 0.6051, ["fromMapId"] = 327,
-	-- 	["fromY"] = 0.1429, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5099, ["toMapId"] = 761, ["toY"] = 0.693, ["toX"] = 0.102, ["fromMapId"] = 680,
-	-- 	["fromY"] = 0.6559, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.738, ["toMapId"] = 334, ["toY"] = 0.906, ["toX"] = 0.5, ["fromMapId"] = 109,
-	-- 	["fromY"] = 0.637, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.47, ["toMapId"] = 350, ["toY"] = 0.761, ["toX"] = 0.588, ["fromMapId"] = 42,
-	-- 	["fromY"] = 0.749, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4956, ["toMapId"] = 731, ["toY"] = 0.3922, ["toX"] = 0.9666, ["fromMapId"] = 650,
-	-- 	["fromY"] = 0.6863, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.57258605957031, ["toMapId"] = 136, ["toY"] = 0.16119384765625, ["toX"] = 0.44488525390625,
-	-- 	["fromMapId"] = 117, ["fromY"] = 0.46659851074219, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.643, ["toMapId"] = 287, ["toY"] = 0.836, ["toX"] = 0.525, ["fromMapId"] = 36,
-	-- 	["fromY"] = 0.709, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.28518676757812, ["toMapId"] = 160, ["toY"] = 0.80958557128906, ["toX"] = 0.29379272460938,
-	-- 	["fromMapId"] = 121, ["fromY"] = 0.86929321289062, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.68598937988281, ["toMapId"] = 168, ["toY"] = 0.98028564453125, ["toX"] = 0.46148681640625,
-	-- 	["fromMapId"] = 125, ["fromY"] = 0.70388793945312, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4734, ["toMapId"] = 368, ["toY"] = 0.9259, ["toX"] = 0.2503, ["fromMapId"] = 198,
-	-- 	["fromY"] = 0.78, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6126, ["toMapId"] = 200, ["toY"] = 0.2942, ["toX"] = 0.4899, ["fromMapId"] = 115,
-	-- 	["fromY"] = 0.5267, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.496, ["toMapId"] = 573, ["toY"] = 0.833, ["toX"] = 0.515, ["fromMapId"] = 525,
-	-- 	["fromY"] = 0.246, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.78498840332031, ["toMapId"] = 431, ["toY"] = 0.90098571777344, ["toX"] = 0.34298706054688,
-	-- 	["fromMapId"] = 19, ["fromY"] = 0.58198547363281, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.541, ["toMapId"] = 232, ["toY"] = 0.243, ["toX"] = 0.265, ["fromMapId"] = 36,
-	-- 	["fromY"] = 0.831, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5293, ["toMapId"] = 248, ["toY"] = 0.2075, ["toX"] = 0.3399, ["fromMapId"] = 70,
-	-- 	["fromY"] = 0.7772, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.34298706054688, ["toMapId"] = 256, ["toY"] = 0.75099182128906, ["toX"] = 0.44119262695312,
-	-- 	["fromMapId"] = 108, ["fromY"] = 0.65609741210938, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.39639282226562, ["toMapId"] = 272, ["toY"] = 0.17289733886719, ["toX"] = 0.33518981933594,
-	-- 	["fromMapId"] = 108, ["fromY"] = 0.5762939453125, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.318, ["toMapId"] = 574, ["toY"] = 0.684, ["toX"] = 0.12, ["fromMapId"] = 539,
-	-- 	["fromY"] = 0.426, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5505, ["toMapId"] = 606, ["toY"] = 0.319, ["toX"] = 0.324, ["fromMapId"] = 543,
-	-- 	["fromY"] = 0.313, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.27499389648438, ["toMapId"] = 129, ["toY"] = 0.87998962402344, ["toX"] = 0.36199951171875,
-	-- 	["fromMapId"] = 114, ["fromY"] = 0.25979614257812, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.36299133300781, ["toMapId"] = 273, ["toY"] = 0.001495361328125, ["toX"] = 0.52059936523438,
-	-- 	["fromMapId"] = 75, ["fromY"] = 0.83198547363281, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5419, ["toMapId"] = 1148, ["toY"] = 0.9391, ["toX"] = 0.5251, ["fromMapId"] = 863,
-	-- 	["fromY"] = 0.531, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.76119995117188, ["toMapId"] = 153, ["toY"] = 0.30918884277344, ["toX"] = 0.58988952636719,
-	-- 	["fromMapId"] = 121, ["fromY"] = 0.20948791503906, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.7264, ["toMapId"] = 704, ["toY"] = 0.0756, ["toX"] = 0.4771, ["fromMapId"] = 634,
-	-- 	["fromY"] = 0.7052, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 17, ["fromY"] = 0.5388, ["toY"] = 0.4827, ["toX"] = 0.5473, ["fromX"] = 0.5494,
-	-- 	["reqs"] = { ["qid"] = "34398", }, ["toMapId"] = 577, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.50419616699219, ["toMapId"] = 225, ["toY"] = 0.68089294433594, ["toX"] = 0.50068664550781,
-	-- 	["fromMapId"] = 84, ["fromY"] = 0.6630859375, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 726, ["fromY"] = 0.4132, ["toY"] = 0.16, ["toX"] = 0.5359, ["fromX"] = 0.2671,
-	-- 	["reqs"] = { ["cls"] = "SHAMAN", ["qid"] = "43002", }, ["toMapId"] = 737, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.44949340820312, ["toMapId"] = 258, ["toY"] = 0.36468505859375, ["toX"] = 0.73348999023438,
-	-- 	["fromMapId"] = 108, ["fromY"] = 0.65609741210938, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.26899719238281, ["toMapId"] = 274, ["toY"] = 0.24798583984375, ["toX"] = 0.2322998046875,
-	-- 	["fromMapId"] = 75, ["fromY"] = 0.35899353027344, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.69488525390625, ["toMapId"] = 322, ["toY"] = 0.88229370117188, ["toX"] = 0.49848937988281,
-	-- 	["fromMapId"] = 204, ["fromY"] = 0.24989318847656, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 198, ["fromY"] = 0.5629, ["toY"] = 0.8385, ["toX"] = 0.5296, ["fromX"] = 0.275,
-	-- 	["reqs"] = { ["qid"] = "29199", }, ["toMapId"] = 338, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5254, ["toMapId"] = 706, ["toY"] = 0.812, ["toX"] = 0.4718, ["fromMapId"] = 634,
-	-- 	["fromY"] = 0.4525, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 726, ["fromY"] = 0.6102, ["toY"] = 0.9264, ["toX"] = 0.2502, ["fromX"] = 0.3108,
-	-- 	["reqs"] = { ["cls"] = "SHAMAN", ["qid"] = "42208", }, ["toMapId"] = 738, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4311, ["toMapId"] = 1473, ["toY"] = 0.3594, ["toX"] = 0.5023, ["fromMapId"] = 81,
-	-- 	["fromY"] = 0.4451, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.7795, ["toMapId"] = 1039, ["toY"] = 0.0842, ["toX"] = 0.4662, ["fromMapId"] = 942,
-	-- 	["fromY"] = 0.2415, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4111, ["toMapId"] = 749, ["toY"] = 0.2007, ["toX"] = 0.4801, ["fromMapId"] = 680,
-	-- 	["fromY"] = 0.6167, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5903, ["toMapId"] = 733, ["toY"] = 0.135, ["toX"] = 0.3654, ["fromMapId"] = 641,
-	-- 	["fromY"] = 0.3118, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.57398986816406, ["toMapId"] = 130, ["toY"] = 0.71209716796875, ["toX"] = 0.87509155273438,
-	-- 	["fromMapId"] = 75, ["fromY"] = 0.82598876953125, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.45379638671875, ["toMapId"] = 138, ["toY"] = 0.5380859375, ["toX"] = 0.07379150390625,
-	-- 	["fromMapId"] = 120, ["fromY"] = 0.21369934082031, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.25799560546875, ["toMapId"] = 291, ["toY"] = 0.13398742675781, ["toX"] = 0.26499938964844,
-	-- 	["fromMapId"] = 55, ["fromY"] = 0.510986328125, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.675, ["toMapId"] = 732, ["toY"] = 0.8209, ["toX"] = 0.5093, ["fromMapId"] = 627,
-	-- 	["fromY"] = 0.6978, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.8747, ["toMapId"] = 166, ["toY"] = 0.4968, ["toX"] = 0.54, ["fromMapId"] = 115,
-	-- 	["fromY"] = 0.5119, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.7103, ["toMapId"] = 341, ["toY"] = 0.5954, ["toX"] = 0.2189, ["fromMapId"] = 104,
-	-- 	["fromY"] = 0.4639, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 627, ["fromY"] = 0.4716, ["toY"] = 0.2498, ["toX"] = 0.5834, ["fromX"] = 0.7518,
-	-- 	["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "42815", }, ["toMapId"] = 695, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5383, ["toMapId"] = 186, ["toY"] = 0.0728, ["toX"] = 0.3898, ["fromMapId"] = 118,
-	-- 	["fromY"] = 0.8712, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 627, ["fromY"] = 0.6927, ["toY"] = 0.913, ["toX"] = 0.5931, ["fromX"] = 0.9796,
-	-- 	["reqs"] = { ["cls"] = "DEMONHUNTER", }, ["toMapId"] = 720, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.5007, ["toMapId"] = 156, ["toY"] = 0.866, ["toX"] = 0.4926, ["fromMapId"] = 123,
-	-- 	["fromY"] = 0.1161, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6001, ["toMapId"] = 155, ["toY"] = 0.5009, ["toX"] = 0.644, ["fromMapId"] = 115,
-	-- 	["fromY"] = 0.5686, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.69398498535156, ["toMapId"] = 435, ["toY"] = 0.45799255371094, ["toX"] = 0.75698852539062,
-	-- 	["fromMapId"] = 19, ["fromY"] = 0.25099182128906, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.29998779296875, ["toMapId"] = 226, ["toY"] = 0.28959655761719, ["toX"] = 0.64329528808594,
-	-- 	["fromMapId"] = 30, ["fromY"] = 0.74699401855469, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.6484, ["toMapId"] = 239, ["fromMapId"] = 69, ["fromY"] = 0.3022, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.39999389648438, ["toMapId"] = 242, ["toY"] = 0.77799987792969, ["toX"] = 0.34698486328125,
-	-- 	["fromMapId"] = 35, ["fromY"] = 0.16999816894531, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.804, ["toMapId"] = 252, ["toY"] = 0.415, ["toX"] = 0.379, ["fromMapId"] = 33,
-	-- 	["fromY"] = 0.407, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.39628601074219, ["toMapId"] = 260, ["toY"] = 0.12449645996094, ["toX"] = 0.2200927734375,
-	-- 	["fromMapId"] = 108, ["fromY"] = 0.73599243164062, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4157, ["toMapId"] = 148, ["toY"] = 0.9501, ["toX"] = 0.5268, ["fromMapId"] = 120,
-	-- 	["fromY"] = 0.1774, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4425, ["toMapId"] = 336, ["toY"] = 0.3641, ["toX"] = 0.3093, ["fromMapId"] = 507,
-	-- 	["fromY"] = 0.4559, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4678, ["toMapId"] = 320, ["toY"] = 0.2692, ["toX"] = 0.52, ["fromMapId"] = 327,
-	-- 	["fromY"] = 0.0745, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.47698974609375, ["toMapId"] = 324, ["toY"] = 0.93899536132812, ["toX"] = 0.54269409179688,
-	-- 	["fromMapId"] = 207, ["fromY"] = 0.51979064941406, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.69999694824219, ["toMapId"] = 283, ["toY"] = 0.70098876953125, ["toX"] = 0.3201904296875,
-	-- 	["fromMapId"] = 34, ["fromY"] = 0.53298950195312, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4807, ["toMapId"] = 710, ["toY"] = 0.7747, ["toX"] = 0.6938, ["fromMapId"] = 630,
-	-- 	["fromY"] = 0.8213, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.50289916992188, ["toMapId"] = 263, ["toY"] = 0.29759216308594, ["toX"] = 0.17588806152344,
-	-- 	["fromMapId"] = 102, ["fromY"] = 0.33329772949219, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.356, ["toMapId"] = 601, ["toY"] = 0.258, ["toX"] = 0.6055, ["fromMapId"] = 542,
-	-- 	["fromY"] = 0.337, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.464, ["toMapId"] = 593, ["toY"] = 0.902, ["toX"] = 0.497, ["fromMapId"] = 535,
-	-- 	["fromY"] = 0.738, ["nodeType"] = "instance", },
-	-- { ["fromMapId"] = 895, ["fromY"] = 0.5313, ["toY"] = 0.1944, ["toX"] = 0.7653, ["fromX"] = 0.8843,
-	-- 	["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 1162, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.15798950195312, ["toMapId"] = 437, ["toY"] = 0.87799072265625, ["toX"] = 0.61299133300781,
-	-- 	["fromMapId"] = 390, ["fromY"] = 0.74099731445312, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.3599853515625, ["toMapId"] = 439, ["toY"] = 0.39698791503906, ["toX"] = 0.79399108886719,
-	-- 	["fromMapId"] = 376, ["fromY"] = 0.69099426269531, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.4374, ["toMapId"] = 934, ["toY"] = 0.825, ["toX"] = 0.503, ["fromMapId"] = 862,
-	-- 	["fromY"] = 0.392, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.39498901367188, ["toMapId"] = 140, ["toY"] = 0.36199951171875, ["toX"] = 0.343994140625,
-	-- 	["fromMapId"] = 120, ["fromY"] = 0.26919555664062, ["nodeType"] = "instance", },
-	-- { ["fromX"] = 0.48948669433594, ["toMapId"] = 265, ["toY"] = 0.13369750976562, ["toX"] = 0.19949340820312,
-	-- 	["fromMapId"] = 102, ["fromY"] = 0.35699462890625, ["nodeType"] = "instance", },
-	{ ["fromMapId"] = 57, ["fromY"] = 0.88526916503906, ["toY"] = 0.48550415039062, ["toX"] = 0.27494812011719,
-		["fromX"] = 0.55094909667969, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 57,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 57, ["fromY"] = 0.48550415039062, ["toY"] = 0.88526916503906, ["toX"] = 0.55094909667969,
-		["fromX"] = 0.27494812011719, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 57,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 57, ["fromY"] = 0.8946, ["toY"] = 0.5409, ["toX"] = 0.2005, ["fromX"] = 0.523,
-		["reqs"] = { ["fac"] = "Alliance", ["notlvl"] = "50", }, ["toMapId"] = 97,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 97, ["fromY"] = 0.5409, ["toY"] = 0.8947, ["toX"] = 0.5238, ["fromX"] = 0.2005,
-		["reqs"] = { ["fac"] = "Alliance", ["notlvl"] = "50", }, ["toMapId"] = 57,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.38578796386719, ["toY"] = 0.34246826171875, ["toX"] = 0.54893493652344,
-		["fromX"] = 0.48880004882812, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "28112", }, ["toMapId"] = 249,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.38290405273438, ["toY"] = 0.23371887207031, ["toX"] = 0.63485717773438,
-		["fromX"] = 0.51069641113281, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "25316", }, ["toMapId"] = 198,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 198, ["fromY"] = 0.24444580078125, ["toY"] = 0.37886047363281, ["toX"] = 0.5013427734375,
-		["fromX"] = 0.63479614257812, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "25316", }, ["toMapId"] = 85,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 81, ["fromY"] = 0.4451, ["toY"] = 0.3594, ["toX"] = 0.5023, ["fromX"] = 0.4311,
-		["reqs"] = { ["passlvl"] = "50", }, ["toMapId"] = 1473, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1473, ["fromY"] = 0.3099, ["toY"] = 0.4519, ["toX"] = 0.4141, ["fromX"] = 0.5023,
-		["reqs"] = { ["passlvl"] = "50", }, ["toMapId"] = 81, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.9247, ["toY"] = 0.283, ["toX"] = 0.546, ["fromX"] = 0.5639,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 74, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 74, ["fromY"] = 0.2681, ["toY"] = 0.2681, ["toX"] = 0.5814, ["fromX"] = 0.5814,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1837158203125, ["toY"] = 0.60920715332031, ["toX"] = 0.73674011230469,
-		["fromX"] = 0.73211669921875, ["reqs"] = { ["fac"] = "Alliance", ["lvl"] = "30", }, ["toMapId"] = 245,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 245, ["fromY"] = 0.58865356445312, ["toY"] = 0.18284606933594, ["toX"] = 0.73388671875,
-		["fromX"] = 0.7523193359375, ["reqs"] = { ["fac"] = "Alliance", ["lvl"] = "30", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1685791015625, ["toY"] = 0.72802734375, ["toX"] = 0.55703735351562,
-		["fromX"] = 0.73297119140625, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "14482", }, ["toMapId"] = 204,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.16426086425781, ["toY"] = 0.77784729003906, ["toX"] = 0.79478454589844,
-		["fromX"] = 0.75343322753906, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "27545", }, ["toMapId"] = 241,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 241, ["fromY"] = 0.77784729003906, ["toY"] = 0.16810607910156, ["toX"] = 0.75169372558594,
-		["fromX"] = 0.79478454589844, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "27545", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 50, ["fromY"] = 0.5099, ["toY"] = 0.1633, ["toX"] = 0.8459, ["fromX"] = 0.3755,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 90, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 18, ["fromY"] = 0.67436218261719, ["toY"] = 0.16448974609375, ["toX"] = 0.50619506835938,
-		["fromX"] = 0.59449768066406, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 110,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 110, ["fromY"] = 0.16448974609375, ["toY"] = 0.67436218261719, ["toX"] = 0.59449768066406,
-		["fromX"] = 0.50619506835938, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 18, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.54376220703125, ["toMapId"] = 95, ["toY"] = 0.96380615234375, ["toX"] = 0.51576232910156,
-		["fromMapId"] = 23, ["fromY"] = 0.08770751953125, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.51576232910156, ["toMapId"] = 23, ["toY"] = 0.08770751953125, ["toX"] = 0.54376220703125,
-		["fromMapId"] = 95, ["fromY"] = 0.96380615234375, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.0439, ["toMapId"] = 122, ["toY"] = 0.3069, ["toX"] = 0.471, ["fromMapId"] = 348,
-		["fromY"] = 0.496, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1186, ["fromY"] = 0.2682, ["toY"] = 0.1725, ["toX"] = 0.5449, ["fromX"] = 0.5925,
-		["reqs"] = { ["rac"] = "DarkIronDwarf", }, ["toMapId"] = 84, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1601, ["toY"] = 0.2434, ["toX"] = 0.6143, ["fromX"] = 0.5269,
-		["reqs"] = { ["rac"] = "DarkIronDwarf", }, ["toMapId"] = 1186, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.55915832519531, ["toMapId"] = 127, ["toY"] = 0.42845153808594, ["toX"] = 0.15812683105469,
-		["fromMapId"] = 125, ["fromY"] = 0.46798706054688, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.15812683105469, ["toMapId"] = 125, ["toY"] = 0.46791076660156, ["toX"] = 0.55921936035156,
-		["fromMapId"] = 127, ["fromY"] = 0.42845153808594, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 120, ["fromY"] = 0.85292053222656, ["toY"] = 0.81881713867188, ["toX"] = 0.50555419921875,
-		["fromX"] = 0.41020202636719, ["reqs"] = { ["qid"] = "12821", }, ["toMapId"] = 120,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 120, ["fromY"] = 0.8193359375, ["toY"] = 0.85359191894531, ["toX"] = 0.40985107421875,
-		["fromX"] = 0.50700378417969, ["reqs"] = { ["qid"] = "12821", }, ["toMapId"] = 120,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 207, ["fromY"] = 0.50308227539062, ["toY"] = 0.13459777832031, ["toX"] = 0.57026672363281,
-		["fromX"] = 0.49266052246094, ["reqs"] = { ["qid"] = "26709", }, ["toMapId"] = 207,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 207, ["fromY"] = 0.13557434082031, ["toY"] = 0.50559997558594, ["toX"] = 0.49301147460938,
-		["fromX"] = 0.57244873046875, ["reqs"] = { ["qid"] = "26709", }, ["toMapId"] = 207,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.69879150390625, ["toY"] = 0.22329711914062, ["toX"] = 0.28970336914062,
-		["fromX"] = 0.48457336425781, ["reqs"] = { ["qid"] = "31110", }, ["toMapId"] = 388,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.22114562988281, ["toY"] = 0.69947814941406, ["toX"] = 0.48579406738281,
-		["fromX"] = 0.2900390625, ["reqs"] = { ["qid"] = "31110", }, ["toMapId"] = 388, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.90576171875, ["toY"] = 0.68890380859375, ["toX"] = 0.49754333496094,
-		["fromX"] = 0.35334777832031, ["reqs"] = { ["qid"] = "32681", ["nqid"] = "32644", ["fac"] = "Alliance", },
-		["toMapId"] = 388, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.68672180175781, ["toY"] = 0.89848327636719, ["toX"] = 0.34861755371094,
-		["fromX"] = 0.49742126464844, ["reqs"] = { ["qid"] = "32681", ["nqid"] = "32644", ["fac"] = "Alliance", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.8946533203125, ["toY"] = 0.83781433105469, ["toX"] = 0.3162841796875,
-		["fromX"] = 0.34902954101562, ["reqs"] = { ["qid"] = "32681", ["nqid"] = "32644", ["fac"] = "Alliance", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.8370361328125, ["toY"] = 0.89263916015625, ["toX"] = 0.3477783203125,
-		["fromX"] = 0.31631469726562, ["reqs"] = { ["qid"] = "32681", ["nqid"] = "32644", ["fac"] = "Alliance", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.7340087890625, ["toY"] = 0.52955627441406, ["toX"] = 0.28367614746094,
-		["fromX"] = 0.50650024414062, ["reqs"] = { ["qid"] = "32680", ["nqid"] = "32212", ["fac"] = "Horde", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.52955627441406, ["toY"] = 0.7340087890625, ["toX"] = 0.50650024414062,
-		["fromX"] = 0.28367614746094, ["reqs"] = { ["qid"] = "32680", ["nqid"] = "32212", ["fac"] = "Horde", },
-		["toMapId"] = 388, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.51728820800781, ["toY"] = 0.52833557128906, ["toX"] = 0.33061218261719,
-		["fromX"] = 0.28480529785156, ["reqs"] = { ["qid"] = "32680", ["nqid"] = "32212", ["fac"] = "Horde", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.52714538574219, ["toY"] = 0.52833557128906, ["toX"] = 0.33061218261719,
-		["fromX"] = 0.2857666015625, ["reqs"] = { ["qid"] = "32680", ["nqid"] = "32212", ["fac"] = "Horde", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.52833557128906, ["toY"] = 0.51728820800781, ["toX"] = 0.28480529785156,
-		["fromX"] = 0.33061218261719, ["reqs"] = { ["qid"] = "32680", ["nqid"] = "32212", ["fac"] = "Horde", },
-		["toMapId"] = 504, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.73481750488281, ["toY"] = 0.68890380859375, ["toX"] = 0.49754333496094,
-		["fromX"] = 0.64712524414062, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "32644", }, ["toMapId"] = 388,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.68663024902344, ["toY"] = 0.72474670410156, ["toX"] = 0.64079284667969,
-		["fromX"] = 0.4974365234375, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "32644", }, ["toMapId"] = 504,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 504, ["fromY"] = 0.32695007324219, ["toY"] = 0.73158264160156, ["toX"] = 0.50694274902344,
-		["fromX"] = 0.33213806152344, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "32212", }, ["toMapId"] = 388,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 388, ["fromY"] = 0.73397827148438, ["toY"] = 0.32432556152344, ["toX"] = 0.33247375488281,
-		["fromX"] = 0.50651550292969, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "32212", }, ["toMapId"] = 504,
-		["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 585, ["fromY"] = 0.486, ["toY"] = 0.3553, ["toX"] = 0.4442, ["fromX"] = 0.7516,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "36614", }, ["toMapId"] = 624, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 585, ["fromY"] = 0.1164, ["toY"] = 0.6973, ["toX"] = 0.4639, ["fromX"] = 0.6207,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "34078", }, ["toMapId"] = 543, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 579, ["fromY"] = 0.275, ["toY"] = 0.525, ["toX"] = 0.317, ["fromX"] = 0.702,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "36615", }, ["toMapId"] = 622, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 579, ["fromY"] = 0.6903, ["toY"] = 0.5977, ["toX"] = 0.5291, ["fromX"] = 0.5884,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "34033", }, ["toMapId"] = 543, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 534, ["fromY"] = 0.4735, ["toY"] = 0.3553, ["toX"] = 0.4442, ["fromX"] = 0.6102,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "37935", }, ["toMapId"] = 624, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 624, ["fromY"] = 0.4391, ["toY"] = 0.473, ["toX"] = 0.6087, ["fromX"] = 0.5309,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "37935", }, ["toMapId"] = 534, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 534, ["fromY"] = 0.6046, ["toY"] = 0.5248, ["toX"] = 0.3171, ["fromX"] = 0.5746,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "38445", }, ["toMapId"] = 622, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 622, ["fromY"] = 0.4124, ["toY"] = 0.6032, ["toX"] = 0.5753, ["fromX"] = 0.3642,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "38445", }, ["toMapId"] = 534, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 538, ["fromY"] = 0.5683, ["toY"] = 0.473, ["toX"] = 0.6087, ["fromX"] = 0.5027,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "38416", }, ["toMapId"] = 534, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 538, ["fromY"] = 0.5517, ["toY"] = 0.6032, ["toX"] = 0.5753, ["fromX"] = 0.5235,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "38562", }, ["toMapId"] = 534, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4505, ["toY"] = 0.6943, ["toX"] = 0.5446, ["fromX"] = 0.3675,
-		["reqs"] = { ["qid"] = "44740", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.6943, ["toY"] = 0.4505, ["toX"] = 0.3675, ["fromX"] = 0.5446,
-		["reqs"] = { ["qid"] = "44740", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4574, ["toY"] = 0.3676, ["toX"] = 0.5235, ["fromX"] = 0.3612,
-		["reqs"] = { ["qid"] = "41575", }, ["toMapId"] = 682, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 682, ["fromY"] = 0.3671, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.5354,
-		["reqs"] = { ["qid"] = "41575", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4504, ["toY"] = 0.791, ["toX"] = 0.4361, ["fromX"] = 0.3617,
-		["reqs"] = { ["qid"] = "43811", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.7924, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.4369,
-		["reqs"] = { ["qid"] = "43811", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4555, ["toY"] = 0.1505, ["toX"] = 0.4137, ["fromX"] = 0.359,
-		["reqs"] = { ["qid"] = "42230", }, ["toMapId"] = 684, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 684, ["fromY"] = 0.1376, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.4093,
-		["reqs"] = { ["qid"] = "42230", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.6063, ["toY"] = 0.4467, ["toX"] = 0.367, ["fromX"] = 0.434,
-		["reqs"] = { ["qid"] = "43813", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4467, ["toY"] = 0.6063, ["toX"] = 0.434, ["fromX"] = 0.367,
-		["reqs"] = { ["qid"] = "43813", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4525, ["toY"] = 0.1087, ["toX"] = 0.3079, ["fromX"] = 0.3601,
-		["reqs"] = { ["qid"] = "43808", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.1102, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.3083,
-		["reqs"] = { ["qid"] = "43808", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4475, ["toY"] = 0.8197, ["toX"] = 0.4745, ["fromX"] = 0.3648,
-		["reqs"] = { ["qid"] = "42487", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.8138, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.4773,
-		["reqs"] = { ["qid"] = "42487", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4466, ["toY"] = 0.3538, ["toX"] = 0.4217, ["fromX"] = 0.3692,
-		["reqs"] = { ["qid"] = "43809", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.3524, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.4203,
-		["reqs"] = { ["qid"] = "43809", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.45, ["toY"] = 0.608, ["toX"] = 0.6409, ["fromX"] = 0.3695,
-		["reqs"] = { ["qid"] = "44084", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.6043, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.64,
-		["reqs"] = { ["qid"] = "44084", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4475, ["toY"] = 0.8197, ["toX"] = 0.4745, ["fromX"] = 0.3648,
-		["reqs"] = { ["nqid"] = "38649", ["qid"] = "42487", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.8138, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.4773,
-		["reqs"] = { ["nqid"] = "38649", ["qid"] = "42487", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.4475, ["toY"] = 0.7887, ["toX"] = 0.5204, ["fromX"] = 0.3649,
-		["reqs"] = { ["qid"] = "42889", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.7875, ["toY"] = 0.4509, ["toX"] = 0.364, ["fromX"] = 0.5198,
-		["reqs"] = { ["qid"] = "42889", }, ["toMapId"] = 680, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 739, ["fromY"] = 0.4336, ["toY"] = 0.4475, ["toX"] = 0.6089, ["fromX"] = 0.4868,
-		["reqs"] = { ["cls"] = "HUNTER", ["qid"] = "40959", }, ["toMapId"] = 627, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 747, ["fromY"] = 0.4303, ["toY"] = 0.4475, ["toX"] = 0.6089, ["fromX"] = 0.5663,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40653", }, ["toMapId"] = 627, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 648, ["fromY"] = 0.3376, ["toY"] = 0.4475, ["toX"] = 0.6089, ["fromX"] = 0.2497,
-		["reqs"] = { ["cls"] = "DEATHKNIGHT", }, ["toMapId"] = 627, ["nodeType"] = "portals_local", },
-	{ ["fromX"] = 0.3008, ["toMapId"] = 627, ["toY"] = 0.4475, ["toX"] = 0.6089, ["fromMapId"] = 634,
-		["fromY"] = 0.4071, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.6927, ["toY"] = 0.913, ["toX"] = 0.5931, ["fromX"] = 0.9796,
-		["reqs"] = { ["cls"] = "DEMONHUNTER", }, ["toMapId"] = 720, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.8762, ["toY"] = 0.4294, ["toX"] = 0.6469, ["fromX"] = 0.5867,
-		["reqs"] = { ["rac"] = "Nightborne", }, ["toMapId"] = 627, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 831, ["fromY"] = 0.2336, ["toY"] = 0.8179, ["toX"] = 0.6259, ["fromX"] = 0.4335,
-		["reqs"] = { ["qid"] = "48440", }, ["toMapId"] = 830, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.2544, ["toY"] = 0.6943, ["toX"] = 0.3327, ["fromX"] = 0.4959,
-		["reqs"] = { ["qid"] = "64957", }, ["toMapId"] = 1970, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1970, ["fromY"] = 0.6977, ["toY"] = 0.3004, ["toX"] = 0.4955, ["fromX"] = 0.3287,
-		["reqs"] = { ["qid"] = "64957", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1961, ["fromY"] = 0.2406, ["toY"] = 0.3344, ["toX"] = 0.374, ["fromX"] = 0.6447,
-		["reqs"] = { ["qid"] = "63665", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.2089, ["toY"] = 0.2411, ["toX"] = 0.6438, ["fromX"] = 0.2916,
-		["reqs"] = { ["qid"] = "63665", }, ["toMapId"] = 1961, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.5786, ["toY"] = 0.6092, ["toX"] = 0.4952, ["fromX"] = 0.5211,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.4274, ["toY"] = 0.42, ["toX"] = 0.4938, ["fromX"] = 0.521,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.6079, ["toY"] = 0.5786, ["toX"] = 0.5207, ["fromX"] = 0.4957,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.4235, ["toY"] = 0.4244, ["toX"] = 0.521, ["fromX"] = 0.4956,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.5036, ["toY"] = 0.5162, ["toX"] = 0.5566, ["fromX"] = 0.5714,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.5034, ["toY"] = 0.5156, ["toX"] = 0.4338, ["fromX"] = 0.4702,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1671, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.5159, ["toY"] = 0.5036, ["toX"] = 0.5714, ["fromX"] = 0.5568,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.5157, ["toY"] = 0.503, ["toX"] = 0.4712, ["fromX"] = 0.4344,
-		["reqs"] = { ["qid"] = "60154", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1671, ["fromY"] = 0.5088, ["toY"] = 0.4099, ["toX"] = 0.4495, ["fromX"] = 0.4927,
-		["reqs"] = { ["qid"] = "59874", }, ["toMapId"] = 1543, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1565, ["fromY"] = 0.1727, ["toY"] = 0.5033, ["toX"] = 0.2038, ["fromX"] = 0.6835,
-		["reqs"] = { ["qid"] = "60338", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1543, ["fromY"] = 0.4216, ["toY"] = 0.5031, ["toX"] = 0.1924, ["fromX"] = 0.4238,
-		["reqs"] = { ["qid"] = "59874", }, ["toMapId"] = 1670, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1543, ["fromY"] = 0.3939, ["toY"] = 0.4708, ["toX"] = 0.1629, ["fromX"] = 0.482,
-		["reqs"] = { ["qid"] = "60136", }, ["toMapId"] = 1911, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1911, ["fromY"] = 0.4713, ["toY"] = 0.3957, ["toX"] = 0.4814, ["fromX"] = 0.1043,
-		["reqs"] = { ["qid"] = "60136", }, ["toMapId"] = 1543, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1536, ["fromY"] = 0.6696, ["toY"] = 0.6769, ["toX"] = 0.371, ["fromX"] = 0.3799,
-		["reqs"] = { ["qid"] = "60453", }, ["toMapId"] = 1536, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1536, ["fromY"] = 0.6756, ["toY"] = 0.6683, ["toX"] = 0.3806, ["fromX"] = 0.3713,
-		["reqs"] = { ["qid"] = "60453", }, ["toMapId"] = 1536, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1525, ["fromY"] = 0.5026, ["toY"] = 0.4668, ["toX"] = 0.3194, ["fromX"] = 0.2485,
-		["reqs"] = { ["qid"] = "57536", }, ["toMapId"] = 1525, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1525, ["fromY"] = 0.467, ["toY"] = 0.5031, ["toX"] = 0.2482, ["fromX"] = 0.3198,
-		["reqs"] = { ["qid"] = "57536", }, ["toMapId"] = 1525, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1525, ["fromY"] = 0.3029, ["toY"] = 0.286, ["toX"] = 0.5742, ["fromX"] = 0.5873,
-		["reqs"] = { ["qid"] = "57885", }, ["toMapId"] = 1525, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1525, ["fromY"] = 0.2867, ["toY"] = 0.3034, ["toX"] = 0.5891, ["fromX"] = 0.5738,
-		["reqs"] = { ["qid"] = "57885", }, ["toMapId"] = 1525, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1525, ["fromY"] = 0.4267, ["toY"] = 0.5706, ["toX"] = 0.2365, ["fromX"] = 0.2935,
-		["reqs"] = { ["qid"] = "59327", }, ["toMapId"] = 1699, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1699, ["fromY"] = 0.6134, ["toY"] = 0.4253, ["toX"] = 0.2957, ["fromX"] = 0.177,
-		["reqs"] = { ["qid"] = "59327", }, ["toMapId"] = 1525, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1911, ["fromY"] = 0.6204, ["toY"] = 0.6881, ["toX"] = 0.5068, ["fromX"] = 0.1595,
-		["reqs"] = { ["qid"] = "60267", }, ["toMapId"] = 1912, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1912, ["fromY"] = 0.8196, ["toY"] = 0.5784, ["toX"] = 0.1609, ["fromX"] = 0.5033,
-		["reqs"] = { ["qid"] = "60267", }, ["toMapId"] = 1911, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1699, ["fromY"] = 0.4819, ["toY"] = 0.3954, ["toX"] = 0.6886, ["fromX"] = 0.3655,
-		["reqs"] = { ["qid"] = "59321", }, ["toMapId"] = 1700, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1700, ["fromY"] = 0.3824, ["toY"] = 0.4723, ["toX"] = 0.3791, ["fromX"] = 0.7064,
-		["reqs"] = { ["qid"] = "59321", }, ["toMapId"] = 1699, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1699, ["fromY"] = 0.4941, ["toY"] = 0.3034, ["toX"] = 0.4942, ["fromX"] = 0.4617,
-		["reqs"] = { ["qid"] = "58530", }, ["toMapId"] = 1533, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1533, ["fromY"] = 0.3035, ["toY"] = 0.4911, ["toX"] = 0.4353, ["fromX"] = 0.4938,
-		["reqs"] = { ["qid"] = "58530", }, ["toMapId"] = 1699, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1702, ["fromY"] = 0.2635, ["toY"] = 0.7357, ["toX"] = 0.6572, ["fromX"] = 0.5521,
-		["reqs"] = { ["qid"] = "57583", }, ["toMapId"] = 1819, ["nodeType"] = "portals_local", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.5477, ["toY"] = 0.9027, ["toX"] = 0.5625, ["fromX"] = 0.2085,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "60151", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1163, ["fromY"] = 0.8467, ["toY"] = 0.4519, ["toX"] = 0.4141, ["fromX"] = 0.7322,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 81, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1163, ["fromY"] = 0.7725, ["toY"] = 0.1687, ["toX"] = 0.2221, ["fromX"] = 0.735,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 88, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1163, ["fromY"] = 0.6967, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.7317,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.1567, ["toY"] = 0.4519, ["toX"] = 0.4141, ["fromX"] = 0.6975,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 81, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.1508, ["toY"] = 0.5982, ["toX"] = 0.4762, ["fromX"] = 0.7035,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 103, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.2444, ["toY"] = 0.3619, ["toX"] = 0.4794, ["fromX"] = 0.6625,
-		["reqs"] = { ["fac"] = "Alliance", ["passlvl"] = "50", }, ["toMapId"] = 62,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1165, ["fromY"] = 0.9449, ["toY"] = 0.35, ["toX"] = 0.4631, ["fromX"] = 0.5198,
-		["reqs"] = { ["fac"] = "Horde", ["passlvl"] = "50", }, ["toMapId"] = 62,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.20494079589844, ["toY"] = 0.34246826171875, ["toX"] = 0.54893493652344,
-		["fromX"] = 0.75245666503906, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "28112", }, ["toMapId"] = 249,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1868896484375, ["toY"] = 0.23391723632812, ["toX"] = 0.63487243652344,
-		["fromX"] = 0.76181030273438, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "25316", }, ["toMapId"] = 198,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.30500793457031, ["toY"] = 0.59820556640625, ["toX"] = 0.4761962890625,
-		["fromX"] = 0.70770263671875, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 103,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.43572998046875, ["toY"] = 0.78672790527344, ["toX"] = 0.43467712402344,
-		["fromX"] = 0.77194213867188, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 89,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 119, ["fromY"] = 0.82762145996094, ["toY"] = 0.07916259765625, ["toX"] = 0.50398254394531,
-		["fromX"] = 0.40266418457031, ["reqs"] = { ["qid"] = "12548", }, ["toMapId"] = 78,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 125, ["fromY"] = 0.2544, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.5541,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 111, ["fromY"] = 0.4881, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.5674,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 207, ["fromY"] = 0.53091430664062, ["toY"] = 0.37886047363281, ["toX"] = 0.5013427734375,
-		["fromX"] = 0.50927734375, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "27203", }, ["toMapId"] = 85,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 245, ["fromY"] = 0.79652404785156, ["toY"] = 0.37886047363281, ["toX"] = 0.5013427734375,
-		["fromX"] = 0.56301879882812, ["reqs"] = { ["fac"] = "Horde", ["lvl"] = "30", }, ["toMapId"] = 85,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 241, ["fromY"] = 0.53532409667969, ["toY"] = 0.37886047363281, ["toX"] = 0.5013427734375,
-		["fromX"] = 0.73550415039062, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "26830", }, ["toMapId"] = 85,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 371, ["fromY"] = 0.1401, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.2853,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "29690", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 392, ["fromY"] = 0.36204528808594, ["toY"] = 0.16867065429688, ["toX"] = 0.22212219238281,
-		["fromX"] = 0.73603820800781, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 88,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 392, ["fromY"] = 0.42718505859375, ["toY"] = 0.40715026855469, ["toX"] = 0.68649291992188,
-		["fromX"] = 0.7337646484375, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 379, ["fromY"] = 0.43572998046875, ["toY"] = 0.40715026855469, ["toX"] = 0.68649291992188,
-		["fromX"] = 0.48530578613281, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 100, ["fromY"] = 0.4945, ["toY"] = 0.6453, ["toX"] = 0.4828, ["fromX"] = 0.8922,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 86, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 100, ["fromY"] = 0.47703552246094, ["toY"] = 0.64529418945312, ["toX"] = 0.48283386230469,
-		["fromX"] = 0.88575744628906, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 86,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.5604, ["toY"] = 0.8947, ["toX"] = 0.5238, ["fromX"] = 0.2385,
-		["reqs"] = { ["fac"] = "Alliance", ["notlvl"] = "50", }, ["toMapId"] = 57,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.5604, ["toY"] = 0.1874, ["toX"] = 0.4595, ["fromX"] = 0.2385,
-		["reqs"] = { ["fac"] = "Alliance", ["passlvl"] = "50", }, ["toMapId"] = 62,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 624, ["fromY"] = 0.5163, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.6066,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.2399, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.5528,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 630, ["fromY"] = 0.413, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.4668,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.5256, ["toY"] = 0.2583, ["toX"] = 0.5929, ["fromX"] = 0.5305,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 198, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.7959, ["toY"] = 0.6019, ["toX"] = 0.6759, ["fromX"] = 0.2612,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 80, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.3888, ["toY"] = 0.639, ["toX"] = 0.4126, ["fromX"] = 0.2357,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 12, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 110, ["fromY"] = 0.1869, ["toY"] = 0.8981, ["toX"] = 0.571, ["fromX"] = 0.5855,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.871, ["toY"] = 0.5982, ["toX"] = 0.4762, ["fromX"] = 0.437,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 103, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.8555, ["toY"] = 0.283, ["toX"] = 0.546, ["fromX"] = 0.4382,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 74, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 680, ["fromY"] = 0.8729, ["toY"] = 0.7725, ["toX"] = 0.3984, ["fromX"] = 0.5821,
-		["reqs"] = { ["rac"] = "Nightborne", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 652, ["fromY"] = 0.6388, ["toY"] = 0.7721, ["toX"] = 0.3982, ["fromX"] = 0.4642,
-		["reqs"] = { ["rac"] = "HighmountainTauren", }, ["toMapId"] = 85, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1670, ["fromY"] = 0.4567, ["toY"] = 0.9023, ["toX"] = 0.4635, ["fromX"] = 0.2086,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "60151", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1163, ["fromY"] = 0.6233, ["toY"] = 0.1926, ["toX"] = 0.583, ["fromX"] = 0.7339,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 110, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1165, ["fromY"] = 0.9455, ["toY"] = 0.2995, ["toX"] = 0.274, ["fromX"] = 0.5191,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "53208", }, ["toMapId"] = 14, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1165, ["fromY"] = 0.2447, ["toY"] = 0.6514, ["toX"] = 0.2158, ["fromX"] = 0.6614,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "53194", }, ["toMapId"] = 14, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.1675, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.7023,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.1547, ["toY"] = 0.0843, ["toX"] = 0.2551, ["fromX"] = 0.7081,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 87, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 630, ["fromY"] = 0.4141, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.4669,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.5561, ["toY"] = 0.1633, ["toX"] = 0.8459, ["fromX"] = 0.5079,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 90, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 125, ["fromY"] = 0.625, ["toY"] = 0.86529541015625, ["toX"] = 0.49591064453125,
-		["fromX"] = 0.39498901367188, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 111, ["fromY"] = 0.481, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.5711,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.8832, ["toY"] = 0.1924, ["toX"] = 0.5826, ["fromX"] = 0.5606,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 110, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 57, ["fromY"] = 0.937, ["toY"] = 0.8653, ["toX"] = 0.4959, ["fromX"] = 0.5503,
-		["reqs"] = { ["fac"] = "Alliance", ["notlvl"] = "50", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 103, ["fromY"] = 0.6263, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.4825,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 100, ["fromY"] = 0.51, ["toY"] = 0.8653, ["toX"] = 0.4959, ["fromX"] = 0.8922,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 100, ["fromY"] = 0.52810668945312, ["toY"] = 0.86529541015625, ["toX"] = 0.49591064453125,
-		["fromX"] = 0.88632202148438, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 207, ["fromY"] = 0.53837585449219, ["toY"] = 0.18338012695312, ["toX"] = 0.74455261230469,
-		["fromX"] = 0.48519897460938, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "27203", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 198, ["fromY"] = 0.23129272460938, ["toY"] = 0.18338012695312, ["toX"] = 0.74455261230469,
-		["fromX"] = 0.62605285644531, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "25316", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 371, ["fromY"] = 0.8516, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.4623,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "31732", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.36099243164062, ["toY"] = 0.86529541015625, ["toX"] = 0.49591064453125,
-		["fromX"] = 0.71446228027344, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.4091796875, ["toY"] = 0.084274291992188, ["toX"] = 0.25509643554688,
-		["fromX"] = 0.74085998535156, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 87,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 379, ["fromY"] = 0.43368530273438, ["toY"] = 0.17002868652344, ["toX"] = 0.67733764648438,
-		["fromX"] = 0.48965454101562, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.36517333984375, ["toY"] = 0.60946655273438, ["toX"] = 0.51368713378906,
-		["fromX"] = 0.49224853515625, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "25924", }, ["toMapId"] = 204,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.39295959472656, ["toY"] = 0.80064392089844, ["toX"] = 0.55775451660156,
-		["fromX"] = 0.47404479980469, ["reqs"] = { ["qid"] = "29690", ["fac"] = "Horde", ["lvl"] = "30", },
-		["toMapId"] = 245, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.39410400390625, ["toY"] = 0.53392028808594, ["toX"] = 0.73631286621094,
-		["fromX"] = 0.50221252441406, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "26830", }, ["toMapId"] = 241,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 392, ["fromY"] = 0.48118591308594, ["toY"] = 0.16328430175781, ["toX"] = 0.84580993652344,
-		["fromX"] = 0.74226379394531, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 90,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 392, ["fromY"] = 0.52592468261719, ["toY"] = 0.19242858886719, ["toX"] = 0.58259582519531,
-		["fromX"] = 0.75790405273438, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 110,
-		["nodeType"] = "portals_static", },
-	{ ["fromX"] = 0.48799133300781, ["toMapId"] = 122, ["toY"] = 0.34480285644531, ["toX"] = 0.48248291015625,
-		["fromMapId"] = 111, ["fromY"] = 0.42045593261719, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 622, ["fromY"] = 0.3799, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.6083,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.6298, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.393,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.652, ["toY"] = 0.235, ["toX"] = 0.6248, ["fromX"] = 0.5027,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 26, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.6892, ["toY"] = 0.3706, ["toX"] = 0.4659, ["fromX"] = 0.3981,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 47, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.6976, ["toY"] = 0.6261, ["toX"] = 0.3863, ["fromX"] = 0.3267,
-		["reqs"] = { ["qid"] = "38576", ["cls"] = "PALADIN", ["fac"] = "Alliance", }, ["toMapId"] = 24,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.1349, ["toY"] = 0.6146, ["toX"] = 0.3942, ["fromX"] = 0.6192,
-		["reqs"] = { ["qid"] = "38576", ["cls"] = "PALADIN", ["fac"] = "Horde", }, ["toMapId"] = 24,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.3483, ["toY"] = 0.4605, ["toX"] = 0.726, ["fromX"] = 0.8025,
-		["reqs"] = { ["qid"] = "40718", ["nqid"] = "44663", ["fac"] = "Alliance", }, ["toMapId"] = 42,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 86, ["fromY"] = 0.7114, ["toY"] = 0.4605, ["toX"] = 0.726, ["fromX"] = 0.3632,
-		["reqs"] = { ["qid"] = "40718", ["nqid"] = "44184", ["fac"] = "Horde", }, ["toMapId"] = 42,
-		["nodeType"] = "portals_static", },
-	{ ["fromX"] = 0.4872, ["toMapId"] = 122, ["toY"] = 0.4815, ["toX"] = 0.5704, ["fromMapId"] = 111,
-		["fromY"] = 0.4205, ["nodeType"] = "portals_static", },
-	{ ["fromX"] = 0.8978, ["toMapId"] = 17, ["toY"] = 0.5345, ["toX"] = 0.5496, ["fromMapId"] = 100,
-		["fromY"] = 0.5022, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 971, ["fromY"] = 0.215, ["toY"] = 0.1475, ["toX"] = 0.54, ["fromX"] = 0.2802,
-		["reqs"] = { ["rac"] = "VoidElf", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1573, ["fromY"] = 0.6064, ["toY"] = 0.1648, ["toX"] = 0.5411, ["fromX"] = 0.2072,
-		["reqs"] = { ["rac"] = "Mechagnome", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 941, ["fromY"] = 0.2532, ["toY"] = 0.1475, ["toX"] = 0.54, ["fromX"] = 0.4322,
-		["reqs"] = { ["rac"] = "LightforgedDraenei", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 74, ["fromY"] = 0.2683, ["toY"] = 0.9023, ["toX"] = 0.4634, ["fromX"] = 0.589,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 392, ["fromY"] = 0.57313537597656, ["toY"] = 0.49209594726562, ["toX"] = 0.53005981445312,
-		["fromX"] = 0.63674926757812, ["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 111,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.53025817871094, ["toY"] = 0.49209594726562, ["toX"] = 0.53005981445312,
-		["fromX"] = 0.68421936035156, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 111,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.8748, ["toY"] = 0.4921, ["toX"] = 0.53, ["fromX"] = 0.5713,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 111, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.8586, ["toY"] = 0.4023, ["toX"] = 0.5497, ["fromX"] = 0.448,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 111, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 89, ["fromY"] = 0.7817, ["toY"] = 0.4956, ["toX"] = 0.8915, ["fromX"] = 0.4399,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 100, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 394, ["fromY"] = 0.39312744140625, ["toY"] = 0.46791076660156, ["toX"] = 0.55921936035156,
-		["fromX"] = 0.61943054199219, ["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 125,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 78, ["fromY"] = 0.07916259765625, ["toY"] = 0.82762145996094, ["toX"] = 0.40266418457031,
-		["fromX"] = 0.50398254394531, ["reqs"] = { ["qid"] = "12548", }, ["toMapId"] = 119,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.2662, ["toY"] = 0.2975, ["toX"] = 0.5043, ["fromX"] = 0.3176,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 116, ["nodeType"] = "portals_static", },
-	{ ["fromX"] = 0.8843, ["toMapId"] = 888, ["toY"] = 0.82, ["toX"] = 0.4369, ["fromMapId"] = 119,
-		["fromY"] = 0.53, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.9169, ["toY"] = 0.4678, ["toX"] = 0.5592, ["fromX"] = 0.5626,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 125, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.8859, ["toY"] = 0.4678, ["toX"] = 0.5592, ["fromX"] = 0.4447,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 125, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.19636535644531, ["toY"] = 0.53555297851562, ["toX"] = 0.4873046875,
-		["fromX"] = 0.73190307617188, ["reqs"] = { ["fac"] = "Alliance", ["qid"] = "27203", }, ["toMapId"] = 207,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.36338806152344, ["toY"] = 0.5294189453125, ["toX"] = 0.50592041015625,
-		["fromX"] = 0.50839233398438, ["reqs"] = { ["fac"] = "Horde", ["qid"] = "27203", }, ["toMapId"] = 207,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.921, ["toY"] = 0.1398, ["toX"] = 0.2856, ["fromX"] = 0.5747,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "29690", }, ["toMapId"] = 371, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.8723, ["toY"] = 0.8507, ["toX"] = 0.4618, ["fromX"] = 0.4566,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "31732", }, ["toMapId"] = 371, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 17, ["fromY"] = 0.5388, ["toY"] = 0.3553, ["toX"] = 0.4442, ["fromX"] = 0.5494,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "34446", }, ["toMapId"] = 624, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 17, ["fromY"] = 0.5388, ["toY"] = 0.5248, ["toX"] = 0.3171, ["fromX"] = 0.5494,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "35884", }, ["toMapId"] = 622, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.8793, ["toY"] = 0.4974, ["toX"] = 0.5695, ["fromX"] = 0.5826,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 624, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.92, ["toY"] = 0.3993, ["toX"] = 0.6153, ["fromX"] = 0.4808,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 622, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 832, ["fromY"] = 0.2549, ["toY"] = 0.4473, ["toX"] = 0.6092, ["fromX"] = 0.4339,
-		["reqs"] = { ["qid"] = "48440", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 884, ["fromY"] = 0.2584, ["toY"] = 0.4473, ["toX"] = 0.6092, ["fromX"] = 0.4939,
-		["reqs"] = { ["qid"] = "48081", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 887, ["fromY"] = 0.5602, ["toY"] = 0.4473, ["toX"] = 0.6092, ["fromX"] = 0.3507,
-		["reqs"] = { ["qid"] = "48199", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromX"] = 0.4978, ["toMapId"] = 627, ["toY"] = 0.5054, ["toX"] = 0.3965, ["fromMapId"] = 888,
-		["fromY"] = 0.088, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 709, ["fromY"] = 0.5717, ["toY"] = 0.4473, ["toX"] = 0.6092, ["fromX"] = 0.524,
-		["reqs"] = { ["cls"] = "MONK", ["qid"] = "40236", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 709, ["fromY"] = 0.5441, ["toY"] = 0.4312, ["toX"] = 0.4869, ["fromX"] = 0.5005,
-		["reqs"] = { ["cls"] = "MONK", ["qid"] = "40236", }, ["toMapId"] = 379, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 734, ["fromY"] = 0.9012, ["toY"] = 0.4473, ["toX"] = 0.6092, ["fromX"] = 0.5731,
-		["reqs"] = { ["cls"] = "MAGE", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 734, ["fromY"] = 0.3997, ["toY"] = 0.1511, ["toX"] = 0.5791, ["fromX"] = 0.551,
-		["reqs"] = { ["spell"] = "223413", ["cls"] = "MAGE", }, ["toMapId"] = 630, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 734, ["fromY"] = 0.4437, ["toY"] = 0.638, ["toX"] = 0.314, ["fromX"] = 0.5664,
-		["reqs"] = { ["spell"] = "223413", ["cls"] = "MAGE", }, ["toMapId"] = 650, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 734, ["fromY"] = 0.4601, ["toY"] = 0.561, ["toX"] = 0.513, ["fromX"] = 0.6684,
-		["reqs"] = { ["spell"] = "223413", ["cls"] = "MAGE", }, ["toMapId"] = 641, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 734, ["fromY"] = 0.4196, ["toY"] = 0.6051, ["toX"] = 0.3134, ["fromX"] = 0.6709,
-		["reqs"] = { ["spell"] = "223413", ["cls"] = "MAGE", }, ["toMapId"] = 634, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 24, ["fromY"] = 0.6384, ["toY"] = 0.6889, ["toX"] = 0.332, ["fromX"] = 0.3779,
-		["reqs"] = { ["qid"] = "38576", ["cls"] = "PALADIN", ["fac"] = "Alliance", }, ["toMapId"] = 627,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 24, ["fromY"] = 0.6384, ["toY"] = 0.1482, ["toX"] = 0.6127, ["fromX"] = 0.3779,
-		["reqs"] = { ["qid"] = "38576", ["cls"] = "PALADIN", ["fac"] = "Horde", }, ["toMapId"] = 627,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 715, ["fromY"] = 0.2393, ["toY"] = 0.3507, ["toX"] = 0.516, ["fromX"] = 0.4552,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 747, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.8955, ["toY"] = 0.4136, ["toX"] = 0.4682, ["fromX"] = 0.5882,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "44184", }, ["toMapId"] = 630, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.9339, ["toY"] = 0.4141, ["toX"] = 0.4669, ["fromX"] = 0.4687,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "44663", }, ["toMapId"] = 630, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 702, ["fromY"] = 0.8071, ["toY"] = 0.5731, ["toX"] = 0.3948, ["fromX"] = 0.498,
-		["reqs"] = { ["cls"] = "PRIEST", ["fac"] = "Alliance", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 702, ["fromY"] = 0.8071, ["toY"] = 0.177, ["toX"] = 0.63, ["fromX"] = 0.498,
-		["reqs"] = { ["cls"] = "PRIEST", ["fac"] = "Horde", }, ["toMapId"] = 627, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 695, ["fromY"] = 0.2498, ["toY"] = 0.5223, ["toX"] = 0.6018, ["fromX"] = 0.5834,
-		["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "39803", }, ["toMapId"] = 635, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 695, ["fromY"] = 0.2498, ["toY"] = 0.2808, ["toX"] = 0.4758, ["fromX"] = 0.5834,
-		["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "38443", }, ["toMapId"] = 630, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 695, ["fromY"] = 0.2498, ["toY"] = 0.7489, ["toX"] = 0.5471, ["fromX"] = 0.5834,
-		["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "38384", }, ["toMapId"] = 641, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 695, ["fromY"] = 0.2498, ["toY"] = 0.4211, ["toX"] = 0.3973, ["fromX"] = 0.5834,
-		["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "38907", }, ["toMapId"] = 750, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 695, ["fromY"] = 0.2498, ["toY"] = 0.482, ["toX"] = 0.3308, ["fromX"] = 0.5834,
-		["reqs"] = { ["cls"] = "WARRIOR", ["qid"] = "42229", }, ["toMapId"] = 680, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 198, ["fromY"] = 0.261, ["toY"] = 0.5188, ["toX"] = 0.5159, ["fromX"] = 0.5907,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 198, ["fromY"] = 0.261, ["toY"] = 0.5188, ["toX"] = 0.5159, ["fromX"] = 0.5907,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 26, ["fromY"] = 0.2279, ["toY"] = 0.625, ["toX"] = 0.4942, ["fromX"] = 0.6232,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 47, ["fromY"] = 0.3586, ["toY"] = 0.66, ["toX"] = 0.3884, ["fromX"] = 0.4656,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 747, ["fromY"] = 0.2241, ["toY"] = 0.2648, ["toX"] = 0.451, ["fromX"] = 0.5543,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 116, ["fromY"] = 0.2932, ["toY"] = 0.2953, ["toX"] = 0.324, ["fromX"] = 0.5035,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 80, ["fromY"] = 0.6023, ["toY"] = 0.7776, ["toX"] = 0.2631, ["fromX"] = 0.6796,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 12, ["fromY"] = 0.1068, ["toY"] = 0.7776, ["toX"] = 0.2631, ["fromX"] = 0.5131,
-		["reqs"] = { ["cls"] = "DRUID", ["qid"] = "40645", }, ["toMapId"] = 715, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.5731, ["toY"] = 0.8071, ["toX"] = 0.498, ["fromX"] = 0.3948,
-		["reqs"] = { ["cls"] = "PRIEST", ["fac"] = "Alliance", }, ["toMapId"] = 702, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.177, ["toY"] = 0.8071, ["toX"] = 0.498, ["fromX"] = 0.63,
-		["reqs"] = { ["cls"] = "PRIEST", ["fac"] = "Horde", }, ["toMapId"] = 702, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1532, ["toY"] = 0.2301, ["toX"] = 0.2868, ["fromX"] = 0.5448,
-		["reqs"] = { ["rac"] = "VoidElf", }, ["toMapId"] = 971, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1615, ["toY"] = 0.6472, ["toX"] = 0.2109, ["fromX"] = 0.5272,
-		["reqs"] = { ["rac"] = "Mechagnome", }, ["toMapId"] = 1573, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.1447, ["toY"] = 0.4622, ["toX"] = 0.4997, ["fromX"] = 0.5441,
-		["reqs"] = { ["rac"] = "LightforgedDraenei", }, ["toMapId"] = 941, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.7687, ["toY"] = 0.8529, ["toX"] = 0.5955, ["fromX"] = 0.4007,
-		["reqs"] = { ["rac"] = "Nightborne", }, ["toMapId"] = 680, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.7687, ["toY"] = 0.6406, ["toX"] = 0.4417, ["fromX"] = 0.4007,
-		["reqs"] = { ["rac"] = "Nightborne", }, ["toMapId"] = 652, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 627, ["fromY"] = 0.4929, ["toY"] = 0.8137, ["toX"] = 0.6115, ["fromX"] = 0.7426,
-		["reqs"] = { ["qid"] = "48440", }, ["toMapId"] = 831, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 81, ["fromY"] = 0.4519, ["toY"] = 0.6458, ["toX"] = 0.6828, ["fromX"] = 0.4159,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 1163, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.9123, ["toY"] = 0.6458, ["toX"] = 0.6828, ["fromX"] = 0.5851,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "46957", }, ["toMapId"] = 1163, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 62, ["fromY"] = 0.3509, ["toY"] = 0.6458, ["toX"] = 0.6828, ["fromX"] = 0.4626,
-		["reqs"] = { ["fac"] = "Horde", ["passlvl"] = "50", }, ["toMapId"] = 1163,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1355, ["fromY"] = 0.6274, ["toY"] = 0.6458, ["toX"] = 0.6828, ["fromX"] = 0.4727,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "56044", }, ["toMapId"] = 1163, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.9496, ["toY"] = 0.5031, ["toX"] = 0.2034, ["fromX"] = 0.4756,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "60151", }, ["toMapId"] = 1670, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 85, ["fromY"] = 0.8785, ["toY"] = 0.5031, ["toX"] = 0.2034, ["fromX"] = 0.5832,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "60151", }, ["toMapId"] = 1670, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 81, ["fromY"] = 0.4486, ["toY"] = 0.1587, ["toX"] = 0.7018, ["fromX"] = 0.4149,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 1161, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 84, ["fromY"] = 0.9512, ["toY"] = 0.1587, ["toX"] = 0.7018, ["fromX"] = 0.4872,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "47189", }, ["toMapId"] = 1161, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 62, ["fromY"] = 0.3624, ["toY"] = 0.1587, ["toX"] = 0.7018, ["fromX"] = 0.4799,
-		["reqs"] = { ["fac"] = "Alliance", ["passlvl"] = "50", }, ["toMapId"] = 1161,
-		["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1355, ["fromY"] = 0.5262, ["toY"] = 0.1577, ["toX"] = 0.6996, ["fromX"] = 0.3995,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 1161, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1161, ["fromY"] = 0.1536, ["toY"] = 0.5284, ["toX"] = 0.3996, ["fromX"] = 0.6989,
-		["reqs"] = { ["fac"] = "Alliance", ["qid"] = "56043", }, ["toMapId"] = 1355, ["nodeType"] = "portals_static", },
-	{ ["fromMapId"] = 1163, ["fromY"] = 0.8433, ["toY"] = 0.6263, ["toX"] = 0.4719, ["fromX"] = 0.6356,
-		["reqs"] = { ["fac"] = "Horde", ["qid"] = "56044", }, ["toMapId"] = 1355, ["nodeType"] = "portals_static", },
-	{ ["spellId"] = 23441, ["toX"] = 0.52236938476562, ["itemId"] = 18986, ["toY"] = 0.27835083007812,
-		["toMapId"] = 71, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 18960, ["toX"] = 0.56265258789062, ["itemId"] = 18960, ["toY"] = 0.32414245605469,
-		["toMapId"] = 80, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 3565, ["spellId"] = 3565, ["toX"] = 0.43467712402344, ["toY"] = 0.78672790527344,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 89, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 49359, ["spellId"] = 49359, ["toX"] = 0.6600341796875, ["toY"] = 0.48992919921875,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 70, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 3567, ["toX"] = 0.48283386230469, ["itemId"] = 3567, ["toY"] = 0.64529418945312,
-		["toMapId"] = 86, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.3911, ["toY"] = 0.093,
-		["reqs"] = { ["qid"] = "53600", }, ["toMapId"] = 199, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 147787, ["toX"] = 0.4996, ["itemId"] = 147787, ["toY"] = 0.3774, ["toMapId"] = 85,
-		["nodeType"] = "teleportto", },
-	{ ["itemId"] = 32271, ["spellId"] = 32271, ["toX"] = 0.4761962890625, ["toY"] = 0.59820556640625,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 103, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89158, ["toX"] = 0.48283386230469, ["itemId"] = 63207, ["toY"] = 0.64529418945312,
-		["toMapId"] = 86, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 23442, ["toX"] = 0.59614562988281, ["itemId"] = 18984, ["toY"] = 0.49714660644531,
-		["toMapId"] = 83, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89158, ["toX"] = 0.48283386230469, ["itemId"] = 65274, ["toY"] = 0.64529418945312,
-		["toMapId"] = 86, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89158, ["toX"] = 0.48283386230469, ["itemId"] = 63353, ["toY"] = 0.64529418945312,
-		["toMapId"] = 86, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 3566, ["spellId"] = 3566, ["toX"] = 0.22212219238281, ["toY"] = 0.16867065429688,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 88, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89157, ["toX"] = 0.49591064453125, ["itemId"] = 63352, ["toY"] = 0.86529541015625,
-		["toMapId"] = 84, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 147787, ["toX"] = 0.7444, ["itemId"] = 147787, ["toY"] = 0.1841, ["toMapId"] = 84,
-		["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.6197, ["toY"] = 0.128,
-		["reqs"] = { ["qid"] = "53594", }, ["toMapId"] = 17, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 3561, ["spellId"] = 3561, ["toX"] = 0.49591064453125, ["toY"] = 0.86529541015625,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 84, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 3563, ["spellId"] = 3563, ["toX"] = 0.84580993652344, ["toY"] = 0.16328430175781,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 90, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 88342, ["spellId"] = 88342, ["toX"] = 0.73674011230469, ["toY"] = 0.60920715332031,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 245, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 88344, ["spellId"] = 88344, ["toX"] = 0.54998779296875, ["toY"] = 0.78768920898438,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 245, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 32272, ["spellId"] = 32272, ["toX"] = 0.58259582519531, ["toY"] = 0.19242858886719,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 110, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 71436, ["toX"] = 0.40982055664062, ["itemId"] = 50287, ["toY"] = 0.73820495605469,
-		["toMapId"] = 210, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 49358, ["spellId"] = 49358, ["toX"] = 0.49844360351562, ["toY"] = 0.55804443359375,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 51, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 3562, ["spellId"] = 3562, ["toX"] = 0.25509643554688, ["toY"] = 0.084274291992188,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 87, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89157, ["toX"] = 0.49591064453125, ["itemId"] = 65360, ["toY"] = 0.86529541015625,
-		["toMapId"] = 84, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 50977, ["spellId"] = 50977, ["toX"] = 0.83717346191406, ["toY"] = 0.50027465820312,
-		["reqs"] = { ["nqid"] = "39757", ["qid"] = "39757", }, ["toMapId"] = 23, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 88344, ["toX"] = 0.54998779296875, ["itemId"] = 63378, ["toY"] = 0.78768920898438,
-		["toMapId"] = 245, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 88342, ["toX"] = 0.73674011230469, ["itemId"] = 63379, ["toY"] = 0.60920715332031,
-		["toMapId"] = 245, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 89157, ["toX"] = 0.49591064453125, ["itemId"] = 63206, ["toY"] = 0.86529541015625,
-		["toMapId"] = 84, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 33690, ["spellId"] = 33690, ["toX"] = 0.5496826171875, ["toY"] = 0.40232849121094,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 111, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 35715, ["spellId"] = 35715, ["toX"] = 0.53005981445312, ["toY"] = 0.49209594726562,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 111, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 36941, ["toX"] = 0.60400390625, ["itemId"] = 30544, ["toY"] = 0.65093994140625,
-		["toMapId"] = 105, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 41234, ["toX"] = 0.64851379394531, ["itemId"] = 32757, ["toY"] = 0.43910217285156,
-		["toMapId"] = 104, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.7242, ["toY"] = 0.1764,
-		["reqs"] = { ["qid"] = "53597", }, ["toMapId"] = 105, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 36890, ["toX"] = 0.32980346679688, ["itemId"] = 30542, ["toY"] = 0.63595581054688,
-		["toMapId"] = 109, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.4535, ["toY"] = 0.4992,
-		["reqs"] = { ["qid"] = "53596", }, ["toMapId"] = 115, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 45688, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 45689, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 45690, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 45691, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 66238, ["toX"] = 0.69369506835938, ["itemId"] = 46874, ["toY"] = 0.22642517089844,
-		["toMapId"] = 118, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 51557, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 48954, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 53140, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 40586, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 48957, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53142, ["toX"] = 0.55921936035156, ["itemId"] = 52251, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 40585, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 51559, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 51558, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 51560, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 48956, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 44934, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 44935, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 53140, ["toX"] = 0.55921936035156, ["itemId"] = 48955, ["toY"] = 0.46791076660156,
-		["toMapId"] = 125, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 80256, ["toX"] = 0.4998779296875, ["itemId"] = 58487, ["toY"] = 0.55465698242188,
-		["toMapId"] = 207, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 126892, ["spellId"] = 126892, ["toX"] = 0.48635864257812, ["toY"] = 0.42939758300781,
-		["reqs"] = { ["nqid"] = "40236", ["qid"] = "40236", }, ["toMapId"] = 379, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 95568, ["spellId"] = 140300, ["toX"] = 0.28480529785156, ["toY"] = 0.51728820800781,
-		["reqs"] = { ["map"] = "504", ["qid"] = "32212", ["nqid"] = "32212", ["fac"] = "Horde", }, ["toMapId"] = 504,
-		["nodeType"] = "teleportto", },
-	{ ["spellId"] = 132627, ["toX"] = 0.62501525878906, ["itemId"] = 132627, ["toY"] = 0.21823120117188,
-		["toMapId"] = 390, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 132621, ["toX"] = 0.863037109375, ["itemId"] = 132621, ["toY"] = 0.61051940917969,
-		["toMapId"] = 390, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.3151, ["toY"] = 0.7359,
-		["reqs"] = { ["qid"] = "53598", }, ["toMapId"] = 376, ["nodeType"] = "teleportto", },
-	{ ["toY"] = 0.89511108398438, ["toX"] = 0.34907531738281, ["itemId"] = 95567,
-		["reqs"] = { ["map"] = "504", ["qid"] = "32644", ["nqid"] = "32644", ["fac"] = "Alliance", }, ["toMapId"] = 504,
-		["nodeType"] = "teleportto", },
-	{ ["itemId"] = 176248, ["spellId"] = 176248, ["toX"] = 0.588, ["toY"] = 0.514,
-		["reqs"] = { ["fac"] = "Alliance", }, ["toMapId"] = 622, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 176242, ["spellId"] = 176242, ["toX"] = 0.588, ["toY"] = 0.514,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 624, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.6575, ["toY"] = 0.0825,
-		["reqs"] = { ["qid"] = "53590", }, ["toMapId"] = 550, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 171253, ["toX"] = 0.4264, ["toY"] = 0.5281, ["reqs"] = { ["fac"] = "Alliance", },
-		["toMapId"] = 579, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 110560, ["spellId"] = 171253, ["toX"] = 0.4095, ["toY"] = 0.5301,
-		["reqs"] = { ["fac"] = "Horde", }, ["toMapId"] = 590, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 126892, ["spellId"] = 126892, ["toX"] = 0.5146, ["toY"] = 0.4865,
-		["reqs"] = { ["qid"] = "40236", }, ["toMapId"] = 709, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 222695, ["toX"] = 0.6072, ["itemId"] = 140192, ["toY"] = 0.4476, ["toMapId"] = 627,
-		["nodeType"] = "teleportto", },
-	{ ["itemId"] = 50977, ["spellId"] = 50977, ["toX"] = 0.2743, ["toY"] = 0.3044,
-		["reqs"] = { ["qid"] = "39757", }, ["toMapId"] = 648, ["nodeType"] = "teleportto", },
-	{ ["itemId"] = 265225, ["spellId"] = 265225, ["toX"] = 0.7169, ["toY"] = 0.4799,
-		["reqs"] = { ["qid"] = "53589", }, ["toMapId"] = 646, ["nodeType"] = "teleportto", },
-	{ ["spellId"] = 193759, ["toX"] = 0.5763, ["itemId"] = 193759, ["toY"] = 0.8613, ["toMapId"] = 734,
-		["nodeType"] = "teleportto", },
-	{ ["spellId"] = 193753, ["toX"] = 0.3533, ["itemId"] = 193753, ["toY"] = 0.5315, ["toMapId"] = 715,
-		["nodeType"] = "teleportto", },
-	{ ["itemId"] = 169862, ["spellId"] = 325624, ["toX"] = 0.4622, ["toY"] = 0.4125,
-		["reqs"] = { ["map"] = "1543", }, ["toMapId"] = 1543, ["nodeType"] = "teleportto", },
+	{ ['type'] = 'Boat', ['mapId'] = 56, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.62263488769531, ['x'] = 0.0634765625, ['source'] = 1, }, -- From Wetlands to Dustwallow Marsh
+	{ ['type'] = 'Boat', ['mapId'] = 62, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.89469909667969, ['x'] = 0.52285766601562, ['source'] = -1, ['target'] = 2, }, -- From Azuremyst Isle to Darkshore
+	{ ['type'] = 'Boat', ['mapId'] = 97, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.54183959960938, ['x'] = 0.20384216308594, ['source'] = 2, }, -- From Azuremyst Isle to Darkshore
+	{ ['type'] = 'Boat', ['mapId'] = 97, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.54183959960938, ['x'] = 0.20384216308594, ['source'] = -1, ['target'] = 3, }, -- From Darkshore to Azuremyst Isle
+	{ ['type'] = 'Boat', ['mapId'] = 62, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.89469909667969, ['x'] = 0.52285766601562, ['source'] = 3, }, -- From Darkshore to Azuremyst Isle
+	{ ['type'] = 'Boat', ['mapId'] = 10, ['reqs'] = {}, ['continent'] = 1, ['y'] = 0.73222351074219,
+		['x'] = 0.70146179199219, ['source'] = -1, ['target'] = 4, }, -- From The Cape of Stranglethorn to Northern Barrens
+	{ ['type'] = 'Boat', ['mapId'] = 210, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.67041015625,
+		['x'] = 0.39083862304688, ['source'] = 4, }, -- From The Cape of Stranglethorn to Northern Barrens
+	{ ['type'] = 'Boat', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.53140258789062,
+		['x'] = 0.52484130859375, ['source'] = -1, ['target'] = 5, }, -- From Northern Stranglethorn to Orgrimmar
+	{ ['type'] = 'Boat', ['mapId'] = 50, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.52389526367188,
+		['x'] = 0.37107849121094, ['source'] = 5, }, -- From Northern Stranglethorn to Orgrimmar
+	{ ['type'] = 'Boat', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.62286376953125,
+		['x'] = 0.44801330566406, ['source'] = -1, ['target'] = 6, }, -- From Borean Tundra to Orgrimmar
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571,
+		['y'] = 0.53611755371094, ['x'] = 0.41377258300781, ['source'] = 6, }, -- From Borean Tundra to Orgrimmar
+	{ ['type'] = 'Boat', ['mapId'] = 463, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.3815,
+		['x'] = 0.7092, ['source'] = -1, ['target'] = 7, }, -- From Zuldazar to Echo Isles
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1642, ['y'] = 0.6504,
+		['x'] = 0.5808, ['source'] = 7, }, -- From Zuldazar to Echo Isles
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 0,
+		['y'] = 0.5622, ['x'] = 0.2283, ['source'] = -1, ['target'] = 8, }, -- From Boralus to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1643,
+		['y'] = 0.2594, ['x'] = 0.775, ['source'] = 8, }, -- From Boralus to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 56, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.62263488769531, ['x'] = 0.0634765625, ['source'] = -1, ['target'] = 9, }, -- From Dustwallow Marsh to Wetlands
+	{ ['type'] = 'Boat', ['mapId'] = 70, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.56373596191406, ['x'] = 0.715576171875, ['source'] = 9, }, -- From Dustwallow Marsh to Wetlands
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.25837707519531, ['x'] = 0.17703247070312, ['source'] = -1, ['target'] = 10, }, -- From Borean Tundra to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.69459533691406, ['x'] = 0.59768676757812, ['source'] = 10, }, -- From Borean Tundra to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 56, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.55833435058594, ['x'] = 0.046951293945312, ['source'] = -1, ['target'] = 11, }, -- From Howling Fjord to Wetlands
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.626220703125, ['x'] = 0.61399841308594, ['source'] = 11, }, -- From Howling Fjord to Wetlands
+	{ ['type'] = 'Boat', ['mapId'] = 18, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.58735656738281,
+		['x'] = 0.60694885253906, ['source'] = -1, ['target'] = 12, }, -- From Orgrimmar to Tirisfal Glades
+	{ ['type'] = 'Boat', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.55856323242188,
+		['x'] = 0.50790405273438, ['source'] = 12, }, -- From Orgrimmar to Tirisfal Glades
+	{ ['type'] = 'Boat', ['mapId'] = 50, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.52389526367188,
+		['x'] = 0.37107849121094, ['source'] = -1, ['target'] = 13, }, -- From Orgrimmar to Northern Stranglethorn
+	{ ['type'] = 'Boat', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.53140258789062,
+		['x'] = 0.52484130859375, ['source'] = 13, }, -- From Orgrimmar to Northern Stranglethorn
+	{ ['type'] = 'Boat', ['mapId'] = 210, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.67041015625,
+		['x'] = 0.39083862304688, ['source'] = -1, ['target'] = 14, }, -- From Northern Barrens to The Cape of Stranglethorn
+	{ ['type'] = 'Boat', ['mapId'] = 10, ['reqs'] = {}, ['continent'] = 1, ['y'] = 0.73222351074219,
+		['x'] = 0.70146179199219, ['source'] = 14, }, -- From Northern Barrens to The Cape of Stranglethorn
+	{ ['type'] = 'Boat', ['mapId'] = 18, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.59027099609375,
+		['x'] = 0.59033203125, ['source'] = -1, ['target'] = 15, }, -- From Howling Fjord to Tirisfal Glades
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571,
+		['y'] = 0.28282165527344, ['x'] = 0.77711486816406, ['source'] = 15, }, -- From Howling Fjord to Tirisfal Glades
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.31375122070312, ['x'] = 0.69371032714844, ['source'] = -1, ['target'] = 16, }, -- From Ironforge to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 87, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.51225280761719, ['x'] = 0.76412963867188, ['source'] = 16, }, -- From Ironforge to Stormwind City
+	{ ['type'] = 'Boat', ['mapId'] = 87, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.51225280761719, ['x'] = 0.76412963867188, ['source'] = -1, ['target'] = 17, }, -- From Stormwind City to Ironforge
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.31375122070312, ['x'] = 0.69371032714844, ['source'] = 17, }, -- From Stormwind City to Ironforge
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.69459533691406, ['x'] = 0.59768676757812, ['source'] = -1, ['target'] = 18, }, -- From Stormwind City to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.25837707519531, ['x'] = 0.17703247070312, ['source'] = 18, }, -- From Stormwind City to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.626220703125, ['x'] = 0.61399841308594, ['source'] = -1, ['target'] = 19, }, -- From Wetlands to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 56, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.55833435058594, ['x'] = 0.046951293945312, ['source'] = 19, }, -- From Wetlands to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571,
+		['y'] = 0.53611755371094, ['x'] = 0.41377258300781, ['source'] = -1, ['target'] = 20, }, -- From Orgrimmar to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.62286376953125,
+		['x'] = 0.44801330566406, ['source'] = 20, }, -- From Orgrimmar to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571,
+		['y'] = 0.28282165527344, ['x'] = 0.77711486816406, ['source'] = -1, ['target'] = 21, }, -- From Tirisfal Glades to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 18, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.59027099609375,
+		['x'] = 0.59033203125, ['source'] = 21, }, -- From Tirisfal Glades to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.57768249511719,
+		['x'] = 0.23497009277344, ['source'] = -1, ['target'] = 22, }, -- From Dragonblight to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 115, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.78422546386719,
+		['x'] = 0.4962158203125, ['source'] = 22, }, -- From Dragonblight to Howling Fjord
+	{ ['type'] = 'Boat', ['mapId'] = 115, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.78422546386719,
+		['x'] = 0.4962158203125, ['source'] = -1, ['target'] = 23, }, -- From Howling Fjord to Dragonblight
+	{ ['type'] = 'Boat', ['mapId'] = 117, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.57768249511719,
+		['x'] = 0.23497009277344, ['source'] = 23, }, -- From Howling Fjord to Dragonblight
+	{ ['type'] = 'Boat', ['mapId'] = 115, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.787353515625,
+		['x'] = 0.47946166992188, ['source'] = -1, ['target'] = 24, }, -- From Borean Tundra to Dragonblight
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.53628540039062,
+		['x'] = 0.78892517089844, ['source'] = 24, }, -- From Borean Tundra to Dragonblight
+	{ ['type'] = 'Boat', ['mapId'] = 114, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.53628540039062,
+		['x'] = 0.78892517089844, ['source'] = -1, ['target'] = 25, }, -- From Dragonblight to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 115, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.787353515625,
+		['x'] = 0.47946166992188, ['source'] = 25, }, -- From Dragonblight to Borean Tundra
+	{ ['type'] = 'Boat', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '38599', }, ['continent'] = 1116,
+		['y'] = 0.2717, ['x'] = 0.5559, ['source'] = -1, ['target'] = 26, }, -- From Tanaan Jungle to Tanaan Jungle
+	{ ['type'] = 'Boat', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '38599', }, ['continent'] = 1116,
+		['y'] = 0.4743, ['x'] = 0.6002, ['source'] = 26, }, -- From Tanaan Jungle to Tanaan Jungle
+	{ ['type'] = 'Boat', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38603', }, ['continent'] = 1116,
+		['y'] = 0.2729, ['x'] = 0.5551, ['source'] = -1, ['target'] = 27, }, -- From Tanaan Jungle to Tanaan Jungle
+	{ ['type'] = 'Boat', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38603', }, ['continent'] = 1116,
+		['y'] = 0.5873, ['x'] = 0.5767, ['source'] = 27, }, -- From Tanaan Jungle to Tanaan Jungle
+	{ ['type'] = 'Boat', ['mapId'] = 739, ['reqs'] = { ['qid'] = '40959', ['cls'] = 'HUNTER', }, ['continent'] = 1220,
+		['y'] = 0.2783, ['x'] = 0.3664, ['source'] = -1, ['target'] = 28, }, -- From Dalaran to Trueshot Lodge
+	{ ['type'] = 'Boat', ['mapId'] = 627, ['reqs'] = { ['qid'] = '40959', ['cls'] = 'HUNTER', }, ['continent'] = 1220,
+		['y'] = 0.413, ['x'] = 0.7277, ['source'] = 28, }, -- From Dalaran to Trueshot Lodge
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1642,
+		['y'] = 0.625, ['x'] = 0.584, ['source'] = -1, ['target'] = 29, }, -- From Stormsong Valley to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 942, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1643,
+		['y'] = 0.3375, ['x'] = 0.5143, ['source'] = 29, }, -- From Stormsong Valley to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1642,
+		['y'] = 0.625, ['x'] = 0.584, ['source'] = -1, ['target'] = 30, }, -- From Stormsong Valley to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 942, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1643,
+		['y'] = 0.2449, ['x'] = 0.5198, ['source'] = 30, }, -- From Stormsong Valley to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51340', }, ['continent'] = 1642,
+		['y'] = 0.625, ['x'] = 0.584, ['source'] = -1, ['target'] = 31, }, -- From Drustvar to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 896, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51340', }, ['continent'] = 1643,
+		['y'] = 0.4335, ['x'] = 0.2061, ['source'] = 31, }, -- From Drustvar to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51589', }, ['continent'] = 1642,
+		['y'] = 0.625, ['x'] = 0.584, ['source'] = -1, ['target'] = 32, }, -- From Tiragarde Sound to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 895, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51589', }, ['continent'] = 1643,
+		['y'] = 0.5119, ['x'] = 0.8785, ['source'] = 32, }, -- From Tiragarde Sound to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1642, ['y'] = 0.6504,
+		['x'] = 0.5808, ['source'] = -1, ['target'] = 33, }, -- From Echo Isles to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 463, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.3815,
+		['x'] = 0.7092, ['source'] = 33, }, -- From Echo Isles to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 864, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51283', }, ['continent'] = 1642,
+		['y'] = 0.3317, ['x'] = 0.356, ['source'] = -1, ['target'] = 34, }, -- From Boralus to Vol'dun
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51283', }, ['continent'] = 1643,
+		['y'] = 0.2663, ['x'] = 0.6792, ['source'] = 34, }, -- From Boralus to Vol'dun
+	{ ['type'] = 'Boat', ['mapId'] = 863, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51088', }, ['continent'] = 1642,
+		['y'] = 0.3992, ['x'] = 0.6195, ['source'] = -1, ['target'] = 35, }, -- From Boralus to Nazmir
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51088', }, ['continent'] = 1643,
+		['y'] = 0.2663, ['x'] = 0.6792, ['source'] = 35, }, -- From Boralus to Nazmir
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1642,
+		['y'] = 0.7086, ['x'] = 0.4068, ['source'] = -1, ['target'] = 36, }, -- From Boralus to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1643,
+		['y'] = 0.2663, ['x'] = 0.6792, ['source'] = 36, }, -- From Boralus to Zuldazar
+	{ ['type'] = 'Boat', ['mapId'] = 1165, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1642,
+		['y'] = 0.2132, ['x'] = 0.7573, ['source'] = -1, ['target'] = 37, }, -- From Mechagon Island to Dazar'alor
+	{ ['type'] = 'Boat', ['mapId'] = 1462, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1643,
+		['y'] = 0.8759, ['x'] = 0.4184, ['source'] = 37, }, -- From Mechagon Island to Dazar'alor
+	{ ['type'] = 'Boat', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222, ['y'] = 0.4251,
+		['x'] = 0.2962, ['source'] = -1, ['target'] = 38, }, -- From Sinfall to Revendreth
+	{ ['type'] = 'Boat', ['mapId'] = 1700, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222, ['y'] = 0.4729,
+		['x'] = 0.6724, ['source'] = 38, }, -- From Sinfall to Revendreth
+	{ ['type'] = 'Boat', ['mapId'] = 896, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51340', }, ['continent'] = 1643,
+		['y'] = 0.4369, ['x'] = 0.2061, ['source'] = -1, ['target'] = 39, }, -- From Zuldazar to Drustvar
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51340', }, ['continent'] = 1642,
+		['y'] = 0.6299, ['x'] = 0.5846, ['source'] = 39, }, -- From Zuldazar to Drustvar
+	{ ['type'] = 'Boat', ['mapId'] = 942, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1643,
+		['y'] = 0.2449, ['x'] = 0.5198, ['source'] = -1, ['target'] = 40, }, -- From Zuldazar to Stormsong Valley
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51532', }, ['continent'] = 1642,
+		['y'] = 0.6299, ['x'] = 0.5846, ['source'] = 40, }, -- From Zuldazar to Stormsong Valley
+	{ ['type'] = 'Boat', ['mapId'] = 895, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51589', }, ['continent'] = 1643,
+		['y'] = 0.5116, ['x'] = 0.882, ['source'] = -1, ['target'] = 41, }, -- From Zuldazar to Tiragarde Sound
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '51589', }, ['continent'] = 1642,
+		['y'] = 0.6299, ['x'] = 0.5846, ['source'] = 41, }, -- From Zuldazar to Tiragarde Sound
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51283', }, ['continent'] = 1643,
+		['y'] = 0.2706, ['x'] = 0.7022, ['source'] = -1, ['target'] = 42, }, -- From Vol'dun to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 864, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51283', }, ['continent'] = 1642,
+		['y'] = 0.3424, ['x'] = 0.3668, ['source'] = 42, }, -- From Vol'dun to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51088', }, ['continent'] = 1643,
+		['y'] = 0.2706, ['x'] = 0.7022, ['source'] = -1, ['target'] = 43, }, -- From Nazmir to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 863, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51088', }, ['continent'] = 1642,
+		['y'] = 0.4005, ['x'] = 0.6206, ['source'] = 43, }, -- From Nazmir to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1643,
+		['y'] = 0.2706, ['x'] = 0.7022, ['source'] = -1, ['target'] = 44, }, -- From Zuldazar to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 862, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1642,
+		['y'] = 0.7104, ['x'] = 0.4046, ['source'] = 44, }, -- From Zuldazar to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 1643,
+		['y'] = 0.2594, ['x'] = 0.775, ['source'] = -1, ['target'] = 45, }, -- From Stormwind City to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '51308', }, ['continent'] = 0,
+		['y'] = 0.5622, ['x'] = 0.2283, ['source'] = 45, }, -- From Stormwind City to Boralus
+	{ ['type'] = 'Boat', ['mapId'] = 1462, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1643,
+		['y'] = 0.2132, ['x'] = 0.7573, ['source'] = -1, ['target'] = 46, }, -- From Dazar'alor to Mechagon Island
+	{ ['type'] = 'Boat', ['mapId'] = 1165, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1642,
+		['y'] = 0.8759, ['x'] = 0.4184, ['source'] = 46, }, -- From Dazar'alor to Mechagon Island
+	{ ['type'] = 'Boat', ['mapId'] = 1165, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1642,
+		['y'] = 0.8743, ['x'] = 0.4175, ['source'] = -1, ['target'] = 47, }, -- From Mechagon Island to Dazar'alor
+	{ ['type'] = 'Boat', ['mapId'] = 1462, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '55651', }, ['continent'] = 1643,
+		['y'] = 0.2262, ['x'] = 0.7548, ['source'] = 47, }, -- From Mechagon Island to Dazar'alor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 57, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.48550415039062, ['x'] = 0.27494812011719, ['source'] = -1, ['target'] = 48, }, -- From Teldrassil to Teldrassil
+	{ ['y'] = 0.88526916503906, ['x'] = 0.55094909667969, ['mapId'] = 57, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 48, ['type'] = 'LocalPortal', }, -- From Teldrassil to Teldrassil
+	{ ['type'] = 'LocalPortal', ['mapId'] = 57, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.88526916503906, ['x'] = 0.55094909667969, ['source'] = -1, ['target'] = 49, }, -- From Teldrassil to Teldrassil
+	{ ['y'] = 0.48550415039062, ['x'] = 0.27494812011719, ['mapId'] = 57, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 49, ['type'] = 'LocalPortal', }, -- From Teldrassil to Teldrassil
+	{ ['type'] = 'LocalPortal', ['mapId'] = 97, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.5409, ['x'] = 0.2005, ['source'] = -1, ['target'] = 50, }, -- From Teldrassil to Azuremyst Isle
+	{ ['y'] = 0.8946, ['x'] = 0.523, ['mapId'] = 57, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 50, ['type'] = 'LocalPortal', }, -- From Teldrassil to Azuremyst Isle
+	{ ['type'] = 'LocalPortal', ['mapId'] = 57, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.8947, ['x'] = 0.5238, ['source'] = -1, ['target'] = 51, }, -- From Azuremyst Isle to Teldrassil
+	{ ['y'] = 0.5409, ['x'] = 0.2005, ['mapId'] = 97, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 51, ['type'] = 'LocalPortal', }, -- From Azuremyst Isle to Teldrassil
+	{ ['type'] = 'LocalPortal', ['mapId'] = 249, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '28112', }, ['continent'] = 1,
+		['y'] = 0.34246826171875, ['x'] = 0.54893493652344, ['source'] = -1, ['target'] = 52, }, -- From Orgrimmar to Uldum
+	{ ['y'] = 0.38578796386719, ['x'] = 0.48880004882812, ['mapId'] = 85,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '28112', }, ['continent'] = 1, ['source'] = 52,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Uldum
+	{ ['type'] = 'LocalPortal', ['mapId'] = 198, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25316', }, ['continent'] = 1,
+		['y'] = 0.23371887207031, ['x'] = 0.63485717773438, ['source'] = -1, ['target'] = 53, }, -- From Orgrimmar to Mount Hyjal
+	{ ['y'] = 0.38290405273438, ['x'] = 0.51069641113281, ['mapId'] = 85,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25316', }, ['continent'] = 1, ['source'] = 53,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Mount Hyjal
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25316', }, ['continent'] = 1,
+		['y'] = 0.37886047363281, ['x'] = 0.5013427734375, ['source'] = -1, ['target'] = 54, }, -- From Mount Hyjal to Orgrimmar
+	{ ['y'] = 0.24444580078125, ['x'] = 0.63479614257812, ['mapId'] = 198,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25316', }, ['continent'] = 1, ['source'] = 54,
+		['type'] = 'LocalPortal', }, -- From Mount Hyjal to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1473, ['reqs'] = { ['passlvl'] = '50', }, ['continent'] = 2215,
+		['y'] = 0.3594, ['x'] = 0.5023, ['source'] = -1, ['target'] = 55, }, -- From Silithus to Chamber of Heart
+	{ ['y'] = 0.4451, ['x'] = 0.4311, ['mapId'] = 81, ['reqs'] = { ['passlvl'] = '50', }, ['continent'] = 1,
+		['source'] = 55, ['type'] = 'LocalPortal', }, -- From Silithus to Chamber of Heart
+	{ ['type'] = 'LocalPortal', ['mapId'] = 81, ['reqs'] = { ['passlvl'] = '50', }, ['continent'] = 1, ['y'] = 0.4519,
+		['x'] = 0.4141, ['source'] = -1, ['target'] = 56, }, -- From Chamber of Heart to Silithus
+	{ ['y'] = 0.3099, ['x'] = 0.5023, ['mapId'] = 1473, ['reqs'] = { ['passlvl'] = '50', }, ['continent'] = 2215,
+		['source'] = 56, ['type'] = 'LocalPortal', }, -- From Chamber of Heart to Silithus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 74, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.283,
+		['x'] = 0.546, ['source'] = -1, ['target'] = 57, }, -- From Orgrimmar to Caverns of Time
+	{ ['y'] = 0.9247, ['x'] = 0.5639, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 57, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Caverns of Time
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.2681,
+		['x'] = 0.5814, ['source'] = -1, ['target'] = 58, }, -- From Caverns of Time to Orgrimmar
+	{ ['y'] = 0.2681, ['x'] = 0.5814, ['mapId'] = 74, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 58, ['type'] = 'LocalPortal', }, -- From Caverns of Time to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 245, ['reqs'] = { ['fac'] = 'Alliance', ['lvl'] = '30', }, ['continent'] = 0,
+		['y'] = 0.60920715332031, ['x'] = 0.73674011230469, ['source'] = -1, ['target'] = 59, }, -- From Stormwind City to Tol Barad Peninsula
+	{ ['y'] = 0.1837158203125, ['x'] = 0.73211669921875, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['lvl'] = '30', }, ['continent'] = 0, ['source'] = 59,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Tol Barad Peninsula
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['lvl'] = '30', }, ['continent'] = 0,
+		['y'] = 0.18284606933594, ['x'] = 0.73388671875, ['source'] = -1, ['target'] = 60, }, -- From Tol Barad Peninsula to Stormwind City
+	{ ['y'] = 0.58865356445312, ['x'] = 0.7523193359375, ['mapId'] = 245,
+		['reqs'] = { ['fac'] = 'Alliance', ['lvl'] = '30', }, ['continent'] = 0, ['source'] = 60,
+		['type'] = 'LocalPortal', }, -- From Tol Barad Peninsula to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 204, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '14482', },
+		['continent'] = 0, ['y'] = 0.72802734375, ['x'] = 0.55703735351562, ['source'] = -1, ['target'] = 61, }, -- From Stormwind City to Abyssal Depths
+	{ ['y'] = 0.1685791015625, ['x'] = 0.73297119140625, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '14482', }, ['continent'] = 0, ['source'] = 61,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Abyssal Depths
+	{ ['type'] = 'LocalPortal', ['mapId'] = 241, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27545', },
+		['continent'] = 0, ['y'] = 0.77784729003906, ['x'] = 0.79478454589844, ['source'] = -1, ['target'] = 62, }, -- From Stormwind City to Twilight Highlands
+	{ ['y'] = 0.16426086425781, ['x'] = 0.75343322753906, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27545', }, ['continent'] = 0, ['source'] = 62,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Twilight Highlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27545', },
+		['continent'] = 0, ['y'] = 0.16810607910156, ['x'] = 0.75169372558594, ['source'] = -1, ['target'] = 63, }, -- From Twilight Highlands to Stormwind City
+	{ ['y'] = 0.77784729003906, ['x'] = 0.79478454589844, ['mapId'] = 241,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27545', }, ['continent'] = 0, ['source'] = 63,
+		['type'] = 'LocalPortal', }, -- From Twilight Highlands to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 90, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.1633,
+		['x'] = 0.8459, ['source'] = -1, ['target'] = 64, }, -- From Northern Stranglethorn to Undercity
+	{ ['y'] = 0.5099, ['x'] = 0.3755, ['mapId'] = 50, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['source'] = 64, ['type'] = 'LocalPortal', }, -- From Northern Stranglethorn to Undercity
+	{ ['type'] = 'LocalPortal', ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['y'] = 0.16448974609375, ['x'] = 0.50619506835938, ['source'] = -1, ['target'] = 65, }, -- From Tirisfal Glades to Silvermoon City
+	{ ['y'] = 0.67436218261719, ['x'] = 0.59449768066406, ['mapId'] = 18, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 0, ['source'] = 65, ['type'] = 'LocalPortal', }, -- From Tirisfal Glades to Silvermoon City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 18, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['y'] = 0.67436218261719, ['x'] = 0.59449768066406, ['source'] = -1, ['target'] = 66, }, -- From Silvermoon City to Tirisfal Glades
+	{ ['y'] = 0.16448974609375, ['x'] = 0.50619506835938, ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 0, ['source'] = 66, ['type'] = 'LocalPortal', }, -- From Silvermoon City to Tirisfal Glades
+	{ ['type'] = 'LocalPortal', ['mapId'] = 95, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.96380615234375,
+		['x'] = 0.51576232910156, ['source'] = -1, ['target'] = 67, }, -- From Eastern Plaguelands to Ghostlands
+	{ ['y'] = 0.08770751953125, ['x'] = 0.54376220703125, ['mapId'] = 23, ['reqs'] = {}, ['continent'] = 0,
+		['source'] = 67, ['type'] = 'LocalPortal', }, -- From Eastern Plaguelands to Ghostlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 23, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.08770751953125,
+		['x'] = 0.54376220703125, ['source'] = -1, ['target'] = 68, }, -- From Ghostlands to Eastern Plaguelands
+	{ ['y'] = 0.96380615234375, ['x'] = 0.51576232910156, ['mapId'] = 95, ['reqs'] = {}, ['continent'] = 0,
+		['source'] = 68, ['type'] = 'LocalPortal', }, -- From Ghostlands to Eastern Plaguelands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 122, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.3069, ['x'] = 0.471,
+		['source'] = -1, ['target'] = 69, }, -- From Magisters' Terrace to Isle of Quel'Danas
+	{ ['y'] = 0.496, ['x'] = 0.0439, ['mapId'] = 348, ['reqs'] = {}, ['continent'] = 585, ['source'] = 69,
+		['type'] = 'LocalPortal', }, -- From Magisters' Terrace to Isle of Quel'Danas
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['rac'] = 'DarkIronDwarf', }, ['continent'] = 0,
+		['y'] = 0.1725, ['x'] = 0.5449, ['source'] = -1, ['target'] = 70, }, -- From Blackrock Depths to Stormwind City
+	{ ['y'] = 0.2682, ['x'] = 0.5925, ['mapId'] = 1186, ['reqs'] = { ['rac'] = 'DarkIronDwarf', }, ['continent'] = 2081,
+		['source'] = 70, ['type'] = 'LocalPortal', }, -- From Blackrock Depths to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1186, ['reqs'] = { ['rac'] = 'DarkIronDwarf', }, ['continent'] = 2081,
+		['y'] = 0.2434, ['x'] = 0.6143, ['source'] = -1, ['target'] = 71, }, -- From Stormwind City to Blackrock Depths
+	{ ['y'] = 0.1601, ['x'] = 0.5269, ['mapId'] = 84, ['reqs'] = { ['rac'] = 'DarkIronDwarf', }, ['continent'] = 0,
+		['source'] = 71, ['type'] = 'LocalPortal', }, -- From Stormwind City to Blackrock Depths
+	{ ['type'] = 'LocalPortal', ['mapId'] = 127, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.42845153808594,
+		['x'] = 0.15812683105469, ['source'] = -1, ['target'] = 72, }, -- From Dalaran to Crystalsong Forest
+	{ ['y'] = 0.46798706054688, ['x'] = 0.55915832519531, ['mapId'] = 125, ['reqs'] = {}, ['continent'] = 571,
+		['source'] = 72, ['type'] = 'LocalPortal', }, -- From Dalaran to Crystalsong Forest
+	{ ['type'] = 'LocalPortal', ['mapId'] = 125, ['reqs'] = {}, ['continent'] = 571, ['y'] = 0.46791076660156,
+		['x'] = 0.55921936035156, ['source'] = -1, ['target'] = 73, }, -- From Crystalsong Forest to Dalaran
+	{ ['y'] = 0.42845153808594, ['x'] = 0.15812683105469, ['mapId'] = 127, ['reqs'] = {}, ['continent'] = 571,
+		['source'] = 73, ['type'] = 'LocalPortal', }, -- From Crystalsong Forest to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 120, ['reqs'] = { ['qid'] = '12821', }, ['continent'] = 571,
+		['y'] = 0.81881713867188, ['x'] = 0.50555419921875, ['source'] = -1, ['target'] = 74, }, -- From The Storm Peaks to The Storm Peaks
+	{ ['y'] = 0.85292053222656, ['x'] = 0.41020202636719, ['mapId'] = 120, ['reqs'] = { ['qid'] = '12821', },
+		['continent'] = 571, ['source'] = 74, ['type'] = 'LocalPortal', }, -- From The Storm Peaks to The Storm Peaks
+	{ ['type'] = 'LocalPortal', ['mapId'] = 120, ['reqs'] = { ['qid'] = '12821', }, ['continent'] = 571,
+		['y'] = 0.85359191894531, ['x'] = 0.40985107421875, ['source'] = -1, ['target'] = 75, }, -- From The Storm Peaks to The Storm Peaks
+	{ ['y'] = 0.8193359375, ['x'] = 0.50700378417969, ['mapId'] = 120, ['reqs'] = { ['qid'] = '12821', },
+		['continent'] = 571, ['source'] = 75, ['type'] = 'LocalPortal', }, -- From The Storm Peaks to The Storm Peaks
+	{ ['type'] = 'LocalPortal', ['mapId'] = 207, ['reqs'] = { ['qid'] = '26709', }, ['continent'] = 646,
+		['y'] = 0.13459777832031, ['x'] = 0.57026672363281, ['source'] = -1, ['target'] = 76, }, -- From Deepholm to Deepholm
+	{ ['y'] = 0.50308227539062, ['x'] = 0.49266052246094, ['mapId'] = 207, ['reqs'] = { ['qid'] = '26709', },
+		['continent'] = 646, ['source'] = 76, ['type'] = 'LocalPortal', }, -- From Deepholm to Deepholm
+	{ ['type'] = 'LocalPortal', ['mapId'] = 207, ['reqs'] = { ['qid'] = '26709', }, ['continent'] = 646,
+		['y'] = 0.50559997558594, ['x'] = 0.49301147460938, ['source'] = -1, ['target'] = 77, }, -- From Deepholm to Deepholm
+	{ ['y'] = 0.13557434082031, ['x'] = 0.57244873046875, ['mapId'] = 207, ['reqs'] = { ['qid'] = '26709', },
+		['continent'] = 646, ['source'] = 77, ['type'] = 'LocalPortal', }, -- From Deepholm to Deepholm
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388, ['reqs'] = { ['qid'] = '31110', }, ['continent'] = 870,
+		['y'] = 0.22329711914062, ['x'] = 0.28970336914062, ['source'] = -1, ['target'] = 78, }, -- From Townlong Steppes to Townlong Steppes
+	{ ['y'] = 0.69879150390625, ['x'] = 0.48457336425781, ['mapId'] = 388, ['reqs'] = { ['qid'] = '31110', },
+		['continent'] = 870, ['source'] = 78, ['type'] = 'LocalPortal', }, -- From Townlong Steppes to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388, ['reqs'] = { ['qid'] = '31110', }, ['continent'] = 870,
+		['y'] = 0.69947814941406, ['x'] = 0.48579406738281, ['source'] = -1, ['target'] = 79, }, -- From Townlong Steppes to Townlong Steppes
+	{ ['y'] = 0.22114562988281, ['x'] = 0.2900390625, ['mapId'] = 388, ['reqs'] = { ['qid'] = '31110', },
+		['continent'] = 870, ['source'] = 79, ['type'] = 'LocalPortal', }, -- From Townlong Steppes to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870,
+		['y'] = 0.68890380859375, ['x'] = 0.49754333496094, ['source'] = -1, ['target'] = 80, }, -- From Isle of Thunder to Townlong Steppes
+	{ ['y'] = 0.90576171875, ['x'] = 0.35334777832031, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870, ['source'] = 80,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870,
+		['y'] = 0.89848327636719, ['x'] = 0.34861755371094, ['source'] = -1, ['target'] = 81, }, -- From Townlong Steppes to Isle of Thunder
+	{ ['y'] = 0.68672180175781, ['x'] = 0.49742126464844, ['mapId'] = 388,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870, ['source'] = 81,
+		['type'] = 'LocalPortal', }, -- From Townlong Steppes to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870,
+		['y'] = 0.83781433105469, ['x'] = 0.3162841796875, ['source'] = -1, ['target'] = 82, }, -- From Isle of Thunder to Isle of Thunder
+	{ ['y'] = 0.8946533203125, ['x'] = 0.34902954101562, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870, ['source'] = 82,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870,
+		['y'] = 0.89263916015625, ['x'] = 0.3477783203125, ['source'] = -1, ['target'] = 83, }, -- From Isle of Thunder to Isle of Thunder
+	{ ['y'] = 0.8370361328125, ['x'] = 0.31631469726562, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32681', ['nqid'] = '32644', ['fac'] = 'Alliance', }, ['continent'] = 870, ['source'] = 83,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870,
+		['y'] = 0.52955627441406, ['x'] = 0.28367614746094, ['source'] = -1, ['target'] = 84, }, -- From Townlong Steppes to Isle of Thunder
+	{ ['y'] = 0.7340087890625, ['x'] = 0.50650024414062, ['mapId'] = 388,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870, ['source'] = 84,
+		['type'] = 'LocalPortal', }, -- From Townlong Steppes to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870,
+		['y'] = 0.7340087890625, ['x'] = 0.50650024414062, ['source'] = -1, ['target'] = 85, }, -- From Isle of Thunder to Townlong Steppes
+	{ ['y'] = 0.52955627441406, ['x'] = 0.28367614746094, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870, ['source'] = 85,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870,
+		['y'] = 0.52833557128906, ['x'] = 0.33061218261719, ['source'] = -1, ['target'] = 86, }, -- From Isle of Thunder to Isle of Thunder
+	{ ['y'] = 0.51728820800781, ['x'] = 0.28480529785156, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870, ['source'] = 86,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870,
+		['y'] = 0.52833557128906, ['x'] = 0.33061218261719, ['source'] = -1, ['target'] = 87, }, -- From Isle of Thunder to Isle of Thunder
+	{ ['y'] = 0.52714538574219, ['x'] = 0.2857666015625, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870, ['source'] = 87,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870,
+		['y'] = 0.51728820800781, ['x'] = 0.28480529785156, ['source'] = -1, ['target'] = 88, }, -- From Isle of Thunder to Isle of Thunder
+	{ ['y'] = 0.52833557128906, ['x'] = 0.33061218261719, ['mapId'] = 504,
+		['reqs'] = { ['qid'] = '32680', ['nqid'] = '32212', ['fac'] = 'Horde', }, ['continent'] = 870, ['source'] = 88,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '32644', },
+		['continent'] = 870, ['y'] = 0.68890380859375, ['x'] = 0.49754333496094, ['source'] = -1, ['target'] = 89, }, -- From Isle of Thunder to Townlong Steppes
+	{ ['y'] = 0.73481750488281, ['x'] = 0.64712524414062, ['mapId'] = 504,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '32644', }, ['continent'] = 870, ['source'] = 89,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '32644', },
+		['continent'] = 870, ['y'] = 0.72474670410156, ['x'] = 0.64079284667969, ['source'] = -1, ['target'] = 90, }, -- From Townlong Steppes to Isle of Thunder
+	{ ['y'] = 0.68663024902344, ['x'] = 0.4974365234375, ['mapId'] = 388,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '32644', }, ['continent'] = 870, ['source'] = 90,
+		['type'] = 'LocalPortal', }, -- From Townlong Steppes to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 388, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '32212', },
+		['continent'] = 870, ['y'] = 0.73158264160156, ['x'] = 0.50694274902344, ['source'] = -1, ['target'] = 91, }, -- From Isle of Thunder to Townlong Steppes
+	{ ['y'] = 0.32695007324219, ['x'] = 0.33213806152344, ['mapId'] = 504,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '32212', }, ['continent'] = 870, ['source'] = 91,
+		['type'] = 'LocalPortal', }, -- From Isle of Thunder to Townlong Steppes
+	{ ['type'] = 'LocalPortal', ['mapId'] = 504, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '32212', },
+		['continent'] = 870, ['y'] = 0.32432556152344, ['x'] = 0.33247375488281, ['source'] = -1, ['target'] = 92, }, -- From Townlong Steppes to Isle of Thunder
+	{ ['y'] = 0.73397827148438, ['x'] = 0.50651550292969, ['mapId'] = 388,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '32212', }, ['continent'] = 870, ['source'] = 92,
+		['type'] = 'LocalPortal', }, -- From Townlong Steppes to Isle of Thunder
+	{ ['type'] = 'LocalPortal', ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '36614', },
+		['continent'] = 1116, ['y'] = 0.3553, ['x'] = 0.4442, ['source'] = -1, ['target'] = 93, }, -- From Frostwall Mine to Warspear
+	{ ['y'] = 0.486, ['x'] = 0.7516, ['mapId'] = 585, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '36614', },
+		['continent'] = 1116, ['source'] = 93, ['type'] = 'LocalPortal', }, -- From Frostwall Mine to Warspear
+	{ ['type'] = 'LocalPortal', ['mapId'] = 543, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '34078', },
+		['continent'] = 1116, ['y'] = 0.6973, ['x'] = 0.4639, ['source'] = -1, ['target'] = 94, }, -- From Frostwall Mine to Gorgrond
+	{ ['y'] = 0.1164, ['x'] = 0.6207, ['mapId'] = 585, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '34078', },
+		['continent'] = 1116, ['source'] = 94, ['type'] = 'LocalPortal', }, -- From Frostwall Mine to Gorgrond
+	{ ['type'] = 'LocalPortal', ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '36615', },
+		['continent'] = 1116, ['y'] = 0.525, ['x'] = 0.317, ['source'] = -1, ['target'] = 95, }, -- From Lunarfall Excavation to Stormshield
+	{ ['y'] = 0.275, ['x'] = 0.702, ['mapId'] = 579, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '36615', },
+		['continent'] = 1116, ['source'] = 95, ['type'] = 'LocalPortal', }, -- From Lunarfall Excavation to Stormshield
+	{ ['type'] = 'LocalPortal', ['mapId'] = 543, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '34033', },
+		['continent'] = 1116, ['y'] = 0.5977, ['x'] = 0.5291, ['source'] = -1, ['target'] = 96, }, -- From Lunarfall Excavation to Gorgrond
+	{ ['y'] = 0.6903, ['x'] = 0.5884, ['mapId'] = 579, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '34033', },
+		['continent'] = 1116, ['source'] = 96, ['type'] = 'LocalPortal', }, -- From Lunarfall Excavation to Gorgrond
+	{ ['type'] = 'LocalPortal', ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '37935', },
+		['continent'] = 1116, ['y'] = 0.3553, ['x'] = 0.4442, ['source'] = -1, ['target'] = 97, }, -- From Tanaan Jungle to Warspear
+	{ ['y'] = 0.4735, ['x'] = 0.6102, ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '37935', },
+		['continent'] = 1116, ['source'] = 97, ['type'] = 'LocalPortal', }, -- From Tanaan Jungle to Warspear
+	{ ['type'] = 'LocalPortal', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '37935', },
+		['continent'] = 1116, ['y'] = 0.473, ['x'] = 0.6087, ['source'] = -1, ['target'] = 98, }, -- From Warspear to Tanaan Jungle
+	{ ['y'] = 0.4391, ['x'] = 0.5309, ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '37935', },
+		['continent'] = 1116, ['source'] = 98, ['type'] = 'LocalPortal', }, -- From Warspear to Tanaan Jungle
+	{ ['type'] = 'LocalPortal', ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38445', },
+		['continent'] = 1116, ['y'] = 0.5248, ['x'] = 0.3171, ['source'] = -1, ['target'] = 99, }, -- From Tanaan Jungle to Stormshield
+	{ ['y'] = 0.6046, ['x'] = 0.5746, ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38445', },
+		['continent'] = 1116, ['source'] = 99, ['type'] = 'LocalPortal', }, -- From Tanaan Jungle to Stormshield
+	{ ['type'] = 'LocalPortal', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38445', },
+		['continent'] = 1116, ['y'] = 0.6032, ['x'] = 0.5753, ['source'] = -1, ['target'] = 100, }, -- From Stormshield to Tanaan Jungle
+	{ ['y'] = 0.4124, ['x'] = 0.3642, ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38445', },
+		['continent'] = 1116, ['source'] = 100, ['type'] = 'LocalPortal', }, -- From Stormshield to Tanaan Jungle
+	{ ['type'] = 'LocalPortal', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '38416', },
+		['continent'] = 1116, ['y'] = 0.473, ['x'] = 0.6087, ['source'] = -1, ['target'] = 101, }, -- From The Breached Ossuary to Tanaan Jungle
+	{ ['y'] = 0.5683, ['x'] = 0.5027, ['mapId'] = 538, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '38416', },
+		['continent'] = 1116, ['source'] = 101, ['type'] = 'LocalPortal', }, -- From The Breached Ossuary to Tanaan Jungle
+	{ ['type'] = 'LocalPortal', ['mapId'] = 534, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38562', },
+		['continent'] = 1116, ['y'] = 0.6032, ['x'] = 0.5753, ['source'] = -1, ['target'] = 102, }, -- From The Breached Ossuary to Tanaan Jungle
+	{ ['y'] = 0.5517, ['x'] = 0.5235, ['mapId'] = 538, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '38562', },
+		['continent'] = 1116, ['source'] = 102, ['type'] = 'LocalPortal', }, -- From The Breached Ossuary to Tanaan Jungle
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '44740', }, ['continent'] = 1220, ['y'] = 0.6943,
+		['x'] = 0.5446, ['source'] = -1, ['target'] = 103, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4505, ['x'] = 0.3675, ['mapId'] = 680, ['reqs'] = { ['qid'] = '44740', }, ['continent'] = 1220,
+		['source'] = 103, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '44740', }, ['continent'] = 1220, ['y'] = 0.4505,
+		['x'] = 0.3675, ['source'] = -1, ['target'] = 104, }, -- From Suramar to Suramar
+	{ ['y'] = 0.6943, ['x'] = 0.5446, ['mapId'] = 680, ['reqs'] = { ['qid'] = '44740', }, ['continent'] = 1220,
+		['source'] = 104, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 682, ['reqs'] = { ['qid'] = '41575', }, ['continent'] = 1220, ['y'] = 0.3676,
+		['x'] = 0.5235, ['source'] = -1, ['target'] = 105, }, -- From Suramar to Felsoul Hold
+	{ ['y'] = 0.4574, ['x'] = 0.3612, ['mapId'] = 680, ['reqs'] = { ['qid'] = '41575', }, ['continent'] = 1220,
+		['source'] = 105, ['type'] = 'LocalPortal', }, -- From Suramar to Felsoul Hold
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '41575', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 106, }, -- From Felsoul Hold to Suramar
+	{ ['y'] = 0.3671, ['x'] = 0.5354, ['mapId'] = 682, ['reqs'] = { ['qid'] = '41575', }, ['continent'] = 1220,
+		['source'] = 106, ['type'] = 'LocalPortal', }, -- From Felsoul Hold to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43811', }, ['continent'] = 1220, ['y'] = 0.791,
+		['x'] = 0.4361, ['source'] = -1, ['target'] = 107, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4504, ['x'] = 0.3617, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43811', }, ['continent'] = 1220,
+		['source'] = 107, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43811', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 108, }, -- From Suramar to Suramar
+	{ ['y'] = 0.7924, ['x'] = 0.4369, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43811', }, ['continent'] = 1220,
+		['source'] = 108, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 684, ['reqs'] = { ['qid'] = '42230', }, ['continent'] = 1220, ['y'] = 0.1505,
+		['x'] = 0.4137, ['source'] = -1, ['target'] = 109, }, -- From Suramar to Shattered Locus
+	{ ['y'] = 0.4555, ['x'] = 0.359, ['mapId'] = 680, ['reqs'] = { ['qid'] = '42230', }, ['continent'] = 1220,
+		['source'] = 109, ['type'] = 'LocalPortal', }, -- From Suramar to Shattered Locus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42230', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 110, }, -- From Shattered Locus to Suramar
+	{ ['y'] = 0.1376, ['x'] = 0.4093, ['mapId'] = 684, ['reqs'] = { ['qid'] = '42230', }, ['continent'] = 1220,
+		['source'] = 110, ['type'] = 'LocalPortal', }, -- From Shattered Locus to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43813', }, ['continent'] = 1220, ['y'] = 0.4467,
+		['x'] = 0.367, ['source'] = -1, ['target'] = 111, }, -- From Suramar to Suramar
+	{ ['y'] = 0.6063, ['x'] = 0.434, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43813', }, ['continent'] = 1220,
+		['source'] = 111, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43813', }, ['continent'] = 1220, ['y'] = 0.6063,
+		['x'] = 0.434, ['source'] = -1, ['target'] = 112, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4467, ['x'] = 0.367, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43813', }, ['continent'] = 1220,
+		['source'] = 112, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43808', }, ['continent'] = 1220, ['y'] = 0.1087,
+		['x'] = 0.3079, ['source'] = -1, ['target'] = 113, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4525, ['x'] = 0.3601, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43808', }, ['continent'] = 1220,
+		['source'] = 113, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43808', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 114, }, -- From Suramar to Suramar
+	{ ['y'] = 0.1102, ['x'] = 0.3083, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43808', }, ['continent'] = 1220,
+		['source'] = 114, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42487', }, ['continent'] = 1220, ['y'] = 0.8197,
+		['x'] = 0.4745, ['source'] = -1, ['target'] = 115, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4475, ['x'] = 0.3648, ['mapId'] = 680, ['reqs'] = { ['qid'] = '42487', }, ['continent'] = 1220,
+		['source'] = 115, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42487', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 116, }, -- From Suramar to Suramar
+	{ ['y'] = 0.8138, ['x'] = 0.4773, ['mapId'] = 680, ['reqs'] = { ['qid'] = '42487', }, ['continent'] = 1220,
+		['source'] = 116, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43809', }, ['continent'] = 1220, ['y'] = 0.3538,
+		['x'] = 0.4217, ['source'] = -1, ['target'] = 117, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4466, ['x'] = 0.3692, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43809', }, ['continent'] = 1220,
+		['source'] = 117, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '43809', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 118, }, -- From Suramar to Suramar
+	{ ['y'] = 0.3524, ['x'] = 0.4203, ['mapId'] = 680, ['reqs'] = { ['qid'] = '43809', }, ['continent'] = 1220,
+		['source'] = 118, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '44084', }, ['continent'] = 1220, ['y'] = 0.608,
+		['x'] = 0.6409, ['source'] = -1, ['target'] = 119, }, -- From Suramar to Suramar
+	{ ['y'] = 0.45, ['x'] = 0.3695, ['mapId'] = 680, ['reqs'] = { ['qid'] = '44084', }, ['continent'] = 1220,
+		['source'] = 119, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '44084', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 120, }, -- From Suramar to Suramar
+	{ ['y'] = 0.6043, ['x'] = 0.64, ['mapId'] = 680, ['reqs'] = { ['qid'] = '44084', }, ['continent'] = 1220,
+		['source'] = 120, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['nqid'] = '38649', ['qid'] = '42487', },
+		['continent'] = 1220, ['y'] = 0.8197, ['x'] = 0.4745, ['source'] = -1, ['target'] = 121, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4475, ['x'] = 0.3648, ['mapId'] = 680, ['reqs'] = { ['nqid'] = '38649', ['qid'] = '42487', },
+		['continent'] = 1220, ['source'] = 121, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['nqid'] = '38649', ['qid'] = '42487', },
+		['continent'] = 1220, ['y'] = 0.4509, ['x'] = 0.364, ['source'] = -1, ['target'] = 122, }, -- From Suramar to Suramar
+	{ ['y'] = 0.8138, ['x'] = 0.4773, ['mapId'] = 680, ['reqs'] = { ['nqid'] = '38649', ['qid'] = '42487', },
+		['continent'] = 1220, ['source'] = 122, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42889', }, ['continent'] = 1220, ['y'] = 0.7887,
+		['x'] = 0.5204, ['source'] = -1, ['target'] = 123, }, -- From Suramar to Suramar
+	{ ['y'] = 0.4475, ['x'] = 0.3649, ['mapId'] = 680, ['reqs'] = { ['qid'] = '42889', }, ['continent'] = 1220,
+		['source'] = 123, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42889', }, ['continent'] = 1220, ['y'] = 0.4509,
+		['x'] = 0.364, ['source'] = -1, ['target'] = 124, }, -- From Suramar to Suramar
+	{ ['y'] = 0.7875, ['x'] = 0.5198, ['mapId'] = 680, ['reqs'] = { ['qid'] = '42889', }, ['continent'] = 1220,
+		['source'] = 124, ['type'] = 'LocalPortal', }, -- From Suramar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['qid'] = '40959', ['cls'] = 'HUNTER', },
+		['continent'] = 1220, ['y'] = 0.4475, ['x'] = 0.6089, ['source'] = -1, ['target'] = 125, }, -- From Trueshot Lodge to Dalaran
+	{ ['y'] = 0.4336, ['x'] = 0.4868, ['mapId'] = 739, ['reqs'] = { ['qid'] = '40959', ['cls'] = 'HUNTER', },
+		['continent'] = 1220, ['source'] = 125, ['type'] = 'LocalPortal', }, -- From Trueshot Lodge to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['qid'] = '40653', ['cls'] = 'DRUID', },
+		['continent'] = 1220, ['y'] = 0.4475, ['x'] = 0.6089, ['source'] = -1, ['target'] = 126, }, -- From The Dreamgrove to Dalaran
+	{ ['y'] = 0.4303, ['x'] = 0.5663, ['mapId'] = 747, ['reqs'] = { ['qid'] = '40653', ['cls'] = 'DRUID', },
+		['continent'] = 1220, ['source'] = 126, ['type'] = 'LocalPortal', }, -- From The Dreamgrove to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['cls'] = 'DEATHKNIGHT', }, ['continent'] = 1220,
+		['y'] = 0.4475, ['x'] = 0.6089, ['source'] = -1, ['target'] = 127, }, -- From Acherus: The Ebon Hold to Dalaran
+	{ ['y'] = 0.3376, ['x'] = 0.2497, ['mapId'] = 648, ['reqs'] = { ['cls'] = 'DEATHKNIGHT', }, ['continent'] = 1220,
+		['source'] = 127, ['type'] = 'LocalPortal', }, -- From Acherus: The Ebon Hold to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = {}, ['continent'] = 1220, ['y'] = 0.4475, ['x'] = 0.6089,
+		['source'] = -1, ['target'] = 128, }, -- From Stormheim to Dalaran
+	{ ['y'] = 0.4071, ['x'] = 0.3008, ['mapId'] = 634, ['reqs'] = {}, ['continent'] = 1220, ['source'] = 128,
+		['type'] = 'LocalPortal', }, -- From Stormheim to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 720, ['reqs'] = { ['cls'] = 'DEMONHUNTER', }, ['continent'] = 1519,
+		['y'] = 0.913, ['x'] = 0.5931, ['source'] = -1, ['target'] = 129, }, -- From Dalaran to Mardum, the Shattered Abyss
+	{ ['y'] = 0.6927, ['x'] = 0.9796, ['mapId'] = 627, ['reqs'] = { ['cls'] = 'DEMONHUNTER', }, ['continent'] = 1220,
+		['source'] = 129, ['type'] = 'LocalPortal', }, -- From Dalaran to Mardum, the Shattered Abyss
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1220,
+		['y'] = 0.4294, ['x'] = 0.6469, ['source'] = -1, ['target'] = 130, }, -- From Suramar to Dalaran
+	{ ['y'] = 0.8762, ['x'] = 0.5867, ['mapId'] = 680, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1220,
+		['source'] = 130, ['type'] = 'LocalPortal', }, -- From Suramar to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 830, ['reqs'] = { [''] = 'Grand Artificer Romuul', ['qid'] = '48440', },
+		['continent'] = 1669, ['y'] = 0.8179, ['x'] = 0.6259, ['source'] = -1, ['target'] = 131, }, -- From The Vindicaar to Krokuun
+	{ ['y'] = 0.2336, ['x'] = 0.4335, ['mapId'] = 831,
+		['reqs'] = { [''] = 'Grand Artificer Romuul', ['qid'] = '48440', }, ['continent'] = 1669, ['source'] = 131,
+		['type'] = 'LocalPortal', }, -- From The Vindicaar to Krokuun
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1970, ['reqs'] = { ['qid'] = '64957', }, ['continent'] = 2374, ['y'] = 0.6943,
+		['x'] = 0.3327, ['source'] = -1, ['target'] = 132, }, -- From Oribos to Zereth Mortis
+	{ ['y'] = 0.2544, ['x'] = 0.4959, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '64957', }, ['continent'] = 2222,
+		['source'] = 132, ['type'] = 'LocalPortal', }, -- From Oribos to Zereth Mortis
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '64957', }, ['continent'] = 2222, ['y'] = 0.3004,
+		['x'] = 0.4955, ['source'] = -1, ['target'] = 133, }, -- From Zereth Mortis to Oribos
+	{ ['y'] = 0.6977, ['x'] = 0.3287, ['mapId'] = 1970, ['reqs'] = { ['qid'] = '64957', }, ['continent'] = 2374,
+		['source'] = 133, ['type'] = 'LocalPortal', }, -- From Zereth Mortis to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '63665', }, ['continent'] = 2222, ['y'] = 0.3344,
+		['x'] = 0.374, ['source'] = -1, ['target'] = 134, }, -- From Korthia to Oribos
+	{ ['y'] = 0.2406, ['x'] = 0.6447, ['mapId'] = 1961, ['reqs'] = { ['qid'] = '63665', }, ['continent'] = 2222,
+		['source'] = 134, ['type'] = 'LocalPortal', }, -- From Korthia to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1961, ['reqs'] = { ['qid'] = '63665', }, ['continent'] = 2222, ['y'] = 0.2411,
+		['x'] = 0.6438, ['source'] = -1, ['target'] = 135, }, -- From Oribos to Korthia
+	{ ['y'] = 0.2089, ['x'] = 0.2916, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '63665', }, ['continent'] = 2222,
+		['source'] = 135, ['type'] = 'LocalPortal', }, -- From Oribos to Korthia
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.6092,
+		['x'] = 0.4952, ['source'] = -1, ['target'] = 136, }, -- From Oribos to Oribos
+	{ ['y'] = 0.5786, ['x'] = 0.5211, ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 136, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.42,
+		['x'] = 0.4938, ['source'] = -1, ['target'] = 137, }, -- From Oribos to Oribos
+	{ ['y'] = 0.4274, ['x'] = 0.521, ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 137, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.5786,
+		['x'] = 0.5207, ['source'] = -1, ['target'] = 138, }, -- From Oribos to Oribos
+	{ ['y'] = 0.6079, ['x'] = 0.4957, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 138, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.4244,
+		['x'] = 0.521, ['source'] = -1, ['target'] = 139, }, -- From Oribos to Oribos
+	{ ['y'] = 0.4235, ['x'] = 0.4956, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 139, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.5162,
+		['x'] = 0.5566, ['source'] = -1, ['target'] = 140, }, -- From Oribos to Oribos
+	{ ['y'] = 0.5036, ['x'] = 0.5714, ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 140, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.5156,
+		['x'] = 0.4338, ['source'] = -1, ['target'] = 141, }, -- From Oribos to Oribos
+	{ ['y'] = 0.5034, ['x'] = 0.4702, ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 141, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.5036,
+		['x'] = 0.5714, ['source'] = -1, ['target'] = 142, }, -- From Oribos to Oribos
+	{ ['y'] = 0.5159, ['x'] = 0.5568, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 142, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222, ['y'] = 0.503,
+		['x'] = 0.4712, ['source'] = -1, ['target'] = 143, }, -- From Oribos to Oribos
+	{ ['y'] = 0.5157, ['x'] = 0.4344, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '60154', }, ['continent'] = 2222,
+		['source'] = 143, ['type'] = 'LocalPortal', }, -- From Oribos to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1543, ['reqs'] = { ['qid'] = '59874', }, ['continent'] = 2222, ['y'] = 0.4099,
+		['x'] = 0.4495, ['source'] = -1, ['target'] = 144, }, -- From Oribos to The Maw
+	{ ['y'] = 0.5088, ['x'] = 0.4927, ['mapId'] = 1671, ['reqs'] = { ['qid'] = '59874', }, ['continent'] = 2222,
+		['source'] = 144, ['type'] = 'LocalPortal', }, -- From Oribos to The Maw
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '60338', }, ['continent'] = 2222, ['y'] = 0.5033,
+		['x'] = 0.2038, ['source'] = -1, ['target'] = 145, }, -- From Ardenweald to Oribos
+	{ ['y'] = 0.1727, ['x'] = 0.6835, ['mapId'] = 1565, ['reqs'] = { ['qid'] = '60338', }, ['continent'] = 2222,
+		['source'] = 145, ['type'] = 'LocalPortal', }, -- From Ardenweald to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['qid'] = '59874', }, ['continent'] = 2222, ['y'] = 0.5031,
+		['x'] = 0.1924, ['source'] = -1, ['target'] = 146, }, -- From The Maw to Oribos
+	{ ['y'] = 0.4216, ['x'] = 0.4238, ['mapId'] = 1543, ['reqs'] = { ['qid'] = '59874', }, ['continent'] = 2222,
+		['source'] = 146, ['type'] = 'LocalPortal', }, -- From The Maw to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1911, ['reqs'] = { ['qid'] = '60136', }, ['continent'] = 2453, ['y'] = 0.4708,
+		['x'] = 0.1629, ['source'] = -1, ['target'] = 147, }, -- From The Maw to Torghast - Entrance
+	{ ['y'] = 0.3939, ['x'] = 0.482, ['mapId'] = 1543, ['reqs'] = { ['qid'] = '60136', }, ['continent'] = 2222,
+		['source'] = 147, ['type'] = 'LocalPortal', }, -- From The Maw to Torghast - Entrance
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1543, ['reqs'] = { ['qid'] = '60136', }, ['continent'] = 2222, ['y'] = 0.3957,
+		['x'] = 0.4814, ['source'] = -1, ['target'] = 148, }, -- From Torghast - Entrance to The Maw
+	{ ['y'] = 0.4713, ['x'] = 0.1043, ['mapId'] = 1911, ['reqs'] = { ['qid'] = '60136', }, ['continent'] = 2453,
+		['source'] = 148, ['type'] = 'LocalPortal', }, -- From Torghast - Entrance to The Maw
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['qid'] = '60453', }, ['continent'] = 2222, ['y'] = 0.6769,
+		['x'] = 0.371, ['source'] = -1, ['target'] = 149, }, -- From Maldraxxus to Maldraxxus
+	{ ['y'] = 0.6696, ['x'] = 0.3799, ['mapId'] = 1536, ['reqs'] = { ['qid'] = '60453', }, ['continent'] = 2222,
+		['source'] = 149, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['qid'] = '60453', }, ['continent'] = 2222, ['y'] = 0.6683,
+		['x'] = 0.3806, ['source'] = -1, ['target'] = 150, }, -- From Maldraxxus to Maldraxxus
+	{ ['y'] = 0.6756, ['x'] = 0.3713, ['mapId'] = 1536, ['reqs'] = { ['qid'] = '60453', }, ['continent'] = 2222,
+		['source'] = 150, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57536', }, ['continent'] = 2222, ['y'] = 0.4668,
+		['x'] = 0.3194, ['source'] = -1, ['target'] = 151, }, -- From Revendreth to Revendreth
+	{ ['y'] = 0.5026, ['x'] = 0.2485, ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57536', }, ['continent'] = 2222,
+		['source'] = 151, ['type'] = 'LocalPortal', }, -- From Revendreth to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57536', }, ['continent'] = 2222, ['y'] = 0.5031,
+		['x'] = 0.2482, ['source'] = -1, ['target'] = 152, }, -- From Revendreth to Revendreth
+	{ ['y'] = 0.467, ['x'] = 0.3198, ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57536', }, ['continent'] = 2222,
+		['source'] = 152, ['type'] = 'LocalPortal', }, -- From Revendreth to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57885', }, ['continent'] = 2222, ['y'] = 0.286,
+		['x'] = 0.5742, ['source'] = -1, ['target'] = 153, }, -- From Revendreth to Revendreth
+	{ ['y'] = 0.3029, ['x'] = 0.5873, ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57885', }, ['continent'] = 2222,
+		['source'] = 153, ['type'] = 'LocalPortal', }, -- From Revendreth to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57885', }, ['continent'] = 2222, ['y'] = 0.3034,
+		['x'] = 0.5891, ['source'] = -1, ['target'] = 154, }, -- From Revendreth to Revendreth
+	{ ['y'] = 0.2867, ['x'] = 0.5738, ['mapId'] = 1525, ['reqs'] = { ['qid'] = '57885', }, ['continent'] = 2222,
+		['source'] = 154, ['type'] = 'LocalPortal', }, -- From Revendreth to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1699, ['reqs'] = { ['qid'] = '59327', }, ['continent'] = 2222, ['y'] = 0.5706,
+		['x'] = 0.2365, ['source'] = -1, ['target'] = 155, }, -- From Revendreth to Sinfall
+	{ ['y'] = 0.4267, ['x'] = 0.2935, ['mapId'] = 1525, ['reqs'] = { ['qid'] = '59327', }, ['continent'] = 2222,
+		['source'] = 155, ['type'] = 'LocalPortal', }, -- From Revendreth to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['qid'] = '59327', }, ['continent'] = 2222, ['y'] = 0.4253,
+		['x'] = 0.2957, ['source'] = -1, ['target'] = 156, }, -- From Sinfall to Revendreth
+	{ ['y'] = 0.6134, ['x'] = 0.177, ['mapId'] = 1699, ['reqs'] = { ['qid'] = '59327', }, ['continent'] = 2222,
+		['source'] = 156, ['type'] = 'LocalPortal', }, -- From Sinfall to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1912, ['reqs'] = { ['qid'] = '60267', }, ['continent'] = 2453, ['y'] = 0.6881,
+		['x'] = 0.5068, ['source'] = -1, ['target'] = 157, }, -- From Torghast - Entrance to The Runecarver's Oubliette
+	{ ['y'] = 0.6204, ['x'] = 0.1595, ['mapId'] = 1911, ['reqs'] = { ['qid'] = '60267', }, ['continent'] = 2453,
+		['source'] = 157, ['type'] = 'LocalPortal', }, -- From Torghast - Entrance to The Runecarver's Oubliette
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1911, ['reqs'] = { ['qid'] = '60267', }, ['continent'] = 2453, ['y'] = 0.5784,
+		['x'] = 0.1609, ['source'] = -1, ['target'] = 158, }, -- From The Runecarver's Oubliette to Torghast - Entrance
+	{ ['y'] = 0.8196, ['x'] = 0.5033, ['mapId'] = 1912, ['reqs'] = { ['qid'] = '60267', }, ['continent'] = 2453,
+		['source'] = 158, ['type'] = 'LocalPortal', }, -- From The Runecarver's Oubliette to Torghast - Entrance
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1700, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222, ['y'] = 0.3954,
+		['x'] = 0.6886, ['source'] = -1, ['target'] = 159, }, -- From Sinfall to Sinfall
+	{ ['y'] = 0.4819, ['x'] = 0.3655, ['mapId'] = 1699, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222,
+		['source'] = 159, ['type'] = 'LocalPortal', }, -- From Sinfall to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1699, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222, ['y'] = 0.4723,
+		['x'] = 0.3791, ['source'] = -1, ['target'] = 160, }, -- From Sinfall to Sinfall
+	{ ['y'] = 0.3824, ['x'] = 0.7064, ['mapId'] = 1700, ['reqs'] = { ['qid'] = '59321', }, ['continent'] = 2222,
+		['source'] = 160, ['type'] = 'LocalPortal', }, -- From Sinfall to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1533, ['reqs'] = { ['qid'] = '58530', }, ['continent'] = 2222, ['y'] = 0.3034,
+		['x'] = 0.4942, ['source'] = -1, ['target'] = 161, }, -- From Sinfall to Bastion
+	{ ['y'] = 0.4941, ['x'] = 0.4617, ['mapId'] = 1699, ['reqs'] = { ['qid'] = '58530', }, ['continent'] = 2222,
+		['source'] = 161, ['type'] = 'LocalPortal', }, -- From Sinfall to Bastion
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1699, ['reqs'] = { ['qid'] = '58530', }, ['continent'] = 2222, ['y'] = 0.4911,
+		['x'] = 0.4353, ['source'] = -1, ['target'] = 162, }, -- From Bastion to Sinfall
+	{ ['y'] = 0.3035, ['x'] = 0.4938, ['mapId'] = 1533, ['reqs'] = { ['qid'] = '58530', }, ['continent'] = 2222,
+		['source'] = 162, ['type'] = 'LocalPortal', }, -- From Bastion to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.5031, ['x'] = 0.1924, ['source'] = -1, ['target'] = 163, }, -- From Heart of the Forest to Oribos
+	{ ['y'] = 0.2847, ['x'] = 0.599, ['mapId'] = 1702, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 163, ['type'] = 'LocalPortal', }, -- From Heart of the Forest to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.5031, ['x'] = 0.2034, ['source'] = -1, ['target'] = 164, }, -- From Elysian Hold to Oribos
+	{ ['y'] = 0.6479, ['x'] = 0.4882, ['mapId'] = 1707, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 164, ['type'] = 'LocalPortal', }, -- From Elysian Hold to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['qid'] = '57583', }, ['continent'] = 2222, ['y'] = 0.7357,
+		['x'] = 0.6572, ['source'] = -1, ['target'] = 165, }, -- From Heart of the Forest to Fungal Terminus
+	{ ['y'] = 0.2635, ['x'] = 0.5521, ['mapId'] = 1702, ['reqs'] = { ['qid'] = '57583', }, ['continent'] = 2222,
+		['source'] = 165, ['type'] = 'LocalPortal', }, -- From Heart of the Forest to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 166, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.7906, ['x'] = 0.5328, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 166, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 167, }, -- From The Root Cellar to Fungal Terminus
+	{ ['y'] = 0.6828, ['x'] = 0.5041, ['mapId'] = 1826, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 167, ['type'] = 'LocalPortal', }, -- From The Root Cellar to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 168, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.6026, ['x'] = 0.6573, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 168, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 169, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.4259, ['x'] = 0.575, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 169, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 170, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.5125, ['x'] = 0.2644, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 170, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 171, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.3463, ['x'] = 0.2951, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 171, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7357, ['x'] = 0.6572, ['source'] = -1, ['target'] = 172, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.2755, ['x'] = 0.4939, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 172, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1702, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.2635, ['x'] = 0.5521, ['source'] = -1, ['target'] = 173, }, -- From Fungal Terminus to Heart of the Forest
+	{ ['y'] = 0.6308, ['x'] = 0.5845, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 173, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Heart of the Forest
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.7906, ['x'] = 0.5328, ['source'] = -1, ['target'] = 174, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.6769, ['x'] = 0.5302, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 174, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1826, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.6828, ['x'] = 0.5041, ['source'] = -1, ['target'] = 175, }, -- From Fungal Terminus to The Root Cellar
+	{ ['y'] = 0.5368, ['x'] = 0.6007, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 175, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to The Root Cellar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.6026, ['x'] = 0.6573, ['source'] = -1, ['target'] = 176, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.6132, ['x'] = 0.4295, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 176, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.4259, ['x'] = 0.575, ['source'] = -1, ['target'] = 177, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.3891, ['x'] = 0.5671, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 177, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.5125, ['x'] = 0.2644, ['source'] = -1, ['target'] = 178, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.3665, ['x'] = 0.5196, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 178, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.3463, ['x'] = 0.2951, ['source'] = -1, ['target'] = 179, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.4009, ['x'] = 0.4239, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '1', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 179, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.2755, ['x'] = 0.4939, ['source'] = -1, ['target'] = 180, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.4839, ['x'] = 0.3965, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '2', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 180, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.2522, ['x'] = 0.7369, ['source'] = -1, ['target'] = 181, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.6638, ['x'] = 0.4579, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 181, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.736, ['x'] = 0.6575, ['source'] = -1, ['target'] = 182, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.2521, ['x'] = 0.7372, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 182, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.6954, ['x'] = 0.4109, ['source'] = -1, ['target'] = 183, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.354, ['x'] = 0.4687, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 183, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.736, ['x'] = 0.6575, ['source'] = -1, ['target'] = 184, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.6953, ['x'] = 0.4111, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 184, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.6695, ['x'] = 0.2028, ['source'] = -1, ['target'] = 185, }, -- From Fungal Terminus to Ardenweald
+	{ ['y'] = 0.4356, ['x'] = 0.5878, ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 185, ['type'] = 'LocalPortal', }, -- From Fungal Terminus to Ardenweald
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1819, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['y'] = 0.736, ['x'] = 0.6575, ['source'] = -1, ['target'] = 186, }, -- From Ardenweald to Fungal Terminus
+	{ ['y'] = 0.6696, ['x'] = 0.2029, ['mapId'] = 1565, ['reqs'] = { ['trank'] = '3', ['qid'] = '57583', },
+		['continent'] = 2222, ['source'] = 186, ['type'] = 'LocalPortal', }, -- From Ardenweald to Fungal Terminus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.7342, ['x'] = 0.5039, ['source'] = -1, ['target'] = 187, }, -- From Seat of the Primus to Maldraxxus
+	{ ['y'] = 0.2295, ['x'] = 0.5882, ['mapId'] = 1698, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 187, ['type'] = 'LocalPortal', }, -- From Seat of the Primus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1698, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.2585, ['x'] = 0.5871, ['source'] = -1, ['target'] = 188, }, -- From Maldraxxus to Seat of the Primus
+	{ ['y'] = 0.7399, ['x'] = 0.504, ['mapId'] = 1536, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 188, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Seat of the Primus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.4301, ['x'] = 0.2608, ['source'] = -1, ['target'] = 189, }, -- From Seat of the Primus to Maldraxxus
+	{ ['y'] = 0.3702, ['x'] = 0.5644, ['mapId'] = 1698, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 189, ['type'] = 'LocalPortal', }, -- From Seat of the Primus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1698, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.2585, ['x'] = 0.5871, ['source'] = -1, ['target'] = 190, }, -- From Maldraxxus to Seat of the Primus
+	{ ['y'] = 0.4327, ['x'] = 0.2586, ['mapId'] = 1536, ['reqs'] = { ['trank'] = '1', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 190, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Seat of the Primus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.1637, ['x'] = 0.5114, ['source'] = -1, ['target'] = 191, }, -- From Seat of the Primus to Maldraxxus
+	{ ['y'] = 0.3775, ['x'] = 0.6162, ['mapId'] = 1698, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 191, ['type'] = 'LocalPortal', }, -- From Seat of the Primus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1698, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.3424, ['x'] = 0.5892, ['source'] = -1, ['target'] = 192, }, -- From Maldraxxus to Seat of the Primus
+	{ ['y'] = 0.1639, ['x'] = 0.5164, ['mapId'] = 1536, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 192, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Seat of the Primus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1536, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.3364, ['x'] = 0.7427, ['source'] = -1, ['target'] = 193, }, -- From Seat of the Primus to Maldraxxus
+	{ ['y'] = 0.305, ['x'] = 0.6158, ['mapId'] = 1698, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 193, ['type'] = 'LocalPortal', }, -- From Seat of the Primus to Maldraxxus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1698, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.3424, ['x'] = 0.5892, ['source'] = -1, ['target'] = 194, }, -- From Maldraxxus to Seat of the Primus
+	{ ['y'] = 0.3364, ['x'] = 0.7446, ['mapId'] = 1536, ['reqs'] = { ['trank'] = '2', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 194, ['type'] = 'LocalPortal', }, -- From Maldraxxus to Seat of the Primus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['trank'] = '3', ['qid'] = '63059', },
+		['continent'] = 2222, ['y'] = 0.5031, ['x'] = 0.2034, ['source'] = -1, ['target'] = 195, }, -- From Seat of the Primus to Oribos
+	{ ['y'] = 0.3148, ['x'] = 0.5638, ['mapId'] = 1698, ['reqs'] = { ['trank'] = '3', ['qid'] = '63059', },
+		['continent'] = 2222, ['source'] = 195, ['type'] = 'LocalPortal', }, -- From Seat of the Primus to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['trank'] = '1', ['qid'] = '60147', },
+		['continent'] = 2222, ['y'] = 0.3246, ['x'] = 0.5674, ['source'] = -1, ['target'] = 196, }, -- From Sinfall to Revendreth
+	{ ['y'] = 0.495, ['x'] = 0.4618, ['mapId'] = 1699, ['reqs'] = { ['trank'] = '1', ['qid'] = '60147', },
+		['continent'] = 2222, ['source'] = 196, ['type'] = 'LocalPortal', }, -- From Sinfall to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1699, ['reqs'] = { ['trank'] = '1', ['qid'] = '60147', },
+		['continent'] = 2222, ['y'] = 0.495, ['x'] = 0.4618, ['source'] = -1, ['target'] = 197, }, -- From Revendreth to Sinfall
+	{ ['y'] = 0.3246, ['x'] = 0.5674, ['mapId'] = 1525, ['reqs'] = { ['trank'] = '1', ['qid'] = '60147', },
+		['continent'] = 2222, ['source'] = 197, ['type'] = 'LocalPortal', }, -- From Revendreth to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['trank'] = '1', ['qid'] = '60060', },
+		['continent'] = 2222, ['y'] = 0.7548, ['x'] = 0.7076, ['source'] = -1, ['target'] = 198, }, -- From Sinfall to Revendreth
+	{ ['y'] = 0.3622, ['x'] = 0.4212, ['mapId'] = 1699, ['reqs'] = { ['trank'] = '1', ['qid'] = '60060', },
+		['continent'] = 2222, ['source'] = 198, ['type'] = 'LocalPortal', }, -- From Sinfall to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1699, ['reqs'] = { ['trank'] = '1', ['qid'] = '60060', },
+		['continent'] = 2222, ['y'] = 0.3622, ['x'] = 0.4212, ['source'] = -1, ['target'] = 199, }, -- From Revendreth to Sinfall
+	{ ['y'] = 0.7548, ['x'] = 0.7076, ['mapId'] = 1525, ['reqs'] = { ['trank'] = '1', ['qid'] = '60060', },
+		['continent'] = 2222, ['source'] = 199, ['type'] = 'LocalPortal', }, -- From Revendreth to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['trank'] = '2', ['qid'] = '60159', },
+		['continent'] = 2222, ['y'] = 0.4394, ['x'] = 0.7361, ['source'] = -1, ['target'] = 200, }, -- From Sinfall to Revendreth
+	{ ['y'] = 0.5349, ['x'] = 0.6358, ['mapId'] = 1700, ['reqs'] = { ['trank'] = '2', ['qid'] = '60159', },
+		['continent'] = 2222, ['source'] = 200, ['type'] = 'LocalPortal', }, -- From Sinfall to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1700, ['reqs'] = { ['trank'] = '2', ['qid'] = '60159', },
+		['continent'] = 2222, ['y'] = 0.5349, ['x'] = 0.6358, ['source'] = -1, ['target'] = 201, }, -- From Revendreth to Sinfall
+	{ ['y'] = 0.4394, ['x'] = 0.7361, ['mapId'] = 1525, ['reqs'] = { ['trank'] = '2', ['qid'] = '60159', },
+		['continent'] = 2222, ['source'] = 201, ['type'] = 'LocalPortal', }, -- From Revendreth to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1525, ['reqs'] = { ['trank'] = '2', ['qid'] = '60160', },
+		['continent'] = 2222, ['y'] = 0.5707, ['x'] = 0.4348, ['source'] = -1, ['target'] = 202, }, -- From Sinfall to Revendreth
+	{ ['y'] = 0.3656, ['x'] = 0.5834, ['mapId'] = 1700, ['reqs'] = { ['trank'] = '2', ['qid'] = '60160', },
+		['continent'] = 2222, ['source'] = 202, ['type'] = 'LocalPortal', }, -- From Sinfall to Revendreth
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1700, ['reqs'] = { ['trank'] = '2', ['qid'] = '60160', },
+		['continent'] = 2222, ['y'] = 0.3656, ['x'] = 0.5834, ['source'] = -1, ['target'] = 203, }, -- From Revendreth to Sinfall
+	{ ['y'] = 0.5707, ['x'] = 0.4348, ['mapId'] = 1525, ['reqs'] = { ['trank'] = '2', ['qid'] = '60160', },
+		['continent'] = 2222, ['source'] = 203, ['type'] = 'LocalPortal', }, -- From Revendreth to Sinfall
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '60151', }, ['continent'] = 1,
+		['y'] = 0.9027, ['x'] = 0.5625, ['source'] = -1, ['target'] = 204, }, -- From Oribos to Orgrimmar
+	{ ['y'] = 0.5477, ['x'] = 0.2085, ['mapId'] = 1670, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '60151', },
+		['continent'] = 2222, ['source'] = 204, ['type'] = 'LocalPortal', }, -- From Oribos to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 81, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', }, ['continent'] = 1,
+		['y'] = 0.4519, ['x'] = 0.4141, ['source'] = -1, ['target'] = 205, }, -- From Dazar'alor to Silithus
+	{ ['y'] = 0.8467, ['x'] = 0.7322, ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['source'] = 205, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Silithus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 88, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', }, ['continent'] = 1,
+		['y'] = 0.1687, ['x'] = 0.2221, ['source'] = -1, ['target'] = 206, }, -- From Dazar'alor to Thunder Bluff
+	{ ['y'] = 0.7725, ['x'] = 0.735, ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['source'] = 206, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Thunder Bluff
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', }, ['continent'] = 1,
+		['y'] = 0.8981, ['x'] = 0.571, ['source'] = -1, ['target'] = 207, }, -- From Dazar'alor to Orgrimmar
+	{ ['y'] = 0.6967, ['x'] = 0.7317, ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['source'] = 207, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 81, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1, ['y'] = 0.4519, ['x'] = 0.4141, ['source'] = -1, ['target'] = 208, }, -- From Boralus to Silithus
+	{ ['y'] = 0.1567, ['x'] = 0.6975, ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['source'] = 208, ['type'] = 'LocalPortal', }, -- From Boralus to Silithus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 103, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1, ['y'] = 0.5982, ['x'] = 0.4762, ['source'] = -1, ['target'] = 209, }, -- From Boralus to The Exodar
+	{ ['y'] = 0.1508, ['x'] = 0.7035, ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['source'] = 209, ['type'] = 'LocalPortal', }, -- From Boralus to The Exodar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 62, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.3619, ['x'] = 0.4794, ['source'] = -1, ['target'] = 210, }, -- From Boralus to Darkshore
+	{ ['y'] = 0.2444, ['x'] = 0.6625, ['mapId'] = 1161, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1643, ['source'] = 210, ['type'] = 'LocalPortal', }, -- From Boralus to Darkshore
+	{ ['type'] = 'LocalPortal', ['mapId'] = 62, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Horde', }, ['continent'] = 1,
+		['y'] = 0.35, ['x'] = 0.4631, ['source'] = -1, ['target'] = 211, }, -- From Dazar'alor to Darkshore
+	{ ['y'] = 0.9449, ['x'] = 0.5198, ['mapId'] = 1165, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Horde', },
+		['continent'] = 1642, ['source'] = 211, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Darkshore
+	{ ['type'] = 'LocalPortal', ['mapId'] = 249, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '28112', },
+		['continent'] = 1, ['y'] = 0.34246826171875, ['x'] = 0.54893493652344, ['source'] = -1, ['target'] = 212, }, -- From Stormwind City to Uldum
+	{ ['y'] = 0.20494079589844, ['x'] = 0.75245666503906, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '28112', }, ['continent'] = 0, ['source'] = 212,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Uldum
+	{ ['type'] = 'LocalPortal', ['mapId'] = 198, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '25316', },
+		['continent'] = 1, ['y'] = 0.23391723632812, ['x'] = 0.63487243652344, ['source'] = -1, ['target'] = 213, }, -- From Stormwind City to Mount Hyjal
+	{ ['y'] = 0.1868896484375, ['x'] = 0.76181030273438, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '25316', }, ['continent'] = 0, ['source'] = 213,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Mount Hyjal
+	{ ['type'] = 'LocalPortal', ['mapId'] = 103, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.59820556640625, ['x'] = 0.4761962890625, ['source'] = -1, ['target'] = 214, }, -- From Shrine of Seven Stars to The Exodar
+	{ ['y'] = 0.30500793457031, ['x'] = 0.70770263671875, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 214, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to The Exodar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 89, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.78672790527344, ['x'] = 0.43467712402344, ['source'] = -1, ['target'] = 215, }, -- From Shrine of Seven Stars to Darnassus
+	{ ['y'] = 0.43572998046875, ['x'] = 0.77194213867188, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 215, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to Darnassus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 78, ['reqs'] = { ['qid'] = '12548', }, ['continent'] = 1,
+		['y'] = 0.07916259765625, ['x'] = 0.50398254394531, ['source'] = -1, ['target'] = 216, }, -- From Sholazar Basin to Un'Goro Crater
+	{ ['y'] = 0.82762145996094, ['x'] = 0.40266418457031, ['mapId'] = 119, ['reqs'] = { ['qid'] = '12548', },
+		['continent'] = 571, ['source'] = 216, ['type'] = 'LocalPortal', }, -- From Sholazar Basin to Un'Goro Crater
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 217, }, -- From Dalaran to Orgrimmar
+	{ ['y'] = 0.2544, ['x'] = 0.5541, ['mapId'] = 125, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571,
+		['source'] = 217, ['type'] = 'LocalPortal', }, -- From Dalaran to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 218, }, -- From Shattrath City to Orgrimmar
+	{ ['y'] = 0.4881, ['x'] = 0.5674, ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 530,
+		['source'] = 218, ['type'] = 'LocalPortal', }, -- From Shattrath City to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '27203', }, ['continent'] = 1,
+		['y'] = 0.37886047363281, ['x'] = 0.5013427734375, ['source'] = -1, ['target'] = 219, }, -- From Deepholm to Orgrimmar
+	{ ['y'] = 0.53091430664062, ['x'] = 0.50927734375, ['mapId'] = 207,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '27203', }, ['continent'] = 646, ['source'] = 219,
+		['type'] = 'LocalPortal', }, -- From Deepholm to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['lvl'] = '30', }, ['continent'] = 1,
+		['y'] = 0.37886047363281, ['x'] = 0.5013427734375, ['source'] = -1, ['target'] = 220, }, -- From Tol Barad Peninsula to Orgrimmar
+	{ ['y'] = 0.79652404785156, ['x'] = 0.56301879882812, ['mapId'] = 245,
+		['reqs'] = { ['fac'] = 'Horde', ['lvl'] = '30', }, ['continent'] = 0, ['source'] = 220, ['type'] = 'LocalPortal', }, -- From Tol Barad Peninsula to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '26830', }, ['continent'] = 1,
+		['y'] = 0.37886047363281, ['x'] = 0.5013427734375, ['source'] = -1, ['target'] = 221, }, -- From Twilight Highlands to Orgrimmar
+	{ ['y'] = 0.53532409667969, ['x'] = 0.73550415039062, ['mapId'] = 241,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '26830', }, ['continent'] = 0, ['source'] = 221,
+		['type'] = 'LocalPortal', }, -- From Twilight Highlands to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '29690', }, ['continent'] = 1,
+		['y'] = 0.8981, ['x'] = 0.571, ['source'] = -1, ['target'] = 222, }, -- From The Jade Forest to Orgrimmar
+	{ ['y'] = 0.1401, ['x'] = 0.2853, ['mapId'] = 371, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '29690', },
+		['continent'] = 870, ['source'] = 222, ['type'] = 'LocalPortal', }, -- From The Jade Forest to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 88, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['y'] = 0.16867065429688, ['x'] = 0.22212219238281, ['source'] = -1, ['target'] = 223, }, -- From Shrine of Two Moons to Thunder Bluff
+	{ ['y'] = 0.36204528808594, ['x'] = 0.73603820800781, ['mapId'] = 392, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 223, ['type'] = 'LocalPortal', }, -- From Shrine of Two Moons to Thunder Bluff
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['y'] = 0.40715026855469, ['x'] = 0.68649291992188, ['source'] = -1, ['target'] = 224, }, -- From Shrine of Two Moons to Orgrimmar
+	{ ['y'] = 0.42718505859375, ['x'] = 0.7337646484375, ['mapId'] = 392, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 224, ['type'] = 'LocalPortal', }, -- From Shrine of Two Moons to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['y'] = 0.40715026855469, ['x'] = 0.68649291992188, ['source'] = -1, ['target'] = 225, }, -- From Kun-Lai Summit to Orgrimmar
+	{ ['y'] = 0.43572998046875, ['x'] = 0.48530578613281, ['mapId'] = 379, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 225, ['type'] = 'LocalPortal', }, -- From Kun-Lai Summit to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 86, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.6453,
+		['x'] = 0.4828, ['source'] = -1, ['target'] = 226, }, -- From Hellfire Peninsula to Orgrimmar
+	{ ['y'] = 0.4945, ['x'] = 0.8922, ['mapId'] = 100, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 530,
+		['source'] = 226, ['type'] = 'LocalPortal', }, -- From Hellfire Peninsula to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 86, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['y'] = 0.64529418945312, ['x'] = 0.48283386230469, ['source'] = -1, ['target'] = 227, }, -- From Hellfire Peninsula to Orgrimmar
+	{ ['y'] = 0.47703552246094, ['x'] = 0.88575744628906, ['mapId'] = 100, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 530, ['source'] = 227, ['type'] = 'LocalPortal', }, -- From Hellfire Peninsula to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 57, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.8947, ['x'] = 0.5238, ['source'] = -1, ['target'] = 228, }, -- From Stormwind City to Teldrassil
+	{ ['y'] = 0.5604, ['x'] = 0.2385, ['mapId'] = 84, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 0, ['source'] = 228, ['type'] = 'LocalPortal', }, -- From Stormwind City to Teldrassil
+	{ ['type'] = 'LocalPortal', ['mapId'] = 62, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.1874, ['x'] = 0.4595, ['source'] = -1, ['target'] = 229, }, -- From Stormwind City to Darkshore
+	{ ['y'] = 0.5604, ['x'] = 0.2385, ['mapId'] = 84, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 0, ['source'] = 229, ['type'] = 'LocalPortal', }, -- From Stormwind City to Darkshore
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 230, }, -- From Warspear to Orgrimmar
+	{ ['y'] = 0.5163, ['x'] = 0.6066, ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1116,
+		['source'] = 230, ['type'] = 'LocalPortal', }, -- From Warspear to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 231, }, -- From Dalaran to Orgrimmar
+	{ ['y'] = 0.2399, ['x'] = 0.5528, ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1220,
+		['source'] = 231, ['type'] = 'LocalPortal', }, -- From Dalaran to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 232, }, -- From Azsuna to Orgrimmar
+	{ ['y'] = 0.413, ['x'] = 0.4668, ['mapId'] = 630, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1220,
+		['source'] = 232, ['type'] = 'LocalPortal', }, -- From Azsuna to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 198, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', }, ['continent'] = 1,
+		['y'] = 0.2583, ['x'] = 0.5929, ['source'] = -1, ['target'] = 233, }, -- From Emerald Dreamway to Mount Hyjal
+	{ ['y'] = 0.5256, ['x'] = 0.5305, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 233, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to Mount Hyjal
+	{ ['type'] = 'LocalPortal', ['mapId'] = 80, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', }, ['continent'] = 1,
+		['y'] = 0.6019, ['x'] = 0.6759, ['source'] = -1, ['target'] = 234, }, -- From Emerald Dreamway to Moonglade
+	{ ['y'] = 0.7959, ['x'] = 0.2612, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 234, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to Moonglade
+	{ ['type'] = 'LocalPortal', ['mapId'] = 12, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', }, ['continent'] = 1,
+		['y'] = 0.639, ['x'] = 0.4126, ['source'] = -1, ['target'] = 235, }, -- From Emerald Dreamway to Kalimdor
+	{ ['y'] = 0.3888, ['x'] = 0.2357, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 235, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to Kalimdor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1, ['y'] = 0.8981,
+		['x'] = 0.571, ['source'] = -1, ['target'] = 236, }, -- From Silvermoon City to Orgrimmar
+	{ ['y'] = 0.1869, ['x'] = 0.5855, ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['source'] = 236, ['type'] = 'LocalPortal', }, -- From Silvermoon City to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 103, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1, ['y'] = 0.5982,
+		['x'] = 0.4762, ['source'] = -1, ['target'] = 237, }, -- From Stormwind City to The Exodar
+	{ ['y'] = 0.871, ['x'] = 0.437, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['source'] = 237, ['type'] = 'LocalPortal', }, -- From Stormwind City to The Exodar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 74, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1, ['y'] = 0.283,
+		['x'] = 0.546, ['source'] = -1, ['target'] = 238, }, -- From Stormwind City to Caverns of Time
+	{ ['y'] = 0.8555, ['x'] = 0.4382, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['source'] = 238, ['type'] = 'LocalPortal', }, -- From Stormwind City to Caverns of Time
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1, ['y'] = 0.7725,
+		['x'] = 0.3984, ['source'] = -1, ['target'] = 239, }, -- From Suramar to Orgrimmar
+	{ ['y'] = 0.8729, ['x'] = 0.5821, ['mapId'] = 680, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1220,
+		['source'] = 239, ['type'] = 'LocalPortal', }, -- From Suramar to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 85, ['reqs'] = { ['rac'] = 'HighmountainTauren', }, ['continent'] = 1,
+		['y'] = 0.7721, ['x'] = 0.3982, ['source'] = -1, ['target'] = 240, }, -- From Thunder Totem to Orgrimmar
+	{ ['y'] = 0.6388, ['x'] = 0.4642, ['mapId'] = 652, ['reqs'] = { ['rac'] = 'HighmountainTauren', },
+		['continent'] = 1220, ['source'] = 240, ['type'] = 'LocalPortal', }, -- From Thunder Totem to Orgrimmar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '60151', },
+		['continent'] = 0, ['y'] = 0.9023, ['x'] = 0.4635, ['source'] = -1, ['target'] = 241, }, -- From Oribos to Stormwind City
+	{ ['y'] = 0.4567, ['x'] = 0.2086, ['mapId'] = 1670, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '60151', },
+		['continent'] = 2222, ['source'] = 241, ['type'] = 'LocalPortal', }, -- From Oribos to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', }, ['continent'] = 0,
+		['y'] = 0.1926, ['x'] = 0.583, ['source'] = -1, ['target'] = 242, }, -- From Dazar'alor to Silvermoon City
+	{ ['y'] = 0.6233, ['x'] = 0.7339, ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['source'] = 242, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Silvermoon City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 14, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '53208', }, ['continent'] = 0,
+		['y'] = 0.2995, ['x'] = 0.274, ['source'] = -1, ['target'] = 243, }, -- From Dazar'alor to Arathi Highlands
+	{ ['y'] = 0.9455, ['x'] = 0.5191, ['mapId'] = 1165, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '53208', },
+		['continent'] = 1642, ['source'] = 243, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Arathi Highlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 14, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '53194', },
+		['continent'] = 0, ['y'] = 0.6514, ['x'] = 0.2158, ['source'] = -1, ['target'] = 244, }, -- From Dazar'alor to Arathi Highlands
+	{ ['y'] = 0.2447, ['x'] = 0.6614, ['mapId'] = 1165, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '53194', },
+		['continent'] = 1642, ['source'] = 244, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Arathi Highlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 0, ['y'] = 0.9023, ['x'] = 0.4634, ['source'] = -1, ['target'] = 245, }, -- From Boralus to Stormwind City
+	{ ['y'] = 0.1675, ['x'] = 0.7023, ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['source'] = 245, ['type'] = 'LocalPortal', }, -- From Boralus to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 87, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 0, ['y'] = 0.0843, ['x'] = 0.2551, ['source'] = -1, ['target'] = 246, }, -- From Boralus to Ironforge
+	{ ['y'] = 0.1547, ['x'] = 0.7081, ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['source'] = 246, ['type'] = 'LocalPortal', }, -- From Boralus to Ironforge
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 247, }, -- From Azsuna to Stormwind City
+	{ ['y'] = 0.4141, ['x'] = 0.4669, ['mapId'] = 630, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1220,
+		['source'] = 247, ['type'] = 'LocalPortal', }, -- From Azsuna to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 90, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.1633,
+		['x'] = 0.8459, ['source'] = -1, ['target'] = 248, }, -- From Orgrimmar to Undercity
+	{ ['y'] = 0.5561, ['x'] = 0.5079, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 248, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Undercity
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = 249, }, -- From Dalaran to Stormwind City
+	{ ['y'] = 0.625, ['x'] = 0.39498901367188, ['mapId'] = 125, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['source'] = 249, ['type'] = 'LocalPortal', }, -- From Dalaran to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 250, }, -- From Shattrath City to Stormwind City
+	{ ['y'] = 0.481, ['x'] = 0.5711, ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 530,
+		['source'] = 250, ['type'] = 'LocalPortal', }, -- From Shattrath City to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.1924,
+		['x'] = 0.5826, ['source'] = -1, ['target'] = 251, }, -- From Orgrimmar to Silvermoon City
+	{ ['y'] = 0.8832, ['x'] = 0.5606, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 251, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Silvermoon City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 0, ['y'] = 0.8653, ['x'] = 0.4959, ['source'] = -1, ['target'] = 252, }, -- From Teldrassil to Stormwind City
+	{ ['y'] = 0.937, ['x'] = 0.5503, ['mapId'] = 57, ['reqs'] = { ['notlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 252, ['type'] = 'LocalPortal', }, -- From Teldrassil to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 253, }, -- From The Exodar to Stormwind City
+	{ ['y'] = 0.6263, ['x'] = 0.4825, ['mapId'] = 103, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['source'] = 253, ['type'] = 'LocalPortal', }, -- From The Exodar to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.8653,
+		['x'] = 0.4959, ['source'] = -1, ['target'] = 254, }, -- From Hellfire Peninsula to Stormwind City
+	{ ['y'] = 0.51, ['x'] = 0.8922, ['mapId'] = 100, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 530,
+		['source'] = 254, ['type'] = 'LocalPortal', }, -- From Hellfire Peninsula to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = 255, }, -- From Hellfire Peninsula to Stormwind City
+	{ ['y'] = 0.52810668945312, ['x'] = 0.88632202148438, ['mapId'] = 100, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 530, ['source'] = 255, ['type'] = 'LocalPortal', }, -- From Hellfire Peninsula to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27203', },
+		['continent'] = 0, ['y'] = 0.18338012695312, ['x'] = 0.74455261230469, ['source'] = -1, ['target'] = 256, }, -- From Deepholm to Stormwind City
+	{ ['y'] = 0.53837585449219, ['x'] = 0.48519897460938, ['mapId'] = 207,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27203', }, ['continent'] = 646, ['source'] = 256,
+		['type'] = 'LocalPortal', }, -- From Deepholm to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '25316', },
+		['continent'] = 0, ['y'] = 0.18338012695312, ['x'] = 0.74455261230469, ['source'] = -1, ['target'] = 257, }, -- From Mount Hyjal to Stormwind City
+	{ ['y'] = 0.23129272460938, ['x'] = 0.62605285644531, ['mapId'] = 198,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '25316', }, ['continent'] = 1, ['source'] = 257,
+		['type'] = 'LocalPortal', }, -- From Mount Hyjal to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '31732', },
+		['continent'] = 0, ['y'] = 0.9023, ['x'] = 0.4634, ['source'] = -1, ['target'] = 258, }, -- From The Jade Forest to Stormwind City
+	{ ['y'] = 0.8516, ['x'] = 0.4623, ['mapId'] = 371, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '31732', },
+		['continent'] = 870, ['source'] = 258, ['type'] = 'LocalPortal', }, -- From The Jade Forest to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = 259, }, -- From Shrine of Seven Stars to Stormwind City
+	{ ['y'] = 0.36099243164062, ['x'] = 0.71446228027344, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 259, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 87, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.084274291992188, ['x'] = 0.25509643554688, ['source'] = -1, ['target'] = 260, }, -- From Shrine of Seven Stars to Ironforge
+	{ ['y'] = 0.4091796875, ['x'] = 0.74085998535156, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 260, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to Ironforge
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['y'] = 0.17002868652344, ['x'] = 0.67733764648438, ['source'] = -1, ['target'] = 261, }, -- From Kun-Lai Summit to Stormwind City
+	{ ['y'] = 0.43368530273438, ['x'] = 0.48965454101562, ['mapId'] = 379, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 261, ['type'] = 'LocalPortal', }, -- From Kun-Lai Summit to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 204, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25924', }, ['continent'] = 0,
+		['y'] = 0.60946655273438, ['x'] = 0.51368713378906, ['source'] = -1, ['target'] = 262, }, -- From Orgrimmar to Abyssal Depths
+	{ ['y'] = 0.36517333984375, ['x'] = 0.49224853515625, ['mapId'] = 85,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '25924', }, ['continent'] = 1, ['source'] = 262,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Abyssal Depths
+	{ ['type'] = 'LocalPortal', ['mapId'] = 245,
+		['reqs'] = { ['qid'] = '29690', ['fac'] = 'Horde', ['lvl'] = '30', }, ['continent'] = 0, ['y'] = 0.80064392089844,
+		['x'] = 0.55775451660156, ['source'] = -1, ['target'] = 263, }, -- From Orgrimmar to Tol Barad Peninsula
+	{ ['y'] = 0.39295959472656, ['x'] = 0.47404479980469, ['mapId'] = 85,
+		['reqs'] = { ['qid'] = '29690', ['fac'] = 'Horde', ['lvl'] = '30', }, ['continent'] = 1, ['source'] = 263,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Tol Barad Peninsula
+	{ ['type'] = 'LocalPortal', ['mapId'] = 241, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '26830', }, ['continent'] = 0,
+		['y'] = 0.53392028808594, ['x'] = 0.73631286621094, ['source'] = -1, ['target'] = 264, }, -- From Orgrimmar to Twilight Highlands
+	{ ['y'] = 0.39410400390625, ['x'] = 0.50221252441406, ['mapId'] = 85,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '26830', }, ['continent'] = 1, ['source'] = 264,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Twilight Highlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 90, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['y'] = 0.16328430175781, ['x'] = 0.84580993652344, ['source'] = -1, ['target'] = 265, }, -- From Shrine of Two Moons to Undercity
+	{ ['y'] = 0.48118591308594, ['x'] = 0.74226379394531, ['mapId'] = 392, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 265, ['type'] = 'LocalPortal', }, -- From Shrine of Two Moons to Undercity
+	{ ['type'] = 'LocalPortal', ['mapId'] = 110, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 0,
+		['y'] = 0.19242858886719, ['x'] = 0.58259582519531, ['source'] = -1, ['target'] = 266, }, -- From Shrine of Two Moons to Silvermoon City
+	{ ['y'] = 0.52592468261719, ['x'] = 0.75790405273438, ['mapId'] = 392, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 266, ['type'] = 'LocalPortal', }, -- From Shrine of Two Moons to Silvermoon City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 122, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.34480285644531,
+		['x'] = 0.48248291015625, ['source'] = -1, ['target'] = 267, }, -- From Shattrath City to Isle of Quel'Danas
+	{ ['y'] = 0.42045593261719, ['x'] = 0.48799133300781, ['mapId'] = 111, ['reqs'] = {}, ['continent'] = 530,
+		['source'] = 267, ['type'] = 'LocalPortal', }, -- From Shattrath City to Isle of Quel'Danas
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 268, }, -- From Stormshield to Stormwind City
+	{ ['y'] = 0.3799, ['x'] = 0.6083, ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1116,
+		['source'] = 268, ['type'] = 'LocalPortal', }, -- From Stormshield to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 269, }, -- From Dalaran to Stormwind City
+	{ ['y'] = 0.6298, ['x'] = 0.393, ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1220,
+		['source'] = 269, ['type'] = 'LocalPortal', }, -- From Dalaran to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 26, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', }, ['continent'] = 0,
+		['y'] = 0.235, ['x'] = 0.6248, ['source'] = -1, ['target'] = 270, }, -- From Emerald Dreamway to The Hinterlands
+	{ ['y'] = 0.652, ['x'] = 0.5027, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 270, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to The Hinterlands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 47, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', }, ['continent'] = 0,
+		['y'] = 0.3706, ['x'] = 0.4659, ['source'] = -1, ['target'] = 271, }, -- From Emerald Dreamway to Duskwood
+	{ ['y'] = 0.6892, ['x'] = 0.3981, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 271, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to Duskwood
+	{ ['type'] = 'LocalPortal', ['mapId'] = 24,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.6261,
+		['x'] = 0.3863, ['source'] = -1, ['target'] = 272, }, -- From Dalaran to Light's Hope Chapel
+	{ ['y'] = 0.6976, ['x'] = 0.3267, ['mapId'] = 627,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Alliance', }, ['continent'] = 1220,
+		['source'] = 272, ['type'] = 'LocalPortal', }, -- From Dalaran to Light's Hope Chapel
+	{ ['type'] = 'LocalPortal', ['mapId'] = 24,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.6146,
+		['x'] = 0.3942, ['source'] = -1, ['target'] = 273, }, -- From Dalaran to Light's Hope Chapel
+	{ ['y'] = 0.1349, ['x'] = 0.6192, ['mapId'] = 627,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Horde', }, ['continent'] = 1220, ['source'] = 273,
+		['type'] = 'LocalPortal', }, -- From Dalaran to Light's Hope Chapel
+	{ ['type'] = 'LocalPortal', ['mapId'] = 42,
+		['reqs'] = { ['qid'] = '40718', ['nqid'] = '44663', ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.4605,
+		['x'] = 0.726, ['source'] = -1, ['target'] = 274, }, -- From Stormwind City to Deadwind Pass
+	{ ['y'] = 0.3483, ['x'] = 0.8025, ['mapId'] = 84,
+		['reqs'] = { ['qid'] = '40718', ['nqid'] = '44663', ['fac'] = 'Alliance', }, ['continent'] = 0, ['source'] = 274,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Deadwind Pass
+	{ ['type'] = 'LocalPortal', ['mapId'] = 42,
+		['reqs'] = { ['qid'] = '40718', ['nqid'] = '44184', ['fac'] = 'Horde', }, ['continent'] = 0, ['y'] = 0.4605,
+		['x'] = 0.726, ['source'] = -1, ['target'] = 275, }, -- From Orgrimmar to Deadwind Pass
+	{ ['y'] = 0.7114, ['x'] = 0.3632, ['mapId'] = 86,
+		['reqs'] = { ['qid'] = '40718', ['nqid'] = '44184', ['fac'] = 'Horde', }, ['continent'] = 1, ['source'] = 275,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Deadwind Pass
+	{ ['type'] = 'LocalPortal', ['mapId'] = 122, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.4815, ['x'] = 0.5704,
+		['source'] = -1, ['target'] = 276, }, -- From Shattrath City to Isle of Quel'Danas
+	{ ['y'] = 0.4205, ['x'] = 0.4872, ['mapId'] = 111, ['reqs'] = {}, ['continent'] = 530, ['source'] = 276,
+		['type'] = 'LocalPortal', }, -- From Shattrath City to Isle of Quel'Danas
+	{ ['type'] = 'LocalPortal', ['mapId'] = 17, ['reqs'] = {}, ['continent'] = 0, ['y'] = 0.5345, ['x'] = 0.5496,
+		['source'] = -1, ['target'] = 277, }, -- From Hellfire Peninsula to Blasted Lands
+	{ ['y'] = 0.5022, ['x'] = 0.8978, ['mapId'] = 100, ['reqs'] = {}, ['continent'] = 530, ['source'] = 277,
+		['type'] = 'LocalPortal', }, -- From Hellfire Peninsula to Blasted Lands
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['rac'] = 'VoidElf', }, ['continent'] = 0, ['y'] = 0.1475,
+		['x'] = 0.54, ['source'] = -1, ['target'] = 278, }, -- From Telogrus Rift to Stormwind City
+	{ ['y'] = 0.215, ['x'] = 0.2802, ['mapId'] = 971, ['reqs'] = { ['rac'] = 'VoidElf', }, ['continent'] = 1865,
+		['source'] = 278, ['type'] = 'LocalPortal', }, -- From Telogrus Rift to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['rac'] = 'Mechagnome', }, ['continent'] = 0, ['y'] = 0.1648,
+		['x'] = 0.5411, ['source'] = -1, ['target'] = 279, }, -- From Mechagon City to Stormwind City
+	{ ['y'] = 0.6064, ['x'] = 0.2072, ['mapId'] = 1573, ['reqs'] = { ['rac'] = 'Mechagnome', }, ['continent'] = 2268,
+		['source'] = 279, ['type'] = 'LocalPortal', }, -- From Mechagon City to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['rac'] = 'LightforgedDraenei', }, ['continent'] = 0,
+		['y'] = 0.1475, ['x'] = 0.54, ['source'] = -1, ['target'] = 280, }, -- From The Vindicaar to Stormwind City
+	{ ['y'] = 0.2532, ['x'] = 0.4322, ['mapId'] = 941, ['reqs'] = { ['rac'] = 'LightforgedDraenei', },
+		['continent'] = 1860, ['source'] = 280, ['type'] = 'LocalPortal', }, -- From The Vindicaar to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0, ['y'] = 0.9023,
+		['x'] = 0.4634, ['source'] = -1, ['target'] = 281, }, -- From Caverns of Time to Stormwind City
+	{ ['y'] = 0.2683, ['x'] = 0.589, ['mapId'] = 74, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['source'] = 281, ['type'] = 'LocalPortal', }, -- From Caverns of Time to Stormwind City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 530,
+		['y'] = 0.49209594726562, ['x'] = 0.53005981445312, ['source'] = -1, ['target'] = 282, }, -- From Shrine of Two Moons to Shattrath City
+	{ ['y'] = 0.57313537597656, ['x'] = 0.63674926757812, ['mapId'] = 392, ['reqs'] = { ['fac'] = 'Horde', },
+		['continent'] = 870, ['source'] = 282, ['type'] = 'LocalPortal', }, -- From Shrine of Two Moons to Shattrath City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 530,
+		['y'] = 0.49209594726562, ['x'] = 0.53005981445312, ['source'] = -1, ['target'] = 283, }, -- From Shrine of Seven Stars to Shattrath City
+	{ ['y'] = 0.53025817871094, ['x'] = 0.68421936035156, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 283, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to Shattrath City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 530, ['y'] = 0.4921,
+		['x'] = 0.53, ['source'] = -1, ['target'] = 284, }, -- From Orgrimmar to Shattrath City
+	{ ['y'] = 0.8748, ['x'] = 0.5713, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 284, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Shattrath City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 111, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 530,
+		['y'] = 0.4023, ['x'] = 0.5497, ['source'] = -1, ['target'] = 285, }, -- From Stormwind City to Shattrath City
+	{ ['y'] = 0.8586, ['x'] = 0.448, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['source'] = 285, ['type'] = 'LocalPortal', }, -- From Stormwind City to Shattrath City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 100, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 530,
+		['y'] = 0.4956, ['x'] = 0.8915, ['source'] = -1, ['target'] = 286, }, -- From Darnassus to Hellfire Peninsula
+	{ ['y'] = 0.7817, ['x'] = 0.4399, ['mapId'] = 89, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['source'] = 286, ['type'] = 'LocalPortal', }, -- From Darnassus to Hellfire Peninsula
+	{ ['type'] = 'LocalPortal', ['mapId'] = 125, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = 287, }, -- From Shrine of Seven Stars to Dalaran
+	{ ['y'] = 0.39312744140625, ['x'] = 0.61943054199219, ['mapId'] = 394, ['reqs'] = { ['fac'] = 'Alliance', },
+		['continent'] = 870, ['source'] = 287, ['type'] = 'LocalPortal', }, -- From Shrine of Seven Stars to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 119, ['reqs'] = { ['qid'] = '12548', }, ['continent'] = 571,
+		['y'] = 0.82762145996094, ['x'] = 0.40266418457031, ['source'] = -1, ['target'] = 288, }, -- From Un'Goro Crater to Sholazar Basin
+	{ ['y'] = 0.07916259765625, ['x'] = 0.50398254394531, ['mapId'] = 78, ['reqs'] = { ['qid'] = '12548', },
+		['continent'] = 1, ['source'] = 288, ['type'] = 'LocalPortal', }, -- From Un'Goro Crater to Sholazar Basin
+	{ ['type'] = 'LocalPortal', ['mapId'] = 116, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 571, ['y'] = 0.2975, ['x'] = 0.5043, ['source'] = -1, ['target'] = 289, }, -- From Emerald Dreamway to Grizzly Hills
+	{ ['y'] = 0.2662, ['x'] = 0.3176, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 289, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to Grizzly Hills
+	{ ['type'] = 'LocalPortal', ['mapId'] = 888, ['reqs'] = {}, ['continent'] = 1733, ['y'] = 0.82, ['x'] = 0.4369,
+		['source'] = -1, ['target'] = 290, }, -- From Sholazar Basin to Hall of Communion
+	{ ['y'] = 0.53, ['x'] = 0.8843, ['mapId'] = 119, ['reqs'] = {}, ['continent'] = 571, ['source'] = 290,
+		['type'] = 'LocalPortal', }, -- From Sholazar Basin to Hall of Communion
+	{ ['type'] = 'LocalPortal', ['mapId'] = 125, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 571, ['y'] = 0.4678,
+		['x'] = 0.5592, ['source'] = -1, ['target'] = 291, }, -- From Orgrimmar to Dalaran
+	{ ['y'] = 0.9169, ['x'] = 0.5626, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 291, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 125, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 571,
+		['y'] = 0.4678, ['x'] = 0.5592, ['source'] = -1, ['target'] = 292, }, -- From Stormwind City to Dalaran
+	{ ['y'] = 0.8859, ['x'] = 0.4447, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['source'] = 292, ['type'] = 'LocalPortal', }, -- From Stormwind City to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 207, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27203', },
+		['continent'] = 646, ['y'] = 0.53555297851562, ['x'] = 0.4873046875, ['source'] = -1, ['target'] = 293, }, -- From Stormwind City to Deepholm
+	{ ['y'] = 0.19636535644531, ['x'] = 0.73190307617188, ['mapId'] = 84,
+		['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '27203', }, ['continent'] = 0, ['source'] = 293,
+		['type'] = 'LocalPortal', }, -- From Stormwind City to Deepholm
+	{ ['type'] = 'LocalPortal', ['mapId'] = 207, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '27203', },
+		['continent'] = 646, ['y'] = 0.5294189453125, ['x'] = 0.50592041015625, ['source'] = -1, ['target'] = 294, }, -- From Orgrimmar to Deepholm
+	{ ['y'] = 0.36338806152344, ['x'] = 0.50839233398438, ['mapId'] = 85,
+		['reqs'] = { ['fac'] = 'Horde', ['qid'] = '27203', }, ['continent'] = 1, ['source'] = 294,
+		['type'] = 'LocalPortal', }, -- From Orgrimmar to Deepholm
+	{ ['type'] = 'LocalPortal', ['mapId'] = 371, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '29690', },
+		['continent'] = 870, ['y'] = 0.1398, ['x'] = 0.2856, ['source'] = -1, ['target'] = 295, }, -- From Orgrimmar to The Jade Forest
+	{ ['y'] = 0.921, ['x'] = 0.5747, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '29690', },
+		['continent'] = 1, ['source'] = 295, ['type'] = 'LocalPortal', }, -- From Orgrimmar to The Jade Forest
+	{ ['type'] = 'LocalPortal', ['mapId'] = 371, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '31732', },
+		['continent'] = 870, ['y'] = 0.8507, ['x'] = 0.4618, ['source'] = -1, ['target'] = 296, }, -- From Stormwind City to The Jade Forest
+	{ ['y'] = 0.8723, ['x'] = 0.4566, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '31732', },
+		['continent'] = 0, ['source'] = 296, ['type'] = 'LocalPortal', }, -- From Stormwind City to The Jade Forest
+	{ ['type'] = 'LocalPortal', ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '34446', },
+		['continent'] = 1116, ['y'] = 0.3553, ['x'] = 0.4442, ['source'] = -1, ['target'] = 297, }, -- From Blasted Lands to Warspear
+	{ ['y'] = 0.5388, ['x'] = 0.5494, ['mapId'] = 17, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '34446', },
+		['continent'] = 0, ['source'] = 297, ['type'] = 'LocalPortal', }, -- From Blasted Lands to Warspear
+	{ ['type'] = 'LocalPortal', ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '35884', },
+		['continent'] = 1116, ['y'] = 0.5248, ['x'] = 0.3171, ['source'] = -1, ['target'] = 298, }, -- From Blasted Lands to Stormshield
+	{ ['y'] = 0.5388, ['x'] = 0.5494, ['mapId'] = 17, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '35884', },
+		['continent'] = 0, ['source'] = 298, ['type'] = 'LocalPortal', }, -- From Blasted Lands to Stormshield
+	{ ['type'] = 'LocalPortal', ['mapId'] = 624, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1116, ['y'] = 0.4974,
+		['x'] = 0.5695, ['source'] = -1, ['target'] = 299, }, -- From Orgrimmar to Warspear
+	{ ['y'] = 0.8793, ['x'] = 0.5826, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', }, ['continent'] = 1,
+		['source'] = 299, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Warspear
+	{ ['type'] = 'LocalPortal', ['mapId'] = 622, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1116,
+		['y'] = 0.3993, ['x'] = 0.6153, ['source'] = -1, ['target'] = 300, }, -- From Stormwind City to Stormshield
+	{ ['y'] = 0.92, ['x'] = 0.4808, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 0,
+		['source'] = 300, ['type'] = 'LocalPortal', }, -- From Stormwind City to Stormshield
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['qid'] = '48440', }, ['continent'] = 1220, ['y'] = 0.4473,
+		['x'] = 0.6092, ['source'] = -1, ['target'] = 301, }, -- From The Vindicaar to Dalaran
+	{ ['y'] = 0.2549, ['x'] = 0.4339, ['mapId'] = 832, ['reqs'] = { ['qid'] = '48440', }, ['continent'] = 1669,
+		['source'] = 301, ['type'] = 'LocalPortal', }, -- From The Vindicaar to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['qid'] = '48081', }, ['continent'] = 1220, ['y'] = 0.4473,
+		['x'] = 0.6092, ['source'] = -1, ['target'] = 302, }, -- From The Vindicaar to Dalaran
+	{ ['y'] = 0.2584, ['x'] = 0.4939, ['mapId'] = 884, ['reqs'] = { ['qid'] = '48081', }, ['continent'] = 1669,
+		['source'] = 302, ['type'] = 'LocalPortal', }, -- From The Vindicaar to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['qid'] = '48199', }, ['continent'] = 1220, ['y'] = 0.4473,
+		['x'] = 0.6092, ['source'] = -1, ['target'] = 303, }, -- From The Vindicaar to Dalaran
+	{ ['y'] = 0.5602, ['x'] = 0.3507, ['mapId'] = 887, ['reqs'] = { ['qid'] = '48199', }, ['continent'] = 1669,
+		['source'] = 303, ['type'] = 'LocalPortal', }, -- From The Vindicaar to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = {}, ['continent'] = 1220, ['y'] = 0.5054, ['x'] = 0.3965,
+		['source'] = -1, ['target'] = 304, }, -- From Hall of Communion to Dalaran
+	{ ['y'] = 0.088, ['x'] = 0.4978, ['mapId'] = 888, ['reqs'] = {}, ['continent'] = 1733, ['source'] = 304,
+		['type'] = 'LocalPortal', }, -- From Hall of Communion to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['cls'] = 'MONK', ['qid'] = '40236', },
+		['continent'] = 1220, ['y'] = 0.4473, ['x'] = 0.6092, ['source'] = -1, ['target'] = 305, }, -- From The Wandering Isle to Dalaran
+	{ ['y'] = 0.5717, ['x'] = 0.524, ['mapId'] = 709, ['reqs'] = { ['cls'] = 'MONK', ['qid'] = '40236', },
+		['continent'] = 1514, ['source'] = 305, ['type'] = 'LocalPortal', }, -- From The Wandering Isle to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 379, ['reqs'] = { ['cls'] = 'MONK', ['qid'] = '40236', }, ['continent'] = 870,
+		['y'] = 0.4312, ['x'] = 0.4869, ['source'] = -1, ['target'] = 306, }, -- From The Wandering Isle to Kun-Lai Summit
+	{ ['y'] = 0.5441, ['x'] = 0.5005, ['mapId'] = 709, ['reqs'] = { ['cls'] = 'MONK', ['qid'] = '40236', },
+		['continent'] = 1514, ['source'] = 306, ['type'] = 'LocalPortal', }, -- From The Wandering Isle to Kun-Lai Summit
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['cls'] = 'MAGE', }, ['continent'] = 1220, ['y'] = 0.4473,
+		['x'] = 0.6092, ['source'] = -1, ['target'] = 307, }, -- From Hall of the Guardian to Dalaran
+	{ ['y'] = 0.9012, ['x'] = 0.5731, ['mapId'] = 734, ['reqs'] = { ['cls'] = 'MAGE', }, ['continent'] = 1513,
+		['source'] = 307, ['type'] = 'LocalPortal', }, -- From Hall of the Guardian to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 630, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1220, ['y'] = 0.1511, ['x'] = 0.5791, ['source'] = -1, ['target'] = 308, }, -- Using Teleportation Nexus to Azsuna
+	{ ['y'] = 0.3997, ['x'] = 0.551, ['mapId'] = 734, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1513, ['source'] = 308, ['type'] = 'LocalPortal', }, -- From Hall of the Guardian to Azsuna
+	{ ['type'] = 'LocalPortal', ['mapId'] = 650, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1220, ['y'] = 0.638, ['x'] = 0.314, ['source'] = -1, ['target'] = 309, }, -- Using Teleportation Nexus to Highmountain
+	{ ['y'] = 0.4437, ['x'] = 0.5664, ['mapId'] = 734, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1513, ['source'] = 309, ['type'] = 'LocalPortal', }, -- From Hall of the Guardian to Highmountain
+	{ ['type'] = 'LocalPortal', ['mapId'] = 641, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1220, ['y'] = 0.561, ['x'] = 0.513, ['source'] = -1, ['target'] = 310, }, -- Using Teleportation Nexus to Val'sharah
+	{ ['y'] = 0.4601, ['x'] = 0.6684, ['mapId'] = 734, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1513, ['source'] = 310, ['type'] = 'LocalPortal', }, -- From Hall of the Guardian to Val'sharah
+	{ ['type'] = 'LocalPortal', ['mapId'] = 634, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1220, ['y'] = 0.6051, ['x'] = 0.3134, ['source'] = -1, ['target'] = 311, }, -- Using Teleportation Nexus to Stormheim
+	{ ['y'] = 0.4196, ['x'] = 0.6709, ['mapId'] = 734, ['reqs'] = { ['cls'] = 'MAGE', ['spell'] = '223413', },
+		['continent'] = 1513, ['source'] = 311, ['type'] = 'LocalPortal', }, -- From Hall of the Guardian to Stormheim
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Alliance', }, ['continent'] = 1220,
+		['y'] = 0.6889, ['x'] = 0.332, ['source'] = -1, ['target'] = 312, }, -- From Light's Hope Chapel to Dalaran
+	{ ['y'] = 0.6384, ['x'] = 0.3779, ['mapId'] = 24,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Alliance', }, ['continent'] = 0, ['source'] = 312,
+		['type'] = 'LocalPortal', }, -- From Light's Hope Chapel to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Horde', }, ['continent'] = 1220, ['y'] = 0.1482,
+		['x'] = 0.6127, ['source'] = -1, ['target'] = 313, }, -- From Light's Hope Chapel to Dalaran
+	{ ['y'] = 0.6384, ['x'] = 0.3779, ['mapId'] = 24,
+		['reqs'] = { ['qid'] = '38576', ['cls'] = 'PALADIN', ['fac'] = 'Horde', }, ['continent'] = 0, ['source'] = 313,
+		['type'] = 'LocalPortal', }, -- From Light's Hope Chapel to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 747, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1220, ['y'] = 0.3507, ['x'] = 0.516, ['source'] = -1, ['target'] = 314, }, -- From Emerald Dreamway to The Dreamgrove
+	{ ['y'] = 0.2393, ['x'] = 0.4552, ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['source'] = 314, ['type'] = 'LocalPortal', }, -- From Emerald Dreamway to The Dreamgrove
+	{ ['type'] = 'LocalPortal', ['mapId'] = 630, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '44184', },
+		['continent'] = 1220, ['y'] = 0.4136, ['x'] = 0.4682, ['source'] = -1, ['target'] = 315, }, -- From Orgrimmar to Azsuna
+	{ ['y'] = 0.8955, ['x'] = 0.5882, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '44184', },
+		['continent'] = 1, ['source'] = 315, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Azsuna
+	{ ['type'] = 'LocalPortal', ['mapId'] = 630, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '44663', },
+		['continent'] = 1220, ['y'] = 0.4141, ['x'] = 0.4669, ['source'] = -1, ['target'] = 316, }, -- From Stormwind City to Azsuna
+	{ ['y'] = 0.9339, ['x'] = 0.4687, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '44663', },
+		['continent'] = 0, ['source'] = 316, ['type'] = 'LocalPortal', }, -- From Stormwind City to Azsuna
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Alliance', ['cls'] = 'PRIEST', },
+		['continent'] = 1220, ['y'] = 0.5731, ['x'] = 0.3948, ['source'] = -1, ['target'] = 317, }, -- From Netherlight Temple to Dalaran
+	{ ['y'] = 0.8071, ['x'] = 0.498, ['mapId'] = 702, ['reqs'] = { ['fac'] = 'Alliance', ['cls'] = 'PRIEST', },
+		['continent'] = 1512, ['source'] = 317, ['type'] = 'LocalPortal', }, -- From Netherlight Temple to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Horde', ['cls'] = 'PRIEST', },
+		['continent'] = 1220, ['y'] = 0.177, ['x'] = 0.63, ['source'] = -1, ['target'] = 318, }, -- From Netherlight Temple to Dalaran
+	{ ['y'] = 0.8071, ['x'] = 0.498, ['mapId'] = 702, ['reqs'] = { ['fac'] = 'Horde', ['cls'] = 'PRIEST', },
+		['continent'] = 1512, ['source'] = 318, ['type'] = 'LocalPortal', }, -- From Netherlight Temple to Dalaran
+	{ ['type'] = 'LocalPortal', ['mapId'] = 635, ['reqs'] = { ['qid'] = '39803', ['cls'] = 'WARRIOR', },
+		['continent'] = 1220, ['y'] = 0.5223, ['x'] = 0.6018, ['source'] = -1, ['target'] = 319, }, -- From Skyhold to Shield's Rest
+	{ ['y'] = 0.2498, ['x'] = 0.5834, ['mapId'] = 695, ['reqs'] = { ['qid'] = '39803', ['cls'] = 'WARRIOR', },
+		['continent'] = 1479, ['source'] = 319, ['type'] = 'LocalPortal', }, -- From Skyhold to Shield's Rest
+	{ ['type'] = 'LocalPortal', ['mapId'] = 630, ['reqs'] = { ['qid'] = '38443', ['cls'] = 'WARRIOR', },
+		['continent'] = 1220, ['y'] = 0.2808, ['x'] = 0.4758, ['source'] = -1, ['target'] = 320, }, -- From Skyhold to Azsuna
+	{ ['y'] = 0.2498, ['x'] = 0.5834, ['mapId'] = 695, ['reqs'] = { ['qid'] = '38443', ['cls'] = 'WARRIOR', },
+		['continent'] = 1479, ['source'] = 320, ['type'] = 'LocalPortal', }, -- From Skyhold to Azsuna
+	{ ['type'] = 'LocalPortal', ['mapId'] = 641, ['reqs'] = { ['qid'] = '38384', ['cls'] = 'WARRIOR', },
+		['continent'] = 1220, ['y'] = 0.7489, ['x'] = 0.5471, ['source'] = -1, ['target'] = 321, }, -- From Skyhold to Val'sharah
+	{ ['y'] = 0.2498, ['x'] = 0.5834, ['mapId'] = 695, ['reqs'] = { ['qid'] = '38384', ['cls'] = 'WARRIOR', },
+		['continent'] = 1479, ['source'] = 321, ['type'] = 'LocalPortal', }, -- From Skyhold to Val'sharah
+	{ ['type'] = 'LocalPortal', ['mapId'] = 750, ['reqs'] = { ['qid'] = '38907', ['cls'] = 'WARRIOR', },
+		['continent'] = 1220, ['y'] = 0.4211, ['x'] = 0.3973, ['source'] = -1, ['target'] = 322, }, -- From Skyhold to Thunder Totem
+	{ ['y'] = 0.2498, ['x'] = 0.5834, ['mapId'] = 695, ['reqs'] = { ['qid'] = '38907', ['cls'] = 'WARRIOR', },
+		['continent'] = 1479, ['source'] = 322, ['type'] = 'LocalPortal', }, -- From Skyhold to Thunder Totem
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['qid'] = '42229', ['cls'] = 'WARRIOR', },
+		['continent'] = 1220, ['y'] = 0.482, ['x'] = 0.3308, ['source'] = -1, ['target'] = 323, }, -- From Skyhold to Suramar
+	{ ['y'] = 0.2498, ['x'] = 0.5834, ['mapId'] = 695, ['reqs'] = { ['qid'] = '42229', ['cls'] = 'WARRIOR', },
+		['continent'] = 1479, ['source'] = 323, ['type'] = 'LocalPortal', }, -- From Skyhold to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.5188, ['x'] = 0.5159, ['source'] = -1, ['target'] = 324, }, -- From Mount Hyjal to Emerald Dreamway
+	{ ['y'] = 0.261, ['x'] = 0.5907, ['mapId'] = 198, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1, ['source'] = 324, ['type'] = 'LocalPortal', }, -- From Mount Hyjal to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.5188, ['x'] = 0.5159, ['source'] = -1, ['target'] = 325, }, -- From Mount Hyjal to Emerald Dreamway
+	{ ['y'] = 0.261, ['x'] = 0.5907, ['mapId'] = 198, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1, ['source'] = 325, ['type'] = 'LocalPortal', }, -- From Mount Hyjal to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.625, ['x'] = 0.4942, ['source'] = -1, ['target'] = 326, }, -- From The Hinterlands to Emerald Dreamway
+	{ ['y'] = 0.2279, ['x'] = 0.6232, ['mapId'] = 26, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 0, ['source'] = 326, ['type'] = 'LocalPortal', }, -- From The Hinterlands to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.66, ['x'] = 0.3884, ['source'] = -1, ['target'] = 327, }, -- From Duskwood to Emerald Dreamway
+	{ ['y'] = 0.3586, ['x'] = 0.4656, ['mapId'] = 47, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 0, ['source'] = 327, ['type'] = 'LocalPortal', }, -- From Duskwood to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.2648, ['x'] = 0.451, ['source'] = -1, ['target'] = 328, }, -- From The Dreamgrove to Emerald Dreamway
+	{ ['y'] = 0.2241, ['x'] = 0.5543, ['mapId'] = 747, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1220, ['source'] = 328, ['type'] = 'LocalPortal', }, -- From The Dreamgrove to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.2953, ['x'] = 0.324, ['source'] = -1, ['target'] = 329, }, -- From Grizzly Hills to Emerald Dreamway
+	{ ['y'] = 0.2932, ['x'] = 0.5035, ['mapId'] = 116, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 571, ['source'] = 329, ['type'] = 'LocalPortal', }, -- From Grizzly Hills to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.7776, ['x'] = 0.2631, ['source'] = -1, ['target'] = 330, }, -- From Moonglade to Emerald Dreamway
+	{ ['y'] = 0.6023, ['x'] = 0.6796, ['mapId'] = 80, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1, ['source'] = 330, ['type'] = 'LocalPortal', }, -- From Moonglade to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 715, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1540, ['y'] = 0.7776, ['x'] = 0.2631, ['source'] = -1, ['target'] = 331, }, -- From Kalimdor to Emerald Dreamway
+	{ ['y'] = 0.1068, ['x'] = 0.5131, ['mapId'] = 12, ['reqs'] = { ['qid'] = '40645', ['cls'] = 'DRUID', },
+		['continent'] = 1, ['source'] = 331, ['type'] = 'LocalPortal', }, -- From Kalimdor to Emerald Dreamway
+	{ ['type'] = 'LocalPortal', ['mapId'] = 702, ['reqs'] = { ['fac'] = 'Alliance', ['cls'] = 'PRIEST', },
+		['continent'] = 1512, ['y'] = 0.8071, ['x'] = 0.498, ['source'] = -1, ['target'] = 332, }, -- From Dalaran to Netherlight Temple
+	{ ['y'] = 0.5731, ['x'] = 0.3948, ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Alliance', ['cls'] = 'PRIEST', },
+		['continent'] = 1220, ['source'] = 332, ['type'] = 'LocalPortal', }, -- From Dalaran to Netherlight Temple
+	{ ['type'] = 'LocalPortal', ['mapId'] = 702, ['reqs'] = { ['fac'] = 'Horde', ['cls'] = 'PRIEST', },
+		['continent'] = 1512, ['y'] = 0.8071, ['x'] = 0.498, ['source'] = -1, ['target'] = 333, }, -- From Dalaran to Netherlight Temple
+	{ ['y'] = 0.177, ['x'] = 0.63, ['mapId'] = 627, ['reqs'] = { ['fac'] = 'Horde', ['cls'] = 'PRIEST', },
+		['continent'] = 1220, ['source'] = 333, ['type'] = 'LocalPortal', }, -- From Dalaran to Netherlight Temple
+	{ ['type'] = 'LocalPortal', ['mapId'] = 971, ['reqs'] = { ['rac'] = 'VoidElf', }, ['continent'] = 1865,
+		['y'] = 0.2301, ['x'] = 0.2868, ['source'] = -1, ['target'] = 334, }, -- From Stormwind City to Telogrus Rift
+	{ ['y'] = 0.1532, ['x'] = 0.5448, ['mapId'] = 84, ['reqs'] = { ['rac'] = 'VoidElf', }, ['continent'] = 0,
+		['source'] = 334, ['type'] = 'LocalPortal', }, -- From Stormwind City to Telogrus Rift
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1573, ['reqs'] = { ['rac'] = 'Mechagnome', }, ['continent'] = 2268,
+		['y'] = 0.6472, ['x'] = 0.2109, ['source'] = -1, ['target'] = 335, }, -- From Stormwind City to Mechagon City
+	{ ['y'] = 0.1615, ['x'] = 0.5272, ['mapId'] = 84, ['reqs'] = { ['rac'] = 'Mechagnome', }, ['continent'] = 0,
+		['source'] = 335, ['type'] = 'LocalPortal', }, -- From Stormwind City to Mechagon City
+	{ ['type'] = 'LocalPortal', ['mapId'] = 941, ['reqs'] = { ['rac'] = 'LightforgedDraenei', }, ['continent'] = 1860,
+		['y'] = 0.4622, ['x'] = 0.4997, ['source'] = -1, ['target'] = 336, }, -- From Stormwind City to The Vindicaar
+	{ ['y'] = 0.1447, ['x'] = 0.5441, ['mapId'] = 84, ['reqs'] = { ['rac'] = 'LightforgedDraenei', }, ['continent'] = 0,
+		['source'] = 336, ['type'] = 'LocalPortal', }, -- From Stormwind City to The Vindicaar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 680, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1220,
+		['y'] = 0.8529, ['x'] = 0.5955, ['source'] = -1, ['target'] = 337, }, -- From Orgrimmar to Suramar
+	{ ['y'] = 0.7687, ['x'] = 0.4007, ['mapId'] = 85, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1,
+		['source'] = 337, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Suramar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 652, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1220,
+		['y'] = 0.6406, ['x'] = 0.4417, ['source'] = -1, ['target'] = 338, }, -- From Orgrimmar to Thunder Totem
+	{ ['y'] = 0.7687, ['x'] = 0.4007, ['mapId'] = 85, ['reqs'] = { ['rac'] = 'Nightborne', }, ['continent'] = 1,
+		['source'] = 338, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Thunder Totem
+	{ ['type'] = 'LocalPortal', ['mapId'] = 831, ['reqs'] = { ['qid'] = '48440', }, ['continent'] = 1669, ['y'] = 0.8137,
+		['x'] = 0.6115, ['source'] = -1, ['target'] = 339, }, -- From Dalaran to The Vindicaar
+	{ ['y'] = 0.4929, ['x'] = 0.7426, ['mapId'] = 627, ['reqs'] = { ['qid'] = '48440', }, ['continent'] = 1220,
+		['source'] = 339, ['type'] = 'LocalPortal', }, -- From Dalaran to The Vindicaar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['y'] = 0.6458, ['x'] = 0.6828, ['source'] = -1, ['target'] = 340, }, -- From Silithus to Dazar'alor
+	{ ['y'] = 0.4519, ['x'] = 0.4159, ['mapId'] = 81, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1, ['source'] = 340, ['type'] = 'LocalPortal', }, -- From Silithus to Dazar'alor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1642, ['y'] = 0.6458, ['x'] = 0.6828, ['source'] = -1, ['target'] = 341, }, -- From Orgrimmar to Dazar'alor
+	{ ['y'] = 0.9123, ['x'] = 0.5851, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '46957', },
+		['continent'] = 1, ['source'] = 341, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Dazar'alor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1163, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Horde', },
+		['continent'] = 1642, ['y'] = 0.6458, ['x'] = 0.6828, ['source'] = -1, ['target'] = 342, }, -- From Darkshore to Dazar'alor
+	{ ['y'] = 0.3509, ['x'] = 0.4626, ['mapId'] = 62, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Horde', },
+		['continent'] = 1, ['source'] = 342, ['type'] = 'LocalPortal', }, -- From Darkshore to Dazar'alor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '56044', },
+		['continent'] = 1642, ['y'] = 0.6458, ['x'] = 0.6828, ['source'] = -1, ['target'] = 343, }, -- From Nazjatar to Dazar'alor
+	{ ['y'] = 0.6274, ['x'] = 0.4727, ['mapId'] = 1355, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '56044', },
+		['continent'] = 1718, ['source'] = 343, ['type'] = 'LocalPortal', }, -- From Nazjatar to Dazar'alor
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '60151', },
+		['continent'] = 2222, ['y'] = 0.5031, ['x'] = 0.2034, ['source'] = -1, ['target'] = 344, }, -- From Stormwind City to Oribos
+	{ ['y'] = 0.9496, ['x'] = 0.4756, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '60151', },
+		['continent'] = 0, ['source'] = 344, ['type'] = 'LocalPortal', }, -- From Stormwind City to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1670, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '60151', },
+		['continent'] = 2222, ['y'] = 0.5031, ['x'] = 0.2034, ['source'] = -1, ['target'] = 345, }, -- From Orgrimmar to Oribos
+	{ ['y'] = 0.8785, ['x'] = 0.5832, ['mapId'] = 85, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '60151', },
+		['continent'] = 1, ['source'] = 345, ['type'] = 'LocalPortal', }, -- From Orgrimmar to Oribos
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['y'] = 0.1587, ['x'] = 0.7018, ['source'] = -1, ['target'] = 346, }, -- From Silithus to Boralus
+	{ ['y'] = 0.4486, ['x'] = 0.4149, ['mapId'] = 81, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1, ['source'] = 346, ['type'] = 'LocalPortal', }, -- From Silithus to Boralus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 1643, ['y'] = 0.1587, ['x'] = 0.7018, ['source'] = -1, ['target'] = 347, }, -- From Stormwind City to Boralus
+	{ ['y'] = 0.9512, ['x'] = 0.4872, ['mapId'] = 84, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '47189', },
+		['continent'] = 0, ['source'] = 347, ['type'] = 'LocalPortal', }, -- From Stormwind City to Boralus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1161, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1643, ['y'] = 0.1587, ['x'] = 0.7018, ['source'] = -1, ['target'] = 348, }, -- From Darkshore to Boralus
+	{ ['y'] = 0.3624, ['x'] = 0.4799, ['mapId'] = 62, ['reqs'] = { ['passlvl'] = '50', ['fac'] = 'Alliance', },
+		['continent'] = 1, ['source'] = 348, ['type'] = 'LocalPortal', }, -- From Darkshore to Boralus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1643,
+		['y'] = 0.1577, ['x'] = 0.6996, ['source'] = -1, ['target'] = 349, }, -- From Nazjatar to Boralus
+	{ ['y'] = 0.5262, ['x'] = 0.3995, ['mapId'] = 1355, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1718,
+		['source'] = 349, ['type'] = 'LocalPortal', }, -- From Nazjatar to Boralus
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1355, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '56043', },
+		['continent'] = 1718, ['y'] = 0.5284, ['x'] = 0.3996, ['source'] = -1, ['target'] = 350, }, -- From Boralus to Nazjatar
+	{ ['y'] = 0.1536, ['x'] = 0.6989, ['mapId'] = 1161, ['reqs'] = { ['fac'] = 'Alliance', ['qid'] = '56043', },
+		['continent'] = 1643, ['source'] = 350, ['type'] = 'LocalPortal', }, -- From Boralus to Nazjatar
+	{ ['type'] = 'LocalPortal', ['mapId'] = 1355, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '56044', },
+		['continent'] = 1718, ['y'] = 0.6263, ['x'] = 0.4719, ['source'] = -1, ['target'] = 351, }, -- From Dazar'alor to Nazjatar
+	{ ['y'] = 0.8433, ['x'] = 0.6356, ['mapId'] = 1163, ['reqs'] = { ['fac'] = 'Horde', ['qid'] = '56044', },
+		['continent'] = 1642, ['source'] = 351, ['type'] = 'LocalPortal', }, -- From Dazar'alor to Nazjatar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 71, ['reqs'] = { ['spell'] = 23441, }, ['continent'] = 1,
+		['y'] = 0.27835083007812, ['x'] = 0.52236938476562, ['source'] = -1, ['target'] = -1, }, -- Using Gadgetzan Transporter to Tanaris
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 80, ['reqs'] = { ['spell'] = 18960, }, ['continent'] = 1,
+		['y'] = 0.32414245605469, ['x'] = 0.56265258789062, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Moonglade to Moonglade
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 89, ['reqs'] = { ['spell'] = 3565, ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.78672790527344, ['x'] = 0.43467712402344, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Darnassus to Darnassus
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 70, ['reqs'] = { ['spell'] = 49359, ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.48992919921875, ['x'] = 0.6600341796875, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Theramore to Dustwallow Marsh
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 86, ['reqs'] = { ['spell'] = 3567, }, ['continent'] = 1,
+		['y'] = 0.64529418945312, ['x'] = 0.48283386230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Orgrimmar to Orgrimmar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 199, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53600', },
+		['continent'] = 1, ['y'] = 0.093, ['x'] = 0.3911, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Southern Barrens
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 85, ['reqs'] = { ['spell'] = 147787, }, ['continent'] = 1, ['y'] = 0.3774,
+		['x'] = 0.4996, ['source'] = -1, ['target'] = -1, }, --
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 103, ['reqs'] = { ['spell'] = 32271, ['fac'] = 'Alliance', },
+		['continent'] = 1, ['y'] = 0.59820556640625, ['x'] = 0.4761962890625, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Exodar to The Exodar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 86, ['reqs'] = { ['spell'] = 89158, }, ['continent'] = 1,
+		['y'] = 0.64529418945312, ['x'] = 0.48283386230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Orgrimmar to Orgrimmar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 83, ['reqs'] = { ['spell'] = 23442, }, ['continent'] = 1,
+		['y'] = 0.49714660644531, ['x'] = 0.59614562988281, ['source'] = -1, ['target'] = -1, }, -- Using Everlook Transporter to Winterspring
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 86, ['reqs'] = { ['spell'] = 89158, }, ['continent'] = 1,
+		['y'] = 0.64529418945312, ['x'] = 0.48283386230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Orgrimmar to Orgrimmar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 86, ['reqs'] = { ['spell'] = 89158, }, ['continent'] = 1,
+		['y'] = 0.64529418945312, ['x'] = 0.48283386230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Orgrimmar to Orgrimmar
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 88, ['reqs'] = { ['spell'] = 3566, ['fac'] = 'Horde', },
+		['continent'] = 1, ['y'] = 0.16867065429688, ['x'] = 0.22212219238281, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Thunder Bluff to Thunder Bluff
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 84, ['reqs'] = { ['spell'] = 89157, }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stormwind to Stormwind City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 84, ['reqs'] = { ['spell'] = 147787, }, ['continent'] = 0, ['y'] = 0.1841,
+		['x'] = 0.7444, ['source'] = -1, ['target'] = -1, }, --
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 17, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53594', },
+		['continent'] = 0, ['y'] = 0.128, ['x'] = 0.6197, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Blasted Lands
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 84, ['reqs'] = { ['spell'] = 3561, ['fac'] = 'Alliance', },
+		['continent'] = 0, ['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stormwind to Stormwind City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 90, ['reqs'] = { ['spell'] = 3563, ['fac'] = 'Horde', },
+		['continent'] = 0, ['y'] = 0.16328430175781, ['x'] = 0.84580993652344, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Undercity to Undercity
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 245, ['reqs'] = { ['spell'] = 88342, ['fac'] = 'Alliance', },
+		['continent'] = 0, ['y'] = 0.60920715332031, ['x'] = 0.73674011230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Tol Barad to Tol Barad Peninsula
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 245, ['reqs'] = { ['spell'] = 88344, ['fac'] = 'Horde', },
+		['continent'] = 0, ['y'] = 0.78768920898438, ['x'] = 0.54998779296875, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Tol Barad to Tol Barad Peninsula
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 110, ['reqs'] = { ['spell'] = 32272, ['fac'] = 'Horde', },
+		['continent'] = 0, ['y'] = 0.19242858886719, ['x'] = 0.58259582519531, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Silvermoon to Silvermoon City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 210, ['reqs'] = { ['spell'] = 71436, }, ['continent'] = 0,
+		['y'] = 0.73820495605469, ['x'] = 0.40982055664062, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Booty Bay to The Cape of Stranglethorn
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 51, ['reqs'] = { ['spell'] = 49358, ['fac'] = 'Horde', },
+		['continent'] = 0, ['y'] = 0.55804443359375, ['x'] = 0.49844360351562, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stonard to Swamp of Sorrows
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 87, ['reqs'] = { ['spell'] = 3562, ['fac'] = 'Alliance', },
+		['continent'] = 0, ['y'] = 0.084274291992188, ['x'] = 0.25509643554688, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Ironforge to Ironforge
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 84, ['reqs'] = { ['spell'] = 89157, }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stormwind to Stormwind City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 23, ['reqs'] = { ['spell'] = 50977, ['nqid'] = '39757', },
+		['continent'] = 0, ['y'] = 0.50027465820312, ['x'] = 0.83717346191406, ['source'] = -1, ['target'] = -1, }, -- Using Death Gate to Eastern Plaguelands
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 245, ['reqs'] = { ['spell'] = 88344, }, ['continent'] = 0,
+		['y'] = 0.78768920898438, ['x'] = 0.54998779296875, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Tol Barad to Tol Barad Peninsula
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 245, ['reqs'] = { ['spell'] = 88342, }, ['continent'] = 0,
+		['y'] = 0.60920715332031, ['x'] = 0.73674011230469, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Tol Barad to Tol Barad Peninsula
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 84, ['reqs'] = { ['spell'] = 89157, }, ['continent'] = 0,
+		['y'] = 0.86529541015625, ['x'] = 0.49591064453125, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stormwind to Stormwind City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 111, ['reqs'] = { ['spell'] = 33690, ['fac'] = 'Alliance', },
+		['continent'] = 530, ['y'] = 0.40232849121094, ['x'] = 0.5496826171875, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Shattrath to Shattrath City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 111, ['reqs'] = { ['spell'] = 35715, ['fac'] = 'Horde', },
+		['continent'] = 530, ['y'] = 0.49209594726562, ['x'] = 0.53005981445312, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Shattrath to Shattrath City
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 105, ['reqs'] = { ['spell'] = 36941, }, ['continent'] = 530,
+		['y'] = 0.65093994140625, ['x'] = 0.60400390625, ['source'] = -1, ['target'] = -1, }, -- Using Toshley's Station Transporter to Blade's Edge Mountains
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 104, ['reqs'] = { ['spell'] = 41234, }, ['continent'] = 530,
+		['y'] = 0.43910217285156, ['x'] = 0.64851379394531, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Black Temple to Shadowmoon Valley
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 105, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53597', },
+		['continent'] = 530, ['y'] = 0.1764, ['x'] = 0.7242, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Blade's Edge Mountains
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 109, ['reqs'] = { ['spell'] = 36890, }, ['continent'] = 530,
+		['y'] = 0.63595581054688, ['x'] = 0.32980346679688, ['source'] = -1, ['target'] = -1, }, -- Using Area52 Transporter to Netherstorm
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 115, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53596', },
+		['continent'] = 571, ['y'] = 0.4992, ['x'] = 0.4535, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Dragonblight
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 118, ['reqs'] = { ['spell'] = 66238, }, ['continent'] = 571,
+		['y'] = 0.22642517089844, ['x'] = 0.69369506835938, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Argent Tournament to Icecrown
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53142, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Portal: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 125, ['reqs'] = { ['spell'] = 53140, }, ['continent'] = 571,
+		['y'] = 0.46791076660156, ['x'] = 0.55921936035156, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Dalaran - Northrend to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 207, ['reqs'] = { ['spell'] = 80256, }, ['continent'] = 646,
+		['y'] = 0.55465698242188, ['x'] = 0.4998779296875, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Deepholm to Deepholm
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 379, ['reqs'] = { ['spell'] = 126892, ['nqid'] = '40236', },
+		['continent'] = 870, ['y'] = 0.42939758300781, ['x'] = 0.48635864257812, ['source'] = -1, ['target'] = -1, }, -- Using Zen Pilgrimage to Kun-Lai Summit
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 390, ['reqs'] = { ['spell'] = 132627, }, ['continent'] = 870,
+		['y'] = 0.21823120117188, ['x'] = 0.62501525878906, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Vale of Eternal Blossoms to Vale of Eternal Blossoms
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 390, ['reqs'] = { ['spell'] = 132621, }, ['continent'] = 870,
+		['y'] = 0.61051940917969, ['x'] = 0.863037109375, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Vale of Eternal Blossoms to Vale of Eternal Blossoms
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 376, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53598', },
+		['continent'] = 870, ['y'] = 0.7359, ['x'] = 0.3151, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Valley of the Four Winds
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 622, ['reqs'] = { ['spell'] = 176248, ['fac'] = 'Alliance', },
+		['continent'] = 1116, ['y'] = 0.514, ['x'] = 0.588, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Stormshield to Stormshield
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 624, ['reqs'] = { ['spell'] = 176242, ['fac'] = 'Horde', },
+		['continent'] = 1116, ['y'] = 0.514, ['x'] = 0.588, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Warspear to Warspear
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 550, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53590', },
+		['continent'] = 1116, ['y'] = 0.0825, ['x'] = 0.6575, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Nagrand
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 579, ['reqs'] = { ['spell'] = 171253, ['fac'] = 'Alliance', },
+		['continent'] = 1116, ['y'] = 0.5281, ['x'] = 0.4264, ['source'] = -1, ['target'] = -1, }, -- Using Garrison Hearthstone to Lunarfall Excavation
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 590, ['reqs'] = { ['spell'] = 171253, ['fac'] = 'Horde', },
+		['continent'] = 1116, ['y'] = 0.5301, ['x'] = 0.4095, ['source'] = -1, ['target'] = -1, }, -- Using Garrison Hearthstone to Frostwall
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 709, ['reqs'] = { ['spell'] = 126892, ['qid'] = '40236', },
+		['continent'] = 1514, ['y'] = 0.4865, ['x'] = 0.5146, ['source'] = -1, ['target'] = -1, }, -- Using Zen Pilgrimage to The Wandering Isle
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 627, ['reqs'] = { ['spell'] = 222695, }, ['continent'] = 1220,
+		['y'] = 0.4476, ['x'] = 0.6072, ['source'] = -1, ['target'] = -1, }, -- Using Dalaran Hearthstone to Dalaran
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 648, ['reqs'] = { ['spell'] = 50977, ['qid'] = '39757', },
+		['continent'] = 1220, ['y'] = 0.3044, ['x'] = 0.2743, ['source'] = -1, ['target'] = -1, }, -- Using Death Gate to Acherus: The Ebon Hold
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 646, ['reqs'] = { ['spell'] = 265225, ['qid'] = '53589', },
+		['continent'] = 1220, ['y'] = 0.4799, ['x'] = 0.7169, ['source'] = -1, ['target'] = -1, }, -- Using Mole Machine to Broken Shore
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 734, ['reqs'] = { ['spell'] = 193759, }, ['continent'] = 1513,
+		['y'] = 0.8613, ['x'] = 0.5763, ['source'] = -1, ['target'] = -1, }, -- Using Teleport: Hall of the Guardian to Hall of the Guardian
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 715, ['reqs'] = { ['spell'] = 193753, }, ['continent'] = 1540,
+		['y'] = 0.5315, ['x'] = 0.3533, ['source'] = -1, ['target'] = -1, }, -- Using Dreamwalk to Emerald Dreamway
+	{ ['type'] = 'UnboundTeleport', ['mapId'] = 1543, ['reqs'] = { ['map'] = '1543', ['spell'] = 325624, },
+		['continent'] = 2222, ['y'] = 0.4125, ['x'] = 0.4622, ['source'] = -1, ['target'] = -1, }, -- Using Cypher of Relocation to The Maw
+	{ ['type'] = 'Boat', ['mapId'] = 70, ['reqs'] = { ['fac'] = 'Alliance', }, ['continent'] = 1,
+		['y'] = 0.56373596191406, ['x'] = 0.715576171875, ['source'] = -1, ['target'] = 1, }, -- From Wetlands to Dustwallow Marsh
 }
+
 
 
 local function checkReq(type, value)
@@ -1184,100 +1637,34 @@ local function checkReq(type, value)
 		local playerMap = C_Map.GetBestMapForUnit("player")
 		return playerMap == tonumber(value)
 	elseif type == "spell" then
-		local spellName = GetSpellInfo(tonumber(value))
-		if spellName then
-			if GetSpellBookItemInfo(spellName) then
-				return true
-			end
+		local spell = tonumber(value)
+		if IsSpellKnown(spell) then
+			return true
 		end
+
 		return false
 	end
 	return true
 end
 
-local HBD = LibStub("HereBeDragons-2.0")
-
-local coordKeys = {
-	["toX"] = true,
-	["toY"] = true,
-	["fromX"] = true,
-	["fromY"] = true,
-	["toMapId"] = true,
-	["fromMapId"] = true,
-}
-
-
-local function getNodes(d)
-	local _, _, c1 = HBD:GetWorldCoordinatesFromZone(d.toX, d.toY, d.toMapId)
-	local n1 = {
-		["x"] = d.toX,
-		["y"] = d.toY,
-		["mapId"] = d.toMapId,
-		["continent"] = c1
-	}
-	local n2
-
-	local hasFrom = d.fromMapId and d.fromX and d.fromY
-	if hasFrom then
-		local _, _, c2 = HBD:GetWorldCoordinatesFromZone(d.fromX, d.fromY, d.fromMapId)
-		n2 = {
-			["x"] = d.fromX,
-			["y"] = d.fromY,
-			["mapId"] = d.fromMapId,
-			["continent"] = c2
-		}
-	end
-	for i, j in pairs(d) do
-		if not coordKeys[i] then
-			if hasFrom then
-				n2[i] = j
-			end
-			n1[i] = j
-		end
-	end
-	return n1, n2
-end
-
 function module:OnInitialize()
 	core.NavigationData = {}
-	local index = 0
 	local linkIndex = 0
-	for _, data in ipairs(NavigationData) do
-		local reqs = data.reqs
+	for _, node in ipairs(NavigationData) do
+		local reqs = node.reqs
 		if reqs then
-			local validNode = false
+			local validNode = true
 			for rKey, rValue in pairs(reqs) do
-				validNode = checkReq(rKey, rValue)
+				if not checkReq(rKey, rValue) then
+					validNode = false
+					break
+				end
 			end
 			if validNode then
-				local n1, n2 = getNodes(data)
-				if n1 then
-					core.NavigationData[index] = n1
-					core.NavigationData[index].link = -1
-					index = index + 1
-				end
-				if n2 then
-					linkIndex = linkIndex + 1
-					core.NavigationData[index - 1].link = linkIndex
-					n2.link = linkIndex
-					core.NavigationData[index] = n2
-					index = index + 1
-				end
+				table.insert(core.NavigationData, node)
 			end
 		else
-			local n1, n2 = getNodes(data)
-			if n1 then
-				core.NavigationData[index] = n1
-				core.NavigationData[index].link = -1
-				index = index + 1
-			end
-			if n2 then
-				linkIndex = linkIndex + 1
-				core.NavigationData[index - 1].link = linkIndex
-				n2.link = linkIndex
-				core.NavigationData[index] = n2
-				index = index + 1
-			end
+			table.insert(core.NavigationData, node)
 		end
 	end
 end

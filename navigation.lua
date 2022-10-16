@@ -14,12 +14,12 @@ local function dist(m1, x1, y1, m2, x2, y2)
 end
 
 local function heuristic_cost_estimate(nodeA, nodeB)
-    if nodeA.link and nodeB.link then
-        if nodeA.link == nodeB.link then
+    if nodeA.source and nodeB.target then
+        if nodeA.source == nodeB.target then
             return 0
         end
-    elseif nodeB.link then
-        if nodeB.link < 0 then
+    elseif nodeB.target then
+        if nodeB.target < 0 then
             return 0
         end
     end
@@ -31,7 +31,7 @@ local function is_valid_node(node, neighbor)
         return true
     elseif neighbor.mapId == node.mapId then
         return true
-    elseif node.link and node.link == neighbor.link and node.link > 0 then
+    elseif node.source and node.source == neighbor.target and node.source > 0 then
         return true
     else
         return false
@@ -150,12 +150,37 @@ local function path(start, goal, nodes, ignore_cache, valid_node_func)
 end
 
 -- TODO: add coroutine with onUpdate Handler
-local sourceIndex
-local targetIndex
 
-local function formatNavigationOnFrame(path)
+local function formatNavigationOnFrame(path, start, goal)
+    local text = "Lets go\n"
+    for index, node in ipairs(path) do
+        local nodeInfo = C_Map.GetMapInfo(node.mapId)
+        if node.type == "UnboundTeleport" then
+            text = text ..
+                "Teleport to " .. nodeInfo.name .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
+        elseif node.type == "Boat" then
+            text = text .. "Take " .. node.type .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
+        elseif node.type == "LocalPortal" then
+            text = text ..
+                "Take Portal to" .. nodeInfo.name .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
+        end
+    end
+    print(text)
+end
 
-
+local function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
@@ -165,27 +190,28 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     local sourceX, sourceY = C_Map.GetPlayerMapPosition(sourceMapID, "player"):GetXY()
     local _, _, worldZone = HBD:GetWorldCoordinatesFromZone(sourceX, sourceY, sourceMapID)
     local _, _, worldZone2 = HBD:GetWorldCoordinatesFromZone(targetX, targetY, targetMapID)
-    local info = C_Map.GetMapInfo(sourceMapID)
-    local info2 = C_Map.GetMapInfo(targetMapID)
+    if (not sourceMapID) then
+        print("No source map ID")
+        return
+    end
     local data = {
-        ["source"] = { x = sourceX, y = sourceY, mapId = sourceMapID, continent = worldZone, link = -1,
-            ["info"] = info },
-        ["target"] = { x = targetX, y = targetY, mapId = targetMapID, continent = worldZone2, link = -1,
-            ["info"] = info2 }
+        ["source"] = { x = sourceX, y = sourceY, mapId = sourceMapID, continent = worldZone, source = -1, target = -1,
+            ["getInfo"] = C_Map.GetMapInfo(sourceMapID)
+        },
+        ["target"] = { x = targetX, y = targetY, mapId = targetMapID, continent = worldZone2, source = -1, target = -1,
+            ["getInfo"] = C_Map.GetMapInfo(targetMapID)
+        }
     }
-    if sourceIndex then
-        table.remove(core.NavigationData, sourceIndex)
-    end
-    if targetIndex then
-        table.remove(core.NavigationData, targetIndex)
-    end
-    table.insert(core.NavigationData, data.source)
-    sourceIndex = #core.NavigationData
-    table.insert(core.NavigationData, data.target)
-    targetIndex = #core.NavigationData
 
-    local resPath = path(data.source, data.target, core.NavigationData, false, is_valid_node)
+    local navDataCopy = deepcopy(core.NavigationData)
+    table.insert(navDataCopy, data.source)
+    table.insert(navDataCopy, data.target)
+
+    ViragDevTool:AddData(navDataCopy, "navDataCopy")
+
+    local resPath = path(data.source, data.target, navDataCopy, false, is_valid_node)
+    ViragDevTool:AddData(resPath, "resPath")
     core.NavigationStepFrame.spinner:Stop()
     core.NavigationStepFrame.spinnerTexture:Hide()
-    formatNavigationOnFrame(resPath)
+    formatNavigationOnFrame(resPath, data.source, data.target)
 end

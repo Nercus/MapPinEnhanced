@@ -8,6 +8,8 @@ local HBDP = LibStub("HereBeDragons-Pins-2.0")
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
+
+-- TODO: Rebuild node data
 -- TODO: finish navigation (add minipin system for navigation and lines on map, add buttons to press for spells and items [check cooldown])
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
 -- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))
@@ -250,6 +252,14 @@ function MapPinEnhanced:TogglePinTrackerWindow()
     end
 end
 
+function MapPinEnhanced:ToggleNavigationStepFrame()
+    if MapPinEnhancedNavigationStepFrame:IsShown() then
+        MapPinEnhancedNavigationStepFrame:Hide()
+    else
+        MapPinEnhancedNavigationStepFrame:Show()
+    end
+end
+
 function MapPinEnhanced:OnInitialize()
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
@@ -313,7 +323,6 @@ function MapPinEnhanced:OnInitialize()
     navigationStepFrame.close:SetScript("OnClick", function()
         navigationStepFrame:Hide()
         spinnerGroup:Stop()
-
     end)
 
     navigationStepFrame:Hide()
@@ -727,6 +736,7 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
+                    MapPinEnhanced.NavigationStepFrame:Hide()
                     pin.Track(pin.x, pin.y, pin.mapID)
                 elseif e == "hyperlink" then
                     local link = FormatHyperlink(pin.x, pin.y, pin.mapID)
