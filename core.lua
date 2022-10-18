@@ -9,7 +9,9 @@ local LDBIcon = LibStub("LibDBIcon-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
--- TODO: Rebuild node data
+
+-- TODO: Change own framepool to https://wowpedia.fandom.com/wiki/API_ObjectPoolMixin_Acquire
+-- TODO: add coroutine with onUpdate Handler
 -- TODO: finish navigation (add minipin system for navigation and lines on map, add buttons to press for spells and items [check cooldown])
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
 -- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))
@@ -206,7 +208,7 @@ MapPinEntryMixin = {};
 
 
 
-function MapPinEnhancedFrame_OnLoad(self)
+function MPHFrame_OnLoad(self)
     self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetDesaturated(true)
     self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAtlas("NPE_ArrowDown")
     self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAlpha(0.6)
@@ -231,13 +233,13 @@ function MapPinEnhancedFrame_OnLoad(self)
     self.scrollFrame.ScrollBar:Hide()
 end
 
-function MapPinEnhancedFrame_OnDragStart(self)
+function MPHFrame_OnDragStart(self)
     if IsControlKeyDown() then
         self:StartMoving()
     end
 end
 
-function MapPinEnhancedFrame_OnDragStop(self)
+function MPHFrame_OnDragStop(self)
     self:StopMovingOrSizing()
     local x, y = self:GetLeft(), self:GetTop()
     MapPinEnhanced.db.profile.pinTracker.x = x
@@ -245,18 +247,18 @@ function MapPinEnhancedFrame_OnDragStop(self)
 end
 
 function MapPinEnhanced:TogglePinTrackerWindow()
-    if MapPinEnhancedFrame:IsShown() then
-        MapPinEnhancedFrame:Hide()
+    if MPHFrame:IsShown() then
+        MPHFrame:Hide()
     else
-        MapPinEnhancedFrame:Show()
+        MPHFrame:Show()
     end
 end
 
 function MapPinEnhanced:ToggleNavigationStepFrame()
-    if MapPinEnhancedNavigationStepFrame:IsShown() then
-        MapPinEnhancedNavigationStepFrame:Hide()
+    if MPHNavigationStepFrame:IsShown() then
+        MPHNavigationStepFrame:Hide()
     else
-        MapPinEnhancedNavigationStepFrame:Show()
+        MPHNavigationStepFrame:Show()
     end
 end
 
@@ -268,9 +270,9 @@ function MapPinEnhanced:OnInitialize()
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
     MapPinEnhanced:UpdateMinimapButton()
 
-    local navigationStepFrame = CreateFrame("Frame", "MapPinEnhancedNavigationStepFrame", MapPinEnhancedFrame)
+    local navigationStepFrame = CreateFrame("Frame", "MPHNavigationStepFrame", MPHFrame)
     navigationStepFrame:SetSize(250, 200)
-    navigationStepFrame:SetPoint("BOTTOMLEFT", MapPinEnhancedFrame, "TOPLEFT", 0, 20)
+    navigationStepFrame:SetPoint("BOTTOMLEFT", MPHFrame, "TOPLEFT", 0, 20)
     navigationStepFrame.texture = navigationStepFrame:CreateTexture(nil, "BACKGROUND")
     navigationStepFrame.texture:SetAllPoints()
     navigationStepFrame.texture:SetAtlas("dragonflight-score-background")
@@ -416,30 +418,22 @@ local PinFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title)
 
-    local objective = CreateFrame("Button", nil, MapPinEnhancedFrame.scrollFrame.scrollChild,
-        "MapPinEnhancedPinTrackerTemplate")
+    local objective = CreateFrame("Button", nil, MPHFrame.scrollFrame.scrollChild,
+        "MPHTrackerEntryTemplate")
 
-    local pin = CreateFrame("Button", nil)
-    pin:SetSize(30, 30)
-    pin:EnableMouse(true)
-    pin:SetMouseClickEnabled()
-
+    local pin = CreateFrame("Button", nil, nil, "WaypointLocationPinTemplate")
 
     local tracked = false
 
-    local minimappin = CreateFrame("Button", nil)
+    local minimappin = CreateFrame("Button", nil, nil, "WaypointLocationPinTemplate")
     minimappin:SetSize(22, 22)
-    minimappin.icon = minimappin:CreateTexture(nil, "BORDER")
-    minimappin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
-    minimappin.icon:SetSize(22, 22)
-    minimappin.icon:SetBlendMode("BLEND")
-    minimappin.icon:SetAllPoints(minimappin)
+
 
     local function Track(x, y, mapID)
         tracked = true
-        pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
+        pin.Icon:SetAtlas("Waypoint-MapPin-Tracked", true)
         objective.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
-        minimappin.icon:SetAtlas("Waypoint-MapPin-Tracked")
+        minimappin.Icon:SetAtlas("Waypoint-MapPin-Tracked")
         objective.name:SetAlpha(1)
         objective.info:SetAlpha(1)
         blockWAYPOINTevent = true
@@ -457,9 +451,9 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function Untrack()
         tracked = false
-        pin.icon:SetAtlas("Waypoint-MapPin-Untracked", true)
+        pin.Icon:SetAtlas("Waypoint-MapPin-Untracked", true)
         objective.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
-        minimappin.icon:SetAtlas("Waypoint-MapPin-Untracked")
+        minimappin.Icon:SetAtlas("Waypoint-MapPin-Untracked")
         objective.name:SetAlpha(0.7)
         objective.info:SetAlpha(0.7)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -497,11 +491,6 @@ local function CreatePin(x, y, mapID, emit, title)
         return tracked
     end
 
-    pin.icon = pin:CreateTexture(nil, "BORDER")
-    pin.icon:SetAtlas("Waypoint-MapPin-Tracked", true)
-    pin.icon:SetSize(30, 30)
-    pin.icon:SetBlendMode("BLEND")
-    pin.icon:SetAllPoints(pin)
     pin:SetScript("OnMouseDown", function(self, arg1)
         if arg1 == "LeftButton" then
             if IsControlKeyDown() then
@@ -520,9 +509,10 @@ local function CreatePin(x, y, mapID, emit, title)
     local function SetTooltip(title)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-            GameTooltip_SetTitle(GameTooltip, title)
-            GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP)
-            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR)
+            GameTooltip_SetTitle(GameTooltip, title);
+            GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
+            GameTooltip_AddColoredLine(GameTooltip, L["MAP_PIN_TOGGLE"], GREEN_FONT_COLOR);
+            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
             GameTooltip:Show()
         end)
     end
@@ -532,10 +522,6 @@ local function CreatePin(x, y, mapID, emit, title)
     pin:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
-
-    local highlightTexture = pin:CreateTexture(nil, "HIGHLIGHT")
-    highlightTexture:SetAllPoints(true)
-    highlightTexture:SetAtlas("Waypoint-MapPin-Highlight", true)
 
     objective:SetScript("OnMouseDown", function(self, arg1)
         if arg1 == "LeftButton" then
@@ -589,7 +575,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function SetTrackerPosition(index)
         objective:ClearAllPoints()
-        objective:SetPoint("TOPLEFT", MapPinEnhancedFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
+        objective:SetPoint("TOPLEFT", MPHFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
             -((index - 1) * (objective:GetHeight())))
         if not objective:IsShown() then
             objective:Show()
@@ -658,15 +644,15 @@ local function PinManager()
             p.SetTrackerPosition(i)
         end
 
-        if MapPinEnhancedFrame:IsShown() and #pins == 0 then
+        if MPHFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
-        elseif not MapPinEnhancedFrame:IsShown() and #pins > 0 then
+        elseif not MPHFrame:IsShown() and #pins > 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         end
         if (#pins < 7) then
-            MapPinEnhancedFrame.scrollFrame.ScrollBar:Hide()
+            MPHFrame.scrollFrame.ScrollBar:Hide()
         else
-            MapPinEnhancedFrame.scrollFrame.ScrollBar:Show()
+            MPHFrame.scrollFrame.ScrollBar:Show()
         end
 
         -- TODO: add function to scroll to tracked pin

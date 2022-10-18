@@ -149,8 +149,6 @@ local function path(start, goal, nodes, ignore_cache, valid_node_func)
     return resPath
 end
 
--- TODO: add coroutine with onUpdate Handler
-
 local function formatNavigationOnFrame(path, start, goal)
     local text = "Lets go\n"
     for index, node in ipairs(path) do

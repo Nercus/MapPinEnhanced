@@ -1,8 +1,9 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
     <Script file="core.lua" />
 
-    <Frame name="MapPinEnhancedPinTrackerTemplate" virtual="true" hidden="true" mixin="MapPinEntryMixin">
+    <Frame name="MPHTrackerEntryTemplate" virtual="true" hidden="true" mixin="MapPinEntryMixin">
         <Size x="222" y="40" />
         <Layers>
             <Layer level="ARTWORK">
@@ -15,13 +16,13 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalMed2"  justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.7">
+                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.7">
                     <Size x="175" y="20" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="35" y="-4" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontWhiteTiny"  justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.7">>
+                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.7">>
                     <Size x="175" y="20" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" x="35" />
@@ -37,14 +38,14 @@
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture atlas="Waypoint-MapPin-Untracked" parentKey="normal" >
+                        <Texture atlas="Waypoint-MapPin-Untracked" parentKey="normal">
                             <Size x="25" y="25" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent" />
                                 <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
                             </Anchors>
                         </Texture>
-                        <Texture atlas="Waypoint-MapPin-Highlight" hidden="true" parentKey="highlight" >
+                        <Texture atlas="Waypoint-MapPin-Highlight" hidden="true" parentKey="highlight">
                             <Size x="25" y="25" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent" />
@@ -54,7 +55,7 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <Button  hidden="true" parentKey="navStart"  >
+            <Button hidden="true" parentKey="navStart">
                 <Size x="20" y="20" />
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent" x="-10" />
@@ -65,7 +66,7 @@
         </Frames>
     </Frame>
 
-    <Frame name="MapPinEnhancedFrame" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton" hidden="true">
+    <Frame name="MPHFrame" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton" hidden="true">
         <Size x="250" y="300" />
         <Anchors>
             <Anchor point="CENTER" x="0" y="0" />
@@ -144,9 +145,9 @@
             </ScrollFrame>
         </Frames>
         <Scripts>
-            <OnLoad function="MapPinEnhancedFrame_OnLoad" />
-            <OnDragStart function="MapPinEnhancedFrame_OnDragStart" />
-            <OnDragStop function="MapPinEnhancedFrame_OnDragStop" />
+            <OnLoad function="MPHFrame_OnLoad" />
+            <OnDragStart function="MPHFrame_OnDragStart" />
+            <OnDragStop function="MPHFrame_OnDragStop" />
         </Scripts>
     </Frame>
 
