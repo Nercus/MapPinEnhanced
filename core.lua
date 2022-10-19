@@ -11,7 +11,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 -- TODO: Change own framepool to https://wowpedia.fandom.com/wiki/API_ObjectPoolMixin_Acquire
--- TODO: add coroutine with onUpdate Handler
 -- TODO: finish navigation (add minipin system for navigation and lines on map, add buttons to press for spells and items [check cooldown])
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
 -- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))

@@ -3,6 +3,30 @@
 ..\..\FrameXML\UI.xsd">
     <Script file="core.lua" />
 
+
+    <Frame name="MPHNavigationPinTemplate" hidden="true" virtual="true" enableMouse="true">
+        <Size x="20" y="20" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="Icon" atlas="communities-icon-notification" alpha="0.7">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="Icon" atlas="communities-icon-notification" alpha="1">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativeKey="$parent.Icon"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+
+
     <Frame name="MPHTrackerEntryTemplate" virtual="true" hidden="true" mixin="MapPinEntryMixin">
         <Size x="222" y="40" />
         <Layers>

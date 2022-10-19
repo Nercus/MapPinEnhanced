@@ -1,7 +1,7 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
+local module = core:NewModule("Navigation", "AceEvent-3.0")
 local HBD = LibStub("HereBeDragons-2.0")
-
-
+local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local INF = math.huge
 local cachedPaths = nil
@@ -27,6 +27,14 @@ local function heuristic_cost_estimate(nodeA, nodeB)
 end
 
 local function is_valid_node(node, neighbor)
+    if node.reqs then
+        if node.reqs.spell then
+            local isReady = GetSpellCooldown(node.reqs.spell) > 0
+            if not isReady then
+                return false
+            end
+        end
+    end
     if node.continent == neighbor.continent then
         return true
     elseif neighbor.mapId == node.mapId then
@@ -103,6 +111,7 @@ local function a_star(start, goal, nodes, valid_node_func)
 
         local current = lowest_f_score(openset, f_score)
 
+
         if current == goal then
             local path = unwind_path({}, came_from, goal)
             table.insert(path, goal)
@@ -112,7 +121,9 @@ local function a_star(start, goal, nodes, valid_node_func)
         remove_node(openset, current)
         table.insert(closedset, current)
 
+
         local neighbors = neighbor_nodes(current, nodes)
+
         for _, neighbor in ipairs(neighbors) do
             if not_in(closedset, neighbor) then
 
@@ -128,6 +139,8 @@ local function a_star(start, goal, nodes, valid_node_func)
                 end
             end
         end
+        coroutine.yield();
+        print("Running" .. #openset)
     end
     return nil -- no valid path
 end
@@ -149,6 +162,31 @@ local function path(start, goal, nodes, ignore_cache, valid_node_func)
     return resPath
 end
 
+local function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
+end
+
+local function drawNavigationPins(path, start, goal)
+    for index, node in ipairs(path) do
+        -- local nodeInfo = C_Map.GetMapInfo(node.mapId)
+        local navPin = CreateFrame("Frame", nil, nil, "MPHNavigationPinTemplate")
+        HBDP:AddWorldMapIconMap(module, navPin, node.mapId, node.x, node.y, 3)
+    end
+
+
+end
+
 local function formatNavigationOnFrame(path, start, goal)
     local text = "Lets go\n"
     for index, node in ipairs(path) do
@@ -164,21 +202,6 @@ local function formatNavigationOnFrame(path, start, goal)
         end
     end
     print(text)
-end
-
-local function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
@@ -205,11 +228,57 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     table.insert(navDataCopy, data.source)
     table.insert(navDataCopy, data.target)
 
-    ViragDevTool:AddData(navDataCopy, "navDataCopy")
 
-    local resPath = path(data.source, data.target, navDataCopy, false, is_valid_node)
-    ViragDevTool:AddData(resPath, "resPath")
-    core.NavigationStepFrame.spinner:Stop()
-    core.NavigationStepFrame.spinnerTexture:Hide()
-    formatNavigationOnFrame(resPath, data.source, data.target)
+    local co = coroutine.create(function()
+        local path = path(data.source, data.target, navDataCopy, false, is_valid_node)
+        if path then
+            drawNavigationPins(path, data.source, data.target)
+            formatNavigationOnFrame(path, data.source, data.target)
+        else
+            print("No path found")
+        end
+        core.NavigationStepFrame.spinner:Stop()
+        core.NavigationStepFrame.spinnerTexture:Hide()
+    end)
+
+    local function step()
+        if coroutine.status(co) == "dead" then
+            return
+        end
+        local status, err = coroutine.resume(co)
+        if not status then
+            print(err)
+        end
+        C_Timer.After(0.005, step)
+    end
+
+    step()
+
+    -- use spellid 222695
+    local spellButton = CreateFrame("Button", "UniqueButtonMPH", UIParent, "SecureActionButtonTemplate")
+    local spellname, _, icon = GetSpellInfo(222695)
+    if spellname then
+        print("Spellname: " .. spellname)
+        print("/cast" .. " " .. spellname)
+        spellButton:SetAttribute("type", "macro")
+        spellButton:SetAttribute("macrotext", "/cast" .. " " .. spellname)
+        spellButton:SetSize(32, 32)
+        spellButton:SetPoint("CENTER", 0, 0)
+        spellButton:RegisterForClicks("AnyUp")
+        spellButton:SetNormalTexture(icon)
+        spellButton:Show()
+
+        spellButton:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:SetSpellByID(222695)
+            GameTooltip:Show()
+        end)
+
+        spellButton:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+        end)
+
+
+    end
+
 end
