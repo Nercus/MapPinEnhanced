@@ -14,6 +14,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 -- TODO: finish navigation (add minipin system for navigation and lines on map, add buttons to press for spells and items [check cooldown])
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
 -- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))
+-- SuperTrackedFrameMixin:SetTargetAlphaForState for state 0 and 1
 -- TODO: Add Pinmanager (save presets, delete presets, overwrite presets, quick access in pintracker)
 -- TODO: Use
 -- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
@@ -123,8 +124,8 @@ local overrides = {
     }
 }
 
-MapPinEnhanced.CZWFromMapID = {}
-function MapPinEnhanced:GetCZWFromMapID(m)
+local CZWFromMapID = {}
+local function GetCZWFromMapID(m)
     local zone, continent, world, map
     local mapInfo = nil
 
@@ -133,8 +134,8 @@ function MapPinEnhanced:GetCZWFromMapID(m)
     end
 
     -- Return the cached CZW
-    if MapPinEnhanced.CZWFromMapID[m] then
-        return unpack(MapPinEnhanced.CZWFromMapID[m])
+    if CZWFromMapID[m] then
+        return unpack(CZWFromMapID[m])
     end
 
     map = m -- Save the original map
@@ -142,7 +143,7 @@ function MapPinEnhanced:GetCZWFromMapID(m)
         mapInfo = C_Map.GetMapInfo(m)
         if not mapInfo then
             -- No more parents, return what we have
-            MapPinEnhanced.CZWFromMapID[map] = { continent, zone, world }
+            CZWFromMapID[map] = { continent, zone, world }
             return continent, zone, world
         end
         local mapType = (overrides[m] and overrides[m].mapType) or mapInfo.mapType
@@ -157,7 +158,7 @@ function MapPinEnhanced:GetCZWFromMapID(m)
         end
         m = mapInfo.parentMapID
     until (m == 0)
-    MapPinEnhanced.CZWFromMapID[map] = { continent, zone, world }
+    CZWFromMapID[map] = { continent, zone, world }
     return continent, zone, world
 end
 
@@ -203,65 +204,43 @@ local defaults = {
 
 --WaypointLocationPinMixin
 
-MapPinEntryMixin = {};
+
+MapPinEntryMixin = {}
 
 
 
-function MPHFrame_OnLoad(self)
-    self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetDesaturated(true)
-    self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAtlas("NPE_ArrowDown")
-    self.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollDownButton.Highlight:SetAtlas("NPE_ArrowDownGlow")
-    self.scrollFrame.ScrollBar.ScrollDownButton.Highlight:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollDownButton.Normal:SetAtlas("NPE_ArrowDown")
-    self.scrollFrame.ScrollBar.ScrollDownButton.Normal:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollDownButton.Pushed:SetAtlas("NPE_ArrowDown")
-    self.scrollFrame.ScrollBar.ScrollDownButton.Pushed:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollUpButton.Disabled:SetAtlas("NPE_ArrowUp")
-    self.scrollFrame.ScrollBar.ScrollUpButton.Disabled:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollUpButton.Disabled:SetDesaturated(true)
-    self.scrollFrame.ScrollBar.ScrollUpButton.Highlight:SetAtlas("NPE_ArrowUpGlow")
-    self.scrollFrame.ScrollBar.ScrollUpButton.Highlight:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollUpButton.Normal:SetAtlas("NPE_ArrowUp")
-    self.scrollFrame.ScrollBar.ScrollUpButton.Normal:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ScrollUpButton.Pushed:SetAtlas("NPE_ArrowUp")
-    self.scrollFrame.ScrollBar.ScrollUpButton.Pushed:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
-    self.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
-    self.scrollFrame.ScrollBar.ThumbTexture:SetAlpha(0.6)
-    self.scrollFrame.ScrollBar:Hide()
-end
-
-function MPHFrame_OnDragStart(self)
-    if IsControlKeyDown() then
-        self:StartMoving()
-    end
-end
-
-function MPHFrame_OnDragStop(self)
-    self:StopMovingOrSizing()
-    local x, y = self:GetLeft(), self:GetTop()
-    MapPinEnhanced.db.profile.pinTracker.x = x
-    MapPinEnhanced.db.profile.pinTracker.y = y
-end
 
 function MapPinEnhanced:TogglePinTrackerWindow()
-    if MPHFrame:IsShown() then
-        MPHFrame:Hide()
+    if self.MPHFrame:IsShown() then
+        self.MPHFrame:Hide()
     else
-        MPHFrame:Show()
+        self.MPHFrame:Show()
     end
 end
 
 function MapPinEnhanced:ToggleNavigationStepFrame()
-    if MPHNavigationStepFrame:IsShown() then
-        MPHNavigationStepFrame:Hide()
+    if self.MPHFrame.NavigationStepFrame:IsShown() then
+        self.MPHFrame.NavigationStepFrame:Hide()
     else
-        MPHNavigationStepFrame:Show()
+        self.MPHFrame.NavigationStepFrame:Show()
     end
 end
 
 function MapPinEnhanced:OnInitialize()
+
+    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
+
+    MPHFrame:SetScript("OnDragStop", function(s)
+        s:StopMovingOrSizing()
+        local x, y = s:GetLeft(), s:GetTop()
+        self.db.profile.pinTracker.x = x
+        self.db.profile.pinTracker.y = y
+    end)
+
+    self.MPHFrame = MPHFrame
+
+    self.MPHFrame.NavigationStepFrame:SetAction(222695, "Use Port to Dalaran")
+
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
 
@@ -269,72 +248,11 @@ function MapPinEnhanced:OnInitialize()
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
     MapPinEnhanced:UpdateMinimapButton()
 
-    local navigationStepFrame = CreateFrame("Frame", "MPHNavigationStepFrame", MPHFrame)
-    navigationStepFrame:SetSize(250, 200)
-    navigationStepFrame:SetPoint("BOTTOMLEFT", MPHFrame, "TOPLEFT", 0, 20)
-    navigationStepFrame.texture = navigationStepFrame:CreateTexture(nil, "BACKGROUND")
-    navigationStepFrame.texture:SetAllPoints()
-    navigationStepFrame.texture:SetAtlas("dragonflight-score-background")
-    navigationStepFrame.texture:SetAlpha(0.5)
-
-    navigationStepFrame.upperTexture = navigationStepFrame:CreateTexture(nil, "ARTWORK")
-    navigationStepFrame.upperTexture:SetSize(250, 41)
-    navigationStepFrame.upperTexture:SetAtlas("dragonflight-score-topper")
-    navigationStepFrame.upperTexture:SetPoint("CENTER", navigationStepFrame, "TOP", 0, 0)
-
-    navigationStepFrame.lowerTexture = navigationStepFrame:CreateTexture(nil, "ARTWORK")
-    navigationStepFrame.lowerTexture:SetSize(250, 41)
-    navigationStepFrame.lowerTexture:SetAtlas("dragonflight-score-footer")
-    navigationStepFrame.lowerTexture:SetPoint("CENTER", navigationStepFrame, "BOTTOM", 0, 0)
-
-    navigationStepFrame.text = navigationStepFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    navigationStepFrame.text:SetPoint("TOP", navigationStepFrame, "TOP", 0, -5)
-    navigationStepFrame.text:SetText("Navigation")
-    navigationStepFrame.text:SetFontObject("GameFontNormal")
-
-
-    local spinnerTexture = navigationStepFrame:CreateTexture(nil, "OVERLAY")
-    spinnerTexture:SetSize(100, 100)
-    spinnerTexture:SetPoint("CENTER", navigationStepFrame, "CENTER", 0, 0)
-    spinnerTexture:SetAtlas("auctionhouse-ui-loadingspinner")
-
-    local spinnerGroup = spinnerTexture:CreateAnimationGroup()
-    spinnerGroup:SetLooping("REPEAT")
-    local spinner = spinnerGroup:CreateAnimation("Rotation")
-    spinner:SetDuration(1)
-    spinner:SetDegrees(360)
-    spinner:SetOrder(1)
-    spinner:SetOrigin("CENTER", 0, 0)
-    spinner:SetSmoothing("NONE")
-
-    spinnerGroup:Play()
-
-    navigationStepFrame.close = CreateFrame("Button", nil, navigationStepFrame)
-    navigationStepFrame.close:SetSize(15, 15)
-    navigationStepFrame.close:SetNormalAtlas("UI-HUD-Minimap-Zoom-In")
-    navigationStepFrame.close:SetHighlightAtlas("UI-HUD-Minimap-Zoom-In-Mouseover")
-    navigationStepFrame.close:SetPushedAtlas("UI-HUD-Minimap-Zoom-In-Down")
-    -- rotate the close button
-    navigationStepFrame.close:GetNormalTexture():SetRotation(math.rad(45))
-    navigationStepFrame.close:GetHighlightTexture():SetRotation(math.rad(45))
-    navigationStepFrame.close:GetPushedTexture():SetRotation(math.rad(45))
-
-
-    navigationStepFrame.close:SetPoint("TOPRIGHT", navigationStepFrame, "TOPRIGHT", -15, 0)
-    navigationStepFrame.close:SetScript("OnClick", function()
-        navigationStepFrame:Hide()
-        spinnerGroup:Stop()
-    end)
-
-    navigationStepFrame:Hide()
-    navigationStepFrame.spinnerTexture = spinnerTexture
-    navigationStepFrame.spinner = spinnerGroup
-    self.NavigationStepFrame = navigationStepFrame
 
 
     -- Structure mapdata like TomTom, Snippet from TomTom Addon
     for id in pairs(HBDmapData) do
-        local c, z, w = MapPinEnhanced:GetCZWFromMapID(id)
+        local c, z, w = GetCZWFromMapID(id)
         local mapType = (overrides[id] and overrides[id].mapType) or HBDmapData[id].mapType
         if (mapType == Enum.UIMapType.Zone) or (mapType == Enum.UIMapType.Continent) or
             (mapType == Enum.UIMapType.Micro) then
@@ -417,24 +335,18 @@ local PinFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title)
 
-    local objective = CreateFrame("Button", nil, MPHFrame.scrollFrame.scrollChild,
-        "MPHTrackerEntryTemplate")
-
-    local pin = CreateFrame("Button", nil, nil, "WaypointLocationPinTemplate")
-
     local tracked = false
-
-    local minimappin = CreateFrame("Button", nil, nil, "WaypointLocationPinTemplate")
-    minimappin:SetSize(22, 22)
+    local objective = CreateFrame("Button", nil, MapPinEnhanced.MPHFrame.scrollFrame.scrollChild,
+        "MPHTrackerEntryTemplate")
+    local pin = CreateFrame("Button", nil, nil, "MPHMapPinTemplate")
+    local minimappin = CreateFrame("Button", nil, nil, "MPHMinimapPinTemplate")
 
 
     local function Track(x, y, mapID)
         tracked = true
-        pin.Icon:SetAtlas("Waypoint-MapPin-Tracked", true)
-        objective.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
-        minimappin.Icon:SetAtlas("Waypoint-MapPin-Tracked")
-        objective.name:SetAlpha(1)
-        objective.info:SetAlpha(1)
+        pin:Track()
+        objective:Track()
+        minimappin:Track()
         blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID, x, y, 0))
@@ -450,11 +362,9 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function Untrack()
         tracked = false
-        pin.Icon:SetAtlas("Waypoint-MapPin-Untracked", true)
-        objective.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
-        minimappin.Icon:SetAtlas("Waypoint-MapPin-Untracked")
-        objective.name:SetAlpha(0.7)
-        objective.info:SetAlpha(0.7)
+        pin:Untrack()
+        objective:Untrack()
+        minimappin:Untrack()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     end
 
@@ -505,6 +415,8 @@ local function CreatePin(x, y, mapID, emit, title)
     pin:SetScript("OnMouseUp", function(self)
         self:SetPoint("CENTER", 0, 0)
     end)
+
+
     local function SetTooltip(title)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
@@ -518,9 +430,6 @@ local function CreatePin(x, y, mapID, emit, title)
 
     SetTooltip(title)
 
-    pin:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
 
     objective:SetScript("OnMouseDown", function(self, arg1)
         if arg1 == "LeftButton" then
@@ -540,41 +449,12 @@ local function CreatePin(x, y, mapID, emit, title)
     objective.navStart:SetScript("OnClick", function(self)
         emit("track")
         MapPinEnhanced:navigateToPin(x, y, mapID)
-        print("navigateToPin")
     end)
 
-
-
-    objective:SetScript("OnEnter", function(self)
-        objective.highlightBorder:Show()
-        objective.name:SetAlpha(1)
-        objective.info:SetAlpha(1)
-        objective.navStart:Show()
-        objective.button.highlight:Show()
-
-        if (tracked) then
-            objective.highlightBorder:SetAlpha(1)
-        else
-            objective.highlightBorder:SetAlpha(0.4)
-        end
-
-    end)
-
-    objective:SetScript("OnLeave", function(self)
-        if not self.navStart:IsMouseOver() then
-            objective.navStart:Hide()
-            objective.highlightBorder:Hide()
-            objective.button.highlight:Hide()
-            if (not tracked) then
-                objective.name:SetAlpha(0.7)
-                objective.info:SetAlpha(0.7)
-            end
-        end
-    end)
 
     local function SetTrackerPosition(index)
         objective:ClearAllPoints()
-        objective:SetPoint("TOPLEFT", MPHFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
+        objective:SetPoint("TOPLEFT", MapPinEnhanced.MPHFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
             -((index - 1) * (objective:GetHeight())))
         if not objective:IsShown() then
             objective:Show()
@@ -582,8 +462,7 @@ local function CreatePin(x, y, mapID, emit, title)
     end
 
     local function SetObjectiveTitle(title)
-        objective.name:SetText(title)
-        objective.name:Show()
+        objective:SetTitle(title)
     end
 
     SetObjectiveTitle(title)
@@ -643,15 +522,15 @@ local function PinManager()
             p.SetTrackerPosition(i)
         end
 
-        if MPHFrame:IsShown() and #pins == 0 then
+        if MapPinEnhanced.MPHFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
-        elseif not MPHFrame:IsShown() and #pins > 0 then
+        elseif not MapPinEnhanced.MPHFrame:IsShown() and #pins > 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         end
         if (#pins < 7) then
-            MPHFrame.scrollFrame.ScrollBar:Hide()
+            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Hide()
         else
-            MPHFrame.scrollFrame.ScrollBar:Show()
+            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Show()
         end
 
         -- TODO: add function to scroll to tracked pin
@@ -721,7 +600,7 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
-                    MapPinEnhanced.NavigationStepFrame:Hide()
+                    MapPinEnhanced.MPHFrame.NavigationStepFrame:Hide()
                     pin.Track(pin.x, pin.y, pin.mapID)
                 elseif e == "hyperlink" then
                     local link = FormatHyperlink(pin.x, pin.y, pin.mapID)
@@ -864,7 +743,6 @@ end
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
     pinManager.RestoreAllPins()
-
     -- Check if TomTom is Loaded
     if IsAddOnLoaded("TomTom") then
         TomTomLoaded = true
@@ -876,9 +754,6 @@ end
 
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
 local rightseparator = "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
-local function lowergsub(s)
-    return s:lower():gsub("[%s]", "")
-end
 
 function MapPinEnhanced:ParseInput(msg)
     if not msg then

@@ -1,0 +1,88 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+    <Script file="MPHFrame.lua" />
+    <Frame name="MPHFrameTemplate" virtual="true" hidden="true" mixin="MPHFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
+        <Size x="250" y="300" />
+        <Anchors>
+            <Anchor point="CENTER" x="0" y="0" />
+        </Anchors>
+
+        <Frames>
+            <Frame name="$parentHeader" parentKey="header">
+                <Size x="250" y="25" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="textureLeft" atlas="UI-Frame-Dragonflight-TitleLeft">
+                            <Size x="72" y="25" />
+                            <Anchors>
+                                <Anchor point="LEFT" />
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="textureRight" atlas="UI-Frame-Dragonflight-TitleRight">
+                            <Size x="72" y="25" />
+                            <Anchors>
+                                <Anchor point="RIGHT" />
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="textureMiddle" atlas="_UI-Frame-Dragonflight-TitleMiddle">
+                            <Size x="43" y="25" />
+                            <Anchors>
+                                <Anchor point="RIGHT" relativeKey="$parent.textureRight" relativePoint="LEFT" />
+                                <Anchor point="LEFT" relativeKey="$parent.textureLeft" relativePoint="RIGHT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString name="$parentText" parentKey="text" inherits="GameFontNormalMed2Outline" justifyH="LEFT" text="Map Pins" outline="NORMAL">
+                            <Size x="150" y="0" />
+                            <Anchors>
+                                <Anchor point="LEFT" relativeKey="$parent.textureLeft" relativePoint="RIGHT" x="-25" y="0" />
+                            </Anchors>
+
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="close">
+                        <Size x="15" y="15" />
+                        <Anchors>
+                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="27" />
+                        </Anchors>
+                        <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
+                        <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
+                        <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down" />
+                        <Scripts>
+                            <OnClick>
+                                self:GetParent():GetParent():Hide()</OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+
+            <ScrollFrame parentKey="scrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Size x="225" y="275" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-25" />
+                    <Anchor point="BOTTOMLEFT" x="0" y="30" />
+                </Anchors>
+                <ScrollChild>
+                    <Frame parentKey="scrollChild">
+                        <Size x="225" y="1" />
+                        <Anchors>
+                            <Anchor point="LEFT" x="0" y="0" />
+                            <Anchor point="RIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnDragStart method="OnDragStart" />
+        </Scripts>
+    </Frame>
+</Ui>

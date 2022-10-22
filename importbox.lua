@@ -9,11 +9,10 @@ local xpcall = xpcall
 
 
 local function safecall(func, ...)
-	if func then
-		return xpcall(func, errorhandler, ...)
-	end
+    if func then
+        return xpcall(func, errorhandler, ...)
+    end
 end
-
 
 AceGUI:RegisterLayout("customlayout",
     function(content, children)
@@ -80,8 +79,8 @@ StaticPopupDialogs["MPH_RELOAD_POPUP"] = {
     timeout = 0,
     whileDead = true,
     hideOnEscape = true,
-    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-  }
+    preferredIndex = 3, -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+}
 
 
 
@@ -89,8 +88,6 @@ local function CreateWindow()
     if module.gui then return end
 
     local textStore
-    local name
-    local selectedload
     local db = core.db.profile
 
 
@@ -149,7 +146,6 @@ local function CreateWindow()
     _G["MapPinEnhanced_ImportFrame"] = f.frame
     table.insert(UISpecialFrames, "MapPinEnhanced_ImportFrame")
 end
-
 
 function core:ToggleImportWindow()
     if not module.gui then CreateWindow() end

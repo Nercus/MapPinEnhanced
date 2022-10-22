@@ -27,12 +27,11 @@ local function heuristic_cost_estimate(nodeA, nodeB)
 end
 
 local function is_valid_node(node, neighbor)
-    if node.reqs then
-        if node.reqs.spell then
-            local isReady = GetSpellCooldown(node.reqs.spell) > 0
-            if not isReady then
-                return false
-            end
+    if neighbor.reqs then
+        if neighbor.reqs.spell then
+            local isReady = GetSpellCooldown(neighbor.reqs.spell) == 0
+            print(neighbor.reqs.spell, isReady)
+            return isReady
         end
     end
     if node.continent == neighbor.continent then
@@ -179,34 +178,18 @@ end
 
 local function drawNavigationPins(path, start, goal)
     for index, node in ipairs(path) do
-        -- local nodeInfo = C_Map.GetMapInfo(node.mapId)
-        local navPin = CreateFrame("Frame", nil, nil, "MPHNavigationPinTemplate")
-        HBDP:AddWorldMapIconMap(module, navPin, node.mapId, node.x, node.y, 3)
+        ViragDevTool:AddData(navPin, "NavPin")
     end
-
 
 end
 
-local function formatNavigationOnFrame(path, start, goal)
-    local text = "Lets go\n"
-    for index, node in ipairs(path) do
-        local nodeInfo = C_Map.GetMapInfo(node.mapId)
-        if node.type == "UnboundTeleport" then
-            text = text ..
-                "Teleport to " .. nodeInfo.name .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
-        elseif node.type == "Boat" then
-            text = text .. "Take " .. node.type .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
-        elseif node.type == "LocalPortal" then
-            text = text ..
-                "Take Portal to" .. nodeInfo.name .. " (" .. node.mapId .. ", " .. node.x .. ", " .. node.y .. ")\n"
-        end
-    end
-    print(text)
+local function setNavigationPath(path, start, goal)
+    drawNavigationPins(path, start, goal)
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
-    core.NavigationStepFrame:Show()
-    core.NavigationStepFrame.spinner:Play()
+    core.MPHFrame.NavigationStepFrame:Show()
+    core.MPHFrame.NavigationStepFrame:StartSpinner()
     local sourceMapID = C_Map.GetBestMapForUnit("player")
     local sourceX, sourceY = C_Map.GetPlayerMapPosition(sourceMapID, "player"):GetXY()
     local _, _, worldZone = HBD:GetWorldCoordinatesFromZone(sourceX, sourceY, sourceMapID)
@@ -232,13 +215,11 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     local co = coroutine.create(function()
         local path = path(data.source, data.target, navDataCopy, false, is_valid_node)
         if path then
-            drawNavigationPins(path, data.source, data.target)
-            formatNavigationOnFrame(path, data.source, data.target)
+            setNavigationPath(path, data.source, data.target)
         else
             print("No path found")
         end
-        core.NavigationStepFrame.spinner:Stop()
-        core.NavigationStepFrame.spinnerTexture:Hide()
+        core.MPHFrame.NavigationStepFrame:StopSpinner()
     end)
 
     local function step()
@@ -254,31 +235,6 @@ function core:navigateToPin(targetX, targetY, targetMapID)
 
     step()
 
-    -- use spellid 222695
-    local spellButton = CreateFrame("Button", "UniqueButtonMPH", UIParent, "SecureActionButtonTemplate")
-    local spellname, _, icon = GetSpellInfo(222695)
-    if spellname then
-        print("Spellname: " .. spellname)
-        print("/cast" .. " " .. spellname)
-        spellButton:SetAttribute("type", "macro")
-        spellButton:SetAttribute("macrotext", "/cast" .. " " .. spellname)
-        spellButton:SetSize(32, 32)
-        spellButton:SetPoint("CENTER", 0, 0)
-        spellButton:RegisterForClicks("AnyUp")
-        spellButton:SetNormalTexture(icon)
-        spellButton:Show()
 
-        spellButton:SetScript("OnEnter", function(self)
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:SetSpellByID(222695)
-            GameTooltip:Show()
-        end)
-
-        spellButton:SetScript("OnLeave", function(self)
-            GameTooltip:Hide()
-        end)
-
-
-    end
 
 end

@@ -1,0 +1,71 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+    <Script file="MPHTrackerEntry.lua" />
+    <Frame name="MPHTrackerEntryTemplate" virtual="true" hidden="true" mixin="MPHTrackerEntryMixin">
+        <Size x="222" y="40" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture atlas="auctionhouse-nav-button-select" parentKey="highlightBorder" hidden="true" alpha="0.4">
+                    <Size x="222" y="40" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.7">
+                    <Size x="175" y="20" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="35" y="-4" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.7">>
+                    <Size x="175" y="20" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="35" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="button">
+                <Size x="25" y="25" />
+                <Anchors>
+                    <Anchor point="LEFT" x="5" y="0" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="Waypoint-MapPin-Untracked" parentKey="normal">
+                            <Size x="25" y="25" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
+                            </Anchors>
+                        </Texture>
+                        <Texture atlas="Waypoint-MapPin-Highlight" hidden="true" parentKey="highlight">
+                            <Size x="25" y="25" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Button hidden="true" parentKey="navStart">
+                <Size x="20" y="20" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent" x="-10" />
+                </Anchors>
+                <NormalTexture rotation="210" atlas="CovenantSanctum-Renown-Arrow-Depressed" alpha="0.5" desaturated="true"/>
+                <HighlightTexture rotation="210" atlas="CovenantSanctum-Renown-Arrow-Depressed" alpha="1" desaturated="false"/>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnEnter method="OnEnter"/>
+            <OnLeave method="OnLeave"/>
+        </Scripts>
+    </Frame>
+</Ui>

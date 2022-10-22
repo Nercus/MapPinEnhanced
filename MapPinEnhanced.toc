@@ -11,7 +11,9 @@
 
 embeds.xml
 Locales\Locales.xml
-MapPinEnhanced.xml
+core.lua
+FrameXML\frames.xml
+
 importbox.lua
 navigationData.lua
 navigation.lua
