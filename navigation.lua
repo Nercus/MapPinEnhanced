@@ -190,6 +190,7 @@ local function drawNavigationStep(target)
     if C_Map.CanSetUserWaypointOnMap(target.mapId) then
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(target.mapId, target.x, target.y, 0))
     end
+    -- TODO: set mouseover
     --module.navPin:SetScript("OnEnter")
     if module and module.navPin then
         HBDP:AddWorldMapIconMap(module, module.navPin, target.mapId, target.x, target.y, 3)
@@ -204,39 +205,36 @@ local function drawNavigationStep(target)
     end
 end
 
+local function handleNextNavStep(path, index, distance, goal)
+    -- TODO: check if point is linked to the next one
+    -- TODO: remove
+    if distance < 10 then
+        if index > #path then
+            core.distanceTimer = nil
+            return
+        end
+        if path[index] then
+            drawNavigationStep(path[index])
+        else
+            core.RemoveTrackedPin()
+        end
+    end
+end
+
 local function setNavigationPath(path, goal)
+    if not path then return end
     print("setNavigationPath")
     local navigateIndex = 2 -- skip start
     drawNavigationStep(path[navigateIndex])
     if not core.distanceTimer then
         core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
-            if distance < 10 then
-                navigateIndex = navigateIndex + 1
-                if navigateIndex > #path then
-                    core.distanceTimer = nil
-                    return
-                end
-                if path[navigateIndex] then
-                    drawNavigationStep(path[navigateIndex])
-                else
-                    core.RemoveTrackedPin()
-                end
-            end
+            handleNextNavStep(path, navigateIndex, distance, goal)
+            navigateIndex = navigateIndex + 1
         end)
     elseif core.distanceTimer.cancelled then
         core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
-            if distance < 10 then
-                navigateIndex = navigateIndex + 1
-                if navigateIndex > #path then
-                    core.distanceTimer = nil
-                    return
-                end
-                if path[navigateIndex] then
-                    drawNavigationStep(path[navigateIndex])
-                else
-                    core.RemoveTrackedPin()
-                end
-            end
+            handleNextNavStep(path, navigateIndex, distance, goal)
+            navigateIndex = navigateIndex + 1
         end)
     end
 end

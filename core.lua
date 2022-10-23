@@ -18,7 +18,11 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 -- TODO: Add Pinmanager (save presets, delete presets, overwrite presets, quick access in pintracker)
 -- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
 
-
+-- FIXME: using navigation from garrison to elsewhere
+-- 1x Interface/AddOns/MapPinEnhanced/navigation.lua:248: attempt to index a nil value
+-- [string "@Interface/AddOns/MapPinEnhanced/navigation.lua"]:248: in function `navigateToPin'
+-- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:608: in function <Interface/AddOns/MapPinEnhanced/core.lua:595>
+-- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:449: in function <Interface/AddOns/MapPinEnhanced/core.lua:447>
 
 
 
@@ -332,7 +336,6 @@ local function CreatePin(x, y, mapID, emit, title)
 
 
     local function distanceCheck(distance)
-        print(distance)
         if (distance <= 15) then
             emit("remove")
         end
@@ -858,6 +861,7 @@ end
 ---- Hooks ------
 
 function MapPinEnhanced:DistanceTimer(cb)
+
     local distance = C_Navigation.GetDistance()
     if distance > 0 then
         cb(distance)
@@ -867,6 +871,8 @@ function MapPinEnhanced:DistanceTimer(cb)
     if distance == 0 and not C_Map.HasUserWaypoint() then
         cb(0)
         self:CancelAllTimers()
+    else
+        -- TODO: calculate distance if not possible to get  with C_Navigation.GetDistance()
     end
 end
 
