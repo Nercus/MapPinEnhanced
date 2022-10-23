@@ -9,7 +9,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="texture" alpha="0.7" atlas="dragonflight-landingpage-renownbutton-centaur">
+                <Texture parentKey="texture" atlas="dragonflight-landingpage-renownbutton-centaur">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="0" />
@@ -22,13 +22,13 @@
                         <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="25" y="0"/>
                     </Anchors>
                 </FontString>
-                <Texture parentKey="spinnerTexture" atlas="auctionhouse-ui-loadingspinner">
+                <Texture parentKey="spinnerTexture" atlas="UF-Essence-TimerSpin">
                     <Size x="40" y="40"/>
                     <Anchors>
                         <Anchor point="CENTER" relativeTo="$parent" relativePoint="CENTER"/>
                     </Anchors>
                 </Texture>
-                <FontString text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr," wordwrap="true" nonspacewrap="true" parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString wordwrap="true" nonspacewrap="true" parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="200" y="90"/>
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="30" y="0"/>
@@ -54,7 +54,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button enableMouse="true" parentKey="action" name="MPHUseSpellButton">
+            <Button enableMouse="true" registerForClicks="LeftButtonUp, RightButtonUp" parentKey="action" name="MPHUseSpellButton" inherits="SecureActionButtonTemplate">
                 <Size x="50" y="50"/>
                 <Anchors>
                     <Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT" x="-30" y="0"/>

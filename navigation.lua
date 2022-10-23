@@ -5,7 +5,7 @@ local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local INF = math.huge
 local cachedPaths = nil
-
+local UiMapPoint = _G.UiMapPoint
 
 local function dist(m1, x1, y1, m2, x2, y2)
     local distance, _, _ = HBD:GetZoneDistance(m1, x1, y1, m2, x2, y2)
@@ -30,7 +30,6 @@ local function is_valid_node(node, neighbor)
     if neighbor.reqs then
         if neighbor.reqs.spell then
             local isReady = GetSpellCooldown(neighbor.reqs.spell) == 0
-            print(neighbor.reqs.spell, isReady)
             return isReady
         end
     end
@@ -139,7 +138,6 @@ local function a_star(start, goal, nodes, valid_node_func)
             end
         end
         coroutine.yield();
-        print("Running" .. #openset)
     end
     return nil -- no valid path
 end
@@ -176,15 +174,71 @@ local function deepcopy(orig)
     return copy
 end
 
-local function drawNavigationPins(path, start, goal)
-    for index, node in ipairs(path) do
-        ViragDevTool:AddData(navPin, "NavPin")
-    end
-
+function module:OnInitialize()
+    local navPin = CreateFrame("Frame", nil, nil)
+    navPin:SetSize(15, 15)
+    navPin:SetFrameStrata("HIGH")
+    navPin:SetFrameLevel(100)
+    navPin.texture = navPin:CreateTexture(nil, "OVERLAY")
+    navPin.texture:SetAllPoints()
+    navPin.texture:SetAtlas("hud-microbutton-communities-icon-notification")
+    navPin:Hide()
+    self.navPin = navPin
 end
 
-local function setNavigationPath(path, start, goal)
-    drawNavigationPins(path, start, goal)
+local function drawNavigationStep(target)
+    if C_Map.CanSetUserWaypointOnMap(target.mapId) then
+        C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(target.mapId, target.x, target.y, 0))
+    end
+    --module.navPin:SetScript("OnEnter")
+    if module and module.navPin then
+        HBDP:AddWorldMapIconMap(module, module.navPin, target.mapId, target.x, target.y, 3)
+    end
+    local mapInfo = C_Map.GetMapInfo(target.mapId)
+    if target.reqs and target.reqs.spell then
+        core.MPHFrame.NavigationStepFrame:SetAction(target.reqs.spell,
+            "Use " .. GetSpellInfo(target.reqs.spell) .. " to get to " .. mapInfo.name)
+    else
+        core.MPHFrame.NavigationStepFrame:SetText(string.format("Travel to %s (%1.f, %1.f)", mapInfo.name, target.x * 100
+            , target.y * 100))
+    end
+end
+
+local function setNavigationPath(path, goal)
+    print("setNavigationPath")
+    local navigateIndex = 2 -- skip start
+    drawNavigationStep(path[navigateIndex])
+    if not core.distanceTimer then
+        core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
+            if distance < 10 then
+                navigateIndex = navigateIndex + 1
+                if navigateIndex > #path then
+                    core.distanceTimer = nil
+                    return
+                end
+                if path[navigateIndex] then
+                    drawNavigationStep(path[navigateIndex])
+                else
+                    core.RemoveTrackedPin()
+                end
+            end
+        end)
+    elseif core.distanceTimer.cancelled then
+        core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
+            if distance < 10 then
+                navigateIndex = navigateIndex + 1
+                if navigateIndex > #path then
+                    core.distanceTimer = nil
+                    return
+                end
+                if path[navigateIndex] then
+                    drawNavigationStep(path[navigateIndex])
+                else
+                    core.RemoveTrackedPin()
+                end
+            end
+        end)
+    end
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
@@ -199,11 +253,10 @@ function core:navigateToPin(targetX, targetY, targetMapID)
         return
     end
     local data = {
-        ["source"] = { x = sourceX, y = sourceY, mapId = sourceMapID, continent = worldZone, source = -1, target = -1,
-            ["getInfo"] = C_Map.GetMapInfo(sourceMapID)
+        ["source"] = { x = sourceX, y = sourceY, mapId = sourceMapID, continent = worldZone, source = -1, target = -1
+
         },
-        ["target"] = { x = targetX, y = targetY, mapId = targetMapID, continent = worldZone2, source = -1, target = -1,
-            ["getInfo"] = C_Map.GetMapInfo(targetMapID)
+        ["target"] = { x = targetX, y = targetY, mapId = targetMapID, continent = worldZone2, source = -1, target = -1
         }
     }
 
@@ -215,13 +268,12 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     local co = coroutine.create(function()
         local path = path(data.source, data.target, navDataCopy, false, is_valid_node)
         if path then
-            setNavigationPath(path, data.source, data.target)
+            setNavigationPath(path, data.target)
         else
             print("No path found")
         end
         core.MPHFrame.NavigationStepFrame:StopSpinner()
     end)
-
     local function step()
         if coroutine.status(co) == "dead" then
             return
@@ -234,7 +286,4 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     end
 
     step()
-
-
-
 end
