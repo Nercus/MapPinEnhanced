@@ -15,9 +15,14 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
 -- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))
 -- SuperTrackedFrameMixin:SetTargetAlphaForState for state 0 and 1
--- TODO: Add Pinmanager (save presets, delete presets, overwrite presets, quick access in pintracker)
--- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
+-- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker)
+-- TODO: Add "Ingame Navigation" disabled warning
+-- TODO: Update TomTom parsing
+-- TODO: Add Text to navdiamond (distance to next waypoint)
 
+-- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
+-- FIXME: auto hide based on distance to pin is broken
+-- FIXME: setting with /way command doesnt reuse from framepool correctly (show 2 instead of 1)
 -- FIXME: using navigation from garrison to elsewhere
 -- 1x Interface/AddOns/MapPinEnhanced/navigation.lua:248: attempt to index a nil value
 -- [string "@Interface/AddOns/MapPinEnhanced/navigation.lua"]:248: in function `navigateToPin'
@@ -861,19 +866,41 @@ end
 ---- Hooks ------
 
 function MapPinEnhanced:DistanceTimer(cb)
+    local hasBlizzWaypoint = C_Map.HasUserWaypoint()
+    if hasBlizzWaypoint then
+        local distance = C_Navigation.GetDistance()
+        if distance == 0 then -- waypoint is not reachable, can be used because precision of x and y
 
-    local distance = C_Navigation.GetDistance()
-    if distance > 0 then
-        cb(distance)
-        -- distance based throttle
-        self.distanceTimer.delay = (0.1 * distance ^ (0.5))
-    end
-    if distance == 0 and not C_Map.HasUserWaypoint() then
-        cb(0)
-        self:CancelAllTimers()
+        end
     else
-        -- TODO: calculate distance if not possible to get  with C_Navigation.GetDistance()
+        cb()
     end
+
+
+
+    -- local x2,y2,m2 = HBD:GetUnitWorldPosition("player")
+    -- local x, y, m, t = HBD:GetPlayerZonePosition()
+    -- local m3, t1 = HBD:GetPlayerZone()
+    -- local a,b,c = HBD:GetWorldCoordinatesFromZone(0,0, m3)
+    -- local name = HBD:GetLocalizedMap(m3)
+    -- local size = HBD:GetZoneSize(m3)
+    -- print(a,b,c) -- 545.833984375 2091.6669921875 1116
+    -- print(m3) -- 582
+    -- print(name) -- Lunarfall
+    -- print(size) -- 683.333984375
+
+
+    -- if distance > 0 then
+    --     cb(distance)
+    --     -- distance based throttle
+    --     self.distanceTimer.delay = (0.1 * distance ^ (0.5))
+    -- end
+    -- if distance == 0 and not C_Map.HasUserWaypoint() then
+    --     cb(0)
+    --     self:CancelAllTimers()
+    -- else
+    --     -- TODO: calculate distance if not possible to get  with C_Navigation.GetDistance()
+    -- end
 end
 
 hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
