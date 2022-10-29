@@ -120,19 +120,6 @@ local function CreateWindow()
     end)
     f:AddChild(importbutton)
 
-    local checkbox = AceGUI:Create("CheckBox")
-    checkbox:SetValue(true)
-    checkbox:SetLabel("Change Arrow Alpha")
-    checkbox:SetValue(db.options["changedalpha"])
-    checkbox:SetCallback("OnValueChanged", function(widget, event, value)
-        if value == true then
-            db.options["changedalpha"] = true
-        elseif value == false then
-            db.options["changedalpha"] = false
-        end
-        StaticPopup_Show("MPH_RELOAD_POPUP");
-    end)
-    f:AddChild(checkbox)
 
     local exportbutton = AceGUI:Create("Button")
     exportbutton:SetRelativeWidth(0.3)

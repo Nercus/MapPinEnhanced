@@ -13,16 +13,9 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
--- TODO: Add Option window (change total scale, pin range alpha (SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1) to change alpha of pins when supertracked))
--- SuperTrackedFrameMixin:SetTargetAlphaForState for state 0 and 1
--- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker)
--- TODO: Add "Ingame Navigation" disabled warning
+-- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker/LDB and Minimap Button (use Grid2LDB implementation)
 -- TODO: Update TomTom parsing
--- TODO: Add Text to navdiamond (distance to next waypoint)
 
--- FIXME: 1x MapPinEnhanced\core.lua:896: bad argument #2 to 'format' (string expected, got nil)
--- FIXME: auto hide based on distance to pin is broken
--- FIXME: setting with /way command doesnt reuse from framepool correctly (show 2 instead of 1)
 -- FIXME: using navigation from garrison to elsewhere
 -- 1x Interface/AddOns/MapPinEnhanced/navigation.lua:248: attempt to index a nil value
 -- [string "@Interface/AddOns/MapPinEnhanced/navigation.lua"]:248: in function `navigateToPin'
@@ -236,10 +229,14 @@ function MapPinEnhanced:OnInitialize()
         self.db.profile.pinTracker.y = y
     end)
 
+
     self.MPHFrame = MPHFrame
+
 
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
+
+    MPHFrame:SetPoint("CENTER", UIParent, "CENTER", self.db.profile.pinTracker.x, self.db.profile.pinTracker.y)
 
     -- Minimap Icon
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
@@ -320,7 +317,25 @@ end
 
 local blockWAYPOINTevent = false
 
+
+StaticPopupDialogs["MPH_ENABLE_NAVIGATION"] = {
+    text = "Ingame Navigation is disabled! You need to enable it to use MapPinEnhanced properly!",
+    button1 = "Enable",
+    button2 = "Cancel",
+    notClosableByLogout = true,
+    showAlert = true,
+    exclusive = true,
+    OnAccept = function()
+        SetCVar("showInGameNavigation", 1)
+    end,
+    whileDead = true,
+    preferredIndex = 3,
+}
+
 function MapPinEnhanced:OnEnable()
+    if GetCVar("showInGameNavigation") == "0" then
+        StaticPopup_Show("MPH_ENABLE_NAVIGATION")
+    end
     -- Register Events
     self:RegisterEvent("SUPER_TRACKING_CHANGED")
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
@@ -340,9 +355,23 @@ local function CreatePin(x, y, mapID, emit, title)
 
 
 
+    local function setDistanceText(distance)
+        if distance then
+            objective.distance:SetText(IN_GAME_NAVIGATION_RANGE:format(AbbreviateNumbers(distance)))
+        else
+            objective.distance:SetText("-")
+        end
+    end
+
     local function distanceCheck(distance)
-        if (distance <= 15) then
+        if (distance <= 5) and distance > 0 then
             emit("remove")
+        else
+            if distance <= 0 then
+                setDistanceText(nil)
+            else
+                setDistanceText(Round(distance))
+            end
         end
     end
 
@@ -355,6 +384,7 @@ local function CreatePin(x, y, mapID, emit, title)
         if C_Map.CanSetUserWaypointOnMap(mapID2) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID2, x2, y2, 0))
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+
             if not MapPinEnhanced.distanceTimer then
                 MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1,
                     distanceCheck)
@@ -372,6 +402,9 @@ local function CreatePin(x, y, mapID, emit, title)
         objective:Untrack()
         minimappin:Untrack()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
+        if not MapPinEnhanced.distanceTimer.cancelled then
+            MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
+        end
     end
 
     local function ToggleTracked()
@@ -384,7 +417,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function ShowOnMap() -- for newly created map pins
         objective:Show()
-        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3)
+        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
         HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID, x, y, false, false)
     end
 
@@ -398,7 +431,7 @@ local function CreatePin(x, y, mapID, emit, title)
     local function MoveOnMap(x2, y2, mapID2)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin)
         HBDP:RemoveMinimapIcon(MapPinEnhanced, minimappin)
-        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID2, x2, y2, 3)
+        HBDP:AddWorldMapIconMap(MapPinEnhanced, pin, mapID2, x2, y2, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
         HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID2, x2, y2, false, false)
     end
 
@@ -865,42 +898,21 @@ end
 
 ---- Hooks ------
 
+
 function MapPinEnhanced:DistanceTimer(cb)
     local hasBlizzWaypoint = C_Map.HasUserWaypoint()
     if hasBlizzWaypoint then
         local distance = C_Navigation.GetDistance()
-        if distance == 0 then -- waypoint is not reachable, can be used because precision of x and y
-
+        if distance == 0 then
+            cb(-1)
+            self.distanceTimer.delay = 1
+        else
+            cb(distance)
+            self.distanceTimer.delay = (0.015 * distance ^ (0.7)) -- calc new update delay based on distance
         end
     else
-        cb()
+        self:CancelAllTimers()
     end
-
-
-
-    -- local x2,y2,m2 = HBD:GetUnitWorldPosition("player")
-    -- local x, y, m, t = HBD:GetPlayerZonePosition()
-    -- local m3, t1 = HBD:GetPlayerZone()
-    -- local a,b,c = HBD:GetWorldCoordinatesFromZone(0,0, m3)
-    -- local name = HBD:GetLocalizedMap(m3)
-    -- local size = HBD:GetZoneSize(m3)
-    -- print(a,b,c) -- 545.833984375 2091.6669921875 1116
-    -- print(m3) -- 582
-    -- print(name) -- Lunarfall
-    -- print(size) -- 683.333984375
-
-
-    -- if distance > 0 then
-    --     cb(distance)
-    --     -- distance based throttle
-    --     self.distanceTimer.delay = (0.1 * distance ^ (0.5))
-    -- end
-    -- if distance == 0 and not C_Map.HasUserWaypoint() then
-    --     cb(0)
-    --     self:CancelAllTimers()
-    -- else
-    --     -- TODO: calculate distance if not possible to get  with C_Navigation.GetDistance()
-    -- end
 end
 
 hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)

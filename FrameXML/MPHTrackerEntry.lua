@@ -8,6 +8,7 @@ function MPHTrackerEntryMixin:Track()
     self.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
     self.name:SetAlpha(1)
     self.info:SetAlpha(1)
+    self.distance:Show()
 end
 
 function MPHTrackerEntryMixin:Untrack()
@@ -15,6 +16,7 @@ function MPHTrackerEntryMixin:Untrack()
     self.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
     self.name:SetAlpha(0.7)
     self.info:SetAlpha(0.7)
+    self.distance:Hide()
 end
 
 function MPHTrackerEntryMixin:OnEnter()

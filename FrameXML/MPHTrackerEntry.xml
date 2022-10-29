@@ -21,6 +21,12 @@
                         <Anchor point="TOPLEFT" x="35" y="-4" />
                     </Anchors>
                 </FontString>
+                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.7">
+                    <Size x="175" y="20" />
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="-30" y="-4" />
+                    </Anchors>
+                </FontString>
                 <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.7">
                     <Size x="175" y="20" />
                     <Anchors>

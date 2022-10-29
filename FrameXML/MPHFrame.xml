@@ -6,6 +6,7 @@
         <Size x="250" y="300" />
         <Anchors>
             <Anchor point="CENTER" x="0" y="0" />
+
         </Anchors>
 
         <Frames>
