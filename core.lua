@@ -12,7 +12,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
--- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler
+-- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker/LDB and Minimap Button (use Grid2LDB implementation)
 -- TODO: Update TomTom parsing
 
@@ -220,6 +220,7 @@ function MapPinEnhanced:ToggleNavigationStepFrame()
 end
 
 function MapPinEnhanced:OnInitialize()
+    self.blockWAYPOINTevent = false
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
 
     MPHFrame:SetScript("OnDragStop", function(s)
@@ -315,9 +316,6 @@ function MapPinEnhanced:ToggleMinimapButton()
     MapPinEnhanced:UpdateMinimapButton()
 end
 
-local blockWAYPOINTevent = false
-
-
 StaticPopupDialogs["MPH_ENABLE_NAVIGATION"] = {
     text = "Ingame Navigation is disabled! You need to enable it to use MapPinEnhanced properly!",
     button1 = "Enable",
@@ -348,6 +346,7 @@ local MPHFramePool = {}
 local function CreatePin(x, y, mapID, emit, title)
 
     local tracked = false
+    local navigating = false
     local objective = CreateFrame("Button", nil, MapPinEnhanced.MPHFrame.scrollFrame.scrollChild,
         "MPHTrackerEntryTemplate")
     local pin = CreateFrame("Button", nil, nil, "MPHMapPinTemplate")
@@ -364,7 +363,7 @@ local function CreatePin(x, y, mapID, emit, title)
     end
 
     local function distanceCheck(distance)
-        if (distance <= 5) and distance > 0 then
+        if (distance <= 5) and distance > 0 and not navigating then
             emit("remove")
         else
             if distance <= 0 then
@@ -380,11 +379,10 @@ local function CreatePin(x, y, mapID, emit, title)
         pin:Track()
         objective:Track()
         minimappin:Track()
-        blockWAYPOINTevent = true
+        MapPinEnhanced.blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID2) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID2, x2, y2, 0))
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-
             if not MapPinEnhanced.distanceTimer then
                 MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1,
                     distanceCheck)
@@ -393,7 +391,7 @@ local function CreatePin(x, y, mapID, emit, title)
                     distanceCheck)
             end
         end
-        blockWAYPOINTevent = false
+        MapPinEnhanced.blockWAYPOINTevent = false
     end
 
     local function Untrack()
@@ -487,6 +485,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
     objective.navStart:SetScript("OnClick", function(self)
         emit("track")
+        navigating = true
         emit("navigate")
     end)
 
@@ -758,7 +757,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
-    if blockWAYPOINTevent then
+    if self.blockWAYPOINTevent then
         return
     end
     local userwaypoint = C_Map.GetUserWaypoint()
@@ -771,9 +770,9 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
                 C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
             end
         end
-        blockWAYPOINTevent = true
+        self.blockWAYPOINTevent = true
         C_Map.ClearUserWaypoint()
-        blockWAYPOINTevent = false
+        self.blockWAYPOINTevent = false
         MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
     end
 end

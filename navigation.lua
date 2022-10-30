@@ -1,5 +1,5 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
-local module = core:NewModule("Navigation", "AceEvent-3.0")
+local module = core:NewModule("Navigation", "AceEvent-3.0", "AceTimer-3.0")
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
@@ -187,9 +187,26 @@ function module:OnInitialize()
 end
 
 local function drawNavigationStep(target)
+    core.blockWAYPOINTevent = true
     if C_Map.CanSetUserWaypointOnMap(target.mapId) then
         C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(target.mapId, target.x, target.y, 0))
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+    else
+        local worldX, worldY, worldM = HBD:GetWorldCoordinatesFromZone(target.x, target.y, target.mapId)
+        local worldV = CreateVector2D(worldX, worldY)
+        local m = C_Map.GetMapPosFromWorldPos(worldM, worldV)
+        local translateX, translateY = HBD:TranslateZoneCoordinates(target.x, target.y, target.mapId, m)
+        if m and translateX and translateY then
+            print(m, translateX, translateY)
+            C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(m, translateX, translateY, 0))
+            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        end
     end
+    core.blockWAYPOINTevent = false
+
+
+
+
     -- TODO: set mouseover
     --module.navPin:SetScript("OnEnter")
     if module and module.navPin then
@@ -203,14 +220,17 @@ local function drawNavigationStep(target)
         core.MPHFrame.NavigationStepFrame:SetText(string.format("Travel to %s (%1.f, %1.f)", mapInfo.name, target.x * 100
             , target.y * 100))
     end
+
+
+
 end
 
 local function handleNextNavStep(path, index, distance, goal)
+    print("handleNextNavStep", index, distance, goal)
     -- TODO: check if point is linked to the next one
-    -- TODO: remove
     if distance < 10 then
         if index > #path then
-            core.distanceTimer = nil
+            module.distanceTimer = nil
             return
         end
         if path[index] then
@@ -226,15 +246,19 @@ local function setNavigationPath(path, goal)
     print("setNavigationPath")
     local navigateIndex = 2 -- skip start
     drawNavigationStep(path[navigateIndex])
-    if not core.distanceTimer then
-        core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
-            handleNextNavStep(path, navigateIndex, distance, goal)
-            navigateIndex = navigateIndex + 1
+    if not module.distanceTimer then
+        module.distanceTimer = module:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
+            if (distance > 0 and distance <= 10) then
+                handleNextNavStep(path, navigateIndex, distance, goal)
+                navigateIndex = navigateIndex + 1
+            end
         end)
-    elseif core.distanceTimer.cancelled then
-        core.distanceTimer = core:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
-            handleNextNavStep(path, navigateIndex, distance, goal)
-            navigateIndex = navigateIndex + 1
+    elseif module.distanceTimer.cancelled then
+        module.distanceTimer = module:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
+            if (distance > 0 and distance <= 10) then
+                handleNextNavStep(path, navigateIndex, distance, goal)
+                navigateIndex = navigateIndex + 1
+            end
         end)
     end
 end
@@ -284,4 +308,21 @@ function core:navigateToPin(targetX, targetY, targetMapID)
     end
 
     step()
+end
+
+function module:DistanceTimer(cb)
+    local hasBlizzWaypoint = C_Map.HasUserWaypoint()
+    if hasBlizzWaypoint then
+        local distance = C_Navigation.GetDistance()
+        print(module, distance)
+        if distance == 0 then
+            cb(-1)
+            self.distanceTimer.delay = 1
+        else
+            cb(distance)
+            self.distanceTimer.delay = (0.015 * distance ^ (0.7)) -- calc new update delay based on distance
+        end
+    else
+        self:CancelAllTimers()
+    end
 end

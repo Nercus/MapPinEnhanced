@@ -1,5 +1,3 @@
-local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
-
 MPHFrameMixin = {};
 
 function MPHFrameMixin:OnLoad()
