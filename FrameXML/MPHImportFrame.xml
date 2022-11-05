@@ -1,0 +1,231 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+    <Script file="MPHImportFrame.lua" />
+    <Frame name="MPHImportFrameTemplate" virtual="true" hidden="true" mixin="MPHImportFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
+        <Size x="800" y="435"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" atlas="auctionhouse-background-auctions">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="topper" useAtlasSize="true" atlas="dragonflight-score-footer" rotation="180">
+                    <Anchors>
+                        <Anchor relativePoint="TOPLEFT" point="BOTTOMLEFT" relativeKey="$parent.bg" y="-37"/>
+                        <Anchor relativePoint="TOPRIGHT" point="BOTTOMRIGHT" relativeKey="$parent.bg" y="-37"/>
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="footer" useAtlasSize="true" atlas="dragonflight-score-footer">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.bg" y="36"/>
+                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeKey="$parent.bg" y="36"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontNormal" justifyH="CENTER" text="Map Pin Enhanced Import Frame" outline="NORMAL">
+                    <Size x="800" y="0" />
+                    <Anchors>
+                        <Anchor point="TOP" relativeKey="$parent.topper" relativePoint="CENTER" x="0" y="-9" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames >
+            <Button parentKey="close">
+                <Size x="25" y="25" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.topper" relativePoint="RIGHT" x="-9" y="-16" />
+                </Anchors>
+                <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
+                <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
+                <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down" />
+                <Scripts>
+                    <OnClick>
+                         self:GetParent():Hide()
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+
+            <Frame parentKey="editBoxFrame">
+                <Size x="450" y="275" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="20" y="-35" />
+                    <Anchor point="BOTTOMLEFT" x="20" y="60" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture atlas="auctionhouse-background-auctions">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                        <FontString parentKey="textCount" inherits="GameFontNormalTiny2" justifyH="CENTER" outline="NORMAL">
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="-1" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <ScrollFrame parentKey="scrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Size x="450" y="250" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="7" y="-7" />
+                            <Anchor point="BOTTOMRIGHT" x="-30" y="7" />
+                        </Anchors>
+                        <ScrollChild>
+                            <EditBox parentKey="editBox" multiLine="true" autoFocus="false" enableMouse="true" letters="5000">
+                                <Size x="410" y="1"/>
+                                <FontString inherits="GameFontNormalMed1"/>
+                                <Scripts>
+                                    <OnTextChanged>
+                                        ScrollingEdit_OnTextChanged(self, self:GetParent());
+                                        self:GetParent():GetParent():GetParent().editBoxFrame.textCount:SetText(self:GetNumLetters().."/5000");
+                                        self:GetParent():GetParent():GetParent():GetParent()
+                                    </OnTextChanged>
+                                    <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+                                    <OnUpdate>
+                                        ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+                                    </OnUpdate>
+                                    <OnEscapePressed function="EditBox_ClearFocus"/>
+                                    <OnEditFocusLost>
+                                        self:HighlightText(0, 0);
+                                    </OnEditFocusLost>
+                                </Scripts>
+                            </EditBox>
+                        </ScrollChild>
+                    </ScrollFrame>
+                    <Button parentKey="editBoxFocusButton">
+                        <Size x="450" y="275" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parenteditBox"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+						        self:GetParent().scrollFrame.editBox:SetFocus()
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </Frame>
+            <Frame parentKey="presetsFrame">
+                <Size x="300" y="275" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-20" y="-35" />
+                    <Anchor point="BOTTOMRIGHT" x="-20" y="60" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture atlas="auctionhouse-background-buy-commodities-market">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                        <FontString parentKey="textCount" inherits="GameFontNormalTiny2" justifyH="CENTER" outline="NORMAL">
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+                <Frames>
+                    <ScrollFrame parentKey="scrollFrame" inherits="UIPanelScrollFrameTemplate">
+                        <Size x="260" y="250" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="7" y="-7" />
+                            <Anchor point="BOTTOMRIGHT" x="-30" y="7" />
+                        </Anchors>
+                        <ScrollChild>
+                            <Frame parentKey="scrollChild">
+                                <Size x="260" y="1" />
+                                <Anchors>
+                                    <Anchor point="LEFT" x="0" y="0" />
+                                    <Anchor point="RIGHT" x="0" y="0" />
+                                </Anchors>
+                            </Frame>
+                        </ScrollChild>
+                    </ScrollFrame>
+                </Frames>
+            </Frame>
+
+            <Button parentKey="import">
+                <Size x="300" y="30"/>
+                <Anchors>
+                    <Anchor point="BOTTOM" y="15" />
+                    <Anchor point="BOTTOM" y="15" />
+                </Anchors>
+                <NormalTexture atlas="pvpqueue-button-casual-up" />
+                <PushedTexture atlas="pvpqueue-button-casual-down" />
+                <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-selected" alphaMode="ADD" />
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Import" outline="NORMAL">
+                            <Anchors>
+                                <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </Button>
+
+
+            <Button parentKey="export">
+                <Size x="80" y="30"/>
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="20" y="15" />
+                </Anchors>
+                <NormalTexture atlas="pvpqueue-button-casual-up" />
+                <PushedTexture atlas="pvpqueue-button-casual-down" />
+                <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD" desaturated="true"/>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Export" outline="NORMAL">
+                            <Anchors>
+                                <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </Button>
+            <Button parentKey="save">
+                <Size x="80" y="30"/>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-20" y="15" />
+                </Anchors>
+                <NormalTexture atlas="pvpqueue-button-casual-up" />
+                <PushedTexture atlas="pvpqueue-button-casual-down" />
+                <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD"/>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Save" outline="NORMAL">
+                            <Anchors>
+                                <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+
+            </Button>
+
+
+
+
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnDragStart method="OnDragStart" />
+            <OnDragStop method="OnDragStop" />
+        </Scripts>
+    </Frame>
+</Ui>

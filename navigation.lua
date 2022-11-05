@@ -227,6 +227,7 @@ end
 
 local function handleNextNavStep(path, index, distance, goal)
     print("handleNextNavStep", index, distance, goal)
+    ViragDevTool:AddData(path)
     -- TODO: check if point is linked to the next one
     if distance < 10 then
         if index > #path then
@@ -249,21 +250,28 @@ local function setNavigationPath(path, goal)
     if not module.distanceTimer then
         module.distanceTimer = module:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
             if (distance > 0 and distance <= 10) then
-                handleNextNavStep(path, navigateIndex, distance, goal)
+                if path[navigateIndex].target == path[navigateIndex - 1].source and path[navigateIndex].target > 0 then -- skip next step
+                    navigateIndex = navigateIndex + 1
+                end
                 navigateIndex = navigateIndex + 1
+                handleNextNavStep(path, navigateIndex, distance, goal)
             end
         end)
     elseif module.distanceTimer.cancelled then
         module.distanceTimer = module:ScheduleRepeatingTimer("DistanceTimer", 0.1, function(distance)
             if (distance > 0 and distance <= 10) then
-                handleNextNavStep(path, navigateIndex, distance, goal)
+                if path[navigateIndex].target == path[navigateIndex - 1].source and path[navigateIndex].target > 0 then -- skip next step
+                    navigateIndex = navigateIndex + 1
+                end
                 navigateIndex = navigateIndex + 1
+                handleNextNavStep(path, navigateIndex, distance, goal)
             end
         end)
     end
 end
 
 function core:navigateToPin(targetX, targetY, targetMapID)
+    -- TODO: recalculate path if zone changed
     core.MPHFrame.NavigationStepFrame:Show()
     core.MPHFrame.NavigationStepFrame:StartSpinner()
     local sourceMapID = C_Map.GetBestMapForUnit("player")
@@ -326,3 +334,9 @@ function module:DistanceTimer(cb)
         self:CancelAllTimers()
     end
 end
+
+-- FIXME: using navigation from garrison to elsewhere
+-- 1x Interface/AddOns/MapPinEnhanced/navigation.lua:248: attempt to index a nil value
+-- [string "@Interface/AddOns/MapPinEnhanced/navigation.lua"]:248: in function `navigateToPin'
+-- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:608: in function <Interface/AddOns/MapPinEnhanced/core.lua:595>
+-- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:449: in function <Interface/AddOns/MapPinEnhanced/core.lua:447>

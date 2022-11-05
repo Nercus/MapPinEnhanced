@@ -12,15 +12,12 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
+-- TODO: Pretend that TomTom is enabled for other addons
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker/LDB and Minimap Button (use Grid2LDB implementation)
 -- TODO: Update TomTom parsing
+-- TODO: Add average time to travel to pin https://www.curseforge.com/wow/addons/map-pin-timers
 
--- FIXME: using navigation from garrison to elsewhere
--- 1x Interface/AddOns/MapPinEnhanced/navigation.lua:248: attempt to index a nil value
--- [string "@Interface/AddOns/MapPinEnhanced/navigation.lua"]:248: in function `navigateToPin'
--- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:608: in function <Interface/AddOns/MapPinEnhanced/core.lua:595>
--- [string "@Interface/AddOns/MapPinEnhanced/core.lua"]:449: in function <Interface/AddOns/MapPinEnhanced/core.lua:447>
 
 
 
@@ -482,12 +479,19 @@ local function CreatePin(x, y, mapID, emit, title)
         end
     end)
 
-
-    objective.navStart:SetScript("OnClick", function(self)
-        emit("track")
-        navigating = true
-        emit("navigate")
+    objective:SetScript("OnEnter", function()
+        objective:OnEnter(tracked)
     end)
+    objective:SetScript("OnLeave", function()
+        objective:OnLeave(tracked)
+    end)
+
+
+    -- objective.navStart:SetScript("OnClick", function(self)
+    --     emit("track")
+    --     navigating = true
+    --     emit("navigate")
+    -- end)
 
 
     local function SetTrackerPosition(index)
@@ -914,7 +918,7 @@ function MapPinEnhanced:DistanceTimer(cb)
     end
 end
 
-hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self)
+hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self) -- hide default blizzard waypoint
     self:SetAlpha(0)
     self:EnableMouse(false)
 end)

@@ -1,0 +1,58 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+    <Script file="MPHPresetFrame.lua" />
+    <Button name="MPHPresetTemplate" virtual="true" hidden="true" mixin="MPHPresetMixin" enableMouse="true">
+        <Size x="265" y="55"/>
+
+        <NormalTexture name="$parentNormalTexture" atlas="auctionhouse-nav-button" alpha="0.7" useAtlasSize="false">
+            <Size x="265" y="55"/>
+            <Anchors>
+                <Anchor point="TOPLEFT" x="-2" y="0"/>
+            </Anchors>
+        </NormalTexture>
+        <PushedTexture name="$parentPushedTexture" useAtlasSize="false" atlas="auctionhouse-nav-button">
+            <Size x="265" y="52"/>
+            <Anchors>
+                <Anchor point="CENTER"/>
+            </Anchors>
+        </PushedTexture>
+        <HighlightTexture name="$parentHighlightTexture" atlas="auctionhouse-nav-button-highlight" alphaMode="BLEND" alpha="0.3">
+            <Size x="258" y="36"/>
+            <Anchors>
+                <Anchor point="TOP"/>
+            </Anchors>
+        </HighlightTexture>
+
+        <Frames>
+            <Button parentKey="delete">
+                <Size x="25" y="25"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="RIGHT" x="-10" y="22"/>
+                </Anchors>
+                <NormalTexture atlas="auctionhouse-ui-filter-redx" alpha="0.7"/>
+                <PushedTexture atlas="auctionhouse-ui-filter-redx">
+                    <Size x="23" y="23"/>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                </PushedTexture>
+                <HighlightTexture atlas="auctionhouse-ui-filter-redx" alpha="0.7"/>
+            </Button>
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Preset1" outline="NORMAL">
+                    <Size x="225" y="40" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent" x="15" y="10" />
+
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Button>
+</Ui>

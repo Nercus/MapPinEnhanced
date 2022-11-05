@@ -35,7 +35,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString name="$parentText" parentKey="text" inherits="GameFontNormalMed2Outline" justifyH="LEFT" text="Map Pins" outline="NORMAL">
+                        <FontString name="$parentText" parentKey="text" inherits="GameFontNormalLarge" justifyH="LEFT" text="Pintracker" outline="NORMAL">
                             <Size x="150" y="0" />
                             <Anchors>
                                 <Anchor point="LEFT" relativeKey="$parent.textureLeft" relativePoint="RIGHT" x="-25" y="0" />

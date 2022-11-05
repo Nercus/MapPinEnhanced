@@ -15,19 +15,19 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.7">
+                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.4">
                     <Size x="175" y="20" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="35" y="-4" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.7">
+                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.4">
                     <Size x="175" y="20" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" x="-30" y="-4" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.7">
+                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.4">
                     <Size x="175" y="20" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" x="35" />
@@ -60,18 +60,14 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <Button hidden="true" parentKey="navStart">
+            <!-- <Button hidden="true" parentKey="navStart">
                 <Size x="20" y="20" />
                 <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent" x="-10" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent" x="-5" y="-3" />
                 </Anchors>
                 <NormalTexture rotation="210" atlas="CovenantSanctum-Renown-Arrow-Depressed" alpha="0.5" desaturated="true"/>
                 <HighlightTexture rotation="210" atlas="CovenantSanctum-Renown-Arrow-Depressed" alpha="1" desaturated="false"/>
-            </Button>
+            </Button> -->
         </Frames>
-        <Scripts>
-            <OnEnter method="OnEnter"/>
-            <OnLeave method="OnLeave"/>
-        </Scripts>
     </Frame>
 </Ui>

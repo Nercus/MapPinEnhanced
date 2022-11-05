@@ -6,4 +6,6 @@
     <Include file="MPHMapPin.xml"/>
     <Include file="MPHMinimapPin.xml"/>
     <Include file="MPHTrackerEntry.xml"/>
+    <Include file="MPHImportFrame.xml"/>
+    <Include file="MPHPresetFrame.xml"/>
 </Ui>
