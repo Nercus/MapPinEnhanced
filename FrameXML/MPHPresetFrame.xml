@@ -1,8 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
-    <Script file="MPHPresetFrame.lua" />
-    <Button name="MPHPresetTemplate" virtual="true" hidden="true" mixin="MPHPresetMixin" enableMouse="true">
+
+    <Button name="MPHPresetTemplate" virtual="true" hidden="true" enableMouse="true">
         <Size x="265" y="55"/>
 
         <NormalTexture name="$parentNormalTexture" atlas="auctionhouse-nav-button" alpha="0.7" useAtlasSize="false">
@@ -24,11 +24,12 @@
             </Anchors>
         </HighlightTexture>
 
+
         <Frames>
             <Button parentKey="delete">
                 <Size x="25" y="25"/>
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativePoint="RIGHT" x="-10" y="22"/>
+                    <Anchor point="TOPRIGHT" relativePoint="RIGHT" x="-10" y="21"/>
                 </Anchors>
                 <NormalTexture atlas="auctionhouse-ui-filter-redx" alpha="0.7"/>
                 <PushedTexture atlas="auctionhouse-ui-filter-redx">
@@ -51,8 +52,5 @@
                 </FontString>
             </Layer>
         </Layers>
-        <Scripts>
-            <OnLoad method="OnLoad" />
-        </Scripts>
     </Button>
 </Ui>

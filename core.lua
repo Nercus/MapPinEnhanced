@@ -11,12 +11,27 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 
--- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
--- TODO: Pretend that TomTom is enabled for other addons
--- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
--- TODO: Add PinPresets (save presets, delete presets, overwrite presets, quick access in pintracker/LDB and Minimap Button (use Grid2LDB implementation)
+-- FIXME: pintracker not penetrable by mouse if not full. grow based on number of entries. set max in options
+-- TODO: Add quick access in pintracker/LDB and Minimap Button
+-- TODO: Add new fontString on pintracker entry for pin number
 -- TODO: Update TomTom parsing
 -- TODO: Add average time to travel to pin https://www.curseforge.com/wow/addons/map-pin-timers
+-- TODO: Add Button in options to reset tracker position
+-- TODO: Add 2 Sliders in options to move tracker
+-- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets
+
+-- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
+
+-- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, ...)
+-- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
+
+
+-- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
+-- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
+-- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
+-- TODO: option show tracked world quest in pintracker?
+-- TODO: Add visual compass?
+-- TODO: watch possible taint issues
 
 
 
@@ -194,6 +209,7 @@ local defaults = {
             width = 300,
             height = 500,
         },
+        presets = {},
         options = {
             changedalpha = true
         }
