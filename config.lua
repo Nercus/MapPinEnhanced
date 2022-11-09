@@ -17,7 +17,7 @@ function module:OnInitialize()
     setSettingsOnLoad()
 
     local f = AceGUI:Create("SimpleGroup")
-    f:SetLayout("Flow")
+    f:SetLayout("List")
 
     local cb1 = AceGUI:Create("CheckBox")
     cb1:SetLabel("Unlimited Supertrack Distance")
@@ -35,6 +35,16 @@ function module:OnInitialize()
 
     end)
     f:AddChild(cb1)
+
+    local cb2 = AceGUI:Create("Slider")
+    cb2:SetLabel("Pin Tracker Max Entries")
+    cb2:SetSliderValues(3, 10, 1)
+    cb2:SetValue(core.db.profile.options["maxTrackerEntries"])
+    cb2:SetCallback("OnValueChanged", function(widget, event, value)
+        core.db.profile.options["maxTrackerEntries"] = value
+        core.UpdateTrackerPositions()
+    end)
+    f:AddChild(cb2)
 
 
 

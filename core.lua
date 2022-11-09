@@ -11,7 +11,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 
--- FIXME: pintracker not penetrable by mouse if not full. grow based on number of entries. set max in options
+-- TODO: add function to scroll to tracked pin
 -- TODO: Add quick access in pintracker/LDB and Minimap Button
 -- TODO: Add new fontString on pintracker entry for pin number
 -- TODO: Update TomTom parsing
@@ -19,6 +19,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 -- TODO: Add Button in options to reset tracker position
 -- TODO: Add 2 Sliders in options to move tracker
 -- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets
+
+-- TODO: option window smaller than blizzard interface window (like advanced interface options)
 
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 
@@ -203,15 +205,10 @@ local defaults = {
             hide = false
         },
         savedPins = {},
-        pinTracker = {
-            x = 0,
-            y = 0,
-            width = 300,
-            height = 500,
-        },
         presets = {},
         options = {
-            changedalpha = true
+            changedalpha = true,
+            maxTrackerEntries = 6,
         }
     }
 }
@@ -235,28 +232,15 @@ end
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
-
-    MPHFrame:SetScript("OnDragStop", function(s)
-        s:StopMovingOrSizing()
-        local x, y = s:GetLeft(), s:GetTop()
-        self.db.profile.pinTracker.x = x
-        self.db.profile.pinTracker.y = y
-    end)
-
-
+    MPHFrame:SetPoint("CENTER", UIParent, "CENTER")
     self.MPHFrame = MPHFrame
-
 
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
 
-    MPHFrame:SetPoint("CENTER", UIParent, "CENTER", self.db.profile.pinTracker.x, self.db.profile.pinTracker.y)
-
     -- Minimap Icon
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
     MapPinEnhanced:UpdateMinimapButton()
-
-
 
     -- Structure mapdata like TomTom, Snippet from TomTom Addon
     for id in pairs(HBDmapData) do
@@ -344,6 +328,7 @@ StaticPopupDialogs["MPH_ENABLE_NAVIGATION"] = {
 }
 
 function MapPinEnhanced:OnEnable()
+
     if GetCVar("showInGameNavigation") == "0" then
         StaticPopup_Show("MPH_ENABLE_NAVIGATION")
     end
@@ -576,28 +561,35 @@ end
 local function PinManager()
     local pins = {}
     local function UpdateTrackerPositions()
+
         for i, p in ipairs(pins) do
             p.SetTrackerPosition(i)
+
         end
+
 
         if MapPinEnhanced.MPHFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         elseif not MapPinEnhanced.MPHFrame:IsShown() and #pins > 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
         end
-        if (#pins < 7) then
+
+
+        if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Hide()
+            MapPinEnhanced.MPHFrame:SetHeight(60 + (#pins * 40))
         else
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Show()
+            MapPinEnhanced.MPHFrame:SetHeight(60 + (MapPinEnhanced.db.profile.options["maxTrackerEntries"] * 40))
         end
 
-        -- TODO: add function to scroll to tracked pin
+
     end
 
     local function SupertrackClosest()
         if not C_SuperTrack.IsSuperTrackingQuest() then
             local pin = nil
-            for _, p in ipairs(pins) do
+            for i, p in ipairs(pins) do
                 p.Untrack()
                 if IsCloser(p, pin) then
                     pin = p
@@ -746,12 +738,14 @@ local function PinManager()
         RemoveTrackedPin = RemoveTrackedPin,
         RestoreAllPins = RestoreAllPins,
         RemoveAllPins = RemoveAllPins,
-        GetAllPinData = GetAllPinData
+        GetAllPinData = GetAllPinData,
+        UpdateTrackerPositions = UpdateTrackerPositions,
     }
 end
 
 local pinManager = PinManager()
 MapPinEnhanced.RemoveTrackedPin = pinManager.RemoveTrackedPin
+MapPinEnhanced.UpdateTrackerPositions = pinManager.UpdateTrackerPositions
 
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
