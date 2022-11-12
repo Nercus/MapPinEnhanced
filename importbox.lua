@@ -125,7 +125,7 @@ local function CreateWindow()
     if module.importFrame then return end
     local textStore
 
-    local importFrame = CreateFrame("Frame", "MapPinEnhancedImportFrame", UIParent, "MPHImportFrameTemplate")
+    local importFrame = CreateFrame("Frame", nil, UIParent, "MPHImportFrameTemplate")
     importFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
     importFrame.export:SetScript("OnClick", function()
@@ -147,6 +147,7 @@ local function CreateWindow()
     importFrame.import:SetScript("OnClick", function()
         local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
         ParseImport(input)
+        core:ToggleImportWindow()
     end)
     module.importFrame = importFrame
     updatePresetsList()

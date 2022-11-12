@@ -25,17 +25,13 @@ function MPHFrameMixin:OnLoad()
     self.scrollFrame.ScrollBar:Hide()
 
 
-    local navigationStepFrame = CreateFrame("Frame", "MPHNavigationStepFrame", self, "MPHNavigationStepFrameTemplate")
+    local navigationStepFrame = CreateFrame("Frame", nil, self, "MPHNavigationStepFrameTemplate")
 
     self.NavigationStepFrame = navigationStepFrame
 end
 
-function MPHFrameMixin:OnDragStart()
+function MPHFrameMixin:OnMouseDown()
     if IsControlKeyDown() then
         self:StartMoving()
     end
-end
-
-function MPHFrameMixin:OnDragStop(s)
-    self:StopMovingOrSizing()
 end

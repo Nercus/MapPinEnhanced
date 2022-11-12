@@ -12,21 +12,20 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 -- TODO: add function to scroll to tracked pin
+-- TODO: add global functions
 -- TODO: Add quick access in pintracker/LDB and Minimap Button
--- TODO: Add new fontString on pintracker entry for pin number
 -- TODO: Update TomTom parsing
 -- TODO: Add average time to travel to pin https://www.curseforge.com/wow/addons/map-pin-timers
--- TODO: Add Button in options to reset tracker position
 -- TODO: Add 2 Sliders in options to move tracker
--- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets
-
+-- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata
+-- TODO: I am wondering if you could add an option to toggle visibility of all active pins either in a zone (or however is easiest).
 -- TODO: option window smaller than blizzard interface window (like advanced interface options)
-
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 
 -- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, ...)
 -- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
 
+-- TODO: Clickable Hyperlinks in Chat when coords detected: https://www.curseforge.com/wow/addons/tompoints
 
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
@@ -206,12 +205,19 @@ local defaults = {
         },
         savedPins = {},
         presets = {},
+        trackerPos = {
+            x = GetScreenWidth() / 2,
+            y = -GetScreenHeight() / 2
+        },
         options = {
             changedalpha = true,
             maxTrackerEntries = 6,
         }
     }
 }
+
+local pinsRestored = false
+
 
 function MapPinEnhanced:TogglePinTrackerWindow()
     if self.MPHFrame:IsShown() then
@@ -231,12 +237,21 @@ end
 
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
-    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
-    MPHFrame:SetPoint("CENTER", UIParent, "CENTER")
+    local MPHFrame = CreateFrame("Frame", nil, UIParent, "MPHFrameTemplate")
+    MPHFrame:SetScript("OnMouseUp", function(self)
+        local x, y = select(4, self:GetPoint())
+        MapPinEnhanced.db.profile.trackerPos = {
+            x = x,
+            y = y,
+        }
+        self:StopMovingOrSizing()
+    end)
     self.MPHFrame = MPHFrame
 
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
+
+    MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.profile.trackerPos.x, self.db.profile.trackerPos.y)
 
     -- Minimap Icon
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
@@ -354,9 +369,9 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function setDistanceText(distance)
         if distance then
-            objective.distance:SetText(IN_GAME_NAVIGATION_RANGE:format(AbbreviateNumbers(distance)))
+            objective.distance:SetText("[" .. IN_GAME_NAVIGATION_RANGE:format(AbbreviateNumbers(distance)) .. "]")
         else
-            objective.distance:SetText("-")
+            objective.distance:SetText("")
         end
     end
 
@@ -499,6 +514,7 @@ local function CreatePin(x, y, mapID, emit, title)
         objective:ClearAllPoints()
         objective:SetPoint("TOPLEFT", MapPinEnhanced.MPHFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
             -((index - 1) * (objective:GetHeight())))
+        objective.index:SetText(index)
         if not objective:IsShown() then
             objective:Show()
         end
@@ -577,10 +593,19 @@ local function PinManager()
 
         if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Hide()
-            MapPinEnhanced.MPHFrame:SetHeight(60 + (#pins * 40))
+            local newHeight = 60 + (#pins * 40)
+            MapPinEnhanced.MPHFrame:SetHeight(newHeight)
+            if pinsRestored then
+                MapPinEnhanced.MPHFrame:ClearAllPoints()
+                MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.profile.trackerPos.x,
+                    MapPinEnhanced.db.profile.trackerPos.y)
+            end
+
         else
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Show()
-            MapPinEnhanced.MPHFrame:SetHeight(60 + (MapPinEnhanced.db.profile.options["maxTrackerEntries"] * 40))
+            local previousHeight = MapPinEnhanced.MPHFrame:GetHeight()
+            local newHeight = 60 + (MapPinEnhanced.db.profile.options["maxTrackerEntries"] * 40)
+            MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
 
 
@@ -710,6 +735,7 @@ local function PinManager()
         for _, p in ipairs(MapPinEnhanced.db.profile.savedpins) do
             AddPin(p.x, p.y, p.mapID, p.title)
         end
+        pinsRestored = true
     end
 
     local function RemoveAllPins()
@@ -909,7 +935,6 @@ SlashCmdList["MPH"] = function(msg)
     MapPinEnhanced:ParseInput(msg)
 end
 
----- Hooks ------
 
 
 function MapPinEnhanced:DistanceTimer(cb)

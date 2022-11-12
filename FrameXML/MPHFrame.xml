@@ -4,10 +4,6 @@
     <Script file="MPHFrame.lua" />
     <Frame name="MPHFrameTemplate" virtual="true" hidden="true" mixin="MPHFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
         <Size x="250" y="26" />
-        <Anchors>
-            <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
-        </Anchors>
-
         <Frames>
             <Frame name="$parentHeader" parentKey="header">
                 <Size x="250" y="25" />
@@ -82,8 +78,7 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnDragStart method="OnDragStart" />
-            <OnDragStop method="OnDragStop" />
+            <OnMouseDown method="OnMouseDown" />
         </Scripts>
     </Frame>
 </Ui>

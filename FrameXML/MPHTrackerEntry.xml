@@ -4,37 +4,6 @@
     <Script file="MPHTrackerEntry.lua" />
     <Frame name="MPHTrackerEntryTemplate" virtual="true" hidden="true" mixin="MPHTrackerEntryMixin">
         <Size x="222" y="40" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <Texture atlas="auctionhouse-nav-button-select" parentKey="highlightBorder" hidden="true" alpha="0.4">
-                    <Size x="222" y="40" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.4">
-                    <Size x="175" y="20" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="35" y="-4" />
-                    </Anchors>
-                </FontString>
-                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.4">
-                    <Size x="175" y="20" />
-                    <Anchors>
-                        <Anchor point="TOPRIGHT" x="-30" y="-4" />
-                    </Anchors>
-                </FontString>
-                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.4">
-                    <Size x="175" y="20" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="35" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
         <Frames>
             <Frame parentKey="button">
                 <Size x="25" y="25" />
@@ -69,5 +38,42 @@
                 <HighlightTexture rotation="210" atlas="CovenantSanctum-Renown-Arrow-Depressed" alpha="1" desaturated="false"/>
             </Button> -->
         </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture atlas="auctionhouse-nav-button-select" parentKey="highlightBorder" hidden="true" alpha="0.4">
+                    <Size x="222" y="40" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString inherits="GameFontNormalMed2" justifyH="MIDDLE" justifyV="MIDDLE" parentKey="index" alpha="0.4">
+                    <Size y="20" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="2" y="5" relativeKey="$parent.button" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.4">
+                    <Size y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="3" relativeKey="$parent.index" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.6">
+                    <Size y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="3" relativeKey="$parent.name" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.4">
+                    <Size y="20" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="2" y="-5" relativeKey="$parent.button" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
     </Frame>
 </Ui>

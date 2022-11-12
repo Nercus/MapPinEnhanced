@@ -5,6 +5,7 @@ MPHTrackerEntryMixin = {}
 function MPHTrackerEntryMixin:Track()
     self.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
     self.name:SetAlpha(1)
+    self.index:SetAlpha(1)
     self.info:SetAlpha(1)
     self.distance:Show()
 end
@@ -12,6 +13,7 @@ end
 function MPHTrackerEntryMixin:Untrack()
     self.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
     self.name:SetAlpha(0.4)
+    self.index:SetAlpha(0.4)
     self.info:SetAlpha(0.4)
     self.distance:Hide()
 end
@@ -19,6 +21,7 @@ end
 function MPHTrackerEntryMixin:OnEnter(tracked)
     self.highlightBorder:Show()
     self.name:SetAlpha(1)
+    self.index:SetAlpha(1)
     self.info:SetAlpha(1)
     --self.navStart:Show()
     self.button.highlight:Show()
@@ -31,9 +34,10 @@ function MPHTrackerEntryMixin:OnEnter(tracked)
 
     local name = self.name:GetText()
     local info = self.info:GetText()
+    local index = self.index:GetText()
     local atlas = (tracked and "Waypoint-MapPin-Tracked") or "Waypoint-MapPin-Untracked"
     if name then
-        name = "|A:" .. atlas .. ":19:19|a " .. name
+        name = "|A:" .. atlas .. ":19:19|a " .. index .. ". " .. name
         GameTooltip:AddLine(name)
     end
     if info then
@@ -50,6 +54,7 @@ function MPHTrackerEntryMixin:OnLeave(tracked)
     self.button.highlight:Hide()
     if (not tracked) then
         self.name:SetAlpha(0.4)
+        self.index:SetAlpha(0.4)
         self.info:SetAlpha(0.4)
     end
     -- end
