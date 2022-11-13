@@ -3,7 +3,7 @@
 ..\..\FrameXML\UI.xsd">
     <Script file="MPHFrame.lua" />
     <Frame name="MPHFrameTemplate" virtual="true" hidden="true" mixin="MPHFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
-        <Size x="250" y="26" />
+        <Size x="250" y="1" />
         <Frames>
             <Frame name="$parentHeader" parentKey="header">
                 <Size x="250" y="25" />
@@ -63,7 +63,7 @@
                 <Size x="225" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="0" y="-25" />
-                    <Anchor point="BOTTOMLEFT" x="0" y="30" />
+                    <Anchor point="BOTTOMLEFT" x="0" y="0" />
                 </Anchors>
                 <ScrollChild>
                     <Frame parentKey="scrollChild">

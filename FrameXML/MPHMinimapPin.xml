@@ -8,7 +8,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="Icon" atlas="Waypoint-MapPin-Untracked">
-                    <Size x="30" y="30"/>
+                    <Size x="25" y="25"/>
                     <Anchors>
                         <Anchor point="CENTER"/>
                     </Anchors>
@@ -16,7 +16,7 @@
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="Highlight" atlas="Waypoint-MapPin-Highlight">
-                    <Size x="30" y="30"/>
+                    <Size x="25" y="25"/>
                     <Anchors>
                         <Anchor point="CENTER" relativeKey="$parent.Icon"/>
                     </Anchors>

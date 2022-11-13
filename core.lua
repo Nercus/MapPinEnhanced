@@ -8,33 +8,25 @@ local HBDP = LibStub("HereBeDragons-Pins-2.0")
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
+local globalMPH = {}
+_G["MapPinEnhanced"] = globalMPH
 
 
-
--- TODO: add function to scroll to tracked pin
--- TODO: add global functions
+-- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata
 -- TODO: Add quick access in pintracker/LDB and Minimap Button
 -- TODO: Update TomTom parsing
--- TODO: Add average time to travel to pin https://www.curseforge.com/wow/addons/map-pin-timers
--- TODO: Add 2 Sliders in options to move tracker
--- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata
--- TODO: I am wondering if you could add an option to toggle visibility of all active pins either in a zone (or however is easiest).
--- TODO: option window smaller than blizzard interface window (like advanced interface options)
--- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
-
--- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, ...)
 -- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
-
+-- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
+-- TODO: Rightclick to make pin persistent (add newplayertutorial-icon-mouse-leftbutton to tooltip and adjust tooltip)
 -- TODO: Clickable Hyperlinks in Chat when coords detected: https://www.curseforge.com/wow/addons/tompoints
-
--- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
--- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
--- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
--- TODO: option show tracked world quest in pintracker?
--- TODO: Add visual compass?
+-- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
+-- TODO: disable pintracker config slider when pintracker is hidden
+-- FIXME: Scroll possible even with less pins than maxpins
 -- TODO: watch possible taint issues
-
-
+-- FIXME: find way to get rid of blizz minimap pin tooltip
+-- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
+-- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
+-- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
 
 
 local strmatch = _G.string.match
@@ -198,20 +190,26 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
 })
 
 
+local screenWidth, screenHeight = GetPhysicalScreenSize()
 local defaults = {
     profile = {
         minimap = {
             hide = false
         },
-        savedPins = {},
+        savedPins = {
+            pinsData = {},
+            lastTrackedIndex = nil
+        },
         presets = {},
         trackerPos = {
-            x = GetScreenWidth() / 2,
-            y = -GetScreenHeight() / 2
+            x = screenWidth / 2,
+            y = -screenHeight / 2
         },
         options = {
             changedalpha = true,
             maxTrackerEntries = 6,
+            showTimeOnSuperTrackedFrame = true,
+            hidePins = false,
         }
     }
 }
@@ -222,8 +220,14 @@ local pinsRestored = false
 function MapPinEnhanced:TogglePinTrackerWindow()
     if self.MPHFrame:IsShown() then
         self.MPHFrame:Hide()
+        if self.db.profile.options["hidePins"] then
+            self.pinManager:HideAllPins()
+        end
     else
         self.MPHFrame:Show()
+        if self.db.profile.options["hidePins"] then
+            self.pinManager:ShowAllPins()
+        end
     end
 end
 
@@ -352,6 +356,9 @@ function MapPinEnhanced:OnEnable()
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LOGIN")
+    if self.db.profile.options.reduceAlphaOnMod then
+        self:RegisterEvent("CURSOR_CHANGED")
+    end
 end
 
 local MPHFramePool = {}
@@ -365,7 +372,7 @@ local function CreatePin(x, y, mapID, emit, title)
     local pin = CreateFrame("Button", nil, nil, "MPHMapPinTemplate")
     local minimappin = CreateFrame("Button", nil, nil, "MPHMinimapPinTemplate")
 
-
+    local index;
 
     local function setDistanceText(distance)
         if distance then
@@ -404,6 +411,11 @@ local function CreatePin(x, y, mapID, emit, title)
                     distanceCheck)
             end
         end
+        MapPinEnhanced.db.profile.savedpins.lastTrackedPin = {
+            x = x2,
+            y = y2,
+            mapID = mapID2,
+        }
         MapPinEnhanced.blockWAYPOINTevent = false
     end
 
@@ -413,6 +425,7 @@ local function CreatePin(x, y, mapID, emit, title)
         objective:Untrack()
         minimappin:Untrack()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
+        MapPinEnhanced.db.profile.savedpins.lastTrackedPin = nil
         if not MapPinEnhanced.distanceTimer.cancelled then
             MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
         end
@@ -446,8 +459,56 @@ local function CreatePin(x, y, mapID, emit, title)
         HBDP:AddMinimapIconMap(MapPinEnhanced, minimappin, mapID2, x2, y2, false, false)
     end
 
+    local function HidePin()
+        pin:EnableMouse(false)
+        pin:SetAlpha(0)
+        objective:EnableMouse(false)
+        objective:SetAlpha(0)
+        minimappin:EnableMouse(false)
+        -- blizzard minimap pin is always invisible but still has tooltip
+        minimappin:SetAlpha(0)
+    end
+
+    local function ShowPin()
+        pin:EnableMouse(true)
+        pin:SetAlpha(1)
+        objective:EnableMouse(true)
+        objective:SetAlpha(1)
+        minimappin:EnableMouse(true)
+        -- blizzard minimap pin is always invisible but still has tooltip
+        minimappin:SetAlpha(1)
+    end
+
     local function IsTracked()
         return tracked
+    end
+
+    local function scrollToObjective(i, isRetry)
+        local scrollIndex = index
+        if i then
+            scrollIndex = i
+        end
+
+        if scrollIndex then
+            local _, max = MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:GetMinMaxValues()
+            if max == 0 then
+                if not isRetry then
+                    C_Timer.After(0.01, function() scrollToObjective(scrollIndex, true) end)
+                end
+                return
+            end
+
+
+            local value = (scrollIndex - 1) * objective:GetHeight()
+            if value > max then
+                if not isRetry then
+                    C_Timer.After(0.01, function() scrollToObjective(scrollIndex, true) end)
+                    return
+                end
+            end
+            isRetry = nil
+            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetValue(value)
+        end
     end
 
     pin:SetScript("OnMouseDown", function(self, arg1)
@@ -458,6 +519,8 @@ local function CreatePin(x, y, mapID, emit, title)
                 emit("hyperlink")
             else
                 ToggleTracked()
+                -- scroll to tracked pin
+                scrollToObjective()
             end
         end
         self:SetPoint("CENTER", 2, -2)
@@ -474,6 +537,12 @@ local function CreatePin(x, y, mapID, emit, title)
             GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
             GameTooltip_AddColoredLine(GameTooltip, L["MAP_PIN_TOGGLE"], GREEN_FONT_COLOR);
             GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
+            GameTooltip:Show()
+        end)
+
+        minimappin:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
+            GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip:Show()
         end)
     end
@@ -510,13 +579,18 @@ local function CreatePin(x, y, mapID, emit, title)
     -- end)
 
 
-    local function SetTrackerPosition(index)
+    local function SetTrackerPosition(i)
+        index = i
         objective:ClearAllPoints()
         objective:SetPoint("TOPLEFT", MapPinEnhanced.MPHFrame.scrollFrame.scrollChild, "TOPLEFT", 5,
-            -((index - 1) * (objective:GetHeight())))
-        objective.index:SetText(index)
+            -((i - 1) * (objective:GetHeight())))
+        objective:SetIndex(i)
         if not objective:IsShown() then
             objective:Show()
+        end
+
+        if tracked then
+            scrollToObjective(i)
         end
     end
 
@@ -534,6 +608,8 @@ local function CreatePin(x, y, mapID, emit, title)
     SetObjectiveText(x, y, mapID)
 
 
+
+
     return {
         Untrack = Untrack,
         Track = Track,
@@ -543,9 +619,12 @@ local function CreatePin(x, y, mapID, emit, title)
         MoveOnMap = MoveOnMap,
         IsTracked = IsTracked,
         SetTooltip = SetTooltip,
+        scrollToObjective = scrollToObjective,
         SetTrackerPosition = SetTrackerPosition,
         SetObjectiveTitle = SetObjectiveTitle,
         SetObjectiveText = SetObjectiveText,
+        HidePin = HidePin,
+        ShowPin = ShowPin,
         x = x,
         y = y,
         mapID = mapID,
@@ -576,13 +655,24 @@ end
 
 local function PinManager()
     local pins = {}
-    local function UpdateTrackerPositions()
 
+    local function SavePinsPersistent()
+        local data = {}
+        for _, pin in pairs(pins) do
+            table.insert(data, {
+                x = pin.x,
+                y = pin.y,
+                mapID = pin.mapID,
+                title = pin.title,
+            })
+        end
+        MapPinEnhanced.db.profile.savedpins.pinsData = data
+    end
+
+    local function UpdateTrackerPositions()
         for i, p in ipairs(pins) do
             p.SetTrackerPosition(i)
-
         end
-
 
         if MapPinEnhanced.MPHFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
@@ -590,31 +680,26 @@ local function PinManager()
             MapPinEnhanced:TogglePinTrackerWindow()
         end
 
-
         if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
-            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Hide()
-            local newHeight = 60 + (#pins * 40)
+            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(0)
+            local newHeight = 60 + ((#pins - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
             if pinsRestored then
                 MapPinEnhanced.MPHFrame:ClearAllPoints()
                 MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.profile.trackerPos.x,
                     MapPinEnhanced.db.profile.trackerPos.y)
             end
-
         else
-            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:Show()
-            local previousHeight = MapPinEnhanced.MPHFrame:GetHeight()
-            local newHeight = 60 + (MapPinEnhanced.db.profile.options["maxTrackerEntries"] * 40)
+            MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(1)
+            local newHeight = 60 + ((MapPinEnhanced.db.profile.options["maxTrackerEntries"] - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
-
-
     end
 
     local function SupertrackClosest()
         if not C_SuperTrack.IsSuperTrackingQuest() then
             local pin = nil
-            for i, p in ipairs(pins) do
+            for _, p in ipairs(pins) do
                 p.Untrack()
                 if IsCloser(p, pin) then
                     pin = p
@@ -622,6 +707,7 @@ local function PinManager()
             end
             if pin then
                 pin.Track(pin.x, pin.y, pin.mapID)
+
             end
         end
     end
@@ -636,6 +722,7 @@ local function PinManager()
                 SupertrackClosest()
                 tinsert(MPHFramePool, pin)
                 UpdateTrackerPositions()
+                SavePinsPersistent()
                 return
             end
         end
@@ -650,7 +737,7 @@ local function PinManager()
         end
     end
 
-    local function AddPin(x, y, mapID, name)
+    local function AddPin(x, y, mapID, name, noTrack)
         for _, p in ipairs(pins) do
             if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
                 UntrackPins()
@@ -697,10 +784,17 @@ local function PinManager()
             pin.SetObjectiveText(x, y, mapID)
         end
         pins[#pins + 1] = pin
-        UntrackPins()
-        pin.Track(x, y, mapID)
+
+        if not noTrack then
+            UntrackPins()
+            pin.Track(x, y, mapID)
+        else
+            pin.scrollToObjective()
+        end
+
         UpdateTrackerPositions()
-        MapPinEnhanced.db.profile.savedpins = pins
+        SavePinsPersistent()
+
     end
 
     local function RestorePin()
@@ -729,12 +823,22 @@ local function PinManager()
     end
 
     local function RestoreAllPins()
-        if (not MapPinEnhanced.db.profile.savedpins) then
+        if (not MapPinEnhanced.db.profile.savedpins.pinsData) then
             return
         end
-        for _, p in ipairs(MapPinEnhanced.db.profile.savedpins) do
-            AddPin(p.x, p.y, p.mapID, p.title)
+
+        local pTracked = MapPinEnhanced.db.profile.savedpins.lastTrackedPin
+        local hasTracked = pTracked ~= nil
+
+        for _, p in ipairs(MapPinEnhanced.db.profile.savedpins.pinsData) do
+            if hasTracked then
+                AddPin(p.x, p.y, p.mapID, p.title,
+                    not (p.x == pTracked.x and p.y == pTracked.y and p.mapID == pTracked.mapID))
+            else
+                AddPin(p.x, p.y, p.mapID, p.title, true)
+            end
         end
+
         pinsRestored = true
     end
 
@@ -744,6 +848,7 @@ local function PinManager()
             tinsert(MPHFramePool, pin)
             pins[i] = nil
         end
+        SavePinsPersistent()
         C_Map.ClearUserWaypoint()
     end
 
@@ -753,6 +858,18 @@ local function PinManager()
             tinsert(t, { pin.x, pin.y, pin.mapID })
         end
         return t
+    end
+
+    local function HideAllPins()
+        for i, pin in ipairs(pins) do
+            pin.HidePin()
+        end
+    end
+
+    local function ShowAllPins()
+        for i, pin in ipairs(pins) do
+            pin.ShowPin()
+        end
     end
 
     return {
@@ -766,19 +883,20 @@ local function PinManager()
         RemoveAllPins = RemoveAllPins,
         GetAllPinData = GetAllPinData,
         UpdateTrackerPositions = UpdateTrackerPositions,
+        HideAllPins = HideAllPins,
+        ShowAllPins = ShowAllPins,
     }
 end
 
-local pinManager = PinManager()
-MapPinEnhanced.RemoveTrackedPin = pinManager.RemoveTrackedPin
-MapPinEnhanced.UpdateTrackerPositions = pinManager.UpdateTrackerPositions
+MapPinEnhanced.pinManager = PinManager()
+
 
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
             MapPinEnhanced:Print(L["Arrow error"])
         end
-        pinManager.AddPin(x, y, mapID, name)
+        self.pinManager.AddPin(x, y, mapID, name)
     else
         error("x, y or mapID missing")
     end
@@ -786,12 +904,12 @@ end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
     if C_SuperTrack.IsSuperTrackingQuest() then
-        pinManager.UntrackPins()
+        self.pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
         C_Map.ClearUserWaypoint()
     else
         if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
-            pinManager.RefreshTracking()
+            self.pinManager.RefreshTracking()
         end
     end
 end
@@ -821,9 +939,51 @@ function MapPinEnhanced:PLAYER_LOGIN()
     C_Map.ClearUserWaypoint()
 end
 
+function MapPinEnhanced:CURSOR_CHANGED()
+    ViragDevTool:AddData({ GetCursorInfo() })
+end
+
+-- SuperTrackedTimer Text
+
+function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
+    if not self.superTrackedTimer then
+        local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
+
+        frame:SetSize(200, 20)
+        frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 0)
+
+
+        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        text:SetAllPoints()
+        text:SetJustifyH("CENTER")
+        text:SetJustifyV("MIDDLE")
+
+        self.superTrackedTimer = text
+    end
+
+    if time > 0 then
+        self.superTrackedTimer:SetText(TIMER_MINUTES_DISPLAY:format(floor(time / 60), floor(time % 60)))
+    else
+        self.superTrackedTimer:SetText("??:??")
+    end
+end
+
+function MapPinEnhanced:UpdateTrackerTime(distance)
+    if MapPinEnhanced.lastDistance then
+        local speed = (MapPinEnhanced.lastDistance - distance)
+        if speed > 0 then
+            local time = distance / speed
+            if time < 100 then
+                MapPinEnhanced:UpdateSuperTrackedTimerText(time)
+            end
+        end
+    end
+    MapPinEnhanced.lastDistance = distance
+end
+
 local TomTomLoaded
 function MapPinEnhanced:PLAYER_ENTERING_WORLD()
-    pinManager.RestoreAllPins()
+    self.pinManager.RestoreAllPins()
     -- Check if TomTom is Loaded
     if IsAddOnLoaded("TomTom") then
         TomTomLoaded = true
@@ -831,6 +991,26 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD()
     else
         TomTomLoaded = false
     end
+
+    if self.db.profile.options["showTimeOnSuperTrackedFrame"] then
+        self.distanceTimerFast = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
+            if C_Navigation.WasClampedToScreen() then
+                if self.superTrackedTimer then
+                    self.superTrackedTimer:Hide()
+                end
+            else
+                self:UpdateTrackerTime(distance)
+                if self.superTrackedTimer then
+                    self.superTrackedTimer:Show()
+                end
+            end
+        end)
+    end
+end
+
+function MapPinEnhanced:DistanceTimerFast(cb)
+    local distance = C_Navigation.GetDistance();
+    cb(distance)
 end
 
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
@@ -900,7 +1080,7 @@ function MapPinEnhanced:ParseInput(msg)
 end
 
 function MapPinEnhanced:ParseExport()
-    local pinData = pinManager.GetAllPinData()
+    local pinData = self.pinManager.GetAllPinData()
     local output = ""
     for _, pin in ipairs(pinData) do
         local slashcmd = string.format("/way %s %.2f %.2f", mapDataIdReverse[pin[3]], pin[1] * 100, pin[2] * 100)
@@ -917,7 +1097,7 @@ SLASH_MPH3 = "/mph"
 
 SlashCmdList["MPH"] = function(msg)
     if strmatch(msg, "removeall") then
-        pinManager.RemoveAllPins()
+        MapPinEnhanced.pinManager.RemoveAllPins()
         return
     end
     if strmatch(msg, "pintracker") then
@@ -937,6 +1117,10 @@ end
 
 
 
+
+
+
+
 function MapPinEnhanced:DistanceTimer(cb)
     local hasBlizzWaypoint = C_Map.HasUserWaypoint()
     if hasBlizzWaypoint then
@@ -949,7 +1133,7 @@ function MapPinEnhanced:DistanceTimer(cb)
             self.distanceTimer.delay = (0.015 * distance ^ (0.7)) -- calc new update delay based on distance
         end
     else
-        self:CancelAllTimers()
+        self:CancelTimer(self.distanceTimer)
     end
 end
 
@@ -957,3 +1141,10 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self) -- hide de
     self:SetAlpha(0)
     self:EnableMouse(false)
 end)
+
+
+
+-- Set globally available functions
+globalMPH.AddWaypoint = MapPinEnhanced.AddWaypoint
+globalMPH.ParseInput = MapPinEnhanced.ParseInput
+globalMPH.ParseExport = MapPinEnhanced.ParseExport

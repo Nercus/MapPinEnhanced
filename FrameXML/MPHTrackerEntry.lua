@@ -1,7 +1,5 @@
 MPHTrackerEntryMixin = {}
 
-
-
 function MPHTrackerEntryMixin:Track()
     self.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
     self.name:SetAlpha(1)
@@ -64,4 +62,8 @@ end
 function MPHTrackerEntryMixin:SetTitle(title)
     self.name:SetText(title)
     self.name:Show()
+end
+
+function MPHTrackerEntryMixin:SetIndex(i)
+    self.index:SetText(i)
 end
