@@ -13,16 +13,17 @@ _G["MapPinEnhanced"] = globalMPH
 
 
 -- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata, /mph help or with no args show help
--- TODO: Add quick access in pintracker/LDB and Minimap Button
+-- TODO: Add quick access in pintracker/LDB and Minimap Button (List like Grid2)
 -- TODO: Update TomTom parsing
 -- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
+-- FIXME: Pin Tracker Bugs out infight
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 -- TODO: Rightclick to make pin persistent (add newplayertutorial-icon-mouse-leftbutton to tooltip and adjust tooltip)
 -- TODO: Clickable Hyperlinks in Chat when coords detected: https://www.curseforge.com/wow/addons/tompoints
 -- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
 -- TODO: disable pintracker config slider when pintracker is hidden
--- FIXME: Scroll possible even with less pins than maxpins
 -- TODO: watch possible taint issues
+-- TODO: Add more localization
 -- FIXME: find way to get rid of blizz minimap pin tooltip
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
@@ -356,9 +357,6 @@ function MapPinEnhanced:OnEnable()
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LOGIN")
-    if self.db.profile.options.reduceAlphaOnMod then
-        self:RegisterEvent("CURSOR_CHANGED")
-    end
 end
 
 local MPHFramePool = {}
@@ -682,7 +680,7 @@ local function PinManager()
 
         if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(0)
-            local newHeight = 60 + ((#pins - 1) * 40)
+            local newHeight = 65 + ((#pins - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
             if pinsRestored then
                 MapPinEnhanced.MPHFrame:ClearAllPoints()
@@ -691,7 +689,7 @@ local function PinManager()
             end
         else
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(1)
-            local newHeight = 60 + ((MapPinEnhanced.db.profile.options["maxTrackerEntries"] - 1) * 40)
+            local newHeight = 65 + ((MapPinEnhanced.db.profile.options["maxTrackerEntries"] - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
     end
@@ -938,10 +936,6 @@ end
 
 function MapPinEnhanced:PLAYER_LOGIN()
     C_Map.ClearUserWaypoint()
-end
-
-function MapPinEnhanced:CURSOR_CHANGED()
-    ViragDevTool:AddData({ GetCursorInfo() })
 end
 
 -- SuperTrackedTimer Text
