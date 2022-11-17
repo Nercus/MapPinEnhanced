@@ -396,7 +396,6 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function Track(x2, y2, mapID2)
         tracked = true
-        MapPinEnhanced.lastDistance = nil
         pin:Track()
         objective:Track()
         minimappin:Track()
@@ -904,6 +903,7 @@ function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
 end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
+    MapPinEnhanced.lastDistance = nil
     if C_SuperTrack.IsSuperTrackingQuest() then
         self.pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
