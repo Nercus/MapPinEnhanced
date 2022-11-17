@@ -12,7 +12,7 @@ local globalMPH = {}
 _G["MapPinEnhanced"] = globalMPH
 
 
--- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata
+-- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata, /mph help or with no args show help
 -- TODO: Add quick access in pintracker/LDB and Minimap Button
 -- TODO: Update TomTom parsing
 -- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
@@ -396,6 +396,7 @@ local function CreatePin(x, y, mapID, emit, title)
 
     local function Track(x2, y2, mapID2)
         tracked = true
+        MapPinEnhanced.lastDistance = nil
         pin:Track()
         objective:Track()
         minimappin:Track()
@@ -973,7 +974,7 @@ function MapPinEnhanced:UpdateTrackerTime(distance)
         local speed = (MapPinEnhanced.lastDistance - distance)
         if speed > 0 then
             local time = distance / speed
-            if time < 100 then
+            if time < 1800 then
                 MapPinEnhanced:UpdateSuperTrackedTimerText(time)
             end
         end
