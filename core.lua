@@ -12,20 +12,45 @@ local globalMPH = {}
 _G["MapPinEnhanced"] = globalMPH
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Version 2.0
+-- TODO: Rewrite overrides, GetCZWFromMapID, ParseInput, ParseExport
 -- TODO: Change name to Map Pin Enhanced
 -- TODO: Add quick access in pintracker/LDB and Minimap Button (List like Grid2)
--- TODO: Update TomTom parsing
--- TODO: Pretend that Formating error! Use |cffeda55f/mph|r [x] [y] <description> for other addons (possible?) create a fake TomTom API if TomTom is not enabled
--- FIXME: Pin Tracker Bugs out infight
--- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
+-- TODO: Update ParseInput function
 -- TODO: Rightclick to make pin persistent (add newplayertutorial-icon-mouse-leftbutton to tooltip and adjust tooltip)
 -- TODO: Clickable Hyperlinks in Chat when coords detected: https://www.curseforge.com/wow/addons/tompoints
--- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
--- TODO: disable pintracker config slider when pintracker is hidden
--- TODO: watch possible taint issues
--- TODO: Add more localization
+-- FIXME: Pin Tracker Bugs out infight
+
+
+-- Version 2.1
 -- FIXME: find way to get rid of blizz minimap pin tooltip
+-- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
+-- TODO: Create a fake TomTom API if TomTom is not enabled
+-- TODO: watch possible taint issues
+
+-- Version 2.2
+-- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
+-- TODO: Add more localization
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
+
+
+-- Onwards
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
 
@@ -57,78 +82,30 @@ local HBDmapData = HBD.mapData
 
 
 local overrides = {
-    [101] = {
-        mapType = Enum.UIMapType.World
-    }, -- Outland
-    [125] = {
-        mapType = Enum.UIMapType.Zone
-    }, -- Dalaran
-    [126] = {
-        mapType = Enum.UIMapType.Micro
-    },
-    [195] = {
-        suffix = "1"
-    }, -- Kaja'mine
-    [196] = {
-        suffix = "2"
-    }, -- Kaja'mine
-    [197] = {
-        suffix = "3"
-    }, -- Kaja'mine
-    [501] = {
-        mapType = Enum.UIMapType.Zone
-    }, -- Dalaran
-    [502] = {
-        mapType = Enum.UIMapType.Micro
-    },
-    [572] = {
-        mapType = Enum.UIMapType.World
-    }, -- Draenor
-    [579] = {
-        suffix = "1"
-    }, -- Lunarfall Excavation
-    [580] = {
-        suffix = "2"
-    }, -- Lunarfall Excavation
-    [581] = {
-        suffix = "3"
-    }, -- Lunarfall Excavation
-    [582] = {
-        mapType = Enum.UIMapType.Zone
-    }, -- Lunarfall
-    [585] = {
-        suffix = "1"
-    }, -- Frostwall Mine
-    [586] = {
-        suffix = "2"
-    }, -- Frostwall Mine
-    [587] = {
-        suffix = "3"
-    }, -- Frostwall Mine
-    [590] = {
-        mapType = Enum.UIMapType.Zone
-    }, -- Frostwall
-    [625] = {
-        mapType = Enum.UIMapType.Orphan
-    }, -- Dalaran
-    [626] = {
-        mapType = Enum.UIMapType.Micro
-    }, -- Dalaran
-    [627] = {
-        mapType = Enum.UIMapType.Zone
-    },
-    [628] = {
-        mapType = Enum.UIMapType.Micro
-    },
-    [629] = {
-        mapType = Enum.UIMapType.Micro
-    },
-    [943] = {
-        suffix = FACTION_HORDE
-    }, -- Arathi Highlands
-    [1044] = {
-        suffix = FACTION_ALLIANCE
-    }
+    [101] = { mapType = Enum.UIMapType.World }, -- Outland
+    [125] = { mapType = Enum.UIMapType.Zone }, -- Dalaran
+    [126] = { mapType = Enum.UIMapType.Micro },
+    [195] = { suffix = "1" }, -- Kaja'mine
+    [196] = { suffix = "2" }, -- Kaja'mine
+    [197] = { suffix = "3" }, -- Kaja'mine
+    [501] = { mapType = Enum.UIMapType.Zone }, -- Dalaran
+    [502] = { mapType = Enum.UIMapType.Micro },
+    [572] = { mapType = Enum.UIMapType.World }, -- Draenor
+    [579] = { suffix = "1" }, -- Lunarfall Excavation
+    [580] = { suffix = "2" }, -- Lunarfall Excavation
+    [581] = { suffix = "3" }, -- Lunarfall Excavation
+    [582] = { mapType = Enum.UIMapType.Zone }, -- Lunarfall
+    [585] = { suffix = "1" }, -- Frostwall Mine
+    [586] = { suffix = "2" }, -- Frostwall Mine
+    [587] = { suffix = "3" }, -- Frostwall Mine
+    [590] = { mapType = Enum.UIMapType.Zone }, -- Frostwall
+    [625] = { mapType = Enum.UIMapType.Orphan }, -- Dalaran
+    [626] = { mapType = Enum.UIMapType.Micro }, -- Dalaran
+    [627] = { mapType = Enum.UIMapType.Zone },
+    [628] = { mapType = Enum.UIMapType.Micro },
+    [629] = { mapType = Enum.UIMapType.Micro },
+    [943] = { suffix = FACTION_HORDE }, -- Arathi Highlands
+    [1044] = { suffix = FACTION_ALLIANCE },
 }
 
 local CZWFromMapID = {}
@@ -1064,6 +1041,45 @@ function MapPinEnhanced:ParseInput(msg)
 
         local zone = table.concat(tokens, " ", 1, zoneEnd)
         local x, y, _ = select(zoneEnd + 1, unpack(tokens))
+        -- local x,y,desc = select(zoneEnd + 1, unpack(tokens))
+
+        -- if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
+
+        -- for name,mapId in pairs(NameToMapId) do
+        --     local lname = lowergsub(name)
+        --     if lname == lzone then
+        --         -- We have an exact match
+        --         matches = {name}
+        --         break
+        --     elseif lname:match(lzone) then
+        --         table.insert(matches, name)
+        --     end
+        -- end
+
+        -- if #matches > 7 then
+        --     local msg = string.format(L["Found %d possible matches for zone %s.  Please be more specific"], #matches, zone)
+        --     ChatFrame1:AddMessage(msg)
+        --     return
+        -- elseif #matches > 1 then
+        --     local msg = string.format(L["Found multiple matches for zone '%s'.  Did you mean: %s"], zone, table.concat(matches, ", "))
+        --     ChatFrame1:AddMessage(msg)
+        --     return
+        -- elseif #matches == 0 then
+        --     local msg = string.format(L["Could not find any matches for zone %s."], zone)
+        --     ChatFrame1:AddMessage(msg)
+        --     return
+        -- end
+
+        -- -- There was only one match, so proceed
+        -- local zoneName = matches[1]
+        -- local mapId = NameToMapId[zoneName]
+
+        -- x = x and tonumber(x)
+        -- y = y and tonumber(y)
+
+        -- if not x or not y then
+        --     return
+        -- end
 
         slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
         slashmapid = mapDataID[zone]
@@ -1073,6 +1089,18 @@ function MapPinEnhanced:ParseInput(msg)
             MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
         end
     elseif tokens[1] and tonumber(tokens[1]) then
+        -- -- A vanilla set command
+        -- local x,y,desc = unpack(tokens)
+        -- if not x or not tonumber(x) then
+        --     return
+        -- elseif not y or not tonumber(y) then
+        --     return
+        -- end
+        -- if desc then
+        --     desc = table.concat(tokens, " ", 3)
+        -- end
+        -- x = tonumber(x)
+        -- y = tonumber(y)
         slashmapid = HBD:GetPlayerZone()
         slashx, slashy = unpack(tokens)
         if slashx and slashy and slashmapid then

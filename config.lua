@@ -146,6 +146,9 @@ function module:OnInitialize()
                     core.db.profile.trackerPos.x = value + width / 2
                     core.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", core.db.profile.trackerPos.x,
                         core.db.profile.trackerPos.y)
+                    if not core.MPHFrame:IsShown() then
+                        core.MPHFrame:Show()
+                    end
                 end,
             },
             pinTrackerY = {
@@ -161,6 +164,9 @@ function module:OnInitialize()
                     core.db.profile.trackerPos.y = value - height / 2
                     core.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", core.db.profile.trackerPos.x,
                         core.db.profile.trackerPos.y)
+                    if not core.MPHFrame:IsShown() then
+                        core.MPHFrame:Show()
+                    end
                 end,
             },
 
