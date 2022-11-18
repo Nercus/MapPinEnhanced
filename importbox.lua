@@ -15,7 +15,7 @@ local function ParseImport(importstring)
         elseif string.match(s, "/pin ") then
             msg = string.gsub(s, "/pin ", "")
         else
-            core:Print(L["Formating error"])
+            core:PrintMSG(L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"])
         end
         core:ParseInput(msg)
     end
@@ -92,7 +92,7 @@ local function updatePresetsList()
             StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
                 local newName = self.editBox:GetText()
                 if newName == "" then
-                    core:Print(L["Name can't be empty"])
+                    core:PrintMSG(L["Name can't be empty"])
                     return
                 end
                 core.db.profile.presets[k].name = newName

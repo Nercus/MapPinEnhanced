@@ -12,10 +12,10 @@ local globalMPH = {}
 _G["MapPinEnhanced"] = globalMPH
 
 
--- TODO: Extend Slash Commands: /mph help, /mph resettracker, /mph resetpresets, /mph version -> GetAddOnMetadata, /mph help or with no args show help
+-- TODO: Change name to Map Pin Enhanced
 -- TODO: Add quick access in pintracker/LDB and Minimap Button (List like Grid2)
 -- TODO: Update TomTom parsing
--- TODO: Pretend that TomTom is enabled for other addons (possible?) create a fake TomTom API if TomTom is not enabled
+-- TODO: Pretend that Formating error! Use |cffeda55f/mph|r [x] [y] <description> for other addons (possible?) create a fake TomTom API if TomTom is not enabled
 -- FIXME: Pin Tracker Bugs out infight
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 -- TODO: Rightclick to make pin persistent (add newplayertutorial-icon-mouse-leftbutton to tooltip and adjust tooltip)
@@ -185,8 +185,8 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
         end
     end,
     OnTooltipShow = function(tt)
-        tt:AddLine(L["Left-Click LDB"])
-        tt:AddLine(L["Right-Click LDB"])
+        tt:AddLine(L["|cffeda55fLeft-Click|r to toggle the pin tracker."])
+        tt:AddLine(L["|cffeda55fRight-Click|r to toggle the import window."])
     end
 })
 
@@ -217,6 +217,20 @@ local defaults = {
 
 local pinsRestored = false
 
+
+function MapPinEnhanced:PrintMSG(msgTable, hasTitle)
+    local out = ""
+    if hasTitle then
+        out = "|A:Waypoint-MapPin-Tracked:19:19|a|cFFFFD100MapPinEnhanced|r\n"
+    end
+    for i = 1, #msgTable do
+        if hasTitle then
+            out = out .. msgTable[i] .. "\n"
+        else
+            out = out .. "|A:Waypoint-MapPin-Tracked:19:19|a " .. msgTable[i] .. "\n"
+        end
+    end
+end
 
 function MapPinEnhanced:TogglePinTrackerWindow()
     if self.MPHFrame:IsShown() then
@@ -533,7 +547,7 @@ local function CreatePin(x, y, mapID, emit, title)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
-            GameTooltip_AddColoredLine(GameTooltip, L["MAP_PIN_TOGGLE"], GREEN_FONT_COLOR);
+            GameTooltip_AddColoredLine(GameTooltip, L["<Click to toggle pin>"], GREEN_FONT_COLOR);
             GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
             GameTooltip:Show()
         end)
@@ -889,10 +903,18 @@ end
 MapPinEnhanced.pinManager = PinManager()
 
 
+function MapPinEnhanced:ResetTracker()
+    self.db.profile.trackerPos = {
+        x = screenWidth / 2,
+        y = -screenHeight / 2
+    }
+    self.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.profile.trackerPos.x, self.db.profile.trackerPos.y)
+end
+
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            MapPinEnhanced:Print(L["Arrow error"])
+            MapPinEnhanced:PrintMSG({ L["The blizzard arrow does not work in this zone"] })
         end
         self.pinManager.AddPin(x, y, mapID, name)
     else
@@ -982,7 +1004,8 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD()
     -- Check if TomTom is Loaded
     if IsAddOnLoaded("TomTom") then
         TomTomLoaded = true
-        self:Print(L["TomTom enabled"]) -- Localize
+        self:PrintMSG(L[
+            "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."]) -- Localize
     else
         TomTomLoaded = false
     end
@@ -1060,16 +1083,16 @@ function MapPinEnhanced:ParseInput(msg)
             end
         else
             if not TomTomLoaded then
-                MapPinEnhanced:Print(L["Formating error"])
+                MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"] })
             else
-                MapPinEnhanced:Print(L["TomTom is enabled"])
+                MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <description>"] })
             end
         end
     else
         if not TomTomLoaded then
-            MapPinEnhanced:Print(L["Formating error"])
+            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"] })
         else
-            MapPinEnhanced:Print(L["TomTom is enabled"])
+            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <description>"] })
         end
     end
 end
@@ -1091,23 +1114,39 @@ SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
 SlashCmdList["MPH"] = function(msg)
-    if strmatch(msg, "removeall") then
+    if msg == "removeall" then
         MapPinEnhanced.pinManager.RemoveAllPins()
-        return
-    end
-    if strmatch(msg, "pintracker") then
+    elseif msg == "tracker" then
         MapPinEnhanced:TogglePinTrackerWindow()
-        return
-    end
-    if strmatch(msg, "import") then
+    elseif msg == "import" or msg == "export" then
         MapPinEnhanced:ToggleImportWindow()
-        return
-    end
-    if strmatch(msg, "minimap") then
+    elseif msg == "minimap" then
         MapPinEnhanced:ToggleMinimapButton()
-        return
+    elseif msg == "resettracker" then
+        MapPinEnhanced:ResetTracker()
+    elseif msg == "version" then
+        local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
+        local version, build = GetBuildInfo()
+        MapPinEnhanced:PrintMSG({ "MapPinEnhanced: " .. versionMPH, string.format("Game: %s (%d)", version, build) },
+            true)
+    elseif msg == "" or msg == "config" or msg == "options" then
+        if InterfaceOptionsFrame ~= nil then
+            InterfaceOptionsFrame:Show()
+        end
+        InterfaceOptionsFrame_OpenToCategory(MapPinEnhanced.optionsFrame)
+    elseif msg == "help" then
+        MapPinEnhanced:PrintMSG({
+            L["|cffeda55f/mph config|r - Open the options menu"],
+            L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"],
+            L["|cffeda55f/mph import|r - Toggle the Import Window"],
+            L["|cffeda55f/mph minimap|r - Toggle the Minimap Button"],
+            L["|cffeda55f/mph resettracker|r - Reset the Pin Tracker Window"],
+            L["|cffeda55f/mph removeall|r - Remove all pins"],
+            L["|cffeda55f/mph version|r - Show version information"],
+        }, true)
+    else
+        MapPinEnhanced:ParseInput(msg)
     end
-    MapPinEnhanced:ParseInput(msg)
 end
 
 

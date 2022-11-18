@@ -1,9 +1,20 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("MapPinEnhanced", "deDE")
 if not L then return end
 
-L["Left-Click LDB"] = "|cffeda55fLinks-Klick|r um den Pin Tracker zu öffnen."
-L["Right-Click LDB"] = "|cffeda55fRechts-Klick|r um das Import Fenster zu öffnen."
-L["Arrow error"] = "Die Blizzard Navigation funktioniert in dieser Zone nicht!"
-L["TomTom enabled"] = "TomTom ist geladen! Das Verwenden von '/way' ist für MapPinEnhanced deaktiviert. Verwende stattdessen '/mph'"
-L["Formating error"] = "Formatierungsfehler! Verwende |cffeda55f/way|r [x] [y] <beschreibung>"
-L["Formating error TomTom"] = "Formatierungsfehler! Verwende |cffeda55f/mph|r [x] [y] <beschreibung>"
+L["|cffeda55fLeft-Click|r to toggle the pin tracker."] = "|cffeda55fLinks-Klick|r um den Pin Tracker zu öffnen."
+L["|cffeda55fRight-Click|r to toggle the import window."] = "|cffeda55fRechts-Klick|r um das Import Fenster zu öffnen."
+L["The blizzard arrow does not work in this zone"] = "Die Blizzard Navigation funktioniert in dieser Zone nicht!"
+L["TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."] = "TomTom ist geladen! Das Verwenden von '/way' ist für MapPinEnhanced deaktiviert. Verwende stattdessen '/mph'"
+L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"] = "Formatierungsfehler! Verwende |cffeda55f/way|r [x] [y] <beschreibung>"
+L["Formating error! Use |cffeda55f/mph|r [x] [y] <description>"] = "Formatierungsfehler! Verwende |cffeda55f/mph|r [x] [y] <beschreibung>"
+L["Name can't be empty"] = "Der Name darf nicht leer sein"
+
+
+-- slash commands
+L["|cffeda55f/mph config|r - Open the options menu"] = "|cffeda55f/mph config|r - Öffnet das Optionsmenü"
+L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"] = "|cffeda55f/mph tracker|r - Öffnen/Schließen des Pin Trackers"
+L["|cffeda55f/mph import|r - Toggle the Import Window"] = "|cffeda55f/mph import|r - Öffnen/Schließen des Import Fensters"
+L["|cffeda55f/mph minimap|r - Toggle the Minimap Button"] = "|cffeda55f/mph minimap|r - Verstecken/Zeigen des Minimap Buttons"
+L["|cffeda55f/mph resettracker|r - Reset the Pin Tracker Window"] = "|cffeda55f/mph resettracker|r - Setzt die Position des Pin Trackers zurück"
+L["|cffeda55f/mph removeall|r - Remove all pins"] = "|cffeda55f/mph removeall|r - Entfernt alle Pins"
+L["|cffeda55f/mph version|r - Show version information"] = "|cffeda55f/mph version|r - Zeigt Versionsinformationen an"
