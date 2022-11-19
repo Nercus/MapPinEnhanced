@@ -19,7 +19,9 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: Create a fake TomTom API if TomTom is not enabled
 -- TODO: watch possible taint issues
+-- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- FIXME: find way to get rid of blizz minimap pin tooltip
+
 
 -- Version 2.2
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
