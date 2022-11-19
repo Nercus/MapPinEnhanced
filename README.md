@@ -4,7 +4,7 @@ MapPinEnhanced is adding a lot of features to enhance the built in Blizzard MapP
 
 This addon is a simple extension to the Blizzard UI to have more possibilites while using the ingame navigation system.
 
- MapPinEnhanced offers the following features:
+MapPinEnhanced offers the following features:
 
 - Set as many waypoints as you want (no "one-waypoint" limit)
 - Set waypoints via command (additionally to the Ctrl-LeftClick)
@@ -18,5 +18,4 @@ Additionally there are following chat commands:
 - _/mph import_: Open the importbox
 - _/mph minimap_: Toggle the minimapbutton
 
-The slash commands work very similar to TomTom and support the following three prefixes _/way_, _/pin_ or _/mph_.
-
+The slash commands work very similar to TomTom and support the following three prefixes _/mph_, _/pin_ (or _/way_ if you don't have TomTom installed)

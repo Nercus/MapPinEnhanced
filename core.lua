@@ -10,39 +10,16 @@ local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 local globalMPH = {}
 _G["MapPinEnhanced"] = globalMPH
+MapPinEnhanced.name = "Map Pin Enhanced"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Version 2.0
--- TODO: Rewrite overrides, GetCZWFromMapID, ParseInput, ParseExport
--- TODO: Change name to Map Pin Enhanced
--- TODO: Add quick access in pintracker/LDB and Minimap Button (List like Grid2)
--- TODO: Update ParseInput function
--- TODO: Rightclick to make pin persistent (add newplayertutorial-icon-mouse-leftbutton to tooltip and adjust tooltip)
--- TODO: Clickable Hyperlinks in Chat when coords detected: https://www.curseforge.com/wow/addons/tompoints
--- FIXME: Pin Tracker Bugs out infight
 
 
 -- Version 2.1
--- FIXME: find way to get rid of blizz minimap pin tooltip
 -- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
+-- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: Create a fake TomTom API if TomTom is not enabled
 -- TODO: watch possible taint issues
+-- FIXME: find way to get rid of blizz minimap pin tooltip
 
 -- Version 2.2
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
@@ -51,11 +28,9 @@ _G["MapPinEnhanced"] = globalMPH
 
 
 -- Onwards
--- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
--- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport
+-- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
 
 
-local strmatch = _G.string.match
 local tinsert = _G.table.insert
 local wipe = _G.table.wipe
 local tremove = _G.table.remove
@@ -149,21 +124,54 @@ end
 MapPinEnhanced.mapDataID = {}
 local mapDataID = MapPinEnhanced.mapDataID
 
+function MapPinEnhanced:ToggleDropDown(menuParent)
+    self.menuFrame = self.menuFrame or CreateFrame("Frame", "MPHLDBDropdown", UIParent, "UIDropDownMenuTemplate")
+    local menuTable = {}
+    table.insert(menuTable, 1, {
+        text = L["Toggle Import Window"],
+        func = function()
+            MapPinEnhanced:ToggleImportWindow()
+        end,
+        notCheckable = true,
+    })
+    table.insert(menuTable, 2, {
+        text = L["Presets"],
+        notCheckable = true,
+        isTitle = true
+    })
+
+    for i, j in ipairs(self.db.profile.presets) do
+        table.insert(menuTable, i + 2, {
+            text = "  " .. j.name,
+            func = function()
+                self:ParseImport(j.input)
+            end,
+            notCheckable = true,
+        })
+    end
+
+    if menuParent then
+        EasyMenu(menuTable, self.menuFrame, menuParent, 0, 0, "MENU")
+    else
+        EasyMenu(menuTable, self.menuFrame, "cursor", 0, 0, "MENU")
+    end
+end
+
 -- Minimap Button and Minimap Button
 MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
     type = "data source",
-    text = "MapPinEnhanced",
+    text = MapPinEnhanced.name,
     icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
     OnClick = function(_, button)
         if button == "LeftButton" then
             MapPinEnhanced:TogglePinTrackerWindow()
         elseif button == "RightButton" then
-            MapPinEnhanced:ToggleImportWindow()
+            MapPinEnhanced:ToggleDropDown()
         end
     end,
     OnTooltipShow = function(tt)
         tt:AddLine(L["|cffeda55fLeft-Click|r to toggle the pin tracker."])
-        tt:AddLine(L["|cffeda55fRight-Click|r to toggle the import window."])
+        tt:AddLine(L["|cffeda55fRight-Click|r to toggle presets view."])
     end
 })
 
@@ -188,6 +196,7 @@ local defaults = {
             maxTrackerEntries = 6,
             showTimeOnSuperTrackedFrame = true,
             hidePins = false,
+            hyperlink = true,
         }
     }
 }
@@ -198,7 +207,7 @@ local pinsRestored = false
 function MapPinEnhanced:PrintMSG(msgTable, hasTitle)
     local out = ""
     if hasTitle then
-        out = "|A:Waypoint-MapPin-Tracked:19:19|a|cFFFFD100MapPinEnhanced|r\n"
+        out = "|A:Waypoint-MapPin-Tracked:19:19|a|cFFFFD100" .. self.name .. "|r\n"
     end
     for i = 1, #msgTable do
         if hasTitle then
@@ -207,6 +216,7 @@ function MapPinEnhanced:PrintMSG(msgTable, hasTitle)
             out = out .. "|A:Waypoint-MapPin-Tracked:19:19|a " .. msgTable[i] .. "\n"
         end
     end
+    DEFAULT_CHAT_FRAME:AddMessage(out)
 end
 
 function MapPinEnhanced:TogglePinTrackerWindow()
@@ -223,17 +233,17 @@ function MapPinEnhanced:TogglePinTrackerWindow()
     end
 end
 
-function MapPinEnhanced:ToggleNavigationStepFrame()
-    if self.MPHFrame.NavigationStepFrame:IsShown() then
-        self.MPHFrame.NavigationStepFrame:Hide()
-    else
-        self.MPHFrame.NavigationStepFrame:Show()
-    end
-end
+-- function MapPinEnhanced:ToggleNavigationStepFrame()
+--     if self.MPHFrame.NavigationStepFrame:IsShown() then
+--         self.MPHFrame.NavigationStepFrame:Hide()
+--     else
+--         self.MPHFrame.NavigationStepFrame:Show()
+--     end
+-- end
 
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
-    local MPHFrame = CreateFrame("Frame", nil, UIParent, "MPHFrameTemplate")
+    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
     MPHFrame:SetScript("OnMouseUp", function(self)
         local x, y = select(4, self:GetPoint())
         MapPinEnhanced.db.profile.trackerPos = {
@@ -241,17 +251,54 @@ function MapPinEnhanced:OnInitialize()
             y = y,
         }
         self:StopMovingOrSizing()
+        self:ClearAllPoints()
+        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
+    end)
+    MPHFrame:SetScript("OnEnter", function(self)
+        if MapPinEnhanced.db.profile.trackerPos.x == defaults.profile.trackerPos.x and
+            MapPinEnhanced.db.profile.trackerPos.y == defaults.profile.trackerPos.y then
+            GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+            GameTooltip:SetText(L["|cffeda55fCtrl + Left-Click|r to move the pin tracker"])
+            GameTooltip:Show()
+        end
+    end)
+    MPHFrame:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    MPHFrame:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" and IsControlKeyDown() then
+            self:StartMoving()
+        elseif button == "RightButton" then
+            MapPinEnhanced:ToggleDropDown()
+        end
+    end)
+
+    MPHFrame.header.presets:SetScript("OnClick", function(self)
+        if MapPinEnhanced.menuFrame then
+            if MapPinEnhanced.menuFrame:IsShown() then
+                MapPinEnhanced.menuFrame:Hide()
+                CloseDropDownMenus()
+            else
+                MapPinEnhanced:ToggleDropDown(self)
+            end
+        else
+            MapPinEnhanced:ToggleDropDown(self)
+        end
+    end)
+
+    MPHFrame.header.close:SetScript("OnClick", function(self)
+        MapPinEnhanced:TogglePinTrackerWindow()
     end)
     self.MPHFrame = MPHFrame
 
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
-
     MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.profile.trackerPos.x, self.db.profile.trackerPos.y)
 
     -- Minimap Icon
     LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
-    MapPinEnhanced:UpdateMinimapButton()
+    self:UpdateMinimapButton()
 
     -- Structure mapdata like TomTom, Snippet from TomTom Addon
     for id in pairs(HBDmapData) do
@@ -321,7 +368,7 @@ function MapPinEnhanced:ToggleMinimapButton()
     else
         self.db.profile.minimap.hide = true
     end
-    MapPinEnhanced:UpdateMinimapButton()
+    self:UpdateMinimapButton()
 end
 
 StaticPopupDialogs["MPH_ENABLE_NAVIGATION"] = {
@@ -352,7 +399,7 @@ end
 
 local MPHFramePool = {}
 
-local function CreatePin(x, y, mapID, emit, title)
+local function CreatePin(x, y, mapID, emit, title, persist)
 
     local tracked = false
     local navigating = false
@@ -360,19 +407,37 @@ local function CreatePin(x, y, mapID, emit, title)
         "MPHTrackerEntryTemplate")
     local pin = CreateFrame("Button", nil, nil, "MPHMapPinTemplate")
     local minimappin = CreateFrame("Button", nil, nil, "MPHMinimapPinTemplate")
-
+    local persistent = false
     local index;
+
+    local function isPersistent()
+        return persistent
+    end
+
+    local function setPersistent(value)
+        persistent = value
+        pin.Icon:SetDesaturated(value)
+        pin.Highlight:SetDesaturated(value)
+        objective.button.normal:SetDesaturated(value)
+        objective.button.highlight:SetDesaturated(value)
+        minimappin.Icon:SetDesaturated(value)
+        minimappin.Highlight:SetDesaturated(value)
+        SuperTrackedFrame.Icon:SetDesaturated(isPersistent())
+    end
+
+    setPersistent(persist)
+
 
     local function setDistanceText(distance)
         if distance then
-            objective.distance:SetText("[" .. IN_GAME_NAVIGATION_RANGE:format(AbbreviateNumbers(distance)) .. "]")
+            objective.distance:SetText("[" .. ("%s yds"):format(AbbreviateNumbers(distance)) .. "]")
         else
             objective.distance:SetText("")
         end
     end
 
     local function distanceCheck(distance)
-        if (distance <= 5) and distance > 0 and not navigating then
+        if (distance <= 5) and distance > 0 and not navigating and not persistent then
             emit("remove")
         else
             if distance <= 0 then
@@ -388,6 +453,7 @@ local function CreatePin(x, y, mapID, emit, title)
         pin:Track()
         objective:Track()
         minimappin:Track()
+        SuperTrackedFrame.Icon:SetDesaturated(isPersistent())
         MapPinEnhanced.blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID2) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID2, x2, y2, 0))
@@ -399,6 +465,10 @@ local function CreatePin(x, y, mapID, emit, title)
                 MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1,
                     distanceCheck)
             end
+        end
+        MapPinEnhanced.lastDistance = nil
+        if MapPinEnhanced.superTrackedTimer then
+            MapPinEnhanced.superTrackedTimer:Hide()
         end
         MapPinEnhanced.db.profile.savedpins.lastTrackedPin = {
             x = x2,
@@ -413,6 +483,7 @@ local function CreatePin(x, y, mapID, emit, title)
         pin:Untrack()
         objective:Untrack()
         minimappin:Untrack()
+        SuperTrackedFrame.Icon:SetDesaturated(false)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
         MapPinEnhanced.db.profile.savedpins.lastTrackedPin = nil
         if not MapPinEnhanced.distanceTimer.cancelled then
@@ -511,6 +582,10 @@ local function CreatePin(x, y, mapID, emit, title)
                 -- scroll to tracked pin
                 scrollToObjective()
             end
+        elseif arg1 == "RightButton" then
+            if IsShiftKeyDown() then
+                setPersistent(not persistent)
+            end
         end
         self:SetPoint("CENTER", 2, -2)
     end)
@@ -523,20 +598,24 @@ local function CreatePin(x, y, mapID, emit, title)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
             GameTooltip_SetTitle(GameTooltip, title2);
-            GameTooltip_AddNormalLine(GameTooltip, MAP_PIN_SHARING_TOOLTIP);
-            GameTooltip_AddColoredLine(GameTooltip, L["<Click to toggle pin>"], GREEN_FONT_COLOR);
-            GameTooltip_AddColoredLine(GameTooltip, MAP_PIN_REMOVE, GREEN_FONT_COLOR);
+            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin"])
+            GameTooltip:AddLine(L[
+                "|cffeda55fCtrl +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin"])
+            GameTooltip:AddLine(L[
+                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin"])
+            GameTooltip:AddLine(L[
+                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent"])
             GameTooltip:Show()
         end)
 
         minimappin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-            GameTooltip_SetTitle(GameTooltip, title2);
+            GameTooltip:SetTitle(GameTooltip, title2);
             GameTooltip:Show()
         end)
     end
 
-    SetTooltip(title)
+    SetTooltip(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)
 
 
     objective:SetScript("OnMouseDown", function(self, arg1)
@@ -549,7 +628,11 @@ local function CreatePin(x, y, mapID, emit, title)
                 ToggleTracked()
             end
         elseif arg1 == "RightButton" then
-            emit("remove")
+            if IsShiftKeyDown() then
+                setPersistent(not persistent)
+            else
+                emit("remove")
+            end
         end
     end)
 
@@ -587,7 +670,7 @@ local function CreatePin(x, y, mapID, emit, title)
         objective:SetTitle(title2)
     end
 
-    SetObjectiveTitle(title)
+    SetObjectiveTitle(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)
 
     local function SetObjectiveText(x2, y2, mapID2)
         objective.info:SetText(HBDmapData[mapID2]["name"] .. " (" .. Round(x2 * 100) .. ", " .. Round(y2 * 100) .. ")")
@@ -607,6 +690,8 @@ local function CreatePin(x, y, mapID, emit, title)
         RemoveFromMap = RemoveFromMap,
         MoveOnMap = MoveOnMap,
         IsTracked = IsTracked,
+        isPersistent = isPersistent,
+        setPersistent = setPersistent,
         SetTooltip = SetTooltip,
         scrollToObjective = scrollToObjective,
         SetTrackerPosition = SetTrackerPosition,
@@ -617,7 +702,8 @@ local function CreatePin(x, y, mapID, emit, title)
         x = x,
         y = y,
         mapID = mapID,
-        title = title
+        title = title,
+
     }
 end
 
@@ -636,7 +722,7 @@ local function IsCloser(pin, ref)
     end
 end
 
-local function FormatHyperlink(x, y, mapID)
+function MapPinEnhanced:FormatHyperlink(x, y, mapID)
     if x and y and mapID then
         return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
     end
@@ -653,6 +739,7 @@ local function PinManager()
                 y = pin.y,
                 mapID = pin.mapID,
                 title = pin.title,
+                persistent = pin.persistent,
             })
         end
         MapPinEnhanced.db.profile.savedpins.pinsData = data
@@ -669,6 +756,9 @@ local function PinManager()
             MapPinEnhanced:TogglePinTrackerWindow()
         end
 
+        if #pins > 0 and not MapPinEnhanced.MPHFrame.scrollFrame:IsShown() then
+            MapPinEnhanced.MPHFrame.scrollFrame:Show()
+        end
         if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(0)
             local newHeight = 65 + ((#pins - 1) * 40)
@@ -726,7 +816,7 @@ local function PinManager()
         end
     end
 
-    local function AddPin(x, y, mapID, name, noTrack)
+    local function AddPin(x, y, mapID, name, isPersistent, noTrack)
         for _, p in ipairs(pins) do
             if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
                 UntrackPins()
@@ -751,26 +841,28 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
-                    MapPinEnhanced.MPHFrame.NavigationStepFrame:Hide()
+                    --MapPinEnhanced.MPHFrame.NavigationStepFrame:Hide()
                     pin.Track(pin.x, pin.y, pin.mapID)
                 elseif e == "hyperlink" then
-                    local link = FormatHyperlink(pin.x, pin.y, pin.mapID)
+                    local link = MapPinEnhanced:FormatHyperlink(pin.x, pin.y, pin.mapID)
                     ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
                     ChatEdit_InsertLink(link)
                 elseif e == "navigate" then
                     MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
                 end
-            end, title)
+            end, title, isPersistent)
             pin.ShowOnMap()
         else
             pin = ReusedPinFrame
             pin.x = x
             pin.y = y
             pin.mapID = mapID
+            pin.setPersistent = isPersistent
             pin.SetTooltip(title)
             pin.MoveOnMap(x, y, mapID)
             pin.SetObjectiveTitle(title)
             pin.SetObjectiveText(x, y, mapID)
+
         end
         pins[#pins + 1] = pin
 
@@ -821,10 +913,10 @@ local function PinManager()
 
         for _, p in ipairs(MapPinEnhanced.db.profile.savedpins.pinsData) do
             if hasTracked then
-                AddPin(p.x, p.y, p.mapID, p.title,
+                AddPin(p.x, p.y, p.mapID, p.title, p.persistent,
                     not (p.x == pTracked.x and p.y == pTracked.y and p.mapID == pTracked.mapID))
             else
-                AddPin(p.x, p.y, p.mapID, p.title, true)
+                AddPin(p.x, p.y, p.mapID, p.title, p.persistent, true)
             end
         end
 
@@ -880,18 +972,12 @@ end
 MapPinEnhanced.pinManager = PinManager()
 
 
-function MapPinEnhanced:ResetTracker()
-    self.db.profile.trackerPos = {
-        x = screenWidth / 2,
-        y = -screenHeight / 2
-    }
-    self.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.profile.trackerPos.x, self.db.profile.trackerPos.y)
-end
+
 
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            MapPinEnhanced:PrintMSG({ L["The blizzard arrow does not work in this zone"] })
+            self:PrintMSG({ L["The blizzard arrow does not work in this zone"] })
         end
         self.pinManager.AddPin(x, y, mapID, name)
     else
@@ -900,7 +986,6 @@ function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
 end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
-    MapPinEnhanced.lastDistance = nil
     if C_SuperTrack.IsSuperTrackingQuest() then
         self.pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -908,6 +993,41 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
     else
         if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
             self.pinManager.RefreshTracking()
+        end
+    end
+    if self.db.profile.options["showTimeOnSuperTrackedFrame"] and
+        (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
+        if not self.distanceTimerFast then
+            self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
+                if C_Navigation.WasClampedToScreen() then
+                    if self.superTrackedTimer then
+                        self.superTrackedTimer:Hide()
+                    end
+                else
+                    self:UpdateTrackerTime(distance)
+                    if self.superTrackedTimer then
+                        self.superTrackedTimer:Show()
+                    end
+                end
+            end)
+        elseif self.distanceTimerFast.cancelled then
+            self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
+                if C_Navigation.WasClampedToScreen() then
+                    if self.superTrackedTimer then
+                        self.superTrackedTimer:Hide()
+                    end
+                else
+                    self:UpdateTrackerTime(distance)
+                    if self.superTrackedTimer then
+                        self.superTrackedTimer:Show()
+                    end
+                end
+            end)
+        end
+    else
+        if self.distanceTimerFast then
+            self:CancelTimer(self.distanceTimerFast)
+            self.distanceTimerFast = nil
         end
     end
 end
@@ -929,7 +1049,7 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
         self.blockWAYPOINTevent = true
         C_Map.ClearUserWaypoint()
         self.blockWAYPOINTevent = false
-        MapPinEnhanced:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+        self:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
     end
 end
 
@@ -963,43 +1083,71 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
 end
 
 function MapPinEnhanced:UpdateTrackerTime(distance)
-    if MapPinEnhanced.lastDistance then
-        local speed = (MapPinEnhanced.lastDistance - distance)
+    if not C_Map.GetUserWaypoint() or not C_SuperTrack.IsSuperTrackingAnything() then
+        self:CancelTimer(self.distanceTimerFast)
+        self.distanceTimerFast = nil
+        self.lastDistance = nil
+        if self.superTrackedTimer then
+            self.superTrackedTimer:Hide()
+        end
+        return
+    end
+    if self.lastDistance then
+        local speed = (self.lastDistance - distance)
         if speed > 0 then
             local time = distance / speed
             if time < 1800 then
-                MapPinEnhanced:UpdateSuperTrackedTimerText(time)
+                self:UpdateSuperTrackedTimerText(time)
             end
         end
     end
-    MapPinEnhanced.lastDistance = distance
+    self.lastDistance = distance
 end
 
 local TomTomLoaded
-function MapPinEnhanced:PLAYER_ENTERING_WORLD()
-    self.pinManager.RestoreAllPins()
-    -- Check if TomTom is Loaded
-    if IsAddOnLoaded("TomTom") then
-        TomTomLoaded = true
-        self:PrintMSG(L[
-            "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."]) -- Localize
-    else
-        TomTomLoaded = false
-    end
-
-    if self.db.profile.options["showTimeOnSuperTrackedFrame"] then
-        self.distanceTimerFast = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
-            if C_Navigation.WasClampedToScreen() then
-                if self.superTrackedTimer then
-                    self.superTrackedTimer:Hide()
-                end
-            else
-                self:UpdateTrackerTime(distance)
-                if self.superTrackedTimer then
-                    self.superTrackedTimer:Show()
-                end
+function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
+    if isInitialLogin or isReloadingUi then
+        self.pinManager.RestoreAllPins()
+        -- Check if TomTom is Loaded
+        if IsAddOnLoaded("TomTom") then
+            TomTomLoaded = true
+            self:PrintMSG(L[
+                "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."]) -- Localize
+        else
+            TomTomLoaded = false
+        end
+        if self.db.profile.options["showTimeOnSuperTrackedFrame"] and
+            (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
+            if not self.distanceTimerFast then
+                self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1,
+                    function(distance)
+                        if C_Navigation.WasClampedToScreen() then
+                            if self.superTrackedTimer then
+                                self.superTrackedTimer:Hide()
+                            end
+                        else
+                            self:UpdateTrackerTime(distance)
+                            if self.superTrackedTimer then
+                                self.superTrackedTimer:Show()
+                            end
+                        end
+                    end)
+            elseif self.distanceTimerFast.cancelled then
+                self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1,
+                    function(distance)
+                        if C_Navigation.WasClampedToScreen() then
+                            if self.superTrackedTimer then
+                                self.superTrackedTimer:Hide()
+                            end
+                        else
+                            self:UpdateTrackerTime(distance)
+                            if self.superTrackedTimer then
+                                self.superTrackedTimer:Show()
+                            end
+                        end
+                    end)
             end
-        end)
+        end
     end
 end
 
@@ -1011,14 +1159,30 @@ end
 local wrongseparator = "(%d)" .. (tonumber("1.1") and "," or ".") .. "(%d)"
 local rightseparator = "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
 
+
+function MapPinEnhanced:ParseImport(importstring)
+    if not importstring then return end
+    self.pinManager.RemoveAllPins()
+    local msg
+    for s in importstring:gmatch("[^\r\n]+") do
+        if string.match(s, "/way ") or string.match(s, "/mph ") or string.match(s, "/pin ") then
+            msg = string.gsub(s, "/%a%a%a", "")
+        else
+            self:PrintMSG(L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"])
+        end
+        self:ParseInput(msg)
+    end
+end
+
 function MapPinEnhanced:ParseInput(msg)
     if not msg then
         return
     end
-    local slashx
-    local slashy
-    local slashmapid
-    local slashtitle
+    local sx
+    local sy
+    local smapid
+    local stitle
+    local matches = {}
     msg = msg:gsub("(%d)[%.,] (%d)", "%1 %2"):gsub(wrongseparator, rightseparator)
     local tokens = {}
     for token in msg:gmatch("%S+") do
@@ -1040,88 +1204,77 @@ function MapPinEnhanced:ParseInput(msg)
         end
 
         local zone = table.concat(tokens, " ", 1, zoneEnd)
-        local x, y, _ = select(zoneEnd + 1, unpack(tokens))
-        -- local x,y,desc = select(zoneEnd + 1, unpack(tokens))
+        local x, y, title = select(zoneEnd + 1, unpack(tokens))
 
-        -- if desc then desc = table.concat(tokens, " ", zoneEnd + 3) end
+        if title then title = table.concat(tokens, " ", zoneEnd + 3) end
+        local lzone = zone:lower():gsub("[%s]", "")
+        for name, mapId in pairs(mapDataID) do
+            local lname = name:lower():gsub("[%s]", "")
+            if lname == lzone then
+                -- We have an exact match
+                matches = { name }
+                break
+            elseif lname:match(lzone) then
+                table.insert(matches, name)
+            end
+        end
 
-        -- for name,mapId in pairs(NameToMapId) do
-        --     local lname = lowergsub(name)
-        --     if lname == lzone then
-        --         -- We have an exact match
-        --         matches = {name}
-        --         break
-        --     elseif lname:match(lzone) then
-        --         table.insert(matches, name)
-        --     end
-        -- end
+        if #matches > 1 and #matches < 7 then
+            local msg = string.format(L["Found multiple matches for zone '%s'.  Did you mean: %s"], zone,
+                table.concat(matches, ", "))
+            ChatFrame1:AddMessage(msg)
+            return
+        elseif #matches == 0 then
+            local msg = string.format(L["Could not find any matches for zone %s."], zone)
+            ChatFrame1:AddMessage(msg)
+            return
+        end
 
-        -- if #matches > 7 then
-        --     local msg = string.format(L["Found %d possible matches for zone %s.  Please be more specific"], #matches, zone)
-        --     ChatFrame1:AddMessage(msg)
-        --     return
-        -- elseif #matches > 1 then
-        --     local msg = string.format(L["Found multiple matches for zone '%s'.  Did you mean: %s"], zone, table.concat(matches, ", "))
-        --     ChatFrame1:AddMessage(msg)
-        --     return
-        -- elseif #matches == 0 then
-        --     local msg = string.format(L["Could not find any matches for zone %s."], zone)
-        --     ChatFrame1:AddMessage(msg)
-        --     return
-        -- end
+        -- There was only one match, so proceed
+        local zoneName = matches[1]
+        smapid = mapDataID[zoneName]
 
-        -- -- There was only one match, so proceed
-        -- local zoneName = matches[1]
-        -- local mapId = NameToMapId[zoneName]
+        x = x and tonumber(x)
+        y = y and tonumber(y)
 
-        -- x = x and tonumber(x)
-        -- y = y and tonumber(y)
+        if not x or not y then
+            return
+        end
 
-        -- if not x or not y then
-        --     return
-        -- end
+        sx, sy = tonumber(x) / 100, tonumber(y) / 100
 
-        slashx, slashy = tonumber(x) / 100, tonumber(y) / 100
-        slashmapid = mapDataID[zone]
 
-        slashtitle = table.concat(tokens, " ", zoneEnd + 3)
-        if slashx and slashy and slashmapid then
-            MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
+        stitle = table.concat(tokens, " ", zoneEnd + 3)
+        if sx and sy and smapid then
+            MapPinEnhanced:AddWaypoint(sx, sy, smapid, stitle)
         end
     elseif tokens[1] and tonumber(tokens[1]) then
-        -- -- A vanilla set command
-        -- local x,y,desc = unpack(tokens)
-        -- if not x or not tonumber(x) then
-        --     return
-        -- elseif not y or not tonumber(y) then
-        --     return
-        -- end
-        -- if desc then
-        --     desc = table.concat(tokens, " ", 3)
-        -- end
-        -- x = tonumber(x)
-        -- y = tonumber(y)
-        slashmapid = HBD:GetPlayerZone()
-        slashx, slashy = unpack(tokens)
-        if slashx and slashy and slashmapid then
-            slashx, slashy = tonumber(slashx) / 100, tonumber(slashy) / 100
-            slashtitle = table.concat(tokens, " ", 3)
-            if slashx and slashy and slashmapid then
-                MapPinEnhanced:AddWaypoint(slashx, slashy, slashmapid, slashtitle)
+        -- A vanilla set command
+        local x, y, title = unpack(tokens)
+        if not x or not tonumber(x) then
+            return
+        elseif not y or not tonumber(y) then
+            return
+        end
+        if title then
+            title = table.concat(tokens, " ", 3)
+        end
+        x = tonumber(x)
+        y = tonumber(y)
+
+        smapid = HBD:GetPlayerZone()
+        sx, sy = unpack(tokens)
+        if sx and sy and smapid then
+            sx, sy = tonumber(sx) / 100, tonumber(sy) / 100
+            stitle = table.concat(tokens, " ", 3)
+            if sx and sy and smapid then
+                MapPinEnhanced:AddWaypoint(sx, sy, smapid, stitle)
             end
         else
-            if not TomTomLoaded then
-                MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"] })
-            else
-                MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <description>"] })
-            end
+            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
         end
     else
-        if not TomTomLoaded then
-            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"] })
-        else
-            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <description>"] })
-        end
+        MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
     end
 end
 
@@ -1150,25 +1303,22 @@ SlashCmdList["MPH"] = function(msg)
         MapPinEnhanced:ToggleImportWindow()
     elseif msg == "minimap" then
         MapPinEnhanced:ToggleMinimapButton()
-    elseif msg == "resettracker" then
-        MapPinEnhanced:ResetTracker()
     elseif msg == "version" then
         local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
         local version, build = GetBuildInfo()
-        MapPinEnhanced:PrintMSG({ "MapPinEnhanced: " .. versionMPH, string.format("Game: %s (%d)", version, build) },
+        MapPinEnhanced:PrintMSG({ self.name .. ": " .. versionMPH, string.format("Game: %s (%d)", version, build) },
             true)
-    elseif msg == "" or msg == "config" or msg == "options" then
+    elseif msg == "config" or msg == "options" then
         if InterfaceOptionsFrame ~= nil then
             InterfaceOptionsFrame:Show()
         end
         InterfaceOptionsFrame_OpenToCategory(MapPinEnhanced.optionsFrame)
-    elseif msg == "help" then
+    elseif msg == "" or msg == "help" then
         MapPinEnhanced:PrintMSG({
             L["|cffeda55f/mph config|r - Open the options menu"],
             L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"],
             L["|cffeda55f/mph import|r - Toggle the Import Window"],
             L["|cffeda55f/mph minimap|r - Toggle the Minimap Button"],
-            L["|cffeda55f/mph resettracker|r - Reset the Pin Tracker Window"],
             L["|cffeda55f/mph removeall|r - Remove all pins"],
             L["|cffeda55f/mph version|r - Show version information"],
         }, true)

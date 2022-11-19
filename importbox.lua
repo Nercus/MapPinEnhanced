@@ -4,22 +4,7 @@ local module = core:NewModule("Importbox")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
-local function ParseImport(importstring)
-    if not importstring then return end
-    local msg
-    for s in importstring:gmatch("[^\r\n]+") do
-        if string.match(s, "/way ") then
-            msg = string.gsub(s, "/way ", "")
-        elseif string.match(s, "/mph ") then
-            msg = string.gsub(s, "/mph ", "")
-        elseif string.match(s, "/pin ") then
-            msg = string.gsub(s, "/pin ", "")
-        else
-            core:PrintMSG(L["Formating error! Use |cffeda55f/way|r [x] [y] <description>"])
-        end
-        core:ParseInput(msg)
-    end
-end
+
 
 StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
     text = "Changing name of this preset",
@@ -123,7 +108,6 @@ end
 
 local function CreateWindow()
     if module.importFrame then return end
-    local textStore
 
     local importFrame = CreateFrame("Frame", nil, UIParent, "MPHImportFrameTemplate")
     importFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
@@ -146,7 +130,7 @@ local function CreateWindow()
 
     importFrame.import:SetScript("OnClick", function()
         local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
-        ParseImport(input)
+        core:ParseImport(input)
         core:ToggleImportWindow()
     end)
     module.importFrame = importFrame

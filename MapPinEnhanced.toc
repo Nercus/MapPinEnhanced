@@ -2,6 +2,7 @@
 ## Author: Nerc
 ## Title: Map Pin Enhanced
 ## Version: 2.0
+## License: All Rights Reserved
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB
 ## OptionalDeps: Ace3
@@ -15,6 +16,6 @@ core.lua
 FrameXML\frames.xml
 
 importbox.lua
-navigationData.lua
-navigation.lua
+# navigationData.lua
+# navigation.lua
 config.lua

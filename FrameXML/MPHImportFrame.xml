@@ -106,6 +106,7 @@
                         <Size x="450" y="275" />
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeKey="$parenteditBox"/>
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parenteditBox"/>
                         </Anchors>
                         <Scripts>
                             <OnClick>

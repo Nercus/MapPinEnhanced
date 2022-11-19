@@ -70,8 +70,65 @@ local function updateHidePinsOption()
     end
 end
 
+local filteredChannels = {
+    "BATTLEGROUND_LEADER",
+    "BATTLEGROUND",
+    "BN_WHISPER",
+    "BN_WHISPER_INFORM",
+    "COMMUNITIES_CHANNEL",
+    "GUILD",
+    "OFFICER",
+    "PARTY_LEADER",
+    "PARTY",
+    "RAID_LEADER",
+    "RAID_WARNING",
+    "RAID",
+    "SAY",
+    "WHISPER",
+    "WHISPER_INFORM",
+    "YELL"
+}
+local textPatterns = {
+    "(%d+%.%d+), (%d+%.%d+)",
+    "(%d+%.%d+) (%d+%.%d+)",
+    "(%d+%.%d+),(%d+%.%d+)",
+    "(%d+) (%d+)",
+    "(%d+),(%d+)",
+    "(%d+)%, (%d+)",
+}
+
+
+local function HyperLinkChatFilter(self, event, msg, ...)
+    local x, y
+    for i, j in ipairs(textPatterns) do
+        x, y = string.match(msg, j)
+        if x and y then
+            x = (tonumber(x))
+            y = (tonumber(y))
+            if x and y then
+                local mapID = C_Map.GetBestMapForUnit("player")
+                local newMsg = core:FormatHyperlink(x / 100, y / 100, mapID) .. " (" .. x .. ", " .. y .. ")"
+                return false, newMsg, ...
+            end
+        end
+    end
+end
+
+local function updateHyperlinkOption()
+    if core.db.profile.options["hyperlink"] then
+        for i, j in ipairs(filteredChannels) do
+            ChatFrame_AddMessageEventFilter("CHAT_MSG_" .. j, HyperLinkChatFilter)
+        end
+    else
+        for i, j in ipairs(filteredChannels) do
+            ChatFrame_RemoveMessageEventFilter("CHAT_MSG_" .. j, HyperLinkChatFilter)
+        end
+    end
+end
+
 local function setSettingsOnLoad()
     updateTargetAlphaForState()
+    updateHyperlinkOption()
 end
 
 function module:OnInitialize()
@@ -80,7 +137,7 @@ function module:OnInitialize()
 
 
     local options = {
-        name = "MapPinEnhanced",
+        name = core.name,
         handler = core,
         type = "group",
         args = {
@@ -115,6 +172,17 @@ function module:OnInitialize()
                 set = function(info, value)
                     core.db.profile.options["hidePins"] = value
                     updateHidePinsOption()
+                end,
+            },
+            hyperlink = {
+                type = "toggle",
+                width = "full",
+                name = "Detect coordinates in chat",
+                desc = "Detect coordinates in chat",
+                get = function() return core.db.profile.options["hyperlink"] end,
+                set = function(info, value)
+                    core.db.profile.options["hyperlink"] = value
+                    updateHyperlinkOption()
                 end,
             },
             maxTrackerEntries = {
@@ -175,7 +243,8 @@ function module:OnInitialize()
 
 
     AceConfig:RegisterOptionsTable("MapPinEnhanced", options)
-    core.optionsFrame = AceConfigDialog:AddToBlizOptions("MapPinEnhanced", "MapPinEnhanced")
+    core.optionsFrame = AceConfigDialog:AddToBlizOptions("MapPinEnhanced",
+        core.name)
 
 
 

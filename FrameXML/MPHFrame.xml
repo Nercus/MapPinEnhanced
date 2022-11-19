@@ -3,9 +3,9 @@
 ..\..\FrameXML\UI.xsd">
     <Script file="MPHFrame.lua" />
     <Frame name="MPHFrameTemplate" virtual="true" hidden="true" mixin="MPHFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
-        <Size x="250" y="1" />
+        <Size x="250" y="25" />
         <Frames>
-            <Frame name="$parentHeader" parentKey="header">
+            <Frame parentKey="header">
                 <Size x="250" y="25" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
@@ -43,6 +43,14 @@
                     </Layer>
                 </Layers>
                 <Frames>
+                    <Button parentKey="presets">
+                        <Size x="20" y="20" />
+                        <Anchors>
+                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="0" />
+                        </Anchors>
+                        <NormalTexture atlas="ui_adv_health" alpha="0.5" />
+                        <HighlightTexture atlas="ui_adv_health" alpha="1" />
+                    </Button>
                     <Button parentKey="close">
                         <Size x="15" y="15" />
                         <Anchors>
@@ -51,10 +59,6 @@
                         <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
                         <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
                         <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down" />
-                        <Scripts>
-                            <OnClick>
-                                self:GetParent():GetParent():Hide()</OnClick>
-                        </Scripts>
                     </Button>
                 </Frames>
             </Frame>
@@ -78,7 +82,6 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnMouseDown method="OnMouseDown" />
         </Scripts>
     </Frame>
 </Ui>
