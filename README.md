@@ -5,7 +5,7 @@
 # Map Pin Enhanced
 
 
-Map Pin Enhanced is adding a lot of features to enhance the already built in Map Pins.
+Map Pin Enhanced is adding a lot of features to enhance the ingame waypoint system.
 
 Following features are added:
 - Set as many waypoints as you want (no "one-waypoint" limit)
