@@ -56,7 +56,7 @@ StaticPopupDialogs["MPH_CONFIRM_RELOAD"] = {
 
 local presetEntryPool = CreateFramePool("Button", nil, "MPHPresetTemplate")
 
-local function updatePresetsList()
+function module:updatePresetsList()
     local previousFrame = nil
     presetEntryPool:ReleaseAll()
     for k, v in pairs(core.db.profile.presets) do
@@ -70,28 +70,58 @@ local function updatePresetsList()
         presetButton:SetParent(module.importFrame.presetsFrame.scrollFrame.scrollChild)
         presetButton.title:SetText(v.name)
         presetButton:SetFrameLevel(k + 1)
-        presetButton:SetScript("OnClick", function(self)
-            module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
-        end)
-        presetButton:SetScript("OnDoubleClick", function(self)
-            StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
-                local newName = self.editBox:GetText()
-                if newName == "" then
-                    core:PrintMSG(L["Name can't be empty"])
-                    return
+        presetButton:SetScript("OnClick", function(self, button)
+            if button == "LeftButton" then
+                module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
+            elseif button == "RightButton" then
+                StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
+                    local newName = self.editBox:GetText()
+                    if newName == "" then
+                        core:PrintMSG(L["Name can't be empty"])
+                        return
+                    end
+                    core.db.profile.presets[k].name = newName
+                    module:updatePresetsList()
                 end
-                core.db.profile.presets[k].name = newName
-                presetButton.title:SetText(newName)
+                StaticPopup_Show("MPH_EDIT_PRESETNAME")
             end
-            StaticPopup_Show("MPH_EDIT_PRESETNAME")
+
         end)
+
+        presetButton:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip_SetTitle(GameTooltip, v.name)
+
+            -- limit input to 8 lines and show ... if there is more
+            local input = v.input
+            local lines = { strsplit("\n", input) }
+            if #lines > 8 then
+                input = ""
+                for i = 1, 8 do
+                    input = input .. lines[i] .. "\n"
+                end
+                input = input .. "..."
+            end
+            GameTooltip_AddNormalLine(GameTooltip, input, true)
+
+
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"])
+            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"])
+            GameTooltip:Show()
+        end)
+
+        presetButton:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+        end)
+
         presetButton.delete:SetScript("OnClick", function(self)
             StaticPopupDialogs["MPH_CONFIRM_DELETE"].OnAccept = function(self)
                 core.db.profile.presets[k] = nil
                 if k == 1 then
                     previousFrame = nil
                 end
-                updatePresetsList()
+                module:updatePresetsList()
             end
 
             StaticPopup_Show("MPH_CONFIRM_DELETE", v.name)
@@ -121,11 +151,19 @@ local function CreateWindow()
 
     importFrame.save:SetScript("OnClick", function()
         local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
-        table.insert(core.db.profile.presets, {
-            name = tostring(#core.db.profile.presets + 1),
-            input = input
-        })
-        updatePresetsList()
+        StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
+            local newName = self.editBox:GetText()
+            if newName == "" then
+                core:PrintMSG(L["Name can't be empty"])
+                return
+            end
+            table.insert(core.db.profile.presets, {
+                name = newName,
+                input = input
+            })
+            module:updatePresetsList()
+        end
+        StaticPopup_Show("MPH_EDIT_PRESETNAME")
     end)
 
     importFrame.import:SetScript("OnClick", function()
@@ -133,8 +171,9 @@ local function CreateWindow()
         core:ParseImport(input)
         core:ToggleImportWindow()
     end)
+
     module.importFrame = importFrame
-    updatePresetsList()
+    module:updatePresetsList()
 end
 
 function core:ToggleImportWindow()

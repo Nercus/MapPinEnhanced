@@ -14,18 +14,18 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 
+
 -- Version 2.1
 -- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
--- TODO: Create a fake TomTom API if TomTom is not enabled
 -- TODO: watch possible taint issues
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
+-- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
 -- FIXME: find way to get rid of blizz minimap pin tooltip
 
 
 -- Version 2.2
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
--- TODO: Add more localization
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 
 
@@ -136,11 +136,16 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
         end,
         notCheckable = true,
     })
-    table.insert(menuTable, 2, {
-        text = L["Presets"],
-        notCheckable = true,
-        isTitle = true
-    })
+
+
+    if (#self.db.profile.presets > 0) then
+        table.insert(menuTable, 2, {
+            text = L["Presets"],
+            notCheckable = true,
+            isTitle = true
+        })
+    end
+
 
     for i, j in ipairs(self.db.profile.presets) do
         table.insert(menuTable, i + 2, {
@@ -207,10 +212,12 @@ local pinsRestored = false
 
 
 function MapPinEnhanced:PrintMSG(msgTable, hasTitle)
+    if not msgTable then return end
     local out = ""
     if hasTitle then
         out = "|A:Waypoint-MapPin-Tracked:19:19|a|cFFFFD100" .. self.name .. "|r\n"
     end
+
     for i = 1, #msgTable do
         if hasTitle then
             out = out .. msgTable[i] .. "\n"
@@ -488,8 +495,10 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         SuperTrackedFrame.Icon:SetDesaturated(false)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
         MapPinEnhanced.db.profile.savedpins.lastTrackedPin = nil
-        if not MapPinEnhanced.distanceTimer.cancelled then
-            MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
+        if MapPinEnhanced.distanceTimer then
+            if not MapPinEnhanced.distanceTimer.cancelled then
+                MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
+            end
         end
     end
 
@@ -612,7 +621,7 @@ local function CreatePin(x, y, mapID, emit, title, persist)
 
         minimappin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-            GameTooltip:SetTitle(GameTooltip, title2);
+            GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip:Show()
         end)
     end
@@ -726,7 +735,7 @@ end
 
 function MapPinEnhanced:FormatHyperlink(x, y, mapID)
     if x and y and mapID then
-        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
+        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, "MAP_PIN_HYPERLINK")
     end
 end
 
@@ -1113,8 +1122,8 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
         -- Check if TomTom is Loaded
         if IsAddOnLoaded("TomTom") then
             TomTomLoaded = true
-            self:PrintMSG(L[
-                "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."]) -- Localize
+            self:PrintMSG({ L[
+                "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."] }) -- Localize
         else
             TomTomLoaded = false
         end
@@ -1167,10 +1176,10 @@ function MapPinEnhanced:ParseImport(importstring)
     self.pinManager.RemoveAllPins()
     local msg
     for s in importstring:gmatch("[^\r\n]+") do
-        if string.match(s, "/way ") or string.match(s, "/mph ") or string.match(s, "/pin ") then
+        if string.match(s:lower(), "/way ") or string.match(s:lower(), "/mph ") or string.match(s:lower(), "/pin ") then
             msg = string.gsub(s, "/%a%a%a", "")
         else
-            self:PrintMSG(L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"])
+            self:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
         end
         self:ParseInput(msg)
     end
@@ -1281,7 +1290,7 @@ function MapPinEnhanced:ParseInput(msg)
 end
 
 function MapPinEnhanced:ParseExport()
-    local pinData = self.pinManager.GetAllPinData()
+    local pinData = MapPinEnhanced.pinManager.GetAllPinData()
     local output = ""
     for _, pin in ipairs(pinData) do
         local slashcmd = string.format("/way %s %.2f %.2f", mapDataIdReverse[pin[3]], pin[1] * 100, pin[2] * 100)

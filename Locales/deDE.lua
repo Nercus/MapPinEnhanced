@@ -20,6 +20,9 @@ L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin"]
 L["|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin"] = "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a um den Pin zu teilen"
 L["|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent"] = "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a um den Pin persistent zu machen"
 
+L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"] = "Links-Klick um das Preset zu laden"
+L["|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"] = "Rechts-Klick um den Namen des Presets zu ändern"
+
 -- slash commands
 L["|cffeda55f/mph config|r - Open the options menu"] = "|cffeda55f/mph config|r - Öffnet das Optionsmenü"
 L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"] = "|cffeda55f/mph tracker|r - Öffnen/Schließen des Pin Trackers"

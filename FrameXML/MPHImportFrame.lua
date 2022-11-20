@@ -44,6 +44,7 @@ function MPHImportFrameMixin:OnLoad()
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAlpha(0.6)
+
 end
 
 function MPHImportFrameMixin:OnDragStop()

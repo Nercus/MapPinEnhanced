@@ -35,7 +35,7 @@
                 </FontString>
             </Layer>
         </Layers>
-        <Frames >
+        <Frames>
             <Button parentKey="close">
                 <Size x="25" y="25" />
                 <Anchors>
@@ -50,7 +50,6 @@
                     </OnClick>
                 </Scripts>
             </Button>
-
 
             <Frame parentKey="editBoxFrame">
                 <Size x="450" y="275" />

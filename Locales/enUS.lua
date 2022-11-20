@@ -20,6 +20,10 @@ L["|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to shar
 L["|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent"] = "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent"
 
 
+L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"] = "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"
+L["|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"] = "|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"
+
+
 -- slash commands
 L["|cffeda55f/mph config|r - Open the options menu"] = "|cffeda55f/mph config|r - Open the options menu"
 L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"] = "|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"
