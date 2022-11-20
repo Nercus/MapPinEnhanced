@@ -741,7 +741,7 @@ end
 
 function MapPinEnhanced:FormatHyperlink(x, y, mapID)
     if x and y and mapID then
-        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, "MAP_PIN_HYPERLINK")
+        return ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
     end
 end
 
