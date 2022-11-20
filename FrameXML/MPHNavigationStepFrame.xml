@@ -1,0 +1,83 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+    <Script file="MPHNavigationStepFrame.lua" />
+    <Frame name="MPHNavigationStepFrameTemplate" virtual="true" hidden="true" mixin="MPHNavigationStepFrameMixin" enableMouse="true">
+        <Size x="280" y="102" />
+        <Anchors>
+            <Anchor point="BOTTOM" relativePoint="TOP" x="0" y="-5" />
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="texture" atlas="dragonflight-landingpage-renownbutton-centaur">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="0" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString text="Navigation" parentKey="text" inherits="GameFontNormalMed2Outline">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="25" y="0"/>
+                    </Anchors>
+                </FontString>
+                <Texture parentKey="spinnerTexture" atlas="UF-Essence-TimerSpin">
+                    <Size x="40" y="40"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativeTo="$parent" relativePoint="CENTER"/>
+                    </Anchors>
+                </Texture>
+                <FontString wordwrap="true" nonspacewrap="true" parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
+                    <Size x="200" y="90"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="30" y="0"/>
+                        <Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT" x="30" y="0"/>
+                    </Anchors>
+                    <FontHeight val="13" />
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button enableMouse="true" parentKey="close">
+                <Size x="15" y="15"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT" x="-25" y="-1"/>
+                </Anchors>
+                <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In"/>
+                <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down"/>
+                <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover"/>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():Hide()
+                        self:GetParent():StopSpinner()
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button enableMouse="true" registerForClicks="LeftButtonUp, RightButtonUp" parentKey="action" name="MPHUseSpellButton" inherits="SecureActionButtonTemplate">
+                <Size x="50" y="50"/>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT" x="-30" y="0"/>
+                </Anchors>
+                <NormalTexture atlas="UI-HUD-ActionBar-IconFrame"/>
+                <PushedTexture atlas="UI-HUD-ActionBar-IconFrame-Down"/>
+                <HighlightTexture atlas="UI-HUD-ActionBar-IconFrame-Mouseover"/>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="icon">
+                            <Size x="50" y="50"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativeTo="MPHUseSpellButton" relativePoint="CENTER"/>
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+        <Animations>
+            <AnimationGroup parentKey="spinner" looping="REPEAT">
+                <Rotation childKey="spinnerTexture" duration="1" degrees="360" order="1" smoothing="NONE" />
+            </AnimationGroup>
+        </Animations>
+    </Frame>
+</Ui>

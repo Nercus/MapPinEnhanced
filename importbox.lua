@@ -1,76 +1,44 @@
 local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
 local module = core:NewModule("Importbox")
 
-local AceGUI = LibStub("AceGUI-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
-local xpcall = xpcall
 
 
-local function safecall(func, ...)
-	if func then
-		return xpcall(func, errorhandler, ...)
-	end
-end
-
-
-AceGUI:RegisterLayout("customlayout",
-    function(content, children)
-        if children[1] and children[2] and children[3] and children[4] then
-            -- Editbox
-            children[1]:SetWidth(content:GetWidth() or 0)
-            children[1]:SetHeight(content:GetHeight() or 0)
-            children[1].frame:ClearAllPoints()
-            children[1].frame:SetAllPoints(content)
-            children[1].frame:Show()
-
-            -- Import button
-            children[2]:SetWidth(85)
-            children[2]:SetHeight(25)
-            children[2].frame:ClearAllPoints()
-            children[2].frame:SetPoint("BOTTOMLEFT", content, "TOPRIGHT", -90, -12)
-            children[2].frame:Show()
-
-
-            -- Checkbox
-            children[3].frame:ClearAllPoints()
-            children[3].frame:SetPoint("LEFT", content.obj.statustext:GetParent(), "LEFT", 5, 0)
-            children[3].frame:Show()
-
-            children[4]:SetWidth(85)
-            children[4]:SetHeight(25)
-            children[4].frame:ClearAllPoints()
-            children[4].frame:SetPoint("BOTTOMRIGHT", content, "TOPLEFT", 90, -12)
-            children[4].frame:Show()
-
-
-            safecall(content.obj.LayoutFinished, content.obj, nil, content:GetHeight())
-        end
-    end
-)
-
-
-
-local function ParseImport(importstring)
-    if not importstring then return end
-    local msg
-    for s in importstring:gmatch("[^\r\n]+") do
-        if string.match(s, "/way ") then
-            msg = string.gsub(s, "/way ", "")
-        elseif string.match(s, "/mph ") then
-            msg = string.gsub(s, "/mph ", "")
-        elseif string.match(s, "/pin ") then
-            msg = string.gsub(s, "/pin ", "")
+StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
+    text = "Changing name of this preset",
+    button1 = "Accept",
+    button2 = "Cancel",
+    EditBoxOnTextChanged = function(self)
+        local text = self:GetText()
+        if text ~= nil and text ~= "" then
+            self:GetParent().button1:Enable()
         else
-            core:Print(L["Formating error"])
+            self:GetParent().button1:Disable()
         end
-        core:ParseInput(msg)
-    end
-end
+    end,
+    hasEditBox = true,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
 
--- Reload Popup
-StaticPopupDialogs["MPH_RELOAD_POPUP"] = {
+
+StaticPopupDialogs["MPH_CONFIRM_DELETE"] = {
+    text = "Do you really want to delete the preset '%s' ?",
+    showAlert = true,
+    button1 = "Accept",
+    button2 = "Cancel",
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
+
+
+StaticPopupDialogs["MPH_CONFIRM_RELOAD"] = {
     text = "Changing this setting requires that you reload the Interface",
     button1 = "Reload",
     button2 = "Cancel",
@@ -80,83 +48,139 @@ StaticPopupDialogs["MPH_RELOAD_POPUP"] = {
     timeout = 0,
     whileDead = true,
     hideOnEscape = true,
-    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-  }
+    preferredIndex = 3,
+}
 
 
 
-local function CreateWindow()
-    if module.gui then return end
 
-    local textStore
-    local name
-    local selectedload
-    local db = core.db.profile
+local presetEntryPool = CreateFramePool("Button", nil, "MPHPresetTemplate")
 
-
-    local f = AceGUI:Create("Frame")
-    f:Hide()
-    module.gui = f
-    f:SetLayout("customlayout")
-    f:SetWidth(400)
-    f:SetAutoAdjustHeight(true)
-    f:SetTitle("Waypoint Import")
-    f:EnableResize(false)
-
-    local edit = AceGUI:Create("MultiLineEditBox")
-    f:AddChild(edit)
-    edit.label:SetText("")
-    edit:SetText("")
-    edit:DisableButton(true)
-    edit:SetFullWidth(true)
-    edit:SetCallback("OnTextChanged", function(widget, event, text)
-        textStore = text
-    end)
-    module.edit = edit
-
-    local importbutton = AceGUI:Create("Button")
-    importbutton:SetRelativeWidth(0.3)
-    importbutton:SetText("Import")
-    importbutton:SetCallback("OnClick", function()
-        ParseImport(textStore)
-        core:ToggleImportWindow()
-    end)
-    f:AddChild(importbutton)
-
-    local checkbox = AceGUI:Create("CheckBox")
-    checkbox:SetValue(true)
-    checkbox:SetLabel("Change Arrow Alpha")
-    checkbox:SetValue(db.options["changedalpha"])
-    checkbox:SetCallback("OnValueChanged", function(widget, event, value)
-        if value == true then
-            db.options["changedalpha"] = true
-        elseif value == false then
-            db.options["changedalpha"] = false
+function module:updatePresetsList()
+    local previousFrame = nil
+    presetEntryPool:ReleaseAll()
+    for k, v in pairs(core.db.profile.presets) do
+        local presetButton = presetEntryPool:Acquire()
+        if previousFrame then
+            presetButton:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, 12)
+        else
+            presetButton:SetPoint("TOPLEFT", module.importFrame.presetsFrame.scrollFrame.scrollChild, "TOPLEFT", 0, 0)
         end
-        StaticPopup_Show("MPH_RELOAD_POPUP");
-    end)
-    f:AddChild(checkbox)
+        previousFrame = presetButton
+        presetButton:SetParent(module.importFrame.presetsFrame.scrollFrame.scrollChild)
+        presetButton.title:SetText(v.name)
+        presetButton:SetFrameLevel(k + 1)
+        presetButton:SetScript("OnClick", function(self, button)
+            if button == "LeftButton" then
+                module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
+            elseif button == "RightButton" then
+                StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
+                    local newName = self.editBox:GetText()
+                    if newName == "" then
+                        core:PrintMSG(L["Name can't be empty"])
+                        return
+                    end
+                    core.db.profile.presets[k].name = newName
+                    module:updatePresetsList()
+                end
+                StaticPopup_Show("MPH_EDIT_PRESETNAME")
+            end
 
-    local exportbutton = AceGUI:Create("Button")
-    exportbutton:SetRelativeWidth(0.3)
-    exportbutton:SetText("Export")
-    exportbutton:SetCallback("OnClick", function()
-        edit:SetText(core:ParseExport())
-    end)
-    f:AddChild(exportbutton)
+        end)
+
+        presetButton:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip_SetTitle(GameTooltip, v.name)
+
+            -- limit input to 8 lines and show ... if there is more
+            local input = v.input
+            local lines = { strsplit("\n", input) }
+            if #lines > 8 then
+                input = ""
+                for i = 1, 8 do
+                    input = input .. lines[i] .. "\n"
+                end
+                input = input .. "..."
+            end
+            GameTooltip_AddNormalLine(GameTooltip, input, true)
 
 
-    _G["MapPinEnhanced_ImportFrame"] = f.frame
-    table.insert(UISpecialFrames, "MapPinEnhanced_ImportFrame")
+            GameTooltip:AddLine(" ")
+            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"])
+            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"])
+            GameTooltip:Show()
+        end)
+
+        presetButton:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+        end)
+
+        presetButton.delete:SetScript("OnClick", function(self)
+            StaticPopupDialogs["MPH_CONFIRM_DELETE"].OnAccept = function(self)
+                core.db.profile.presets[k] = nil
+                if k == 1 then
+                    previousFrame = nil
+                end
+                module:updatePresetsList()
+            end
+
+            StaticPopup_Show("MPH_CONFIRM_DELETE", v.name)
+        end)
+        presetButton.delete:SetScript("OnEnter", function()
+            presetButton:SetHighlightLocked(true)
+        end)
+        presetButton.delete:SetScript("OnLeave", function()
+            presetButton:SetHighlightLocked(false)
+        end)
+        presetButton:Show()
+    end
 end
 
+local function CreateWindow()
+    if module.importFrame then return end
+
+    local importFrame = CreateFrame("Frame", nil, UIParent, "MPHImportFrameTemplate")
+    importFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+
+    importFrame.export:SetScript("OnClick", function()
+        local output = core.ParseExport()
+        if output then
+            importFrame.editBoxFrame.scrollFrame.editBox:SetText(output)
+        end
+    end)
+
+    importFrame.save:SetScript("OnClick", function()
+        local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
+        StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
+            local newName = self.editBox:GetText()
+            if newName == "" then
+                core:PrintMSG(L["Name can't be empty"])
+                return
+            end
+            table.insert(core.db.profile.presets, {
+                name = newName,
+                input = input
+            })
+            module:updatePresetsList()
+        end
+        StaticPopup_Show("MPH_EDIT_PRESETNAME")
+    end)
+
+    importFrame.import:SetScript("OnClick", function()
+        local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
+        core:ParseImport(input)
+        core:ToggleImportWindow()
+    end)
+
+    module.importFrame = importFrame
+    module:updatePresetsList()
+end
 
 function core:ToggleImportWindow()
-    if not module.gui then CreateWindow() end
-    if module.gui:IsShown() then
-        module.gui:Hide()
+    if not module.importFrame then CreateWindow() end
+    if module.importFrame:IsShown() then
+        module.importFrame:Hide()
     else
-        module.edit:SetText("")
-        module.gui:Show()
+        module.importFrame:Show()
     end
 end
