@@ -15,7 +15,11 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 -- Bugfixes
 -- TODO: Adjust generated changelog
-
+-- TODO: Add import frame title to make clear which box is for what
+-- TODO: Clicking on the small preset button should open the preset frame and close if it is already open
+-- FIXME: CTRL+Click after reload resets the tracker position to topleft corner (sometimes -> left side of tracker title)
+-- TODO: Add scale slider to options
+-- FIXME: Right+Click to rename preset does not work
 
 -- Version 2.1
 -- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])

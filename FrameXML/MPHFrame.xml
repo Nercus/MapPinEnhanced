@@ -44,17 +44,17 @@
                 </Layers>
                 <Frames>
                     <Button parentKey="presets">
-                        <Size x="20" y="20" />
+                        <Size x="15" y="15" />
                         <Anchors>
                             <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="0" />
                         </Anchors>
-                        <NormalTexture atlas="ui_adv_health" alpha="0.5" />
-                        <HighlightTexture atlas="ui_adv_health" alpha="1" />
+                        <NormalTexture atlas="UI-HUD-UnitFrame-Target-PortraitOn-Boss-Rare-Star" alpha="0.7" />
+                        <HighlightTexture atlas="UI-HUD-UnitFrame-Target-PortraitOn-Boss-Rare-Star" alpha="1" />
                     </Button>
                     <Button parentKey="close">
                         <Size x="15" y="15" />
                         <Anchors>
-                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="27" />
+                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="27" y="-1" />
                         </Anchors>
                         <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
                         <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
