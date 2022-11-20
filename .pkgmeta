@@ -19,8 +19,7 @@ Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
 ignore:
 
 - README.md
-
-license-output: LICENSE.txt
-
-move-folders:
-MapPinEnhanced/MapPinEnhanced: MapPinEnhanced
+- .github
+- .gitignore
+- banner.png
+- logo.png
