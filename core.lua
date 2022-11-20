@@ -13,6 +13,8 @@ _G["MapPinEnhanced"] = globalMPH
 MapPinEnhanced.name = "Map Pin Enhanced"
 
 
+-- Bugfixes
+-- TODO: Adjust generated changelog
 
 
 -- Version 2.1
@@ -1317,7 +1319,8 @@ SlashCmdList["MPH"] = function(msg)
     elseif msg == "version" then
         local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
         local version, build = GetBuildInfo()
-        MapPinEnhanced:PrintMSG({ self.name .. ": " .. versionMPH, string.format("Game: %s (%d)", version, build) },
+        MapPinEnhanced:PrintMSG({ MapPinEnhanced.name .. ": " .. versionMPH,
+            string.format("Game: %s (%d)", version, build) },
             true)
     elseif msg == "config" or msg == "options" then
         if InterfaceOptionsFrame ~= nil then
