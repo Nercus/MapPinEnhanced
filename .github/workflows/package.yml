@@ -2,8 +2,6 @@ name: Package Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - "*"
       - "!**-alpha**"
