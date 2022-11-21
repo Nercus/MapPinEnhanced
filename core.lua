@@ -19,7 +19,8 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 -- FIXME: Clicking of the header mphframe jumps
 -- FIXME: CTRL+Click after reload resets the tracker position to topleft corner (sometimes -> left side of tracker title)
 -- TODO: Check for localization in xml
-
+-- TODO: saving a preset with the same name overrides the existing preset -> show warning message
+-- TODO: convert hDB zone names to localized zone names
 
 
 -- Version 2.1
