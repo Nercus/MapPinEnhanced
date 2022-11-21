@@ -52,5 +52,10 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad>
+			    self:RegisterForClicks("AnyUp")
+            </OnLoad>
+        </Scripts>
     </Button>
 </Ui>

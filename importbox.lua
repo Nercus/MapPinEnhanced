@@ -59,7 +59,7 @@ local presetEntryPool = CreateFramePool("Button", nil, "MPHPresetTemplate")
 function module:updatePresetsList()
     local previousFrame = nil
     presetEntryPool:ReleaseAll()
-    for k, v in pairs(core.db.profile.presets) do
+    for k, v in pairs(core.db.global.presets) do
         local presetButton = presetEntryPool:Acquire()
         if previousFrame then
             presetButton:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, 12)
@@ -80,7 +80,7 @@ function module:updatePresetsList()
                         core:PrintMSG(L["Name can't be empty"])
                         return
                     end
-                    core.db.profile.presets[k].name = newName
+                    core.db.global.presets[k].name = newName
                     module:updatePresetsList()
                 end
                 StaticPopup_Show("MPH_EDIT_PRESETNAME")
@@ -117,7 +117,7 @@ function module:updatePresetsList()
 
         presetButton.delete:SetScript("OnClick", function(self)
             StaticPopupDialogs["MPH_CONFIRM_DELETE"].OnAccept = function(self)
-                core.db.profile.presets[k] = nil
+                core.db.global.presets[k] = nil
                 if k == 1 then
                     previousFrame = nil
                 end
@@ -157,7 +157,7 @@ local function CreateWindow()
                 core:PrintMSG(L["Name can't be empty"])
                 return
             end
-            table.insert(core.db.profile.presets, {
+            table.insert(core.db.global.presets, {
                 name = newName,
                 input = input
             })

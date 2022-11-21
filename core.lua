@@ -14,15 +14,17 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 -- Bugfixes
--- TODO: Adjust generated changelog
--- TODO: Add import frame title to make clear which box is for what
 -- TODO: Clicking on the small preset button should open the preset frame and close if it is already open
 -- FIXME: CTRL+Click after reload resets the tracker position to topleft corner (sometimes -> left side of tracker title)
--- TODO: Add scale slider to options
--- FIXME: Right+Click to rename preset does not work
+-- TODO: Check for localization in xml
+
+
+-- TODO: Test tracker scale slider
+-- FIXME: Test rightclick rename for presets
+-- TODO: Test new Importframe and Presets title text in importframe
 
 -- Version 2.1
--- TODO: extend MapPinEnhanced:AddWaypoint possible options (icons with mask, persistent, ...[check])
+-- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: watch possible taint issues
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
@@ -144,7 +146,7 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
     })
 
 
-    if (#self.db.profile.presets > 0) then
+    if (#self.db.global.presets > 0) then
         table.insert(menuTable, 2, {
             text = L["Presets"],
             notCheckable = true,
@@ -153,7 +155,7 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
     end
 
 
-    for i, j in ipairs(self.db.profile.presets) do
+    for i, j in ipairs(self.db.global.presets) do
         table.insert(menuTable, i + 2, {
             text = "  " .. j.name,
             func = function()
@@ -191,7 +193,7 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
 
 local screenWidth, screenHeight = GetPhysicalScreenSize()
 local defaults = {
-    profile = {
+    global = {
         minimap = {
             hide = false
         },
@@ -210,6 +212,7 @@ local defaults = {
             showTimeOnSuperTrackedFrame = true,
             hidePins = false,
             hyperlink = true,
+            trackerScale = 1,
         }
     }
 }
@@ -237,12 +240,12 @@ end
 function MapPinEnhanced:TogglePinTrackerWindow()
     if self.MPHFrame:IsShown() then
         self.MPHFrame:Hide()
-        if self.db.profile.options["hidePins"] then
+        if self.db.global.options["hidePins"] then
             self.pinManager:HideAllPins()
         end
     else
         self.MPHFrame:Show()
-        if self.db.profile.options["hidePins"] then
+        if self.db.global.options["hidePins"] then
             self.pinManager:ShowAllPins()
         end
     end
@@ -261,17 +264,21 @@ function MapPinEnhanced:OnInitialize()
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
     MPHFrame:SetScript("OnMouseUp", function(self)
         local x, y = select(4, self:GetPoint())
-        MapPinEnhanced.db.profile.trackerPos = {
-            x = x,
-            y = y,
-        }
+        if x and y then
+            if x ~= MapPinEnhanced.db.global.trackerPos.x or y ~= MapPinEnhanced.db.global.trackerPos.y then -- Only save if the position has changed
+                MapPinEnhanced.db.global.trackerPos = {
+                    x = x,
+                    y = y,
+                }
+                self:ClearAllPoints()
+                self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
+            end
+        end
         self:StopMovingOrSizing()
-        self:ClearAllPoints()
-        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
     end)
     MPHFrame:SetScript("OnEnter", function(self)
-        if MapPinEnhanced.db.profile.trackerPos.x == defaults.profile.trackerPos.x and
-            MapPinEnhanced.db.profile.trackerPos.y == defaults.profile.trackerPos.y then
+        if MapPinEnhanced.db.global.trackerPos.x == defaults.global.trackerPos.x and
+            MapPinEnhanced.db.global.trackerPos.y == defaults.global.trackerPos.y then
             GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
             GameTooltip:SetText(L["|cffeda55fCtrl + Left-Click|r to move the pin tracker"])
             GameTooltip:Show()
@@ -308,11 +315,36 @@ function MapPinEnhanced:OnInitialize()
     self.MPHFrame = MPHFrame
 
     -- Saved Vars
-    self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults, true)
-    MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.profile.trackerPos.x, self.db.profile.trackerPos.y)
+    self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults)
+    MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.global.trackerPos.x, self.db.global.trackerPos.y)
+
+
+    -- conversion to new global saved vars
+    if self.db.profile then
+        if self.db.minimap ~= nil then
+            self.db.global.minimap.hide = self.db.minimap.hide
+        end
+        if self.db.profile.savedpins ~= nil then
+            self.db.global.savedPins = {
+                pinsData = {},
+                lastTrackedIndex = nil
+            }
+        end
+        if self.db.profile.pintrackerposition ~= nil then
+            self.db.global.trackerPos = {
+                x = self.db.profile.pintrackerposition.x,
+                y = self.db.profile.pintrackerposition.y,
+            }
+        end
+
+        if self.db.profile.options.changedalpha ~= nil then
+            self.db.global.options.changedalpha = self.db.profile.options.changedalpha
+        end
+        self.db.profile = nil
+    end
 
     -- Minimap Icon
-    LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.profile.minimap)
+    LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker, self.db.global.minimap)
     self:UpdateMinimapButton()
 
     -- Structure mapdata like TomTom, Snippet from TomTom Addon
@@ -370,7 +402,7 @@ function MapPinEnhanced:OnInitialize()
 end
 
 function MapPinEnhanced:UpdateMinimapButton()
-    if (self.db.profile.minimap.hide) then
+    if (self.db.global.minimap.hide) then
         LDBIcon:Hide("MapPinEnhanced")
     else
         LDBIcon:Show("MapPinEnhanced")
@@ -378,10 +410,10 @@ function MapPinEnhanced:UpdateMinimapButton()
 end
 
 function MapPinEnhanced:ToggleMinimapButton()
-    if (self.db.profile.minimap.hide) then
-        self.db.profile.minimap.hide = false
+    if (self.db.global.minimap.hide) then
+        self.db.global.minimap.hide = false
     else
-        self.db.profile.minimap.hide = true
+        self.db.global.minimap.hide = true
     end
     self:UpdateMinimapButton()
 end
@@ -485,7 +517,10 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         if MapPinEnhanced.superTrackedTimer then
             MapPinEnhanced.superTrackedTimer:Hide()
         end
-        MapPinEnhanced.db.profile.savedpins.lastTrackedPin = {
+        if not MapPinEnhanced.db.global.savedpins then
+            MapPinEnhanced.db.global.savedpins = {}
+        end
+        MapPinEnhanced.db.global.savedpins.lastTrackedPin = {
             x = x2,
             y = y2,
             mapID = mapID2,
@@ -500,7 +535,7 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         minimappin:Untrack()
         SuperTrackedFrame.Icon:SetDesaturated(false)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-        MapPinEnhanced.db.profile.savedpins.lastTrackedPin = nil
+        MapPinEnhanced.db.global.savedpins.lastTrackedPin = nil
         if MapPinEnhanced.distanceTimer then
             if not MapPinEnhanced.distanceTimer.cancelled then
                 MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
@@ -759,7 +794,7 @@ local function PinManager()
                 persistent = pin.persistent,
             })
         end
-        MapPinEnhanced.db.profile.savedpins.pinsData = data
+        MapPinEnhanced.db.global.savedpins.pinsData = data
     end
 
     local function UpdateTrackerPositions()
@@ -776,18 +811,18 @@ local function PinManager()
         if #pins > 0 and not MapPinEnhanced.MPHFrame.scrollFrame:IsShown() then
             MapPinEnhanced.MPHFrame.scrollFrame:Show()
         end
-        if (#pins <= MapPinEnhanced.db.profile.options["maxTrackerEntries"]) then
+        if (#pins <= MapPinEnhanced.db.global.options["maxTrackerEntries"]) then
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(0)
             local newHeight = 65 + ((#pins - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
             if pinsRestored then
                 MapPinEnhanced.MPHFrame:ClearAllPoints()
-                MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.profile.trackerPos.x,
-                    MapPinEnhanced.db.profile.trackerPos.y)
+                MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.global.trackerPos.x,
+                    MapPinEnhanced.db.global.trackerPos.y)
             end
         else
             MapPinEnhanced.MPHFrame.scrollFrame.ScrollBar:SetAlpha(1)
-            local newHeight = 65 + ((MapPinEnhanced.db.profile.options["maxTrackerEntries"] - 1) * 40)
+            local newHeight = 65 + ((MapPinEnhanced.db.global.options["maxTrackerEntries"] - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
     end
@@ -921,14 +956,17 @@ local function PinManager()
     end
 
     local function RestoreAllPins()
-        if (not MapPinEnhanced.db.profile.savedpins.pinsData) then
+        if (not MapPinEnhanced.db.global.savedpins) then
+            return
+        end
+        if (not MapPinEnhanced.db.global.savedpins.pinsData) then
             return
         end
 
-        local pTracked = MapPinEnhanced.db.profile.savedpins.lastTrackedPin
+        local pTracked = MapPinEnhanced.db.global.savedpins.lastTrackedPin
         local hasTracked = pTracked ~= nil
 
-        for _, p in ipairs(MapPinEnhanced.db.profile.savedpins.pinsData) do
+        for _, p in ipairs(MapPinEnhanced.db.global.savedpins.pinsData) do
             if hasTracked then
                 AddPin(p.x, p.y, p.mapID, p.title, p.persistent,
                     not (p.x == pTracked.x and p.y == pTracked.y and p.mapID == pTracked.mapID))
@@ -1012,7 +1050,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
             self.pinManager.RefreshTracking()
         end
     end
-    if self.db.profile.options["showTimeOnSuperTrackedFrame"] and
+    if self.db.global.options["showTimeOnSuperTrackedFrame"] and
         (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
         if not self.distanceTimerFast then
             self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
@@ -1133,7 +1171,7 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
         else
             TomTomLoaded = false
         end
-        if self.db.profile.options["showTimeOnSuperTrackedFrame"] and
+        if self.db.global.options["showTimeOnSuperTrackedFrame"] and
             (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
             if not self.distanceTimerFast then
                 self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1,

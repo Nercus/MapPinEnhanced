@@ -1,13 +1,16 @@
+<h1 align="center"> Map Pin Enhanced </h1> <br>
+
 <p align="center">
   <img width="70%" src="banner.png" />
 </p>
+<p align="center">
+  Map Pin Enhanced enhances the ingame waypoint system.
+</p>
 
-# Map Pin Enhanced
+## Features
 
+You can do these things with Map Pin Enhanced:
 
-Map Pin Enhanced is adding a lot of features to enhance the ingame waypoint system.
-
-Following features are added:
 - Set as many waypoints as you want (no "one-waypoint" limit)
 - Set waypoints via command: _/mph_, _/pin_ (or _/way_ if you don't have TomTom installed)
 - A pin tracker to see a list of all active pins
@@ -15,5 +18,3 @@ Following features are added:
 - Make detected coordinates in chat clickable
 - Add Time to reach tracked pin
 - Unlimited distance for supertracking
-
-

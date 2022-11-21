@@ -8,6 +8,7 @@
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
 ## X-Curse-Project-ID: 441677
+## X-Wago-ID: RqGZqqKd
 
 
 embeds.xml

@@ -70,6 +70,11 @@
                                 <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="-1" />
                             </Anchors>
                         </FontString>
+                        <FontString parentKey="title" inherits="GameFontNormalMed1" justifyH="LEFT" text="Importbox">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="-1" />
+                            </Anchors>
+                        </FontString>
                     </Layer>
                 </Layers>
                 <Frames>
@@ -129,9 +134,9 @@
                                 <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="textCount" inherits="GameFontNormalTiny2" justifyH="CENTER" outline="NORMAL">
+                        <FontString parentKey="title" inherits="GameFontNormalMed1" justifyH="LEFT" text="Presets">
                             <Anchors>
-                                <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="-1" />
                             </Anchors>
                         </FontString>
                     </Layer>
