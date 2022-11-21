@@ -30,7 +30,7 @@
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="CENTER" text="Map Pin Enhanced Import Frame" outline="NORMAL">
                     <Size x="800" y="0" />
                     <Anchors>
-                        <Anchor point="TOP" relativeKey="$parent.topper" relativePoint="CENTER" x="0" y="-9" />
+                        <Anchor point="TOP" relativeKey="$parent.topper" relativePoint="CENTER" x="0" y="-3" />
                     </Anchors>
                 </FontString>
             </Layer>

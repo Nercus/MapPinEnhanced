@@ -14,14 +14,13 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 -- Bugfixes
--- TODO: Clicking on the small preset button should open the preset frame and close if it is already open
+-- TODO: Adjust titles in importframe
+-- TODO: Frame jumps after changing scale and when preset is loaded
+-- FIXME: Clicking of the header mphframe jumps
 -- FIXME: CTRL+Click after reload resets the tracker position to topleft corner (sometimes -> left side of tracker title)
 -- TODO: Check for localization in xml
 
 
--- TODO: Test tracker scale slider
--- FIXME: Test rightclick rename for presets
--- TODO: Test new Importframe and Presets title text in importframe
 
 -- Version 2.1
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
@@ -296,7 +295,7 @@ function MapPinEnhanced:OnInitialize()
         end
     end)
 
-    MPHFrame.header.presets:SetScript("OnClick", function(self)
+    MPHFrame.header.presets:SetScript("OnMouseDown", function(self)
         if MapPinEnhanced.menuFrame then
             if MapPinEnhanced.menuFrame:IsShown() then
                 MapPinEnhanced.menuFrame:Hide()
