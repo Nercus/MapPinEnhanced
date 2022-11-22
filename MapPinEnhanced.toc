@@ -12,7 +12,6 @@
 
 
 embeds.xml
-Locales\Locales.xml
 core.lua
 FrameXML\frames.xml
 

@@ -1,6 +1,7 @@
 MPHImportFrameMixin = {};
 
 function MPHImportFrameMixin:OnLoad()
+
     self.editBoxFrame.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetDesaturated(true)
     self.editBoxFrame.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAtlas("NPE_ArrowDown")
     self.editBoxFrame.scrollFrame.ScrollBar.ScrollDownButton.Disabled:SetAlpha(0.6)
@@ -44,7 +45,7 @@ function MPHImportFrameMixin:OnLoad()
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.presetsFrame.scrollFrame.ScrollBar.ThumbTexture:SetAlpha(0.6)
-
+    self:SetTitle("Map Pin Enhanced Import Frame")
 end
 
 function MPHImportFrameMixin:OnDragStop()
@@ -52,7 +53,7 @@ function MPHImportFrameMixin:OnDragStop()
 end
 
 function MPHImportFrameMixin:OnDragStart()
-    if self.topper:IsMouseOver() then
+    if self.TitleContainer:IsMouseOver() then
         self:StartMoving()
     end
 end

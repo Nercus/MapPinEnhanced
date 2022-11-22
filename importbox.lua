@@ -2,7 +2,6 @@ local core = LibStub("AceAddon-3.0"):GetAddon("MapPinEnhanced")
 local module = core:NewModule("Importbox")
 
 
-local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 
 
@@ -17,13 +16,11 @@ StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
         else
             self:GetParent().button1:Disable()
         end
-
         -- check if name already exists
-        for k, v in pairs(core.db.global.presets) do
+        for _, v in pairs(core.db.global.presets) do
+            print(v.name == text)
             if v.name == text then
-                self:GetParent().startDelay = 3
-                self:GetParent().showAlert = true
-                self:GetParent().text = "Saving this preset will overwrite the existing preset with the same name."
+                self:GetParent().button1:Disable()
                 break
             end
         end
@@ -48,21 +45,6 @@ StaticPopupDialogs["MPH_CONFIRM_DELETE"] = {
 }
 
 
-StaticPopupDialogs["MPH_CONFIRM_RELOAD"] = {
-    text = "Changing this setting requires that you reload the Interface",
-    button1 = "Reload",
-    button2 = "Cancel",
-    OnAccept = function()
-        ReloadUI()
-    end,
-    timeout = 0,
-    whileDead = true,
-    hideOnEscape = true,
-    preferredIndex = 3,
-}
-
-
-
 
 local presetEntryPool = CreateFramePool("Button", nil, "MPHPresetTemplate")
 
@@ -72,7 +54,7 @@ function module:updatePresetsList()
     for k, v in pairs(core.db.global.presets) do
         local presetButton = presetEntryPool:Acquire()
         if previousFrame then
-            presetButton:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, 12)
+            presetButton:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, -3)
         else
             presetButton:SetPoint("TOPLEFT", module.importFrame.presetsFrame.scrollFrame.scrollChild, "TOPLEFT", 0, 0)
         end
@@ -80,28 +62,14 @@ function module:updatePresetsList()
         presetButton:SetParent(module.importFrame.presetsFrame.scrollFrame.scrollChild)
         presetButton.title:SetText(v.name)
         presetButton:SetFrameLevel(k + 1)
-        presetButton:SetScript("OnClick", function(self, button)
-            if button == "LeftButton" then
-                module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
-            elseif button == "RightButton" then
-                StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
-                    local newName = self.editBox:GetText()
-                    if newName == "" then
-                        core:PrintMSG(L["Name can't be empty"])
-                        return
-                    end
-                    core.db.global.presets[k].name = newName
-                    module:updatePresetsList()
-                end
-                StaticPopup_Show("MPH_EDIT_PRESETNAME")
-            end
-
+        presetButton:SetScript("OnClick", function(self)
+            module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
+            core:ParseImport(v.input)
         end)
 
         presetButton:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
             GameTooltip_SetTitle(GameTooltip, v.name)
-
             -- limit input to 8 lines and show ... if there is more
             local input = v.input
             local lines = { strsplit("\n", input) }
@@ -113,11 +81,6 @@ function module:updatePresetsList()
                 input = input .. "..."
             end
             GameTooltip_AddNormalLine(GameTooltip, input, true)
-
-
-            GameTooltip:AddLine(" ")
-            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to load preset"])
-            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to change preset name"])
             GameTooltip:Show()
         end)
 
@@ -125,6 +88,14 @@ function module:updatePresetsList()
             GameTooltip:Hide()
         end)
 
+        presetButton.edit:SetScript("OnClick", function(self)
+            StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
+                local newName = self.editBox:GetText()
+                core.db.global.presets[k].name = newName
+                module:updatePresetsList()
+            end
+            StaticPopup_Show("MPH_EDIT_PRESETNAME")
+        end)
         presetButton.delete:SetScript("OnClick", function(self)
             StaticPopupDialogs["MPH_CONFIRM_DELETE"].OnAccept = function(self)
                 core.db.global.presets[k] = nil
@@ -133,7 +104,6 @@ function module:updatePresetsList()
                 end
                 module:updatePresetsList()
             end
-
             StaticPopup_Show("MPH_CONFIRM_DELETE", v.name)
         end)
         presetButton.delete:SetScript("OnEnter", function()
@@ -164,7 +134,7 @@ local function CreateWindow()
         StaticPopupDialogs["MPH_EDIT_PRESETNAME"].OnAccept = function(self)
             local newName = self.editBox:GetText()
             if newName == "" then
-                core:PrintMSG(L["Name can't be empty"])
+                core:PrintMSG("Name can't be empty")
                 return
             end
             table.insert(core.db.global.presets, {
@@ -182,6 +152,32 @@ local function CreateWindow()
         core:ToggleImportWindow()
     end)
 
+    importFrame.editBoxFrame.scrollFrame.editBox:SetScript("OnTextChanged", function(self)
+        if self:GetText() == "" then
+            importFrame.import:Disable()
+            importFrame.save:Disable()
+            importFrame.import.text:SetFontObject("GameFontDisable")
+            importFrame.save.text:SetFontObject("GameFontDisable")
+        else
+            importFrame.import:Enable()
+            importFrame.save:Enable()
+            importFrame.import.text:SetFontObject("GameFontNormal")
+            importFrame.save.text:SetFontObject("GameFontNormal")
+        end
+    end)
+
+    importFrame.import:Disable()
+    importFrame.save:Disable()
+    importFrame.import.text:SetFontObject("GameFontDisable")
+    importFrame.save.text:SetFontObject("GameFontDisable")
+
+    if core.pinManager.GetNumPins() == 0 then
+        importFrame.export:Disable()
+        importFrame.export.text:SetFontObject("GameFontDisable")
+    end
+
+
+
     module.importFrame = importFrame
     module:updatePresetsList()
 end
@@ -190,7 +186,17 @@ function core:ToggleImportWindow()
     if not module.importFrame then CreateWindow() end
     if module.importFrame:IsShown() then
         module.importFrame:Hide()
+        module.checkPinsRepeat:Cancel()
     else
         module.importFrame:Show()
+        module.checkPinsRepeat = C_Timer.NewTicker(1, function()
+            if core.pinManager.GetNumPins() == 0 then
+                module.importFrame.export:Disable()
+                module.importFrame.export.text:SetFontObject("GameFontDisable")
+            else
+                module.importFrame.export:Enable()
+                module.importFrame.export.text:SetFontObject("GameFontNormal")
+            end
+        end)
     end
 end

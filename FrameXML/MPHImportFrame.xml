@@ -2,64 +2,28 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
     <Script file="MPHImportFrame.lua" />
-    <Frame name="MPHImportFrameTemplate" virtual="true" hidden="true" mixin="MPHImportFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
+    <Frame name="MPHImportFrameTemplate" virtual="true" inherits="PortraitFrameTemplate" hidden="true" mixin="MPHImportFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
         <Size x="800" y="435"/>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="auctionhouse-background-auctions">
+            <Layer level="ARTWORK" textureSubLevel="1">
+                <Texture parentKey="Portrait" file="Interface\Addons\MapPinEnhanced\assets\logo">
+                    <Size x="60" y="60"/>
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="TOPLEFT" x="-4" y="8"/>
                     </Anchors>
                 </Texture>
-                <Texture parentKey="topper" useAtlasSize="true" atlas="dragonflight-score-footer" rotation="180">
-                    <Anchors>
-                        <Anchor relativePoint="TOPLEFT" point="BOTTOMLEFT" relativeKey="$parent.bg" y="-37"/>
-                        <Anchor relativePoint="TOPRIGHT" point="BOTTOMRIGHT" relativeKey="$parent.bg" y="-37"/>
-                    </Anchors>
-                </Texture>
-                <Texture parentKey="footer" useAtlasSize="true" atlas="dragonflight-score-footer">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.bg" y="36"/>
-                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeKey="$parent.bg" y="36"/>
-                    </Anchors>
-                </Texture>
-            </Layer>
-
-            <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="CENTER" text="Map Pin Enhanced Import Frame" outline="NORMAL">
-                    <Size x="800" y="0" />
-                    <Anchors>
-                        <Anchor point="TOP" relativeKey="$parent.topper" relativePoint="CENTER" x="0" y="-3" />
-                    </Anchors>
-                </FontString>
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="close">
-                <Size x="25" y="25" />
-                <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.topper" relativePoint="RIGHT" x="-9" y="-16" />
-                </Anchors>
-                <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
-                <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
-                <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down" />
-                <Scripts>
-                    <OnClick>
-                         self:GetParent():Hide()
-                    </OnClick>
-                </Scripts>
-            </Button>
-
             <Frame parentKey="editBoxFrame">
                 <Size x="450" y="275" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="20" y="-35" />
+                    <Anchor point="TOPLEFT" x="20" y="-50" />
                     <Anchor point="BOTTOMLEFT" x="20" y="60" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture atlas="auctionhouse-background-auctions">
+                        <Texture atlas="auctionhouse-background-index">
                             <Anchors>
                                 <Anchor point="TOPLEFT" />
                                 <Anchor point="BOTTOMRIGHT" />
@@ -67,12 +31,12 @@
                         </Texture>
                         <FontString parentKey="textCount" inherits="GameFontNormalTiny2" justifyH="CENTER" outline="NORMAL">
                             <Anchors>
-                                <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="-1" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-20" y="1" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="title" inherits="GameFontNormalMed1" justifyH="LEFT" text="Importbox">
+                        <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Importbox">
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="-1" />
+                                <Anchor point="BOTTOM" relativePoint="TOP" y="4" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -87,7 +51,7 @@
                         <ScrollChild>
                             <EditBox parentKey="editBox" multiLine="true" autoFocus="false" enableMouse="true" letters="5000">
                                 <Size x="410" y="1"/>
-                                <FontString inherits="GameFontNormalMed1"/>
+                                <FontString inherits="GameFontNormal"/>
                                 <Scripts>
                                     <OnTextChanged>
                                         ScrollingEdit_OnTextChanged(self, self:GetParent());
@@ -123,20 +87,20 @@
             <Frame parentKey="presetsFrame">
                 <Size x="300" y="275" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="-20" y="-35" />
+                    <Anchor point="TOPRIGHT" x="-20" y="-50" />
                     <Anchor point="BOTTOMRIGHT" x="-20" y="60" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture atlas="auctionhouse-background-buy-commodities-market">
+                        <Texture atlas="auctionhouse-background-buy-commodities">
                             <Anchors>
                                 <Anchor point="TOPLEFT" />
                                 <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="title" inherits="GameFontNormalMed1" justifyH="LEFT" text="Presets">
+                        <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Presets">
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" y="-1" />
+                                <Anchor point="BOTTOM" relativePoint="TOP" y="4" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -163,17 +127,16 @@
             </Frame>
 
             <Button parentKey="import">
-                <Size x="300" y="30"/>
+                <Size x="200" y="30"/>
                 <Anchors>
-                    <Anchor point="BOTTOM" y="15" />
-                    <Anchor point="BOTTOM" y="15" />
+                    <Anchor point="BOTTOM" x="-30" y="20" />
                 </Anchors>
                 <NormalTexture atlas="pvpqueue-button-casual-up" />
                 <PushedTexture atlas="pvpqueue-button-casual-down" />
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-selected" alphaMode="ADD" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Import" outline="NORMAL">
+                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Import" outline="NORMAL">
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>
@@ -182,19 +145,17 @@
                 </Layers>
 
             </Button>
-
-
             <Button parentKey="export">
-                <Size x="80" y="30"/>
+                <Size x="140" y="30"/>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="20" y="15" />
+                    <Anchor point="BOTTOMLEFT" x="20" y="20" />
                 </Anchors>
                 <NormalTexture atlas="pvpqueue-button-casual-up" />
                 <PushedTexture atlas="pvpqueue-button-casual-down" />
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD" desaturated="true"/>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Export" outline="NORMAL">
+                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Extract from Map" outline="NORMAL">
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>
@@ -206,14 +167,14 @@
             <Button parentKey="save">
                 <Size x="80" y="30"/>
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-20" y="15" />
+                    <Anchor point="BOTTOMRIGHT" x="-20" y="20" />
                 </Anchors>
                 <NormalTexture atlas="pvpqueue-button-casual-up" />
                 <PushedTexture atlas="pvpqueue-button-casual-down" />
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD"/>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" justifyH="CENTER" text="Save" outline="NORMAL">
+                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Save" outline="NORMAL">
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>

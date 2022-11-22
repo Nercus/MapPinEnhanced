@@ -6,7 +6,6 @@ local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced", "AceCo
 local HBD = LibStub("HereBeDragons-2.0")
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 local LDBIcon = LibStub("LibDBIcon-1.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("MapPinEnhanced")
 
 local globalMPH = {}
 _G["MapPinEnhanced"] = globalMPH
@@ -14,12 +13,7 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 -- Bugfixes
--- TODO: Check for localization in xml
--- TODO: Adjust titles in importframe
--- TEST: Test MPHFrame positioning
--- TEST: Check if new preset overwrite warning works
-
--- TODO: convert hDB zone names to localized zone names
+-- TODO: convert HDB zone names to localized zone names
 
 -- Version 2.1
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
@@ -60,7 +54,7 @@ local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack,
 local Enum = _G.Enum
 local UiMapPoint = _G.UiMapPoint
 
-local mapDataIdReverse = {}
+
 local HBDmapData = HBD.mapData
 
 
@@ -136,7 +130,7 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
     self.menuFrame = self.menuFrame or CreateFrame("Frame", "MPHLDBDropdown", UIParent, "UIDropDownMenuTemplate")
     local menuTable = {}
     table.insert(menuTable, 1, {
-        text = L["Toggle Import Window"],
+        text = "Toggle Import Window",
         func = function()
             MapPinEnhanced:ToggleImportWindow()
         end,
@@ -146,7 +140,7 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
 
     if (#self.db.global.presets > 0) then
         table.insert(menuTable, 2, {
-            text = L["Presets"],
+            text = "Presets",
             notCheckable = true,
             isTitle = true
         })
@@ -174,7 +168,7 @@ end
 MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
     type = "data source",
     text = MapPinEnhanced.name,
-    icon = "Interface\\MINIMAP\\Minimap-Waypoint-MapPin-Tracked",
+    icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo",
     OnClick = function(_, button)
         if button == "LeftButton" then
             MapPinEnhanced:TogglePinTrackerWindow()
@@ -183,13 +177,12 @@ MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhance
         end
     end,
     OnTooltipShow = function(tt)
-        tt:AddLine(L["|cffeda55fLeft-Click|r to toggle the pin tracker."])
-        tt:AddLine(L["|cffeda55fRight-Click|r to toggle presets view."])
+        tt:AddLine("|cffeda55fLeft-Click|r to toggle the pin tracker.")
+        tt:AddLine("|cffeda55fRight-Click|r to toggle presets view.")
     end
 })
 
 
-local screenWidth, screenHeight = GetPhysicalScreenSize()
 local defaults = {
     global = {
         minimap = {
@@ -271,28 +264,26 @@ function MapPinEnhanced:OnInitialize()
                 point = point,
                 relativePoint = relativePoint
             }
-            self:ClearAllPoints()
-            self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
-
         end
         self:StopMovingOrSizing()
     end)
-
-    -- show tooltip if mouse is over frame for 1 second
-    local tooltipTimer = nil
+    MPHFrame:StopMovingOrSizing()
     MPHFrame:SetScript("OnEnter", function(self)
-        tooltipTimer = C_Timer.NewTimer(1, function()
+        local isDefault = true
+        for i, j in pairs(MapPinEnhanced.db.global.trackerPos) do
+            if j ~= defaults.global.trackerPos[i] then
+                isDefault = false
+                break
+            end
+        end
+        if isDefault then
             GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-            GameTooltip:SetText(L["|cffeda55fCtrl + Left-Click|r to move the pin tracker"])
+            GameTooltip:SetText("|cffeda55fCtrl + Left-Click|r to move the pin tracker")
             GameTooltip:Show()
-        end)
+        end
     end)
 
     MPHFrame:SetScript("OnLeave", function(self)
-        if tooltipTimer then
-            tooltipTimer:Cancel()
-            tooltipTimer = nil
-        end
         GameTooltip:Hide()
     end)
 
@@ -385,7 +376,7 @@ function MapPinEnhanced:OnInitialize()
     for name, mapID in pairs(mapDataID) do
         if type(mapID) == "table" then
             mapDataID[name] = nil
-            for idx, mapId in pairs(mapID) do
+            for _, mapId in pairs(mapID) do
                 local parent = HBDmapData[mapId].parent
                 local parentName = (parent and (parent > 0) and HBDmapData[parent].name)
                 if parentName then
@@ -401,9 +392,6 @@ function MapPinEnhanced:OnInitialize()
     end
     for name, mapID in pairs(newEntries) do
         mapDataID[name] = mapID
-    end
-    for entry, mapID in pairs(mapDataID) do
-        mapDataIdReverse[mapID] = entry
     end
     wipe(newEntries)
     collectgarbage("collect")
@@ -658,13 +646,13 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
             GameTooltip_SetTitle(GameTooltip, title2);
-            GameTooltip:AddLine(L["|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin"])
-            GameTooltip:AddLine(L[
-                "|cffeda55fCtrl +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin"])
-            GameTooltip:AddLine(L[
-                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin"])
-            GameTooltip:AddLine(L[
-                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent"])
+            GameTooltip:AddLine("|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+            GameTooltip:AddLine(
+                "|cffeda55fCtrl +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+            GameTooltip:AddLine(
+                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+            GameTooltip:AddLine(
+                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent")
             GameTooltip:Show()
         end)
 
@@ -825,8 +813,8 @@ local function PinManager()
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
             if pinsRestored then
                 MapPinEnhanced.MPHFrame:ClearAllPoints()
-
-                MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.global.trackerPos.x,
+                MapPinEnhanced.MPHFrame:SetPoint(MapPinEnhanced.db.global.trackerPos.point, UIParent,
+                    MapPinEnhanced.db.global.trackerPos.relativePoint, MapPinEnhanced.db.global.trackerPos.x,
                     MapPinEnhanced.db.global.trackerPos.y)
             end
         else
@@ -1017,6 +1005,8 @@ local function PinManager()
         end
     end
 
+    function GetNumPins() return #pins end
+
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
@@ -1030,6 +1020,7 @@ local function PinManager()
         UpdateTrackerPositions = UpdateTrackerPositions,
         HideAllPins = HideAllPins,
         ShowAllPins = ShowAllPins,
+        GetNumPins = GetNumPins,
     }
 end
 
@@ -1041,7 +1032,7 @@ MapPinEnhanced.pinManager = PinManager()
 function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            self:PrintMSG({ L["The blizzard arrow does not work in this zone"] })
+            self:PrintMSG({ "The blizzard arrow does not work in this zone" })
         end
         self.pinManager.AddPin(x, y, mapID, name)
     else
@@ -1176,8 +1167,9 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
         -- Check if TomTom is Loaded
         if IsAddOnLoaded("TomTom") then
             TomTomLoaded = true
-            self:PrintMSG({ L[
-                "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."] }) -- Localize
+            self:PrintMSG({
+                "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."
+            }) -- Localize
         else
             TomTomLoaded = false
         end
@@ -1233,7 +1225,7 @@ function MapPinEnhanced:ParseImport(importstring)
         if string.match(s:lower(), "/way ") or string.match(s:lower(), "/mph ") or string.match(s:lower(), "/pin ") then
             msg = string.gsub(s, "/%a%a%a", "")
         else
-            self:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
+            self:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
         end
         self:ParseInput(msg)
     end
@@ -1285,12 +1277,12 @@ function MapPinEnhanced:ParseInput(msg)
         end
 
         if #matches > 1 and #matches < 7 then
-            local msg = string.format(L["Found multiple matches for zone '%s'.  Did you mean: %s"], zone,
+            local msg = string.format("Found multiple matches for zone '%s'.  Did you mean: %s", zone,
                 table.concat(matches, ", "))
             ChatFrame1:AddMessage(msg)
             return
         elseif #matches == 0 then
-            local msg = string.format(L["Could not find any matches for zone %s."], zone)
+            local msg = string.format("Could not find any matches for zone %s.", zone)
             ChatFrame1:AddMessage(msg)
             return
         end
@@ -1336,10 +1328,10 @@ function MapPinEnhanced:ParseInput(msg)
                 MapPinEnhanced:AddWaypoint(sx, sy, smapid, stitle)
             end
         else
-            MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
+            MapPinEnhanced:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
         end
     else
-        MapPinEnhanced:PrintMSG({ L["Formating error! Use |cffeda55f/mph|r [x] [y] <title>"] })
+        MapPinEnhanced:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
     end
 end
 
@@ -1347,7 +1339,7 @@ function MapPinEnhanced:ParseExport()
     local pinData = MapPinEnhanced.pinManager.GetAllPinData()
     local output = ""
     for _, pin in ipairs(pinData) do
-        local slashcmd = string.format("/way %s %.2f %.2f", mapDataIdReverse[pin[3]], pin[1] * 100, pin[2] * 100)
+        local slashcmd = string.format("/way #%d %.2f %.2f", pin[3], pin[1] * 100, pin[2] * 100)
         output = output .. slashcmd .. "\n"
     end
     return output
@@ -1381,12 +1373,12 @@ SlashCmdList["MPH"] = function(msg)
         InterfaceOptionsFrame_OpenToCategory(MapPinEnhanced.optionsFrame)
     elseif msg == "" or msg == "help" then
         MapPinEnhanced:PrintMSG({
-            L["|cffeda55f/mph config|r - Open the options menu"],
-            L["|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window"],
-            L["|cffeda55f/mph import|r - Toggle the Import Window"],
-            L["|cffeda55f/mph minimap|r - Toggle the Minimap Button"],
-            L["|cffeda55f/mph removeall|r - Remove all pins"],
-            L["|cffeda55f/mph version|r - Show version information"],
+            "|cffeda55f/mph config|r - Open the options menu",
+            "|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window",
+            "|cffeda55f/mph import|r - Toggle the Import Window",
+            "|cffeda55f/mph minimap|r - Toggle the Minimap Button",
+            "|cffeda55f/mph removeall|r - Remove all pins",
+            "|cffeda55f/mph version|r - Show version information",
         }, true)
     else
         MapPinEnhanced:ParseInput(msg)

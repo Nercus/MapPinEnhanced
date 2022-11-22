@@ -6,7 +6,6 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 
-local width, height = GetPhysicalScreenSize()
 
 local function updateTargetAlphaForState()
     if core.db.global.options["changedalpha"] then

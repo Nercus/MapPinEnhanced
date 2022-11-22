@@ -12,23 +12,11 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="textureLeft" atlas="UI-Frame-Dragonflight-TitleLeft">
-                            <Size x="72" y="25" />
+                        <Texture parentKey="textureMiddle" atlas="majorfaction-celebration-bottomglowline" alpha="1.0">
+                            <Size y="10" x="187" />
                             <Anchors>
-                                <Anchor point="LEFT" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="textureRight" atlas="UI-Frame-Dragonflight-TitleRight">
-                            <Size x="72" y="25" />
-                            <Anchors>
-                                <Anchor point="RIGHT" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="textureMiddle" atlas="_UI-Frame-Dragonflight-TitleMiddle">
-                            <Size x="43" y="25" />
-                            <Anchors>
-                                <Anchor point="RIGHT" relativeKey="$parent.textureRight" relativePoint="LEFT" />
-                                <Anchor point="LEFT" relativeKey="$parent.textureLeft" relativePoint="RIGHT" />
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -36,29 +24,29 @@
                         <FontString name="$parentText" parentKey="text" inherits="GameFontNormalLarge" justifyH="LEFT" text="Pintracker" outline="NORMAL">
                             <Size x="150" y="0" />
                             <Anchors>
-                                <Anchor point="LEFT" relativeKey="$parent.textureLeft" relativePoint="RIGHT" x="-25" y="0" />
+                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.textureMiddle" relativePoint="TOPLEFT" x="20" y="-3" />
                             </Anchors>
-
                         </FontString>
                     </Layer>
                 </Layers>
                 <Frames>
                     <Button parentKey="presets">
-                        <Size x="15" y="15" />
+                        <Size x="20" y="20" />
                         <Anchors>
-                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="0" />
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.textureMiddle" relativePoint="TOPRIGHT" x="-45" y="-3"/>
                         </Anchors>
-                        <NormalTexture atlas="UI-HUD-UnitFrame-Target-PortraitOn-Boss-Rare-Star" alpha="0.7" />
-                        <HighlightTexture atlas="UI-HUD-UnitFrame-Target-PortraitOn-Boss-Rare-Star" alpha="1" />
+                        <NormalTexture atlas="PetJournal-FavoritesIcon" alpha="0.7" />
+                        <HighlightTexture atlas="PetJournal-FavoritesIcon" alpha="1" />
                     </Button>
                     <Button parentKey="close">
-                        <Size x="15" y="15" />
+                        <Size x="17" y="9" />
                         <Anchors>
-                            <Anchor point="LEFT" relativeKey="$parent.textureMiddle" relativePoint="RIGHT" x="27" y="-1" />
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.textureMiddle" relativePoint="TOPRIGHT" x="-20" y="2"/>
                         </Anchors>
-                        <NormalTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In" />
-                        <HighlightTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Mouseover" />
-                        <PushedTexture rotation="45" atlas="UI-HUD-Minimap-Zoom-In-Down" />
+                        <NormalTexture atlas="UI-HUD-Minimap-Zoom-Out" />
+                        <HighlightTexture atlas="UI-HUD-Minimap-Zoom-Out-Mouseover" />
+                        <PushedTexture atlas="UI-HUD-Minimap-Zoom-Out-Down" />
+
                     </Button>
                 </Frames>
             </Frame>
