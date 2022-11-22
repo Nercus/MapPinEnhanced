@@ -16,14 +16,11 @@ Libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1
 Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
 
 ignore:
-- CHANGELOG.md
-- README.md
-- .github
-- .gitignore
-- banner.png
-- logo.png
+- "*.md"
+- "*.png"
+
 
 
 manual-changelog:
-  filename: Latest.md
+  filename: Changelog.md
   markup-type: markdown
