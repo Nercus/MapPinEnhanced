@@ -1,9 +1,8 @@
-# Version 2.0
+# 2.0-beta-2
 
-- Newly designed pin tracker
-- Newly designed import frame
-- Added options window
-- Added presets feature
-- Added several small features
-- Fixed a lot of issues
-- Using FrameXML for frametemplates
+- Redesign Import Frame again
+- Slightly adjust Tracker design
+- Hopefully fix pin tracker positioning now
+- Add logo
+- Remove locales for now because they are a pain to manage
+- Block adding preset with same name
