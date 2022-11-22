@@ -1147,7 +1147,8 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
 end
 
 function MapPinEnhanced:UpdateTrackerTime(distance)
-    if not C_Map.GetUserWaypoint() or not C_SuperTrack.IsSuperTrackingAnything() then
+    if not C_Map.GetUserWaypoint() or not C_SuperTrack.IsSuperTrackingAnything() or
+        not C_SuperTrack.IsSuperTrackingUserWaypoint() then
         self:CancelTimer(self.distanceTimerFast)
         self.distanceTimerFast = nil
         self.lastDistance = nil
