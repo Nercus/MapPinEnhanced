@@ -12,21 +12,18 @@ _G["MapPinEnhanced"] = globalMPH
 MapPinEnhanced.name = "Map Pin Enhanced"
 
 
--- Bugfixes
--- TODO: convert HDB zone names to localized zone names
+
 
 -- Version 2.1
+-- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
--- TODO: watch possible taint issues
--- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
 -- FIXME: find way to get rid of blizz minimap pin tooltip
-
-
--- Version 2.2
--- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
+-- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
+
+
 
 
 -- Onwards
