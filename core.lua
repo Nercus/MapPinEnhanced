@@ -335,10 +335,12 @@ function MapPinEnhanced:OnInitialize()
                 y = self.db.profile.pintrackerposition.y,
             }
         end
-
-        if self.db.profile.options.changedalpha ~= nil then
-            self.db.global.options.changedalpha = self.db.profile.options.changedalpha
+        if self.db.options then
+            if self.db.profile.options.changedalpha ~= nil then
+                self.db.global.options.changedalpha = self.db.profile.options.changedalpha
+            end
         end
+
         self.db.profile = nil
     end
 
