@@ -1,8 +1,4 @@
-# 2.0-beta-2
+# 2.0-beta-3
 
-- Redesign Import Frame again
-- Slightly adjust Tracker design
-- Hopefully fix pin tracker positioning now
-- Add logo
-- Remove locales for now because they are a pain to manage
-- Block adding preset with same name
+- Adjust CI Build
+- Small fixes
