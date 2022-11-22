@@ -208,42 +208,6 @@ function module:OnInitialize()
                     end
                 end,
             },
-            pinTrackerX = {
-                type = "range",
-                width = "full",
-                name = "Pin Tracker X",
-                desc = "Sets the X position of the Pin Tracker",
-                min = -width / 2,
-                max = width / 2,
-                step = 1,
-                get = function() return core.db.global.trackerPos.x - width / 2 end,
-                set = function(info, value)
-                    core.db.global.trackerPos.x = value + width / 2
-                    core.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", core.db.global.trackerPos.x,
-                        core.db.global.trackerPos.y)
-                    if not core.MPHFrame:IsShown() then
-                        core.MPHFrame:Show()
-                    end
-                end,
-            },
-            pinTrackerY = {
-                type = "range",
-                name = "Pin Tracker Y",
-                width = "full",
-                desc = "Sets the Y position of the Pin Tracker",
-                min = -height / 2,
-                max = height / 2,
-                step = 1,
-                get = function() return core.db.global.trackerPos.y + height / 2 end,
-                set = function(info, value)
-                    core.db.global.trackerPos.y = value - height / 2
-                    core.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", core.db.global.trackerPos.x,
-                        core.db.global.trackerPos.y)
-                    if not core.MPHFrame:IsShown() then
-                        core.MPHFrame:Show()
-                    end
-                end,
-            },
             pinTrackerScale = {
                 type = "range",
                 name = "Pin Tracker Scale",

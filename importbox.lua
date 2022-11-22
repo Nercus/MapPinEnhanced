@@ -17,6 +17,16 @@ StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
         else
             self:GetParent().button1:Disable()
         end
+
+        -- check if name already exists
+        for k, v in pairs(core.db.global.presets) do
+            if v.name == text then
+                self:GetParent().startDelay = 3
+                self:GetParent().showAlert = true
+                self:GetParent().text = "Saving this preset will overwrite the existing preset with the same name."
+                break
+            end
+        end
     end,
     hasEditBox = true,
     timeout = 0,

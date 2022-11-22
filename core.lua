@@ -14,14 +14,12 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 -- Bugfixes
--- TODO: Adjust titles in importframe
--- TODO: Frame jumps after changing scale and when preset is loaded
--- FIXME: Clicking of the header mphframe jumps
--- FIXME: CTRL+Click after reload resets the tracker position to topleft corner (sometimes -> left side of tracker title)
 -- TODO: Check for localization in xml
--- TODO: saving a preset with the same name overrides the existing preset -> show warning message
--- TODO: convert hDB zone names to localized zone names
+-- TODO: Adjust titles in importframe
+-- TEST: Test MPHFrame positioning
+-- TEST: Check if new preset overwrite warning works
 
+-- TODO: convert hDB zone names to localized zone names
 
 -- Version 2.1
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
@@ -203,8 +201,10 @@ local defaults = {
         },
         presets = {},
         trackerPos = {
-            x = screenWidth / 2,
-            y = -screenHeight / 2
+            x = 0,
+            y = 0,
+            point = "CENTER",
+            relativePoint = "CENTER"
         },
         options = {
             changedalpha = true,
@@ -263,28 +263,36 @@ function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
     MPHFrame:SetScript("OnMouseUp", function(self)
-        local x, y = select(4, self:GetPoint())
-        if x and y then
-            if x ~= MapPinEnhanced.db.global.trackerPos.x or y ~= MapPinEnhanced.db.global.trackerPos.y then -- Only save if the position has changed
-                MapPinEnhanced.db.global.trackerPos = {
-                    x = x,
-                    y = y,
-                }
-                self:ClearAllPoints()
-                self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
-            end
+        local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
+        if xOfs and yOfs and point and relativePoint then
+            MapPinEnhanced.db.global.trackerPos = {
+                x = xOfs,
+                y = yOfs,
+                point = point,
+                relativePoint = relativePoint
+            }
+            self:ClearAllPoints()
+            self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
+
         end
         self:StopMovingOrSizing()
     end)
+
+    -- show tooltip if mouse is over frame for 1 second
+    local tooltipTimer = nil
     MPHFrame:SetScript("OnEnter", function(self)
-        if MapPinEnhanced.db.global.trackerPos.x == defaults.global.trackerPos.x and
-            MapPinEnhanced.db.global.trackerPos.y == defaults.global.trackerPos.y then
-            GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
+        tooltipTimer = C_Timer.NewTimer(1, function()
+            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
             GameTooltip:SetText(L["|cffeda55fCtrl + Left-Click|r to move the pin tracker"])
             GameTooltip:Show()
-        end
+        end)
     end)
+
     MPHFrame:SetScript("OnLeave", function(self)
+        if tooltipTimer then
+            tooltipTimer:Cancel()
+            tooltipTimer = nil
+        end
         GameTooltip:Hide()
     end)
 
@@ -316,7 +324,7 @@ function MapPinEnhanced:OnInitialize()
 
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults)
-    MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", self.db.global.trackerPos.x, self.db.global.trackerPos.y)
+
 
 
     -- conversion to new global saved vars
@@ -817,6 +825,7 @@ local function PinManager()
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
             if pinsRestored then
                 MapPinEnhanced.MPHFrame:ClearAllPoints()
+
                 MapPinEnhanced.MPHFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", MapPinEnhanced.db.global.trackerPos.x,
                     MapPinEnhanced.db.global.trackerPos.y)
             end
