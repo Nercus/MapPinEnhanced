@@ -1,4 +1,5 @@
-# 2.0-beta-3
+# 2.0-beta-4
 
-- Adjust CI Build
-- Small fixes
+- Remove leftover prints
+- Fix bug for unsaved pin titles
+- Fix bug for no being able to extract the pin title
