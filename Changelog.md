@@ -1,5 +1,5 @@
-# 2.0-beta-4
+# 2.0-beta-6
 
-- Remove leftover prints
-- Fix bug for unsaved pin titles
-- Fix bug for no being able to extract the pin title
+- Fix tooltip pin tracker entries
+- Remove some leftover debug stuff
+- Adjust presetname popup to be more intuitive
