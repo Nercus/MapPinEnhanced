@@ -12,9 +12,13 @@ _G["MapPinEnhanced"] = globalMPH
 MapPinEnhanced.name = "Map Pin Enhanced"
 
 
+local DEFAULT_PIN_TITLE = "Map Pin"
+
+
 
 
 -- Version 2.1
+-- TODO: Add ElvUI Skin
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
@@ -24,6 +28,8 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
 
 
+-- Version 2.2
+-- TODO: Be able to overwrite presets
 
 
 -- Onwards
@@ -451,6 +457,7 @@ local function CreatePin(x, y, mapID, emit, title, persist)
     local minimappin = CreateFrame("Button", nil, nil, "MPHMinimapPinTemplate")
     local persistent = false
     local index;
+    local title = title
 
     local function isPersistent()
         return persistent
@@ -720,7 +727,11 @@ local function CreatePin(x, y, mapID, emit, title, persist)
     SetObjectiveTitle(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)
 
     local function SetObjectiveText(x2, y2, mapID2)
-        objective.info:SetText(HBDmapData[mapID2]["name"] .. " (" .. Round(x2 * 100) .. ", " .. Round(y2 * 100) .. ")")
+        local zoneName = HBDmapData[mapID2]["name"]
+        zoneName = strlen(zoneName) > 20 and strsub(zoneName, 1, 18) .. "..." or zoneName
+
+
+        objective.info:SetText(zoneName .. " (" .. Round(x2 * 100) .. ", " .. Round(y2 * 100) .. ")")
         objective.info:Show()
     end
 
@@ -875,7 +886,7 @@ local function PinManager()
 
         local title
         if not name or name == "" then
-            title = "Map Pin"
+            title = DEFAULT_PIN_TITLE
         else
             title = name
         end
@@ -905,6 +916,7 @@ local function PinManager()
             pin.x = x
             pin.y = y
             pin.mapID = mapID
+            pin.title = title
             pin.setPersistent = isPersistent
             pin.SetTooltip(title)
             pin.MoveOnMap(x, y, mapID)
@@ -987,7 +999,7 @@ local function PinManager()
     local function GetAllPinData()
         local t = {}
         for i, pin in ipairs(pins) do
-            tinsert(t, { pin.x, pin.y, pin.mapID })
+            tinsert(t, { pin.x, pin.y, pin.mapID, pin.title })
         end
         return t
     end
@@ -1338,7 +1350,12 @@ function MapPinEnhanced:ParseExport()
     local pinData = MapPinEnhanced.pinManager.GetAllPinData()
     local output = ""
     for _, pin in ipairs(pinData) do
-        local slashcmd = string.format("/way #%d %.2f %.2f", pin[3], pin[1] * 100, pin[2] * 100)
+        -- check if pin has a title
+        local title = ""
+        if pin[4] ~= DEFAULT_PIN_TITLE and pin[4] then
+            title = pin[4]
+        end
+        local slashcmd = string.format("/way #%d %.2f %.2f %s", pin[3], pin[1] * 100, pin[2] * 100, title)
         output = output .. slashcmd .. "\n"
     end
     return output

@@ -18,7 +18,6 @@ StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
         end
         -- check if name already exists
         for _, v in pairs(core.db.global.presets) do
-            print(v.name == text)
             if v.name == text then
                 self:GetParent().button1:Disable()
                 break
@@ -43,6 +42,9 @@ StaticPopupDialogs["MPH_CONFIRM_DELETE"] = {
     hideOnEscape = true,
     preferredIndex = 3,
 }
+
+
+
 
 
 
