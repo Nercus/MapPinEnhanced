@@ -6,7 +6,8 @@ local module = core:NewModule("Importbox")
 
 
 StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
-    text = "Changing name of this preset",
+    text = "Please enter a name for the preset",
+    subText = "Name already exists!",
     button1 = "Accept",
     button2 = "Cancel",
     EditBoxOnTextChanged = function(self)
@@ -19,8 +20,13 @@ StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
         -- check if name already exists
         for _, v in pairs(core.db.global.presets) do
             if v.name == text then
+                ViragDevTool:AddData(self:GetParent())
+                self:GetParent().SubText:Show()
                 self:GetParent().button1:Disable()
                 break
+            else
+                self:GetParent().SubText:Hide()
+                self:GetParent().button1:Enable()
             end
         end
     end,
