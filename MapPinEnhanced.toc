@@ -13,7 +13,7 @@
 
 embeds.xml
 core.lua
-FrameXML\frames.xml
+frames\frames.xml
 
 importbox.lua
 # navigationData.lua
