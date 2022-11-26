@@ -1094,6 +1094,9 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
         if self.distanceTimerFast then
             self:CancelTimer(self.distanceTimerFast)
             self.distanceTimerFast = nil
+            if self.superTrackedTimer then
+                self.superTrackedTimer:Hide()
+            end
         end
     end
 end

@@ -20,7 +20,6 @@ StaticPopupDialogs["MPH_EDIT_PRESETNAME"] = {
         -- check if name already exists
         for _, v in pairs(core.db.global.presets) do
             if v.name == text then
-                ViragDevTool:AddData(self:GetParent())
                 self:GetParent().SubText:Show()
                 self:GetParent().button1:Disable()
                 break
