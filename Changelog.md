@@ -1,5 +1,3 @@
-# 2.0-beta-6
+# 2.0-beta-7
 
-- Fix tooltip pin tracker entries
-- Remove some leftover debug stuff
-- Adjust presetname popup to be more intuitive
+- Tried to fix issue for tracker not working at all
