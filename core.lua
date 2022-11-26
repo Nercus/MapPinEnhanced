@@ -667,9 +667,16 @@ local function CreatePin(x, y, mapID, emit, title, persist)
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip:Show()
         end)
+
+        objective:SetScript("OnEnter", function()
+            objective:OnEnter(tracked, title2)
+        end)
+        objective:SetScript("OnLeave", function()
+            objective:OnLeave(tracked)
+        end)
     end
 
-    SetTooltip(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)
+    SetTooltip(title)
 
 
     objective:SetScript("OnMouseDown", function(self, arg1)
@@ -690,12 +697,7 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         end
     end)
 
-    objective:SetScript("OnEnter", function()
-        objective:OnEnter(tracked)
-    end)
-    objective:SetScript("OnLeave", function()
-        objective:OnLeave(tracked)
-    end)
+
 
 
     -- objective.navStart:SetScript("OnClick", function(self)
@@ -721,7 +723,7 @@ local function CreatePin(x, y, mapID, emit, title, persist)
     end
 
     local function SetObjectiveTitle(title2)
-        objective:SetTitle(title2)
+        objective:SetTitle(strlen(title2) > 15 and strsub(title2, 1, 13) .. "..." or title2)
     end
 
     SetObjectiveTitle(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)

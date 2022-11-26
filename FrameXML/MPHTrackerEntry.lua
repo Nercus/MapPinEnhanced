@@ -16,7 +16,7 @@ function MPHTrackerEntryMixin:Untrack()
     self.distance:Hide()
 end
 
-function MPHTrackerEntryMixin:OnEnter(tracked)
+function MPHTrackerEntryMixin:OnEnter(tracked, title)
     self.highlightBorder:Show()
     self.name:SetAlpha(1)
     self.index:SetAlpha(1)
@@ -31,12 +31,15 @@ function MPHTrackerEntryMixin:OnEnter(tracked)
     GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
 
     local name = self.name:GetText()
+    if title then
+        name = title
+    end
     local info = self.info:GetText()
     local index = self.index:GetText()
     local atlas = (tracked and "Waypoint-MapPin-Tracked") or "Waypoint-MapPin-Untracked"
     if name then
-        name = "|A:" .. atlas .. ":19:19|a " .. index .. ". " .. name
-        GameTooltip:AddLine(name)
+        name = "|A:" .. atlas .. ":19:19|a " .. name
+        GameTooltip:AddLine(name, 1, 0.82, 0, true)
     end
     if info then
         GameTooltip:AddLine(info, 1, 1, 1, true)
