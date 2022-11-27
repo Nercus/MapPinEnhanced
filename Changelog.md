@@ -1,3 +1,8 @@
-# 2.0-beta-7
+# 2.0
 
-- Tried to fix issue for tracker not working at all
+- Redesigned the pin tracker
+- Redesigned the import window
+- Added new option window
+- Added optional average time of arrival
+- Added optional chat filter for pin links
+- A lot of bug fixes :bug:
