@@ -167,10 +167,11 @@ function MapPinEnhanced:ToggleDropDown(menuParent)
     end
 end
 
+local brokerText = "|A:Waypoint-MapPin-Tracked:19:19|aMPH"
 -- Minimap Button and Minimap Button
-MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
+local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
     type = "data source",
-    text = MapPinEnhanced.name,
+    text = brokerText,
     icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo",
     OnClick = function(_, button)
         if button == "LeftButton" then
@@ -834,6 +835,12 @@ local function PinManager()
             local newHeight = 65 + ((MapPinEnhanced.db.global.options["maxTrackerEntries"] - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
+        if #pins > 0 then
+            MapPinEnhancedBroker.text = brokerText .. ": " .. #pins
+        else
+            MapPinEnhancedBroker.text = brokerText
+        end
+
     end
 
     local function SupertrackClosest()
