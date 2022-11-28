@@ -16,8 +16,8 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 
 
 
-
--- Version 2.1
+--@do-not-package@
+-- Possible features:
 -- TODO: Add ElvUI Skin
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
@@ -26,15 +26,9 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 -- FIXME: find way to get rid of blizz minimap pin tooltip
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
-
-
--- Version 2.2
 -- TODO: Be able to overwrite presets
-
-
--- Onwards
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
-
+--@end-do-not-package@
 
 local tinsert = _G.table.insert
 local wipe = _G.table.wipe
