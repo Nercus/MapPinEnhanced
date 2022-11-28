@@ -137,7 +137,7 @@ local function setSettingsOnLoad()
     updateTrackerScaleOption()
 end
 
-function module:OnInitialize()
+function module:OnEnable()
     if not core.db then return end
     setSettingsOnLoad()
 

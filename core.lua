@@ -372,6 +372,18 @@ function MapPinEnhanced:OnEnable()
 
 
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
+    MPHFrame:ClearAllPoints()
+    local x = 0
+    local y = 0
+    local relativePoint = "CENTER"
+    local point = "CENTER"
+    if self.db.global.trackerPos then
+        x = self.db.global.trackerPos.x
+        y = self.db.global.trackerPos.y
+        relativePoint = self.db.global.trackerPos.relativePoint
+        point = self.db.global.trackerPos.point
+    end
+    MPHFrame:SetPoint(point, UIParent, relativePoint, x, y)
     MPHFrame:SetScript("OnMouseUp", function(self)
         local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
         if xOfs and yOfs and point and relativePoint then
