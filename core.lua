@@ -243,69 +243,8 @@ end
 
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
-    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
-    MPHFrame:SetScript("OnMouseUp", function(self)
-        local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
-        if xOfs and yOfs and point and relativePoint then
-            MapPinEnhanced.db.global.trackerPos = {
-                x = xOfs,
-                y = yOfs,
-                point = point,
-                relativePoint = relativePoint
-            }
-        end
-        self:StopMovingOrSizing()
-    end)
-    MPHFrame:StopMovingOrSizing()
-    MPHFrame:SetScript("OnEnter", function(self)
-        local isDefault = true
-        for i, j in pairs(MapPinEnhanced.db.global.trackerPos) do
-            if j ~= defaults.global.trackerPos[i] then
-                isDefault = false
-                break
-            end
-        end
-        if isDefault then
-            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-            GameTooltip:SetText("|cffeda55fCtrl + Left-Click|r to move the pin tracker")
-            GameTooltip:Show()
-        end
-    end)
-
-    MPHFrame:SetScript("OnLeave", function(self)
-        GameTooltip:Hide()
-    end)
-
-    MPHFrame:SetScript("OnMouseDown", function(self, button)
-        if button == "LeftButton" and IsControlKeyDown() then
-            self:StartMoving()
-        elseif button == "RightButton" then
-            MapPinEnhanced:ToggleDropDown()
-        end
-    end)
-
-    MPHFrame.header.presets:SetScript("OnMouseDown", function(self)
-        if MapPinEnhanced.menuFrame then
-            if MapPinEnhanced.menuFrame:IsShown() then
-                MapPinEnhanced.menuFrame:Hide()
-                CloseDropDownMenus()
-            else
-                MapPinEnhanced:ToggleDropDown(self)
-            end
-        else
-            MapPinEnhanced:ToggleDropDown(self)
-        end
-    end)
-
-    MPHFrame.header.close:SetScript("OnClick", function(self)
-        MapPinEnhanced:TogglePinTrackerWindow()
-    end)
-    self.MPHFrame = MPHFrame
-
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults)
-
-
 
     -- conversion to new global saved vars
     if self.db.profile then
@@ -429,6 +368,66 @@ function MapPinEnhanced:OnEnable()
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LOGIN")
+
+
+    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
+    MPHFrame:SetScript("OnMouseUp", function(self)
+        local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
+        if xOfs and yOfs and point and relativePoint then
+            MapPinEnhanced.db.global.trackerPos = {
+                x = xOfs,
+                y = yOfs,
+                point = point,
+                relativePoint = relativePoint
+            }
+        end
+        self:StopMovingOrSizing()
+    end)
+    MPHFrame:StopMovingOrSizing()
+    MPHFrame:SetScript("OnEnter", function(self)
+        local isDefault = true
+        for i, j in pairs(MapPinEnhanced.db.global.trackerPos) do
+            if j ~= defaults.global.trackerPos[i] then
+                isDefault = false
+                break
+            end
+        end
+        if isDefault then
+            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+            GameTooltip:SetText("|cffeda55fCtrl + Left-Click|r to move the pin tracker")
+            GameTooltip:Show()
+        end
+    end)
+
+    MPHFrame:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    MPHFrame:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" and IsControlKeyDown() then
+            self:StartMoving()
+        elseif button == "RightButton" then
+            MapPinEnhanced:ToggleDropDown()
+        end
+    end)
+
+    MPHFrame.header.presets:SetScript("OnMouseDown", function(self)
+        if MapPinEnhanced.menuFrame then
+            if MapPinEnhanced.menuFrame:IsShown() then
+                MapPinEnhanced.menuFrame:Hide()
+                CloseDropDownMenus()
+            else
+                MapPinEnhanced:ToggleDropDown(self)
+            end
+        else
+            MapPinEnhanced:ToggleDropDown(self)
+        end
+    end)
+
+    MPHFrame.header.close:SetScript("OnClick", function(self)
+        MapPinEnhanced:TogglePinTrackerWindow()
+    end)
+    self.MPHFrame = MPHFrame
 end
 
 local MPHFramePool = {}
