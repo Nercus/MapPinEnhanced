@@ -241,14 +241,6 @@ function MapPinEnhanced:TogglePinTrackerWindow()
     end
 end
 
--- function MapPinEnhanced:ToggleNavigationStepFrame()
---     if self.MPHFrame.NavigationStepFrame:IsShown() then
---         self.MPHFrame.NavigationStepFrame:Hide()
---     else
---         self.MPHFrame.NavigationStepFrame:Show()
---     end
--- end
-
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
     local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
@@ -896,7 +888,6 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
-                    --MapPinEnhanced.MPHFrame.NavigationStepFrame:Hide()
                     pin.Track(pin.x, pin.y, pin.mapID)
                 elseif e == "hyperlink" then
                     local link = MapPinEnhanced:FormatHyperlink(pin.x, pin.y, pin.mapID)
