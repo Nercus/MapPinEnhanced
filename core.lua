@@ -16,8 +16,8 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 
 
 
-
--- Version 2.1
+--@do-not-package@
+-- Possible features:
 -- TODO: Add ElvUI Skin
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
@@ -26,15 +26,9 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 -- FIXME: find way to get rid of blizz minimap pin tooltip
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
-
-
--- Version 2.2
 -- TODO: Be able to overwrite presets
-
-
--- Onwards
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
-
+--@end-do-not-package@
 
 local tinsert = _G.table.insert
 local wipe = _G.table.wipe
@@ -248,79 +242,10 @@ function MapPinEnhanced:TogglePinTrackerWindow()
     end
 end
 
--- function MapPinEnhanced:ToggleNavigationStepFrame()
---     if self.MPHFrame.NavigationStepFrame:IsShown() then
---         self.MPHFrame.NavigationStepFrame:Hide()
---     else
---         self.MPHFrame.NavigationStepFrame:Show()
---     end
--- end
-
 function MapPinEnhanced:OnInitialize()
     self.blockWAYPOINTevent = false
-    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
-    MPHFrame:SetScript("OnMouseUp", function(self)
-        local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
-        if xOfs and yOfs and point and relativePoint then
-            MapPinEnhanced.db.global.trackerPos = {
-                x = xOfs,
-                y = yOfs,
-                point = point,
-                relativePoint = relativePoint
-            }
-        end
-        self:StopMovingOrSizing()
-    end)
-    MPHFrame:StopMovingOrSizing()
-    MPHFrame:SetScript("OnEnter", function(self)
-        local isDefault = true
-        for i, j in pairs(MapPinEnhanced.db.global.trackerPos) do
-            if j ~= defaults.global.trackerPos[i] then
-                isDefault = false
-                break
-            end
-        end
-        if isDefault then
-            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-            GameTooltip:SetText("|cffeda55fCtrl + Left-Click|r to move the pin tracker")
-            GameTooltip:Show()
-        end
-    end)
-
-    MPHFrame:SetScript("OnLeave", function(self)
-        GameTooltip:Hide()
-    end)
-
-    MPHFrame:SetScript("OnMouseDown", function(self, button)
-        if button == "LeftButton" and IsControlKeyDown() then
-            self:StartMoving()
-        elseif button == "RightButton" then
-            MapPinEnhanced:ToggleDropDown()
-        end
-    end)
-
-    MPHFrame.header.presets:SetScript("OnMouseDown", function(self)
-        if MapPinEnhanced.menuFrame then
-            if MapPinEnhanced.menuFrame:IsShown() then
-                MapPinEnhanced.menuFrame:Hide()
-                CloseDropDownMenus()
-            else
-                MapPinEnhanced:ToggleDropDown(self)
-            end
-        else
-            MapPinEnhanced:ToggleDropDown(self)
-        end
-    end)
-
-    MPHFrame.header.close:SetScript("OnClick", function(self)
-        MapPinEnhanced:TogglePinTrackerWindow()
-    end)
-    self.MPHFrame = MPHFrame
-
     -- Saved Vars
     self.db = LibStub("AceDB-3.0"):New("MapPinEnhancedDB", defaults)
-
-
 
     -- conversion to new global saved vars
     if self.db.profile then
@@ -444,6 +369,66 @@ function MapPinEnhanced:OnEnable()
     self:RegisterEvent("USER_WAYPOINT_UPDATED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RegisterEvent("PLAYER_LOGIN")
+
+
+    local MPHFrame = CreateFrame("Frame", "MPHFrame", UIParent, "MPHFrameTemplate")
+    MPHFrame:SetScript("OnMouseUp", function(self)
+        local point, _, relativePoint, xOfs, yOfs = self:GetPoint()
+        if xOfs and yOfs and point and relativePoint then
+            MapPinEnhanced.db.global.trackerPos = {
+                x = xOfs,
+                y = yOfs,
+                point = point,
+                relativePoint = relativePoint
+            }
+        end
+        self:StopMovingOrSizing()
+    end)
+    MPHFrame:StopMovingOrSizing()
+    MPHFrame:SetScript("OnEnter", function(self)
+        local isDefault = true
+        for i, j in pairs(MapPinEnhanced.db.global.trackerPos) do
+            if j ~= defaults.global.trackerPos[i] then
+                isDefault = false
+                break
+            end
+        end
+        if isDefault then
+            GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+            GameTooltip:SetText("|cffeda55fCtrl + Left-Click|r to move the pin tracker")
+            GameTooltip:Show()
+        end
+    end)
+
+    MPHFrame:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    MPHFrame:SetScript("OnMouseDown", function(self, button)
+        if button == "LeftButton" and IsControlKeyDown() then
+            self:StartMoving()
+        elseif button == "RightButton" then
+            MapPinEnhanced:ToggleDropDown()
+        end
+    end)
+
+    MPHFrame.header.presets:SetScript("OnMouseDown", function(self)
+        if MapPinEnhanced.menuFrame then
+            if MapPinEnhanced.menuFrame:IsShown() then
+                MapPinEnhanced.menuFrame:Hide()
+                CloseDropDownMenus()
+            else
+                MapPinEnhanced:ToggleDropDown(self)
+            end
+        else
+            MapPinEnhanced:ToggleDropDown(self)
+        end
+    end)
+
+    MPHFrame.header.close:SetScript("OnClick", function(self)
+        MapPinEnhanced:TogglePinTrackerWindow()
+    end)
+    self.MPHFrame = MPHFrame
 end
 
 local MPHFramePool = {}
@@ -909,7 +894,6 @@ local function PinManager()
                     SupertrackClosest()
                 elseif e == "track" then
                     UntrackPins()
-                    --MapPinEnhanced.MPHFrame.NavigationStepFrame:Hide()
                     pin.Track(pin.x, pin.y, pin.mapID)
                 elseif e == "hyperlink" then
                     local link = MapPinEnhanced:FormatHyperlink(pin.x, pin.y, pin.mapID)

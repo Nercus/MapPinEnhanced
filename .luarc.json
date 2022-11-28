@@ -1,0 +1,33 @@
+{
+    "workspace.ignoreDir": [
+        ".vscode",
+        "libs"
+    ],
+    "diagnostics.globals": [
+        "ChatEdit_ActivateChat",
+        "ChatEdit_InsertLink",
+        "ChatFrame_AddMessageEventFilter",
+        "ChatFrame_RemoveMessageEventFilter",
+        "ChatFrame1",
+        "CloseDropDownMenus",
+        "CreateFramePool",
+        "DEFAULT_CHAT_FRAME",
+        "EasyMenu",
+        "FACTION_ALLIANCE",
+        "FACTION_HORDE",
+        "GameTooltip_AddNormalLine",
+        "GameTooltip_SetDefaultAnchor",
+        "GameTooltip_SetTitle",
+        "GameTooltip",
+        "InterfaceOptionsFrame_OpenToCategory",
+        "InterfaceOptionsFrame",
+        "SlashCmdList",
+        "StaticPopup_Hide",
+        "StaticPopup_Show",
+        "StaticPopupDialogs",
+        "SuperTrackedFrame",
+        "SuperTrackedFrameMixin",
+        "TIMER_MINUTES_DISPLAY",
+        "WaypointLocationPinMixin"
+    ]
+}

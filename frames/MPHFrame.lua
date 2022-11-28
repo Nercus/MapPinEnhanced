@@ -23,8 +23,4 @@ function MPHFrameMixin:OnLoad()
     self.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.scrollFrame.ScrollBar.ThumbTexture:SetAlpha(0.6)
     self.scrollFrame:Hide()
-
-    -- local navigationStepFrame = CreateFrame("Frame", nil, self, "MPHNavigationStepFrameTemplate")
-
-    -- self.NavigationStepFrame = navigationStepFrame
 end

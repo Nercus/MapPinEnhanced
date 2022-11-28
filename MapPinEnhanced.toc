@@ -16,6 +16,4 @@ core.lua
 frames\frames.xml
 
 importbox.lua
-# navigationData.lua
-# navigation.lua
 config.lua
