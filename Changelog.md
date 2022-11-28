@@ -1,8 +1,4 @@
-# 2.0
+# 2.1
 
-- Redesigned the pin tracker
-- Redesigned the import window
-- Added new option window
-- Added optional average time of arrival
-- Added optional chat filter for pin links
-- A lot of bug fixes :bug:
+- Show number of pins in broker
+- Fix sometimes pin tracker not showing up
