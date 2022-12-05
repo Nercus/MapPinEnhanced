@@ -27,7 +27,7 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 -- Possible features:
 -- TODO: Add ElvUI Skin, replace font aswell
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
--- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
+-- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin), add color variants for pins and quick select with right click popup. save in presets
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
 -- FIXME: find way to get rid of blizz minimap pin tooltip
@@ -890,7 +890,6 @@ local function PinManager()
             title = name
         end
 
-        -- FIXME: change to blizz framepool
         local ReusedPinFrame = tremove(MPHFramePool)
         local pin
         if not ReusedPinFrame then
@@ -916,7 +915,7 @@ local function PinManager()
             pin.y = y
             pin.mapID = mapID
             pin.title = title
-            pin.setPersistent = isPersistent or false
+            pin.setPersistent(isPersistent or false)
             pin.SetTooltip(title)
             pin.MoveOnMap(x, y, mapID)
             pin.SetObjectiveTitle(title)
