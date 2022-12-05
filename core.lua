@@ -13,8 +13,16 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 local DEFAULT_PIN_TITLE = "Map Pin"
+local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
+-- FIXME: Adjust fonts to give a better contrast ( delete image.png)
+-- FIXME: double check usage of /way with tomtom enabled
+-- FIXME: don't import /way if tomtom is enabled replace with /mph instead
+-- TODO: Add Text for import window when not focused
+-- FIXME: Importing pins does not work if no pin is ever created before
+-- FIXME: Removing persistent pins keeps the persistent state in the pool
+-- FIXME: Distance timer still shows for quests -> dont hide the text for that but let it keep going
 
 --@do-not-package@
 -- Possible features:
@@ -165,17 +173,24 @@ local brokerText = "|A:Waypoint-MapPin-Tracked:19:19|aMPH"
 -- Minimap Button and Minimap Button
 local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinEnhanced", {
     type = "data source",
-    text = brokerText,
+    text = brokerText .. ": 0",
     icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo",
     OnClick = function(_, button)
         if button == "LeftButton" then
-            MapPinEnhanced:TogglePinTrackerWindow()
+            if IsAltKeyDown() then
+                MapPinEnhanced.pinManager.RemoveAllPins()
+            else
+                MapPinEnhanced:ToggleImportWindow()
+            end
         elseif button == "RightButton" then
             MapPinEnhanced:ToggleDropDown()
         end
     end,
     OnTooltipShow = function(tt)
-        tt:AddLine("|cffeda55fLeft-Click|r to toggle the pin tracker.")
+        tt:ClearLines();
+        tt:AddDoubleLine("Map Pin Enhanced", versionMPH);
+        tt:AddLine("|cffeda55fClick|r to toggle the pin tracker.")
+        tt:AddLine("|cffeda55fAlt-Click|r to remove all pins.")
         tt:AddLine("|cffeda55fRight-Click|r to toggle presets view.")
     end
 })
@@ -797,7 +812,7 @@ local function PinManager()
                 y = pin.y,
                 mapID = pin.mapID,
                 title = pin.title,
-                persistent = pin.persistent,
+                persistent = pin.isPersistent(),
             })
         end
         MapPinEnhanced.db.global.savedpins.pinsData = data
@@ -832,12 +847,7 @@ local function PinManager()
             local newHeight = 65 + ((MapPinEnhanced.db.global.options["maxTrackerEntries"] - 1) * 40)
             MapPinEnhanced.MPHFrame:SetHeight(newHeight)
         end
-        if #pins > 0 then
-            MapPinEnhancedBroker.text = brokerText .. ": " .. #pins
-        else
-            MapPinEnhancedBroker.text = brokerText
-        end
-
+        MapPinEnhancedBroker.text = brokerText .. ": " .. #pins
     end
 
     local function SupertrackClosest()
@@ -922,12 +932,11 @@ local function PinManager()
             pin.y = y
             pin.mapID = mapID
             pin.title = title
-            pin.setPersistent = isPersistent
+            pin.setPersistent = isPersistent or false
             pin.SetTooltip(title)
             pin.MoveOnMap(x, y, mapID)
             pin.SetObjectiveTitle(title)
             pin.SetObjectiveText(x, y, mapID)
-
         end
         pins[#pins + 1] = pin
 
@@ -999,6 +1008,8 @@ local function PinManager()
         end
         SavePinsPersistent()
         C_Map.ClearUserWaypoint()
+        MapPinEnhancedBroker.text = brokerText .. ": 0"
+        UpdateTrackerPositions()
     end
 
     local function GetAllPinData()
@@ -1246,7 +1257,8 @@ function MapPinEnhanced:ParseImport(importstring)
         else
             self:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
         end
-        self:ParseInput(msg)
+        local x, y, mapID, title = self:ParseInput(msg)
+        MapPinEnhanced:AddWaypoint(x, y, mapID, title)
     end
 end
 
@@ -1322,7 +1334,7 @@ function MapPinEnhanced:ParseInput(msg)
 
         stitle = table.concat(tokens, " ", zoneEnd + 3)
         if sx and sy and smapid then
-            MapPinEnhanced:AddWaypoint(sx, sy, smapid, stitle)
+            return sx, sy, smapid, stitle
         end
     elseif tokens[1] and tonumber(tokens[1]) then
         -- A vanilla set command
@@ -1344,7 +1356,7 @@ function MapPinEnhanced:ParseInput(msg)
             sx, sy = tonumber(sx) / 100, tonumber(sy) / 100
             stitle = table.concat(tokens, " ", 3)
             if sx and sy and smapid then
-                MapPinEnhanced:AddWaypoint(sx, sy, smapid, stitle)
+                return sx, sy, smapid, stitle
             end
         else
             MapPinEnhanced:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
@@ -1385,7 +1397,6 @@ SlashCmdList["MPH"] = function(msg)
     elseif msg == "minimap" then
         MapPinEnhanced:ToggleMinimapButton()
     elseif msg == "version" then
-        local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
         local version, build = GetBuildInfo()
         MapPinEnhanced:PrintMSG({ MapPinEnhanced.name .. ": " .. versionMPH,
             string.format("Game: %s (%d)", version, build) },
@@ -1405,7 +1416,8 @@ SlashCmdList["MPH"] = function(msg)
             "|cffeda55f/mph version|r - Show version information",
         }, true)
     else
-        MapPinEnhanced:ParseInput(msg)
+        local x, y, mapdID, title = MapPinEnhanced:ParseInput(msg)
+        MapPinEnhanced:AddWaypoint(x, y, mapdID, title)
     end
 end
 
@@ -1440,5 +1452,3 @@ end)
 
 -- Set globally available functions
 globalMPH.AddWaypoint = MapPinEnhanced.AddWaypoint
-globalMPH.ParseInput = MapPinEnhanced.ParseInput
-globalMPH.ParseExport = MapPinEnhanced.ParseExport
