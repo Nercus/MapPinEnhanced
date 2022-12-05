@@ -862,13 +862,16 @@ local function PinManager()
     end
 
     local function AddPin(x, y, mapID, name, isPersistent, noTrack)
-        for _, p in ipairs(pins) do
-            if math.abs(x - p.x) < 0.01 and math.abs(y - p.y) < 0.01 and mapID == p.mapID then
-                UntrackPins()
-                p.Track(x, y, mapID)
-                return
+        if #pins > 0 then
+            for _, p in ipairs(pins) do
+                if math.abs(x - p.x) < 0.005 and math.abs(y - p.y) < 0.005 and mapID == p.mapID then
+                    UntrackPins()
+                    p.Track(x, y, mapID)
+                    return
+                end
             end
         end
+
 
         local title
         if not name or name == "" then
@@ -892,7 +895,7 @@ local function PinManager()
                     ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
                     ChatEdit_InsertLink(link)
                 elseif e == "navigate" then
-                    MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
+                    --MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
                 end
             end, title, isPersistent)
             pin.ShowOnMap()
@@ -1001,7 +1004,7 @@ local function PinManager()
         end
     end
 
-    function GetNumPins() return #pins end
+    local function GetNumPins() return #pins end
 
     return {
         AddPin = AddPin,
@@ -1216,7 +1219,9 @@ local rightseparator = "%1" .. (tonumber("1.1") and "." or ",") .. "%2"
 
 function MapPinEnhanced:ParseImport(importstring)
     if not importstring then return end
-    self.pinManager.RemoveAllPins()
+    if self.pinManager.GetNumPins() > 0 then
+        self.pinManager.RemoveAllPins()
+    end
     local msg
     for s in importstring:gmatch("[^\r\n]+") do
         if string.match(s:lower(), "/way ") or string.match(s:lower(), "/mph ") or string.match(s:lower(), "/pin ") then
