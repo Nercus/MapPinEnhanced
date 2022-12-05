@@ -30,26 +30,6 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
 --@end-do-not-package@
 
-local tinsert = _G.table.insert
-local wipe = _G.table.wipe
-local tremove = _G.table.remove
-
-local pairs = _G.pairs
-local ipairs = _G.ipairs
-local select = _G.select
-local tonumber = _G.tonumber
-local tostring = _G.tostring
-local unpack = _G.unpack
-local Round = _G.Round
-local IsControlKeyDown = _G.IsControlKeyDown
-local IsShiftKeyDown = _G.IsShiftKeyDown
-
-
-local MAP_PIN_HYPERLINK = _G.MAP_PIN_HYPERLINK
-
-local C_Map, C_SuperTrack, C_QuestLog, C_Navigation = _G.C_Map, _G.C_SuperTrack, _G.C_QuestLog, _G.C_Navigation
-local Enum = _G.Enum
-local UiMapPoint = _G.UiMapPoint
 
 
 local HBDmapData = HBD.mapData
@@ -1067,7 +1047,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
         end
     end
     if self.db.global.options["showTimeOnSuperTrackedFrame"] and
-        (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
+        C_SuperTrack.IsSuperTrackingAnything() then
         if not self.distanceTimerFast then
             self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
                 if C_Navigation.WasClampedToScreen() then
@@ -1132,7 +1112,6 @@ function MapPinEnhanced:PLAYER_LOGIN()
 end
 
 -- SuperTrackedTimer Text
-
 function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
     if not self.superTrackedTimer then
         local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
@@ -1157,8 +1136,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
 end
 
 function MapPinEnhanced:UpdateTrackerTime(distance)
-    if not C_Map.GetUserWaypoint() or not C_SuperTrack.IsSuperTrackingAnything() or
-        not C_SuperTrack.IsSuperTrackingUserWaypoint() then
+    if not C_SuperTrack.IsSuperTrackingAnything() then
         self:CancelTimer(self.distanceTimerFast)
         self.distanceTimerFast = nil
         self.lastDistance = nil
