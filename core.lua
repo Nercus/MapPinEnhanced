@@ -880,6 +880,7 @@ local function PinManager()
             title = name
         end
 
+        -- FIXME: change to blizz framepool
         local ReusedPinFrame = tremove(MPHFramePool)
         local pin
         if not ReusedPinFrame then
