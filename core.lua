@@ -1,4 +1,3 @@
-local _G = _G
 local MapPinEnhanced = LibStub("AceAddon-3.0"):NewAddon("MapPinEnhanced", "AceConsole-3.0", "AceEvent-3.0",
     "AceTimer-3.0")
 
@@ -26,7 +25,7 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 --@do-not-package@
 -- Possible features:
--- TODO: Add ElvUI Skin
+-- TODO: Add ElvUI Skin, replace font aswell
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin)
 -- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
@@ -438,6 +437,7 @@ function MapPinEnhanced:OnEnable()
     self.MPHFrame = MPHFrame
 end
 
+-- TODO: change to https://wowpedia.fandom.com/wiki/API_CreateFramePoolCollection
 local MPHFramePool = {}
 
 local function CreatePin(x, y, mapID, emit, title, persist)
@@ -1135,7 +1135,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
         frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 0)
 
 
-        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        local text = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormalLargeRightYellow")
         text:SetAllPoints()
         text:SetJustifyH("CENTER")
         text:SetJustifyV("MIDDLE")

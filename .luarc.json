@@ -59,7 +59,9 @@
         "UIMapPoint",
         "unpack",
         "MAP_PIN_HYPERLINK",
-        "_G"
+        "UiMapPoint",
+        "tinsert",
+        "tremove"
     ],
     "workspace.ignoreDir": [
         ".vscode",
