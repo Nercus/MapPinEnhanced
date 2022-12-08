@@ -213,6 +213,7 @@ function core:ToggleImportWindow()
         module.checkPinsRepeat:Cancel()
     else
         module.importFrame:Show()
+        module.importFrame.editBoxFrame.scrollFrame.editBox:SetText("")
         module.checkPinsRepeat = C_Timer.NewTicker(1, function()
             if core.pinManager.GetNumPins() == 0 then
                 module.importFrame.export:Disable()
@@ -222,5 +223,7 @@ function core:ToggleImportWindow()
                 module.importFrame.export.text:SetTextColor(1, 0.82, 0, 1)
             end
         end)
+        module.importFrame.editBoxFrame.editBoxFocusButton:Show()
+
     end
 end

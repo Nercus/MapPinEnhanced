@@ -76,12 +76,21 @@
                     <Button parentKey="editBoxFocusButton">
                         <Size x="450" y="275" />
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parenteditBox"/>
-                            <Anchor point="BOTTOMRIGHT" relativeKey="$parenteditBox"/>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.editBox"/>
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.editBox"/>
                         </Anchors>
+                        <ButtonText parentKey="focusText" text="Click here to import chat commands">
+                            <Size x="0" y="8"/>
+                            <Anchors>
+                                <Anchor point="CENTER" relativeKey="$parent.editBoxFocusButton" relativePoint="CENTER" />
+                            </Anchors>
+                        </ButtonText>
+                        <NormalFont style="GameFontNormalSmall"/>
+                        <NormalTexture atlas="dragonflight-score-background" alpha="0.5" />
                         <Scripts>
                             <OnClick>
 						        self:GetParent().scrollFrame.editBox:SetFocus()
+                                self:Hide()
                             </OnClick>
                         </Scripts>
                     </Button>
@@ -130,7 +139,6 @@
                     </ScrollFrame>
                 </Frames>
             </Frame>
-
             <Button parentKey="import">
                 <Size x="200" y="30"/>
                 <Anchors>
