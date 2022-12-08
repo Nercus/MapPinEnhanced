@@ -51,7 +51,8 @@
         </Frames>
         <Layers>
             <Layer level="OVERLAY">
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Preset1" outline="NORMAL">
+                <FontString parentKey="title" inherits="MPHYellowNormal" justifyH="LEFT" text="Preset1">
+                    <Color r="1" g=".82" b="0"/>
                     <Size x="225" y="40" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent" x="15" y="0" />

@@ -15,7 +15,6 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
--- FIXME: Adjust fonts to give a better contrast ( delete image.png)
 -- FIXME: double check usage of /way with tomtom enabled
 -- FIXME: don't import /way if tomtom is enabled replace with /mph instead
 -- TODO: Add Text for import window when not focused
@@ -1134,7 +1133,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
         frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 0)
 
 
-        local text = frame:CreateFontString(nil, "OVERLAY", "NumberFontNormalLargeRightYellow")
+        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         text:SetAllPoints()
         text:SetJustifyH("CENTER")
         text:SetJustifyV("MIDDLE")

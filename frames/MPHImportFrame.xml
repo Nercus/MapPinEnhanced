@@ -29,12 +29,13 @@
                                 <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="textCount" inherits="GameFontNormalTiny2" justifyH="CENTER" outline="NORMAL">
+                        <FontString parentKey="textCount" inherits="MPHYellowNormal" justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-20" y="1" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Importbox">
+                        <FontString parentKey="title" inherits="MPHYellowNormal" justifyH="LEFT" text="Importbox">
+                            <Color r="1" g=".82" b="0"/>
                             <Anchors>
                                 <Anchor point="BOTTOM" relativePoint="TOP" y="4" />
                             </Anchors>
@@ -51,7 +52,9 @@
                         <ScrollChild>
                             <EditBox parentKey="editBox" multiLine="true" autoFocus="false" enableMouse="true" letters="5000">
                                 <Size x="410" y="1"/>
-                                <FontString inherits="GameFontNormal"/>
+                                <FontString inherits="MPHYellowNormal">
+                                    <Color r="1" g=".82" b="0"/>
+                                </FontString>
                                 <Scripts>
                                     <OnTextChanged>
                                         ScrollingEdit_OnTextChanged(self, self:GetParent());
@@ -98,10 +101,12 @@
                                 <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
-                        <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" text="Presets">
+                        <FontString parentKey="title" inherits="MPHYellowNormal" justifyH="LEFT" text="Presets">
+                            <Color r="1" g=".82" b="0"/>
                             <Anchors>
                                 <Anchor point="BOTTOM" relativePoint="TOP" y="4" />
                             </Anchors>
+
                         </FontString>
                     </Layer>
                 </Layers>
@@ -136,7 +141,8 @@
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-selected" alphaMode="ADD" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Import" outline="NORMAL">
+                        <FontString parentKey="text" inherits="MPHYellowNormal" justifyH="CENTER" text="Import">
+                            <Color r="1" g=".82" b="0"/>
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>
@@ -155,7 +161,8 @@
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD" desaturated="true"/>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Extract from Map" outline="NORMAL">
+                        <FontString parentKey="text" inherits="MPHYellowNormal" justifyH="CENTER" text="Map-Extract">
+                            <Color r="1" g=".82" b="0"/>
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>
@@ -174,7 +181,8 @@
                 <HighlightTexture parentKey="HighlightTexture" atlas="pvpqueue-button-casual-highlight" alphaMode="ADD"/>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="text" inherits="GameFontNormal" justifyH="CENTER" text="Save" outline="NORMAL">
+                        <FontString parentKey="text" inherits="MPHYellowNormal" justifyH="CENTER" text="Save">
+                            <Color r="1" g=".82" b="0"/>
                             <Anchors>
                                 <Anchor point="CENTER" relativeKey="$parent" relativePoint="CENTER" />
                             </Anchors>
@@ -183,10 +191,6 @@
                 </Layers>
 
             </Button>
-
-
-
-
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

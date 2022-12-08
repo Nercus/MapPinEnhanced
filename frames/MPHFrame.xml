@@ -21,11 +21,12 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString name="$parentText" parentKey="text" inherits="GameFontNormalLarge" justifyH="LEFT" text="Pintracker" outline="NORMAL">
+                        <FontString name="$parentText" parentKey="text" inherits="MPHYellowNormal" justifyH="LEFT" text="Pintracker">
                             <Size x="150" y="0" />
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" relativeKey="$parent.textureMiddle" relativePoint="TOPLEFT" x="20" y="-3" />
                             </Anchors>
+                            <Color r="1" g=".82" b="0"/>
                         </FontString>
                     </Layer>
                 </Layers>

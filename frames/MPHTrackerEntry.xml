@@ -49,25 +49,28 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalMed2" justifyH="MIDDLE" justifyV="MIDDLE" parentKey="index" alpha="0.4">
+                <FontString inherits="MPHYellowNormal" justifyH="MIDDLE" justifyV="MIDDLE" parentKey="index" alpha="0.4">
+                    <Color r="1" g=".82" b="0"/>
                     <Size y="20" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="2" y="5" relativeKey="$parent.button" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalMed2" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.4">
+                <FontString inherits="MPHYellowNormal" justifyH="LEFT" justifyV="MIDDLE" parentKey="name" alpha="0.4">
+                    <Color r="1" g=".82" b="0"/>
                     <Size y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" x="3" relativeKey="$parent.index" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.6">
+                <FontString inherits="MPHYellowNormal" justifyH="RIGHT" justifyV="MIDDLE" parentKey="distance" alpha="0.6">
+                    <Color r="1" g=".82" b="0"/>
                     <Size y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" x="3" relativeKey="$parent.name" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontWhiteTiny" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.4">
+                <FontString inherits="MPHWhiteSmall" justifyH="LEFT" justifyV="MIDDLE" parentKey="info" alpha="0.6">
                     <Size y="20" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="2" y="-5" relativeKey="$parent.button" />

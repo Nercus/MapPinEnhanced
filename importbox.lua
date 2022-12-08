@@ -163,24 +163,24 @@ local function CreateWindow()
         if self:GetText() == "" then
             importFrame.import:Disable()
             importFrame.save:Disable()
-            importFrame.import.text:SetFontObject("GameFontDisable")
-            importFrame.save.text:SetFontObject("GameFontDisable")
+            importFrame.import.text:SetTextColor(0.1, 0.1, 0.1, 1)
+            importFrame.save.text:SetTextColor(0.1, 0.1, 0.1, 1)
         else
             importFrame.import:Enable()
             importFrame.save:Enable()
-            importFrame.import.text:SetFontObject("GameFontNormal")
-            importFrame.save.text:SetFontObject("GameFontNormal")
+            importFrame.import.text:SetTextColor(1, 0.82, 0, 1)
+            importFrame.save.text:SetTextColor(1, 0.82, 0, 1)
         end
     end)
 
     importFrame.import:Disable()
     importFrame.save:Disable()
-    importFrame.import.text:SetFontObject("GameFontDisable")
-    importFrame.save.text:SetFontObject("GameFontDisable")
+    importFrame.import.text:SetTextColor(0.1, 0.1, 0.1, 1)
+    importFrame.save.text:SetTextColor(0.1, 0.1, 0.1, 1)
 
     if core.pinManager.GetNumPins() == 0 then
         importFrame.export:Disable()
-        importFrame.export.text:SetFontObject("GameFontDisable")
+        importFrame.export.text:SetTextColor(0.1, 0.1, 0.1, 1)
     end
 
 
@@ -199,10 +199,10 @@ function core:ToggleImportWindow()
         module.checkPinsRepeat = C_Timer.NewTicker(1, function()
             if core.pinManager.GetNumPins() == 0 then
                 module.importFrame.export:Disable()
-                module.importFrame.export.text:SetFontObject("GameFontDisable")
+                module.importFrame.export.text:SetTextColor(0.1, 0.1, 0.1, 1)
             else
                 module.importFrame.export:Enable()
-                module.importFrame.export.text:SetFontObject("GameFontNormal")
+                module.importFrame.export.text:SetTextColor(1, 0.82, 0, 1)
             end
         end)
     end
