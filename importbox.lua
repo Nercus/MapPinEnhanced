@@ -70,8 +70,13 @@ function module:updatePresetsList()
         presetButton.title:SetText(v.name)
         presetButton:SetFrameLevel(k + 1)
         presetButton:SetScript("OnClick", function(self)
-            module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(v.input)
-            core:ParseImport(v.input)
+            local input = v.input
+            if core.TomTomLoaded then
+                -- convert all /way to /mph
+                input = string.gsub(input, "/way", "/mph")
+            end
+            module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(input)
+            core:ParseImport(input)
         end)
 
         presetButton:SetScript("OnEnter", function(self)
@@ -132,6 +137,10 @@ local function CreateWindow()
     importFrame.export:SetScript("OnClick", function()
         local output = core.ParseExport()
         if output then
+            if core.TomTomLoaded then
+                -- convert all /way to /mph
+                output = string.gsub(output, "/way", "/mph")
+            end
             importFrame.editBoxFrame.scrollFrame.editBox:SetText(output)
         end
     end)
@@ -155,6 +164,10 @@ local function CreateWindow()
 
     importFrame.import:SetScript("OnClick", function()
         local input = importFrame.editBoxFrame.scrollFrame.editBox:GetText()
+        if core.TomTomLoaded then
+            -- convert all /way to /mph
+            input = string.gsub(input, "/way", "/mph")
+        end
         core:ParseImport(input)
         core:ToggleImportWindow()
     end)
@@ -183,7 +196,11 @@ local function CreateWindow()
         importFrame.export.text:SetTextColor(0.1, 0.1, 0.1, 1)
     end
 
-
+    if core.TomTomLoaded then
+        importFrame.tomtomAlert:Show()
+    else
+        importFrame.tomtomAlert:Hide()
+    end
 
     module.importFrame = importFrame
     module:updatePresetsList()

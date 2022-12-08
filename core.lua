@@ -15,8 +15,6 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
--- FIXME: double check usage of /way with tomtom enabled
--- FIXME: don't import /way if tomtom is enabled replace with /mph instead
 -- TODO: Add Text for import window when not focused
 -- FIXME: Importing pins does not work if no pin is ever created before
 -- FIXME: Removing persistent pins keeps the persistent state in the pool
@@ -1170,18 +1168,18 @@ function MapPinEnhanced:UpdateTrackerTime(distance)
     self.lastDistance = distance
 end
 
-local TomTomLoaded
+MapPinEnhanced.TomTomLoaded = false
 function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
     if isInitialLogin or isReloadingUi then
         self.pinManager.RestoreAllPins()
         -- Check if TomTom is Loaded
         if IsAddOnLoaded("TomTom") then
-            TomTomLoaded = true
+            self.TomTomLoaded = true
             self:PrintMSG({
                 "TomTom is enabled! Using '/way' is disabled for MapPinEnhanced. You can use '/mph' instead."
             }) -- Localize
         else
-            TomTomLoaded = false
+            self.TomTomLoaded = false
         end
         if self.db.global.options["showTimeOnSuperTrackedFrame"] and
             (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then

@@ -151,6 +151,32 @@
                 </Layers>
 
             </Button>
+            <Frame parentKey="tomtomAlert">
+                <Size x="28" y="28" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.import" x="20" y="0" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture atlas="gmchat-icon-alert">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnEnter>
+                        GameTooltip:SetOwner(self, "ANCHOR_TOP");
+                        GameTooltip:AddLine("TomTom is installed! All import will use /mph over /way to avoid complications.");
+                        GameTooltip:Show();
+                    </OnEnter>
+                    <OnLeave>
+				        GameTooltip:Hide();
+                    </OnLeave>
+                </Scripts>
+            </Frame>
             <Button parentKey="export">
                 <Size x="140" y="30"/>
                 <Anchors>
