@@ -16,8 +16,6 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
 -- FIXME: Importing pins does not work if no pin is ever created before
--- FIXME: Removing persistent pins keeps the persistent state in the pool
--- FIXME: Distance timer still shows for quests -> dont hide the text for that but let it keep going
 
 --@do-not-package@
 -- Possible features:

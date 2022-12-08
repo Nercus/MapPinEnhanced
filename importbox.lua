@@ -76,6 +76,7 @@ function module:updatePresetsList()
                 input = string.gsub(input, "/way", "/mph")
             end
             module.importFrame.editBoxFrame.scrollFrame.editBox:SetText(input)
+            module.importFrame.editBoxFrame.editBoxFocusButton:Hide()
             core:ParseImport(input)
         end)
 
@@ -142,6 +143,7 @@ local function CreateWindow()
                 output = string.gsub(output, "/way", "/mph")
             end
             importFrame.editBoxFrame.scrollFrame.editBox:SetText(output)
+            module.importFrame.editBoxFrame.editBoxFocusButton:Hide()
         end
     end)
 
