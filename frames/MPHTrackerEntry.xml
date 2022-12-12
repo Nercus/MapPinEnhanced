@@ -3,7 +3,7 @@
 ..\..\FrameXML\UI.xsd">
     <Script file="MPHTrackerEntry.lua" />
     <Frame name="MPHTrackerEntryTemplate" virtual="true" hidden="true" mixin="MPHTrackerEntryMixin">
-        <Size x="222" y="40" />
+        <Size x="272" y="40" />
         <Frames>
             <Frame parentKey="button">
                 <Size x="25" y="25" />
@@ -41,7 +41,7 @@
         <Layers>
             <Layer level="ARTWORK">
                 <Texture atlas="auctionhouse-nav-button-select" parentKey="highlightBorder" hidden="true" alpha="0.4">
-                    <Size x="222" y="40" />
+                    <Size x="272" y="40" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent" />
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent" />

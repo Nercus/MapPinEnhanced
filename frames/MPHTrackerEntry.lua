@@ -1,7 +1,18 @@
 MPHTrackerEntryMixin = {}
 
+MPHTrackerEntryMixin.textureTracked = "Waypoint-MapPin-Tracked"
+MPHTrackerEntryMixin.textureUntracked = "Waypoint-MapPin-Untracked"
+
+
+
+
 function MPHTrackerEntryMixin:Track()
-    self.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
+    if type(self.textureTracked) == "string" then
+        self.button.normal:SetAtlas(self.textureTracked)
+    else
+        self.button.normal:SetTexture(self.textureTracked)
+    end
+    self.button.normal:SetAlpha(1)
     self.name:SetAlpha(1)
     self.index:SetAlpha(1)
     self.info:SetAlpha(1)
@@ -9,14 +20,22 @@ function MPHTrackerEntryMixin:Track()
 end
 
 function MPHTrackerEntryMixin:Untrack()
-    self.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
+    if (not self.textureUntracked) then
+        self.button.normal:SetAlpha(0.4)
+    else
+        if type(self.textureUntracked) == "string" then
+            self.button.normal:SetAtlas(self.textureUntracked)
+        else
+            self.button.normal:SetTexture(self.textureUntracked)
+        end
+    end
     self.name:SetAlpha(0.4)
     self.index:SetAlpha(0.4)
     self.info:SetAlpha(0.4)
     self.distance:Hide()
 end
 
-function MPHTrackerEntryMixin:OnEnter(tracked, title)
+function MPHTrackerEntryMixin:OnEnter(tracked, title, description)
     self.highlightBorder:Show()
     self.name:SetAlpha(1)
     self.index:SetAlpha(1)
@@ -35,14 +54,20 @@ function MPHTrackerEntryMixin:OnEnter(tracked, title)
         name = title
     end
     local info = self.info:GetText()
-    local index = self.index:GetText()
-    local atlas = (tracked and "Waypoint-MapPin-Tracked") or "Waypoint-MapPin-Untracked"
+    local texture = (tracked and self.textureTracked) or (self.textureUntracked or self.textureTracked)
     if name then
-        name = "|A:" .. atlas .. ":19:19|a " .. name
+        local escapedTexture = type(texture) == "string" and "|A:" .. texture .. ":19:19|a " or
+            "|T" .. texture .. ":19:19|t "
+        name = escapedTexture .. name
         GameTooltip:AddLine(name, 1, 0.82, 0, true)
     end
     if info then
         GameTooltip:AddLine(info, 1, 1, 1, true)
+    end
+
+    if description then
+        GameTooltip:AddLine(" ")
+        GameTooltip:AddLine(description, 1, 0.82, 0, true)
     end
 
     GameTooltip:Show()

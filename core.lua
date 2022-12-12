@@ -15,20 +15,21 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
--- FIXME: Importing pins does not work if no pin is ever created before
+-- TODO: use FramePoolCollection for pin/minimap/objective https://wowpedia.fandom.com/wiki/API_CreateFramePoolCollection
+-- TODO: Be able to overwrite presets
+-- TODO: Set circular mask for number textures
 
 --@do-not-package@
 -- Possible features:
+-- TODO: Change SupertrackeFrame texture for custom icons.
+-- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
 -- TODO: Add ElvUI Skin, replace font aswell
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
--- TODO: Add possibility to set custom icons for pins (minimap, objective, tooltip, pin), add color variants for pins and quick select with right click popup. save in presets
--- TODO: Add click handler to blizz map overlays and set waypoint (maybe with isMouseOver check and same keybind)
 -- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
--- FIXME: find way to get rid of blizz minimap pin tooltip
 -- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
--- TODO: Be able to overwrite presets
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
+-- FIXME: find way to get rid of blizz minimap pin tooltip
 --@end-do-not-package@
 
 
@@ -50,7 +51,7 @@ local overrides = {
     [580] = { suffix = "2" }, -- Lunarfall Excavation
     [581] = { suffix = "3" }, -- Lunarfall Excavation
     [582] = { mapType = Enum.UIMapType.Zone }, -- Lunarfall
-    [585] = { suffix = "1" }, -- Frostwall Mine
+    [585] = { suffix = "1" }, -- Frostwall Minem
     [586] = { suffix = "2" }, -- Frostwall Mine
     [587] = { suffix = "3" }, -- Frostwall Mine
     [590] = { mapType = Enum.UIMapType.Zone }, -- Frostwall
@@ -175,8 +176,6 @@ local defaults = {
             hide = false
         },
         savedPins = {
-            pinsData = {},
-            lastTrackedIndex = nil
         },
         presets = {},
         trackerPos = {
@@ -240,11 +239,8 @@ function MapPinEnhanced:OnInitialize()
         if self.db.minimap ~= nil then
             self.db.global.minimap.hide = self.db.minimap.hide
         end
-        if self.db.profile.savedpins ~= nil then
-            self.db.global.savedPins = {
-                pinsData = {},
-                lastTrackedIndex = nil
-            }
+        if self.db.profile.savedPins ~= nil then
+            self.db.global.savedPins = {}
         end
         if self.db.profile.pintrackerposition ~= nil then
             self.db.global.trackerPos = {
@@ -431,10 +427,9 @@ function MapPinEnhanced:OnEnable()
     self.MPHFrame = MPHFrame
 end
 
--- TODO: change to https://wowpedia.fandom.com/wiki/API_CreateFramePoolCollection
 local MPHFramePool = {}
 
-local function CreatePin(x, y, mapID, emit, title, persist)
+local function CreatePin(x, y, mapID, emit, title, persist, texture, description)
 
     local tracked = false
     local navigating = false
@@ -506,14 +501,12 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         if MapPinEnhanced.superTrackedTimer then
             MapPinEnhanced.superTrackedTimer:Hide()
         end
-        if not MapPinEnhanced.db.global.savedpins then
-            MapPinEnhanced.db.global.savedpins = {}
+        if not MapPinEnhanced.db.global.savedPins or MapPinEnhanced.db.global.savedPins.lastTrackedPin or
+            MapPinEnhanced.db.global.savedPins.lastTrackedIndex then
+            MapPinEnhanced.db.global.savedPins = {}
         end
-        MapPinEnhanced.db.global.savedpins.lastTrackedPin = {
-            x = x2,
-            y = y2,
-            mapID = mapID2,
-        }
+
+
         MapPinEnhanced.blockWAYPOINTevent = false
     end
 
@@ -524,7 +517,6 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         minimappin:Untrack()
         SuperTrackedFrame.Icon:SetDesaturated(false)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-        MapPinEnhanced.db.global.savedpins.lastTrackedPin = nil
         if MapPinEnhanced.distanceTimer then
             if not MapPinEnhanced.distanceTimer.cancelled then
                 MapPinEnhanced:CancelTimer(MapPinEnhanced.distanceTimer)
@@ -635,10 +627,11 @@ local function CreatePin(x, y, mapID, emit, title, persist)
     end)
 
 
-    local function SetTooltip(title2)
+    local function SetTooltip(title2, description2)
         pin:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
             GameTooltip_SetTitle(GameTooltip, title2);
+            GameTooltip_AddNormalLine(GameTooltip, description2, true);
             GameTooltip:AddLine("|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
             GameTooltip:AddLine(
                 "|cffeda55fCtrl +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
@@ -656,14 +649,14 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         end)
 
         objective:SetScript("OnEnter", function()
-            objective:OnEnter(tracked, title2)
+            objective:OnEnter(tracked, title2, description2)
         end)
         objective:SetScript("OnLeave", function()
             objective:OnLeave(tracked)
         end)
     end
 
-    SetTooltip(title)
+    SetTooltip(title, description)
 
 
     objective:SetScript("OnMouseDown", function(self, arg1)
@@ -709,15 +702,17 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         end
     end
 
+    local maxLength = 30
     local function SetObjectiveTitle(title2)
-        objective:SetTitle(strlen(title2) > 15 and strsub(title2, 1, 13) .. "..." or title2)
+        objective:SetTitle(strlen(title2) > maxLength and strsub(title2, 1, maxLength - 2) .. "..." or title2)
     end
 
-    SetObjectiveTitle(strlen(title) > 15 and strsub(title, 1, 13) .. "..." or title)
+    SetObjectiveTitle(strlen(title) > maxLength and strsub(title, 1, maxLength - 2) .. "..." or title)
 
     local function SetObjectiveText(x2, y2, mapID2)
         local zoneName = HBDmapData[mapID2]["name"]
-        zoneName = strlen(zoneName) > 20 and strsub(zoneName, 1, 18) .. "..." or zoneName
+        zoneName = strlen(zoneName) > math.ceil(maxLength * 1.55) and
+            strsub(zoneName, 1, math.ceil(maxLength * 1.55) - 2) .. "..." or zoneName
 
 
         objective.info:SetText(zoneName .. " (" .. Round(x2 * 100) .. ", " .. Round(y2 * 100) .. ")")
@@ -726,8 +721,54 @@ local function CreatePin(x, y, mapID, emit, title, persist)
 
     SetObjectiveText(x, y, mapID)
 
+    local function SetCustomTexture(trackedTexture)
+        if trackedTexture then
+            objective.textureTracked = trackedTexture
+            minimappin.textureTracked = trackedTexture
+            objective.textureUntracked = nil
+            minimappin.textureUntracked = nil
+            if type(trackedTexture) == "number" then
+                objective.button.normal:SetTexture(trackedTexture)
+                minimappin.Icon:SetTexture(trackedTexture)
+                objective.button.highlight:SetTexture(nil)
+                minimappin.Highlight:SetTexture(nil)
+            elseif type(trackedTexture) == "string" then
+                objective.button.normal:SetAtlas(trackedTexture)
+                minimappin.Icon:SetAtlas(trackedTexture)
+                objective.button.highlight:SetAtlas(nil)
+                minimappin.Highlight:SetAtlas(nil)
+            end
+        else -- reset to default
+            objective.textureTracked = "Waypoint-MapPin-Tracked"
+            objective.textureUntracked = "Waypoint-MapPin-Untracked"
+            objective.button.highlight:SetAtlas("Waypoint-MapPin-Highlight")
 
+            minimappin.textureTracked = "Waypoint-MapPin-Tracked"
+            minimappin.textureUntracked = "Waypoint-MapPin-Untracked"
+            minimappin.Highlight:SetAtlas("Waypoint-MapPin-Highlight")
+            if IsTracked() then
+                objective.button.normal:SetAtlas("Waypoint-MapPin-Tracked")
+                minimappin.Icon:SetAtlas("Waypoint-MapPin-Tracked")
+            else
+                objective.button.normal:SetAtlas("Waypoint-MapPin-Untracked")
+                minimappin.Icon:SetAtlas("Waypoint-MapPin-Untracked")
+            end
+        end
+    end
 
+    if texture then
+        SetCustomTexture(texture)
+    end
+
+    local function GetOptionals()
+        return {
+            title = title,
+            description = description,
+            texture = texture,
+            persistent = persistent,
+            noTrack = not tracked
+        }
+    end
 
     return {
         Untrack = Untrack,
@@ -746,6 +787,8 @@ local function CreatePin(x, y, mapID, emit, title, persist)
         SetObjectiveText = SetObjectiveText,
         HidePin = HidePin,
         ShowPin = ShowPin,
+        SetCustomTexture = SetCustomTexture,
+        GetOptionals = GetOptionals,
         x = x,
         y = y,
         mapID = mapID,
@@ -786,10 +829,10 @@ local function PinManager()
                 y = pin.y,
                 mapID = pin.mapID,
                 title = pin.title,
-                persistent = pin.isPersistent(),
+                optionals = pin.GetOptionals(),
             })
         end
-        MapPinEnhanced.db.global.savedpins.pinsData = data
+        MapPinEnhanced.db.global.savedPins = data
     end
 
     local function UpdateTrackerPositions()
@@ -865,23 +908,43 @@ local function PinManager()
         end
     end
 
-    local function AddPin(x, y, mapID, name, isPersistent, noTrack)
+    local function AddPin(x, y, mapID, optionals)
         if #pins > 0 then
             for _, p in ipairs(pins) do
                 if math.abs(x - p.x) < 0.005 and math.abs(y - p.y) < 0.005 and mapID == p.mapID then
-                    UntrackPins()
-                    p.Track(x, y, mapID)
-                    return
+                    RemovePin(p)
+                    break
                 end
             end
         end
 
 
         local title
-        if not name or name == "" then
+        if not optionals.title or optionals.title == "" then
             title = DEFAULT_PIN_TITLE
         else
-            title = name
+            title = optionals.title
+        end
+
+        local isPersistent
+        if not optionals.persistent then
+            isPersistent = false
+        else
+            isPersistent = optionals.persistent
+        end
+
+        local texture
+        if not optionals.texture then
+            texture = nil
+        else
+            texture = optionals.texture
+        end
+
+        local description
+        if not optionals.description or optionals.description == "" then
+            description = nil
+        else
+            description = optionals.description
         end
 
         local ReusedPinFrame = tremove(MPHFramePool)
@@ -901,7 +964,7 @@ local function PinManager()
                 elseif e == "navigate" then
                     --MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
                 end
-            end, title, isPersistent)
+            end, title, isPersistent, texture, description)
             pin.ShowOnMap()
         else
             pin = ReusedPinFrame
@@ -910,23 +973,28 @@ local function PinManager()
             pin.mapID = mapID
             pin.title = title
             pin.setPersistent(isPersistent or false)
-            pin.SetTooltip(title)
+            pin.SetTooltip(title, description)
             pin.MoveOnMap(x, y, mapID)
             pin.SetObjectiveTitle(title)
             pin.SetObjectiveText(x, y, mapID)
+            pin.SetCustomTexture(texture)
         end
         pins[#pins + 1] = pin
-
-        if not noTrack then
-            UntrackPins()
+        if not optionals.noTrack then
+            if pinsRestored then
+                UntrackPins()
+            end
             pin.Track(x, y, mapID)
         else
-            pin.scrollToObjective()
+            if pinsRestored then
+                pin.scrollToObjective()
+            else
+                pin.Untrack()
+            end
         end
 
         UpdateTrackerPositions()
         SavePinsPersistent()
-
     end
 
     local function RestorePin()
@@ -955,23 +1023,14 @@ local function PinManager()
     end
 
     local function RestoreAllPins()
-        if (not MapPinEnhanced.db.global.savedpins) then
-            return
-        end
-        if (not MapPinEnhanced.db.global.savedpins.pinsData) then
+        if (not MapPinEnhanced.db.global.savedPins) or MapPinEnhanced.db.global.savedPins.lastTrackedPin then
+            MapPinEnhanced.db.global.savedPins = {}
             return
         end
 
-        local pTracked = MapPinEnhanced.db.global.savedpins.lastTrackedPin
-        local hasTracked = pTracked ~= nil
 
-        for _, p in ipairs(MapPinEnhanced.db.global.savedpins.pinsData) do
-            if hasTracked then
-                AddPin(p.x, p.y, p.mapID, p.title, p.persistent,
-                    not (p.x == pTracked.x and p.y == pTracked.y and p.mapID == pTracked.mapID))
-            else
-                AddPin(p.x, p.y, p.mapID, p.title, p.persistent, true)
-            end
+        for _, p in ipairs(MapPinEnhanced.db.global.savedPins) do
+            AddPin(p.x, p.y, p.mapID, p.optionals)
         end
 
         pinsRestored = true
@@ -991,8 +1050,21 @@ local function PinManager()
 
     local function GetAllPinData()
         local t = {}
+        local hasOptionals = false
         for i, pin in ipairs(pins) do
-            tinsert(t, { pin.x, pin.y, pin.mapID, pin.title })
+            local title = nil
+            local optionals = pin.GetOptionals()
+            if optionals.title and optionals.title ~= "" and
+                optionals.title ~= DEFAULT_PIN_TITLE then
+                title = optionals.title
+            end
+            if optionals.texture or optionals.description then
+                hasOptionals = true
+            end
+            tinsert(t, { pin.x, pin.y, pin.mapID, title })
+        end
+        if hasOptionals then
+            MapPinEnhanced:PrintMSG({ "Warning: Exporting pins with custom icons or descriptions is not supported yet. They will be exported as normal pins for now." })
         end
         return t
     end
@@ -1025,6 +1097,7 @@ local function PinManager()
         HideAllPins = HideAllPins,
         ShowAllPins = ShowAllPins,
         GetNumPins = GetNumPins,
+        SavePinsPersistent = SavePinsPersistent,
     }
 end
 
@@ -1033,12 +1106,13 @@ MapPinEnhanced.pinManager = PinManager()
 
 
 
-function MapPinEnhanced:AddWaypoint(x, y, mapID, name)
+
+function MapPinEnhanced.AddWaypoint(x, y, mapID, optionals)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
-            self:PrintMSG({ "The blizzard arrow does not work in this zone" })
+            MapPinEnhanced:PrintMSG({ "The blizzard arrow does not work in this zone" })
         end
-        self.pinManager.AddPin(x, y, mapID, name)
+        MapPinEnhanced.pinManager.AddPin(x, y, mapID, optionals)
     else
         error("x, y or mapID missing")
     end
@@ -1092,6 +1166,24 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
             end
         end
     end
+    self.pinManager.SavePinsPersistent()
+end
+
+local function detectPinData()
+    local resultTable = GetMouseFocus()
+    if not resultTable then
+        return nil, nil
+    end
+    if resultTable.Texture and string.find(resultTable.pinTemplate, "%a+PinTemplate") then -- Blizzard Map Pin
+        if resultTable.name and resultTable.Texture then
+            local atlas = resultTable.Texture:GetAtlas()
+            if atlas then
+                return resultTable.name, atlas
+            end
+        end
+
+    end
+    return nil, nil
 end
 
 function MapPinEnhanced:USER_WAYPOINT_UPDATED()
@@ -1108,10 +1200,12 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
                 C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
             end
         end
+        local title, texture = detectPinData()
         self.blockWAYPOINTevent = true
         C_Map.ClearUserWaypoint()
         self.blockWAYPOINTevent = false
-        self:AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID)
+        self.AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID,
+            { title = title, texture = texture })
     end
 end
 
@@ -1125,8 +1219,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
         local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
 
         frame:SetSize(200, 20)
-        frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 0)
-
+        frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 2)
 
         local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         text:SetAllPoints()
@@ -1135,6 +1228,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
 
         self.superTrackedTimer = text
     end
+
 
     if time > 0 then
         self.superTrackedTimer:SetText(TIMER_MINUTES_DISPLAY:format(floor(time / 60), floor(time % 60)))
@@ -1235,7 +1329,7 @@ function MapPinEnhanced:ParseImport(importstring)
             self:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
         end
         local x, y, mapID, title = self:ParseInput(msg)
-        MapPinEnhanced:AddWaypoint(x, y, mapID, title)
+        MapPinEnhanced.AddWaypoint(x, y, mapID, { title = title })
     end
 end
 
@@ -1358,7 +1452,7 @@ function MapPinEnhanced:ParseExport()
     return output
 end
 
-if not TomTomLoaded then
+if not MapPinEnhanced.TomTomLoaded then
     SLASH_MPH1 = "/way"
 end
 SLASH_MPH2 = "/pin"
@@ -1394,14 +1488,9 @@ SlashCmdList["MPH"] = function(msg)
         }, true)
     else
         local x, y, mapdID, title = MapPinEnhanced:ParseInput(msg)
-        MapPinEnhanced:AddWaypoint(x, y, mapdID, title)
+        MapPinEnhanced.AddWaypoint(x, y, mapdID, { title = title })
     end
 end
-
-
-
-
-
 
 
 function MapPinEnhanced:DistanceTimer(cb)
@@ -1427,5 +1516,18 @@ end)
 
 
 
--- Set globally available functions
+-- Globally available functions
+
+-- This function can be called from other addons to add a waypoint to the map
+-- Following parameters are required:
+-- x: x coordinate of the waypoint (0-1)
+-- y: y coordinate of the waypoint (0-1)
+-- mapID: mapID of the zone the waypoint is in
+-- Following parameters are optional and shall be passed as a keyed table:
+-- title: title of the waypoint
+-- description: description of the waypoint (will be shown in the tooltip)
+-- texture: atlas name of the texture to be used for the waypoint
+------------------------------------------------------------
+-- Example:
+-- /run MapPinEnhanced.AddWaypoint(0.4, 0.5, 2022, { title = "My Waypoint", description = "This is my waypoint", texture = "poi-workorders" })
 globalMPH.AddWaypoint = MapPinEnhanced.AddWaypoint

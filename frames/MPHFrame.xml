@@ -3,10 +3,10 @@
 ..\..\FrameXML\UI.xsd">
     <Script file="MPHFrame.lua" />
     <Frame name="MPHFrameTemplate" virtual="true" hidden="true" mixin="MPHFrameMixin" toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
-        <Size x="250" y="25" />
+        <Size x="300" y="25" />
         <Frames>
             <Frame parentKey="header">
-                <Size x="250" y="25" />
+                <Size x="300" y="25" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
                 </Anchors>
@@ -53,14 +53,14 @@
             </Frame>
 
             <ScrollFrame parentKey="scrollFrame" inherits="UIPanelScrollFrameTemplate">
-                <Size x="225" y="1" />
+                <Size x="275" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="0" y="-25" />
                     <Anchor point="BOTTOMLEFT" x="0" y="0" />
                 </Anchors>
                 <ScrollChild>
                     <Frame parentKey="scrollChild">
-                        <Size x="225" y="1" />
+                        <Size x="275" y="1" />
                         <Anchors>
                             <Anchor point="LEFT" x="0" y="0" />
                             <Anchor point="RIGHT" x="0" y="0" />
