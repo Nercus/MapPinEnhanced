@@ -75,63 +75,16 @@ local function updateTrackerScaleOption()
     end
 end
 
-local filteredChannels = {
-    "BATTLEGROUND_LEADER",
-    "BATTLEGROUND",
-    "BN_WHISPER",
-    "BN_WHISPER_INFORM",
-    "COMMUNITIES_CHANNEL",
-    "GUILD",
-    "OFFICER",
-    "PARTY_LEADER",
-    "PARTY",
-    "RAID_LEADER",
-    "RAID_WARNING",
-    "RAID",
-    "SAY",
-    "WHISPER",
-    "WHISPER_INFORM",
-    "YELL"
-}
-local textPatterns = {
-    "(%d+%.%d+), (%d+%.%d+)",
-    "(%d+%.%d+) (%d+%.%d+)",
-    "(%d+%.%d+),(%d+%.%d+)",
-    "(%d+)%, (%d+)",
-}
-
-
-local function HyperLinkChatFilter(self, event, msg, ...)
-    local x, y
-    for i, j in ipairs(textPatterns) do
-        x, y = string.match(msg, j)
-        if x and y then
-            x = (tonumber(x))
-            y = (tonumber(y))
-            if x and y then
-                local mapID = C_Map.GetBestMapForUnit("player")
-                local newMsg = core:FormatHyperlink(x / 100, y / 100, mapID) .. " (" .. x .. ", " .. y .. ")"
-                return false, newMsg, ...
-            end
-        end
-    end
-end
-
-local function updateHyperlinkOption()
-    if core.db.global.options["hyperlink"] then
-        for i, j in ipairs(filteredChannels) do
-            ChatFrame_AddMessageEventFilter("CHAT_MSG_" .. j, HyperLinkChatFilter)
-        end
+local function updateBlockMoving()
+    if core.db.global.options["blockMoving"] then
+        core.MPHFrame:SetMovable(false)
     else
-        for i, j in ipairs(filteredChannels) do
-            ChatFrame_RemoveMessageEventFilter("CHAT_MSG_" .. j, HyperLinkChatFilter)
-        end
+        core.MPHFrame:SetMovable(true)
     end
 end
 
 local function setSettingsOnLoad()
     updateTargetAlphaForState()
-    updateHyperlinkOption()
     updateTrackerScaleOption()
 end
 
@@ -167,6 +120,17 @@ function module:OnEnable()
                     updateShowTimeOption()
                 end,
             },
+            blockMoving = {
+                type = "toggle",
+                width = "full",
+                name = "Block Moving",
+                desc = "Blocks the Pin Tracker from being moved",
+                get = function() return core.db.global.options["blockMoving"] end,
+                set = function(info, value)
+                    core.db.global.options["blockMoving"] = value
+                    updateBlockMoving()
+                end,
+            },
             hidePins = {
                 type = "toggle",
                 width = "full",
@@ -176,17 +140,6 @@ function module:OnEnable()
                 set = function(info, value)
                     core.db.global.options["hidePins"] = value
                     updateHidePinsOption()
-                end,
-            },
-            hyperlink = {
-                type = "toggle",
-                width = "full",
-                name = "Detect coordinates in chat",
-                desc = "Detect coordinates in chat",
-                get = function() return core.db.global.options["hyperlink"] end,
-                set = function(info, value)
-                    core.db.global.options["hyperlink"] = value
-                    updateHyperlinkOption()
                 end,
             },
             maxTrackerEntries = {

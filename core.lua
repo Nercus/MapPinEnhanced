@@ -16,11 +16,10 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
 -- TODO: use FramePoolCollection for pin/minimap/objective https://wowpedia.fandom.com/wiki/API_CreateFramePoolCollection
--- TODO: Be able to overwrite presets
--- TODO: Set circular mask for number textures
 
 --@do-not-package@
 -- Possible features:
+-- TODO: Be able to overwrite presets
 -- TODO: Change SupertrackeFrame texture for custom icons.
 -- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
 -- TODO: Add ElvUI Skin, replace font aswell
@@ -189,8 +188,8 @@ local defaults = {
             maxTrackerEntries = 6,
             showTimeOnSuperTrackedFrame = true,
             hidePins = false,
-            hyperlink = true,
             trackerScale = 1,
+            blockMoving = false,
         }
     }
 }
@@ -200,6 +199,9 @@ local pinsRestored = false
 
 function MapPinEnhanced:PrintMSG(msgTable, hasTitle)
     if not msgTable then return end
+    if type(msgTable) ~= "table" then
+        msgTable = { msgTable }
+    end
     local out = ""
     if hasTitle then
         out = "|A:Waypoint-MapPin-Tracked:19:19|a|cFFFFD100" .. self.name .. "|r\n"
@@ -252,6 +254,19 @@ function MapPinEnhanced:OnInitialize()
             if self.db.profile.options.changedalpha ~= nil then
                 self.db.global.options.changedalpha = self.db.profile.options.changedalpha
             end
+        end
+
+        if self.db.global.options["hyperlink"] then
+            self.db.global.options["hyperlink"] = nil
+        end
+
+        if not self.db.global.trackerPos then
+            self.db.global.trackerPos = {
+                x = 0,
+                y = 0,
+                point = "CENTER",
+                relativePoint = "CENTER"
+            }
         end
 
         self.db.profile = nil
@@ -402,6 +417,10 @@ function MapPinEnhanced:OnEnable()
 
     MPHFrame:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" and IsControlKeyDown() then
+            if MapPinEnhanced.db.global.options["blockMoving"] then
+                MapPinEnhanced:PrintMSG({ "Moving is blocked! You can change this in the options or by typing /mph lock" })
+                return
+            end
             self:StartMoving()
         elseif button == "RightButton" then
             MapPinEnhanced:ToggleDropDown()
@@ -702,7 +721,7 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         end
     end
 
-    local maxLength = 30
+    local maxLength = 19
     local function SetObjectiveTitle(title2)
         objective:SetTitle(strlen(title2) > maxLength and strsub(title2, 1, maxLength - 2) .. "..." or title2)
     end
@@ -1175,10 +1194,14 @@ local function detectPinData()
         return nil, nil
     end
     if resultTable.Texture and string.find(resultTable.pinTemplate, "%a+PinTemplate") then -- Blizzard Map Pin
-        if resultTable.name and resultTable.Texture then
+        local name = resultTable.name
+        if resultTable.questID then
+            name = C_QuestLog.GetTitleForQuestID(resultTable.questID)
+        end
+        if name and resultTable.Texture then
             local atlas = resultTable.Texture:GetAtlas()
             if atlas then
-                return resultTable.name, atlas
+                return name, atlas
             end
         end
 
@@ -1477,9 +1500,15 @@ SlashCmdList["MPH"] = function(msg)
             InterfaceOptionsFrame:Show()
         end
         InterfaceOptionsFrame_OpenToCategory(MapPinEnhanced.optionsFrame)
+    elseif msg == "lock" then
+        MapPinEnhanced.db.global.options["blockMoving"] = not MapPinEnhanced.db.global.options["blockMoving"]
+        MapPinEnhanced:PrintMSG({ "Pin Tracker Window is now " ..
+            (MapPinEnhanced.db.global.options["blockMoving"] and "locked" or "unlocked") })
+        MapPinEnhanced.MPHFrame:SetMovable(not MapPinEnhanced.db.global.options["blockMoving"])
     elseif msg == "" or msg == "help" then
         MapPinEnhanced:PrintMSG({
             "|cffeda55f/mph config|r - Open the options menu",
+            "|cffeda55f/mph lock|r - Lock/Unlock the pin tracker window",
             "|cffeda55f/mph tracker|r - Toggle the Pin Tracker Window",
             "|cffeda55f/mph import|r - Toggle the Import Window",
             "|cffeda55f/mph minimap|r - Toggle the Minimap Button",
