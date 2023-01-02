@@ -15,13 +15,11 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
--- TODO: use FramePoolCollection for pin/minimap/objective https://wowpedia.fandom.com/wiki/API_CreateFramePoolCollection
 
 --@do-not-package@
--- Possible features:
--- TODO: Be able to overwrite presets
 -- TODO: Change SupertrackeFrame texture for custom icons.
 -- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
+-- TODO: Be able to overwrite presets
 -- TODO: Add ElvUI Skin, replace font aswell
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
 -- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
@@ -446,19 +444,33 @@ function MapPinEnhanced:OnEnable()
     self.MPHFrame = MPHFrame
 end
 
-local MPHFramePool = {}
+local MPHFramePools = CreateFramePoolCollection()
+MPHFramePools:CreatePool("Button", nil, "MPHTrackerEntryTemplate")
+MPHFramePools:CreatePool("Button", nil, "MPHMapPinTemplate")
+MPHFramePools:CreatePool("Button", nil, "MPHMinimapPinTemplate")
+local trackerPool = MPHFramePools:GetPool("MPHTrackerEntryTemplate")
+local mapPinPool = MPHFramePools:GetPool("MPHMapPinTemplate")
+local minimapPinPool = MPHFramePools:GetPool("MPHMinimapPinTemplate")
 
 local function CreatePin(x, y, mapID, emit, title, persist, texture, description)
 
     local tracked = false
     local navigating = false
-    local objective = CreateFrame("Button", nil, MapPinEnhanced.MPHFrame.scrollFrame.scrollChild,
-        "MPHTrackerEntryTemplate")
-    local pin = CreateFrame("Button", nil, nil, "MPHMapPinTemplate")
-    local minimappin = CreateFrame("Button", nil, nil, "MPHMinimapPinTemplate")
+
+    local objective = trackerPool:Acquire()
+    objective:SetParent(MapPinEnhanced.MPHFrame.scrollFrame.scrollChild)
+
+    local pin = mapPinPool:Acquire()
+    local minimappin = minimapPinPool:Acquire()
     local persistent = false
     local index;
     local title = title
+
+    local function Release()
+        trackerPool:Release(objective)
+        mapPinPool:Release(pin)
+        minimapPinPool:Release(minimappin)
+    end
 
     local function isPersistent()
         return persistent
@@ -775,9 +787,8 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         end
     end
 
-    if texture then
-        SetCustomTexture(texture)
-    end
+    SetCustomTexture(texture)
+
 
     local function GetOptionals()
         return {
@@ -808,11 +819,11 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         ShowPin = ShowPin,
         SetCustomTexture = SetCustomTexture,
         GetOptionals = GetOptionals,
+        Release = Release,
         x = x,
         y = y,
         mapID = mapID,
         title = title,
-
     }
 end
 
@@ -910,7 +921,7 @@ local function PinManager()
                 pins[#pins] = nil
                 C_Map.ClearUserWaypoint()
                 SupertrackClosest()
-                tinsert(MPHFramePool, pin)
+                pin.Release()
                 UpdateTrackerPositions()
                 SavePinsPersistent()
                 return
@@ -966,38 +977,24 @@ local function PinManager()
             description = optionals.description
         end
 
-        local ReusedPinFrame = tremove(MPHFramePool)
-        local pin
-        if not ReusedPinFrame then
-            pin = CreatePin(x, y, mapID, function(e)
-                if e == "remove" then
-                    RemovePin(pin)
-                    SupertrackClosest()
-                elseif e == "track" then
-                    UntrackPins()
-                    pin.Track(pin.x, pin.y, pin.mapID)
-                elseif e == "hyperlink" then
-                    local link = MapPinEnhanced:FormatHyperlink(pin.x, pin.y, pin.mapID)
-                    ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
-                    ChatEdit_InsertLink(link)
-                elseif e == "navigate" then
-                    --MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
-                end
-            end, title, isPersistent, texture, description)
-            pin.ShowOnMap()
-        else
-            pin = ReusedPinFrame
-            pin.x = x
-            pin.y = y
-            pin.mapID = mapID
-            pin.title = title
-            pin.setPersistent(isPersistent or false)
-            pin.SetTooltip(title, description)
-            pin.MoveOnMap(x, y, mapID)
-            pin.SetObjectiveTitle(title)
-            pin.SetObjectiveText(x, y, mapID)
-            pin.SetCustomTexture(texture)
-        end
+        local pin;
+        pin = CreatePin(x, y, mapID, function(e)
+            if e == "remove" then
+                RemovePin(pin)
+                SupertrackClosest()
+            elseif e == "track" then
+                UntrackPins()
+                pin.Track(pin.x, pin.y, pin.mapID)
+            elseif e == "hyperlink" then
+                local link = MapPinEnhanced:FormatHyperlink(pin.x, pin.y, pin.mapID)
+                ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
+                ChatEdit_InsertLink(link)
+            elseif e == "navigate" then
+                --MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
+            end
+        end, title, isPersistent, texture, description)
+        pin.ShowOnMap()
+
         pins[#pins + 1] = pin
         if not optionals.noTrack then
             if pinsRestored then
