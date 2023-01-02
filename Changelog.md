@@ -1,4 +1,8 @@
-# 2.1
+# 2.2
 
-- Show number of pins in broker
-- Fix sometimes pin tracker not showing up
+- Add auto detect icons and description when setting pin on other things on map (limited)
+- Pins can now use custom icons
+- Pins can now use custom descriptions
+- Disable chat links for now
+- Fix issues focusing the editbox
+- More bug fixes
