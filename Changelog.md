@@ -1,5 +1,3 @@
-# 2.2
-
 - Add auto detect icons and description when setting pin on other things on map (limited)
 - Pins can now use custom icons
 - Pins can now use custom descriptions
