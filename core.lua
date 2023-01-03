@@ -1055,7 +1055,7 @@ local function PinManager()
     local function RemoveAllPins()
         for i, pin in ipairs(pins) do
             pin.RemoveFromMap()
-            tinsert(MPHFramePool, pin)
+            pin.Release()
             pins[i] = nil
         end
         SavePinsPersistent()
