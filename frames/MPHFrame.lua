@@ -22,5 +22,6 @@ function MPHFrameMixin:OnLoad()
     self.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.scrollFrame.ScrollBar.ThumbTexture:SetAtlas("voicechat-icon-loudnessbar-2")
     self.scrollFrame.ScrollBar.ThumbTexture:SetAlpha(0.6)
+    self.scrollFrame.ScrollBar.scrollStep = 15
     self.scrollFrame:Hide()
 end
