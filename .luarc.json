@@ -62,7 +62,8 @@
         "UIParent",
         "unpack",
         "WaypointLocationPinMixin",
-        "wipe"
+        "wipe",
+        "WorldMapFrame"
     ],
     "workspace.ignoreDir": [
         ".vscode",

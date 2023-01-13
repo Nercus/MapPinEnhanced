@@ -14,19 +14,18 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
-
+-- TODO: dont override pin when tracked quest
+-- TODO: Change option on how to display persistentcy of pins
+-- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
 
 --@do-not-package@
--- TODO: Change SupertrackeFrame texture for custom icons.
--- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
 -- TODO: Be able to overwrite presets
 -- TODO: Add ElvUI Skin, replace font aswell
--- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran)
--- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
--- TODO: make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
--- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
 -- FIXME: find way to get rid of blizz minimap pin tooltip
+-- TODO: Add custom hyperlink with zone name and coords to chat (https://wowpedia.fandom.com/wiki/Hyperlinks#garrmission)
+-- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran) | make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
+-- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
 --@end-do-not-package@
 
 
@@ -898,18 +897,16 @@ local function PinManager()
     end
 
     local function SupertrackClosest()
-        if not C_SuperTrack.IsSuperTrackingQuest() then
-            local pin = nil
-            for _, p in ipairs(pins) do
-                p.Untrack()
-                if IsCloser(p, pin) then
-                    pin = p
-                end
+        local pin = nil
+        for _, p in ipairs(pins) do
+            p.Untrack()
+            if IsCloser(p, pin) then
+                pin = p
             end
-            if pin then
-                pin.Track(pin.x, pin.y, pin.mapID)
+        end
+        if pin then
+            pin.Track(pin.x, pin.y, pin.mapID)
 
-            end
         end
     end
 
@@ -1122,7 +1119,6 @@ MapPinEnhanced.pinManager = PinManager()
 
 
 
-
 function MapPinEnhanced.AddWaypoint(x, y, mapID, optionals)
     if x and y and mapID then
         if not C_Map.CanSetUserWaypointOnMap(mapID) then
@@ -1198,6 +1194,9 @@ local function detectPinData()
         if name and resultTable.Texture then
             local atlas = resultTable.Texture:GetAtlas()
             if atlas then
+                if atlas == "worldquest-questmarker-questbang" then
+                    atlas = "worldquest-tracker-questmarker"
+                end
                 return name, atlas
             end
         end
