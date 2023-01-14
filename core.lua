@@ -14,7 +14,6 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
--- TODO: dont override pin when tracked quest
 -- TODO: Change option on how to display persistentcy of pins
 -- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
 
