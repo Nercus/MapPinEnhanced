@@ -518,6 +518,7 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         MapPinEnhanced.blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID2) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID2, x2, y2, 0))
+            MapPinEnhanced.blockSUPERTRACKEDevent = true
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
             if not MapPinEnhanced.distanceTimer then
                 MapPinEnhanced.distanceTimer = MapPinEnhanced:ScheduleRepeatingTimer("DistanceTimer", 0.1,
@@ -1131,10 +1132,14 @@ function MapPinEnhanced.AddWaypoint(x, y, mapID, optionals)
 end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
+    if self.blockSUPERTRACKEDevent then
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        self.blockSUPERTRACKEDevent = false
+        return
+    end
     if C_SuperTrack.IsSuperTrackingQuest() then
         self.pinManager.UntrackPins()
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-        C_Map.ClearUserWaypoint()
     else
         if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
             self.pinManager.RefreshTracking()
@@ -1178,6 +1183,7 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
             end
         end
     end
+    self.blockSUPERTRACKEDevent = false
     self.pinManager.SavePinsPersistent()
 end
 
@@ -1211,20 +1217,18 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
     end
     local userwaypoint = C_Map.GetUserWaypoint()
     if userwaypoint then
+        self.blockWAYPOINTevent = true
+
+        -- -- tracking questid now
         local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
         if superTrackedQuestID ~= 0 then
-            if C_QuestLog.IsWorldQuest(superTrackedQuestID) then
-                C_QuestLog.RemoveWorldQuestWatch(superTrackedQuestID)
-            else
-                C_QuestLog.RemoveQuestWatch(superTrackedQuestID)
-            end
+            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
         end
         local title, texture = detectPinData()
-        self.blockWAYPOINTevent = true
-        C_Map.ClearUserWaypoint()
-        self.blockWAYPOINTevent = false
+
         self.AddWaypoint(userwaypoint.position.x, userwaypoint.position.y, userwaypoint.uiMapID,
             { title = title, texture = texture })
+        self.blockWAYPOINTevent = false
     end
 end
 
