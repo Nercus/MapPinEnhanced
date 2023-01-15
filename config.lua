@@ -18,45 +18,11 @@ local function updateTargetAlphaForState()
 end
 
 local function updateShowTimeOption()
-    if core.db.global.options["showTimeOnSuperTrackedFrame"] then
-        if not core.distanceTimerFast then
-            core.distanceTimerFast = core:ScheduleRepeatingTimer("DistanceTimerFast", 1,
-                function(distance)
-                    if C_Navigation.WasClampedToScreen() then
-                        if core.superTrackedTimer then
-                            core.superTrackedTimer:Hide()
-                        end
-                    else
-                        core:UpdateTrackerTime(distance)
-                        if core.superTrackedTimer then
-                            core.superTrackedTimer:Show()
-                        end
-                    end
-                end)
-        elseif core.distanceTimerFast.cancelled then
-            core.distanceTimerFast = core:ScheduleRepeatingTimer("DistanceTimerFast", 1,
-                function(distance)
-                    if C_Navigation.WasClampedToScreen() then
-                        if core.superTrackedTimer then
-                            core.superTrackedTimer:Hide()
-                        end
-                    else
-                        core:UpdateTrackerTime(distance)
-                        if core.superTrackedTimer then
-                            core.superTrackedTimer:Show()
-                        end
-                    end
-                end)
-        end
-    else
-        if core.distanceTimerFast then
-            core:CancelTimer(core.distanceTimerFast)
-            core.distanceTimerFast = nil
-        end
-        if core.superTrackedTimer then
-            core.superTrackedTimer:Hide()
-        end
-    end
+    core:UpdateDistanceTimerState()
+end
+
+local function updateShowInfoOption()
+    core:UpdateInfoState()
 end
 
 local function updateHidePinsOption()
@@ -118,6 +84,17 @@ function module:OnEnable()
                 set = function(info, value)
                     core.db.global.options["showTimeOnSuperTrackedFrame"] = value
                     updateShowTimeOption()
+                end,
+            },
+            showInfo = {
+                type = "toggle",
+                width = "full",
+                name = "Show Info on SuperTrackedFrame",
+                desc = "Shows the title and texture on the SuperTrackedFrame for the tracked pin",
+                get = function() return core.db.global.options["showInfoOnSuperTrackedFrame"] end,
+                set = function(info, value)
+                    core.db.global.options["showInfoOnSuperTrackedFrame"] = value
+                    updateShowInfoOption()
                 end,
             },
             blockMoving = {

@@ -15,7 +15,11 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 -- TODO: Change option on how to display persistentcy of pins
--- TODO: Add info text to supertrackedframe, add custom icon to supertrackedframe
+-- Lock Texture in title or description for objective
+-- Lock Texture in Tooltip on mappin
+-- Lock Texture on pin itself
+-- Change to doubleclick lock
+
 
 --@do-not-package@
 -- TODO: Be able to overwrite presets
@@ -536,7 +540,7 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             MapPinEnhanced.db.global.savedPins = {}
         end
 
-
+        MapPinEnhanced:UpdateInfoState()
         MapPinEnhanced.blockWAYPOINTevent = false
     end
 
@@ -799,6 +803,14 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         }
     end
 
+    local function GetTitle()
+        return title
+    end
+
+    local function GetTexture()
+        return texture
+    end
+
     return {
         Untrack = Untrack,
         Track = Track,
@@ -819,6 +831,8 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         SetCustomTexture = SetCustomTexture,
         GetOptionals = GetOptionals,
         Release = Release,
+        GetTitle = GetTitle,
+        GetTexture = GetTexture,
         x = x,
         y = y,
         mapID = mapID,
@@ -1010,14 +1024,6 @@ local function PinManager()
         SavePinsPersistent()
     end
 
-    local function RestorePin()
-        for _, p in ipairs(pins) do
-            if p.SupertrackClosest() then
-                break
-            end
-        end
-    end
-
     local function RefreshTracking()
         for _, p in ipairs(pins) do
             if p.IsTracked() then
@@ -1094,12 +1100,20 @@ local function PinManager()
         end
     end
 
+    local function GetTrackedPinTitleAndTexture()
+        for _, p in ipairs(pins) do
+            if p.IsTracked() then
+                return p.GetTitle(), p.GetTexture()
+            end
+        end
+        return nil, nil
+    end
+
     local function GetNumPins() return #pins end
 
     return {
         AddPin = AddPin,
         RemovePin = RemovePin,
-        RestorePin = RestorePin,
         UntrackPins = UntrackPins,
         RefreshTracking = RefreshTracking,
         RemoveTrackedPin = RemoveTrackedPin,
@@ -1111,6 +1125,7 @@ local function PinManager()
         ShowAllPins = ShowAllPins,
         GetNumPins = GetNumPins,
         SavePinsPersistent = SavePinsPersistent,
+        GetTrackedPinTitleAndTexture = GetTrackedPinTitleAndTexture,
     }
 end
 
@@ -1130,22 +1145,18 @@ function MapPinEnhanced.AddWaypoint(x, y, mapID, optionals)
     end
 end
 
-function MapPinEnhanced:SUPER_TRACKING_CHANGED()
-    if self.blockSUPERTRACKEDevent then
-        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-        self.blockSUPERTRACKEDevent = false
-        return
+function MapPinEnhanced:UpdateDistanceTimerState()
+    local enable = true
+    if not self.db.global.options["showTimeOnSuperTrackedFrame"] then
+        enable = false
     end
-    if C_SuperTrack.IsSuperTrackingQuest() then
-        self.pinManager.UntrackPins()
-        C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-    else
-        if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
-            self.pinManager.RefreshTracking()
-        end
+    if not C_SuperTrack.IsSuperTrackingAnything() then
+        enable = false
     end
-    if self.db.global.options["showTimeOnSuperTrackedFrame"] and
-        C_SuperTrack.IsSuperTrackingAnything() then
+    if C_Navigation.WasClampedToScreen() then
+        enable = false
+    end
+    if enable then
         if not self.distanceTimerFast then
             self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1, function(distance)
                 if C_Navigation.WasClampedToScreen() then
@@ -1180,6 +1191,48 @@ function MapPinEnhanced:SUPER_TRACKING_CHANGED()
             if self.superTrackedTimer then
                 self.superTrackedTimer:Hide()
             end
+        end
+    end
+end
+
+function MapPinEnhanced:UpdateInfoState()
+    local enable = true
+    if not self.db.global.options["showInfoOnSuperTrackedFrame"] then
+        enable = false
+    end
+    if not C_SuperTrack.IsSuperTrackingAnything() then
+        enable = false
+    end
+    if C_Navigation.WasClampedToScreen() then
+        enable = false
+    end
+    if enable then
+        local title, texture = self.pinManager.GetTrackedPinTitleAndTexture()
+        self:UpdateTrackerInfo(title, texture)
+        if self.superTrackedInfo then
+            self.superTrackedInfo:Show()
+        end
+    else
+        if self.superTrackedInfo then
+            self.superTrackedInfo:Hide()
+        end
+    end
+end
+
+function MapPinEnhanced:SUPER_TRACKING_CHANGED()
+    self:UpdateDistanceTimerState()
+    if self.blockSUPERTRACKEDevent then
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        self.pinManager.SavePinsPersistent()
+        self.blockSUPERTRACKEDevent = false
+        return
+    end
+    if C_SuperTrack.IsSuperTrackingQuest() then
+        self.pinManager.UntrackPins()
+        C_SuperTrack.SetSuperTrackedUserWaypoint(false)
+    else
+        if not C_SuperTrack.IsSuperTrackingUserWaypoint() then
+            self.pinManager.RefreshTracking()
         end
     end
     self.blockSUPERTRACKEDevent = false
@@ -1241,9 +1294,9 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
         local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
 
         frame:SetSize(200, 20)
-        frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 2)
+        frame:SetPoint("TOP", SuperTrackedFrame.DistanceText, "BOTTOM", 0, 9)
 
-        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall2")
         text:SetAllPoints()
         text:SetJustifyH("CENTER")
         text:SetJustifyV("MIDDLE")
@@ -1260,15 +1313,7 @@ function MapPinEnhanced:UpdateSuperTrackedTimerText(time)
 end
 
 function MapPinEnhanced:UpdateTrackerTime(distance)
-    if not C_SuperTrack.IsSuperTrackingAnything() then
-        self:CancelTimer(self.distanceTimerFast)
-        self.distanceTimerFast = nil
-        self.lastDistance = nil
-        if self.superTrackedTimer then
-            self.superTrackedTimer:Hide()
-        end
-        return
-    end
+    self:UpdateDistanceTimerState()
     if self.lastDistance then
         local speed = (self.lastDistance - distance)
         if speed > 0 then
@@ -1279,6 +1324,38 @@ function MapPinEnhanced:UpdateTrackerTime(distance)
         end
     end
     self.lastDistance = distance
+end
+
+function MapPinEnhanced:UpdateSuperTrackedInfoText(infoString)
+    if not self.superTrackedInfo then
+        local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
+
+        frame:SetSize(200, 20)
+        frame:SetPoint("BOTTOM", SuperTrackedFrame.DistanceText, "TOP", 0, -5)
+
+        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall2")
+        text:SetAllPoints()
+        text:SetJustifyH("CENTER")
+        text:SetJustifyV("MIDDLE")
+
+        self.superTrackedInfo = text
+    end
+    self.superTrackedInfo:SetText(infoString)
+end
+
+function MapPinEnhanced:UpdateTrackerInfo(title, texture)
+    local infoString = ""
+    if texture then
+        if type(texture) == "number" then
+            infoString = infoString .. "|T" .. texture .. ":14|t"
+        elseif type(texture) == "string" then
+            infoString = infoString .. "|A:" .. texture .. ":14:14|a"
+        end
+    end
+    if title and title ~= DEFAULT_PIN_TITLE then
+        infoString = infoString .. title
+    end
+    self:UpdateSuperTrackedInfoText(infoString)
 end
 
 MapPinEnhanced.TomTomLoaded = false
@@ -1294,38 +1371,7 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
         else
             self.TomTomLoaded = false
         end
-        if self.db.global.options["showTimeOnSuperTrackedFrame"] and
-            (C_Map.GetUserWaypoint() and C_SuperTrack.IsSuperTrackingAnything()) then
-            if not self.distanceTimerFast then
-                self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1,
-                    function(distance)
-                        if C_Navigation.WasClampedToScreen() then
-                            if self.superTrackedTimer then
-                                self.superTrackedTimer:Hide()
-                            end
-                        else
-                            self:UpdateTrackerTime(distance)
-                            if self.superTrackedTimer then
-                                self.superTrackedTimer:Show()
-                            end
-                        end
-                    end)
-            elseif self.distanceTimerFast.cancelled then
-                self.distanceTimerFast = self:ScheduleRepeatingTimer("DistanceTimerFast", 1,
-                    function(distance)
-                        if C_Navigation.WasClampedToScreen() then
-                            if self.superTrackedTimer then
-                                self.superTrackedTimer:Hide()
-                            end
-                        else
-                            self:UpdateTrackerTime(distance)
-                            if self.superTrackedTimer then
-                                self.superTrackedTimer:Show()
-                            end
-                        end
-                    end)
-            end
-        end
+        self:UpdateDistanceTimerState()
     end
 end
 
@@ -1540,6 +1586,26 @@ end
 hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self) -- hide default blizzard waypoint
     self:SetAlpha(0)
     self:EnableMouse(false)
+end)
+
+
+hooksecurefunc(SuperTrackedFrame, "PingNavFrame", function(self)
+    MapPinEnhanced:UpdateDistanceTimerState()
+    if C_Navigation.WasClampedToScreen() then
+        if MapPinEnhanced.superTrackedTimer then
+            MapPinEnhanced.superTrackedTimer:Hide()
+        end
+        if MapPinEnhanced.superTrackedInfo then
+            MapPinEnhanced.superTrackedInfo:Hide()
+        end
+    else
+        if MapPinEnhanced.superTrackedTimer then
+            MapPinEnhanced.superTrackedTimer:Show()
+        end
+        if MapPinEnhanced.superTrackedInfo then
+            MapPinEnhanced.superTrackedInfo:Show()
+        end
+    end
 end)
 
 
