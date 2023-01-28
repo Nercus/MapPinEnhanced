@@ -15,9 +15,6 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local DEFAULT_PERSISTENT_ATLAS = "|A:honorsystem-bar-lock:16:13:-1:1|a"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
--- FIXME: Auto Tracking quest after pin is reached doesn't update info state
-
-
 --@do-not-package@
 -- TODO: Be able to overwrite presets
 -- TODO: Add ElvUI Skin, replace font aswell
