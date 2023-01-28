@@ -1,6 +1,6 @@
-- Add auto detect icons and description when setting pin on other things on map (limited)
-- Pins can now use custom icons
-- Pins can now use custom descriptions
-- Disable chat links for now
-- Fix issues focusing the editbox
+- Adjust scrolling speed in pin tracker to be more consistent
+- Add info text on SuperTrackedFrame
+- Reworked who persistency is displayed
+- Major fix for interactions with tracked quests
+- Make Tooltip more readable
 - More bug fixes
