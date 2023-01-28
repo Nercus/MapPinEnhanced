@@ -12,7 +12,3 @@ end
 function MPHMapPinMixin:Untrack()
     self.Icon:SetAtlas(self.textureUntracked, true)
 end
-
-function MPHMapPinMixin:OnLeave()
-    GameTooltip:Hide()
-end

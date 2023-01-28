@@ -47,7 +47,7 @@ function MPHTrackerEntryMixin:OnEnter(tracked, title, description)
     else
         self.highlightBorder:SetAlpha(0.4)
     end
-    GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
+
 
     local name = self.name:GetText()
     if title then
@@ -56,8 +56,8 @@ function MPHTrackerEntryMixin:OnEnter(tracked, title, description)
     local info = self.info:GetText()
     local texture = (tracked and self.textureTracked) or (self.textureUntracked or self.textureTracked)
     if name then
-        local escapedTexture = type(texture) == "string" and "|A:" .. texture .. ":19:19|a " or
-            "|T" .. texture .. ":19:19|t "
+        local escapedTexture = type(texture) == "string" and "|A:" .. texture .. ":19:19|a" or
+            "|T" .. texture .. ":19:19|t"
         name = escapedTexture .. name
         GameTooltip:AddLine(name, 1, 0.82, 0, true)
     end
@@ -70,7 +70,6 @@ function MPHTrackerEntryMixin:OnEnter(tracked, title, description)
         GameTooltip:AddLine(description, 1, 0.82, 0, true)
     end
 
-    GameTooltip:Show()
 end
 
 function MPHTrackerEntryMixin:OnLeave(tracked)

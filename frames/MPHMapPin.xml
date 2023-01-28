@@ -14,6 +14,14 @@
                     </Anchors>
                 </Texture>
             </Layer>
+            <Layer level="BORDER">
+                <Texture parentKey="Lock" atlas="honorsystem-bar-lock" hidden="true">
+                    <Size x="20" y="26"/>
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="TOP" y="-2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="Highlight" atlas="Waypoint-MapPin-Highlight">
                     <Size x="30" y="30"/>
@@ -23,8 +31,5 @@
                 </Texture>
             </Layer>
         </Layers>
-        <Scripts>
-            <OnLeave method="OnLeave"/>
-        </Scripts>
     </Frame>
 </Ui>

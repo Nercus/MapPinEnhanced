@@ -12,13 +12,10 @@ MapPinEnhanced.name = "Map Pin Enhanced"
 
 
 local DEFAULT_PIN_TITLE = "Map Pin"
+local DEFAULT_PERSISTENT_ATLAS = "|A:honorsystem-bar-lock:16:13:-1:1|a"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
--- TODO: Change option on how to display persistentcy of pins
--- Lock Texture in title or description for objective
--- Lock Texture in Tooltip on mappin
--- Lock Texture on pin itself
--- Change to doubleclick lock
+-- FIXME: Auto Tracking quest after pin is reached doesn't update info state
 
 
 --@do-not-package@
@@ -30,6 +27,11 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 -- TODO: overcome the problem with notsetable waypoints (e.g. in dungeons, Dalaran) | make it possible to set pin on map even if navigation is not possible: mapCanvas:AddGlobalPinMouseActionHandler, set pin on parent map and set dummy frame on mapCanvas for correct map
 -- TODO: finish navigation: Finish navigation step pins, fix distance tracking in zones with no waypointsupport, replace secure button so frame stays interactable in combat
 --@end-do-not-package@
+local lpadcolor = function(str, len, char)
+    if char == nil then char = ' ' end
+    local out = string.rep(char, len - #str) .. str
+    return "|cffeda55f" .. out .. "|r"
+end
 
 
 
@@ -478,20 +480,6 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         return persistent
     end
 
-    local function setPersistent(value)
-        persistent = value
-        pin.Icon:SetDesaturated(value)
-        pin.Highlight:SetDesaturated(value)
-        objective.button.normal:SetDesaturated(value)
-        objective.button.highlight:SetDesaturated(value)
-        minimappin.Icon:SetDesaturated(value)
-        minimappin.Highlight:SetDesaturated(value)
-        SuperTrackedFrame.Icon:SetDesaturated(isPersistent())
-    end
-
-    setPersistent(persist)
-
-
     local function setDistanceText(distance)
         if distance then
             objective.distance:SetText("[" .. ("%s yds"):format(AbbreviateNumbers(distance)) .. "]")
@@ -517,7 +505,6 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         pin:Track()
         objective:Track()
         minimappin:Track()
-        SuperTrackedFrame.Icon:SetDesaturated(isPersistent())
         MapPinEnhanced.blockWAYPOINTevent = true
         if C_Map.CanSetUserWaypointOnMap(mapID2) then
             C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(mapID2, x2, y2, 0))
@@ -549,7 +536,6 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         pin:Untrack()
         objective:Untrack()
         minimappin:Untrack()
-        SuperTrackedFrame.Icon:SetDesaturated(false)
         C_SuperTrack.SetSuperTrackedUserWaypoint(false)
         if MapPinEnhanced.distanceTimer then
             if not MapPinEnhanced.distanceTimer.cancelled then
@@ -638,20 +624,119 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         end
     end
 
+    local function SetTooltip(title2, description2)
+        pin:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
+            GameTooltip_SetTitle(GameTooltip, title2);
+            GameTooltip_AddNormalLine(GameTooltip, description2, true);
+            GameTooltip:AddLine(lpadcolor("", 8, " ") ..
+                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+            GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+            GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+            GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+            GameTooltip:Show()
+        end)
+
+        pin:SetScript("OnLeave", function(self)
+            GameTooltip:Hide()
+        end)
+
+        minimappin:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
+            GameTooltip_SetTitle(GameTooltip, title2);
+            GameTooltip_AddNormalLine(GameTooltip, description2, true);
+            GameTooltip:Show()
+        end)
+
+        objective:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_NONE")
+            GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, -4)
+            objective:OnEnter(tracked, title2, description2)
+            if (IsModifierKeyDown()) then
+                GameTooltip:AddLine(lpadcolor("", 8, " ") ..
+                    " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+                GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+                GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+                GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+            end
+            GameTooltip:Show()
+        end)
+        objective:SetScript("OnLeave", function()
+            objective:OnLeave(tracked)
+        end)
+        if GameTooltip:IsShown() and GameTooltip:GetOwner() == pin then
+            GameTooltip:ClearLines()
+            GameTooltip_SetTitle(GameTooltip, title2);
+            GameTooltip_AddNormalLine(GameTooltip, description2, true);
+            GameTooltip:AddLine(lpadcolor("", 8, " ") ..
+                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+            GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+            GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+            GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+            GameTooltip:Show()
+        elseif GameTooltip:IsShown() and GameTooltip:GetOwner() == objective then
+            GameTooltip:ClearLines()
+            objective:OnEnter(tracked, title2, description2)
+            GameTooltip:Show()
+        end
+    end
+
+    SetTooltip(title, description)
+
+    local maxLength = 19
+    local function SetObjectiveTitle(title2)
+        if isPersistent() then
+            maxLength = DEFAULT_PERSISTENT_ATLAS:len() + 19
+        else
+            maxLength = 19
+        end
+        objective:SetTitle(strlen(title2) > maxLength and strsub(title2, 1, maxLength - 2) .. "..." or title2)
+    end
+
+    SetObjectiveTitle(title)
+
+    local function setPersistent(value)
+        persistent = value
+        if (value) then
+            title = DEFAULT_PERSISTENT_ATLAS .. title
+        else
+            local start, finish = string.find(title, DEFAULT_PERSISTENT_ATLAS, 1, true)
+            if start and finish then
+                title = string.sub(title, finish + 1, string.len(title))
+            end
+        end
+        SetTooltip(title, description)
+        SetObjectiveTitle(title)
+        emit("forceupdate")
+        MapPinEnhanced:UpdateInfoState()
+
+        pin.Lock:SetShown(value)
+    end
+
+    setPersistent(persist)
+
     pin:SetScript("OnMouseDown", function(self, arg1)
         if arg1 == "LeftButton" then
             if IsControlKeyDown() then
                 emit("remove")
             elseif IsShiftKeyDown() then
                 emit("hyperlink")
+            elseif IsAltKeyDown() then
+                setPersistent(not persistent)
+                emit("forceupdate")
             else
                 ToggleTracked()
                 -- scroll to tracked pin
                 scrollToObjective()
-            end
-        elseif arg1 == "RightButton" then
-            if IsShiftKeyDown() then
-                setPersistent(not persistent)
             end
         end
         self:SetPoint("CENTER", 2, -2)
@@ -660,59 +745,23 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
         self:SetPoint("CENTER", 0, 0)
     end)
 
-
-    local function SetTooltip(title2, description2)
-        pin:SetScript("OnEnter", function(self)
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-            GameTooltip_SetTitle(GameTooltip, title2);
-            GameTooltip_AddNormalLine(GameTooltip, description2, true);
-            GameTooltip:AddLine("|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
-            GameTooltip:AddLine(
-                "|cffeda55fCtrl +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
-            GameTooltip:AddLine(
-                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
-            GameTooltip:AddLine(
-                "|cffeda55fShift +|r|A:newplayertutorial-icon-mouse-rightbutton:12:12|a to make the pin persistent")
-            GameTooltip:Show()
-        end)
-
-        minimappin:SetScript("OnEnter", function(self)
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
-            GameTooltip_SetTitle(GameTooltip, title2);
-            GameTooltip:Show()
-        end)
-
-        objective:SetScript("OnEnter", function()
-            objective:OnEnter(tracked, title2, description2)
-        end)
-        objective:SetScript("OnLeave", function()
-            objective:OnLeave(tracked)
-        end)
-    end
-
-    SetTooltip(title, description)
-
-
     objective:SetScript("OnMouseDown", function(self, arg1)
         if arg1 == "LeftButton" then
             if IsControlKeyDown() then
                 emit("remove")
             elseif IsShiftKeyDown() then
                 emit("hyperlink")
+            elseif IsAltKeyDown() then
+                setPersistent(not persistent)
+                emit("forceupdate")
             else
                 ToggleTracked()
+                SetTooltip(title, description)
             end
         elseif arg1 == "RightButton" then
-            if IsShiftKeyDown() then
-                setPersistent(not persistent)
-            else
-                emit("remove")
-            end
+            emit("remove")
         end
     end)
-
-
-
 
     -- objective.navStart:SetScript("OnClick", function(self)
     --     emit("track")
@@ -735,13 +784,6 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             scrollToObjective(i)
         end
     end
-
-    local maxLength = 19
-    local function SetObjectiveTitle(title2)
-        objective:SetTitle(strlen(title2) > maxLength and strsub(title2, 1, maxLength - 2) .. "..." or title2)
-    end
-
-    SetObjectiveTitle(strlen(title) > maxLength and strsub(title, 1, maxLength - 2) .. "..." or title)
 
     local function SetObjectiveText(x2, y2, mapID2)
         local zoneName = HBDmapData[mapID2]["name"]
@@ -804,6 +846,9 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
     end
 
     local function GetTitle()
+        if persistent then
+            return string.sub(title, string.len(DEFAULT_PERSISTENT_ATLAS) + 1, string.len(title))
+        end
         return title
     end
 
@@ -871,7 +916,7 @@ local function PinManager()
                 x = pin.x,
                 y = pin.y,
                 mapID = pin.mapID,
-                title = pin.title,
+                title = pin.GetTitle(),
                 optionals = pin.GetOptionals(),
             })
         end
@@ -920,7 +965,6 @@ local function PinManager()
         end
         if pin then
             pin.Track(pin.x, pin.y, pin.mapID)
-
         end
     end
 
@@ -966,6 +1010,11 @@ local function PinManager()
         else
             title = optionals.title
         end
+        -- remove persistent atlas from title if still present
+        local start, finish = string.find(title, DEFAULT_PERSISTENT_ATLAS, 1, true)
+        if start and finish then
+            title = string.sub(title, finish + 1, string.len(title))
+        end
 
         local isPersistent
         if not optionals.persistent then
@@ -1002,6 +1051,8 @@ local function PinManager()
                 ChatEdit_InsertLink(link)
             elseif e == "navigate" then
                 --MapPinEnhanced:navigateToPin(pin.x, pin.y, pin.mapID)
+            elseif e == "forceupdate" then
+                SavePinsPersistent()
             end
         end, title, isPersistent, texture, description)
         pin.ShowOnMap()
@@ -1103,7 +1154,7 @@ local function PinManager()
     local function GetTrackedPinTitleAndTexture()
         for _, p in ipairs(pins) do
             if p.IsTracked() then
-                return p.GetTitle(), p.GetTexture()
+                return p.GetTitle(), p.GetTexture(), p.isPersistent()
             end
         end
         return nil, nil
@@ -1203,12 +1254,15 @@ function MapPinEnhanced:UpdateInfoState()
     if not C_SuperTrack.IsSuperTrackingAnything() then
         enable = false
     end
+    if C_SuperTrack.IsSuperTrackingQuest() then
+        enable = false
+    end
     if C_Navigation.WasClampedToScreen() then
         enable = false
     end
     if enable then
-        local title, texture = self.pinManager.GetTrackedPinTitleAndTexture()
-        self:UpdateTrackerInfo(title, texture)
+        local title, texture, isPersistent = self.pinManager.GetTrackedPinTitleAndTexture()
+        self:UpdateTrackerInfo(title, texture, isPersistent)
         if self.superTrackedInfo then
             self.superTrackedInfo:Show()
         end
@@ -1221,6 +1275,7 @@ end
 
 function MapPinEnhanced:SUPER_TRACKING_CHANGED()
     self:UpdateDistanceTimerState()
+    self:UpdateInfoState()
     if self.blockSUPERTRACKEDevent then
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
         self.pinManager.SavePinsPersistent()
@@ -1331,9 +1386,9 @@ function MapPinEnhanced:UpdateSuperTrackedInfoText(infoString)
         local frame = CreateFrame("Frame", nil, SuperTrackedFrame)
 
         frame:SetSize(200, 20)
-        frame:SetPoint("BOTTOM", SuperTrackedFrame.DistanceText, "TOP", 0, -5)
+        frame:SetPoint("BOTTOM", SuperTrackedFrame.DistanceText, "TOP", 0, -4)
 
-        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall2")
+        local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         text:SetAllPoints()
         text:SetJustifyH("CENTER")
         text:SetJustifyV("MIDDLE")
@@ -1343,7 +1398,7 @@ function MapPinEnhanced:UpdateSuperTrackedInfoText(infoString)
     self.superTrackedInfo:SetText(infoString)
 end
 
-function MapPinEnhanced:UpdateTrackerInfo(title, texture)
+function MapPinEnhanced:UpdateTrackerInfo(title, texture, persistent)
     local infoString = ""
     if texture then
         if type(texture) == "number" then
@@ -1351,6 +1406,9 @@ function MapPinEnhanced:UpdateTrackerInfo(title, texture)
         elseif type(texture) == "string" then
             infoString = infoString .. "|A:" .. texture .. ":14:14|a"
         end
+    end
+    if persistent then
+        title = DEFAULT_PERSISTENT_ATLAS .. " " .. title
     end
     if title and title ~= DEFAULT_PIN_TITLE then
         infoString = infoString .. title
