@@ -1,6 +1,2 @@
-- Adjust scrolling speed in pin tracker to be more consistent
-- Add info text on SuperTrackedFrame
-- Reworked who persistency is displayed
-- Major fix for interactions with tracked quests
-- Make Tooltip more readable
-- More bug fixes
+- Added option to disable minimap button in options
+- Added option to disable the automatic opening of the pin tracker
