@@ -15,7 +15,9 @@ local DEFAULT_PIN_TITLE = "Map Pin"
 local DEFAULT_PERSISTENT_ATLAS = "|A:honorsystem-bar-lock:16:13:-1:1|a"
 local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
+
 --@do-not-package@
+-- TODO: Set texture as SuperTrackedFrame Texture
 -- TODO: Be able to overwrite presets
 -- TODO: Add ElvUI Skin, replace font aswell
 -- TODO: Investigate broken supertracking for instanced zones (uldum bfa <> uldum cata)
@@ -152,7 +154,7 @@ local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("MapPinE
             if IsAltKeyDown() then
                 MapPinEnhanced.pinManager.RemoveAllPins()
             else
-                MapPinEnhanced:ToggleImportWindow()
+                MapPinEnhanced:TogglePinTrackerWindow()
             end
         elseif button == "RightButton" then
             MapPinEnhanced:ToggleDropDown()
@@ -189,6 +191,7 @@ local defaults = {
             hidePins = false,
             trackerScale = 1,
             blockMoving = false,
+            autoOpenTracker = false,
         }
     }
 }
@@ -358,7 +361,6 @@ StaticPopupDialogs["MPH_ENABLE_NAVIGATION"] = {
 }
 
 function MapPinEnhanced:OnEnable()
-
     if GetCVar("showInGameNavigation") == "0" then
         StaticPopup_Show("MPH_ENABLE_NAVIGATION")
     end
@@ -454,7 +456,6 @@ local mapPinPool = MPHFramePools:GetPool("MPHMapPinTemplate")
 local minimapPinPool = MPHFramePools:GetPool("MPHMinimapPinTemplate")
 
 local function CreatePin(x, y, mapID, emit, title, persist, texture, description)
-
     local tracked = false
     local navigating = false
 
@@ -627,13 +628,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip_AddNormalLine(GameTooltip, description2, true);
             GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+            " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
             GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
             GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
             GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             GameTooltip:Show()
         end)
 
@@ -654,13 +655,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             objective:OnEnter(tracked, title2, description2)
             if (IsModifierKeyDown()) then
                 GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-                    " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
                 GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
                 GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
                 GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             end
             GameTooltip:Show()
         end)
@@ -672,13 +673,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip_AddNormalLine(GameTooltip, description2, true);
             GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+            " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
             GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
             GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
             GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             GameTooltip:Show()
         elseif GameTooltip:IsShown() and GameTooltip:GetOwner() == objective then
             GameTooltip:ClearLines()
@@ -927,7 +928,7 @@ local function PinManager()
 
         if MapPinEnhanced.MPHFrame:IsShown() and #pins == 0 then
             MapPinEnhanced:TogglePinTrackerWindow()
-        elseif not MapPinEnhanced.MPHFrame:IsShown() and #pins > 0 then
+        elseif not MapPinEnhanced.MPHFrame:IsShown() and #pins > 0 and MapPinEnhanced.db.global.options.autoOpenTracker then
             MapPinEnhanced:TogglePinTrackerWindow()
         end
 
@@ -1131,7 +1132,8 @@ local function PinManager()
             tinsert(t, { pin.x, pin.y, pin.mapID, title })
         end
         if hasOptionals then
-            MapPinEnhanced:PrintMSG({ "Warning: Exporting pins with custom icons or descriptions is not supported yet. They will be exported as normal pins for now." })
+            MapPinEnhanced:PrintMSG({
+                "Warning: Exporting pins with custom icons or descriptions is not supported yet. They will be exported as normal pins for now." })
         end
         return t
     end
@@ -1310,7 +1312,6 @@ local function detectPinData()
                 return name, atlas
             end
         end
-
     end
     return nil, nil
 end
@@ -1603,7 +1604,7 @@ SlashCmdList["MPH"] = function(msg)
     elseif msg == "lock" then
         MapPinEnhanced.db.global.options["blockMoving"] = not MapPinEnhanced.db.global.options["blockMoving"]
         MapPinEnhanced:PrintMSG({ "Pin Tracker Window is now " ..
-            (MapPinEnhanced.db.global.options["blockMoving"] and "locked" or "unlocked") })
+        (MapPinEnhanced.db.global.options["blockMoving"] and "locked" or "unlocked") })
         MapPinEnhanced.MPHFrame:SetMovable(not MapPinEnhanced.db.global.options["blockMoving"])
     elseif msg == "" or msg == "help" then
         MapPinEnhanced:PrintMSG({
@@ -1627,7 +1628,7 @@ function MapPinEnhanced:DistanceTimer(cb)
     if hasBlizzWaypoint then
         local distance = C_Navigation.GetDistance()
         if distance == 0 then
-            cb(-1)
+            cb( -1)
             self.distanceTimer.delay = 1
         else
             cb(distance)

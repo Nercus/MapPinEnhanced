@@ -100,7 +100,7 @@ function module:OnEnable()
             blockMoving = {
                 type = "toggle",
                 width = "full",
-                name = "Block Moving",
+                name = "Block Pin Tracker Moving",
                 desc = "Blocks the Pin Tracker from being moved",
                 get = function() return core.db.global.options["blockMoving"] end,
                 set = function(info, value)
@@ -113,6 +113,7 @@ function module:OnEnable()
                 width = "full",
                 name = "Hide Pins when Pin Tracker is closed",
                 desc = "Hide Pins when Pin Tracker is closed",
+                disabled = function() return not core.db.global.options["autoOpenTracker"] end,
                 get = function() return core.db.global.options["hidePins"] end,
                 set = function(info, value)
                     core.db.global.options["hidePins"] = value
@@ -147,6 +148,39 @@ function module:OnEnable()
                 set = function(info, value)
                     core.db.global.options.trackerScale = value
                     updateTrackerScaleOption()
+                end,
+            },
+            toggleMinmapButton = {
+                type = "toggle",
+                name = "Toggle Minimap Button",
+                width = "full",
+                desc = "Toggles the Minimap Button",
+                get = function()
+                    local show = core.db.global.minimap.hide
+                    return not show
+                end,
+                set = function(info, value)
+                    core.db.global.minimap.hide = not value
+                    core:UpdateMinimapButton()
+                end,
+            },
+            autoOpenPinTracker = {
+                type = "toggle",
+                name = "Auto Open Pin Tracker",
+                width = "full",
+                desc = "Auto Open Pin Tracker when a pin is added",
+                get = function()
+                    return core.db.global.options.autoOpenTracker
+                end,
+                set = function(info, value)
+                    core.db.global.options.autoOpenTracker = value
+                    if (value) then
+                        if core.pinManager.GetNumPins() > 0 then
+                            core:TogglePinTrackerWindow()
+                        end
+                    else
+                        core.db.global.options["hidePins"] = false
+                    end
                 end,
             },
         }
