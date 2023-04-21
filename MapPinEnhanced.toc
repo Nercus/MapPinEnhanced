@@ -1,7 +1,7 @@
 ## Interface: 100005
 ## Author: Nerc
 ## Title: Map Pin Enhanced
-## Version: 2.4
+## Version: 2.5
 ## License: All Rights Reserved
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB

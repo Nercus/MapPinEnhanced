@@ -1,2 +1,1 @@
-- Added option to disable minimap button in options
-- Added option to disable the automatic opening of the pin tracker
+- Fix reordering of pins when removing a pin
