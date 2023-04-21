@@ -38,25 +38,25 @@ local HBDmapData = HBD.mapData
 
 
 local overrides = {
-    [101] = { mapType = Enum.UIMapType.World }, -- Outland
-    [125] = { mapType = Enum.UIMapType.Zone }, -- Dalaran
+    [101] = { mapType = Enum.UIMapType.World },  -- Outland
+    [125] = { mapType = Enum.UIMapType.Zone },   -- Dalaran
     [126] = { mapType = Enum.UIMapType.Micro },
-    [195] = { suffix = "1" }, -- Kaja'mine
-    [196] = { suffix = "2" }, -- Kaja'mine
-    [197] = { suffix = "3" }, -- Kaja'mine
-    [501] = { mapType = Enum.UIMapType.Zone }, -- Dalaran
+    [195] = { suffix = "1" },                    -- Kaja'mine
+    [196] = { suffix = "2" },                    -- Kaja'mine
+    [197] = { suffix = "3" },                    -- Kaja'mine
+    [501] = { mapType = Enum.UIMapType.Zone },   -- Dalaran
     [502] = { mapType = Enum.UIMapType.Micro },
-    [572] = { mapType = Enum.UIMapType.World }, -- Draenor
-    [579] = { suffix = "1" }, -- Lunarfall Excavation
-    [580] = { suffix = "2" }, -- Lunarfall Excavation
-    [581] = { suffix = "3" }, -- Lunarfall Excavation
-    [582] = { mapType = Enum.UIMapType.Zone }, -- Lunarfall
-    [585] = { suffix = "1" }, -- Frostwall Minem
-    [586] = { suffix = "2" }, -- Frostwall Mine
-    [587] = { suffix = "3" }, -- Frostwall Mine
-    [590] = { mapType = Enum.UIMapType.Zone }, -- Frostwall
+    [572] = { mapType = Enum.UIMapType.World },  -- Draenor
+    [579] = { suffix = "1" },                    -- Lunarfall Excavation
+    [580] = { suffix = "2" },                    -- Lunarfall Excavation
+    [581] = { suffix = "3" },                    -- Lunarfall Excavation
+    [582] = { mapType = Enum.UIMapType.Zone },   -- Lunarfall
+    [585] = { suffix = "1" },                    -- Frostwall Minem
+    [586] = { suffix = "2" },                    -- Frostwall Mine
+    [587] = { suffix = "3" },                    -- Frostwall Mine
+    [590] = { mapType = Enum.UIMapType.Zone },   -- Frostwall
     [625] = { mapType = Enum.UIMapType.Orphan }, -- Dalaran
-    [626] = { mapType = Enum.UIMapType.Micro }, -- Dalaran
+    [626] = { mapType = Enum.UIMapType.Micro },  -- Dalaran
     [627] = { mapType = Enum.UIMapType.Zone },
     [628] = { mapType = Enum.UIMapType.Micro },
     [629] = { mapType = Enum.UIMapType.Micro },
@@ -628,13 +628,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip_AddNormalLine(GameTooltip, description2, true);
             GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-            " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
             GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
             GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
             GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             GameTooltip:Show()
         end)
 
@@ -655,13 +655,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             objective:OnEnter(tracked, title2, description2)
             if (IsModifierKeyDown()) then
                 GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+                    " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
                 GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
                 GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
                 GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+                    "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             end
             GameTooltip:Show()
         end)
@@ -673,13 +673,13 @@ local function CreatePin(x, y, mapID, emit, title, persist, texture, description
             GameTooltip_SetTitle(GameTooltip, title2);
             GameTooltip_AddNormalLine(GameTooltip, description2, true);
             GameTooltip:AddLine(lpadcolor("", 8, " ") ..
-            " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
+                " |A:newplayertutorial-icon-mouse-leftbutton:12:12|a to track/untrack the pin")
             GameTooltip:AddLine(lpadcolor("Ctrl +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to remove the pin")
             GameTooltip:AddLine(lpadcolor("Shift +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to share the pin")
             GameTooltip:AddLine(lpadcolor("Alt +", 8, " ") ..
-            "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
+                "|A:newplayertutorial-icon-mouse-leftbutton:12:12|a to make the pin persistent")
             GameTooltip:Show()
         elseif GameTooltip:IsShown() and GameTooltip:GetOwner() == objective then
             GameTooltip:ClearLines()
@@ -968,19 +968,24 @@ local function PinManager()
 
     local function RemovePin(pin)
         pin.RemoveFromMap()
+        local pinFound = false
         for i, p in ipairs(pins) do
             if p == pin then
-                pins[i] = pins[#pins]
-                pins[#pins] = nil
-                C_Map.ClearUserWaypoint()
-                SupertrackClosest()
-                pin.Release()
-                UpdateTrackerPositions()
-                SavePinsPersistent()
-                return
+                pinFound = true
+                pins[i] = nil
+            end
+            -- if pin is found shift all pins in the pins table
+            if pinFound then
+                pins[i] = pins[i + 1]
             end
         end
+        C_Map.ClearUserWaypoint()
+        SupertrackClosest()
+        pin.Release()
+        UpdateTrackerPositions()
+        SavePinsPersistent()
     end
+
 
     local function UntrackPins()
         for _, p in ipairs(pins) do
@@ -1594,7 +1599,7 @@ SlashCmdList["MPH"] = function(msg)
     elseif msg == "version" then
         local version, build = GetBuildInfo()
         MapPinEnhanced:PrintMSG({ MapPinEnhanced.name .. ": " .. versionMPH,
-            string.format("Game: %s (%d)", version, build) },
+                string.format("Game: %s (%d)", version, build) },
             true)
     elseif msg == "config" or msg == "options" then
         if InterfaceOptionsFrame ~= nil then
@@ -1628,7 +1633,7 @@ function MapPinEnhanced:DistanceTimer(cb)
     if hasBlizzWaypoint then
         local distance = C_Navigation.GetDistance()
         if distance == 0 then
-            cb( -1)
+            cb(-1)
             self.distanceTimer.delay = 1
         else
             cb(distance)
