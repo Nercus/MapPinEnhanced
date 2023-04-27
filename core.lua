@@ -1431,6 +1431,7 @@ function MapPinEnhanced:PLAYER_ENTERING_WORLD(_, isInitialLogin, isReloadingUi)
             }) -- Localize
         else
             self.TomTomLoaded = false
+            SLASH_MPH1 = "/way"
         end
         self:UpdateDistanceTimerState()
     end
@@ -1581,9 +1582,6 @@ function MapPinEnhanced:ParseExport()
     return output
 end
 
-if not MapPinEnhanced.TomTomLoaded then
-    SLASH_MPH1 = "/way"
-end
 SLASH_MPH2 = "/pin"
 SLASH_MPH3 = "/mph"
 
