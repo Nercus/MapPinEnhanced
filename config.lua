@@ -183,6 +183,18 @@ function module:OnEnable()
                     end
                 end,
             },
+            autoTrackNearest = {
+                type = "toggle",
+                name = "Automatically Track Nearest Pin",
+                width = "full",
+                desc = "Automatically Track Nearest Pin when a pin is removed",
+                get = function()
+                    return core.db.global.options.autoTrackNearest
+                end,
+                set = function(info, value)
+                    core.db.global.options.autoTrackNearest = value
+                end,
+            },
         }
     }
 

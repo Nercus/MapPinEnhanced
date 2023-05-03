@@ -192,6 +192,7 @@ local defaults = {
             trackerScale = 1,
             blockMoving = false,
             autoOpenTracker = false,
+            autoTrackNearest = true,
         }
     }
 }
@@ -966,13 +967,38 @@ local function PinManager()
         end
     end
 
+    local function SuperTrackIndex(index)
+        local pinIndex = index
+        if not pins[index] then
+            pinIndex = index - 1
+        end
+        if pinIndex == 0 then
+            return
+        end
+        local pin = pins[pinIndex]
+        if pin then
+            pin.Track(pin.x, pin.y, pin.mapID)
+        end
+    end
+
+
+    local function TrackNext(pinIndex)
+        if MapPinEnhanced.db.global.options.autoTrackNearest then
+            SupertrackClosest()
+        else
+            SuperTrackIndex(pinIndex)
+        end
+    end
+
     local function RemovePin(pin)
         pin.RemoveFromMap()
         local pinFound = false
+        local pinIndex = 0
         for i, p in ipairs(pins) do
             if p == pin then
                 pinFound = true
                 pins[i] = nil
+                pinIndex = i
             end
             -- if pin is found shift all pins in the pins table
             if pinFound then
@@ -980,8 +1006,10 @@ local function PinManager()
             end
         end
         C_Map.ClearUserWaypoint()
-        SupertrackClosest()
         pin.Release()
+        if pin.IsTracked() then
+            TrackNext(pinIndex)
+        end
         UpdateTrackerPositions()
         SavePinsPersistent()
     end
@@ -1044,7 +1072,6 @@ local function PinManager()
         pin = CreatePin(x, y, mapID, function(e)
             if e == "remove" then
                 RemovePin(pin)
-                SupertrackClosest()
             elseif e == "track" then
                 UntrackPins()
                 pin.Track(pin.x, pin.y, pin.mapID)
