@@ -5,6 +5,7 @@
 ## License: All Rights Reserved
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB
+## IconTexture: Interface\AddOns\MapPinEnhanced\assets\logo.blp
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
 ## X-Curse-Project-ID: 441677
