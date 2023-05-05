@@ -17,6 +17,8 @@ local versionMPH = GetAddOnMetadata("MapPinEnhanced", "Version")
 
 
 --@do-not-package@
+-- FIXME: fix problem distance tracking
+-- FIXME: properly remove the waypoint text from supertrackedframe
 -- TODO: Set texture as SuperTrackedFrame Texture
 -- TODO: Be able to overwrite presets
 -- TODO: Add ElvUI Skin, replace font aswell
