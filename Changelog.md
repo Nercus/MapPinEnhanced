@@ -1,1 +1,2 @@
-- Fix reordering of pins when removing a pin
+- Bump interface version for 10.1
+- Add option to toggle the "auto track nearest" feature
