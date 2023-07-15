@@ -1281,28 +1281,33 @@ end
 
 function MapPinEnhanced:UpdateInfoState()
     local enable = true
+
     if not self.db.global.options["showInfoOnSuperTrackedFrame"] then
         enable = false
     end
     if not C_SuperTrack.IsSuperTrackingAnything() then
         enable = false
     end
-    if C_SuperTrack.IsSuperTrackingQuest() then
-        enable = false
-    end
-    if C_Navigation.WasClampedToScreen() then
-        enable = false
-    end
-    if enable then
-        local title, texture, isPersistent = self.pinManager.GetTrackedPinTitleAndTexture()
-        self:UpdateTrackerInfo(title, texture, isPersistent)
-        if self.superTrackedInfo then
-            self.superTrackedInfo:Show()
-        end
-    else
+
+
+    if not enable then
         if self.superTrackedInfo then
             self.superTrackedInfo:Hide()
         end
+        return
+    end
+
+    local title, texture, isPersistent = self.pinManager.GetTrackedPinTitleAndTexture()
+    self:UpdateTrackerInfo(title, texture, isPersistent)
+
+    if C_Navigation.WasClampedToScreen() then
+        if self.superTrackedInfo then
+            self.superTrackedInfo:Hide()
+        end
+        return
+    end
+    if self.superTrackedInfo then
+        self.superTrackedInfo:Show()
     end
 end
 
