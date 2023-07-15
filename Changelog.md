@@ -1,2 +1,4 @@
-- Bump interface version for 10.1
-- Add option to toggle the "auto track nearest" feature
+- Bump interface version for 10.1.5
+- Fixed nil error introduced in 10.1.5
+- Fixed issue with insufficient pin info updates
+- Fixed issue with supertracked pins sometimes not showing a waypoint
