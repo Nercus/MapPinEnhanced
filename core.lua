@@ -1007,9 +1007,9 @@ local function PinManager()
                 pins[i] = pins[i + 1]
             end
         end
-        C_Map.ClearUserWaypoint()
         pin.Release()
         if pin.IsTracked() then
+            C_Map.ClearUserWaypoint()
             TrackNext(pinIndex)
         end
         UpdateTrackerPositions()
