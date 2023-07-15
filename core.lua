@@ -1358,9 +1358,12 @@ function MapPinEnhanced:USER_WAYPOINT_UPDATED()
     if userwaypoint then
         self.blockWAYPOINTevent = true
 
-        -- -- tracking questid now
-        local superTrackedQuestID = C_SuperTrack.GetSuperTrackedQuestID()
-        if superTrackedQuestID ~= 0 then
+        local superTrackingQuest = C_SuperTrack.IsSuperTrackingQuest()
+        local superTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+        local superTrackingContent = C_SuperTrack.IsSuperTrackingContent()
+
+        -- is not tracking anything or is tracking a waypoint
+        if not superTrackingQuest and not superTrackingCorpse and not superTrackingContent then
             C_SuperTrack.SetSuperTrackedUserWaypoint(true)
         end
         local title, texture = detectPinData()
