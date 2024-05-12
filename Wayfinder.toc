@@ -1,0 +1,10 @@
+## Interface: 100207
+## Author: Nerc, Eminos and Esky
+## Title: Wayfinder
+## Version: 3.0.0
+## License: GNU General Public License v3.0
+## Notes: Enhances the functionality of the map pin
+## SavedVariables: WayfinderDB
+
+libs\libs.xml
+Wayfinder.lua
