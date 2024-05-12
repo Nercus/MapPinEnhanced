@@ -1,2 +1,1 @@
-# Update 1.5
-- Added Export Button to import box
+- Bump interface version for 10.2
