@@ -3,7 +3,7 @@ local Wayfinder = select(2, ...)
 local commandList = {} ---@type table<string, function>
 
 
-SLASH_Wayfinder1, SLASH_Wayfinder2 = "/find", "/wayfinder"
+SLASH_Wayfinder1, SLASH_Wayfinder2 = "/find", "/wf"
 if not Wayfinder.isTomTomLoaded then
   SLASH_Wayfinder3 = "/way"
 end

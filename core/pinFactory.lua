@@ -1,0 +1,1 @@
+-- NOTE: Here the big pin "object" is created, deleted and managed (icon change) containing the pin data, the world pin, the minimap pin and the worldmap pin.
