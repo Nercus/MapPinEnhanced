@@ -9,4 +9,5 @@
   <Script file="persist.lua" />
   <Script file="defaults.lua" />
   <Script file="modules.lua" />
+  <Script file="textures.lua" />
 </Ui>
