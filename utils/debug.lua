@@ -60,15 +60,7 @@ end)
 local devAddonList = {
   "!BugGrabber",
   "BugSack",
-  "DialogKey",
-  "OPie",
   "TextureAtlasViewer",
-  "WeakAuras",
-  "WeakAurasArchive",
-  "WeakAurasModelPaths",
-  "WeakAurasOptions",
-  "WeakAurasTemplates",
-  "WeakAurasCompanion",
   "DevTool",
   "Wayfinder",
   "Wowlua"

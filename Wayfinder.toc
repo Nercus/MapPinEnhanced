@@ -7,4 +7,5 @@
 ## SavedVariables: WayfinderDB
 
 libs\libs.xml
+utils\utils.xml
 Wayfinder.lua
