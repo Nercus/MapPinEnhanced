@@ -9,6 +9,8 @@ local DisableAllAddOns = C_AddOns.DisableAllAddOns
 local EnableAddOn = C_AddOns.EnableAddOn
 local DisableAddOn = C_AddOns.DisableAddOn
 local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
+local GetNumAddOns = C_AddOns.GetNumAddOns
+local GetAddOnInfo = C_AddOns.GetAddOnInfo
 ---@type function
 local ReloadUI = C_UI.Reload
 
@@ -70,8 +72,16 @@ local devAddonList = {
 
 local function loadDevAddons(isDev)
   if not isDev then
-    EnableAllAddOns()
     DisableAddOn(AddOnName)
+    local loadedAddons = Wayfinder:GetVar("loadedAddons") or {}
+    if #loadedAddons == 0 then
+      EnableAllAddOns()
+      return
+    end
+    for i = 1, #loadedAddons do
+      local name = loadedAddons[i] ---@type string
+      EnableAddOn(name)
+    end
   else
     DisableAllAddOns()
     for i = 1, #devAddonList do
@@ -124,6 +134,16 @@ local function loadDevMode(_, loadedAddon)
   if (devModeEnabled) then
     Wayfinder:Print("Dev mode enabled")
     AddDevReload()
+  else
+    -- check what addons are loaded right now and save them
+    local loadedAddons = {}
+    for i = 1, GetNumAddOns() do
+      local name, _, _, _, reason = GetAddOnInfo(i)
+      if reason ~= "DISABLED" then
+        table.insert(loadedAddons, name)
+      end
+    end
+    Wayfinder:SaveVar("loadedAddons", loadedAddons)
   end
 end
 
