@@ -6,4 +6,7 @@ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
     <Script file="pinManager.lua" />
     <Include file="templates\MinimapPin.xml" />
     <Include file="templates\WorldmapPin.xml" />
+
+    <Include file="providers\providers.xml" />
+
 </Ui>

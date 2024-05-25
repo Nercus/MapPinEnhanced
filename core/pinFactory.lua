@@ -2,7 +2,7 @@
 local Wayfinder = select(2, ...)
 ---@class PinFactory : Module
 local PinFactory = Wayfinder:CreateModule("PinFactory")
--- NOTE: Here the big pin "object" is created, deleted and managed (i.e. icon change) containing the pin data, the world pin, the minimap pin and the worldmap pin.
+-- NOTE: Here the big pin "object" is created, deleted and managed (i.e. icon change) containing the pin data, the world pin, the minimap pin and the worldmap pin. (a singular pin object)
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
