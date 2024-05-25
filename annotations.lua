@@ -4,6 +4,17 @@
 ---@field mapID number
 ---@field x number
 ---@field y number
+---@field title string?
+---@field texture string?
+---@field usesAtlas boolean?
+
+
+---@class PinObject
+---@field id string
+---@field worldPin Frame
+---@field minimapPin Frame
+---@field pinData pinData
+
 
 
 ---@param frameType string

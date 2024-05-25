@@ -10,13 +10,9 @@ local WorldmapPool = CreateFramePool("Button", nil, "WayfinderWorldmapPinTemplat
 local MinimapPool = CreateFramePool("Frame", nil, "WayfinderMinimapPinTemplate") ---@as Frame
 
 ---@param pinData pinData
----@return table <Frame, Frame, pinData>
-function PinFactory:CreatePin(pinData)
-    assert(pinData, "Pin data is required to create a pin.")
-    assert(pinData.mapID, "Pin data must contain a mapID.")
-    assert(pinData.x, "Pin data must contain an x coordinate.")
-    assert(pinData.y, "Pin data must contain a y coordinate.")
-
+---@param pinID string
+---@return PinObject
+function PinFactory:CreatePin(pinData, pinID)
     local worldPin = WorldmapPool:Acquire()
     local minimapPin = MinimapPool:Acquire()
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
@@ -25,6 +21,7 @@ function PinFactory:CreatePin(pinData)
     HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
 
     return {
+        pinID = pinID,
         worldPin = worldPin,
         minimapPin = minimapPin,
         pinData = pinData
