@@ -6,7 +6,7 @@ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
         <Size x="15" y="15"/>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="normalTexture" file="Interface\AddOns\Wayfinder\assets\SimplePin.blp" setAllPoints="true"/>
+                <Texture parentKey="normalTexture" file="Interface\AddOns\Wayfinder\assets\SimplePin.blp" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false"/>
             </Layer>
         </Layers>
         <Scripts>
