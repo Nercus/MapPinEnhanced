@@ -1,12 +1,9 @@
----@type string
-local AddOnName = ...
-
 ---@class Wayfinder
 local Wayfinder = select(2, ...)
 
 
 local defaultColor = ConsoleGetColorFromType(1)
-local prefix = Wayfinder:WrapTextInColor(AddOnName .. ": ", defaultColor)
+local prefix = Wayfinder:WrapTextInColor(Wayfinder.addonName .. ": ", defaultColor)
 
 
 ---Print a styled message to the chat

@@ -1,6 +1,3 @@
----@type string
-local AddOnName = ...
-
 ---@class Wayfinder
 local Wayfinder = select(2, ...)
 
@@ -72,7 +69,7 @@ local devAddonList = {
 
 local function loadDevAddons(isDev)
   if not isDev then
-    DisableAddOn(AddOnName)
+    DisableAddOn(Wayfinder.addonName)
     local loadedAddons = Wayfinder:GetVar("loadedAddons") or {}
     if #loadedAddons == 0 then
       EnableAllAddOns()
@@ -127,7 +124,7 @@ local function AddDevReload()
 end
 
 local function loadDevMode(_, loadedAddon)
-  if loadedAddon ~= AddOnName then
+  if loadedAddon ~= Wayfinder.addonName then
     return
   end
   local devModeEnabled = Wayfinder:GetVar("devMode")
