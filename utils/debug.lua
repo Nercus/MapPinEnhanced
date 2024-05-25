@@ -111,10 +111,12 @@ local function AddDevReload()
   local text = f:CreateFontString(nil, "OVERLAY")
   text:SetFontObject(GameFontNormal)
   text:SetPoint("CENTER")
-  text:SetText("Press 1 to reload UI | Press 0 to exit dev mode")
+  text:SetText("Press 1 to reload UI | Press 2 to add Wayfinder to devtools | Press 0 to exit dev mode")
   f:SetScript("OnKeyDown", function(_, key)
     if key == "1" then
       ReloadUI()
+    elseif key == "2" then
+      Wayfinder:Debug(Wayfinder)
     elseif key == "0" then
       setDevMode()
     end
