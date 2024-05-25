@@ -33,13 +33,14 @@ function PinProvider:USER_WAYPOINT_UPDATED()
     if not superTrackingQuest and not superTrackingCorpse and not superTrackingContent then
         SetSuperTrackedUserWaypoint(true)
     end
-    local title, texture = PinProvider:DetectMouseFocusPinInfo()
+    local title, texture, usesAtlas = PinProvider:DetectMouseFocusPinInfo()
     PinManager:AddPin({
         mapID = wp.uiMapID,
         x = wp.position.x,
         y = wp.position.y,
         title = title,
-        texture = texture
+        texture = texture,
+        usesAtlas = usesAtlas
     })
 
     blockEvent = false
