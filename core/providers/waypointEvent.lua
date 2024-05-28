@@ -40,7 +40,8 @@ function PinProvider:USER_WAYPOINT_UPDATED()
         y = wp.position.y,
         title = title,
         texture = texture,
-        usesAtlas = usesAtlas
+        usesAtlas = usesAtlas,
+        setTracked = true
     })
 
     blockEvent = false

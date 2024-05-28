@@ -24,6 +24,14 @@ function WayfinderMinimapPinMixin:OnLeave()
     print("WayfinderMinimapPinMixin:OnLeave()")
 end
 
+function WayfinderMinimapPinMixin:Track()
+  self:SetAlpha(1)
+end
+
+function WayfinderMinimapPinMixin:Untrack()
+  self:SetAlpha(0.5)
+end
+
 ---@param pinData pinData
 function WayfinderMinimapPinMixin:Setup(pinData)
     assert(pinData, "pinData is nil")

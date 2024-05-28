@@ -45,6 +45,16 @@ function WayfinderWorldPinMixin:OnLeave()
     GameTooltip:Hide()
 end
 
+
+function WayfinderWorldPinMixin:Track()
+  self:SetAlpha(1)
+end
+
+function WayfinderWorldPinMixin:Untrack()
+  self:SetAlpha(0.5)
+end
+
+
 ---@param pinData pinData
 function WayfinderWorldPinMixin:Setup(pinData)
     assert(pinData, "pinData is nil")
