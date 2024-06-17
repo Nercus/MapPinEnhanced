@@ -7,7 +7,7 @@
 ## IconTexture: Interface\AddOns\Wayfinder\assets\SimplePin.blp
 ## SavedVariables: WayfinderDB
 
-Wayfinder.lua
 libs\libs.xml
+Wayfinder.lua
 utils\utils.xml
 core\core.xml

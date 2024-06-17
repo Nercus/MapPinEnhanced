@@ -8,7 +8,7 @@ local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local WorldmapPool = CreateFramePool("Button", nil, "WayfinderWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "WayfinderMinimapPinTemplate")
-local WorldPool = CreateFramePool("Frame", nil, "WayfinderWorldPinTemplate")
+-- local WorldPool = CreateFramePool("Frame", nil, "WayfinderWorldPinTemplate")
 
 
 
@@ -23,12 +23,12 @@ function PinFactory:CreatePin(pinData, pinID)
     ---@cast worldmapPin WayfinderWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
     ---@cast minimapPin WayfinderMinimapPinMixin
-    local worldPin = WorldPool:Acquire()
+    -- local worldPin = WorldPool:Acquire()
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
-    worldPin:Setup(pinData)
+    -- worldPin:Setup(pinData)
 
     HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
@@ -36,38 +36,38 @@ function PinFactory:CreatePin(pinData, pinID)
 
     local isTracked = false
     local function Track()
-      worldmapPin:Track()
-      minimapPin:Track()
-      worldPin:Track()
-      SetSuperTrackedUserWaypoint(true)
-      isTracked = true
+        worldmapPin:Track()
+        minimapPin:Track()
+        -- worldPin:Track()
+        SetSuperTrackedUserWaypoint(true)
+        isTracked = true
     end
 
     local function Untrack()
-      worldmapPin:Untrack()
-      minimapPin:Untrack()
-      worldPin:Untrack()
-      isTracked = false
+        worldmapPin:Untrack()
+        minimapPin:Untrack()
+        -- worldPin:Untrack()
+        isTracked = false
     end
 
     worldmapPin:SetClickCallback(function()
-      if isTracked then
-        Untrack()
-      else
-        Track()
-      end
+        if isTracked then
+            Untrack()
+        else
+            Track()
+        end
     end)
 
 
 
     if pinData.setTracked then
-      Track()
+        Track()
     end
 
 
     return {
         pinID = pinID,
-        worldPin = worldPin,
+        -- worldPin = worldPin,
         minimapPin = minimapPin,
         pinData = pinData,
         Track = Track,

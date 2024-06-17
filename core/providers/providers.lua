@@ -46,16 +46,19 @@ end
 ---@return string | nil name, string | nil texture, boolean isAtlas
 function PinProvider:DetectMouseFocusPinInfo()
     ---@type table
-    local mouseFocus = GetMouseFocus()
+    local mouseFocus = GetMouseFoci()
     if not mouseFocus then
         return nil, nil, false
     end
-    local pinTemplate = mouseFocus.pinTemplate ---@type string
+    local pinTemplate = nil ---@type string | nil
+    for _, mouseFocusTable in pairs(mouseFocus) do
+        pinTemplate = mouseFocusTable.pinTemplate ---@type string
+        if pinTemplate and (string.find(pinTemplate, "%a+PinTemplate")) then
+            return ParseBlizzardMapPinInfo(mouseFocusTable)
+        end
+    end
     if not pinTemplate then
         return nil, nil, false
-    end
-    if (string.find(pinTemplate, "%a+PinTemplate")) then
-        return ParseBlizzardMapPinInfo(mouseFocus)
     end
     return nil, nil, false
 end

@@ -24,18 +24,15 @@ function PinManager:GetPinByID(pinID)
     return self.Pins[pinID]
 end
 
-
-
 function PinManager:TrackPin(pin)
-  for _, p in pairs(self.Pins) do
-    if p:IsTracked() then
-      p:Untrack()
-      pin:Track()
-      return
+    for _, p in pairs(self.Pins) do
+        if p:IsTracked() then
+            p:Untrack()
+            pin:Track()
+            return
+        end
     end
-  end
 end
-
 
 ---add a pin
 ---@param pinData pinData
@@ -51,7 +48,6 @@ function PinManager:AddPin(pinData)
         -- NOTE: maybe we should notify the player here
         return
     end
-    local pinID = pinID
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     self.Pins[pinID] = pinObject
 end

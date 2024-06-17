@@ -40,24 +40,22 @@ function WayfinderWorldMapPinMixin:OnLeave()
     GameTooltip:Hide()
 end
 
-
 function WayfinderWorldMapPinMixin:SetClickCallback(callback)
     self.callback = callback
 end
 
-function WayfinderWorldMapPinMixin:OnClick(button)
+function WayfinderWorldMapPinMixin:OnClick()
     if self.callback then
         self.callback(self)
     end
 end
 
-
 function WayfinderWorldMapPinMixin:Track()
-  self:SetAlpha(1)
+    self:SetAlpha(1)
 end
 
 function WayfinderWorldMapPinMixin:Untrack()
-  self:SetAlpha(0.5)
+    self:SetAlpha(0.5)
 end
 
 ---@param pinData pinData

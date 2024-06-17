@@ -4,6 +4,7 @@
 ---@field mapID number
 ---@field x number
 ---@field y number
+---@field setTracked boolean? set to true to autotrack this pin on creation
 ---@field title string?
 ---@field texture string?
 ---@field usesAtlas boolean?
@@ -14,6 +15,9 @@
 ---@field worldPin Frame
 ---@field minimapPin Frame
 ---@field pinData pinData
+---@field Track fun()
+---@field Untrack fun()
+---@field IsTracked fun():boolean
 
 
 

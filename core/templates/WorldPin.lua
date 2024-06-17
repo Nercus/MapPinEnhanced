@@ -1,6 +1,7 @@
 ---@class WayfinderWorldPinMixin : Frame
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
+---@field titleDisplay FontString
 WayfinderWorldPinMixin = {}
 
 
@@ -24,7 +25,6 @@ function WayfinderWorldPinMixin:SetTitle(title)
     self.titleDisplay:SetText(title)
 end
 
-
 function WayfinderWorldPinMixin:OnLoad()
     print("WayfinderWorldPinMixin:OnLoad()")
 end
@@ -45,15 +45,13 @@ function WayfinderWorldPinMixin:OnLeave()
     GameTooltip:Hide()
 end
 
-
 function WayfinderWorldPinMixin:Track()
-  self:SetAlpha(1)
+    self:SetAlpha(1)
 end
 
 function WayfinderWorldPinMixin:Untrack()
-  self:SetAlpha(0.5)
+    self:SetAlpha(0.5)
 end
-
 
 ---@param pinData pinData
 function WayfinderWorldPinMixin:Setup(pinData)
@@ -75,7 +73,7 @@ function WayfinderWorldPinMixin:Setup(pinData)
     self.pinData = pinData
 
 
-    if WayfinderCompass then
-        WayfinderCompass:AddPin(self)
-    end
+    -- if WayfinderCompass then
+    --     WayfinderCompass:AddPin(self)
+    -- end
 end
