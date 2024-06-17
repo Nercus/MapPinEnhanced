@@ -1,5 +1,5 @@
-## Interface: 100207
-## Author: Nerc, Eminos and Esky
+## Interface: 110000
+## Author: Nerc and Eminos
 ## Title: Wayfinder
 ## Version: 3.0.0
 ## License: GNU General Public License v3.0
