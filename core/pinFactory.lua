@@ -8,8 +8,6 @@ local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local WorldmapPool = CreateFramePool("Button", nil, "WayfinderWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "WayfinderMinimapPinTemplate")
--- local WorldPool = CreateFramePool("Frame", nil, "WayfinderWorldPinTemplate")
-
 
 
 local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
@@ -23,22 +21,20 @@ function PinFactory:CreatePin(pinData, pinID)
     ---@cast worldmapPin WayfinderWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
     ---@cast minimapPin WayfinderMinimapPinMixin
-    -- local worldPin = WorldPool:Acquire()
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
-    -- worldPin:Setup(pinData)
 
-    HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
-    HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
+    -- NOTE: Commented out because on some error on beta
+    --  HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
+    --  HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
 
 
     local isTracked = false
     local function Track()
         worldmapPin:Track()
         minimapPin:Track()
-        -- worldPin:Track()
         SetSuperTrackedUserWaypoint(true)
         isTracked = true
     end
@@ -46,7 +42,6 @@ function PinFactory:CreatePin(pinData, pinID)
     local function Untrack()
         worldmapPin:Untrack()
         minimapPin:Untrack()
-        -- worldPin:Untrack()
         isTracked = false
     end
 
@@ -57,8 +52,6 @@ function PinFactory:CreatePin(pinData, pinID)
             Track()
         end
     end)
-
-
 
     if pinData.setTracked then
         Track()
