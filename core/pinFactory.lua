@@ -2,7 +2,6 @@
 local Wayfinder = select(2, ...)
 ---@class PinFactory : Module
 local PinFactory = Wayfinder:CreateModule("PinFactory")
--- NOTE: Here the big pin "object" is created, deleted and managed (i.e. icon change) containing the pin data, the world pin, the minimap pin and the worldmap pin. (a singular pin object)
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
@@ -26,9 +25,8 @@ function PinFactory:CreatePin(pinData, pinID)
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
 
-    -- NOTE: Commented out because on some error on beta
-    --  HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
-    --  HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
+    HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
+    HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
 
 
     local isTracked = false

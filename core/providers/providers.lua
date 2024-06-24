@@ -4,13 +4,15 @@ local Wayfinder = select(2, ...)
 ---@class PinProvider : Module
 local PinProvider = Wayfinder:CreateModule("PinProvider")
 
--- NOTE: All the different providers are defined here. -> Ctrl + Click on Map, the SetUserWaypoint function, slash commands, etc.
-
-
 local PIN_TEXTURE_OVERRIDES = {
     ["worldquest-questmarker-questbang"] = "worldquest-tracker-questmarker",
 }
 
+
+---@class FrameWithTemplate : Frame
+---@field pinTemplate string
+---@diagnostic disable-next-line: no-unknown GetMouseFoci is not defined in the extension yet
+local GetMouseFoci = GetMouseFoci ---@type fun(): table<number, FrameWithTemplate> | nil
 
 ---@param mouseFocus table
 ---@return string | nil name, string | nil texture, boolean isAtlas
@@ -29,7 +31,7 @@ local function ParseBlizzardMapPinInfo(mouseFocus)
         local texture = pinTexture:GetAtlas() ---@type string | nil
         if texture then
             if PIN_TEXTURE_OVERRIDES[texture] then
-                texture = PIN_TEXTURE_OVERRIDES[texture]
+                texture = PIN_TEXTURE_OVERRIDES[texture] ---@type string
             end
             return name, texture, true
         else
@@ -45,14 +47,13 @@ end
 ---Detects the pin info of the mouse focus. This is used to get the name and texture of the pin.
 ---@return string | nil name, string | nil texture, boolean isAtlas
 function PinProvider:DetectMouseFocusPinInfo()
-    ---@type table
     local mouseFocus = GetMouseFoci()
     if not mouseFocus then
         return nil, nil, false
     end
     local pinTemplate = nil ---@type string | nil
-    for _, mouseFocusTable in pairs(mouseFocus) do
-        pinTemplate = mouseFocusTable.pinTemplate ---@type string
+    for _, mouseFocusTable in ipairs(mouseFocus) do
+        pinTemplate = mouseFocusTable.pinTemplate
         if pinTemplate and (string.find(pinTemplate, "%a+PinTemplate")) then
             return ParseBlizzardMapPinInfo(mouseFocusTable)
         end
