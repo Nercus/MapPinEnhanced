@@ -1,0 +1,33 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    <Script file="TrackerEntry.lua" />
+    <Button name="MapPinEnhancedTrackerEntryTemplate" mixin="MapPinEnhancedTrackerEntryMixin"
+        virtual="true" enableMouse="true">
+        <Size x="250" y="20" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="normalTexture"
+                    file="Interface\AddOns\MapPinEnhanced\assets\SimplePin.blp" setAllPoints="true"
+                    texelSnappingBias="0" snapToPixelGrid="false">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="5" />
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="titleDisplay" inherits="GameFontNormal">
+                    <Size x="225" y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="30" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>

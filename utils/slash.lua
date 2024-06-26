@@ -21,7 +21,7 @@ function SlashCommandHandler(msg)
     if commandList[command] then
         pcall(commandList[command], unpack(args))
     else
-        -- NOTE: here can be a default call for a slash command without arguments
+        MapPinEnhanced:TogglePinTracker()
     end
 end
 

@@ -3,7 +3,11 @@ local MapPinEnhanced = select(2, ...)
 
 -- DEFAULTS is a table that stores the default values for various settings.
 local DEFAULTS = {
-
+    ["trackerPosition"] = {
+        ["x"] = GetScreenWidth() / 2 - 200,
+        ["y"] = GetScreenHeight() / 2 - 200
+    },
+    ["trackerVisible"] = true
 }
 
 ---Retrieves the default value for a given set of keys.
@@ -19,9 +23,10 @@ function MapPinEnhanced:GetDefault(...)
             end
             return currentTable[key]
         end
-        if not currentTable[key] then
+        if currentTable[key] == nil then
             assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
         end
-        currentTable = currentTable[key] ---@type table
+        ---@diagnostic disable-next-line: no-unknown currentTable should be a table here
+        currentTable = currentTable[key] -- traverse to the next table
     end
 end

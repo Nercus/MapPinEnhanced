@@ -1,0 +1,56 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    <Include file="TrackerEntry.xml" />
+
+    <Script file="Tracker.lua" />
+    <Frame name="MapPinEnhancedTrackerTemplate" mixin="MapPinEnhancedTrackerMixin" virtual="true"
+        toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
+        registerForDrag="LeftButton">
+        <Size x="250" y="400" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentBackground" file="Interface\Tooltips\UI-Tooltip-Background">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString name="$parentTitle" inherits="GameFontNormal"
+                    text="Map Pin Enhanced Tracker"
+                    justifyH="CENTER">
+                    <Size x="250" y="25" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button>
+                <Size x="25" y="25" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <NormalTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Up" />
+                <PushedTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Down" />
+                <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" />
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():Close();
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnMouseDown method="OnMouseDown" />
+            <OnMouseUp method="OnMouseUp" />
+        </Scripts>
+    </Frame>
+</Ui>
