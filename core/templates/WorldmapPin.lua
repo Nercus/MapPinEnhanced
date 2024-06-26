@@ -1,30 +1,30 @@
----@class WayfinderWorldMapPinMixin : Frame
+---@class MapPinEnhancedWorldMapPinMixin : Frame
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
-WayfinderWorldMapPinMixin = {}
+MapPinEnhancedWorldMapPinMixin = {}
 
 
-function WayfinderWorldMapPinMixin:SetNormalTexture(normalTexture)
+function MapPinEnhancedWorldMapPinMixin:SetNormalTexture(normalTexture)
     self.normalTexture:SetTexture(normalTexture)
 end
 
-function WayfinderWorldMapPinMixin:SetHighlightTexture(highlightTexture)
+function MapPinEnhancedWorldMapPinMixin:SetHighlightTexture(highlightTexture)
     self.highlightTexture:SetTexture(highlightTexture)
 end
 
-function WayfinderWorldMapPinMixin:SetNormalAtlas(normalTexture)
+function MapPinEnhancedWorldMapPinMixin:SetNormalAtlas(normalTexture)
     self.normalTexture:SetAtlas(normalTexture)
 end
 
-function WayfinderWorldMapPinMixin:SetHighlightAtlas(highlightTexture)
+function MapPinEnhancedWorldMapPinMixin:SetHighlightAtlas(highlightTexture)
     self.highlightTexture:SetAtlas(highlightTexture)
 end
 
-function WayfinderWorldMapPinMixin:OnLoad()
-    print("WayfinderWorldMapPinMixin:OnLoad()")
+function MapPinEnhancedWorldMapPinMixin:OnLoad()
+    print("MapPinEnhancedWorldMapPinMixin:OnLoad()")
 end
 
-function WayfinderWorldMapPinMixin:OnEnter()
+function MapPinEnhancedWorldMapPinMixin:OnEnter()
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -16, -4)
     if self.texture then
         GameTooltip:AddAtlas(self.texture, true)
@@ -36,30 +36,30 @@ function WayfinderWorldMapPinMixin:OnEnter()
     GameTooltip:Show()
 end
 
-function WayfinderWorldMapPinMixin:OnLeave()
+function MapPinEnhancedWorldMapPinMixin:OnLeave()
     GameTooltip:Hide()
 end
 
-function WayfinderWorldMapPinMixin:SetClickCallback(callback)
+function MapPinEnhancedWorldMapPinMixin:SetClickCallback(callback)
     self.callback = callback
 end
 
-function WayfinderWorldMapPinMixin:OnClick()
+function MapPinEnhancedWorldMapPinMixin:OnClick()
     if self.callback then
         self.callback(self)
     end
 end
 
-function WayfinderWorldMapPinMixin:Track()
+function MapPinEnhancedWorldMapPinMixin:Track()
     self:SetAlpha(1)
 end
 
-function WayfinderWorldMapPinMixin:Untrack()
+function MapPinEnhancedWorldMapPinMixin:Untrack()
     self:SetAlpha(0.5)
 end
 
 ---@param pinData pinData
-function WayfinderWorldMapPinMixin:Setup(pinData)
+function MapPinEnhancedWorldMapPinMixin:Setup(pinData)
     assert(pinData, "pinData is nil")
     if pinData.texture then
         if pinData.usesAtlas then

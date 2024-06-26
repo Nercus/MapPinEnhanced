@@ -1,13 +1,13 @@
 ## Interface: 110000
 ## Author: Nerc and Eminos
-## Title: Wayfinder
+## Title: Map Pin Enhanced
 ## Version: 3.0.0
 ## License: GNU General Public License v3.0
 ## Notes: Enhances the functionality of the map pin
-## IconTexture: Interface\AddOns\Wayfinder\assets\SimplePin.blp
-## SavedVariables: WayfinderDB
+## IconTexture: Interface\AddOns\MapPinEnhanced\assets\SimplePin.blp
+## SavedVariables: MapPinEnhancedDB
 
 libs\libs.xml
-Wayfinder.lua
+MapPinEnhanced.lua
 utils\utils.xml
 core\core.xml

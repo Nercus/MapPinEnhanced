@@ -1,8 +1,8 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 ---@class PinProvider : Module
-local PinProvider = Wayfinder:CreateModule("PinProvider")
+local PinProvider = MapPinEnhanced:CreateModule("PinProvider")
 
 local PIN_TEXTURE_OVERRIDES = {
     ["worldquest-questmarker-questbang"] = "worldquest-tracker-questmarker",

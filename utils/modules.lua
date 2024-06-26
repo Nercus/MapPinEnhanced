@@ -1,6 +1,6 @@
----@class Wayfinder
+---@class MapPinEnhanced
 ---@field modules table<string, Module>
-local Wayfinder = select(2, ...)
+local MapPinEnhanced = select(2, ...)
 
 ---@class Module
 ---@field name string
@@ -8,19 +8,19 @@ local Wayfinder = select(2, ...)
 
 ---@param name string
 ---@return Module
-function Wayfinder:CreateModule(name)
-  local module = {
-    name = name,
-  } ---@type Module
-  if (not self.modules) then
-    self.modules = {}
-  end
-  self.modules[name] = module
-  return module
+function MapPinEnhanced:CreateModule(name)
+    local module = {
+        name = name,
+    } ---@type Module
+    if (not self.modules) then
+        self.modules = {}
+    end
+    self.modules[name] = module
+    return module
 end
 
 ---@param name string
 ---@return Module
-function Wayfinder:GetModule(name)
-  return self.modules[name]
+function MapPinEnhanced:GetModule(name)
+    return self.modules[name]
 end

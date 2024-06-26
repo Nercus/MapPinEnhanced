@@ -1,12 +1,12 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 ---@class PinFactory : Module
-local PinFactory = Wayfinder:CreateModule("PinFactory")
+local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
-local WorldmapPool = CreateFramePool("Button", nil, "WayfinderWorldmapPinTemplate")
-local MinimapPool = CreateFramePool("Frame", nil, "WayfinderMinimapPinTemplate")
+local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
+local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 
 
 local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
@@ -17,16 +17,16 @@ local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
 ---@return PinObject
 function PinFactory:CreatePin(pinData, pinID)
     local worldmapPin = WorldmapPool:Acquire()
-    ---@cast worldmapPin WayfinderWorldMapPinMixin
+    ---@cast worldmapPin MapPinEnhancedWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
-    ---@cast minimapPin WayfinderMinimapPinMixin
+    ---@cast minimapPin MapPinEnhancedMinimapPinMixin
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
 
-    HBDP:AddWorldMapIconMap(Wayfinder, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
-    HBDP:AddMinimapIconMap(Wayfinder, minimapPin, mapID, x, y, false, false)
+    HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
+    HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
 
 
     local isTracked = false

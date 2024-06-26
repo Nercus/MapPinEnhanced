@@ -1,18 +1,18 @@
--- ---@class WayfinderCompassMixin : Frame
+-- ---@class MapPinEnhancedCompassMixin : Frame
 -- ---@field background Texture
--- WayfinderCompassMixin = {}
--- WayfinderCompassMixin.pins = {}
+-- MapPinEnhancedCompassMixin = {}
+-- MapPinEnhancedCompassMixin.pins = {}
 
--- function WayfinderCompassMixin:OnLoad()
---     print("WayfinderCompassMixin:OnLoad()")
+-- function MapPinEnhancedCompassMixin:OnLoad()
+--     print("MapPinEnhancedCompassMixin:OnLoad()")
 -- end
 
--- function WayfinderCompassMixin:OnEnter()
---     print("WayfinderCompassMixin:OnEnter()")
+-- function MapPinEnhancedCompassMixin:OnEnter()
+--     print("MapPinEnhancedCompassMixin:OnEnter()")
 -- end
 
--- function WayfinderCompassMixin:OnLeave()
---     print("WayfinderCompassMixin:OnLeave()")
+-- function MapPinEnhancedCompassMixin:OnLeave()
+--     print("MapPinEnhancedCompassMixin:OnLeave()")
 -- end
 
 
@@ -68,11 +68,11 @@
 
 
 -- local GetPlayerFacing = GetPlayerFacing
--- function WayfinderCompassMixin:OnUpdate()
+-- function MapPinEnhancedCompassMixin:OnUpdate()
 --   -- TODO: add smart throtteling (maybe based on facing change)
 --   local facing = GetPlayerFacing()
 --   -- print("facing: " .. facing)
---   if WayfinderCompassMixin.previousFacing and WayfinderCompassMixin.previousFacing == facing then
+--   if MapPinEnhancedCompassMixin.previousFacing and MapPinEnhancedCompassMixin.previousFacing == facing then
 --     -- player has not changed facing
 --     -- check if camera angle has changed by tracking supertrackednavframe x position
 --     local superTrackingAngle = GetSuperTrackedCameraAngle(facing)
@@ -84,7 +84,7 @@
 --     -- facing changed
 --   end
 
---   WayfinderCompassMixin.previousFacing = GetPlayerFacing()
+--   MapPinEnhancedCompassMixin.previousFacing = GetPlayerFacing()
 
 
 --   local playerFacing = GetPlayerFacing()
@@ -101,7 +101,7 @@
 -- end
 
 
--- function WayfinderCompassMixin:AddPin(worldPin)
+-- function MapPinEnhancedCompassMixin:AddPin(worldPin)
 --     worldPin:SetPoint("CENTER", self, "CENTER", 10,20)
 --     worldPin:Show()
 --     table.insert(self.pins, worldPin)

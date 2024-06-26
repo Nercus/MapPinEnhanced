@@ -1,12 +1,12 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 ---@class PinProvider : Module
-local PinProvider = Wayfinder:GetModule("PinProvider")
+local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 
 
 ---@class PinManager
-local PinManager = Wayfinder:GetModule("PinManager")
+local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 
 local GetUserWaypoint = C_Map.GetUserWaypoint
@@ -47,6 +47,6 @@ function PinProvider:USER_WAYPOINT_UPDATED()
     blockEvent = false
 end
 
-Wayfinder:RegisterEvent("USER_WAYPOINT_UPDATED", function()
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
     PinProvider:USER_WAYPOINT_UPDATED()
 end)

@@ -1,10 +1,10 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 
 local TEXTURES = {
-    ["icon"] = "Interface\\AddOns\\Wayfinder\\assets\\icon.blp",
-    ["atlasTextureFile"] = "Interface\\AddOns\\Wayfinder\\assets\\icon.blp",
+    ["icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\icon.blp",
+    ["atlasTextureFile"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\icon.blp",
 }
 
 local ATLAS = {
@@ -15,7 +15,7 @@ local ATLAS = {
 ---Get the texture path for a texture. If the texture is not found, an error is thrown.
 ---@param textureName string
 ---@return string | nil
-function Wayfinder:GetTexture(textureName)
+function MapPinEnhanced:GetTexture(textureName)
     if (TEXTURES[textureName]) then
         return TEXTURES[textureName]
     end
@@ -25,7 +25,7 @@ end
 ---Use the custom atlas system to apply a custom texture file to a texture.
 ---@param texture Texture
 ---@param atlasName string
-function Wayfinder:ApplyCustomAtlasToTexture(texture, atlasName)
+function MapPinEnhanced:ApplyCustomAtlasToTexture(texture, atlasName)
     local atlasData = ATLAS[atlasName]
     local texturePath = self:GetTexture(atlasData[1])
     texture:SetSize(atlasData[3], atlasData[2])

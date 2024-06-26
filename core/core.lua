@@ -1,5 +1,5 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 
 

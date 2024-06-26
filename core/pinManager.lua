@@ -1,12 +1,12 @@
----@class Wayfinder
-local Wayfinder = select(2, ...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 ---@class PinManager : Module
-local PinManager = Wayfinder:CreateModule("PinManager")
+local PinManager = MapPinEnhanced:CreateModule("PinManager")
 -- NOTE: Create, delete and manage pins here (multiple pins)
 
 ---@class PinFactory : Module
-local PinFactory = Wayfinder:GetModule("PinFactory")
+local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 
 ---@type table<string, PinObject>
 PinManager.Pins = {}

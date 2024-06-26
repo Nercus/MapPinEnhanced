@@ -1,39 +1,39 @@
----@class WayfinderMinimapPinMixin : Frame
+---@class MapPinEnhancedMinimapPinMixin : Frame
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
-WayfinderMinimapPinMixin = {}
+MapPinEnhancedMinimapPinMixin = {}
 
 
-function WayfinderMinimapPinMixin:SetNormalTexture(normalTexture)
+function MapPinEnhancedMinimapPinMixin:SetNormalTexture(normalTexture)
     self.normalTexture:SetTexture(normalTexture)
 end
 
-function WayfinderMinimapPinMixin:SetHighlightTexture(highlightTexture)
+function MapPinEnhancedMinimapPinMixin:SetHighlightTexture(highlightTexture)
     self.highlightTexture:SetTexture(highlightTexture)
 end
 
-function WayfinderMinimapPinMixin:OnLoad()
-    print("WayfinderMinimapPinMixin:OnLoad()")
+function MapPinEnhancedMinimapPinMixin:OnLoad()
+    print("MapPinEnhancedMinimapPinMixin:OnLoad()")
 end
 
-function WayfinderMinimapPinMixin:OnEnter()
-    print("WayfinderMinimapPinMixin:OnEnter()")
+function MapPinEnhancedMinimapPinMixin:OnEnter()
+    print("MapPinEnhancedMinimapPinMixin:OnEnter()")
 end
 
-function WayfinderMinimapPinMixin:OnLeave()
-    print("WayfinderMinimapPinMixin:OnLeave()")
+function MapPinEnhancedMinimapPinMixin:OnLeave()
+    print("MapPinEnhancedMinimapPinMixin:OnLeave()")
 end
 
-function WayfinderMinimapPinMixin:Track()
-  self:SetAlpha(1)
+function MapPinEnhancedMinimapPinMixin:Track()
+    self:SetAlpha(1)
 end
 
-function WayfinderMinimapPinMixin:Untrack()
-  self:SetAlpha(0.5)
+function MapPinEnhancedMinimapPinMixin:Untrack()
+    self:SetAlpha(0.5)
 end
 
 ---@param pinData pinData
-function WayfinderMinimapPinMixin:Setup(pinData)
+function MapPinEnhancedMinimapPinMixin:Setup(pinData)
     assert(pinData, "pinData is nil")
-    print("WayfinderMinimapPinMixin:Setup()")
+    print("MapPinEnhancedMinimapPinMixin:Setup()")
 end
