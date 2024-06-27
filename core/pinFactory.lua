@@ -26,9 +26,14 @@ function PinFactory:CreatePin(pinData, pinID)
 
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
-    worldmapPin:Setup(pinData)
-    minimapPin:Setup(pinData)
-    trackerEntry:Setup(pinData)
+
+    worldmapPin:SetPinData(pinData)
+    minimapPin:SetPinData(pinData)
+    trackerEntry:SetPinData(pinData)
+
+    worldmapPin:Setup()
+    minimapPin:Setup()
+    trackerEntry:Setup()
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
@@ -37,30 +42,26 @@ function PinFactory:CreatePin(pinData, pinID)
 
     local isTracked = false
     local function Track()
-        worldmapPin:Track()
-        minimapPin:Track()
+        worldmapPin:SetTracked()
+        minimapPin:SetTracked()
         SetSuperTrackedUserWaypoint(true)
         isTracked = true
     end
 
     local function Untrack()
-        worldmapPin:Untrack()
-        minimapPin:Untrack()
+        worldmapPin:SetUntracked()
+        minimapPin:SetUntracked()
         isTracked = false
     end
 
-    worldmapPin:SetClickCallback(function()
-        if isTracked then
-            Untrack()
-        else
-            Track()
-        end
-    end)
 
     if pinData.setTracked then
         Track()
     end
 
+    minimapPin:UpdatePin()
+    worldmapPin:UpdatePin()
+    trackerEntry:UpdatePin()
 
     return {
         pinID = pinID,

@@ -4,6 +4,9 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerMixin : Frame
 MapPinEnhancedTrackerMixin = {}
 
+
+local ENTRY_GAP = 15
+
 function MapPinEnhancedTrackerMixin:RestorePosition()
     local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
     if trackerPosition then
@@ -65,7 +68,7 @@ function MapPinEnhancedTrackerMixin:UpdateEntries()
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -5)
         end
-        height = height + entry:GetHeight() + 5 --[[@as number]]
+        height = height + entry:GetHeight() + ENTRY_GAP --[[@as number]]
     end
     self:SetHeight(height)
 end

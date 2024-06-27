@@ -1,0 +1,22 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    <Script file="Pin.lua" />
+    <Button name="MapPinEnhancedBasePinTemplate" mixin="MapPinEnhancedBasePinMixin"
+        virtual="true" enableMouse="true">
+        <Size x="30" y="30" />
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true" />
+                <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
+                    justifyV="MIDDLE" justifyH="CENTER" />
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight" atlas="Waypoint-MapPin-Highlight" setAllPoints="true" />
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Button>
+</Ui>

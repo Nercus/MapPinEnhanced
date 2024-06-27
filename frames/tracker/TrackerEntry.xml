@@ -4,30 +4,29 @@
     <Script file="TrackerEntry.lua" />
     <Button name="MapPinEnhancedTrackerEntryTemplate" mixin="MapPinEnhancedTrackerEntryMixin"
         virtual="true" enableMouse="true">
-        <Size x="250" y="20" />
+        <Size x="250" y="40" />
+        <KeyValues>
+            <KeyValue key="titlePosition" value="RIGHT" />
+            <KeyValue key="titleXOffset" value="5" />
+        </KeyValues>
+        <Frames>
+            <Frame parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" x="0" />
+                </Anchors>
+            </Frame>
+        </Frames>
         <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="normalTexture"
-                    file="Interface\AddOns\MapPinEnhanced\assets\SimplePin.blp" setAllPoints="true"
-                    texelSnappingBias="0" snapToPixelGrid="false">
-                    <Size x="20" y="20" />
-                    <Anchors>
-                        <Anchor point="LEFT" x="5" />
-                    </Anchors>
-                </Texture>
-                <FontString parentKey="titleDisplay" inherits="GameFontNormal">
-                    <Size x="225" y="20" />
-                    <Anchors>
-                        <Anchor point="LEFT" x="30" />
-                    </Anchors>
-                </FontString>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight" atlas="evergreen-weeklyrewards-reward-coin-selected"
+                    setAllPoints="true" />
             </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnClick method="OnClick" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
-            <OnClick method="OnClick" />
         </Scripts>
     </Button>
 </Ui>

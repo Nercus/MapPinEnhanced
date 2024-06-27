@@ -1,8 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
-    <Include file="TrackerEntry.xml" />
-
     <Script file="Tracker.lua" />
     <Frame name="MapPinEnhancedTrackerTemplate" mixin="MapPinEnhancedTrackerMixin" virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
