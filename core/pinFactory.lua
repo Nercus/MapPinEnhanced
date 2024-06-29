@@ -13,6 +13,19 @@ local TrackerEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerEn
 local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
 
 
+
+local TEST_COLORS = {
+    CreateColor(1, 0.369, 0.545),
+    CreateColor(0.651, 0.067, 0.129),
+    CreateColor(1, 0.647, 0.31),
+    CreateColor(0.455, 0.863, 0.525),
+    CreateColor(0.004, 0.373, 0.231),
+    CreateColor(0, 0.831, 0.945),
+    CreateColor(0.655, 0.573, 1),
+    CreateColor(0.6, 0.082, 0.459),
+}
+
+
 ---@param pinData pinData
 ---@param pinID string
 ---@return PinObject
@@ -44,6 +57,7 @@ function PinFactory:CreatePin(pinData, pinID)
     local function Track()
         worldmapPin:SetTracked()
         minimapPin:SetTracked()
+        trackerEntry:SetTracked()
         SetSuperTrackedUserWaypoint(true)
         isTracked = true
     end
@@ -51,21 +65,90 @@ function PinFactory:CreatePin(pinData, pinID)
     local function Untrack()
         worldmapPin:SetUntracked()
         minimapPin:SetUntracked()
+        trackerEntry:SetUntracked()
         isTracked = false
     end
 
+    local function ToggleTracked()
+        if isTracked then
+            Untrack()
+        else
+            Track()
+        end
+    end
 
     if pinData.setTracked then
         Track()
+    else
+        Untrack()
     end
+
+
+
+
+
+
+
+
+
+
+    local function SetColor(color)
+        worldmapPin:SetPinColor(color)
+        minimapPin:SetPinColor(color)
+        trackerEntry:SetPinColor(color)
+    end
+
+
+
+
+
+
+
+
+
+    local function CreateMenu(parentFrame)
+        local titleString = string.format("|%s:%s:20:20|%s %s",
+            pinData.usesAtlas and "A" or "T", pinData.texture,
+            pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
+
+        ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+        MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
+            rootDescription:CreateTitle(titleString)
+            rootDescription:CreateDivider()
+            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+            local submenu = rootDescription:CreateButton("Change Color");
+            for i = 1, #TEST_COLORS do
+                local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
+                    TEST_COLORS[i]:GetRGBAsBytes())
+                submenu:CreateButton(buttonTextureText, function() SetColor(TEST_COLORS[i]) end)
+            end
+
+            rootDescription:CreateButton("Share Pin", function() print("Share Pin") end)
+            rootDescription:CreateButton("Add to a set", function() print("Add to set") end)
+            rootDescription:CreateButton("Hey James", function() print("Test Button") end)
+        end)
+    end
+
+
+    local function HandleClicks(buttonFrame, button)
+        if button == "LeftButton" then
+            ToggleTracked()
+        else
+            CreateMenu(buttonFrame)
+        end
+    end
+
+
+
+
+    worldmapPin:SetScript("OnMouseDown", HandleClicks)
+    trackerEntry:SetScript("OnMouseDown", HandleClicks)
 
     minimapPin:UpdatePin()
     worldmapPin:UpdatePin()
     trackerEntry:UpdatePin()
-
     return {
         pinID = pinID,
-        -- worldPin = worldPin,
         minimapPin = minimapPin,
         trackerEntry = trackerEntry,
         pinData = pinData,

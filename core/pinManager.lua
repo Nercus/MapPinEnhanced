@@ -48,6 +48,14 @@ function PinManager:AddPin(pinData)
         -- NOTE: maybe we should notify the player here
         return
     end
+
+    -- set defaults
+    if (pinData.texture == nil) then
+        pinData.texture = "Waypoint-MapPin-Untracked"
+        pinData.usesAtlas = true
+    end
+
+
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     self.Pins[pinID] = pinObject
 end

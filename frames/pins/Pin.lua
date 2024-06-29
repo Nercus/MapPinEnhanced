@@ -54,12 +54,24 @@ function MapPinEnhancedBasePinMixin:OnLoad()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
 end
 
+local DEFAULT_UNTRACKED_TEXTURE = "Waypoint-MapPin-Untracked"
+local DEFAULT_TRACKED_TEXTURE = "Waypoint-MapPin-Tracked"
 function MapPinEnhancedBasePinMixin:SetTracked()
-    self:SetAlpha(1)
+    local pinData = self.pinData
+    if not pinData then return end
+    if (pinData.texture == DEFAULT_UNTRACKED_TEXTURE or pinData.texture == DEFAULT_TRACKED_TEXTURE) then
+        self.pinData.texture = DEFAULT_TRACKED_TEXTURE
+    end
+    self:OverrideTexture()
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
-    self:SetAlpha(0.5)
+    local pinData = self.pinData
+    if not pinData then return end
+    if (pinData.texture == DEFAULT_UNTRACKED_TEXTURE or pinData.texture == DEFAULT_TRACKED_TEXTURE) then
+        self.pinData.texture = DEFAULT_UNTRACKED_TEXTURE
+    end
+    self:OverrideTexture()
 end
 
 function MapPinEnhancedBasePinMixin:UpdatePin()
@@ -73,4 +85,8 @@ end
 function MapPinEnhancedBasePinMixin:SetPinData(pinData)
     self.pinData = pinData
     self:UpdatePin()
+end
+
+function MapPinEnhancedBasePinMixin:SetPinColor(color)
+    self.icon:SetVertexColor(color.r, color.g, color.b)
 end

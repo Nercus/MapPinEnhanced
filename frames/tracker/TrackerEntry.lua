@@ -1,4 +1,4 @@
----@class MapPinEnhancedTrackerEntryMixin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedTrackerEntryMixin : MapPinEnhancedBasePinMixin, Button
 ---@field Pin MapPinEnhancedBasePinMixin
 MapPinEnhancedTrackerEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
 
@@ -22,6 +22,11 @@ function MapPinEnhancedTrackerEntryMixin:OverrideTexture()
         end
         self.Pin.icon:SetTexture(pinData.texture)
     end
+end
+
+---comment we override the texture function from the base pin mixin to include the other pathing to the texture
+function MapPinEnhancedTrackerEntryMixin:SetPinColor(color)
+    self.Pin.icon:SetVertexColor(color.r, color.g, color.b)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title

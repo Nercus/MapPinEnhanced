@@ -1,4 +1,4 @@
----@class MapPinEnhancedWorldMapPinMixin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedWorldMapPinMixin : MapPinEnhancedBasePinMixin, Button
 MapPinEnhancedWorldMapPinMixin = {}
 
 function MapPinEnhancedWorldMapPinMixin:Setup()
