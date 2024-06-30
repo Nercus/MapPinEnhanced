@@ -26,7 +26,6 @@ function MapPinEnhanced:GetDefault(...)
         if currentTable[key] == nil then
             assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
         end
-        ---@diagnostic disable-next-line: no-unknown currentTable should be a table here
-        currentTable = currentTable[key] -- traverse to the next table
+        currentTable = currentTable[key] --[[@as table]]
     end
 end

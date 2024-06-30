@@ -2,7 +2,6 @@
     "workspace.ignoreDir": [
         ".github",
         ".vscode",
-        "_old",
         "libs"
     ],
     "diagnostics.disable": [
