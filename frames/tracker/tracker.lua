@@ -60,17 +60,18 @@ function MapPinEnhancedTrackerMixin:OnMouseUp()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateEntries()
+    MapPinEnhanced:Debug({ self })
     local height = 30
     for i, entry in ipairs(self.entries) do
         entry:ClearAllPoints()
         if i == 1 then
-            entry:SetPoint("TOPLEFT", self, "TOPLEFT", 0, -20)
+            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, -20)
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -5)
         end
         height = height + entry:GetHeight() + ENTRY_GAP --[[@as number]]
     end
-    self:SetHeight(height)
+    self.scrollFrame.Child:SetHeight(height)
 end
 
 ---@param entries table<number, MapPinEnhancedTrackerEntryMixin>

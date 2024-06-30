@@ -1,20 +1,33 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    <Include file="TrackerEntry.xml" />
+    <Include file="SetView.xml" />
+    <Include file="PinView.xml" />
+
     <Script file="Tracker.lua" />
     <Frame name="MapPinEnhancedTrackerTemplate" mixin="MapPinEnhancedTrackerMixin" virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
-        <Size x="250" y="400" />
+        <Size x="250" y="200" />
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parentBackground" file="Interface\Tooltips\UI-Tooltip-Background">
+                <Texture name="$parentBackground" atlas="plunderstorm-stormbar-fill"
+                    desaturated="true">
+                    <Size x="250" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture name="$parentBackground" atlas="plunderstorm-stormbar-border"
+                >
+                    <Color r="0.5" g="0.5" b="0.5" />
+                    <Size x="250" y="26" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -22,7 +35,7 @@
                 <FontString name="$parentTitle" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="CENTER">
-                    <Size x="250" y="25" />
+                    <Size x="250" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
@@ -30,20 +43,50 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button>
-                <Size x="25" y="25" />
+            <Button inherits="UIPanelCloseButtonDefaultAnchors">
+                <Size x="16" y="16" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" />
+                    <Anchor point="TOPRIGHT" x="-5" y="-5" />
                 </Anchors>
-                <NormalTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Up" />
-                <PushedTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Down" />
-                <HighlightTexture file="Interface\Buttons\UI-Panel-MinimizeButton-Highlight" />
                 <Scripts>
                     <OnClick>
                         self:GetParent():Close();
                     </OnClick>
                 </Scripts>
             </Button>
+            <Button>
+                <Size x="18" y="22" />
+                <NormalTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Up"
+                    setAllPoints="true" />
+                <PushedTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Down"
+                    setAllPoints="true" />
+                <HighlightTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Mouseover"
+                    setAllPoints="true" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="5" y="-2" />
+                </Anchors>
+
+            </Button>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-26" />
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                </Anchors>
+                <Size x="250" y="500" />
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="-20" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="250" y="300" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
