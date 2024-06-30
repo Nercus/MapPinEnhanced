@@ -55,6 +55,18 @@ end)
 
 
 
+local function AddTestPins()
+    ---@class PinManager : Module
+    local PinManager = MapPinEnhanced:GetModule("PinManager")
+    PinManager:AddPin({
+        mapID = C_Map.GetBestMapForUnit("player") or 37, -- Elwynn Forest
+        x = math.random(),
+        y = math.random(),
+        setTracked = true,
+        title = "Test Pin",
+        description = "This is a test pin",
+    })
+end
 
 local devAddonList = {
     "!BugGrabber",
@@ -111,11 +123,14 @@ local function AddDevReload()
     local text = f:CreateFontString(nil, "OVERLAY")
     text:SetFontObject(GameFontNormal)
     text:SetPoint("CENTER")
-    text:SetText("Press 1 to reload UI | Press 2 to add MapPinEnhanced to devtools | Press 0 to exit dev mode")
+    text:SetText(
+        "Press 1 to reload UI | Press 2 to add test pins | Press 3 to add MapPinEnhanced to devtools | Press 0 to exit dev mode")
     f:SetScript("OnKeyDown", function(_, key)
         if key == "1" then
             ReloadUI()
         elseif key == "2" then
+            AddTestPins()
+        elseif key == "3" then
             MapPinEnhanced:Debug(MapPinEnhanced)
         elseif key == "0" then
             setDevMode()
