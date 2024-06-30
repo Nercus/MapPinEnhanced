@@ -2,16 +2,15 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory : Module
 local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
+---@type PinManager
+local PinManager
+MapPinEnhanced:GetModuleAsync("PinManager", function(m) PinManager = m end)
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerEntryTemplate")
-
-
-local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
-
 
 
 local TEST_COLORS = {
@@ -55,14 +54,20 @@ function PinFactory:CreatePin(pinData, pinID)
 
     local isTracked = false
     local function Track()
+        local success = PinManager:TrackPinByID(pinID)
+        if not success then
+            return
+        end
         worldmapPin:SetTracked()
         minimapPin:SetTracked()
         trackerEntry:SetTracked()
-        SetSuperTrackedUserWaypoint(true)
         isTracked = true
     end
 
     local function Untrack()
+        if isTracked then
+            C_Map.ClearUserWaypoint()
+        end
         worldmapPin:SetUntracked()
         minimapPin:SetUntracked()
         trackerEntry:SetUntracked()
@@ -77,32 +82,12 @@ function PinFactory:CreatePin(pinData, pinID)
         end
     end
 
-    if pinData.setTracked then
-        Track()
-    else
-        Untrack()
-    end
-
-
-
-
-
-
-
-
-
 
     local function SetColor(color)
         worldmapPin:SetPinColor(color)
         minimapPin:SetPinColor(color)
         trackerEntry:SetPinColor(color)
     end
-
-
-
-
-
-
 
 
 
@@ -123,9 +108,8 @@ function PinFactory:CreatePin(pinData, pinID)
                 submenu:CreateButton(buttonTextureText, function() SetColor(TEST_COLORS[i]) end)
             end
 
-            rootDescription:CreateButton("Share Pin", function() print("Share Pin") end)
-            rootDescription:CreateButton("Add to a set", function() print("Add to set") end)
-            rootDescription:CreateButton("Hey James", function() print("Test Button") end)
+            rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
+            rootDescription:CreateButton("Add to a set", function() error("Not implemented: Add to set") end)
         end)
     end
 
@@ -149,6 +133,7 @@ function PinFactory:CreatePin(pinData, pinID)
     trackerEntry:UpdatePin()
     return {
         pinID = pinID,
+        worldmapPin = worldmapPin,
         minimapPin = minimapPin,
         trackerEntry = trackerEntry,
         pinData = pinData,

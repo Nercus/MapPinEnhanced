@@ -36,3 +36,28 @@ hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self) -- hide de
     self:SetAlpha(0)
     self:EnableMouse(false)
 end)
+
+
+-- TODO: Wrap this in a function and add an option
+---@diagnostic disable-next-line: no-unknown
+SuperTrackedFrameMixin:SetTargetAlphaForState(0, 1)
+---@diagnostic disable-next-line: no-unknown
+SuperTrackedFrameMixin:SetTargetAlphaForState(1, 1)
+
+
+function MapPinEnhanced:SetBlizzardWaypoint(x, y, mapID)
+    if not C_Map.CanSetUserWaypointOnMap(mapID) then
+        --TODO: show proper error message to the user
+        error("Cannot set waypoint on map " .. mapID)
+        return
+    end
+    ---@diagnostic disable-next-line: no-unknown
+    local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
+    C_Map.SetUserWaypoint(uiMapPoint)
+    C_Timer.After(0.1, function()
+        repeat
+            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        until C_SuperTrack.IsSuperTrackingUserWaypoint()
+    end)
+    -- TODO: set locals
+end

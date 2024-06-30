@@ -10,11 +10,6 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 
 local GetUserWaypoint = C_Map.GetUserWaypoint
-local IsSuperTrackingQuest = C_SuperTrack.IsSuperTrackingQuest
-local IsSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse
-local IsSuperTrackingContent = C_SuperTrack.IsSuperTrackingContent
-local SetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
-
 
 local blockEvent = false
 --- USER_WAYPOINT_UPDATED event handler
@@ -25,14 +20,6 @@ function PinProvider:USER_WAYPOINT_UPDATED()
     if not wp then return end
     blockEvent = true
 
-    local superTrackingQuest = IsSuperTrackingQuest()
-    local superTrackingCorpse = IsSuperTrackingCorpse()
-    local superTrackingContent = IsSuperTrackingContent()
-
-    -- is not tracking anything or is tracking a waypoint
-    if not superTrackingQuest and not superTrackingCorpse and not superTrackingContent then
-        SetSuperTrackedUserWaypoint(true)
-    end
     local title, texture, usesAtlas = PinProvider:DetectMouseFocusPinInfo()
     PinManager:AddPin({
         mapID = wp.uiMapID,

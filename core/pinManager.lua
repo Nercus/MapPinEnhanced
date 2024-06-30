@@ -11,6 +11,9 @@ local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 ---@type table<string, PinObject>
 PinManager.Pins = {}
 
+
+local MAX_COUNT_PINS = 1000
+
 ---Get a string representation of a position from pinData
 ---@param pinData pinData
 ---@return string
@@ -24,12 +27,21 @@ function PinManager:GetPinByID(pinID)
     return self.Pins[pinID]
 end
 
-function PinManager:TrackPin(pin)
-    for _, p in pairs(self.Pins) do
-        if p:IsTracked() then
-            p:Untrack()
-            pin:Track()
-            return
+function PinManager:TrackPinByID(pinID)
+    local pin = self.Pins[pinID]
+    if not pin then
+        return false
+    end
+    PinManager:UntrackTrackedPin()
+    local pinData = pin.pinData
+    MapPinEnhanced:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
+    return true
+end
+
+function PinManager:UntrackTrackedPin()
+    for _, pin in pairs(self.Pins) do
+        if pin:IsTracked() then
+            pin:Untrack()
         end
     end
 end
@@ -42,12 +54,19 @@ function PinManager:AddPin(pinData)
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
 
+    if #self.Pins >= MAX_COUNT_PINS then
+        -- too many pins
+        -- TODO: notify the player here
+        return
+    end
+
     local pinID = GetPinIDFromPinData(pinData)
     if self.Pins[pinID] then
         -- pin already exists
-        -- NOTE: maybe we should notify the player here
+        -- TODO: notify the player here
         return
     end
+
 
     -- set defaults
     if (pinData.texture == nil) then
@@ -58,4 +77,10 @@ function PinManager:AddPin(pinData)
 
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     self.Pins[pinID] = pinObject
+
+    if pinData.setTracked then
+        pinObject:Track()
+    else
+        pinObject:Untrack()
+    end
 end

@@ -11,9 +11,10 @@
 
 
 ---@class PinObject
----@field id string
----@field worldPin Frame
----@field minimapPin Frame
+---@field pinID string
+---@field worldmapPin MapPinEnhancedWorldMapPinMixin
+---@field minimapPin MapPinEnhancedMinimapPinMixin
+---@field trackerEntry MapPinEnhancedTrackerEntryMixin
 ---@field pinData pinData
 ---@field Track fun()
 ---@field Untrack fun()
