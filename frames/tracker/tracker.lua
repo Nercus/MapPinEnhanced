@@ -60,7 +60,6 @@ function MapPinEnhancedTrackerMixin:OnMouseUp()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateEntries()
-    MapPinEnhanced:Debug({ self })
     local height = 30
     for i, entry in ipairs(self.entries) do
         entry:ClearAllPoints()
