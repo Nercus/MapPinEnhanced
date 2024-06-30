@@ -1,3 +1,6 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedBasePinMixin : Frame
 ---@field icon Texture
 ---@field highlight Texture
@@ -7,6 +10,8 @@
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
 MapPinEnhancedBasePinMixin = {}
+
+
 
 
 function MapPinEnhancedBasePinMixin:OverrideTexture()
@@ -54,8 +59,8 @@ function MapPinEnhancedBasePinMixin:OnLoad()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
 end
 
-local DEFAULT_UNTRACKED_TEXTURE = "Waypoint-MapPin-Untracked"
-local DEFAULT_TRACKED_TEXTURE = "Waypoint-MapPin-Tracked"
+local DEFAULT_UNTRACKED_TEXTURE = MapPinEnhanced:GetTexture("UntrackedPin")
+local DEFAULT_TRACKED_TEXTURE = MapPinEnhanced:GetTexture("TrackedPin")
 function MapPinEnhancedBasePinMixin:SetTracked()
     local pinData = self.pinData
     if not pinData then return end

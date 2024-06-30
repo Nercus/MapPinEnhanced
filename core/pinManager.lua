@@ -70,8 +70,8 @@ function PinManager:AddPin(pinData)
 
     -- set defaults
     if (pinData.texture == nil) then
-        pinData.texture = "Waypoint-MapPin-Untracked"
-        pinData.usesAtlas = true
+        pinData.texture = MapPinEnhanced:GetTexture("UntrackedPin")
+        pinData.usesAtlas = false
     end
 
 

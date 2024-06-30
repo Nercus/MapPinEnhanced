@@ -7,12 +7,16 @@
         <Size x="30" y="30" />
         <Layers>
             <Layer level="OVERLAY">
-                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true" />
+                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true">
+                    <Size x="30" y="30" />
+                </Texture>
                 <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="Waypoint-MapPin-Highlight" setAllPoints="true" />
+                <Texture parentKey="highlight" atlas="Waypoint-MapPin-Highlight" setAllPoints="true">
+                    <Size x="30" y="30" />
+                </Texture>
             </Layer>
         </Layers>
         <Scripts>

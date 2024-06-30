@@ -4,7 +4,7 @@
 ## Version: 3.0.0
 ## License: GNU General Public License v3.0
 ## Notes: Enhances the functionality of the map pin
-## IconTexture: Interface\AddOns\MapPinEnhanced\assets\SimplePin.blp
+## IconTexture: Interface\AddOns\MapPinEnhanced\assets\PinTracked.blp
 ## SavedVariables: MapPinEnhancedDB
 
 libs\libs.xml

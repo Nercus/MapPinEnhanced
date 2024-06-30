@@ -1,16 +1,17 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
+---@type table<string, string>
 local TEXTURES = {
-    ["icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\icon.blp",
-    ["atlasTextureFile"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\icon.blp",
+    ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTracked.blp",
+    ["TrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTracked.blp",
+    ["UntrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntracked.blp",
 }
 
+---@type table<string, any>
 local ATLAS = {
-    ["shadowBox"] = { "atlasTextureFile", 47, 413, 0.09765625, 0.904296875, 0.0341796875, 0.080078125, false, false },
+    ["shadowBox"] = { "atlasTextureFile", 47, 413, 0.09765625, 0.904296875, 0.0341796875, 0.080078125, false, false }, --Note: This is a test value
 }
-
 
 ---Get the texture path for a texture. If the texture is not found, an error is thrown.
 ---@param textureName string
