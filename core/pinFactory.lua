@@ -92,8 +92,8 @@ function PinFactory:CreatePin(pinData, pinID)
 
 
     local function CreateMenu(parentFrame)
-        local titleString = string.format("|%s:%s:20:20|%s %s",
-            pinData.usesAtlas and "A" or "T", pinData.texture,
+        local titleString = string.format("|%s%s:20:20|%s %s",
+            pinData.usesAtlas and "A:" or "T", pinData.texture,
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
 
         ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
