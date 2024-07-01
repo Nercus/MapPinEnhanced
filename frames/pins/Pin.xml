@@ -14,8 +14,9 @@
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="Waypoint-MapPin-Highlight" setAllPoints="true">
-                    <Size x="30" y="30" />
+                <Texture parentKey="highlight"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.blp"
+                    setAllPoints="true">
                 </Texture>
             </Layer>
         </Layers>
