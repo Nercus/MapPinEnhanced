@@ -27,7 +27,7 @@ function MapPinEnhancedBasePinMixin:OverrideTexture()
 end
 
 ---Set the position of the title text
----@param position 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT' | 'CENTER'
+---@param position 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT' | 'CENTER' | nil
 ---@param xOffset number
 ---@param yOffset number
 function MapPinEnhancedBasePinMixin:SetTitlePosition(position, xOffset, yOffset)

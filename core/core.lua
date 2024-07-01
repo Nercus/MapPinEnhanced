@@ -2,6 +2,12 @@
 local MapPinEnhanced = select(2, ...)
 
 
+local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
+local SetUserWaypoint = C_Map.SetUserWaypoint
+local CanSetUserWaypointOnMap = C_Map.CanSetUserWaypointOnMap
+local TimerAfter = C_Timer.After
+local SuperTrackSetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
+
 ---toggle the pin tracker
 ---@param forceShow? boolean if true, the tracker will be shown, if false, the tracker will be hidden, if nil, the tracker will be toggled
 function MapPinEnhanced:TogglePinTracker(forceShow)
@@ -46,18 +52,15 @@ SuperTrackedFrameMixin:SetTargetAlphaForState(1, 1)
 
 
 function MapPinEnhanced:SetBlizzardWaypoint(x, y, mapID)
-    if not C_Map.CanSetUserWaypointOnMap(mapID) then
+    if not CanSetUserWaypointOnMap(mapID) then
         --TODO: show proper error message to the user
         error("Cannot set waypoint on map " .. mapID)
         return
     end
     ---@diagnostic disable-next-line: no-unknown
-    local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
-    C_Map.SetUserWaypoint(uiMapPoint)
-    C_Timer.After(0.1, function()
-        repeat
-            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-        until C_SuperTrack.IsSuperTrackingUserWaypoint()
+    local uiMapPoint = CreateUIMapPointFromCoordinates(mapID, x, y, 0)
+    SetUserWaypoint(uiMapPoint)
+    TimerAfter(0.1, function()
+        SuperTrackSetSuperTrackedUserWaypoint(true)
     end)
-    -- TODO: set locals
 end
