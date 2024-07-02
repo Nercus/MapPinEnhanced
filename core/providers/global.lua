@@ -12,6 +12,7 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 -- TODO: add a wrapper to parse tomtom pin info
 local globalMapPinEnhanced = {}
 globalMapPinEnhanced.AddPin = PinManager.AddPin
+globalMapPinEnhanced.AddWaypoint = PinManager.AddPin
 
 ---@type table
 _G[MapPinEnhanced.addonName] = globalMapPinEnhanced

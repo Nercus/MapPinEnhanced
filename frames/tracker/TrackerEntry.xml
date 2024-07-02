@@ -18,7 +18,7 @@
         </Frames>
         <Layers>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="evergreen-weeklyrewards-reward-coin-selected"
+                <Texture parentKey="highlight" atlas="GarrMissionLocation-Maw-ButtonHighlight"
                     setAllPoints="true" />
             </Layer>
         </Layers>

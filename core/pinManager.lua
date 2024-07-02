@@ -50,18 +50,18 @@ end
 ---@param pinData pinData
 function PinManager:AddPin(pinData)
     assert(pinData, "Pin data is required to create a pin.")
+    assert(type(pinData) == "table", "Pin data must be a table.")
     assert(pinData.mapID, "Pin data must contain a mapID.")
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
-
-    if #self.Pins >= MAX_COUNT_PINS then
+    if #PinManager.Pins >= MAX_COUNT_PINS then
         -- too many pins
         -- TODO: notify the player here
         return
     end
 
     local pinID = GetPinIDFromPinData(pinData)
-    if self.Pins[pinID] then
+    if PinManager.Pins[pinID] then
         -- pin already exists
         -- TODO: notify the player here
         return
@@ -76,7 +76,7 @@ function PinManager:AddPin(pinData)
 
 
     local pinObject = PinFactory:CreatePin(pinData, pinID)
-    self.Pins[pinID] = pinObject
+    PinManager.Pins[pinID] = pinObject
 
     if pinData.setTracked then
         pinObject:Track()

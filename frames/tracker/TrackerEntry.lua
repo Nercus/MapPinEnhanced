@@ -5,6 +5,10 @@ MapPinEnhancedTrackerEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
 
 function MapPinEnhancedTrackerEntryMixin:Setup()
     ---@diagnostic disable-next-line: undefined-field not defined in the vscode extions yet
+    if (not self.Pin.SetPropagateMouseClicks or not self.Pin.SetPropagateMouseMotion) then
+        return
+    end
+    ---@diagnostic disable-next-line: undefined-field not defined in the vscode extions yet
     self.Pin:SetPropagateMouseClicks(true)
     ---@diagnostic disable-next-line: undefined-field
     self.Pin:SetPropagateMouseMotion(true)
