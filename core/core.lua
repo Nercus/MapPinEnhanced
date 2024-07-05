@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 
+---@diagnostic disable-next-line: no-unknown
 local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
 local SetUserWaypoint = C_Map.SetUserWaypoint
 local CanSetUserWaypointOnMap = C_Map.CanSetUserWaypointOnMap

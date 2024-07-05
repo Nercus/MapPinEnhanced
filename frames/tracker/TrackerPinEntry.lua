@@ -1,9 +1,9 @@
----@class MapPinEnhancedTrackerEntryMixin : MapPinEnhancedBasePinMixin, Button
+---@class MapPinEnhancedTrackerPinEntryMixin : MapPinEnhancedBasePinMixin, Button
 ---@field Pin MapPinEnhancedBasePinMixin
-MapPinEnhancedTrackerEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
+MapPinEnhancedTrackerPinEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
 
 
-function MapPinEnhancedTrackerEntryMixin:Setup()
+function MapPinEnhancedTrackerPinEntryMixin:Setup()
     ---@diagnostic disable-next-line: undefined-field not defined in the vscode extions yet
     if (not self.Pin.SetPropagateMouseClicks or not self.Pin.SetPropagateMouseMotion) then
         return
@@ -14,12 +14,12 @@ function MapPinEnhancedTrackerEntryMixin:Setup()
     self.Pin:SetPropagateMouseMotion(true)
 end
 
-function MapPinEnhancedTrackerEntryMixin:OnClick()
-    print("MapPinEnhancedTrackerEntryMixin:OnClick()")
+function MapPinEnhancedTrackerPinEntryMixin:OnClick()
+    print("MapPinEnhancedTrackerPinEntryMixin:OnClick()")
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
-function MapPinEnhancedTrackerEntryMixin:OverrideTexture()
+function MapPinEnhancedTrackerPinEntryMixin:OverrideTexture()
     ---@type pinData
     local pinData = self.pinData
     if (pinData.texture) then
@@ -32,12 +32,12 @@ function MapPinEnhancedTrackerEntryMixin:OverrideTexture()
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
-function MapPinEnhancedTrackerEntryMixin:SetPinColor(color)
+function MapPinEnhancedTrackerPinEntryMixin:SetPinColor(color)
     self.Pin.icon:SetVertexColor(color.r, color.g, color.b)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title
-function MapPinEnhancedTrackerEntryMixin:SetTitle()
+function MapPinEnhancedTrackerPinEntryMixin:SetTitle()
     if not self.pinData then
         return
     end
@@ -45,7 +45,7 @@ function MapPinEnhancedTrackerEntryMixin:SetTitle()
     self.Pin.title:SetText(title)
 end
 
-function MapPinEnhancedTrackerEntryMixin:SetTitlePosition(position, xOffset, yOffset)
+function MapPinEnhancedTrackerPinEntryMixin:SetTitlePosition(position, xOffset, yOffset)
     self.Pin.title:ClearAllPoints()
     if not position then
         return
@@ -71,10 +71,10 @@ function MapPinEnhancedTrackerEntryMixin:SetTitlePosition(position, xOffset, yOf
     )
 end
 
-function MapPinEnhancedTrackerEntryMixin:OnEnter()
+function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
     self.Pin:LockHighlight()
 end
 
-function MapPinEnhancedTrackerEntryMixin:OnLeave()
+function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     self.Pin:UnlockHighlight()
 end

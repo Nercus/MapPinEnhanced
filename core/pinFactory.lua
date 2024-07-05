@@ -5,12 +5,13 @@ local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
 ---@type PinManager
 local PinManager
 MapPinEnhanced:GetModuleAsync("PinManager", function(m) PinManager = m end)
+-- TODO: async loading blocks usage on addon load -> cache added pins and add them when PinManager is loaded
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
-local TrackerEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerEntryTemplate")
+local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
 
 local TEST_COLORS = {
@@ -33,23 +34,23 @@ function PinFactory:CreatePin(pinData, pinID)
     ---@cast worldmapPin MapPinEnhancedWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
     ---@cast minimapPin MapPinEnhancedMinimapPinMixin
-    local trackerEntry = TrackerEntryPool:Acquire()
-    ---@cast trackerEntry MapPinEnhancedTrackerEntryMixin
+    local TrackerPinEntry = TrackerPinEntryPool:Acquire()
+    ---@cast TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
 
     worldmapPin:SetPinData(pinData)
     minimapPin:SetPinData(pinData)
-    trackerEntry:SetPinData(pinData)
+    TrackerPinEntry:SetPinData(pinData)
 
     worldmapPin:Setup()
     minimapPin:Setup()
-    trackerEntry:Setup()
+    TrackerPinEntry:Setup()
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
-    MapPinEnhanced.pinTracker:AddEntry(trackerEntry)
+    MapPinEnhanced.pinTracker:AddEntry(TrackerPinEntry)
 
 
     local isTracked = false
@@ -60,7 +61,7 @@ function PinFactory:CreatePin(pinData, pinID)
         end
         worldmapPin:SetTracked()
         minimapPin:SetTracked()
-        trackerEntry:SetTracked()
+        TrackerPinEntry:SetTracked()
         isTracked = true
     end
 
@@ -70,7 +71,7 @@ function PinFactory:CreatePin(pinData, pinID)
         end
         worldmapPin:SetUntracked()
         minimapPin:SetUntracked()
-        trackerEntry:SetUntracked()
+        TrackerPinEntry:SetUntracked()
         isTracked = false
     end
 
@@ -86,7 +87,7 @@ function PinFactory:CreatePin(pinData, pinID)
     local function SetColor(color)
         worldmapPin:SetPinColor(color)
         minimapPin:SetPinColor(color)
-        trackerEntry:SetPinColor(color)
+        TrackerPinEntry:SetPinColor(color)
     end
 
 
@@ -126,16 +127,16 @@ function PinFactory:CreatePin(pinData, pinID)
 
 
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
-    trackerEntry:SetScript("OnMouseDown", HandleClicks)
+    TrackerPinEntry:SetScript("OnMouseDown", HandleClicks)
 
     minimapPin:UpdatePin()
     worldmapPin:UpdatePin()
-    trackerEntry:UpdatePin()
+    TrackerPinEntry:UpdatePin()
     return {
         pinID = pinID,
         worldmapPin = worldmapPin,
         minimapPin = minimapPin,
-        trackerEntry = trackerEntry,
+        TrackerPinEntry = TrackerPinEntry,
         pinData = pinData,
         Track = Track,
         Untrack = Untrack,

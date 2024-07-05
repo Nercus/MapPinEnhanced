@@ -83,4 +83,6 @@ function PinManager:AddPin(pinData)
     else
         pinObject:Untrack()
     end
+
+    -- TODO: persist pins
 end

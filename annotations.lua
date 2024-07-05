@@ -14,7 +14,7 @@
 ---@field pinID string
 ---@field worldmapPin MapPinEnhancedWorldMapPinMixin
 ---@field minimapPin MapPinEnhancedMinimapPinMixin
----@field trackerEntry MapPinEnhancedTrackerEntryMixin
+---@field TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 ---@field pinData pinData
 ---@field Track fun()
 ---@field Untrack fun()
