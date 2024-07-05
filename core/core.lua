@@ -2,6 +2,12 @@
 local MapPinEnhanced = select(2, ...)
 
 
+---@class PinManager : Module
+local PinManager = MapPinEnhanced:CreateModule("PinManager")
+
+---@class PinFactory : Module
+local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
+
 ---@diagnostic disable-next-line: no-unknown
 local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
 local SetUserWaypoint = C_Map.SetUserWaypoint

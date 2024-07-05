@@ -1,11 +1,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory : Module
-local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
----@type PinManager
-local PinManager
-MapPinEnhanced:GetModuleAsync("PinManager", function(m) PinManager = m end)
--- TODO: async loading blocks usage on addon load -> cache added pins and add them when PinManager is loaded
+local PinFactory = MapPinEnhanced:GetModule("PinFactory")
+---@class PinManager : Module
+local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 

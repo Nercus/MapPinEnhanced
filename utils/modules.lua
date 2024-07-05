@@ -24,14 +24,3 @@ end
 function MapPinEnhanced:GetModule(name)
     return self.modules[name]
 end
-
-function MapPinEnhanced:GetModuleAsync(name, callback)
-    local m = self.modules[name]
-    if (m) then
-        callback(m)
-    else
-        C_Timer.After(0.1, function()
-            callback(self.modules[name])
-        end)
-    end
-end

@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class PinManager : Module
-local PinManager = MapPinEnhanced:CreateModule("PinManager")
+local PinManager = MapPinEnhanced:GetModule("PinManager")
 -- NOTE: Create, delete and manage pins here (multiple pins)
 
 ---@class PinFactory : Module
@@ -46,6 +46,24 @@ function PinManager:UntrackTrackedPin()
     end
 end
 
+function PinManager:PersistPins()
+    ---@type table<string, pinData>
+    local reducedPins = {}
+    for pinID, pin in pairs(self.Pins) do
+        reducedPins[pinID] = pin.pinData
+    end
+    MapPinEnhanced:SaveVar("storedPins", reducedPins)
+end
+
+function PinManager:RestorePins()
+    local storedPins = MapPinEnhanced:GetVar("storedPins") --[[@as table<string, pinData> | nil]]
+    if storedPins then
+        for _, pinData in pairs(storedPins) do
+            self:AddPin(pinData)
+        end
+    end
+end
+
 ---add a pin
 ---@param pinData pinData
 function PinManager:AddPin(pinData)
@@ -85,4 +103,9 @@ function PinManager:AddPin(pinData)
     end
 
     -- TODO: persist pins
+    self:PersistPins()
 end
+
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+    PinManager:RestorePins()
+end)
