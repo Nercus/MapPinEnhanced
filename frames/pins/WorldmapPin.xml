@@ -6,9 +6,10 @@
         virtual="true"
         inherits="MapPinEnhancedBasePinTemplate"
         registerForClicks="LeftButtonUp, RightButtonUp">
+        <Size x="25" y="25" />
         <Frames>
             <Frame parentKey="CreationPulse" hidden="true">
-                <Size x="32" y="32" />
+                <Size x="27" y="27" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>

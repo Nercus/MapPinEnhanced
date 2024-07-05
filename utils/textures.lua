@@ -3,10 +3,10 @@ local MapPinEnhanced = select(2, ...)
 
 ---@type table<string, string>
 local TEXTURES = {
-    ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTracked.blp",
-    ["TrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTracked.blp",
-    ["UntrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\nocolour.blp",
-    ["PinHighlight"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinHighlight.blp",
+    ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedYellow.png",
+    ["TrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedYellow.png",
+    ["UntrackedPin"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntracked.png",
+    ["PinHighlight"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinHighlight.png",
 }
 
 ---@type table<string, any>

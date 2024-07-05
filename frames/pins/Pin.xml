@@ -6,16 +6,18 @@
         virtual="true" enableMouse="true">
         <Size x="30" y="30" />
         <Layers>
+            <Layer level="BACKGROUND">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
+                    setAllPoints="true" />
+            </Layer>
             <Layer level="OVERLAY">
-                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true">
-                    <Size x="30" y="30" />
-                </Texture>
+                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true" />
                 <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.blp"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.png"
                     setAllPoints="true">
                 </Texture>
             </Layer>
