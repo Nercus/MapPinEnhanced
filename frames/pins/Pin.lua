@@ -9,21 +9,15 @@ local MapPinEnhanced = select(2, ...)
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
+---@field trackedTexture string
+---@field untrackedTexture string
 MapPinEnhancedBasePinMixin = {}
 
 
 
 
-function MapPinEnhancedBasePinMixin:OverrideTexture()
-    ---@type pinData
-    local pinData = self.pinData
-    if (pinData.texture) then
-        if (pinData.usesAtlas) then
-            self.icon:SetAtlas(pinData.texture)
-            return
-        end
-        self.icon:SetTexture(pinData.texture)
-    end
+function MapPinEnhancedBasePinMixin:SetCustomTexture()
+    -- TODO: this function is for using a custom texture that is placed on top of the base pin textures
 end
 
 ---Set the position of the title text
@@ -57,34 +51,28 @@ end
 
 function MapPinEnhancedBasePinMixin:OnLoad()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
+    self:SetUntrackedTexture()
 end
 
-local DEFAULT_UNTRACKED_TEXTURE = MapPinEnhanced:GetTexture("UntrackedPin")
-local DEFAULT_TRACKED_TEXTURE = MapPinEnhanced:GetTexture("TrackedPin")
-function MapPinEnhancedBasePinMixin:SetTracked()
+local DEFAULT_COLOR = "Yellow"
+function MapPinEnhancedBasePinMixin:SetTrackedTexture()
     local pinData = self.pinData
     if not pinData then return end
-    if (pinData.texture == DEFAULT_UNTRACKED_TEXTURE or pinData.texture == DEFAULT_TRACKED_TEXTURE) then
-        self.pinData.texture = DEFAULT_TRACKED_TEXTURE
-    end
-    self:OverrideTexture()
+    self.icon:SetTexture(self.trackedTexture)
 end
 
-function MapPinEnhancedBasePinMixin:SetUntracked()
+function MapPinEnhancedBasePinMixin:SetUntrackedTexture()
     local pinData = self.pinData
     if not pinData then return end
-    if (pinData.texture == DEFAULT_UNTRACKED_TEXTURE or pinData.texture == DEFAULT_TRACKED_TEXTURE) then
-        self.pinData.texture = DEFAULT_UNTRACKED_TEXTURE
-    end
-    self:OverrideTexture()
+    self.icon:SetTexture(self.untrackedTexture)
 end
 
 function MapPinEnhancedBasePinMixin:UpdatePin()
     if not self.pinData then
         return
     end
-    self:OverrideTexture()
     self:SetTitle()
+    self:SetPinColor(DEFAULT_COLOR)
 end
 
 function MapPinEnhancedBasePinMixin:SetPinData(pinData)
@@ -92,6 +80,13 @@ function MapPinEnhancedBasePinMixin:SetPinData(pinData)
     self:UpdatePin()
 end
 
+---comment
+---@param color string
 function MapPinEnhancedBasePinMixin:SetPinColor(color)
-    self.icon:SetVertexColor(color.r, color.g, color.b)
+    local untrackedTexture = MapPinEnhanced:GetTexture("PinUntracked" .. color)
+    local trackedTexture = MapPinEnhanced:GetTexture("PinTracked" .. color)
+    assert(untrackedTexture, "Untracked texture not found")
+    assert(trackedTexture, "Tracked texture not found")
+    self.untrackedTexture = untrackedTexture
+    self.trackedTexture = trackedTexture
 end

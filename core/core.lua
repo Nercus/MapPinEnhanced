@@ -71,3 +71,15 @@ function MapPinEnhanced:SetBlizzardWaypoint(x, y, mapID)
         SuperTrackSetSuperTrackedUserWaypoint(true)
     end)
 end
+
+MapPinEnhanced.PIN_COLORS = {
+    ["Yellow"] = CreateColor(0.8745, 0.6627, 0.0196),
+    ["Pale"] = CreateColor(0.9137, 0.6078, 0.3569),
+    ["Red"] = CreateColor(0.9137, 0.0706, 0.0078),
+    ["Pink"] = CreateColor(1.0000, 0.3961, 0.7804),
+    ["Green"] = CreateColor(0.3176, 0.9137, 0.0745),
+    ["DarkBlue"] = CreateColor(0.3176, 0.9137, 0.0745),
+    ["Purple"] = CreateColor(0.6941, 0.5020, 0.9137),
+    ["LightBlue"] = CreateColor(0.4745, 0.5020, 0.9137),
+    ["Orange"] = CreateColor(0.9137, 0.3882, 0.1882),
+}

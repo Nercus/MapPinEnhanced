@@ -12,16 +12,6 @@ local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTempl
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
 
-local TEST_COLORS = {
-    CreateColor(1, 0.369, 0.545),
-    CreateColor(0.651, 0.067, 0.129),
-    CreateColor(1, 0.647, 0.31),
-    CreateColor(0.455, 0.863, 0.525),
-    CreateColor(0.004, 0.373, 0.231),
-    CreateColor(0, 0.831, 0.945),
-    CreateColor(0.655, 0.573, 1),
-    CreateColor(0.6, 0.082, 0.459),
-}
 
 
 ---@param pinData pinData
@@ -57,9 +47,9 @@ function PinFactory:CreatePin(pinData, pinID)
         if not success then
             return
         end
-        worldmapPin:SetTracked()
-        minimapPin:SetTracked()
-        TrackerPinEntry:SetTracked()
+        worldmapPin:SetTrackedTexture()
+        minimapPin:SetTrackedTexture()
+        TrackerPinEntry:SetTrackedTexture()
         isTracked = true
     end
 
@@ -67,9 +57,9 @@ function PinFactory:CreatePin(pinData, pinID)
         if isTracked then
             C_Map.ClearUserWaypoint()
         end
-        worldmapPin:SetUntracked()
-        minimapPin:SetUntracked()
-        TrackerPinEntry:SetUntracked()
+        worldmapPin:SetUntrackedTexture()
+        minimapPin:SetUntrackedTexture()
+        TrackerPinEntry:SetUntrackedTexture()
         isTracked = false
     end
 
@@ -86,13 +76,22 @@ function PinFactory:CreatePin(pinData, pinID)
         worldmapPin:SetPinColor(color)
         minimapPin:SetPinColor(color)
         TrackerPinEntry:SetPinColor(color)
+        if (isTracked) then
+            worldmapPin:SetTrackedTexture()
+            minimapPin:SetTrackedTexture()
+            TrackerPinEntry:SetTrackedTexture()
+        else
+            worldmapPin:SetUntrackedTexture()
+            minimapPin:SetUntrackedTexture()
+            TrackerPinEntry:SetUntrackedTexture()
+        end
     end
 
 
 
     local function CreateMenu(parentFrame)
         local titleString = string.format("|%s%s:20:20|%s %s",
-            pinData.usesAtlas and "A:" or "T", pinData.texture,
+            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.icon:GetTexture(),
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
 
         ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
@@ -101,10 +100,10 @@ function PinFactory:CreatePin(pinData, pinID)
             rootDescription:CreateDivider()
             ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
             local submenu = rootDescription:CreateButton("Change Color");
-            for i = 1, #TEST_COLORS do
+            for colorString, color in pairs(MapPinEnhanced.PIN_COLORS) do
                 local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
-                    TEST_COLORS[i]:GetRGBAsBytes())
-                submenu:CreateButton(buttonTextureText, function() SetColor(TEST_COLORS[i]) end)
+                    color:GetRGBAsBytes())
+                submenu:CreateButton(buttonTextureText, function() SetColor(colorString) end)
             end
 
             rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)

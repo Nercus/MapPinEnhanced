@@ -19,21 +19,20 @@ function MapPinEnhancedTrackerPinEntryMixin:OnClick()
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
-function MapPinEnhancedTrackerPinEntryMixin:OverrideTexture()
-    ---@type pinData
-    local pinData = self.pinData
-    if (pinData.texture) then
-        if (pinData.usesAtlas) then
-            self.Pin.icon:SetAtlas(pinData.texture)
-            return
-        end
-        self.Pin.icon:SetTexture(pinData.texture)
-    end
+function MapPinEnhancedTrackerPinEntryMixin:SetCustomTexture()
+    -- TODO: this function is for using a custom texture that is placed on top of the base pin textures
 end
 
----comment we override the texture function from the base pin mixin to include the other pathing to the texture
-function MapPinEnhancedTrackerPinEntryMixin:SetPinColor(color)
-    self.Pin.icon:SetVertexColor(color.r, color.g, color.b)
+function MapPinEnhancedTrackerPinEntryMixin:SetTrackedTexture()
+    local pinData = self.pinData
+    if not pinData then return end
+    self.Pin.icon:SetTexture(self.trackedTexture)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
+    local pinData = self.pinData
+    if not pinData then return end
+    self.Pin.icon:SetTexture(self.untrackedTexture)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title

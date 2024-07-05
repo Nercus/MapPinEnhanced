@@ -72,6 +72,10 @@ function PinManager:AddPin(pinData)
     assert(pinData.mapID, "Pin data must contain a mapID.")
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
+    assert((pinData.color and MapPinEnhanced.PIN_COLORS[pinData.color]) or not pinData.color,
+        "Pin data must contain a valid color.")
+
+
     if #PinManager.Pins >= MAX_COUNT_PINS then
         -- too many pins
         -- TODO: notify the player here
@@ -85,13 +89,10 @@ function PinManager:AddPin(pinData)
         return
     end
 
-
     -- set defaults
-    if (pinData.texture == nil) then
-        pinData.texture = MapPinEnhanced:GetTexture("UntrackedPin")
-        pinData.usesAtlas = false
+    if (pinData.texture == nil and pinData.color == nil) then
+        pinData.color = "Yellow"
     end
-
 
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     PinManager.Pins[pinID] = pinObject
@@ -102,10 +103,9 @@ function PinManager:AddPin(pinData)
         pinObject:Untrack()
     end
 
-    -- TODO: persist pins
     self:PersistPins()
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-    PinManager:RestorePins()
-end)
+-- MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+--     PinManager:RestorePins()
+-- end)

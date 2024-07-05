@@ -7,6 +7,7 @@
 ---@field setTracked boolean? set to true to autotrack this pin on creation
 ---@field title string?
 ---@field texture string?
+---@field color string?
 ---@field usesAtlas boolean?
 
 
