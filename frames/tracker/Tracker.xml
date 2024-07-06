@@ -14,7 +14,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture name="$parentBackground" atlas="plunderstorm-stormbar-fill"
+                <Texture atlas="plunderstorm-stormbar-fill"
                     desaturated="true">
                     <Size x="250" y="26" />
                     <Anchors>
@@ -31,7 +31,7 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString name="$parentTitle" inherits="GameFontNormal"
+                <FontString parentKey="title" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="CENTER">
                     <Size x="250" y="26" />
@@ -53,7 +53,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button>
+            <Button parentKey="viewToggle">
                 <Size x="18" y="22" />
                 <NormalTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Up"
                     setAllPoints="true" />
@@ -64,7 +64,6 @@
                 <Anchors>
                     <Anchor point="TOPLEFT" x="5" y="-2" />
                 </Anchors>
-
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Anchors>

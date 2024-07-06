@@ -20,6 +20,7 @@
 ---@field Track fun()
 ---@field Untrack fun()
 ---@field IsTracked fun():boolean
+---@field HandleClicks fun()
 
 
 
@@ -42,3 +43,5 @@ function FramePool:Acquire() end
 ---@param obj Frame
 ---@return boolean success
 function FramePool:Release(obj) end
+
+function FramePool:ReleaseAll() end

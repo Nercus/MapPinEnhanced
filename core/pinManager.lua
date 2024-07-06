@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
--- NOTE: Create, delete and manage pins here (multiple pins)
 
 ---@class PinFactory : Module
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
@@ -22,6 +21,10 @@ local function GetPinIDFromPinData(pinData)
     return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
 end
 
+
+function PinManager:GetPins()
+    return self.Pins
+end
 
 function PinManager:GetPinByID(pinID)
     return self.Pins[pinID]
@@ -104,6 +107,9 @@ function PinManager:AddPin(pinData)
     end
 
     self:PersistPins()
+    if MapPinEnhanced.pinTracker:GetActiveView() == "pins" then
+        MapPinEnhanced.pinTracker:AddEntry(pinObject.TrackerPinEntry)
+    end
 end
 
 -- MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()

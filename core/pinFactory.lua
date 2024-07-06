@@ -38,8 +38,6 @@ function PinFactory:CreatePin(pinData, pinID)
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
-    MapPinEnhanced.pinTracker:AddEntry(TrackerPinEntry)
-
 
     local isTracked = false
     local function Track()
@@ -121,14 +119,15 @@ function PinFactory:CreatePin(pinData, pinID)
     end
 
 
-
-
+    -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
     TrackerPinEntry:SetScript("OnMouseDown", HandleClicks)
 
     minimapPin:UpdatePin()
     worldmapPin:UpdatePin()
     TrackerPinEntry:UpdatePin()
+
+
     return {
         pinID = pinID,
         worldmapPin = worldmapPin,
