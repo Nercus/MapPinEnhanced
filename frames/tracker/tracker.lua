@@ -72,7 +72,16 @@ function MapPinEnhancedTrackerMixin:SetActiveView(viewType)
             table.insert(self.entries, pin.TrackerPinEntry)
         end
     elseif viewType == "Sets" then
-        -- self:AddMultipleEntries(MapPinEnhanced.SetManager:GetAllSetEntries())
+        if not self.importButton then
+            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
+                "MapPinEnhancedTrackerTextImportButtonTemplate")
+        end
+        local sets = {} ---@type table<number, SetObject | MapPinEnhancedTrackerTextImportButtonMixin>
+        table.insert(sets, self.importButton)
+        --MapPinEnhanced.SetManager:GetAllSetEntries()
+        for _, set in pairs(sets) do
+            table.insert(self.entries, set)
+        end
     end
     self.activeView = viewType
     self:UpdateEntriesPosition()

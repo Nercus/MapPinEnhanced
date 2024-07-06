@@ -30,6 +30,20 @@ function MapPinEnhanced:TogglePinTracker(forceShow)
     end
 end
 
+function MapPinEnhanced:ToggleImportWindow()
+    if not self.importWindow then
+        self.importWindow = CreateFrame("Frame", "MapPinEnhancedImportWindow", UIParent,
+            "MapPinEnhancedImportWindowTemplate") --[[@as MapPinEnhancedImportWindowMixin]]
+        self.importWindow:Open()
+        return
+    end
+    if self.importWindow:IsVisible() then
+        self.importWindow:Close()
+    else
+        self.importWindow:Open()
+    end
+end
+
 local function RestorePinTrackerVisibility()
     local trackerVisibility = MapPinEnhanced:GetVar("trackerVisible") --[[@as boolean]]
     if trackerVisibility == nil then
