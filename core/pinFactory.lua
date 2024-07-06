@@ -111,7 +111,7 @@ function PinFactory:CreatePin(pinData, pinID)
 
 
 
-    local function RemovePin()
+    local function Remove()
         MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
         worldmapPin:Hide()
         minimapPin:Hide()
@@ -133,7 +133,7 @@ function PinFactory:CreatePin(pinData, pinID)
         local shift, ctrl, alt = IsShiftKeyDown(), IsControlKeyDown(), IsAltKeyDown()
         if button == "LeftButton" then
             if ctrl then
-                RemovePin()
+                PinManager:RemovePinByID(pinID)
                 return
             end
             if shift then
@@ -165,5 +165,6 @@ function PinFactory:CreatePin(pinData, pinID)
         Track = Track,
         Untrack = Untrack,
         IsTracked = function() return isTracked end,
+        Remove = Remove,
     }
 end

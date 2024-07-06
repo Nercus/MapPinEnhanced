@@ -49,6 +49,16 @@ function PinManager:UntrackTrackedPin()
     end
 end
 
+function PinManager:RemovePinByID(pinID)
+    local pin = self.Pins[pinID]
+    if not pin then
+        return
+    end
+    pin:Remove()
+    self.Pins[pinID] = nil
+    self:PersistPins()
+end
+
 function PinManager:PersistPins()
     ---@type table<string, pinData>
     local reducedPins = {}
@@ -112,6 +122,6 @@ function PinManager:AddPin(pinData)
     end
 end
 
--- MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
---     PinManager:RestorePins()
--- end)
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+    PinManager:RestorePins()
+end)

@@ -20,7 +20,7 @@
 ---@field Track fun()
 ---@field Untrack fun()
 ---@field IsTracked fun():boolean
----@field HandleClicks fun()
+---@field Remove fun()
 
 
 
