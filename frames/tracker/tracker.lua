@@ -8,7 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field SetPanExtent fun(self:MapPinEnhancedTrackerScrollFrame, extent:number)
 
 
----@alias TrackerView 'pins' | 'sets'
+---@alias TrackerView 'Pins' | 'Sets'
 
 
 ---@class MapPinEnhancedTrackerMixin : Frame
@@ -63,17 +63,16 @@ function MapPinEnhancedTrackerMixin:SetActiveView(viewType)
         return
     end
     self:ClearEntries()
-    if viewType == "pins" then
+    if viewType == "Pins" then
         ---@class PinManager : Module
         local PinManager = MapPinEnhanced:GetModule("PinManager")
         local pins = PinManager:GetPins()
+        ---@type number
         for _, pin in pairs(pins) do
             table.insert(self.entries, pin.TrackerPinEntry)
         end
-        self:SetTrackerTitle("Pins")
-    elseif viewType == "sets" then
+    elseif viewType == "Sets" then
         -- self:AddMultipleEntries(MapPinEnhanced.SetManager:GetAllSetEntries())
-        self:SetTrackerTitle("Sets")
     end
     self.activeView = viewType
     self:UpdateEntriesPosition()
@@ -102,14 +101,14 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollFrame:SetPanExtent(ENTRY_HEIGHT + ENTRY_GAP)
 
     self.viewToggle:SetScript("OnClick", function()
-        if self.activeView == "pins" then
-            self:SetActiveView("sets")
+        if self.activeView == "Pins" then
+            self:SetActiveView("Sets")
         else
-            self:SetActiveView("pins")
+            self:SetActiveView("Pins")
         end
     end)
     -- set default view
-    self:SetActiveView("pins")
+    self:SetActiveView("Pins")
 end
 
 function MapPinEnhancedTrackerMixin:OnMouseDown()
@@ -141,6 +140,7 @@ function MapPinEnhancedTrackerMixin:UpdateEntriesPosition()
         height = 1
     end
     self.scrollFrame.Child:SetHeight(height)
+    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, #self.entries))
 end
 
 ---@param entry Frame
@@ -156,6 +156,7 @@ function MapPinEnhancedTrackerMixin:AddEntry(entry)
     entry:SetParent(self.scrollFrame.Child)
     entry:Show()
     self.scrollFrame.Child:SetHeight(scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP)
+    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, #self.entries))
 end
 
 function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
