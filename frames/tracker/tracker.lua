@@ -47,6 +47,7 @@ function MapPinEnhancedTrackerMixin:ClearEntries()
     for _, entry in ipairs(self.entries) do
         entry:Hide()
         entry:ClearAllPoints()
+        entry:SetParent(nil)
     end
     self.entries = {}
 end
@@ -135,6 +136,10 @@ function MapPinEnhancedTrackerMixin:UpdateEntriesPosition()
         height = height + ENTRY_HEIGHT + ENTRY_GAP --[[@as number]]
         entry:Show()
     end
+    -- set the height of the scroll child so the scroll bar gets resized correctly
+    if height < 1 then
+        height = 1
+    end
     self.scrollFrame.Child:SetHeight(height)
 end
 
@@ -152,8 +157,6 @@ function MapPinEnhancedTrackerMixin:AddEntry(entry)
     entry:Show()
     self.scrollFrame.Child:SetHeight(scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP)
 end
-
-
 
 function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
     for i, e in ipairs(self.entries) do
