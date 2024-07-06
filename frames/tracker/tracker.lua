@@ -120,6 +120,15 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self:SetActiveView("Pins")
 end
 
+function MapPinEnhancedTrackerMixin:GetEntryCount()
+    local currentView = self:GetActiveView()
+    if currentView == "Pins" then
+        return #self.entries
+    elseif currentView == "Sets" then
+        return #self.entries - 1
+    end
+end
+
 function MapPinEnhancedTrackerMixin:OnMouseDown()
     self:StartMoving()
 end
@@ -149,7 +158,7 @@ function MapPinEnhancedTrackerMixin:UpdateEntriesPosition()
         height = 1
     end
     self.scrollFrame.Child:SetHeight(height)
-    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, #self.entries))
+    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
 end
 
 ---@param entry Frame
@@ -165,7 +174,7 @@ function MapPinEnhancedTrackerMixin:AddEntry(entry)
     entry:SetParent(self.scrollFrame.Child)
     entry:Show()
     self.scrollFrame.Child:SetHeight(scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP)
-    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, #self.entries))
+    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
 end
 
 function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
