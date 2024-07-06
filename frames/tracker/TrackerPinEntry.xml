@@ -18,7 +18,7 @@
         </Frames>
         <Layers>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="GarrMissionLocation-Maw-ButtonHighlight"
+                <Texture parentKey="highlight" atlas="groupfinder-button-select" alphaMode="ADD"
                     setAllPoints="true" />
             </Layer>
         </Layers>
