@@ -72,7 +72,9 @@ function MapPinEnhancedBasePinMixin:UpdatePin()
         return
     end
     self:SetTitle()
-    self:SetPinColor(DEFAULT_COLOR)
+    if not self.pinData or not self.pinData.color then
+        self:SetPinColor(DEFAULT_COLOR)
+    end
 end
 
 function MapPinEnhancedBasePinMixin:SetPinData(pinData)

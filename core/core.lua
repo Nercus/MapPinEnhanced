@@ -73,13 +73,25 @@ function MapPinEnhanced:SetBlizzardWaypoint(x, y, mapID)
 end
 
 MapPinEnhanced.PIN_COLORS = {
-    ["Yellow"] = CreateColor(0.8745, 0.6627, 0.0196),
-    ["Pale"] = CreateColor(0.9137, 0.6078, 0.3569),
-    ["Red"] = CreateColor(0.9137, 0.0706, 0.0078),
-    ["Pink"] = CreateColor(1.0000, 0.3961, 0.7804),
-    ["Green"] = CreateColor(0.3176, 0.9137, 0.0745),
-    ["DarkBlue"] = CreateColor(0.3176, 0.9137, 0.0745),
-    ["Purple"] = CreateColor(0.6941, 0.5020, 0.9137),
-    ["LightBlue"] = CreateColor(0.4745, 0.5020, 0.9137),
-    ["Orange"] = CreateColor(0.9137, 0.3882, 0.1882),
+    { color = CreateColorFromBytes(237, 179, 20, 1),  colorName = "Yellow" },
+    { color = CreateColorFromBytes(96, 236, 29, 1),   colorName = "Green" },
+    { color = CreateColorFromBytes(132, 196, 237, 1), colorName = "LightBlue" },
+    { color = CreateColorFromBytes(42, 93, 237, 1),   colorName = "DarkBlue" },
+    { color = CreateColorFromBytes(190, 139, 237, 1), colorName = "Purple" },
+    { color = CreateColorFromBytes(251, 109, 197, 1), colorName = "Pink" },
+    { color = CreateColorFromBytes(235, 15, 14, 1),   colorName = "Red" },
+    { color = CreateColorFromBytes(237, 114, 63, 1),  colorName = "Orange" },
+    { color = CreateColorFromBytes(235, 183, 139, 1), colorName = "Pale" },
+}
+
+MapPinEnhanced.PIN_COLORS_BY_NAME = {
+    ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
+    ["Green"] = CreateColorFromBytes(96, 236, 29, 1),
+    ["LightBlue"] = CreateColorFromBytes(132, 196, 237, 1),
+    ["DarkBlue"] = CreateColorFromBytes(42, 93, 237, 1),
+    ["Purple"] = CreateColorFromBytes(190, 139, 237, 1),
+    ["Pink"] = CreateColorFromBytes(251, 109, 197, 1),
+    ["Red"] = CreateColorFromBytes(235, 15, 14, 1),
+    ["Orange"] = CreateColorFromBytes(237, 114, 63, 1),
+    ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
 }

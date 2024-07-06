@@ -63,7 +63,7 @@ function PinManager:PersistPins()
     ---@type table<string, pinData>
     local reducedPins = {}
     for pinID, pin in pairs(self.Pins) do
-        reducedPins[pinID] = pin.pinData
+        reducedPins[pinID] = pin:GetPinData()
     end
     MapPinEnhanced:SaveVar("storedPins", reducedPins)
 end
@@ -85,7 +85,7 @@ function PinManager:AddPin(pinData)
     assert(pinData.mapID, "Pin data must contain a mapID.")
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
-    assert((pinData.color and MapPinEnhanced.PIN_COLORS[pinData.color]) or not pinData.color,
+    assert((pinData.color and MapPinEnhanced.PIN_COLORS_BY_NAME[pinData.color]) or not pinData.color,
         "Pin data must contain a valid color.")
 
 

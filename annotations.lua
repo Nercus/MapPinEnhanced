@@ -21,6 +21,7 @@
 ---@field Untrack fun()
 ---@field IsTracked fun():boolean
 ---@field Remove fun()
+---@field GetPinData fun():pinData
 
 
 

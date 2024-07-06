@@ -14,16 +14,19 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 
 
 
----@param pinData pinData
+---@param initPinData pinData
 ---@param pinID string
 ---@return PinObject
-function PinFactory:CreatePin(pinData, pinID)
+function PinFactory:CreatePin(initPinData, pinID)
     local worldmapPin = WorldmapPool:Acquire()
     ---@cast worldmapPin MapPinEnhancedWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
     ---@cast minimapPin MapPinEnhancedMinimapPinMixin
     local TrackerPinEntry = TrackerPinEntryPool:Acquire()
     ---@cast TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
+
+
+    local pinData = initPinData
 
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
@@ -83,8 +86,20 @@ function PinFactory:CreatePin(pinData, pinID)
             minimapPin:SetUntrackedTexture()
             TrackerPinEntry:SetUntrackedTexture()
         end
+        pinData.color = color
+        PinManager:PersistPins()
     end
+    SetColor(pinData.color)
 
+
+    local function IsColorSelected(color)
+        local colorByIndex = MapPinEnhanced.PIN_COLORS[color]
+        if not colorByIndex then
+            return false
+        end
+        local colorName = colorByIndex.colorName
+        return pinData.color == colorName
+    end
 
 
     local function CreateMenu(parentFrame)
@@ -98,10 +113,15 @@ function PinFactory:CreatePin(pinData, pinID)
             rootDescription:CreateDivider()
             ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
             local submenu = rootDescription:CreateButton("Change Color");
-            for colorString, color in pairs(MapPinEnhanced.PIN_COLORS) do
+            for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
                 local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
-                    color:GetRGBAsBytes())
-                submenu:CreateButton(buttonTextureText, function() SetColor(colorString) end)
+                    colorTable.color:GetRGBAsBytes())
+                submenu:CreateRadio(
+                    buttonTextureText,
+                    IsColorSelected,
+                    function() SetColor(colorTable.colorName) end,
+                    colorIndex
+                )
             end
 
             rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
@@ -109,6 +129,11 @@ function PinFactory:CreatePin(pinData, pinID)
         end)
     end
 
+
+
+    local function GetPinData()
+        return pinData
+    end
 
 
     local function Remove()
@@ -130,7 +155,8 @@ function PinFactory:CreatePin(pinData, pinID)
 
 
     local function HandleClicks(buttonFrame, button)
-        local shift, ctrl, alt = IsShiftKeyDown(), IsControlKeyDown(), IsAltKeyDown()
+        local shift, ctrl = IsShiftKeyDown(), IsControlKeyDown()
+        -- alt not used right now
         if button == "LeftButton" then
             if ctrl then
                 PinManager:RemovePinByID(pinID)
@@ -166,5 +192,6 @@ function PinFactory:CreatePin(pinData, pinID)
         Untrack = Untrack,
         IsTracked = function() return isTracked end,
         Remove = Remove,
+        GetPinData = GetPinData
     }
 end
