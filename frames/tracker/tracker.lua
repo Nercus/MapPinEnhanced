@@ -152,3 +152,17 @@ function MapPinEnhancedTrackerMixin:AddEntry(entry)
     entry:Show()
     self.scrollFrame.Child:SetHeight(scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP)
 end
+
+
+
+function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
+    for i, e in ipairs(self.entries) do
+        if e == entry then
+            table.remove(self.entries, i)
+            entry:Hide()
+            entry:ClearAllPoints()
+            self:UpdateEntriesPosition()
+            return
+        end
+    end
+end

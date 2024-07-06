@@ -110,8 +110,36 @@ function PinFactory:CreatePin(pinData, pinID)
     end
 
 
+
+    local function RemovePin()
+        MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
+        worldmapPin:Hide()
+        minimapPin:Hide()
+        TrackerPinEntry:Hide()
+        WorldmapPool:Release(worldmapPin)
+        MinimapPool:Release(minimapPin)
+        TrackerPinEntryPool:Release(TrackerPinEntry)
+    end
+
+
+
+    local function SharePin()
+        -- TODO: implement sharing of pins
+        error("Not implemented: Share Pin")
+    end
+
+
     local function HandleClicks(buttonFrame, button)
+        local shift, ctrl, alt = IsShiftKeyDown(), IsControlKeyDown(), IsAltKeyDown()
         if button == "LeftButton" then
+            if ctrl then
+                RemovePin()
+                return
+            end
+            if shift then
+                SharePin()
+                return
+            end
             ToggleTracked()
         else
             CreateMenu(buttonFrame)
