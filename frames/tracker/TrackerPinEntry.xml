@@ -4,7 +4,7 @@
     <Script file="TrackerPinEntry.lua" />
     <Button name="MapPinEnhancedTrackerPinEntryTemplate" mixin="MapPinEnhancedTrackerPinEntryMixin"
         virtual="true" enableMouse="true">
-        <Size x="250" y="40" />
+        <Size x="275" y="37" />
         <KeyValues>
             <KeyValue key="titlePosition" value="RIGHT" />
             <KeyValue key="titleXOffset" value="5" />

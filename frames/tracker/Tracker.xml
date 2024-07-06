@@ -3,12 +3,13 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
     <Include file="TrackerPinEntry.xml" />
     <Include file="TrackerSetEntry.xml" />
+    <Include file="TrackerTextImportButton.xml" />
 
     <Script file="Tracker.lua" />
     <Frame name="MapPinEnhancedTrackerTemplate" mixin="MapPinEnhancedTrackerMixin" virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
-        <Size x="250" y="200" />
+        <Size x="300" y="200" />
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
@@ -16,7 +17,7 @@
             <Layer level="BACKGROUND">
                 <Texture atlas="plunderstorm-stormbar-fill"
                     desaturated="true">
-                    <Size x="250" y="26" />
+                    <Size x="300" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
@@ -24,7 +25,7 @@
                 <Texture name="$parentBackground" atlas="plunderstorm-stormbar-border"
                 >
                     <Color r="0.5" g="0.5" b="0.5" />
-                    <Size x="250" y="26" />
+                    <Size x="300" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
@@ -34,7 +35,7 @@
                 <FontString parentKey="title" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="CENTER">
-                    <Size x="250" y="26" />
+                    <Size x="300" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
@@ -42,7 +43,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button inherits="UIPanelCloseButtonDefaultAnchors">
+            <Button inherits="BigRedExitButtonTemplate">
                 <Size x="16" y="16" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="-5" y="-5" />
@@ -70,7 +71,7 @@
                     <Anchor point="TOPLEFT" x="0" y="-26" />
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
-                <Size x="250" y="1" />
+                <Size x="300" y="1" />
                 <KeyValues>
                     <KeyValue key="scrollBarX" value="-20" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
@@ -78,7 +79,7 @@
                 </KeyValues>
                 <ScrollChild>
                     <Frame parentKey="Child">
-                        <Size x="250" y="1" />
+                        <Size x="300" y="1" />
                         <Anchors>
                             <Anchor point="TOPLEFT" x="0" y="0" />
                             <Anchor point="BOTTOMRIGHT" x="0" y="0" />
