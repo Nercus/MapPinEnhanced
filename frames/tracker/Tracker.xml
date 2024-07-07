@@ -22,7 +22,7 @@
                         <Anchor point="TOPLEFT" />
                     </Anchors>
                 </Texture>
-                <Texture name="$parentBackground" atlas="plunderstorm-stormbar-border"
+                <Texture parentKey="bg" atlas="plunderstorm-stormbar-border"
                 >
                     <Color r="0.5" g="0.5" b="0.5" />
                     <Size x="300" y="26" />
