@@ -64,7 +64,6 @@ local function AddTestPins()
         y = math.random(),
         setTracked = true,
         title = "Test Pin",
-        description = "This is a test pin",
     })
 end
 

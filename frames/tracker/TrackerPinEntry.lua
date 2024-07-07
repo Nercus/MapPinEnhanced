@@ -1,3 +1,6 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedTrackerPinEntryMixin : MapPinEnhancedBasePinMixin, Button
 ---@field Pin MapPinEnhancedBasePinMixin
 MapPinEnhancedTrackerPinEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
@@ -20,7 +23,18 @@ end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
 function MapPinEnhancedTrackerPinEntryMixin:SetCustomTexture()
-    -- TODO: this function is for using a custom texture that is placed on top of the base pin textures
+    if type(self.pinData.texture) ~= "number" then
+        self.Pin.customTexture:RemoveMaskTexture(self.Pin.customTextureMask)
+    else
+        self.Pin.customTexture:AddMaskTexture(self.Pin.customTextureMask)
+    end
+
+    if (self.pinData.usesAtlas) then
+        self.Pin.customTexture:SetAtlas(self.pinData.texture)
+    else
+        self.Pin.customTexture:SetTexture(self.pinData.texture)
+    end
+    self.Pin.customTexture:Show()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTrackedTexture()

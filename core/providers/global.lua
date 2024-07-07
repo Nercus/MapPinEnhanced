@@ -11,8 +11,12 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 -- TODO: add a function to register a callback so other addons know when a pin is added
 -- TODO: add a wrapper to parse tomtom pin info
 local globalMapPinEnhanced = {}
-globalMapPinEnhanced.AddPin = PinManager.AddPin
-globalMapPinEnhanced.AddWaypoint = PinManager.AddPin
+globalMapPinEnhanced.AddPin = function(_, pinData)
+    PinManager:AddPin(pinData)
+end
+globalMapPinEnhanced.AddWaypoint = function(_, pinData)
+    PinManager:AddPin(pinData)
+end
 
 ---@type table
 _G[MapPinEnhanced.addonName] = globalMapPinEnhanced

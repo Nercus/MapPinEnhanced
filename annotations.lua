@@ -2,13 +2,13 @@
 
 ---@class pinData
 ---@field mapID number
----@field x number
----@field y number
+---@field x number x coordinate between 0 and 1
+---@field y number y coordinate between 0 and 1
 ---@field setTracked boolean? set to true to autotrack this pin on creation
 ---@field title string?
 ---@field texture string?
----@field color string?
 ---@field usesAtlas boolean?
+---@field color string?
 
 
 ---@class PinObject

@@ -85,9 +85,17 @@ function PinManager:AddPin(pinData)
     assert(pinData.mapID, "Pin data must contain a mapID.")
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
-    assert((pinData.color and MapPinEnhanced.PIN_COLORS_BY_NAME[pinData.color]) or not pinData.color,
+    assert(
+        (pinData.color and MapPinEnhanced.PIN_COLORS_BY_NAME[pinData.color] or pinData.color == 'Custom') or
+        not pinData.color,
         "Pin data must contain a valid color.")
 
+    if (pinData.x > 1) then
+        pinData.x = pinData.x / 100
+    end
+    if (pinData.y > 1) then
+        pinData.y = pinData.y / 100
+    end
 
     if #PinManager.Pins >= MAX_COUNT_PINS then
         -- too many pins

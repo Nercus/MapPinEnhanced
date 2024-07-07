@@ -27,9 +27,12 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local pinData = initPinData
-
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
+
+    if pinData.texture then
+        pinData.color = "Custom"
+    end
 
     worldmapPin:SetPinData(pinData)
     minimapPin:SetPinData(pinData)
@@ -141,17 +144,19 @@ function PinFactory:CreatePin(initPinData, pinID)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
             rootDescription:CreateTitle(titleString)
             rootDescription:CreateDivider()
-            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
-            local colorSubmenu = rootDescription:CreateButton("Change Color");
-            for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
-                local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
-                    colorTable.color:GetRGBAsBytes())
-                colorSubmenu:CreateRadio(
-                    buttonTextureText,
-                    IsColorSelected,
-                    function() SetColor(colorTable.colorName) end,
-                    colorIndex
-                )
+            if pinData.color ~= "Custom" then
+                ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+                local colorSubmenu = rootDescription:CreateButton("Change Color");
+                for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
+                    local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
+                        colorTable.color:GetRGBAsBytes())
+                    colorSubmenu:CreateRadio(
+                        buttonTextureText,
+                        IsColorSelected,
+                        function() SetColor(colorTable.colorName) end,
+                        colorIndex
+                    )
+                end
             end
 
             ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension

@@ -4,6 +4,8 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedBasePinMixin : Frame
 ---@field icon Texture
 ---@field highlight Texture
+---@field customTexture Texture
+---@field customTextureMask MaskTexture
 ---@field title FontString
 ---@field pinData pinData | nil
 ---@field titlePosition string | nil
@@ -17,7 +19,18 @@ MapPinEnhancedBasePinMixin = {}
 
 
 function MapPinEnhancedBasePinMixin:SetCustomTexture()
-    -- TODO: this function is for using a custom texture that is placed on top of the base pin textures
+    if type(self.pinData.texture) ~= "number" then
+        self.customTexture:RemoveMaskTexture(self.customTextureMask)
+    else
+        self.customTexture:AddMaskTexture(self.customTextureMask)
+    end
+
+    if (self.pinData.usesAtlas) then
+        self.customTexture:SetAtlas(self.pinData.texture)
+    else
+        self.customTexture:SetTexture(self.pinData.texture)
+    end
+    self.customTexture:Show()
 end
 
 ---Set the position of the title text
@@ -50,6 +63,8 @@ function MapPinEnhancedBasePinMixin:SetTitle()
 end
 
 function MapPinEnhancedBasePinMixin:OnLoad()
+    print("MapPinEnhancedBasePinMixin:OnLoad")
+    -- TODO: onload is not called for reused frames
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
     self:SetUntrackedTexture()
 end
@@ -80,6 +95,10 @@ end
 function MapPinEnhancedBasePinMixin:SetPinData(pinData)
     self.pinData = pinData
     self:UpdatePin()
+
+    if self.pinData.texture then
+        self:SetCustomTexture()
+    end
 end
 
 ---comment

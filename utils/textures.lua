@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@type table<string, string>
 local TEXTURES = {
     ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedDarkBlue.png",
+    ["PinMask"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinMask.png",
     ["PinHighlight"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinHighlight.png",
     ["PinShadow"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinShadow.png",
     ["PinTrackedDarkBlue"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedDarkBlue.png",
@@ -15,6 +16,7 @@ local TEXTURES = {
     ["PinTrackedPurple"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedPurple.png",
     ["PinTrackedRed"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedRed.png",
     ["PinTrackedYellow"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedYellow.png",
+    ["PinTrackedCustom"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedCustom.png",
     ["PinUntrackedDarkBlue"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedDarkBlue.png",
     ["PinUntrackedGreen"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedGreen.png",
     ["PinUntrackedLightBlue"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedLightBlue.png",
@@ -24,12 +26,11 @@ local TEXTURES = {
     ["PinUntrackedPurple"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedPurple.png",
     ["PinUntrackedRed"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedRed.png",
     ["PinUntrackedYellow"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedYellow.png",
+    ["PinUntrackedCustom"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\PinUntrackedCustom.png",
 }
 
 ---@type table<string, any>
-local ATLAS = {
-    ["shadowBox"] = { "atlasTextureFile", 47, 413, 0.09765625, 0.904296875, 0.0341796875, 0.080078125, false, false }, --Note: This is a test value
-}
+local ATLAS = {}
 
 ---Get the texture path for a texture. If the texture is not found, an error is thrown.
 ---@param textureName string

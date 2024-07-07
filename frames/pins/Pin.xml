@@ -10,16 +10,35 @@
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
                     setAllPoints="true" />
             </Layer>
-            <Layer level="OVERLAY">
+            <Layer level="ARTWORK">
                 <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true" />
                 <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="customTexture"
+                    hidden="true">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture parentKey="customTextureMask"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinMask.png"
+                    hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="customTexture" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight"
                     file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.png"
-                    setAllPoints="true">
-                </Texture>
+                    setAllPoints="true" />
             </Layer>
         </Layers>
         <Scripts>
