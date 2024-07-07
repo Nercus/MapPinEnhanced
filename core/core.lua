@@ -8,6 +8,13 @@ local PinManager = MapPinEnhanced:CreateModule("PinManager")
 ---@class PinFactory : Module
 local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
 
+
+---@class SetManager : Module
+local SetManager = MapPinEnhanced:CreateModule("SetManager")
+
+---@class SetFactory : Module
+local SetFactory = MapPinEnhanced:CreateModule("SetFactory")
+
 ---@diagnostic disable-next-line: no-unknown
 local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
 local SetUserWaypoint = C_Map.SetUserWaypoint

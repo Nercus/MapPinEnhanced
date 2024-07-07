@@ -4,5 +4,7 @@
     <Script file="core.lua" />
     <Script file="pinFactory.lua" />
     <Script file="pinManager.lua" />
+    <Script file="setFactory.lua" />
+    <Script file="setManager.lua" />
     <Include file="providers\providers.xml" />
 </Ui>

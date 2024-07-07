@@ -4,14 +4,14 @@ local MapPinEnhanced = select(2, ...)
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 ---@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+---@class SetManager : Module
+local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local HBDP = LibStub("HereBeDragons-Pins-2.0")
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
-
-
 
 
 ---@param initPinData pinData
@@ -102,39 +102,12 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
-    local function CreateMenu(parentFrame)
-        local titleString = string.format("|%s%s:20:20|%s %s",
-            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.icon:GetTexture(),
-            pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
-
-        ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
-        MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
-            rootDescription:CreateTitle(titleString)
-            rootDescription:CreateDivider()
-            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
-            local submenu = rootDescription:CreateButton("Change Color");
-            for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
-                local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
-                    colorTable.color:GetRGBAsBytes())
-                submenu:CreateRadio(
-                    buttonTextureText,
-                    IsColorSelected,
-                    function() SetColor(colorTable.colorName) end,
-                    colorIndex
-                )
-            end
-
-            rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
-            rootDescription:CreateButton("Add to a set", function() error("Not implemented: Add to set") end)
-        end)
-    end
 
 
 
     local function GetPinData()
         return pinData
     end
-
 
     local function Remove()
         if isTracked then
@@ -156,6 +129,55 @@ function PinFactory:CreatePin(initPinData, pinID)
     local function SharePin()
         -- TODO: implement sharing of pins
         error("Not implemented: Share Pin")
+    end
+
+
+    local function CreateMenu(parentFrame)
+        local titleString = string.format("|%s%s:20:20|%s %s",
+            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.icon:GetTexture(),
+            pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
+
+        ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+        MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
+            rootDescription:CreateTitle(titleString)
+            rootDescription:CreateDivider()
+            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+            local colorSubmenu = rootDescription:CreateButton("Change Color");
+            for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
+                local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
+                    colorTable.color:GetRGBAsBytes())
+                colorSubmenu:CreateRadio(
+                    buttonTextureText,
+                    IsColorSelected,
+                    function() SetColor(colorTable.colorName) end,
+                    colorIndex
+                )
+            end
+
+            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+            local setSubmenu = rootDescription:CreateButton("Add to a set");
+            local sets = SetManager:GetSets()
+            setSubmenu:CreateButton("Create new set", function()
+                MapPinEnhanced:OpenTextModal({
+                    title = "Set Name",
+                    autoFocus = true,
+                    onAccept = function(text)
+                        local set = SetManager:AddSet(text)
+                        set:AddPin(pinData)
+                    end,
+                    onCancel = function() end
+                })
+            end)
+            setSubmenu:CreateDivider()
+            for _, set in pairs(sets) do
+                setSubmenu:CreateButton(set.name, function()
+                    set:AddPin(pinData)
+                end)
+            end
+
+            rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
+            rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
+        end)
     end
 
 

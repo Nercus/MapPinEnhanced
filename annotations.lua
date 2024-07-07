@@ -24,6 +24,17 @@
 ---@field GetPinData fun():pinData
 
 
+---@class SetObject
+---@field setID string
+---@field name string
+---@field AddPin fun(self, pinData:pinData)
+---@field RemovePin fun(self, pinID:string)
+---@field Delete fun()
+---@field GetPins fun():table<string, pinData>
+---@field GetPin fun(self, pinID:string):pinData
+---@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
+
+
 
 ---@param frameType string
 ---@param parent string?
