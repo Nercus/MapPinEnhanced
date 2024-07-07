@@ -36,7 +36,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button parentKey="DeleteCharacterButton" inherits="UIButtonTemplate">
+            <Button parentKey="ClearEditboxButton" inherits="UIButtonTemplate">
                 <Size x="24" y="24" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="10" y="5" />

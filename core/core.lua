@@ -111,3 +111,13 @@ MapPinEnhanced.PIN_COLORS_BY_NAME = {
     ["Orange"] = CreateColorFromBytes(237, 114, 63, 1),
     ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
 }
+
+
+
+---@param options ModalOptions
+function MapPinEnhanced:OpenTextModal(options)
+    if not self.textModal then
+        self.textModal = CreateFrame("Frame", "MapPinEnhancedTextModal", UIParent, "MapPinEnhancedTextModalTemplate") --[[@as MapPinEnhancedTextModalMixin]]
+    end
+    self.textModal:Open(options)
+end
