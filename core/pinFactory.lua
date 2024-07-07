@@ -7,7 +7,7 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 ---@class SetManager : Module
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
-local HBDP = LibStub("HereBeDragons-Pins-2.0")
+local HBDP = MapPinEnhanced.HBDP
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")

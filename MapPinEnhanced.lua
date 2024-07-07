@@ -10,3 +10,10 @@ MapPinEnhanced.isWrath = WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC
 MapPinEnhanced.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 MapPinEnhanced.isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 MapPinEnhanced.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
+
+
+local HereBeDragons = LibStub("HereBeDragons-2.0")
+local HereBeDragonsPins = LibStub("HereBeDragons-Pins-2.0")
+
+MapPinEnhanced.HBD = HereBeDragons
+MapPinEnhanced.HBDP = HereBeDragonsPins

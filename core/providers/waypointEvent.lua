@@ -4,8 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinProvider : Module
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 
-
----@class PinManager
+---@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 

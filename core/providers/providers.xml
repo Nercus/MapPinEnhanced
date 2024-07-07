@@ -4,4 +4,5 @@
     <Script file="providers.lua" />
     <Script file="global.lua" />
     <Script file="waypointEvent.lua" />
+    <Script file="tomtom.lua" />
 </Ui>
