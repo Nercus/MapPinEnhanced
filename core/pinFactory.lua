@@ -137,10 +137,15 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function Remove()
+        if isTracked then
+            C_Map.ClearUserWaypoint()
+        end
         MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
         worldmapPin:Hide()
         minimapPin:Hide()
         TrackerPinEntry:Hide()
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, minimapPin)
+        HBDP:RemoveWorldMapIcon(MapPinEnhanced, worldmapPin)
         WorldmapPool:Release(worldmapPin)
         MinimapPool:Release(minimapPin)
         TrackerPinEntryPool:Release(TrackerPinEntry)
