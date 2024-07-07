@@ -114,6 +114,28 @@ end
 MapPinEnhanced:AddSlashCommand("dev", setDevMode)
 
 
+---@diagnostic disable-next-line: no-unknown
+StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
+    text = "Are you sure you want to reset all saved variables?",
+    button1 = "Yes",
+    button2 = "No",
+    OnAccept = function()
+        MapPinEnhancedDB = {}
+        ReloadUI()
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
+
+local function ResetSavedVars()
+    -- use a static popup to confirm
+    ---@diagnostic disable-next-line: no-unknown
+    StaticPopup_Show("MAP_PIN_ENHANCED_RESET_SAVED_VARS")
+end
+
+
 local function AddDevReload()
     local f = CreateFrame("frame")
     f:SetPoint("BOTTOM", 0, 10)
@@ -124,7 +146,7 @@ local function AddDevReload()
     text:SetFontObject(GameFontNormal)
     text:SetPoint("CENTER")
     text:SetText(
-        "Press 1 to reload UI | Press 2 to add test pins | Press 3 to add MapPinEnhanced to devtools | Press 0 to exit dev mode")
+        "Press 1 to reload UI | Press 2 to add test pins | Press 3 to add MapPinEnhanced to devtools | Press 4 to reset saved variables | Press 0 to exit dev mode")
     f:SetScript("OnKeyDown", function(_, key)
         if key == "1" then
             ReloadUI()
@@ -132,6 +154,8 @@ local function AddDevReload()
             AddTestPins()
         elseif key == "3" then
             MapPinEnhanced:Debug(MapPinEnhanced)
+        elseif key == "4" then
+            ResetSavedVars()
         elseif key == "0" then
             setDevMode()
         end

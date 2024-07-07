@@ -28,10 +28,10 @@
 ---@field setID string
 ---@field name string
 ---@field AddPin fun(self, pinData:pinData)
----@field RemovePin fun(self, pinID:string)
+---@field RemovePin fun(self, mapID:string, x:number, y:number)
 ---@field Delete fun()
 ---@field GetPins fun():table<string, pinData>
----@field GetPin fun(self, pinID:string):pinData
+---@field GetPin fun(self, mapID:string, x:number, y:number):pinData
 ---@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 
 

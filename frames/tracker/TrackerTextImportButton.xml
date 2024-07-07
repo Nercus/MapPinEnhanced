@@ -5,11 +5,11 @@
     <Button name="MapPinEnhancedTrackerTextImportButtonTemplate"
         mixin="MapPinEnhancedTrackerTextImportButtonMixin"
         virtual="true" enableMouse="true">
-        <Size x="300" y="40" />
+        <Size x="275" y="37" />
         <NormalTexture atlas="groupfinder-button-cover" setAllPoints="true" />
         <PushedTexture atlas="groupfinder-button-cover-down" setAllPoints="true" />
         <HighlightTexture atlas="groupfinder-button-select" alphaMode="ADD">
-            <Size x="280" y="30" />
+            <Size x="255" y="30" />
             <Anchors>
                 <Anchor point="CENTER" />
             </Anchors>

@@ -1,10 +1,14 @@
 ---@class MapPinEnhancedTrackerSetEntryMixin : Button
+---@field title FontString
 MapPinEnhancedTrackerSetEntryMixin = {}
-
 
 
 function MapPinEnhancedTrackerSetEntryMixin:OnLoad()
     print("MapPinEnhancedTrackerSetEntryMixin:OnLoad() ")
+end
+
+function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
+    self.title:SetText(title)
 end
 
 function MapPinEnhancedTrackerSetEntryMixin:OnClick()

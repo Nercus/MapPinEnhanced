@@ -4,10 +4,22 @@
     <Script file="TrackerSetEntry.lua" />
     <Button name="MapPinEnhancedTrackerSetEntryTemplate" mixin="MapPinEnhancedTrackerSetEntryMixin"
         enableMouse="true" virtual="true">
-        <Size x="250" y="30" />
+        <Size x="275" y="37" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="plunderstorm-scenariotracker-waiting-frame" setAllPoints="true" />
+                <Texture atlas="GarrMissionLocation-Maw-ButtonBG" setAllPoints="true" />
+            </Layer>
+            <Layer level="OVERLAY">
+                <FontString parentKey="title" font="GameFontNormal">
+                    <Size x="0" y="10" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="10" />
+                        <Anchor point="RIGHT" x="-10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture atlas="GarrMissionLocation-Maw-ButtonHighlight" setAllPoints="true" />
             </Layer>
         </Layers>
         <Scripts>

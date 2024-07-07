@@ -22,7 +22,7 @@ MapPinEnhancedTrackerMixin.entries = {}
 
 
 local ENTRY_GAP = 5
-local ENTRY_HEIGHT = 40
+local ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerMixin:RestorePosition()
     local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
     if trackerPosition then
@@ -72,15 +72,17 @@ function MapPinEnhancedTrackerMixin:SetActiveView(viewType)
             table.insert(self.entries, pin.TrackerPinEntry)
         end
     elseif viewType == "Sets" then
+        ---@class SetManager : Module
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
         if not self.importButton then
             self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
                 "MapPinEnhancedTrackerTextImportButtonTemplate")
         end
-        local sets = {} ---@type table<number, SetObject | MapPinEnhancedTrackerTextImportButtonMixin>
-        table.insert(sets, self.importButton)
+        local sets = SetManager:GetSets() ---@type table<string, SetObject | MapPinEnhancedTrackerTextImportButtonMixin>
+        table.insert(self.entries, self.importButton)
         --MapPinEnhanced.SetManager:GetAllSetEntries()
         for _, set in pairs(sets) do
-            table.insert(self.entries, set)
+            table.insert(self.entries, set.TrackerSetEntry)
         end
     end
     self.activeView = viewType
