@@ -1,11 +1,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
 ---@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
-
 ---@class PinFactory : Module
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
+---@class Blizz : Module
+local Blizz = MapPinEnhanced:GetModule("Blizz")
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 ---@type table<string, PinObject>
 PinManager.Pins = {}
@@ -37,7 +38,7 @@ function PinManager:TrackPinByID(pinID)
     end
     PinManager:UntrackTrackedPin()
     local pinData = pin.pinData
-    MapPinEnhanced:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
+    Blizz:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
     return true
 end
 
@@ -86,7 +87,7 @@ function PinManager:AddPin(pinData)
     assert(pinData.x, "Pin data must contain an x coordinate.")
     assert(pinData.y, "Pin data must contain a y coordinate.")
     assert(
-        (pinData.color and MapPinEnhanced.PIN_COLORS_BY_NAME[pinData.color] or pinData.color == 'Custom') or
+        (pinData.color and CONSTANTS.PIN_COLORS_BY_NAME[pinData.color] or pinData.color == 'Custom') or
         not pinData.color,
         "Pin data must contain a valid color.")
 

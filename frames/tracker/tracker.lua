@@ -1,15 +1,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
-
 ---@class MapPinEnhancedTrackerScrollFrame : ScrollFrame
 ---@field Child Frame
 ---@field SetPanExtent fun(self:MapPinEnhancedTrackerScrollFrame, extent:number)
 
-
 ---@alias TrackerView 'Pins' | 'Sets'
-
 
 ---@class MapPinEnhancedTrackerMixin : Frame
 ---@field title FontString
@@ -193,3 +189,16 @@ function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
         end
     end
 end
+
+local function RestorePinTrackerVisibility()
+    local trackerVisibility = MapPinEnhanced:GetVar("trackerVisible") --[[@as boolean]]
+    if trackerVisibility == nil then
+        trackerVisibility = MapPinEnhanced:GetDefault("trackerVisible") --[[@as boolean]]
+    end
+    MapPinEnhanced:TogglePinTracker(trackerVisibility)
+end
+
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    RestorePinTrackerVisibility()
+end)

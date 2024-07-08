@@ -8,10 +8,13 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local HBDP = MapPinEnhanced.HBDP
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
+
+
 
 
 ---@param initPinData pinData
@@ -96,7 +99,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function IsColorSelected(color)
-        local colorByIndex = MapPinEnhanced.PIN_COLORS[color]
+        local colorByIndex = CONSTANTS.PIN_COLORS[color]
         if not colorByIndex then
             return false
         end
@@ -147,7 +150,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             if pinData.color ~= "Custom" then
                 ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
                 local colorSubmenu = rootDescription:CreateButton("Change Color");
-                for colorIndex, colorTable in ipairs(MapPinEnhanced.PIN_COLORS) do
+                for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
                     local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
                         colorTable.color:GetRGBAsBytes())
                     colorSubmenu:CreateRadio(

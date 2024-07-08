@@ -10,5 +10,6 @@
 libs\libs.xml
 MapPinEnhanced.lua
 utils\utils.xml
+constants\constants.xml
 frames\frames.xml
 core\core.xml
