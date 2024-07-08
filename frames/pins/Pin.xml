@@ -8,16 +8,17 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
-                    setAllPoints="true" />
+                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true" />
+                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
+                    texelSnappingBias="0" snapToPixelGrid="false" />
                 <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
             <Layer level="OVERLAY">
                 <Texture parentKey="customTexture"
-                    hidden="true">
+                    hidden="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />
@@ -36,7 +37,7 @@
                 </MaskTexture>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight"
+                <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false"
                     file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.png"
                     setAllPoints="true" />
             </Layer>
