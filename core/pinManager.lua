@@ -116,14 +116,14 @@ function PinManager:AddPin(pinData, restored)
 
     if #PinManager.Pins >= MAX_COUNT_PINS then
         -- too many pins
-        -- TODO: notify the player here
+        --NOTE: show error message here
         return
     end
 
     local pinID = GetPinIDFromPinData(pinData)
     if PinManager.Pins[pinID] then
         -- pin already exists
-        -- TODO: notify the player here
+        --NOTE: show error message here
         return
     end
 

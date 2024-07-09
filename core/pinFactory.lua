@@ -142,7 +142,6 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function SharePin()
-        -- TODO: implement sharing of pins
         error("Not implemented: Share Pin")
     end
 

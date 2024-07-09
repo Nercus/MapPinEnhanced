@@ -31,7 +31,7 @@ end
 
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
     if not CanSetUserWaypointOnMap(mapID) then
-        --TODO: show proper error message to the user
+        --NOTE: show error message here
         error("Cannot set waypoint on map " .. mapID)
         return
     end
