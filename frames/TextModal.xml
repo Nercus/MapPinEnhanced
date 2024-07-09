@@ -3,11 +3,12 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
 
     <Script file="TextModal.lua" />
-    <Frame name="MapPinEnhancedTextModalTemplate" mixin="MapPinEnhancedTextModalMixin" hidden="true"
-        virtual="true" toplevel="true" inherits="DefaultPanelFlatTemplate" parent="UIParent"
-        enableMouse="true" movable="true" clampedToScreen="true" registerForDrag="LeftButton">
+    <Frame name="MapPinEnhancedTextModalTemplate" mixin="MapPinEnhancedTextModalMixin"
+        hidden="true"
+        virtual="true" toplevel="true" parent="UIParent"
+        clampedToScreen="true">
         <Size
-            x="300" y="88" />
+            x="300" y="75" />
         <Anchors>
             <Anchor point="CENTER" relativeTo="UIParent" />
         </Anchors>
@@ -16,8 +17,8 @@
                 <Texture parentKey="glow" atlas="challenges-blackfade"
                     desaturated="true" alpha="0">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="10" y="-25" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="25" />
+                        <Anchor point="TOPLEFT" x="13" y="-13" />
+                        <Anchor point="BOTTOMRIGHT" x="-13" y="30" />
                     </Anchors>
                     <Animations>
                         <AnimationGroup parentKey="fadeIn" setToFinalAlpha="true">
@@ -30,19 +31,20 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND">
-                <FontString parentKey="helpText" inherits="GameFontNormal"
-                    text="Click here to start adding text"
+                <FontString parentKey="title" inherits="GameFontNormal"
+                    text="Enter text"
                     justifyH="CENTER">
                     <Size x="200" y="20" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="TOPLEFT" x="20" y="-13" />
+                        <Anchor point="BOTTOMRIGHT" x="-45" y="30" />
                     </Anchors>
                 </FontString>
-                <Texture parentKey="bg" atlas="auctionhouse-background-buy-noncommodities-header"
+                <Texture parentKey="bg" atlas="lootroll-itementry-background"
                     alpha="0.6">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="10" y="-25" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="25" />
+                        <Anchor point="TOPLEFT" x="13" y="-13" />
+                        <Anchor point="BOTTOMRIGHT" x="-13" y="30" />
                     </Anchors>
                     <Animations>
                         <AnimationGroup parentKey="fadeIn" setToFinalAlpha="true">
@@ -56,17 +58,19 @@
             </Layer>
         </Layers>
         <Frames>
+
+            <Frame parentKey="Border" inherits="DialogBorderDarkTemplate" />
             <EditBox parentKey="editBox" multiLine="false" autoFocus="false" letters="255"
-                font="GameFontNormalHuge">
+                font="GameFontHighlight">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="20" y="-25" />
-                    <Anchor point="BOTTOMRIGHT" x="-45" y="25" />
+                    <Anchor point="TOPLEFT" x="20" y="-13" />
+                    <Anchor point="BOTTOMRIGHT" x="-45" y="30" />
                 </Anchors>
             </EditBox>
             <Button parentKey="clearEditboxButton" inherits="UIButtonTemplate" hidden="true">
-                <Size x="24" y="24" />
+                <Size x="20" y="20" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-15" relativeKey="$parenteditBox" />
+                    <Anchor point="RIGHT" x="-17" y="8" relativeKey="$parenteditBox" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="buttonArtKit" value="128-redbutton-delete" type="string" />
@@ -74,22 +78,22 @@
                 <Scripts>
                     <OnClick>
                         self:GetParent().editBox:SetText("")
-                        self:GetParent():UpdateHelpTextVisibility()
-                    </OnClick>
+                        self:GetParent():UpdateEditBoxElementsVisibility()
+                </OnClick>
                 </Scripts>
             </Button>
             <Button parentKey="acceptButton" inherits="SharedButtonSmallTemplate" text="Accept"
                 frameStrata="HIGH">
                 <Size x="100" y="18" />
                 <Anchors>
-                    <Anchor point="BOTTOM" relativeTo="MapPinEnhancedTextModal" x="-55" y="5" />
+                    <Anchor point="BOTTOM" relativeTo="MapPinEnhancedTextModal" x="-55" y="11" />
                 </Anchors>
             </Button>
             <Button parentKey="cancelButton" inherits="SharedButtonSmallTemplate" text="Cancel"
                 frameStrata="HIGH">
                 <Size x="100" y="18" />
                 <Anchors>
-                    <Anchor point="BOTTOM" relativeTo="MapPinEnhancedTextModal" x="55" y="5" />
+                    <Anchor point="BOTTOM" relativeTo="MapPinEnhancedTextModal" x="55" y="11" />
                 </Anchors>
             </Button>
         </Frames>

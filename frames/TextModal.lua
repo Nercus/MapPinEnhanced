@@ -1,7 +1,7 @@
 ---@class MapPinEnhancedTextModalMixin : Frame
 ---@field TitleContainer Frame
 ---@field SetTitle function
----@field helpText FontString
+---@field title FontString
 ---@field editBox EditBox
 ---@field bg MapPinEnhancedImportWindowBackground
 ---@field glow MapPinEnhancedImportWindowGlow
@@ -22,14 +22,18 @@ MapPinEnhancedTextModalMixin = {}
 function MapPinEnhancedTextModalMixin:UpdateEditBoxElementsVisibility()
     local text = self:GetText() --[[@as string]]
     if string.len(text) == 0 then
-        self.helpText:Show()
+        self.title:Show()
         self.acceptButton:Disable()
         self.clearEditboxButton:Hide()
     else
-        self.helpText:Hide()
+        self.title:Hide()
         self.acceptButton:Enable()
         self.clearEditboxButton:Show()
     end
+end
+
+function MapPinEnhancedTextModalMixin:SetTitle(title)
+    self.title:SetText(title)
 end
 
 function MapPinEnhancedTextModalMixin:OnLoad()
@@ -51,7 +55,7 @@ function MapPinEnhancedTextModalMixin:OnLoad()
     self.editBox:SetScript("OnEditFocusGained", function()
         self.glow.fadeIn:Play()
         self.bg.fadeIn:Play()
-        self.helpText:Hide()
+        self.title:Hide()
     end)
 
     self.editBox:SetScript("OnEditFocusLost", function()
@@ -100,15 +104,12 @@ end
 ---@param options ModalOptions
 function MapPinEnhancedTextModalMixin:Open(options)
     self.options = options
-
-    if options.title then
-        self:SetTitle(options.title)
-    end
     if options.autoFocus then
         self.editBox:SetAutoFocus(true)
         self.editBox:SetText("")
         self.editBox:SetCursorPosition(1)
     end
+    self:SetTitle(options.title)
     self:Show()
 end
 

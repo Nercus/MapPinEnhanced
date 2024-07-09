@@ -172,7 +172,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             local sets = SetManager:GetSets()
             setSubmenu:CreateButton("Create new set", function()
                 MapPinEnhanced:OpenTextModal({
-                    title = "Set Name",
+                    title = "Enter Set Name",
                     autoFocus = true,
                     onAccept = function(text)
                         local set = SetManager:AddSet(text)
