@@ -3,10 +3,6 @@
 MapPinEnhancedTrackerSetEntryMixin = {}
 
 
-function MapPinEnhancedTrackerSetEntryMixin:OnLoad()
-    print("MapPinEnhancedTrackerSetEntryMixin:OnLoad() ")
-end
-
 function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
     self.title:SetText(title)
 end

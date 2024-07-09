@@ -37,13 +37,10 @@ function PinFactory:CreatePin(initPinData, pinID)
         pinData.color = "Custom"
     end
 
-    worldmapPin:SetPinData(pinData)
-    minimapPin:SetPinData(pinData)
-    TrackerPinEntry:SetPinData(pinData)
+    worldmapPin:Setup(pinData)
+    minimapPin:Setup(pinData)
+    TrackerPinEntry:Setup(pinData)
 
-    worldmapPin:Setup()
-    minimapPin:Setup()
-    TrackerPinEntry:Setup()
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
@@ -140,7 +137,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function CreateMenu(parentFrame)
         local titleString = string.format("|%s%s:20:20|%s %s",
-            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.icon:GetTexture(),
+            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.texture:GetTexture(),
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
 
         ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
@@ -211,10 +208,6 @@ function PinFactory:CreatePin(initPinData, pinID)
     -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
     TrackerPinEntry:SetScript("OnMouseDown", HandleClicks)
-
-    minimapPin:UpdatePin()
-    worldmapPin:UpdatePin()
-    TrackerPinEntry:UpdatePin()
 
 
     return {

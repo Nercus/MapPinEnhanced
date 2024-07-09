@@ -23,7 +23,6 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad method="OnLoad" />
             <OnClick method="OnClick" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

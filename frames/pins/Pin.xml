@@ -11,20 +11,20 @@
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="icon" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
+                <Texture parentKey="texture" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
                 <FontString parentKey="title" inherits="GameFontNormal" text="Pin Title"
                     justifyV="MIDDLE" justifyH="CENTER" />
             </Layer>
             <Layer level="OVERLAY">
-                <Texture parentKey="customTexture"
+                <Texture parentKey="icon"
                     hidden="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
-                <MaskTexture parentKey="customTextureMask"
+                <MaskTexture parentKey="iconMask"
                     file="Interface/AddOns/MapPinEnhanced/assets/PinMask.png"
                     hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
                     <Anchors>
@@ -32,7 +32,7 @@
                         <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
                     </Anchors>
                     <MaskedTextures>
-                        <MaskedTexture childKey="customTexture" />
+                        <MaskedTexture childKey="icon" />
                     </MaskedTextures>
                 </MaskTexture>
             </Layer>
@@ -42,8 +42,5 @@
                     setAllPoints="true" />
             </Layer>
         </Layers>
-        <Scripts>
-            <OnLoad method="OnLoad" />
-        </Scripts>
     </Button>
 </Ui>

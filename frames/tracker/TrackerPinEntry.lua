@@ -1,12 +1,15 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedTrackerPinEntryMixin : MapPinEnhancedBasePinMixin, Button
+---@class MapPinEnhancedTrackerPinEntryMixin :  Button
 ---@field Pin MapPinEnhancedBasePinMixin
-MapPinEnhancedTrackerPinEntryMixin = CreateFromMixins(MapPinEnhancedBasePinMixin)
+---@field titlePosition string | nil
+---@field titleXOffset number | nil
+---@field titleYOffset number | nil
+MapPinEnhancedTrackerPinEntryMixin = {}
 
 
-function MapPinEnhancedTrackerPinEntryMixin:Setup()
+function MapPinEnhancedTrackerPinEntryMixin:OnLoad()
     ---@diagnostic disable-next-line: undefined-field not defined in the vscode extions yet
     if (not self.Pin.SetPropagateMouseClicks or not self.Pin.SetPropagateMouseMotion) then
         return
@@ -17,71 +20,41 @@ function MapPinEnhancedTrackerPinEntryMixin:Setup()
     self.Pin:SetPropagateMouseMotion(true)
 end
 
-function MapPinEnhancedTrackerPinEntryMixin:OnClick()
-    print("MapPinEnhancedTrackerPinEntryMixin:OnClick()")
+function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
+    if pinData then
+        self.pinData = pinData
+    end
+    if not self.pinData then
+        return
+    end
+    self.Pin.titlePosition = self.titlePosition
+    self.Pin.titleXOffset = self.titleXOffset
+    self.Pin.titleYOffset = self.titleYOffset
+    self.Pin:Setup(pinData)
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
-function MapPinEnhancedTrackerPinEntryMixin:SetCustomTexture()
-    if type(self.pinData.texture) ~= "number" then
-        self.Pin.customTexture:RemoveMaskTexture(self.Pin.customTextureMask)
-    else
-        self.Pin.customTexture:AddMaskTexture(self.Pin.customTextureMask)
-    end
+function MapPinEnhancedTrackerPinEntryMixin:SetPinIcon()
+    self.Pin:SetPinIcon()
+end
 
-    if (self.pinData.usesAtlas) then
-        self.Pin.customTexture:SetAtlas(self.pinData.texture)
-    else
-        self.Pin.customTexture:SetTexture(self.pinData.texture)
-    end
-    self.Pin.customTexture:Show()
+function MapPinEnhancedTrackerPinEntryMixin:SetPinColor(color)
+    self.Pin:SetPinColor(color)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTrackedTexture()
-    local pinData = self.pinData
-    if not pinData then return end
-    self.Pin.icon:SetTexture(self.trackedTexture)
+    -- NOTE: change the texture of the tracker entry here
+    self.Pin:SetTrackedTexture()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
-    local pinData = self.pinData
-    if not pinData then return end
-    self.Pin.icon:SetTexture(self.untrackedTexture)
+    -- NOTE: change the texture of the tracker entry here
+    self.Pin:SetUntrackedTexture()
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle()
-    if not self.pinData then
-        return
-    end
-    local title = self.pinData.title or "Map Pin"
-    self.Pin.title:SetText(title)
-end
-
-function MapPinEnhancedTrackerPinEntryMixin:SetTitlePosition(position, xOffset, yOffset)
-    self.Pin.title:ClearAllPoints()
-    if not position then
-        return
-    end
-
-
-    local relativePosition =
-        position == 'LEFT' and 'RIGHT' or
-        position == 'RIGHT' and 'LEFT' or
-        position == 'TOP' and 'BOTTOM' or
-        position == 'BOTTOM' and 'TOP' or 'CENTER'
-
-
-    self.Pin.title:SetPoint(relativePosition, self.Pin.icon, position, xOffset, yOffset)
-    -- justify based on position
-    self.Pin.title:SetJustifyH(
-        position == 'LEFT' and 'RIGHT' or
-        position == 'RIGHT' and 'LEFT' or 'MIDDLE'
-    )
-    self.Pin.title:SetJustifyV(
-        position == 'TOP' and 'BOTTOM' or
-        position == 'BOTTOM' and 'TOP' or 'MIDDLE'
-    )
+    self.Pin:SetTitle()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()

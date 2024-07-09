@@ -20,6 +20,8 @@ function Blizz:HideBlizzardPin()
     end)
 end
 
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
+
 function Blizz:OverrideSuperTrackedAlphaState()
     ---@diagnostic disable-next-line: no-unknown
     SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
