@@ -80,9 +80,8 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     if not self.pinData then
         return
     end
-    if not self.pinData.color then
-        self:SetPinColor() -- set default color
-    end
+
+    self:SetPinColor(self.pinData.color) -- set default color
     self:SetTitle()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
     self:SetPinIcon()

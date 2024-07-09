@@ -15,7 +15,7 @@ local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTempl
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
 
-
+-- TODO: notify pinManager for pin change. dont use persistpins in factory
 
 ---@param initPinData pinData
 ---@param pinID string
@@ -55,6 +55,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetTrackedTexture()
         TrackerPinEntry:SetTrackedTexture()
         isTracked = true
+        PinManager:PersistPins()
     end
 
     local function Untrack()
@@ -65,6 +66,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetUntrackedTexture()
         TrackerPinEntry:SetUntrackedTexture()
         isTracked = false
+        PinManager:PersistPins()
     end
 
     local function ToggleTracked()
@@ -92,7 +94,17 @@ function PinFactory:CreatePin(initPinData, pinID)
         pinData.color = color
         PinManager:PersistPins()
     end
-    SetColor(pinData.color)
+
+
+    if (isTracked) then
+        worldmapPin:SetTrackedTexture()
+        minimapPin:SetTrackedTexture()
+        TrackerPinEntry:SetTrackedTexture()
+    else
+        worldmapPin:SetUntrackedTexture()
+        minimapPin:SetUntrackedTexture()
+        TrackerPinEntry:SetUntrackedTexture()
+    end
 
 
     local function IsColorSelected(color)
