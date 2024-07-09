@@ -95,7 +95,7 @@ end
 
 ---add a pin
 ---@param pinData pinData
----@param restored boolean
+---@param restored boolean?
 function PinManager:AddPin(pinData, restored)
     assert(pinData, "Pin data is required to create a pin.")
     assert(type(pinData) == "table", "Pin data must be a table.")
