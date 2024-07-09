@@ -60,11 +60,26 @@ function PinManager:RemovePinByID(pinID)
     self:PersistPins()
 end
 
+function PinManager:GetTrackedPin()
+    for _, pin in pairs(self.Pins) do
+        if pin:IsTracked() then
+            return pin
+        end
+    end
+    return nil
+end
+
 function PinManager:PersistPins()
     ---@type table<string, pinData>
     local reducedPins = {}
+    local trackedPin = self:GetTrackedPin()
+    if not trackedPin then
+        trackedPin = {}
+        trackedPin.pinID = nil
+    end
     for pinID, pin in pairs(self.Pins) do
         reducedPins[pinID] = pin:GetPinData()
+        reducedPins[pinID].setTracked = pin.pinID == trackedPin.pinID
     end
     MapPinEnhanced:SaveVar("storedPins", reducedPins)
 end
@@ -73,14 +88,15 @@ function PinManager:RestorePins()
     local storedPins = MapPinEnhanced:GetVar("storedPins") --[[@as table<string, pinData> | nil]]
     if storedPins then
         for _, pinData in pairs(storedPins) do
-            self:AddPin(pinData)
+            self:AddPin(pinData, true)
         end
     end
 end
 
 ---add a pin
 ---@param pinData pinData
-function PinManager:AddPin(pinData)
+---@param restored boolean
+function PinManager:AddPin(pinData, restored)
     assert(pinData, "Pin data is required to create a pin.")
     assert(type(pinData) == "table", "Pin data must be a table.")
     assert(pinData.mapID, "Pin data must contain a mapID.")
@@ -129,7 +145,9 @@ function PinManager:AddPin(pinData)
         pinObject:Untrack()
     end
 
-    self:PersistPins()
+    if not restored then
+        self:PersistPins()
+    end
     if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
         MapPinEnhanced.pinTracker:AddEntry(pinObject.TrackerPinEntry)
     end
