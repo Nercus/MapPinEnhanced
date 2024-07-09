@@ -10,6 +10,10 @@
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinBackground.png"
+                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
+            </Layer>
             <Layer level="ARTWORK">
                 <Texture parentKey="texture" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
