@@ -43,11 +43,11 @@ function PinManager:TrackPinByID(pinID)
 end
 
 function PinManager:UntrackTrackedPin()
-    for _, pin in pairs(self.Pins) do
-        if pin:IsTracked() then
-            pin:Untrack()
-        end
+    local trackedPin = self:GetTrackedPin()
+    if not trackedPin then
+        return
     end
+    trackedPin:Untrack()
 end
 
 function PinManager:RemovePinByID(pinID)
@@ -74,6 +74,7 @@ function PinManager:PersistPins()
     local reducedPins = {}
     local trackedPin = self:GetTrackedPin()
     if not trackedPin then
+        ---@type table<string, nil>
         trackedPin = {}
         trackedPin.pinID = nil
     end
