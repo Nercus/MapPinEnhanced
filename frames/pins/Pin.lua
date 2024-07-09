@@ -65,9 +65,12 @@ function MapPinEnhancedBasePinMixin:SetTitlePosition(position, xOffset, yOffset)
     )
 end
 
-function MapPinEnhancedBasePinMixin:SetTitle()
+function MapPinEnhancedBasePinMixin:SetTitle(overrideTitle)
     if not self.pinData then
         return
+    end
+    if overrideTitle then
+        self.pinData.title = overrideTitle
     end
     local title = self.pinData.title
     self.title:SetText(title)

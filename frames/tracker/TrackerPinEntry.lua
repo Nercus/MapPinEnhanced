@@ -53,8 +53,8 @@ function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title
-function MapPinEnhancedTrackerPinEntryMixin:SetTitle()
-    self.Pin:SetTitle()
+function MapPinEnhancedTrackerPinEntryMixin:SetTitle(overrideTitle)
+    self.Pin:SetTitle(overrideTitle)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()

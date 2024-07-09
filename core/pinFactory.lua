@@ -137,10 +137,20 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
+    local function ChangeTitle(text)
+        pinData.title = text
+        worldmapPin:SetTitle(text)
+        minimapPin:SetTitle(text)
+        TrackerPinEntry:SetTitle(text)
+        PinManager:PersistPins()
+    end
+
 
     local function SharePin()
         error("Not implemented: Share Pin")
     end
+
+
 
 
     local function CreateMenu(parentFrame)
@@ -187,7 +197,15 @@ function PinFactory:CreatePin(initPinData, pinID)
                     set:AddPin(pinData)
                 end)
             end
-
+            rootDescription:CreateButton("Change Pin Title", function()
+                MapPinEnhanced:OpenTextModal({
+                    title = "Enter Pin Title",
+                    autoFocus = true,
+                    text = pinData.title,
+                    onAccept = function(text) ChangeTitle(text) end,
+                    onCancel = function() end
+                })
+            end)
             rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
         end)
