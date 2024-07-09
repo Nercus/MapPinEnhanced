@@ -21,8 +21,6 @@ local Blizz = MapPinEnhanced:CreateModule("Blizz")
 function MapPinEnhanced:TogglePinTracker(forceShow)
     if not self.pinTracker then
         self.pinTracker = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerTemplate") --[[@as MapPinEnhancedTrackerMixin]]
-        self.pinTracker:Open()
-        return
     end
     if forceShow == true then
         self.pinTracker:Open()

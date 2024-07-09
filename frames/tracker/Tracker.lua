@@ -199,6 +199,6 @@ local function RestorePinTrackerVisibility()
 end
 
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     RestorePinTrackerVisibility()
 end)
