@@ -112,6 +112,14 @@ local function GetDigSiteLocationInfo(digSiteID, mapID)
 end
 
 
+local trackedMapPinTypes = {
+    [Enum.SuperTrackingMapPinType.AreaPOI] = true,
+    [Enum.SuperTrackingMapPinType.QuestOffer] = true,
+    [Enum.SuperTrackingMapPinType.TaxiNode] = true,
+    [Enum.SuperTrackingMapPinType.DigSite] = true
+}
+
+
 ---@param mapPinType Enum.SuperTrackingType
 ---@param mapPinTypeID number
 ---@param mapID number
@@ -132,6 +140,9 @@ end
 function PinProvider:SupertrackingOnChanged()
     local mapPinType, mapPinTypeID = GetSuperTrackedMapPin()
     if not mapPinType or not mapPinTypeID then return end
+    if trackedMapPinTypes[mapPinType] then
+        C_SuperTrack.ClearSuperTrackedContent()
+    end
     local mapID = GetOpenedMapID()
     if not mapID then return end
     local nodeInfo = GetNodeForMapPinType(mapPinType, mapPinTypeID, mapID)
