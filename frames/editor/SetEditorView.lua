@@ -1,0 +1,2 @@
+---@class MapPinEnhancedSetEditorViewMixin
+MapPinEnhancedSetEditorViewMixin = {}

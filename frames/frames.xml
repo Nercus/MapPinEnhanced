@@ -8,4 +8,5 @@
     <Include file="pins\WorldmapPin.xml" />
     <Include file="pins\MinimapPin.xml" />
     <Include file="tracker\Tracker.xml" />
+    <Include file="editor\Editor.xml" />
 </Ui>
