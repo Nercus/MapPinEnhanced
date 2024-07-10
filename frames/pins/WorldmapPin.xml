@@ -38,8 +38,5 @@
                 </Animations>
             </Frame>
         </Frames>
-        <Scripts>
-            <OnClick method="OnClick" />
-        </Scripts>
     </Button>
 </Ui>
