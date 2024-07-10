@@ -9,6 +9,11 @@ local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 
+if not Enum.SuperTrackingMapPinType then
+    return
+end
+
+
 local GetSuperTrackedMapPin = C_SuperTrack.GetSuperTrackedMapPin
 local GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
 
