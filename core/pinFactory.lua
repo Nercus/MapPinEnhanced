@@ -43,6 +43,12 @@ function PinFactory:CreatePin(initPinData, pinID)
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
 
+
+    local function GetPinData()
+        return pinData
+    end
+
+
     local isTracked = false
     local function Track()
         local success = PinManager:TrackPinByID(pinID)
@@ -52,6 +58,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         worldmapPin:SetTrackedTexture()
         minimapPin:SetTrackedTexture()
         TrackerPinEntry:SetTrackedTexture()
+        MapPinEnhanced:SetSuperTrackedFrame(GetPinData())
         isTracked = true
     end
 
@@ -117,9 +124,6 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
 
-    local function GetPinData()
-        return pinData
-    end
 
     local function Remove()
         if isTracked then

@@ -1,0 +1,20 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+
+    <Script file="SuperTrackedFrame.lua" />
+    <Frame name="MapPinEnhancedSuperTrackedFrameTemplate"
+        mixin="MapPinEnhancedSuperTrackedFrameMixin"
+        inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="false">
+        <KeyValues>
+            <KeyValue key="titlePosition" value="BOTTOM" />
+            <KeyValue key="titleYOffset" value="4" />
+            <KeyValue key="titleFont" value="GameFontHighlight" />
+        </KeyValues>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnEvent method="OnEvent" />
+            <OnShow method="OnShow" />
+        </Scripts>
+    </Frame>
+</Ui>

@@ -52,3 +52,18 @@ function MapPinEnhanced:OpenTextModal(options)
     end
     self.textModal:Open(options)
 end
+
+---@param pinData pinData | nil
+function MapPinEnhanced:SetSuperTrackedFrame(pinData)
+    if not self.SuperTrackedFrame then
+        self.SuperTrackedFrame = CreateFrame("Frame", "MapPinEnhancedSuperTrackedFrame", UIParent,
+            "MapPinEnhancedSuperTrackedFrameTemplate") --[[@as MapPinEnhancedSuperTrackedFrameMixin]]
+    end
+    if not pinData then
+        self.SuperTrackedFrame:Clear()
+        return
+    end
+    self.SuperTrackedFrame:Setup(pinData)
+    self.SuperTrackedFrame:SetTrackedTexture()
+    self.SuperTrackedFrame:Show()
+end
