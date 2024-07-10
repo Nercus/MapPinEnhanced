@@ -7,11 +7,13 @@
         <Size x="30" y="30" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
+                <Texture parentKey="shadow"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="BORDER">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinBackground.png"
+                <Texture parentKey="background"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinBackground.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="ARTWORK">

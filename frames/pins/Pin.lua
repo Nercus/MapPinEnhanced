@@ -2,8 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedBasePinMixin : Frame
----@field texture Texture
+---@field background Texture
 ---@field highlight Texture
+---@field shadow Texture
+---@field texture Texture
 ---@field icon Texture
 ---@field iconMask MaskTexture
 ---@field title FontString
@@ -11,6 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
+---@field titleFont string | nil
 ---@field trackedTexture string
 ---@field untrackedTexture string
 MapPinEnhancedBasePinMixin = {}
@@ -65,6 +68,10 @@ function MapPinEnhancedBasePinMixin:SetTitlePosition(position, xOffset, yOffset)
     )
 end
 
+function MapPinEnhancedBasePinMixin:SetTitleFont(font)
+    self.title:SetFontObject(font)
+end
+
 function MapPinEnhancedBasePinMixin:SetTitle(overrideTitle)
     if not self.pinData then
         return
@@ -87,6 +94,7 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetPinColor(self.pinData.color) -- set default color
     self:SetTitle()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
+    self:SetTitleFont(self.titleFont or "GameFontNormal")
     self:SetPinIcon()
     self:SetUntrackedTexture()
 end
