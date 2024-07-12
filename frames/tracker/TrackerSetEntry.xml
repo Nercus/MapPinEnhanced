@@ -7,19 +7,29 @@
         <Size x="275" y="37" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="GarrMissionLocation-Maw-ButtonBG" setAllPoints="true" />
+                <Texture atlas="cosmic-bar-fill-white"
+                    setAllPoints="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1.0" g="0.82" b="0" a="0.5" />
+                        <MaxColor r="1.0" g="0.82" b="0" a="0" />
+                    </Gradient>
+                </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString parentKey="title" font="GameFontNormal">
-                    <Size x="0" y="10" />
+                <Texture parentKey="icon" file="Interface/AddOns/MapPinEnhanced/assets/SetsIcon.png">
+                    <Size x="40" y="40" />
                     <Anchors>
                         <Anchor point="LEFT" x="10" />
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="title" font="GameFontNormal" justifyH="LEFT"
+                    justifyV="MIDDLE">
+                    <Size x="1" y="10" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="10" relativePoint="RIGHT" relativeKey="$parent.icon" />
                         <Anchor point="RIGHT" x="-10" />
                     </Anchors>
                 </FontString>
-            </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture atlas="GarrMissionLocation-Maw-ButtonHighlight" setAllPoints="true" />
             </Layer>
         </Layers>
         <Scripts>
