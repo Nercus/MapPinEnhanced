@@ -70,7 +70,7 @@
             <Button parentKey="clearEditboxButton" inherits="UIButtonTemplate" hidden="true">
                 <Size x="20" y="20" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-17" y="8" relativeKey="$parenteditBox" />
+                    <Anchor point="RIGHT" x="25" y="0" relativeKey="$parent.editBox" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="buttonArtKit" value="128-redbutton-delete" type="string" />
