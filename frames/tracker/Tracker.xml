@@ -15,21 +15,21 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="plunderstorm-stormbar-fill"
-                    desaturated="true">
-                    <Size x="300" y="26" />
+                <Texture atlas="evergreen-weeklyrewards-header">
+                    <Color r="0.97" g="1" b="0.33" />
+                    <Size x="300" y="5" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPLEFT" y="-25" />
                     </Anchors>
                 </Texture>
-                <Texture parentKey="bg" atlas="plunderstorm-stormbar-border"
+                <!-- <Texture parentKey="bg" atlas="evergreen-weeklyrewards-header"
                 >
                     <Color r="0.5" g="0.5" b="0.5" />
                     <Size x="300" y="26" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
-                </Texture>
+                </Texture> -->
             </Layer>
             <Layer level="OVERLAY">
                 <FontString parentKey="title" inherits="GameFontNormal"

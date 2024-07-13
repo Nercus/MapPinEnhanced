@@ -13,7 +13,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
 ---@field viewToggle Button
----@field bg Texture
 MapPinEnhancedTrackerMixin = {}
 MapPinEnhancedTrackerMixin.entries = {}
 
@@ -130,7 +129,7 @@ end
 
 function MapPinEnhancedTrackerMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
-    if not self.bg:IsMouseOver() then return end
+    if not self.title:IsMouseOver() then return end
     self:StartMoving()
 end
 
