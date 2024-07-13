@@ -3,9 +3,40 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
     <Include file="SetEditorView.xml" />
     <Include file="OptionEditorView.xml" />
-
+    <!-- TODO: split all the subelements -->
     <Script file="Editor.lua" />
-    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" virtual="true"
+    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin"
+        inherits="DefaultPanelFlatTemplate"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
-        registerForDrag="LeftButton"></Frame>
+        registerForDrag="LeftButton">
+        <Size x="850" y="500" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+
+        <Frames>
+            <Frame parentKey="viewHolde"
+                inherits="MapPinEnhancedSetEditorViewTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="5" y="-21" />
+                    <Anchor point="BOTTOMRIGHT" y="1" />
+                </Anchors>
+            </Frame>
+            <Button parentKey="testbutton" inherits="BigRedExitButtonTemplate"
+                frameStrata="HIGH">
+                <Size x="16" y="16" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-4" y="-4" />
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():Hide();
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
 </Ui>

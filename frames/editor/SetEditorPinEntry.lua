@@ -1,0 +1,2 @@
+---@class MapPinEnhancedSetEditorPinEntryMixin : Frame
+MapPinEnhancedSetEditorPinEntryMixin = {}

@@ -1,0 +1,36 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+
+    <Script file="SetEditorPinEntry.lua" />
+    <Frame name="MapPinEnhancedSetEditorPinEntryTemplate" virtual="true"
+        mixin="MapPinEnhancedSetEditorPinEntryMixin">
+        <Size x="560" y="80" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" atlas="common-dropdown-bg" setAllPoints="true" />
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame inherits="MapPinEnhancedBasePinTemplate">
+                <Size x="40" y="40" />
+                <Anchors>
+                    <Anchor point="LEFT" x="20" y="3"></Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        self.title:ClearAllPoints()
+                        self:SetPinColor()
+                        self.texture:SetTexture(self.trackedTexture)
+                    </OnLoad>
+                    <!-- TODO: onclick: menu for colors (input with icon number / texture string) -->
+                </Scripts>
+            </Frame>
+            <!-- TODO: Add: editbox for x -->
+            <!-- TODO: Add: editbox for y -->
+            <!-- TODO: Add: menu with continents > zones > subzones -->
+            <!-- TODO: Add: editbox for title -->
+            <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
+        </Frames>
+    </Frame>
+</Ui>
