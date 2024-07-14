@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="WorldmapPin.lua" />
     <Button name="MapPinEnhancedWorldmapPinTemplate" mixin="MapPinEnhancedWorldMapPinMixin"
         virtual="true"
@@ -31,8 +31,8 @@
                         <Alpha duration="0.3" order="2" fromAlpha=".6" toAlpha="0" />
                         <Scripts>
                             <OnFinished>
-								self:GetParent():Hide();
-							</OnFinished>
+                                self:GetParent():Hide();
+                            </OnFinished>
                         </Scripts>
                     </AnimationGroup>
                 </Animations>
