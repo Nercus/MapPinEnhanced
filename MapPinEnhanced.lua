@@ -17,4 +17,5 @@ local HereBeDragonsPins = LibStub("HereBeDragons-Pins-2.0")
 
 MapPinEnhanced.HBD = HereBeDragons
 MapPinEnhanced.HBDP = HereBeDragonsPins
+---@type CallbackHandlerRegistry
 MapPinEnhanced.callbacks = MapPinEnhanced.callbacks or LibStub("CallbackHandler-1.0"):New(MapPinEnhanced)
