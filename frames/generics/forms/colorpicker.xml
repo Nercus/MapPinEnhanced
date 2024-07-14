@@ -1,0 +1,45 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="colorpicker.lua" />
+
+    <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin"
+        virtual="true">
+        <Size x="30" y="30" />
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="bg" file="Interface/AddOns/MapPinEnhanced/assets/checkers.png"
+                    setAllPoints="true" />
+                <MaskTexture file="Interface\Common\common-iconmask" parentKey="bgMask"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="30" y="30" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="bg" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="color" file="Interface\Common\common-iconmask"
+                    setAllPoints="true">
+                    <Color r="0.5" g="0.7" b="0.2" a="0.8" />
+                </Texture>
+                <MaskTexture file="Interface\Common\common-iconmask" parentKey="bgMask">
+                    <Size x="30" y="30" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="bg" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture atlas="loottoast-itemborder-gray" setAllPoints="true"
+                    desaturated="true" />
+            </Layer>
+        </Layers>
+    </Button>
+</Ui>

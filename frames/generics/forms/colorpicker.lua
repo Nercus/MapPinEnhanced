@@ -1,0 +1,2 @@
+---@class MapPinEnhancedColorpickerMixin : Button
+MapPinEnhancedColorpickerMixin = {}

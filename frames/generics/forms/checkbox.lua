@@ -1,0 +1,2 @@
+---@class MapPinEnhancedCheckboxMixin : CheckButton
+MapPinEnhancedCheckboxMixin = {}

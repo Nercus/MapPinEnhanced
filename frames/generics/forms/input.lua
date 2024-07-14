@@ -1,0 +1,2 @@
+---@class MapPinEnhancedInputMixin : EditBox
+MapPinEnhancedInputMixin = {}

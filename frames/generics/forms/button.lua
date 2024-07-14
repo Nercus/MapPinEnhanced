@@ -1,0 +1,2 @@
+---@class MapPinEnhancedButtonMixin : Button
+MapPinEnhancedButtonMixin = {}
