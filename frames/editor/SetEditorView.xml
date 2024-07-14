@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="SetEditorPinEntry.xml"></Include>
 
     <Script file="SetEditorView.lua" />
@@ -17,11 +17,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture parentKey="bg"
-                            atlas="auctionhouse-background-buy-commodities-market">
-                            <Gradient orientation="VERTICAL">
-                                <MinColor r="0.75" g="0.5" b="0" a="0.9" />
-                                <MaxColor r="0.8" g="0.8" b="1" a="0.7" />
-                            </Gradient>
+                            atlas="characterupdate_background" alpha="0.8">
                             <Anchors>
                                 <Anchor point="TOPLEFT" />
                                 <Anchor point="BOTTOMRIGHT" />
@@ -109,7 +105,7 @@
                         </Anchors>
                         <Layers>
                             <Layer level="BACKGROUND">
-                                <Texture atlas="auctionhouse-background-buy-noncommodities-market"
+                                <Texture atlas="characterupdate_minimized_background" alpha="0.8"
                                     setAllPoints="true" />
                             </Layer>
                             <Layer level="ARTWORK">
