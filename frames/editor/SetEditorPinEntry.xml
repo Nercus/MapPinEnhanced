@@ -12,7 +12,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame inherits="MapPinEnhancedBasePinTemplate">
+            <Button parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
                 <Size x="40" y="40" />
                 <Anchors>
                     <Anchor point="LEFT" x="20" y="3"></Anchor>
@@ -25,7 +25,7 @@
                     </OnLoad>
                     <!-- TODO: onclick: menu for colors (input with icon number / texture string) -->
                 </Scripts>
-            </Frame>
+            </Button>
             <!-- TODO: Add: editbox for x -->
             <!-- TODO: Add: editbox for y -->
             <!-- TODO: Add: menu with continents > zones > subzones -->
