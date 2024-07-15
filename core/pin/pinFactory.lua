@@ -30,19 +30,12 @@ function PinFactory:CreatePin(initPinData, pinID)
     local pinData = initPinData
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
-
-    if pinData.texture then
-        pinData.color = "Custom"
-    end
-
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
     TrackerPinEntry:Setup(pinData)
 
-
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
-
 
     local function GetPinData()
         return pinData
@@ -120,11 +113,6 @@ function PinFactory:CreatePin(initPinData, pinID)
         return pinData.color == colorName
     end
 
-
-
-
-
-
     local function Remove()
         if isTracked then
             C_Map.ClearUserWaypoint()
@@ -153,9 +141,6 @@ function PinFactory:CreatePin(initPinData, pinID)
     local function SharePin()
         error("Not implemented: Share Pin")
     end
-
-
-
 
     local function CreateMenu(parentFrame)
         local titleString = string.format("|%s%s:20:20|%s %s",

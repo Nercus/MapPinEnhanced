@@ -137,6 +137,10 @@ function PinManager:AddPin(pinData, restored)
         pinData.title = "Custom Pin"
     end
 
+    if pinData.texture then
+        pinData.color = "Custom"
+    end
+
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     PinManager.Pins[pinID] = pinObject
 

@@ -29,6 +29,8 @@ function MapPinEnhanced:TogglePinTracker(forceShow)
     else
         self.pinTracker:Toggle()
     end
+
+    print(self.L['Test'])
 end
 
 function MapPinEnhanced:ToggleImportWindow()
