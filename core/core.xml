@@ -3,9 +3,9 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="core.lua" />
     <Script file="blizz.lua" />
-    <Script file="pinFactory.lua" />
-    <Script file="pinManager.lua" />
-    <Script file="setFactory.lua" />
-    <Script file="setManager.lua" />
+    <Script file="pin\pinFactory.lua" />
+    <Script file="pin\pinManager.lua" />
+    <Script file="set\setFactory.lua" />
+    <Script file="set\setManager.lua" />
     <Include file="providers\providers.xml" />
 </Ui>
