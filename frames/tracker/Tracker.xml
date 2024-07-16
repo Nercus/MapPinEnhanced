@@ -15,21 +15,20 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="evergreen-weeklyrewards-header">
-                    <Color r="0.97" g="1" b="0.33" />
-                    <Size x="300" y="5" />
+                <Texture parentKey="headerTexture"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
+                    <Size x="300" y="28" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" y="-25" />
+                        <Anchor point="TOPLEFT" y="-15" />
                     </Anchors>
                 </Texture>
-                <!-- <Texture parentKey="bg" atlas="evergreen-weeklyrewards-header"
-                >
-                    <Color r="0.5" g="0.5" b="0.5" />
-                    <Size x="300" y="26" />
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
+                    <Size x="1" y="1" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
+                        <Anchor relativeKey="$parent.headerTexture" point="TOPLEFT" />
+                        <Anchor relativeKey="$parent.headerTexture" point="BOTTOMRIGHT" />
                     </Anchors>
-                </Texture> -->
+                </Texture>
             </Layer>
             <Layer level="OVERLAY">
                 <FontString parentKey="title" inherits="GameFontNormal"
@@ -66,7 +65,7 @@
                     <Anchor point="TOPLEFT" x="5" y="-2" />
                 </Anchors>
             </Button>
-            <Button parentKey="editorToggle">
+            <!-- <Button parentKey="editorToggle">
                 <Size x="18" y="22" />
                 <NormalTexture atlas="UI-HUD-MicroMenu-Professions-Up"
                     setAllPoints="true" />
@@ -78,10 +77,10 @@
                     <Anchor point="LEFT" x="5" relativeKey="$parent.viewToggle"
                         relativePoint="RIGHT" />
                 </Anchors>
-            </Button>
+            </Button> -->
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="-26" />
+                    <Anchor point="TOPLEFT" x="0" y="-30" />
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
                 <Size x="300" y="1" />

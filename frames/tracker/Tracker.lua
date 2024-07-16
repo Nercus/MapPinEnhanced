@@ -118,9 +118,9 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     -- set default view
     self:SetActiveView("Pins")
 
-    self.editorToggle:SetScript("OnClick", function()
-        MapPinEnhanced:ToggleEditorWindow()
-    end)
+    -- self.editorToggle:SetScript("OnClick", function()
+    --     MapPinEnhanced:ToggleEditorWindow()
+    -- end)
 end
 
 function MapPinEnhancedTrackerMixin:GetEntryCount()
