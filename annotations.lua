@@ -33,6 +33,7 @@
 ---@field GetPins fun():table<string, pinData>
 ---@field GetPin fun(self, mapID:string, x:number, y:number):pinData
 ---@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
+---@field SetEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
 
 

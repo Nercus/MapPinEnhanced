@@ -29,8 +29,6 @@ function MapPinEnhanced:TogglePinTracker(forceShow)
     else
         self.pinTracker:Toggle()
     end
-
-    print(self.L['Test'])
 end
 
 function MapPinEnhanced:ToggleImportWindow()
@@ -44,6 +42,20 @@ function MapPinEnhanced:ToggleImportWindow()
         self.importWindow:Close()
     else
         self.importWindow:Open()
+    end
+end
+
+function MapPinEnhanced:ToggleEditorWindow()
+    if not self.editorWindow then
+        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
+            "MapPinEnhancedEditorTemplate") --[[@as MapPinEnhancedEditorMixin]]
+        self.editorWindow:Open()
+        return
+    end
+    if self.editorWindow:IsVisible() then
+        self.editorWindow:Close()
+    else
+        self.editorWindow:Open()
     end
 end
 

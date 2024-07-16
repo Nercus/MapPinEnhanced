@@ -56,14 +56,27 @@
             </Button>
             <Button parentKey="viewToggle">
                 <Size x="18" y="22" />
-                <NormalTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Up"
+                <NormalTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Up"
                     setAllPoints="true" />
-                <PushedTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Down"
+                <PushedTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Down"
                     setAllPoints="true" />
-                <HighlightTexture atlas="UI-HUD-MicroMenu-GuildCommunities-GuildColor-Mouseover"
+                <HighlightTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Mouseover"
                     setAllPoints="true" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="5" y="-2" />
+                </Anchors>
+            </Button>
+            <Button parentKey="editorToggle">
+                <Size x="18" y="22" />
+                <NormalTexture atlas="UI-HUD-MicroMenu-Professions-Up"
+                    setAllPoints="true" />
+                <PushedTexture atlas="UI-HUD-MicroMenu-Professions-Down"
+                    setAllPoints="true" />
+                <HighlightTexture atlas="UI-HUD-MicroMenu-Professions-Mouseover"
+                    setAllPoints="true" />
+                <Anchors>
+                    <Anchor point="LEFT" x="5" relativeKey="$parent.viewToggle"
+                        relativePoint="RIGHT" />
                 </Anchors>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">

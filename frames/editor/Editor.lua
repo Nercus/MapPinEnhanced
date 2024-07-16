@@ -25,3 +25,19 @@ function MapPinEnhancedEditorMixin:OnLoad()
         self:StopMovingOrSizing()
     end)
 end
+
+function MapPinEnhancedEditorMixin:Close()
+    self:Hide()
+end
+
+function MapPinEnhancedEditorMixin:Open()
+    self:Show()
+end
+
+function MapPinEnhancedEditorMixin:Toggle()
+    if self:IsShown() then
+        self:Close()
+    else
+        self:Open()
+    end
+end

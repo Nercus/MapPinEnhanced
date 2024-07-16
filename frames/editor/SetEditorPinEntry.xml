@@ -4,7 +4,7 @@
 
     <Script file="SetEditorPinEntry.lua" />
     <Frame name="MapPinEnhancedSetEditorPinEntryTemplate" virtual="true"
-        mixin="MapPinEnhancedSetEditorPinEntryMixin">
+        mixin="MapPinEnhancedSetEditorPinEntryMixin" propagateKeyboardInput="true">
         <Size x="560" y="80" />
         <Layers>
             <Layer level="BACKGROUND">
@@ -26,11 +26,121 @@
                     <!-- TODO: onclick: menu for colors (input with icon number / texture string) -->
                 </Scripts>
             </Button>
-            <!-- TODO: Add: editbox for x -->
-            <!-- TODO: Add: editbox for y -->
-            <!-- TODO: Add: menu with continents > zones > subzones -->
-            <!-- TODO: Add: editbox for title -->
+            <EditBox parentKey="mapID" inherits="MapPinEnhancedInputTemplate" numeric="true"
+                letters="5">
+                <Size x="65" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15"
+                        y="-5" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="MapID">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <!-- TODO: Add: menu with continents > zones > subzones -->
+                    <Button parentKey="mapSelection" hidden="true">
+                        <Size x="15" y="15" />
+                        <NormalTexture atlas="poi-islands-table" setAllPoints="true" alpha="0.8" />
+                        <HighlightTexture atlas="poi-islands-table" setAllPoints="true" alpha="1" />
+                        <PushedTexture atlas="poi-islands-table">
+                            <Size x="15" y="15" />
+                            <Anchors>
+                                <Anchor point="CENTER" x="1" y="-1" />
+                            </Anchors>
+                        </PushedTexture>
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-5" />
+                        </Anchors>
+                    </Button>
+                </Frames>
+            </EditBox>
+            <EditBox parentKey="xCoord" inherits="MapPinEnhancedInputTemplate"
+                letters="5">
+                <KeyValues>
+                    <KeyValue key="isDecimal" value="true" type="boolean" />
+                </KeyValues>
+                <Size x="45" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.mapID" x="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="x">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnChar method="OnChar" />
+                </Scripts>
+            </EditBox>
+            <EditBox parentKey="yCoord" inherits="MapPinEnhancedInputTemplate"
+                letters="5">
+                <KeyValues>
+                    <KeyValue key="isDecimal" value="true" type="boolean" />
+                </KeyValues>
+                <Size x="45" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.xCoord" x="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="y">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnChar method="OnChar" />
+                </Scripts>
+            </EditBox>
+            <EditBox parentKey="title" inherits="MapPinEnhancedInputTemplate"
+                letters="50">
+                <Size x="150" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yCoord" x="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="Title">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </EditBox>
+            <Frame parentKey="pinOptions" inherits="MapPinEnhancedSelectTemplate">
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="10" />
+                    <Anchor point="RIGHT" x="-20" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="Pin options">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+
             <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
         </Frames>
+        <!-- <Scripts>
+            <OnKeyDown method="OnKeyDown" />
+        </Scripts> -->
     </Frame>
 </Ui>

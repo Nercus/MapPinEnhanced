@@ -8,14 +8,14 @@
         virtual="true"
         enableMouse="true">
         <Frames>
-            <Frame parentKey="leftContainer">
+            <Frame parentKey="leftContainer" frameLevel="100">
                 <Size x="250" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
                     <Anchor point="BOTTOMLEFT" />
                 </Anchors>
                 <Layers>
-                    <Layer level="OVERLAY">
+                    <Layer level="BACKGROUND">
                         <Texture parentKey="bg"
                             atlas="characterupdate_background" alpha="0.8">
                             <Anchors>
@@ -26,7 +26,7 @@
                     </Layer>
                 </Layers>
                 <Frames>
-                    <EditBox inherits="InputBoxVisualTemplate" parentKey="searchInput"
+                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
                         autoFocus="false">
                         <Size x="1" y="30" />
                         <Anchors>
@@ -47,7 +47,6 @@
                                 type="boolean" />
                         </KeyValues>
                         <ScrollChild>
-                            <!-- TODO: reuse trackersetentry template here -->
                             <Frame parentKey="Child">
                                 <Size x="275" y="1" />
                                 <Anchors>
@@ -161,11 +160,11 @@
                         </Frames>
                     </Frame>
                     <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                        <Size x="590" y="1" />
                         <Anchors>
                             <Anchor point="TOPLEFT" x="0" y="-45" />
                             <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
                         </Anchors>
-                        <Size x="590" y="1" />
                         <KeyValues>
                             <KeyValue key="scrollBarX" value="-10" type="number" />
                             <KeyValue key="scrollBarTopY" value="-4" type="number" />
@@ -174,7 +173,7 @@
                         </KeyValues>
                         <ScrollChild>
                             <Frame parentKey="Child" setAllPoints="true">
-                                <Size x="590" y="1" />
+                                <Size x="590" y="10" />
                                 <Anchors>
                                     <Anchor point="TOPLEFT" x="0" y="0" />
                                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
@@ -193,5 +192,8 @@
                 </Frames>
             </Frame>
         </Frames>
+        <Scripts>
+            <OnShow method="OnShow" />
+        </Scripts>
     </Frame>
 </Ui>

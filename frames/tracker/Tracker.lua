@@ -13,6 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
 ---@field viewToggle Button
+---@field editorToggle Button
 MapPinEnhancedTrackerMixin = {}
 MapPinEnhancedTrackerMixin.entries = {}
 
@@ -116,6 +117,10 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     end)
     -- set default view
     self:SetActiveView("Pins")
+
+    self.editorToggle:SetScript("OnClick", function()
+        MapPinEnhanced:ToggleEditorWindow()
+    end)
 end
 
 function MapPinEnhancedTrackerMixin:GetEntryCount()
