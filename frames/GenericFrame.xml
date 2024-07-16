@@ -1,0 +1,220 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedGenericFrameTemplate" parent="UIParent" resizable="true"
+        enableMouse="true" registerForDrag="LeftButton" movable="true" clampedToScreen="true">
+        <Size x="500" y="500" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="sizeX" inherits="GameFontNormal">
+                    <Anchors>
+                        <Anchor point="TOP" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="sizeY" inherits="GameFontNormal">
+                    <Anchors>
+                        <Anchor point="BOTTOM" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="topleft"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="topright" rotation="270"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="bottomright" rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="bottomleft" rotation="90"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="artTop" rotation="0"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="TOP" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="artBottom" rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="BOTTOM" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="artLeft" rotation="90"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="LEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="artRight" rotation="270"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="RIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture parentKey="borderTopLeft" rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artTop"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture parentKey="borderTopRight" rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.topright"
+                            relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.artTop"
+                            relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture parentKey="borderBottomLeft" rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artBottom"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture parentKey="borderBottomRight" rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.artBottom"
+                            relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture parentKey="borderLeftTop" rotation="0" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artLeft"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture parentKey="borderLeftBottom" rotation="0" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.artLeft"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture parentKey="borderRightTop" rotation="180" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topright"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artRight"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture parentKey="borderRightBottom" rotation="180" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.artRight"
+                            relativePoint="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture parentKey="background" vertTile="true" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/genericframe/MPHBorder_Background.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+
+        <Frames>
+            <Button parentKey="ResizeButton">
+                <Size x="16" y="16" />
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture setAllPoints="true">
+                            <Color r="1" g="0" b="0" />
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnMouseDown>
+                        self:GetParent():StartSizing("TOPRIGHT")
+                    </OnMouseDown>
+                    <OnMouseUp>
+                        self:GetParent():StopMovingOrSizing()
+                    </OnMouseUp>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnMouseDown>
+                self:StartMoving()
+            </OnMouseDown>
+            <OnMouseUp>
+                self:StopMovingOrSizing()
+            </OnMouseUp>
+
+            <OnUpdate>
+                local sizeX = self:GetWidth()
+                local sizeY = self:GetHeight()
+                self.sizeX:SetText(sizeX)
+                self.sizeY:SetText(sizeY)
+            </OnUpdate>
+        </Scripts>
+    </Frame>
+</Ui>
