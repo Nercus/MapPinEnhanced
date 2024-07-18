@@ -47,7 +47,7 @@ end
 ---Detects the pin info of the mouse focus. This is used to get the name and texture of the pin.
 ---@return string | nil name, string | nil texture, boolean isAtlas
 function PinProvider:DetectMouseFocusPinInfo()
-    ---@type table<number, FrameWithTemplate> | nil
+    ---@type table<number, FrameWithTemplate | ScriptRegion> | nil
     local mouseFocus
     if GetMouseFoci then
         mouseFocus = GetMouseFoci()
