@@ -8,11 +8,7 @@ local PIN_TEXTURE_OVERRIDES = {
     ["worldquest-questmarker-questbang"] = "worldquest-tracker-questmarker",
 }
 
-
----@class FrameWithTemplate : Frame
----@field pinTemplate string
----@diagnostic disable-next-line: no-unknown GetMouseFoci is not defined in the extension yet
-local GetMouseFoci = GetMouseFoci ---@type fun(): table<number, FrameWithTemplate> | nil
+local GetMouseFoci = GetMouseFoci
 
 ---@param mouseFocus table
 ---@return string | nil name, string | nil texture, boolean isAtlas
@@ -44,10 +40,14 @@ local function ParseBlizzardMapPinInfo(mouseFocus)
     return nil, nil, false
 end
 
+---@class ScripRegionWithPinInfo : ScriptRegion
+---@field pinTemplate string
+
+
 ---Detects the pin info of the mouse focus. This is used to get the name and texture of the pin.
 ---@return string | nil name, string | nil texture, boolean isAtlas
 function PinProvider:DetectMouseFocusPinInfo()
-    ---@type table<number, FrameWithTemplate | ScriptRegion> | nil
+    ---@type table<number | ScriptRegion> | nil
     local mouseFocus
     if GetMouseFoci then
         mouseFocus = GetMouseFoci()
@@ -59,6 +59,7 @@ function PinProvider:DetectMouseFocusPinInfo()
     end
     local pinTemplate = nil ---@type string | nil
     for _, mouseFocusTable in ipairs(mouseFocus) do
+        ---@cast mouseFocusTable ScripRegionWithPinInfo
         pinTemplate = mouseFocusTable.pinTemplate
         if pinTemplate and (string.find(pinTemplate, "%a+PinTemplate")) then
             return ParseBlizzardMapPinInfo(mouseFocusTable)

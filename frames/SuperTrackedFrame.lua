@@ -28,7 +28,7 @@ end
 
 function MapPinEnhancedSuperTrackedFrameMixin:OnShow()
     -- set anchor
-    local f = SuperTrackedFrame --[[@as Frame]]
+    local f = SuperTrackedFrame
     if not f then
         return
     end

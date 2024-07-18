@@ -147,16 +147,16 @@ function PinFactory:CreatePin(initPinData, pinID)
             pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.texture:GetTexture(),
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
 
-        ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
             rootDescription:CreateTitle(titleString)
             rootDescription:CreateDivider()
             if pinData.color ~= "Custom" then
-                ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+                ---@type MenuUtil
                 local colorSubmenu = rootDescription:CreateButton("Change Color");
                 for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
                     local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
                         colorTable.color:GetRGBAsBytes())
+                    -- TODO: check this type annotation
                     colorSubmenu:CreateRadio(
                         buttonTextureText,
                         IsColorSelected,
@@ -166,7 +166,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                 end
             end
 
-            ---@diagnostic disable-next-line: no-unknown Annotation for this is not implemented into the vscode wow extension
+            ---@type MenuUtil
             local setSubmenu = rootDescription:CreateButton("Add to a set");
             local sets = SetManager:GetSets()
             setSubmenu:CreateButton("Create new set", function()

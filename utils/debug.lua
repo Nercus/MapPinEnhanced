@@ -113,7 +113,7 @@ end
 MapPinEnhanced:AddSlashCommand("dev", setDevMode)
 
 
----@diagnostic disable-next-line: no-unknown
+
 StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
     text = "Are you sure you want to reset all saved variables?",
     button1 = "Yes",
@@ -130,7 +130,7 @@ StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
 
 local function ResetSavedVars()
     -- use a static popup to confirm
-    ---@diagnostic disable-next-line: no-unknown
+
     StaticPopup_Show("MAP_PIN_ENHANCED_RESET_SAVED_VARS")
 end
 

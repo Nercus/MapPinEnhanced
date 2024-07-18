@@ -58,3 +58,113 @@ function FramePool:Acquire() end
 function FramePool:Release(obj) end
 
 function FramePool:ReleaseAll() end
+
+function FramePool:EnumerateActive() end
+
+---@class UiMapPoint
+UiMapPoint = {}
+
+---@param mapID number
+---@param x number
+---@param y number
+---@param z number
+---@return UiMapPoint
+function UiMapPoint.CreateFromCoordinates(mapID, x, y, z) end
+
+---@param mapID number
+---@param position Vector2DMixin
+---@param z number
+---@return UiMapPoint
+function UiMapPoint.CreateFromVector2D(mapID, position, z) end
+
+---@param mapID number
+---@param position Vector3DMixin
+---@return UiMapPoint
+function UiMapPoint.CreateFromVector3D(mapID, position) end
+
+---@class WaypointLocationPinMixin
+WaypointLocationPinMixin = {}
+
+
+---@class SuperTrackedFrameMixin
+SuperTrackedFrameMixin = {}
+
+---@class SuperTrackedFrame : Frame
+SuperTrackedFrame = {}
+
+---@param NavigationState Enum.NavigationState
+---@param alphaValue number
+function SuperTrackedFrameMixin:SetTargetAlphaForState(NavigationState, alphaValue) end
+
+---@type table<string, table>
+StaticPopupDialogs = {}
+---@param dialogName string
+function StaticPopup_Show(dialogName) end
+
+---@type table<string, table | number | string | boolean>
+MapPinEnhancedDB = {}
+
+---@return ScriptRegion region
+function GetMouseFoci() end
+
+---@class MenuUtil
+MenuUtil = {}
+
+function MenuUtil.TraverseMenu(elementDescription, op, condition) end
+
+function MenuUtil.GetSelections(elementDescription, condition) end
+
+function MenuUtil.ShowTooltip(owner, func, ...) end
+
+function MenuUtil.HideTooltip(owner) end
+
+function MenuUtil.HookTooltipScripts(owner, func) end
+
+function MenuUtil.CreateRootMenuDescription(menuMixin) end
+
+function MenuUtil.CreateContextMenu(ownerRegion, generator, ...) end
+
+function MenuUtil.SetElementText(elementDescription, text) end
+
+function MenuUtil.GetElementText(elementDescription) end
+
+function MenuUtil.CreateFrame() end
+
+function MenuUtil.CreateTemplate(template) end
+
+function MenuUtil.CreateTitle(text, color) end
+
+function MenuUtil.CreateButton(text, callback, data) end
+
+function MenuUtil.CreateCheckbox(text, isSelected, setSelected, data) end
+
+function MenuUtil.CreateRadio(text, isSelected, setSelected, data) end
+
+function MenuUtil.CreateColorSwatch(text, callback, colorInfo) end
+
+function MenuUtil.CreateButtonMenu(dropdown, ...) end
+
+function MenuUtil.CreateButtonContextMenu(ownerRegion, ...) end
+
+function MenuUtil.CreateCheckboxMenu(dropdown, isSelected, setSelected, ...) end
+
+function MenuUtil.CreateCheckboxContextMenu(ownerRegion, isSelected, setSelected, ...) end
+
+function MenuUtil.CreateRadioMenu(dropdown, isSelected, setSelected, ...) end
+
+function MenuUtil.CreateRadioContextMenu(ownerRegion, isSelected, setSelected, ...) end
+
+function MenuUtil.CreateEnumRadioMenu(dropdown, enum, enumTranslator, isSelected, setSelected, orderTbl) end
+
+function MenuUtil.CreateEnumRadioContextMenu(dropdown, enum, enumTranslator, isSelected, setSelected, orderTbl) end
+
+function MenuUtil.CreateDivider() end
+
+function MenuUtil.CreateSpacer() end
+
+---@class WorldMapFrame
+---@field pinPools table<string, FramePool>
+WorldMapFrame = {}
+
+---@return number
+function WorldMapFrame:GetMapID() end

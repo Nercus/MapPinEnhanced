@@ -4,35 +4,19 @@
         ".vscode",
         "libs"
     ],
-    "diagnostics.disable": [
-        "undefined-global"
-    ],
-    "diagnostics.groupFileStatus": {
-        "strong": "Any",
-        "strict": "Any",
-        "type-check": "Any",
-        "luadoc": "Any",
-        "unused": "Any",
-        "unbalanced": "Any",
-        "redefined": "Any",
-        "ambiguity": "Any",
-        "duplicate": "Any",
-        "codestyle": "None"
+    "diagnostics.disable": [],
+    "diagnostics.neededFileStatus": {
+        "global-element": "Any",
+        "missing-global-doc": "Any",
+        "codestyle-check": "Any",
+        "incomplete-signature-doc": "Any",
+        "no-unknown": "Any"
     },
     "diagnostics.groupSeverity": {
-        "strict": "Error",
-        "unbalanced": "Error",
-        "redefined": "Error",
-        "strong": "Error",
-        "type-check": "Error",
-        "ambiguity": "Error",
-        "unused": "Warning",
-        "duplicate": "Error",
-        "luadoc": "Warning",
-        "codestyle": "Information"
+        "global": "Error"
     },
     "runtime.version": "Lua 5.1",
     "diagnostics.globals": [
-        "SuperTrackedFrame"
+        "UiMapPoint"
     ]
 }

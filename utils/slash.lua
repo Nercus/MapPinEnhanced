@@ -1,3 +1,4 @@
+---@diagnostic disable: global-element The slash command definition has to be global
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local commandList = {} ---@type table<string, function>
@@ -12,7 +13,7 @@ local SlashCmdList = getglobal("SlashCmdList") ---@as table<string, function>
 
 ---parse the full msg and split into the different arguments
 ---@param msg string
-function SlashCommandHandler(msg)
+local function SlashCommandHandler(msg)
     local args = {} ---@type table<number, string>
     for word in string.gmatch(msg, "[^%s]+") do
         table.insert(args, word)
