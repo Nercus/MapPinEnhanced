@@ -4,6 +4,8 @@
 MapPinEnhancedSuperTrackedFrameMixin = {}
 MapPinEnhancedSuperTrackedFrameMixin.navFrameCreated = false;
 
+-- FIXME: SuperTrackeFrame is not reseted when the supertracking is changed to a different no pin type (i.e. quest, death, etc)
+
 
 function MapPinEnhancedSuperTrackedFrameMixin:Clear()
     self:Hide()
