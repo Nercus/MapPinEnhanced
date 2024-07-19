@@ -162,6 +162,61 @@ function MenuUtil.CreateDivider() end
 
 function MenuUtil.CreateSpacer() end
 
+---@class SubMenuUtil
+SubMenuUtil = {}
+
+function SubMenuUtil:TraverseMenu(elementDescription, op, condition) end
+
+function SubMenuUtil:GetSelections(elementDescription, condition) end
+
+function SubMenuUtil:ShowTooltip(owner, func, ...) end
+
+function SubMenuUtil:HideTooltip(owner) end
+
+function SubMenuUtil:HookTooltipScripts(owner, func) end
+
+function SubMenuUtil:CreateRootMenuDescription(menuMixin) end
+
+function SubMenuUtil:CreateContextMenu(ownerRegion, generator, ...) end
+
+function SubMenuUtil:SetElementText(elementDescription, text) end
+
+function SubMenuUtil:GetElementText(elementDescription) end
+
+function SubMenuUtil:CreateFrame() end
+
+function SubMenuUtil:CreateTemplate(template) end
+
+function SubMenuUtil:CreateTitle(text, color) end
+
+function SubMenuUtil:CreateButton(text, callback, data) end
+
+function SubMenuUtil:CreateCheckbox(text, isSelected, setSelected, data) end
+
+function SubMenuUtil:CreateRadio(text, isSelected, setSelected, data) end
+
+function SubMenuUtil:CreateColorSwatch(text, callback, colorInfo) end
+
+function SubMenuUtil:CreateButtonMenu(dropdown, ...) end
+
+function SubMenuUtil:CreateButtonContextMenu(ownerRegion, ...) end
+
+function SubMenuUtil:CreateCheckboxMenu(dropdown, isSelected, setSelected, ...) end
+
+function SubMenuUtil:CreateCheckboxContextMenu(ownerRegion, isSelected, setSelected, ...) end
+
+function SubMenuUtil:CreateRadioMenu(dropdown, isSelected, setSelected, ...) end
+
+function SubMenuUtil:CreateRadioContextMenu(ownerRegion, isSelected, setSelected, ...) end
+
+function SubMenuUtil:CreateEnumRadioMenu(dropdown, enum, enumTranslator, isSelected, setSelected, orderTbl) end
+
+function SubMenuUtil:CreateEnumRadioContextMenu(dropdown, enum, enumTranslator, isSelected, setSelected, orderTbl) end
+
+function SubMenuUtil:CreateDivider() end
+
+function SubMenuUtil:CreateSpacer() end
+
 ---@class WorldMapFrame
 ---@field pinPools table<string, FramePool>
 WorldMapFrame = {}

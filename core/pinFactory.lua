@@ -151,7 +151,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             rootDescription:CreateTitle(titleString)
             rootDescription:CreateDivider()
             if pinData.color ~= "Custom" then
-                ---@type MenuUtil
+                ---@type SubMenuUtil
                 local colorSubmenu = rootDescription:CreateButton("Change Color");
                 for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
                     local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
