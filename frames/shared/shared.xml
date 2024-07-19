@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="forms/textarea.xml" />
+    <Include file="forms/slider.xml" />
+    <Include file="forms/select.xml" />
+    <Include file="forms/input.xml" />
+    <Include file="forms/colorpicker.xml" />
+    <Include file="forms/checkbox.xml" />
+    <Include file="forms/button.xml" />
+    <Include file="BaseFrame.xml" />
+    <Include file="TestFrame.xml" />
+
+</Ui>
