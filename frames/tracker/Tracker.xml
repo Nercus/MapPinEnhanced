@@ -16,17 +16,10 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="headerTexture"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_HeaderShadow.png">
                     <Size x="300" y="28" />
                     <Anchors>
                         <Anchor point="TOPLEFT" y="-15" />
-                    </Anchors>
-                </Texture>
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
-                    <Size x="1" y="1" />
-                    <Anchors>
-                        <Anchor relativeKey="$parent.headerTexture" point="TOPLEFT" />
-                        <Anchor relativeKey="$parent.headerTexture" point="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
             </Layer>
