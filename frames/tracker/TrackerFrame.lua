@@ -7,20 +7,20 @@ local MapPinEnhanced = select(2, ...)
 
 ---@alias TrackerView 'Pins' | 'Sets'
 
----@class MapPinEnhancedTrackerMixin : Frame
+---@class MapPinEnhancedTrackerFrameMixin : Frame
 ---@field title FontString
 ---@field entries table<number, MapPinEnhancedTrackerSetEntryMixin> | table<number, MapPinEnhancedTrackerPinEntryMixin>
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
 ---@field viewToggle Button
 ---@field editorToggle Button
-MapPinEnhancedTrackerMixin = {}
-MapPinEnhancedTrackerMixin.entries = {}
+MapPinEnhancedTrackerFrameMixin = {}
+MapPinEnhancedTrackerFrameMixin.entries = {}
 
 
 local ENTRY_GAP = 5
 local ENTRY_HEIGHT = 37
-function MapPinEnhancedTrackerMixin:RestorePosition()
+function MapPinEnhancedTrackerFrameMixin:RestorePosition()
     local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
     if trackerPosition then
         self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", trackerPosition.x, trackerPosition.y)
@@ -36,11 +36,11 @@ function MapPinEnhancedTrackerMixin:RestorePosition()
     end
 end
 
-function MapPinEnhancedTrackerMixin:SetTrackerTitle(title)
+function MapPinEnhancedTrackerFrameMixin:SetTrackerTitle(title)
     self.title:SetText(title)
 end
 
-function MapPinEnhancedTrackerMixin:ClearEntries()
+function MapPinEnhancedTrackerFrameMixin:ClearEntries()
     for _, entry in ipairs(self.entries) do
         entry:Hide()
         entry:ClearAllPoints()
@@ -49,13 +49,13 @@ function MapPinEnhancedTrackerMixin:ClearEntries()
     self.entries = {}
 end
 
-function MapPinEnhancedTrackerMixin:GetActiveView()
+function MapPinEnhancedTrackerFrameMixin:GetActiveView()
     return self.activeView
 end
 
 ---comment
 ---@param viewType TrackerView
-function MapPinEnhancedTrackerMixin:SetActiveView(viewType)
+function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType)
     if self.activeView == viewType then
         return
     end
@@ -86,17 +86,17 @@ function MapPinEnhancedTrackerMixin:SetActiveView(viewType)
     self:UpdateEntriesPosition()
 end
 
-function MapPinEnhancedTrackerMixin:Close()
+function MapPinEnhancedTrackerFrameMixin:Close()
     self:Hide()
     MapPinEnhanced:SaveVar("trackerVisible", false)
 end
 
-function MapPinEnhancedTrackerMixin:Open()
+function MapPinEnhancedTrackerFrameMixin:Open()
     self:Show()
     MapPinEnhanced:SaveVar("trackerVisible", true)
 end
 
-function MapPinEnhancedTrackerMixin:Toggle()
+function MapPinEnhancedTrackerFrameMixin:Toggle()
     if self:IsShown() then
         self:Close()
     else
@@ -104,7 +104,7 @@ function MapPinEnhancedTrackerMixin:Toggle()
     end
 end
 
-function MapPinEnhancedTrackerMixin:OnLoad()
+function MapPinEnhancedTrackerFrameMixin:OnLoad()
     self:RestorePosition()
     self.scrollFrame:SetPanExtent(ENTRY_HEIGHT + ENTRY_GAP)
 
@@ -123,7 +123,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     -- end)
 end
 
-function MapPinEnhancedTrackerMixin:GetEntryCount()
+function MapPinEnhancedTrackerFrameMixin:GetEntryCount()
     local currentView = self:GetActiveView()
     if currentView == "Pins" then
         return #self.entries
@@ -132,20 +132,20 @@ function MapPinEnhancedTrackerMixin:GetEntryCount()
     end
 end
 
-function MapPinEnhancedTrackerMixin:OnMouseDown(button)
+function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
     if not self.title:IsMouseOver() then return end
     self:StartMoving()
 end
 
-function MapPinEnhancedTrackerMixin:OnMouseUp()
+function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     self:StopMovingOrSizing()
     local top = self:GetTop()
     local left = self:GetLeft()
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
 end
 
-function MapPinEnhancedTrackerMixin:UpdateEntriesPosition()
+function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     local height = 0
     for i, entry in ipairs(self.entries) do
         entry:ClearAllPoints()
@@ -167,7 +167,7 @@ function MapPinEnhancedTrackerMixin:UpdateEntriesPosition()
 end
 
 ---@param entry Frame
-function MapPinEnhancedTrackerMixin:AddEntry(entry)
+function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     table.insert(self.entries, entry)
     local scollChildHeight = self.scrollFrame.Child:GetHeight()
     entry:ClearAllPoints()
@@ -182,7 +182,7 @@ function MapPinEnhancedTrackerMixin:AddEntry(entry)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
 end
 
-function MapPinEnhancedTrackerMixin:RemoveEntry(entry)
+function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
     for i, e in ipairs(self.entries) do
         if e == entry then
             table.remove(self.entries, i)

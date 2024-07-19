@@ -9,7 +9,7 @@
 
 libs\libs.xml
 MapPinEnhanced.lua
+locales\locales.xml
 utils\utils.xml
-constants\constants.xml
 frames\frames.xml
-core\core.xml
+modules\modules.xml

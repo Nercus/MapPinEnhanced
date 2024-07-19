@@ -1,15 +1,15 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedEditorMixin : Frame
+---@class MapPinEnhancedEditorWindowMixin : Frame
 ---@field TitleContainer Frame
 ---@field SetTitle function
-MapPinEnhancedEditorMixin = {}
+MapPinEnhancedEditorWindowMixin = {}
 
 
 
 
-function MapPinEnhancedEditorMixin:OnLoad()
+function MapPinEnhancedEditorWindowMixin:OnLoad()
     self:SetTitle("Map Pin Enhanced")
     self:SetScript("OnMouseDown", function()
         if (not self:IsMovable()) then
@@ -26,15 +26,15 @@ function MapPinEnhancedEditorMixin:OnLoad()
     end)
 end
 
-function MapPinEnhancedEditorMixin:Close()
+function MapPinEnhancedEditorWindowMixin:Close()
     self:Hide()
 end
 
-function MapPinEnhancedEditorMixin:Open()
+function MapPinEnhancedEditorWindowMixin:Open()
     self:Show()
 end
 
-function MapPinEnhancedEditorMixin:Toggle()
+function MapPinEnhancedEditorWindowMixin:Toggle()
     if self:IsShown() then
         self:Close()
     else

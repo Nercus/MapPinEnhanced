@@ -20,7 +20,7 @@ local Blizz = MapPinEnhanced:CreateModule("Blizz")
 ---@param forceShow? boolean if true, the tracker will be shown, if false, the tracker will be hidden, if nil, the tracker will be toggled
 function MapPinEnhanced:TogglePinTracker(forceShow)
     if not self.pinTracker then
-        self.pinTracker = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerTemplate") --[[@as MapPinEnhancedTrackerMixin]]
+        self.pinTracker = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerFrameTemplate") --[[@as MapPinEnhancedTrackerFrameMixin]]
     end
     if forceShow == true then
         self.pinTracker:Open()
@@ -47,8 +47,8 @@ end
 
 function MapPinEnhanced:ToggleEditorWindow()
     if not self.editorWindow then
-        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
-            "MapPinEnhancedEditorTemplate") --[[@as MapPinEnhancedEditorMixin]]
+        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindowTemplate", UIParent,
+            "MapPinEnhancedEditorTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
         self.editorWindow:Open()
         return
     end
@@ -71,7 +71,7 @@ end
 function MapPinEnhanced:SetSuperTrackedFrame(pinData)
     if not self.SuperTrackedFrame then
         self.SuperTrackedFrame = CreateFrame("Frame", "MapPinEnhancedSuperTrackedFrame", UIParent,
-            "MapPinEnhancedSuperTrackedFrameTemplate") --[[@as MapPinEnhancedSuperTrackedFrameMixin]]
+            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
     end
     if not pinData then
         self.SuperTrackedFrame:Clear()

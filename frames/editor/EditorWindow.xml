@@ -1,11 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Include file="SetEditorView.xml" />
-    <Include file="OptionEditorView.xml" />
 
-    <Script file="Editor.lua" />
-    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" virtual="true"
+    <Script file="EditorWindow.lua" />
+    <Frame name="MapPinEnhancedEditorWindowTemplate" mixin="MapPinEnhancedEditorWindowMixin"
+        virtual="true"
         inherits="DefaultPanelFlatTemplate"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
@@ -13,7 +12,6 @@
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
-
         <Frames>
             <Frame parentKey="viewHolder"
                 inherits="MapPinEnhancedSetEditorViewTemplate">

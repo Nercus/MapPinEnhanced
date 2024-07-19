@@ -1,25 +1,25 @@
----@class MapPinEnhancedSuperTrackedFrameMixin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
 ---@field hooked boolean
-MapPinEnhancedSuperTrackedFrameMixin = {}
-MapPinEnhancedSuperTrackedFrameMixin.navFrameCreated = false;
+MapPinEnhancedSuperTrackedPinMixin = {}
+MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 
 -- FIXME: SuperTrackeFrame is not reseted when the supertracking is changed to a different no pin type (i.e. quest, death, etc)
 
 
-function MapPinEnhancedSuperTrackedFrameMixin:Clear()
+function MapPinEnhancedSuperTrackedPinMixin:Clear()
     self:Hide()
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnClamped()
+function MapPinEnhancedSuperTrackedPinMixin:OnClamped()
     self.title:Hide()
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnUnclamped()
+function MapPinEnhancedSuperTrackedPinMixin:OnUnclamped()
     self.title:Show()
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnClampedStateChanged()
+function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     local clamped = C_Navigation.WasClampedToScreen();
     if clamped then
         self:OnClamped()
@@ -28,7 +28,7 @@ function MapPinEnhancedSuperTrackedFrameMixin:OnClampedStateChanged()
     end
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnShow()
+function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     -- set anchor
     local f = SuperTrackedFrame
     if not f then
@@ -46,14 +46,14 @@ function MapPinEnhancedSuperTrackedFrameMixin:OnShow()
     self:SetFrameStrata(f:GetFrameStrata())
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnLoad()
+function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
     self:RegisterEvent("SUPER_TRACKING_CHANGED");
     self.hooked = false
 end
 
-function MapPinEnhancedSuperTrackedFrameMixin:OnEvent(event)
+function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
     if event == "NAVIGATION_FRAME_CREATED" then
         self.navFrameCreated = true;
     elseif event == "NAVIGATION_FRAME_DESTROYED" then

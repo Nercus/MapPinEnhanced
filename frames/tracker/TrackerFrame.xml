@@ -5,8 +5,9 @@
     <Include file="TrackerSetEntry.xml" />
     <Include file="TrackerTextImportButton.xml" />
 
-    <Script file="Tracker.lua" />
-    <Frame name="MapPinEnhancedTrackerTemplate" mixin="MapPinEnhancedTrackerMixin" virtual="true"
+    <Script file="TrackerFrame.lua" />
+    <Frame name="MapPinEnhancedTrackerFrameTemplate" mixin="MapPinEnhancedTrackerFrameMixin"
+        virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
         <Size x="300" y="200" />
