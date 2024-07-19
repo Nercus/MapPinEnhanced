@@ -18,6 +18,9 @@ local preFiredQueue = {}
 ---add debug message to DevTool
 ---@param ... table | string | number | boolean | nil
 function MapPinEnhanced:Debug(...)
+    if (MapPinEnhanced:GetVar("devMode") == false) then
+        return
+    end
     local args = ...
     if (playerLoginFired == false) then
         table.insert(preFiredQueue, { args })
