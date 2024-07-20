@@ -15,17 +15,31 @@ local MapPinEnhanced = select(2, ...)
 ---@field title MapPinEnhancedInputMixin
 ---@field pinOptions MapPinEnhancedSelectMixin
 ---@field onChangeCallback function
+---@field initValues table<'mapID' | 'xCoord' | 'yCoord' | 'title', string | number>
 MapPinEnhancedSetEditorPinEntryMixin = {}
 
+
+
+local tonumber = tonumber
+local tostring = tostring
+local Round = Round
 
 
 ---@param pin pinData
 function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
     self.Pin:Setup(pin)
     self.mapID:SetText(tostring(pin.mapID))
-    self.xCoord:SetText(tostring(pin.x * 100))
-    self.yCoord:SetText(tostring(pin.y * 100))
+    local xCoord = tostring(Round(pin.x * 10000) / 100)
+    self.xCoord:SetText(xCoord)
+    local yCoord = tostring(Round(pin.y * 10000) / 100)
+    self.yCoord:SetText(yCoord)
     self.title:SetText(pin.title)
+    self.initValues = {
+        mapID = pin.mapID,
+        xCoord = Round(pin.x * 10000) / 10000,
+        yCoord = Round(pin.y * 10000) / 10000,
+        title = pin.title,
+    }
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
@@ -36,6 +50,8 @@ end
 ---@param value string
 function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     assert(self.onChangeCallback, "No callback set")
+
+
     ---@type string | number?
     local cleanedValue = value
     if key == 'mapID' then
@@ -44,6 +60,9 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
         cleanedValue = tonumber(value) / 100
     end
 
+    if tostring(self.initValues[key]) == tostring(cleanedValue) then
+        return
+    end
     self.onChangeCallback(key, cleanedValue)
 end
 
