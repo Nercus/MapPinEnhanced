@@ -1,4 +1,3 @@
----@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
 
@@ -7,6 +6,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame SetListScrollFrame
 ---@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
 MapPinEnhancedSetEditorViewBodyMixin = {}
+
+
+local lower = string.lower
+
+
+
+
+
 
 
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
@@ -86,6 +93,13 @@ function MapPinEnhancedSetEditorViewSidebarMixin:SetActiveEditorSet(set)
     SetEditorBody:SetActiveEditorSet(set)
 end
 
+---@param a SetObject
+---@param b SetObject
+---@return boolean
+local function SortBySetName(a, b)
+    return lower(a.name) < lower(b.name)
+end
+
 ---@return SetObject[]
 function MapPinEnhancedSetEditorViewSidebarMixin:GetAlphabeticalSortedSets()
     ---@class SetManager : Module
@@ -95,15 +109,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:GetAlphabeticalSortedSets()
     for _, setObject in pairs(sets) do
         table.insert(sortedSets, setObject)
     end
-    -- MapPinEnhanced:Debug({ unsorted = sortedSets, sets = sets })
-    table.sort(sortedSets,
-        ---@param a SetObject
-        ---@param b SetObject
-        ---@return boolean
-        function(a, b)
-            return a.name > b.name
-        end)
-    -- MapPinEnhanced:Debug({ sortedSets = sortedSets, sets = sets })
+    table.sort(sortedSets, SortBySetName)
     return sortedSets
 end
 

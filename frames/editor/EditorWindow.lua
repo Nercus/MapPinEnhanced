@@ -49,8 +49,6 @@ local viewConfigurations = {
 }
 
 
-
-
 function MapPinEnhancedEditorWindowMixin:ConfigureViewVisibility(viewToShow, viewToHide)
     if viewToHide then
         viewToHide.body:ClearAllPoints()
