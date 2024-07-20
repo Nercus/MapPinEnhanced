@@ -63,7 +63,7 @@ function SetManager:AddSet(name)
     if #self.Sets >= MAX_COUNT_SETS then
         error("Too many sets")
     end
-    local setID = name
+    local setID = MapPinEnhanced:GenerateUUID("set")
     local set = SetFactory:CreateSet(name)
     set.setID = setID
     self.Sets[setID] = set

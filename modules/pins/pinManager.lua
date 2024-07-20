@@ -14,15 +14,6 @@ PinManager.Pins = {}
 
 local MAX_COUNT_PINS = 1000
 
----Get a string representation of a position from pinData
----@param pinData pinData
----@return string
-local function GetPinIDFromPinData(pinData)
-    -- the x and y coordinates are normalized so we cut them here to avoid to many pins on the same point
-    return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
-end
-
-
 function PinManager:GetPins()
     return self.Pins
 end
@@ -121,7 +112,7 @@ function PinManager:AddPin(pinData, restored)
         return
     end
 
-    local pinID = GetPinIDFromPinData(pinData)
+    local pinID = MapPinEnhanced:GenerateUUID("pin")
     if PinManager.Pins[pinID] then
         -- pin already exists
         --NOTE: show error message here

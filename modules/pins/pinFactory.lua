@@ -16,7 +16,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 
 
 ---@param initPinData pinData
----@param pinID string
+---@param pinID UUID
 ---@return PinObject
 function PinFactory:CreatePin(initPinData, pinID)
     local worldmapPin = WorldmapPool:Acquire()

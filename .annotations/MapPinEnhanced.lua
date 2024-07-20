@@ -12,7 +12,7 @@
 
 
 ---@class PinObject
----@field pinID string
+---@field pinID UUID
 ---@field worldmapPin MapPinEnhancedWorldMapPinMixin
 ---@field minimapPin MapPinEnhancedMinimapPinMixin
 ---@field TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
@@ -25,7 +25,7 @@
 
 
 ---@class SetObject
----@field setID string
+---@field setID UUID
 ---@field name string
 ---@field AddPin fun(self, pinData:pinData)
 ---@field RemovePin fun(self, mapID:string, x:number, y:number)
