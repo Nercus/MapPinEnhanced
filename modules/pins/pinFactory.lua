@@ -51,7 +51,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         worldmapPin:SetTrackedTexture()
         minimapPin:SetTrackedTexture()
         TrackerPinEntry:SetTrackedTexture()
-        MapPinEnhanced:SetSuperTrackedFrame(GetPinData())
+        MapPinEnhanced:SetSuperTrackedPin(GetPinData())
         isTracked = true
     end
 
