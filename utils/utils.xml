@@ -10,4 +10,5 @@
     <Script file="defaults.lua" />
     <Script file="modules.lua" />
     <Script file="textures.lua" />
+    <Script file="uuid.lua" />
 </Ui>
