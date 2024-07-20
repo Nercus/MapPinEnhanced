@@ -5,23 +5,20 @@
 
     <EditBox name="MapPinEnhancedInputTemplate" mixin="MapPinEnhancedInputMixin" virtual="true"
         font="GameFontNormal" autoFocus="false">
-        <Size x="200" y="30" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="Left" atlas="common-search-border-left" useAtlasSize="false">
-                    <Size x="12" y="30" />
                     <Anchors>
                         <Anchor point="LEFT" x="-5" y="0" />
                     </Anchors>
                 </Texture>
                 <Texture parentKey="Right" atlas="common-search-border-right">
-                    <Size x="12" y="30" />
                     <Anchors>
                         <Anchor point="RIGHT" x="0" y="0" />
                     </Anchors>
                 </Texture>
-                <Texture parentKey="Middle" atlas="common-search-border-middle">
-                    <Size x="15" y="30" />
+                <Texture parentKey="Middle" atlas="_common-search-border-center" horizTile="true">
+                    <Size x="1" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.Left" relativePoint="RIGHT" />
                         <Anchor point="RIGHT" relativeKey="$parent.Right" relativePoint="LEFT" />
@@ -29,5 +26,14 @@
                 </Texture>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad>
+                -- original left and right texture has a ratio of 1:2.5
+                local height = self:GetHeight()
+                self.Left:SetSize(height / 2.5, height)
+                self.Right:SetSize(height / 2.5, height)
+                self.Middle:SetSize(height / 2.5, height)
+            </OnLoad>
+        </Scripts>
     </EditBox>
 </Ui>
