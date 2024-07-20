@@ -1,10 +1,16 @@
 local MapPinEnhanced = select(2, ...)
 
+---@class SetEditorViewBodyHeader : Frame
+---@field setName EditBox
+---@field deleteButton Button
+---@field importButton Button
+---@field exportButton Button
 
 ---@class MapPinEnhancedSetEditorViewBodyMixin : Frame
 ---@field activeEditorSet SetObject | nil
 ---@field scrollFrame SetListScrollFrame
 ---@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
+---@field setHeader SetEditorViewBodyHeader
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
 
@@ -60,6 +66,7 @@ end
 
 function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSet(set)
     self.activeEditorSet = set
+    self.setHeader.setName:SetText(set.name)
     self:UpdateEditor()
 end
 
@@ -143,6 +150,9 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
         -- not the nicest solution but it works for now, we overwrite the OnClick function to set the active editor set and hope we dont need to update the set list too often
         setFrame:SetScript("OnClick", function()
             self:SetActiveEditorSet(setObject)
+        end)
+        hooksecurefunc(setObject, "AddPin", function()
+            self.body:UpdateEditor()
         end)
     end
 end
