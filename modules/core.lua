@@ -47,8 +47,8 @@ end
 
 function MapPinEnhanced:ToggleEditorWindow()
     if not self.editorWindow then
-        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindowTemplate", UIParent,
-            "MapPinEnhancedEditorTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
+        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
+            "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
         self.editorWindow:Open()
         return
     end
@@ -68,16 +68,20 @@ function MapPinEnhanced:OpenTextModal(options)
 end
 
 ---@param pinData pinData | nil
-function MapPinEnhanced:SetSuperTrackedFrame(pinData)
-    if not self.SuperTrackedFrame then
-        self.SuperTrackedFrame = CreateFrame("Frame", "MapPinEnhancedSuperTrackedFrame", UIParent,
+function MapPinEnhanced:SetSuperTrackedPin(pinData)
+    if not self.SuperTrackedPin then
+        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
             "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
     end
     if not pinData then
-        self.SuperTrackedFrame:Clear()
+        self.SuperTrackedPin:Clear()
         return
     end
-    self.SuperTrackedFrame:Setup(pinData)
-    self.SuperTrackedFrame:SetTrackedTexture()
-    self.SuperTrackedFrame:Show()
+    self.SuperTrackedPin:Setup(pinData)
+    self.SuperTrackedPin:SetTrackedTexture()
+    self.SuperTrackedPin:Show()
 end
+
+C_Timer.After(1, function()
+    MapPinEnhanced:ToggleEditorWindow()
+end)

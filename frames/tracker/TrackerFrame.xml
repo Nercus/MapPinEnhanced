@@ -48,30 +48,30 @@
                 </Scripts>
             </Button>
             <Button parentKey="viewToggle">
-                <Size x="18" y="22" />
-                <NormalTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Up"
+                <Size x="16" y="16" />
+                <NormalTexture atlas="128-RedButton-Plus"
                     setAllPoints="true" />
-                <PushedTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Down"
+                <PushedTexture atlas="128-RedButton-Plus-Pressed"
                     setAllPoints="true" />
-                <HighlightTexture atlas="UI-HUD-MicroMenu-GuildCommunities-Mouseover"
+                <HighlightTexture atlas="128-RedButton-Plus-Highlight"
                     setAllPoints="true" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="5" y="-2" />
                 </Anchors>
             </Button>
-            <!-- <Button parentKey="editorToggle">
-                <Size x="18" y="22" />
-                <NormalTexture atlas="UI-HUD-MicroMenu-Professions-Up"
+            <Button parentKey="editorToggle">
+                <Size x="16" y="16" />
+                <NormalTexture atlas="128-RedButton-ArrowDown"
                     setAllPoints="true" />
-                <PushedTexture atlas="UI-HUD-MicroMenu-Professions-Down"
+                <PushedTexture atlas="128-RedButton-ArrowDown-Pressed"
                     setAllPoints="true" />
-                <HighlightTexture atlas="UI-HUD-MicroMenu-Professions-Mouseover"
+                <HighlightTexture atlas="128-RedButton-ArrowDown-Highlight"
                     setAllPoints="true" />
                 <Anchors>
                     <Anchor point="LEFT" x="5" relativeKey="$parent.viewToggle"
                         relativePoint="RIGHT" />
                 </Anchors>
-            </Button> -->
+            </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Anchors>
                     <Anchor point="TOPLEFT" x="0" y="-30" />

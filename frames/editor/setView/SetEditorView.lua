@@ -5,42 +5,36 @@ local MapPinEnhanced = select(2, ...)
 ---@field Child Frame
 
 
-
----@class SetLeftContainer : Frame
----@field bg Texture
+---@class MapPinEnhancedSetEditorViewSidebarMixin : Frame
+---@field activeEditorSet SetObject
 ---@field searchInput MapPinEnhancedInputMixin
 ---@field scrollFrame SetListScrollFrame
----@field optionsToggleButton Button
+---@field switchViewButton Button
+MapPinEnhancedSetEditorViewSidebarMixin = {}
 
 
 
----@class MapPinEnhancedSetEditorViewMixin
----@field activeEditorSet SetObject
----@field leftContainer SetLeftContainer
-MapPinEnhancedSetEditorViewMixin = {}
 
-
-
-function MapPinEnhancedSetEditorViewMixin:UpdateEditor()
+function MapPinEnhancedSetEditorViewSidebarMixin:UpdateEditor()
     if not self.activeEditorSet then
         return
     end
 end
 
-function MapPinEnhancedSetEditorViewMixin:SetActiveEditorSet(set)
+function MapPinEnhancedSetEditorViewSidebarMixin:SetActiveEditorSet(set)
     self.activeEditorSet = set
     self:UpdateEditor()
 end
 
 ---The set list can be updated with a custom set list, if not provided the set manager will be used -> used for search
 ---@param sets table<string, SetObject> | nil
-function MapPinEnhancedSetEditorViewMixin:UpdateSetList(sets)
+function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
     if not sets then
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         sets = SetManager:GetSets()
     end
-    local scrollChild = self.leftContainer.scrollFrame.Child
+    local scrollChild = self.scrollFrame.Child
     local lastFrame = nil
     for _, setObject in pairs(sets) do
         local setFrame = setObject.SetEditorEntry
@@ -59,10 +53,14 @@ function MapPinEnhancedSetEditorViewMixin:UpdateSetList(sets)
     end
 end
 
-function MapPinEnhancedSetEditorViewMixin:OnSearchChange()
-    -- TODO: change that
+function MapPinEnhancedSetEditorViewSidebarMixin:OnSearchChange()
+    -- TODO: implement search
+    print(123)
 end
 
-function MapPinEnhancedSetEditorViewMixin:OnShow()
+function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     self:UpdateSetList()
 end
+
+---@class MapPinEnhancedSetEditorViewBodyMixin : Frame
+MapPinEnhancedSetEditorViewBodyMixin = {}

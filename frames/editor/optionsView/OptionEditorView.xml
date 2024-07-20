@@ -3,9 +3,50 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Script file="OptionEditorView.lua" />
-    <Frame name="MapPinEnhancedOptionEditorViewTemplate" mixin="MapPinEnhancedOptionEditorViewMixin"
-        virtual="true"
+    <Frame name="MapPinEnhancedOptionEditorViewSidebarTemplate"
+        mixin="MapPinEnhancedOptionEditorViewSidebarMixin"
+        virtual="true" hidden="true"
         enableMouse="true">
+        <Size x="250" y="1" />
+        <Anchors>
+            <Anchor point="TOPLEFT" />
+            <Anchor point="BOTTOMLEFT" />
+        </Anchors>
+        <Frames>
+            <Button parentKey="switchViewButton"
+                inherits="BigRedThreeSliceButtonTemplate">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="10" y="5" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture atlas="glues-characterSelect-iconShop-hover">
+                            <Size x="20" y="20" />
+                            <Anchors>
+                                <Anchor point="LEFT" x="7" />
+                            </Anchors>
+                            <Color r="0.82" g="1" b="0" />
+                        </Texture>
+                        <FontString inherits="GameFontNormal" text="Sets"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+    </Frame>
 
+    <Frame name="MapPinEnhancedOptionEditorViewBodyTemplate"
+        mixin="MapPinEnhancedOptionEditorViewBodyMixin"
+        virtual="true" hidden="true"
+        enableMouse="true">
+        <Frames>
+
+        </Frames>
     </Frame>
 </Ui>

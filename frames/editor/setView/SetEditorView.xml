@@ -4,196 +4,140 @@
     <Include file="SetEditorPinEntry.xml" />
 
     <Script file="SetEditorView.lua" />
-    <Frame name="MapPinEnhancedSetEditorViewTemplate" mixin="MapPinEnhancedSetEditorViewMixin"
-        virtual="true"
+
+    <Frame name="MapPinEnhancedSetEditorViewSidebarTemplate"
+        mixin="MapPinEnhancedSetEditorViewSidebarMixin"
+        virtual="true" hidden="true"
         enableMouse="true">
         <Frames>
-            <Frame parentKey="leftContainer" frameLevel="100">
-                <Size x="250" y="1" />
+            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
+                autoFocus="false">
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="15" y="-15" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
+                </Anchors>
+            </EditBox>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-35" />
+                    <Anchor point="BOTTOMRIGHT" x="0" y="31" />
+                </Anchors>
+                <Size x="275" y="1" />
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="-15" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="275" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+            <Button parentKey="switchViewButton"
+                inherits="BigRedThreeSliceButtonTemplate">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="10" y="15" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture atlas="glues-characterSelect-icon-notify-inProgress">
+                            <Size x="20" y="20" />
+                            <Anchors>
+                                <Anchor point="LEFT" x="7" />
+                            </Anchors>
+                            <Color r="0.82" g="1" b="0" />
+                        </Texture>
+                        <FontString inherits="GameFontNormal" text="Options"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+    </Frame>
+
+    <Frame name="MapPinEnhancedSetEditorViewBodyTemplate"
+        mixin="MapPinEnhancedSetEditorViewBodyMixin"
+        virtual="true" hidden="true"
+        enableMouse="true">
+        <Frames>
+            <Frame parentKey="setHeader">
+                <Size x="1" y="40" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMLEFT" />
+                    <Anchor point="TOPRIGHT" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture parentKey="bg"
-                            atlas="characterupdate_background" alpha="0.8">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" />
-                                <Anchor point="BOTTOMRIGHT" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
                 <Frames>
-                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
+                    <EditBox parentKey="setName" multiLine="false" letters="100"
+                        font="GameFontNormalLarge"
                         autoFocus="false">
-                        <Size x="1" y="30" />
+                        <Size x="200" y="40" />
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="15" y="-5" />
-                            <Anchor point="TOPRIGHT" x="-10" y="-5" />
+                            <Anchor point="LEFT" x="15"></Anchor>
                         </Anchors>
                     </EditBox>
-                    <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                    <Button parentKey="deleteButton" inherits="UIButtonTemplate">
+                        <Size x="30" y="30" />
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="0" y="-35" />
-                            <Anchor point="BOTTOMRIGHT" x="0" y="31" />
+                            <Anchor point="RIGHT" x="-15" />
                         </Anchors>
-                        <Size x="275" y="1" />
                         <KeyValues>
-                            <KeyValue key="scrollBarX" value="-15" type="number" />
-                            <KeyValue key="scrollBarTopY" value="-4" type="number" />
-                            <KeyValue key="scrollBarHideIfUnscrollable" value="true"
-                                type="boolean" />
+                            <KeyValue key="buttonArtKit" value="128-redbutton-delete"
+                                type="string" />
                         </KeyValues>
-                        <ScrollChild>
-                            <Frame parentKey="Child">
-                                <Size x="275" y="1" />
-                                <Anchors>
-                                    <Anchor point="TOPLEFT" x="0" y="0" />
-                                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
-                                </Anchors>
-                            </Frame>
-                        </ScrollChild>
-                    </ScrollFrame>
-                    <Button parentKey="optionsToggleButton"
-                        inherits="BigRedThreeSliceButtonTemplate">
-                        <Size x="1" y="26" />
-                        <Anchors>
-                            <Anchor point="BOTTOMLEFT" x="10" y="5" />
-                            <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
-                        </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture atlas="glues-characterSelect-icon-notify-inProgress">
-                                    <Size x="20" y="20" />
-                                    <Anchors>
-                                        <Anchor point="LEFT" x="7" />
-                                    </Anchors>
-                                    <Color r="0.82" g="1" b="0" />
-                                </Texture>
-                                <FontString inherits="GameFontNormal" text="Options"
-                                    justifyH="CENTER">
-                                    <Anchors>
-                                        <Anchor point="CENTER" />
-                                    </Anchors>
-                                </FontString>
-                            </Layer>
-                        </Layers>
                     </Button>
-
+                    <Button parentKey="importButton" inherits="SharedButtonSmallTemplate"
+                        text="Import set"
+                        frameStrata="HIGH">
+                        <Size x="100" y="22" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-55" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="exportButton" inherits="SharedButtonSmallTemplate"
+                        text="Export set"
+                        frameStrata="HIGH">
+                        <Size x="100" y="22" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-155" />
+                        </Anchors>
+                    </Button>
                 </Frames>
             </Frame>
-            <Frame parentKey="rightContainer">
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="590" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.leftContainer"
-                        relativePoint="TOPRIGHT" />
-                    <Anchor point="BOTTOMRIGHT" />
+                    <Anchor point="TOPLEFT" x="0" y="-45" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture atlas="Artifacts-BG-Shadow" setAllPoints="true" alpha="0.5" />
-                    </Layer>
-                </Layers>
-                <Frames>
-                    <Frame parentKey="setHeader">
-                        <Size x="1" y="40" />
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="-10" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child" setAllPoints="true">
+                        <Size x="590" y="10" />
                         <Anchors>
-                            <Anchor point="TOPLEFT" />
-                            <Anchor point="TOPRIGHT" />
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="BACKGROUND">
-                                <Texture atlas="characterupdate_minimized_background" alpha="0.8"
-                                    setAllPoints="true" />
-                            </Layer>
-                            <Layer level="ARTWORK">
-                                <Texture atlas="AdventureMap_TopBorder" setAllPoints="true" />
-                                <Texture atlas="QuestBG-Shadow-bottom" rotation="180">
-                                    <Size x="1" y="10" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
-                                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
-                        <Frames>
-                            <EditBox multiLine="false" letters="100" font="GameFontNormalLarge"
-                                autoFocus="false">
-                                <Size x="200" y="40" />
-                                <Anchors>
-                                    <Anchor point="LEFT" x="15"></Anchor>
-                                </Anchors>
-                                <Scripts>
-                                    <OnLoad>
-                                        self:SetText("Set Name")
-                                    </OnLoad>
-                                </Scripts>
-                            </EditBox>
-                            <Button parentKey="deleteButton" inherits="UIButtonTemplate">
-                                <Size x="30" y="30" />
-                                <Anchors>
-                                    <Anchor point="RIGHT" x="-15" />
-                                </Anchors>
-                                <KeyValues>
-                                    <KeyValue key="buttonArtKit" value="128-redbutton-delete"
-                                        type="string" />
-                                </KeyValues>
-                            </Button>
-                            <Button parentKey="importButton" inherits="SharedButtonSmallTemplate"
-                                text="Import set"
-                                frameStrata="HIGH">
-                                <Size x="100" y="22" />
-                                <Anchors>
-                                    <Anchor point="RIGHT" x="-55" />
-                                </Anchors>
-                            </Button>
-                            <Button parentKey="exportButton" inherits="SharedButtonSmallTemplate"
-                                text="Export set"
-                                frameStrata="HIGH">
-                                <Size x="100" y="22" />
-                                <Anchors>
-                                    <Anchor point="RIGHT" x="-155" />
-                                </Anchors>
-                            </Button>
-                        </Frames>
                     </Frame>
-                    <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
-                        <Size x="590" y="1" />
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="0" y="-45" />
-                            <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
-                        </Anchors>
-                        <KeyValues>
-                            <KeyValue key="scrollBarX" value="-10" type="number" />
-                            <KeyValue key="scrollBarTopY" value="-4" type="number" />
-                            <KeyValue key="scrollBarHideIfUnscrollable" value="true"
-                                type="boolean" />
-                        </KeyValues>
-                        <ScrollChild>
-                            <Frame parentKey="Child" setAllPoints="true">
-                                <Size x="590" y="10" />
-                                <Anchors>
-                                    <Anchor point="TOPLEFT" x="0" y="0" />
-                                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
-                                </Anchors>
-                                <Frames>
-                                    <Frame
-                                        inherits="MapPinEnhancedSetEditorPinEntryTemplate">
-                                        <Anchors>
-                                            <Anchor point="TOP" />
-                                        </Anchors>
-                                    </Frame>
-                                </Frames>
-                            </Frame>
-                        </ScrollChild>
-                    </ScrollFrame>
-                </Frames>
-            </Frame>
+                </ScrollChild>
+            </ScrollFrame>
         </Frames>
-        <Scripts>
-            <OnShow method="OnShow" />
-        </Scripts>
     </Frame>
 </Ui>
