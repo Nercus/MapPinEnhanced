@@ -27,6 +27,8 @@ local viewConfigurations = {
             self.setView.sideBar.switchViewButton:SetScript("OnClick", function()
                 self:SetActiveView(AVAILABLE_VIEWS.optionView)
             end)
+            self.setView.sideBar.body = self.setView.body
+            self.setView.body.sideBar = self.setView.sideBar
         end
         return self.setView, self.optionView
     end,
@@ -36,6 +38,8 @@ local viewConfigurations = {
                 body = CreateFrame("Frame", nil, self.body, "MapPinEnhancedOptionEditorViewBodyTemplate"),
                 sideBar = CreateFrame("Frame", nil, self.sideBar, "MapPinEnhancedOptionEditorViewSidebarTemplate"),
             }
+            self.optionView.sideBar.body = self.optionView.body
+            self.optionView.body.sideBar = self.optionView.sideBar
             self.optionView.sideBar.switchViewButton:SetScript("OnClick", function()
                 self:SetActiveView(AVAILABLE_VIEWS.setView)
             end)

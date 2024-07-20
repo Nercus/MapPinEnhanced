@@ -4,7 +4,6 @@
     <Include file="SetEditorPinEntry.xml" />
 
     <Script file="SetEditorView.lua" />
-
     <Frame name="MapPinEnhancedSetEditorViewSidebarTemplate"
         mixin="MapPinEnhancedSetEditorViewSidebarMixin"
         virtual="true" hidden="true"
@@ -66,6 +65,10 @@
                 </Layers>
             </Button>
         </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+        </Scripts>
     </Frame>
 
     <Frame name="MapPinEnhancedSetEditorViewBodyTemplate"

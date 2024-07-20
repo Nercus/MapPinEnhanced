@@ -39,14 +39,59 @@
                 </Layers>
             </Button>
         </Frames>
+        <Scripts>
+            <OnShow method="OnShow" />
+        </Scripts>
     </Frame>
+
 
     <Frame name="MapPinEnhancedOptionEditorViewBodyTemplate"
         mixin="MapPinEnhancedOptionEditorViewBodyMixin"
         virtual="true" hidden="true"
         enableMouse="true">
         <Frames>
-
+            <!-- <Button inherits="MapPinEnhancedSquareButtonYellowTemplate">
+                <Size x="50" y="50" />
+                <Anchors>
+                    <Anchor point="CENTER"></Anchor>
+                </Anchors>
+            </Button>
+            <Button inherits="MapPinEnhancedSquareButtonRedTemplate">
+                <Size x="50" y="50" />
+                <Anchors>
+                    <Anchor point="CENTER" y="-60"></Anchor>
+                </Anchors>
+            </Button> -->
+            <Button inherits="MapPinEnhancedButtonYellowTemplate">
+                <Size x="200" y="30" />
+                <Anchors>
+                    <Anchor point="CENTER"></Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="MPHGameFontNormalBlack" text="Hey James">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+            <Button inherits="MapPinEnhancedButtonRedTemplate">
+                <Size x="200" y="30" />
+                <Anchors>
+                    <Anchor point="CENTER" y="-60"></Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" text="Hey James">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
         </Frames>
     </Frame>
 </Ui>

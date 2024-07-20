@@ -15,7 +15,7 @@
                     </Gradient>
                 </Texture>
             </Layer>
-            <Layer level="OVERLAY">
+            <Layer level="ARTWORK">
                 <Texture parentKey="icon" file="Interface/AddOns/MapPinEnhanced/assets/SetsIcon.png">
                     <Size x="40" y="40" />
                     <Anchors>
@@ -30,6 +30,10 @@
                         <Anchor point="RIGHT" x="-10" />
                     </Anchors>
                 </FontString>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="activeTexture" setAllPoints="true"
+                    atlas="communitiesfinder_card_highlight" hidden="true" />
             </Layer>
         </Layers>
     </Button>

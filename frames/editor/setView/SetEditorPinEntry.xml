@@ -139,8 +139,8 @@
 
             <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
         </Frames>
-        <!-- <Scripts>
-            <OnKeyDown method="OnKeyDown" />
-        </Scripts> -->
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
     </Frame>
 </Ui>

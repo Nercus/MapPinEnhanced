@@ -16,7 +16,7 @@
         </Anchors>
         <Frames>
             <Frame parentKey="sideBar" inherits="MapPinEnhancedBaseFrameTemplate">
-                <Size x="250" y="500" />
+                <Size x="275" y="500" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
                     <Anchor point="BOTTOMLEFT" />
