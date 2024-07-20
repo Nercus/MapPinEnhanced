@@ -17,11 +17,6 @@ MapPinEnhancedSetEditorViewBodyMixin = {}
 local lower = string.lower
 
 
-
-
-
-
-
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
 
 
@@ -66,7 +61,9 @@ end
 
 function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSet(set)
     self.activeEditorSet = set
-    self.setHeader.setName:SetText(set.name)
+    if set then
+        self.setHeader.setName:SetText(set.name)
+    end
     self:UpdateEditor()
 end
 
