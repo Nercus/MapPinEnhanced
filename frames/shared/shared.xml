@@ -8,7 +8,10 @@
     <Include file="forms/colorpicker.xml" />
     <Include file="forms/checkbox.xml" />
     <Include file="forms/button.xml" />
+    <Include file="SquareButtonRed.xml" />
+    <Include file="SquareButtonYellow.xml" />
     <Include file="BaseFrame.xml" />
     <Include file="TestFrame.xml" />
-
+    <Include file="ButtonRed.xml" />
+    <Include file="ButtonYellow.xml" />
 </Ui>

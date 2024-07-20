@@ -3,9 +3,6 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Frame name="MapPinEnhancedBaseFrameTemplate" virtual="true">
-        <Anchors>
-            <Anchor point="CENTER" />
-        </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="topleft"

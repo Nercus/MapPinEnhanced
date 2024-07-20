@@ -1,0 +1,71 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+
+    <Font name="MPHGameFontNormalBlack" inherits="SystemFont_Shadow_Med1" virtual="true">
+        <Color r="0" g="0" b="0" />
+    </Font>
+
+
+    <Button name="MapPinEnhancedButtonYellowTemplate" virtual="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture
+                    parentKey="left"
+                    file="Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Left.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                </Texture>
+                <Texture
+                    parentKey="right"
+                    file="Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Right.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture
+                    parentKey="middle" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Centre.png">
+                    <Size x="2" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.left" relativePoint="TOPRIGHT"></Anchor>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.right"
+                            relativePoint="BOTTOMLEFT"></Anchor>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture
+                    atlas="128-GoldRedButton-Highlight">
+                    <Size x="1" y="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="10" />
+                        <Anchor point="BOTTOMRIGHT" x="-10" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnMouseDown>
+                self.left:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Left_Pressed.png")
+                self.right:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Right_Pressed.png")
+                self.middle:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Centre_Pressed.png")
+            </OnMouseDown>
+            <OnMouseUp>
+                self.left:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Left.png")
+                self.right:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Right.png")
+                self.middle:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeYellow_Centre.png")
+            </OnMouseUp>
+            <OnLoad>
+                local height = self:GetHeight()
+                self.left:SetSize(height, height)
+                self.right:SetSize(height, height)
+                self.middle:SetHeight(height)
+            </OnLoad>
+        </Scripts>
+    </Button>
+</Ui>
