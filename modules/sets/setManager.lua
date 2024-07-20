@@ -5,6 +5,7 @@ local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 ---@class SetManager : Module
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
+
 ---@type table<string, SetObject>
 SetManager.Sets = {}
 

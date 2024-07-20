@@ -11,8 +11,20 @@ local CONSTANTS = MapPinEnhanced.CONSTANTS
 ---@type table<string, PinObject>
 PinManager.Pins = {}
 
+---@type table<string, boolean>
+PinManager.Positions = {}
+
 
 local MAX_COUNT_PINS = 1000
+
+---Get a string representation of a position from pinData
+---@param pinData pinData
+---@return string
+local function GetPositionStringForPin(pinData)
+    -- the x and y coordinates are normalized so we cut them here to avoid to many pins on the same point
+    return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
+end
+
 
 function PinManager:GetPins()
     return self.Pins
@@ -41,13 +53,26 @@ function PinManager:UntrackTrackedPin()
     trackedPin:Untrack()
 end
 
+function PinManager:ClearPins()
+    for _, pin in pairs(self.Pins) do
+        pin:Remove()
+    end
+    self.Pins = {}
+    self.Positions = {}
+    self:PersistPins()
+end
+
 function PinManager:RemovePinByID(pinID)
     local pin = self.Pins[pinID]
     if not pin then
         return
     end
     pin:Remove()
+    local pinData = self.Pins[pinID]:GetPinData()
+    local pinPositionString = GetPositionStringForPin(pinData)
+    self.Positions[pinPositionString] = nil
     self.Pins[pinID] = nil
+
     self:PersistPins()
 end
 
@@ -112,8 +137,9 @@ function PinManager:AddPin(pinData, restored)
         return
     end
 
-    local pinID = MapPinEnhanced:GenerateUUID("pin")
-    if PinManager.Pins[pinID] then
+
+    local pinPositionString = GetPositionStringForPin(pinData)
+    if PinManager.Positions[pinPositionString] then
         -- pin already exists
         --NOTE: show error message here
         return
@@ -132,8 +158,11 @@ function PinManager:AddPin(pinData, restored)
         pinData.color = "Custom"
     end
 
+    local pinID = MapPinEnhanced:GenerateUUID("pin")
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     PinManager.Pins[pinID] = pinObject
+    PinManager.Positions[pinPositionString] = true
+
 
     if pinData.setTracked then
         pinObject:Track()

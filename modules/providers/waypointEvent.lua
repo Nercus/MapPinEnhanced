@@ -29,7 +29,6 @@ function PinProvider:USER_WAYPOINT_UPDATED()
         usesAtlas = usesAtlas,
         setTracked = true
     })
-
     blockEvent = false
 end
 

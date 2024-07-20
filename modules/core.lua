@@ -31,6 +31,14 @@ function MapPinEnhanced:TogglePinTracker(forceShow)
     end
 end
 
+---@param viewType TrackerView
+function MapPinEnhanced:SetPinTrackerView(viewType)
+    if not self.pinTracker then
+        self:TogglePinTracker(true)
+    end
+    self.pinTracker:SetActiveView(viewType)
+end
+
 function MapPinEnhanced:ToggleImportWindow()
     if not self.importWindow then
         self.importWindow = CreateFrame("Frame", "MapPinEnhancedImportWindow", UIParent,
