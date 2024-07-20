@@ -22,6 +22,7 @@ local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditor
 ---@param key 'mapID' | 'xCoord' | 'yCoord' | 'title'
 ---@param value string
 function MapPinEnhancedSetEditorViewBodyMixin:OnPinDataChange(key, value)
+    print(key, value)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
@@ -66,9 +67,12 @@ end
 ---@field Child Frame
 
 
+---@class SetSearchInput : MapPinEnhancedInputMixin
+---@field clearButton Button
+
 ---@class MapPinEnhancedSetEditorViewSidebarMixin : Frame
 ---@field activeEditorSet SetObject | nil
----@field searchInput MapPinEnhancedInputMixin
+---@field searchInput SetSearchInput
 ---@field scrollFrame SetListScrollFrame
 ---@field switchViewButton Button
 ---@field body MapPinEnhancedSetEditorViewBodyMixin
@@ -143,11 +147,10 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
     end
 end
 
-function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets()
-    local searchQuery = self.searchInput:GetText()
-    if searchQuery == "" then
-        return nil
-    end
+---@param searchQuery string
+---@return SetObject[] | nil
+function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets(searchQuery)
+    if searchQuery == "" then return nil end
     local sets = self:GetAlphabeticalSortedSets()
     local filteredSets = {}
     for _, setObject in ipairs(sets) do
@@ -158,18 +161,42 @@ function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets()
     return filteredSets
 end
 
-function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
-    self.searchInput:SetScript("OnTextChanged", function()
-        self:OnSearchChange()
-    end)
+function MapPinEnhancedSetEditorViewSidebarMixin:SetFirstSetActive()
+    local searchQuery = self.searchInput:GetText()
+    local sets = self:GetFilteredSets(searchQuery)
+    if sets and #sets > 0 then
+        self:SetActiveEditorSet(sets[1])
+        self.searchInput:ClearFocus()
+    end
 end
 
-function MapPinEnhancedSetEditorViewSidebarMixin:OnSearchChange()
-    local filteredSets = self:GetFilteredSets()
+function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
+    self.searchInput:SetScript("OnTextChanged", function()
+        local searchQuery = self.searchInput:GetText()
+        if searchQuery == "" then
+            self.searchInput.clearButton:Hide()
+        else
+            self.searchInput.clearButton:Show()
+        end
+        self:OnSearchChange(searchQuery)
+    end)
+    self.searchInput:SetScript("OnEscapePressed", function()
+        self.searchInput:ClearFocus()
+        self.searchInput:SetText("")
+    end)
+    self.searchInput:SetScript("OnEnterPressed", function()
+        self:SetFirstSetActive()
+    end)
+    self.searchInput:SetTextInsets(16, 20, 0, 0);
+end
+
+---@param searchQuery string
+function MapPinEnhancedSetEditorViewSidebarMixin:OnSearchChange(searchQuery)
+    local filteredSets = self:GetFilteredSets(searchQuery)
     self:UpdateSetList(filteredSets)
 end
 
 function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     print("show sets")
-    self:UpdateSetList()
+    self:UpdateSetList() -- init population
 end
