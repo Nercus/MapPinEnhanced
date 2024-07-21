@@ -63,7 +63,8 @@
         "unpack",
         "WaypointLocationPinMixin",
         "wipe",
-        "WorldMapFrame"
+        "WorldMapFrame",
+        "GetMouseFoci"
     ],
     "workspace.ignoreDir": [
         ".vscode",
