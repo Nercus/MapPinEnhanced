@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedBasePinMixin : Frame
+---@class MapPinEnhancedBasePinMixin : Frame, PropagateMouseMotion, PropagateMouseClicks
 ---@field background Texture
 ---@field highlight Texture
 ---@field shadow Texture
