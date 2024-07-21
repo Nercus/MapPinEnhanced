@@ -7,6 +7,7 @@
             <Layer level="BACKGROUND">
                 <Texture parentKey="topleft"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
@@ -14,6 +15,7 @@
                 </Texture>
                 <Texture parentKey="topright" rotation="270"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
@@ -21,6 +23,7 @@
                 </Texture>
                 <Texture parentKey="bottomright" rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
@@ -28,6 +31,7 @@
                 </Texture>
                 <Texture parentKey="bottomleft" rotation="90"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" />
                     </Anchors>
@@ -35,6 +39,7 @@
                 </Texture>
                 <Texture parentKey="artTop" rotation="0"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOP" />
                     </Anchors>
@@ -42,6 +47,7 @@
                 </Texture>
                 <Texture parentKey="artBottom" rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="BOTTOM" />
                     </Anchors>
@@ -49,6 +55,7 @@
                 </Texture>
                 <Texture parentKey="artLeft" rotation="90"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="LEFT" />
                     </Anchors>
@@ -56,6 +63,7 @@
                 </Texture>
                 <Texture parentKey="artRight" rotation="270"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="RIGHT" />
                     </Anchors>
@@ -63,6 +71,7 @@
                 </Texture>
                 <Texture parentKey="borderTopLeft" rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
                             relativePoint="TOPRIGHT" />
@@ -73,6 +82,7 @@
                 </Texture>
                 <Texture parentKey="borderTopRight" rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.topright"
                             relativePoint="TOPLEFT" />
@@ -85,6 +95,7 @@
 
                 <Texture parentKey="borderBottomLeft" rotation="180" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
                             relativePoint="TOPRIGHT" />
@@ -95,6 +106,7 @@
                 </Texture>
                 <Texture parentKey="borderBottomRight" rotation="180" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.bottomright"
                             relativePoint="TOPLEFT" />
@@ -107,6 +119,7 @@
 
                 <Texture parentKey="borderLeftTop" rotation="0" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
                             relativePoint="BOTTOMLEFT" />
@@ -117,6 +130,7 @@
                 </Texture>
                 <Texture parentKey="borderLeftBottom" rotation="0" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomleft"
                             relativePoint="TOPRIGHT" />
@@ -129,6 +143,7 @@
 
                 <Texture parentKey="borderRightTop" rotation="180" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topright"
                             relativePoint="BOTTOMLEFT" />
@@ -139,6 +154,7 @@
                 </Texture>
                 <Texture parentKey="borderRightBottom" rotation="180" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.artRight"
                             relativePoint="BOTTOMRIGHT" />
@@ -149,6 +165,7 @@
                 </Texture>
                 <Texture parentKey="background" vertTile="true" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Background.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
                             relativePoint="BOTTOMRIGHT" />
@@ -165,6 +182,7 @@
             <Layer level="BACKGROUND">
                 <Texture parentKey="left"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderEdge.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="LEFT" />
                     </Anchors>
@@ -172,6 +190,7 @@
                 </Texture>
                 <Texture parentKey="right" rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderEdge.png">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="RIGHT" />
                     </Anchors>
@@ -180,6 +199,7 @@
                 <Texture parentKey="middle" rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderMiddle.png"
                     horizTile="true">
+                    <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.left" />
                         <Anchor
