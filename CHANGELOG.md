@@ -1,1 +1,2 @@
-- Bump interface version for 10.2
+- Add support for The War Within
+- Bump interface version for 10.2.7

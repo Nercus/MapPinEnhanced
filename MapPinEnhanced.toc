@@ -1,7 +1,7 @@
-## Interface: 100200
+## Interface: 100207,110000,110002
 ## Author: Nerc
 ## Title: Map Pin Enhanced
-## Version: 2.7.2
+## Version: 2.8
 ## License: All Rights Reserved
 ## Notes: Enhances the functionality of the map pin
 ## SavedVariables: MapPinEnhancedDB
