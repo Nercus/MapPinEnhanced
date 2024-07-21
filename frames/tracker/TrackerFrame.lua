@@ -55,8 +55,9 @@ end
 
 ---comment
 ---@param viewType TrackerView
-function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType)
-    if self.activeView == viewType then
+---@param forceUpdate? boolean
+function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
+    if self.activeView == viewType and not forceUpdate then
         return
     end
     self:ClearEntries()
@@ -89,11 +90,16 @@ end
 function MapPinEnhancedTrackerFrameMixin:Close()
     self:Hide()
     MapPinEnhanced:SaveVar("trackerVisible", false)
+    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
 end
 
 function MapPinEnhancedTrackerFrameMixin:Open()
     self:Show()
     MapPinEnhanced:SaveVar("trackerVisible", true)
+    MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
+        if self.activeView ~= "Sets" then return end
+        self:SetActiveView(self.activeView, true)
+    end)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Toggle()
@@ -146,6 +152,7 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
+    print("UpdateEntriesPosition")
     local height = 0
     for i, entry in ipairs(self.entries) do
         entry:ClearAllPoints()

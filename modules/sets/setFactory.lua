@@ -71,6 +71,14 @@ function SetFactory:CreateSet(name)
         SetManager:PersistSets()
     end
 
+    local function Delete()
+        for setpinID, _ in pairs(pins) do
+            pins[setpinID] = nil
+        end
+        TrackerSetEntryPool:Release(TrackerSetEntry)
+        SetEditorEntryPool:Release(SetEditorEntry)
+    end
+
     ---@return table<UUID, pinData>
     local function GetPins()
         return pins
@@ -102,6 +110,7 @@ function SetFactory:CreateSet(name)
         GetPinsByPosition = GetPinsByPosition,
         GetPinByID = GetPinByID,
         GetPins = GetPins,
+        Delete = Delete,
         TrackerSetEntry = TrackerSetEntry,
         SetEditorEntry = SetEditorEntry
     }

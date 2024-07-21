@@ -1,7 +1,7 @@
 ---@type string
 local AddOnName = ...
 
----@class MapPinEnhanced
+---@class MapPinEnhanced : MPHCallbackHandler
 local MapPinEnhanced = select(2, ...)
 
 MapPinEnhanced.version = C_AddOns.GetAddOnMetadata("MapPinEnhanced", "Version")
@@ -17,5 +17,5 @@ local HereBeDragonsPins = LibStub("HereBeDragons-Pins-2.0")
 
 MapPinEnhanced.HBD = HereBeDragons
 MapPinEnhanced.HBDP = HereBeDragonsPins
----@type CallbackHandlerRegistry
-MapPinEnhanced.callbacks = MapPinEnhanced.callbacks or LibStub("CallbackHandler-1.0"):New(MapPinEnhanced)
+---@type MPHCallbackHandlerRegistry
+MapPinEnhanced.CB = MapPinEnhanced.CB or LibStub("CallbackHandler-1.0"):New(MapPinEnhanced)

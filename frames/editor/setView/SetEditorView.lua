@@ -1,3 +1,4 @@
+---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
 ---@class SetEditorViewBodyHeader : Frame
@@ -14,6 +15,8 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
 
+
+local CB = MapPinEnhanced.CB
 local lower = string.lower
 
 
@@ -55,8 +58,25 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
     end
 end
 
+function MapPinEnhancedSetEditorViewBodyMixin:UpdateSetHeader()
+    if not self.activeEditorSet then
+        self.setHeader:Hide()
+        return
+    end
+    self.setHeader:Show()
+    self.setHeader.setName:SetText(self.activeEditorSet.name)
+    self.setHeader.deleteButton:SetScript("OnClick", function()
+        ---@class SetManager : Module
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        SetManager:DeleteSet(self.activeEditorSet.setID)
+        self:SetActiveEditorSet()
+        CB:Fire('UpdateSetList')
+    end)
+end
+
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateEditor()
     self:UpdatePinList()
+    self:UpdateSetHeader()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSet(set)
@@ -65,6 +85,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSet(set)
         self.setHeader.setName:SetText(set.name)
     end
     self:UpdateEditor()
+    self:UpdateSetHeader()
 end
 
 ---@class SetListScrollFrame : ScrollFrame
@@ -79,6 +100,7 @@ end
 ---@field searchInput SetSearchInput
 ---@field scrollFrame SetListScrollFrame
 ---@field switchViewButton Button
+---@field createSetButton Button
 ---@field body MapPinEnhancedSetEditorViewBodyMixin
 MapPinEnhancedSetEditorViewSidebarMixin = {}
 
@@ -195,6 +217,13 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
         self:SetFirstSetActive()
     end)
     self.searchInput:SetTextInsets(16, 20, 0, 0);
+
+    self.createSetButton:SetScript("OnClick", function()
+        ---@class SetManager : Module
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        local setObject = SetManager:AddSet("Set name")
+        self:SetActiveEditorSet(setObject)
+    end)
 end
 
 ---@param searchQuery string
@@ -203,7 +232,14 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnSearchChange(searchQuery)
     self:UpdateSetList(filteredSets)
 end
 
+function MapPinEnhancedSetEditorViewSidebarMixin:OnHide()
+    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
+end
+
 function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     print("show sets")
     self:UpdateSetList() -- init population
+    MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
+        self:UpdateSetList()
+    end)
 end

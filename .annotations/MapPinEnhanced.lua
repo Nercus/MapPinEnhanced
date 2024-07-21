@@ -28,7 +28,10 @@
 ---@field setID UUID
 ---@field name string
 ---@field AddPin fun(self, pinData:pinData)
----@field RemovePin fun(self, mapID:string, x:number, y:number)
+---@field GetPinsByPosition fun(self, mapID:number, x:number, y:number):table<UUID, pinData>
+---@field GetPinByID fun(self, setpinID:UUID):pinData
+---@field RemovePinsByPostion fun(self, mapID:number, x:number, y:number)
+---@field RemovePinByID fun(self, pinsetID:UUID)
 ---@field Delete fun()
 ---@field GetPins fun():table<string, pinData>
 ---@field GetPin fun(self, mapID:string, x:number, y:number):pinData

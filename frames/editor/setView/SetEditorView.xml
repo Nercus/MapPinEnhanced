@@ -70,27 +70,34 @@
                 </ScrollChild>
             </ScrollFrame>
             <Button parentKey="switchViewButton"
-                inherits="BigRedThreeSliceButtonTemplate">
-                <Size x="1" y="26" />
+                inherits="MapPinEnhancedSquareButtonRedTemplate">
+                <Size x="26" y="26" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="10" y="15" />
-                    <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture atlas="glues-characterSelect-icon-notify-inProgress">
                             <Size x="20" y="20" />
                             <Anchors>
-                                <Anchor point="LEFT" x="7" />
+                                <Anchor point="CENTER" />
                             </Anchors>
                             <Color r="0.82" g="1" b="0" />
                         </Texture>
-                        <FontString inherits="GameFontNormal" text="Options"
-                            justifyH="CENTER">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+            <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="5" relativeKey="$parent.switchViewButton"
+                        relativePoint="BOTTOMRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="MPHGameFontNormalBlack" text="New Set"
+                            justifyH="CENTER" setAllPoints="true" />
                     </Layer>
                 </Layers>
             </Button>
@@ -98,6 +105,7 @@
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
         </Scripts>
     </Frame>
 

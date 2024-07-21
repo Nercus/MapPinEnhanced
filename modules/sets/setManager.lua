@@ -5,7 +5,7 @@ local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 ---@class SetManager : Module
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
-
+local CB = MapPinEnhanced.CB
 ---@type table<string, SetObject>
 SetManager.Sets = {}
 
@@ -42,6 +42,13 @@ function SetManager:RestoreSets()
     end
 end
 
+function SetManager:DeleteSet(setID)
+    self.Sets[setID]:Delete()
+    self.Sets[setID] = nil
+    SetManager:PersistSets()
+    CB:Fire("UpdateSetList")
+end
+
 function SetManager:GetSets()
     return self.Sets
 end
@@ -69,6 +76,7 @@ function SetManager:AddSet(name)
     set.setID = setID
     self.Sets[setID] = set
     SetManager:PersistSets()
+    CB:Fire("UpdateSetList")
     return set
 end
 
