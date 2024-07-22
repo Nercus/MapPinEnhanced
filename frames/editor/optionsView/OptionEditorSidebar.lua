@@ -3,10 +3,6 @@
 MapPinEnhancedOptionEditorViewSidebarMixin = {}
 
 
----@class MapPinEnhancedOptionEditorViewBodyMixin : Frame
-MapPinEnhancedOptionEditorViewBodyMixin = {}
-
-
 function MapPinEnhancedOptionEditorViewSidebarMixin:OnShow()
     print("show options")
 end

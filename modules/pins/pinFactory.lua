@@ -156,7 +156,6 @@ function PinFactory:CreatePin(initPinData, pinID)
                 for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
                     local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
                         colorTable.color:GetRGBAsBytes())
-                    -- TODO: check this type annotation
                     colorSubmenu:CreateRadio(
                         buttonTextureText,
                         IsColorSelected,

@@ -1,0 +1,79 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/beta/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="SetEditorPinEntry.xml" />
+
+    <Script file="SetEditorBody.lua" />
+    <Frame name="MapPinEnhancedSetEditorViewBodyTemplate"
+        mixin="MapPinEnhancedSetEditorViewBodyMixin"
+        virtual="true" hidden="true"
+        enableMouse="true">
+        <Frames>
+            <Frame parentKey="setHeader">
+                <Size x="1" y="40" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Frames>
+                    <EditBox parentKey="setName" multiLine="false" letters="100"
+                        font="GameFontNormalLarge"
+                        autoFocus="false">
+                        <Size x="200" y="40" />
+                        <Anchors>
+                            <Anchor point="LEFT" x="15" />
+                        </Anchors>
+                    </EditBox>
+                    <Button parentKey="deleteButton" inherits="UIButtonTemplate">
+                        <Size x="30" y="30" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-15" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="buttonArtKit" value="128-redbutton-delete"
+                                type="string" />
+                        </KeyValues>
+                    </Button>
+                    <Button parentKey="importButton" inherits="SharedButtonSmallTemplate"
+                        text="Import set"
+                        frameStrata="HIGH">
+                        <Size x="100" y="22" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-55" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="exportButton" inherits="SharedButtonSmallTemplate"
+                        text="Export set"
+                        frameStrata="HIGH">
+                        <Size x="100" y="22" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-155" />
+                        </Anchors>
+                    </Button>
+                </Frames>
+            </Frame>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="590" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="-45" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="-10" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child" setAllPoints="true">
+                        <Size x="590" y="10" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+    </Frame>
+</Ui>
