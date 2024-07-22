@@ -86,7 +86,7 @@ function PinManager:GetTrackedPin()
 end
 
 function PinManager:PersistPins()
-    ---@type table<string, pinData>
+    ---@type pinData[]
     local reducedPins = {}
     local trackedPin = self:GetTrackedPin()
     if not trackedPin then
@@ -94,9 +94,10 @@ function PinManager:PersistPins()
         trackedPin = {}
         trackedPin.pinID = nil
     end
-    for pinID, pin in pairs(self.Pins) do
-        reducedPins[pinID] = pin:GetPinData()
-        reducedPins[pinID].setTracked = pin.pinID == trackedPin.pinID
+    for _, pin in pairs(self.Pins) do
+        local p = pin:GetPinData()
+        p.setTracked = pin.pinID == trackedPin.pinID
+        table.insert(reducedPins, p)
     end
     MapPinEnhanced:SaveVar("storedPins", reducedPins)
 end
