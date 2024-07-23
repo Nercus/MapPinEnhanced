@@ -15,6 +15,30 @@ local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTempl
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
 
+---@class pinData
+---@field mapID number
+---@field x number x coordinate between 0 and 1
+---@field y number y coordinate between 0 and 1
+---@field setTracked boolean? set to true to autotrack this pin on creation
+---@field title string?
+---@field texture string?
+---@field usesAtlas boolean?
+---@field color string?
+
+
+---@class PinObject
+---@field pinID UUID
+---@field worldmapPin MapPinEnhancedWorldMapPinMixin
+---@field minimapPin MapPinEnhancedMinimapPinMixin
+---@field TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
+---@field pinData pinData
+---@field Track fun()
+---@field Untrack fun()
+---@field IsTracked fun():boolean
+---@field Remove fun()
+---@field GetPinData fun():pinData
+
+
 ---@param initPinData pinData
 ---@param pinID UUID
 ---@return PinObject

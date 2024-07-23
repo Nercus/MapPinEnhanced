@@ -7,9 +7,7 @@
 ## IconTexture: Interface\AddOns\MapPinEnhanced\assets\PinTrackedYellow.png
 ## SavedVariables: MapPinEnhancedDB
 
-libs\libs.xml
+libs\_imports.xml
 MapPinEnhanced.lua
-locales\locales.xml
-utils\utils.xml
-frames\frames.xml
-modules\modules.xml
+utils\_imports.xml
+modules\_imports.xml

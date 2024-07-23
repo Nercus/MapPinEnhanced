@@ -1,2 +1,0 @@
----@class MapPinEnhancedOptionEditorViewBodyMixin : Frame
-MapPinEnhancedOptionEditorViewBodyMixin = {}

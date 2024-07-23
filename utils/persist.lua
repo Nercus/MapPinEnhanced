@@ -1,19 +1,20 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@alias MapPinEnhancedDB table<string, table | number | string | boolean>
+
 
 ---save a variable to the saved variables
 ---@param ... string | number | boolean | table
 function MapPinEnhanced:SaveVar(...)
     if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
     local arg = { ... }
-
-
-    local value = arg[#arg]
+    local value = arg[#arg] -- last argument is the value
 
     -- remove the last argument from the tables
     arg[#arg] = nil
@@ -41,6 +42,7 @@ end
 ---@return string | number | boolean | table | nil
 function MapPinEnhanced:GetVar(...)
     if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
@@ -64,6 +66,7 @@ end
 ---@param ... string | number | boolean | table | nil
 function MapPinEnhanced:DeleteVar(...)
     if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
@@ -83,6 +86,7 @@ end
 
 function MapPinEnhanced:MigrateVar(prevKeys, newKeys)
     if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
     local prevValue = self:GetVar(unpack(prevKeys))

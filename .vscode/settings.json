@@ -17,9 +17,11 @@
     "peacock.color": "#EBCB8B",
     "wowAPI.autoAddGlobals": false,
     "Lua.completion.autoRequire": false,
-    "explorer.sortOrder": "foldersNestsFiles",
+    "explorer.sortOrder": "default",
     "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": true,
     "explorer.fileNesting.patterns": {
         "*.lua": "${capture}.lua, ${capture}.xml",
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, annotations.lua"
     }
 }

@@ -10,6 +10,20 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
 local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- NOTE: currently the same template
 
+---@class SetObject
+---@field setID UUID
+---@field name string
+---@field AddPin fun(self, pinData:pinData)
+---@field GetPinsByPosition fun(self, mapID:number, x:number, y:number):table<UUID, pinData>
+---@field GetPinByID fun(self, setpinID:UUID):pinData
+---@field RemovePinsByPostion fun(self, mapID:number, x:number, y:number)
+---@field RemovePinByID fun(self, pinsetID:UUID)
+---@field Delete fun()
+---@field GetPins fun():table<string, pinData>
+---@field GetPin fun(self, mapID:string, x:number, y:number):pinData
+---@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
+---@field SetEditorEntry MapPinEnhancedTrackerSetEntryMixin
+
 function SetFactory:CreateSet(name)
     local TrackerSetEntry = TrackerSetEntryPool:Acquire()
     ---@cast TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin

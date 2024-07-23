@@ -1,2 +1,0 @@
----@class MapPinEnhancedSliderMixin : Slider
-MapPinEnhancedSliderMixin = {}
