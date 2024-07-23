@@ -35,8 +35,8 @@
                                 <Texture
                                     file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Dismiss.png">
                                     <Anchors>
-                                        <Anchor point="TOPLEFT" x="7" y="-7" />
-                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
                                     </Anchors>
                                 </Texture>
                             </Layer>
@@ -57,8 +57,8 @@
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
-                                        <Anchor point="TOPLEFT" x="7" y="-7" />
-                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
                                     </Anchors>
                                 </Texture>
                             </Layer>
@@ -79,8 +79,8 @@
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
-                                        <Anchor point="TOPLEFT" x="7" y="-7" />
-                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
                                     </Anchors>
                                 </Texture>
                             </Layer>

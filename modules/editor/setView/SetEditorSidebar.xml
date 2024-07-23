@@ -76,12 +76,12 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <Texture atlas="glues-characterSelect-icon-notify-inProgress">
-                            <Size x="20" y="20" />
+                        <Texture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Options.png">
                             <Anchors>
-                                <Anchor point="CENTER" />
+                                <Anchor point="TOPLEFT" x="6" y="-6" />
+                                <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
                             </Anchors>
-                            <Color r="0.82" g="1" b="0" />
                         </Texture>
                     </Layer>
                 </Layers>
