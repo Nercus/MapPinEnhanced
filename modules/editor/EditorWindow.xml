@@ -28,12 +28,23 @@
                     <Anchor point="BOTTOMRIGHT" />
                 </Anchors>
             </Frame>
-            <Button parentKey="closebutton" inherits="UIPanelCloseButtonNoScripts"
-                frameStrata="HIGH">
+            <Button parentKey="closebutton"
+                inherits="MapPinEnhancedSquareButtonRedTemplate" frameStrata="HIGH">
                 <Size x="20" y="20" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="5" y="5" />
                 </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Dismiss.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="5" y="-5" />
+                                <Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
                 <Scripts>
                     <OnClick>
                         self:GetParent():Hide();

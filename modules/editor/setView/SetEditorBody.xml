@@ -10,7 +10,7 @@
         enableMouse="true">
         <Frames>
             <Frame parentKey="setHeader" hidden="true">
-                <Size x="1" y="40" />
+                <Size x="1" y="50" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
                     <Anchor point="TOPRIGHT" />
@@ -91,7 +91,7 @@
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="590" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="-45" />
+                    <Anchor point="TOPLEFT" x="0" y="-55" />
                     <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
                 </Anchors>
                 <KeyValues>
