@@ -9,7 +9,7 @@
         virtual="true" hidden="true"
         enableMouse="true">
         <Frames>
-            <Frame parentKey="setHeader">
+            <Frame parentKey="setHeader" hidden="true">
                 <Size x="1" y="40" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
@@ -24,31 +24,67 @@
                             <Anchor point="LEFT" x="15" />
                         </Anchors>
                     </EditBox>
-                    <Button parentKey="deleteButton" inherits="UIButtonTemplate">
+                    <Button parentKey="deleteButton"
+                        inherits="MapPinEnhancedSquareButtonRedTemplate">
                         <Size x="30" y="30" />
                         <Anchors>
                             <Anchor point="RIGHT" x="-15" />
                         </Anchors>
-                        <KeyValues>
-                            <KeyValue key="buttonArtKit" value="128-redbutton-delete"
-                                type="string" />
-                        </KeyValues>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Dismiss.png">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="7" y="-7" />
+                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Button>
-                    <Button parentKey="importButton" inherits="SharedButtonSmallTemplate"
-                        text="Import set"
+                    <Button parentKey="importButton"
+                        inherits="MapPinEnhancedSquareButtonYellowTemplate"
                         frameStrata="HIGH">
-                        <Size x="100" y="22" />
+                        <Size x="30" y="30" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-55" />
+                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
+                                relativePoint="LEFT" />
                         </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Import.png"
+                                    desaturated="true">
+                                    <Color r="0.4" g="0.4" b="0.4" />
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="7" y="-7" />
+                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Button>
-                    <Button parentKey="exportButton" inherits="SharedButtonSmallTemplate"
-                        text="Export set"
+                    <Button parentKey="exportButton"
+                        inherits="MapPinEnhancedSquareButtonYellowTemplate"
                         frameStrata="HIGH">
-                        <Size x="100" y="22" />
+                        <Size x="30" y="30" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-155" />
+                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.importButton"
+                                relativePoint="LEFT" />
                         </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Export.png"
+                                    desaturated="true">
+                                    <Color r="0.4" g="0.4" b="0.4" />
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="7" y="-7" />
+                                        <Anchor point="BOTTOMRIGHT" x="-7" y="7" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Button>
                 </Frames>
             </Frame>
