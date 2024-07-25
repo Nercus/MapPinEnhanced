@@ -98,6 +98,7 @@
             <OnLoad method="OnLoad" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />
+            <OnEvent method="OnEvent" />
         </Scripts>
     </Frame>
 </Ui>

@@ -112,6 +112,7 @@ function MapPinEnhancedTrackerFrameMixin:Toggle()
 end
 
 function MapPinEnhancedTrackerFrameMixin:OnLoad()
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RestorePosition()
     self.scrollFrame:SetPanExtent(ENTRY_HEIGHT + ENTRY_GAP)
 
@@ -211,7 +212,8 @@ local function RestorePinTrackerVisibility()
     MapPinEnhanced:TogglePinTracker(trackerVisibility)
 end
 
-
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-    RestorePinTrackerVisibility()
-end)
+function MapPinEnhancedTrackerFrameMixin:OnEvent(event)
+    if event == "PLAYER_ENTERING_WORLD" then
+        RestorePinTrackerVisibility()
+    end
+end
