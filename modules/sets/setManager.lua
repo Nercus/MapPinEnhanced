@@ -34,9 +34,9 @@ function SetManager:RestoreSets()
         return
     end
     for _, setTable in pairs(reducedSets) do
-        local set = SetManager:AddSet(setTable.name)
+        local set = SetManager:AddSet(setTable.name, true)
         for _, pinData in pairs(setTable.pins) do
-            set:AddPin(pinData)
+            set:AddPin(pinData, true)
         end
         self.Sets[set.setID] = set
     end
@@ -66,8 +66,9 @@ function SetManager:GetSetByName(name)
 end
 
 ---@param name string
+---@param restore boolean?
 ---@return SetObject
-function SetManager:AddSet(name)
+function SetManager:AddSet(name, restore)
     if #self.Sets >= MAX_COUNT_SETS then
         error("Too many sets")
     end
@@ -75,6 +76,9 @@ function SetManager:AddSet(name)
     local set = SetFactory:CreateSet(name)
     set.setID = setID
     self.Sets[setID] = set
+    if restore then
+        return set
+    end
     SetManager:PersistSets()
     CB:Fire("UpdateSetList")
     return set
