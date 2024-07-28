@@ -108,41 +108,20 @@ MapPinEnhanced.mapDataID = {}
 local mapDataID = MapPinEnhanced.mapDataID
 
 function MapPinEnhanced:ToggleDropDown(menuParent)
-  self.menuFrame = self.menuFrame or CreateFrame("Frame", "MPHLDBDropdown", UIParent, "UIDropDownMenuTemplate")
-  local menuTable = {}
-  table.insert(menuTable, 1, {
-    text = "Toggle Import Window",
-    func = function()
+  MenuUtil.CreateContextMenu(menuParent, function(ownerRegion, rootDescription)
+    rootDescription:CreateButton("Toggle Import Window", function()
       MapPinEnhanced:ToggleImportWindow()
-    end,
-    notCheckable = true,
-  })
-
-
-  if (#self.db.global.presets > 0) then
-    table.insert(menuTable, 2, {
-      text = "Presets",
-      notCheckable = true,
-      isTitle = true
-    })
-  end
-
-
-  for i, j in ipairs(self.db.global.presets) do
-    table.insert(menuTable, i + 2, {
-      text = "  " .. j.name,
-      func = function()
-        self:ParseImport(j.input)
-      end,
-      notCheckable = true,
-    })
-  end
-
-  if menuParent then
-    EasyMenu(menuTable, self.menuFrame, menuParent, 0, 0, "MENU")
-  else
-    EasyMenu(menuTable, self.menuFrame, "cursor", 0, 0, "MENU")
-  end
+    end)
+    rootDescription:CreateDivider()
+    if (#self.db.global.presets > 0) then
+      rootDescription:CreateTitle("Presets")
+      for i, j in ipairs(self.db.global.presets) do
+        rootDescription:CreateButton(j.name, function()
+          self:ParseImport(j.input)
+        end)
+      end
+    end
+  end)
 end
 
 local brokerText = "|A:Waypoint-MapPin-Tracked:19:19|aMPH"
@@ -1224,8 +1203,6 @@ function MapPinEnhanced.AddWaypoint(x, y, mapID, optionals)
       MapPinEnhanced:PrintMSG({ "The blizzard arrow does not work in this zone" })
     end
     MapPinEnhanced.pinManager.AddPin(x, y, mapID, optionals)
-  else
-    error("x, y or mapID missing")
   end
 end
 
@@ -1502,6 +1479,10 @@ function MapPinEnhanced:ParseImport(importstring)
       self:PrintMSG({ "Formating error! Use |cffeda55f/mph|r [x] [y] <title>" })
     end
     local x, y, mapID, title = self:ParseInput(msg)
+    if not x or not y or not mapID then
+      self:PrintMSG({ "Missing map id or coordinate" })
+      return
+    end
     MapPinEnhanced.AddWaypoint(x, y, mapID, { title = title })
   end
 end
