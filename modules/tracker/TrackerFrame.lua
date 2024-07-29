@@ -19,6 +19,8 @@ MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
 
+-- FIXME: frame is sometimes not restored properly
+
 local ENTRY_GAP = 5
 local ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()

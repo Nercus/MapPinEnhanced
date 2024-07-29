@@ -2,11 +2,17 @@
 ---@field modules table<string, Module>
 local MapPinEnhanced = select(2, ...)
 
+
+
+---@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider"| "SetFactory" | "SetManager" |"PinManager"
+
+
+
 ---@class Module
----@field name string
+---@field name ModuleName
 
 
----@param name string
+---@param name ModuleName
 ---@return Module
 function MapPinEnhanced:CreateModule(name)
     local module = {
@@ -19,8 +25,9 @@ function MapPinEnhanced:CreateModule(name)
     return module
 end
 
----@param name string
----@return Module
+---@generic T
+---@param name `T`
+---@return T
 function MapPinEnhanced:GetModule(name)
     return self.modules[name]
 end
