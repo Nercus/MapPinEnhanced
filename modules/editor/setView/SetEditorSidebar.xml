@@ -77,7 +77,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Options.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconSettings_Yellow.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="6" y="-6" />
                                 <Anchor point="BOTTOMRIGHT" x="-6" y="6" />

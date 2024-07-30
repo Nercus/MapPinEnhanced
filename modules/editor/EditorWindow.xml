@@ -37,7 +37,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Dismiss.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="5" y="-5" />
                                 <Anchor point="BOTTOMRIGHT" x="-5" y="5" />

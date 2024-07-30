@@ -33,7 +33,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Dismiss.png">
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconTrash_Yellow.png">
                                     <Anchors>
                                         <Anchor point="TOPLEFT" x="6" y="-6" />
                                         <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
@@ -53,7 +53,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Import.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconImport_Dark.png"
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
@@ -75,7 +75,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/Icon_Export.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconExport_Dark.png"
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
