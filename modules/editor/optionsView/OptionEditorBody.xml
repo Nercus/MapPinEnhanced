@@ -7,6 +7,17 @@
         mixin="MapPinEnhancedOptionEditorViewBodyMixin"
         virtual="true" hidden="true"
         enableMouse="true">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="descriptionBG" atlas="Artifacts-BG-Shadow">
+                    <Size x="275" y="1" />
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="-5" y="-5" />
+                        <Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
         <Frames>
             <!-- <Button inherits="MapPinEnhancedSquareButtonYellowTemplate">
                 <Size x="50" y="50" />
@@ -50,6 +61,12 @@
                     </Layer>
                 </Layers>
             </Button>
+            <Frame parentKey="descriptionHolder">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.descriptionBG" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.descriptionBG" />
+                </Anchors>
+            </Frame>
         </Frames>
     </Frame>
 </Ui>
