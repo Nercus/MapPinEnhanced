@@ -136,30 +136,65 @@ end
 
 
 local function AddDevReload()
-    local f = CreateFrame("frame")
-    f:SetPoint("BOTTOM", 0, 10)
-    f:SetSize(200, 20)
+    local f = CreateFrame("frame", nil, UIParent, "DefaultPanelFlatTemplate")
+    f:SetPoint("TOPLEFT", 5, -5)
+    f:SetSize(150, 400)
     f:SetFrameStrata("HIGH")
     f:SetFrameLevel(100)
+
+    local totalHeight = 0
     local text = f:CreateFontString(nil, "OVERLAY")
     text:SetFontObject(GameFontNormal)
-    text:SetPoint("CENTER")
-    text:SetText(
-        "Press 1 to reload UI | Press 2 to add test pins | Press 3 to add MapPinEnhanced to devtools | Press 4 to reset saved variables | Press 0 to exit dev mode")
+    text:SetPoint("TOP", 0, -30)
+    text:SetText("Press 1 to reload UI")
     f:SetScript("OnKeyDown", function(_, key)
         if key == "1" then
             ReloadUI()
-        elseif key == "2" then
-            AddTestPins()
-        elseif key == "3" then
-            MapPinEnhanced:Debug(MapPinEnhanced)
-        elseif key == "4" then
-            ResetSavedVars()
-        elseif key == "0" then
-            setDevMode()
         end
     end)
+
+    totalHeight = totalHeight + text:GetHeight()
+
+    local button1 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
+    button1:SetPoint("TOP", text, "BOTTOM", 0, -10)
+    button1:SetSize(130, 40)
+    button1:SetScale(0.8)
+    button1:SetText("Add Test Pins")
+    button1:SetScript("OnClick", AddTestPins)
+
+    totalHeight = totalHeight + button1:GetHeight()
+
+    local button2 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
+    button2:SetPoint("TOP", button1, "BOTTOM", 0, -10)
+    button2:SetSize(130, 40)
+    button2:SetScale(0.8)
+    button2:SetText("Reset Saved Vars")
+    button2:SetScript("OnClick", ResetSavedVars)
+
+    totalHeight = totalHeight + button2:GetHeight()
+
+    local button3 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
+    button3:SetPoint("TOP", button2, "BOTTOM", 0, -10)
+    button3:SetSize(130, 40)
+    button3:SetScale(0.8)
+    button3:SetText("Debug MPH")
+    button3:SetScript("OnClick", function()
+        MapPinEnhanced:Debug(MapPinEnhanced)
+    end)
+
+    totalHeight = totalHeight + button3:GetHeight()
+
+    local button4 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonRedTemplate")
+    button4:SetPoint("TOP", button3, "BOTTOM", 0, -10)
+    button4:SetSize(130, 40)
+    button4:SetScale(0.8)
+    button4:SetText("Exit Dev Mode")
+    button4:SetScript("OnClick", setDevMode)
+
+    totalHeight = totalHeight + button4:GetHeight()
+
     f:SetPropagateKeyboardInput(true)
+    f:SetSize(150, totalHeight + 50)
     f:Show()
 end
 
