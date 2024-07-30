@@ -61,5 +61,6 @@
                 self.middle:SetHeight(height)
             </OnLoad>
         </Scripts>
+        <NormalFont style="GameFontNormal" />
     </Button>
 </Ui>
