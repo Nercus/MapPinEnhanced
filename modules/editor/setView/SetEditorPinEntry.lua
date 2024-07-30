@@ -47,17 +47,15 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param key 'mapID' | 'xCoord' | 'yCoord' | 'title'
+---@param key 'mapID' | 'x' | 'y' | 'title'
 ---@param value string
 function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     assert(self.onChangeCallback, "No callback set")
-
-
     ---@type string | number?
     local cleanedValue = value
     if key == 'mapID' then
         cleanedValue = tonumber(value)
-    elseif key == 'xCoord' or key == 'yCoord' then
+    elseif key == 'x' or key == 'y' then
         cleanedValue = tonumber(value) / 100
     end
 
@@ -72,10 +70,10 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
         self:OnChange('mapID', self.mapID:GetText())
     end)
     self.xCoord:SetScript("OnTextChanged", function()
-        self:OnChange('xCoord', self.xCoord:GetText())
+        self:OnChange('x', self.xCoord:GetText())
     end)
     self.yCoord:SetScript("OnTextChanged", function()
-        self:OnChange('yCoord', self.yCoord:GetText())
+        self:OnChange('y', self.yCoord:GetText())
     end)
     self.title:SetScript("OnTextChanged", function()
         self:OnChange('title', self.title:GetText())

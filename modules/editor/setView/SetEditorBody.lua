@@ -21,11 +21,13 @@ local CB = MapPinEnhanced.CB
 
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
 
-
----@param key 'mapID' | 'xCoord' | 'yCoord' | 'title'
+---@param set SetObject
+---@param setpinID UUID
+---@param key 'mapID' | 'x' | 'y' | 'title'
 ---@param value string
-function MapPinEnhancedSetEditorViewBodyMixin:OnPinDataChange(key, value)
-    print(key, value)
+function MapPinEnhancedSetEditorViewBodyMixin:OnPinDataChange(set, setpinID, key, value)
+    assert(set, "No set")
+    set:UpdatePin(setpinID, key, value)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
@@ -44,7 +46,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
     local pins = set:GetPins()
 
     local lastFrame = nil
-    for _, pin in pairs(pins) do
+    for setpinID, pin in pairs(pins) do
         local pinFrame = PinEntryFramePool:Acquire() --[[@as MapPinEnhancedSetEditorPinEntryMixin]]
         pinFrame:SetParent(scrollChild)
         pinFrame:Show()
@@ -56,7 +58,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         lastFrame = pinFrame
         pinFrame:SetPin(pin)
         pinFrame:SetChangeCallback(function(key, value)
-            self:OnPinDataChange(key, value)
+            self:OnPinDataChange(set, setpinID, key, value)
         end)
     end
 

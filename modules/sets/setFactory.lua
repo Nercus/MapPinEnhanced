@@ -14,6 +14,7 @@ local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@field setID UUID
 ---@field name string
 ---@field AddPin fun(self, pinData:pinData, restore:boolean?)
+---@field UpdatePin fun(self, setpinID:UUID, key:string, value:any)
 ---@field GetPinsByPosition fun(self, mapID:number, x:number, y:number):table<UUID, pinData>
 ---@field GetPinByID fun(self, setpinID:UUID):pinData
 ---@field RemovePinsByPostion fun(self, mapID:number, x:number, y:number)
@@ -48,6 +49,19 @@ function SetFactory:CreateSet(name)
         if not restore then
             SetManager:PersistSets()
         end
+    end
+
+    ---@param pinsetID UUID
+    ---@param key 'mapID' | 'x' | 'y' | 'title'
+    ---@param value any
+    local function UpdatePin(_, pinsetID, key, value)
+        local pin = pins[pinsetID]
+        if not pin then
+            return
+        end
+        ---@type string | number | boolean | nil
+        pin[key] = value
+        SetManager:PersistSets()
     end
 
     ---@param mapID number
@@ -127,6 +141,7 @@ function SetFactory:CreateSet(name)
         name = name,
         SetName = SetName,
         AddPin = AddPin,
+        UpdatePin = UpdatePin,
         RemovePinsByPos = RemovePinsByPostion,
         RemovePinByID = RemovePinByID,
         GetPinsByPosition = GetPinsByPosition,
