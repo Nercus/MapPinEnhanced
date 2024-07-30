@@ -114,6 +114,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:SetFirstSetActive()
     if sets and #sets > 0 then
         self:ToggleActiveSet(sets[1].setID)
         self.searchInput:ClearFocus()
+        self.searchInput:SetText("")
     end
 end
 
