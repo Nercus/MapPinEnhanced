@@ -18,6 +18,7 @@ local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@field GetPinByID fun(self, setpinID:UUID):pinData
 ---@field RemovePinsByPostion fun(self, mapID:number, x:number, y:number)
 ---@field RemovePinByID fun(self, pinsetID:UUID)
+---@field SetName fun(self, newName:string)
 ---@field Delete fun()
 ---@field GetPins fun():table<string, pinData>
 ---@field GetPin fun(self, mapID:string, x:number, y:number):pinData
@@ -113,7 +114,10 @@ function SetFactory:CreateSet(name)
         MapPinEnhanced:SetPinTrackerView('Pins')
     end
 
-
+    local function SetName(_, newName)
+        TrackerSetEntry:SetTitle(newName)
+        SetEditorEntry:SetTitle(newName)
+    end
 
     TrackerSetEntry:SetScript("OnClick", function()
         LoadSet(IsShiftKeyDown())
@@ -121,6 +125,7 @@ function SetFactory:CreateSet(name)
 
     return {
         name = name,
+        SetName = SetName,
         AddPin = AddPin,
         RemovePinsByPos = RemovePinsByPostion,
         RemovePinByID = RemovePinByID,

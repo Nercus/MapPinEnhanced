@@ -66,6 +66,13 @@ function SetManager:GetSetByName(name)
     end
 end
 
+function SetManager:UpdateSetNameByID(setID, newName)
+    self.Sets[setID].name = newName
+    self.Sets[setID]:SetName(newName)
+    SetManager:PersistSets()
+    CB:Fire("UpdateSetList")
+end
+
 ---@param name string
 ---@param restore boolean?
 ---@return SetObject

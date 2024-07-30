@@ -12,7 +12,6 @@ local lower = string.lower
 ---@field clearButton Button
 
 ---@class MapPinEnhancedSetEditorViewSidebarMixin : Frame
----@field activeEditorSet SetObject | nil
 ---@field searchInput SetSearchInput
 ---@field scrollFrame SetListScrollFrame
 ---@field switchViewButton Button
@@ -22,23 +21,24 @@ MapPinEnhancedSetEditorViewSidebarMixin = {}
 
 
 
----@param set SetObject | nil
-function MapPinEnhancedSetEditorViewSidebarMixin:SetActiveEditorSet(set)
-    if not set then return end
+---@param setID UUID | nil
+function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
+    if not setID then return end
     local SetEditorBody = self.body
-    if self.activeEditorSet and set.setID == self.activeEditorSet.setID then
-        self.activeEditorSet.SetEditorEntry:SetInactive()
-        self.activeEditorSet = nil
+    local activeSet = SetEditorBody:GetActiveEditorSet()
+    if activeSet then -- there is currently an active set
+        local set = SetEditorBody:GetActiveSetData()
+        set.SetEditorEntry:SetInactive()
+    end
+    if setID == activeSet then -- if we click on the active set we want to close it
+        local set = SetEditorBody:GetActiveSetData()
+        set.SetEditorEntry:SetInactive()
         SetEditorBody:SetActiveEditorSet()
         return
     end
-
-    if self.activeEditorSet then
-        self.activeEditorSet.SetEditorEntry:SetInactive()
-    end
-    self.activeEditorSet = set
-    set.SetEditorEntry:SetActive()
-    SetEditorBody:SetActiveEditorSet(set)
+    SetEditorBody:SetActiveEditorSet(setID)
+    local newSet = SetEditorBody:GetActiveSetData()
+    newSet.SetEditorEntry:SetActive()
 end
 
 ---@param a SetObject
@@ -86,7 +86,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
         lastFrame = setFrame
         -- not the nicest solution but it works for now, we overwrite the OnClick function to set the active editor set and hope we dont need to update the set list too often
         setFrame:SetScript("OnClick", function()
-            self:SetActiveEditorSet(setObject)
+            self:ToggleActiveSet(setObject.setID)
         end)
         hooksecurefunc(setObject, "AddPin", function()
             self.body:UpdateEditor()
@@ -112,7 +112,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:SetFirstSetActive()
     local searchQuery = self.searchInput:GetText()
     local sets = self:GetFilteredSets(searchQuery)
     if sets and #sets > 0 then
-        self:SetActiveEditorSet(sets[1])
+        self:ToggleActiveSet(sets[1].setID)
         self.searchInput:ClearFocus()
     end
 end
@@ -140,7 +140,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         local setObject = SetManager:AddSet("Set name")
-        self:SetActiveEditorSet(setObject)
+        self:ToggleActiveSet(setObject.setID)
     end)
 end
 
