@@ -13,6 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame SetListScrollFrame
 ---@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
 ---@field setHeader SetEditorViewBodyHeader
+---@field addPinButton Button
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
 
@@ -35,7 +36,10 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         child:ClearAllPoints()
     end
     PinEntryFramePool:ReleaseAll()
-    if not self.activeEditorSet then return end
+    if not self.activeEditorSet then
+        self.addPinButton:Hide()
+        return
+    end
     local set = self:GetActiveSetData()
     local pins = set:GetPins()
 
@@ -55,6 +59,25 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
             self:OnPinDataChange(key, value)
         end)
     end
+
+    self.addPinButton:ClearAllPoints()
+    self.addPinButton:SetParent(scrollChild)
+    if lastFrame then
+        self.addPinButton:SetPoint("TOP", lastFrame, "BOTTOM", 0, -5)
+    else
+        self.addPinButton:SetPoint("TOP", scrollChild, "TOP", 0, -10)
+    end
+    self.addPinButton:Show()
+    self.addPinButton:SetScript("OnClick", function()
+        local Blizz = MapPinEnhanced:GetModule("Blizz")
+        set:AddPin({
+            mapID = Blizz:GetPlayerMap() or 1,
+            x = 0.5,
+            y = 0.5,
+            title = "New Pin"
+        }, false)
+        self:UpdatePinList()
+    end)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()

@@ -88,6 +88,33 @@
                     </Button>
                 </Frames>
             </Frame>
+            <Button inherits="MapPinEnhancedButtonYellowTemplate" hidden="true"
+                parentKey="addPinButton">
+                <Size x="150" y="30" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="addPinButtonText" inherits="MPHGameFontNormalBlack"
+                            text="Add Pin"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" x="10" />
+                            </Anchors>
+                        </FontString>
+                        <Texture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Dark.png"
+                            rotation="45">
+                            <Size x="10" y="10" />
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-6" relativeKey="$parent.addPinButtonText"
+                                    relativePoint="LEFT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="590" y="1" />
                 <Anchors>

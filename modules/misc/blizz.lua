@@ -38,3 +38,7 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
         SuperTrackSetSuperTrackedUserWaypoint(true)
     end)
 end
+
+function Blizz:GetPlayerMap()
+    return C_Map.GetBestMapForUnit("player")
+end
