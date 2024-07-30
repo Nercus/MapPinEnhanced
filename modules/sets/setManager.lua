@@ -10,6 +10,7 @@ local CB = MapPinEnhanced.CB
 SetManager.Sets = {}
 
 local MAX_COUNT_SETS = 500
+local CURRENT_SET_COUNT = 0
 
 ---@class reducedSet
 ---@field name string
@@ -69,17 +70,17 @@ end
 ---@param restore boolean?
 ---@return SetObject
 function SetManager:AddSet(name, restore)
-    if #self.Sets >= MAX_COUNT_SETS then
+    CURRENT_SET_COUNT = CURRENT_SET_COUNT + 1
+    if CURRENT_SET_COUNT > MAX_COUNT_SETS then
         error("Too many sets")
     end
     local setID = MapPinEnhanced:GenerateUUID("set")
     local set = SetFactory:CreateSet(name)
     set.setID = setID
     self.Sets[setID] = set
-    if restore then
-        return set
+    if not restore then
+        SetManager:PersistSets()
     end
-    SetManager:PersistSets()
     CB:Fire("UpdateSetList")
     return set
 end

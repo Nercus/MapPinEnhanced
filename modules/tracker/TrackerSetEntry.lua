@@ -13,6 +13,6 @@ function MapPinEnhancedTrackerSetEntryMixin:SetActive()
     self.activeTexture:Show()
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:SetInActive()
+function MapPinEnhancedTrackerSetEntryMixin:SetInactive()
     self.activeTexture:Hide()
 end

@@ -44,8 +44,9 @@ function SetFactory:CreateSet(name)
         local setpinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
         pins[setpinID] = pinData
-        if restore then return end
-        SetManager:PersistSets()
+        if not restore then
+            SetManager:PersistSets()
+        end
     end
 
     ---@param mapID number

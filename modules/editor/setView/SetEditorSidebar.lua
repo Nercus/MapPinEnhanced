@@ -27,14 +27,14 @@ function MapPinEnhancedSetEditorViewSidebarMixin:SetActiveEditorSet(set)
     if not set then return end
     local SetEditorBody = self.body
     if self.activeEditorSet and set.setID == self.activeEditorSet.setID then
-        self.activeEditorSet.SetEditorEntry:SetInActive()
+        self.activeEditorSet.SetEditorEntry:SetInactive()
         self.activeEditorSet = nil
         SetEditorBody:SetActiveEditorSet()
         return
     end
 
     if self.activeEditorSet then
-        self.activeEditorSet.SetEditorEntry:SetInActive()
+        self.activeEditorSet.SetEditorEntry:SetInactive()
     end
     self.activeEditorSet = set
     set.SetEditorEntry:SetActive()
