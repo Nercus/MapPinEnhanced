@@ -14,12 +14,6 @@ local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTe
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
-
---FIXME: 1x ...ceMapPinEnhanced/modules/pins/pinFactory.lua:144: attempt to index field 'pinTracker' (a nil value)
--- [string "@MapPinEnhanced/modules/pins/pinFactory.lua"]:144: in function `Remove'
--- [string "@MapPinEnhanced/modules/pins/pinManager.lua"]:70: in function `RemovePinByID'
--- [string "@MapPinEnhanced/modules/pins/pinFactory.lua"]:232: in function <...ceMapPinEnhanced/modules/pins/pinFactory.lua:227>
-
 ---@class pinData
 ---@field mapID number
 ---@field x number x coordinate between 0 and 1
@@ -146,7 +140,9 @@ function PinFactory:CreatePin(initPinData, pinID)
         if isTracked then
             C_Map.ClearUserWaypoint()
         end
-        MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
+        if MapPinEnhanced.pinTracker and MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
+            MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
+        end
         worldmapPin:Hide()
         minimapPin:Hide()
         TrackerPinEntry:Hide()
