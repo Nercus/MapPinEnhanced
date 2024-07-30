@@ -17,7 +17,6 @@
             <Layer level="BACKGROUND">
                 <Texture parentKey="headerTexture"
                     file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_HeaderShadow.png">
-                    <Color r="0.7" g="0.7" b="0.7" />
                     <Size x="300" y="28" />
                     <Anchors>
                         <Anchor point="TOPLEFT" y="-15" />
