@@ -23,7 +23,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.init = true
 end
 
----@alias FormType "OptionButton" |"OptionCheckbox" |"OptionColorpicker" |"OptionInput" |"OptionSelect" |"OptionSlider"
+---@alias FormType "button" | "checkbox" | "colorpicker" | "input" | "select" | "slider"
 ---@alias FormElement MapPinEnhancedButtonMixin | MapPinEnhancedCheckboxMixin | MapPinEnhancedColorpickerMixin | MapPinEnhancedInputMixin | MapPinEnhancedSelectMixin | MapPinEnhancedSliderMixin
 
 ---@class FormData

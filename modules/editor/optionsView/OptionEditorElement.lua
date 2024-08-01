@@ -2,7 +2,7 @@
 ---@class MapPinEnhancedOptionEditorElementMixin : Frame
 ---@field label FontString
 ---@field highlight Texture
----@field option OptionObject
+---@field option OptionObjectTypes
 ---@field formElement FormElement
 ---@field optionHolder Frame
 MapPinEnhancedOptionEditorElementMixin = {}
