@@ -5,5 +5,4 @@ MapPinEnhancedOptionEditorViewSidebarMixin = {}
 
 
 function MapPinEnhancedOptionEditorViewSidebarMixin:OnShow()
-    print("show options")
 end

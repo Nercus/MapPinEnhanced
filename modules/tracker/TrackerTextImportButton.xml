@@ -3,30 +3,11 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="TrackerTextImportButton.lua" />
     <Button name="MapPinEnhancedTrackerTextImportButtonTemplate"
+        inherits="MapPinEnhancedButtonYellowTemplate"
         mixin="MapPinEnhancedTrackerTextImportButtonMixin"
-        virtual="true" enableMouse="true">
-        <Size x="275" y="37" />
-        <NormalTexture atlas="groupfinder-button-cover" setAllPoints="true" />
-        <PushedTexture atlas="groupfinder-button-cover-down" setAllPoints="true" />
-        <HighlightTexture atlas="groupfinder-button-select" alphaMode="ADD">
-            <Size x="255" y="30" />
-            <Anchors>
-                <Anchor point="CENTER" />
-            </Anchors>
-        </HighlightTexture>
-        <Layers>
-            <Layer level="OVERLAY">
-                <Texture atlas="Gamepad_Rev_Plus_64">
-                    <Color r="1.0" g="0.82" b="0" />
-                    <Size x="27" y="27" />
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-        </Layers>
+        virtual="true" text="Import">
+        <Size x="300" y="32" />
         <Scripts>
-            <OnLoad method="OnLoad" />
             <OnClick method="OnClick" />
         </Scripts>
     </Button>

@@ -7,100 +7,115 @@
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
-        <Size x="300" y="200" />
-        <!-- TODO: resize frame dynamically based on height and how many elements are in the
-        scrollframe -->
+        <Size x="300" y="1" />
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture setAllPoints="true" parentKey="blackBackground">
+                    <Color r="0" g="0" b="0" a="0.5" />
+                </Texture>
+            </Layer>
+        </Layers>
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture parentKey="headerTexture"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_HeaderShadow.png">
-                    <Size x="300" y="28" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" y="-15" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY">
-                <FontString parentKey="title" inherits="GameFontNormal"
-                    text="Map Pin Enhanced Tracker"
-                    justifyH="CENTER">
-                    <Size x="300" y="26" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
         <Frames>
-            <Button parentKey="closebutton" frameStrata="HIGH">
-                <Size x="16" y="16" />
+            <Frame parentKey="header" frameStrata="HIGH">
+                <Size x="1" y="30" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="-5" y="-7" />
+                    <Anchor point="TOPLEFT" x="0" y="0" />
+                    <Anchor point="TOPRIGHT" x="0" y="0" />
                 </Anchors>
-                <NormalTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
-                    setAllPoints="true" />
-                <PushedTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="1" y="-1" />
-                        <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                    </Anchors>
-                </PushedTexture>
-                <HighlightTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
-                    setAllPoints="true" alpha="0.5" />
-                <Scripts>
-                    <OnClick>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture parentKey="headerTexture"
+                            file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_HeaderShadow.png">
+                            <Size x="300" y="28" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" y="-15" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="title" inherits="GameFontNormal"
+                            text="Map Pin Enhanced Tracker"
+                            justifyH="CENTER">
+                            <Size x="300" y="26" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="closebutton" frameStrata="HIGH">
+                        <Size x="16" y="16" />
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="-5" y="-7" />
+                        </Anchors>
+                        <NormalTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                            setAllPoints="true" />
+                        <PushedTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="1" y="-1" />
+                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+                            </Anchors>
+                        </PushedTexture>
+                        <HighlightTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            setAllPoints="true" alpha="0.5" />
+                        <Scripts>
+                            <OnClick>
                         self:GetParent():Hide();
                     </OnClick>
-                </Scripts>
-            </Button>
-            <Button parentKey="viewToggle" frameStrata="HIGH">
-                <Size x="22" y="22" />
+                        </Scripts>
+                    </Button>
+                    <Button parentKey="viewToggle" frameStrata="HIGH">
+                        <Size x="22" y="22" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="5" y="-5" />
+                        </Anchors>
+                        <NormalTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png"
+                            setAllPoints="true" />
+                        <PushedTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="1" y="-1" />
+                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+                            </Anchors>
+                        </PushedTexture>
+                        <HighlightTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            setAllPoints="true" alpha="0.5" />
+                    </Button>
+                    <Button parentKey="editorToggle" frameStrata="HIGH">
+                        <Size x="20" y="20" />
+                        <Anchors>
+                            <Anchor point="LEFT" x="5" relativeKey="$parent.viewToggle"
+                                relativePoint="RIGHT" />
+                        </Anchors>
+                        <NormalTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png"
+                            setAllPoints="true" />
+                        <PushedTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="1" y="-1" />
+                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+                            </Anchors>
+                        </PushedTexture>
+                        <HighlightTexture
+                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            setAllPoints="true" alpha="0.5" />
+                    </Button>
+                </Frames>
+            </Frame>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="5" y="-5" />
-                </Anchors>
-                <NormalTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png"
-                    setAllPoints="true" />
-                <PushedTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="1" y="-1" />
-                        <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                    </Anchors>
-                </PushedTexture>
-                <HighlightTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
-                    setAllPoints="true" alpha="0.5" />
-            </Button>
-            <Button parentKey="editorToggle" frameStrata="HIGH">
-                <Size x="20" y="20" />
-                <Anchors>
-                    <Anchor point="LEFT" x="5" relativeKey="$parent.viewToggle"
-                        relativePoint="RIGHT" />
-                </Anchors>
-                <NormalTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png"
-                    setAllPoints="true" />
-                <PushedTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="1" y="-1" />
-                        <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                    </Anchors>
-                </PushedTexture>
-                <HighlightTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
-                    setAllPoints="true" alpha="0.5" />
-            </Button>
-            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="-30" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
+                        x="0" y="0" />
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
                 <Size x="300" y="1" />
@@ -108,6 +123,8 @@
                     <KeyValue key="scrollBarX" value="-20" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
+                    <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
+                        type="boolean" />
                 </KeyValues>
                 <ScrollChild>
                     <Frame parentKey="Child">
@@ -124,7 +141,6 @@
             <OnLoad method="OnLoad" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />
-            <OnEvent method="OnEvent" />
         </Scripts>
     </Frame>
 </Ui>

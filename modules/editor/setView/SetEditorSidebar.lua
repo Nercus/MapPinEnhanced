@@ -156,7 +156,6 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnHide()
 end
 
 function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
-    print("show sets")
     self:UpdateSetList() -- init population
     MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
         self:UpdateSetList()

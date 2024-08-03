@@ -2,24 +2,33 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedTrackerScrollBar
+---@field Update fun(self:MapPinEnhancedTrackerScrollBar)
+
 ---@class MapPinEnhancedTrackerScrollFrame : ScrollFrame
 ---@field Child Frame
 ---@field SetPanExtent fun(self:MapPinEnhancedTrackerScrollFrame, extent:number)
+---@field ScrollBar MapPinEnhancedTrackerScrollBar
+
+
+---@class MapPinEnhancedTrackerHeader : Frame
+---@field title FontString
+---@field viewToggle Button
+---@field editorToggle Button
+---@field headerTexture Texture
+
 
 ---@alias TrackerView 'Pins' | 'Sets'
 
 ---@class MapPinEnhancedTrackerFrameMixin : Frame
----@field title FontString
 ---@field entries table<number, MapPinEnhancedTrackerSetEntryMixin> | table<number, MapPinEnhancedTrackerPinEntryMixin>
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
----@field viewToggle Button
----@field editorToggle Button
+---@field header MapPinEnhancedTrackerHeader
 MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
 
--- FIXME: frame is sometimes not restored properly
 
 local ENTRY_GAP = 5
 local ENTRY_HEIGHT = 37
@@ -40,7 +49,7 @@ function MapPinEnhancedTrackerFrameMixin:RestorePosition()
 end
 
 function MapPinEnhancedTrackerFrameMixin:SetTrackerTitle(title)
-    self.title:SetText(title)
+    self.header.title:SetText(title)
 end
 
 function MapPinEnhancedTrackerFrameMixin:ClearEntries()
@@ -118,7 +127,7 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     self:RestorePosition()
     self.scrollFrame:SetPanExtent(ENTRY_HEIGHT + ENTRY_GAP)
 
-    self.viewToggle:SetScript("OnClick", function()
+    self.header.viewToggle:SetScript("OnClick", function()
         if self.activeView == "Pins" then
             self:SetActiveView("Sets")
         else
@@ -128,7 +137,7 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     -- set default view
     self:SetActiveView("Pins")
 
-    self.editorToggle:SetScript("OnClick", function()
+    self.header.editorToggle:SetScript("OnClick", function()
         MapPinEnhanced:ToggleEditorWindow()
     end)
 end
@@ -144,7 +153,7 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
-    if not self.title:IsMouseOver() then return end
+    if not self.header.title:IsMouseOver() then return end
     self:StartMoving()
 end
 
@@ -155,15 +164,21 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
 end
 
+---@param scrollFrameHeight number
+function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
+    local headerHeight = self.header:GetHeight()
+    self:SetHeight(scrollFrameHeight + headerHeight)
+    self.scrollFrame.ScrollBar:Update()
+end
+
 function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
-    -- TODO: only update if it's visible
-    print("UpdateEntriesPosition")
-    local height = 0
+    if not self:IsVisible() then return end
+    local height = ENTRY_GAP
     for i, entry in ipairs(self.entries) do
         entry:ClearAllPoints()
         entry:SetParent(self.scrollFrame.Child)
         if i == 1 then
-            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, 0)
+            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, -ENTRY_GAP)
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
         end
@@ -176,6 +191,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     end
     self.scrollFrame.Child:SetHeight(height)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
+    self:UpdateFrameHeight(height)
 end
 
 ---@param entry Frame
@@ -184,14 +200,16 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     local scollChildHeight = self.scrollFrame.Child:GetHeight()
     entry:ClearAllPoints()
     if #self.entries == 1 then
-        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, 0)
+        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, -ENTRY_GAP)
     else
         entry:SetPoint("TOPLEFT", self.entries[#self.entries - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
     end
     entry:SetParent(self.scrollFrame.Child)
     entry:Show()
-    self.scrollFrame.Child:SetHeight(scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP)
+    local newHeight = scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP
+    self.scrollFrame.Child:SetHeight(newHeight)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
+    self:UpdateFrameHeight(newHeight)
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
@@ -214,8 +232,4 @@ local function RestorePinTrackerVisibility()
     MapPinEnhanced:TogglePinTracker(trackerVisibility)
 end
 
-function MapPinEnhancedTrackerFrameMixin:OnEvent(event)
-    if event == "PLAYER_ENTERING_WORLD" then
-        RestorePinTrackerVisibility()
-    end
-end
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RestorePinTrackerVisibility)
