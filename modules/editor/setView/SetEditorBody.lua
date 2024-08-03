@@ -13,6 +13,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame SetListScrollFrame
 ---@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
 ---@field setHeader SetEditorViewBodyHeader
+---@field infoText FontString
+---@field pinListHeader Frame
 ---@field addPinButton Button
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
@@ -106,9 +108,15 @@ end
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateSetHeader()
     if not self.activeEditorSet then
         self.setHeader:Hide()
+        self.pinListHeader:Hide()
+        self.scrollFrame:Hide()
+        self.infoText:Show()
         return
     end
+    self.infoText:Hide()
+    self.scrollFrame:Show()
     self.setHeader:Show()
+    self.pinListHeader:Show()
     local set = self:GetActiveSetData()
     self.setHeader.setName:SetText(set.name)
 end

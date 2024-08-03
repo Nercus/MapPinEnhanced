@@ -8,7 +8,7 @@
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
         registerForDrag="LeftButton">
-        <Size x="850" y="500" />
+        <Size x="900" y="500" />
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>

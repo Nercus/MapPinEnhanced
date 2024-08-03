@@ -5,17 +5,23 @@
     <Script file="SetEditorPinEntry.lua" />
     <Frame name="MapPinEnhancedSetEditorPinEntryTemplate" virtual="true"
         mixin="MapPinEnhancedSetEditorPinEntryMixin" propagateKeyboardInput="true">
-        <Size x="560" y="80" />
+        <Size x="560" y="40" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="common-dropdown-bg" setAllPoints="true" />
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                    <Size x="1" y="10" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="3" />
+                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="3" />
+                    </Anchors>
+                </Texture>
             </Layer>
         </Layers>
         <Frames>
             <Button parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
-                <Size x="40" y="40" />
+                <Size x="30" y="30" />
                 <Anchors>
-                    <Anchor point="LEFT" x="20" y="3"></Anchor>
+                    <Anchor point="LEFT" x="20" y="0"></Anchor>
                 </Anchors>
                 <Scripts>
                     <OnLoad>
@@ -30,20 +36,11 @@
                 letters="5">
                 <Size x="65" y="30" />
                 <Anchors>
-                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15"
-                        y="-5" />
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="MapID">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
                 <Frames>
-                    <!-- TODO: Add: menu with continents > zones > subzones -->
+                    <!-- TODO: Use menu instead with continents > zones > subzones and override
+                    mapid input field -->
                     <Button parentKey="mapSelection" hidden="true">
                         <Size x="15" y="15" />
                         <NormalTexture atlas="poi-islands-table" setAllPoints="true" alpha="0.8" />
@@ -69,15 +66,6 @@
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.mapID" x="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="x">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
                 <Scripts>
                     <OnChar method="OnChar" />
                 </Scripts>
@@ -91,15 +79,6 @@
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.xCoord" x="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="y">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
                 <Scripts>
                     <OnChar method="OnChar" />
                 </Scripts>
@@ -110,34 +89,37 @@
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yCoord" x="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="Title">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-5" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </EditBox>
+            <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
+
+            <Button parentKey="deleteButton">
+                <Size x="15" y="15" />
+                <NormalTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                    setAllPoints="true" />
+                <PushedTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="1" y="-1" />
+                        <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+                    </Anchors>
+                </PushedTexture>
+                <HighlightTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                    setAllPoints="true" alpha="0.5" />
+                <Anchors>
+                    <Anchor point="RIGHT" x="-10" />
+                </Anchors>
+            </Button>
             <Frame parentKey="pinOptions" inherits="MapPinEnhancedSelectTemplate">
                 <Size x="1" y="30" />
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="10" />
-                    <Anchor point="RIGHT" x="-20" />
+                    <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.deleteButton"
+                        x="-10" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="Pin options">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </Frame>
 
-            <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

@@ -163,6 +163,6 @@ function PinProvider:SupertrackingOnChanged()
     })
 end
 
-EventRegistry:RegisterCallback("Supertracking.OnChanged", function()
-    PinProvider:SupertrackingOnChanged()
-end)
+-- EventRegistry:RegisterCallback("Supertracking.OnChanged", function()
+--     PinProvider:SupertrackingOnChanged()
+-- end)
