@@ -36,5 +36,13 @@
                     atlas="communitiesfinder_card_highlight" hidden="true" />
             </Layer>
         </Layers>
+        <!-- <Animations>
+            <AnimationGroup parentKey="appear">
+                <Translation duration="0" order="1" offsetY="20" smoothing="IN_OUT" />
+                <Alpha fromAlpha="0" toAlpha="1" duration="0.5" order="2" startDelay="0.1" />
+                <Translation duration="0.5" order="2" offsetY="-20" smoothing="IN_OUT"
+                    startDelay="0.1" />
+            </AnimationGroup>
+        </Animations> -->
     </Button>
 </Ui>

@@ -27,5 +27,15 @@
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>
+        <!-- <Animations>
+            <AnimationGroup parentKey="appear">
+                <Translation duration="0" order="1" offsetX="15" smoothing="IN_OUT" />
+                <Alpha toAlpha="0" duration="0" order="1" />
+                <Alpha fromAlpha="0" toAlpha="1" duration="0.3" order="2" startDelay="0.1"
+                    smoothing="IN" />
+                <Translation duration="0.3" order="2" offsetX="-15" smoothing="IN"
+                    startDelay="0.1" />
+            </AnimationGroup>
+        </Animations> -->
     </Button>
 </Ui>

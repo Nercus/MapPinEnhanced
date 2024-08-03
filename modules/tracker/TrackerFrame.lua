@@ -176,6 +176,16 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
     self.scrollFrame.ScrollBar:Update()
 end
 
+-- function MapPinEnhancedTrackerFrameMixin:PlayAnimation()
+--     if not self:IsVisible() then return end
+--     for i = #self.entries, 1, -1 do
+--         local entry = self.entries[i]
+--         if entry.appear then
+--             entry.appear:Play(false, (#self.entries - i + 1) * 0.05)
+--         end
+--     end
+-- end
+
 function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     if not self:IsVisible() then return end
     local height = ENTRY_GAP
@@ -197,6 +207,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     self.scrollFrame.Child:SetHeight(height)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
     self:UpdateFrameHeight(height)
+    -- self:PlayAnimation()
 end
 
 ---@param entry Frame
@@ -215,6 +226,7 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     self.scrollFrame.Child:SetHeight(newHeight)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
     self:UpdateFrameHeight(newHeight)
+    -- entry.appear:Play()
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
