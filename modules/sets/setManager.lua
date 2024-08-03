@@ -6,7 +6,7 @@ local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local CB = MapPinEnhanced.CB
----@type table<string, SetObject>
+---@type table<UUID, SetObject>
 SetManager.Sets = {}
 
 local MAX_COUNT_SETS = 500
@@ -16,26 +16,39 @@ local CURRENT_SET_COUNT = 0
 ---@field name string
 ---@field pins table<string, pinData>
 
-function SetManager:PersistSets()
-    ---@type table<number, reducedSet>
-    local reducedSets = {}
-    for _, set in pairs(self.Sets) do
+---@param targetSetID? UUID if nil, all sets will be persisted
+function SetManager:PersistSets(targetSetID)
+    if targetSetID then
+        local set = self.Sets[targetSetID]
+        if not set then -- set was deleted
+            MapPinEnhanced:DeleteVar("Sets", targetSetID)
+        end
         local setTable = {
             name = set.name,
             pins = set:GetPins()
         }
-        table.insert(reducedSets, setTable)
+        MapPinEnhanced:SaveVar("Sets", targetSetID, setTable)
+        return
+    end
+    ---@type table<UUID, reducedSet>
+    local reducedSets = {}
+    for setID, set in pairs(self.Sets) do
+        reducedSets[setID] = {
+            name = set.name,
+            pins = set:GetPins()
+        }
     end
     MapPinEnhanced:SaveVar("Sets", reducedSets)
 end
 
 function SetManager:RestoreSets()
-    local reducedSets = MapPinEnhanced:GetVar("Sets") --[[@as table<number, reducedSet> | nil]]
+    local reducedSets = MapPinEnhanced:GetVar("Sets") --[[@as table<UUID, reducedSet> | nil]]
+    MapPinEnhanced:Debug(reducedSets)
     if not reducedSets then
         return
     end
-    for _, setTable in pairs(reducedSets) do
-        local set = SetManager:AddSet(setTable.name, true)
+    for setID, setTable in pairs(reducedSets) do
+        local set = SetManager:AddSet(setTable.name, setID, true)
         for _, pinData in pairs(setTable.pins) do
             set:AddPin(pinData, true)
         end
@@ -46,7 +59,7 @@ end
 function SetManager:DeleteSet(setID)
     self.Sets[setID]:Delete()
     self.Sets[setID] = nil
-    SetManager:PersistSets()
+    SetManager:PersistSets(setID)
     CB:Fire("UpdateSetList")
 end
 
@@ -69,24 +82,25 @@ end
 function SetManager:UpdateSetNameByID(setID, newName)
     self.Sets[setID].name = newName
     self.Sets[setID]:SetName(newName)
-    SetManager:PersistSets()
+    SetManager:PersistSets(setID)
     CB:Fire("UpdateSetList")
 end
 
 ---@param name string
+---@param overrideSetID UUID? if nil, a new setID will be generated
 ---@param restore boolean?
 ---@return SetObject
-function SetManager:AddSet(name, restore)
+function SetManager:AddSet(name, overrideSetID, restore)
     CURRENT_SET_COUNT = CURRENT_SET_COUNT + 1
     if CURRENT_SET_COUNT > MAX_COUNT_SETS then
         error("Too many sets")
     end
-    local setID = MapPinEnhanced:GenerateUUID("set")
-    local set = SetFactory:CreateSet(name)
+    local setID = overrideSetID or MapPinEnhanced:GenerateUUID("set")
+    local set = SetFactory:CreateSet(name, setID)
     set.setID = setID
     self.Sets[setID] = set
     if not restore then
-        SetManager:PersistSets()
+        SetManager:PersistSets(setID)
     end
     CB:Fire("UpdateSetList")
     return set

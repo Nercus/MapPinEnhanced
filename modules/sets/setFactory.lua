@@ -10,6 +10,7 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
 local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- NOTE: currently the same template
 
+
 ---@class SetObject
 ---@field setID UUID
 ---@field name string
@@ -26,7 +27,11 @@ local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 ---@field SetEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
-function SetFactory:CreateSet(name)
+---Create a new set
+---@param name string
+---@param id UUID
+---@return SetObject
+function SetFactory:CreateSet(name, id)
     local TrackerSetEntry = TrackerSetEntryPool:Acquire()
     ---@cast TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 
@@ -36,18 +41,20 @@ function SetFactory:CreateSet(name)
     TrackerSetEntry:SetTitle(name)
     SetEditorEntry:SetTitle(name)
 
+    local setID = id
 
     ---@type table<UUID, pinData>
-    local pins = {}
+    local pins  = {}
 
     ---@param pinData pinData
     ---@param restore boolean?
     local function AddPin(_, pinData, restore)
+        -- TODO: change uuid setup to a index based system for better performance and consistent order
         local setpinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
         pins[setpinID] = pinData
         if not restore then
-            SetManager:PersistSets()
+            SetManager:PersistSets(setID)
         end
     end
 
@@ -61,7 +68,7 @@ function SetFactory:CreateSet(name)
         end
         ---@type string | number | boolean | nil
         pin[key] = value
-        SetManager:PersistSets()
+        SetManager:PersistSets(setID)
     end
 
     ---@param mapID number
@@ -94,13 +101,13 @@ function SetFactory:CreateSet(name)
         for setpinID, _ in pairs(pinsToRemove) do
             pins[setpinID] = nil
         end
-        SetManager:PersistSets()
+        SetManager:PersistSets(setID)
     end
 
     ---@param pinsetID UUID
     local function RemovePinByID(_, pinsetID)
         pins[pinsetID] = nil
-        SetManager:PersistSets()
+        SetManager:PersistSets(setID)
     end
 
     local function Delete()
@@ -110,6 +117,8 @@ function SetFactory:CreateSet(name)
         TrackerSetEntryPool:Release(TrackerSetEntry)
         SetEditorEntryPool:Release(SetEditorEntry)
     end
+
+
 
     ---@return table<UUID, pinData>
     local function GetPins()
