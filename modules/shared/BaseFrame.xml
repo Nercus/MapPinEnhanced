@@ -3,6 +3,44 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Frame name="MapPinEnhancedBaseFrameTemplate" virtual="true">
+        <Frames>
+            <Frame parentKey="artLeft">
+                <Size x="32" y="64" />
+                <Anchors>
+                    <Anchor point="LEFT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture rotation="90"
+                            file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png"
+                        >
+                            <Size x="64" y="32" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame parentKey="artRight">
+                <Size x="32" y="64" />
+                <Anchors>
+                    <Anchor point="RIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture rotation="270"
+                            file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png"
+                        >
+                            <Size x="64" y="32" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="topleft"
@@ -38,29 +76,16 @@
                     <Anchors>
                         <Anchor point="TOP" />
                     </Anchors>
-                    <Size x="32" y="32" />
+                    <Size x="64" y="32" />
                 </Texture>
                 <Texture parentKey="artBottom" rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
                     <Anchors>
                         <Anchor point="BOTTOM" />
                     </Anchors>
-                    <Size x="32" y="32" />
+                    <Size x="64" y="32" />
                 </Texture>
-                <Texture parentKey="artLeft" rotation="90"
-                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
-                    <Anchors>
-                        <Anchor point="LEFT" />
-                    </Anchors>
-                    <Size x="32" y="32" />
-                </Texture>
-                <Texture parentKey="artRight" rotation="270"
-                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
-                    <Anchors>
-                        <Anchor point="RIGHT" />
-                    </Anchors>
-                    <Size x="32" y="32" />
-                </Texture>
+
                 <Texture parentKey="borderTopLeft" rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
@@ -160,34 +185,60 @@
         </Layers>
     </Frame>
 
-    <Frame name="MapPinEnhancedBaseFrameHeaderTemplate" virtual="true">
+    <Frame name="MapPinEnhancedBaseFrameHeaderTemplate" hidden="true">
+        <Size x="256" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="left"
-                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderEdge.png">
+                <Texture parentKey="topleft"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
-                        <Anchor point="LEFT" />
+                        <Anchor point="TOPLEFT" />
                     </Anchors>
-                    <Size x="16" y="32" />
+                    <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="right" rotation="180"
-                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderEdge.png">
+                <Texture parentKey="topright" rotation="270"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
-                        <Anchor point="RIGHT" />
+                        <Anchor point="TOPRIGHT" />
                     </Anchors>
-                    <Size x="16" y="32" />
+                    <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="middle" rotation="180"
-                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/header/MPHHeaderMiddle.png"
-                    horizTile="true">
+                <Texture parentKey="bottomright" rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.left" />
-                        <Anchor
-                            point="RIGHT" relativePoint="LEFT"
-                            relativeKey="$parent.right" />
+                        <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
-                    <Size x="1" y="32" />
+                    <Size x="32" y="32" />
                 </Texture>
+                <Texture parentKey="bottomleft" rotation="90"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+
+                <Texture parentKey="borderTop" rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.topright"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture parentKey="borderBottom" rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
             </Layer>
         </Layers>
     </Frame>
