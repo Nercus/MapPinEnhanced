@@ -120,7 +120,7 @@
                 </Anchors>
                 <Size x="300" y="1" />
                 <KeyValues>
-                    <KeyValue key="scrollBarX" value="-20" type="number" />
+                    <!-- <KeyValue key="scrollBarX" value="" type="number" /> -->
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
                     <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"

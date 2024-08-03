@@ -164,10 +164,15 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
 end
 
+local MAX_HEIGHT = 500
 ---@param scrollFrameHeight number
 function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
     local headerHeight = self.header:GetHeight()
-    self:SetHeight(scrollFrameHeight + headerHeight)
+    local newHeight = scrollFrameHeight + headerHeight
+    if newHeight > MAX_HEIGHT then
+        newHeight = MAX_HEIGHT
+    end
+    self:SetHeight(newHeight)
     self.scrollFrame.ScrollBar:Update()
 end
 

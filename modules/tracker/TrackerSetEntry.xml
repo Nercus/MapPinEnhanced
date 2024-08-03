@@ -4,7 +4,7 @@
     <Script file="TrackerSetEntry.lua" />
     <Button name="MapPinEnhancedTrackerSetEntryTemplate" mixin="MapPinEnhancedTrackerSetEntryMixin"
         enableMouse="true" virtual="true">
-        <Size x="275" y="37" />
+        <Size x="300" y="37" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture atlas="cosmic-bar-fill-white"
