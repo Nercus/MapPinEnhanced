@@ -75,6 +75,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
     end
     self:ClearEntries()
     if viewType == "Pins" then
+        MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
         ---@class PinManager : Module
         local PinManager = MapPinEnhanced:GetModule("PinManager")
         local pins = PinManager:GetPins()
@@ -95,6 +96,10 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         for _, set in pairs(sets) do
             table.insert(self.entries, set.TrackerSetEntry)
         end
+        MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
+            if self.activeView ~= "Sets" then return end
+            self:SetActiveView(self.activeView, true)
+        end)
     end
     self.activeView = viewType
     self:UpdateEntriesPosition()
@@ -103,16 +108,11 @@ end
 function MapPinEnhancedTrackerFrameMixin:Close()
     self:Hide()
     MapPinEnhanced:SaveVar("trackerVisible", false)
-    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
 end
 
 function MapPinEnhancedTrackerFrameMixin:Open()
     self:Show()
     MapPinEnhanced:SaveVar("trackerVisible", true)
-    MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
-        if self.activeView ~= "Sets" then return end
-        self:SetActiveView(self.activeView, true)
-    end)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Toggle()

@@ -64,8 +64,8 @@
                             setAllPoints="true" alpha="0.5" />
                         <Scripts>
                             <OnClick>
-                        self:GetParent():Hide();
-                    </OnClick>
+                                self:GetParent():GetParent():Close()
+                            </OnClick>
                         </Scripts>
                     </Button>
                     <Button parentKey="viewToggle" frameStrata="HIGH">
