@@ -5,7 +5,7 @@
     <Script file="SetEditorPinEntry.lua" />
     <Frame name="MapPinEnhancedSetEditorPinEntryTemplate" virtual="true"
         mixin="MapPinEnhancedSetEditorPinEntryMixin" propagateKeyboardInput="true">
-        <Size x="560" y="40" />
+        <Size x="580" y="40" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
