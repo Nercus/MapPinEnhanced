@@ -6,18 +6,15 @@
     <Frame name="MapPinEnhancedTrackerFrameTemplate" mixin="MapPinEnhancedTrackerFrameMixin"
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
-        registerForDrag="LeftButton">
+        registerForDrag="LeftButton" dontSavePosition="true">
         <Size x="300" y="1" />
         <Layers>
-            <!-- <Layer level="OVERLAY">
+            <Layer level="OVERLAY">
                 <Texture setAllPoints="true" parentKey="blackBackground">
-                    <Color r="0" g="0" b="0" a="0.5" />
+                    <Color r="0" g="0" b="0" a="0" />
                 </Texture>
-            </Layer> -->
+            </Layer>
         </Layers>
-        <Anchors>
-            <Anchor point="CENTER" />
-        </Anchors>
         <Frames>
             <Frame parentKey="header" frameStrata="HIGH">
                 <Size x="1" y="30" />

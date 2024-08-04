@@ -35,16 +35,17 @@ local ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
     local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
     if trackerPosition then
-        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", trackerPosition.x, trackerPosition.y)
+        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", trackerPosition.x, -trackerPosition.y)
     else
         local defaultPosition = MapPinEnhanced:GetDefault("trackerPosition")
         if not defaultPosition then
             defaultPosition = {
-                ["x"] = (GetScreenWidth() / 2) - 200,
-                ["y"] = (GetScreenHeight() / 2) - 200
+                ["x"] = (GetScreenWidth() / 2) - self:GetWidth() / 2,
+                ["y"] = (GetScreenHeight() / 2) - self:GetHeight() / 2
             }
         end
-        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", defaultPosition.x, defaultPosition.y)
+        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", defaultPosition.x, -defaultPosition.y)
+        MapPinEnhanced:SaveVar("trackerPosition", defaultPosition)
     end
 end
 
@@ -159,9 +160,11 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     self:StopMovingOrSizing()
-    local top = self:GetTop()
-    local left = self:GetLeft()
+    local left, top = self:GetLeft(), self:GetTop()
+    top = top - GetScreenHeight() -- relative from bottom left
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
+    self:ClearAllPoints()
+    self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", left, top)
 end
 
 local MAX_HEIGHT = 500
