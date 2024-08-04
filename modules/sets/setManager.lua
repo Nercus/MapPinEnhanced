@@ -20,8 +20,9 @@ local CURRENT_SET_COUNT = 0
 function SetManager:PersistSets(targetSetID)
     if targetSetID then
         local set = self.Sets[targetSetID]
-        if not set then -- set was deleted
+        if not set then --set was deleted
             MapPinEnhanced:DeleteVar("Sets", targetSetID)
+            return
         end
         local setTable = {
             name = set.name,
@@ -43,7 +44,6 @@ end
 
 function SetManager:RestoreSets()
     local reducedSets = MapPinEnhanced:GetVar("Sets") --[[@as table<UUID, reducedSet> | nil]]
-    MapPinEnhanced:Debug(reducedSets)
     if not reducedSets then
         return
     end

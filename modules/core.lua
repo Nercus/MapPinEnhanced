@@ -90,6 +90,7 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData)
     self.SuperTrackedPin:Show()
 end
 
-C_Timer.After(1, function()
-    MapPinEnhanced:ToggleEditorWindow()
-end)
+-- C_Timer.After(1, function()
+--     MapPinEnhanced:ToggleEditorWindow()
+--     MapPinEnhanced.editorWindow:SetActiveView("optionView")
+-- end)
