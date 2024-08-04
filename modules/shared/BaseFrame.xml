@@ -10,8 +10,8 @@
                     <Anchor point="LEFT" />
                 </Anchors>
                 <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture rotation="90"
+                    <Layer level="OVERLAY">
+                        <Texture texelSnappingBias="0" snapToPixelGrid="false" rotation="90"
                             file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png"
                         >
                             <Size x="64" y="32" />
@@ -28,8 +28,8 @@
                     <Anchor point="RIGHT" />
                 </Anchors>
                 <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture rotation="270"
+                    <Layer level="OVERLAY">
+                        <Texture texelSnappingBias="0" snapToPixelGrid="false" rotation="270"
                             file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png"
                         >
                             <Size x="64" y="32" />
@@ -42,43 +42,48 @@
             </Frame>
         </Frames>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture parentKey="topleft"
+            <Layer level="OVERLAY">
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topleft"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="topright" rotation="270"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topright"
+                    rotation="270"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="bottomright" rotation="180"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomright"
+                    rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="bottomleft" rotation="90"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomleft"
+                    rotation="90"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="artTop" rotation="0"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="artTop"
+                    rotation="0"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
                     <Anchors>
                         <Anchor point="TOP" />
                     </Anchors>
                     <Size x="64" y="32" />
                 </Texture>
-                <Texture parentKey="artBottom" rotation="180"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="artBottom"
+                    rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Center.png">
                     <Anchors>
                         <Anchor point="BOTTOM" />
@@ -86,7 +91,8 @@
                     <Size x="64" y="32" />
                 </Texture>
 
-                <Texture parentKey="borderTopLeft" rotation="0" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTopLeft"
+                    rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
@@ -96,7 +102,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="borderTopRight" rotation="0" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTopRight"
+                    rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.topright"
@@ -108,7 +115,8 @@
                 </Texture>
 
 
-                <Texture parentKey="borderBottomLeft" rotation="180" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottomLeft"
+                    rotation="180" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
@@ -118,7 +126,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="borderBottomRight" rotation="180" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottomRight"
+                    rotation="180" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.bottomright"
@@ -130,7 +139,8 @@
                 </Texture>
 
 
-                <Texture parentKey="borderLeftTop" rotation="0" vertTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderLeftTop"
+                    rotation="0" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
@@ -140,7 +150,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="borderLeftBottom" rotation="0" vertTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderLeftBottom"
+                    rotation="0" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomleft"
@@ -152,7 +163,8 @@
                 </Texture>
 
 
-                <Texture parentKey="borderRightTop" rotation="180" vertTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderRightTop"
+                    rotation="180" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topright"
@@ -162,7 +174,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="borderRightBottom" rotation="180" vertTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderRightBottom"
+                    rotation="180" vertTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Vertical.png">
                     <Anchors>
                         <Anchor point="TOPRIGHT" relativeKey="$parent.artRight"
@@ -172,7 +185,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="background" vertTile="true" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="background"
+                    vertTile="true" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Background.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
@@ -185,32 +199,35 @@
         </Layers>
     </Frame>
 
-    <Frame name="MapPinEnhancedBaseFrameHeaderTemplate" hidden="true">
+    <Frame name="MapPinEnhancedBaseFrameHeaderTemplate" virtual="true">
         <Size x="256" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="topleft"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topleft"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="topright" rotation="270"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topright"
+                    rotation="270"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="bottomright" rotation="180"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomright"
+                    rotation="180"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                     <Size x="32" y="32" />
                 </Texture>
-                <Texture parentKey="bottomleft" rotation="90"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomleft"
+                    rotation="90"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Corner.png">
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" />
@@ -218,7 +235,8 @@
                     <Size x="32" y="32" />
                 </Texture>
 
-                <Texture parentKey="borderTop" rotation="0" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTop"
+                    rotation="0" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
@@ -228,7 +246,8 @@
                     </Anchors>
                     <Size x="1" y="1" />
                 </Texture>
-                <Texture parentKey="borderBottom" rotation="180" horizTile="true"
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottom"
+                    rotation="180" horizTile="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/baseframe/MPHBorder_Horizontal.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
