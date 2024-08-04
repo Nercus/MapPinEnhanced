@@ -202,6 +202,9 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         end
         height = height + ENTRY_HEIGHT + ENTRY_GAP --[[@as number]]
         entry:Show()
+        if entry.SetEntryIndex then
+            entry:SetEntryIndex(i)
+        end
     end
     -- set the height of the scroll child so the scroll bar gets resized correctly
     if height < 1 then
@@ -213,7 +216,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     -- self:PlayAnimation()
 end
 
----@param entry Frame
+---@param entry MapPinEnhancedTrackerSetEntryMixin | MapPinEnhancedTrackerPinEntryMixin
 function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     table.insert(self.entries, entry)
     local scollChildHeight = self.scrollFrame.Child:GetHeight()
@@ -229,6 +232,9 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     self.scrollFrame.Child:SetHeight(newHeight)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
     self:UpdateFrameHeight(newHeight)
+    if entry.SetEntryIndex then
+        entry:SetEntryIndex(#self.entries)
+    end
     -- entry.appear:Play()
 end
 

@@ -2,8 +2,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePinMixin
+---@field count FontString
+
+
 ---@class MapPinEnhancedTrackerPinEntryMixin :  Button
----@field Pin MapPinEnhancedBasePinMixin
+---@field Pin MapPinEnhancedTrackerPinEntryPin
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
@@ -48,6 +52,10 @@ end
 function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
     -- NOTE: change the texture of the tracker entry here
     self.Pin:SetUntrackedTexture()
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndex(index)
+    self.Pin.count:SetText(index)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title

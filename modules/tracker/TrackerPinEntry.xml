@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="TrackerPinEntry.lua" />
     <Button name="MapPinEnhancedTrackerPinEntryTemplate" mixin="MapPinEnhancedTrackerPinEntryMixin"
-        virtual="true" enableMouse="true">
+        virtual="true" enableMouse="true" clipChildren="false">
         <Size x="300" y="37" />
         <KeyValues>
             <KeyValue key="titlePosition" value="RIGHT" />
@@ -13,8 +13,19 @@
         <Frames>
             <Frame parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
                 <Anchors>
-                    <Anchor point="LEFT" x="0" />
+                    <Anchor point="LEFT" x="5" />
                 </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalSmall" text="1" justifyH="RIGHT"
+                            parentKey="count">
+                            <Anchors>
+                                <Anchor point="TOPRIGHT"
+                                    relativePoint="BOTTOMLEFT" x="15" y="10" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
             </Frame>
         </Frames>
         <Layers>
