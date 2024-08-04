@@ -11,7 +11,7 @@
                 <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
                     <Size x="1" y="10" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="5" />
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" />
                         <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="5" />
                     </Anchors>
                 </Texture>

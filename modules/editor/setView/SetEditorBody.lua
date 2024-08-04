@@ -5,14 +5,16 @@ local MapPinEnhanced = select(2, ...)
 ---@class SetEditorViewBodyHeader : Frame
 ---@field setName EditBox
 ---@field deleteButton Button
----@field importButton Button
 ---@field exportButton Button
+---@field createSetButton Button
+---@field importButton Button
+---@field bg Texture
 
 ---@class MapPinEnhancedSetEditorViewBodyMixin : Frame
 ---@field activeEditorSet UUID | nil
 ---@field scrollFrame SetListScrollFrame
 ---@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
----@field setHeader SetEditorViewBodyHeader
+---@field header SetEditorViewBodyHeader
 ---@field infoText FontString
 ---@field pinListHeader Frame
 ---@field addPinButton Button
@@ -85,7 +87,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
-    self.setHeader.deleteButton:SetScript("OnClick", function()
+    self.header.deleteButton:SetScript("OnClick", function()
+        -- TODO: add a confirmation dialog
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         SetManager:DeleteSet(self.activeEditorSet)
@@ -93,10 +96,17 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         CB:Fire('UpdateSetList')
     end)
 
-    self.setHeader.setName:SetScript("OnTextChanged", function()
+    self.header.setName:SetScript("OnTextChanged", function()
         if not self.activeEditorSet then return end
         local SetManager = MapPinEnhanced:GetModule("SetManager")
-        SetManager:UpdateSetNameByID(self.activeEditorSet, self.setHeader.setName:GetText())
+        SetManager:UpdateSetNameByID(self.activeEditorSet, self.header.setName:GetText())
+    end)
+    self.header:SetScript("OnMouseDown", function(self)
+        MapPinEnhanced.editorWindow:StartMoving()
+    end)
+
+    self.header:SetScript("OnMouseUp", function(self)
+        MapPinEnhanced.editorWindow:StopMovingOrSizing()
     end)
 end
 
@@ -105,9 +115,14 @@ function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
     return SetManager:GetSetByID(self.activeEditorSet)
 end
 
-function MapPinEnhancedSetEditorViewBodyMixin:UpdateSetHeader()
+function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
     if not self.activeEditorSet then
-        self.setHeader:Hide()
+        self.header.setName:Hide()
+        self.header.deleteButton:Hide()
+        self.header.exportButton:Hide()
+        self.header.createSetButton:Show()
+        self.header.importButton:Show()
+
         self.pinListHeader:Hide()
         self.scrollFrame:Hide()
         self.infoText:Show()
@@ -115,15 +130,19 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateSetHeader()
     end
     self.infoText:Hide()
     self.scrollFrame:Show()
-    self.setHeader:Show()
+    self.header.setName:Show()
+    self.header.deleteButton:Show()
+    self.header.exportButton:Show()
+    self.header.createSetButton:Hide()
+    self.header.importButton:Hide()
     self.pinListHeader:Show()
     local set = self:GetActiveSetData()
-    self.setHeader.setName:SetText(set.name)
+    self.header.setName:SetText(set.name)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateEditor()
     self:UpdatePinList()
-    self:UpdateSetHeader()
+    self:UpdateHeader()
 end
 
 ---@param setID UUID | nil

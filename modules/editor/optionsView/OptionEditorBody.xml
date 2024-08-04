@@ -10,63 +10,258 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="descriptionBG" atlas="Artifacts-BG-Shadow">
-                    <Size x="275" y="1" />
+                    <Size x="200" y="1" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="1" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
                     <Anchors>
-                        <Anchor point="TOPRIGHT" x="-5" y="-5" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+                        <Anchor point="TOPRIGHT" x="-7" y="-6" />
+                        <Anchor point="BOTTOMRIGHT" x="-7" y="6" />
                     </Anchors>
                 </Texture>
             </Layer>
         </Layers>
         <Frames>
-            <!-- <Button inherits="MapPinEnhancedSquareButtonYellowTemplate">
-                <Size x="50" y="50" />
-                <Anchors>
-                    <Anchor point="CENTER"></Anchor>
-                </Anchors>
-            </Button>
-            <Button inherits="MapPinEnhancedSquareButtonRedTemplate">
-                <Size x="50" y="50" />
-                <Anchors>
-                    <Anchor point="CENTER" y="-60"></Anchor>
-                </Anchors>
-            </Button> -->
-            <Button inherits="MapPinEnhancedButtonYellowTemplate">
-                <Size x="200" y="30" />
-                <Anchors>
-                    <Anchor point="CENTER"></Anchor>
-                </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="MPHGameFontNormalBlack" text="Hey James">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-            </Button>
-            <Button inherits="MapPinEnhancedButtonRedTemplate">
-                <Size x="200" y="30" />
-                <Anchors>
-                    <Anchor point="CENTER" y="-60"></Anchor>
-                </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="Hey James">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-            </Button>
-            <Frame parentKey="descriptionHolder">
+            <Frame parentKey="descriptionFrame">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.descriptionBG" />
                     <Anchor point="BOTTOMRIGHT" relativeKey="$parent.descriptionBG" />
                 </Anchors>
+                <Frames>
+                    <Frame parentKey="header">
+                        <Size x="1" y="30" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="3" y="-9" />
+                            <Anchor point="TOPRIGHT" x="-3" y="-9"
+                                relativeKey="$parent.descriptionFrame" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="BACKGROUND">
+                                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                                    <Size x="1" y="10" />
+                                    <Anchors>
+                                        <Anchor point="BOTTOMLEFT" />
+                                        <Anchor point="BOTTOMRIGHT" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                            <Layer level="OVERLAY">
+                                <FontString inherits="GameFontNormalLarge"
+                                    text="Name hightlighted option"
+                                    justifyH="CENTER">
+                                    <Anchors>
+                                        <Anchor point="CENTER" />
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+                    <Frame parentKey="holder">
+                        <Size x="1" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.header"
+                                relativePoint="BOTTOMLEFT" />
+                            <Anchor point="BOTTOMRIGHT" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
             </Frame>
+            <Frame parentKey="header">
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="10" y="-15" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-15" relativePoint="TOPLEFT"
+                        relativeKey="$parent.descriptionFrame" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                            <Size x="1" y="10" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalLarge" text="Selected option category"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="15" y="-30" relativeKey="$parent.header" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.descriptionFrame"
+                        relativePoint="BOTTOMLEFT" x="-10" y="10" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="-7" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child" setAllPoints="true">
+                        <Size x="1" y="10" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                        <Frames>
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-5" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-70" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-135" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-200" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-265" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-330" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-395" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-460" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-525" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+                            <Frame>
+                                <Size x="200" y="60" />
+                                <Anchors>
+                                    <Anchor point="TOP" y="-590" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="BACKGROUND">
+                                        <Texture setAllPoints="true">
+                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Frame>
+
+
+                        </Frames>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
         </Frames>
     </Frame>
 </Ui>

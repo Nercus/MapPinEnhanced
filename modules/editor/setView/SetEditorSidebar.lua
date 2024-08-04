@@ -17,6 +17,7 @@ local lower = string.lower
 ---@field switchViewButton Button
 ---@field createSetButton Button
 ---@field body MapPinEnhancedSetEditorViewBodyMixin
+---@field header Frame
 MapPinEnhancedSetEditorViewSidebarMixin = {}
 
 
@@ -100,8 +101,10 @@ function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets(searchQuery)
     if searchQuery == "" then return nil end
     local sets = self:GetAlphabeticalSortedSets()
     local filteredSets = {}
+    searchQuery = lower(searchQuery)
     for _, setObject in ipairs(sets) do
-        if string.find(setObject.name, searchQuery) then
+        local setObjectName = lower(setObject.name)
+        if string.find(setObjectName, searchQuery) then
             table.insert(filteredSets, setObject)
         end
     end
@@ -142,6 +145,13 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         local setObject = SetManager:AddSet("Set name")
         self:ToggleActiveSet(setObject.setID)
+    end)
+
+    self.header:SetScript("OnMouseDown", function()
+        MapPinEnhanced.editorWindow:StartMoving()
+    end)
+    self.header:SetScript("OnMouseUp", function()
+        MapPinEnhanced.editorWindow:StopMovingOrSizing()
     end)
 end
 

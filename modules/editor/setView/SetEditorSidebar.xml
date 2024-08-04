@@ -8,12 +8,40 @@
         virtual="true" hidden="true"
         enableMouse="true">
         <Frames>
+            <Frame parentKey="header">
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="10" y="-15" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                            <Size x="1" y="10" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalLarge" text="Sets"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
             <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
                 autoFocus="false">
                 <Size x="1" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="15" y="-15" />
-                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
+                    <Anchor point="TOPLEFT" x="15" y="-5" relativeKey="$parent.header"
+                        relativePoint="BOTTOMLEFT" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-5" relativeKey="$parent.header"
+                        relativePoint="BOTTOMRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
@@ -46,28 +74,7 @@
                     </Button>
                 </Frames>
             </EditBox>
-            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="-35" />
-                    <Anchor point="BOTTOMRIGHT" x="0" y="31" />
-                </Anchors>
-                <Size x="275" y="1" />
-                <KeyValues>
-                    <KeyValue key="scrollBarX" value="-15" type="number" />
-                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
-                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
-                        type="boolean" />
-                </KeyValues>
-                <ScrollChild>
-                    <Frame parentKey="Child">
-                        <Size x="275" y="1" />
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="0" y="0" />
-                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
-                        </Anchors>
-                    </Frame>
-                </ScrollChild>
-            </ScrollFrame>
+
             <Button parentKey="switchViewButton"
                 inherits="MapPinEnhancedSquareButtonRedTemplate">
                 <Size x="26" y="26" />
@@ -100,6 +107,29 @@
                     </Layer>
                 </Layers>
             </Button>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="-15" y="0" relativeKey="$parent.searchInput"
+                        relativePoint="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" x="-25" y="45" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="3" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="275" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

@@ -10,6 +10,7 @@
         virtual="true" hidden="true"
         enableMouse="true">
         <Layers>
+
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" parentKey="infoText"
                     text="Select or create a set on the right to start editing" setAllPoints="true"
@@ -17,31 +18,32 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="setHeader" hidden="true">
-                <Size x="1" y="50" />
+            <Frame parentKey="header" enableMouse="true">
+                <Size x="1" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="TOPRIGHT" />
+                    <Anchor point="TOPLEFT" x="10" y="-15" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
                 </Anchors>
                 <Frames>
-                    <EditBox parentKey="setName" multiLine="false" letters="100"
+                    <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
                         font="GameFontNormalLarge"
                         autoFocus="false">
-                        <Size x="200" y="40" />
+                        <Size x="200" y="26" />
                         <Anchors>
                             <Anchor point="LEFT" x="15" />
                         </Anchors>
                     </EditBox>
-                    <Button parentKey="deleteButton"
+                    <Button parentKey="deleteButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonRedTemplate">
-                        <Size x="30" y="30" />
+                        <Size x="26" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-15" />
+                            <Anchor point="RIGHT" x="-12" y="7" />
                         </Anchors>
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconTrash_Yellow.png">
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconTrash_Yellow.png"
+                                    texelSnappingBias="0" snapToPixelGrid="false">
                                     <Anchors>
                                         <Anchor point="TOPLEFT" x="6" y="-6" />
                                         <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
@@ -50,34 +52,12 @@
                             </Layer>
                         </Layers>
                     </Button>
-                    <Button parentKey="importButton"
+                    <Button parentKey="exportButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonYellowTemplate"
                         frameStrata="HIGH">
-                        <Size x="30" y="30" />
+                        <Size x="26" y="26" />
                         <Anchors>
                             <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
-                                relativePoint="LEFT" />
-                        </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconImport_Dark.png"
-                                    desaturated="true">
-                                    <Color r="0.4" g="0.4" b="0.4" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
-                    </Button>
-                    <Button parentKey="exportButton"
-                        inherits="MapPinEnhancedSquareButtonYellowTemplate"
-                        frameStrata="HIGH">
-                        <Size x="30" y="30" />
-                        <Anchors>
-                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.importButton"
                                 relativePoint="LEFT" />
                         </Anchors>
                         <Layers>
@@ -94,7 +74,56 @@
                             </Layer>
                         </Layers>
                     </Button>
+                    <Button parentKey="createSetButton"
+                        inherits="MapPinEnhancedButtonYellowTemplate">
+                        <Size x="75" y="26" />
+                        <Anchors>
+                            <Anchor point="RIGHT" y="7" x="-8" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString inherits="MPHGameFontNormalBlack" text="New Set"
+                                    justifyH="CENTER" setAllPoints="true" />
+                            </Layer>
+                        </Layers>
+                    </Button>
+                    <Button parentKey="importButton"
+                        inherits="MapPinEnhancedButtonYellowTemplate">
+                        <Size x="75" y="26" />
+                        <Anchors>
+                            <Anchor point="RIGHT" relativeKey="$parent.createSetButton"
+                                relativePoint="LEFT" x="-10" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString inherits="MPHGameFontNormalBlack" text="Import"
+                                    justifyH="RIGHT">
+                                    <Anchors>
+                                        <Anchor point="RIGHT" x="-10" />
+                                    </Anchors>
+                                </FontString>
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconImport_Dark.png">
+                                    <Size x="12" y="12" />
+                                    <Anchors>
+                                        <Anchor point="LEFT" x="10" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                    </Button>
                 </Frames>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                            <Size x="1" y="10" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
             </Frame>
             <Button inherits="MapPinEnhancedButtonYellowTemplate" hidden="true"
                 parentKey="addPinButton">
@@ -126,8 +155,10 @@
             <Frame inherits="MapPinEnhancedSetEditorPinHeaderTemplate" parentKey="pinListHeader"
                 hidden="true">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="15" y="-40" />
-                    <Anchor point="TOPRIGHT" x="-30" y="-40" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
+                        x="10" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.header"
+                        relativePoint="BOTTOMRIGHT" x="-10" />
                 </Anchors>
             </Frame>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
