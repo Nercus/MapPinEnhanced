@@ -7,7 +7,8 @@
         <Size x="300" y="37" />
         <KeyValues>
             <KeyValue key="titlePosition" value="RIGHT" />
-            <KeyValue key="titleXOffset" value="5" />
+            <KeyValue key="titleXOffset" value="10" />
+            <KeyValue key="titleYOffset" value="9" />
         </KeyValues>
         <Frames>
             <Frame parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
@@ -20,6 +21,53 @@
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" atlas="groupfinder-button-select" alphaMode="ADD"
                     setAllPoints="true" />
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString inherits="GameFontHighlight" text="Stockades">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.Pin" relativePoint="RIGHT" x="10"
+                            y="-9" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture
+                    parentKey="bgLeft" texelSnappingBias="0"
+                    snapToPixelGrid="false"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Left.png">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="-9" relativeKey="$parent.Pin" relativePoint="RIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="bgRight" texelSnappingBias="0"
+                    snapToPixelGrid="false"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Right.png"
+                    alpha="0.2">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="RIGHT" x="0" />
+                    </Anchors>
+
+                </Texture>
+                <Texture parentKey="bgMiddle"
+                    texelSnappingBias="0"
+                    snapToPixelGrid="false"
+                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Middle.png"
+                    horizTile="true">
+                    <Size x="1" y="32" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.bgLeft"
+                            relativePoint="RIGHT" />
+                        <Anchor point="RIGHT" relativeKey="$parent.bgRight"
+                            relativePoint="LEFT" />
+                    </Anchors>
+                    <Gradient>
+                        <MinColor r="1" g="1" b="1" a="1" />
+                        <MaxColor r="1" g="1" b="1" a="0.2" />
+
+                    </Gradient>
+                </Texture>
             </Layer>
         </Layers>
         <Scripts>
