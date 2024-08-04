@@ -2,8 +2,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class SetEditorSetNameEditBox : EditBox
+---@field editButton Button
+
 ---@class SetEditorViewBodyHeader : Frame
----@field setName EditBox
+---@field setName SetEditorSetNameEditBox
 ---@field deleteButton Button
 ---@field exportButton Button
 ---@field createSetButton Button
@@ -108,6 +111,30 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     self.header:SetScript("OnMouseUp", function(self)
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
     end)
+
+    --- TODO: restructure this editbox to be a template
+
+    self.header.setName.editButton:SetScript("OnClick", function()
+        if self.header.setName:IsEnabled() then
+            self.header.setName:Disable()
+            self.header.setName:HighlightText(0, 0)
+            self.header.setName.editButton.icon:SetTexture(
+                "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+            return
+        end
+        self.header.setName:Enable()
+        self.header.setName:SetFocus()
+        self.header.setName:HighlightText()
+        self.header.setName.editButton.icon:SetTexture(
+            "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
+    end)
+
+    self.header.setName:SetScript("OnEnterPressed", function()
+        self.header.setName:Disable()
+        self.header.setName:HighlightText(0, 0)
+        self.header.setName.editButton.icon:SetTexture(
+            "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+    end)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
@@ -138,6 +165,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
     self.pinListHeader:Show()
     local set = self:GetActiveSetData()
     self.header.setName:SetText(set.name)
+
+    self.header.setName:Disable()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateEditor()

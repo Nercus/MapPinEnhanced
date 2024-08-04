@@ -28,10 +28,30 @@
                     <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
                         font="GameFontNormalLarge"
                         autoFocus="false">
+                        <TextInsets right="-25" />
                         <Size x="200" y="26" />
                         <Anchors>
                             <Anchor point="LEFT" x="15" />
                         </Anchors>
+                        <Frames>
+                            <Button parentKey="editButton">
+                                <Size x="26" y="26" />
+                                <Anchors>
+                                    <Anchor point="RIGHT" />
+                                </Anchors>
+                                <Layers>
+                                    <Layer level="OVERLAY">
+                                        <Texture parentKey="icon"
+                                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEdit_Yellow.png">
+                                            <Anchors>
+                                                <Anchor point="TOPLEFT" x="6" y="-6" />
+                                                <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
+                                            </Anchors>
+                                        </Texture>
+                                    </Layer>
+                                </Layers>
+                            </Button>
+                        </Frames>
                     </EditBox>
                     <Button parentKey="deleteButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonRedTemplate">
@@ -78,7 +98,7 @@
                         inherits="MapPinEnhancedButtonYellowTemplate">
                         <Size x="75" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" y="7" x="-8" />
+                            <Anchor point="RIGHT" y="7" x="-3" relativePoint="CENTER" />
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
@@ -91,8 +111,7 @@
                         inherits="MapPinEnhancedButtonYellowTemplate">
                         <Size x="75" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" relativeKey="$parent.createSetButton"
-                                relativePoint="LEFT" x="-10" />
+                            <Anchor point="LEFT" y="7" x="3" relativePoint="CENTER" />
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
