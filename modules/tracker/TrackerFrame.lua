@@ -196,7 +196,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         entry:ClearAllPoints()
         entry:SetParent(self.scrollFrame.Child)
         if i == 1 then
-            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, -ENTRY_GAP)
+            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 20, -ENTRY_GAP)
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
         end

@@ -17,11 +17,12 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString inherits="GameFontNormalSmall" text="1" justifyH="RIGHT"
+                        <FontString inherits="GameFontNormalLarge" alpha="0.7" text="1"
+                            justifyH="RIGHT"
                             parentKey="count">
                             <Anchors>
-                                <Anchor point="TOPRIGHT"
-                                    relativePoint="BOTTOMLEFT" x="15" y="10" />
+                                <Anchor point="RIGHT" relativeKey="$parent.Pin"
+                                    relativePoint="LEFT" />
                             </Anchors>
                         </FontString>
                     </Layer>

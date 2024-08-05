@@ -112,7 +112,7 @@
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
-                        x="0" y="0" />
+                        x="-20" y="0" />
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
                 <Size x="300" y="1" />
