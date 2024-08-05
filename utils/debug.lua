@@ -14,7 +14,33 @@ local ReloadUI = C_UI.Reload
 local playerLoginFired = false
 local preFiredQueue = {}
 
---- TODO: dont package this in the release version
+-- TODO: dont package this in the release version
+-- TODO: add a test system that automatically tests different things
+-- this should move the current saved vars to a different location and then test different things and then reset the saved vars -> always a fresh use
+-- should be able to test the following:
+-- - Add a pin
+-- - Remove a pin
+-- - Track a pin
+-- - Untrack a pin
+-- - Change the color of a pin
+-- - Change the title of a pin
+-- - Change the icon of a pin
+-- - Create a set
+-- - Delete a set
+-- - Update the name of a set
+-- - Add a pin to a set
+-- - Remove a pin from a set
+-- - Edit a pin in a set
+-- - Change option values and see if they work
+-- - Change the position of the tracker
+-- - Open the seteditor
+-- - Close the seteditor
+-- - Open the tracker
+-- - Close the tracker
+-- - Open the options
+-- - Close the options
+-- - Test migration from old saved vars
+
 ---add debug message to DevTool
 ---@param ... table | string | number | boolean | nil
 function MapPinEnhanced:Debug(...)

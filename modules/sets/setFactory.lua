@@ -49,7 +49,6 @@ function SetFactory:CreateSet(name, id)
     ---@param pinData pinData
     ---@param restore boolean?
     local function AddPin(_, pinData, restore)
-        -- TODO: change uuid setup to a index based system for better performance and consistent order
         local setpinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
         pins[setpinID] = pinData
