@@ -47,6 +47,20 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@alias OptionObjectTypes OptionButton | OptionCheckbox | OptionColorpicker | OptionInput | OptionSelect | OptionSlider
 
 
+local function CheckForDuplicateOption(label, category, options)
+    if not options then return end
+    if not options[category] then return end
+    ---@type OptionObjectTypes[]
+    local categoryOptions = options[category]
+    for _, option in ipairs(categoryOptions) do
+        if option.label == label then
+            error(("Option with label %s already exists in category %s"):format(label, category))
+        end
+    end
+end
+
+
+
 ---@param optionType FormType
 ---@param option OptionObjectTypes
 function Options:RegisterOption(optionType, option)
@@ -61,6 +75,7 @@ function Options:RegisterOption(optionType, option)
     if not self.options[option.category] then
         self.options[option.category] = {}
     end
+    CheckForDuplicateOption(option.label, option.category, self.options)
     table.insert(self.options[option.category], option)
 end
 

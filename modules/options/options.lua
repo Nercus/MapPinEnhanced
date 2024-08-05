@@ -24,5 +24,42 @@ local CATEGORY_ORDER = {
 
 Options.CATEGORIES = OptionCategories
 
-function Options:SetOptionDisabledState()
+
+
+---get a list of all used categories in the correct order
+---@return string[]
+function Options:GetCategories()
+    -- dont return empty categories
+    local categories = {}
+    for _, category in ipairs(CATEGORY_ORDER) do
+        if self.options[category] then
+            table.insert(categories, category)
+        end
+    end
+    return categories
+end
+
+---@param category OPTIONCATEGORY
+---@param label string
+---@return OptionObjectTypes | nil
+function Options:GetOptionElement(category, label)
+    local categoryOptions = self.options[category]
+    for _, option in ipairs(categoryOptions) do
+        if option and option.label == label then
+            return option
+        end
+    end
+    return nil
+end
+
+---@param category OPTIONCATEGORY
+---@param label string
+---@param disabledState boolean
+function Options:SetOptionDisabledState(category, label, disabledState)
+    local option = self:GetOptionElement(category, label)
+    if option then
+        -- TODO: implement
+        return
+    end
+    error(("Option with label %s does not exist in category %s"):format(label, category))
 end

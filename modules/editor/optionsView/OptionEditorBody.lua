@@ -8,6 +8,7 @@
 ---@field selects FramePool
 ---@field sliders FramePool
 ---@field init boolean
+---@field sidebar MapPinEnhancedOptionEditorViewSidebarMixin
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
 
@@ -59,4 +60,8 @@ function MapPinEnhancedOptionEditorViewBodyMixin:GetFormElement(formType)
     end
     error("Invalid form formType: " .. formType)
     return optionElement
+end
+
+---@param category OPTIONCATEGORY
+function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
 end

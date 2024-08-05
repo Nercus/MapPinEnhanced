@@ -39,6 +39,7 @@
                     </Layer>
                 </Layers>
             </Frame>
+
             <Button parentKey="switchViewButton" inherits="MapPinEnhancedButtonRedTemplate">
                 <Size x="1" y="26" />
                 <Anchors>
@@ -61,6 +62,30 @@
                     </Layer>
                 </Layers>
             </Button>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header"
+                        relativePoint="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.switchViewButton"
+                        relativePoint="TOPRIGHT" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="3" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="275" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
         </Frames>
         <Scripts>
             <OnShow method="OnShow" />
