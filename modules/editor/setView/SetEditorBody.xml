@@ -50,8 +50,32 @@
                                         </Texture>
                                     </Layer>
                                 </Layers>
+                                <Scripts>
+                                    <OnClick>
+                                        <!-- TODO: check if propagate mouseclicks for dragging works -->
+                                        local editBox = self:GetParent()
+                                        if editBox:IsEnabled() then
+                                            editBox:Disable()
+                                            editBox:HighlightText(0, 0)
+                                            self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+                                            return
+                                        end
+                                        editBox:Enable()
+                                        editBox:SetFocus()
+                                        editBox:HighlightText()
+                                        self.icon:SetTexture( "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
+                                    </OnClick>
+                                </Scripts>
                             </Button>
                         </Frames>
+                        <Scripts>
+                            <OnEnterPressed>
+                                self:Disable()
+                                self:HighlightText(0, 0)
+                                self.editButton.icon:SetTexture(
+                                "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+                            </OnEnterPressed>
+                        </Scripts>
                     </EditBox>
                     <Button parentKey="deleteButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonRedTemplate">

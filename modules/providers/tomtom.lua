@@ -12,7 +12,8 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 
 -- local HBDmapData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
--- -- TODO: add a wrapper to parse tomtom pin info
+-- TODO: add a wrapper to parse tomtom pin info
+-- TODO: add fake tomtom function and namespace for compatibility with other addons
 
 -- MapPinEnhanced:Debug(HBDmapData)
 -- for i, j in ipairs(HBDmapData) do

@@ -111,30 +111,6 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     self.header:SetScript("OnMouseUp", function(self)
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
     end)
-
-    --- TODO: restructure this editbox to be a template
-
-    self.header.setName.editButton:SetScript("OnClick", function()
-        if self.header.setName:IsEnabled() then
-            self.header.setName:Disable()
-            self.header.setName:HighlightText(0, 0)
-            self.header.setName.editButton.icon:SetTexture(
-                "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
-            return
-        end
-        self.header.setName:Enable()
-        self.header.setName:SetFocus()
-        self.header.setName:HighlightText()
-        self.header.setName.editButton.icon:SetTexture(
-            "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
-    end)
-
-    self.header.setName:SetScript("OnEnterPressed", function()
-        self.header.setName:Disable()
-        self.header.setName:HighlightText(0, 0)
-        self.header.setName.editButton.icon:SetTexture(
-            "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
-    end)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
@@ -142,7 +118,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
     return SetManager:GetSetByID(self.activeEditorSet)
 end
 
-function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
+function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
     if not self.activeEditorSet then
         self.header.setName:Hide()
         self.header.deleteButton:Hide()
@@ -163,13 +139,16 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
     self.header.createSetButton:Hide()
     self.header.importButton:Hide()
     self.pinListHeader:Show()
+end
+
+function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
     local set = self:GetActiveSetData()
     self.header.setName:SetText(set.name)
-
     self.header.setName:Disable()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateEditor()
+    self:UpdateDisplayedElements()
     self:UpdatePinList()
     self:UpdateHeader()
 end

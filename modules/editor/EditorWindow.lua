@@ -57,7 +57,6 @@ function MapPinEnhancedEditorWindowMixin:ConfigureViewVisibility(viewToShow, vie
         viewToHide.sideBar:ClearAllPoints()
         viewToHide.sideBar:Hide()
     end
-
     if viewToShow then
         viewToShow.body:Show()
         viewToShow.body:SetAllPoints(self.body)
@@ -79,17 +78,6 @@ function MapPinEnhancedEditorWindowMixin:SetActiveView(view)
 end
 
 function MapPinEnhancedEditorWindowMixin:OnLoad()
-    self:SetScript("OnMouseDown", function()
-        if (not self:IsMovable()) then
-            return
-        end
-        -- TODO: use header here to move window
-        -- if (not self.TitleContainer:IsMouseOver()) then
-        --     return
-        -- end
-        self:StartMoving()
-    end)
-
     self:SetScript("OnMouseUp", function()
         self:StopMovingOrSizing()
     end)
