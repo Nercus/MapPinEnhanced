@@ -50,6 +50,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         return
     end
     local set = self:GetActiveSetData()
+    if not set then return end
     local pins = set:GetPins()
 
     local lastFrame = nil
@@ -143,7 +144,11 @@ end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
     local set = self:GetActiveSetData()
-    self.header.setName:SetText(set.name)
+    local setName = ""
+    if set then
+        setName = set.name
+    end
+    self.header.setName:SetText(setName)
     self.header.setName:Disable()
 end
 

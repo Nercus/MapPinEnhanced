@@ -67,6 +67,8 @@ function SetManager:GetSets()
     return self.Sets
 end
 
+---@param setID UUID
+---@return SetObject | nil
 function SetManager:GetSetByID(setID)
     return self.Sets[setID]
 end
