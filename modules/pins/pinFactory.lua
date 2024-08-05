@@ -14,6 +14,12 @@ local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTe
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
+
+
+local MENU_TITLE_PATTERN = "|%s%s:20:20|%s %s"
+local MENU_COLOR_BUTTON_PATTERN = "|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a"
+
+
 ---@class pinData
 ---@field mapID number
 ---@field x number x coordinate between 0 and 1
@@ -171,8 +177,10 @@ function PinFactory:CreatePin(initPinData, pinID)
         error("Not implemented: Share Pin")
     end
 
+
+
     local function CreateMenu(parentFrame)
-        local titleString = string.format("|%s%s:20:20|%s %s",
+        local titleString = string.format(MENU_TITLE_PATTERN,
             pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.texture:GetTexture(),
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
 
@@ -183,14 +191,9 @@ function PinFactory:CreatePin(initPinData, pinID)
                 ---@type SubMenuUtil
                 local colorSubmenu = rootDescription:CreateButton("Change Color");
                 for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
-                    local buttonTextureText = string.format("|A:charactercreate-customize-palette:12:64:0:0:%d:%d:%d|a",
-                        colorTable.color:GetRGBAsBytes())
-                    colorSubmenu:CreateRadio(
-                        buttonTextureText,
-                        IsColorSelected,
-                        function() SetColor(colorTable.colorName) end,
-                        colorIndex
-                    )
+                    local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorTable.color:GetRGBAsBytes())
+                    colorSubmenu:CreateRadio(label, IsColorSelected, function() SetColor(colorTable.colorName) end,
+                        colorIndex)
                 end
             end
 
@@ -223,7 +226,8 @@ function PinFactory:CreatePin(initPinData, pinID)
                     onCancel = function() end
                 })
             end)
-            rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
+            -- NOTE: Sharing pins to chat is not yet implemented
+            -- rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
         end)
     end
