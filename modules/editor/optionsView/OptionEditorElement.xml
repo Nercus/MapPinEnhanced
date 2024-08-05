@@ -15,6 +15,11 @@
                     </Anchors>
                 </FontString>
             </Layer>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Color r="0" g="1" b="0" a="0.5" />
+                </Texture>
+            </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" atlas="groupfinder-button-select" alphaMode="ADD"
                     setAllPoints="true" />

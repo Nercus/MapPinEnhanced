@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 
 ---@class Options : Module
----@field options table<OPTIONCATEGORY, OptionObjectTypes[]> | nil
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class PlainOptionObject
@@ -44,13 +43,27 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field max number
 ---@field step number
 
----@alias OptionObjectTypes OptionButton | OptionCheckbox | OptionColorpicker | OptionInput | OptionSelect | OptionSlider
+---@alias OptionObjectVariants OptionButton | OptionCheckbox | OptionColorpicker | OptionInput | OptionSelect | OptionSlider
 
+---@class OptionButtonTyped : OptionButton
+---@field type "button"
+---@class OptionCheckboxTyped : OptionCheckbox
+---@field type "checkbox"
+---@class OptionColorpickerTyped : OptionColorpicker
+---@field type "colorpicker"
+---@class OptionInputTyped : OptionInput
+---@field type "input"
+---@class OptionSelectTyped : OptionSelect
+---@field type "select"
+---@class OptionSliderTyped : OptionSlider
+---@field type "slider"
+
+---@alias OptionObjectVariantsTyped OptionButtonTyped | OptionCheckboxTyped | OptionColorpickerTyped | OptionInputTyped | OptionSelectTyped | OptionSliderTyped
 
 local function CheckForDuplicateOption(label, category, options)
     if not options then return end
     if not options[category] then return end
-    ---@type OptionObjectTypes[]
+    ---@type OptionObjectVariants[]
     local categoryOptions = options[category]
     for _, option in ipairs(categoryOptions) do
         if option.label == label then
@@ -59,10 +72,8 @@ local function CheckForDuplicateOption(label, category, options)
     end
 end
 
-
-
 ---@param optionType FormType
----@param option OptionObjectTypes
+---@param option OptionObjectVariants
 function Options:RegisterOption(optionType, option)
     assert(option.category, "Option must have a category")
     assert(option.label, "Option must have a label")
@@ -76,6 +87,8 @@ function Options:RegisterOption(optionType, option)
         self.options[option.category] = {}
     end
     CheckForDuplicateOption(option.label, option.category, self.options)
+    local optionTyped = option --[[@as OptionObjectVariantsTyped]]
+    optionTyped.type = optionType
     table.insert(self.options[option.category], option)
 end
 

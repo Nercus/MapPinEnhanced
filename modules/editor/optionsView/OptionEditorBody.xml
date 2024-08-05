@@ -99,169 +99,28 @@
                 <Anchors>
                     <Anchor point="TOPLEFT" x="15" y="-30" relativeKey="$parent.header" />
                     <Anchor point="BOTTOMRIGHT" relativeKey="$parent.descriptionFrame"
-                        relativePoint="BOTTOMLEFT" x="-10" y="10" />
+                        relativePoint="BOTTOMLEFT" x="-20" y="10" />
                 </Anchors>
                 <KeyValues>
-                    <KeyValue key="scrollBarX" value="-7" type="number" />
-                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarX" value="6" type="number" />
+                    <KeyValue key="scrollBarTopY" value="0" type="number" />
+                    <KeyValue key="scrollBarBottomY" value="0" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true"
                         type="boolean" />
                 </KeyValues>
                 <ScrollChild>
-                    <Frame parentKey="Child" setAllPoints="true">
-                        <Size x="1" y="10" />
+                    <Frame parentKey="Child">
+                        <Size x="385" y="1" />
                         <Anchors>
                             <Anchor point="TOPLEFT" x="0" y="0" />
                             <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                         </Anchors>
-                        <Frames>
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-5" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-70" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-135" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-200" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-265" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-330" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-395" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-460" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-525" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-                            <Frame>
-                                <Size x="200" y="60" />
-                                <Anchors>
-                                    <Anchor point="TOP" y="-590" />
-                                </Anchors>
-                                <Layers>
-                                    <Layer level="BACKGROUND">
-                                        <Texture setAllPoints="true">
-                                            <Color r="0.1" g="0.1" b="1" a="0.5" />
-                                        </Texture>
-                                    </Layer>
-                                </Layers>
-                            </Frame>
-
-
-                        </Frames>
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
         </Frames>
+        <Scripts>
+            <OnShow method="OnShow" />
+        </Scripts>
     </Frame>
 </Ui>

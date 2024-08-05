@@ -2,9 +2,10 @@
 ---@class MapPinEnhancedOptionEditorElementMixin : Frame
 ---@field label FontString
 ---@field highlight Texture
----@field option OptionObjectTypes
+---@field option OptionObjectVariants
 ---@field formElement FormElement
 ---@field optionHolder Frame
+---@field type FormType
 MapPinEnhancedOptionEditorElementMixin = {}
 
 
@@ -16,4 +17,8 @@ function MapPinEnhancedOptionEditorElementMixin:SetFormElement(formElement)
     formElement:ClearAllPoints()
     formElement:SetPoint("RIGHT", -10, 0)
     formElement:Show()
+end
+
+---@param optionData OptionObjectVariantsTyped
+function MapPinEnhancedOptionEditorElementMixin:Setup(optionData)
 end

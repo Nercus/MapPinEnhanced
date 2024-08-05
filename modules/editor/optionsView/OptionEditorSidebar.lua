@@ -24,11 +24,13 @@ local Options = MapPinEnhanced:GetModule("Options")
 function MapPinEnhancedOptionEditorViewSidebarMixin:UpdateCategoryList()
     local categories = Options:GetCategories()
     local lastCategoryButton = nil
+    local activeButton = nil
     for i, category in ipairs(categories) do
         local categoryButton = self.categoryButtonPool:Acquire() --[[@as MapPinEnhancedOptionEditorViewCategoryButtonMixin]]
         categoryButton:SetLabel(category)
         categoryButton:SetInactive()
 
+        categoryButton:ClearAllPoints()
         if lastCategoryButton then
             categoryButton:SetPoint("TOPLEFT", lastCategoryButton, "BOTTOMLEFT", 0, -10)
             categoryButton:SetPoint("TOPRIGHT", lastCategoryButton, "BOTTOMRIGHT", 0, -10)
@@ -36,13 +38,22 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:UpdateCategoryList()
             categoryButton:SetPoint("TOP", self.scrollFrame.Child)
             categoryButton:SetPoint("LEFT", self.scrollFrame.Child)
             categoryButton:SetPoint("RIGHT", self.scrollFrame.Child)
+            categoryButton:SetActive() -- set the first category to active
+            activeButton = categoryButton
         end
         categoryButton:SetParent(self.scrollFrame.Child)
-
         categoryButton:SetScript("OnClick", function()
             self.body:SetActiveCategory(category)
         end)
-
+        categoryButton:Show()
+        categoryButton:SetScript("OnClick", function()
+            self.body:SetActiveCategory(category)
+            if activeButton then
+                activeButton:SetInactive()
+            end
+            categoryButton:SetActive()
+            activeButton = categoryButton
+        end)
         lastCategoryButton = categoryButton
     end
 end

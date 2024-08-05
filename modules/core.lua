@@ -90,7 +90,22 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData)
     self.SuperTrackedPin:Show()
 end
 
--- C_Timer.After(1, function()
---     MapPinEnhanced:ToggleEditorWindow()
---     MapPinEnhanced.editorWindow:SetActiveView("optionView")
--- end)
+C_Timer.After(1, function()
+    local Options = MapPinEnhanced:GetModule("Options")
+
+
+    for i = 1, 40 do
+        Options:RegisterButton({
+            category = "General",
+            label = "Option" .. i,
+            description = "Open the editor window",
+            descriptionImage = "Interface\\Icons\\INV_Misc_Map_01",
+            onChange = function()
+                print(i)
+            end
+        })
+    end
+
+    MapPinEnhanced:ToggleEditorWindow()
+    MapPinEnhanced.editorWindow:SetActiveView("optionView")
+end)

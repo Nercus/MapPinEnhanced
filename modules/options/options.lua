@@ -4,10 +4,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Options : Module
----@field CATEGORIES table<OPTIONCATEGORY, string>
-local Options = MapPinEnhanced:CreateModule("Options")
 
+
+---@class Options : Module
+---@field options table<OPTIONCATEGORY, OptionObjectVariantsTyped[]> | nil
+local Options = MapPinEnhanced:CreateModule("Options")
+Options.options = {}
 
 ---@enum OPTIONCATEGORY
 local OptionCategories = {
@@ -16,14 +18,12 @@ local OptionCategories = {
     FloatingPin = "Floating Pin"
 }
 
+
 local CATEGORY_ORDER = {
     OptionCategories.General,
     OptionCategories.Tracker,
     OptionCategories.FloatingPin
 }
-
-Options.CATEGORIES = OptionCategories
-
 
 
 ---get a list of all used categories in the correct order
@@ -39,9 +39,13 @@ function Options:GetCategories()
     return categories
 end
 
+function Options:GetOptionsForCategory(category)
+    return self.options[category]
+end
+
 ---@param category OPTIONCATEGORY
 ---@param label string
----@return OptionObjectTypes | nil
+---@return OptionObjectVariantsTyped | nil
 function Options:GetOptionElement(category, label)
     local categoryOptions = self.options[category]
     for _, option in ipairs(categoryOptions) do
@@ -58,7 +62,7 @@ end
 function Options:SetOptionDisabledState(category, label, disabledState)
     local option = self:GetOptionElement(category, label)
     if option then
-        -- TODO: implement
+        -- TODO: implement disabling of options element
         return
     end
     error(("Option with label %s does not exist in category %s"):format(label, category))
