@@ -245,3 +245,6 @@ function ColorPickerFrame:GetColorAlpha() end
 
 
 function ColorPickerFrame:SetupColorPickerAndShow(info) end
+
+---@class DropdownButton : Button
+---@field SetupMenu fun(self:DropdownButton, generator:fun(owner:Frame, rootDescription:table))

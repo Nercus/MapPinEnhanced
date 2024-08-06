@@ -8,12 +8,12 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@class PlainOptionObject
 ---@field category OPTIONCATEGORY
 ---@field label string
----@field description string
----@field descriptionImage string reference to an image
+---@field description string?
+---@field descriptionImage string? reference to an image
 
 ---@class OptionButton : PlainOptionObject
 ---@field buttonLabel string
----@field onChange fun(value: MouseButton, down: boolean)
+---@field onChange fun(value: mouseButton, down: boolean)
 
 ---@class OptionCheckbox : PlainOptionObject
 ---@field onChange fun(value: boolean)
@@ -30,11 +30,16 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field init string
 ---@field default string
 
+
+---@class SelectOptionEntry
+---@field label string
+---@field value string | number
+
 ---@class OptionSelect : PlainOptionObject
 ---@field onChange fun(value: string)
----@field init number index of the selected option
----@field default number index of the selected option
----@field options (string | number | boolean)[]
+---@field init string | number
+---@field default string | number
+---@field options SelectOptionEntry[]
 
 ---@class OptionSlider : PlainOptionObject
 ---@field onChange fun(value: number)

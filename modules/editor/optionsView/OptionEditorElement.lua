@@ -16,7 +16,7 @@ function MapPinEnhancedOptionEditorElementMixin:SetFormElement(formElement)
     self.formElement = formElement
     formElement:SetParent(self.optionHolder)
     formElement:ClearAllPoints()
-    formElement:SetPoint("LEFT", 0, 0)
+    formElement:SetPoint("RIGHT", 0, 0)
     formElement:Show()
     formElement:SetPropagateMouseMotion(true)
 end

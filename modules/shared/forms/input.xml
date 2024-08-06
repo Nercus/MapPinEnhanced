@@ -5,12 +5,13 @@
 
     <EditBox name="MapPinEnhancedInputTemplate" mixin="MapPinEnhancedInputMixin" virtual="true"
         font="GameFontNormal" autoFocus="false">
+        <TextInsets left="5" />
         <Size x="200" y="28" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="Left" atlas="common-search-border-left" useAtlasSize="false">
                     <Anchors>
-                        <Anchor point="LEFT" x="-5" y="0" />
+                        <Anchor point="LEFT" x="0" y="0" />
                     </Anchors>
                 </Texture>
                 <Texture parentKey="Right" atlas="common-search-border-right">

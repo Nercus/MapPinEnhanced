@@ -6,12 +6,12 @@
         mixin="MapPinEnhancedOptionEditorElementMixin"
         virtual="true" hidden="true"
         enableMouse="true">
-        <Size x="1" y="45" />
+        <Size x="580" y="45" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormal" text="Option">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="15" />
+                        <Anchor point="LEFT" x="20" />
                     </Anchors>
                 </FontString>
                 <Texture enableMouse="true" parentKey="info" file="Interface\common\help-i">
@@ -35,11 +35,9 @@
         </Layers>
         <Frames>
             <Frame parentKey="optionHolder" propagateMouseInput="Motion">
+                <Size x="300" y="45" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.label" relativePoint="BOTTOMLEFT"
-                        x="15"
-                        y="-5" />
-                    <Anchor point="BOTTOMRIGHT" />
+                    <Anchor point="RIGHT" x="-20" />
                 </Anchors>
             </Frame>
         </Frames>

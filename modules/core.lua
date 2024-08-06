@@ -101,6 +101,7 @@ C_Timer.After(1, function()
         default = true,
         init = true,
         onChange = function(value)
+            MapPinEnhanced:Debug(value)
             print("Checkbox changed", value)
         end
     })
@@ -110,10 +111,10 @@ C_Timer.After(1, function()
         label = "Testcolorpicker",
         description = "Testing the colorpicker",
         descriptionImage = "interface/talentframe/talentsclassbackgroundwarrior2",
-        default = { r = 1, g = 1, b = 1, a = 1 },
-        init = { r = 1, g = 1, b = 1, a = 1 },
+        default = { r = 1, g = 0, b = 1, a = 1 },
+        init = { r = 1, g = 1, b = 0, a = 1 },
         onChange = function(value)
-            print("Colorpicker changed", value)
+            print("Colorpicker changed", value.r, value.g, value.b, value.a)
         end
     })
 
@@ -135,12 +136,25 @@ C_Timer.After(1, function()
         label = "Testselect",
         description = "Testing the select",
         descriptionImage = "interface/icons/achievement_boss_lichking",
-        default = 1,
-        init = 1,
+        default = "OptionValue 1",
+        init = "OptionValue 1",
         onChange = function(value)
             print("Select changed", value)
         end,
-        options = { "TestA", "TestB", "TestC" }
+        options = {
+            {
+                label = "Option 1",
+                value = "OptionValue 1"
+            },
+            {
+                label = "Option 2",
+                value = "OptionValue 2"
+            },
+            {
+                label = "Option 3",
+                value = "OptionValue 3"
+            }
+        }
     })
 
     Options:RegisterSlider({

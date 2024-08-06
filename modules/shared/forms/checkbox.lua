@@ -15,7 +15,7 @@ function MapPinEnhancedCheckboxMixin:Setup(optionData)
     self:SetChecked(optionData.init)
     self:SetScript("OnClick", function()
         if not self.onChangeCallback then return end
-        self.onChangeCallback(self, self:GetChecked())
+        self.onChangeCallback(self:GetChecked())
     end)
     self:SetCallback(optionData.onChange)
 end

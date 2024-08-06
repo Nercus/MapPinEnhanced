@@ -27,7 +27,7 @@
                 <Frames>
                     <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
                         font="GameFontNormalLarge"
-                        autoFocus="false">
+                        autoFocus="false" propagateMouseInput="Clicks">
                         <TextInsets right="-25" />
                         <Size x="200" y="26" />
                         <Anchors>
@@ -52,17 +52,18 @@
                                 </Layers>
                                 <Scripts>
                                     <OnClick>
-                                        <!-- TODO: check if propagate mouseclicks for dragging works -->
                                         local editBox = self:GetParent()
                                         if editBox:IsEnabled() then
                                             editBox:Disable()
                                             editBox:HighlightText(0, 0)
                                             self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+                                            editBox:SetPropagateMouseClicks(true)
                                             return
                                         end
                                         editBox:Enable()
                                         editBox:SetFocus()
                                         editBox:HighlightText()
+                                        editBox:SetPropagateMouseClicks(false)
                                         self.icon:SetTexture( "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
                                     </OnClick>
                                 </Scripts>

@@ -1,7 +1,4 @@
 -- Template: file://./input.xml
----@class MapPinEnhanced
-local MapPinEnhanced = select(2, ...)
-
 ---@class MapPinEnhancedInputMixin : EditBox, PropagateMouseMotion
 ---@field isDecimal boolean
 ---@onChangeCallback function
@@ -31,9 +28,14 @@ end
 ---@param optionData OptionObjectVariantsTyped
 function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
+    local init = optionData.init --[[@as string]]
+    self:SetText(init)
     self:SetScript("OnTextChanged", function()
         if not self.onChangeCallback then return end
         self.onChangeCallback(self:GetText())
     end)
-    self:SetCallback(optionData.onChange)
+    -- this is a hack to make sure the callback is set after the input is created
+    C_Timer.After(0.1, function()
+        self:SetCallback(optionData.onChange)
+    end)
 end

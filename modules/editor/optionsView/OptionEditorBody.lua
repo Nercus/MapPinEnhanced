@@ -41,7 +41,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field header OptionEditorBodyHeader
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
-
 function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     if self.init then return end
     self.optionElements = CreateFramePool("Frame", nil, "MapPinEnhancedOptionEditorElementTemplate")
@@ -49,7 +48,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.checkboxes = CreateFramePool("CheckButton", nil, "MapPinEnhancedCheckboxTemplate")
     self.colorpickers = CreateFramePool("ColorSelect", nil, "MapPinEnhancedColorpickerTemplate")
     self.inputs = CreateFramePool("EditBox", nil, "MapPinEnhancedInputTemplate")
-    self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectWithSteppersTemplate")
+    self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
     self.header:SetScript("OnMouseDown", function(self)
@@ -62,15 +61,15 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
         SetCursor(nil)
     end)
 
-    self.descriptionFrame.header:SetScript("OnMouseDown", function(self)
-        MapPinEnhanced.editorWindow:StartMoving()
-        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
-    end)
+    -- self.descriptionFrame.header:SetScript("OnMouseDown", function(self)
+    --     MapPinEnhanced.editorWindow:StartMoving()
+    --     SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+    -- end)
 
-    self.descriptionFrame.header:SetScript("OnMouseUp", function(self)
-        MapPinEnhanced.editorWindow:StopMovingOrSizing()
-        SetCursor(nil)
-    end)
+    -- self.descriptionFrame.header:SetScript("OnMouseUp", function(self)
+    --     MapPinEnhanced.editorWindow:StopMovingOrSizing()
+    --     SetCursor(nil)
+    -- end)
 end
 
 ---@alias FormType "button" | "checkbox" | "colorpicker" | "input" | "select" | "slider"
@@ -154,7 +153,6 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
             optionElement:SetPoint("LEFT", self.scrollFrame.Child, 0, -10)
             optionElement:SetPoint("RIGHT", self.scrollFrame.Child, 0, -10)
         end
-        optionElement:SetWidth(200)
         optionElement:SetParent(self.scrollFrame.Child)
         optionElement:Show()
         optionElement.info:SetScript("OnEnter", function()
@@ -163,7 +161,6 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         end)
         optionElement.info:SetScript("OnLeave", function()
             self.descriptionFrame.holder:Hide()
-            self.descriptionFrame.header.optionName:SetText("")
         end)
         lastOptionElement = optionElement
     end
