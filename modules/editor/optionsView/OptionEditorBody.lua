@@ -8,6 +8,24 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@class OptionScrollFrame : ScrollFrame
 ---@field Child Frame
 
+---@class DescriptionHolder : Frame
+---@field description FontString
+---@field descriptionImage Texture
+
+---@class DescriptionHeader : Frame
+---@field bg Texture
+---@field optionName FontString
+
+---@class DescriptionFrame : Frame
+---@field header DescriptionHeader
+---@field holder DescriptionHolder
+
+
+---@class OptionEditorBodyHeader : Frame
+---@field bg Texture
+---@field selectedCategoryName FontString
+
+
 ---@class MapPinEnhancedOptionEditorViewBodyMixin : Frame
 ---@field optionElements FramePool
 ---@field buttons FramePool
@@ -19,6 +37,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field init boolean
 ---@field sidebar MapPinEnhancedOptionEditorViewSidebarMixin
 ---@field scrollFrame OptionScrollFrame
+---@field descriptionFrame DescriptionFrame
+---@field header OptionEditorBodyHeader
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
 
@@ -29,7 +49,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.checkboxes = CreateFramePool("CheckButton", nil, "MapPinEnhancedCheckboxTemplate")
     self.colorpickers = CreateFramePool("ColorSelect", nil, "MapPinEnhancedColorpickerTemplate")
     self.inputs = CreateFramePool("EditBox", nil, "MapPinEnhancedInputTemplate")
-    self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectTemplate")
+    self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectWithSteppersTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
 end
@@ -100,9 +120,10 @@ end
 function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
     local options = Options:GetOptionsForCategory(category)
     self:ClearAllOptions()
+    self.header.selectedCategoryName:SetText(category)
     if not options then return end
     local lastOptionElement = nil
-    for i, option in ipairs(options) do
+    for _, option in ipairs(options) do
         local optionElement = self:GetFormElement(option.type)
         optionElement:ClearAllPoints()
         optionElement:Setup(option)
@@ -117,6 +138,34 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         optionElement:SetWidth(200)
         optionElement:SetParent(self.scrollFrame.Child)
         optionElement:Show()
+        optionElement.info:SetScript("OnEnter", function()
+            self:SetDescription(option.description, option.descriptionImage)
+            self.descriptionFrame.header.optionName:SetText(option.label)
+        end)
+        optionElement.info:SetScript("OnLeave", function()
+            self.descriptionFrame.holder:Hide()
+            self.descriptionFrame.header.optionName:SetText("")
+        end)
         lastOptionElement = optionElement
     end
+end
+
+---@param description string
+---@param descriptionImage string?
+function MapPinEnhancedOptionEditorViewBodyMixin:SetDescription(description, descriptionImage)
+    self.descriptionFrame.holder:Show()
+    if not descriptionImage then
+        self.descriptionFrame.holder.descriptionImage:Hide()
+        self.descriptionFrame.holder.description:ClearAllPoints()
+        self.descriptionFrame.holder.description:SetPoint("TOPLEFT", 10, -5)
+        self.descriptionFrame.holder.description:SetPoint("BOTTOMRIGHT", -5, 5)
+    else
+        self.descriptionFrame.holder.descriptionImage:SetTexture(descriptionImage)
+        self.descriptionFrame.holder.descriptionImage:Show()
+        self.descriptionFrame.holder.description:ClearAllPoints()
+        self.descriptionFrame.holder.description:SetPoint("TOPLEFT", self.descriptionFrame.holder.descriptionImage,
+            "BOTTOMLEFT", 5, -10)
+        self.descriptionFrame.holder.description:SetPoint("BOTTOMRIGHT", -8, 5)
+    end
+    self.descriptionFrame.holder.description:SetText(description)
 end

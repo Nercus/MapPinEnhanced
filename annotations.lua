@@ -222,3 +222,26 @@ WorldMapFrame = {}
 
 ---@return number
 function WorldMapFrame:GetMapID() end
+
+---@class ColorPickerFrame : Frame
+ColorPickerFrame = {}
+
+---@return number, number, number
+function ColorPickerFrame:GetColorRGB() end
+
+---@return number
+function ColorPickerFrame:GetColorAlpha() end
+
+---@class ColorPickerInfo
+---@field swatchFunc fun()
+---@field hasOpacity boolean
+---@field opacityFunc fun()
+---@field opacity number
+---@field cancelFunc fun()
+---@field r number
+---@field g number
+---@field b number
+---@field a number
+
+
+function ColorPickerFrame:SetupColorPickerAndShow(info) end

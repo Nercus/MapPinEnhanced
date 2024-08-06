@@ -47,8 +47,8 @@
                                 </Texture>
                             </Layer>
                             <Layer level="OVERLAY">
-                                <FontString inherits="GameFontNormalLarge"
-                                    text="Name hightlighted option"
+                                <FontString
+                                    parentKey="optionName" inherits="GameFontNormalLarge"
                                     justifyH="CENTER">
                                     <Anchors>
                                         <Anchor point="CENTER" />
@@ -64,6 +64,28 @@
                                 relativePoint="BOTTOMLEFT" />
                             <Anchor point="BOTTOMRIGHT" />
                         </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture parentKey="descriptionImage">
+                                    <Size x="1" y="175" />
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="5" />
+                                        <Anchor point="TOPRIGHT" x="-5" />
+                                    </Anchors>
+                                </Texture>
+                                <FontString parentKey="description" inherits="GameFontHighlight"
+                                    justifyH="LEFT" spacing="2"
+                                    justifyV="TOP">
+                                    <Size x="1" y="1" />
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="5" y="-10"
+                                            relativeKey="$parent.descriptionImage"
+                                            relativePoint="BOTTOMLEFT" />
+                                        <Anchor point="BOTTOMRIGHT" x="-8" y="5" />
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
                     </Frame>
                 </Frames>
             </Frame>
@@ -85,7 +107,8 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString inherits="GameFontNormalLarge" text="Selected option category"
+                        <FontString parentKey="selectedCategoryName" inherits="GameFontNormalLarge"
+                            text="Selected option category"
                             justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="CENTER" />

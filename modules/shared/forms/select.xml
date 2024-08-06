@@ -6,7 +6,7 @@
         virtual="true" inherits="DropdownWithSteppersTemplate">
         <Frames>
             <DropdownButton parentKey="Dropdown" inherits="WowStyle2DropdownTemplate">
-                <Size x="200" y="30" />
+                <Size x="170" y="30" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
@@ -16,6 +16,7 @@
 
     <Frame name="MapPinEnhancedSelectTemplate" mixin="MapPinEnhancedSelectMixin"
         virtual="true">
+        <Size x="200" y="30" />
         <Frames>
             <DropdownButton parentKey="Dropdown" inherits="WowStyle2DropdownTemplate">
                 <Size x="1" y="30" />

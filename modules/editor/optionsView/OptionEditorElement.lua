@@ -6,6 +6,7 @@
 ---@field formElement FormElement
 ---@field optionHolder Frame
 ---@field type FormType
+---@field info Frame -- defining it as a frame for now
 MapPinEnhancedOptionEditorElementMixin = {}
 
 
@@ -15,10 +16,14 @@ function MapPinEnhancedOptionEditorElementMixin:SetFormElement(formElement)
     self.formElement = formElement
     formElement:SetParent(self.optionHolder)
     formElement:ClearAllPoints()
-    formElement:SetPoint("RIGHT", -10, 0)
+    formElement:SetPoint("LEFT", 0, 0)
     formElement:Show()
+    formElement:SetPropagateMouseMotion(true)
 end
 
 ---@param optionData OptionObjectVariantsTyped
 function MapPinEnhancedOptionEditorElementMixin:Setup(optionData)
+    self.option = optionData
+    self.label:SetText(optionData.label)
+    self.formElement:Setup(optionData)
 end

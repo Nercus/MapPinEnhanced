@@ -4,15 +4,17 @@
     <Script file="colorpicker.lua" />
 
     <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin"
-        virtual="true">
-        <Size x="30" y="30" />
+        virtual="true" enableMouse="true">
+        <Size x="84" y="20" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="-1">
                 <Texture parentKey="bg" file="Interface/AddOns/MapPinEnhanced/assets/checkers.png"
-                    setAllPoints="true" />
-                <MaskTexture file="Interface\Common\common-iconmask" parentKey="bgMask"
+                    setAllPoints="true" vertTile="true" horizTile="true" />
+                <MaskTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/colorStroke.png"
+                    parentKey="bgMask"
                     vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="30" y="30" />
+                    <Size x="84" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
@@ -22,23 +24,14 @@
                 </MaskTexture>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture parentKey="color" file="Interface\Common\common-iconmask"
+                <Texture parentKey="color"
+                    file="Interface/AddOns/MapPinEnhanced/assets/colorStroke.png"
                     setAllPoints="true">
-                    <Color r="0.5" g="0.7" b="0.2" a="0.8" />
                 </Texture>
-                <MaskTexture file="Interface\Common\common-iconmask" parentKey="bgMask">
-                    <Size x="30" y="30" />
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
-                    <MaskedTextures>
-                        <MaskedTexture childKey="bg" />
-                    </MaskedTextures>
-                </MaskTexture>
             </Layer>
-            <Layer level="BORDER">
-                <Texture atlas="loottoast-itemborder-gray" setAllPoints="true"
-                    desaturated="true" />
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight" file="Interface\Buttons\UI-Common-MouseHilight"
+                    setAllPoints="true" alphaMode="ADD" />
             </Layer>
         </Layers>
     </Button>

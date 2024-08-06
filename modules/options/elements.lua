@@ -12,6 +12,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field descriptionImage string reference to an image
 
 ---@class OptionButton : PlainOptionObject
+---@field buttonLabel string
 ---@field onChange fun(value: MouseButton, down: boolean)
 
 ---@class OptionCheckbox : PlainOptionObject
@@ -78,7 +79,6 @@ function Options:RegisterOption(optionType, option)
     assert(option.category, "Option must have a category")
     assert(option.label, "Option must have a label")
     assert(option.description, "Option must have a description")
-    assert(option.descriptionImage, "Option must have a descriptionImage")
     assert(optionType, "Option must have a type")
     if not self.options then
         self.options = {}

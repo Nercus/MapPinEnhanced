@@ -93,15 +93,94 @@ end
 C_Timer.After(1, function()
     local Options = MapPinEnhanced:GetModule("Options")
 
+    Options:RegisterCheckbox({
+        category = "General",
+        label = "Testcheckbox",
+        description = "Testing the checkbox",
+        descriptionImage = "interface/glues/charactercreate/blizzconcc2015dh",
+        default = true,
+        init = true,
+        onChange = function(value)
+            print("Checkbox changed", value)
+        end
+    })
+
+    Options:RegisterColorpicker({
+        category = "General",
+        label = "Testcolorpicker",
+        description = "Testing the colorpicker",
+        descriptionImage = "interface/talentframe/talentsclassbackgroundwarrior2",
+        default = { r = 1, g = 1, b = 1, a = 1 },
+        init = { r = 1, g = 1, b = 1, a = 1 },
+        onChange = function(value)
+            print("Colorpicker changed", value)
+        end
+    })
+
+    Options:RegisterInput({
+        category = "General",
+        label = "Testinput",
+        description = "Testing the input",
+        descriptionImage = "interface/dressupframe/dressingroommonk",
+        default = "Test",
+        init = "Test",
+        onChange = function(value)
+            print("Input changed", value)
+        end
+    })
+
+
+    Options:RegisterSelect({
+        category = "General",
+        label = "Testselect",
+        description = "Testing the select",
+        descriptionImage = "interface/icons/achievement_boss_lichking",
+        default = 1,
+        init = 1,
+        onChange = function(value)
+            print("Select changed", value)
+        end,
+        options = { "TestA", "TestB", "TestC" }
+    })
+
+    Options:RegisterSlider({
+        category = "General",
+        label = "Testslider",
+        description = "Testing the slider",
+        descriptionImage = "interface/icons/achievement_boss_lichking",
+        default = 50,
+        init = 50,
+        onChange = function(value)
+            print("Slider changed", value)
+        end,
+        min = 0,
+        max = 100,
+        step = 1
+    })
+
 
     for i = 1, 40 do
         Options:RegisterButton({
             category = "General",
             label = "Option" .. i,
-            description = "Open the editor window",
-            descriptionImage = "Interface\\Icons\\INV_Misc_Map_01",
+            description = "Press this button to print the number " .. i,
+            buttonLabel = "Press me",
             onChange = function()
                 print(i)
+            end
+        })
+    end
+
+    for i = 1, 40 do
+        Options:RegisterColorpicker({
+            category = "Tracker",
+            label = "Color" .. i,
+            description = "Testing the colorpicker",
+            descriptionImage = "interface/talentframe/talentsclassbackgroundwarrior2",
+            default = { r = 1, g = 1, b = 1, a = 1 },
+            init = { r = 1, g = 1, b = 1, a = 1 },
+            onChange = function(value)
+                print("Colorpicker changed", value)
             end
         })
     end

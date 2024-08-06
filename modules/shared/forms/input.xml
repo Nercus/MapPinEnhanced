@@ -5,6 +5,7 @@
 
     <EditBox name="MapPinEnhancedInputTemplate" mixin="MapPinEnhancedInputMixin" virtual="true"
         font="GameFontNormal" autoFocus="false">
+        <Size x="200" y="28" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="Left" atlas="common-search-border-left" useAtlasSize="false">

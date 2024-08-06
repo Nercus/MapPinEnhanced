@@ -2,8 +2,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedInputMixin : EditBox
+---@class MapPinEnhancedInputMixin : EditBox, PropagateMouseMotion
 ---@field isDecimal boolean
+---@onChangeCallback function
 MapPinEnhancedInputMixin = {}
 
 local seperator = GetLocale() == "deDE" and "," or "."
@@ -20,4 +21,19 @@ function MapPinEnhancedInputMixin:OnChar()
     if tonumber(text) and tonumber(text) < 100 then return end
 
     self:SetText(text:sub(1, #text - 1))
+end
+
+function MapPinEnhancedInputMixin:SetCallback(callback)
+    assert(type(callback) == "function")
+    self.onChangeCallback = callback
+end
+
+---@param optionData OptionObjectVariantsTyped
+function MapPinEnhancedInputMixin:Setup(optionData)
+    self.onChangeCallback = nil
+    self:SetScript("OnTextChanged", function()
+        if not self.onChangeCallback then return end
+        self.onChangeCallback(self:GetText())
+    end)
+    self:SetCallback(optionData.onChange)
 end
