@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="TrackerPinEntry.lua" />
     <Button name="MapPinEnhancedTrackerPinEntryTemplate" mixin="MapPinEnhancedTrackerPinEntryMixin"
-        virtual="true" enableMouse="true" clipChildren="false">
+        virtual="true" enableMouse="true" clipChildren="false" propagateMouseInput="Motion">
         <Size x="300" y="37" />
         <KeyValues>
             <KeyValue key="titlePosition" value="RIGHT" />
@@ -22,7 +22,7 @@
                             parentKey="count">
                             <Anchors>
                                 <Anchor point="RIGHT" relativeKey="$parent.Pin"
-                                    relativePoint="LEFT" />
+                                    relativePoint="LEFT" x="-5" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -35,7 +35,7 @@
                     setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontHighlight" text="Stockades">
+                <FontString parentKey="zoneText" inherits="GameFontHighlight" text="Stockades">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.Pin" relativePoint="RIGHT" x="10"
                             y="-9" />
@@ -58,9 +58,8 @@
                     alpha="0.2">
                     <Size x="32" y="32" />
                     <Anchors>
-                        <Anchor point="RIGHT" x="0" />
+                        <Anchor point="RIGHT" x="-8" />
                     </Anchors>
-
                 </Texture>
                 <Texture parentKey="bgMiddle"
                     texelSnappingBias="0"
