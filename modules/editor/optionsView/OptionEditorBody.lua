@@ -12,12 +12,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field description FontString
 ---@field descriptionImage Texture
 
----@class DescriptionHeader : Frame
----@field bg Texture
----@field optionName FontString
 
 ---@class DescriptionFrame : Frame
----@field header DescriptionHeader
 ---@field holder DescriptionHolder
 
 
@@ -157,7 +153,6 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         optionElement:Show()
         optionElement.info:SetScript("OnEnter", function()
             self:SetDescription(option.description, option.descriptionImage)
-            self.descriptionFrame.header.optionName:SetText(option.label)
         end)
         optionElement.info:SetScript("OnLeave", function()
             self.descriptionFrame.holder:Hide()
