@@ -27,18 +27,19 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     if not setID then return end
     local SetEditorBody = self.body
     local activeSet = SetEditorBody:GetActiveEditorSet()
+    local set = SetEditorBody:GetActiveSetData()
+    if not set then return end
     if activeSet then -- there is currently an active set
-        local set = SetEditorBody:GetActiveSetData()
         set.SetEditorEntry:SetInactive()
     end
     if setID == activeSet then -- if we click on the active set we want to close it
-        local set = SetEditorBody:GetActiveSetData()
         set.SetEditorEntry:SetInactive()
         SetEditorBody:SetActiveEditorSet()
         return
     end
     SetEditorBody:SetActiveEditorSet(setID)
     local newSet = SetEditorBody:GetActiveSetData()
+    if not newSet then return end
     newSet.SetEditorEntry:SetActive()
 end
 
@@ -149,9 +150,11 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
 
     self.header:SetScript("OnMouseDown", function()
         MapPinEnhanced.editorWindow:StartMoving()
+        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
     end)
     self.header:SetScript("OnMouseUp", function()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
+        SetCursor(nil)
     end)
 end
 

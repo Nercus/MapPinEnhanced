@@ -14,6 +14,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field body MapPinEnhancedOptionEditorViewBodyMixin
 ---@field categoryButtonPool FramePool
 ---@field scrollFrame CategoryListScrollFrame
+---@field header Frame
 MapPinEnhancedOptionEditorViewSidebarMixin = {}
 
 
@@ -64,4 +65,15 @@ end
 
 function MapPinEnhancedOptionEditorViewSidebarMixin:OnLoad()
     self.categoryButtonPool = CreateFramePool("Button", nil, "MapPinEnhancedOptionEditorViewCategoryButtonTemplate")
+
+
+    self.header:SetScript("OnMouseDown", function(self)
+        MapPinEnhanced.editorWindow:StartMoving()
+        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+    end)
+
+    self.header:SetScript("OnMouseUp", function(self)
+        MapPinEnhanced.editorWindow:StopMovingOrSizing()
+        SetCursor(nil)
+    end)
 end

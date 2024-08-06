@@ -52,6 +52,25 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectWithSteppersTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
+    self.header:SetScript("OnMouseDown", function(self)
+        MapPinEnhanced.editorWindow:StartMoving()
+        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+    end)
+
+    self.header:SetScript("OnMouseUp", function(self)
+        MapPinEnhanced.editorWindow:StopMovingOrSizing()
+        SetCursor(nil)
+    end)
+
+    self.descriptionFrame.header:SetScript("OnMouseDown", function(self)
+        MapPinEnhanced.editorWindow:StartMoving()
+        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+    end)
+
+    self.descriptionFrame.header:SetScript("OnMouseUp", function(self)
+        MapPinEnhanced.editorWindow:StopMovingOrSizing()
+        SetCursor(nil)
+    end)
 end
 
 ---@alias FormType "button" | "checkbox" | "colorpicker" | "input" | "select" | "slider"
