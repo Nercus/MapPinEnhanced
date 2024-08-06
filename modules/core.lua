@@ -97,7 +97,7 @@ C_Timer.After(1, function()
         category = "General",
         label = "Testcheckbox",
         description = "Testing the checkbox",
-        descriptionImage = "interface/glues/charactercreate/blizzconcc2015dh",
+        descriptionImage = "Interface/AddOns/MapPinEnhanced/assets/maskedDescriptionImageTest.png",
         default = true,
         init = true,
         onChange = function(value)
