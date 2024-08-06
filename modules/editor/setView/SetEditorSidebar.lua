@@ -27,12 +27,14 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     if not setID then return end
     local SetEditorBody = self.body
     local activeSet = SetEditorBody:GetActiveEditorSet()
-    local set = SetEditorBody:GetActiveSetData()
-    if not set then return end
     if activeSet then -- there is currently an active set
+        local set = SetEditorBody:GetActiveSetData()
+        if not set then return end
         set.SetEditorEntry:SetInactive()
     end
     if setID == activeSet then -- if we click on the active set we want to close it
+        local set = SetEditorBody:GetActiveSetData()
+        if not set then return end
         set.SetEditorEntry:SetInactive()
         SetEditorBody:SetActiveEditorSet()
         return
