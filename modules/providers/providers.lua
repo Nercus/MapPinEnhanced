@@ -49,11 +49,7 @@ end
 function PinProvider:DetectMouseFocusPinInfo()
     ---@type table<number | ScriptRegion> | nil
     local mouseFocus
-    if GetMouseFoci then
-        mouseFocus = GetMouseFoci()
-    else
-        mouseFocus = { GetMouseFocus() }
-    end
+    mouseFocus = GetMouseFoci()
     if not mouseFocus then
         return nil, nil, false
     end
