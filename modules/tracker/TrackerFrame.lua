@@ -222,7 +222,7 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     local scollChildHeight = self.scrollFrame.Child:GetHeight()
     entry:ClearAllPoints()
     if #self.entries == 1 then
-        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 0, -ENTRY_GAP)
+        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 20, -ENTRY_GAP)
     else
         entry:SetPoint("TOPLEFT", self.entries[#self.entries - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
     end
