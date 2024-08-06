@@ -48,6 +48,7 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:UpdateCategoryList()
         end)
         categoryButton:Show()
         categoryButton:SetScript("OnClick", function()
+            -- FIXME: highlight is not working properly
             self.body:SetActiveCategory(category)
             if activeButton then
                 activeButton:SetInactive()
