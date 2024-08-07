@@ -37,8 +37,7 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "c:\\Users\\Sebastian\\.vscode\\extensions\\ketho.wow-api-0.15.5\\Annotations",
-        "c:\\Users\\swinte\\.vscode\\extensions\\ketho.wow-api-0.15.5\\Annotations",
+        "c:\\Users\\swint\\.vscode\\extensions\\ketho.wow-api-0.15.5\\Annotations"
     ],
     "Lua.diagnostics.globals": [
         "MapPinEnhancedDB"
