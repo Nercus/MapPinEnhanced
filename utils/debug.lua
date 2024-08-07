@@ -162,16 +162,15 @@ end
 
 
 local function AddDevReload()
-    local f = CreateFrame("frame", nil, UIParent, "DefaultPanelFlatTemplate")
-    f:SetPoint("TOPLEFT", 5, -5)
-    f:SetSize(150, 400)
+    local f = CreateFrame("frame", nil, UIParent, "MapPinEnhancedBaseFrameTemplate")
+    f:SetPoint("BOTTOM", 0, 10)
     f:SetFrameStrata("HIGH")
     f:SetFrameLevel(100)
 
-    local totalHeight = 0
+    local totalWidth = 60
     local text = f:CreateFontString(nil, "OVERLAY")
-    text:SetFontObject(GameFontNormal)
-    text:SetPoint("TOP", 0, -30)
+    text:SetFontObject(GameFontNormalLarge)
+    text:SetPoint("TOP", 0, -20)
     text:SetText("Press 1 to reload UI")
     f:SetScript("OnKeyDown", function(_, key)
         if key == "1" then
@@ -179,48 +178,73 @@ local function AddDevReload()
         end
     end)
 
-    totalHeight = totalHeight + text:GetHeight()
-
     local button1 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
-    button1:SetPoint("TOP", text, "BOTTOM", 0, -10)
+    button1:SetPoint("LEFT", 30, 0)
     button1:SetSize(130, 40)
-    button1:SetScale(0.8)
+    button1:SetFrameStrata("HIGH")
     button1:SetText("Add Test Pins")
     button1:SetScript("OnClick", AddTestPins)
 
-    totalHeight = totalHeight + button1:GetHeight()
+    totalWidth = totalWidth + button1:GetWidth() + 10
 
     local button2 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
-    button2:SetPoint("TOP", button1, "BOTTOM", 0, -10)
+    button2:SetPoint("LEFT", button1, "RIGHT", 10, 0)
     button2:SetSize(130, 40)
-    button2:SetScale(0.8)
+    button2:SetFrameStrata("HIGH")
     button2:SetText("Reset Saved Vars")
     button2:SetScript("OnClick", ResetSavedVars)
 
-    totalHeight = totalHeight + button2:GetHeight()
+    totalWidth = totalWidth + button2:GetWidth() + 10
 
     local button3 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonYellowTemplate")
-    button3:SetPoint("TOP", button2, "BOTTOM", 0, -10)
+    button3:SetPoint("LEFT", button2, "RIGHT", 10, 0)
     button3:SetSize(130, 40)
-    button3:SetScale(0.8)
+    button3:SetFrameStrata("HIGH")
     button3:SetText("Debug MPH")
     button3:SetScript("OnClick", function()
         MapPinEnhanced:Debug(MapPinEnhanced)
     end)
 
-    totalHeight = totalHeight + button3:GetHeight()
+    totalWidth = totalWidth + button3:GetWidth() + 10
 
     local button4 = CreateFrame("Button", nil, f, "MapPinEnhancedButtonRedTemplate")
-    button4:SetPoint("TOP", button3, "BOTTOM", 0, -10)
+    button4:SetPoint("LEFT", button3, "RIGHT", 10, 0)
     button4:SetSize(130, 40)
-    button4:SetScale(0.8)
+    button4:SetFrameStrata("HIGH")
     button4:SetText("Exit Dev Mode")
     button4:SetScript("OnClick", setDevMode)
 
-    totalHeight = totalHeight + button4:GetHeight()
+    totalWidth = totalWidth + button4:GetWidth() + 10
+
+
+
+    local testStatusbar = CreateFrame("StatusBar", nil, f)
+    testStatusbar:SetSize(totalWidth - 160, 17)
+    testStatusbar:SetStatusBarTexture("Skillbar_Fill_Flipbook_DefaultBlue")
+    testStatusbar:SetStatusBarDesaturated(true)
+    testStatusbar:SetStatusBarColor(1, 1, 1)
+    testStatusbar:SetPoint("BOTTOM", 0, 20)
+
+
+    testStatusbar.border = testStatusbar:CreateTexture(nil, "BACKGROUND")
+    testStatusbar.border:SetAtlas("common-dropdown-bg")
+    testStatusbar.border:SetPoint("TOPLEFT", -5, 4)
+    testStatusbar.border:SetPoint("BOTTOMRIGHT", 5, -6)
+
+    testStatusbar.text = testStatusbar:CreateFontString(nil, "OVERLAY")
+    testStatusbar.text:SetFontObject(GameFontNormal)
+    testStatusbar.text:SetPoint("CENTER", 0, 0)
+
+    local function SetStatusbarValue(min, max, current)
+        testStatusbar:SetMinMaxValues(min, max)
+        testStatusbar:SetValue(current)
+        testStatusbar.text:SetText(string.format("Tests completed: %d/%d", current, max))
+    end
+    SetStatusbarValue(0, 0, 0)
+
 
     f:SetPropagateKeyboardInput(true)
-    f:SetSize(150, totalHeight + 50)
+    f:SetSize(totalWidth, 130)
     f:Show()
 end
 
