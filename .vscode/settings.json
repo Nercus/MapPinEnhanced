@@ -36,8 +36,24 @@
         "table": "disable",
         "utf8": "disable"
     },
-    "Lua.workspace.library": [
-        "c:\\Users\\swint\\.vscode\\extensions\\ketho.wow-api-0.15.2\\Annotations"
+    "Lua.workspace.library": [],
+    "Lua.diagnostics.globals": [
+        "MapPinEnhancedDB"
     ],
-    "Lua.diagnostics.globals": []
+    "Lua.workspace.ignoreDir": [
+        ".github",
+        ".vscode",
+        "libs"
+    ],
+    "Lua.diagnostics.disable": [],
+    "Lua.diagnostics.neededFileStatus": {
+        "global-element": "Any",
+        "missing-global-doc": "Any",
+        "codestyle-check": "Any",
+        "incomplete-signature-doc": "Any",
+        "no-unknown": "Any"
+    },
+    "Lua.diagnostics.groupSeverity": {
+        "global": "Error"
+    },
 }
