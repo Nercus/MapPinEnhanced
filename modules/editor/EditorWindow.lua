@@ -50,6 +50,8 @@ local viewConfigurations = {
 }
 
 
+---@param viewToShow viewObject<MapPinEnhancedSetEditorViewBodyMixin, MapPinEnhancedSetEditorViewSidebarMixin> | viewObject<MapPinEnhancedOptionEditorViewBodyMixin, MapPinEnhancedOptionEditorViewSidebarMixin>   | nil
+---@param viewToHide viewObject<MapPinEnhancedSetEditorViewBodyMixin, MapPinEnhancedSetEditorViewSidebarMixin> | viewObject<MapPinEnhancedOptionEditorViewBodyMixin, MapPinEnhancedOptionEditorViewSidebarMixin>   | nil
 function MapPinEnhancedEditorWindowMixin:ConfigureViewVisibility(viewToShow, viewToHide)
     if viewToHide then
         viewToHide.body:ClearAllPoints()
