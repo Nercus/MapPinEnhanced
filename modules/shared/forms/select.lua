@@ -40,7 +40,21 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
         local rootDescription = rootDescription
 
         for index, option in ipairs(optionData.options) do
-            rootDescription:CreateRadio(option.label, IsSelected, SetSelected, index)
+            if option.type == "divider" then
+                rootDescription:CreateDivider()
+            elseif option.type == "title" then
+                rootDescription:CreateTitle(option.label)
+            elseif option.type == "button" then
+                rootDescription:CreateButton(option.label, self.onChangeCallback)
+            elseif option.type == "spacer" then
+                rootDescription:CreateSpacer() -- always use built in default extent of 10
+            elseif option.type == "checkbox" then
+                rootDescription:CreateCheckbox(option.label, IsSelected, SetSelected, index)
+            elseif option.type == "radio" then
+                rootDescription:CreateRadio(option.label, IsSelected, SetSelected, index)
+            elseif option.type == "colorswatch" then
+                rootDescription:CreateColorSwatch(option.label, self.onChangeCallback, option.value)
+            end
         end
     end
     self.Dropdown:SetupMenu(GeneratorFunction)

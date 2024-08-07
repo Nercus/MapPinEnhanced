@@ -34,7 +34,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class SelectOptionEntry
 ---@field label string
----@field value string | number
+---@field value string | number | ColorPickerInfo
+---@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer" | "colorswatch"
 
 ---@class OptionSelect : PlainOptionObject
 ---@field onChange fun(value: string)
@@ -67,36 +68,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@alias OptionObjectVariantsTyped OptionButtonTyped | OptionCheckboxTyped | OptionColorpickerTyped | OptionInputTyped | OptionSelectTyped | OptionSliderTyped
 
-local function CheckForDuplicateOption(label, category, options)
-    if not options then return end
-    if not options[category] then return end
-    ---@type OptionObjectVariants[]
-    local categoryOptions = options[category]
-    for _, option in ipairs(categoryOptions) do
-        if option.label == label then
-            error(("Option with label %s already exists in category %s"):format(label, category))
-        end
-    end
-end
-
----@param optionType FormType
----@param option OptionObjectVariants
-function Options:RegisterOption(optionType, option)
-    assert(option.category, "Option must have a category")
-    assert(option.label, "Option must have a label")
-    assert(option.description, "Option must have a description")
-    assert(optionType, "Option must have a type")
-    if not self.options then
-        self.options = {}
-    end
-    if not self.options[option.category] then
-        self.options[option.category] = {}
-    end
-    CheckForDuplicateOption(option.label, option.category, self.options)
-    local optionTyped = option --[[@as OptionObjectVariantsTyped]]
-    optionTyped.type = optionType
-    table.insert(self.options[option.category], option)
-end
 
 ---@param option OptionButton
 function Options:RegisterButton(option)

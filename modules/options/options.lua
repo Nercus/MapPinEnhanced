@@ -24,6 +24,37 @@ local CATEGORY_ORDER = {
 }
 
 
+local function CheckForDuplicateOption(label, category, options)
+    if not options then return end
+    if not options[category] then return end
+    ---@type OptionObjectVariants[]
+    local categoryOptions = options[category]
+    for _, option in ipairs(categoryOptions) do
+        if option.label == label then
+            error(("Option with label %s already exists in category %s"):format(label, category))
+        end
+    end
+end
+
+---@param optionType FormType
+---@param option OptionObjectVariants
+function Options:RegisterOption(optionType, option)
+    assert(option.category, "Option must have a category")
+    assert(option.label, "Option must have a label")
+    assert(option.description, "Option must have a description")
+    assert(optionType, "Option must have a type")
+    if not self.options then
+        self.options = {}
+    end
+    if not self.options[option.category] then
+        self.options[option.category] = {}
+    end
+    CheckForDuplicateOption(option.label, option.category, self.options)
+    local optionTyped = option --[[@as OptionObjectVariantsTyped]]
+    optionTyped.type = optionType
+    table.insert(self.options[option.category], option)
+end
+
 ---get a list of all used categories in the correct order
 ---@return string[]
 function Options:GetCategories()

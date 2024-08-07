@@ -144,15 +144,95 @@ C_Timer.After(1, function()
         options = {
             {
                 label = "Option 1",
-                value = "OptionValue 1"
+                value = "OptionValue 1",
+                type = "radio"
             },
             {
                 label = "Option 2",
-                value = "OptionValue 2"
+                value = "OptionValue 2",
+                type = "radio"
             },
             {
                 label = "Option 3",
-                value = "OptionValue 3"
+                value = "OptionValue 3",
+                type = "radio"
+            }
+        }
+    })
+
+    Options:RegisterSelect({
+        category = "General",
+        label = "TestselectColor",
+        description = "Testing the select",
+        descriptionImage = "interface/icons/achievement_boss_lichking",
+        default = "OptionValue 1",
+        init = "OptionValue 1",
+        onChange = function(value)
+            print("Select changed", value)
+        end,
+        options = {
+            {
+                label = "Option 1",
+                value = {
+                    r = 1,
+                    g = 0,
+                    b = 0,
+                    a = 1,
+                    swatchFunc = function()
+                        print("Swatch clicked")
+                    end,
+                    hasOpacity = true,
+                    opacityFunc = function()
+                        print("Opacity clicked")
+                    end,
+                    opacity = 1,
+                    cancelFunc = function()
+                        print("Cancel clicked")
+                    end
+                },
+                type = "colorswatch"
+            },
+            {
+                label = "Option 2",
+                value = {
+                    r = 0,
+                    g = 1,
+                    b = 0,
+                    a = 1,
+                    swatchFunc = function()
+                        print("Swatch clicked")
+                    end,
+                    hasOpacity = true,
+                    opacityFunc = function()
+                        print("Opacity clicked")
+                    end,
+                    opacity = 1,
+                    cancelFunc = function()
+                        print("Cancel clicked")
+                    end
+                },
+                type = "colorswatch"
+            },
+            {
+                label = "Option 3",
+                value = {
+                    r = 0,
+                    g = 0,
+                    b = 1,
+                    a = 1,
+                    swatchFunc = function()
+                        print("Swatch clicked")
+                    end,
+                    hasOpacity = true,
+                    opacityFunc = function()
+                        print("Opacity clicked")
+                    end,
+                    opacity = 1,
+                    cancelFunc = function()
+                        print("Cancel clicked")
+                    end
+                },
+                type = "colorswatch"
             }
         }
     })
@@ -171,34 +251,15 @@ C_Timer.After(1, function()
         max = 100,
         step = 1
     })
+    Options:RegisterButton({
+        category = "General",
+        label = "Testbutton",
+        description = "Press this button to print the number",
+        buttonLabel = "Press me",
+        onChange = function()
 
-
-    for i = 1, 40 do
-        Options:RegisterButton({
-            category = "General",
-            label = "Option" .. i,
-            description = "Press this button to print the number " .. i,
-            buttonLabel = "Press me",
-            onChange = function()
-                print(i)
-            end
-        })
-    end
-
-    for i = 1, 40 do
-        Options:RegisterColorpicker({
-            category = "Tracker",
-            label = "Color" .. i,
-            description = "Testing the colorpicker",
-            descriptionImage = "interface/talentframe/talentsclassbackgroundwarrior2",
-            default = { r = 1, g = 1, b = 1, a = 1 },
-            init = { r = 1, g = 1, b = 1, a = 1 },
-            onChange = function(value)
-                print("Colorpicker changed", value)
-            end
-        })
-    end
-
+        end
+    })
     MapPinEnhanced:ToggleEditorWindow()
     MapPinEnhanced.editorWindow:SetActiveView("optionView")
 end)
