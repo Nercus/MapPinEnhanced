@@ -18,17 +18,17 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class OptionCheckbox : PlainOptionObject
 ---@field onChange fun(value: boolean)
----@field init boolean
+---@field init? boolean -- initial value can be nil if option has never been set before
 ---@field default boolean
 
 ---@class OptionColorpicker : PlainOptionObject
 ---@field onChange fun(value: Color)
----@field init Color
+---@field init? Color -- initial value can be nil if option has never been set before
 ---@field default Color
 
 ---@class OptionInput : PlainOptionObject
 ---@field onChange fun(value: string)
----@field init string
+---@field init? string -- initial value can be nil if option has never been set before
 ---@field default string
 
 
@@ -39,13 +39,13 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class OptionSelect : PlainOptionObject
 ---@field onChange fun(value: string)
----@field init string | number
+---@field init? string | number -- initial value can be nil if option has never been set before
 ---@field default string | number
 ---@field options SelectOptionEntry[]
 
 ---@class OptionSlider : PlainOptionObject
 ---@field onChange fun(value: number)
----@field init number
+---@field init? number -- initial value can be nil if option has never been set before
 ---@field default number
 ---@field min number
 ---@field max number

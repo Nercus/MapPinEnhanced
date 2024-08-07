@@ -93,6 +93,23 @@ end
 C_Timer.After(1, function()
     local Options = MapPinEnhanced:GetModule("Options")
 
+    Options:RegisterSlider({
+        category = "Floating Pin",
+        label = "Size",
+        description = "Testing the slider",
+        descriptionImage = "interface/icons/achievement_boss_lichking",
+        default = MapPinEnhanced:GetDefault("FloatingPin", "Size") --[[@as number]],
+        init = MapPinEnhanced:GetVar("FloatingPin", "Size") --[[@as number]],
+        onChange = function(value)
+            print("Slider changed", value)
+            MapPinEnhanced:SaveVar("FloatingPin", "Size", value)
+        end,
+        min = 0,
+        max = 100,
+        step = 1
+    })
+
+
     Options:RegisterCheckbox({
         category = "General",
         label = "Testcheckbox",

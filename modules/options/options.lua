@@ -41,7 +41,7 @@ end
 function Options:RegisterOption(optionType, option)
     assert(option.category, "Option must have a category")
     assert(option.label, "Option must have a label")
-    assert(option.description, "Option must have a description")
+    assert(option.default, "Option must have a default value")
     assert(optionType, "Option must have a type")
     if not self.options then
         self.options = {}
@@ -52,6 +52,9 @@ function Options:RegisterOption(optionType, option)
     CheckForDuplicateOption(option.label, option.category, self.options)
     local optionTyped = option --[[@as OptionObjectVariantsTyped]]
     optionTyped.type = optionType
+    if not optionTyped.init then
+        optionTyped.init = optionTyped.default
+    end
     table.insert(self.options[option.category], option)
 end
 
