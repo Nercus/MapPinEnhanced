@@ -29,7 +29,9 @@
                         self:SetPinColor()
                         self.texture:SetTexture(self.trackedTexture)
                     </OnLoad>
-                    <!-- TODO: onclick: menu for colors (input with icon number / texture string) -->
+                    <OnClick>
+                        self:GetParent():OpenColorMenu()
+                    </OnClick>
                 </Scripts>
             </Button>
             <EditBox parentKey="mapID" inherits="MapPinEnhancedInputTemplate" numeric="true"
@@ -90,8 +92,6 @@
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yCoord" x="15" />
                 </Anchors>
             </EditBox>
-            <!-- TODO: Add: menu with checkboxes for pinoptions: set tracked, set persistent -->
-
             <Button parentKey="deleteButton">
                 <Size x="15" y="15" />
                 <NormalTexture

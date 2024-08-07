@@ -41,5 +41,8 @@
                 </Anchors>
             </Frame>
         </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
     </Frame>
 </Ui>

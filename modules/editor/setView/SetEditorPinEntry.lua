@@ -16,11 +16,11 @@ local MapPinEnhanced = select(2, ...)
 ---@field title MapPinEnhancedInputMixin
 ---@field pinOptions MapPinEnhancedSelectMixin
 ---@field onChangeCallback function
----@field initValues table<'mapID' | 'xCoord' | 'yCoord' | 'title', string | number>
+---@field initValues table<'mapID' | 'xCoord' | 'yCoord' | 'title' | 'color', string | number>
 MapPinEnhancedSetEditorPinEntryMixin = {}
 
 
-
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 local tonumber = tonumber
 local tostring = tostring
 local Round = Round
@@ -29,6 +29,7 @@ local Round = Round
 ---@param pin pinData
 function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
     self.Pin:Setup(pin)
+    self.Pin:SetTrackedTexture()
     self.mapID:SetText(tostring(pin.mapID))
     local xCoord = tostring(Round(pin.x * 10000) / 100)
     self.xCoord:SetText(xCoord)
@@ -47,7 +48,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param key 'mapID' | 'x' | 'y' | 'title'
+---@param key 'mapID' | 'x' | 'y' | 'title' | 'color'
 ---@param value string
 function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     assert(self.onChangeCallback, "No callback set")
@@ -78,50 +79,32 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self.title:SetScript("OnTextChanged", function()
         self:OnChange('title', self.title:GetText())
     end)
+    -- TODO: implement pinOptions dropdown
     -- self.pinOptions:SetScript("OnValueChanged", function()
     --     self:OnChange()
     -- end)
 end
 
--- local order = {
---     "mapID",
---     "xCoord",
---     "yCoord",
---     "title",
--- }
--- local orderCount = #order
+function MapPinEnhancedSetEditorPinEntryMixin:OpenColorMenu()
+    local pin = self.Pin
 
+    local function IsColorSelected(colorIndex)
+        local colorTable = CONSTANTS.PIN_COLORS[colorIndex]
+        return pin.pinData.color == colorTable.colorName or
+            (pin.pinData.color == nil and colorIndex == 1) -- default to yellow
+    end
 
--- function MapPinEnhancedSetEditorPinEntryMixin:IsFocusingInput()
---     if self.mapID:HasFocus() then return true end
---     if self.xCoord:HasFocus() then return true end
---     if self.yCoord:HasFocus() then return true end
---     if self.title:HasFocus() then return true end
---     return false
--- end
-
--- function MapPinEnhancedSetEditorPinEntryMixin:SetEditBoxPropagation(propagation)
---     self.mapID:SetPropagateKeyboardInput(propagation)
---     self.xCoord:SetPropagateKeyboardInput(propagation)
---     self.yCoord:SetPropagateKeyboardInput(propagation)
---     self.title:SetPropagateKeyboardInput(propagation)
--- end
-
--- function MapPinEnhancedSetEditorPinEntryMixin:CycleEditboxes()
---     if not self.currentFocus or self.currentFocus > orderCount then
---         self.currentFocus = 0
---     end
---     self.currentFocus = self.currentFocus + 1
---     ---@type "mapID" | "xCoord" | "yCoord" | "title" | nil
---     local nextFocus = order[self.currentFocus]
---     if not nextFocus then
---         self:CycleEditboxes()
---         return
---     end
---     self[nextFocus]:SetFocus()
--- end
-
--- function MapPinEnhancedSetEditorPinEntryMixin:OnKeyDown(key)
---     if key ~= "TAB" then return end
---     self:CycleEditboxes()
--- end
+    local function SetColor(colorName)
+        pin.pinData.color = colorName
+        pin:SetPinColor(colorName)
+        pin:SetTrackedTexture()
+        self.onChangeCallback('color', colorName)
+    end
+    MenuUtil.CreateContextMenu(pin, function(_, rootDescription)
+        for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
+            local label = string.format(CONSTANTS.MENU_COLOR_BUTTON_PATTERN, colorTable.color:GetRGBAsBytes())
+            rootDescription:CreateRadio(label, IsColorSelected, function() SetColor(colorTable.colorName) end,
+                colorIndex)
+        end
+    end)
+end
