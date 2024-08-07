@@ -9,7 +9,7 @@
             <Layer level="ARTWORK">
                 <FontString parentKey="valueText" inherits="GameFontNormalSmall">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="20" />
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="-20" />
                     </Anchors>
                 </FontString>
             </Layer>

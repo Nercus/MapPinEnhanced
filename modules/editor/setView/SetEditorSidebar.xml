@@ -36,6 +36,7 @@
             </Frame>
             <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
                 autoFocus="false">
+                <TextInsets left="20" right="20" />
                 <Size x="1" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="15" y="-5" relativeKey="$parent.header"
@@ -45,11 +46,12 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <Texture name="$parentSearchIcon" atlas="common-search-magnifyingglass"
+                        <Texture name="$parentSearchIcon"
+                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconSearch_Yellow.png"
                             useAtlasSize="false">
-                            <Size x="10" y="10" />
+                            <Size x="12" y="12" />
                             <Anchors>
-                                <Anchor point="LEFT" x="1" y="-1" />
+                                <Anchor point="LEFT" x="5" y="-1" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -59,11 +61,13 @@
                     <Button name="$parentClearButton" parentKey="clearButton" hidden="true">
                         <Size x="12" y="12" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-8" y="0" />
+                            <Anchor point="RIGHT" x="-8" y="-1" />
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
-                                <Texture atlas="common-search-clearbutton" setAllPoints="true" />
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                                    setAllPoints="true" />
                             </Layer>
                         </Layers>
                         <Scripts>

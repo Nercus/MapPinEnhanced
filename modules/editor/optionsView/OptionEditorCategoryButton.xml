@@ -21,6 +21,8 @@
                     setAllPoints="true" />
             </Layer>
         </Layers>
+        <Scripts>
+            <OnHide method="OnHide" />
+        </Scripts>
     </Button>
-
 </Ui>

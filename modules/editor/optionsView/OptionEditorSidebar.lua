@@ -26,6 +26,7 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:UpdateCategoryList()
     local categories = Options:GetCategories()
     local lastCategoryButton = nil
     local activeButton = nil
+    self.categoryButtonPool:ReleaseAll()
     for i, category in ipairs(categories) do
         local categoryButton = self.categoryButtonPool:Acquire() --[[@as MapPinEnhancedOptionEditorViewCategoryButtonMixin]]
         categoryButton:SetLabel(category)

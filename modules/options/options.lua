@@ -41,7 +41,9 @@ end
 function Options:RegisterOption(optionType, option)
     assert(option.category, "Option must have a category")
     assert(option.label, "Option must have a label")
-    assert(option.default, "Option must have a default value")
+    if optionType ~= "button" then
+        assert(option.default, "Option must have a default value")
+    end
     assert(optionType, "Option must have a type")
     if not self.options then
         self.options = {}

@@ -98,11 +98,11 @@ C_Timer.After(1, function()
         label = "Size",
         description = "Testing the slider",
         descriptionImage = "interface/icons/achievement_boss_lichking",
-        default = MapPinEnhanced:GetDefault("FloatingPin", "Size") --[[@as number]],
-        init = MapPinEnhanced:GetVar("FloatingPin", "Size") --[[@as number]],
+        default = MapPinEnhanced:GetDefault("Floating Pin", "Size") --[[@as number]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "Size") --[[@as number]],
         onChange = function(value)
             print("Slider changed", value)
-            MapPinEnhanced:SaveVar("FloatingPin", "Size", value)
+            MapPinEnhanced:SaveVar("Floating Pin", "Size", value)
         end,
         min = 0,
         max = 100,
@@ -177,82 +177,6 @@ C_Timer.After(1, function()
         }
     })
 
-    Options:RegisterSelect({
-        category = "General",
-        label = "TestselectColor",
-        description = "Testing the select",
-        descriptionImage = "interface/icons/achievement_boss_lichking",
-        default = "OptionValue 1",
-        init = "OptionValue 1",
-        onChange = function(value)
-            print("Select changed", value)
-        end,
-        options = {
-            {
-                label = "Option 1",
-                value = {
-                    r = 1,
-                    g = 0,
-                    b = 0,
-                    a = 1,
-                    swatchFunc = function()
-                        print("Swatch clicked")
-                    end,
-                    hasOpacity = true,
-                    opacityFunc = function()
-                        print("Opacity clicked")
-                    end,
-                    opacity = 1,
-                    cancelFunc = function()
-                        print("Cancel clicked")
-                    end
-                },
-                type = "colorswatch"
-            },
-            {
-                label = "Option 2",
-                value = {
-                    r = 0,
-                    g = 1,
-                    b = 0,
-                    a = 1,
-                    swatchFunc = function()
-                        print("Swatch clicked")
-                    end,
-                    hasOpacity = true,
-                    opacityFunc = function()
-                        print("Opacity clicked")
-                    end,
-                    opacity = 1,
-                    cancelFunc = function()
-                        print("Cancel clicked")
-                    end
-                },
-                type = "colorswatch"
-            },
-            {
-                label = "Option 3",
-                value = {
-                    r = 0,
-                    g = 0,
-                    b = 1,
-                    a = 1,
-                    swatchFunc = function()
-                        print("Swatch clicked")
-                    end,
-                    hasOpacity = true,
-                    opacityFunc = function()
-                        print("Opacity clicked")
-                    end,
-                    opacity = 1,
-                    cancelFunc = function()
-                        print("Cancel clicked")
-                    end
-                },
-                type = "colorswatch"
-            }
-        }
-    })
 
     Options:RegisterSlider({
         category = "General",

@@ -35,7 +35,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@class SelectOptionEntry
 ---@field label string
 ---@field value string | number | ColorPickerInfo
----@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer" | "colorswatch"
+---@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer"
 
 ---@class OptionSelect : PlainOptionObject
 ---@field onChange fun(value: string)

@@ -7,7 +7,10 @@ local DEFAULTS = {
         ["x"] = GetScreenWidth() / 2 - 200,
         ["y"] = GetScreenHeight() / 2 - 200
     },
-    ["trackerVisible"] = true
+    ["trackerVisible"] = true,
+    ["Floating Pin"] = {
+        ["Size"] = 23
+    }
 }
 
 ---Retrieves the default value for a given set of keys.

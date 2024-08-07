@@ -141,7 +141,6 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
     self.searchInput:SetScript("OnEnterPressed", function()
         self:SetFirstSetActive()
     end)
-    self.searchInput:SetTextInsets(16, 20, 0, 0);
 
     self.createSetButton:SetScript("OnClick", function()
         ---@class SetManager : Module

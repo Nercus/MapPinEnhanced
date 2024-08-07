@@ -116,6 +116,7 @@ end
 
 ---@param category OPTIONCATEGORY
 function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
+    if not category then return end
     local options = Options:GetOptionsForCategory(category)
     self:ClearAllOptions()
     self.optionElementFrames = {}
@@ -137,12 +138,6 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         end
         optionElement:SetParent(self.scrollFrame.Child)
         optionElement:Show()
-        optionElement.info:SetScript("OnEnter", function()
-            self:SetDescription(optionElement.info, option.description, option.descriptionImage)
-        end)
-        optionElement.info:SetScript("OnLeave", function()
-            GameTooltip:Hide()
-        end)
         lastOptionElement = optionElement
         self.optionElementFrames[option.label] = optionElement
     end
@@ -180,16 +175,4 @@ function MapPinEnhancedOptionEditorViewBodyMixin:Update(category, label)
         end
         return
     end
-end
-
----@param owner Frame
----@param description string
----@param descriptionImage string?
-function MapPinEnhancedOptionEditorViewBodyMixin:SetDescription(owner, description, descriptionImage)
-    GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-    if descriptionImage then
-        GameTooltip:AddTexture(descriptionImage)
-    end
-    GameTooltip:AddLine(description, 1, 1, 1, true)
-    GameTooltip:Show()
 end

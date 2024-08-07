@@ -5,6 +5,7 @@
     <Button name="MapPinEnhancedTrackerTextImportButtonTemplate"
         inherits="MapPinEnhancedButtonYellowTemplate"
         mixin="MapPinEnhancedTrackerTextImportButtonMixin"
+        propagateMouseInput="Motion"
         virtual="true" text="Import">
         <Size x="300" y="32" />
         <Scripts>

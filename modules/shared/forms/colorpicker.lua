@@ -51,10 +51,12 @@ end
 ---@param disabled boolean
 function MapPinEnhancedColorpickerMixin:SetDisabled(disabled)
     if disabled then
-        self:Disable()
+        self:SetScript("OnMouseDown", nil)
         self:SetAlpha(0.5)
     else
-        self:Enable()
+        self:SetScript("OnMouseDown", function(self)
+            showColorPicker(self)
+        end)
         self:SetAlpha(1)
     end
 end

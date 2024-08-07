@@ -38,7 +38,6 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
     local function GeneratorFunction(owner, rootDescription)
         ---@type SubMenuUtil
         local rootDescription = rootDescription
-
         for index, option in ipairs(optionData.options) do
             if option.type == "divider" then
                 rootDescription:CreateDivider()
@@ -52,8 +51,6 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
                 rootDescription:CreateCheckbox(option.label, IsSelected, SetSelected, index)
             elseif option.type == "radio" then
                 rootDescription:CreateRadio(option.label, IsSelected, SetSelected, index)
-            elseif option.type == "colorswatch" then
-                rootDescription:CreateColorSwatch(option.label, self.onChangeCallback, option.value)
             end
         end
     end
