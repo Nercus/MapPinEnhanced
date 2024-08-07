@@ -177,6 +177,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function CreateMenu(parentFrame)
+        -- TODO: change it to an edit box custom frame to change the pin title in here
         local titleString = string.format(CONSTANTS.MENU_TITLE_PATTERN,
             pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.texture:GetTexture(),
             pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")

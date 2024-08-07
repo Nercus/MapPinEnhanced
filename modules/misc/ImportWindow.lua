@@ -26,6 +26,8 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedImportWindowMixin = {}
 
 
+-- TODO: move the import window to a new view on the tracker window
+
 function MapPinEnhancedImportWindowMixin:UpdateHelpTextVisibility()
     local text = self:GetText() --[[@as string]]
     if string.len(text) == 0 then
