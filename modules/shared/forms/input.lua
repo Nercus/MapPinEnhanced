@@ -25,11 +25,24 @@ function MapPinEnhancedInputMixin:SetCallback(callback)
     self.onChangeCallback = callback
 end
 
+---@param disabled boolean
+function MapPinEnhancedInputMixin:SetDisabled(disabled)
+    if disabled then
+        self:Disable()
+        self:SetAlpha(0.5)
+    else
+        self:Enable()
+        self:SetAlpha(1)
+    end
+end
+
 ---@param optionData OptionObjectVariantsTyped
 function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
     local init = optionData.init --[[@as string]]
     self:SetText(init)
+    self:SetDisabled(optionData.disabledState)
+    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetScript("OnTextChanged", function()
         if not self.onChangeCallback then return end
         self.onChangeCallback(self:GetText())

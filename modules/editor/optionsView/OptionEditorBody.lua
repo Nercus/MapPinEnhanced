@@ -25,6 +25,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field sidebar MapPinEnhancedOptionEditorViewSidebarMixin
 ---@field scrollFrame OptionScrollFrame
 ---@field header OptionEditorBodyHeader
+---@field optionElementFrames table<string, MapPinEnhancedOptionEditorElementMixin>
+---@field activeCategory OPTIONCATEGORY
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
 function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
@@ -46,6 +48,8 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)
+
+    Options.OptionBody = self
 end
 
 ---@alias FormType "button" | "checkbox" | "colorpicker" | "input" | "select" | "slider"
@@ -114,7 +118,9 @@ end
 function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
     local options = Options:GetOptionsForCategory(category)
     self:ClearAllOptions()
+    self.optionElementFrames = {}
     self.header.selectedCategoryName:SetText(category)
+    self.activeCategory = category
     if not options then return end
     local lastOptionElement = nil
     for _, option in ipairs(options) do
@@ -138,6 +144,41 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
             GameTooltip:Hide()
         end)
         lastOptionElement = optionElement
+        self.optionElementFrames[option.label] = optionElement
+    end
+end
+
+function MapPinEnhancedOptionEditorViewBodyMixin:GetActiveCategory()
+    return self.activeCategory
+end
+
+function MapPinEnhancedOptionEditorViewBodyMixin:GetOptionElementFrame(category, label)
+    if not category or category ~= self:GetActiveCategory() then
+        return nil
+    end
+    if not label then
+        return nil
+    end
+    return self.optionElementFrames[label]
+end
+
+---@param category? OPTIONCATEGORY
+---@param label? string
+function MapPinEnhancedOptionEditorViewBodyMixin:Update(category, label)
+    if not category and not label then -- update the current category
+        self:SetActiveCategory(self.header.selectedCategoryName:GetText())
+        return
+    end
+    if category and category == self.header.selectedCategoryName:GetText() then -- update the current category if the category is the same
+        self:SetActiveCategory(category)
+        return
+    end
+    if category and label then -- update a specific option
+        local optionElement = self:GetOptionElementFrame(category, label)
+        if optionElement then
+            optionElement:Update()
+        end
+        return
     end
 end
 

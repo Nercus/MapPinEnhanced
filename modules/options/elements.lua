@@ -10,6 +10,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field label string
 ---@field description string?
 ---@field descriptionImage string? reference to an image
+---@field disabledState boolean?
 
 ---@class OptionButton : PlainOptionObject
 ---@field buttonLabel string

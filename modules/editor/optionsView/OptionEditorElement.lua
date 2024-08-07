@@ -2,7 +2,7 @@
 ---@class MapPinEnhancedOptionEditorElementMixin : Frame
 ---@field label FontString
 ---@field highlight Texture
----@field option OptionObjectVariants
+---@field option OptionObjectVariantsTyped
 ---@field formElement FormElement
 ---@field optionHolder Frame
 ---@field type FormType
@@ -26,4 +26,12 @@ function MapPinEnhancedOptionEditorElementMixin:Setup(optionData)
     self.option = optionData
     self.label:SetText(optionData.label)
     self.formElement:Setup(optionData)
+end
+
+function MapPinEnhancedOptionEditorElementMixin:Update()
+    if not self.option then
+        return
+    end
+    self.label:SetText(self.option.label)
+    self.formElement:Setup(self.option)
 end

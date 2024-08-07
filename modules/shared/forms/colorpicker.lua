@@ -48,6 +48,17 @@ local function showColorPicker(colorFrame)
 end
 
 
+---@param disabled boolean
+function MapPinEnhancedColorpickerMixin:SetDisabled(disabled)
+    if disabled then
+        self:Disable()
+        self:SetAlpha(0.5)
+    else
+        self:Enable()
+        self:SetAlpha(1)
+    end
+end
+
 function MapPinEnhancedColorpickerMixin:SetCallback(callback)
     assert(type(callback) == "function")
     self.onChangeCallback = callback
@@ -60,6 +71,7 @@ function MapPinEnhancedColorpickerMixin:Setup(optionData)
     self.g = nil
     self.b = nil
     self.a = nil
+
     self:SetScript("OnMouseDown", function(self)
         showColorPicker(self)
     end)
@@ -70,5 +82,7 @@ function MapPinEnhancedColorpickerMixin:Setup(optionData)
         self.onChangeCallback({ r = r, g = g, b = b, a = a })
     end
     self.setColor(optionData.init.r, optionData.init.g, optionData.init.b, optionData.init.a)
+    self:SetDisabled(optionData.disabledState)
+    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetCallback(optionData.onChange)
 end

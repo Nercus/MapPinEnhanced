@@ -27,6 +27,25 @@ local function roundValueToPrecision(value, step)
 end
 
 
+---@param disabled boolean
+function MapPinEnhancedSliderMixin:SetDisabled(disabled)
+    if disabled then
+        self:Disable()
+        self:SetAlpha(0.5)
+        self.Back:Disable()
+        self.Back:SetAlpha(0.5)
+        self.Forward:Disable()
+        self.Forward:SetAlpha(0.5)
+    else
+        self:Enable()
+        self:SetAlpha(1)
+        self.Back:Enable()
+        self.Back:SetAlpha(1)
+        self.Forward:Enable()
+        self.Forward:SetAlpha(1)
+    end
+end
+
 ---@param optionData OptionObjectVariantsTyped
 function MapPinEnhancedSliderMixin:Setup(optionData)
     self.onChangeCallback = nil
@@ -35,6 +54,8 @@ function MapPinEnhancedSliderMixin:Setup(optionData)
     local init = optionData.init --[[@as number | nil]]
     self:SetValue(init or 0)
     self.valueText:SetText(roundValueToPrecision(init or 0, optionData.step))
+    self:SetDisabled(optionData.disabledState)
+    if optionData.disabledState then return end
     self:SetScript("OnValueChanged", function(_, value)
         self.valueText:SetText(roundValueToPrecision(self:GetValue(), optionData.step))
         if not self.onChangeCallback then return end

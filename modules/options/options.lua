@@ -1,13 +1,11 @@
 -- TODO: wrapper for settings are here: might want to use a similiar debounce method like https://gist.github.com/Meorawr/c8b09f8a0ffc0b9f3fc32494c8208194
 
-
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
-
 ---@class Options : Module
----@field options table<OPTIONCATEGORY, OptionObjectVariantsTyped[]> | nil
+---@field options table<OPTIONCATEGORY, OptionObjectVariantsTyped[]> | nil#
+---@field OptionBody MapPinEnhancedOptionEditorViewBodyMixin | nil#
 local Options = MapPinEnhanced:CreateModule("Options")
 Options.options = {}
 
@@ -62,7 +60,10 @@ end
 function Options:SetOptionDisabledState(category, label, disabledState)
     local option = self:GetOptionElement(category, label)
     if option then
-        -- TODO: implement disabling of options element
+        option.disabledState = disabledState
+        if self.OptionBody then
+            self.OptionBody:Update(category, label)
+        end
         return
     end
     error(("Option with label %s does not exist in category %s"):format(label, category))

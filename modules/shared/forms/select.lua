@@ -9,9 +9,19 @@ function MapPinEnhancedSelectMixin:SetCallback(callback)
     self.onChangeCallback = callback
 end
 
+---@param disabled boolean
+function MapPinEnhancedSelectMixin:SetDisabled(disabled)
+    if disabled then
+        self.Dropdown:Disable()
+        self.Dropdown:SetAlpha(0.5)
+    else
+        self.Dropdown:Enable()
+        self.Dropdown:SetAlpha(1)
+    end
+end
+
 ---@param optionData OptionObjectVariantsTyped
 function MapPinEnhancedSelectMixin:Setup(optionData)
-    self:SetCallback(optionData.onChange)
     self.currentValue = optionData.init
     local function IsSelected(index)
         local option = optionData.options[index]
@@ -34,4 +44,7 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
         end
     end
     self.Dropdown:SetupMenu(GeneratorFunction)
+    self:SetDisabled(optionData.disabledState)
+    if optionData.disabledState then return end -- dont set up click handler if disabled
+    self:SetCallback(optionData.onChange)
 end
