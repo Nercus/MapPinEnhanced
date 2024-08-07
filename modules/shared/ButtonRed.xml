@@ -54,12 +54,12 @@
                 self.right:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeRed_Right.png")
                 self.middle:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeRed_Centre.png")
             </OnMouseUp>
-            <OnLoad>
+            <OnSizeChanged>
                 local height = self:GetHeight()
                 self.left:SetSize(height, height)
                 self.right:SetSize(height, height)
                 self.middle:SetHeight(height)
-            </OnLoad>
+            </OnSizeChanged>
         </Scripts>
         <NormalFont style="GameFontNormal" />
     </Button>
