@@ -7,58 +7,7 @@
         mixin="MapPinEnhancedOptionEditorViewBodyMixin"
         virtual="true" hidden="true"
         enableMouse="true">
-
         <Frames>
-            <Frame parentKey="descriptionFrame" frameStrata="HIGH" hidden="true">
-                <!-- TODO: think about where to put the descriptionFrame -->
-                <Size x="1" y="40" />
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <Texture parentKey="descriptionBG" atlas="common-dropdown-bg"
-                            setAllPoints="true">
-                            <Gradient orientation="VERTICAL">
-                                <MinColor r="0" g="0" b="0" a="0" />
-                                <MaxColor r="1" g="1" b="1" a="1" />
-                            </Gradient>
-                        </Texture>
-                    </Layer>
-                </Layers>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="7" y="6" />
-                    <Anchor point="BOTTOMRIGHT" x="-7" y="6" />
-                </Anchors>
-                <Frames>
-                    <Frame parentKey="holder">
-                        <Size x="1" y="1" />
-                        <Anchors>
-                            <Anchor point="TOPLEFT" />
-                            <Anchor point="BOTTOMRIGHT" />
-                        </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture parentKey="descriptionImage">
-                                    <Size x="1" y="175" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="5" />
-                                        <Anchor point="TOPRIGHT" x="-5" />
-                                    </Anchors>
-                                </Texture>
-                                <FontString parentKey="description" inherits="GameFontHighlight"
-                                    justifyH="LEFT" spacing="2"
-                                    justifyV="TOP">
-                                    <Size x="1" y="1" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="5" y="-10"
-                                            relativeKey="$parent.descriptionImage"
-                                            relativePoint="BOTTOMLEFT" />
-                                        <Anchor point="BOTTOMRIGHT" x="-8" y="5" />
-                                    </Anchors>
-                                </FontString>
-                            </Layer>
-                        </Layers>
-                    </Frame>
-                </Frames>
-            </Frame>
             <Frame parentKey="header">
                 <Size x="1" y="30" />
                 <Anchors>

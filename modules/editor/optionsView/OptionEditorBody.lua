@@ -8,15 +8,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@class OptionScrollFrame : ScrollFrame
 ---@field Child Frame
 
----@class DescriptionHolder : Frame
----@field description FontString
----@field descriptionImage Texture
-
-
----@class DescriptionFrame : Frame
----@field holder DescriptionHolder
-
-
 ---@class OptionEditorBodyHeader : Frame
 ---@field bg Texture
 ---@field selectedCategoryName FontString
@@ -33,7 +24,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field init boolean
 ---@field sidebar MapPinEnhancedOptionEditorViewSidebarMixin
 ---@field scrollFrame OptionScrollFrame
----@field descriptionFrame DescriptionFrame
 ---@field header OptionEditorBodyHeader
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
@@ -152,31 +142,23 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         optionElement:SetParent(self.scrollFrame.Child)
         optionElement:Show()
         optionElement.info:SetScript("OnEnter", function()
-            self:SetDescription(option.description, option.descriptionImage)
+            self:SetDescription(optionElement.info, option.description, option.descriptionImage)
         end)
         optionElement.info:SetScript("OnLeave", function()
-            self.descriptionFrame.holder:Hide()
+            GameTooltip:Hide()
         end)
         lastOptionElement = optionElement
     end
 end
 
+---@param owner Frame
 ---@param description string
 ---@param descriptionImage string?
-function MapPinEnhancedOptionEditorViewBodyMixin:SetDescription(description, descriptionImage)
-    self.descriptionFrame.holder:Show()
-    if not descriptionImage then
-        self.descriptionFrame.holder.descriptionImage:Hide()
-        self.descriptionFrame.holder.description:ClearAllPoints()
-        self.descriptionFrame.holder.description:SetPoint("TOPLEFT", 10, -5)
-        self.descriptionFrame.holder.description:SetPoint("BOTTOMRIGHT", -5, 5)
-    else
-        self.descriptionFrame.holder.descriptionImage:SetTexture(descriptionImage)
-        self.descriptionFrame.holder.descriptionImage:Show()
-        self.descriptionFrame.holder.description:ClearAllPoints()
-        self.descriptionFrame.holder.description:SetPoint("TOPLEFT", self.descriptionFrame.holder.descriptionImage,
-            "BOTTOMLEFT", 5, -10)
-        self.descriptionFrame.holder.description:SetPoint("BOTTOMRIGHT", -8, 5)
+function MapPinEnhancedOptionEditorViewBodyMixin:SetDescription(owner, description, descriptionImage)
+    GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+    if descriptionImage then
+        GameTooltip:AddTexture(descriptionImage)
     end
-    self.descriptionFrame.holder.description:SetText(description)
+    GameTooltip:AddLine(description, 1, 1, 1, true)
+    GameTooltip:Show()
 end
