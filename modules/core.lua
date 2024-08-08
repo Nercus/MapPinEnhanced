@@ -197,7 +197,7 @@ C_Timer.After(1, function()
         description = "Press this button to print the number",
         buttonLabel = "Press me",
         onChange = function()
-
+            print("Button pressed")
         end
     })
     MapPinEnhanced:ToggleEditorWindow()

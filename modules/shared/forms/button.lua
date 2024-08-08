@@ -33,8 +33,8 @@ end
 
 function MapPinEnhancedButtonMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.5)
-    -- TODO: test it then implement the debounce on all other elements aswell
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+    -- TODO: debounce works great -> move to all other elements aswell
 end
 
 ---@param optionData OptionButtonTyped | ButtonOptions

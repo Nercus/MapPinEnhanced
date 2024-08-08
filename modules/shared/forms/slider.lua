@@ -1,4 +1,8 @@
 -- Template: file://./slider.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
+
 ---@class MapPinEnhancedSliderMixin : Slider,PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field valueText FontString
@@ -16,7 +20,7 @@ MapPinEnhancedSliderMixin = {}
 
 function MapPinEnhancedSliderMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = callback
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
 ---@param value number
