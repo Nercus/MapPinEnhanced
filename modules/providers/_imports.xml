@@ -5,5 +5,5 @@
     <Script file="global.lua" />
     <Script file="waypointEvent.lua" />
     <Script file="supertrackingEvent.lua" />
-    <Script file="tomtom.lua" />
+    <Script file="wayCommand.lua" />
 </Ui>
