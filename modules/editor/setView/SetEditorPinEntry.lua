@@ -42,6 +42,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
         yCoord = Round(pin.y * 10000) / 10000,
         title = pin.title,
     }
+    self:SetupPinOptions(pin.persistent)
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
@@ -49,10 +50,10 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
 end
 
 ---@param key 'mapID' | 'x' | 'y' | 'title' | 'color'
----@param value string
+---@param value (string | number | boolean)?
 function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     assert(self.onChangeCallback, "No callback set")
-    ---@type string | number?
+    ---@type (string | number | boolean)?
     local cleanedValue = value
     if key == 'mapID' then
         cleanedValue = tonumber(value)
@@ -70,40 +71,41 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self.mapID:SetScript("OnTextChanged", function()
         self:OnChange('mapID', self.mapID:GetText())
     end)
-    self.xCoord:SetScript("OnTextChanged", function()
-        self:OnChange('x', self.xCoord:GetText())
-    end)
-    self.yCoord:SetScript("OnTextChanged", function()
-        self:OnChange('y', self.yCoord:GetText())
-    end)
     self.title:SetScript("OnTextChanged", function()
         self:OnChange('title', self.title:GetText())
     end)
+    C_Timer.After(0.5, function()
+        self.xCoord:SetScript("OnTextChanged", function()
+            self:OnChange('x', self.xCoord:GetText())
+        end)
+        self.yCoord:SetScript("OnTextChanged", function()
+            self:OnChange('y', self.yCoord:GetText())
+        end)
+    end)
 end
 
-function MapPinEnhancedSetEditorPinEntryMixin:OpenPinOptionsMenu()
+function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
     ---@type SelectOptions
     local selectOptions = {
-        default = self.Pin.pinData.color,
-        init = self.Pin.pinData.color,
+        default = {
+            persistent = false,
+        },
+        init = {
+            persistent = initPersistent or false,
+        },
         onChange = function(value)
-            -- TODO: implement pinOptions dropdown
-            -- self.pinOptions:SetScript("OnValueChanged", function()
-            --     self:OnChange()
-            -- end)
-            print(value)
+            if not value then return end
+            if type(value) ~= "table" then return end
+            for key, value in pairs(value) do
+                self:OnChange(key, value)
+            end
         end,
         options = {
             {
-                label = "Is persistent",
+                label = "Persistent",
                 value = "persistent",
                 type = "checkbox"
             },
-            {
-                label = "Is tracked",
-                value = "tracked",
-                type = "checkbox"
-            }
         }
     }
     self.pinOptions:Setup(selectOptions)

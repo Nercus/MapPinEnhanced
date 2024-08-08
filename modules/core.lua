@@ -118,7 +118,6 @@ C_Timer.After(1, function()
         default = true,
         init = true,
         onChange = function(value)
-            MapPinEnhanced:Debug(value)
             print("Checkbox changed", value)
         end
     })

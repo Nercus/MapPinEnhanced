@@ -11,9 +11,9 @@ MapPinEnhancedSelectMixin = {}
 ---@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer"
 
 ---@class SelectOptions
----@field onChange fun(value: string)
----@field init? string | number -- initial value can be nil if option has never been set before
----@field default string | number
+---@field onChange fun(value: string | number | table<string,boolean>)
+---@field init? string | number | table<string,boolean> -- initial value can be nil if option has never been set before
+---@field default string | number | table<string,boolean>
 ---@field options SelectOptionEntry[]
 
 
@@ -33,19 +33,36 @@ function MapPinEnhancedSelectMixin:SetDisabled(disabled)
     end
 end
 
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
+
 ---@param optionData OptionObjectVariantsTyped | SelectOptions
 function MapPinEnhancedSelectMixin:Setup(optionData)
     self.currentValue = optionData.init
-    local function IsSelected(index)
+    local function IsSelectedRadio(index)
         local option = optionData.options[index]
         return option.value == self.currentValue
     end
 
-    local function SetSelected(index)
+    local function SetSelectedRadio(index)
         local option = optionData.options[index]
         self.currentValue = option.value
         if not self.onChangeCallback then return end
         self.onChangeCallback(option.value)
+    end
+
+    local function SetSelectedCheckbox(index)
+        local option = optionData.options[index]
+        ---@type boolean
+        self.currentValue[option.value] = not self.currentValue[option.value]
+        if not self.onChangeCallback then return end
+        self.onChangeCallback(self.currentValue)
+    end
+
+    local function IsSelectedCheckbox(index)
+        local option = optionData.options[index]
+        return self.currentValue[option.value]
     end
 
     local function GeneratorFunction(owner, rootDescription)
@@ -61,9 +78,9 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
             elseif option.type == "spacer" then
                 rootDescription:CreateSpacer() -- always use built in default extent of 10
             elseif option.type == "checkbox" then
-                rootDescription:CreateCheckbox(option.label, IsSelected, SetSelected, index)
+                rootDescription:CreateCheckbox(option.label, IsSelectedCheckbox, SetSelectedCheckbox, index)
             elseif option.type == "radio" then
-                rootDescription:CreateRadio(option.label, IsSelected, SetSelected, index)
+                rootDescription:CreateRadio(option.label, IsSelectedRadio, SetSelectedRadio, index)
             end
         end
     end
