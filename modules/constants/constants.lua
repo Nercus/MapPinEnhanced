@@ -32,7 +32,7 @@ MapPinEnhanced.CONSTANTS.PIN_COLORS_BY_NAME = {
 
 
 
-
+MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR = tonumber("9.9") and "," or "."
 
 
 MapPinEnhanced.CONSTANTS.MENU_COLOR_BUTTON_PATTERN =

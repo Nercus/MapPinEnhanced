@@ -1,4 +1,7 @@
 -- Template: file://./input.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedInputMixin : EditBox, PropagateMouseMotion
 ---@field isDecimal boolean
 ---@onChangeCallback function
@@ -12,7 +15,8 @@ MapPinEnhancedInputMixin = {}
 
 
 
-local seperator = GetLocale() == "deDE" and "," or "."
+
+local seperator = MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR
 
 function MapPinEnhancedInputMixin:OnChar()
     if not self.isDecimal then return end
