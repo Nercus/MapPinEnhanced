@@ -15,8 +15,8 @@ MapPinEnhancedInputMixin = {}
 
 
 
-
-local seperator = MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR
+local CONSTANTS = MapPinEnhanced.CONSTANTS
+local seperator = CONSTANTS.DECIMAL_SEPARATOR
 
 function MapPinEnhancedInputMixin:OnChar()
     if not self.isDecimal then return end
