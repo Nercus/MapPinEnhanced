@@ -128,7 +128,6 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
         self.header.exportButton:Hide()
         self.header.createSetButton:Show()
         self.header.importButton:Show()
-
         self.pinListHeader:Hide()
         self.scrollFrame:Hide()
         self.infoText:Show()
