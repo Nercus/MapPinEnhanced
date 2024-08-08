@@ -19,7 +19,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field headerTexture Texture
 
 
----@alias TrackerView 'Pins' | 'Sets'
+---@alias TrackerView 'Pins' | 'Sets' | 'Import'
 
 ---@class MapPinEnhancedTrackerFrameMixin : Frame
 ---@field entries table<number, MapPinEnhancedTrackerSetEntryMixin> | table<number, MapPinEnhancedTrackerPinEntryMixin>
@@ -89,10 +89,17 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         if not self.importButton then
             self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedTrackerTextImportButtonTemplate")
+                "MapPinEnhancedButtonYellowTemplate")
+            self.importButton:SetText("Import")
+            self.importButton:SetScript("OnClick", function()
+                self:SetActiveView("Import")
+            end)
+            self.importButton:SetPropagateMouseMotion(true)
+            table.insert(self.entries, self.importButton)
+        else
+            table.insert(self.entries, self.importButton)
         end
-        local sets = SetManager:GetSets() ---@type table<string, SetObject | MapPinEnhancedTrackerTextImportButtonMixin>
-        table.insert(self.entries, self.importButton)
+        local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
         --MapPinEnhanced.SetManager:GetAllSetEntries()
         for _, set in pairs(sets) do
             table.insert(self.entries, set.TrackerSetEntry)
@@ -101,6 +108,36 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
             if self.activeView ~= "Sets" then return end
             self:SetActiveView(self.activeView, true)
         end)
+    elseif viewType == "Import" then
+        if not self.importButton then
+            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
+                "MapPinEnhancedButtonYellowTemplate")
+            self.importButton:SetText("Import")
+            self.importButton:SetScript("OnClick", function()
+                self:SetActiveView("Import")
+            end)
+            self.importButton:SetPropagateMouseMotion(true)
+            table.insert(self.entries, self.importButton)
+        else
+            table.insert(self.entries, self.importButton)
+        end
+        -- TODO: implement import view
+        -- take the max height from the set option and create two entry elements
+        -- 1. a text box for the import string and scroll frame
+        -- 2. a button to import the string
+        -- 3. a button to cancel and go back to sets
+        if not self.cancelButton then
+            self.cancelButton = CreateFrame("Button", nil, self.scrollFrame.Child,
+                "MapPinEnhancedButtonRedTemplate")
+            self.cancelButton:SetText("Cancel")
+            self.cancelButton:SetScript("OnClick", function()
+                self:SetActiveView("Sets")
+            end)
+            self.cancelButton:SetPropagateMouseMotion(true)
+            table.insert(self.entries, self.cancelButton)
+        else
+            table.insert(self.entries, self.cancelButton)
+        end
     end
     self.activeView = viewType
     self:UpdateEntriesPosition()
