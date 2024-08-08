@@ -32,9 +32,42 @@ MapPinEnhanced.CONSTANTS.PIN_COLORS_BY_NAME = {
 
 
 
-MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR = tonumber("9.9") and "," or "."
+MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "," or "."
 
 
 MapPinEnhanced.CONSTANTS.MENU_COLOR_BUTTON_PATTERN =
 "|TInterface\\AddOns\\MapPinEnhanced\\assets\\MPHColourPicker_Body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 MapPinEnhanced.CONSTANTS.MENU_TITLE_PATTERN = "|%s%s:20:20|%s %s"
+
+
+---@type table<number, string>
+MapPinEnhanced.CONSTANTS.MAPID_SUFFIXES = {
+    [195] = "1",                                -- Kaja'mine
+    [196] = "2",                                -- Kaja'mine
+    [197] = "3",                                -- Kaja'mine
+    [579] = "1",                                -- Lunarfall Excavation
+    [580] = "2",                                -- Lunarfall Excavation
+    [581] = "3",                                -- Lunarfall Excavation
+    [585] = "1",                                -- Frostwall Minem
+    [586] = "2",                                -- Frostwall Mine
+    [587] = "3",                                -- Frostwall Mine
+    [943] = FACTION_HORDE --[[@as string]],     -- Arathi Highlands Horde
+    [1044] = FACTION_ALLIANCE --[[@as string]], -- Arathi Highlands Alliance
+}
+
+---@type table<number, Enum.UIMapType>
+MapPinEnhanced.CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
+    [101] = Enum.UIMapType.World,  -- Outland
+    [125] = Enum.UIMapType.Zone,   -- Dalaran
+    [126] = Enum.UIMapType.Micro,
+    [501] = Enum.UIMapType.Zone,   -- Dalaran
+    [502] = Enum.UIMapType.Micro,
+    [572] = Enum.UIMapType.World,  -- Draenor
+    [582] = Enum.UIMapType.Zone,   -- Lunarfall
+    [590] = Enum.UIMapType.Zone,   -- Frostwall
+    [625] = Enum.UIMapType.Orphan, -- Dalaran
+    [626] = Enum.UIMapType.Micro,  -- Dalaran
+    [627] = Enum.UIMapType.Zone,
+    [628] = Enum.UIMapType.Micro,
+    [629] = Enum.UIMapType.Micro,
+}
