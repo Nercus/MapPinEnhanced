@@ -57,7 +57,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     local cleanedValue = value
     if key == 'mapID' then
         cleanedValue = tonumber(value)
-    elseif key == 'x' or key == 'y' then
+    elseif (key == 'x' or key == 'y') and value ~= "" then
         cleanedValue = tonumber(value) / 100
     end
 

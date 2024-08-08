@@ -36,6 +36,7 @@
                 self.Right:SetSize(height / 2.5, height)
                 self.Middle:SetSize(height / 2.5, height)
             </OnLoad>
+            <OnChar method="OnChar" />
         </Scripts>
     </EditBox>
 </Ui>

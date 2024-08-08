@@ -202,4 +202,30 @@ C_Timer.After(1, function()
     })
     MapPinEnhanced:ToggleEditorWindow()
     MapPinEnhanced.editorWindow:SetActiveView("optionView")
+
+
+    -- local HBDData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
+    -- MapPinEnhanced:DeleteVar("HBDData")
+
+
+
+
+
+    -- local btn = CreateFrame("Button", "MapPinEnhancedTestButton", UIParent, "MapPinEnhancedButtonRedTemplate")
+    -- btn:SetText("Test Button")
+    -- btn:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    -- btn:SetSize(200, 50)
+    -- btn:SetScript("OnClick", function()
+    --     MenuUtil.CreateContextMenu(btn, function(owner, rootDescription)
+    --         rootDescription:CreateTitle("My Title");
+    --         local testEditbox = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate");
+    --         testEditbox:AddInitializer(function(frame, elementDescription, menu)
+    --             MapPinEnhanced:Debug({
+    --                 frame = frame,
+    --                 elementDescription = elementDescription,
+    --                 menu = menu
+    --             })
+    --         end);
+    --     end);
+    -- end)
 end)
