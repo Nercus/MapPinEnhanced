@@ -39,7 +39,7 @@
                 </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture
+                <Texture parentKey="highlight"
                     atlas="128-GoldRedButton-Highlight">
                     <Size x="1" y="1" />
                     <Anchors>
@@ -66,6 +66,18 @@
                 self.right:SetSize(height, height)
                 self.middle:SetHeight(height)
             </OnSizeChanged>
+            <OnDisable>
+                self.left:SetDesaturated(true)
+                self.right:SetDesaturated(true)
+                self.middle:SetDesaturated(true)
+                self.highlight:SetAlpha(0)
+            </OnDisable>
+            <OnEnable>
+                self.left:SetDesaturated(false)
+                self.right:SetDesaturated(false)
+                self.middle:SetDesaturated(false)
+                self.highlight:SetAlpha(1)
+            </OnEnable>
         </Scripts>
         <NormalFont style="MPHGameFontNormalBlack" />
     </Button>
