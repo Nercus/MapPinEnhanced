@@ -79,10 +79,34 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self.title:SetScript("OnTextChanged", function()
         self:OnChange('title', self.title:GetText())
     end)
-    -- TODO: implement pinOptions dropdown
-    -- self.pinOptions:SetScript("OnValueChanged", function()
-    --     self:OnChange()
-    -- end)
+end
+
+function MapPinEnhancedSetEditorPinEntryMixin:OpenPinOptionsMenu()
+    ---@type SelectOptions
+    local selectOptions = {
+        default = self.Pin.pinData.color,
+        init = self.Pin.pinData.color,
+        onChange = function(value)
+            -- TODO: implement pinOptions dropdown
+            -- self.pinOptions:SetScript("OnValueChanged", function()
+            --     self:OnChange()
+            -- end)
+            print(value)
+        end,
+        options = {
+            {
+                label = "Is persistent",
+                value = "persistent",
+                type = "checkbox"
+            },
+            {
+                label = "Is tracked",
+                value = "tracked",
+                type = "checkbox"
+            }
+        }
+    }
+    self.pinOptions:Setup(selectOptions)
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenColorMenu()

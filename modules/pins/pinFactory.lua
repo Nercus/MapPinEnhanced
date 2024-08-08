@@ -22,10 +22,11 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field x number x coordinate between 0 and 1
 ---@field y number y coordinate between 0 and 1
 ---@field setTracked boolean? set to true to autotrack this pin on creation
----@field title string?
----@field texture string?
----@field usesAtlas boolean?
----@field color string?
+---@field title string? title of the pin
+---@field texture string? an optional texture to use for the pin this will override the color
+---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
+---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
+---@field persistent boolean? if true, the pin will be not be removed automatically when it has been reached
 
 
 -- TODO: add a way to order the pins in a specific order -> should be consistent for newly created pins and for pins in a set.
