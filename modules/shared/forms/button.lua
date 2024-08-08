@@ -1,4 +1,7 @@
 -- Template: file://./button.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedButtonMixin : Button, PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field left Texture
@@ -30,7 +33,8 @@ end
 
 function MapPinEnhancedButtonMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = callback
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.5)
+    -- TODO: implement the debounce on all other elements aswell
 end
 
 ---@param optionData OptionButtonTyped | ButtonOptions
@@ -40,8 +44,8 @@ function MapPinEnhancedButtonMixin:Setup(optionData)
     self:SetDisabled(optionData.disabledState)
     if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetCallback(optionData.onChange)
-    self:SetScript("OnClick", function()
+    self:SetScript("OnClick", function(_, button, down)
         if not self.onChangeCallback then return end
-        self.onChangeCallback()
+        self.onChangeCallback(button, down)
     end)
 end

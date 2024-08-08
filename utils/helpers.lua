@@ -19,3 +19,17 @@ function MapPinEnhanced:GenerateUUID(prefix)
     end)
     return prefix and prefix .. '-' .. ans or ans
 end
+
+function MapPinEnhanced:DebounceChange(func, delay)
+    ---@type FunctionContainer?
+    local timer
+    return function(...)
+        local args = { ... }
+        if timer then
+            timer:Cancel()
+        end
+        timer = C_Timer.NewTimer(delay, function()
+            func(unpack(args))
+        end)
+    end
+end
