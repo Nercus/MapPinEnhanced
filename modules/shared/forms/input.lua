@@ -4,6 +4,14 @@
 ---@onChangeCallback function
 MapPinEnhancedInputMixin = {}
 
+
+---@class InputOptions
+---@field onChange fun(value: string)
+---@field init? string -- initial value can be nil if option has never been set before
+---@field default string
+
+
+
 local seperator = GetLocale() == "deDE" and "," or "."
 
 function MapPinEnhancedInputMixin:OnChar()
@@ -36,7 +44,7 @@ function MapPinEnhancedInputMixin:SetDisabled(disabled)
     end
 end
 
----@param optionData OptionObjectVariantsTyped
+---@param optionData OptionObjectVariantsTyped | InputOptions
 function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
     local init = optionData.init --[[@as string]]

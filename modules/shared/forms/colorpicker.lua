@@ -8,12 +8,18 @@
 ---@field color Texture
 MapPinEnhancedColorpickerMixin = {}
 
-
 ---@class Color
 ---@field r number
 ---@field g number
 ---@field b number
 ---@field a number?
+
+
+
+---@class ColorPickerOptions
+---@field onChange fun(value: Color)
+---@field init? Color -- initial value can be nil if option has never been set before
+---@field default Color
 
 
 local ColorPickerFrame = ColorPickerFrame
@@ -66,7 +72,7 @@ function MapPinEnhancedColorpickerMixin:SetCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param optionData OptionObjectVariantsTyped
+---@param optionData OptionObjectVariantsTyped | ColorPickerOptions
 function MapPinEnhancedColorpickerMixin:Setup(optionData)
     self.onChangeCallback = nil
     self.r = nil

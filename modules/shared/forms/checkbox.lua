@@ -3,6 +3,10 @@
 ---@onChangeCallback function
 MapPinEnhancedCheckboxMixin = {}
 
+---@class CheckboxOptions
+---@field onChange fun(value: boolean)
+---@field init? boolean -- initial value can be nil if option has never been set before
+---@field default boolean
 
 function MapPinEnhancedCheckboxMixin:SetDisabled(disabled)
     if disabled then
@@ -19,7 +23,7 @@ function MapPinEnhancedCheckboxMixin:SetCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param optionData OptionCheckboxTyped
+---@param optionData OptionCheckboxTyped | CheckboxOptions
 function MapPinEnhancedCheckboxMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetChecked(optionData.init)

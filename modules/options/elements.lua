@@ -12,44 +12,12 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field descriptionImage string? reference to an image
 ---@field disabledState boolean?
 
----@class OptionButton : PlainOptionObject
----@field buttonLabel string
----@field onChange fun(value: mouseButton, down: boolean)
-
----@class OptionCheckbox : PlainOptionObject
----@field onChange fun(value: boolean)
----@field init? boolean -- initial value can be nil if option has never been set before
----@field default boolean
-
----@class OptionColorpicker : PlainOptionObject
----@field onChange fun(value: Color)
----@field init? Color -- initial value can be nil if option has never been set before
----@field default Color
-
----@class OptionInput : PlainOptionObject
----@field onChange fun(value: string)
----@field init? string -- initial value can be nil if option has never been set before
----@field default string
-
-
----@class SelectOptionEntry
----@field label string
----@field value string | number | ColorPickerInfo
----@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer"
-
----@class OptionSelect : PlainOptionObject
----@field onChange fun(value: string)
----@field init? string | number -- initial value can be nil if option has never been set before
----@field default string | number
----@field options SelectOptionEntry[]
-
----@class OptionSlider : PlainOptionObject
----@field onChange fun(value: number)
----@field init? number -- initial value can be nil if option has never been set before
----@field default number
----@field min number
----@field max number
----@field step number
+---@class OptionButton : PlainOptionObject,ButtonOptions
+---@class OptionCheckbox : PlainOptionObject,CheckboxOptions
+---@class OptionColorpicker : PlainOptionObject,ColorPickerOptions
+---@class OptionInput : PlainOptionObject,InputOptions
+---@class OptionSelect : PlainOptionObject,SelectOptions
+---@class OptionSlider : PlainOptionObject,SliderOptions
 
 ---@alias OptionObjectVariants OptionButton | OptionCheckbox | OptionColorpicker | OptionInput | OptionSelect | OptionSlider
 

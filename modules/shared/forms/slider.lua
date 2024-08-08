@@ -6,9 +6,13 @@
 ---@field Forward Button
 MapPinEnhancedSliderMixin = {}
 
-
----@class MapPinEnhanced
-local MapPinEnhanced = select(2, ...)
+---@class SliderOptions
+---@field onChange fun(value: number)
+---@field init? number -- initial value can be nil if option has never been set before
+---@field default number
+---@field min number
+---@field max number
+---@field step number
 
 function MapPinEnhancedSliderMixin:SetCallback(callback)
     assert(type(callback) == "function")
@@ -46,7 +50,7 @@ function MapPinEnhancedSliderMixin:SetDisabled(disabled)
     end
 end
 
----@param optionData OptionObjectVariantsTyped
+---@param optionData OptionObjectVariantsTyped | SliderOptions
 function MapPinEnhancedSliderMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetValueStep(optionData.step or 1)

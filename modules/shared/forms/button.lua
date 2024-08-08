@@ -7,6 +7,10 @@
 MapPinEnhancedButtonMixin = {}
 
 
+---@class ButtonOptions
+---@field buttonLabel string
+---@field onChange fun(value: mouseButton, down: boolean)
+
 ---@param disabled boolean
 function MapPinEnhancedButtonMixin:SetDisabled(disabled)
     if disabled then
@@ -29,7 +33,7 @@ function MapPinEnhancedButtonMixin:SetCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param optionData OptionButtonTyped
+---@param optionData OptionButtonTyped | ButtonOptions
 function MapPinEnhancedButtonMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetText(optionData.buttonLabel)

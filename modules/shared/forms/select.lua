@@ -4,6 +4,19 @@
 ---@field Dropdown DropdownButton
 MapPinEnhancedSelectMixin = {}
 
+
+---@class SelectOptionEntry
+---@field label string
+---@field value string | number | ColorPickerInfo
+---@field type "button" | "title" | "checkbox" | "radio" | "divider" | "spacer"
+
+---@class SelectOptions
+---@field onChange fun(value: string)
+---@field init? string | number -- initial value can be nil if option has never been set before
+---@field default string | number
+---@field options SelectOptionEntry[]
+
+
 function MapPinEnhancedSelectMixin:SetCallback(callback)
     assert(type(callback) == "function")
     self.onChangeCallback = callback
@@ -20,7 +33,7 @@ function MapPinEnhancedSelectMixin:SetDisabled(disabled)
     end
 end
 
----@param optionData OptionObjectVariantsTyped
+---@param optionData OptionObjectVariantsTyped | SelectOptions
 function MapPinEnhancedSelectMixin:Setup(optionData)
     self.currentValue = optionData.init
     local function IsSelected(index)
