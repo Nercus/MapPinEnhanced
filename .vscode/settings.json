@@ -37,7 +37,9 @@
         "utf8": "disable"
     },
     "Lua.diagnostics.globals": [
-        "MapPinEnhancedDB"
+        "MapPinEnhancedDB",
+        "FACTION_HORDE",
+        "FACTION_ALLIANCE"
     ],
     "Lua.workspace.ignoreDir": [
         ".github",
