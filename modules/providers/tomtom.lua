@@ -11,10 +11,106 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 
 
--- local HBDmapData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
 -- TODO: add a wrapper to parse tomtom pin info
 -- TODO: add fake tomtom function and namespace for compatibility with other addons
 
+local TEST_STRINGS = {
+    "/way #114 33,5 58,3 Ceremonial Spear",
+    "/way Nazmir 51 59 1st clue",
+    "/way 26.6, 53.9 on top of Fangli Hoot's head",
+    "/way 9.97 56.5 on the bottom of a bookshelf in the Little Scales Daycare",
+    "/way 39.8,64.4 ontop of a barrel to the right of the Jewelcrafting crafting station",
+    "/way 29,2 62,7 near the Skinning banner in the Artisan's Market",
+    "/way 44,2  58,4 above the entrance arch of the Auction House",
+    "/way 38, 49 on the ground to the right of the Blacksmith building, behind an Obsidian Guardian",
+    "/way 55,43 at the entrance of the Seat of the Aspects - After the stairs, by the first bonfire to the left",
+    "/way 46. 32 by a waterfall near the Inn",
+    "/way 47, 32.1 under the bridge near the Inn",
+    "/way 47.5, 32 in the cellar of the Inn",
+}
+
+local decimal_separator = tonumber("0.5") == 0 and "," or "."
+local inverse_decimal_separator = decimal_separator == "," and "." or ","
+local slashString1 = "/way"
+local slashString2 = "/mph"
+
+local function trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+local function ConvertImportMapString(mapString)
+    -- if first character is a # remove it and return to number
+    if mapString:sub(1, 1) == "#" then
+        return tonumber(mapString:sub(2))
+    end
+    -- TODO: check localized map names
+    return 1
+end
+
+
+local function parseMsg(msg)
+    -- remove the slashString from the message
+    msg = msg:gsub(slashString1, ""):gsub(slashString2, "")
+    msg = trim(msg)
+    -- split msg into tokens on whitespace
+    local tokens = {}
+    for token in string.gmatch(msg, "%S+") do
+        -- check if the last character in a token is either a . or a , and if so remove it
+        if string.find(token, "[%.%,]$") then
+            token = token:sub(1, -2)
+        end
+        table.insert(tokens, token)
+    end
+
+    local titleTokens = {}
+    -- iterate reverse over tokens to find the first number
+    for idx = #tokens, 1, -1 do
+        -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
+        if tonumber(tokens[idx]) or string.find(tokens[idx], "%d" .. decimal_separator .. "%d") then
+            break
+        else
+            table.insert(titleTokens, 1, tokens[idx])
+            table.remove(tokens, idx)
+        end
+    end
+    local title = table.concat(titleTokens, " ")
+
+    -- if length is small than 3 try to split the last element on ","
+    if #tokens < 2 then
+        local last = tokens[#tokens]
+        local split = { string.match(last, "(.-),(.+)") }
+        if #split == 2 then
+            table.remove(tokens, #tokens)
+            table.insert(tokens, split[1])
+            table.insert(tokens, split[2])
+        end
+    end
+
+    local mapID
+    local coords = {}
+
+    for idx, token in ipairs(tokens) do
+        -- replace all wrong decimal separators with the right one
+        token = token:gsub(inverse_decimal_separator, decimal_separator)
+        -- if element is not a number its the mapID/zoneName
+        if not tonumber(token) then
+            mapID = ConvertImportMapString(token)
+        else
+            table.insert(coords, token)
+        end
+    end
+
+    return title, mapID, coords
+end
+
+for _, msg in ipairs(TEST_STRINGS) do
+    print(msg)
+    parseMsg(msg)
+    print("---------------------")
+end
+
+
+-- local HBDmapData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
 -- MapPinEnhanced:Debug(HBDmapData)
 -- for i, j in ipairs(HBDmapData) do
 --     print(i)
@@ -210,11 +306,9 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 --         if #matches > 1 and #matches < 7 then
 --             local msg = string.format("Found multiple matches for zone '%s'.  Did you mean: %s", zone,
 --                 table.concat(matches, ", "))
---             ChatFrame1:AddMessage(msg)
 --             return
 --         elseif #matches == 0 then
 --             local msg = string.format("Could not find any matches for zone %s.", zone)
---             ChatFrame1:AddMessage(msg)
 --             return
 --         end
 
@@ -250,7 +344,7 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 --         x = tonumber(x)
 --         y = tonumber(y)
 
---         smapid = HBD:GetPlayerZone()
+--         smapid = MapPinEnhanced.HBD:GetPlayerZone()
 --         sx, sy = unpack(tokens)
 --         if sx and sy and smapid then
 --             sx, sy = tonumber(sx) / 100, tonumber(sy) / 100
