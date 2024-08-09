@@ -42,7 +42,7 @@
                 </Anchors>
                 <Frames>
                     <!-- TODO: Use menu instead with continents > zones > subzones and override
-                    mapid input field -->
+                    mapid input field: use https://wowpedia.fandom.com/wiki/API_C_Map.GetMapChildrenInfo-->
                     <Button parentKey="mapSelection" hidden="true">
                         <Size x="15" y="15" />
                         <NormalTexture atlas="poi-islands-table" setAllPoints="true" alpha="0.8" />
