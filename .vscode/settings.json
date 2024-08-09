@@ -58,6 +58,6 @@
         "global": "Error"
     },
     "Lua.workspace.library": [
-        "$USERPROFILE\\.vscode\\extensions\\ketho.wow-api-0.15.8\\Annotations"
+        "$USERPROFILE\\.vscode\\extensions\\ketho.wow-api-0.15.9\\Annotations"
     ],
 }
