@@ -37,7 +37,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field pinID UUID
 ---@field worldmapPin MapPinEnhancedWorldMapPinMixin
 ---@field minimapPin MapPinEnhancedMinimapPinMixin
----@field TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
+---@field trackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 ---@field pinData pinData
 ---@field Track fun()
 ---@field Untrack fun()
@@ -54,8 +54,8 @@ function PinFactory:CreatePin(initPinData, pinID)
     ---@cast worldmapPin MapPinEnhancedWorldMapPinMixin
     local minimapPin = MinimapPool:Acquire()
     ---@cast minimapPin MapPinEnhancedMinimapPinMixin
-    local TrackerPinEntry = TrackerPinEntryPool:Acquire()
-    ---@cast TrackerPinEntry MapPinEnhancedTrackerPinEntryMixin
+    local trackerPinEntry = TrackerPinEntryPool:Acquire()
+    ---@cast trackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 
 
     local pinData = initPinData
@@ -63,7 +63,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     worldmapPin:Setup(pinData)
     minimapPin:Setup(pinData)
-    TrackerPinEntry:Setup(pinData)
+    trackerPinEntry:Setup(pinData)
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
@@ -81,7 +81,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         end
         worldmapPin:SetTrackedTexture()
         minimapPin:SetTrackedTexture()
-        TrackerPinEntry:SetTrackedTexture()
+        trackerPinEntry:SetTrackedTexture()
         MapPinEnhanced:SetSuperTrackedPin(GetPinData())
         isTracked = true
     end
@@ -92,7 +92,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         end
         worldmapPin:SetUntrackedTexture()
         minimapPin:SetUntrackedTexture()
-        TrackerPinEntry:SetUntrackedTexture()
+        trackerPinEntry:SetUntrackedTexture()
         isTracked = false
     end
 
@@ -109,15 +109,15 @@ function PinFactory:CreatePin(initPinData, pinID)
     local function SetColor(color)
         worldmapPin:SetPinColor(color)
         minimapPin:SetPinColor(color)
-        TrackerPinEntry:SetPinColor(color)
+        trackerPinEntry:SetPinColor(color)
         if (isTracked) then
             worldmapPin:SetTrackedTexture()
             minimapPin:SetTrackedTexture()
-            TrackerPinEntry:SetTrackedTexture()
+            trackerPinEntry:SetTrackedTexture()
         else
             worldmapPin:SetUntrackedTexture()
             minimapPin:SetUntrackedTexture()
-            TrackerPinEntry:SetUntrackedTexture()
+            trackerPinEntry:SetUntrackedTexture()
         end
         pinData.color = color
         PinManager:PersistPins()
@@ -127,11 +127,11 @@ function PinFactory:CreatePin(initPinData, pinID)
     if (isTracked) then
         worldmapPin:SetTrackedTexture()
         minimapPin:SetTrackedTexture()
-        TrackerPinEntry:SetTrackedTexture()
+        trackerPinEntry:SetTrackedTexture()
     else
         worldmapPin:SetUntrackedTexture()
         minimapPin:SetUntrackedTexture()
-        TrackerPinEntry:SetUntrackedTexture()
+        trackerPinEntry:SetUntrackedTexture()
     end
 
 
@@ -149,16 +149,16 @@ function PinFactory:CreatePin(initPinData, pinID)
             C_Map.ClearUserWaypoint()
         end
         if MapPinEnhanced.pinTracker and MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-            MapPinEnhanced.pinTracker:RemoveEntry(TrackerPinEntry)
+            MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
         end
         worldmapPin:Hide()
         minimapPin:Hide()
-        TrackerPinEntry:Hide()
+        trackerPinEntry:Hide()
         HBDP:RemoveMinimapIcon(MapPinEnhanced, minimapPin)
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, worldmapPin)
         WorldmapPool:Release(worldmapPin)
         MinimapPool:Release(minimapPin)
-        TrackerPinEntryPool:Release(TrackerPinEntry)
+        TrackerPinEntryPool:Release(trackerPinEntry)
     end
 
 
@@ -166,7 +166,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         pinData.title = text
         worldmapPin:SetTitle(text)
         minimapPin:SetTitle(text)
-        TrackerPinEntry:SetTitle(text)
+        trackerPinEntry:SetTitle(text)
         PinManager:PersistPins()
     end
 
@@ -259,14 +259,14 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
-    TrackerPinEntry:SetScript("OnMouseDown", HandleClicks)
+    trackerPinEntry:SetScript("OnMouseDown", HandleClicks)
 
 
     return {
         pinID = pinID,
         worldmapPin = worldmapPin,
         minimapPin = minimapPin,
-        TrackerPinEntry = TrackerPinEntry,
+        trackerPinEntry = trackerPinEntry,
         pinData = pinData,
         Track = Track,
         Untrack = Untrack,

@@ -24,7 +24,7 @@ local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@field Delete fun()
 ---@field GetPins fun():table<string, pinData>
 ---@field GetPin fun(self, mapID:string, x:number, y:number):pinData
----@field TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
+---@field trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 ---@field SetEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
 ---Create a new set
@@ -32,14 +32,14 @@ local SetEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@param id UUID
 ---@return SetObject
 function SetFactory:CreateSet(name, id)
-    local TrackerSetEntry = TrackerSetEntryPool:Acquire()
-    ---@cast TrackerSetEntry MapPinEnhancedTrackerSetEntryMixin
+    local trackerSetEntry = TrackerSetEntryPool:Acquire()
+    ---@cast trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 
-    local SetEditorEntry = SetEditorEntryPool:Acquire()
-    ---@cast SetEditorEntry MapPinEnhancedTrackerSetEntryMixin
+    local setEditorEntry = SetEditorEntryPool:Acquire()
+    ---@cast setEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
-    TrackerSetEntry:SetTitle(name)
-    SetEditorEntry:SetTitle(name)
+    trackerSetEntry:SetTitle(name)
+    setEditorEntry:SetTitle(name)
 
     local setID = id
 
@@ -113,8 +113,8 @@ function SetFactory:CreateSet(name, id)
         for setpinID, _ in pairs(pins) do
             pins[setpinID] = nil
         end
-        TrackerSetEntryPool:Release(TrackerSetEntry)
-        SetEditorEntryPool:Release(SetEditorEntry)
+        TrackerSetEntryPool:Release(trackerSetEntry)
+        SetEditorEntryPool:Release(setEditorEntry)
     end
 
 
@@ -137,11 +137,11 @@ function SetFactory:CreateSet(name, id)
     end
 
     local function SetName(_, newName)
-        TrackerSetEntry:SetTitle(newName)
-        SetEditorEntry:SetTitle(newName)
+        trackerSetEntry:SetTitle(newName)
+        setEditorEntry:SetTitle(newName)
     end
 
-    TrackerSetEntry:SetScript("OnClick", function()
+    trackerSetEntry:SetScript("OnClick", function()
         LoadSet(IsShiftKeyDown())
     end)
 
@@ -156,7 +156,7 @@ function SetFactory:CreateSet(name, id)
         GetPinByID = GetPinByID,
         GetPins = GetPins,
         Delete = Delete,
-        TrackerSetEntry = TrackerSetEntry,
-        SetEditorEntry = SetEditorEntry
+        trackerSetEntry = trackerSetEntry,
+        setEditorEntry = setEditorEntry
     }
 end
