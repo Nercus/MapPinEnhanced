@@ -223,12 +223,21 @@ C_Timer.After(1, function()
     btn:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     btn:SetSize(200, 50)
     btn:SetScript("OnClick", function()
-        MenuUtil.CreateContextMenu(btn, function(owner, rootDescription)
+        MenuUtil.CreateContextMenu(btn, function(owner, rootDescription, a, b, c)
             rootDescription:CreateTitle("Care! Work in progress")
             local function CreateSubMenu(menu, children)
+                local existingZoneNames = {}
                 for _, child in ipairs(children) do
                     if C_Map.CanSetUserWaypointOnMap(child.mapID) then
-                        local sub = menu:CreateButton(child.name)
+                        local mapName = child.name
+                        if existingZoneNames[mapName] then
+                            mapName = mapName .. " (" .. (existingZoneNames[mapName] + 1) .. ")"
+                        end
+                        local sub = menu:CreateButton(mapName, function()
+                            print("Clicked", child.mapID)
+                            -- TODO: properly close all menus
+                        end)
+                        existingZoneNames[child.name] = (existingZoneNames[child.name] or 0) + 1
                         local children = C_Map.GetMapChildrenInfo(child.mapID)
                         if children then
                             CreateSubMenu(sub, children)
@@ -237,8 +246,17 @@ C_Timer.After(1, function()
                 end
             end
 
+            local existingZoneNames = {}
             for _, continent in ipairs(continents) do
-                local sub = rootDescription:CreateButton(continent[1].name)
+                local mapName = continent[1].name
+                if existingZoneNames[mapName] then
+                    mapName = mapName .. " (" .. existingZoneNames[mapName] + 1 .. ")"
+                end
+                local sub = rootDescription:CreateButton(mapName, function()
+                    print("Clicked", continent[2])
+                    -- TODO: properly close all menus
+                end)
+                existingZoneNames[continent[1].name] = (existingZoneNames[mapName] or 0) + 1
                 local children = C_Map.GetMapChildrenInfo(continent[2])
                 if children then
                     CreateSubMenu(sub, children)
