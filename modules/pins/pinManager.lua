@@ -31,6 +31,7 @@ function PinManager:GetPins()
 end
 
 function PinManager:GetPinByID(pinID)
+    -- TODO: change it to index based
     return self.Pins[pinID]
 end
 
