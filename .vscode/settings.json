@@ -15,7 +15,7 @@
         "titleBar.inactiveForeground": "#15202b99"
     },
     "peacock.color": "#EBCB8B",
-    "wowAPI.autoAddGlobals": false,
+    "wowAPI.luals.defineKnownGlobals": false,
     "Lua.completion.autoRequire": false,
     "explorer.sortOrder": "default",
     "explorer.fileNesting.enabled": true,
@@ -58,6 +58,6 @@
         "global": "Error"
     },
     "Lua.workspace.library": [
-        "$USERPROFILE\\.vscode\\extensions\\ketho.wow-api-0.15.7\\Annotations"
+        "$USERPROFILE\\.vscode\\extensions\\ketho.wow-api-0.15.8\\Annotations"
     ],
 }

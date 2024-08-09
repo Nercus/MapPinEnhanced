@@ -37,7 +37,6 @@ MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "," or "."
 
 MapPinEnhanced.CONSTANTS.MENU_COLOR_BUTTON_PATTERN =
 "|TInterface\\AddOns\\MapPinEnhanced\\assets\\MPHColourPicker_Body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
-MapPinEnhanced.CONSTANTS.MENU_TITLE_PATTERN = "|%s%s:20:20|%s %s"
 
 
 ---@type table<number, string>

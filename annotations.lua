@@ -175,6 +175,11 @@ function SubMenuUtil:CreateDivider() end
 
 function SubMenuUtil:CreateSpacer() end
 
+---@class BaseMenuDescriptionMixin
+BaseMenuDescriptionMixin = {}
+
+function BaseMenuDescriptionMixin:AddInitializer(initializer, index) end
+
 ---@type table<string, table>
 StaticPopupDialogs = {}
 ---@param dialogName string

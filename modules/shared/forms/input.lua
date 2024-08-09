@@ -48,7 +48,7 @@ function MapPinEnhancedInputMixin:SetDisabled(disabled)
     end
 end
 
----@param optionData OptionObjectVariantsTyped | InputOptions
+---@param optionData OptionInputTyped | InputOptions
 function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
     local init = optionData.init --[[@as string]]

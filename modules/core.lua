@@ -219,13 +219,7 @@ C_Timer.After(1, function()
     --     MenuUtil.CreateContextMenu(btn, function(owner, rootDescription)
     --         rootDescription:CreateTitle("My Title");
     --         local testEditbox = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate");
-    --         testEditbox:AddInitializer(function(frame, elementDescription, menu)
-    --             MapPinEnhanced:Debug({
-    --                 frame = frame,
-    --                 elementDescription = elementDescription,
-    --                 menu = menu
-    --             })
-    --         end);
+    --
     --     end);
     -- end)
 end)

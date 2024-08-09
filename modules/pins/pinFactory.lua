@@ -178,13 +178,19 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function CreateMenu(parentFrame)
-        -- TODO: change it to an edit box custom frame to change the pin title in here
-        local titleString = string.format(CONSTANTS.MENU_TITLE_PATTERN,
-            pinData.usesAtlas and "A:" or "T", pinData.texture or worldmapPin.texture:GetTexture(),
-            pinData.usesAtlas and "a" or "t", pinData.title or "Map Pin")
-
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
-            rootDescription:CreateTitle(titleString)
+            ---@type BaseMenuDescriptionMixin
+            local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate");
+            titleElementDescription:AddInitializer(function(frame, elementDescription, menu)
+                ---@cast frame MapPinEnhancedInputMixin
+                frame:Setup({
+                    default = pinData.title or "Map Pin",
+                    init = pinData.title or "Map Pin",
+                    onChange = function(value)
+                        ChangeTitle(value)
+                    end
+                })
+            end);
             rootDescription:CreateDivider()
             if pinData.color ~= "Custom" then
                 ---@type SubMenuUtil
