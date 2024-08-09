@@ -30,19 +30,19 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     if activeSet then -- there is currently an active set
         local set = SetEditorBody:GetActiveSetData()
         if not set then return end
-        set.SetEditorEntry:SetInactive()
+        set.setEditorEntry:SetInactive()
     end
     if setID == activeSet then -- if we click on the active set we want to close it
         local set = SetEditorBody:GetActiveSetData()
         if not set then return end
-        set.SetEditorEntry:SetInactive()
+        set.setEditorEntry:SetInactive()
         SetEditorBody:SetActiveEditorSet()
         return
     end
     SetEditorBody:SetActiveEditorSet(setID)
     local newSet = SetEditorBody:GetActiveSetData()
     if not newSet then return end
-    newSet.SetEditorEntry:SetActive()
+    newSet.setEditorEntry:SetActive()
 end
 
 ---@param a SetObject
@@ -79,7 +79,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
     end
     local lastFrame = nil
     for _, setObject in ipairs(sets) do
-        local setFrame = setObject.SetEditorEntry
+        local setFrame = setObject.setEditorEntry
         if not lastFrame then
             setFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -10)
         else
