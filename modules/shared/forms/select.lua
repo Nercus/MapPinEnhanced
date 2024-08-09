@@ -1,4 +1,7 @@
 -- Template: file://./select.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedSelectMixin : Button,PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field Dropdown DropdownButton
@@ -19,7 +22,7 @@ MapPinEnhancedSelectMixin = {}
 
 function MapPinEnhancedSelectMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = callback
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
 ---@param disabled boolean
@@ -37,7 +40,7 @@ end
 local MapPinEnhanced = select(2, ...)
 
 
----@param optionData OptionObjectVariantsTyped | SelectOptions
+---@param optionData OptionSelectTyped | SelectOptions
 function MapPinEnhancedSelectMixin:Setup(optionData)
     self.currentValue = optionData.init
     local function IsSelectedRadio(index)

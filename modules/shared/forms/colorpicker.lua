@@ -1,4 +1,8 @@
 -- Template: file://./colorpicker.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
+
 ---@class MapPinEnhancedColorpickerMixin : Button, PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field r number
@@ -69,10 +73,10 @@ end
 
 function MapPinEnhancedColorpickerMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = callback
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@param optionData OptionObjectVariantsTyped | ColorPickerOptions
+---@param optionData OptionColorpickerTyped | ColorPickerOptions
 function MapPinEnhancedColorpickerMixin:Setup(optionData)
     self.onChangeCallback = nil
     self.r = nil

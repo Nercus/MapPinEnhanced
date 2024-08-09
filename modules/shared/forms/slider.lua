@@ -54,7 +54,7 @@ function MapPinEnhancedSliderMixin:SetDisabled(disabled)
     end
 end
 
----@param optionData OptionObjectVariantsTyped | SliderOptions
+---@param optionData OptionSliderTyped | SliderOptions
 function MapPinEnhancedSliderMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetValueStep(optionData.step or 1)

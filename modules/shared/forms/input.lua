@@ -34,7 +34,7 @@ end
 
 function MapPinEnhancedInputMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = callback
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
 ---@param disabled boolean
