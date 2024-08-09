@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
+---@field zoneText FontString
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 
@@ -20,6 +21,13 @@ function MapPinEnhancedTrackerPinEntryMixin:OnLoad()
     end
     self.Pin:SetPropagateMouseClicks(true)
     self.Pin:SetPropagateMouseMotion(true)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetZoneText(mapID)
+    local mapInfo = C_Map.GetMapInfo(mapID)
+    if mapInfo then
+        self.zoneText:SetText(mapInfo.name)
+    end
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
@@ -33,6 +41,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
     self.Pin.titleXOffset = self.titleXOffset
     self.Pin.titleYOffset = self.titleYOffset
     self.Pin:Setup(pinData)
+    self:SetZoneText(pinData.mapID)
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
