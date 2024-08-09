@@ -8,10 +8,6 @@ local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 ---@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
--- TODO: finish provider
--- TODO: add fake tomtom function and namespace for compatibility with other addons
-
-
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 local decimal_separator = CONSTANTS.DECIMAL_SEPARATOR
@@ -49,10 +45,9 @@ for mapID in pairs(HBDmapData) do
         end
     end
 end
-MapPinEnhanced:Debug(ZONE_NAME_TO_ID)
 
-
-
+---@param mapString string
+---@return number?
 local function ConvertImportMapString(mapString)
     -- if first character is a # remove it and return to number
     if mapString:sub(1, 1) == "#" then
@@ -63,7 +58,9 @@ local function ConvertImportMapString(mapString)
 end
 
 
-function MapPinEnhanced:ParseWayStringToData(wayString)
+---@param wayString string
+---@return string, number?, number[]
+function PinProvider:ParseWayStringToData(wayString)
     -- remove the slashString from the message
     wayString = wayString:gsub(SLASH_PREFIX_1, ""):gsub(SLASH_PREFIX_2, ""):gsub(SLASH_PREFIX_3, "")
     wayString = trim(wayString)
@@ -118,4 +115,19 @@ function MapPinEnhanced:ParseWayStringToData(wayString)
         mapID = C_Map.GetBestMapForUnit("player")
     end
     return title, mapID, coords
+end
+
+function PinProvider:ImportFromWayString(wayString)
+    -- iterate over newlines
+    for line in wayString:gmatch("[^\r\n]+") do
+        local title, mapID, coords = self:ParseWayStringToData(line)
+        if title and mapID and coords then
+            PinManager:AddPin({
+                mapID = mapID,
+                x = coords[1],
+                y = coords[2],
+                title = title or "Imported Waypoint",
+            })
+        end
+    end
 end
