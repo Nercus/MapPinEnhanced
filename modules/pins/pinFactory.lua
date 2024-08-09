@@ -29,10 +29,6 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field persistent boolean? if true, the pin will be not be removed automatically when it has been reached
 
 
--- TODO: add a way to order the pins in a specific order -> should be consistent for newly created pins and for pins in a set.
----field order number? used to give the pin a specific order -> lower numbers are displayed first -> nil means no order
-
-
 ---@class PinObject
 ---@field pinID UUID
 ---@field worldmapPin MapPinEnhancedWorldMapPinMixin
