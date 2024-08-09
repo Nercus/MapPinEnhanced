@@ -26,7 +26,8 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedImportWindowMixin = {}
 
 
--- TODO: move the import window to a new view on the tracker window
+-- TODO: adjust the import window to be able to call it with /mph import and on the minimap button
+-- tracker has its own import view as the editor has as well
 
 function MapPinEnhancedImportWindowMixin:UpdateHelpTextVisibility()
     local text = self:GetText() --[[@as string]]
