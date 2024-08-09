@@ -204,22 +204,46 @@ C_Timer.After(1, function()
     MapPinEnhanced.editorWindow:SetActiveView("optionView")
 
 
-    -- local HBDData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
-    -- MapPinEnhanced:DeleteVar("HBDData")
+    local HBDData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
+    local sortedByMapType = {}
+    for mapID, mapData in pairs(HBDData) do
+        local mapType = mapData.mapType
+        if not sortedByMapType[mapType] then
+            sortedByMapType[mapType] = {}
+        end
+        if mapData.parent == 947 then
+            table.insert(sortedByMapType[mapType], { mapData, mapID })
+        end
+    end
+    local continents = sortedByMapType[Enum.UIMapType.Continent]
 
 
+    local btn = CreateFrame("Button", "MapPinEnhancedTestButton", UIParent, "MapPinEnhancedButtonRedTemplate")
+    btn:SetText("Test Button")
+    btn:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    btn:SetSize(200, 50)
+    btn:SetScript("OnClick", function()
+        MenuUtil.CreateContextMenu(btn, function(owner, rootDescription)
+            rootDescription:CreateTitle("Care! Work in progress")
+            local function CreateSubMenu(menu, children)
+                for _, child in ipairs(children) do
+                    if C_Map.CanSetUserWaypointOnMap(child.mapID) then
+                        local sub = menu:CreateButton(child.name)
+                        local children = C_Map.GetMapChildrenInfo(child.mapID)
+                        if children then
+                            CreateSubMenu(sub, children)
+                        end
+                    end
+                end
+            end
 
-
-
-    -- local btn = CreateFrame("Button", "MapPinEnhancedTestButton", UIParent, "MapPinEnhancedButtonRedTemplate")
-    -- btn:SetText("Test Button")
-    -- btn:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    -- btn:SetSize(200, 50)
-    -- btn:SetScript("OnClick", function()
-    --     MenuUtil.CreateContextMenu(btn, function(owner, rootDescription)
-    --         rootDescription:CreateTitle("My Title");
-    --         local testEditbox = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate");
-    --
-    --     end);
-    -- end)
+            for _, continent in ipairs(continents) do
+                local sub = rootDescription:CreateButton(continent[1].name)
+                local children = C_Map.GetMapChildrenInfo(continent[2])
+                if children then
+                    CreateSubMenu(sub, children)
+                end
+            end
+        end);
+    end)
 end)
