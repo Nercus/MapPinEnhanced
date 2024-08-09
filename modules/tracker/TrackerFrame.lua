@@ -82,7 +82,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         local pins = PinManager:GetPins()
         ---@type number
         for _, pin in pairs(pins) do
-            table.insert(self.entries, pin.TrackerPinEntry)
+            table.insert(self.entries, pin.trackerPinEntry)
         end
     elseif viewType == "Sets" then
         ---@class SetManager : Module
@@ -102,7 +102,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
         --MapPinEnhanced.SetManager:GetAllSetEntries()
         for _, set in pairs(sets) do
-            table.insert(self.entries, set.TrackerSetEntry)
+            table.insert(self.entries, set.trackerSetEntry)
         end
         MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
             if self.activeView ~= "Sets" then return end

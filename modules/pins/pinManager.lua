@@ -175,7 +175,7 @@ function PinManager:AddPin(pinData, restored)
         self:PersistPins()
     end
     if MapPinEnhanced.pinTracker and MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-        MapPinEnhanced.pinTracker:AddEntry(pinObject.TrackerPinEntry)
+        MapPinEnhanced.pinTracker:AddEntry(pinObject.trackerPinEntry)
     end
 end
 
