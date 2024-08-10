@@ -178,7 +178,51 @@ function SubMenuUtil:CreateSpacer() end
 ---@class BaseMenuDescriptionMixin
 BaseMenuDescriptionMixin = {}
 
+---@param initializer fun(frame: Frame, elementDescription: BaseMenuDescriptionMixin, menu: BaseMenuDescriptionMixin)
+---@param index number?
 function BaseMenuDescriptionMixin:AddInitializer(initializer, index) end
+
+---@param isRadio boolean
+function BaseMenuDescriptionMixin:SetRadio(isRadio) end
+
+---@return boolean
+function BaseMenuDescriptionMixin:IsSelected() end
+
+---@return boolean
+function BaseMenuDescriptionMixin:SetIsSelected() end
+
+function BaseMenuDescriptionMixin:SetSelectionIgnored() end
+
+---@param soundKit number
+function BaseMenuDescriptionMixin:SetSoundKit(soundKit) end
+
+---@param onEnter fun()
+function BaseMenuDescriptionMixin:SetOnEnter(onEnter) end
+
+---@param onLeave fun()
+function BaseMenuDescriptionMixin:SetOnLeave(onLeave) end
+
+---@param isEnabled boolean
+function BaseMenuDescriptionMixin:SetEnabled(isEnabled) end
+
+---@return boolean
+function BaseMenuDescriptionMixin:IsEnabled() end
+
+---@param data table
+function BaseMenuDescriptionMixin:SetData(data) end
+
+---@param callback fun(data:table,menuInputData:table, menu: BaseMenuDescriptionMixin):integer
+function BaseMenuDescriptionMixin:SetResponder(callback) end
+
+---@param response MenuResponse
+function BaseMenuDescriptionMixin:SetResponse(response) end
+
+---@param tooltip fun()
+function BaseMenuDescriptionMixin:SetTooltip(tooltip) end
+
+---@param inputContext integer
+---@param buttonName string
+function BaseMenuDescriptionMixin:Pick(inputContext, buttonName) end
 
 ---@type table<string, table>
 StaticPopupDialogs = {}
@@ -281,3 +325,42 @@ function ColorPickerFrame:SetupColorPickerAndShow(info) end
 
 ---@param mapID number
 function OpenWorldMap(mapID) end
+
+MenuConstants =
+{
+    VerticalLinearDirection = 1,
+    VerticalGridDirection = 2,
+    HorizontalGridDirection = 3,
+    AutoCalculateColumns = nil,
+    ElementPollFrequencySeconds = .2,
+    PrintSecure = false,
+};
+
+--[[
+Response values are optional returns from description handlers to inform the menu
+structure to remain open, reinitialize all the children, or only close the leafmost menu.
+It is common for menus with checkboxes or radio options to return Refresh in order for
+the children to visually update.
+--]]
+---@class MenuResponse
+MenuResponse =
+{
+    Open = 1,     -- Menu remains open and unchanged
+    Refresh = 2,  -- All frames in the menu are reinitialized
+    Close = 3,    -- Parent menus remain open but this menu closes
+    CloseAll = 4, -- All menus close
+};
+
+
+--[[
+Passed to element handlers to inform which input is responsible for invoking the element handler,
+which is relevant in some specialized use cases. See Blizzard_CharacterCustomize.lua.
+Can be used to
+]] --
+---@class MenuInputContext
+MenuInputContext =
+{
+    None = 1,
+    MouseButton = 2,
+    MouseWheel = 3,
+};

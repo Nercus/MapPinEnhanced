@@ -183,10 +183,10 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
-            ---@type BaseMenuDescriptionMixin
-            local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate");
+            local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             titleElementDescription:AddInitializer(function(frame, elementDescription, menu)
                 ---@cast frame MapPinEnhancedInputMixin
+                frame:SetSize(150, 24)
                 frame:Setup({
                     default = pinData.title or "Map Pin",
                     init = pinData.title or "Map Pin",
@@ -206,19 +206,58 @@ function PinFactory:CreatePin(initPinData, pinID)
                 end
             end
 
-            ---@type MenuUtil
+
+            ---@type fun(disabled:boolean)?
+            local OverrideCreateSetButtonDisabledState
+
+            ---@type SubMenuUtil
             local setSubmenu = rootDescription:CreateButton("Add to a set");
             local sets = SetManager:GetSets()
-            setSubmenu:CreateButton("Create new set", function()
-                MapPinEnhanced:OpenTextModal({
-                    title = "Enter Set Name",
-                    autoFocus = true,
-                    onAccept = function(text)
-                        local set = SetManager:AddSet(text)
-                        set:AddPin(pinData)
-                    end,
-                    onCancel = function() end
+            setSubmenu:CreateTitle("Enter new set name")
+            local cachedSetName = ""
+            local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
+            newSetNameElementDescription:AddInitializer(function(frame, elementDescription, menu)
+                ---@cast frame MapPinEnhancedInputMixin
+                frame:SetSize(150, 20)
+                frame:Setup({
+                    default = "",
+                    init = "",
+                    onChange = function(value)
+                        cachedSetName = value
+                        if not OverrideCreateSetButtonDisabledState then return end
+                        if value == "" then
+                            OverrideCreateSetButtonDisabledState(true)
+                        else
+                            OverrideCreateSetButtonDisabledState(false)
+                        end
+                    end
                 })
+            end)
+            local confirmNewSetElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedButtonTemplate") --[[@as BaseMenuDescriptionMixin]]
+            confirmNewSetElementDescription:SetResponder(function(data, menuInputData, menu)
+                return MenuResponse.CloseAll;
+            end)
+            confirmNewSetElementDescription:AddInitializer(function(frame, elementDescription, menu)
+                ---@cast frame MapPinEnhancedButtonMixin
+                frame:SetSize(150, 20)
+                frame:SetText("Create Set")
+                frame:Setup({
+                    buttonLabel = "Create Set",
+                    onChange = function(buttonName)
+                        if cachedSetName == "" then
+                            return
+                        end
+                        local newSet = SetManager:AddSet(cachedSetName)
+                        newSet:AddPin(pinData)
+                        local inputContext = MenuInputContext.MouseButton;
+                        confirmNewSetElementDescription:Pick(inputContext, buttonName);
+                    end,
+                    disabledState = true
+                })
+
+                OverrideCreateSetButtonDisabledState = function(disabled)
+                    frame:SetDisabled(disabled)
+                end
             end)
             setSubmenu:CreateDivider()
             for _, set in pairs(sets) do
