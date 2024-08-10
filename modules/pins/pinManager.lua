@@ -14,6 +14,8 @@ PinManager.Pins = {}
 ---@type table<string, boolean>
 PinManager.Positions = {}
 
+---@type PinObject | nil
+PinManager.lastTrackedPin = nil
 
 local MAX_COUNT_PINS = 1000
 
@@ -35,6 +37,10 @@ function PinManager:GetPinByID(pinID)
     return self.Pins[pinID]
 end
 
+function PinManager:SetLastTrackedPin(pinID)
+    self.lastTrackedPin = self.Pins[pinID]
+end
+
 function PinManager:TrackPinByID(pinID)
     local pin = self.Pins[pinID]
     if not pin then
@@ -44,6 +50,13 @@ function PinManager:TrackPinByID(pinID)
     local pinData = pin.pinData
     Blizz:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
     return true
+end
+
+function PinManager:TrackLastTrackedPin()
+    if not self.lastTrackedPin then
+        return
+    end
+    self.lastTrackedPin:Track()
 end
 
 function PinManager:UntrackTrackedPin()

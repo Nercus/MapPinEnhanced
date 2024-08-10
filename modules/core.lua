@@ -65,7 +65,9 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData)
     end
     self.SuperTrackedPin:Setup(pinData)
     self.SuperTrackedPin:SetTrackedTexture()
-    self.SuperTrackedPin:Show()
+    if not self.SuperTrackedPin:IsVisible() then
+        self.SuperTrackedPin:Show()
+    end
 end
 
 C_Timer.After(1, function()

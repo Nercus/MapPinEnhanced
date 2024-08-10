@@ -2,6 +2,7 @@
 ---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
 ---@field hooked boolean
+---@field fadeIn AnimationGroup
 MapPinEnhancedSuperTrackedPinMixin = {}
 MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 
@@ -45,6 +46,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetPoint("CENTER", f, "CENTER", 0, 0)
     self:SetFrameLevel(f:GetFrameLevel() + 1)
     self:SetFrameStrata(f:GetFrameStrata())
+    self.fadeIn:Play()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()

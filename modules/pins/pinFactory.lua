@@ -79,6 +79,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetTrackedTexture()
         trackerPinEntry:SetTrackedTexture()
         MapPinEnhanced:SetSuperTrackedPin(GetPinData())
+        PinManager:SetLastTrackedPin(pinID)
         isTracked = true
     end
 
@@ -89,6 +90,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         worldmapPin:SetUntrackedTexture()
         minimapPin:SetUntrackedTexture()
         trackerPinEntry:SetUntrackedTexture()
+        MapPinEnhanced:SetSuperTrackedPin(nil)
         isTracked = false
     end
 
@@ -117,6 +119,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         end
         pinData.color = color
         PinManager:PersistPins()
+        MapPinEnhanced:SetSuperTrackedPin(GetPinData())
     end
 
 

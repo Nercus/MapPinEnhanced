@@ -42,3 +42,32 @@ end
 function Blizz:GetPlayerMap()
     return C_Map.GetBestMapForUnit("player")
 end
+
+local countSinceLastTrackedPin = 0
+function Blizz:OnSuperTrackingChanged()
+    ---@type boolean
+    local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
+    local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    if not isSuperTracking then
+        if countSinceLastTrackedPin <= 2 then
+            local PinManager = MapPinEnhanced:GetModule("PinManager")
+            PinManager:TrackLastTrackedPin()
+        end
+        return
+    end
+    if not isSuperTrackingUserWaypoint then
+        countSinceLastTrackedPin = countSinceLastTrackedPin + 1
+        local PinManager = MapPinEnhanced:GetModule("PinManager")
+        PinManager:UntrackTrackedPin()
+    else
+        countSinceLastTrackedPin = 0
+    end
+end
+
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
+    Blizz:OnSuperTrackingChanged()
+end)
+
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
+    Blizz:OnSuperTrackingChanged()
+end)
