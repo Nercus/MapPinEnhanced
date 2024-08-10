@@ -39,20 +39,6 @@ function MapPinEnhanced:SetPinTrackerView(viewType)
     self.pinTracker:SetActiveView(viewType)
 end
 
-function MapPinEnhanced:ToggleImportWindow()
-    if not self.importWindow then
-        self.importWindow = CreateFrame("Frame", "MapPinEnhancedImportWindow", UIParent,
-            "MapPinEnhancedImportWindowTemplate") --[[@as MapPinEnhancedImportWindowMixin]]
-        self.importWindow:Open()
-        return
-    end
-    if self.importWindow:IsVisible() then
-        self.importWindow:Close()
-    else
-        self.importWindow:Open()
-    end
-end
-
 function MapPinEnhanced:ToggleEditorWindow()
     if not self.editorWindow then
         self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
@@ -65,14 +51,6 @@ function MapPinEnhanced:ToggleEditorWindow()
     else
         self.editorWindow:Open()
     end
-end
-
----@param options ModalOptions
-function MapPinEnhanced:OpenTextModal(options)
-    if not self.textModal then
-        self.textModal = CreateFrame("Frame", "MapPinEnhancedTextModal", UIParent, "MapPinEnhancedTextModalTemplate") --[[@as MapPinEnhancedTextModalMixin]]
-    end
-    self.textModal:Open(options)
 end
 
 ---@param pinData pinData | nil
