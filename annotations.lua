@@ -371,3 +371,9 @@ AddonCompartmentFrame = {}
 
 ---@param data {text: string, icon: string, notCheckable: boolean, func: fun(_, buttonName: string, menu: Frame)}
 function AddonCompartmentFrame:RegisterAddon(data) end
+
+FACTION_HORDE = "Horde"
+FACTION_ALLIANCE = "Alliance"
+
+---@type MapPinEnhancedDB
+MapPinEnhancedDB = {}
