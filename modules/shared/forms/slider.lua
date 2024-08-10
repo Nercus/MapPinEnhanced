@@ -63,7 +63,6 @@ function MapPinEnhancedSliderMixin:Setup(optionData)
     self:SetValue(init or 0)
     self.valueText:SetText(roundValueToPrecision(init or 0, optionData.step))
     self:SetDisabled(optionData.disabledState)
-    if optionData.disabledState then return end
     self:SetScript("OnValueChanged", function(_, value)
         self.valueText:SetText(roundValueToPrecision(self:GetValue(), optionData.step))
         if not self.onChangeCallback then return end

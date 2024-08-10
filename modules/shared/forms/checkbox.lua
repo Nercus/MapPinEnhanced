@@ -31,7 +31,6 @@ function MapPinEnhancedCheckboxMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetChecked(optionData.init)
     self:SetDisabled(optionData.disabledState)
-    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetScript("OnClick", function()
         if not self.onChangeCallback then return end
         self.onChangeCallback(self:GetChecked())

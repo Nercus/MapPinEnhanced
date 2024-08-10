@@ -29,13 +29,13 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad>
+            <OnSizeChanged>
                 -- original left and right texture has a ratio of 1:2.5
                 local height = self:GetHeight()
                 self.Left:SetSize(height / 2.5, height)
                 self.Right:SetSize(height / 2.5, height)
                 self.Middle:SetSize(height / 2.5, height)
-            </OnLoad>
+            </OnSizeChanged>
             <OnChar method="OnChar" />
         </Scripts>
     </EditBox>

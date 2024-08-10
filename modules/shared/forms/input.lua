@@ -55,7 +55,6 @@ function MapPinEnhancedInputMixin:Setup(optionData)
     self:SetText(init)
     self:SetCursorPosition(0)
     self:SetDisabled(optionData.disabledState)
-    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetScript("OnTextChanged", function()
         if not self.onChangeCallback then return end
         self.onChangeCallback(self:GetText())

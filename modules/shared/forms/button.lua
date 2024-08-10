@@ -41,7 +41,6 @@ function MapPinEnhancedButtonMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetText(optionData.buttonLabel)
     self:SetDisabled(optionData.disabledState)
-    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetCallback(optionData.onChange)
     self:SetScript("OnClick", function(_, button, down)
         if not self.onChangeCallback then return end

@@ -75,5 +75,6 @@
             </OnEnable>
         </Scripts>
         <NormalFont style="GameFontNormal" />
+        <DisabledFont style="GameFontDisable" />
     </Button>
 </Ui>

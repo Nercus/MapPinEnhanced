@@ -95,6 +95,5 @@ function MapPinEnhancedColorpickerMixin:Setup(optionData)
     end
     self.setColor(optionData.init.r, optionData.init.g, optionData.init.b, optionData.init.a)
     self:SetDisabled(optionData.disabledState)
-    if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetCallback(optionData.onChange)
 end

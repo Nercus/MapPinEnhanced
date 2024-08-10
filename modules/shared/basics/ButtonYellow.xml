@@ -81,5 +81,6 @@
             </OnEnable>
         </Scripts>
         <NormalFont style="MPHGameFontNormalBlack" />
+        <DisabledFont style="GameFontDisable" />
     </Button>
 </Ui>
