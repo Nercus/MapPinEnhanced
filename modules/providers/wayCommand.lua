@@ -13,9 +13,13 @@ local CONSTANTS = MapPinEnhanced.CONSTANTS
 local decimal_separator = CONSTANTS.DECIMAL_SEPARATOR
 local inverse_decimal_separator = decimal_separator == "," and "." or ","
 
-local SLASH_PREFIX_1 = "/mph"
-local SLASH_PREFIX_2 = "/mpe"
-local SLASH_PREFIX_3 = "/way"
+
+local DECIMAL_SEPARATOR_PATTERN = decimal_separator == "." and "%." or ","
+local INVERSE_DECIMAL_SEPARATOR_PATTERN = inverse_decimal_separator == "." and "%." or ","
+
+local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][Hh]"
+local SLASH_PREFIX_PATTERN_2 = "/[Mm][Pp][Ee]"
+local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local trim = string.trim
 
@@ -62,7 +66,8 @@ end
 ---@return string, number?, number[]
 function PinProvider:ParseWayStringToData(wayString)
     -- remove the slashString from the message
-    wayString = wayString:gsub(SLASH_PREFIX_1, ""):gsub(SLASH_PREFIX_2, ""):gsub(SLASH_PREFIX_3, "")
+    wayString = wayString:gsub(SLASH_PREFIX_PATTERN_1, ""):gsub(SLASH_PREFIX_PATTERN_2, ""):gsub(SLASH_PREFIX_PATTERN_3,
+        "")
     wayString = trim(wayString)
     -- split msg into tokens on whitespace
     local tokens = {}
@@ -100,10 +105,9 @@ function PinProvider:ParseWayStringToData(wayString)
 
     local mapID
     local coords = {}
-
     for idx, token in ipairs(tokens) do
         -- replace all wrong decimal separators with the right one
-        token = token:gsub(inverse_decimal_separator, decimal_separator)
+        token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
         -- if element is not a number its the mapID/zoneName
         if not tonumber(token) then
             mapID = ConvertImportMapString(token)

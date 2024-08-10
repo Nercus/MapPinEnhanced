@@ -19,8 +19,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field headerTexture Texture
 
 
-
-
 ---@alias TrackerView 'Pins' | 'Sets' | 'Import'
 
 ---@class MapPinEnhancedTrackerFrameMixin : Frame
@@ -154,8 +152,10 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
             self.importButton:SetPropagateMouseMotion(true)
         end
         self.importButton:SetScript("OnClick", function()
-            print("Importing")
-            self:SetActiveView("Sets")
+            local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+            local wayString = self.importEditBox.editBox:GetText()
+            PinProvider:ImportFromWayString(wayString)
+            self:SetActiveView("Pins")
         end)
         table.insert(self.entries, self.importButton)
     end
