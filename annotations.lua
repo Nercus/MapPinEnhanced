@@ -253,3 +253,19 @@ function ColorPickerFrame:SetupColorPickerAndShow(info) end
 
 ---@class DropdownButton : Button
 ---@field SetupMenu fun(self:DropdownButton, generator:fun(owner:Frame, rootDescription:table))
+
+
+---@class ScrollableTextarea : ScrollFrame
+---@field bg Texture
+---@field gainFocus Animation
+---@field loseFocus Animation
+---@field editBox EditBox
+---@field focusButton Frame
+
+
+---@class ClickPropagatableFrame : Frame, PropagateMouseClicks
+---@class ClicksPropagatableButton : Button, PropagateMouseClicks
+---@class MousePropagatableFrame : Frame, PropagateMouseMotion
+---@class MousePropagatableButton : Button, PropagateMouseMotion
+---@class BothPropagatableFrame : Frame, PropagateMouseClicks, PropagateMouseMotion
+---@class BothPropagatableButton : Button, PropagateMouseClicks, PropagateMouseMotion

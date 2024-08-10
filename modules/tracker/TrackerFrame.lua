@@ -19,6 +19,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field headerTexture Texture
 
 
+
+
 ---@alias TrackerView 'Pins' | 'Sets' | 'Import'
 
 ---@class MapPinEnhancedTrackerFrameMixin : Frame
@@ -26,13 +28,16 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
 ---@field header MapPinEnhancedTrackerHeader
+---@field importButton MousePropagatableButton
+---@field importEditBox ScrollableTextarea
+---@field cancelButton MousePropagatableButton
 MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
 
 
 local ENTRY_GAP = 5
-local ENTRY_HEIGHT = 37
+local DEFAULT_ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
     local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
     if trackerPosition then
@@ -89,16 +94,16 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         if not self.importButton then
             self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonYellowTemplate")
+                "MapPinEnhancedButtonYellowTemplate") --[[@as MousePropagatableButton]]
+            self.importButton:SetSize(300, 30)
             self.importButton:SetText("Import")
-            self.importButton:SetScript("OnClick", function()
-                self:SetActiveView("Import")
-            end)
             self.importButton:SetPropagateMouseMotion(true)
-            table.insert(self.entries, self.importButton)
-        else
-            table.insert(self.entries, self.importButton)
         end
+        self.importButton:Enable()
+        self.importButton:SetScript("OnClick", function()
+            self:SetActiveView("Import")
+        end)
+        table.insert(self.entries, self.importButton)
         local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
         --MapPinEnhanced.SetManager:GetAllSetEntries()
         for _, set in pairs(sets) do
@@ -109,18 +114,6 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
             self:SetActiveView(self.activeView, true)
         end)
     elseif viewType == "Import" then
-        if not self.importButton then
-            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonYellowTemplate")
-            self.importButton:SetText("Import")
-            self.importButton:SetScript("OnClick", function()
-                self:SetActiveView("Import")
-            end)
-            self.importButton:SetPropagateMouseMotion(true)
-            table.insert(self.entries, self.importButton)
-        else
-            table.insert(self.entries, self.importButton)
-        end
         -- TODO: implement import view
         -- take the max height from the set option and create two entry elements
         -- 1. a text box for the import string and scroll frame
@@ -128,16 +121,43 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         -- 3. a button to cancel and go back to sets
         if not self.cancelButton then
             self.cancelButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonRedTemplate")
+                "MapPinEnhancedButtonRedTemplate") --[[@as MousePropagatableButton]]
+            self.cancelButton:SetSize(300, 30)
             self.cancelButton:SetText("Cancel")
             self.cancelButton:SetScript("OnClick", function()
                 self:SetActiveView("Sets")
             end)
             self.cancelButton:SetPropagateMouseMotion(true)
-            table.insert(self.entries, self.cancelButton)
-        else
-            table.insert(self.entries, self.cancelButton)
         end
+        table.insert(self.entries, self.cancelButton)
+        if not self.importEditBox then
+            self.importEditBox = CreateFrame("ScrollFrame", nil, self.scrollFrame.Child,
+                "MapPinEnhancedScrollableTextareaTemplate") --[[@as ScrollableTextarea]]
+            self.importEditBox:SetSize(300, 300)
+        end
+        table.insert(self.entries, self.importEditBox)
+
+        self.importEditBox.editBox:SetScript("OnTextChanged", function()
+            local text = self.importEditBox.editBox:GetText()
+            if text and text ~= "" then
+                self.importButton:Enable()
+            else
+                self.importButton:Disable()
+            end
+        end)
+
+        if not self.importButton then
+            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
+                "MapPinEnhancedButtonYellowTemplate") --[[@as MousePropagatableButton]]
+            self.importButton:SetSize(300, 30)
+            self.importButton:SetText("Import")
+            self.importButton:SetPropagateMouseMotion(true)
+        end
+        self.importButton:SetScript("OnClick", function()
+            print("Importing")
+            self:SetActiveView("Sets")
+        end)
+        table.insert(self.entries, self.importButton)
     end
     self.activeView = viewType
     self:UpdateEntriesPosition()
@@ -164,7 +184,7 @@ end
 function MapPinEnhancedTrackerFrameMixin:OnLoad()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RestorePosition()
-    self.scrollFrame:SetPanExtent(ENTRY_HEIGHT + ENTRY_GAP)
+    self.scrollFrame:SetPanExtent(DEFAULT_ENTRY_HEIGHT + ENTRY_GAP)
 
     self.header.viewToggle:SetScript("OnClick", function()
         if self.activeView == "Pins" then
@@ -231,7 +251,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
         end
-        height = height + ENTRY_HEIGHT + ENTRY_GAP --[[@as number]]
+        height = height + entry:GetHeight() + ENTRY_GAP --[[@as number]]
         entry:Show()
         if entry.SetEntryIndex then
             entry:SetEntryIndex(i)
@@ -242,7 +262,8 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         height = 1
     end
     self.scrollFrame.Child:SetHeight(height)
-    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
+    self:SetTrackerTitle(string.format("%s %s", self.activeView,
+        self:GetEntryCount() and string.format("(%d)", self:GetEntryCount()) or ""))
     self:UpdateFrameHeight(height)
 end
 
@@ -258,7 +279,7 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     end
     entry:SetParent(self.scrollFrame.Child)
     entry:Show()
-    local newHeight = scollChildHeight + ENTRY_HEIGHT + ENTRY_GAP
+    local newHeight = scollChildHeight + entry:GetHeight() + ENTRY_GAP
     self.scrollFrame.Child:SetHeight(newHeight)
     self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
     self:UpdateFrameHeight(newHeight)
