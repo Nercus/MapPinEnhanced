@@ -172,6 +172,14 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
+    local function ShowOnMap()
+        if InCombatLockdown() then
+            -- NOTE: Tell user that they can't do this in combat
+            return
+        end
+        OpenWorldMap(mapID);
+    end
+
 
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
@@ -218,6 +226,8 @@ function PinFactory:CreatePin(initPinData, pinID)
                     set:AddPin(pinData)
                 end)
             end
+
+            rootDescription:CreateButton("Show on Map", ShowOnMap)
             -- NOTE: Sharing pins to chat is not yet implemented
             -- rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)

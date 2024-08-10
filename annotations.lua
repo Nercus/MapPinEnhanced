@@ -276,3 +276,8 @@ function ColorPickerFrame:SetupColorPickerAndShow(info) end
 ---@field parent number
 ---@field name string
 ---@field instance number
+
+
+
+---@param mapID number
+function OpenWorldMap(mapID) end
