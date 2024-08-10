@@ -74,6 +74,7 @@
                     </OnMouseDown>
                     <OnShow>
                         local parent = self:GetParent();
+                        if not parent.editBox then return end
                         local editBoxText = parent.editBox:GetText();
                         if editBoxText ~= "" then
                             self.infoText:SetText("");
