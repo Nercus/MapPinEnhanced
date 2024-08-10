@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedEditorWindowMixin : Frame
 ---@field SetTitle function
 ---@field sideBar Frame
+---@field versionText FontString
 ---@field body Frame
 ---@field setView viewObject<MapPinEnhancedSetEditorViewBodyMixin, MapPinEnhancedSetEditorViewSidebarMixin> | nil
 ---@field optionView viewObject<MapPinEnhancedOptionEditorViewBodyMixin, MapPinEnhancedOptionEditorViewSidebarMixin> | nil
@@ -84,6 +85,7 @@ function MapPinEnhancedEditorWindowMixin:OnLoad()
         self:StopMovingOrSizing()
     end)
     self:SetActiveView(AVAILABLE_VIEWS.setView)
+    self.versionText:SetText(MapPinEnhanced.nameVersionString)
 end
 
 function MapPinEnhancedEditorWindowMixin:Close()

@@ -12,6 +12,15 @@
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString inherits="GameFontWhiteTiny2" parentKey="versionText">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Frames>
             <Frame parentKey="sideBar" inherits="MapPinEnhancedBaseFrameTemplate">
                 <Size x="275" y="500" />

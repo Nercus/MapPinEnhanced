@@ -10,6 +10,11 @@ local DEFAULTS = {
     ["trackerVisible"] = true,
     ["Floating Pin"] = {
         ["Size"] = 23
+    },
+    ["MinimapIcon"] = {
+        ["hide"] = false,
+        ["lock"] = false,
+        ["minimapPos"] = 45
     }
 }
 

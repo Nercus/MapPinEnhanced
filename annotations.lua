@@ -364,3 +364,10 @@ MenuInputContext =
     MouseButton = 2,
     MouseWheel = 3,
 };
+
+
+---@class AddonCompartmentFrame : Frame
+AddonCompartmentFrame = {}
+
+---@param data {text: string, icon: string, notCheckable: boolean, func: fun(_, buttonName: string, menu: Frame)}
+function AddonCompartmentFrame:RegisterAddon(data) end
