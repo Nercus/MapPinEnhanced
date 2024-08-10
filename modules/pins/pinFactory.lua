@@ -218,15 +218,6 @@ function PinFactory:CreatePin(initPinData, pinID)
                     set:AddPin(pinData)
                 end)
             end
-            rootDescription:CreateButton("Change Pin Title", function()
-                MapPinEnhanced:OpenTextModal({
-                    title = "Enter Pin Title",
-                    autoFocus = true,
-                    text = pinData.title,
-                    onAccept = function(text) ChangeTitle(text) end,
-                    onCancel = function() end
-                })
-            end)
             -- NOTE: Sharing pins to chat is not yet implemented
             -- rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
