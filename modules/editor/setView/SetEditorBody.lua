@@ -5,6 +5,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class SetEditorSetNameEditBox : EditBox
 ---@field editButton Button
 
+---@class ImportFrameWithButton :ScrollableTextarea
+---@field confirmButton Button
+
+
 ---@class SetEditorViewBodyHeader : Frame
 ---@field setName SetEditorSetNameEditBox
 ---@field deleteButton Button
@@ -21,6 +25,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field infoText FontString
 ---@field pinListHeader Frame
 ---@field addPinButton Button
+---@field importFrame ImportFrameWithButton
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
 
@@ -114,6 +119,44 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)
+
+    self.header.importButton:SetScript("OnClick", function()
+        if self.activeEditorSet then return end
+        if self.importFrame:IsShown() then
+            self.importFrame:Hide()
+            self.infoText:Show()
+        else
+            self.importFrame:Show()
+            self.infoText:Hide()
+        end
+    end)
+
+    self.importFrame.editBox:SetScript("OnTextChanged", function()
+        local text = self.importFrame.editBox:GetText()
+        if text == "" then
+            self.importFrame.confirmButton:Disable()
+        else
+            self.importFrame.confirmButton:Enable()
+        end
+    end)
+
+    self.importFrame.confirmButton:SetScript("OnClick", function()
+        local text = self.importFrame.editBox:GetText()
+        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+        local pins = PinProvider:DeserializeWayString(text)
+        if not pins then return end
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        local set = SetManager:AddSet("Imported Set")
+        for _, pin in ipairs(pins) do
+            set:AddPin({
+                mapID = pin.mapID,
+                x = pin.x,
+                y = pin.y,
+                title = pin.title,
+            })
+        end
+        self:SetActiveEditorSet(set.setID)
+    end)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
@@ -140,6 +183,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
     self.header.exportButton:Show()
     self.header.createSetButton:Hide()
     self.header.importButton:Hide()
+    self.importFrame:Hide()
     self.pinListHeader:Show()
 end
 

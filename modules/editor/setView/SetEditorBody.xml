@@ -10,7 +10,6 @@
         virtual="true" hidden="true"
         enableMouse="true">
         <Layers>
-
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" parentKey="infoText"
                     text="Select or create a set on the right to start editing" setAllPoints="true"
@@ -227,6 +226,24 @@
                         </Anchors>
                     </Frame>
                 </ScrollChild>
+            </ScrollFrame>
+            <ScrollFrame inherits="MapPinEnhancedScrollableTextareaTemplate" hidden="true"
+                parentKey="importFrame">
+                <Size x="590" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
+                        relativeKey="$parent.header" x="5" y="-5" />
+                    <Anchor point="BOTTOMRIGHT" x="-15" y="15" />
+                </Anchors>
+                <Frames>
+                    <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonYellowTemplate"
+                        text="Import">
+                        <Size x="100" y="30" />
+                        <Anchors>
+                            <Anchor point="BOTTOM" x="0" y="10" />
+                        </Anchors>
+                    </Button>
+                </Frames>
             </ScrollFrame>
         </Frames>
         <Scripts>
