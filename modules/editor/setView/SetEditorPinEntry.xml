@@ -41,9 +41,7 @@
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15" />
                 </Anchors>
                 <Frames>
-                    <!-- TODO: Use menu instead with continents > zones > subzones and override
-                    mapid input field: use https://wowpedia.fandom.com/wiki/API_C_Map.GetMapChildrenInfo-->
-                    <Button parentKey="mapSelection" hidden="true">
+                    <Button parentKey="mapSelection">
                         <Size x="15" y="15" />
                         <NormalTexture atlas="poi-islands-table" setAllPoints="true" alpha="0.8" />
                         <HighlightTexture atlas="poi-islands-table" setAllPoints="true" alpha="1" />

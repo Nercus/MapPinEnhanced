@@ -269,3 +269,10 @@ function ColorPickerFrame:SetupColorPickerAndShow(info) end
 ---@class MousePropagatableButton : Button, PropagateMouseMotion
 ---@class BothPropagatableFrame : Frame, PropagateMouseClicks, PropagateMouseMotion
 ---@class BothPropagatableButton : Button, PropagateMouseClicks, PropagateMouseMotion
+
+
+---@class HereBeDragonMapData
+---@field mapType Enum.UIMapType
+---@field parent number
+---@field name string
+---@field instance number
