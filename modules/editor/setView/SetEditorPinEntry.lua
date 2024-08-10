@@ -33,11 +33,13 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
     self.Pin:Setup(pin)
     self.Pin:SetTrackedTexture()
     self.mapID:SetText(tostring(pin.mapID))
+
     local xCoord = tostring(Round(pin.x * 10000) / 100)
     self.xCoord:SetText(xCoord)
     local yCoord = tostring(Round(pin.y * 10000) / 100)
     self.yCoord:SetText(yCoord)
     self.title:SetText(pin.title)
+    self.title:SetCursorPosition(0)
     self.initValues = {
         mapID = pin.mapID,
         xCoord = Round(pin.x * 10000) / 10000,

@@ -194,6 +194,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
         setName = set.name
     end
     self.header.setName:SetText(setName)
+    self.header.setName:SetCursorPosition(0)
     self.header.setName:Disable()
 end
 

@@ -53,6 +53,7 @@ function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
     local init = optionData.init --[[@as string]]
     self:SetText(init)
+    self:SetCursorPosition(0)
     self:SetDisabled(optionData.disabledState)
     if optionData.disabledState then return end -- dont set up click handler if disabled
     self:SetScript("OnTextChanged", function()
