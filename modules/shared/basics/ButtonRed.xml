@@ -45,6 +45,7 @@
         </Layers>
         <Scripts>
             <OnMouseDown>
+                if not self:IsEnabled() then return end
                 self.left:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeRed_Left_Pressed.png")
                 self.right:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeRed_Right_Pressed.png")
                 self.middle:SetTexture("Interface/AddOns/MapPinEnhanced/assets/LargeButtons/MPHButtonLargeRed_Centre_Pressed.png")

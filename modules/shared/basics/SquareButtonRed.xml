@@ -10,5 +10,13 @@
         <HighlightTexture setAllPoints="true"
             file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareRed_Highlight.png"
         />
+        <Scripts>
+            <OnDisable>
+                self:GetNormalTexture():SetDesaturated(true)
+            </OnDisable>
+            <OnEnable>
+                self:GetNormalTexture():SetDesaturated(false)
+            </OnEnable>
+        </Scripts>
     </Button>
 </Ui>
