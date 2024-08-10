@@ -121,6 +121,31 @@ function PinProvider:ParseWayStringToData(wayString)
     return title, mapID, coords
 end
 
+---@class ParseWayStringData
+---@field title string
+---@field mapID number
+---@field x number
+---@field y number
+
+---@param wayString string
+---@return ParseWayStringData[]
+function PinProvider:DeserializeWayString(wayString)
+    local data = {}
+    for line in wayString:gmatch("[^\r\n]+") do
+        local title, mapID, coords = self:ParseWayStringToData(line)
+        if title and mapID and coords then
+            table.insert(data, {
+                title = title,
+                mapID = mapID,
+                x = coords[1] / 100,
+                y = coords[2] / 100,
+            })
+        end
+    end
+    return data
+end
+
+---@param wayString string
 function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
     for line in wayString:gmatch("[^\r\n]+") do
@@ -128,8 +153,8 @@ function PinProvider:ImportFromWayString(wayString)
         if title and mapID and coords then
             PinManager:AddPin({
                 mapID = mapID,
-                x = coords[1],
-                y = coords[2],
+                x = coords[1] / 100,
+                y = coords[2] / 100,
                 title = title or "Imported Waypoint",
             })
         end
