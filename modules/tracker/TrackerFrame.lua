@@ -112,11 +112,6 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
             self:SetActiveView(self.activeView, true)
         end)
     elseif viewType == "Import" then
-        -- TODO: implement import view
-        -- take the max height from the set option and create two entry elements
-        -- 1. a text box for the import string and scroll frame
-        -- 2. a button to import the string
-        -- 3. a button to cancel and go back to sets
         if not self.cancelButton then
             self.cancelButton = CreateFrame("Button", nil, self.scrollFrame.Child,
                 "MapPinEnhancedButtonRedTemplate") --[[@as MousePropagatableButton]]
