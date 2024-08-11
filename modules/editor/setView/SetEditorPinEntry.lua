@@ -168,12 +168,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
             assert(menu, "Menu is nil")
             assert(children, "Children is nil")
             assert(parent, "Parent is nil")
-            MapPinEnhanced:Debug({
-                [parent.name] = {
-                    mapID = parent.mapID,
-                    children = children
-                }
-            })
+
             ---@type table<string, number>
             local existingZoneNames = {}
             menu:CreateButton(parent.name, function()
