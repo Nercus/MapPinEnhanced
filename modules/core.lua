@@ -109,10 +109,10 @@ function MapPinEnhanced:ToggleMinimapButton(init)
     local currentState = MapPinEnhanced:GetVar("MinimapIcon", "hide") --[[@as boolean]]
     if currentState then
         MapPinEnhanced:SaveVar("MinimapIcon", "hide", false)
-        -- NOTE: notify user here
+        MapPinEnhanced:Notify("Minimapbutton is now visible")
     else
         MapPinEnhanced:SaveVar("MinimapIcon", "hide", true)
-        -- NOTE: notify user here
+        MapPinEnhanced:Notify("Minimapbutton is now hidden")
     end
     self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.MinimapIcon --[[@as LibDBIcon.button.DB]])
 end

@@ -262,7 +262,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function ShowOnMap()
         if InCombatLockdown() then
-            -- NOTE: Tell user that they can't do this in combat
+            MapPinEnhanced:Notify("Can't show on map in combat", "ERROR")
             return
         end
         OpenWorldMap(mapID);

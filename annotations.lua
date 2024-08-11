@@ -377,3 +377,8 @@ FACTION_ALLIANCE = "Alliance"
 
 ---@type MapPinEnhancedDB
 MapPinEnhancedDB = {}
+
+---@class UIErrorsFrame
+UIErrorsFrame = {}
+
+function UIErrorsFrame:AddMessage(message, r, g, b, a) end
