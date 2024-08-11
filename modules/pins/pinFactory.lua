@@ -75,6 +75,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     local lastUpdate = nil
 
 
+
     local function UpdateDistance()
         local currentTime = GetTime()
         -- Check if we need to update based on throttle interval
@@ -131,6 +132,13 @@ function PinFactory:CreatePin(initPinData, pinID)
                 MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
             end
 
+            if distance < 10 then
+                if not pinData.persistent then
+                    PinManager:RemovePinByID(pinID)
+                end
+            end
+
+
             lastUpdate = currentTime
         end
     end
@@ -160,11 +168,11 @@ function PinFactory:CreatePin(initPinData, pinID)
     local function Untrack()
         if isTracked then
             C_Map.ClearUserWaypoint()
+            MapPinEnhanced:SetSuperTrackedPin(nil)
         end
         worldmapPin:SetUntrackedTexture()
         minimapPin:SetUntrackedTexture()
         trackerPinEntry:SetUntrackedTexture()
-        MapPinEnhanced:SetSuperTrackedPin(nil)
         DisableDistanceCheck()
         isTracked = false
     end
@@ -261,6 +269,16 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
+    local function TogglePersistentState()
+        pinData.persistent = not pinData.persistent
+        trackerPinEntry.Pin:SetPersitentState(pinData.persistent)
+        if MapPinEnhanced.SuperTrackedPin then
+            MapPinEnhanced.SuperTrackedPin:SetPersitentState(pinData.persistent)
+        end
+        PinManager:PersistPins()
+    end
+
+
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
             local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
@@ -347,6 +365,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             end
 
             rootDescription:CreateButton("Show on Map", ShowOnMap)
+            rootDescription:CreateButton("Toggle persistent", function()
+                TogglePersistentState()
+            end)
             -- NOTE: Sharing pins to chat is not yet implemented
             -- rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)

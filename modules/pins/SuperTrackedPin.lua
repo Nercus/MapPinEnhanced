@@ -36,16 +36,32 @@ function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     end
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:UpdateTitleVisibility()
-    if not self.pinData then
-        return
-    end
+function MapPinEnhancedSuperTrackedPinMixin:SetPersitentState(isPersistent)
+    if not self.pinData then return end
     local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
-    if hasDefaultTitle then
-        self.title:SetAlpha(0)
+    if isPersistent and not hasDefaultTitle then
+        self.persitentIcon:Show()
     else
-        self.title:SetAlpha(1)
+        self.persitentIcon:Hide()
     end
+end
+
+function MapPinEnhancedSuperTrackedPinMixin:UpdateTitleVisibility()
+    local clamped = C_Navigation.WasClampedToScreen();
+    if clamped then
+        self.title:Hide()
+        self.distantText:Hide()
+        self.persitentIcon:Hide()
+    else
+        self.title:Show()
+        self.distantText:Show()
+        self.persitentIcon:Show()
+    end
+
+    if not self.pinData then return end
+    local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
+    self.title:SetShown(not hasDefaultTitle)
+    self.persitentIcon:SetShown(not hasDefaultTitle)
 end
 
 ---override the function in the base pin mixin to handle the title visibilty for the default title
@@ -70,7 +86,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     end
     if not self.hooked then
         hooksecurefunc(f, "PingNavFrame", function()
-            self:OnClampedStateChanged()
+            self:UpdateTitleVisibility()
         end)
         self.hooked = true
     end
@@ -78,8 +94,8 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetPoint("CENTER", f, "CENTER", 0, 0)
     self:SetFrameLevel(f:GetFrameLevel() + 1)
     self:SetFrameStrata(f:GetFrameStrata())
-    self:UpdateTitleVisibility()
     self.fadeIn:Play()
+    self:UpdateTitleVisibility()
 end
 
 ---@param timeInSeconds number? time in seconds, if nil, ??:?? will be displayed

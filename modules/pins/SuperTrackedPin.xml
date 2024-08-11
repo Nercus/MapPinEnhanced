@@ -23,7 +23,7 @@
         </Animations>
         <Layers>
             <Layer level="OVERLAY">
-                <FontString parentKey="distantText" inherits="GameFontHighlight" text="1:00">
+                <FontString parentKey="distantText" inherits="GameFontHighlight" text="??:??">
                     <Anchors>
                         <Anchor point="TOP" relativePoint="BOTTOM" y="3" />
                     </Anchors>
