@@ -20,6 +20,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedBasePinMixin = {}
 
 
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 function MapPinEnhancedBasePinMixin:SetPinIcon()
     if not self.pinData then
         return
@@ -112,7 +113,7 @@ function MapPinEnhancedBasePinMixin:SetUntrackedTexture()
     self.texture:SetTexture(self.untrackedTexture)
 end
 
-local DEFAULT_COLOR = "Yellow"
+local DEFAULT_COLOR = CONSTANTS.DEFAULT_PIN_COLOR
 ---@param color string?
 function MapPinEnhancedBasePinMixin:SetPinColor(color)
     if not color then

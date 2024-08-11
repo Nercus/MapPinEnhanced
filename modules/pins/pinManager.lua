@@ -162,11 +162,11 @@ function PinManager:AddPin(pinData, restored)
 
     -- set defaults
     if (pinData.texture == nil and pinData.color == nil) then
-        pinData.color = "Yellow"
+        pinData.color = CONSTANTS.DEFAULT_PIN_COLOR
     end
 
     if (pinData.title == nil) then
-        pinData.title = "Custom Pin"
+        pinData.title = CONSTANTS.DEFAULT_PIN_NAME
     end
 
     if pinData.texture then

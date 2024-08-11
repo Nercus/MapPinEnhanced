@@ -70,3 +70,7 @@ MapPinEnhanced.CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
     [628] = Enum.UIMapType.Micro,
     [629] = Enum.UIMapType.Micro,
 }
+
+
+MapPinEnhanced.CONSTANTS.DEFAULT_PIN_NAME = "Map Pin"
+MapPinEnhanced.CONSTANTS.DEFAULT_PIN_COLOR = "Yellow"

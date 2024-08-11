@@ -1,4 +1,7 @@
 -- Template: file://./SuperTrackedPin.xml
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
 ---@field hooked boolean
@@ -8,6 +11,7 @@ MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 
 -- FIXME: SuperTrackeFrame is not reseted when the supertracking is changed to a different no pin type (i.e. quest, death, etc)
 
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 function MapPinEnhancedSuperTrackedPinMixin:Clear()
     self:Hide()
@@ -30,6 +34,32 @@ function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     end
 end
 
+function MapPinEnhancedSuperTrackedPinMixin:UpdateTitleVisibility()
+    if not self.pinData then
+        return
+    end
+    local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
+    if hasDefaultTitle then
+        self.title:SetAlpha(0)
+    else
+        self.title:SetAlpha(1)
+    end
+end
+
+---override the function in the base pin mixin to handle the title visibilty for the default title
+---@param overrideTitle any
+function MapPinEnhancedSuperTrackedPinMixin:SetTitle(overrideTitle)
+    if not self.pinData then
+        return
+    end
+    if overrideTitle then
+        self.pinData.title = overrideTitle
+    end
+    local title = self.pinData.title
+    self.title:SetText(title)
+    self:UpdateTitleVisibility()
+end
+
 function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     -- set anchor
     local f = SuperTrackedFrame
@@ -46,6 +76,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetPoint("CENTER", f, "CENTER", 0, 0)
     self:SetFrameLevel(f:GetFrameLevel() + 1)
     self:SetFrameStrata(f:GetFrameStrata())
+    self:UpdateTitleVisibility()
     self.fadeIn:Play()
 end
 
