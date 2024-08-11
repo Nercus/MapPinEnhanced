@@ -108,10 +108,30 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
     self.distantText:SetText(timeText)
 end
 
+local margin = 20
+---@type number? is not the real height when game is loaded
+local screenWidthHalf
+
+function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
+    local navFrame = C_Navigation.GetFrame();
+    if not navFrame then
+        return
+    end
+    local x = navFrame:GetLeft()
+    local diff = math.abs(x - screenWidthHalf)
+    if diff < margin then
+        self:LockHighlight()
+    else
+        self:UnlockHighlight()
+    end
+end
+
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
+    screenWidthHalf = GetScreenWidth() / 2
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
     self:RegisterEvent("SUPER_TRACKING_CHANGED");
+    self:SetScript("OnUpdate", self.CheckIsCentered)
     self.hooked = false
 end
 
