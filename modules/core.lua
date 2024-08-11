@@ -137,6 +137,23 @@ MapPinEnhanced:AddSlashCommand("minimap", function()
     MapPinEnhanced:ToggleMinimapButton()
 end, "Toggle the minimap button")
 
+MapPinEnhanced:AddSlashCommand("back", function()
+    local currentMapID = C_Map.GetBestMapForUnit("player")
+    if not currentMapID then
+        MapPinEnhanced:Notify("You are in an instance or a zone where the map is not available")
+        return
+    end
+    local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
+    PinManager:AddPin({
+        title = "My way back pin",
+        mapID = currentMapID,
+        x = x,
+        y = y,
+        setTracked = true,
+        persistent = true,
+    })
+end, "Create a pin at your current location")
+
 -- C_Timer.After(1, function()
 --     local Options = MapPinEnhanced:GetModule("Options")
 
