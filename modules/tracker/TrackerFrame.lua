@@ -318,3 +318,10 @@ local function RestorePinTrackerVisibility()
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RestorePinTrackerVisibility)
+MapPinEnhanced:AddSlashCommand("tracker", function()
+    MapPinEnhanced:TogglePinTracker()
+end, "Toggle the tracker window")
+MapPinEnhanced:AddSlashCommand("import", function()
+    MapPinEnhanced:TogglePinTracker(true)
+    MapPinEnhanced.pinTracker:SetActiveView("Import")
+end, "Import a set from a string")

@@ -135,7 +135,7 @@ end)
 
 MapPinEnhanced:AddSlashCommand("minimap", function()
     MapPinEnhanced:ToggleMinimapButton()
-end)
+end, "Toggle the minimap button")
 
 -- C_Timer.After(1, function()
 --     local Options = MapPinEnhanced:GetModule("Options")

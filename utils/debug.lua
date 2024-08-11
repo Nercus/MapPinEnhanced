@@ -136,7 +136,7 @@ local function setDevMode()
     loadDevAddons(not devModeEnabled)
     ReloadUI()
 end
-MapPinEnhanced:AddSlashCommand("dev", setDevMode)
+MapPinEnhanced:AddSlashCommand("dev", setDevMode, "Toggle dev mode")
 
 
 
