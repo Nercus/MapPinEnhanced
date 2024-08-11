@@ -45,6 +45,8 @@ local function HandleOnPlayerLogin()
 end
 
 
+-- FIXME: save last supertracked type and block setTracked on pin restore
+
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HandleOnPlayerLogin)
 
 function Blizz:SetBlizzardWaypoint(x, y, mapID)

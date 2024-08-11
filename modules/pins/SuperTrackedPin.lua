@@ -32,6 +32,7 @@ function MapPinEnhancedSuperTrackedPinMixin:SetpersistentState(isPersistent)
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTitleVisibility()
+    -- FIXME: that function is bad -> refactor it completely
     local clamped = C_Navigation.WasClampedToScreen();
     local showTime = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time")
     local showTitle = MapPinEnhanced:GetVar("Floating Pin", "Show Title")
