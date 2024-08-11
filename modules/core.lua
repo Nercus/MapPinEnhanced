@@ -70,12 +70,6 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData)
     end
 end
 
----@param owner Frame
----@param isMinimapButton boolean?
-function MapPinEnhanced:OpenMinimapMenu(owner, isMinimapButton)
-
-end
-
 function MapPinEnhanced:ToggleMinimapButton(init)
     if not self.minimapIconCreated then
         local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("Bunnies", {
