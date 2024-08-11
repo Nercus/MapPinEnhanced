@@ -68,6 +68,79 @@ function PinFactory:CreatePin(initPinData, pinID)
         return pinData
     end
 
+    ---@type {distance: number, time: number}[]
+    local distanceCache = {}
+    local throttle_interval = 1
+    local lastDistance = 0
+    local lastUpdate = nil
+
+
+    local function UpdateDistance()
+        local currentTime = GetTime()
+        -- Check if we need to update based on throttle interval
+        if not lastUpdate or currentTime - lastUpdate > throttle_interval then
+            local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+            if not isSuperTrackingUserWaypoint then return end
+
+            local distance = C_Navigation.GetDistance()
+            if distance == 0 then return end            -- No distance to get to the waypoint
+            if lastDistance == distance then return end -- No need to update if the distance is the same
+            lastDistance = distance
+
+            -- Maintain a cache of recent distances
+            if #distanceCache > 5 then
+                table.remove(distanceCache, 1)
+            end
+            table.insert(distanceCache, { distance = distance, time = currentTime })
+
+            -- Calculate total distance and time from the cache
+            local totalDistance = 0
+            local totalTime = 0
+            for i = 2, #distanceCache do
+                local prev = distanceCache[i - 1]
+                local current = distanceCache[i]
+                totalDistance = totalDistance + (prev.distance - current.distance)
+                totalTime = totalTime + (current.time - prev.time)
+            end
+
+            if totalTime == 0 then return 0 end
+
+            -- Calculate speed (yards per second)
+            ---@type number
+            local speed = totalDistance / totalTime
+            if speed <= 0 then
+                self.distanceCache = {}
+                if MapPinEnhanced.SuperTrackedPin then
+                    MapPinEnhanced.SuperTrackedPin:UpdateTimeText()
+                end
+            end
+
+            -- Calculate time to target
+            local timeToTarget = distance / speed
+            if timeToTarget <= 0 then
+                if MapPinEnhanced.SuperTrackedPin then
+                    MapPinEnhanced.SuperTrackedPin:UpdateTimeText()
+                end
+            end
+
+            -- Update throttle interval based on distance
+            throttle_interval = 0.1 + 2e-04 * distance - 5e-09 * distance * distance
+
+            -- Update the UI with the new time to target
+            if MapPinEnhanced.SuperTrackedPin then
+                MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
+            end
+
+            lastUpdate = currentTime
+        end
+    end
+    local function EnableDistanceCheck()
+        trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
+    end
+
+    local function DisableDistanceCheck()
+        trackerPinEntry:SetScript("OnUpdate", nil)
+    end
 
     local isTracked = false
     local function Track()
@@ -80,6 +153,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         trackerPinEntry:SetTrackedTexture()
         MapPinEnhanced:SetSuperTrackedPin(GetPinData())
         PinManager:SetLastTrackedPin(pinID)
+        EnableDistanceCheck()
         isTracked = true
     end
 
@@ -91,6 +165,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetUntrackedTexture()
         trackerPinEntry:SetUntrackedTexture()
         MapPinEnhanced:SetSuperTrackedPin(nil)
+        DisableDistanceCheck()
         isTracked = false
     end
 
@@ -158,6 +233,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         WorldmapPool:Release(worldmapPin)
         MinimapPool:Release(minimapPin)
         TrackerPinEntryPool:Release(trackerPinEntry)
+        MapPinEnhanced:SetSuperTrackedPin(nil)
     end
 
 
@@ -167,6 +243,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetTitle(text)
         trackerPinEntry:SetTitle(text)
         PinManager:PersistPins()
+        MapPinEnhanced:SetSuperTrackedPin(GetPinData())
     end
 
 
@@ -296,9 +373,11 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
+
     -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
     trackerPinEntry:SetScript("OnMouseDown", HandleClicks)
+
 
 
     return {

@@ -6,10 +6,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field navFrameCreated boolean
 ---@field hooked boolean
 ---@field fadeIn AnimationGroup
+---@field distantText FontString
 MapPinEnhancedSuperTrackedPinMixin = {}
 MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 
--- FIXME: SuperTrackeFrame is not reseted when the supertracking is changed to a different no pin type (i.e. quest, death, etc)
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
@@ -19,10 +19,12 @@ end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnClamped()
     self.title:Hide()
+    self.distantText:Hide()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnUnclamped()
     self.title:Show()
+    self.distantText:Show()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
@@ -78,6 +80,16 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetFrameStrata(f:GetFrameStrata())
     self:UpdateTitleVisibility()
     self.fadeIn:Play()
+end
+
+---@param timeInSeconds number? time in seconds, if nil, ??:?? will be displayed
+function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
+    if not timeInSeconds or timeInSeconds < 0 then
+        self.distantText:SetText("??:??")
+        return
+    end
+    local timeText = SecondsToClock(timeInSeconds)
+    self.distantText:SetText(timeText)
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()

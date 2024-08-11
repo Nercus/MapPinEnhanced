@@ -53,8 +53,9 @@ function MapPinEnhanced:ToggleEditorWindow()
     end
 end
 
----@param pinData pinData | nil
-function MapPinEnhanced:SetSuperTrackedPin(pinData)
+---@param pinData pinData | nil if nil, the super tracked pin will be hidden
+---@param timeToTarget number?
+function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
     if not self.SuperTrackedPin then
         self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
             "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
@@ -65,7 +66,8 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData)
     end
     self.SuperTrackedPin:Setup(pinData)
     self.SuperTrackedPin:SetTrackedTexture()
-    if not self.SuperTrackedPin:IsVisible() then
+    self.SuperTrackedPin:UpdateTimeText(timeToTarget)
+    if not self.SuperTrackedPin:IsShown() then
         self.SuperTrackedPin:Show()
     end
 end
