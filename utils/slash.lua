@@ -12,15 +12,14 @@ end
 local normalColor = CreateColor(1, 0.82, 0)
 local SlashCmdList = getglobal("SlashCmdList") ---@as table<string, function>
 local helpPattern = "|A:gearupdate-arrow-bullet-point:12:12:2:-2|a %s - %s"
-local function PrintHelp()
-    print(MapPinEnhanced:WrapTextInColor(MapPinEnhanced.nameVersionString, normalColor))
+function MapPinEnhanced:PrintHelp()
+    print(self:WrapTextInColor(self.nameVersionString, normalColor))
     for command, help in pairs(commandHelpStrings) do
-        help = MapPinEnhanced:WrapTextInColor(help, normalColor)
+        help = self:WrapTextInColor(help, normalColor)
         local helpString = helpPattern:format(command, help)
         print(helpString)
     end
 end
-
 
 ---parse the full msg and split into the different arguments
 ---@param msg string
@@ -33,7 +32,7 @@ local function SlashCommandHandler(msg)
     if commandList[command] then
         pcall(commandList[command], unpack(args))
     else
-        PrintHelp()
+        MapPinEnhanced:PrintHelp()
     end
 end
 
@@ -49,5 +48,5 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
 end
 
 MapPinEnhanced:AddSlashCommand("help", function()
-    PrintHelp()
+    MapPinEnhanced:PrintHelp()
 end, "Show this help message")

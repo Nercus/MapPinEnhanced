@@ -5,8 +5,8 @@
     <Script file="textformat.lua" />
     <Script file="notifier.lua" />
     <Script file="print.lua" />
-    <Script file="slash.lua" />
     <Script file="events.lua" />
+    <Script file="slash.lua" />
     <Script file="debug.lua" />
     <Script file="persist.lua" />
     <Script file="defaults.lua" />

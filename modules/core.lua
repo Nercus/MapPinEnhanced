@@ -128,9 +128,29 @@ function MapPinEnhanced:RegisterAddonCompartment()
     })
 end
 
+--- check if this version is a new version and return the last version
+function MapPinEnhanced:IsNewVersion()
+    local currentVersion = MapPinEnhanced.version
+    local lastVersion = MapPinEnhanced:GetVar("version")
+    if not lastVersion or lastVersion ~= currentVersion then
+        return lastVersion
+    end
+end
+
+function MapPinEnhanced:UpdateVersionInfo()
+    if self.lastVersion then return end -- only update once
+    self.lastVersion = MapPinEnhanced:GetVar("version")
+    local currentVersion = MapPinEnhanced.version
+    if not MapPinEnhanced.lastVersion or MapPinEnhanced.lastVersion ~= currentVersion then
+        MapPinEnhanced:SaveVar("version", currentVersion)
+        MapPinEnhanced:PrintHelp() -- show the help message after a new upate
+    end
+end
+
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     MapPinEnhanced:ToggleMinimapButton(true)
     MapPinEnhanced:RegisterAddonCompartment()
+    MapPinEnhanced:UpdateVersionInfo()
 end)
 
 MapPinEnhanced:AddSlashCommand("minimap", function()
