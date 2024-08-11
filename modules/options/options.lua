@@ -102,3 +102,115 @@ function Options:SetOptionDisabledState(category, label, disabledState)
     end
     error(("Option with label %s does not exist in category %s"):format(label, category))
 end
+
+-- C_Timer.After(1, function()
+--     Options:RegisterSlider({
+--         category = "Floating Pin",
+--         label = "Size",
+--         description = "Testing the slider",
+--         descriptionImage = "interface/icons/achievement_boss_lichking",
+--         default = MapPinEnhanced:GetDefault("Floating Pin", "Size") --[[@as number]],
+--         init = MapPinEnhanced:GetVar("Floating Pin", "Size") --[[@as number]],
+--         onChange = function(value)
+--             print("Slider changed", value)
+--             MapPinEnhanced:SaveVar("Floating Pin", "Size", value)
+--         end,
+--         min = 0,
+--         max = 100,
+--         step = 1
+--     })
+
+
+--     Options:RegisterCheckbox({
+--         category = "General",
+--         label = "Testcheckbox",
+--         description = "Testing the checkbox",
+--         descriptionImage = "Interface/AddOns/MapPinEnhanced/assets/maskedDescriptionImageTest.png",
+--         default = true,
+--         init = true,
+--         onChange = function(value)
+--             print("Checkbox changed", value)
+--         end
+--     })
+
+--     Options:RegisterColorpicker({
+--         category = "General",
+--         label = "Testcolorpicker",
+--         description = "Testing the colorpicker",
+--         descriptionImage = "interface/talentframe/talentsclassbackgroundwarrior2",
+--         default = { r = 1, g = 0, b = 1, a = 1 },
+--         init = { r = 1, g = 1, b = 0, a = 1 },
+--         onChange = function(value)
+--             print("Colorpicker changed", value.r, value.g, value.b, value.a)
+--         end
+--     })
+
+--     Options:RegisterInput({
+--         category = "General",
+--         label = "Testinput",
+--         description = "Testing the input",
+--         descriptionImage = "interface/dressupframe/dressingroommonk",
+--         default = "Test",
+--         init = "Test",
+--         onChange = function(value)
+--             print("Input changed", value)
+--         end
+--     })
+
+
+--     Options:RegisterSelect({
+--         category = "General",
+--         label = "Testselect",
+--         description = "Testing the select",
+--         descriptionImage = "interface/icons/achievement_boss_lichking",
+--         default = "OptionValue 1",
+--         init = "OptionValue 1",
+--         onChange = function(value)
+--             print("Select changed", value)
+--         end,
+--         options = {
+--             {
+--                 label = "Option 1",
+--                 value = "OptionValue 1",
+--                 type = "radio"
+--             },
+--             {
+--                 label = "Option 2",
+--                 value = "OptionValue 2",
+--                 type = "radio"
+--             },
+--             {
+--                 label = "Option 3",
+--                 value = "OptionValue 3",
+--                 type = "radio"
+--             }
+--         }
+--     })
+
+
+--     Options:RegisterSlider({
+--         category = "General",
+--         label = "Testslider",
+--         description = "Testing the slider",
+--         descriptionImage = "interface/icons/achievement_boss_lichking",
+--         default = 50,
+--         init = 50,
+--         onChange = function(value)
+--             print("Slider changed", value)
+--         end,
+--         min = 0,
+--         max = 100,
+--         step = 1
+--     })
+--     Options:RegisterButton({
+--         category = "General",
+--         label = "Testbutton",
+--         description = "Press this button to print the number",
+--         buttonLabel = "Press me",
+--         onChange = function()
+--             print("Button pressed")
+--         end
+--     })
+--     -- MapPinEnhanced:ToggleEditorWindow()
+--     -- MapPinEnhanced.editorWindow:SetActiveView("optionView")
+-- end)
