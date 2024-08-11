@@ -29,10 +29,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field importButton MousePropagatableButton
 ---@field importEditBox ScrollableTextarea
 ---@field cancelButton MousePropagatableButton
+---@field blackBackground Texture
+---@field showNumbering boolean?
 MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
-
+-- FIXME: width of entry pin entry incorrect after first show of tracker
+-- FIXME: init height update is not correct. sometimes bigger than set
 
 local ENTRY_GAP = 5
 local DEFAULT_ENTRY_HEIGHT = 37
@@ -70,6 +73,21 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
     return self.activeView
 end
 
+function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
+    if not self:GetActiveView() == "Pins" then return end
+    local autoVisibility = MapPinEnhanced:GetVar("Tracker", "autoVisibility") --[[@as 'none' | 'autoHide' | 'autoShow' | 'both']]
+    local entryCount = self:GetEntryCount()
+    if autoVisibility == "none" then return end
+    if (autoVisibility == "autoHide" or autoVisibility == "both") and entryCount == 0 then
+        self:Close()
+        return
+    end
+    if (autoVisibility == "autoShow" or autoVisibility == "both") and entryCount > 0 then
+        self:Open()
+        return
+    end
+end
+
 ---comment
 ---@param viewType TrackerView
 ---@param forceUpdate? boolean
@@ -87,6 +105,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         for _, pin in pairs(pins) do
             table.insert(self.entries, pin.trackerPinEntry)
         end
+        self:UpdatePinNumberingVisibility()
     elseif viewType == "Sets" then
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
@@ -176,6 +195,103 @@ function MapPinEnhancedTrackerFrameMixin:Toggle()
     end
 end
 
+function MapPinEnhancedTrackerFrameMixin:UpdatePinNumberingVisibility()
+    local showNumbering = MapPinEnhanced:GetVar("Tracker", "showNumbering") --[[@as boolean]]
+    if showNumbering == self.showNumbering then return end
+    for _, entry in ipairs(self.entries) do
+        if entry.SetEntryIndexVisibility then
+            ---@cast entry MapPinEnhancedTrackerPinEntryMixin
+            entry:SetEntryIndexVisibility(showNumbering)
+        end
+    end
+    self.showNumbering = showNumbering
+end
+
+function MapPinEnhancedTrackerFrameMixin:AddOptions()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterSelect({
+        category = "Tracker",
+        label = "Automatic Visibility",
+        default = MapPinEnhanced:GetDefault("Tracker", "autoVisibility") --[[@as string]],
+        init = MapPinEnhanced:GetVar("Tracker", "autoVisibility") --[[@as string]],
+        options = {
+            { label = "None",      value = "none",     type = "radio" },
+            { label = "Auto hide", value = "autoHide", type = "radio" },
+            { label = "Auto show", value = "autoShow", type = "radio" },
+            { label = "Both",      value = "both",     type = "radio" }
+        },
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "autoVisibility", value)
+        end
+    })
+
+    Options:RegisterCheckbox({
+        category = "Tracker",
+        label = "Lock Tracker",
+        default = MapPinEnhanced:GetDefault("Tracker", "lockTracker") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Tracker", "lockTracker") --[[@as boolean]],
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "lockTracker", value)
+        end
+    })
+
+    Options:RegisterSlider({
+        category = "Tracker",
+        label = "Scale",
+        default = MapPinEnhanced:GetDefault("Tracker", "trackerScale") --[[@as number]],
+        init = MapPinEnhanced:GetVar("Tracker", "trackerScale") --[[@as number]],
+        min = 0.5,
+        max = 2,
+        step = 0.1,
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "trackerScale", value)
+            self:SetScale(value)
+        end
+    })
+
+    Options:RegisterSlider({
+        category = "Tracker",
+        label = "Background Opacity",
+        default = MapPinEnhanced:GetDefault("Tracker", "backgroundOpacity") --[[@as number]],
+        init = MapPinEnhanced:GetVar("Tracker", "backgroundOpacity") --[[@as number]],
+        min = 0,
+        max = 1,
+        step = 0.1,
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "backgroundOpacity", value)
+            self.blackBackground:SetAlpha(value)
+        end
+    })
+
+    Options:RegisterCheckbox({
+        category = "Tracker",
+        label = "Show Numbering",
+        default = MapPinEnhanced:GetDefault("Tracker", "showNumbering") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Tracker", "showNumbering") --[[@as boolean]],
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "showNumbering", value)
+            self:UpdatePinNumberingVisibility()
+        end
+    })
+
+    Options:RegisterSlider({
+        category = "Tracker",
+        label = "Entry Height",
+        default = MapPinEnhanced:GetDefault("Tracker", "trackerHeight") --[[@as number]],
+        init = MapPinEnhanced:GetVar("Tracker", "trackerHeight") --[[@as number]],
+        min = 1,
+        max = 14,
+        step = 1,
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Tracker", "trackerHeight", value)
+            local maxEntryCount = MapPinEnhanced:GetVar("Tracker", "trackerHeight")
+            local headerHeight = self.header:GetHeight()
+            local maxHeight = (DEFAULT_ENTRY_HEIGHT + ENTRY_GAP) * maxEntryCount + ENTRY_GAP + headerHeight
+            self:UpdateFrameHeight(maxHeight)
+        end
+    })
+end
+
 function MapPinEnhancedTrackerFrameMixin:OnLoad()
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
     self:RestorePosition()
@@ -195,6 +311,7 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
         MapPinEnhanced:ToggleEditorWindow()
     end)
     self.scrollFrame.ScrollBar:SetAlpha(0)
+    self:AddOptions()
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetEntryCount()
@@ -209,6 +326,11 @@ end
 function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
     if not self.header.title:IsMouseOver() then return end
+    local isLocked = MapPinEnhanced:GetVar("Tracker", "lockTracker") --[[@as boolean]]
+    if isLocked then
+        MapPinEnhanced:Print("Tracker is locked. Unlock it in the options.")
+        return
+    end
     self:StartMoving()
     SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
 end
@@ -223,13 +345,20 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     SetCursor(nil)
 end
 
-local MAX_HEIGHT = 500
----@param scrollFrameHeight number
+---@param scrollFrameHeight number?
 function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
+    if self:GetActiveView() == "Import" then
+        local headerHeight = self.header:GetHeight()
+        local newHeight = scrollFrameHeight + headerHeight
+        self:SetHeight(newHeight)
+        return
+    end
+    local maxEntryCount = MapPinEnhanced:GetVar("Tracker", "trackerHeight")
     local headerHeight = self.header:GetHeight()
+    local maxHeight = (DEFAULT_ENTRY_HEIGHT + ENTRY_GAP) * maxEntryCount + ENTRY_GAP + headerHeight
     local newHeight = scrollFrameHeight + headerHeight
-    if newHeight > MAX_HEIGHT then
-        newHeight = MAX_HEIGHT
+    if newHeight > maxHeight then
+        newHeight = maxHeight
     end
     self:SetHeight(newHeight)
     self.scrollFrame.ScrollBar:Update()
@@ -260,6 +389,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     self:SetTrackerTitle(string.format("%s %s", self.activeView,
         self:GetEntryCount() and string.format("(%d)", self:GetEntryCount()) or ""))
     self:UpdateFrameHeight(height)
+    self:UpdateVisibility()
 end
 
 ---@param entry MapPinEnhancedTrackerSetEntryMixin | MapPinEnhancedTrackerPinEntryMixin
@@ -281,6 +411,11 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     if entry.SetEntryIndex then
         entry:SetEntryIndex(#self.entries)
     end
+    if entry.SetEntryIndexVisibility then
+        ---@cast entry MapPinEnhancedTrackerPinEntryMixin
+        entry:SetEntryIndexVisibility(self.showNumbering)
+    end
+    self:UpdateVisibility()
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)

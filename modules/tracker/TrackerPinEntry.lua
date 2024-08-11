@@ -54,17 +54,19 @@ function MapPinEnhancedTrackerPinEntryMixin:SetPinColor(color)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTrackedTexture()
-    -- NOTE: change the texture of the tracker entry here
     self.Pin:SetTrackedTexture()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
-    -- NOTE: change the texture of the tracker entry here
     self.Pin:SetUntrackedTexture()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndex(index)
     self.Pin.count:SetText(index)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndexVisibility(visible)
+    self.Pin.count:SetShown(visible)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title

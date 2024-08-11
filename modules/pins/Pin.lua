@@ -6,7 +6,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field background Texture
 ---@field highlight Texture
 ---@field shadow Texture
----@field persitentIcon Texture
+---@field persistentIcon Texture
 ---@field texture Texture
 ---@field icon Texture
 ---@field iconMask MaskTexture
@@ -100,14 +100,14 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetTitleFont(self.titleFont or "GameFontNormal")
     self:SetPinIcon()
     self:SetUntrackedTexture()
-    self:SetPersitentState(self.pinData.persistent)
+    self:SetpersistentState(self.pinData.persistent)
 end
 
-function MapPinEnhancedBasePinMixin:SetPersitentState(isPersistent)
+function MapPinEnhancedBasePinMixin:SetpersistentState(isPersistent)
     if isPersistent then
-        self.persitentIcon:Show()
+        self.persistentIcon:Show()
     else
-        self.persitentIcon:Hide()
+        self.persistentIcon:Hide()
     end
 end
 

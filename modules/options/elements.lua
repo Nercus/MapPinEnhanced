@@ -11,6 +11,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field description string?
 ---@field descriptionImage string? reference to an image
 ---@field disabledState boolean?
+---@field blockOnCreationInit boolean?
 
 ---@class OptionButton : PlainOptionObject,ButtonOptions
 ---@class OptionCheckbox : PlainOptionObject,CheckboxOptions

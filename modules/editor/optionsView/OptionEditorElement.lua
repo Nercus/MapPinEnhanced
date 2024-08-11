@@ -21,14 +21,14 @@ function MapPinEnhancedOptionEditorElementMixin:ShowDescription()
             GameTooltip:AddLine(" ")
             ---@diagnostic disable-next-line: redundant-parameter (this is not full documented in the WoW API extension)
             GameTooltip:AddTexture(descriptionImage, {
-                width = 200,
-                height = 200,
+                width = 128,
+                height = 128,
                 anchor = Enum.TooltipTextureAnchor.LeftTop,
                 region = Enum.TooltipTextureRelativeRegion.LeftLine,
                 verticalOffset = 0,
                 margin = { left = 5, right = 5, top = 0, bottom = 0 },
             })
-            GameTooltip:SetMinimumWidth(210)
+            GameTooltip:SetMinimumWidth(138)
         end
         GameTooltip:AddLine(description, 1, 1, 1, true)
         GameTooltip:Show()
@@ -42,6 +42,14 @@ function MapPinEnhancedOptionEditorElementMixin:OnLoad()
     self.info:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
+end
+
+function MapPinEnhancedOptionEditorElementMixin:UpdateInfoButtonVisibility()
+    if self.option.description or self.option.descriptionImage then
+        self.info:Show()
+    else
+        self.info:Hide()
+    end
 end
 
 ---@param formElement FormElement
@@ -60,6 +68,7 @@ function MapPinEnhancedOptionEditorElementMixin:Setup(optionData)
     self.option = optionData
     self.label:SetText(optionData.label)
     self.formElement:Setup(optionData)
+    self:UpdateInfoButtonVisibility()
 end
 
 function MapPinEnhancedOptionEditorElementMixin:Update()

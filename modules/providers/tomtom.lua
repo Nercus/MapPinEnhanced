@@ -1,1 +1,0 @@
--- TODO: add fake tomtom function and namespace for compatibility with other addons

@@ -27,6 +27,27 @@ local function GetPositionStringForPin(pinData)
     return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
 end
 
+function PinManager:TrackNearestPin()
+    local nearestPin = nil
+    local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
+    if not playerMap or not playerX or not playerY then
+        return
+    end
+    for _, pin in pairs(self.Pins) do
+        local pinData = pin:GetPinData()
+        local distance = MapPinEnhanced.HBD:GetZoneDistance(playerMap, playerX, playerY, pinData.mapID, pinData.x,
+            pinData.y)
+        if not nearestPin or distance < nearestPin.distance then
+            nearestPin = {
+                pin = pin,
+                distance = distance
+            }
+        end
+    end
+    if nearestPin then
+        nearestPin.pin:Track()
+    end
+end
 
 function PinManager:GetPins()
     return self.Pins
@@ -88,6 +109,10 @@ function PinManager:RemovePinByID(pinID)
     self.Pins[pinID] = nil
 
     self:PersistPins()
+    local optionTrackNearestPin = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin")
+    if optionTrackNearestPin then
+        self:TrackNearestPin()
+    end
 end
 
 function PinManager:GetTrackedPin()
@@ -148,15 +173,13 @@ function PinManager:AddPin(pinData, restored)
 
     if #PinManager.Pins >= MAX_COUNT_PINS then
         -- too many pins
-        --NOTE: show error message here
+        MapPinEnhanced:Notify("Too many pins. Please remove some pins before adding more.", "ERROR")
         return
     end
 
 
     local pinPositionString = GetPositionStringForPin(pinData)
     if PinManager.Positions[pinPositionString] then
-        -- pin already exists
-        --NOTE: show error message here
         return
     end
 
@@ -195,4 +218,15 @@ end
 
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     PinManager:RestorePins()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterCheckbox({
+        category = "General",
+        label = "Auto Track Nearest Pin",
+        description = "Automatically track the nearest pin when a tracked pin is removed.",
+        default = MapPinEnhanced:GetDefault("General", "Auto Track Nearest Pin") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin") --[[@as boolean]],
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("General", "Auto Track Nearest Pin", value)
+        end
+    })
 end)

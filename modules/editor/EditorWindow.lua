@@ -80,12 +80,30 @@ function MapPinEnhancedEditorWindowMixin:SetActiveView(view)
     self:ConfigureViewVisibility(viewToShow, viewToHide)
 end
 
+function MapPinEnhancedEditorWindowMixin:AddOptions()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterSlider({
+        label = "Editor Scale",
+        category = "General",
+        min = 0.5,
+        max = 2,
+        step = 0.1,
+        default = MapPinEnhanced:GetDefault("General", "Editor Scale") --[[@as number]],
+        init = MapPinEnhanced:GetVar("General", "Editor Scale") --[[@as number]],
+        onChange = function(value)
+            self:SetScale(value)
+            MapPinEnhanced:SaveVar("General", "Editor Scale", value)
+        end
+    })
+end
+
 function MapPinEnhancedEditorWindowMixin:OnLoad()
     self:SetScript("OnMouseUp", function()
         self:StopMovingOrSizing()
     end)
     self:SetActiveView(AVAILABLE_VIEWS.setView)
     self.versionText:SetText(MapPinEnhanced.nameVersionString)
+    self:AddOptions()
 end
 
 function MapPinEnhancedEditorWindowMixin:Close()

@@ -74,8 +74,6 @@ function PinFactory:CreatePin(initPinData, pinID)
     local lastDistance = 0
     local lastUpdate = nil
 
-
-
     local function UpdateDistance()
         local currentTime = GetTime()
         -- Check if we need to update based on throttle interval
@@ -105,6 +103,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             end
 
             if totalTime == 0 then return 0 end
+            if totalDistance == 0 then return 0 end
 
             -- Calculate speed (yards per second)
             ---@type number
@@ -132,7 +131,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                 MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
             end
 
-            if distance < 10 then
+            if distance < 20 then
                 if not pinData.persistent then
                     PinManager:RemovePinByID(pinID)
                 end
@@ -271,9 +270,9 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function TogglePersistentState()
         pinData.persistent = not pinData.persistent
-        trackerPinEntry.Pin:SetPersitentState(pinData.persistent)
+        trackerPinEntry.Pin:SetpersistentState(pinData.persistent)
         if MapPinEnhanced.SuperTrackedPin then
-            MapPinEnhanced.SuperTrackedPin:SetPersitentState(pinData.persistent)
+            MapPinEnhanced.SuperTrackedPin:SetpersistentState(pinData.persistent)
         end
         PinManager:PersistPins()
     end

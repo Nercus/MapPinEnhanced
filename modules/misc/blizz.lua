@@ -19,17 +19,38 @@ function Blizz:HideBlizzardPin()
     end)
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
-
-function Blizz:OverrideSuperTrackedAlphaState()
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 1)
+function Blizz:OverrideSuperTrackedAlphaState(enable)
+    if enable then
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 1)
+        return
+    end
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 0)
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
 end
+
+local function HandleOnPlayerLogin()
+    Blizz:HideBlizzardPin()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterCheckbox({
+        category = "Floating Pin",
+        label = "Enable Unlimited Distance",
+        default = MapPinEnhanced:GetDefault("Floating Pin", "unlimitedDistance") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "unlimitedDistance") --[[@as boolean]],
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Floating Pin", "unlimitedDistance", value)
+            Blizz:OverrideSuperTrackedAlphaState(value)
+        end
+    })
+end
+
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HandleOnPlayerLogin)
 
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
     if not CanSetUserWaypointOnMap(mapID) then
-        --NOTE: show error message here
-        error("Cannot set waypoint on map " .. mapID)
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        MapPinEnhanced:Notify("Cannot set waypoint on " .. mapInfo.name, "ERROR")
         return
     end
     local uiMapPoint = CreateUIMapPointFromCoordinates(mapID, x, y, 0)
@@ -41,6 +62,10 @@ end
 
 function Blizz:GetPlayerMap()
     return C_Map.GetBestMapForUnit("player")
+end
+
+function Blizz:GetPlayerMapPosition()
+    return MapPinEnhanced.HBD:GetPlayerZonePosition()
 end
 
 local countSinceLastTrackedPin = 0

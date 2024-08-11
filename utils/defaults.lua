@@ -9,12 +9,27 @@ local DEFAULTS = {
     },
     ["trackerVisible"] = true,
     ["Floating Pin"] = {
-        ["Size"] = 23
+        ["unlimitedDistance"] = true,
+        ["Show Estimated Time"] = true,
+        ["Show Title"] = true,
+        ["Show Centered Highlight"] = true
     },
     ["MinimapIcon"] = {
         ["hide"] = false,
         ["lock"] = false,
         ["minimapPos"] = 45
+    },
+    ["General"] = {
+        ["Editor Scale"] = 1,
+        ["Auto Track Nearest Pin"] = true
+    },
+    ["Tracker"] = {
+        ["autoVisibility"] = "both",
+        ["lockTracker"] = "false",
+        ["trackerScale"] = 1,
+        ["backgroundOpacity"] = 0,
+        ["showNumbering"] = true,
+        ["trackerHeight"] = 7
     }
 }
 

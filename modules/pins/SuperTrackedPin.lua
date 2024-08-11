@@ -17,51 +17,53 @@ function MapPinEnhancedSuperTrackedPinMixin:Clear()
     self:Hide()
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:OnClamped()
-    self.title:Hide()
-    self.distantText:Hide()
-end
-
-function MapPinEnhancedSuperTrackedPinMixin:OnUnclamped()
-    self.title:Show()
-    self.distantText:Show()
-end
-
 function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
-    local clamped = C_Navigation.WasClampedToScreen();
-    if clamped then
-        self:OnClamped()
-    else
-        self:OnUnclamped()
-    end
+    self:UpdateTitleVisibility()
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:SetPersitentState(isPersistent)
+function MapPinEnhancedSuperTrackedPinMixin:SetpersistentState(isPersistent)
     if not self.pinData then return end
     local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
     if isPersistent and not hasDefaultTitle then
-        self.persitentIcon:Show()
+        self.persistentIcon:Show()
     else
-        self.persitentIcon:Hide()
+        self.persistentIcon:Hide()
     end
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTitleVisibility()
     local clamped = C_Navigation.WasClampedToScreen();
+    local showTime = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time")
+    local showTitle = MapPinEnhanced:GetVar("Floating Pin", "Show Title")
     if clamped then
         self.title:Hide()
         self.distantText:Hide()
-        self.persitentIcon:Hide()
+        self.persistentIcon:Hide()
+        return
     else
-        self.title:Show()
-        self.distantText:Show()
-        self.persitentIcon:Show()
+        if showTime then
+            self.distantText:Show()
+        end
+        if showTitle then
+            self.title:Show()
+            self.persistentIcon:Show()
+        end
     end
 
     if not self.pinData then return end
     local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
-    self.title:SetShown(not hasDefaultTitle)
-    self.persitentIcon:SetShown(not hasDefaultTitle)
+    if not hasDefaultTitle and not showTitle then
+        self.title:Hide()
+        self.persistentIcon:Hide()
+        return
+    end
+    if hasDefaultTitle then
+        self.title:Hide()
+        self.persistentIcon:Hide()
+        return
+    end
+    self.title:Show()
+    self.persistentIcon:Show()
 end
 
 ---override the function in the base pin mixin to handle the title visibilty for the default title
@@ -100,6 +102,9 @@ end
 
 ---@param timeInSeconds number? time in seconds, if nil, ??:?? will be displayed
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
+    if not self.distantText:IsShown() then
+        return
+    end
     if not timeInSeconds or timeInSeconds < 0 then
         self.distantText:SetText("??:??")
         return
@@ -108,30 +113,76 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
     self.distantText:SetText(timeText)
 end
 
+local lastUpdateTime = 0
 local margin = 20
 ---@type number? is not the real height when game is loaded
 local screenWidthHalf
 
 function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
-    local navFrame = C_Navigation.GetFrame();
-    if not navFrame then
-        return
+    if not self.navFrameCreated then return end
+    if not self:IsShown() then return end
+    if not lastUpdateTime or (GetTime() - lastUpdateTime) > 0.1 then
+        local navFrame = C_Navigation.GetFrame();
+        if not navFrame then return end
+        local x = navFrame:GetLeft()
+        local diff = math.abs(x - screenWidthHalf)
+        if diff < margin then
+            self:LockHighlight()
+        else
+            self:UnlockHighlight()
+        end
+        lastUpdateTime = GetTime()
     end
-    local x = navFrame:GetLeft()
-    local diff = math.abs(x - screenWidthHalf)
-    if diff < margin then
-        self:LockHighlight()
-    else
-        self:UnlockHighlight()
-    end
+end
+
+function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterCheckbox({
+        category = "Floating Pin",
+        label = "Show Estimated Time",
+        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Estimated Time") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time") --[[@as boolean]],
+        onChange = function(value)
+            -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
+            MapPinEnhanced:SaveVar("Floating Pin", "Show Estimated Time", value)
+            self.distantText:SetShown(value)
+        end
+    })
+    Options:RegisterCheckbox({
+        category = "Floating Pin",
+        label = "Show Title",
+        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Title") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "Show Title") --[[@as boolean]],
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Floating Pin", "Show Title", value)
+            self:UpdateTitleVisibility()
+        end
+    })
+
+    Options:RegisterCheckbox({
+        category = "Floating Pin",
+        label = "Show Centered Highlight",
+        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Centered Highlight") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "Show Centered Highlight") --[[@as boolean]],
+        description = "Highlight the floating pin when it is centered on the screen.",
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("Floating Pin", "Show Centered Highlight", value)
+            if value then
+                self:SetScript("OnUpdate", self.CheckIsCentered)
+            else
+                self:SetScript("OnUpdate", nil)
+                self:UnlockHighlight()
+            end
+        end
+    })
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     screenWidthHalf = GetScreenWidth() / 2
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
-    self:RegisterEvent("SUPER_TRACKING_CHANGED");
-    self:SetScript("OnUpdate", self.CheckIsCentered)
+
+    self:AddOptions()
     self.hooked = false
 end
 
