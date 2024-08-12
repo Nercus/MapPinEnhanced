@@ -13,9 +13,9 @@ local SuperTrackSetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWa
 
 
 function Blizz:HideBlizzardPin()
-    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(self) -- hide default blizzard waypoint
-        self:SetAlpha(0)
-        self:EnableMouse(false)
+    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
+        waypointSelf:SetAlpha(0)
+        waypointSelf:EnableMouse(false)
     end)
 end
 

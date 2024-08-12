@@ -39,12 +39,12 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
-    self.header:SetScript("OnMouseDown", function(self)
+    self.header:SetScript("OnMouseDown", function()
         MapPinEnhanced.editorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
     end)
 
-    self.header:SetScript("OnMouseUp", function(self)
+    self.header:SetScript("OnMouseUp", function()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)
@@ -70,30 +70,25 @@ function MapPinEnhancedOptionEditorViewBodyMixin:GetFormElement(formType)
     if formType == "button" then
         local buttons = self.buttons:Acquire() --[[@as MapPinEnhancedButtonMixin]]
         optionElement:SetFormElement(buttons)
-        return optionElement
     elseif formType == "checkbox" then
         local checkboxes = self.checkboxes:Acquire() --[[@as MapPinEnhancedCheckboxMixin]]
         optionElement:SetFormElement(checkboxes)
-        return optionElement
     elseif formType == "colorpicker" then
         local colorpickers = self.colorpickers:Acquire() --[[@as MapPinEnhancedColorpickerMixin]]
         optionElement:SetFormElement(colorpickers)
-        return optionElement
     elseif formType == "input" then
         local inputs = self.inputs:Acquire() --[[@as MapPinEnhancedInputMixin]]
         optionElement:SetFormElement(inputs)
-        return optionElement
     elseif formType == "select" then
         local selects = self.selects:Acquire() --[[@as MapPinEnhancedSelectMixin]]
         optionElement:SetFormElement(selects)
-        return optionElement
     elseif formType == "slider" then
         local sliders = self.sliders:Acquire() --[[@as MapPinEnhancedSliderMixin]]
         optionElement:SetFormElement(sliders)
-        return optionElement
+    else
+        error("Invalid form formType: " .. formType)
     end
     optionElement.type = formType
-    error("Invalid form formType: " .. formType)
     return optionElement
 end
 

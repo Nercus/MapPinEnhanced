@@ -45,7 +45,7 @@ end
 function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
     local scrollChild = self.scrollFrame.Child
     for _, child in pairs({ scrollChild:GetChildren() }) do
-        local child = child --[[@as Frame]]
+        ---@cast child Frame
         child:Hide()
         child:ClearAllPoints()
     end
@@ -110,12 +110,12 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         SetManager:UpdateSetNameByID(self.activeEditorSet, self.header.setName:GetText())
     end)
-    self.header:SetScript("OnMouseDown", function(self)
+    self.header:SetScript("OnMouseDown", function()
         MapPinEnhanced.editorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
     end)
 
-    self.header:SetScript("OnMouseUp", function(self)
+    self.header:SetScript("OnMouseUp", function()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)

@@ -5,7 +5,6 @@
 MapPinEnhancedTrackerSetEntryMixin = {}
 
 function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex(index)
-    -- NOTE: This is a placeholder function
 end
 
 function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)

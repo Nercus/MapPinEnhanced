@@ -88,7 +88,6 @@ function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
     end
 end
 
----comment
 ---@param viewType TrackerView
 ---@param forceUpdate? boolean
 function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
@@ -96,6 +95,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         return
     end
     self:ClearEntries()
+
     if viewType == "Pins" then
         MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
         ---@class PinManager : Module

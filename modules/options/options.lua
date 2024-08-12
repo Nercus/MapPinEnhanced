@@ -43,12 +43,15 @@ function Options:RegisterOption(optionType, option)
         assert(option.default ~= nil, "Option must have a default value")
     end
     assert(optionType, "Option must have a type")
+
+
     if not self.options then
         self.options = {}
     end
     if not self.options[option.category] then
         self.options[option.category] = {}
     end
+
     CheckForDuplicateOption(option.label, option.category, self.options)
     local optionTyped = option --[[@as OptionObjectVariantsTyped]]
     optionTyped.type = optionType

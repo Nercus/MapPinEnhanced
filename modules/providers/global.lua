@@ -8,6 +8,7 @@ local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local globalMapPinEnhanced = {}
+
 globalMapPinEnhanced.AddPin = function(_, pinData)
     PinManager:AddPin(pinData)
 end

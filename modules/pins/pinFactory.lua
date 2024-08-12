@@ -75,6 +75,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     local lastUpdate = nil
 
     local function UpdateDistance()
+        -- TODO: move somewhere else? this is a bit messy
         local currentTime = GetTime()
         -- Check if we need to update based on throttle interval
         if not lastUpdate or currentTime - lastUpdate > throttle_interval then
@@ -281,7 +282,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
             local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
-            titleElementDescription:AddInitializer(function(frame, elementDescription, menu)
+            titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 24)
                 frame:Setup({
@@ -313,7 +314,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             setSubmenu:CreateTitle("Enter new set name")
             local cachedSetName = ""
             local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
-            newSetNameElementDescription:AddInitializer(function(frame, elementDescription, menu)
+            newSetNameElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 20)
                 frame:Setup({
@@ -331,10 +332,10 @@ function PinFactory:CreatePin(initPinData, pinID)
                 })
             end)
             local confirmNewSetElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedButtonTemplate") --[[@as BaseMenuDescriptionMixin]]
-            confirmNewSetElementDescription:SetResponder(function(data, menuInputData, menu)
+            confirmNewSetElementDescription:SetResponder(function()
                 return MenuResponse.CloseAll;
             end)
-            confirmNewSetElementDescription:AddInitializer(function(frame, elementDescription, menu)
+            confirmNewSetElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedButtonMixin
                 frame:SetSize(150, 20)
                 frame:SetText("Create Set")

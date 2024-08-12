@@ -130,7 +130,7 @@ function MapPinEnhanced:RegisterAddonCompartment()
         text = self.addonName,
         icon = "Interface\\Addons\\MapPinEnhanced\\assets\\MPH_Logo.png",
         notCheckable = true,
-        func = function(_, buttonName, menu)
+        func = function()
             self:TogglePinTracker()
         end,
     })

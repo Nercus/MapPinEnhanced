@@ -104,8 +104,8 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
         onChange = function(value)
             if not value then return end
             if type(value) ~= "table" then return end
-            for key, value in pairs(value) do
-                self:OnChange(key, value)
+            for optionKey, optionValue in pairs(value) do
+                self:OnChange(optionKey, optionValue)
             end
         end,
         options = {
@@ -159,7 +159,7 @@ local continents = sortedByMapType[Enum.UIMapType.Continent]
 
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
-    MenuUtil.CreateContextMenu(self.mapID.mapSelection, function(owner, rootDescription, a, b, c)
+    MenuUtil.CreateContextMenu(self.mapID.mapSelection, function(_, rootDescription)
         rootDescription:CreateTitle("Care! Work in progress")
         ---@param menu SubMenuUtil
         ---@param children UiMapDetails[]
@@ -185,7 +185,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
                     end
                     ---@type SubMenuUtil
                     local sub
-                    sub = menu:CreateButton(mapName, function(_, buttonName, button)
+                    sub = menu:CreateButton(mapName, function()
                         self.mapID:SetText(tostring(child.mapID))
                         self:OnChange('title', self.title:GetText())
                     end) --[[@as SubMenuUtil]]
