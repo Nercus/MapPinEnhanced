@@ -192,6 +192,7 @@ function PinManager:PersistPins()
 end
 
 function PinManager:RestorePins()
+    self.wasSuperTrackingOther = MapPinEnhanced:GetVar("SuperTrackingOther") --[[@as boolean]]
     local storedPins = MapPinEnhanced:GetVar("storedPins") --[[@as table<string, pinData> | nil]]
     if storedPins then
         for _, pinData in pairs(storedPins) do
@@ -253,7 +254,7 @@ function PinManager:AddPin(pinData, restored)
     PinManager.Positions[pinPositionString] = true
 
 
-    if pinData.setTracked then
+    if pinData.setTracked and not self.wasSuperTrackingOther then
         pinObject:Track()
     else
         pinObject:Untrack()

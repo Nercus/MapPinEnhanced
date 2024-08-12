@@ -45,8 +45,6 @@ local function HandleOnPlayerLogin()
 end
 
 
--- FIXME: save last supertracked type and block setTracked on pin restore
-
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HandleOnPlayerLogin)
 
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
@@ -75,6 +73,7 @@ function Blizz:OnSuperTrackingChanged()
     ---@type boolean
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    MapPinEnhanced:SaveVar("SuperTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
     if not isSuperTracking then
         if countSinceLastTrackedPin <= 2 then
             local PinManager = MapPinEnhanced:GetModule("PinManager")
