@@ -1,0 +1,39 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame inherits="MapPinEnhancedBaseFrameTemplate" name="MapPinEnhancedPopupDialogTemplate"
+        hidden="true"
+        virtual="true"
+        parent="UIParent">
+        <Size x="400" y="200" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="text" text="Popup title">
+                    <Anchors>
+                        <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="accept" inherits="MapPinEnhancedButtonYellowTemplate">
+                <Size x="70" y="25" />
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOM" x="-10"
+                        y="10" />
+                </Anchors>
+            </Button>
+            <Button parentKey="cancel" inherits="MapPinEnhancedButtonRedTemplate">
+                <Size x="70" y="25" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent" relativePoint="BOTTOM" x="10"
+                        y="10" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>

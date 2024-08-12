@@ -11,8 +11,6 @@ MapPinEnhanced.nameVersionString = MapPinEnhanced.addonName .. " v" .. MapPinEnh
 MapPinEnhanced.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 MapPinEnhanced.isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC -- Note: Classic is not supported yet
 
-MapPinEnhanced.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
-
 MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")
 MapPinEnhanced.HBDP = LibStub("HereBeDragons-Pins-2.0")
 MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")

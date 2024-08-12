@@ -96,32 +96,40 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
-    self.header.deleteButton:SetScript("OnClick", function()
-        -- TODO: add a confirmation dialog
-        ---@class SetManager : Module
-        local SetManager = MapPinEnhanced:GetModule("SetManager")
-        SetManager:DeleteSet(self.activeEditorSet)
-        self:SetActiveEditorSetID()
-        CB:Fire('UpdateSetList')
-    end)
+    local function DeleteSet()
+        MapPinEnhanced:ShowPopup({
+            text = "Are you sure you want to delete this set?",
+            onAccept = function()
+                ---@class SetManager : Module
+                local SetManager = MapPinEnhanced:GetModule("SetManager")
+                SetManager:DeleteSet(self.activeEditorSet)
+                self:SetActiveEditorSetID()
+                CB:Fire('UpdateSetList')
+            end
+        })
+    end
+    self.header.deleteButton:SetScript("OnClick", DeleteSet)
 
-    self.header.setName:SetScript("OnTextChanged", function()
+    local function UpdateSetName()
         if not self.activeEditorSet then return end
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         SetManager:UpdateSetNameByID(self.activeEditorSet, self.header.setName:GetText())
-    end)
-    self.header:SetScript("OnMouseDown", function()
+    end
+    self.header.setName:SetScript("OnTextChanged", UpdateSetName)
+
+    local function StartMoving()
         MapPinEnhanced.editorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
-    end)
+    end
+    self.header:SetScript("OnMouseDown", StartMoving)
 
-    self.header:SetScript("OnMouseUp", function()
+    local function StopMoving()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
-    end)
+    end
+    self.header:SetScript("OnMouseUp", StopMoving)
 
-    self.header.importButton:SetScript("OnClick", function()
-        if self.activeEditorSet then return end
+    local function ToggleImportFrame()
         if self.importFrame:IsShown() then
             self.importFrame:Hide()
             self.infoText:Show()
@@ -129,18 +137,20 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
             self.importFrame:Show()
             self.infoText:Hide()
         end
-    end)
+    end
+    self.header.importButton:SetScript("OnClick", ToggleImportFrame)
 
-    self.importFrame.editBox:SetScript("OnTextChanged", function()
+    local function OnImportStringUpdate()
         local text = self.importFrame.editBox:GetText()
         if text == "" then
             self.importFrame.confirmButton:Disable()
         else
             self.importFrame.confirmButton:Enable()
         end
-    end)
+    end
+    self.importFrame.editBox:SetScript("OnTextChanged", OnImportStringUpdate)
 
-    self.importFrame.confirmButton:SetScript("OnClick", function()
+    local function OnImportConfirm()
         local text = self.importFrame.editBox:GetText()
         local PinProvider = MapPinEnhanced:GetModule("PinProvider")
         local pins = PinProvider:DeserializeWayString(text)
@@ -156,7 +166,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
             })
         end
         self:SetActiveEditorSetID(set.setID)
-    end)
+    end
+    self.importFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSet()

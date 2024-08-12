@@ -155,10 +155,33 @@ function MapPinEnhanced:UpdateVersionInfo()
     end
 end
 
+function MapPinEnhanced:CheckNavigationEnabled()
+    if GetCVar("showInGameNavigation") == "1" then return end
+    self:ShowPopup({
+        text =
+        "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?",
+        onAccept = function()
+            SetCVar("showInGameNavigation", 1)
+        end
+    })
+end
+
+function MapPinEnhanced:CheckForTomTom()
+    self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
+    if not self.isTomTomLoaded then
+        ---@diagnostic disable-next-line: global-element slash command definition has to be global
+        SLASH_MapPinEnhanced3 = "/way"
+        return
+    end
+    self:Notify("TomTom is loaded! The usage of /way is disabled.")
+end
+
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     MapPinEnhanced:ToggleMinimapButton(true)
     MapPinEnhanced:RegisterAddonCompartment()
     MapPinEnhanced:UpdateVersionInfo()
+    MapPinEnhanced:CheckNavigationEnabled()
+    MapPinEnhanced:CheckForTomTom()
 end)
 
 MapPinEnhanced:AddSlashCommand("minimap", function()

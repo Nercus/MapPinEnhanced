@@ -5,9 +5,7 @@ local commandList = {} ---@type table<string, function>
 local commandHelpStrings = {} ---@type table<string, string>
 
 SLASH_MapPinEnhanced1, SLASH_MapPinEnhanced2 = "/mph", "/mpe"
-if not MapPinEnhanced.isTomTomLoaded then
-    SLASH_MapPinEnhanced3 = "/way"
-end
+
 
 local normalColor = CreateColor(1, 0.82, 0)
 local SlashCmdList = getglobal("SlashCmdList") ---@as table<string, function>

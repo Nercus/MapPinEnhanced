@@ -13,4 +13,5 @@
     <Script file="modules.lua" />
     <Script file="textures.lua" />
     <Script file="helpers.lua" />
+    <Script file="dialog.lua" />
 </Ui>
