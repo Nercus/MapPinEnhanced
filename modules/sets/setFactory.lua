@@ -8,7 +8,7 @@ local SetManager = MapPinEnhanced:GetModule("SetManager")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
-local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- NOTE: currently the same template
+local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- currently the same template
 
 
 ---@class SetObject

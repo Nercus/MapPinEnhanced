@@ -49,6 +49,21 @@ function PinManager:TrackNearestPin()
     end
 end
 
+---@param lastPinOrder number?
+function PinManager:TrackNextPin(lastPinOrder)
+    if not lastPinOrder then
+        lastPinOrder = 0 -- start from the beginning
+    end
+    for _, pin in pairs(self.Pins) do
+        local pinData = pin:GetPinData()
+        local order = pinData.order
+        if order > lastPinOrder then
+            pin:Track()
+            return
+        end
+    end
+end
+
 function PinManager:GetMaxPinOrder()
     local maxOrder = 0
     local numPins = 0
@@ -136,6 +151,7 @@ function PinManager:RemovePinByID(pinID)
     end
     pin:Remove()
     local pinData = self.Pins[pinID]:GetPinData()
+    local lastPinOrder = pinData.order
     local pinPositionString = GetPositionStringForPin(pinData)
     self.Positions[pinPositionString] = nil
     self.Pins[pinID] = nil
@@ -144,6 +160,8 @@ function PinManager:RemovePinByID(pinID)
     local optionTrackNearestPin = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin")
     if optionTrackNearestPin then
         self:TrackNearestPin()
+    else
+        self:TrackNextPin(lastPinOrder)
     end
 end
 

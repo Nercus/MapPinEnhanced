@@ -369,8 +369,6 @@ function PinFactory:CreatePin(initPinData, pinID)
             rootDescription:CreateButton("Toggle persistent", function()
                 TogglePersistentState()
             end)
-            -- NOTE: Sharing pins to chat is not yet implemented
-            -- rootDescription:CreateButton("Share Pin", function() error("Not implemented: Share Pin") end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
         end)
     end
