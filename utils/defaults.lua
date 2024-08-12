@@ -12,7 +12,8 @@ local DEFAULTS = {
         ["unlimitedDistance"] = true,
         ["Show Estimated Time"] = true,
         ["Show Title"] = true,
-        ["Show Centered Highlight"] = true
+        ["Show Centered Highlight"] = true,
+        ["Override world quest tracking"] = false
     },
     ["MinimapIcon"] = {
         ["hide"] = false,

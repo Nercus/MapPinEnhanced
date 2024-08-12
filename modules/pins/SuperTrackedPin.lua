@@ -176,6 +176,23 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
             end
         end
     })
+
+    Options:RegisterCheckbox({
+        category = "Floating Pin",
+        label = "Override world quest tracking",
+        default = MapPinEnhanced:GetDefault("Floating Pin", "Override world quest tracking") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("Floating Pin", "Override world quest tracking") --[[@as boolean]],
+        description =
+        "When enabled, the tracked pin will be retracted when a world quest is tracked (flying over the world quest on the map).",
+        onChange = function(value)
+            if value then
+                self:RegisterEvent("QUEST_POI_UPDATE");
+            else
+                self:UnregisterEvent("QUEST_POI_UPDATE");
+            end
+            MapPinEnhanced:SaveVar("Floating Pin", "Override world quest tracking", value)
+        end
+    })
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
@@ -192,5 +209,10 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
         self.navFrameCreated = true;
     elseif event == "NAVIGATION_FRAME_DESTROYED" then
         self.navFrameCreated = false;
+    elseif event == "QUEST_POI_UPDATE" then
+        C_Timer.After(0.1, function()
+            local PinManager = MapPinEnhanced:GetModule("PinManager")
+            PinManager:TrackLastTrackedPin()
+        end)
     end
 end
