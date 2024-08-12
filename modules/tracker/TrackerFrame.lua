@@ -100,7 +100,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
         MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
         ---@class PinManager : Module
         local PinManager = MapPinEnhanced:GetModule("PinManager")
-        local pins = PinManager:GetPins()
+        local pins = PinManager:GetPinsByOrder()
         ---@type number
         for _, pin in pairs(pins) do
             table.insert(self.entries, pin.trackerPinEntry)

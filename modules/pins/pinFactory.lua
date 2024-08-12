@@ -27,6 +27,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
 ---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
 ---@field persistent boolean? if true, the pin will be not be removed automatically when it has been reached
+---@field order number? the order of the pin: the lower the number, the higher the pin will be displayed on the tracker -> if not set, the pin will be displayed at the end of the tracker
 
 
 ---@class PinObject

@@ -15,23 +15,33 @@ local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 ---@field setID UUID
 ---@field name string
 ---@field AddPin fun(self, pinData:pinData, restore:boolean?)
----@field UpdatePin fun(self, setpinID:UUID, key:string, value:any)
----@field GetPinsByPosition fun(self, mapID:number, x:number, y:number):table<UUID, pinData>
----@field GetPinByID fun(self, setpinID:UUID):pinData
----@field RemovePinsByPostion fun(self, mapID:number, x:number, y:number)
+---@field UpdatePin fun(self, setPinID:UUID, key:string, value:any)
+---@field GetPinByID fun(self, setPinID:UUID):setPinData
 ---@field RemovePinByID fun(self, pinsetID:UUID)
 ---@field SetName fun(self, newName:string)
+---@field GetPinsByOrder fun():setPinData[]
 ---@field Delete fun()
----@field GetPins fun():table<string, pinData>
----@field GetPin fun(self, mapID:string, x:number, y:number):pinData
+---@field GetPins fun():table<string, setPinData>
+---@field GetAllPinData fun():table<UUID, pinData>
+---@field GetPinCount fun():number
+---@field GetPin fun(self, mapID:string, x:number, y:number):setPinData
 ---@field trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 ---@field setEditorEntry MapPinEnhancedTrackerSetEntryMixin
+
+---@class setPinData
+---@field setID UUID
+---@field setPinID UUID
+---@field pinData pinData
 
 ---Create a new set
 ---@param name string
 ---@param id UUID
 ---@return SetObject
 function SetFactory:CreateSet(name, id)
+    ---@type table<UUID, setPinData>
+    local pins = {}
+    local setID = id
+
     local trackerSetEntry = TrackerSetEntryPool:Acquire()
     ---@cast trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 
@@ -41,18 +51,21 @@ function SetFactory:CreateSet(name, id)
     trackerSetEntry:SetTitle(name)
     setEditorEntry:SetTitle(name)
 
-    local setID = id
-
-    ---@type table<UUID, pinData>
-    local pins  = {}
+    local function GetPinCount()
+        local count = 0
+        for _, _ in pairs(pins) do
+            count = count + 1
+        end
+        return count
+    end
 
     ---@param pinData pinData
     ---@param restore boolean?
     local function AddPin(_, pinData, restore)
-        -- TODO: save by index instead of id
-        local setpinID = MapPinEnhanced:GenerateUUID("setpin")
+        local setPinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
-        pins[setpinID] = pinData
+        pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
+        pins[setPinID] = { pinData = pinData, setID = setID, setPinID = setPinID }
         if not restore then
             SetManager:PersistSets(setID)
         end
@@ -67,42 +80,16 @@ function SetFactory:CreateSet(name, id)
             return
         end
         ---@type string | number | boolean | nil
-        pin[key] = value
+        pin.pinData[key] = value
         SetManager:PersistSets(setID)
     end
 
-    ---@param mapID number
-    ---@param x number
-    ---@param y number
-    ---@return table<UUID, pinData>
-    local function GetPinsByPosition(_, mapID, x, y)
-        ---@type table<UUID, pinData>
-        local pinsByPosition = {}
-        for setpinID, pin in pairs(pins) do
-            if pin.mapID == mapID and pin.x == x and pin.y == y then
-                pinsByPosition[setpinID] = pin
-            end
-        end
-        return pinsByPosition
+    ---@param setPinID UUID
+    ---@return setPinData
+    local function GetPinByID(_, setPinID)
+        return pins[setPinID]
     end
 
-
-    ---@param setpinID UUID
-    ---@return pinData
-    local function GetPinByID(_, setpinID)
-        return pins[setpinID]
-    end
-
-    ---@param mapID number
-    ---@param x number
-    ---@param y number
-    local function RemovePinsByPostion(_, mapID, x, y)
-        local pinsToRemove = GetPinsByPosition(_, mapID, x, y)
-        for setpinID, _ in pairs(pinsToRemove) do
-            pins[setpinID] = nil
-        end
-        SetManager:PersistSets(setID)
-    end
 
     ---@param pinsetID UUID
     local function RemovePinByID(_, pinsetID)
@@ -111,8 +98,8 @@ function SetFactory:CreateSet(name, id)
     end
 
     local function Delete()
-        for setpinID, _ in pairs(pins) do
-            pins[setpinID] = nil
+        for setPinID, _ in pairs(pins) do
+            pins[setPinID] = nil
         end
         TrackerSetEntryPool:Release(trackerSetEntry)
         setEditorEntryPool:Release(setEditorEntry)
@@ -120,9 +107,38 @@ function SetFactory:CreateSet(name, id)
 
 
 
-    ---@return table<UUID, pinData>
+    ---@return table<UUID, setPinData>
     local function GetPins()
         return pins
+    end
+
+
+    ---@return table<UUID, pinData>
+    local function GetAllPinData()
+        ---@type table<UUID, pinData>
+        local pinData = {}
+        for _, setPinData in pairs(pins) do
+            pinData[setPinData.setPinID] = setPinData.pinData
+        end
+        return pinData
+    end
+
+
+    ---@param a PinObject
+    ---@param b PinObject
+    ---@return boolean
+    local function SortByOrder(a, b)
+        return a:GetPinData().order < b:GetPinData().order
+    end
+
+    ---@return setPinData[]
+    local function GetPinsByOrder()
+        local orderedPins = {}
+        for _, pin in pairs(pins) do
+            table.insert(orderedPins, pin)
+        end
+        table.sort(orderedPins, SortByOrder)
+        return orderedPins
     end
 
 
@@ -130,9 +146,8 @@ function SetFactory:CreateSet(name, id)
         if override then
             PinManager:ClearPins()
         end
-        local pins = GetPins()
-        for _, pinData in pairs(pins) do
-            PinManager:AddPin(pinData)
+        for _, setPinData in pairs(pins) do
+            PinManager:AddPin(setPinData.pinData)
         end
         MapPinEnhanced:SetPinTrackerView('Pins')
     end
@@ -151,11 +166,12 @@ function SetFactory:CreateSet(name, id)
         SetName = SetName,
         AddPin = AddPin,
         UpdatePin = UpdatePin,
-        RemovePinsByPos = RemovePinsByPostion,
         RemovePinByID = RemovePinByID,
-        GetPinsByPosition = GetPinsByPosition,
         GetPinByID = GetPinByID,
         GetPins = GetPins,
+        GetAllPinData = GetAllPinData,
+        GetPinCount = GetPinCount,
+        GetPinsByOrder = GetPinsByOrder,
         Delete = Delete,
         trackerSetEntry = trackerSetEntry,
         setEditorEntry = setEditorEntry

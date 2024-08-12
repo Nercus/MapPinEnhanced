@@ -14,7 +14,7 @@ local CURRENT_SET_COUNT = 0
 
 ---@class reducedSet
 ---@field name string
----@field pins table<string, pinData>
+---@field pins table<UUID, pinData>
 
 ---@param targetSetID? UUID if nil, all sets will be persisted
 function SetManager:PersistSets(targetSetID)
@@ -26,7 +26,7 @@ function SetManager:PersistSets(targetSetID)
         end
         local setTable = {
             name = set.name,
-            pins = set:GetPins()
+            pins = set:GetAllPinData()
         }
         MapPinEnhanced:SaveVar("Sets", targetSetID, setTable)
         return
@@ -36,7 +36,7 @@ function SetManager:PersistSets(targetSetID)
     for setID, set in pairs(self.Sets) do
         reducedSets[setID] = {
             name = set.name,
-            pins = set:GetPins()
+            pins = set:GetAllPinData()
         }
     end
     MapPinEnhanced:SaveVar("Sets", reducedSets)

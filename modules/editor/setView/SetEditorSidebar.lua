@@ -26,21 +26,21 @@ MapPinEnhancedSetEditorViewSidebarMixin = {}
 function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     if not setID then return end
     local SetEditorBody = self.body
-    local activeSet = SetEditorBody:GetActiveEditorSet()
-    if activeSet then -- there is currently an active set
-        local set = SetEditorBody:GetActiveSetData()
+    local activeSetID = SetEditorBody:GetActiveEditorSetID()
+    if activeSetID then -- there is currently an active set
+        local set = SetEditorBody:GetActiveSet()
         if not set then return end
         set.setEditorEntry:SetInactive()
     end
-    if setID == activeSet then -- if we click on the active set we want to close it
-        local set = SetEditorBody:GetActiveSetData()
+    if setID == activeSetID then -- if we click on the active set we want to close it
+        local set = SetEditorBody:GetActiveSet()
         if not set then return end
         set.setEditorEntry:SetInactive()
-        SetEditorBody:SetActiveEditorSet()
+        SetEditorBody:SetActiveEditorSetID()
         return
     end
-    SetEditorBody:SetActiveEditorSet(setID)
-    local newSet = SetEditorBody:GetActiveSetData()
+    SetEditorBody:SetActiveEditorSetID(setID)
+    local newSet = SetEditorBody:GetActiveSet()
     if not newSet then return end
     newSet.setEditorEntry:SetActive()
 end
@@ -73,7 +73,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
     end
     local scrollChild = self.scrollFrame.Child
     for _, child in ipairs({ scrollChild:GetChildren() }) do
-        local child = child --[[@as Frame]]
+        ---@cast child Frame
         child:Hide()
         child:ClearAllPoints()
     end
@@ -91,9 +91,6 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
         -- not the nicest solution but it works for now, we overwrite the OnClick function to set the active editor set and hope we dont need to update the set list too often
         setFrame:SetScript("OnClick", function()
             self:ToggleActiveSet(setObject.setID)
-        end)
-        hooksecurefunc(setObject, "AddPin", function()
-            self.body:UpdateEditor()
         end)
     end
 end

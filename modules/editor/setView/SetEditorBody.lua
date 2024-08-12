@@ -54,12 +54,12 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         self.addPinButton:Hide()
         return
     end
-    local set = self:GetActiveSetData()
+    local set = self:GetActiveSet()
     if not set then return end
-    local pins = set:GetPins()
+    local pins = set:GetPinsByOrder()
 
     local lastFrame = nil
-    for setpinID, pin in pairs(pins) do
+    for _, pin in ipairs(pins) do
         local pinFrame = PinEntryFramePool:Acquire() --[[@as MapPinEnhancedSetEditorPinEntryMixin]]
         pinFrame:SetParent(scrollChild)
         pinFrame:Show()
@@ -69,9 +69,9 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
             pinFrame:SetPoint("TOPLEFT", lastFrame, "BOTTOMLEFT", 0, -5)
         end
         lastFrame = pinFrame
-        pinFrame:SetPin(pin)
+        pinFrame:SetPin(pin.pinData)
         pinFrame:SetChangeCallback(function(key, value)
-            self:OnPinDataChange(set, setpinID, key, value)
+            self:OnPinDataChange(set, pin.setPinID, key, value)
         end)
     end
 
@@ -101,7 +101,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         SetManager:DeleteSet(self.activeEditorSet)
-        self:SetActiveEditorSet()
+        self:SetActiveEditorSetID()
         CB:Fire('UpdateSetList')
     end)
 
@@ -155,11 +155,11 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
                 title = pin.title,
             })
         end
-        self:SetActiveEditorSet(set.setID)
+        self:SetActiveEditorSetID(set.setID)
     end)
 end
 
-function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSetData()
+function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSet()
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     return SetManager:GetSetByID(self.activeEditorSet)
 end
@@ -188,7 +188,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()
-    local set = self:GetActiveSetData()
+    local set = self:GetActiveSet()
     local setName = ""
     if set then
         setName = set.name
@@ -205,12 +205,12 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateEditor()
 end
 
 ---@param setID UUID | nil
-function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSet(setID)
+function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSetID(setID)
     self.activeEditorSet = setID
     self:UpdateEditor()
 end
 
 ---@return UUID | nil
-function MapPinEnhancedSetEditorViewBodyMixin:GetActiveEditorSet()
+function MapPinEnhancedSetEditorViewBodyMixin:GetActiveEditorSetID()
     return self.activeEditorSet
 end

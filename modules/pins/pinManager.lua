@@ -49,12 +49,44 @@ function PinManager:TrackNearestPin()
     end
 end
 
+function PinManager:GetMaxPinOrder()
+    local maxOrder = 0
+    local numPins = 0
+    for _, pin in pairs(self.Pins) do
+        if pin:GetPinData().order > maxOrder then
+            maxOrder = pin:GetPinData().order
+        end
+        numPins = numPins + 1
+    end
+    if maxOrder == 0 then
+        ---@type number
+        maxOrder = numPins
+    end
+    return maxOrder
+end
+
 function PinManager:GetPins()
     return self.Pins
 end
 
+---@param a PinObject
+---@param b PinObject
+---@return boolean
+local function SortByOrder(a, b)
+    return a:GetPinData().order < b:GetPinData().order
+end
+
+---@return PinObject[]
+function PinManager:GetPinsByOrder()
+    local pins = {}
+    for _, pin in pairs(self.Pins) do
+        table.insert(pins, pin)
+    end
+    table.sort(pins, SortByOrder)
+    return pins
+end
+
 function PinManager:GetPinByID(pinID)
-    -- TODO: change it to index based
     return self.Pins[pinID]
 end
 
@@ -197,6 +229,7 @@ function PinManager:AddPin(pinData, restored)
     end
 
     local pinID = MapPinEnhanced:GenerateUUID("pin")
+    pinData.order = self:GetMaxPinOrder() + (pinData.order or 1) -- default order is 1
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     PinManager.Pins[pinID] = pinObject
     PinManager.Positions[pinPositionString] = true
