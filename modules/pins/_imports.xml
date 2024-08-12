@@ -6,5 +6,6 @@
     <Include file="MinimapPin.xml" />
     <Include file="SuperTrackedPin.xml" />
     <Script file="pinFactory.lua" />
+    <Script file="pinDistance.lua" />
     <Script file="pinManager.lua" />
 </Ui>
