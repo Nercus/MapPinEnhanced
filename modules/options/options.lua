@@ -109,3 +109,10 @@ function Options:SetOptionDisabledState(category, label, disabledState)
     end
     error(("Option with label %s does not exist in category %s"):format(label, category))
 end
+
+---@param oldVersion number
+function Options:MigrateOptionByVersion(oldVersion)
+    if oldVersion < 300 then -- versions before 3.0.0
+        -- TODO: add migration of options from 2.x.x to 3.0.0
+    end
+end

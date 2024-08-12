@@ -147,11 +147,15 @@ end
 
 function MapPinEnhanced:UpdateVersionInfo()
     if self.lastVersion then return end -- only update once
-    self.lastVersion = MapPinEnhanced:GetVar("version")
+    self.lastVersion = MapPinEnhanced:GetVar("version") --[[@as number]]
     local currentVersion = MapPinEnhanced.version
     if not MapPinEnhanced.lastVersion or MapPinEnhanced.lastVersion ~= currentVersion then
         MapPinEnhanced:SaveVar("version", currentVersion)
         MapPinEnhanced:PrintHelp() -- show the help message after a new upate
+    end
+    if self.lastVersion then
+        local Options = MapPinEnhanced:GetModule("Options")
+        Options:MigrateOptionByVersion(self.lastVersion)
     end
 end
 
