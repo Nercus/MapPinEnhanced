@@ -14,7 +14,7 @@ local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTe
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
-
+-- FIXME: investigate issue why sometimes the pin is gone
 
 
 ---@class pinData
@@ -70,9 +70,11 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
-
     local function EnableDistanceCheck()
-        trackerPinEntry:SetScript("OnUpdate", self.UpdateDistance)
+        local function UpdateDistance()
+            self:UpdateDistance(pinID, pinData)
+        end
+        trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
     end
 
     local function DisableDistanceCheck()
@@ -185,7 +187,12 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function SharePin()
-        error("Not implemented: Share Pin")
+        if x and y and mapID then
+            local waypointLink = ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000,
+                MAP_PIN_HYPERLINK)
+            ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
+            ChatEdit_InsertLink(waypointLink)
+        end
     end
 
 
@@ -297,6 +304,8 @@ function PinFactory:CreatePin(initPinData, pinID)
             rootDescription:CreateButton("Toggle persistent", function()
                 TogglePersistentState()
             end)
+
+            rootDescription:CreateButton("Remove Pin", function() SharePin() end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
         end)
     end

@@ -382,3 +382,17 @@ MapPinEnhancedDB = {}
 UIErrorsFrame = {}
 
 function UIErrorsFrame:AddMessage(message, r, g, b, a) end
+
+-- typed only for english client, but that doesnt matter using ingame global anyways
+MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location"
+
+
+---@param editBox EditBox
+function ChatEdit_ActivateChat(editBox) end
+
+---@param link string
+function ChatEdit_InsertLink(link) end
+
+---@class DEFAULT_CHAT_FRAME
+---@field editBox EditBox
+DEFAULT_CHAT_FRAME = {}

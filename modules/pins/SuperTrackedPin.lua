@@ -35,8 +35,11 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local clamped = C_Navigation.WasClampedToScreen();
     local showTime = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time")
     local showTitle = MapPinEnhanced:GetVar("Floating Pin", "Show Title")
-    local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == (self.pinData.title or "")
+    local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
 
+
+    --- FIXME: distance text is sometimes just gone
+    --- FIXME: lock icon is sometimes not hidden
     if clamped or (not showTime and not showTitle) then -- clamped or dont show title and time
         self.title:Hide()
         self.distantText:Hide()

@@ -34,9 +34,6 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
--- FIXME: width of entry pin entry incorrect after first show of tracker
--- FIXME: init height update is not correct. sometimes bigger than set
-
 local ENTRY_GAP = 5
 local DEFAULT_ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
@@ -113,6 +110,7 @@ function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
             self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
                 "MapPinEnhancedButtonYellowTemplate") --[[@as MousePropagatableButton]]
             self.importButton:SetSize(300, 30)
+            -- TODO: resize all non normal entries and anchor with full width instead of topleft
             self.importButton:SetText("Import")
             self.importButton:SetPropagateMouseMotion(true)
         end
@@ -242,7 +240,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         init = MapPinEnhanced:GetVar("Tracker", "trackerScale") --[[@as number]],
         min = 0.5,
         max = 2,
-        step = 0.1,
+        step = 0.05,
         onChange = function(value)
             MapPinEnhanced:SaveVar("Tracker", "trackerScale", value)
             self:SetScale(value)
@@ -284,10 +282,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         step = 1,
         onChange = function(value)
             MapPinEnhanced:SaveVar("Tracker", "trackerHeight", value)
-            local maxEntryCount = MapPinEnhanced:GetVar("Tracker", "trackerHeight")
-            local headerHeight = self.header:GetHeight()
-            local maxHeight = (DEFAULT_ENTRY_HEIGHT + ENTRY_GAP) * maxEntryCount + ENTRY_GAP + headerHeight
-            self:UpdateFrameHeight(maxHeight)
+            self:UpdateEntriesPosition()
         end
     })
 end
@@ -312,6 +307,9 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     end)
     self.scrollFrame.ScrollBar:SetAlpha(0)
     self:AddOptions()
+    -- FIXME: WHY ARE THE FUCKING PINS HIDDEN ON START UP EVERYTHING IS SHOWN ONLY THESE TWO LINES FIX IT....
+    self:SetScale(1.01)
+    self:SetScale(1)
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetEntryCount()
@@ -337,6 +335,7 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
     self:StopMovingOrSizing()
+    -- FIXME: take scale into consideration
     local left, top = self:GetLeft(), self:GetTop()
     top = top - GetScreenHeight() -- relative from bottom left
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
@@ -347,16 +346,14 @@ end
 
 ---@param scrollFrameHeight number?
 function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
+    local headerHeight = self.header:GetHeight()
+    local newHeight = headerHeight + (scrollFrameHeight or 0)
     if self:GetActiveView() == "Import" then
-        local headerHeight = self.header:GetHeight()
-        local newHeight = scrollFrameHeight + headerHeight
         self:SetHeight(newHeight)
         return
     end
     local maxEntryCount = MapPinEnhanced:GetVar("Tracker", "trackerHeight")
-    local headerHeight = self.header:GetHeight()
     local maxHeight = (DEFAULT_ENTRY_HEIGHT + ENTRY_GAP) * maxEntryCount + ENTRY_GAP + headerHeight
-    local newHeight = scrollFrameHeight + headerHeight
     if newHeight > maxHeight then
         newHeight = maxHeight
     end
@@ -398,7 +395,7 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     local scollChildHeight = self.scrollFrame.Child:GetHeight()
     entry:ClearAllPoints()
     if #self.entries == 1 then
-        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 20, -ENTRY_GAP)
+        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 30, -ENTRY_GAP)
     else
         entry:SetPoint("TOPLEFT", self.entries[#self.entries - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
     end

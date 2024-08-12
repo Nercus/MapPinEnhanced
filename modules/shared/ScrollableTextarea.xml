@@ -36,7 +36,8 @@
             </AnimationGroup>
         </Animations>
         <ScrollChild>
-            <EditBox parentKey="editBox" multiLine="true" autoFocus="false" font="GameFontNormal">
+            <EditBox parentKey="editBox" multiLine="true" autoFocus="false"
+                font="GameFontHighlight">
                 <TextInsets left="10" top="10" right="-5" bottom="10" />
                 <Anchors>
                     <Anchor point="TOP" x="0" y="-5" />
