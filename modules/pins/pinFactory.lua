@@ -14,9 +14,6 @@ local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTe
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
--- FIXME: investigate issue why sometimes the pin is gone
-
-
 ---@class pinData
 ---@field mapID number
 ---@field x number x coordinate between 0 and 1

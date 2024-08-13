@@ -63,7 +63,7 @@
                                         editBox:SetFocus()
                                         editBox:HighlightText()
                                         editBox:SetPropagateMouseClicks(false)
-                                        self.icon:SetTexture( "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
+                                        self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
                                     </OnClick>
                                 </Scripts>
                             </Button>

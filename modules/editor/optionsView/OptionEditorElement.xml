@@ -5,7 +5,7 @@
     <Frame name="MapPinEnhancedOptionEditorElementTemplate"
         mixin="MapPinEnhancedOptionEditorElementMixin"
         virtual="true" hidden="true"
-        enableMouse="true">
+        enableMouse="true" propagateMouseInput="Motion">
         <Size x="580" y="45" />
         <Layers>
             <Layer level="ARTWORK">

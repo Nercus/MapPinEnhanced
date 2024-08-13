@@ -5,8 +5,13 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerScrollBar : Frame
 ---@field Update fun(self:MapPinEnhancedTrackerScrollBar)
 
+---@class MapPinEnhancedTrackerScrollFrameChild : Frame
+---@field importButton MousePropagatableButton
+---@field importEditBox ScrollableTextarea
+---@field cancelButton MousePropagatableButton
+
 ---@class MapPinEnhancedTrackerScrollFrame : ScrollFrame
----@field Child Frame
+---@field Child MapPinEnhancedTrackerScrollFrameChild
 ---@field SetPanExtent fun(self:MapPinEnhancedTrackerScrollFrame, extent:number)
 ---@field ScrollBar MapPinEnhancedTrackerScrollBar
 
@@ -26,9 +31,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollFrame MapPinEnhancedTrackerScrollFrame
 ---@field activeView TrackerView
 ---@field header MapPinEnhancedTrackerHeader
----@field importButton MousePropagatableButton
----@field importEditBox ScrollableTextarea
----@field cancelButton MousePropagatableButton
 ---@field blackBackground Texture
 ---@field showNumbering boolean?
 MapPinEnhancedTrackerFrameMixin = {}
@@ -71,7 +73,7 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
-    if not self:GetActiveView() == "Pins" then return end
+    if self:GetActiveView() ~= "Pins" then return end
     local autoVisibility = MapPinEnhanced:GetVar("Tracker", "autoVisibility") --[[@as 'none' | 'autoHide' | 'autoShow' | 'both']]
     local entryCount = self:GetEntryCount()
     if autoVisibility == "none" then return end
@@ -85,93 +87,78 @@ function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
     end
 end
 
----@param viewType TrackerView
----@param forceUpdate? boolean
-function MapPinEnhancedTrackerFrameMixin:SetActiveView(viewType, forceUpdate)
-    if self.activeView == viewType and not forceUpdate then
-        return
-    end
+---@param forceUpdate? boolean force an update
+function MapPinEnhancedTrackerFrameMixin:SetPinView(forceUpdate)
+    if self.activeView == "Pins" and not forceUpdate then return end
     self:ClearEntries()
-
-    if viewType == "Pins" then
-        MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
-        ---@class PinManager : Module
-        local PinManager = MapPinEnhanced:GetModule("PinManager")
-        local pins = PinManager:GetPinsByOrder()
-        ---@type number
-        for _, pin in pairs(pins) do
-            table.insert(self.entries, pin.trackerPinEntry)
-        end
-        self:UpdatePinNumberingVisibility()
-    elseif viewType == "Sets" then
-        ---@class SetManager : Module
-        local SetManager = MapPinEnhanced:GetModule("SetManager")
-        if not self.importButton then
-            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonYellowTemplate") --[[@as MousePropagatableButton]]
-            self.importButton:SetSize(300, 30)
-            -- TODO: resize all non normal entries and anchor with full width instead of topleft
-            self.importButton:SetText("Import")
-            self.importButton:SetPropagateMouseMotion(true)
-        end
-        self.importButton:Enable()
-        self.importButton:SetScript("OnClick", function()
-            self:SetActiveView("Import")
-        end)
-        table.insert(self.entries, self.importButton)
-        local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
-        --MapPinEnhanced.SetManager:GetAllSetEntries()
-        for _, set in pairs(sets) do
-            table.insert(self.entries, set.trackerSetEntry)
-        end
-        MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
-            if self.activeView ~= "Sets" then return end
-            self:SetActiveView(self.activeView, true)
-        end)
-    elseif viewType == "Import" then
-        if not self.cancelButton then
-            self.cancelButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonRedTemplate") --[[@as MousePropagatableButton]]
-            self.cancelButton:SetSize(300, 30)
-            self.cancelButton:SetText("Cancel")
-            self.cancelButton:SetScript("OnClick", function()
-                self:SetActiveView("Sets")
-            end)
-            self.cancelButton:SetPropagateMouseMotion(true)
-        end
-        table.insert(self.entries, self.cancelButton)
-        if not self.importEditBox then
-            self.importEditBox = CreateFrame("ScrollFrame", nil, self.scrollFrame.Child,
-                "MapPinEnhancedScrollableTextareaTemplate") --[[@as ScrollableTextarea]]
-            self.importEditBox:SetSize(300, 300)
-        end
-        table.insert(self.entries, self.importEditBox)
-
-        self.importEditBox.editBox:SetScript("OnTextChanged", function()
-            local text = self.importEditBox.editBox:GetText()
-            if text and text ~= "" then
-                self.importButton:Enable()
-            else
-                self.importButton:Disable()
-            end
-        end)
-
-        if not self.importButton then
-            self.importButton = CreateFrame("Button", nil, self.scrollFrame.Child,
-                "MapPinEnhancedButtonYellowTemplate") --[[@as MousePropagatableButton]]
-            self.importButton:SetSize(300, 30)
-            self.importButton:SetText("Import")
-            self.importButton:SetPropagateMouseMotion(true)
-        end
-        self.importButton:SetScript("OnClick", function()
-            local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-            local wayString = self.importEditBox.editBox:GetText()
-            PinProvider:ImportFromWayString(wayString)
-            self:SetActiveView("Pins")
-        end)
-        table.insert(self.entries, self.importButton)
+    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
+    local PinManager = MapPinEnhanced:GetModule("PinManager")
+    local pins = PinManager:GetPinsByOrder()
+    ---@type number
+    for _, pin in pairs(pins) do
+        table.insert(self.entries, pin.trackerPinEntry)
     end
-    self.activeView = viewType
+    self:UpdatePinNumberingVisibility()
+    self.activeView = "Pins"
+    self:UpdateEntriesPosition()
+end
+
+---@param forceUpdate? boolean force an update
+function MapPinEnhancedTrackerFrameMixin:SetSetView(forceUpdate)
+    if self.activeView == "Sets" and not forceUpdate then return end
+    self:ClearEntries()
+    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
+    local SetManager = MapPinEnhanced:GetModule("SetManager")
+    local importButton = self.scrollFrame.Child.importButton
+    importButton:Enable()
+    importButton:SetScript("OnClick", function()
+        self:SetImportView()
+    end)
+    table.insert(self.entries, importButton)
+    local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
+    --MapPinEnhanced.SetManager:GetAllSetEntries()
+    for _, set in pairs(sets) do
+        table.insert(self.entries, set.trackerSetEntry)
+    end
+    MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
+        if self.activeView ~= "Sets" then return end
+        self:SetSetView(true)
+    end)
+    self.activeView = "Sets"
+    self:UpdateEntriesPosition()
+end
+
+---@param forceUpdate? boolean force an update
+function MapPinEnhancedTrackerFrameMixin:SetImportView(forceUpdate)
+    if self.activeView == "Import" and not forceUpdate then return end
+    self:ClearEntries()
+    local cancelButton = self.scrollFrame.Child.cancelButton
+    local importEditBox = self.scrollFrame.Child.importEditBox
+    local importButton = self.scrollFrame.Child.importButton
+
+    cancelButton:SetScript("OnClick", function()
+        self:SetSetView()
+    end)
+    table.insert(self.entries, cancelButton)
+    table.insert(self.entries, importEditBox)
+
+    importEditBox.editBox:SetScript("OnTextChanged", function()
+        local text = importEditBox.editBox:GetText()
+        if text and text ~= "" then
+            importButton:Enable()
+        else
+            importButton:Disable()
+        end
+    end)
+    importButton:SetScript("OnClick", function()
+        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+        local wayString = importEditBox.editBox:GetText()
+        PinProvider:ImportFromWayString(wayString)
+        self:SetPinView()
+    end)
+    importButton:Disable()
+    table.insert(self.entries, importButton)
+    self.activeView = "Import"
     self:UpdateEntriesPosition()
 end
 
@@ -294,13 +281,13 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
 
     self.header.viewToggle:SetScript("OnClick", function()
         if self.activeView == "Pins" then
-            self:SetActiveView("Sets")
+            self:SetSetView()
         else
-            self:SetActiveView("Pins")
+            self:SetPinView()
         end
     end)
     -- set default view
-    self:SetActiveView("Pins")
+    self:SetPinView()
 
     self.header.editorToggle:SetScript("OnClick", function()
         MapPinEnhanced:ToggleEditorWindow()
@@ -330,11 +317,10 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
 end
 
-function MapPinEnhancedTrackerFrameMixin:OnMouseUp()
+function MapPinEnhancedTrackerFrameMixin:OnMouseUp(button)
+    if button ~= "LeftButton" then return end
+    local _, _, _, left, top = self:GetPoint()
     self:StopMovingOrSizing()
-    -- FIXME: take scale into consideration
-    local left, top = self:GetLeft(), self:GetTop()
-    top = top - GetScreenHeight() -- relative from bottom left
     MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
     self:ClearAllPoints()
     self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", left, top)
@@ -365,9 +351,11 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         entry:ClearAllPoints()
         entry:SetParent(self.scrollFrame.Child)
         if i == 1 then
-            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 30, -ENTRY_GAP)
+            entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 35, -ENTRY_GAP)
+            entry:SetPoint("TOPRIGHT", self.scrollFrame.Child, "TOPRIGHT", 25, -ENTRY_GAP)
         else
             entry:SetPoint("TOPLEFT", self.entries[i - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
+            entry:SetPoint("TOPRIGHT", self.entries[i - 1], "BOTTOMRIGHT", 0, -ENTRY_GAP)
         end
         height = height + entry:GetHeight() + ENTRY_GAP --[[@as number]]
         entry:Show()
@@ -393,8 +381,10 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     entry:ClearAllPoints()
     if #self.entries == 1 then
         entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 30, -ENTRY_GAP)
+        entry:SetPoint("TOPRIGHT", self.scrollFrame.Child, "TOPRIGHT", 25, -ENTRY_GAP)
     else
         entry:SetPoint("TOPLEFT", self.entries[#self.entries - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
+        entry:SetPoint("TOPRIGHT", self.entries[#self.entries - 1], "BOTTOMRIGHT", 0, -ENTRY_GAP)
     end
     entry:SetParent(self.scrollFrame.Child)
     entry:Show()

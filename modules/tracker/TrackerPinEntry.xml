@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="TrackerPinEntry.lua" />
     <Button name="MapPinEnhancedTrackerPinEntryTemplate" mixin="MapPinEnhancedTrackerPinEntryMixin"
-        virtual="true" enableMouse="true" clipChildren="false" propagateMouseInput="Motion">
+        virtual="true" enableMouse="true" clipChildren="false" propagateMouseInput="Both">
         <Size x="300" y="37" />
         <KeyValues>
             <KeyValue key="titlePosition" value="RIGHT" />
@@ -19,10 +19,10 @@
                     <Layer level="OVERLAY">
                         <FontString inherits="GameFontNormalLarge" alpha="0.7" text="1"
                             justifyH="RIGHT"
-                            parentKey="count">
+                            parentKey="numbering">
                             <Anchors>
                                 <Anchor point="RIGHT" relativeKey="$parent.Pin"
-                                    relativePoint="LEFT" x="-5" />
+                                    relativePoint="LEFT" x="-8" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -30,9 +30,9 @@
             </Frame>
         </Frames>
         <Layers>
-            <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="groupfinder-button-select" alphaMode="ADD"
-                    setAllPoints="true" />
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture parentKey="highlight" atlas="AftLevelup-CloudyLineLeft"
+                    setAllPoints="true" hidden="true" />
             </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="zoneText" inherits="GameFontHighlight" text="Stockades">
@@ -42,7 +42,7 @@
                     </Anchors>
                 </FontString>
             </Layer>
-            <Layer level="BACKGROUND">
+            <Layer level="BACKGROUND" textureSubLevel="1">
                 <Texture
                     parentKey="bgLeft" texelSnappingBias="0"
                     snapToPixelGrid="false"
@@ -82,7 +82,6 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad method="OnLoad" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>

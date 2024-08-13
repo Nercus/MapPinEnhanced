@@ -3,7 +3,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePinMixin
----@field count FontString
+---@field numbering FontString
 
 
 ---@class MapPinEnhancedTrackerPinEntryMixin :  Button
@@ -12,16 +12,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
 ---@field zoneText FontString
+---@field highlight Texture
+---@field tracked boolean?
 MapPinEnhancedTrackerPinEntryMixin = {}
 
-
-function MapPinEnhancedTrackerPinEntryMixin:OnLoad()
-    if (not self.Pin.SetPropagateMouseClicks or not self.Pin.SetPropagateMouseMotion) then
-        return
-    end
-    self.Pin:SetPropagateMouseClicks(true)
-    self.Pin:SetPropagateMouseMotion(true)
-end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetZoneText(mapID)
     local mapInfo = C_Map.GetMapInfo(mapID)
@@ -55,18 +49,22 @@ end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTrackedTexture()
     self.Pin:SetTrackedTexture()
+    self.Pin.numbering:SetAlpha(1)
+    self.tracked = true
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetUntrackedTexture()
     self.Pin:SetUntrackedTexture()
+    self.Pin.numbering:SetAlpha(0.7)
+    self.tracked = false
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndex(index)
-    self.Pin.count:SetText(index)
+    self.Pin.numbering:SetText(index)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndexVisibility(visible)
-    self.Pin.count:SetShown(visible)
+    self.Pin.numbering:SetShown(visible)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title
@@ -76,8 +74,13 @@ end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
     self.Pin:LockHighlight()
+    self.highlight:Show()
+    self.Pin.numbering:SetAlpha(1)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     self.Pin:UnlockHighlight()
+    self.highlight:Hide()
+    if self.tracked then return end
+    self.Pin.numbering:SetAlpha(0.7)
 end

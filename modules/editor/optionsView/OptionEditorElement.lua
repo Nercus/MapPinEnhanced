@@ -60,7 +60,6 @@ function MapPinEnhancedOptionEditorElementMixin:SetFormElement(formElement)
     formElement:ClearAllPoints()
     formElement:SetPoint("RIGHT", 0, 0)
     formElement:Show()
-    formElement:SetPropagateMouseMotion(true)
 end
 
 ---@param optionData OptionObjectVariantsTyped

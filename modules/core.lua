@@ -36,7 +36,18 @@ function MapPinEnhanced:SetPinTrackerView(viewType)
     if not self.pinTracker then
         self:TogglePinTracker(true)
     end
-    self.pinTracker:SetActiveView(viewType)
+    if viewType == "Import" then
+        self.pinTracker:SetImportView()
+        return
+    end
+    if viewType == "Pins" then
+        self.pinTracker:SetPinView()
+        return
+    end
+    if viewType == "Sets" then
+        self.pinTracker:SetSetView()
+        return
+    end
 end
 
 ---@param viewType EditorViews

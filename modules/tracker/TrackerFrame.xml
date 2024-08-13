@@ -23,7 +23,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="header" frameStrata="HIGH" propagateMouseInput="Both">
+            <Frame parentKey="header" frameStrata="HIGH" propagateMouseInput="Motion">
                 <Size x="1" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="0" y="0" />
@@ -129,7 +129,7 @@
                 </Anchors>
                 <Size x="300" y="1" />
                 <KeyValues>
-                    <KeyValue key="scrollBarX" value="-1" type="number" />
+                    <KeyValue key="scrollBarX" value="0" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
                     <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
@@ -142,6 +142,23 @@
                             <Anchor point="TOPLEFT" x="0" y="0" />
                             <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                         </Anchors>
+                        <Frames>
+                            <Button parentKey="importButton"
+                                inherits="MapPinEnhancedButtonYellowTemplate"
+                                propagateMouseInput="Motion" hidden="true" text="Import">
+                                <Size x="300" y="30" />
+                            </Button>
+                            <ScrollFrame parentKey="importEditBox"
+                                inherits="MapPinEnhancedScrollableTextareaTemplate"
+                                hidden="true">
+                                <Size x="300" y="300" />
+                            </ScrollFrame>
+                            <Button parentKey="cancelButton"
+                                inherits="MapPinEnhancedButtonRedTemplate"
+                                propagateMouseInput="Motion" hidden="true" text="Cancel">
+                                <Size x="300" y="30" />
+                            </Button>
+                        </Frames>
                     </Frame>
                 </ScrollChild>
             </ScrollFrame>
