@@ -1,8 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
--- TODO: rename all of them
-
 -- DEFAULTS is a table that stores the default values for various settings.
 local DEFAULTS = {
     ["trackerPosition"] = {
@@ -10,23 +8,23 @@ local DEFAULTS = {
         ["y"] = -(GetScreenHeight() / 2)
     },
     ["trackerVisible"] = true,
-    ["Floating Pin"] = {
+    ["floatingPin"] = {
         ["unlimitedDistance"] = true,
-        ["Show Estimated Time"] = true,
-        ["Show Title"] = true,
-        ["Show Centered Highlight"] = true,
-        ["Override world quest tracking"] = false
+        ["showEstimatedTime"] = true,
+        ["showTitle"] = true,
+        ["showCenteredHighlight"] = true,
+        ["overrideWorldQuestTracking"] = false
     },
-    ["MinimapIcon"] = {
+    ["minimapIcon"] = {
         ["hide"] = false,
         ["lock"] = false,
         ["minimapPos"] = 45
     },
-    ["General"] = {
-        ["Editor Scale"] = 1,
-        ["Auto Track Nearest Pin"] = true
+    ["general"] = {
+        ["editorScale"] = 1,
+        ["autoTrackNearestPin"] = true
     },
-    ["Tracker"] = {
+    ["tracker"] = {
         ["autoVisibility"] = "both",
         ["lockTracker"] = false,
         ["trackerScale"] = 1,

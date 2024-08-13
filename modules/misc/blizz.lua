@@ -35,10 +35,10 @@ local function HandleOnPlayerLogin()
     Options:RegisterCheckbox({
         category = "Floating Pin",
         label = "Enable Unlimited Distance",
-        default = MapPinEnhanced:GetDefault("Floating Pin", "unlimitedDistance") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("Floating Pin", "unlimitedDistance") --[[@as boolean]],
+        default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") --[[@as boolean]],
         onChange = function(value)
-            MapPinEnhanced:SaveVar("Floating Pin", "unlimitedDistance", value)
+            MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
             Blizz:OverrideSuperTrackedAlphaState(value)
         end
     })

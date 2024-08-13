@@ -124,11 +124,11 @@ function SetFactory:CreateSet(name, id)
     end
 
 
-    ---@param a PinObject
-    ---@param b PinObject
+    ---@param a setPinData
+    ---@param b setPinData
     ---@return boolean
     local function SortByOrder(a, b)
-        return a:GetPinData().order < b:GetPinData().order
+        return a.pinData.order < b.pinData.order
     end
 
     ---@return setPinData[]

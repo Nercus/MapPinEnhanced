@@ -88,11 +88,11 @@ function MapPinEnhancedEditorWindowMixin:AddOptions()
         min = 0.5,
         max = 2,
         step = 0.05,
-        default = MapPinEnhanced:GetDefault("General", "Editor Scale") --[[@as number]],
-        init = MapPinEnhanced:GetVar("General", "Editor Scale") --[[@as number]],
+        default = MapPinEnhanced:GetDefault("general", "editorScale") --[[@as number]],
+        init = MapPinEnhanced:GetVar("general", "editorScale") --[[@as number]],
         onChange = function(value)
             self:SetScale(value)
-            MapPinEnhanced:SaveVar("General", "Editor Scale", value)
+            MapPinEnhanced:SaveVar("general", "editorScale", value)
         end
     })
 end

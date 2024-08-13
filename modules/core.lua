@@ -118,22 +118,22 @@ function MapPinEnhanced:ToggleMinimapButton(init)
             end,
         })
         self.minimapIconCreated = true
-        if not MapPinEnhancedDB.MinimapIcon then
-            MapPinEnhancedDB.MinimapIcon = MapPinEnhanced:GetDefault("MinimapIcon") --[[@as table]]
+        if not MapPinEnhancedDB.minimapIcon then
+            MapPinEnhancedDB.minimapIcon = MapPinEnhanced:GetDefault("minimapIcon") --[[@as table]]
         end
         self.LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker,
-            MapPinEnhancedDB.MinimapIcon --[[@as LibDBIcon.button.DB]])
+            MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
     end
     if init then return end
-    local currentState = MapPinEnhanced:GetVar("MinimapIcon", "hide") --[[@as boolean]]
+    local currentState = MapPinEnhanced:GetVar("minimapIcon", "hide") --[[@as boolean]]
     if currentState then
-        MapPinEnhanced:SaveVar("MinimapIcon", "hide", false)
+        MapPinEnhanced:SaveVar("minimapIcon", "hide", false)
         MapPinEnhanced:Notify("Minimapbutton is now visible")
     else
-        MapPinEnhanced:SaveVar("MinimapIcon", "hide", true)
+        MapPinEnhanced:SaveVar("minimapIcon", "hide", true)
         MapPinEnhanced:Notify("Minimapbutton is now hidden")
     end
-    self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.MinimapIcon --[[@as LibDBIcon.button.DB]])
+    self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
 end
 
 function MapPinEnhanced:RegisterAddonCompartment()
@@ -158,16 +158,14 @@ end
 
 function MapPinEnhanced:UpdateVersionInfo()
     if self.lastVersion then return end -- only update once
-    self.lastVersion = MapPinEnhanced:GetVar("version") --[[@as number]]
-    local currentVersion = MapPinEnhanced.version
-    if not MapPinEnhanced.lastVersion or MapPinEnhanced.lastVersion ~= currentVersion then
-        MapPinEnhanced:SaveVar("version", currentVersion)
-        MapPinEnhanced:PrintHelp() -- show the help message after a new upate
+    self.lastVersion = self:GetVar("version") --[[@as number]]
+    local currentVersion = self.version
+    if not self.lastVersion or self.lastVersion ~= currentVersion then
+        self:SaveVar("version", currentVersion)
+        self:PrintHelp() -- show the help message after a new upate
     end
-    if self.lastVersion then
-        local Options = MapPinEnhanced:GetModule("Options")
-        Options:MigrateOptionByVersion(self.lastVersion)
-    end
+    local Options = self:GetModule("Options")
+    Options:MigrateOptionByVersion(self.lastVersion or 0)
 end
 
 function MapPinEnhanced:CheckNavigationEnabled()

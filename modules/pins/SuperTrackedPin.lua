@@ -33,8 +33,8 @@ end
 
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local clamped = C_Navigation.WasClampedToScreen();
-    local showTime = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time")
-    local showTitle = MapPinEnhanced:GetVar("Floating Pin", "Show Title")
+    local showTime = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime")
+    local showTitle = MapPinEnhanced:GetVar("floatingPin", "showTitle")
     local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
     local isPersistent = self.pinData and self.pinData.persistent
 
@@ -141,21 +141,21 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     Options:RegisterCheckbox({
         category = "Floating Pin",
         label = "Show Estimated Time",
-        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Estimated Time") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time") --[[@as boolean]],
+        default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") --[[@as boolean]],
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
-            MapPinEnhanced:SaveVar("Floating Pin", "Show Estimated Time", value)
+            MapPinEnhanced:SaveVar("floatingPin", "showEstimatedTime", value)
             self.distantText:SetShown(value)
         end
     })
     Options:RegisterCheckbox({
         category = "Floating Pin",
         label = "Show Title",
-        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Title") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("Floating Pin", "Show Title") --[[@as boolean]],
+        default = MapPinEnhanced:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("floatingPin", "showTitle") --[[@as boolean]],
         onChange = function(value)
-            MapPinEnhanced:SaveVar("Floating Pin", "Show Title", value)
+            MapPinEnhanced:SaveVar("floatingPin", "showTitle", value)
             self:UpdateTextVisibility()
         end
     })
@@ -163,11 +163,11 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     Options:RegisterCheckbox({
         category = "Floating Pin",
         label = "Show Centered Highlight",
-        default = MapPinEnhanced:GetDefault("Floating Pin", "Show Centered Highlight") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("Floating Pin", "Show Centered Highlight") --[[@as boolean]],
+        default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]],
         description = "Highlight the floating pin when it is centered on the screen.",
         onChange = function(value)
-            MapPinEnhanced:SaveVar("Floating Pin", "Show Centered Highlight", value)
+            MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
             if value then
                 self:SetScript("OnUpdate", self.CheckIsCentered)
             else
@@ -180,8 +180,8 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     Options:RegisterCheckbox({
         category = "Floating Pin",
         label = "Override world quest tracking",
-        default = MapPinEnhanced:GetDefault("Floating Pin", "Override world quest tracking") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("Floating Pin", "Override world quest tracking") --[[@as boolean]],
+        default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
+        init = MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
         description =
         "When enabled, the tracked pin will be retracted when a world quest is tracked (flying over the world quest on the map).",
         onChange = function(value)
@@ -190,7 +190,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
             else
                 self:UnregisterEvent("QUEST_POI_UPDATE");
             end
-            MapPinEnhanced:SaveVar("Floating Pin", "Override world quest tracking", value)
+            MapPinEnhanced:SaveVar("floatingPin", "overrideWorldQuestTracking", value)
         end
     })
 end

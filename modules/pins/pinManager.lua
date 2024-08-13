@@ -157,7 +157,7 @@ function PinManager:RemovePinByID(pinID)
     self.Pins[pinID] = nil
 
     self:PersistPins()
-    local optionTrackNearestPin = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin")
+    local optionTrackNearestPin = MapPinEnhanced:GetVar("general", "autoTrackNearestPin")
     if optionTrackNearestPin then
         self:TrackNearestPin()
     else
@@ -281,10 +281,10 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload
             category = "General",
             label = "Auto Track Nearest Pin",
             description = "Automatically track the nearest pin when a tracked pin is removed.",
-            default = MapPinEnhanced:GetDefault("General", "Auto Track Nearest Pin") --[[@as boolean]],
-            init = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin") --[[@as boolean]],
+            default = MapPinEnhanced:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
+            init = MapPinEnhanced:GetVar("general", "autoTrackNearestPin") --[[@as boolean]],
             onChange = function(value)
-                MapPinEnhanced:SaveVar("General", "Auto Track Nearest Pin", value)
+                MapPinEnhanced:SaveVar("general", "autoTrackNearestPin", value)
             end
         })
     end
