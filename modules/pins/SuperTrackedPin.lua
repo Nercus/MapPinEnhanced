@@ -36,10 +36,8 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local showTime = MapPinEnhanced:GetVar("Floating Pin", "Show Estimated Time")
     local showTitle = MapPinEnhanced:GetVar("Floating Pin", "Show Title")
     local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
+    local isPersistent = self.pinData and self.pinData.persistent
 
-
-    --- FIXME: distance text is sometimes just gone
-    --- FIXME: lock icon is sometimes not hidden
     if clamped or (not showTime and not showTitle) then -- clamped or dont show title and time
         self.title:Hide()
         self.distantText:Hide()
@@ -57,15 +55,16 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
         return
     end
 
+
+    self.distantText:Show()
     if hasDefaultTitle then -- options has title enabled, but the title is the default title
         self.title:Hide()
         self.persistentIcon:Hide()
         return
     end
 
+    self.persistentIcon:SetShown(isPersistent)
     self.title:Show()
-    self.persistentIcon:Show()
-    self.distantText:Show()
 end
 
 ---override the function in the base pin mixin to handle the title visibilty for the default title
