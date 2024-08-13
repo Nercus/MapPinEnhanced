@@ -55,6 +55,13 @@
                         parent.gainFocus:Play();
                         parent.focusButton:Hide();
                     </OnEditFocusGained>
+                    <OnShow>
+                        local parent = self:GetParent();
+                        parent.loseFocus:Stop();
+                        parent.gainFocus:Stop();
+                        parent.focusButton:Show();
+                        self:SetText("");
+                    </OnShow>
                 </Scripts>
             </EditBox>
         </ScrollChild>
