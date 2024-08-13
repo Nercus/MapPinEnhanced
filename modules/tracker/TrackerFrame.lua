@@ -45,10 +45,7 @@ function MapPinEnhancedTrackerFrameMixin:RestorePosition()
     else
         local defaultPosition = MapPinEnhanced:GetDefault("trackerPosition")
         if not defaultPosition then
-            defaultPosition = {
-                ["x"] = (GetScreenWidth() / 2) - self:GetWidth() / 2,
-                ["y"] = -(GetScreenHeight() / 2) - self:GetHeight() / 2
-            }
+            defaultPosition = { x = GetScreenWidth() / 2 + 300, y = -(GetScreenHeight() / 2) }
         end
         self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", defaultPosition.x, defaultPosition.y)
         MapPinEnhanced:SaveVar("trackerPosition", defaultPosition)
@@ -73,9 +70,9 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
-    if self:GetActiveView() ~= "Pins" then return end
     local autoVisibility = MapPinEnhanced:GetVar("Tracker", "autoVisibility") --[[@as 'none' | 'autoHide' | 'autoShow' | 'both']]
-    local entryCount = self:GetEntryCount()
+    local entryCount = #self.entries
+    -- don't use GetEntryCount() here as  that will not provide the correct count for sets
     if autoVisibility == "none" then return end
     if (autoVisibility == "autoHide" or autoVisibility == "both") and entryCount == 0 then
         self:Close()
@@ -90,8 +87,9 @@ end
 ---@param forceUpdate? boolean force an update
 function MapPinEnhancedTrackerFrameMixin:SetPinView(forceUpdate)
     if self.activeView == "Pins" and not forceUpdate then return end
+    print("Set Pin View")
     self:ClearEntries()
-    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
+    MapPinEnhanced.UnregisterCallback(self, "UpdateSetList")
     local PinManager = MapPinEnhanced:GetModule("PinManager")
     local pins = PinManager:GetPinsByOrder()
     ---@type number
@@ -107,7 +105,7 @@ end
 function MapPinEnhancedTrackerFrameMixin:SetSetView(forceUpdate)
     if self.activeView == "Sets" and not forceUpdate then return end
     self:ClearEntries()
-    MapPinEnhanced.UnregisterCallback(self, 'UpdateSetList')
+    MapPinEnhanced.UnregisterCallback(self, "UpdateSetList")
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     local importButton = self.scrollFrame.Child.importButton
     importButton:Enable()
@@ -120,7 +118,7 @@ function MapPinEnhancedTrackerFrameMixin:SetSetView(forceUpdate)
     for _, set in pairs(sets) do
         table.insert(self.entries, set.trackerSetEntry)
     end
-    MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
+    MapPinEnhanced.RegisterCallback(self, "UpdateSetList", function()
         if self.activeView ~= "Sets" then return end
         self:SetSetView(true)
     end)
@@ -163,11 +161,16 @@ function MapPinEnhancedTrackerFrameMixin:SetImportView(forceUpdate)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Close()
+    if not self:IsShown() then return end
     self:Hide()
     MapPinEnhanced:SaveVar("trackerVisible", false)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Open()
+    if self:IsShown() then return end
+    if self.activeView ~= "Pins" then
+        self:SetPinView()
+    end
     self:Show()
     MapPinEnhanced:SaveVar("trackerVisible", true)
 end
@@ -336,6 +339,9 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
         return
     end
     local maxEntryCount = MapPinEnhanced:GetVar("Tracker", "trackerHeight")
+    if not maxEntryCount then
+        maxEntryCount = MapPinEnhanced:GetDefault("Tracker", "trackerHeight")
+    end
     local maxHeight = (DEFAULT_ENTRY_HEIGHT + ENTRY_GAP) * maxEntryCount + ENTRY_GAP + headerHeight
     if newHeight > maxHeight then
         newHeight = maxHeight
@@ -345,6 +351,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
+    self:UpdateVisibility()
     if not self:IsVisible() then return end
     local height = ENTRY_GAP
     for i, entry in ipairs(self.entries) do
@@ -371,35 +378,13 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
     self:SetTrackerTitle(string.format("%s %s", self.activeView,
         self:GetEntryCount() and string.format("(%d)", self:GetEntryCount()) or ""))
     self:UpdateFrameHeight(height)
-    self:UpdateVisibility()
 end
 
 ---@param entry MapPinEnhancedTrackerSetEntryMixin | MapPinEnhancedTrackerPinEntryMixin
 function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     table.insert(self.entries, entry)
-    local scollChildHeight = self.scrollFrame.Child:GetHeight()
-    entry:ClearAllPoints()
-    if #self.entries == 1 then
-        entry:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 30, -ENTRY_GAP)
-        entry:SetPoint("TOPRIGHT", self.scrollFrame.Child, "TOPRIGHT", 25, -ENTRY_GAP)
-    else
-        entry:SetPoint("TOPLEFT", self.entries[#self.entries - 1], "BOTTOMLEFT", 0, -ENTRY_GAP)
-        entry:SetPoint("TOPRIGHT", self.entries[#self.entries - 1], "BOTTOMRIGHT", 0, -ENTRY_GAP)
-    end
-    entry:SetParent(self.scrollFrame.Child)
-    entry:Show()
-    local newHeight = scollChildHeight + entry:GetHeight() + ENTRY_GAP
-    self.scrollFrame.Child:SetHeight(newHeight)
-    self:SetTrackerTitle(string.format("%s (%d)", self.activeView, self:GetEntryCount()))
-    self:UpdateFrameHeight(newHeight)
-    if entry.SetEntryIndex then
-        entry:SetEntryIndex(#self.entries)
-    end
-    if entry.SetEntryIndexVisibility then
-        ---@cast entry MapPinEnhancedTrackerPinEntryMixin
-        entry:SetEntryIndexVisibility(self.showNumbering)
-    end
-    self:UpdateVisibility()
+    -- REVIEW: might want to refactor this to avoid a update on all entry positions
+    self:UpdateEntriesPosition()
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)

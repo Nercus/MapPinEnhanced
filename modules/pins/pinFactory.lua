@@ -158,8 +158,11 @@ function PinFactory:CreatePin(initPinData, pinID)
         if isTracked then
             C_Map.ClearUserWaypoint()
         end
-        if MapPinEnhanced.pinTracker and MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-            MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
+        if MapPinEnhanced.pinTracker then
+            if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
+                MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
+            end
+            MapPinEnhanced.pinTracker:UpdateVisibility()
         end
         worldmapPin:Hide()
         minimapPin:Hide()

@@ -263,8 +263,11 @@ function PinManager:AddPin(pinData, restored)
     if not restored then
         self:PersistPins()
     end
-    if MapPinEnhanced.pinTracker and MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-        MapPinEnhanced.pinTracker:AddEntry(pinObject.trackerPinEntry)
+    if MapPinEnhanced.pinTracker then
+        if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
+            MapPinEnhanced.pinTracker:AddEntry(pinObject.trackerPinEntry)
+        end
+        MapPinEnhanced.pinTracker:UpdateVisibility()
     end
 end
 

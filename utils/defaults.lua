@@ -1,11 +1,13 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+-- TODO: rename all of them
+
 -- DEFAULTS is a table that stores the default values for various settings.
 local DEFAULTS = {
     ["trackerPosition"] = {
-        ["x"] = GetScreenWidth() / 2 - 200,
-        ["y"] = GetScreenHeight() / 2 - 200
+        ["x"] = GetScreenWidth() / 2 + 300,
+        ["y"] = -(GetScreenHeight() / 2)
     },
     ["trackerVisible"] = true,
     ["Floating Pin"] = {
@@ -26,7 +28,7 @@ local DEFAULTS = {
     },
     ["Tracker"] = {
         ["autoVisibility"] = "both",
-        ["lockTracker"] = "false",
+        ["lockTracker"] = false,
         ["trackerScale"] = 1,
         ["backgroundOpacity"] = 0,
         ["showNumbering"] = true,
