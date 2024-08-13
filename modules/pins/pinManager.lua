@@ -268,17 +268,21 @@ function PinManager:AddPin(pinData, restored)
     end
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
-    PinManager:RestorePins()
-    local Options = MapPinEnhanced:GetModule("Options")
-    Options:RegisterCheckbox({
-        category = "General",
-        label = "Auto Track Nearest Pin",
-        description = "Automatically track the nearest pin when a tracked pin is removed.",
-        default = MapPinEnhanced:GetDefault("General", "Auto Track Nearest Pin") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin") --[[@as boolean]],
-        onChange = function(value)
-            MapPinEnhanced:SaveVar("General", "Auto Track Nearest Pin", value)
-        end
-    })
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload)
+    if isLogin then
+        PinManager:RestorePins()
+    end
+    if isReload then
+        local Options = MapPinEnhanced:GetModule("Options")
+        Options:RegisterCheckbox({
+            category = "General",
+            label = "Auto Track Nearest Pin",
+            description = "Automatically track the nearest pin when a tracked pin is removed.",
+            default = MapPinEnhanced:GetDefault("General", "Auto Track Nearest Pin") --[[@as boolean]],
+            init = MapPinEnhanced:GetVar("General", "Auto Track Nearest Pin") --[[@as boolean]],
+            onChange = function(value)
+                MapPinEnhanced:SaveVar("General", "Auto Track Nearest Pin", value)
+            end
+        })
+    end
 end)
