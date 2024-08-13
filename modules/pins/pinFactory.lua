@@ -302,7 +302,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                 TogglePersistentState()
             end)
 
-            rootDescription:CreateButton("Remove Pin", function() SharePin() end)
+            rootDescription:CreateButton("Share Pin", function() SharePin() end)
             rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
         end)
     end
