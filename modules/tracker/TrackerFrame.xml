@@ -101,10 +101,10 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture parentKey="headerTexture"
-                            file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_HeaderShadow.png">
-                            <Size x="300" y="28" />
+                            file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
+                            <Size x="300" y="19" />
                             <Anchors>
-                                <Anchor point="TOPLEFT" y="-15" />
+                                <Anchor point="CENTER" y="-19" />
                             </Anchors>
                         </Texture>
                     </Layer>

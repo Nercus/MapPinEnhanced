@@ -6,6 +6,7 @@
     <Frame name="MapPinEnhancedSuperTrackedPinTemplate"
         mixin="MapPinEnhancedSuperTrackedPinMixin"
         inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="false">
+        <Size x="24" y="24" />
         <KeyValues>
             <KeyValue key="titlePosition" value="TOP" />
             <KeyValue key="titleYOffset" value="-1" />
