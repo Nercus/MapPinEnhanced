@@ -6,7 +6,10 @@
     <Frame name="MapPinEnhancedTrackerFrameTemplate" mixin="MapPinEnhancedTrackerFrameMixin"
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
-        registerForDrag="LeftButton" dontSavePosition="true">
+        registerForDrag="LeftButton" dontSavePosition="true" scale="1.01">
+        <!-- We set a scale to 1.01 because of a layouting bug in wow, the scale option changes it
+        back to the correct one afterwards. That scale change fixes the problem of the scrollframe child
+        not being rendered -->
         <Size x="300" y="1" />
         <Layers>
             <Layer level="OVERLAY">

@@ -307,9 +307,6 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     end)
     self.scrollFrame.ScrollBar:SetAlpha(0)
     self:AddOptions()
-    -- FIXME: WHY ARE THE FUCKING PINS HIDDEN ON START UP EVERYTHING IS SHOWN ONLY THESE TWO LINES FIX IT....
-    self:SetScale(1.01)
-    self:SetScale(1)
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetEntryCount()
