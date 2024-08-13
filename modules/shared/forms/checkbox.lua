@@ -1,4 +1,4 @@
--- Template: file://./checkbox.xml
+-- LINK ./checkbox.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

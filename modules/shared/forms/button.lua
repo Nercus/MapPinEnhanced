@@ -1,4 +1,4 @@
--- Template: file://./button.xml
+-- LINK ./button.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

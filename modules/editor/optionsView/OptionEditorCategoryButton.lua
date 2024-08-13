@@ -1,4 +1,4 @@
--- Template: file://./OptionEditorCategoryButton.xml
+-- LINK ./OptionEditorCategoryButton.xml
 ---@class MapPinEnhancedOptionEditorViewCategoryButtonMixin : Button
 ---@field label FontString
 ---@field highlight Texture

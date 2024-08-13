@@ -1,4 +1,4 @@
--- Template: file://./WorldmapPin.xml
+-- LINK ./WorldmapPin.xml
 ---@class CreationPulseFrame : Frame
 ---@field Anim Animation
 

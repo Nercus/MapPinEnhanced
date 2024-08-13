@@ -1,4 +1,4 @@
--- Template: file://./OptionEditorElement.xml
+-- LINK ./OptionEditorElement.xml
 ---@class MapPinEnhancedOptionEditorElementMixin : Frame
 ---@field label FontString
 ---@field highlight Texture

@@ -1,4 +1,4 @@
--- Template: file://./OptionEditorSidebar.xml
+-- LINK ./OptionEditorSidebar.xml
 
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)

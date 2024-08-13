@@ -1,4 +1,4 @@
--- Template: file://./slider.xml
+-- LINK ./slider.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

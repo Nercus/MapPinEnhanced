@@ -1,4 +1,4 @@
--- Template: file://./MinimapPin.xml
+-- LINK ./MinimapPin.xml
 ---@class MapPinEnhancedMinimapPinMixin : MapPinEnhancedBasePinMixin
 MapPinEnhancedMinimapPinMixin = {}
 

@@ -1,4 +1,4 @@
--- Template: file://./SuperTrackedPin.xml
+-- LINK ./SuperTrackedPin.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

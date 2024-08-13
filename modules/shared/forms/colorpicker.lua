@@ -1,4 +1,4 @@
--- Template: file://./colorpicker.xml
+-- LINK ./colorpicker.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
