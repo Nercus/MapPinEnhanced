@@ -5,33 +5,43 @@
     <Frame inherits="MapPinEnhancedBaseFrameTemplate" name="MapPinEnhancedPopupDialogTemplate"
         hidden="true"
         virtual="true"
-        parent="UIParent">
-        <Size x="400" y="200" />
+        parent="UIParent" toplevel="true" frameStrata="DIALOG">
+        <Size x="300" y="150" />
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
         <Layers>
-            <Layer level="ARTWORK">
-                <FontString parentKey="text" text="Popup title">
+            <Layer level="OVERLAY">
+                <FontString parentKey="text" text="Popup title" inherits="GameFontNormalLarge">
                     <Anchors>
-                        <Anchor point="TOP" relativeKey="$parent" relativePoint="TOP" x="0" y="-10" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="10"
+                            y="-25" />
+                        <Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT"
+                            x="-10" y="-25" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontDisableTiny"
+                    text="Use enter or your bound interact key to accept.">
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.text"
+                            y="-10" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="accept" inherits="MapPinEnhancedButtonYellowTemplate">
-                <Size x="70" y="25" />
+            <Button parentKey="accept" inherits="MapPinEnhancedButtonYellowTemplate" text="Accept">
+                <Size x="100" y="30" />
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" relativeKey="$parent" relativePoint="BOTTOM" x="-10"
-                        y="10" />
+                        y="25" />
                 </Anchors>
             </Button>
-            <Button parentKey="cancel" inherits="MapPinEnhancedButtonRedTemplate">
-                <Size x="70" y="25" />
+            <Button parentKey="cancel" inherits="MapPinEnhancedButtonRedTemplate" text="Cancel">
+                <Size x="100" y="30" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent" relativePoint="BOTTOM" x="10"
-                        y="10" />
+                        y="25" />
                 </Anchors>
             </Button>
         </Frames>

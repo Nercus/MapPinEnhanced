@@ -29,14 +29,15 @@ end
 
 
 local function GetInteractKeybind()
-    local key1, key2 = GetBindingKey("INTERACTTARGET")
-    if key1 then
-        return key1
-    end
-    if key2 then
-        return key2
-    end
-    return "SPACE"
+    local key1 = GetBindingKey("INTERACTTARGET")
+    if not key1 then return end
+    -- get modifiers
+    if string.find(key1, "SHIFT") and not IsShiftKeyDown() then return end
+    if string.find(key1, "CTRL") and not IsControlKeyDown() then return end
+    if string.find(key1, "ALT") and not IsAltKeyDown() then return end
+    -- split by "-" and get the last part
+    local keys = { strsplit("-", key1) }
+    return keys[#keys]
 end
 
 ---@param options PopupOption
@@ -50,7 +51,6 @@ function MapPinEnhanced:ShowPopup(options)
         dialog:Hide()
     end
 
-
     local function OnCancel()
         if options.onCancel then
             options.onCancel()
@@ -62,13 +62,12 @@ function MapPinEnhanced:ShowPopup(options)
     dialog.text:SetText(options.text)
     dialog.accept:SetScript("OnClick", OnAccept)
     dialog.cancel:SetScript("OnClick", OnCancel)
-
     local function OnInteract(_, key)
         if key == "ESCAPE" then
             OnCancel()
         elseif key == "ENTER" then
             OnAccept()
-        elseif key == GetInteractKeybind() then
+        elseif key and key == GetInteractKeybind() then
             OnAccept()
         end
     end
