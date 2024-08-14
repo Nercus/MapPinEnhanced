@@ -1,4 +1,4 @@
--- LINK ./SetEditorSidebar.xml
+-- Template: file://./SetEditorSidebar.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

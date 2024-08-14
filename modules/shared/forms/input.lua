@@ -1,4 +1,4 @@
--- LINK ./input.xml
+-- Template: file://./input.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 

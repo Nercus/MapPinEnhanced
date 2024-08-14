@@ -1,4 +1,4 @@
--- LINK ./SetEditorPinHeader.xml
+-- Template: file://./SetEditorPinHeader.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
