@@ -22,7 +22,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     self:UpdateTextVisibility()
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:SetpersistentState(isPersistent)
+function MapPinEnhancedSuperTrackedPinMixin:SetPersistentState(isPersistent)
     if not self.pinData then return end
     local hasDefaultTitle = self.pinData.title == L[CONSTANTS.DEFAULT_PIN_NAME]
     if isPersistent and not hasDefaultTitle then

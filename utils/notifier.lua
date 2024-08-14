@@ -17,7 +17,7 @@ local NOTIFY_LEVEL_COLOR = {
     [NOTIFIY_LEVELS.ERROR] = CreateColor(1, 0, 0, 1),
 }
 
-local prefix = "|TInterface\\AddOns\\MapPinEnhanced\\assets\\PinTrackedYellow.png:16:16:0:0|t"
+local prefix = "|TInterface\\AddOns\\MapPinEnhanced\\assets\\logo.png:16:16:0:0|t"
 local NOTIFY_PATTERN = prefix .. " %s"
 
 ---@param text string

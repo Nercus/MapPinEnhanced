@@ -4,7 +4,7 @@
 ## Version: 3.0.0
 ## License: GNU General Public License v3.0
 ## Notes: Enhances the functionality of the map pin
-## IconTexture: Interface\Addons\MapPinEnhanced\assets\MPH_Logo.png
+## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
 ## SavedVariables: MapPinEnhancedDB
 
 libs\_imports.xml

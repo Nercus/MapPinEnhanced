@@ -6,23 +6,62 @@
         enableMouse="true" virtual="true" propagateMouseInput="Motion">
         <Size x="300" y="37" />
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture atlas="cosmic-bar-fill-white"
-                    setAllPoints="true">
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture atlas="common-dropdown-bg">
                     <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1.0" g="0.82" b="0" a="0.5" />
-                        <MaxColor r="1.0" g="0.82" b="0" a="0" />
+                        <MaxColor r="0" g="0" b="0" a="0" />
+                        <MinColor r="0" g="0" b="0" a="0.7" />
                     </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                            x="3" y="6" />
+                        <Anchor point="BOTTOMRIGHT"
+                            x="-3" y="1" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="1">
+                <Texture parentKey="highlight" hidden="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/SetTracker_Highlight.png"
+                    horizTile="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                        <MinColor r="1" g="1" b="1" a="1" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                            x="11" y="2" />
+                        <Anchor point="BOTTOMRIGHT"
+                            x="-8" y="5" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture parentKey="left"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/SetTrackerBar_Left.png">
+                    <Size x="32" y="16" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" y="3" x="5" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="right"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/SetTrackerBar_Right.png">
+                    <Size x="1" y="16" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.left" />
+                        <Anchor point="RIGHT" y="3" x="-5" />
+                    </Anchors>
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="icon" file="Interface/AddOns/MapPinEnhanced/assets/SetsIcon.png">
-                    <Size x="40" y="40" />
+                <Texture parentKey="icon"
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yellow.png">
+                    <Size x="35" y="35" />
                     <Anchors>
-                        <Anchor point="LEFT" x="10" />
+                        <Anchor point="LEFT" x="2" y="4" />
                     </Anchors>
                 </Texture>
-                <FontString parentKey="title" font="GameFontNormal" justifyH="LEFT"
+                <FontString parentKey="title" font="GameFontNormalLarge" justifyH="LEFT"
                     justifyV="MIDDLE">
                     <Size x="1" y="10" />
                     <Anchors>
@@ -31,10 +70,11 @@
                     </Anchors>
                 </FontString>
             </Layer>
-            <Layer level="OVERLAY">
-                <Texture parentKey="activeTexture" setAllPoints="true"
-                    atlas="communitiesfinder_card_highlight" hidden="true" />
-            </Layer>
+
         </Layers>
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
     </Button>
 </Ui>

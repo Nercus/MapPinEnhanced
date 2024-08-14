@@ -98,7 +98,7 @@ function MapPinEnhanced:ToggleMinimapButton(init)
         local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(self.addonName, {
             type = "launcher",
             text = self.addonName,
-            icon = "Interface\\Addons\\MapPinEnhanced\\assets\\MPH_Logo.png",
+            icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
             OnClick = function(owner, button)
                 if button == "LeftButton" then
                     self:TogglePinTracker()
@@ -141,7 +141,7 @@ end
 function MapPinEnhanced:RegisterAddonCompartment()
     AddonCompartmentFrame:RegisterAddon({
         text = self.addonName,
-        icon = "Interface\\Addons\\MapPinEnhanced\\assets\\MPH_Logo.png",
+        icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
         notCheckable = true,
         func = function()
             self:TogglePinTracker()

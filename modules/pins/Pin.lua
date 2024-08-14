@@ -100,10 +100,10 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetTitleFont(self.titleFont or "GameFontNormal")
     self:SetPinIcon()
     self:SetUntrackedTexture()
-    self:SetpersistentState(self.pinData.persistent)
+    self:SetPersistentState(self.pinData.persistent)
 end
 
-function MapPinEnhancedBasePinMixin:SetpersistentState(isPersistent)
+function MapPinEnhancedBasePinMixin:SetPersistentState(isPersistent)
     if isPersistent then
         self.persistentIcon:Show()
     else

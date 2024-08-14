@@ -4,11 +4,11 @@
 
     <Button name="MapPinEnhancedSquareButtonYellowTemplate" virtual="true">
         <NormalTexture setAllPoints="true"
-            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow.png" />
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow.png" />
         <PushedTexture setAllPoints="true"
-            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Pressed.png" />
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Pressed.png" />
         <HighlightTexture setAllPoints="true"
-            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
         />
         <Scripts>
             <OnDisable>

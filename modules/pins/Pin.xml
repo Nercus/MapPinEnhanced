@@ -8,12 +8,12 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="shadow"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinShadow.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinShadow.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="BORDER">
                 <Texture parentKey="background"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinBackground.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="ARTWORK">
@@ -24,9 +24,8 @@
                     <Size x="200" />
                 </FontString>
                 <Texture parentKey="persistentIcon" hidden="true"
-                    file="Interface/AddOns/MapPinEnhanced/assets/lockIcon.png">
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconLock_Yellow.png">
                     <Size x="12" y="12" />
-                    <Color r="1.0" g="0.82" b="0" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="3"
                             y="0" />
@@ -42,7 +41,7 @@
                     </Anchors>
                 </Texture>
                 <MaskTexture parentKey="iconMask"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinMask.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinMask.png"
                     hWrapMode="CLAMPTOBLACKADDITIVE" vWrapMode="CLAMPTOBLACKADDITIVE">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="6" y="-6" />
@@ -55,7 +54,7 @@
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinHighlight.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png"
                     setAllPoints="true" />
             </Layer>
         </Layers>

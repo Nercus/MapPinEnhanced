@@ -36,22 +36,22 @@
             </Frame>
             <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
                 autoFocus="false">
-                <TextInsets left="20" right="20" />
+                <TextInsets left="22" right="22" top="1" />
                 <Size x="1" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="15" y="-5" relativeKey="$parent.header"
+                    <Anchor point="TOPLEFT" x="3" y="-5" relativeKey="$parent.header"
                         relativePoint="BOTTOMLEFT" />
-                    <Anchor point="TOPRIGHT" x="-10" y="-5" relativeKey="$parent.header"
+                    <Anchor point="TOPRIGHT" x="-3" y="-5" relativeKey="$parent.header"
                         relativePoint="BOTTOMRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture name="$parentSearchIcon"
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconSearch_Yellow.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconSearch_Yellow_Grey.png"
                             useAtlasSize="false">
                             <Size x="12" y="12" />
                             <Anchors>
-                                <Anchor point="LEFT" x="5" y="-1" />
+                                <Anchor point="LEFT" x="7" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -61,12 +61,12 @@
                     <Button name="$parentClearButton" parentKey="clearButton" hidden="true">
                         <Size x="12" y="12" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-8" y="-1" />
+                            <Anchor point="RIGHT" x="-7" />
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
                                     setAllPoints="true" />
                             </Layer>
                         </Layers>
@@ -88,7 +88,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconSettings_Yellow.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconSettings_Yellow.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="6" y="-6" />
                                 <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
@@ -109,7 +109,7 @@
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="1" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="-15" y="0" relativeKey="$parent.searchInput"
+                    <Anchor point="TOPLEFT" x="5" y="0" relativeKey="$parent.searchInput"
                         relativePoint="BOTTOMLEFT" />
                     <Anchor point="BOTTOMRIGHT" x="-25" y="45" />
                 </Anchors>

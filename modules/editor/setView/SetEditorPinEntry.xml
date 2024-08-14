@@ -93,17 +93,17 @@
             <Button parentKey="deleteButton">
                 <Size x="15" y="15" />
                 <NormalTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
                     setAllPoints="true" />
                 <PushedTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="1" y="-1" />
                         <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
                     </Anchors>
                 </PushedTexture>
                 <HighlightTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
                     setAllPoints="true" alpha="0.5" />
                 <Anchors>
                     <Anchor point="RIGHT" x="-10" />

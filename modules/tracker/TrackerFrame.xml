@@ -37,17 +37,17 @@
                             <Anchor point="TOPRIGHT" x="-10" y="-5" />
                         </Anchors>
                         <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
                             setAllPoints="true" />
                         <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Yellow.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="1" y="-1" />
                                 <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
                             </Anchors>
                         </PushedTexture>
                         <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
                             setAllPoints="true" alpha="0.5" />
                         <Scripts>
                             <OnClick>
@@ -63,17 +63,17 @@
                                 relativeKey="$parent.closebutton" />
                         </Anchors>
                         <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png"
                             setAllPoints="true" />
                         <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/PinTrackedYellow.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="1" y="-1" />
                                 <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
                             </Anchors>
                         </PushedTexture>
                         <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
                             setAllPoints="true" alpha="0.5" />
                     </Button>
                     <Button parentKey="editorToggle" frameStrata="HIGH" hidden="true"
@@ -84,24 +84,24 @@
                                 relativeKey="$parent.viewToggle" />
                         </Anchors>
                         <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEditor_Yellow_Grey.png"
                             setAllPoints="true" />
                         <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEditor_Yellow.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEditor_Yellow_Grey.png">
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="1" y="-1" />
                                 <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
                             </Anchors>
                         </PushedTexture>
                         <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/squarebuttons/MPHButtonSquareYellow_Highlight.png"
+                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
                             setAllPoints="true" alpha="0.5" />
                     </Button>
                 </Frames>
                 <Layers>
                     <Layer level="OVERLAY">
                         <Texture parentKey="headerTexture"
-                            file="Interface/AddOns/MapPinEnhanced/assets/PinTracker_Header.png">
+                            file="Interface/AddOns/MapPinEnhanced/assets/tracker/PinTrackerHeader.png">
                             <Size x="300" y="19" />
                             <Anchors>
                                 <Anchor point="CENTER" y="-19" />

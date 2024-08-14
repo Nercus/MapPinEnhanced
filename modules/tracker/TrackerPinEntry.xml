@@ -46,7 +46,7 @@
                 <Texture
                     parentKey="bgLeft" texelSnappingBias="0"
                     snapToPixelGrid="false"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Left.png">
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/PinTracker_Bar_Left.png">
                     <Size x="32" y="32" />
                     <Anchors>
                         <Anchor point="LEFT" x="-9" relativeKey="$parent.Pin" relativePoint="RIGHT" />
@@ -54,7 +54,7 @@
                 </Texture>
                 <Texture parentKey="bgRight" texelSnappingBias="0"
                     snapToPixelGrid="false"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Right.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/PinTracker_Bar_Right.png"
                     alpha="0.2">
                     <Size x="32" y="32" />
                     <Anchors>
@@ -64,7 +64,7 @@
                 <Texture parentKey="bgMiddle"
                     texelSnappingBias="0"
                     snapToPixelGrid="false"
-                    file="Interface/AddOns/MapPinEnhanced/assets/PinTrackerBar/PinTracker_Bar_Middle.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker/PinTracker_Bar_Middle.png"
                     horizTile="true">
                     <Size x="1" y="32" />
                     <Anchors>

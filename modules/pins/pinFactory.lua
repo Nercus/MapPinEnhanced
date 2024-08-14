@@ -209,9 +209,9 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function TogglePersistentState()
         pinData.persistent = not pinData.persistent
-        trackerPinEntry.Pin:SetpersistentState(pinData.persistent)
+        trackerPinEntry.Pin:SetPersistentState(pinData.persistent)
         if MapPinEnhanced.SuperTrackedPin then
-            MapPinEnhanced.SuperTrackedPin:SetpersistentState(pinData.persistent)
+            MapPinEnhanced.SuperTrackedPin:SetPersistentState(pinData.persistent)
         end
         PinManager:PersistPins()
     end

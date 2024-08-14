@@ -8,10 +8,11 @@
         <Size x="84" y="20" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="-1">
-                <Texture parentKey="bg" file="Interface/AddOns/MapPinEnhanced/assets/checkers.png"
+                <Texture parentKey="bg"
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/checkers.png"
                     setAllPoints="true" vertTile="true" horizTile="true" />
                 <MaskTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/MPHColourPicker_Body.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
                     parentKey="bgMask"
                     vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Size x="84" y="20" />
@@ -25,13 +26,13 @@
             </Layer>
             <Layer level="BACKGROUND">
                 <Texture parentKey="color"
-                    file="Interface/AddOns/MapPinEnhanced/assets/MPHColourPicker_Body.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
                     setAllPoints="true">
                 </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight"
-                    file="Interface/AddOns/MapPinEnhanced/assets/MPHColourPicker_Body.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
                     setAllPoints="true" alpha="0.5">
                 </Texture>
             </Layer>

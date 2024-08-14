@@ -81,14 +81,18 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
         child:Hide()
         child:ClearAllPoints()
     end
+    local childWidth = scrollChild:GetWidth()
     local lastFrame = nil
     for _, setObject in ipairs(sets) do
         local setFrame = setObject.setEditorEntry
         if not lastFrame then
             setFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -10)
+            setFrame:SetPoint("TOPRIGHT", scrollChild, "TOPRIGHT", -34, -10)
         else
             setFrame:SetPoint("TOPLEFT", lastFrame, "BOTTOMLEFT", 0, -5)
+            setFrame:SetPoint("TOPRIGHT", lastFrame, "BOTTOMRIGHT", 0, -5)
         end
+        setFrame:SetWidth(childWidth)
         setFrame:SetParent(scrollChild)
         setFrame:Show()
         lastFrame = setFrame

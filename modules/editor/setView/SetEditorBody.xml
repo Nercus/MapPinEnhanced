@@ -41,7 +41,7 @@
                                 <Layers>
                                     <Layer level="OVERLAY">
                                         <Texture parentKey="icon"
-                                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconEdit_Yellow.png">
+                                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEdit_Yellow.png">
                                             <Anchors>
                                                 <Anchor point="TOPLEFT" x="6" y="-6" />
                                                 <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
@@ -55,7 +55,7 @@
                                         if editBox:IsEnabled() then
                                             editBox:Disable()
                                             editBox:HighlightText(0, 0)
-                                            self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+                                            self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
                                             editBox:SetPropagateMouseClicks(true)
                                             return
                                         end
@@ -63,7 +63,7 @@
                                         editBox:SetFocus()
                                         editBox:HighlightText()
                                         editBox:SetPropagateMouseClicks(false)
-                                        self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconTick_Yellow.png")
+                                        self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
                                     </OnClick>
                                 </Scripts>
                             </Button>
@@ -73,7 +73,7 @@
                                 self:Disable()
                                 self:HighlightText(0, 0)
                                 self.editButton.icon:SetTexture(
-                                "Interface\\AddOns\\MapPinEnhanced\\assets\\Icons\\MPHIconEdit_Yellow.png")
+                                "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
                             </OnEnterPressed>
                         </Scripts>
                     </EditBox>
@@ -86,7 +86,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconTrash_Yellow.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconTrash_Yellow.png"
                                     texelSnappingBias="0" snapToPixelGrid="false">
                                     <Anchors>
                                         <Anchor point="TOPLEFT" x="6" y="-6" />
@@ -107,7 +107,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconExport_Dark.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png"
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
@@ -129,7 +129,7 @@
                         <Layers>
                             <Layer level="OVERLAY">
                                 <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconExport_Dark.png"
+                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png"
                                     desaturated="true">
                                     <Color r="0.4" g="0.4" b="0.4" />
                                     <Anchors>
