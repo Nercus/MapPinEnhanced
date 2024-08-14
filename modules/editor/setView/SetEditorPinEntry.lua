@@ -2,6 +2,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedMapIDEditBox : MapPinEnhancedInputMixin
 ---@field mapSelection Button
@@ -110,7 +111,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
         end,
         options = {
             {
-                label = "Persistent",
+                label = L["Persistent"],
                 value = "persistent",
                 type = "checkbox"
             },

@@ -1,6 +1,8 @@
 ---@diagnostic disable: global-element The slash command definition has to be global
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local L = MapPinEnhanced.L
+
 local commandList = {} ---@type table<string, function>
 local commandHelpStrings = {} ---@type table<string, string>
 
@@ -45,6 +47,6 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
     commandHelpStrings[command] = help
 end
 
-MapPinEnhanced:AddSlashCommand("help", function()
+MapPinEnhanced:AddSlashCommand(L["Help"], function()
     MapPinEnhanced:PrintHelp()
-end, "Show this help message")
+end, L["Show this help message"])

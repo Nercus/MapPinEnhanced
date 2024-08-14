@@ -28,7 +28,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field importFrame ImportFrameWithButton
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
-
+local L = MapPinEnhanced.L
 local CB = MapPinEnhanced.CB
 
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
@@ -89,7 +89,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
             mapID = Blizz:GetPlayerMap() or 1,
             x = 0.5,
             y = 0.5,
-            title = "New Pin"
+            title = L["New Pin"]
         }, false)
         self:UpdatePinList()
     end)
@@ -98,7 +98,7 @@ end
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     local function DeleteSet()
         MapPinEnhanced:ShowPopup({
-            text = "Are you sure you want to delete this set?",
+            text = L["Are you sure you want to delete this set?"],
             onAccept = function()
                 ---@class SetManager : Module
                 local SetManager = MapPinEnhanced:GetModule("SetManager")
@@ -156,7 +156,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         local pins = PinProvider:DeserializeWayString(text)
         if not pins then return end
         local SetManager = MapPinEnhanced:GetModule("SetManager")
-        local set = SetManager:AddSet("Imported Set")
+        local set = SetManager:AddSet(L["Imported Set"])
         for _, pin in ipairs(pins) do
             set:AddPin({
                 mapID = pin.mapID,
@@ -168,6 +168,12 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         self:SetActiveEditorSetID(set.setID)
     end
     self.importFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
+
+    self.infoText:SetText(L["Select a set to edit or create a new one."])
+    self.header.createSetButton:SetText(L["Create Set"])
+    self.header.importButton:SetText(L["Import"])
+    self.addPinButton:SetText(L["Add Pin"])
+    self.importFrame.confirmButton:SetText(L["Import"])
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSet()

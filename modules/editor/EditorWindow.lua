@@ -13,6 +13,8 @@ MapPinEnhancedEditorWindowMixin = {}
 
 ---@class viewObject<B, S>: {body: B, sideBar: S}
 
+local L = MapPinEnhanced.L
+
 ---@enum EditorViews
 local AVAILABLE_VIEWS = {
     setView = "setView",
@@ -83,8 +85,8 @@ end
 function MapPinEnhancedEditorWindowMixin:AddOptions()
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterSlider({
-        label = "Editor Scale",
-        category = "General",
+        label = L["Editor Scale"],
+        category = L["General"],
         min = 0.5,
         max = 2,
         step = 0.05,

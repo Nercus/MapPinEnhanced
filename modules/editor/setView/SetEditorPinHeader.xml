@@ -24,7 +24,7 @@
                     </Anchors>
                 </FontString>
 
-                <FontString text="Map" parentKey="mapID" inherits="GameFontNormal"
+                <FontString text="Map ID" parentKey="mapID" inherits="GameFontNormal"
                     justifyH="LEFT">
                     <Size x="65" y="15" />
                     <Anchors>

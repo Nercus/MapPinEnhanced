@@ -36,6 +36,8 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
+local L = MapPinEnhanced.L
+
 local ENTRY_GAP = 5
 local DEFAULT_ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
@@ -198,13 +200,13 @@ end
 function MapPinEnhancedTrackerFrameMixin:AddOptions()
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterSelect({
-        category = "Tracker",
-        label = "Automatic Visibility",
+        category = L["Tracker"],
+        label = L["Automatic Visibility"],
         default = MapPinEnhanced:GetDefault("tracker", "autoVisibility") --[[@as string]],
         init = MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as string]],
         options = {
-            { label = "Disabled",  value = "none", type = "radio" },
-            { label = "Automatic", value = "both", type = "radio" }
+            { label = L["Disabled"],  value = "none", type = "radio" },
+            { label = L["Automatic"], value = "both", type = "radio" }
         },
         onChange = function(value)
             MapPinEnhanced:SaveVar("tracker", "autoVisibility", value)
@@ -212,8 +214,8 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
     })
 
     Options:RegisterCheckbox({
-        category = "Tracker",
-        label = "Lock Tracker",
+        category = L["Tracker"],
+        label = L["Lock Tracker"],
         default = MapPinEnhanced:GetDefault("tracker", "lockTracker") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]],
         onChange = function(value)
@@ -222,8 +224,8 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
     })
 
     Options:RegisterSlider({
-        category = "Tracker",
-        label = "Scale",
+        category = L["Tracker"],
+        label = L["Scale"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerScale") --[[@as number]],
         init = MapPinEnhanced:GetVar("tracker", "trackerScale") --[[@as number]],
         min = 0.5,
@@ -236,8 +238,8 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
     })
 
     Options:RegisterSlider({
-        category = "Tracker",
-        label = "Background Opacity",
+        category = L["Tracker"],
+        label = L["Background Opacity"],
         default = MapPinEnhanced:GetDefault("tracker", "backgroundOpacity") --[[@as number]],
         init = MapPinEnhanced:GetVar("tracker", "backgroundOpacity") --[[@as number]],
         min = 0,
@@ -250,8 +252,8 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
     })
 
     Options:RegisterCheckbox({
-        category = "Tracker",
-        label = "Show Numbering",
+        category = L["Tracker"],
+        label = L["Show Numbering"],
         default = MapPinEnhanced:GetDefault("tracker", "showNumbering") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]],
         onChange = function(value)
@@ -261,8 +263,8 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
     })
 
     Options:RegisterSlider({
-        category = "Tracker",
-        label = "Entry Height",
+        category = L["Tracker"],
+        label = L["Entry Height"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerHeight") --[[@as number]],
         init = MapPinEnhanced:GetVar("tracker", "trackerHeight") --[[@as number]],
         min = 1,
@@ -295,6 +297,8 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     end)
     self.scrollFrame.ScrollBar:SetAlpha(0)
     self:AddOptions()
+    self.scrollFrame.Child.importButton:SetText(L["Import"])
+    self.scrollFrame.Child.cancelButton:SetText(L["Cancel"])
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetEntryCount()

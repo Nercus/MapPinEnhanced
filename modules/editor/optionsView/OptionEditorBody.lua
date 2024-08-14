@@ -29,6 +29,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field activeCategory OPTIONCATEGORY
 MapPinEnhancedOptionEditorViewBodyMixin = {}
 
+local L = MapPinEnhanced.L
+
 function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     if self.init then return end
     self.optionElements = CreateFramePool("Frame", nil, "MapPinEnhancedOptionEditorElementTemplate")
@@ -115,7 +117,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
     local options = Options:GetOptionsForCategory(category)
     self:ClearAllOptions()
     self.optionElementFrames = {}
-    self.header.selectedCategoryName:SetText(category)
+    self.header.selectedCategoryName:SetText(L[category])
     self.activeCategory = category
     if not options then return end
     local lastOptionElement = nil

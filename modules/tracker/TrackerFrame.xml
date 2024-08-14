@@ -109,8 +109,8 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
+                        <!-- TODO: check the height of title to make the frame easier to move -->
                         <FontString parentKey="title" inherits="GameFontNormalLarge"
-                            text="Map Pin Enhanced Tracker"
                             justifyH="LEFT" justifyV="MIDDLE">
                             <Size x="220" y="18" />
                             <Anchors>

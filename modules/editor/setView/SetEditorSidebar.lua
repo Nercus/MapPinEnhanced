@@ -11,15 +11,19 @@ local lower = string.lower
 ---@class SetSearchInput : MapPinEnhancedInputMixin
 ---@field clearButton Button
 
+---@class SetSidebarHeader : Frame
+---@field title FontString
+
 ---@class MapPinEnhancedSetEditorViewSidebarMixin : Frame
 ---@field searchInput SetSearchInput
 ---@field scrollFrame SetListScrollFrame
 ---@field switchViewButton Button
 ---@field createSetButton Button
 ---@field body MapPinEnhancedSetEditorViewBodyMixin
----@field header Frame
+---@field header SetSidebarHeader
 MapPinEnhancedSetEditorViewSidebarMixin = {}
 
+local L = MapPinEnhanced.L
 
 
 ---@param setID UUID | nil
@@ -154,6 +158,9 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)
+
+    self.header.title:SetText(L["Sets"])
+    self.createSetButton:SetText(L["Create Set"])
 end
 
 ---@param searchQuery string

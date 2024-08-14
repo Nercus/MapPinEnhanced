@@ -26,7 +26,6 @@
                     </Layer>
                     <Layer level="OVERLAY">
                         <FontString parentKey="selectedCategoryName" inherits="GameFontNormalLarge"
-                            text="Selected option category"
                             justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="CENTER" />

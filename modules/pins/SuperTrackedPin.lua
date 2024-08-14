@@ -12,6 +12,7 @@ MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
+local L = MapPinEnhanced.L
 
 function MapPinEnhancedSuperTrackedPinMixin:Clear()
     self:Hide()
@@ -139,8 +140,8 @@ end
 function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
-        category = "Floating Pin",
-        label = "Show Estimated Time",
+        category = L["Floating Pin"],
+        label = L["Show Estimated Time"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") --[[@as boolean]],
         onChange = function(value)
@@ -150,8 +151,8 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         end
     })
     Options:RegisterCheckbox({
-        category = "Floating Pin",
-        label = "Show Title",
+        category = L["Floating Pin"],
+        label = L["Show Title"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("floatingPin", "showTitle") --[[@as boolean]],
         onChange = function(value)
@@ -161,8 +162,8 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     })
 
     Options:RegisterCheckbox({
-        category = "Floating Pin",
-        label = "Show Centered Highlight",
+        category = L["Floating Pin"],
+        label = L["Show Centered Highlight"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]],
         description = "Highlight the floating pin when it is centered on the screen.",
@@ -178,8 +179,8 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     })
 
     Options:RegisterCheckbox({
-        category = "Floating Pin",
-        label = "Override world quest tracking",
+        category = L["Floating Pin"],
+        label = L["Override world quest tracking"],
         default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
         description =

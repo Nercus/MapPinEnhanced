@@ -87,7 +87,7 @@
                         if editBoxText ~= "" then
                             self.infoText:SetText("");
                         else
-                            self.infoText:SetText("Click to start editing");
+                            self.infoText:SetText(GUILD_EDIT_TEXT_LINK);
                         end
                     </OnShow>
                 </Scripts>
@@ -95,7 +95,7 @@
                     <Layer level="OVERLAY">
                         <FontString parentKey="infoText" setAllPoints="true"
                             inherits="GameFontDisable"
-                            text="Click to start editing" justifyH="CENTER" justifyV="MIDDLE" />
+                            text="GUILD_EDIT_TEXT_LINK" justifyH="CENTER" justifyV="MIDDLE" />
                     </Layer>
                 </Layers>
             </Frame>

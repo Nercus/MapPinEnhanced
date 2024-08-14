@@ -35,7 +35,7 @@
                     setAllPoints="true" hidden="true" />
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="zoneText" inherits="GameFontHighlight" text="Stockades">
+                <FontString parentKey="zoneText" inherits="GameFontHighlight">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.Pin" relativePoint="RIGHT" x="10"
                             y="-9" />

@@ -6,6 +6,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhanced.CONSTANTS = {}
 
 
+
 MapPinEnhanced.CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(237, 179, 20, 1),  colorName = "Yellow" },
     { color = CreateColorFromBytes(96, 236, 29, 1),   colorName = "Green" },

@@ -9,7 +9,6 @@
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" alpha="0.5" inherits="GameFontNormalLarge"
-                    text="Category 1"
                     justifyH="CENTER">
                     <Anchors>
                         <Anchor point="CENTER" />

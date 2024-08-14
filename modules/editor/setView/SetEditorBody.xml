@@ -12,7 +12,7 @@
         <Layers>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" parentKey="infoText"
-                    text="Select or create a set on the right to start editing" setAllPoints="true"
+                    text="Select a set to edit or create a new one." setAllPoints="true"
                     justifyH="CENTER" justifyV="MIDDLE" />
             </Layer>
         </Layers>
@@ -119,41 +119,18 @@
                         </Layers>
                     </Button>
                     <Button parentKey="createSetButton"
-                        inherits="MapPinEnhancedButtonYellowTemplate">
+                        inherits="MapPinEnhancedButtonYellowTemplate" text="Create Set">
                         <Size x="75" y="26" />
                         <Anchors>
                             <Anchor point="RIGHT" y="7" x="-3" relativePoint="CENTER" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="ARTWORK">
-                                <FontString inherits="MPHGameFontNormalBlack" text="New Set"
-                                    justifyH="CENTER" setAllPoints="true" />
-                            </Layer>
-                        </Layers>
                     </Button>
                     <Button parentKey="importButton"
-                        inherits="MapPinEnhancedButtonYellowTemplate">
+                        inherits="MapPinEnhancedButtonYellowTemplate" text="Import">
                         <Size x="75" y="26" />
                         <Anchors>
                             <Anchor point="LEFT" y="7" x="3" relativePoint="CENTER" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="ARTWORK">
-                                <FontString inherits="MPHGameFontNormalBlack" text="Import"
-                                    justifyH="RIGHT">
-                                    <Anchors>
-                                        <Anchor point="RIGHT" x="-10" />
-                                    </Anchors>
-                                </FontString>
-                                <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconImport_Dark.png">
-                                    <Size x="12" y="12" />
-                                    <Anchors>
-                                        <Anchor point="LEFT" x="10" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
                     </Button>
                 </Frames>
                 <Layers>
@@ -169,31 +146,11 @@
                 </Layers>
             </Frame>
             <Button inherits="MapPinEnhancedButtonYellowTemplate" hidden="true"
-                parentKey="addPinButton">
+                parentKey="addPinButton" text="Add Pin">
                 <Size x="150" y="30" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString parentKey="addPinButtonText" inherits="MPHGameFontNormalBlack"
-                            text="Add Pin"
-                            justifyH="CENTER">
-                            <Anchors>
-                                <Anchor point="CENTER" x="10" />
-                            </Anchors>
-                        </FontString>
-                        <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconCross_Dark.png"
-                            rotation="45">
-                            <Size x="10" y="10" />
-                            <Anchors>
-                                <Anchor point="RIGHT" x="-6" relativeKey="$parent.addPinButtonText"
-                                    relativePoint="LEFT" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
             </Button>
             <Frame inherits="MapPinEnhancedSetEditorPinHeaderTemplate" parentKey="pinListHeader"
                 hidden="true">

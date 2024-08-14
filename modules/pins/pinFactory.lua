@@ -9,10 +9,12 @@ local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local HBDP = MapPinEnhanced.HBDP
 local CONSTANTS = MapPinEnhanced.CONSTANTS
+local L = MapPinEnhanced.L
 
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
+
 
 ---@class pinData
 ---@field mapID number
@@ -198,7 +200,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function ShowOnMap()
         if InCombatLockdown() then
-            MapPinEnhanced:Notify("Can't show on map in combat", "ERROR")
+            MapPinEnhanced:Notify(L["Can't show on map in combat"], "ERROR")
             return
         end
         OpenWorldMap(mapID);
@@ -232,7 +234,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             rootDescription:CreateDivider()
             if pinData.color ~= "Custom" then
                 ---@type SubMenuUtil
-                local colorSubmenu = rootDescription:CreateButton("Change Color");
+                local colorSubmenu = rootDescription:CreateButton(L["Change Color"]);
                 for colorIndex, colorTable in ipairs(CONSTANTS.PIN_COLORS) do
                     local label = string.format(CONSTANTS.MENU_COLOR_BUTTON_PATTERN, colorTable.color:GetRGBAsBytes())
                     colorSubmenu:CreateRadio(label, IsColorSelected, function() SetColor(colorTable.colorName) end,
@@ -245,9 +247,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             local OverrideCreateSetButtonDisabledState
 
             ---@type SubMenuUtil
-            local setSubmenu = rootDescription:CreateButton("Add to a set");
+            local setSubmenu = rootDescription:CreateButton(L["Add to a set"]);
             local sets = SetManager:GetSets()
-            setSubmenu:CreateTitle("Enter new set name")
+            setSubmenu:CreateTitle(L["Enter new set name"])
             local cachedSetName = ""
             local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             newSetNameElementDescription:AddInitializer(function(frame)
@@ -274,9 +276,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             confirmNewSetElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedButtonMixin
                 frame:SetSize(150, 20)
-                frame:SetText("Create Set")
+                frame:SetText(L["Create Set"])
                 frame:Setup({
-                    buttonLabel = "Create Set",
+                    buttonLabel = L["Create Set"],
                     onChange = function(buttonName)
                         if cachedSetName == "" then
                             return
@@ -300,13 +302,13 @@ function PinFactory:CreatePin(initPinData, pinID)
                 end)
             end
 
-            rootDescription:CreateButton("Show on Map", ShowOnMap)
-            rootDescription:CreateButton("Toggle persistent", function()
+            rootDescription:CreateButton(L["Show on Map"], ShowOnMap)
+            rootDescription:CreateButton(L["Toggle persistent"], function()
                 TogglePersistentState()
             end)
 
-            rootDescription:CreateButton("Share Pin", function() SharePin() end)
-            rootDescription:CreateButton("Remove Pin", function() PinManager:RemovePinByID(pinID) end)
+            rootDescription:CreateButton(L["Share Pin"], function() SharePin() end)
+            rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pinID) end)
         end)
     end
 

@@ -9,7 +9,7 @@
         <Size x="580" y="45" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormal" text="Option">
+                <FontString parentKey="label" inherits="GameFontNormal">
                     <Anchors>
                         <Anchor point="LEFT" x="20" />
                     </Anchors>

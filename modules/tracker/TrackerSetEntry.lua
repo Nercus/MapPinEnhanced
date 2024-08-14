@@ -4,8 +4,7 @@
 ---@field activeTexture Texture
 MapPinEnhancedTrackerSetEntryMixin = {}
 
-function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex(index)
-end
+function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex() end -- not used right now
 
 function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
     self.title:SetText(title)

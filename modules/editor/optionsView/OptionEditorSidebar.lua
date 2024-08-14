@@ -6,6 +6,9 @@ local MapPinEnhanced = select(2, ...)
 ---@class CategoryListScrollFrame : ScrollFrame
 ---@field Child Frame
 
+---@class CategorySidebarHeader : Frame
+---@field bg Texture
+---@field headerText FontString
 
 
 
@@ -14,10 +17,11 @@ local MapPinEnhanced = select(2, ...)
 ---@field body MapPinEnhancedOptionEditorViewBodyMixin
 ---@field categoryButtonPool FramePool
 ---@field scrollFrame CategoryListScrollFrame
----@field header Frame
+---@field header CategorySidebarHeader
 MapPinEnhancedOptionEditorViewSidebarMixin = {}
 
 
+local L = MapPinEnhanced.L
 
 local Options = MapPinEnhanced:GetModule("Options")
 
@@ -29,7 +33,7 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:UpdateCategoryList()
     self.categoryButtonPool:ReleaseAll()
     for i, category in ipairs(categories) do
         local categoryButton = self.categoryButtonPool:Acquire() --[[@as MapPinEnhancedOptionEditorViewCategoryButtonMixin]]
-        categoryButton:SetLabel(category)
+        categoryButton:SetLabel(L[category])
         categoryButton:SetInactive()
 
         categoryButton:ClearAllPoints()
@@ -68,13 +72,15 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:OnLoad()
     self.categoryButtonPool = CreateFramePool("Button", nil, "MapPinEnhancedOptionEditorViewCategoryButtonTemplate")
 
 
-    self.header:SetScript("OnMouseDown", function(self)
+    self.header:SetScript("OnMouseDown", function()
         MapPinEnhanced.editorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
     end)
 
-    self.header:SetScript("OnMouseUp", function(self)
+    self.header:SetScript("OnMouseUp", function()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end)
+    self.header.headerText:SetText(L["Options"])
+    self.switchViewButton:SetText(L["Show Sets"])
 end

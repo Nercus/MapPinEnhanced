@@ -13,6 +13,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field options FontString
 MapPinEnhancedSetEditorPinHeaderMixin = {}
 
+local L = MapPinEnhanced.L
 
 function MapPinEnhancedSetEditorPinHeaderMixin:OnLoad()
+    self.Pin:SetText(L["Icon"])
+    self.mapID:SetText(L["Map ID"])
+    self.xCoord:SetText(L["X"])
+    self.yCoord:SetText(L["Y"])
+    self.title:SetText(L["Title"])
+    self.options:SetText(L["Options"])
 end

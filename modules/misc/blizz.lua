@@ -4,13 +4,13 @@ local MapPinEnhanced = select(2, ...)
 ---@class Blizz : Module
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 
+local L = MapPinEnhanced.L
 
 local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
 local SetUserWaypoint = C_Map.SetUserWaypoint
 local CanSetUserWaypointOnMap = C_Map.CanSetUserWaypointOnMap
 local TimerAfter = C_Timer.After
 local SuperTrackSetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
-
 
 function Blizz:HideBlizzardPin()
     hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
@@ -33,8 +33,8 @@ local function HandleOnPlayerLogin()
     Blizz:HideBlizzardPin()
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
-        category = "Floating Pin",
-        label = "Enable Unlimited Distance",
+        category = L["Floating Pin"],
+        label = L["Enable Unlimited Distance"],
         default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
         init = MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") --[[@as boolean]],
         onChange = function(value)

@@ -16,6 +16,8 @@ local SetFactory = MapPinEnhanced:CreateModule("SetFactory")
 ---@class Blizz : Module
 local Blizz = MapPinEnhanced:CreateModule("Blizz")
 
+local L = MapPinEnhanced.L
+
 ---toggle the pin tracker
 ---@param forceShow? boolean if true, the tracker will be shown, if false, the tracker will be hidden, if nil, the tracker will be toggled
 function MapPinEnhanced:TogglePinTracker(forceShow)
@@ -93,7 +95,7 @@ end
 
 function MapPinEnhanced:ToggleMinimapButton(init)
     if not self.minimapIconCreated then
-        local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject("Bunnies", {
+        local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(self.addonName, {
             type = "launcher",
             text = self.addonName,
             icon = "Interface\\Addons\\MapPinEnhanced\\assets\\MPH_Logo.png",
@@ -103,14 +105,14 @@ function MapPinEnhanced:ToggleMinimapButton(init)
                 elseif button == "RightButton" then
                     MenuUtil.CreateContextMenu(owner, function(_, rootDescription)
                         rootDescription:CreateTitle(MapPinEnhanced.nameVersionString)
-                        rootDescription:CreateButton("Toggle Pin Tracker", function()
+                        rootDescription:CreateButton(L["Toggle tracker"], function()
                             MapPinEnhanced:TogglePinTracker()
                         end)
-                        rootDescription:CreateButton("Toggle Editor", function()
+                        rootDescription:CreateButton(L["Toggle Editor"], function()
                             MapPinEnhanced:ToggleEditorWindow()
                         end)
                         rootDescription:CreateDivider()
-                        rootDescription:CreateButton("Hide Minimap Button", function()
+                        rootDescription:CreateButton(L["Hide Minimap Button"], function()
                             MapPinEnhanced:ToggleMinimapButton()
                         end)
                     end)
@@ -128,10 +130,10 @@ function MapPinEnhanced:ToggleMinimapButton(init)
     local currentState = MapPinEnhanced:GetVar("minimapIcon", "hide") --[[@as boolean]]
     if currentState then
         MapPinEnhanced:SaveVar("minimapIcon", "hide", false)
-        MapPinEnhanced:Notify("Minimapbutton is now visible")
+        MapPinEnhanced:Notify(L["Minimap button is now visible"])
     else
         MapPinEnhanced:SaveVar("minimapIcon", "hide", true)
-        MapPinEnhanced:Notify("Minimapbutton is now hidden")
+        MapPinEnhanced:Notify(L["Minimap button is now hidden"])
     end
     self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
 end
@@ -172,7 +174,8 @@ function MapPinEnhanced:CheckNavigationEnabled()
     if GetCVar("showInGameNavigation") == "1" then return end
     self:ShowPopup({
         text =
-        "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?",
+            L
+            ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"],
         onAccept = function()
             SetCVar("showInGameNavigation", 1)
         end
@@ -186,7 +189,7 @@ function MapPinEnhanced:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
-    self:Notify("TomTom is loaded! The usage of /way is disabled.")
+    self:Notify(L["TomTom is loaded! The usage of /way is disabled."])
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
@@ -197,42 +200,43 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     MapPinEnhanced:CheckForTomTom()
 end)
 
-MapPinEnhanced:AddSlashCommand("minimap", function()
-    MapPinEnhanced:ToggleMinimapButton()
-end, "Toggle the minimap button")
 
-MapPinEnhanced:AddSlashCommand("back", function()
+MapPinEnhanced:AddSlashCommand(L["Minimap"]:lower(), function()
+    MapPinEnhanced:ToggleMinimapButton()
+end, L["Toggle minimap button"])
+
+MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
     local currentMapID = C_Map.GetBestMapForUnit("player")
     if not currentMapID then
-        MapPinEnhanced:Notify("You are in an instance or a zone where the map is not available")
+        MapPinEnhanced:Notify(L["You are in an instance or a zone where the map is not available"])
         return
     end
     local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
     PinManager:AddPin({
-        title = "My way back pin",
+        title = L["My way back"],
         mapID = currentMapID,
         x = x,
         y = y,
         setTracked = true,
         persistent = true,
     })
-end, "Create a pin at your current location")
+end, L["Create a pin at your current location"])
 
-MapPinEnhanced:AddSlashCommand("tracker", function()
+MapPinEnhanced:AddSlashCommand(L["Tracker"]:lower(), function()
     MapPinEnhanced:TogglePinTracker()
-end, "Toggle the tracker window")
+end, L["Toggle tracker"])
 
 
-MapPinEnhanced:AddSlashCommand("import", function()
+MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
     MapPinEnhanced:TogglePinTracker(true)
     MapPinEnhanced:SetPinTrackerView("Import")
-end, "Import a set from a string")
+end, L["Import a set"])
 
-MapPinEnhanced:AddSlashCommand("editor", function()
+MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
     MapPinEnhanced:ToggleEditorWindow()
-end, "Toggle the editor window")
+end, L["Toggle Editor"])
 
-MapPinEnhanced:AddSlashCommand("options", function()
+MapPinEnhanced:AddSlashCommand(L["Options"]:lower(), function()
     MapPinEnhanced:ToggleEditorWindow()
     MapPinEnhanced:SetEditorView("optionView")
-end, "Open the options window")
+end, L["Open options"])

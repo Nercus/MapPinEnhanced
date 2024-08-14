@@ -7,6 +7,7 @@ local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 ---@class Blizz : Module
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 local CONSTANTS = MapPinEnhanced.CONSTANTS
+local L = MapPinEnhanced.L
 
 ---@type table<string, PinObject>
 PinManager.Pins = {}
@@ -278,8 +279,8 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload
     if isReload then
         local Options = MapPinEnhanced:GetModule("Options")
         Options:RegisterCheckbox({
-            category = "General",
-            label = "Auto Track Nearest Pin",
+            category = L["General"],
+            label = L["Auto Track Nearest Pin"],
             description = "Automatically track the nearest pin when a tracked pin is removed.",
             default = MapPinEnhanced:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
             init = MapPinEnhanced:GetVar("general", "autoTrackNearestPin") --[[@as boolean]],

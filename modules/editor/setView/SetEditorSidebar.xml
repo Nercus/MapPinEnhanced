@@ -25,7 +25,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString inherits="GameFontNormalLarge" text="Sets"
+                        <FontString inherits="GameFontNormalLarge" text="Sets" parentKey="title"
                             justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="CENTER" />
@@ -97,19 +97,14 @@
                     </Layer>
                 </Layers>
             </Button>
-            <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate">
+            <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate"
+                text="Create Set">
                 <Size x="1" y="26" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="5" relativeKey="$parent.switchViewButton"
                         relativePoint="BOTTOMRIGHT" />
                     <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="MPHGameFontNormalBlack" text="New Set"
-                            justifyH="CENTER" setAllPoints="true" />
-                    </Layer>
-                </Layers>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="1" y="1" />

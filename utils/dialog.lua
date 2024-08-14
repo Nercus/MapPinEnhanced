@@ -15,6 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field accept Button
 ---@field cancel? Button
 
+local L = MapPinEnhanced.L
 
 ---@type MapPinEnhancedDialogFrame?
 local dialogFrame = nil
@@ -40,6 +41,11 @@ local function GetInteractKeybind()
     return keys[#keys]
 end
 
+---@type string
+local acceptButtonText = L["Accept"]
+---@type string
+local cancelButtonText = L["Cancel"]
+
 ---@param options PopupOption
 function MapPinEnhanced:ShowPopup(options)
     assert(options.text, "The popup must have text")
@@ -62,6 +68,9 @@ function MapPinEnhanced:ShowPopup(options)
     dialog.text:SetText(options.text)
     dialog.accept:SetScript("OnClick", OnAccept)
     dialog.cancel:SetScript("OnClick", OnCancel)
+    dialog.accept:SetText(acceptButtonText)
+    dialog.cancel:SetText(cancelButtonText)
+    -- TODO: only propagate the keys that are not used by the dialog
     local function OnInteract(_, key)
         if key == "ESCAPE" then
             OnCancel()

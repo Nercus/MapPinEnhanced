@@ -30,7 +30,8 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString inherits="GameFontNormalLarge" text="Options"
+                        <FontString inherits="GameFontNormalLarge" parentKey="headerText"
+                            text="Options"
                             justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="CENTER" />
@@ -40,22 +41,13 @@
                 </Layers>
             </Frame>
 
-            <Button parentKey="switchViewButton" inherits="MapPinEnhancedButtonRedTemplate">
+            <Button parentKey="switchViewButton" inherits="MapPinEnhancedButtonRedTemplate"
+                text="Show Sets">
                 <Size x="1" y="26" />
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="10" y="15" />
                     <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" text="Sets"
-                            justifyH="CENTER">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="1" y="1" />
