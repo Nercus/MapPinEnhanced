@@ -70,6 +70,8 @@ local L = {
     ["You are in an instance or a zone where the map is not available"] =
     "You are in an instance or a zone where the map is not available",
     ["Pins"] = "Pins",
+    ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"] =
+    "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"
 }
 
 MapPinEnhanced.L = L

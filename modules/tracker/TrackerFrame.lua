@@ -167,7 +167,6 @@ function MapPinEnhancedTrackerFrameMixin:Close()
     MapPinEnhanced:SaveVar("trackerVisible", false)
 end
 
--- FIXME: tracker header just display default text and is not moveable -> buttons are not clickable
 function MapPinEnhancedTrackerFrameMixin:Open()
     if self:IsShown() then return end
     self:Show()
@@ -313,7 +312,7 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
-    if not self.header.title:IsMouseOver() then return end
+    if not self.header:IsMouseOver() then return end
     local isLocked = MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     if isLocked then
         MapPinEnhanced:Print("Tracker is locked. Unlock it in the options.")

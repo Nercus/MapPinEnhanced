@@ -14,19 +14,10 @@
             <Layer level="OVERLAY">
                 <FontString parentKey="text" inherits="GameFontNormalLarge">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="10"
+                        <Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPLEFT" x="25"
                             y="-25" />
                         <Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT"
-                            x="-10" y="-25" />
-                    </Anchors>
-                </FontString>
-                <!-- TODO: Check if that interferes with large texts. if so remove it, if not then
-                localize it -->
-                <FontString inherits="GameFontDisableTiny"
-                    text="Use enter or your bound interact key to accept.">
-                    <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.text"
-                            y="-10" />
+                            x="-25" y="-25" />
                     </Anchors>
                 </FontString>
             </Layer>

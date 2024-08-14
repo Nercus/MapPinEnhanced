@@ -29,16 +29,16 @@ local function GetPopupDialogFrame()
 end
 
 
-local function GetInteractKeybind()
-    local key1 = GetBindingKey("INTERACTTARGET")
-    if not key1 then return end
-    -- get modifiers
-    if string.find(key1, "SHIFT") and not IsShiftKeyDown() then return end
-    if string.find(key1, "CTRL") and not IsControlKeyDown() then return end
-    if string.find(key1, "ALT") and not IsAltKeyDown() then return end
-    -- split by "-" and get the last part
-    local keys = { strsplit("-", key1) }
-    return keys[#keys]
+local function GetFrameWidthByTextLength(textLength)
+    if textLength < 50 then
+        return 300
+    elseif textLength < 100 then
+        return 370
+    elseif textLength < 150 then
+        return 440
+    elseif textLength < 200 then
+        return 510
+    end
 end
 
 ---@type string
@@ -64,20 +64,25 @@ function MapPinEnhanced:ShowPopup(options)
         dialog:Hide()
     end
 
+    local textLength = string.len(options.text)
+    dialog:SetWidth(GetFrameWidthByTextLength(textLength))
+
     dialog:Show()
     dialog.text:SetText(options.text)
     dialog.accept:SetScript("OnClick", OnAccept)
     dialog.cancel:SetScript("OnClick", OnCancel)
     dialog.accept:SetText(acceptButtonText)
     dialog.cancel:SetText(cancelButtonText)
-    -- TODO: only propagate the keys that are not used by the dialog
+
     local function OnInteract(_, key)
         if key == "ESCAPE" then
             OnCancel()
+            dialog:SetPropagateKeyboardInput(false)
         elseif key == "ENTER" then
             OnAccept()
-        elseif key and key == GetInteractKeybind() then
-            OnAccept()
+            dialog:SetPropagateKeyboardInput(false)
+        else
+            dialog:SetPropagateKeyboardInput(true)
         end
     end
 

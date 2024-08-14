@@ -173,8 +173,7 @@ end
 function MapPinEnhanced:CheckNavigationEnabled()
     if GetCVar("showInGameNavigation") == "1" then return end
     self:ShowPopup({
-        text =
-            L
+        text = L
             ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"],
         onAccept = function()
             SetCVar("showInGameNavigation", 1)
