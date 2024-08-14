@@ -1,6 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+--@do-not-package@
 local EnableAllAddOns = C_AddOns.EnableAllAddOns
 local DisableAllAddOns = C_AddOns.DisableAllAddOns
 local EnableAddOn = C_AddOns.EnableAddOn
@@ -13,10 +14,12 @@ local ReloadUI = C_UI.Reload
 
 local playerLoginFired = false
 local preFiredQueue = {}
+--@end-do-not-package@
 
 ---add debug message to DevTool
 ---@param ... table | string | number | boolean | nil
 function MapPinEnhanced:Debug(...)
+    --@do-not-package@
     local args = ...
     if (playerLoginFired == false) then
         table.insert(preFiredQueue, { args })
@@ -41,8 +44,10 @@ function MapPinEnhanced:Debug(...)
         end)
         return
     end
+    --@end-do-not-package@
 end
 
+--@do-not-package@
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     playerLoginFired = true
     C_Timer.After(1, function()
@@ -243,3 +248,5 @@ local function loadDevMode(_, loadedAddon)
 end
 
 MapPinEnhanced:RegisterEvent("ADDON_LOADED", loadDevMode)
+
+--@end-do-not-package@
