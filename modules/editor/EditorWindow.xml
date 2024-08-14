@@ -7,7 +7,7 @@
     <Frame name="MapPinEnhancedEditorWindowTemplate" mixin="MapPinEnhancedEditorWindowMixin"
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
-        registerForDrag="LeftButton">
+        registerForDrag="LeftButton" propagateKeyboardInput="true">
         <Size x="900" y="500" />
         <Anchors>
             <Anchor point="CENTER" />
@@ -39,9 +39,9 @@
             </Frame>
             <Button parentKey="closebutton"
                 inherits="MapPinEnhancedSquareButtonRedTemplate" frameStrata="HIGH">
-                <Size x="20" y="20" />
+                <Size x="26" y="26" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="5" y="5" />
+                    <Anchor point="TOPRIGHT" x="-12" y="-10" />
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
@@ -63,6 +63,11 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnKeyDown>
+                if key == "ESCAPE" then
+                    self:Hide();
+                end
+            </OnKeyDown>
         </Scripts>
     </Frame>
 </Ui>

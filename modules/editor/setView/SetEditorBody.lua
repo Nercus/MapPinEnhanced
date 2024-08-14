@@ -7,25 +7,26 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class ImportFrameWithButton :ScrollableTextarea
 ---@field confirmButton Button
+---@field cancelImportButton Button
 
 
 ---@class SetEditorViewBodyHeader : Frame
 ---@field setName SetEditorSetNameEditBox
 ---@field deleteButton Button
 ---@field exportButton Button
----@field createSetButton Button
----@field importButton Button
 ---@field bg Texture
+---@field infoText FontString
 
 ---@class MapPinEnhancedSetEditorViewBodyMixin : Frame
 ---@field activeEditorSet UUID | nil
 ---@field scrollFrame SetListScrollFrame
 ---@field sideBar MapPinEnhancedSetEditorViewSidebarMixin
 ---@field header SetEditorViewBodyHeader
----@field infoText FontString
 ---@field pinListHeader Frame
 ---@field addPinButton Button
 ---@field importFrame ImportFrameWithButton
+---@field createSetButton Button
+---@field importButton Button
 MapPinEnhancedSetEditorViewBodyMixin = {}
 
 local L = MapPinEnhanced.L
@@ -104,11 +105,16 @@ end
 
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     local function DeleteSet()
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        if IsShiftKeyDown() then
+            SetManager:DeleteSet(self.activeEditorSet)
+            self:SetActiveEditorSetID()
+            CB:Fire('UpdateSetList')
+            return
+        end
         MapPinEnhanced:ShowPopup({
             text = L["Are you sure you want to delete this set?"],
             onAccept = function()
-                ---@class SetManager : Module
-                local SetManager = MapPinEnhanced:GetModule("SetManager")
                 SetManager:DeleteSet(self.activeEditorSet)
                 self:SetActiveEditorSetID()
                 CB:Fire('UpdateSetList')
@@ -139,13 +145,17 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     local function ToggleImportFrame()
         if self.importFrame:IsShown() then
             self.importFrame:Hide()
-            self.infoText:Show()
+            self.header.infoText:SetText(L["Select a set to edit or create a new one."])
+            self.createSetButton:Show()
+            self.importButton:Show()
         else
             self.importFrame:Show()
-            self.infoText:Hide()
+            self.header.infoText:SetText(L["Paste a string to import a set"])
+            self.createSetButton:Hide()
+            self.importButton:Hide()
         end
     end
-    self.header.importButton:SetScript("OnClick", ToggleImportFrame)
+    self.importButton:SetScript("OnClick", ToggleImportFrame)
 
     local function OnImportStringUpdate()
         local text = self.importFrame.editBox:GetText()
@@ -177,7 +187,9 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     end
     self.importFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
 
-    self.header.createSetButton:SetScript("OnClick", function()
+    self.importFrame.cancelImportButton:SetScript("OnClick", ToggleImportFrame)
+
+    self.createSetButton:SetScript("OnClick", function()
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New set"])
@@ -185,9 +197,9 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         self.sideBar:ToggleActiveSet(setObject.setID)
     end)
 
-    self.infoText:SetText(L["Select a set to edit or create a new one."])
-    self.header.createSetButton:SetText(L["Create Set"])
-    self.header.importButton:SetText(L["Import"])
+
+    self.createSetButton:SetText(L["Create Set"])
+    self.importButton:SetText(L["Import Set"])
     self.addPinButton:SetText(L["Add Pin"])
     self.importFrame.confirmButton:SetText(L["Import"])
 end
@@ -199,25 +211,25 @@ end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
     if not self.activeEditorSet then
-        self.header.setName:Hide()
+        self.createSetButton:Show()
         self.header.deleteButton:Hide()
         self.header.exportButton:Hide()
-        self.header.createSetButton:Show()
-        self.header.importButton:Show()
+        self.header.infoText:Show()
+        self.header.setName:Hide()
+        self.importButton:Show()
         self.pinListHeader:Hide()
         self.scrollFrame:Hide()
-        self.infoText:Show()
         return
     end
-    self.infoText:Hide()
-    self.scrollFrame:Show()
-    self.header.setName:Show()
+    self.createSetButton:Hide()
     self.header.deleteButton:Show()
     self.header.exportButton:Show()
-    self.header.createSetButton:Hide()
-    self.header.importButton:Hide()
+    self.header.infoText:Hide()
+    self.header.setName:Show()
+    self.importButton:Hide()
     self.importFrame:Hide()
     self.pinListHeader:Show()
+    self.scrollFrame:Show()
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:UpdateHeader()

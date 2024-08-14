@@ -33,6 +33,7 @@ local L = {
     ["Hide Minimap Button"] = "Hide Minimap Button",
     ["Icon"] = "Icon",
     ["Import a set"] = "Import a set",
+    ["Import Set"] = "Import Set",
     ["Import"] = "Import",
     ["Imported Set"] = "Imported Set",
     ["Lock Tracker"] = "Lock Tracker",
@@ -74,6 +75,7 @@ local L = {
     "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?",
     ["New set"] = "New set",
     ["Map Pin"] = "Map Pin", -- TODO: this is really important. check why the metatable is not working without that entry
-    ["Map Select"] = "Map Select"
+    ["Map Select"] = "Map Select",
+    ["Paste a string to import a set"] = "Paste a string to import a set"
 }
 MapPinEnhanced.L = L

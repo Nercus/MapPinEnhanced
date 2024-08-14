@@ -9,13 +9,6 @@
         mixin="MapPinEnhancedSetEditorViewBodyMixin"
         virtual="true" hidden="true"
         enableMouse="true">
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormal" parentKey="infoText"
-                    text="Select a set to edit or create a new one." setAllPoints="true"
-                    justifyH="CENTER" justifyV="MIDDLE" />
-            </Layer>
-        </Layers>
         <Frames>
             <Frame parentKey="header" enableMouse="true">
                 <Size x="1" y="30" />
@@ -23,6 +16,13 @@
                     <Anchor point="TOPLEFT" x="10" y="-15" />
                     <Anchor point="TOPRIGHT" x="-10" y="-15" />
                 </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" parentKey="infoText"
+                            text="Select a set to edit or create a new one." setAllPoints="true"
+                            justifyH="CENTER" justifyV="MIDDLE" />
+                    </Layer>
+                </Layers>
                 <Frames>
                     <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
                         font="GameFontNormalLarge"
@@ -81,7 +81,7 @@
                         inherits="MapPinEnhancedSquareButtonRedTemplate">
                         <Size x="26" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-12" y="7" />
+                            <Anchor point="RIGHT" x="-37" y="7" />
                         </Anchors>
                         <Layers>
                             <Layer level="OVERLAY">
@@ -118,19 +118,27 @@
                             </Layer>
                         </Layers>
                     </Button>
-                    <Button parentKey="createSetButton"
-                        inherits="MapPinEnhancedButtonYellowTemplate" text="Create Set">
-                        <Size x="75" y="26" />
+                    <Button parentKey="importFromMapButton" hidden="true"
+                        inherits="MapPinEnhancedSquareButtonYellowTemplate"
+                        frameStrata="HIGH">
+                        <Size x="26" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" y="7" x="-3" relativePoint="CENTER" />
+                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
+                                relativePoint="LEFT" />
                         </Anchors>
-                    </Button>
-                    <Button parentKey="importButton"
-                        inherits="MapPinEnhancedButtonYellowTemplate" text="Import">
-                        <Size x="75" y="26" />
-                        <Anchors>
-                            <Anchor point="LEFT" y="7" x="3" relativePoint="CENTER" />
-                        </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/Icons/MPHIconExport_Dark.png"
+                                    desaturated="true">
+                                    <Color r="0.4" g="0.4" b="0.4" />
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
+                                    </Anchors>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Button>
                 </Frames>
                 <Layers>
@@ -197,11 +205,32 @@
                         text="Import">
                         <Size x="100" y="30" />
                         <Anchors>
-                            <Anchor point="BOTTOM" x="0" y="10" />
+                            <Anchor point="BOTTOM" x="55" y="10" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="cancelImportButton"
+                        inherits="MapPinEnhancedButtonRedTemplate" text="Back">
+                        <Size x="100" y="30" />
+                        <Anchors>
+                            <Anchor point="BOTTOM" x="-55" y="10" />
                         </Anchors>
                     </Button>
                 </Frames>
             </ScrollFrame>
+            <Button parentKey="createSetButton"
+                inherits="MapPinEnhancedButtonYellowTemplate" text="Create Set">
+                <Size x="150" y="32" />
+                <Anchors>
+                    <Anchor point="CENTER" y="32" relativePoint="CENTER" />
+                </Anchors>
+            </Button>
+            <Button parentKey="importButton"
+                inherits="MapPinEnhancedButtonYellowTemplate" text="Import Set">
+                <Size x="150" y="32" />
+                <Anchors>
+                    <Anchor point="CENTER" y="-32" relativePoint="CENTER" />
+                </Anchors>
+            </Button>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
