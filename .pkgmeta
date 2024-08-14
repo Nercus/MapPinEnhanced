@@ -1,17 +1,26 @@
 package-as: MapPinEnhanced
 
 externals:
-Libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
-Libs/LibDataBroker-1.1: https://repos.wowace.com/wow/libdatabroker-1-1
-Libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
-Libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
+  libs/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+  libs/LibDataBroker-1.1: https://repos.wowace.com/wow/libdatabroker-1-1
+  libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
+  libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
+  libs/HereBeDragons: https://repos.wowace.com/wow/herebedragons
+
+enable-nolib-creation: no
 
 ignore:
-  - "*.md"
-  - "*.png"
+  - README.md
+  - CHANGELOG.md
+  - annotations.lua
 
-
+required-dependencies:
+  - herebedragons
+  - callbackhandler
+  - libdatabroker-1-1
+  - libdbicon-1-0
+  - libstub
 
 manual-changelog:
-  filename: Changelog.md
+  filename: CHANGELOG.md
   markup-type: markdown
