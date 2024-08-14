@@ -9,6 +9,7 @@ local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
+local L = MapPinEnhanced.L
 
 local decimal_separator = CONSTANTS.DECIMAL_SEPARATOR
 local inverse_decimal_separator = decimal_separator == "," and "." or ","
@@ -91,6 +92,9 @@ function PinProvider:ParseWayStringToData(wayString)
         end
     end
     local title = table.concat(titleTokens, " ")
+    if title == "" then
+        title = L[CONSTANTS.DEFAULT_PIN_NAME]
+    end
 
     -- if length is small than 3 try to split the last element on ","
     if #tokens < 2 then

@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 --- Holds all the constants for the addon
 
 MapPinEnhanced.CONSTANTS = {}
-
+local L = MapPinEnhanced.L
 
 
 MapPinEnhanced.CONSTANTS.PIN_COLORS = {
@@ -73,5 +73,6 @@ MapPinEnhanced.CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
 }
 
 
+---@type string
 MapPinEnhanced.CONSTANTS.DEFAULT_PIN_NAME = "Map Pin"
 MapPinEnhanced.CONSTANTS.DEFAULT_PIN_COLOR = "Yellow"

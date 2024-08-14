@@ -241,7 +241,7 @@ function PinManager:AddPin(pinData, restored)
     end
 
     if (pinData.title == nil) then
-        pinData.title = CONSTANTS.DEFAULT_PIN_NAME
+        pinData.title = L[CONSTANTS.DEFAULT_PIN_NAME]
     end
 
     if pinData.texture then

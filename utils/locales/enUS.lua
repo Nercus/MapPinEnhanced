@@ -72,7 +72,8 @@ local L = {
     ["Pins"] = "Pins",
     ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"] =
     "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?",
-    ["New set"] = "New set"
+    ["New set"] = "New set",
+    ["Map Pin"] = "Map Pin", -- TODO: this is really important. check why the metatable is not working without that entry
+    ["Map Select"] = "Map Select"
 }
-
 MapPinEnhanced.L = L

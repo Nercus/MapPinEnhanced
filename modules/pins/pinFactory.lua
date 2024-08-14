@@ -224,8 +224,8 @@ function PinFactory:CreatePin(initPinData, pinID)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 24)
                 frame:Setup({
-                    default = pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
-                    init = pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
+                    default = pinData.title or L[CONSTANTS.DEFAULT_PIN_NAME],
+                    init = pinData.title or L[CONSTANTS.DEFAULT_PIN_NAME],
                     onChange = function(value)
                         ChangeTitle(value)
                     end

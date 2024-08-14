@@ -72,6 +72,7 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
+    -- TODO: slash command is not working to show it
     local autoVisibility = MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as 'none' |  'both']]
     local entryCount = #self.entries
     -- don't use GetEntryCount() here as  that will not provide the correct count for sets
