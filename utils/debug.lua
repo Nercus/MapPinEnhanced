@@ -118,12 +118,22 @@ MapPinEnhanced:AddSlashCommand("dev", setDevMode, "Toggle dev mode")
 
 
 
+local keysToKeep = {
+    ["devMode"] = true,
+    ["loadedAddons"] = true,
+    ["version"] = true,
+}
+
 StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
     text = "Are you sure you want to reset all saved variables?",
     button1 = "Yes",
     button2 = "No",
     OnAccept = function()
-        MapPinEnhancedDB = {}
+        for key, _ in pairs(MapPinEnhancedDB) do
+            if not keysToKeep[key] then
+                MapPinEnhancedDB[key] = nil
+            end
+        end
         ReloadUI()
     end,
     timeout = 0,
@@ -134,7 +144,6 @@ StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
 
 local function ResetSavedVars()
     -- use a static popup to confirm
-
     StaticPopup_Show("MAP_PIN_ENHANCED_RESET_SAVED_VARS")
 end
 

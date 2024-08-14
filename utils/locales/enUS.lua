@@ -69,6 +69,7 @@ local L = {
     ["Y"] = "Y",
     ["You are in an instance or a zone where the map is not available"] =
     "You are in an instance or a zone where the map is not available",
+    ["Pins"] = "Pins",
 }
 
 MapPinEnhanced.L = L

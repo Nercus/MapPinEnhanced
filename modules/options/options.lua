@@ -110,51 +110,47 @@ function Options:SetOptionDisabledState(category, label, disabledState)
     error(("Option with label %s does not exist in category %s"):format(label, category))
 end
 
--- TODO: more testing on migration
 ---@param oldVersion number
 function Options:MigrateOptionByVersion(oldVersion)
-    print(oldVersion)
     if oldVersion < 300 then -- versions before 3.0.0
-        if MapPinEnhancedDB.global.options.autoOpenTracker ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.autoOpenTracker ~= nil then
             ---@type boolean
             local value = MapPinEnhancedDB.global.options.autoOpenTracker
             MapPinEnhanced:SaveVar("tracker", "autoVisibility", value and "both" or "none")
         end
-        if MapPinEnhancedDB.global.options.showInfoOnSuperTrackedFrame ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.showInfoOnSuperTrackedFrame ~= nil then
             ---@type boolean
             local value = MapPinEnhancedDB.global.options.showInfoOnSuperTrackedFrame
             MapPinEnhanced:SaveVar("floatingPin", "showTitle", value)
         end
-        if MapPinEnhancedDB.global.options.showTimeOnSuperTrackedFrame ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.showTimeOnSuperTrackedFrame ~= nil then
             ---@type boolean
             local value = MapPinEnhancedDB.global.options.showTimeOnSuperTrackedFrame
             MapPinEnhanced:SaveVar("floatingPin", "showEstimatedTime", value)
         end
-        if MapPinEnhancedDB.global.options.changedalpha ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.changedalpha ~= nil then
             ---@type boolean
             local value = MapPinEnhancedDB.global.options.changedalpha
             MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
         end
-        if MapPinEnhancedDB.global.options.maxTrackerEntries ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.maxTrackerEntries ~= nil then
             ---@type number
             local value = MapPinEnhancedDB.global.options.maxTrackerEntries
             MapPinEnhanced:SaveVar("tracker", "trackerHeight", value)
         end
-        if MapPinEnhancedDB.global.options.autoTrackNearest ~= nil then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.autoTrackNearest ~= nil then
             ---@type boolean
             local value = MapPinEnhancedDB.options.autoTrackNearest
             MapPinEnhanced:SaveVar("general", "autoTrackNearestPin", value)
         end
 
 
-        if MapPinEnhancedDB.global.presets then
+        if MapPinEnhancedDB.global and MapPinEnhancedDB.global.presets then
             local SetManager = MapPinEnhanced:GetModule("SetManager")
             local PinProvider = MapPinEnhanced:GetModule("PinProvider")
             ---@diagnostic disable-next-line: param-type-mismatch, no-unknown we don't type anything we just want to migrate them over
             for _, preset in pairs(MapPinEnhancedDB.global.presets) do
                 local migratedSetName = preset.name or "Imported"
-                print("Migrating preset", migratedSetName)
-                print("Input", preset.input)
                 if preset.input then
                     local pins = PinProvider:DeserializeWayString(preset.input)
                     local newSet = SetManager:AddSet(migratedSetName)

@@ -175,6 +175,7 @@ function MapPinEnhancedTrackerFrameMixin:Open()
         self:SetPinView(true)
     end
     MapPinEnhanced:SaveVar("trackerVisible", true)
+    self:UpdateEntriesPosition()
 end
 
 function MapPinEnhancedTrackerFrameMixin:Toggle()
@@ -377,7 +378,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         height = 1
     end
     self.scrollFrame.Child:SetHeight(height)
-    self:SetTrackerTitle(string.format("%s %s", self.activeView,
+    self:SetTrackerTitle(string.format("%s %s", L[self.activeView],
         self:GetEntryCount() and string.format("(%d)", self:GetEntryCount()) or ""))
     self:UpdateFrameHeight(height)
 end

@@ -57,6 +57,10 @@ function SetManager:RestoreSets()
 end
 
 function SetManager:DeleteSet(setID)
+    if not self.Sets[setID] then
+        CB:Fire("UpdateSetList")
+        return
+    end
     self.Sets[setID]:Delete()
     self.Sets[setID] = nil
     SetManager:PersistSets(setID)
