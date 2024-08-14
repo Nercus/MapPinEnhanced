@@ -8,8 +8,8 @@
         inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="false">
         <Size x="24" y="24" />
         <KeyValues>
-            <KeyValue key="titlePosition" value="TOP" />
-            <KeyValue key="titleYOffset" value="-1" />
+            <KeyValue key="titlePosition" value="BOTTOM" />
+            <KeyValue key="titleYOffset" value="2" />
             <KeyValue key="titleFont" value="GameFontHighlight" />
         </KeyValues>
         <Scripts>
@@ -26,7 +26,7 @@
             <Layer level="OVERLAY">
                 <FontString parentKey="distantText" inherits="GameFontHighlight" text="??:??">
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" y="3" />
+                        <Anchor point="TOP" relativePoint="BOTTOM" y="-24" />
                     </Anchors>
                 </FontString>
             </Layer>

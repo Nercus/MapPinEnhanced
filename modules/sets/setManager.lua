@@ -56,6 +56,16 @@ function SetManager:RestoreSets()
     end
 end
 
+function SetManager:GetPlaceholderSetNameByPrefix(prefix)
+    local count = 1
+    for _, set in pairs(self.Sets) do
+        if string.find(set.name, prefix) then
+            count = count + 1
+        end
+    end
+    return string.format("%s %i", prefix, count)
+end
+
 function SetManager:DeleteSet(setID)
     if not self.Sets[setID] then
         CB:Fire("UpdateSetList")

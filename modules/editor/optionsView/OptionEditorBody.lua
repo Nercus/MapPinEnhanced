@@ -22,7 +22,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field selects FramePool
 ---@field sliders FramePool
 ---@field init boolean
----@field sidebar MapPinEnhancedOptionEditorViewSidebarMixin
+---@field sideBar MapPinEnhancedOptionEditorViewSidebarMixin
 ---@field scrollFrame OptionScrollFrame
 ---@field header OptionEditorBodyHeader
 ---@field optionElementFrames table<string, MapPinEnhancedOptionEditorElementMixin>

@@ -72,13 +72,25 @@ function MapPinEnhancedTrackerPinEntryMixin:SetTitle(overrideTitle)
     self.Pin:SetTitle(overrideTitle)
 end
 
+function MapPinEnhancedTrackerPinEntryMixin:ShowTooltip()
+    if not self.pinData then return end
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText(self.pinData.title, 1, 1, 1, 1, true)
+    GameTooltip:Show()
+end
+
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
     self.Pin:LockHighlight()
     self.highlight:Show()
     self.Pin.numbering:SetAlpha(1)
+    local isTitleEllipsis = self.Pin.title:IsTruncated()
+    if isTitleEllipsis then
+        self:ShowTooltip()
+    end
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
+    GameTooltip:Hide()
     self.Pin:UnlockHighlight()
     self.highlight:Hide()
     if self.tracked then return end

@@ -4,8 +4,11 @@
     <Script file="MinimapPin.lua" />
     <Frame name="MapPinEnhancedMinimapPinTemplate" mixin="MapPinEnhancedMinimapPinMixin"
         inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="true">
+        <Size x="25" y="25" />
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
 </Ui>

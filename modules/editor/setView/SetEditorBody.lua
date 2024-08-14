@@ -20,7 +20,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedSetEditorViewBodyMixin : Frame
 ---@field activeEditorSet UUID | nil
 ---@field scrollFrame SetListScrollFrame
----@field sidebar MapPinEnhancedSetEditorViewSidebarMixin
+---@field sideBar MapPinEnhancedSetEditorViewSidebarMixin
 ---@field header SetEditorViewBodyHeader
 ---@field infoText FontString
 ---@field pinListHeader Frame
@@ -156,7 +156,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         local pins = PinProvider:DeserializeWayString(text)
         if not pins then return end
         local SetManager = MapPinEnhanced:GetModule("SetManager")
-        local set = SetManager:AddSet(L["Imported Set"])
+        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["Imported Set"])
+        local set = SetManager:AddSet(setName)
         for _, pin in ipairs(pins) do
             set:AddPin({
                 mapID = pin.mapID,
@@ -165,9 +166,17 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
                 title = pin.title,
             })
         end
-        self:SetActiveEditorSetID(set.setID)
+        self.sideBar:ToggleActiveSet(set.setID)
     end
     self.importFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
+
+    self.header.createSetButton:SetScript("OnClick", function()
+        ---@class SetManager : Module
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New set"])
+        local setObject = SetManager:AddSet(setName)
+        self.sideBar:ToggleActiveSet(setObject.setID)
+    end)
 
     self.infoText:SetText(L["Select a set to edit or create a new one."])
     self.header.createSetButton:SetText(L["Create Set"])

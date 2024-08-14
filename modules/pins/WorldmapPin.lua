@@ -26,3 +26,18 @@ function MapPinEnhancedWorldMapPinMixin:Setup(pinData)
     self.CreationPulse:Show();
     self.CreationPulse.Anim:Play();
 end
+
+function MapPinEnhancedWorldMapPinMixin:ShowTooltip()
+    if not self.pinData then return end
+    GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 20)
+    GameTooltip:SetText(self.pinData.title, 1, 1, 1)
+    GameTooltip:Show()
+end
+
+function MapPinEnhancedWorldMapPinMixin:OnEnter()
+    self:ShowTooltip()
+end
+
+function MapPinEnhancedWorldMapPinMixin:OnLeave()
+    GameTooltip:Hide()
+end

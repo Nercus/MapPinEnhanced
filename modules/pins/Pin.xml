@@ -20,7 +20,9 @@
                 <Texture parentKey="texture" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
                 <FontString parentKey="title" inherits="GameFontNormal"
-                    justifyV="MIDDLE" justifyH="CENTER" />
+                    justifyV="MIDDLE" justifyH="CENTER" wordwrap="false">
+                    <Size x="200" />
+                </FontString>
                 <Texture parentKey="persistentIcon" hidden="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/lockIcon.png">
                     <Size x="12" y="12" />
