@@ -19,6 +19,7 @@ local L = MapPinEnhanced.L
 ---@field title MapPinEnhancedInputMixin
 ---@field pinOptions MapPinEnhancedSelectMixin
 ---@field onChangeCallback function
+---@field deleteButton Button
 ---@field initValues table<'mapID' | 'xCoord' | 'yCoord' | 'title' | 'color', string | number>
 MapPinEnhancedSetEditorPinEntryMixin = {}
 
@@ -54,7 +55,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
     self.onChangeCallback = callback
 end
 
----@param key 'mapID' | 'x' | 'y' | 'title' | 'color'
+---@param key changeableKeys
 ---@param value (string | number | boolean)?
 function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     assert(self.onChangeCallback, "No callback set")
@@ -90,6 +91,9 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
 
     self.mapID.mapSelection:SetScript("OnClick", function()
         self:OpenMapHelperMenu()
+    end)
+    self.deleteButton:SetScript("OnClick", function()
+        self.onChangeCallback('delete', true)
     end)
 end
 
@@ -161,7 +165,7 @@ local continents = sortedByMapType[Enum.UIMapType.Continent]
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
     MenuUtil.CreateContextMenu(self.mapID.mapSelection, function(_, rootDescription)
-        rootDescription:CreateTitle("Care! Work in progress")
+        rootDescription:CreateTitle(L["Map Select"])
         ---@param menu SubMenuUtil
         ---@param children UiMapDetails[]
         ---@param parent UiMapDetails

@@ -33,12 +33,19 @@ local CB = MapPinEnhanced.CB
 
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
 
+---@alias changeableKeys 'mapID' | 'x' | 'y' | 'title' | 'color' | 'persistent' | 'delete'
+
 ---@param set SetObject
 ---@param setpinID UUID
----@param key 'mapID' | 'x' | 'y' | 'title'
+---@param key changeableKeys
 ---@param value string
 function MapPinEnhancedSetEditorViewBodyMixin:OnPinDataChange(set, setpinID, key, value)
     assert(set, "No set")
+    if key == "delete" then
+        set:RemovePinByID(setpinID)
+        self:UpdatePinList()
+        return
+    end
     set:UpdatePin(setpinID, key, value)
 end
 
