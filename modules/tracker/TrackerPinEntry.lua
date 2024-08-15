@@ -14,16 +14,24 @@ local CONSTANTS = MapPinEnhanced.CONSTANTS
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
 ---@field zoneText FontString
+---@field coordsText FontString
 ---@field highlight Texture
 ---@field tracked boolean?
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 
 function MapPinEnhancedTrackerPinEntryMixin:SetZoneText(mapID)
+    if not self.pinData then return end
     local mapInfo = C_Map.GetMapInfo(mapID)
     if mapInfo then
         self.zoneText:SetText(mapInfo.name)
     end
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetCoordsText(x, y)
+    if not self.pinData then return end
+    local coordsText = string.format(CONSTANTS.COORDS_TEXT_PATTERN, x * 100, y * 100)
+    self.coordsText:SetText(coordsText)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
@@ -38,6 +46,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
     self.Pin.titleYOffset = self.titleYOffset
     self.Pin:Setup(pinData)
     self:SetZoneText(pinData.mapID)
+    self:SetCoordsText(pinData.x, pinData.y)
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture
