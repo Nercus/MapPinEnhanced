@@ -47,6 +47,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Setup(pinData)
     self.Pin:Setup(pinData)
     self:SetZoneText(pinData.mapID)
     self:SetCoordsText(pinData.x, pinData.y)
+    self.Pin.title:SetWidth(self:GetWidth() - 100)
 end
 
 ---comment we override the texture function from the base pin mixin to include the other pathing to the texture

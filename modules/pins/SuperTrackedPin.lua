@@ -68,11 +68,22 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     self.title:Show()
 end
 
+local SUPERTRACKEDPIN_TITLE_MAX_WIDTH = 200
+
 ---override the function in the base pin mixin to handle the title visibilty for the default title
 ---@param overrideTitle any
 function MapPinEnhancedSuperTrackedPinMixin:SetTitle(overrideTitle)
     MapPinEnhancedBasePinMixin.SetTitle(self, overrideTitle)
     self:UpdateTextVisibility()
+    -- set title width dynamically based on the title
+    local numCharacters = string.len(self.title:GetText())
+    local width = numCharacters * 8
+    self.title:SetWidth(width)
+    local stringWidth = self.title:GetStringWidth()
+    if stringWidth > SUPERTRACKEDPIN_TITLE_MAX_WIDTH then
+        stringWidth = SUPERTRACKEDPIN_TITLE_MAX_WIDTH
+    end
+    self.title:SetWidth(stringWidth)
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnShow()
