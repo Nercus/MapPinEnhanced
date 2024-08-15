@@ -170,9 +170,20 @@ function SetFactory:CreateSet(name, id)
         setEditorEntry:SetTitle(newName)
     end
 
-    trackerSetEntry:SetScript("OnClick", function()
-        LoadSet(IsShiftKeyDown())
-    end)
+
+    local function CreateMenu(parentFrame)
+        -- TODO: add set menu
+    end
+
+    local function HandleClick(buttonFrame, button)
+        if button == "LeftButton" then
+            LoadSet(IsShiftKeyDown())
+        else
+            CreateMenu(buttonFrame)
+        end
+    end
+
+    trackerSetEntry:SetScript("OnClick", HandleClick)
 
     return {
         name = name,
