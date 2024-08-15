@@ -173,7 +173,6 @@ function SetFactory:CreateSet(name, id)
 
 
     local function CreateMenu(parentFrame)
-        -- TODO: add set menu
     end
 
     local function HandleClick(buttonFrame, button)

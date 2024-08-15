@@ -188,7 +188,7 @@ function MapPinEnhanced:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
-    self:Notify(L["TomTom is loaded! The usage of /way is disabled."])
+    self:Print(L["TomTom is loaded! You could experience some unexpected behavior."])
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()

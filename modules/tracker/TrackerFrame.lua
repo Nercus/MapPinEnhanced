@@ -212,7 +212,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Automatic Visibility"],
         default = MapPinEnhanced:GetDefault("tracker", "autoVisibility") --[[@as string]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "autoVisibility") end --[[@as string]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as string]] end,
         options = {
             { label = L["Disabled"],  value = "none", type = "radio" },
             { label = L["Automatic"], value = "both", type = "radio" }
@@ -226,7 +226,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Lock Tracker"],
         default = MapPinEnhanced:GetDefault("tracker", "lockTracker") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "lockTracker") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]] end,
         onChange = function(value)
             MapPinEnhanced:SaveVar("tracker", "lockTracker", value)
         end
@@ -236,7 +236,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Scale"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerScale") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "trackerScale") end --[[@as number]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "trackerScale") --[[@as number]] end,
         min = 0.5,
         max = 2,
         step = 0.05,
@@ -250,7 +250,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Background Opacity"],
         default = MapPinEnhanced:GetDefault("tracker", "backgroundOpacity") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "backgroundOpacity") end --[[@as number]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "backgroundOpacity") --[[@as number]] end,
         min = 0,
         max = 1,
         step = 0.1,
@@ -264,7 +264,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Show Numbering"],
         default = MapPinEnhanced:GetDefault("tracker", "showNumbering") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "showNumbering") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]] end,
         onChange = function(value)
             MapPinEnhanced:SaveVar("tracker", "showNumbering", value)
             self:UpdatePinNumberingVisibility()
@@ -275,7 +275,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Entry Height"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerHeight") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "trackerHeight") end --[[@as number]],
+        init = function() return MapPinEnhanced:GetVar("tracker", "trackerHeight") --[[@as number]] end,
         min = 1,
         max = 14,
         step = 1,

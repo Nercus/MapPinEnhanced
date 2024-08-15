@@ -52,4 +52,7 @@
     "Lua.diagnostics.groupSeverity": {
         "global": "Error"
     },
+    "Lua.diagnostics.globals": [
+        "TomTom"
+    ],
 }

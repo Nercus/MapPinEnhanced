@@ -280,7 +280,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload
             label = L["Auto Track Nearest Pin"],
             description = "Automatically track the nearest pin when a tracked pin is removed.",
             default = MapPinEnhanced:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
-            init = function() return MapPinEnhanced:GetVar("general", "autoTrackNearestPin") end --[[@as boolean]],
+            init = function() return MapPinEnhanced:GetVar("general", "autoTrackNearestPin") --[[@as boolean]] end,
             onChange = function(value)
                 MapPinEnhanced:SaveVar("general", "autoTrackNearestPin", value)
             end
