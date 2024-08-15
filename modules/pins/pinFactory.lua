@@ -222,6 +222,14 @@ function PinFactory:CreatePin(initPinData, pinID)
             titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 24)
+                frame:SetScript("OnEscapePressed",
+                    function()
+                        frame:SetPropagateKeyboardInput(true)
+                        frame:ClearFocus()
+                        C_Timer.After(0.1, function()
+                            frame:SetPropagateKeyboardInput(false)
+                        end)
+                    end)
                 frame:Setup({
                     default = pinData.title or "",
                     init = pinData.title or "",
@@ -254,6 +262,14 @@ function PinFactory:CreatePin(initPinData, pinID)
             newSetNameElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 20)
+                frame:SetScript("OnEscapePressed",
+                    function()
+                        frame:SetPropagateKeyboardInput(true)
+                        frame:ClearFocus()
+                        C_Timer.After(0.1, function()
+                            frame:SetPropagateKeyboardInput(false)
+                        end)
+                    end)
                 frame:Setup({
                     default = "",
                     init = "",
