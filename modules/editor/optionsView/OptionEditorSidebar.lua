@@ -13,7 +13,7 @@ local MapPinEnhanced = select(2, ...)
 
 
 ---@class MapPinEnhancedOptionEditorViewSidebarMixin : Frame
----@field switchViewButton Button
+---@field switchViewButton MapPinEnhancedSquareButton
 ---@field body MapPinEnhancedOptionEditorViewBodyMixin
 ---@field categoryButtonPool FramePool
 ---@field scrollFrame CategoryListScrollFrame
@@ -83,4 +83,5 @@ function MapPinEnhancedOptionEditorViewSidebarMixin:OnLoad()
     end)
     self.header.headerText:SetText(L["Options"])
     self.switchViewButton:SetText(L["Show Sets"])
+    self.switchViewButton.tooltip = L["Show Options"]
 end

@@ -28,10 +28,18 @@
                 self:GetNormalTexture():SetDesaturated(false)
             </OnEnable>
             <OnLoad>
-                if self.iconTexture then
-                    self.icon:SetTexture(self.iconTexture)
-                end
+                if not self.iconTexture then return end
+                self.icon:SetTexture(self.iconTexture)
             </OnLoad>
+            <OnEnter>
+                if not self.tooltip then return end
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:SetText(self.tooltip)
+                GameTooltip:Show()
+            </OnEnter>
+            <OnLeave>
+                GameTooltip:Hide()
+            </OnLeave>
         </Scripts>
     </Button>
 </Ui>

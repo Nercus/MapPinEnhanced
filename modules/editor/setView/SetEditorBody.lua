@@ -12,9 +12,9 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class SetEditorViewBodyHeader : Frame
 ---@field setName SetEditorSetNameEditBox
----@field deleteButton Button
----@field exportButton Button
----@field importFromMapButton Button
+---@field deleteButton MapPinEnhancedSquareButton
+---@field exportButton MapPinEnhancedSquareButton
+---@field importFromMapButton MapPinEnhancedSquareButton
 ---@field bg Texture
 ---@field infoText FontString
 
@@ -218,6 +218,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     self.importButton:SetText(L["Import Set"])
     self.addPinButton:SetText(L["Add Pin"])
     self.importFrame.confirmButton:SetText(L["Import"])
+    self.header.deleteButton.tooltip = L["Delete Set"]
+    self.header.exportButton.tooltip = L["Export Set"]
 end
 
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveSet()

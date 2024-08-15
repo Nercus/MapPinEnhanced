@@ -88,6 +88,7 @@
                 <KeyValues>
                     <KeyValue key="iconTexture"
                         value="Interface/AddOns/MapPinEnhanced/assets/icons/IconSettings_Yellow.png" />
+                    <KeyValue key="tooltip" value="Show Options" />
                 </KeyValues>
             </Button>
             <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate"

@@ -86,6 +86,7 @@
                         <KeyValues>
                             <KeyValue key="iconTexture"
                                 value="Interface/AddOns/MapPinEnhanced/assets/icons/IconTrash_Yellow.png" />
+                            <KeyValue key="tooltip" value="Delete Set" />
                         </KeyValues>
                     </Button>
                     <Button parentKey="exportButton" hidden="true"
@@ -99,6 +100,7 @@
                         <KeyValues>
                             <KeyValue key="iconTexture"
                                 value="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png" />
+                            <KeyValue key="tooltip" value="Export Set" />
                         </KeyValues>
                     </Button>
                     <Button parentKey="importFromMapButton" hidden="true"
@@ -112,6 +114,7 @@
                         <KeyValues>
                             <KeyValue key="iconTexture"
                                 value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPin_Dark.png" />
+                            <KeyValue key="tooltip" value="Import pins from map" />
                         </KeyValues>
                     </Button>
                 </Frames>

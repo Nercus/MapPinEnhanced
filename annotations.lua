@@ -396,3 +396,8 @@ function ChatEdit_InsertLink(link) end
 ---@class DEFAULT_CHAT_FRAME
 ---@field editBox EditBox
 DEFAULT_CHAT_FRAME = {}
+
+
+---@class MapPinEnhancedSquareButton : Button
+---@field iconTexture string
+---@field tooltip? string
