@@ -3,11 +3,14 @@ local MapPinEnhanced = select(2, ...)
 
 --- Holds all the constants for the addon
 
-MapPinEnhanced.CONSTANTS = {}
+
 local L = MapPinEnhanced.L
 
+---@class CONSTANTS
+local CONSTANTS = {}
+MapPinEnhanced.CONSTANTS = CONSTANTS
 
-MapPinEnhanced.CONSTANTS.PIN_COLORS = {
+CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(237, 179, 20, 1),  colorName = "Yellow" },
     { color = CreateColorFromBytes(96, 236, 29, 1),   colorName = "Green" },
     { color = CreateColorFromBytes(132, 196, 237, 1), colorName = "LightBlue" },
@@ -19,7 +22,7 @@ MapPinEnhanced.CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(235, 183, 139, 1), colorName = "Pale" },
 }
 
-MapPinEnhanced.CONSTANTS.PIN_COLORS_BY_NAME = {
+CONSTANTS.PIN_COLORS_BY_NAME = {
     ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
     ["Green"] = CreateColorFromBytes(96, 236, 29, 1),
     ["LightBlue"] = CreateColorFromBytes(132, 196, 237, 1),
@@ -33,15 +36,15 @@ MapPinEnhanced.CONSTANTS.PIN_COLORS_BY_NAME = {
 
 
 
-MapPinEnhanced.CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "." or ","
+CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "." or ","
 
 
-MapPinEnhanced.CONSTANTS.MENU_COLOR_BUTTON_PATTERN =
+CONSTANTS.MENU_COLOR_BUTTON_PATTERN =
 "|TInterface\\AddOns\\MapPinEnhanced\\assets\\forms\\ColourPicker_Body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 
 
 ---@type table<number, string>
-MapPinEnhanced.CONSTANTS.MAPID_SUFFIXES = {
+CONSTANTS.MAPID_SUFFIXES = {
     [195] = "1",                                -- Kaja'mine
     [196] = "2",                                -- Kaja'mine
     [197] = "3",                                -- Kaja'mine
@@ -56,7 +59,7 @@ MapPinEnhanced.CONSTANTS.MAPID_SUFFIXES = {
 }
 
 ---@type table<number, Enum.UIMapType>
-MapPinEnhanced.CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
+CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
     [101] = Enum.UIMapType.World,  -- Outland
     [125] = Enum.UIMapType.Zone,   -- Dalaran
     [126] = Enum.UIMapType.Micro,
@@ -74,5 +77,5 @@ MapPinEnhanced.CONSTANTS.MAPID_MAPTYPE_OVERRIDE = {
 
 
 ---@type string
-MapPinEnhanced.CONSTANTS.DEFAULT_PIN_NAME = "Map Pin"
-MapPinEnhanced.CONSTANTS.DEFAULT_PIN_COLOR = "Yellow"
+CONSTANTS.DEFAULT_PIN_NAME = L["Map Pin"]
+CONSTANTS.DEFAULT_PIN_COLOR = "Yellow"

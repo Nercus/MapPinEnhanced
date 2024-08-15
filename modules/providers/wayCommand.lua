@@ -64,7 +64,7 @@ end
 
 
 ---@param wayString string
----@return string, number?, number[]
+---@return string?, number?, number[]
 function PinProvider:ParseWayStringToData(wayString)
     -- remove the slashString from the message
     wayString = wayString:gsub(SLASH_PREFIX_PATTERN_1, ""):gsub(SLASH_PREFIX_PATTERN_2, ""):gsub(SLASH_PREFIX_PATTERN_3,
@@ -91,9 +91,10 @@ function PinProvider:ParseWayStringToData(wayString)
             table.remove(tokens, idx)
         end
     end
+    ---@type string?
     local title = table.concat(titleTokens, " ")
     if title == "" then
-        title = L[CONSTANTS.DEFAULT_PIN_NAME]
+        title = nil
     end
 
     -- if length is small than 3 try to split the last element on ","

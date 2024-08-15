@@ -2,6 +2,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local CONSTANTS = MapPinEnhanced.CONSTANTS
+
 ---@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePinMixin
 ---@field numbering FontString
 
@@ -68,6 +70,7 @@ function MapPinEnhancedTrackerPinEntryMixin:SetEntryIndexVisibility(visible)
 end
 
 ---comment we override the title position function from the base pin mixin to include the other pathing to the title
+---@param overrideTitle string
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle(overrideTitle)
     self.Pin:SetTitle(overrideTitle)
 end

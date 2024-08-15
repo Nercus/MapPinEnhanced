@@ -29,6 +29,7 @@ end
 
 function MapPinEnhancedWorldMapPinMixin:ShowTooltip()
     if not self.pinData then return end
+    if not self.pinData.title then return end
     GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 20)
     GameTooltip:SetText(self.pinData.title, 1, 1, 1)
     GameTooltip:Show()

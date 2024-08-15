@@ -150,7 +150,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
     self.createSetButton:SetScript("OnClick", function()
         ---@class SetManager : Module
         local SetManager = MapPinEnhanced:GetModule("SetManager")
-        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New set"])
+        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New Set"])
         local setObject = SetManager:AddSet(setName)
         self:ToggleActiveSet(setObject.setID)
     end)

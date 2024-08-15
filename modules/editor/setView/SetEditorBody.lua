@@ -96,8 +96,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         local Blizz = MapPinEnhanced:GetModule("Blizz")
         set:AddPin({
             mapID = Blizz:GetPlayerMap() or 1,
-            x = 0.5,
-            y = 0.5,
+            x = math.random(),
+            y = math.random(),
         }, false)
         self:UpdatePinList()
     end)
@@ -190,7 +190,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
 
     local function OnCreateNewSet()
         local SetManager = MapPinEnhanced:GetModule("SetManager")
-        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New set"])
+        local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New Set"])
         local setObject = SetManager:AddSet(setName)
         self.sideBar:ToggleActiveSet(setObject.setID)
     end

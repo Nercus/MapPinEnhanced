@@ -24,7 +24,7 @@ end
 
 function MapPinEnhancedSuperTrackedPinMixin:SetPersistentState(isPersistent)
     if not self.pinData then return end
-    local hasDefaultTitle = self.pinData.title == L[CONSTANTS.DEFAULT_PIN_NAME]
+    local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
     if isPersistent and not hasDefaultTitle then
         self.persistentIcon:Show()
     else
@@ -36,7 +36,7 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local clamped = C_Navigation.WasClampedToScreen();
     local showTime = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime")
     local showTitle = MapPinEnhanced:GetVar("floatingPin", "showTitle")
-    local hasDefaultTitle = L[CONSTANTS.DEFAULT_PIN_NAME] == ((self.pinData and self.pinData.title) or "")
+    local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
     local isPersistent = self.pinData and self.pinData.persistent
 
     if clamped or (not showTime and not showTitle) then -- clamped or dont show title and time
@@ -71,14 +71,7 @@ end
 ---override the function in the base pin mixin to handle the title visibilty for the default title
 ---@param overrideTitle any
 function MapPinEnhancedSuperTrackedPinMixin:SetTitle(overrideTitle)
-    if not self.pinData then
-        return
-    end
-    if overrideTitle then
-        self.pinData.title = overrideTitle
-    end
-    local title = self.pinData.title
-    self.title:SetText(title)
+    MapPinEnhancedBasePinMixin.SetTitle(self, overrideTitle)
     self:UpdateTextVisibility()
 end
 

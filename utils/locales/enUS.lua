@@ -72,7 +72,7 @@ L["You are in an instance or a zone where the map is not available"] =
 L["Pins"] = "Pins"
 L["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"] =
 "The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"
-L["New set"] = "New set"
+L["New Set"] = "New Set"
 L["Map Pin"] = "Map Pin"
 L["Map Select"] = "Map Select"
 L["Paste a string to import a set"] = "Paste a string to import a set"

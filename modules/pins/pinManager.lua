@@ -240,10 +240,6 @@ function PinManager:AddPin(pinData, restored)
         pinData.color = CONSTANTS.DEFAULT_PIN_COLOR
     end
 
-    if (pinData.title == nil) then
-        pinData.title = L[CONSTANTS.DEFAULT_PIN_NAME]
-    end
-
     if pinData.texture then
         pinData.color = "Custom"
     end
