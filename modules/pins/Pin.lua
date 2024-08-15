@@ -82,6 +82,9 @@ function MapPinEnhancedBasePinMixin:SetTitle(overrideTitle)
     if overrideTitle then
         self.pinData.title = overrideTitle
     end
+    if self.pinData.title == "" then
+        self.pinData.title = nil
+    end
     local title = self.pinData.title or CONSTANTS.DEFAULT_PIN_NAME
     self.title:SetText(title)
 end
