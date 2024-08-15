@@ -8,7 +8,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="bg" name="$parentBG" atlas="common-dropdown-bg">
-                    <Color r="0" g="0" b="0" a="0.3" />
+                    <Color r="1" g="1" b="1" a="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-9" y="6" />
                         <Anchor point="BOTTOMRIGHT" x="9" y="-12" />
@@ -21,20 +21,6 @@
             <KeyValue key="scrollBarTopY" value="-5" type="number" />
             <KeyValue key="scrollBarBottomY" value="5" type="number" />
         </KeyValues>
-        <Animations>
-            <AnimationGroup parentKey="gainFocus">
-                <VertexColor order="1" duration="0.3" smoothing="IN_OUT" target="$parentBG">
-                    <StartColor r="0" g="0" b="0" a="0.3" />
-                    <EndColor r="1" g="1" b="1" a="0.7" />
-                </VertexColor>
-            </AnimationGroup>
-            <AnimationGroup parentKey="loseFocus">
-                <VertexColor order="1" duration="0.3" smoothing="IN_OUT" target="$parentBG">
-                    <StartColor r="1" g="1" b="1" a="0.7" />
-                    <EndColor r="0" g="0" b="0" a="0.3" />
-                </VertexColor>
-            </AnimationGroup>
-        </Animations>
         <ScrollChild>
             <EditBox parentKey="editBox" multiLine="true" autoFocus="false"
                 font="GameFontHighlight">
@@ -45,21 +31,13 @@
                 <Scripts>
                     <OnEditFocusLost>
                         local parent = self:GetParent();
-                        parent.gainFocus:Stop();
-                        parent.loseFocus:Play();
                         parent.focusButton:Show();
                     </OnEditFocusLost>
                     <OnEditFocusGained>
                         local parent = self:GetParent();
-                        parent.loseFocus:Stop();
-                        parent.gainFocus:Play();
-                        parent.focusButton:Hide();
                     </OnEditFocusGained>
                     <OnShow>
                         local parent = self:GetParent();
-                        parent.loseFocus:Stop();
-                        parent.gainFocus:Stop();
-                        parent.focusButton:Show();
                         self:SetText("");
                     </OnShow>
                 </Scripts>

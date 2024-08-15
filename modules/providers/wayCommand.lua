@@ -165,3 +165,13 @@ function PinProvider:ImportFromWayString(wayString)
         end
     end
 end
+
+---@param pinData pinData
+---@return string
+function PinProvider:SerializeWayString(pinData)
+    local mapID = pinData.mapID or ""
+    local title = pinData.title or ""
+    local x = pinData.x * 100
+    local y = pinData.y * 100
+    return trim(string.format(CONSTANTS.WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))
+end

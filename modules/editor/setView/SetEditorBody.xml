@@ -170,7 +170,7 @@
                 </ScrollChild>
             </ScrollFrame>
             <ScrollFrame inherits="MapPinEnhancedScrollableTextareaTemplate" hidden="true"
-                parentKey="importFrame">
+                parentKey="importExportFrame">
                 <Size x="590" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
@@ -178,6 +178,25 @@
                     <Anchor point="BOTTOMRIGHT" x="-15" y="15" />
                 </Anchors>
                 <Frames>
+                    <CheckButton inherits="MapPinEnhancedCheckboxTemplate"
+                        parentKey="exportTypeToggle"
+                        clipChildren="false"
+                        hidden="true">
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" x="10" y="10"
+                                relativeKey="$parent.importExportFrame" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <FontString inherits="GameFontNormal" parentKey="showAllPinsText"
+                                    text="Export as commands">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativePoint="RIGHT" x="2" />
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </CheckButton>
                     <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonYellowTemplate"
                         text="Import">
                         <Size x="100" y="30" />
@@ -192,8 +211,16 @@
                             <Anchor point="BOTTOM" x="-55" y="10" />
                         </Anchors>
                     </Button>
+                    <Button parentKey="cancelExportButton"
+                        inherits="MapPinEnhancedButtonRedTemplate" text="Cancel">
+                        <Size x="120" y="30" />
+                        <Anchors>
+                            <Anchor point="BOTTOM" y="10" />
+                        </Anchors>
+                    </Button>
                 </Frames>
             </ScrollFrame>
+
             <Button parentKey="createSetButton"
                 inherits="MapPinEnhancedButtonYellowTemplate" text="Create Set">
                 <Size x="150" y="32" />

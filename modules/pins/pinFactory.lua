@@ -232,7 +232,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                     end)
                 frame:Setup({
                     default = pinData.title or "",
-                    init = pinData.title or "",
+                    init = function() return pinData.title or "" end,
                     onChange = function(value)
                         ChangeTitle(value)
                     end
@@ -272,7 +272,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                     end)
                 frame:Setup({
                     default = "",
-                    init = "",
+                    init = function() return "" end,
                     onChange = function(value)
                         cachedSetName = value
                         if not OverrideCreateSetButtonDisabledState then return end

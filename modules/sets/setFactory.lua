@@ -26,6 +26,7 @@ local CB = MapPinEnhanced.CB
 ---@field GetAllPinData fun():table<UUID, pinData>
 ---@field GetPinCount fun():number
 ---@field GetPin fun(self, mapID:string, x:number, y:number):setPinData
+---@field GetRawSetData fun():{name:string, pins:table<UUID, pinData>}
 ---@field trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
 ---@field setEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
@@ -185,6 +186,14 @@ function SetFactory:CreateSet(name, id)
 
     trackerSetEntry:SetScript("OnClick", HandleClick)
 
+
+    local function GetRawSetData()
+        return {
+            name = name,
+            pins = GetAllPinData()
+        }
+    end
+
     return {
         name = name,
         SetName = SetName,
@@ -197,6 +206,7 @@ function SetFactory:CreateSet(name, id)
         GetPinCount = GetPinCount,
         GetPinsByOrder = GetPinsByOrder,
         Delete = Delete,
+        GetRawSetData = GetRawSetData,
         trackerSetEntry = trackerSetEntry,
         setEditorEntry = setEditorEntry
     }

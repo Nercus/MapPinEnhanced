@@ -18,5 +18,10 @@ MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")
 MapPinEnhanced.HBDP = LibStub("HereBeDragons-Pins-2.0")
 MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")
 MapPinEnhanced.LDBIcon = LibStub("LibDBIcon-1.0")
+MapPinEnhanced.LibSerialize = LibStub("LibSerialize")
+MapPinEnhanced.LibDeflate = LibStub("LibDeflate")
+
+
+
 ---@type MPHCallbackHandlerRegistry
 MapPinEnhanced.CB = MapPinEnhanced.CB or LibStub("CallbackHandler-1.0"):New(MapPinEnhanced)

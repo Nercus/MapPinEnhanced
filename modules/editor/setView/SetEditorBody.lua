@@ -5,9 +5,11 @@ local MapPinEnhanced = select(2, ...)
 ---@class SetEditorSetNameEditBox : EditBox
 ---@field editButton Button
 
----@class ImportFrameWithButton :ScrollableTextarea
+---@class ImportExportFrameWithButton :ScrollableTextarea
 ---@field confirmButton Button
 ---@field cancelImportButton Button
+---@field cancelExportButton Button
+---@field exportTypeToggle MapPinEnhancedCheckboxMixin
 
 
 ---@class SetEditorViewBodyHeader : Frame
@@ -25,7 +27,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field header SetEditorViewBodyHeader
 ---@field pinListHeader Frame
 ---@field addPinButton Button
----@field importFrame ImportFrameWithButton
+---@field importExportFrame ImportExportFrameWithButton
 ---@field createSetButton Button
 ---@field importButton Button
 MapPinEnhancedSetEditorViewBodyMixin = {}
@@ -103,6 +105,60 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
     end)
 end
 
+function MapPinEnhancedSetEditorViewBodyMixin:ShowImportFrame()
+    self.createSetButton:Hide()
+    self.header.infoText:SetText(L["Paste a string to import a set"])
+    self.importButton:Hide()
+    self.importExportFrame:Show()
+    self.importExportFrame.cancelExportButton:Hide()
+    self.importExportFrame.cancelImportButton:Show()
+    self.importExportFrame.confirmButton:Show()
+    self.importExportFrame.exportTypeToggle:Hide()
+end
+
+function MapPinEnhancedSetEditorViewBodyMixin:HideImportFrame()
+    self.createSetButton:Show()
+    self.header.infoText:SetText(L["Select a set to edit or create a new one."])
+    self.importButton:Show()
+    self.importExportFrame:Hide()
+end
+
+---@params exportString string
+function MapPinEnhancedSetEditorViewBodyMixin:ShowExportFrame(exportString)
+    self.createSetButton:Hide()
+    self.header.deleteButton:Hide()
+    self.header.exportButton:Hide()
+    self.header.importFromMapButton:Hide()
+    self.header.infoText:SetText(L["Copy the string below to export the set."])
+    self.header.infoText:Show()
+    self.header.setName:Hide()
+    self.importButton:Hide()
+    self.importExportFrame:Show()
+    self.importExportFrame.cancelExportButton:Show()
+    self.importExportFrame.cancelImportButton:Hide()
+    self.importExportFrame.confirmButton:Hide()
+    self.importExportFrame.editBox:HighlightText()
+    self.importExportFrame.editBox:SetFocus()
+    self.importExportFrame.editBox:SetText(exportString)
+    self.importExportFrame.exportTypeToggle:Show()
+    self.pinListHeader:Hide()
+    self.scrollFrame.Child:Hide()
+end
+
+function MapPinEnhancedSetEditorViewBodyMixin:HideExportFrame()
+    self:UpdatePinList()
+    self.createSetButton:Hide()
+    self.header.deleteButton:Show()
+    self.header.exportButton:Show()
+    self.header.importFromMapButton:Show()
+    self.header.infoText:Hide()
+    self.header.setName:Show()
+    self.importButton:Hide()
+    self.importExportFrame:Hide()
+    self.pinListHeader:Show()
+    self.scrollFrame.Child:Show()
+end
+
 function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     local function DeleteSet()
         local SetManager = MapPinEnhanced:GetModule("SetManager")
@@ -142,33 +198,41 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     end
     self.header:SetScript("OnMouseUp", StopMoving)
 
-    local function ToggleImportFrame()
-        if self.importFrame:IsShown() then
-            self.importFrame:Hide()
-            self.header.infoText:SetText(L["Select a set to edit or create a new one."])
-            self.createSetButton:Show()
-            self.importButton:Show()
+    local function ToggleImportExportFrame()
+        if self.importExportFrame:IsShown() then
+            self:HideImportFrame()
         else
-            self.importFrame:Show()
-            self.header.infoText:SetText(L["Paste a string to import a set"])
-            self.createSetButton:Hide()
-            self.importButton:Hide()
+            self:ShowImportFrame()
         end
     end
-    self.importButton:SetScript("OnClick", ToggleImportFrame)
+    self.importButton:SetScript("OnClick", ToggleImportExportFrame)
 
     local function OnImportStringUpdate()
-        local text = self.importFrame.editBox:GetText()
+        local text = self.importExportFrame.editBox:GetText()
         if text == "" then
-            self.importFrame.confirmButton:Disable()
+            self.importExportFrame.confirmButton:Disable()
         else
-            self.importFrame.confirmButton:Enable()
+            self.importExportFrame.confirmButton:Enable()
         end
     end
-    self.importFrame.editBox:SetScript("OnTextChanged", OnImportStringUpdate)
+    self.importExportFrame.editBox:SetScript("OnTextChanged", OnImportStringUpdate)
 
     local function OnImportConfirm()
-        local text = self.importFrame.editBox:GetText()
+        local text = self.importExportFrame.editBox:GetText()
+        if text == "" then return end
+        -- check if it has the import prefix
+        if string.find(text, MapPinEnhanced.CONSTANTS.PREFIX) then
+            local SetManager = MapPinEnhanced:GetModule("SetManager")
+            local importedData = MapPinEnhanced:DeserializeImport(text) --[[@as {name:string, pins:table<UUID, pinData>}]]
+            if not importedData then return end
+            local setName = importedData.name
+            local set = SetManager:AddSet(setName)
+            for _, pinData in pairs(importedData.pins) do
+                set:AddPin(pinData, true)
+            end
+            return
+        end
+
         local PinProvider = MapPinEnhanced:GetModule("PinProvider")
         local pins = PinProvider:DeserializeWayString(text)
         if not pins then return end
@@ -185,8 +249,8 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
         end
         self.sideBar:ToggleActiveSet(set.setID)
     end
-    self.importFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
-    self.importFrame.cancelImportButton:SetScript("OnClick", ToggleImportFrame)
+    self.importExportFrame.confirmButton:SetScript("OnClick", OnImportConfirm)
+    self.importExportFrame.cancelImportButton:SetScript("OnClick", ToggleImportExportFrame)
 
     local function OnCreateNewSet()
         local SetManager = MapPinEnhanced:GetModule("SetManager")
@@ -214,10 +278,47 @@ function MapPinEnhancedSetEditorViewBodyMixin:OnLoad()
     end
     self.header.importFromMapButton:SetScript("OnClick", OnImportFromMap)
 
+
+    local function ExportActiveSet()
+        local activeSet = self:GetActiveSet()
+        if not activeSet then return end
+        local rawSetData = activeSet:GetRawSetData()
+        if not rawSetData then return end
+        local serializedString = MapPinEnhanced:SerializeImport(rawSetData)
+        self:ShowExportFrame(serializedString)
+    end
+    self.header.exportButton:SetScript("OnClick", ExportActiveSet)
+
+
+    self.importExportFrame.exportTypeToggle:SetScript("OnClick", function()
+        local exportType = self.importExportFrame.exportTypeToggle:GetChecked()
+        if not exportType then
+            ExportActiveSet()
+            return
+        end
+        local activeSet = self:GetActiveSet()
+        if not activeSet then return end
+        local setPinData = activeSet:GetAllPinData()
+        if not setPinData then return end
+        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+        local serializedString = ""
+        for _, pinData in pairs(setPinData) do
+            serializedString = serializedString .. PinProvider:SerializeWayString(pinData) .. "\n"
+        end
+        serializedString = string.sub(serializedString, 1, -2) -- remove last newline
+        self:ShowExportFrame(serializedString)
+    end)
+
+
+    self.importExportFrame.cancelExportButton:SetScript("OnClick", function()
+        self:HideExportFrame()
+    end)
+
+
     self.createSetButton:SetText(L["Create Set"])
     self.importButton:SetText(L["Import Set"])
     self.addPinButton:SetText(L["Add Pin"])
-    self.importFrame.confirmButton:SetText(L["Import"])
+    self.importExportFrame.confirmButton:SetText(L["Import"])
     self.header.deleteButton.tooltip = L["Delete Set"]
     self.header.exportButton.tooltip = L["Export Set"]
 end
@@ -247,7 +348,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdateDisplayedElements()
     self.header.infoText:Hide()
     self.header.setName:Show()
     self.importButton:Hide()
-    self.importFrame:Hide()
+    self.importExportFrame:Hide()
     self.pinListHeader:Show()
     self.scrollFrame:Show()
 end

@@ -6,6 +6,8 @@ externals:
   libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
   libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
   libs/HereBeDragons: https://repos.wowace.com/wow/herebedragons
+  libs/LibDeflate: https://github.com/SafeteeWoW/LibDeflate
+  libs/LibSerialize: https://github.com/rossnichols/LibSerialize
 
 enable-nolib-creation: no
 
@@ -20,6 +22,7 @@ required-dependencies:
   - libdatabroker-1-1
   - libdbicon-1-0
   - libstub
+  - libdeflate
 
 manual-changelog:
   filename: CHANGELOG.md

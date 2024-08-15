@@ -36,7 +36,7 @@ local function HandleOnPlayerLogin()
         category = L["Floating Pin"],
         label = L["Enable Unlimited Distance"],
         default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
             Blizz:OverrideSuperTrackedAlphaState(value)
