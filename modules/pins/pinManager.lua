@@ -23,7 +23,7 @@ local MAX_COUNT_PINS = 1000
 ---Get a string representation of a position from pinData
 ---@param pinData pinData
 ---@return string
-local function GetPositionStringForPin(pinData)
+function PinManager:GetPositionStringForPin(pinData)
     -- the x and y coordinates are normalized so we cut them here to avoid to many pins on the same point
     return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
 end
@@ -153,7 +153,7 @@ function PinManager:RemovePinByID(pinID)
     pin:Remove()
     local pinData = self.Pins[pinID]:GetPinData()
     local lastPinOrder = pinData.order
-    local pinPositionString = GetPositionStringForPin(pinData)
+    local pinPositionString = self:GetPositionStringForPin(pinData)
     self.Positions[pinPositionString] = nil
     self.Pins[pinID] = nil
 
@@ -230,7 +230,7 @@ function PinManager:AddPin(pinData, restored)
     end
 
 
-    local pinPositionString = GetPositionStringForPin(pinData)
+    local pinPositionString = self:GetPositionStringForPin(pinData)
     if PinManager.Positions[pinPositionString] then
         return
     end

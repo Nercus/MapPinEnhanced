@@ -10,7 +10,6 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
 local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- currently the same template
 
-
 ---@class SetObject
 ---@field setID UUID
 ---@field name string
@@ -40,6 +39,8 @@ local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracker
 function SetFactory:CreateSet(name, id)
     ---@type table<UUID, setPinData>
     local pins = {}
+    ---@type table<string, boolean>
+    local positions = {}
     local setID = id
 
     local trackerSetEntry = TrackerSetEntryPool:Acquire()
@@ -62,6 +63,10 @@ function SetFactory:CreateSet(name, id)
     ---@param pinData pinData
     ---@param restore boolean?
     local function AddPin(_, pinData, restore)
+        local positonString = PinManager:GetPositionStringForPin(pinData)
+        if positions[positonString] then
+            return
+        end
         local setPinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
         pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
@@ -69,6 +74,7 @@ function SetFactory:CreateSet(name, id)
         if not restore then
             SetManager:PersistSets(setID)
         end
+        positions[positonString] = true
     end
 
     ---@param pinsetID UUID
@@ -93,14 +99,16 @@ function SetFactory:CreateSet(name, id)
 
     ---@param pinsetID UUID
     local function RemovePinByID(_, pinsetID)
+        local pinData = pins[pinsetID].pinData
+        local positionString = PinManager:GetPositionStringForPin(pinData)
         pins[pinsetID] = nil
+        positions[positionString] = nil
         SetManager:PersistSets(setID)
     end
 
     local function Delete()
-        for setPinID, _ in pairs(pins) do
-            pins[setPinID] = nil
-        end
+        pins = {}
+        positions = {}
         TrackerSetEntryPool:Release(trackerSetEntry)
         setEditorEntryPool:Release(setEditorEntry)
     end
