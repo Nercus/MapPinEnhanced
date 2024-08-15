@@ -18,9 +18,9 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerHeader : Frame
 ---@field title FontString
----@field viewToggle Button
----@field editorToggle Button
----@field closebutton Button
+---@field viewToggle MapPinEnhancedSquareButton
+---@field editorToggle MapPinEnhancedSquareButton
+---@field closebutton MapPinEnhancedSquareButton
 ---@field headerTexture Texture
 
 
@@ -37,6 +37,9 @@ MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
 local L = MapPinEnhanced.L
+
+local PIN_VIEW_ICON = "Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png"
+local SET_VIEW_ICON = "Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yellow.png"
 
 local ENTRY_GAP = 5
 local DEFAULT_ENTRY_HEIGHT = 37
@@ -100,6 +103,9 @@ function MapPinEnhancedTrackerFrameMixin:SetPinView(forceUpdate)
     self:UpdatePinNumberingVisibility()
     self.activeView = "Pins"
     self:UpdateEntriesPosition()
+    self.header.viewToggle:SetNormalTexture(SET_VIEW_ICON)
+    self.header.viewToggle:SetPushedTexture(SET_VIEW_ICON)
+    self.header.viewToggle.tooltip = L["View Sets"]
 end
 
 ---@param forceUpdate? boolean force an update
@@ -125,6 +131,9 @@ function MapPinEnhancedTrackerFrameMixin:SetSetView(forceUpdate)
     end)
     self.activeView = "Sets"
     self:UpdateEntriesPosition()
+    self.header.viewToggle:SetNormalTexture(PIN_VIEW_ICON)
+    self.header.viewToggle:SetPushedTexture(PIN_VIEW_ICON)
+    self.header.viewToggle.tooltip = L["View Pins"]
 end
 
 ---@param forceUpdate? boolean force an update
@@ -299,6 +308,8 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     self:AddOptions()
     self.scrollFrame.Child.importButton:SetText(L["Import"])
     self.scrollFrame.Child.cancelButton:SetText(L["Cancel"])
+    self.header.closebutton.tooltip = L["Close Tracker"]
+    self.header.editorToggle.tooltip = L["Toggle Editor"]
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetEntryCount()

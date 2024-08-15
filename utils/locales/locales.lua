@@ -7,6 +7,7 @@ local MapPinEnhanced = select(2, ...)
 local L = setmetatable({}, {
     __index = function(t, k)
         local v = tostring(k)
+        MapPinEnhanced:Debug("Missing localization for: " .. v)
         rawset(t, k, v)
         return v
     end

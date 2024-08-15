@@ -31,24 +31,16 @@
                 </Anchors>
                 <Frames>
                     <Button parentKey="closebutton" frameStrata="HIGH" hidden="true"
-                        propagateMouseInput="Motion">
+                        propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="16" y="16" />
                         <Anchors>
                             <Anchor point="TOPRIGHT" x="-10" y="-5" />
                         </Anchors>
-                        <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
-                            setAllPoints="true" />
-                        <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="1" y="-1" />
-                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                            </Anchors>
-                        </PushedTexture>
-                        <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
-                            setAllPoints="true" alpha="0.5" />
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" />
+                            <KeyValue key="tooltip" value="Close Tracker" />
+                        </KeyValues>
                         <Scripts>
                             <OnClick>
                                 self:GetParent():GetParent():Close()
@@ -56,46 +48,30 @@
                         </Scripts>
                     </Button>
                     <Button parentKey="viewToggle" frameStrata="HIGH" hidden="true"
-                        propagateMouseInput="Motion">
+                        propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="22" y="22" />
                         <Anchors>
                             <Anchor point="RIGHT" x="-5" relativePoint="LEFT"
                                 relativeKey="$parent.closebutton" />
                         </Anchors>
-                        <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png"
-                            setAllPoints="true" />
-                        <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="1" y="-1" />
-                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                            </Anchors>
-                        </PushedTexture>
-                        <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
-                            setAllPoints="true" alpha="0.5" />
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png" />
+                            <KeyValue key="tooltip" value="Show Pins" />
+                        </KeyValues>
                     </Button>
                     <Button parentKey="editorToggle" frameStrata="HIGH" hidden="true"
-                        propagateMouseInput="Motion">
+                        propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="20" y="20" />
                         <Anchors>
                             <Anchor point="RIGHT" x="-5" relativePoint="LEFT"
                                 relativeKey="$parent.viewToggle" />
                         </Anchors>
-                        <NormalTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEditor_Yellow_Grey.png"
-                            setAllPoints="true" />
-                        <PushedTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEditor_Yellow_Grey.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="1" y="-1" />
-                                <Anchor point="BOTTOMRIGHT" x="-1" y="1" />
-                            </Anchors>
-                        </PushedTexture>
-                        <HighlightTexture
-                            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
-                            setAllPoints="true" alpha="0.5" />
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconEditor_Yellow_Grey.png" />
+                            <KeyValue key="tooltip" value="Open Editor" />
+                        </KeyValues>
                     </Button>
                 </Frames>
                 <Layers>
