@@ -101,7 +101,7 @@
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="iconTexture"
-                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Dark.png" />
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPlus_Dark.png" />
                 </KeyValues>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">

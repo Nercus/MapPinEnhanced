@@ -113,7 +113,7 @@
                         </Anchors>
                         <KeyValues>
                             <KeyValue key="iconTexture"
-                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPin_Dark.png" />
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconMap_Dark.png" />
                             <KeyValue key="tooltip" value="Import pins from map" />
                         </KeyValues>
                     </Button>
@@ -229,7 +229,7 @@
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="iconTexture"
-                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Dark.png" />
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPlus_Dark.png" />
                 </KeyValues>
             </Button>
             <Button parentKey="importButton"

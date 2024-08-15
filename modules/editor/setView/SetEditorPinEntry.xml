@@ -41,19 +41,17 @@
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15" />
                 </Anchors>
                 <Frames>
-                    <Button parentKey="mapSelection">
+                    <Button parentKey="mapSelection" frameStrata="HIGH"
+                        propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="15" y="15" />
-                        <NormalTexture atlas="poi-islands-table" setAllPoints="true" alpha="0.8" />
-                        <HighlightTexture atlas="poi-islands-table" setAllPoints="true" alpha="1" />
-                        <PushedTexture atlas="poi-islands-table">
-                            <Size x="15" y="15" />
-                            <Anchors>
-                                <Anchor point="CENTER" x="1" y="-1" />
-                            </Anchors>
-                        </PushedTexture>
                         <Anchors>
                             <Anchor point="RIGHT" x="-5" />
                         </Anchors>
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconMap_Yellow.png" />
+                            <KeyValue key="tooltip" value="Show Pins" />
+                        </KeyValues>
                     </Button>
                 </Frames>
             </EditBox>
