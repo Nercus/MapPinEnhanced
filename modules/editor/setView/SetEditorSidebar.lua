@@ -182,5 +182,6 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     self:UpdateSetList() -- init population
     MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
         self:UpdateSetList()
+        self.body:UpdateEditor()
     end)
 end

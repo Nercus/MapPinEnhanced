@@ -10,6 +10,8 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
 local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- currently the same template
 
+local CB = MapPinEnhanced.CB
+
 ---@class SetObject
 ---@field setID UUID
 ---@field name string
@@ -75,6 +77,7 @@ function SetFactory:CreateSet(name, id)
             SetManager:PersistSets(setID)
         end
         positions[positonString] = true
+        CB:Fire('UpdateSetList')
     end
 
     ---@param pinsetID UUID
