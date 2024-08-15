@@ -45,9 +45,13 @@
                 text="Show Sets">
                 <Size x="1" y="26" />
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="10" y="15" />
-                    <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
+                    <Anchor point="BOTTOMLEFT" x="10" y="16" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="16" />
                 </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yellow.png" />
+                </KeyValues>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="1" y="1" />

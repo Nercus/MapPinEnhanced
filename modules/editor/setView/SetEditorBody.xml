@@ -83,18 +83,10 @@
                         <Anchors>
                             <Anchor point="RIGHT" x="-37" y="7" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconTrash_Yellow.png"
-                                    texelSnappingBias="0" snapToPixelGrid="false">
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
+                        <KeyValues>
+                            <KeyValue key="iconTexture"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconTrash_Yellow.png" />
+                        </KeyValues>
                     </Button>
                     <Button parentKey="exportButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonYellowTemplate"
@@ -104,41 +96,23 @@
                             <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
                                 relativePoint="LEFT" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png"
-                                    desaturated="true">
-                                    <Color r="0.4" g="0.4" b="0.4" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
+                        <KeyValues>
+                            <KeyValue key="iconTexture"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png" />
+                        </KeyValues>
                     </Button>
                     <Button parentKey="importFromMapButton" hidden="true"
                         inherits="MapPinEnhancedSquareButtonYellowTemplate"
                         frameStrata="HIGH">
                         <Size x="26" y="26" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
+                            <Anchor point="RIGHT" x="-10" relativeKey="$parent.exportButton"
                                 relativePoint="LEFT" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture
-                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png"
-                                    desaturated="true">
-                                    <Color r="0.4" g="0.4" b="0.4" />
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
+                        <KeyValues>
+                            <KeyValue key="iconTexture"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPin_Dark.png" />
+                        </KeyValues>
                     </Button>
                 </Frames>
                 <Layers>
@@ -223,6 +197,10 @@
                 <Anchors>
                     <Anchor point="CENTER" y="32" relativePoint="CENTER" />
                 </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Dark.png" />
+                </KeyValues>
             </Button>
             <Button parentKey="importButton"
                 inherits="MapPinEnhancedButtonYellowTemplate" text="Import Set">
@@ -230,6 +208,10 @@
                 <Anchors>
                     <Anchor point="CENTER" y="-32" relativePoint="CENTER" />
                 </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Dark.png" />
+                </KeyValues>
             </Button>
         </Frames>
         <Scripts>

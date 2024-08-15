@@ -85,17 +85,10 @@
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="10" y="15" />
                 </Anchors>
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconSettings_Yellow.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="6" y="-6" />
-                                <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconSettings_Yellow.png" />
+                </KeyValues>
             </Button>
             <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate"
                 text="Create Set">
@@ -105,6 +98,10 @@
                         relativePoint="BOTTOMRIGHT" />
                     <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Dark.png" />
+                </KeyValues>
             </Button>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
                 <Size x="1" y="1" />

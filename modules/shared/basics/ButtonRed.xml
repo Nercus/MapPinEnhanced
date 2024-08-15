@@ -44,6 +44,12 @@
                     </Anchors>
                 </Texture>
             </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="icon"
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconTick_Dark.png"
+                    hidden="true">
+                </Texture>
+            </Layer>
         </Layers>
         <Scripts>
             <OnMouseDown>
@@ -75,6 +81,18 @@
                 self.middle:SetDesaturated(false)
                 self.highlight:SetAlpha(1)
             </OnEnable>
+            <OnLoad>
+                if not self.iconTexture then return end
+                local height = self:GetHeight()
+                local fontString = self:GetFontString()
+                fontString:ClearAllPoints()
+                fontString:SetPoint("CENTER", (height - 15) / 2, 0)
+                self.icon:SetSize(height - 15, height - 15)
+                self.icon:ClearAllPoints()
+                self.icon:SetPoint("RIGHT", fontString, "LEFT", -3, 0)
+                self.icon:SetTexture(self.iconTexture)
+                self.icon:Show()
+            </OnLoad>
         </Scripts>
         <NormalFont style="GameFontNormal" />
         <DisabledFont style="GameFontDisable" />

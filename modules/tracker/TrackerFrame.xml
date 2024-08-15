@@ -146,6 +146,10 @@
                                 inherits="MapPinEnhancedButtonYellowTemplate"
                                 propagateMouseInput="Motion" hidden="true" text="Import">
                                 <Size x="300" y="30" />
+                                <KeyValues>
+                                    <KeyValue key="iconTexture"
+                                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Dark.png" />
+                                </KeyValues>
                             </Button>
                             <ScrollFrame parentKey="importEditBox"
                                 inherits="MapPinEnhancedScrollableTextareaTemplate"

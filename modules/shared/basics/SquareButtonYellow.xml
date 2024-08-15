@@ -8,8 +8,18 @@
         <PushedTexture setAllPoints="true"
             file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Pressed.png" />
         <HighlightTexture setAllPoints="true"
-            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png"
-        />
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonSquareYellow_Highlight.png" />
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture parentKey="icon"
+                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconTick_Dark.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="6" y="-6" />
+                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnDisable>
                 self:GetNormalTexture():SetDesaturated(true)
@@ -17,6 +27,11 @@
             <OnEnable>
                 self:GetNormalTexture():SetDesaturated(false)
             </OnEnable>
+            <OnLoad>
+                if self.iconTexture then
+                    self.icon:SetTexture(self.iconTexture)
+                end
+            </OnLoad>
         </Scripts>
     </Button>
 </Ui>

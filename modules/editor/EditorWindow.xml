@@ -43,17 +43,10 @@
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="-12" y="-10" />
                 </Anchors>
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <Texture
-                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="5" y="-5" />
-                                <Anchor point="BOTTOMRIGHT" x="-5" y="5" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" />
+                </KeyValues>
                 <Scripts>
                     <OnClick>
                         self:GetParent():Hide();
