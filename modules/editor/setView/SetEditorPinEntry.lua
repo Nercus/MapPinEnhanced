@@ -104,9 +104,11 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
         default = {
             persistent = false,
         },
-        init = {
-            persistent = initPersistent or false,
-        },
+        init = function()
+            return {
+                persistent = initPersistent
+            }
+        end,
         onChange = function(value)
             if not value then return end
             if type(value) ~= "table" then return end

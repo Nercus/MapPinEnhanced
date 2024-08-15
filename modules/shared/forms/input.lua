@@ -10,7 +10,7 @@ MapPinEnhancedInputMixin = {}
 
 ---@class InputOptions
 ---@field onChange fun(value: string)
----@field init? string -- initial value can be nil if option has never been set before
+---@field init? fun(): string -- initial value can be nil if option has never been set before
 ---@field default string
 
 
@@ -51,7 +51,7 @@ end
 ---@param optionData OptionInputTyped | InputOptions
 function MapPinEnhancedInputMixin:Setup(optionData)
     self.onChangeCallback = nil
-    local init = optionData.init --[[@as string]]
+    local init = optionData.init()
     self:SetText(init)
     self:SetCursorPosition(0)
     self:SetDisabled(optionData.disabledState)

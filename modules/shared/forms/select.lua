@@ -15,7 +15,7 @@ MapPinEnhancedSelectMixin = {}
 
 ---@class SelectOptions
 ---@field onChange fun(value: string | number | table<string,boolean>)
----@field init? string | number | table<string,boolean> -- initial value can be nil if option has never been set before
+---@field init? fun(): string | number | table<string,boolean> -- initial value can be nil if option has never been set before
 ---@field default string | number | table<string,boolean>
 ---@field options SelectOptionEntry[]
 
@@ -36,13 +36,9 @@ function MapPinEnhancedSelectMixin:SetDisabled(disabled)
     end
 end
 
----@class MapPinEnhanced
-local MapPinEnhanced = select(2, ...)
-
-
 ---@param optionData OptionSelectTyped | SelectOptions
 function MapPinEnhancedSelectMixin:Setup(optionData)
-    self.currentValue = optionData.init
+    self.currentValue = optionData.init()
     local function IsSelectedRadio(index)
         local option = optionData.options[index]
         return option.value == self.currentValue
@@ -68,9 +64,8 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
         return self.currentValue[option.value]
     end
 
-    local function GeneratorFunction(owner, rootDescription)
-        ---@type SubMenuUtil
-        local rootDescription = rootDescription
+    local function GeneratorFunction(_, rootDescription)
+        ---@cast rootDescription SubMenuUtil
         for index, option in ipairs(optionData.options) do
             if option.type == "divider" then
                 rootDescription:CreateDivider()

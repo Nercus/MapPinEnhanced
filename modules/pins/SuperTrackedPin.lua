@@ -147,7 +147,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Show Estimated Time"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") end --[[@as boolean]],
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
             MapPinEnhanced:SaveVar("floatingPin", "showEstimatedTime", value)
@@ -158,7 +158,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Show Title"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("floatingPin", "showTitle") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showTitle") end --[[@as boolean]],
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "showTitle", value)
             self:UpdateTextVisibility()
@@ -169,7 +169,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Show Centered Highlight"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") end --[[@as boolean]],
         description = "Highlight the floating pin when it is centered on the screen.",
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
@@ -186,7 +186,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Override world quest tracking"],
         default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
-        init = MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") end --[[@as boolean]],
         description =
         "When enabled, the tracked pin will be retracted when a world quest is tracked (flying over the world quest on the map).",
         onChange = function(value)

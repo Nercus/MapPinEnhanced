@@ -55,14 +55,16 @@ function Options:RegisterOption(optionType, option)
     CheckForDuplicateOption(option.label, option.category, self.options)
     local optionTyped = option --[[@as OptionObjectVariantsTyped]]
     optionTyped.type = optionType
-    if optionTyped.init == nil then
-        optionTyped.init = optionTyped.default -- set init to default if not set
-    end
-    if optionTyped.onChange and not optionTyped.blockOnCreationInit then
-        assert(type(optionTyped.onChange) == "function", "onChange must be a function")
-        optionTyped.onChange(optionTyped.init)
-    end
     table.insert(self.options[option.category], option)
+
+    if not optionTyped.onChange then return end
+    assert(type(optionTyped.onChange) == "function", "onChange must be a function")
+    if optionTyped.init() == nil then
+        optionTyped.onChange(optionTyped.default) -- set default value
+    end
+    if not optionTyped.blockOnCreationInit then
+        optionTyped.onChange(optionTyped.init()) -- set initial value
+    end
 end
 
 ---get a list of all used categories in the correct order

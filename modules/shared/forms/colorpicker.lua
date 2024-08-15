@@ -22,7 +22,7 @@ MapPinEnhancedColorpickerMixin = {}
 
 ---@class ColorPickerOptions
 ---@field onChange fun(value: Color)
----@field init? Color -- initial value can be nil if option has never been set before
+---@field init? fun(): Color -- initial value can be nil if option has never been set before
 ---@field default Color
 
 
@@ -64,7 +64,7 @@ function MapPinEnhancedColorpickerMixin:SetDisabled(disabled)
         self:SetScript("OnMouseDown", nil)
         self:SetAlpha(0.5)
     else
-        self:SetScript("OnMouseDown", function(self)
+        self:SetScript("OnMouseDown", function()
             showColorPicker(self)
         end)
         self:SetAlpha(1)
@@ -84,7 +84,7 @@ function MapPinEnhancedColorpickerMixin:Setup(optionData)
     self.b = nil
     self.a = nil
 
-    self:SetScript("OnMouseDown", function(self)
+    self:SetScript("OnMouseDown", function()
         showColorPicker(self)
     end)
     self.setColor = function(r, g, b, a)
@@ -93,7 +93,8 @@ function MapPinEnhancedColorpickerMixin:Setup(optionData)
         if not self.onChangeCallback then return end
         self.onChangeCallback({ r = r, g = g, b = b, a = a })
     end
-    self.setColor(optionData.init.r, optionData.init.g, optionData.init.b, optionData.init.a)
+    local initColor = optionData.init()
+    self.setColor(initColor.r, initColor.g, initColor.b, initColor.a)
     self:SetDisabled(optionData.disabledState)
     self:SetCallback(optionData.onChange)
 end

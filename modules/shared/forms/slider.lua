@@ -12,7 +12,7 @@ MapPinEnhancedSliderMixin = {}
 
 ---@class SliderOptions
 ---@field onChange fun(value: number)
----@field init? number -- initial value can be nil if option has never been set before
+---@field init? fun(): number -- initial value can be nil if option has never been set before
 ---@field default number
 ---@field min number
 ---@field max number
@@ -59,7 +59,7 @@ function MapPinEnhancedSliderMixin:Setup(optionData)
     self.onChangeCallback = nil
     self:SetValueStep(optionData.step or 1)
     self:SetMinMaxValues(optionData.min or 0, optionData.max or 100)
-    local init = optionData.init --[[@as number | nil]]
+    local init = optionData.init()
     self:SetValue(init or 0)
     self.valueText:SetText(roundValueToPrecision(init or 0, optionData.step))
     self:SetDisabled(optionData.disabledState)
