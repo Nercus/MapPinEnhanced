@@ -58,7 +58,7 @@ function PinManager:TrackNextPin(lastPinOrder)
     for _, pin in pairs(self.Pins) do
         local pinData = pin:GetPinData()
         local order = pinData.order
-        if order > lastPinOrder then
+        if order and order > lastPinOrder then
             pin:Track()
             return
         end
@@ -245,7 +245,9 @@ function PinManager:AddPin(pinData, restored)
     end
 
     local pinID = MapPinEnhanced:GenerateUUID("pin")
-    pinData.order = self:GetMaxPinOrder() + (pinData.order or 1) -- default order is 1
+    if not pinData.order then
+        pinData.order = self:GetMaxPinOrder() + (pinData.order or 1) -- default order is 1
+    end
     local pinObject = PinFactory:CreatePin(pinData, pinID)
     PinManager.Pins[pinID] = pinObject
     PinManager.Positions[pinPositionString] = true

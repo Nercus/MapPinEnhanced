@@ -71,7 +71,9 @@ function SetFactory:CreateSet(name, id)
         end
         local setPinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
-        pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
+        if not pinData.order then
+            pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
+        end
         pins[setPinID] = { pinData = pinData, setID = setID, setPinID = setPinID }
         if not restore then
             SetManager:PersistSets(setID)
