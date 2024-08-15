@@ -164,7 +164,6 @@ function PinFactory:CreatePin(initPinData, pinID)
             if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
                 MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
             end
-            MapPinEnhanced.pinTracker:UpdateVisibility()
         end
         worldmapPin:Hide()
         minimapPin:Hide()

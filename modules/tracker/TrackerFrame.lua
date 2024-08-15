@@ -72,16 +72,15 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
-    -- TODO: slash command is not working to show it
     local autoVisibility = MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as 'none' |  'both']]
     local entryCount = #self.entries
     -- don't use GetEntryCount() here as  that will not provide the correct count for sets
     if autoVisibility == "none" then return end
-    if autoVisibility == "both" and entryCount == 0 then
+    if entryCount == 0 then
         self:Close()
         return
     end
-    if autoVisibility == "both" and entryCount > 0 then
+    if entryCount > 0 then
         self:Open()
         return
     end
@@ -354,7 +353,6 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
-    self:UpdateVisibility()
     if not self:IsVisible() then return end
     local height = ENTRY_GAP
     for i, entry in ipairs(self.entries) do
@@ -388,6 +386,7 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     table.insert(self.entries, entry)
     -- REVIEW: might want to refactor this to avoid a update on all entry positions
     self:UpdateEntriesPosition()
+    self:UpdateVisibility()
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
@@ -397,9 +396,10 @@ function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
             entry:Hide()
             entry:ClearAllPoints()
             self:UpdateEntriesPosition()
-            return
+            break
         end
     end
+    self:UpdateVisibility()
 end
 
 function MapPinEnhancedTrackerFrameMixin:OnEnter()
