@@ -43,9 +43,9 @@
                 <Frames>
                     <Button parentKey="mapSelection" frameStrata="HIGH"
                         propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
-                        <Size x="15" y="15" />
+                        <Size x="14" y="14" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-5" />
+                            <Anchor point="RIGHT" x="-7" y="-1" />
                         </Anchors>
                         <KeyValues>
                             <KeyValue key="icon"
