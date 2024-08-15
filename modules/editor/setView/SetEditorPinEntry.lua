@@ -1,5 +1,6 @@
 -- Template: file://./SetEditorPinEntry.xml
 ---@class MapPinEnhanced
+---@field L Locale
 local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
@@ -40,7 +41,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
     self.xCoord:SetText(xCoord)
     local yCoord = tostring(Round(pin.y * 10000) / 100)
     self.yCoord:SetText(yCoord)
-    self.title:SetText(pin.title)
+    self.title:SetText(pin.title or "")
     self.title:SetCursorPosition(0)
     self.initValues = {
         mapID = pin.mapID,

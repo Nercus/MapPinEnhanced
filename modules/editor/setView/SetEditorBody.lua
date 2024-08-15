@@ -97,7 +97,6 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
             mapID = Blizz:GetPlayerMap() or 1,
             x = 0.5,
             y = 0.5,
-            title = L["New Pin"]
         }, false)
         self:UpdatePinList()
     end)
