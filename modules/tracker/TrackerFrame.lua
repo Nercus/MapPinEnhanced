@@ -273,11 +273,11 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
 
     Options:RegisterSlider({
         category = L["Tracker"],
-        label = L["Entry Height"],
+        label = L["Displayed number of entries"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerHeight") --[[@as number]],
         init = function() return MapPinEnhanced:GetVar("tracker", "trackerHeight") --[[@as number]] end,
         min = 1,
-        max = 14,
+        max = 25,
         step = 1,
         onChange = function(value)
             MapPinEnhanced:SaveVar("tracker", "trackerHeight", value)
