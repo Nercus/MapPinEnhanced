@@ -32,7 +32,7 @@
                 <Frames>
                     <Button parentKey="closebutton" frameStrata="HIGH" hidden="true"
                         propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
-                        <Size x="16" y="16" />
+                        <Size x="18" y="18" />
                         <Anchors>
                             <Anchor point="TOPRIGHT" x="-10" y="-5" />
                         </Anchors>
