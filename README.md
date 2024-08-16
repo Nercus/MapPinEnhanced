@@ -18,3 +18,13 @@ You can do these things with Map Pin Enhanced:
 - Make detected coordinates in chat clickable
 - Add Time to reach tracked pin
 - Unlimited distance for supertracking
+
+## Sharing Pins & Pin Sets
+
+## Commands
+
+## Features in Development
+
+## Contributions
+
+We welcome contributions from developers!
