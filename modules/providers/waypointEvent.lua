@@ -1,18 +1,18 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class PinProvider : Module
+---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-
----@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
-
 
 local GetUserWaypoint = C_Map.GetUserWaypoint
 
 local blockEvent = false
+
+---------------------------------------------------------------------------
+
 --- USER_WAYPOINT_UPDATED event handler
-function PinProvider:USER_WAYPOINT_UPDATED()
+local function OnUserWaypoint()
     if blockEvent then return end -- as super tracking a pin triggers this event we need to block it so we don't get into an infinite loop
 
     local wp = GetUserWaypoint()
@@ -32,6 +32,4 @@ function PinProvider:USER_WAYPOINT_UPDATED()
     blockEvent = false
 end
 
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
-    PinProvider:USER_WAYPOINT_UPDATED()
-end)
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypoint)

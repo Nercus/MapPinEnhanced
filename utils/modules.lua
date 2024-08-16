@@ -1,23 +1,17 @@
 ---@class MapPinEnhanced
----@field modules table<string, Module>
+---@field modules table<string, table>
 local MapPinEnhanced = select(2, ...)
 
 
 
 ---@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider"| "SetFactory" | "SetManager" |"PinManager"
 
-
-
----@class Module
----@field name ModuleName
-
-
 ---@param name ModuleName
----@return Module
+---@return table
 function MapPinEnhanced:CreateModule(name)
     local module = {
         name = name,
-    } ---@type Module
+    } ---@type table
     if (not self.modules) then
         self.modules = {}
     end

@@ -1,9 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
----@class Options : Module
+---@class Options
 local Options = MapPinEnhanced:GetModule("Options")
+
+---------------------------------------------------------------------------
 
 ---@class PlainOptionObject
 ---@field category OPTIONCATEGORY
@@ -37,6 +38,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@alias OptionObjectVariantsTyped OptionButtonTyped | OptionCheckboxTyped | OptionColorpickerTyped | OptionInputTyped | OptionSelectTyped | OptionSliderTyped
 
+---------------------------------------------------------------------------
 
 ---@param option OptionButton
 function Options:RegisterButton(option)

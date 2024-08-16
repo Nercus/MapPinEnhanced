@@ -142,12 +142,13 @@ function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
+    local Blizz = MapPinEnhanced:GetModule("Blizz")
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
         label = L["Show Estimated Time"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") --[[@as boolean]] end,
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
             MapPinEnhanced:SaveVar("floatingPin", "showEstimatedTime", value)
@@ -158,7 +159,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Show Title"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "showTitle") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showTitle") --[[@as boolean]] end,
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "showTitle", value)
             self:UpdateTextVisibility()
@@ -169,7 +170,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Show Centered Highlight"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]] end,
         description = "Highlight the floating pin when it is centered on the screen.",
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
@@ -186,7 +187,7 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         category = L["Floating Pin"],
         label = L["Override world quest tracking"],
         default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") end --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]] end,
         description =
         "When enabled, the tracked pin will be retracted when a world quest is tracked (flying over the world quest on the map).",
         onChange = function(value)
@@ -196,6 +197,16 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
                 self:UnregisterEvent("QUEST_POI_UPDATE");
             end
             MapPinEnhanced:SaveVar("floatingPin", "overrideWorldQuestTracking", value)
+        end
+    })
+    Options:RegisterCheckbox({
+        category = L["Floating Pin"],
+        label = L["Enable Unlimited Distance"],
+        default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
+        onChange = function(value)
+            MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
+            Blizz:OverrideSuperTrackedAlphaState(value)
         end
     })
 end
@@ -219,5 +230,26 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
             local PinManager = MapPinEnhanced:GetModule("PinManager")
             PinManager:TrackLastTrackedPin()
         end)
+    end
+end
+
+---------------------------------------------------------------------------
+
+---@param pinData pinData | nil if nil, the super tracked pin will be hidden
+---@param timeToTarget number?
+function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
+    if not self.SuperTrackedPin then
+        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
+            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
+    end
+    if not pinData then
+        self.SuperTrackedPin:Clear()
+        return
+    end
+    self.SuperTrackedPin:Setup(pinData)
+    self.SuperTrackedPin:SetTrackedTexture()
+    self.SuperTrackedPin:UpdateTimeText(timeToTarget)
+    if not self.SuperTrackedPin:IsShown() then
+        self.SuperTrackedPin:Show()
     end
 end

@@ -1,20 +1,14 @@
----@diagnostic disable: no-unknown, unused-local, redefined-local
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class PinProvider : Module
+---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-
----@class PinManager : Module
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
-local L = MapPinEnhanced.L
 
 local decimal_separator = CONSTANTS.DECIMAL_SEPARATOR
 local inverse_decimal_separator = decimal_separator == "," and "." or ","
-
-
 local DECIMAL_SEPARATOR_PATTERN = decimal_separator == "." and "%." or ","
 local INVERSE_DECIMAL_SEPARATOR_PATTERN = inverse_decimal_separator == "." and "%." or ","
 
@@ -22,10 +16,12 @@ local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][Hh]"
 local SLASH_PREFIX_PATTERN_2 = "/[Mm][Pp][Ee]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
+local HBDmapData = MapPinEnhanced.HBD.mapData
 local trim = string.trim
 
-local HBDmapData = MapPinEnhanced.HBD.mapData --[[@as table<string, table>]]
+---------------------------------------------------------------------------
 
+---@type table<string, number|number[]>
 local ZONE_NAME_TO_ID = {}
 for mapID in pairs(HBDmapData) do
     local mapType = CONSTANTS.MAPID_MAPTYPE_OVERRIDE[mapID] or HBDmapData[mapID].mapType
@@ -42,15 +38,16 @@ for mapID in pairs(HBDmapData) do
         if ZONE_NAME_TO_ID[mapName] then
             if type(ZONE_NAME_TO_ID[mapName]) ~= "table" then
                 -- convert to table
-                ZONE_NAME_TO_ID[mapName] = { ZONE_NAME_TO_ID[mapName] }
+                ZONE_NAME_TO_ID[mapName] = { ZONE_NAME_TO_ID[mapName] } --[[@as table<number>]]
             end
-            table.insert(ZONE_NAME_TO_ID[mapName], mapID)
+            table.insert(ZONE_NAME_TO_ID[mapName] --[[@as table<number>]], mapID)
         else
             ZONE_NAME_TO_ID[mapName] = mapID
         end
     end
 end
 
+---get the mapID from a mapString
 ---@param mapString string
 ---@return number?
 local function ConvertImportMapString(mapString)
@@ -58,11 +55,17 @@ local function ConvertImportMapString(mapString)
     if mapString:sub(1, 1) == "#" then
         return tonumber(mapString:sub(2))
     else
-        return ZONE_NAME_TO_ID[mapString]
+        local mapID = ZONE_NAME_TO_ID[mapString]
+        if type(mapID) == "table" then
+            return mapID[1]
+        else
+            return mapID
+        end
     end
 end
 
 
+---parse a wayString into a coords, mapID and title
 ---@param wayString string
 ---@return string?, number?, number[]
 function PinProvider:ParseWayStringToData(wayString)
@@ -71,11 +74,12 @@ function PinProvider:ParseWayStringToData(wayString)
         "")
     wayString = trim(wayString)
     -- split msg into tokens on whitespace
+    ---@type string[]
     local tokens = {}
     for token in string.gmatch(wayString, "%S+") do
         -- check if the last character in a token is either a . or a , and if so remove it
         if string.find(token, "[%.%,]$") then
-            token = token:sub(1, -2)
+            token = token:sub(1, -2) --[[@as string remove last character]]
         end
         table.insert(tokens, token)
     end
@@ -97,9 +101,10 @@ function PinProvider:ParseWayStringToData(wayString)
         title = nil
     end
 
+    local tokenLength = #tokens
     -- if length is small than 3 try to split the last element on ","
-    if #tokens < 2 then
-        local last = tokens[#tokens]
+    if tokenLength < 2 then
+        local last = tokens[#tokens] or ""
         local split = { string.match(last, "(.-),(.+)") }
         if #split == 2 then
             table.remove(tokens, #tokens)
@@ -108,9 +113,10 @@ function PinProvider:ParseWayStringToData(wayString)
         end
     end
 
+    ---@type number?
     local mapID
     local coords = {}
-    for idx, token in ipairs(tokens) do
+    for _, token in ipairs(tokens) do
         -- replace all wrong decimal separators with the right one
         token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
         -- if element is not a number its the mapID/zoneName
@@ -126,14 +132,9 @@ function PinProvider:ParseWayStringToData(wayString)
     return title, mapID, coords
 end
 
----@class ParseWayStringData
----@field title string
----@field mapID number
----@field x number
----@field y number
-
+---deserialize a multiline wayString into pinData
 ---@param wayString string
----@return ParseWayStringData[]
+---@return pinData[]
 function PinProvider:DeserializeWayString(wayString)
     local data = {}
     for line in wayString:gmatch("[^\r\n]+") do
@@ -150,6 +151,7 @@ function PinProvider:DeserializeWayString(wayString)
     return data
 end
 
+---create pins from a multiline wayString
 ---@param wayString string
 function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
@@ -166,6 +168,7 @@ function PinProvider:ImportFromWayString(wayString)
     end
 end
 
+---create a wayString from pinData
 ---@param pinData pinData
 ---@return string
 function PinProvider:SerializeWayString(pinData)

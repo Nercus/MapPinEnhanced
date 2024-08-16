@@ -91,7 +91,7 @@ function MapPinEnhancedEditorWindowMixin:AddOptions()
         max = 2,
         step = 0.05,
         default = MapPinEnhanced:GetDefault("general", "editorScale") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("general", "editorScale") end --[[@as number]],
+        init = function() return MapPinEnhanced:GetVar("general", "editorScale") --[[@as number]] end,
         onChange = function(value)
             self:SetScale(value)
             MapPinEnhanced:SaveVar("general", "editorScale", value)
@@ -123,3 +123,36 @@ function MapPinEnhancedEditorWindowMixin:Toggle()
         self:Open()
     end
 end
+
+---------------------------------------------------------------------------
+
+---@param viewType EditorViews
+function MapPinEnhanced:SetEditorView(viewType)
+    if not self.editorWindow then
+        self:ToggleEditorWindow()
+    end
+    self.editorWindow:SetActiveView(viewType)
+end
+
+function MapPinEnhanced:ToggleEditorWindow()
+    if not self.editorWindow then
+        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
+            "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
+        self.editorWindow:Open()
+        return
+    end
+    if self.editorWindow:IsVisible() then
+        self.editorWindow:Close()
+    else
+        self.editorWindow:Open()
+    end
+end
+
+MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
+    MapPinEnhanced:ToggleEditorWindow()
+end, L["Toggle Editor"])
+
+MapPinEnhanced:AddSlashCommand(L["Options"]:lower(), function()
+    MapPinEnhanced:ToggleEditorWindow()
+    MapPinEnhanced:SetEditorView("optionView")
+end, L["Open options"])

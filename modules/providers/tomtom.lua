@@ -1,13 +1,12 @@
 ---@diagnostic disable: no-unknown
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
----@class PinProvider : Module
-local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
+---------------------------------------------------------------------------
+
 local isHooked = false
+--- Hook TomTom's AddWaypoint function to add pins to the map when a use has TomTom installed and adds a waypoint to the map.
 local function HookTomTomAddWaypoint()
     if isHooked then return end
     if not TomTom then return end

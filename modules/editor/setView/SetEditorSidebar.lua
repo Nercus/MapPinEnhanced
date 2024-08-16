@@ -58,7 +58,7 @@ end
 
 ---@return SetObject[]
 function MapPinEnhancedSetEditorViewSidebarMixin:GetAlphabeticalSortedSets()
-    ---@class SetManager : Module
+    ---@class SetManager
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     local sets = SetManager:GetSets()
     local sortedSets = {}
@@ -148,7 +148,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
     end)
 
     self.createSetButton:SetScript("OnClick", function()
-        ---@class SetManager : Module
+        ---@class SetManager
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         local setName = SetManager:GetPlaceholderSetNameByPrefix(L["New Set"])
         local setObject = SetManager:AddSet(setName)

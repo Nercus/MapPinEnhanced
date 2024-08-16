@@ -1,97 +1,16 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
----@class PinManager : Module
-local PinManager = MapPinEnhanced:CreateModule("PinManager")
-
----@class PinFactory : Module
-local PinFactory = MapPinEnhanced:CreateModule("PinFactory")
-
----@class SetManager : Module
-local SetManager = MapPinEnhanced:CreateModule("SetManager")
-
----@class SetFactory : Module
-local SetFactory = MapPinEnhanced:CreateModule("SetFactory")
-
----@class Blizz : Module
-local Blizz = MapPinEnhanced:CreateModule("Blizz")
-
 local L = MapPinEnhanced.L
 
----toggle the pin tracker
----@param forceShow? boolean if true, the tracker will be shown, if false, the tracker will be hidden, if nil, the tracker will be toggled
-function MapPinEnhanced:TogglePinTracker(forceShow)
-    if not self.pinTracker then
-        self.pinTracker = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerFrameTemplate") --[[@as MapPinEnhancedTrackerFrameMixin]]
-    end
-    if forceShow == true then
-        self.pinTracker:Open()
-    elseif forceShow == false then
-        self.pinTracker:Close()
-    else
-        self.pinTracker:Toggle()
-    end
-end
+---------------------------------------------------------------------------
 
----@param viewType TrackerView
-function MapPinEnhanced:SetPinTrackerView(viewType)
-    if not self.pinTracker then
-        self:TogglePinTracker(true)
-    end
-    if viewType == "Import" then
-        self.pinTracker:SetImportView()
-        return
-    end
-    if viewType == "Pins" then
-        self.pinTracker:SetPinView()
-        return
-    end
-    if viewType == "Sets" then
-        self.pinTracker:SetSetView()
-        return
-    end
-end
+MapPinEnhanced:CreateModule("PinManager")
+MapPinEnhanced:CreateModule("PinFactory")
+MapPinEnhanced:CreateModule("SetManager")
+MapPinEnhanced:CreateModule("SetFactory")
+MapPinEnhanced:CreateModule("Blizz")
 
----@param viewType EditorViews
-function MapPinEnhanced:SetEditorView(viewType)
-    if not self.editorWindow then
-        self:ToggleEditorWindow()
-    end
-    self.editorWindow:SetActiveView(viewType)
-end
-
-function MapPinEnhanced:ToggleEditorWindow()
-    if not self.editorWindow then
-        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
-            "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
-        self.editorWindow:Open()
-        return
-    end
-    if self.editorWindow:IsVisible() then
-        self.editorWindow:Close()
-    else
-        self.editorWindow:Open()
-    end
-end
-
----@param pinData pinData | nil if nil, the super tracked pin will be hidden
----@param timeToTarget number?
-function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
-    if not self.SuperTrackedPin then
-        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
-            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
-    end
-    if not pinData then
-        self.SuperTrackedPin:Clear()
-        return
-    end
-    self.SuperTrackedPin:Setup(pinData)
-    self.SuperTrackedPin:SetTrackedTexture()
-    self.SuperTrackedPin:UpdateTimeText(timeToTarget)
-    if not self.SuperTrackedPin:IsShown() then
-        self.SuperTrackedPin:Show()
-    end
-end
+---------------------------------------------------------------------------
 
 function MapPinEnhanced:ToggleMinimapButton(init)
     if not self.minimapIconCreated then
@@ -149,27 +68,6 @@ function MapPinEnhanced:RegisterAddonCompartment()
     })
 end
 
---- check if this version is a new version and return the last version
-function MapPinEnhanced:IsNewVersion()
-    local currentVersion = MapPinEnhanced.version
-    local lastVersion = MapPinEnhanced:GetVar("version")
-    if not lastVersion or lastVersion ~= currentVersion then
-        return lastVersion
-    end
-end
-
-function MapPinEnhanced:UpdateVersionInfo()
-    if self.lastVersion then return end -- only update once
-    self.lastVersion = self:GetVar("version") --[[@as number]]
-    local currentVersion = self.version
-    if not self.lastVersion or self.lastVersion ~= currentVersion then
-        self:SaveVar("version", currentVersion)
-        self:PrintHelp() -- show the help message after a new upate
-    end
-    local Options = self:GetModule("Options")
-    Options:MigrateOptionByVersion(self.lastVersion or 0)
-end
-
 function MapPinEnhanced:CheckNavigationEnabled()
     if GetCVar("showInGameNavigation") == "1" then return end
     self:ShowPopup({
@@ -191,51 +89,21 @@ function MapPinEnhanced:CheckForTomTom()
     self:Print(L["TomTom is loaded! You could experience some unexpected behavior."])
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    MapPinEnhanced:ToggleMinimapButton(true)
-    MapPinEnhanced:RegisterAddonCompartment()
-    MapPinEnhanced:UpdateVersionInfo()
-    MapPinEnhanced:CheckNavigationEnabled()
-    MapPinEnhanced:CheckForTomTom()
-end)
-
+---------------------------------------------------------------------------
 
 MapPinEnhanced:AddSlashCommand(L["Minimap"]:lower(), function()
     MapPinEnhanced:ToggleMinimapButton()
 end, L["Toggle minimap button"])
 
-MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
-    local currentMapID = C_Map.GetBestMapForUnit("player")
-    if not currentMapID then
-        MapPinEnhanced:Notify(L["You are in an instance or a zone where the map is not available"])
-        return
-    end
-    local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
-    PinManager:AddPin({
-        title = L["My way back"],
-        mapID = currentMapID,
-        x = x,
-        y = y,
-        setTracked = true,
-        persistent = true,
-    })
-end, L["Create a pin at your current location"])
+---------------------------------------------------------------------------
 
-MapPinEnhanced:AddSlashCommand(L["Tracker"]:lower(), function()
-    MapPinEnhanced:TogglePinTracker()
-end, L["Toggle tracker"])
+function MapPinEnhanced:Initialize()
+    if MapPinEnhanced.init then return end
+    MapPinEnhanced:ToggleMinimapButton(true)
+    MapPinEnhanced:RegisterAddonCompartment()
+    MapPinEnhanced:CheckNavigationEnabled()
+    MapPinEnhanced:CheckForTomTom()
+    MapPinEnhanced.init = true
+end
 
-
-MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
-    MapPinEnhanced:TogglePinTracker(true)
-    MapPinEnhanced:SetPinTrackerView("Import")
-end, L["Import a set"])
-
-MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
-    MapPinEnhanced:ToggleEditorWindow()
-end, L["Toggle Editor"])
-
-MapPinEnhanced:AddSlashCommand(L["Options"]:lower(), function()
-    MapPinEnhanced:ToggleEditorWindow()
-    MapPinEnhanced:SetEditorView("optionView")
-end, L["Open options"])
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", MapPinEnhanced.Initialize)

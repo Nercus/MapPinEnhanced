@@ -16,11 +16,9 @@ MapPinEnhanced.isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC -- Note: Classi
 
 MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")
 MapPinEnhanced.HBDP = LibStub("HereBeDragons-Pins-2.0")
-MapPinEnhanced.HBD = LibStub("HereBeDragons-2.0")
 MapPinEnhanced.LDBIcon = LibStub("LibDBIcon-1.0")
 MapPinEnhanced.LibSerialize = LibStub("LibSerialize")
 MapPinEnhanced.LibDeflate = LibStub("LibDeflate")
-
 
 
 ---@type MPHCallbackHandlerRegistry

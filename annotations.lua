@@ -401,3 +401,11 @@ DEFAULT_CHAT_FRAME = {}
 ---@class MapPinEnhancedSquareButton : Button
 ---@field iconTexture string
 ---@field tooltip? string
+
+---@class ScripRegionWithPinInfo : ScriptRegion
+---@field pinTemplate string
+
+
+-- extend herebedragons type annotation with mapData
+---@class HereBeDragons-2.0
+---@field mapData table<number, HereBeDragonMapData>

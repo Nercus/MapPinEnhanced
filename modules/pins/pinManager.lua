@@ -1,10 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class PinManager : Module
+---@class PinManager
 local PinManager = MapPinEnhanced:GetModule("PinManager")
----@class PinFactory : Module
+---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
----@class Blizz : Module
+---@class Blizz
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 local L = MapPinEnhanced.L

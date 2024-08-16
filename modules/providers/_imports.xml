@@ -4,7 +4,6 @@
     <Script file="providers.lua" />
     <Script file="global.lua" />
     <Script file="waypointEvent.lua" />
-    <Script file="supertrackingEvent.lua" />
     <Script file="wayCommand.lua" />
     <Script file="tomtom.lua" />
 </Ui>

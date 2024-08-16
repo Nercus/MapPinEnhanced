@@ -60,7 +60,7 @@ end)
 
 
 local function AddTestPins()
-    ---@class PinManager : Module
+    ---@class PinManager
     local PinManager = MapPinEnhanced:GetModule("PinManager")
     PinManager:AddPin({
         mapID = C_Map.GetBestMapForUnit("player") or 37, -- Elwynn Forest

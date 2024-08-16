@@ -1,8 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class SetFactory : Module
+---@class SetFactory
 local SetFactory = MapPinEnhanced:GetModule("SetFactory")
----@class SetManager : Module
+---@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local CB = MapPinEnhanced.CB

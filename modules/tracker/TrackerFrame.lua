@@ -436,3 +436,48 @@ local function RestorePinTrackerVisibility()
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RestorePinTrackerVisibility)
+
+---------------------------------------------------------------------------
+
+---@param viewType TrackerView
+function MapPinEnhanced:SetPinTrackerView(viewType)
+    if not self.pinTracker then
+        self:TogglePinTracker(true)
+    end
+    if viewType == "Import" then
+        self.pinTracker:SetImportView()
+        return
+    end
+    if viewType == "Pins" then
+        self.pinTracker:SetPinView()
+        return
+    end
+    if viewType == "Sets" then
+        self.pinTracker:SetSetView()
+        return
+    end
+end
+
+---toggle the pin tracker
+---@param forceShow? boolean if true, the tracker will be shown, if false, the tracker will be hidden, if nil, the tracker will be toggled
+function MapPinEnhanced:TogglePinTracker(forceShow)
+    if not self.pinTracker then
+        self.pinTracker = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerFrameTemplate") --[[@as MapPinEnhancedTrackerFrameMixin]]
+    end
+    if forceShow == true then
+        self.pinTracker:Open()
+    elseif forceShow == false then
+        self.pinTracker:Close()
+    else
+        self.pinTracker:Toggle()
+    end
+end
+
+MapPinEnhanced:AddSlashCommand(L["Tracker"]:lower(), function()
+    MapPinEnhanced:TogglePinTracker()
+end, L["Toggle tracker"])
+
+MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
+    MapPinEnhanced:TogglePinTracker(true)
+    MapPinEnhanced:SetPinTrackerView("Import")
+end, L["Import a set"])

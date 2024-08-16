@@ -3,6 +3,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class Options
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class OptionScrollFrame : ScrollFrame
@@ -51,6 +52,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
         SetCursor(nil)
     end)
 
+    ---@type MapPinEnhancedOptionEditorViewBodyMixin
     Options.OptionBody = self
 end
 
@@ -144,7 +146,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:GetActiveCategory()
     return self.activeCategory
 end
 
-function MapPinEnhancedOptionEditorViewBodyMixin:GetOptionElementFrame(category, label)
+function MapPinEnhancedOptionEditorViewBodyMixin:GetOptionElementDataFrame(category, label)
     if not category or category ~= self:GetActiveCategory() then
         return nil
     end
@@ -166,7 +168,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:Update(category, label)
         return
     end
     if category and label then -- update a specific option
-        local optionElement = self:GetOptionElementFrame(category, label)
+        local optionElement = self:GetOptionElementDataFrame(category, label)
         if optionElement then
             optionElement:Update()
         end

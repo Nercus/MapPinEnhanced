@@ -1,10 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class SetFactory : Module
+---@class SetFactory
 local SetFactory = MapPinEnhanced:GetModule("SetFactory")
----@class SetManager : Module
+---@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
----@class PinManager : Module
+---@class PinManager
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")

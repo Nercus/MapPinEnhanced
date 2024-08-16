@@ -1,10 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
----@class Blizz : Module
+---@class Blizz
 local Blizz = MapPinEnhanced:GetModule("Blizz")
-
-local L = MapPinEnhanced.L
 
 local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
 local SetUserWaypoint = C_Map.SetUserWaypoint
@@ -12,41 +9,24 @@ local CanSetUserWaypointOnMap = C_Map.CanSetUserWaypointOnMap
 local TimerAfter = C_Timer.After
 local SuperTrackSetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
 
-function Blizz:HideBlizzardPin()
-    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
-        waypointSelf:SetAlpha(0)
-        waypointSelf:EnableMouse(false)
-    end)
+---------------------------------------------------------------------------
+
+---Wrapper for the current map the player is on
+---@return number? mapID
+function Blizz:GetPlayerMap()
+    return C_Map.GetBestMapForUnit("player")
 end
 
-function Blizz:OverrideSuperTrackedAlphaState(enable)
-    if enable then
-        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
-        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 1)
-        return
-    end
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 0)
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
+---Wrapper for the current map position of the player
+---@return number x, number y, number currentPlayerUIMapID, Enum.UIMapType currentPlayerUIMapType
+function Blizz:GetPlayerMapPosition()
+    return MapPinEnhanced.HBD:GetPlayerZonePosition()
 end
 
-local function HandleOnPlayerLogin()
-    Blizz:HideBlizzardPin()
-    local Options = MapPinEnhanced:GetModule("Options")
-    Options:RegisterCheckbox({
-        category = L["Floating Pin"],
-        label = L["Enable Unlimited Distance"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
-        onChange = function(value)
-            MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
-            Blizz:OverrideSuperTrackedAlphaState(value)
-        end
-    })
-end
-
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HandleOnPlayerLogin)
-
+---Method to create the blizzard waypoint at a specific position
+---@param x number
+---@param y number
+---@param mapID number
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
     if not CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)
@@ -60,15 +40,32 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
     end)
 end
 
-function Blizz:GetPlayerMap()
-    return C_Map.GetBestMapForUnit("player")
+---Method to override the alpha state of the super tracked frame -> create unlimited distance
+---@param enable boolean
+function Blizz:OverrideSuperTrackedAlphaState(enable)
+    if enable then
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 1)
+        return
+    end
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 0)
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
 end
 
-function Blizz:GetPlayerMapPosition()
-    return MapPinEnhanced.HBD:GetPlayerZonePosition()
+---------------------------------------------------------------------------
+
+---Hide default world map Pin
+function Blizz:HideBlizzardPin()
+    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
+        waypointSelf:SetAlpha(0)
+        waypointSelf:EnableMouse(false)
+    end)
 end
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
 
 local countSinceLastTrackedPin = 0
+---Method to handle the super tracking change event and track the last tracked pin
 function Blizz:OnSuperTrackingChanged()
     ---@type boolean
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
@@ -90,10 +87,5 @@ function Blizz:OnSuperTrackingChanged()
     end
 end
 
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
-    Blizz:OnSuperTrackingChanged()
-end)
-
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
-    Blizz:OnSuperTrackingChanged()
-end)
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", Blizz.OnSuperTrackingChanged)
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", Blizz.OnSuperTrackingChanged)
