@@ -149,11 +149,6 @@ function MapPinEnhanced:ToggleEditorWindow()
     end
 end
 
--- TODO: remove after debugging
-C_Timer.After(1, function()
-    MapPinEnhanced:SetEditorView("setView")
-end)
-
 MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
     MapPinEnhanced:ToggleEditorWindow()
 end, L["Toggle Editor"])
