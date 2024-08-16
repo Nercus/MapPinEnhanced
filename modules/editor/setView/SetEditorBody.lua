@@ -83,7 +83,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
             mapID = Blizz:GetPlayerMap() or 1,
             x = math.random(),
             y = math.random(),
-        }, false)
+        }, true) -- don't persist yet
         self:UpdatePinList()
     end)
 end

@@ -102,8 +102,9 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:ImportCommands(commandStr
             x = pin.x,
             y = pin.y,
             title = pin.title,
-        })
+        }, true)
     end
+    SetManager:PersistSets(set.setID)
     self.body.sideBar:ToggleActiveSet(set.setID)
 end
 
@@ -118,6 +119,7 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:ImportString(importString
     for _, pinData in pairs(importedData.pins) do
         set:AddPin(pinData, true)
     end
+    SetManager:PersistSets(set.setID)
 end
 
 function MapPinEnhancedSetEditorImportExportFrameMixin:ConfirmImport()

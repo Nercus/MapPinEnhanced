@@ -30,6 +30,7 @@ end
 
 function MapPinEnhancedSetEditorBodyHeaderMixin:ImportFromMap()
     local PinManager = MapPinEnhanced:GetModule("PinManager")
+    local SetManager = MapPinEnhanced:GetModule("SetManager")
     local activeSet = self.body:GetActiveSet()
     if not activeSet then return end
     local pins = PinManager:GetPins()
@@ -39,8 +40,9 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:ImportFromMap()
             x = pin.pinData.x,
             y = pin.pinData.y,
             title = pin.pinData.title,
-        })
+        }, true)
     end
+    SetManager:PersistSets(activeSet.setID)
     self.body:UpdatePinList()
 end
 

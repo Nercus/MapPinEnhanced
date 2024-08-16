@@ -54,10 +54,11 @@ local function MigratePriorTo300()
                         x = pin.x,
                         y = pin.y,
                         title = pin.title,
-                    })
+                    }, true)
                 end
             end
         end
+        SetManager:PersistSets()
     end
     MapPinEnhanced:DeleteVar("global")
     MapPinEnhanced:DeleteVar("profileKeys")
