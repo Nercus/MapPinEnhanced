@@ -481,3 +481,8 @@ MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
     MapPinEnhanced:TogglePinTracker(true)
     MapPinEnhanced:SetPinTrackerView("Import")
 end, L["Import a set"])
+
+MapPinEnhanced:AddSlashCommand(L["Clear"]:lower(), function()
+    local PinManager = MapPinEnhanced:GetModule("PinManager")
+    PinManager:ClearPins()
+end, L["Clear all pins"])
