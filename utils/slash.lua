@@ -47,6 +47,6 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
     commandHelpStrings[command] = help
 end
 
-MapPinEnhanced:AddSlashCommand(L["Help"], function()
+MapPinEnhanced:AddSlashCommand(L["Help"]:lower(), function()
     MapPinEnhanced:PrintHelp()
 end, L["Show this help message"])

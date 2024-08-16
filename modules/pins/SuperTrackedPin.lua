@@ -119,34 +119,34 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
     self.distantText:SetText(timeText)
 end
 
-local lastUpdateTime = 0
-local margin = 20
----@type number? is not the real height when game is loaded
-local screenWidthHalf
+-- local lastUpdateTime = 0
+-- local margin = 20
+-- ---@type number? is not the real height when game is loaded
+-- local screenWidthHalf
 
-function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
-    if not self.navFrameCreated then return end
-    if not self:IsShown() then return end
-    if not lastUpdateTime or (GetTime() - lastUpdateTime) > 0.1 then
-        local navFrame = C_Navigation.GetFrame();
-        if not navFrame then return end
-        local x = navFrame:GetLeft()
-        local diff = math.abs(x - screenWidthHalf)
-        if diff < margin then
-            self:LockHighlight()
-        else
-            self:UnlockHighlight()
-        end
-        lastUpdateTime = GetTime()
-    end
-end
+-- function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
+--     if not self.navFrameCreated then return end
+--     if not self:IsShown() then return end
+--     if not lastUpdateTime or (GetTime() - lastUpdateTime) > 0.1 then
+--         local navFrame = C_Navigation.GetFrame();
+--         if not navFrame then return end
+--         local x = navFrame:GetLeft()
+--         local diff = math.abs(x - screenWidthHalf)
+--         if diff < margin then
+--             self:LockHighlight()
+--         else
+--             self:UnlockHighlight()
+--         end
+--         lastUpdateTime = GetTime()
+--     end
+-- end
 
 function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     local Blizz = MapPinEnhanced:GetModule("Blizz")
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
-        label = L["Show Estimated Time"],
+        label = L["Show Estimated Arrival Time"],
         default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
         init = function() return MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime") --[[@as boolean]] end,
         onChange = function(value)
@@ -166,22 +166,22 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         end
     })
 
-    Options:RegisterCheckbox({
-        category = L["Floating Pin"],
-        label = L["Show Centered Highlight"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]] end,
-        description = "Highlight the floating pin when it is centered on the screen.",
-        onChange = function(value)
-            MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
-            if value then
-                self:SetScript("OnUpdate", self.CheckIsCentered)
-            else
-                self:SetScript("OnUpdate", nil)
-                self:UnlockHighlight()
-            end
-        end
-    })
+    -- Options:RegisterCheckbox({
+    --     category = L["Floating Pin"],
+    --     label = L["Show Centered Highlight"],
+    --     default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
+    --     init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]] end,
+    --     description = "Highlight the floating pin when it is centered on the screen.",
+    --     onChange = function(value)
+    --         MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
+    --         if value then
+    --             self:SetScript("OnUpdate", self.CheckIsCentered)
+    --         else
+    --             self:SetScript("OnUpdate", nil)
+    --             self:UnlockHighlight()
+    --         end
+    --     end
+    -- })
 
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
@@ -207,12 +207,13 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
         onChange = function(value)
             MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
             Blizz:OverrideSuperTrackedAlphaState(value)
-        end
+        end,
+        description = L["When enabled, the floating pin will be shown even if the tracked pin is very far away."]
     })
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
-    screenWidthHalf = GetScreenWidth() / 2
+    -- screenWidthHalf = GetScreenWidth() / 2
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
 

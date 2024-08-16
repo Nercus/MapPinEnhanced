@@ -219,7 +219,9 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         },
         onChange = function(value)
             MapPinEnhanced:SaveVar("tracker", "autoVisibility", value)
-        end
+        end,
+        description = L
+            ["When enabled, the tracker will be shown/hidden automatically based on the number of active pins."]
     })
 
     Options:RegisterCheckbox({

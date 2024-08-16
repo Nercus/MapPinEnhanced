@@ -322,7 +322,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                 TogglePersistentState()
             end)
 
-            rootDescription:CreateButton(L["Share Pin"], function() SharePin() end)
+            rootDescription:CreateButton(L["Share To Chat"], function() SharePin() end)
             rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pinID) end)
         end)
     end

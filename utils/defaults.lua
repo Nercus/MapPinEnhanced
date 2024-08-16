@@ -12,7 +12,7 @@ local DEFAULTS = {
         ["unlimitedDistance"] = true,
         ["showEstimatedTime"] = true,
         ["showTitle"] = true,
-        ["showCenteredHighlight"] = true,
+        -- ["showCenteredHighlight"] = true,
         ["overrideWorldQuestTracking"] = false
     },
     ["minimapIcon"] = {
@@ -25,7 +25,7 @@ local DEFAULTS = {
         ["autoTrackNearestPin"] = true
     },
     ["tracker"] = {
-        ["autoVisibility"] = "both",
+        ["autoVisibility"] = "none",
         ["lockTracker"] = false,
         ["trackerScale"] = 1,
         ["backgroundOpacity"] = 0,

@@ -114,6 +114,7 @@ end
 
 function MapPinEnhancedEditorWindowMixin:Open()
     self:Show()
+    self:SetActiveView(AVAILABLE_VIEWS.setView)
 end
 
 function MapPinEnhancedEditorWindowMixin:Toggle()
