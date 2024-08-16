@@ -49,7 +49,7 @@
                     </Button>
                     <Button parentKey="viewToggle" frameStrata="HIGH" hidden="true"
                         propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
-                        <Size x="22" y="22" />
+                        <Size x="20" y="20" />
                         <Anchors>
                             <Anchor point="RIGHT" x="-5" relativePoint="LEFT"
                                 relativeKey="$parent.closebutton" />
