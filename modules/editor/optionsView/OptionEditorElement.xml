@@ -21,9 +21,22 @@
                     </Anchors>
                 </Texture>
             </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="common-dropdown-bg" alpha="0.5"
+            <Layer level="BACKGROUND">
+                <Texture atlas="common-dropdown-bg" alpha="0.3"
                     alphaMode="ADD">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"
+                            x="-7" y="12" />
+                        <Anchor point="BOTTOMRIGHT"
+                            x="2" y="-15" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="highlight" atlas="common-dropdown-bg" hidden="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.8" />
+                        <MaxColor r="1" g="1" b="1" a="0.2" />
+                    </Gradient>
+
                     <Anchors>
                         <Anchor point="TOPLEFT"
                             x="-7" y="12" />

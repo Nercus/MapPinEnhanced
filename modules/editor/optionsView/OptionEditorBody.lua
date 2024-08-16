@@ -113,6 +113,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:ClearAllOptions()
     self.sliders:ReleaseAll()
 end
 
+local GAP = 15
 ---@param category OPTIONCATEGORY
 function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
     if not category then return end
@@ -128,8 +129,8 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
         optionElement:ClearAllPoints()
         optionElement:Setup(option)
         if lastOptionElement then
-            optionElement:SetPoint("TOPLEFT", lastOptionElement, "BOTTOMLEFT", 0, -10)
-            optionElement:SetPoint("TOPRIGHT", lastOptionElement, "BOTTOMRIGHT", 0, -10)
+            optionElement:SetPoint("TOPLEFT", lastOptionElement, "BOTTOMLEFT", 0, -GAP)
+            optionElement:SetPoint("TOPRIGHT", lastOptionElement, "BOTTOMRIGHT", 0, -GAP)
         else
             optionElement:SetPoint("TOP", self.scrollFrame.Child, 0, -10)
             optionElement:SetPoint("LEFT", self.scrollFrame.Child, 0, -10)

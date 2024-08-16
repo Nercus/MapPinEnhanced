@@ -46,6 +46,13 @@ function MapPinEnhancedOptionEditorElementMixin:OnLoad()
     self.info:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
+    self:SetScript("OnEnter", function()
+        self.highlight:Show()
+    end)
+
+    self:SetScript("OnLeave", function()
+        self.highlight:Hide()
+    end)
 end
 
 function MapPinEnhancedOptionEditorElementMixin:UpdateInfoButtonVisibility()
