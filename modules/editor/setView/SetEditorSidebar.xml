@@ -91,14 +91,14 @@
                     <KeyValue key="tooltip" value="Show Options" />
                 </KeyValues>
             </Button>
-            <Button parentKey="importButton" inherits="MapPinEnhancedSquareButtonYellowTemplate">
+            <Button parentKey="importButton" inherits="MapPinEnhancedSquareButtonRedTemplate">
                 <Size x="26" y="26" />
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="iconTexture"
-                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Dark.png" />
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Yellow.png" />
                     <KeyValue key="tooltip" value="Import Set" />
                 </KeyValues>
             </Button>
