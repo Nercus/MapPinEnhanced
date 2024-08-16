@@ -40,6 +40,11 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:ImportFromMap()
             x = pin.pinData.x,
             y = pin.pinData.y,
             title = pin.pinData.title,
+            color = pin.pinData.color,
+            persistent = pin.pinData.persistent,
+            setTracked = pin.pinData.setTracked,
+            texture = pin.pinData.texture,
+            usesAtlas = pin.pinData.usesAtlas,
         }, true)
     end
     SetManager:PersistSets(activeSet.setID)
