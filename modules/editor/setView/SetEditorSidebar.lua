@@ -17,8 +17,9 @@ local lower = string.lower
 ---@class MapPinEnhancedSetEditorViewSidebarMixin : Frame
 ---@field searchInput SetSearchInput
 ---@field scrollFrame SetListScrollFrame
----@field switchViewButton Button
+---@field switchViewButton MapPinEnhancedSquareButton
 ---@field createSetButton Button
+---@field importButton MapPinEnhancedSquareButton
 ---@field body MapPinEnhancedSetEditorViewBodyMixin
 ---@field header SetSidebarHeader
 MapPinEnhancedSetEditorViewSidebarMixin = {}
@@ -166,6 +167,20 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
 
     self.header.title:SetText(L["Sets"])
     self.createSetButton:SetText(L["Create Set"])
+
+    self.importButton:SetScript("OnClick", function()
+        if self.body.importExportFrame:IsShown() and self.body.importExportFrame.mode == "import" then
+            self.body.importExportFrame:HideImportFrame()
+            return
+        end
+        -- hide export frame if its visible
+        self.body.importExportFrame:HideExportFrame()
+        local currentSetId = self.body:GetActiveEditorSetID()
+        self:ToggleActiveSet(currentSetId)
+        self.body:SetActiveEditorSetID() -- set nil
+        self.body.importExportFrame:ShowImportFrame()
+        self:UpdateSetList()
+    end)
 end
 
 ---@param searchQuery string
@@ -182,6 +197,5 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     self:UpdateSetList() -- init population
     MapPinEnhanced.RegisterCallback(self, 'UpdateSetList', function()
         self:UpdateSetList()
-        self.body:UpdateEditor()
     end)
 end

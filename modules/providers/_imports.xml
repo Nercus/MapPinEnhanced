@@ -6,4 +6,5 @@
     <Script file="waypointEvent.lua" />
     <Script file="wayCommand.lua" />
     <Script file="tomtom.lua" />
+    <Script file="importString.lua" />
 </Ui>

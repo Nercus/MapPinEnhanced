@@ -35,6 +35,7 @@
                     </OnEditFocusLost>
                     <OnEditFocusGained>
                         local parent = self:GetParent();
+                        parent.focusButton:Hide();
                     </OnEditFocusGained>
                     <OnShow>
                         local parent = self:GetParent();
