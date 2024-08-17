@@ -55,19 +55,19 @@
                             <OnClick>
                                 local editBox = self:GetParent()
                                 if editBox:IsEnabled() then
-                                editBox:Disable()
-                                editBox:HighlightText(0, 0)
-                                self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
-                                self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
-                                editBox:SetPropagateMouseClicks(true)
-                                return
+                                    editBox:Disable()
+                                    editBox:HighlightText(0, 0)
+                                    self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                    self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                    editBox:SetPropagateMouseClicks(true)
+                                    return
                                 end
-                                editBox:Enable()
-                                editBox:SetFocus()
-                                editBox:HighlightText()
-                                editBox:SetPropagateMouseClicks(false)
-                                self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
-                                self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                                    editBox:Enable()
+                                    editBox:SetFocus()
+                                    editBox:HighlightText()
+                                    editBox:SetPropagateMouseClicks(false)
+                                    self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                                    self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
                             </OnClick>
                         </Scripts>
                     </Button>
@@ -76,8 +76,8 @@
                     <OnEnterPressed>
                         self:Disable()
                         self:HighlightText(0, 0)
-                        self.editButton.icon:SetTexture(
-                        "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                        self.editButton:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                        self.editButton:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
                     </OnEnterPressed>
                 </Scripts>
             </EditBox>
