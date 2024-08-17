@@ -95,3 +95,4 @@ L["When enabled, the tracker will be shown/hidden automatically based on the num
 L["Edit Set Name"] = "Edit Set Name"
 L["Click to change color"] = "Click to change color"
 L["Shift click to Share to chat"] = "Shift click to Share to chat"
+L['Set "%s" loaded'] = 'Set "%s" loaded'

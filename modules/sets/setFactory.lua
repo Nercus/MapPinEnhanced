@@ -11,6 +11,7 @@ local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- currently the same template
 
 local CB = MapPinEnhanced.CB
+local L = MapPinEnhanced.L
 
 ---@class SetObject
 ---@field setID UUID
@@ -164,6 +165,7 @@ function SetFactory:CreateSet(name, id)
             PinManager:AddPin(setPinData.pinData)
         end
         MapPinEnhanced:SetPinTrackerView('Pins')
+        MapPinEnhanced:Notify(string.format(L['Set "%s" loaded'], name))
     end
 
     local function SetName(_, newName)
