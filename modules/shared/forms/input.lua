@@ -64,3 +64,11 @@ function MapPinEnhancedInputMixin:Setup(optionData)
         self:SetCallback(optionData.onChange)
     end)
 end
+
+function MapPinEnhancedInputMixin:ClearFocusOnKey()
+    self:SetPropagateKeyboardInput(true)
+    self:ClearFocus()
+    C_Timer.After(0.1, function()
+        self:SetPropagateKeyboardInput(false)
+    end)
+end

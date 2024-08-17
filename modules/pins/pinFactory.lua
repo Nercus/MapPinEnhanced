@@ -226,14 +226,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 24)
-                frame:SetScript("OnEscapePressed",
-                    function()
-                        frame:SetPropagateKeyboardInput(true)
-                        frame:ClearFocus()
-                        C_Timer.After(0.1, function()
-                            frame:SetPropagateKeyboardInput(false)
-                        end)
-                    end)
+
+                frame:SetScript("OnEscapePressed", function() frame:ClearFocusOnKey() end)
+                frame:SetScript("OnEnterPressed", function() frame:ClearFocusOnKey() end)
                 frame:Setup({
                     default = pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
                     init = function() return pinData.title or CONSTANTS.DEFAULT_PIN_NAME end,
@@ -262,18 +257,22 @@ function PinFactory:CreatePin(initPinData, pinID)
             local sets = SetManager:GetSets()
             setSubmenu:CreateTitle(L["Enter new set name"])
             local cachedSetName = ""
+            local confirmNewSetElementDescription
             local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             newSetNameElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 20)
-                frame:SetScript("OnEscapePressed",
-                    function()
-                        frame:SetPropagateKeyboardInput(true)
-                        frame:ClearFocus()
-                        C_Timer.After(0.1, function()
-                            frame:SetPropagateKeyboardInput(false)
-                        end)
-                    end)
+                frame:SetScript("OnEscapePressed", function() frame:ClearFocusOnKey() end)
+                frame:SetScript("OnEnterPressed", function()
+                    if cachedSetName == "" then
+                        return
+                    end
+                    local newSet = SetManager:AddSet(cachedSetName)
+                    newSet:AddPin(pinData)
+                    local inputContext = MenuInputContext.MouseButton;
+                    confirmNewSetElementDescription:Pick(inputContext, "LeftButton");
+                    frame:ClearFocusOnKey()
+                end)
                 frame:Setup({
                     default = "",
                     init = function() return "" end,
@@ -289,7 +288,8 @@ function PinFactory:CreatePin(initPinData, pinID)
                 })
             end)
             setSubmenu:CreateSpacer()
-            local confirmNewSetElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedButtonTemplate") --[[@as BaseMenuDescriptionMixin]]
+
+            confirmNewSetElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedButtonTemplate") --[[@as BaseMenuDescriptionMixin]]
             confirmNewSetElementDescription:SetResponder(function()
                 return MenuResponse.CloseAll;
             end)
