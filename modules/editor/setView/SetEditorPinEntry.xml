@@ -5,20 +5,32 @@
     <Script file="SetEditorPinEntry.lua" />
     <Frame name="MapPinEnhancedSetEditorPinEntryTemplate" virtual="true"
         mixin="MapPinEnhancedSetEditorPinEntryMixin" propagateKeyboardInput="true">
-        <Size x="580" y="40" />
+        <Size x="1" y="40" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
-                    <Size x="1" y="10" />
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                    snapToPixelGrid="false" texelSnappingBias="0" alpha="0.3">
+                    <Size x="12" y="12" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="15" y="3" />
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="3" />
                         <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="3" />
+                    </Anchors>
+                </Texture>
+                <Texture atlas="common-dropdown-bg" parentKey="highlight" hidden="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                        <MinColor r="1" g="0.82" b="0" a="0.7" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="5" />
+                        <Anchor point="BOTTOMRIGHT" y="-10" x="10" />
                     </Anchors>
                 </Texture>
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
+            <Button propagateMouseInput="Motion" parentKey="Pin"
+                inherits="MapPinEnhancedBasePinTemplate">
                 <Size x="30" y="30" />
                 <Anchors>
                     <Anchor point="LEFT" x="20" y="0"></Anchor>
@@ -29,12 +41,10 @@
                         self:SetPinColor()
                         self.texture:SetTexture(self.trackedTexture)
                     </OnLoad>
-                    <OnClick>
-                        self:GetParent():OpenColorMenu()
-                    </OnClick>
                 </Scripts>
             </Button>
-            <EditBox parentKey="mapID" inherits="MapPinEnhancedInputTemplate" numeric="true"
+            <EditBox propagateMouseInput="Motion" parentKey="mapID"
+                inherits="MapPinEnhancedInputTemplate" numeric="true"
                 letters="5">
                 <Size x="65" y="30" />
                 <Anchors>
@@ -55,7 +65,8 @@
                     </Button>
                 </Frames>
             </EditBox>
-            <EditBox parentKey="xCoord" inherits="MapPinEnhancedInputTemplate"
+            <EditBox propagateMouseInput="Motion" parentKey="xCoord"
+                inherits="MapPinEnhancedInputTemplate"
                 letters="5">
                 <KeyValues>
                     <KeyValue key="isDecimal" value="true" type="boolean" />
@@ -68,7 +79,8 @@
                     <OnChar method="OnChar" />
                 </Scripts>
             </EditBox>
-            <EditBox parentKey="yCoord" inherits="MapPinEnhancedInputTemplate"
+            <EditBox propagateMouseInput="Motion" parentKey="yCoord"
+                inherits="MapPinEnhancedInputTemplate"
                 letters="5">
                 <KeyValues>
                     <KeyValue key="isDecimal" value="true" type="boolean" />
@@ -81,14 +93,15 @@
                     <OnChar method="OnChar" />
                 </Scripts>
             </EditBox>
-            <EditBox parentKey="title" inherits="MapPinEnhancedInputTemplate"
+            <EditBox propagateMouseInput="Motion" parentKey="title"
+                inherits="MapPinEnhancedInputTemplate"
                 letters="50">
                 <Size x="150" y="30" />
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yCoord" x="15" />
                 </Anchors>
             </EditBox>
-            <Button parentKey="deleteButton">
+            <Button propagateMouseInput="Motion" parentKey="deleteButton">
                 <Size x="15" y="15" />
                 <NormalTexture
                     file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
@@ -107,7 +120,8 @@
                     <Anchor point="RIGHT" x="-10" />
                 </Anchors>
             </Button>
-            <Frame parentKey="pinOptions" inherits="MapPinEnhancedSelectTemplate">
+            <Frame propagateMouseInput="Motion" parentKey="pinOptions"
+                inherits="MapPinEnhancedSelectTemplate">
                 <Size x="1" y="30" />
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="10" />
@@ -119,6 +133,12 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnter>
+                self.highlight:Show()
+            </OnEnter>
+            <OnLeave>
+                self.highlight:Hide()
+            </OnLeave>
         </Scripts>
     </Frame>
 </Ui>

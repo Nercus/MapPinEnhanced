@@ -92,3 +92,6 @@ L["When enabled, the floating pin will be shown even if the tracked pin is very 
 "When enabled, the floating pin will be shown even if the tracked pin is very far away."
 L["When enabled, the tracker will be shown/hidden automatically based on the number of active pins."] =
 "When enabled, the tracker will be shown/hidden automatically based on the number of active pins."
+L["Edit Set Name"] = "Edit Set Name"
+L["Click to change color"] = "Click to change color"
+L["Shift click to Share to chat"] = "Shift click to Share to chat"

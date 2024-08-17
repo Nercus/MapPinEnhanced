@@ -58,9 +58,11 @@ function MapPinEnhancedSetEditorViewBodyMixin:UpdatePinList()
         pinFrame:SetParent(scrollChild)
         pinFrame:Show()
         if not lastFrame then
-            pinFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -10)
+            pinFrame:SetPoint("TOPLEFT", scrollChild, "TOPLEFT")
+            pinFrame:SetPoint("TOPRIGHT", scrollChild, "TOPRIGHT")
         else
             pinFrame:SetPoint("TOPLEFT", lastFrame, "BOTTOMLEFT", 0, -5)
+            pinFrame:SetPoint("TOPRIGHT", lastFrame, "BOTTOMRIGHT", 0, -5)
         end
         lastFrame = pinFrame
         pinFrame:SetPin(pin.pinData)

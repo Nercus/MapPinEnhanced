@@ -6,7 +6,8 @@
         virtual="true">
         <Size x="200" y="30" />
         <Frames>
-            <DropdownButton parentKey="Dropdown" inherits="WowStyle2DropdownTemplate">
+            <DropdownButton propagateMouseInput="Motion" parentKey="Dropdown"
+                inherits="WowStyle2DropdownTemplate">
                 <Size x="1" y="30" />
                 <Anchors>
                     <Anchor point="LEFT" />

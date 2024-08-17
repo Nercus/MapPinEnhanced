@@ -8,7 +8,8 @@
         <Size x="560" y="25" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                    snapToPixelGrid="false" texelSnappingBias="0">
                     <Size x="1" y="10" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" />

@@ -5,20 +5,41 @@
     <Script file="OptionEditorCategoryButton.lua" />
     <Button virtual="true" name="MapPinEnhancedOptionEditorViewCategoryButtonTemplate"
         mixin="MapPinEnhancedOptionEditorViewCategoryButtonMixin">
-        <Size x="1" y="26" />
+        <Size x="1" y="40" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormalLarge"
-                    justifyH="CENTER">
+                    justifyH="CENTER" justifyV="MIDDLE">
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="CENTER" y="2" />
                     </Anchors>
                 </FontString>
             </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" atlas="groupfinder-button-select" alphaMode="ADD"
-                    setAllPoints="true" />
+            <Layer level="BACKGROUND">
+                <Texture atlas="common-dropdown-bg" alpha="0.5" setAllPoints="true"
+                    alphaMode="ADD">
+                    <Color r="1" g="0.82" b="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="5" />
+                        <Anchor point="BOTTOMRIGHT" y="-5" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="highlight" atlas="common-dropdown-bg" setAllPoints="true"
+                    hidden="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="1" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="5" />
+                        <Anchor point="BOTTOMRIGHT" y="-5" />
+                    </Anchors>
+                </Texture>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
     </Button>
 </Ui>

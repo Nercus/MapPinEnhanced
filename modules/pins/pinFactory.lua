@@ -189,10 +189,8 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function SharePin()
         if x and y and mapID then
-            local waypointLink = ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000,
-                MAP_PIN_HYPERLINK)
-            ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
-            ChatEdit_InsertLink(waypointLink)
+            local Blizz = MapPinEnhanced:GetModule("Blizz")
+            Blizz:InsertWaypointLinkToChat(x, y, mapID)
         end
     end
 

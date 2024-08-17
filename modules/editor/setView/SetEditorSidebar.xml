@@ -9,18 +9,19 @@
         enableMouse="true">
         <Frames>
             <Frame parentKey="header">
-                <Size x="1" y="30" />
+                <Size x="1" y="45" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="10" y="-15" />
-                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
-                            <Size x="1" y="10" />
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                            snapToPixelGrid="false" texelSnappingBias="0">
+                            <Size x="16" y="16" />
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" />
-                                <Anchor point="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                                <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -28,7 +29,7 @@
                         <FontString inherits="GameFontNormalLarge" text="Sets" parentKey="title"
                             justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="CENTER" />
+                                <Anchor point="CENTER" y="-1" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -39,9 +40,9 @@
                 <TextInsets left="22" right="22" top="1" />
                 <Size x="1" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="3" y="-5" relativeKey="$parent.header"
+                    <Anchor point="TOPLEFT" x="12" y="-4" relativeKey="$parent.header"
                         relativePoint="BOTTOMLEFT" />
-                    <Anchor point="TOPRIGHT" x="-3" y="-5" relativeKey="$parent.header"
+                    <Anchor point="TOPRIGHT" x="-12" y="-4" relativeKey="$parent.header"
                         relativePoint="BOTTOMRIGHT" />
                 </Anchors>
                 <Layers>

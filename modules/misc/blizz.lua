@@ -52,6 +52,18 @@ function Blizz:OverrideSuperTrackedAlphaState(enable)
     SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
 end
 
+---Method to insert a waypoint link to the chat
+---@param x number
+---@param y number
+---@param mapID number
+function Blizz:InsertWaypointLinkToChat(x, y, mapID)
+    assert(x and y and mapID, "Invalid arguments")
+    local waypointLink = ("|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"):format(mapID, x * 10000, y * 10000,
+        MAP_PIN_HYPERLINK)
+    ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
+    ChatEdit_InsertLink(waypointLink)
+end
+
 ---------------------------------------------------------------------------
 
 ---Hide default world map Pin

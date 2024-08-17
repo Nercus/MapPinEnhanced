@@ -13,12 +13,21 @@ end
 
 function MapPinEnhancedOptionEditorViewCategoryButtonMixin:SetActive()
     if self.isActive then return end
-    self:LockHighlight()
+    self.highlight:Show()
     self.isActive = true
+end
+
+function MapPinEnhancedOptionEditorViewCategoryButtonMixin:OnEnter()
+    self.highlight:Show()
+end
+
+function MapPinEnhancedOptionEditorViewCategoryButtonMixin:OnLeave()
+    if self.isActive then return end
+    self.highlight:Hide()
 end
 
 function MapPinEnhancedOptionEditorViewCategoryButtonMixin:SetInactive()
     if not self.isActive then return end
-    self:UnlockHighlight()
+    self.highlight:Hide()
     self.isActive = false
 end

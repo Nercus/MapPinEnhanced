@@ -5,68 +5,69 @@
     <Frame name="MapPinEnhancedSetEditorBodyHeader" mixin="MapPinEnhancedSetEditorBodyHeaderMixin"
         parentKey="header" enableMouse="true"
         virtual="true">
-        <Size x="1" y="30" />
+        <Size x="1" y="45" />
         <Anchors>
-            <Anchor point="TOPLEFT" x="10" y="-15" />
-            <Anchor point="TOPRIGHT" x="-10" y="-15" />
+            <Anchor point="TOPLEFT" />
+            <Anchor point="TOPRIGHT" />
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
-                    <Size x="1" y="10" />
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                    snapToPixelGrid="false" texelSnappingBias="0">
+                    <Size x="16" y="16" />
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
                     </Anchors>
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" parentKey="infoText"
-                    text="Select a set to edit or create a new one." setAllPoints="true"
-                    justifyH="CENTER" justifyV="MIDDLE" />
+                    text="Select a set to edit or create a new one."
+                    justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER" y="-1" />
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
         <Frames>
             <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
                 font="GameFontNormalLarge"
                 autoFocus="false" propagateMouseInput="Clicks">
-                <TextInsets right="-25" />
-                <Size x="200" y="26" />
+                <TextInsets left="20" />
+                <Size x="300" y="26" />
                 <Anchors>
                     <Anchor point="LEFT" x="15" />
                 </Anchors>
                 <Frames>
-                    <Button parentKey="editButton">
-                        <Size x="26" y="26" />
+                    <Button parentKey="editButton" inherits="MapPinEnhancedIconButtonTemplate">
+                        <Size x="13" y="13" />
                         <Anchors>
-                            <Anchor point="RIGHT" />
+                            <Anchor point="LEFT" y="-1" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="OVERLAY">
-                                <Texture parentKey="icon"
-                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconEdit_Yellow.png">
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="6" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconEdit_Yellow.png" />
+                            <KeyValue key="tooltip" value="Edit Set Name" />
+                        </KeyValues>
                         <Scripts>
                             <OnClick>
                                 local editBox = self:GetParent()
                                 if editBox:IsEnabled() then
-                                    editBox:Disable()
-                                    editBox:HighlightText(0, 0)
-                                    self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
-                                    editBox:SetPropagateMouseClicks(true)
-                                    return
+                                editBox:Disable()
+                                editBox:HighlightText(0, 0)
+                                self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                editBox:SetPropagateMouseClicks(true)
+                                return
                                 end
                                 editBox:Enable()
                                 editBox:SetFocus()
                                 editBox:HighlightText()
                                 editBox:SetPropagateMouseClicks(false)
-                                self.icon:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                                self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                                self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
                             </OnClick>
                         </Scripts>
                     </Button>
@@ -84,7 +85,7 @@
                 inherits="MapPinEnhancedSquareButtonRedTemplate">
                 <Size x="26" y="26" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-37" y="7" />
+                    <Anchor point="RIGHT" x="-43" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="iconTexture"
@@ -97,7 +98,7 @@
                 frameStrata="HIGH">
                 <Size x="26" y="26" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-10" relativeKey="$parent.deleteButton"
+                    <Anchor point="RIGHT" x="-5" relativeKey="$parent.deleteButton"
                         relativePoint="LEFT" />
                 </Anchors>
                 <KeyValues>
@@ -111,7 +112,7 @@
                 frameStrata="HIGH">
                 <Size x="26" y="26" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-10" relativeKey="$parent.exportButton"
+                    <Anchor point="RIGHT" x="-5" relativeKey="$parent.exportButton"
                         relativePoint="LEFT" />
                 </Anchors>
                 <KeyValues>

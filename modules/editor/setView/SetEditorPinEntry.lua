@@ -74,6 +74,27 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnChange(key, value)
     self.onChangeCallback(key, cleanedValue)
 end
 
+function MapPinEnhancedSetEditorPinEntryMixin:SetupPinButton()
+    self.Pin:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(self.Pin, "ANCHOR_RIGHT")
+        GameTooltip:SetText(L["Click to change color"] .. "\n" .. L["Shift click to Share to chat"])
+        GameTooltip:Show()
+    end)
+    self.Pin:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    self.Pin:SetScript("OnClick", function()
+        if IsShiftKeyDown() then
+            local x = self.Pin.pinData.x / 100
+            local y = self.Pin.pinData.y / 100
+            local mapID = self.Pin.pinData.mapID
+            local Blizz = MapPinEnhanced:GetModule("Blizz")
+            Blizz:InsertWaypointLinkToChat(x, y, mapID)
+        else
+            self:OpenColorMenu()
+        end
+    end)
+end
+
 function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self.mapID:SetScript("OnTextChanged", function()
         self:OnChange('mapID', self.mapID:GetText())
@@ -96,6 +117,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self.deleteButton:SetScript("OnClick", function()
         self.onChangeCallback('delete', true)
     end)
+    self:SetupPinButton()
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)

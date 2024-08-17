@@ -41,7 +41,7 @@
                 inherits="MapPinEnhancedSquareButtonRedTemplate" frameStrata="HIGH">
                 <Size x="26" y="26" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="-12" y="-10" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-10" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="iconTexture"
@@ -52,6 +52,16 @@
                         self:GetParent():Hide();
                     </OnClick>
                 </Scripts>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture atlas="Tab-Divider-Top" rotation="90" horizTile="true">
+                            <Size x="22" y="12" />
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="LEFT" x="-3" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
             </Button>
         </Frames>
         <Scripts>

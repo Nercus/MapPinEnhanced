@@ -15,7 +15,7 @@ local CB = MapPinEnhanced.CB
 MapPinEnhancedSetEditorBodyHeaderMixin = {}
 
 ---@class SetEditorSetNameEditBox : EditBox
----@field editButton Button
+---@field editButton MapPinEnhancedSquareButton
 
 ---@param mode 'info' | 'editor
 function MapPinEnhancedSetEditorBodyHeaderMixin:SetMode(mode)
@@ -85,6 +85,7 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:OnLoad()
     self.body = self:GetParent() --[[@as MapPinEnhancedSetEditorViewBodyMixin]]
     self.deleteButton.tooltip = L["Delete Set"]
     self.exportButton.tooltip = L["Export Set"]
+    self.setName.editButton.tooltip = L["Edit Set Name"]
 
     self.setName:SetScript("OnTextChanged", function() self:OnChangeSetName() end)
     self.exportButton:SetScript("OnClick", function() self.body.importExportFrame:ShowExportFrame() end)

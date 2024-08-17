@@ -14,18 +14,19 @@
         </Anchors>
         <Frames>
             <Frame parentKey="header">
-                <Size x="1" y="30" />
+                <Size x="1" y="45" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="10" y="-15" />
-                    <Anchor point="TOPRIGHT" x="-10" y="-15" />
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true">
-                            <Size x="1" y="10" />
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                            snapToPixelGrid="false" texelSnappingBias="0">
+                            <Size x="16" y="16" />
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" />
-                                <Anchor point="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                                <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -34,7 +35,7 @@
                             text="Options"
                             justifyH="CENTER">
                             <Anchors>
-                                <Anchor point="CENTER" />
+                                <Anchor point="CENTER" y="-1" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -57,9 +58,9 @@
                 <Size x="1" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header"
-                        relativePoint="BOTTOMLEFT" y="-5" />
+                        relativePoint="BOTTOMLEFT" x="12" y="-4" />
                     <Anchor point="BOTTOMRIGHT" relativeKey="$parent.switchViewButton"
-                        relativePoint="TOPRIGHT" y="5" />
+                        relativePoint="TOPRIGHT" x="-12" y="5" />
                 </Anchors>
                 <KeyValues>
                     <KeyValue key="scrollBarX" value="3" type="number" />

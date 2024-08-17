@@ -33,7 +33,7 @@
                 <Size x="590" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
-                        relativeKey="$parent.pinListHeader" />
+                        relativeKey="$parent.pinListHeader" y="-4" />
                     <Anchor point="BOTTOMRIGHT" x="-30" y="15" />
                 </Anchors>
                 <KeyValues>
