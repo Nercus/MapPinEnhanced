@@ -247,6 +247,7 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
         self.SuperTrackedPin:Clear()
         return
     end
+    self.SuperTrackedPin:UnlockHighlight()
     self.SuperTrackedPin:Setup(pinData)
     self.SuperTrackedPin:SetTrackedTexture()
     self.SuperTrackedPin:UpdateTimeText(timeToTarget)

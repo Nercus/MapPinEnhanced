@@ -70,10 +70,15 @@ function PinFactory:UpdateDistance(pinID, pinData)
         if MapPinEnhanced.SuperTrackedPin then
             MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
         end
-
         if distance < 20 then
-            if not pinData.persistent then
+            if pinData.persistent then
+                MapPinEnhanced.SuperTrackedPin:LockHighlight()
+            else
                 PinManager:RemovePinByID(pinID)
+            end
+        else
+            if pinData.persistent then
+                MapPinEnhanced.SuperTrackedPin:UnlockHighlight()
             end
         end
         lastUpdate = currentTime
