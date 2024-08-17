@@ -132,7 +132,9 @@ function PinFactory:CreatePin(initPinData, pinID)
         end
         pinData.color = color
         PinManager:PersistPins()
-        MapPinEnhanced:SetSuperTrackedPin(GetPinData())
+        if isTracked then
+            MapPinEnhanced:SetSuperTrackedPin(GetPinData())
+        end
     end
 
 
@@ -173,7 +175,9 @@ function PinFactory:CreatePin(initPinData, pinID)
         WorldmapPool:Release(worldmapPin)
         MinimapPool:Release(minimapPin)
         TrackerPinEntryPool:Release(trackerPinEntry)
-        MapPinEnhanced:SetSuperTrackedPin(nil)
+        if isTracked then
+            MapPinEnhanced:SetSuperTrackedPin(nil)
+        end
     end
 
 
@@ -183,7 +187,9 @@ function PinFactory:CreatePin(initPinData, pinID)
         minimapPin:SetTitle(text)
         trackerPinEntry:SetTitle(text)
         PinManager:PersistPins()
-        MapPinEnhanced:SetSuperTrackedPin(GetPinData())
+        if isTracked then
+            MapPinEnhanced:SetSuperTrackedPin(GetPinData())
+        end
     end
 
 
