@@ -288,6 +288,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                     end
                 })
             end)
+            setSubmenu:CreateSpacer()
             local confirmNewSetElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedButtonTemplate") --[[@as BaseMenuDescriptionMixin]]
             confirmNewSetElementDescription:SetResponder(function()
                 return MenuResponse.CloseAll;
