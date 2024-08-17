@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 ---@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
-
+local lower = string.lower
 local CB = MapPinEnhanced.CB
 ---@type table<UUID, SetObject>
 SetManager.Sets = {}
@@ -77,6 +77,7 @@ function SetManager:DeleteSet(setID)
     CB:Fire("UpdateSetList")
 end
 
+---@return table<UUID, SetObject>
 function SetManager:GetSets()
     return self.Sets
 end
@@ -100,6 +101,24 @@ function SetManager:UpdateSetNameByID(setID, newName)
     self.Sets[setID]:SetName(newName)
     SetManager:PersistSets(setID)
     CB:Fire("UpdateSetList")
+end
+
+---@param a SetObject
+---@param b SetObject
+---@return boolean
+local function SortBySetName(a, b)
+    return lower(a.name) < lower(b.name)
+end
+
+---@return SetObject[]
+function SetManager:GetAlphabeticalSortedSets()
+    ---@class SetManager
+    local sortedSets = {}
+    for _, setObject in pairs(self.Sets) do
+        table.insert(sortedSets, setObject)
+    end
+    table.sort(sortedSets, SortBySetName)
+    return sortedSets
 end
 
 ---@param name string

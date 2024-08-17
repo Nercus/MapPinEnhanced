@@ -2,8 +2,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-local lower = string.lower
 
+local lower = string.lower
 
 ---@class SetListScrollFrame : ScrollFrame
 ---@field Child Frame
@@ -50,31 +50,12 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     newSet.setEditorEntry:SetActive()
 end
 
----@param a SetObject
----@param b SetObject
----@return boolean
-local function SortBySetName(a, b)
-    return lower(a.name) < lower(b.name)
-end
-
----@return SetObject[]
-function MapPinEnhancedSetEditorViewSidebarMixin:GetAlphabeticalSortedSets()
-    ---@class SetManager
-    local SetManager = MapPinEnhanced:GetModule("SetManager")
-    local sets = SetManager:GetSets()
-    local sortedSets = {}
-    for _, setObject in pairs(sets) do
-        table.insert(sortedSets, setObject)
-    end
-    table.sort(sortedSets, SortBySetName)
-    return sortedSets
-end
-
 ---The set list can be updated with a custom set list, if not provided the set manager will be used -> used for search
 ---@param sets table<string, SetObject> | nil
 function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
     if not sets then
-        sets = self:GetAlphabeticalSortedSets()
+        local SetManager = MapPinEnhanced:GetModule("SetManager")
+        sets = SetManager:GetAlphabeticalSortedSets()
     end
     local scrollChild = self.scrollFrame.Child
     for _, child in ipairs({ scrollChild:GetChildren() }) do
@@ -108,7 +89,8 @@ end
 ---@return SetObject[] | nil
 function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets(searchQuery)
     if searchQuery == "" then return nil end
-    local sets = self:GetAlphabeticalSortedSets()
+    local SetManager = MapPinEnhanced:GetModule("SetManager")
+    local sets = SetManager:GetAlphabeticalSortedSets()
     local filteredSets = {}
     searchQuery = lower(searchQuery)
     for _, setObject in ipairs(sets) do

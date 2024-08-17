@@ -120,7 +120,7 @@ function MapPinEnhancedTrackerFrameMixin:SetSetView(forceUpdate)
         self:SetImportView()
     end)
     table.insert(self.entries, importButton)
-    local sets = SetManager:GetSets() ---@type table<string, SetObject | Button>
+    local sets = SetManager:GetAlphabeticalSortedSets() ---@type table<string, SetObject | Button>
     --MapPinEnhanced.SetManager:GetAllSetEntries()
     for _, set in pairs(sets) do
         table.insert(self.entries, set.trackerSetEntry)
