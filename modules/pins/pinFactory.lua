@@ -235,8 +235,8 @@ function PinFactory:CreatePin(initPinData, pinID)
                         end)
                     end)
                 frame:Setup({
-                    default = pinData.title or "",
-                    init = function() return pinData.title or "" end,
+                    default = pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
+                    init = function() return pinData.title or CONSTANTS.DEFAULT_PIN_NAME end,
                     onChange = function(value)
                         ChangeTitle(value)
                     end
