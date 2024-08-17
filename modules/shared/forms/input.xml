@@ -39,6 +39,9 @@
             <OnEscapePressed>
                 self:ClearFocus()
             </OnEscapePressed>
+            <OnEditFocusGained>
+                self:HighlightText()
+            </OnEditFocusGained>
             <OnChar method="OnChar" />
         </Scripts>
     </EditBox>
