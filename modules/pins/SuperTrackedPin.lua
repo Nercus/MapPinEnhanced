@@ -119,28 +119,6 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
     self.distantText:SetText(timeText)
 end
 
--- local lastUpdateTime = 0
--- local margin = 20
--- ---@type number? is not the real height when game is loaded
--- local screenWidthHalf
-
--- function MapPinEnhancedSuperTrackedPinMixin:CheckIsCentered()
---     if not self.navFrameCreated then return end
---     if not self:IsShown() then return end
---     if not lastUpdateTime or (GetTime() - lastUpdateTime) > 0.1 then
---         local navFrame = C_Navigation.GetFrame();
---         if not navFrame then return end
---         local x = navFrame:GetLeft()
---         local diff = math.abs(x - screenWidthHalf)
---         if diff < margin then
---             self:LockHighlight()
---         else
---             self:UnlockHighlight()
---         end
---         lastUpdateTime = GetTime()
---     end
--- end
-
 local function AddOptions()
     local self = MapPinEnhanced:GetSuperTrackedPin()
     local Blizz = MapPinEnhanced:GetModule("Blizz")
@@ -166,23 +144,6 @@ local function AddOptions()
             self:UpdateTextVisibility()
         end
     })
-
-    -- Options:RegisterCheckbox({
-    --     category = L["Floating Pin"],
-    --     label = L["Show Centered Highlight"],
-    --     default = MapPinEnhanced:GetDefault("floatingPin", "showCenteredHighlight") --[[@as boolean]],
-    --     init = function() return MapPinEnhanced:GetVar("floatingPin", "showCenteredHighlight") --[[@as boolean]] end,
-    --     description = "Highlight the floating pin when it is centered on the screen.",
-    --     onChange = function(value)
-    --         MapPinEnhanced:SaveVar("floatingPin", "showCenteredHighlight", value)
-    --         if value then
-    --             self:SetScript("OnUpdate", self.CheckIsCentered)
-    --         else
-    --             self:SetScript("OnUpdate", nil)
-    --             self:UnlockHighlight()
-    --         end
-    --     end
-    -- })
 
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
