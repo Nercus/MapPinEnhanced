@@ -20,6 +20,15 @@ local function OnUserWaypoint()
     blockEvent = true
 
     local title, texture, usesAtlas = PinProvider:DetectMouseFocusPinInfo()
+    local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
+    local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+
+    if isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingCorpse then
+        C_SuperTrack.ClearAllSuperTracked()
+    end
+
+
     PinManager:AddPin({
         mapID = wp.uiMapID,
         x = wp.position.x,
@@ -27,7 +36,7 @@ local function OnUserWaypoint()
         title = title,
         texture = texture,
         usesAtlas = usesAtlas,
-        setTracked = true
+        setTracked = not isSuperTrackingCorpse
     })
     blockEvent = false
 end

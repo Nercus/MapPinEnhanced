@@ -36,7 +36,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field trackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 ---@field pinData pinData
 ---@field Track fun()
----@field Untrack fun()
+---@field Untrack fun(restored:boolean?)
 ---@field IsTracked fun():boolean
 ---@field Remove fun()
 ---@field GetPinData fun():pinData
@@ -121,9 +121,11 @@ function PinFactory:CreatePin(initPinData, pinID)
         isTracked = true
     end
 
-    local function Untrack()
+    local function Untrack(restored)
         if isTracked then
             C_Map.ClearUserWaypoint()
+        end
+        if not restored then
             MapPinEnhanced:SetSuperTrackedPin(nil)
         end
         worldmapPin:SetUntrackedTexture()
@@ -185,9 +187,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
     local function Remove()
-        if isTracked then
-            C_Map.ClearUserWaypoint()
-        end
+        Untrack()
         if MapPinEnhanced.pinTracker then
             if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
                 MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
@@ -201,9 +201,6 @@ function PinFactory:CreatePin(initPinData, pinID)
         WorldmapPool:Release(worldmapPin)
         MinimapPool:Release(minimapPin)
         TrackerPinEntryPool:Release(trackerPinEntry)
-        if isTracked then
-            MapPinEnhanced:SetSuperTrackedPin(nil)
-        end
     end
 
 

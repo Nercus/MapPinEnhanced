@@ -203,6 +203,15 @@ function PinManager:RestorePins()
     end
 end
 
+---@return number
+function PinManager:GetPinCount()
+    local length = 0
+    for _ in pairs(self.Pins) do
+        length = length + 1
+    end
+    return length
+end
+
 ---add a pin
 ---@param pinData pinData
 ---@param restored boolean?
@@ -224,7 +233,7 @@ function PinManager:AddPin(pinData, restored)
         pinData.y = pinData.y / 100
     end
 
-    if #PinManager.Pins >= MAX_COUNT_PINS then
+    if self:GetPinCount() >= MAX_COUNT_PINS then
         -- too many pins
         MapPinEnhanced:Notify("Too many pins. Please remove some pins before adding more.", "ERROR")
         return
@@ -253,11 +262,10 @@ function PinManager:AddPin(pinData, restored)
     PinManager.Pins[pinID] = pinObject
     PinManager.Positions[pinPositionString] = true
 
-
     if pinData.setTracked and not self.wasSuperTrackingOther then
         pinObject:Track()
     else
-        pinObject:Untrack()
+        pinObject.Untrack(restored)
     end
 
     if not restored then

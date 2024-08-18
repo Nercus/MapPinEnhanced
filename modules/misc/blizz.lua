@@ -33,6 +33,13 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
         MapPinEnhanced:Notify("Cannot set waypoint on " .. mapInfo.name, "ERROR")
         return
     end
+
+    local hasUserWaypoint = C_Map.HasUserWaypoint()
+    if hasUserWaypoint then
+        C_SuperTrack.ClearAllSuperTracked()
+        C_Map.ClearUserWaypoint()
+    end
+
     local uiMapPoint = CreateUIMapPointFromCoordinates(mapID, x, y, 0)
     SetUserWaypoint(uiMapPoint)
     TimerAfter(0.1, function()
@@ -76,28 +83,28 @@ end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
 
-local countSinceLastTrackedPin = 0
+
+
+
+
 ---Method to handle the super tracking change event and track the last tracked pin
 function Blizz:OnSuperTrackingChanged()
     ---@type boolean
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     MapPinEnhanced:SaveVar("SuperTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
-    if not isSuperTracking then
-        if countSinceLastTrackedPin <= 2 then
-            local PinManager = MapPinEnhanced:GetModule("PinManager")
-            PinManager:TrackLastTrackedPin()
-        end
-        return
-    end
-    if not isSuperTrackingUserWaypoint then
-        countSinceLastTrackedPin = countSinceLastTrackedPin + 1
-        local PinManager = MapPinEnhanced:GetModule("PinManager")
+    if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
+
+    local PinManager = MapPinEnhanced:GetModule("PinManager")
+    if isSuperTracking and not isSuperTrackingUserWaypoint then
         PinManager:UntrackTrackedPin()
-    else
-        countSinceLastTrackedPin = 0
     end
 end
 
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", Blizz.OnSuperTrackingChanged)
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", Blizz.OnSuperTrackingChanged)
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
+    Blizz:OnSuperTrackingChanged()
+end)
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
+    Blizz:OnSuperTrackingChanged()
+end)
