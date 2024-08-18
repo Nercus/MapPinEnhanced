@@ -49,4 +49,4 @@ end
 
 MapPinEnhanced:AddSlashCommand(L["Help"]:lower(), function()
     MapPinEnhanced:PrintHelp()
-end, L["Show this help message"])
+end, L["Show This Help Message"])

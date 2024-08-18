@@ -47,7 +47,7 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:ShowImportFrame()
     self:Show()
     self.body.importExportFrameOpened = true
     self.body:UpdateDisplayedElements()
-    self.body.header:SetInfoText(L["Paste a string to import a set"])
+    self.body.header:SetInfoText(L["Paste a String to Import a Set"])
 end
 
 function MapPinEnhancedSetEditorImportExportFrameMixin:HideImportFrame()
@@ -55,7 +55,7 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:HideImportFrame()
     self.cancelImportButton:Hide()
     self:HideParent()
     self.body:UpdateDisplayedElements()
-    self.body.header:SetInfoText(L["Select a set to edit or create a new one."])
+    self.body.header:SetInfoText(L["Select a Set to Edit or Create a New One."])
 end
 
 function MapPinEnhancedSetEditorImportExportFrameMixin:HideParent()
@@ -69,7 +69,7 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:UpdateExportType(isComman
     if not activeSet then return end
     local pinCount = activeSet:GetPinCount()
     if pinCount == 0 then
-        self.editBox:SetText(L["No Pins to export."])
+        self.editBox:SetText(L["No Pins to Export."])
         self.editBox:HighlightText()
         self.editBox:SetFocus()
         return
@@ -153,7 +153,7 @@ end
 function MapPinEnhancedSetEditorImportExportFrameMixin:OnLoad()
     self.body = self:GetParent() --[[@as MapPinEnhancedSetEditorViewBodyMixin]]
 
-    self.exportTypeToggle.label:SetText(L["Export as commands"])
+    self.exportTypeToggle.label:SetText(L["Export as Commands"])
     self.confirmImportButton:SetText(L["Confirm"])
     self.cancelImportButton:SetText(L["Back"])
     self.cancelExportButton:SetText(L["Cancel"])

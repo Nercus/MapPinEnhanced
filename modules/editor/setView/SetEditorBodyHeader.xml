@@ -23,7 +23,7 @@
             </Layer>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" parentKey="infoText"
-                    text="Select a set to edit or create a new one."
+                    text="Select a Set to Edit or Create a New One."
                     justifyH="CENTER">
                     <Anchors>
                         <Anchor point="CENTER" y="-1" />
@@ -118,7 +118,7 @@
                 <KeyValues>
                     <KeyValue key="iconTexture"
                         value="Interface/AddOns/MapPinEnhanced/assets/icons/IconMap_Dark.png" />
-                    <KeyValue key="tooltip" value="Import pins from map" />
+                    <KeyValue key="tooltip" value="Import Pins from Map" />
                 </KeyValues>
             </Button>
         </Frames>

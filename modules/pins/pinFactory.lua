@@ -226,7 +226,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function ShowOnMap()
         if InCombatLockdown() then
-            MapPinEnhanced:Notify(L["Can't show on map in combat"], "ERROR")
+            MapPinEnhanced:Notify(L["Can't Show on Map in Combat"], "ERROR")
             return
         end
         OpenWorldMap(mapID);
@@ -275,9 +275,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             local OverrideCreateSetButtonDisabledState
 
             ---@type SubMenuUtil
-            local setSubmenu = rootDescription:CreateButton(L["Add to a set"]);
+            local setSubmenu = rootDescription:CreateButton(L["Add to a Set"]);
             local sets = SetManager:GetSets()
-            setSubmenu:CreateTitle(L["Enter new set name"])
+            setSubmenu:CreateTitle(L["Enter New Set Name"])
             local cachedSetName = ""
             local confirmNewSetElementDescription
             local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
@@ -345,11 +345,11 @@ function PinFactory:CreatePin(initPinData, pinID)
             end
 
             rootDescription:CreateButton(L["Show on Map"], ShowOnMap)
-            rootDescription:CreateButton(L["Toggle persistent"], function()
+            rootDescription:CreateButton(L["Toggle Persistent"], function()
                 TogglePersistentState()
             end)
 
-            rootDescription:CreateButton(L["Share To Chat"], function() SharePin() end)
+            rootDescription:CreateButton(L["Share to Chat"], function() SharePin() end)
             rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pinID) end)
         end)
     end

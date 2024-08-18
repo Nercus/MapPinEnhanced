@@ -24,7 +24,7 @@ function MapPinEnhanced:ToggleMinimapButton(init)
                 elseif button == "RightButton" then
                     MenuUtil.CreateContextMenu(owner, function(_, rootDescription)
                         rootDescription:CreateTitle(MapPinEnhanced.nameVersionString)
-                        rootDescription:CreateButton(L["Toggle tracker"], function()
+                        rootDescription:CreateButton(L["Toggle Tracker"], function()
                             MapPinEnhanced:TogglePinTracker()
                         end)
                         rootDescription:CreateButton(L["Toggle Editor"], function()
@@ -49,10 +49,10 @@ function MapPinEnhanced:ToggleMinimapButton(init)
     local currentState = MapPinEnhanced:GetVar("minimapIcon", "hide") --[[@as boolean]]
     if currentState then
         MapPinEnhanced:SaveVar("minimapIcon", "hide", false)
-        MapPinEnhanced:Notify(L["Minimap button is now visible"])
+        MapPinEnhanced:Print(L["Minimap Button Is Now Visible"])
     else
         MapPinEnhanced:SaveVar("minimapIcon", "hide", true)
-        MapPinEnhanced:Notify(L["Minimap button is now hidden"])
+        MapPinEnhanced:Print(L["Minimap Button Is Now Hidden"])
     end
     self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
 end
@@ -86,14 +86,14 @@ function MapPinEnhanced:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
-    self:Print(L["TomTom is loaded! You may experience some unexpected behavior."])
+    self:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
 end
 
 ---------------------------------------------------------------------------
 
 MapPinEnhanced:AddSlashCommand(L["Minimap"]:lower(), function()
     MapPinEnhanced:ToggleMinimapButton()
-end, L["Toggle minimap button"])
+end, L["Toggle Minimap Button"])
 
 ---------------------------------------------------------------------------
 

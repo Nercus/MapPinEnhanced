@@ -275,7 +275,7 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
 
     Options:RegisterSlider({
         category = L["Tracker"],
-        label = L["Displayed number of entries"],
+        label = L["Displayed Number of Entries"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerHeight") --[[@as number]],
         init = function() return MapPinEnhanced:GetVar("tracker", "trackerHeight") --[[@as number]] end,
         min = 1,
@@ -477,14 +477,14 @@ end
 
 MapPinEnhanced:AddSlashCommand(L["Tracker"]:lower(), function()
     MapPinEnhanced:TogglePinTracker()
-end, L["Toggle tracker"])
+end, L["Toggle Tracker"])
 
 MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
     MapPinEnhanced:TogglePinTracker(true)
     MapPinEnhanced:SetPinTrackerView("Import")
-end, L["Import a set"])
+end, L["Import a Set"])
 
 MapPinEnhanced:AddSlashCommand(L["Clear"]:lower(), function()
     local PinManager = MapPinEnhanced:GetModule("PinManager")
     PinManager:ClearPins()
-end, L["Clear all pins"])
+end, L["Clear All Pins"])

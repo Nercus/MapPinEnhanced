@@ -143,7 +143,7 @@ local function AddOptions()
 
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
-        label = L["Override world quest tracking"],
+        label = L["Override World Quest Tracking"],
         default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
         init = function() return MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]] end,
         description =

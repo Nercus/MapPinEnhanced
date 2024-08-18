@@ -79,7 +79,7 @@ end
 function MapPinEnhancedSetEditorPinEntryMixin:SetupPinButton()
     self.Pin:SetScript("OnEnter", function()
         GameTooltip:SetOwner(self.Pin, "ANCHOR_RIGHT")
-        GameTooltip:SetText(L["Click to change color"] .. "\n" .. L["Shift click to Share to chat"])
+        GameTooltip:SetText(L["Click to Change Color"] .. "\n" .. L["Shift-Click to Share to Chat"])
         GameTooltip:Show()
     end)
     self.Pin:SetScript("OnLeave", function() GameTooltip:Hide() end)

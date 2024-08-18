@@ -86,6 +86,7 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:OnLoad()
     self.deleteButton.tooltip = L["Delete Set"]
     self.exportButton.tooltip = L["Export Set"]
     self.setName.editButton.tooltip = L["Edit Set Name"]
+    self.importFromMapButton.tooltip = L["Import Pins from Map"]
 
     self.setName:SetScript("OnTextChanged", function() self:OnChangeSetName() end)
     self.exportButton:SetScript("OnClick", function() self.body.importExportFrame:ShowExportFrame() end)

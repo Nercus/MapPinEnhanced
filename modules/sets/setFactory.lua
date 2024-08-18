@@ -167,7 +167,7 @@ function SetFactory:CreateSet(name, id)
             PinManager:AddPin(setPinData.pinData)
         end
         MapPinEnhanced:SetPinTrackerView('Pins')
-        MapPinEnhanced:Notify(string.format(L['Set "%s" loaded'], name))
+        MapPinEnhanced:Notify(string.format(L["Set \"%s\" Loaded"], name))
     end
 
     local function SetName(_, newName)
@@ -231,7 +231,7 @@ function SetFactory:CreateSet(name, id)
     end
 
     trackerSetEntry:SetScript("OnClick", HandleClick)
-    trackerSetEntry.tooltip = L["Click to load set"] .. "\n" .. L["Shift-Click to load and override all pins"]
+    trackerSetEntry.tooltip = L["Click to Load Set"] .. "\n" .. L["Shift-Click to Load and Override All Pins"]
 
 
     local function GetRawSetData()

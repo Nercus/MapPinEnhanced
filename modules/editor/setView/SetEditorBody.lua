@@ -130,7 +130,7 @@ function MapPinEnhancedSetEditorViewBodyMixin:SetActiveEditorSetID(setID)
         self.header:UpdateSetName()
     else
         self.header:SetMode('info')
-        self.header:SetInfoText(L["Select a set to edit or create a new one."])
+        self.header:SetInfoText(L["Select a Set to Edit or Create a New One."])
     end
     self:UpdateDisplayedElements()
     self:UpdatePinList()
