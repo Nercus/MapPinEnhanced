@@ -42,15 +42,18 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
-    self.header:SetScript("OnMouseDown", function()
+
+    local function StartMoving()
         MapPinEnhanced.editorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
-    end)
+    end
 
-    self.header:SetScript("OnMouseUp", function()
+    local function StopMovingOrSizing()
         MapPinEnhanced.editorWindow:StopMovingOrSizing()
         SetCursor(nil)
-    end)
+    end
+    self.header:SetScript("OnMouseDown", StartMoving)
+    self.header:SetScript("OnMouseUp", StopMovingOrSizing)
 
     ---@type MapPinEnhancedOptionEditorViewBodyMixin
     Options.OptionBody = self

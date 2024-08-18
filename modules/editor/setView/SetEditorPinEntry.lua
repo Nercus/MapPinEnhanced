@@ -180,17 +180,19 @@ end
 ---@param parent UiMapDetails?
 function MapPinEnhancedSetEditorPinEntryMixin:GenerateMenuTemplateFromMapData(parentTable, children, parent)
     if parent then
-        table.insert(parentTable, {
+        ---@type table
+        parentTable[#parentTable + 1] = {
             type = "button",
             label = parent.name,
             onClick = function()
                 self.mapID:SetText(tostring(parent.mapID))
                 self:OnChange('title', self.title:GetText())
             end
-        })
-        table.insert(parentTable, {
+        }
+        ---@type table
+        parentTable[#parentTable + 1] = {
             type = "divider"
-        })
+        }
     end
     for _, child in ipairs(children) do
         if C_Map.CanSetUserWaypointOnMap(child.mapID) then
@@ -201,22 +203,24 @@ function MapPinEnhancedSetEditorPinEntryMixin:GenerateMenuTemplateFromMapData(pa
             self.existingZoneNames[child.name] = (self.existingZoneNames[child.name] or 0) + 1
             local nextChildren = C_Map.GetMapChildrenInfo(child.mapID, 3)
             if nextChildren and #nextChildren > 0 then
-                table.insert(parentTable, {
+                ---@type table
+                parentTable[#parentTable + 1] = {
                     type = "submenu",
                     label = mapName,
                     entries = {}
-                })
+                }
                 local mapInfo = C_Map.GetMapInfo(child.mapID)
                 self:GenerateMenuTemplateFromMapData(parentTable[#parentTable].entries, nextChildren, mapInfo)
             else
-                table.insert(parentTable, {
+                ---@type table
+                parentTable[#parentTable + 1] = {
                     type = "button",
                     label = mapName,
                     onClick = function()
                         self.mapID:SetText(tostring(child.mapID))
                         self:OnChange('title', self.title:GetText())
                     end
-                })
+                }
             end
         end
     end

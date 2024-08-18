@@ -203,6 +203,13 @@ function SetFactory:CreateSet(name, id)
         },
         {
             type = "button",
+            label = L["Edit Set"],
+            onClick = function()
+                MapPinEnhanced:ShowEditorForSet(setID)
+            end
+        },
+        {
+            type = "button",
             label = L["Export Set"],
             onClick = function()
                 MapPinEnhanced.editorWindow.setView.sideBar:ToggleActiveSet(setID, true)

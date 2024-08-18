@@ -219,3 +219,11 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
         self:UpdateSetList()
     end)
 end
+
+function MapPinEnhanced:ShowEditorForSet(setID)
+    local editorWindow = self:GetEditorWindow()
+    if editorWindow.setView.sideBar.ToggleActiveSet then
+        editorWindow:Open()
+        editorWindow.setView.sideBar:ToggleActiveSet(setID, true)
+    end
+end

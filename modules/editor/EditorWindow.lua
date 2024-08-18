@@ -137,8 +137,7 @@ end
 
 function MapPinEnhanced:ToggleEditorWindow()
     if not self.editorWindow then
-        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
-            "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
+        self:GetEditorWindow()
         self.editorWindow:Open()
         return
     end
@@ -147,6 +146,14 @@ function MapPinEnhanced:ToggleEditorWindow()
     else
         self.editorWindow:Open()
     end
+end
+
+function MapPinEnhanced:GetEditorWindow()
+    if not self.editorWindow then
+        self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
+            "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
+    end
+    return self.editorWindow
 end
 
 MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
