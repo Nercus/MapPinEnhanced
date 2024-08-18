@@ -225,10 +225,6 @@ function PinFactory:CreatePin(initPinData, pinID)
             local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
-                frame:SetSize(150, 24)
-
-                frame:SetScript("OnEscapePressed", function() frame:ClearFocusOnKey() end)
-                frame:SetScript("OnEnterPressed", function() frame:ClearFocusOnKey() end)
                 frame:Setup({
                     default = pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
                     init = function() return pinData.title or CONSTANTS.DEFAULT_PIN_NAME end,

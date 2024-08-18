@@ -28,7 +28,8 @@ local L = MapPinEnhanced.L
 
 
 ---@param setID UUID | nil
-function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
+---@param override boolean | nil
+function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID, override)
     if not setID then return end
     local SetEditorBody = self.body
     local activeSetID = SetEditorBody:GetActiveEditorSetID()
@@ -37,7 +38,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
         if not set then return end
         set.setEditorEntry:SetInactive()
     end
-    if setID == activeSetID then -- if we click on the active set we want to close it
+    if setID == activeSetID and not override then -- if we click on the active set we want to close it
         local set = SetEditorBody:GetActiveSet()
         if not set then return end
         set.setEditorEntry:SetInactive()
@@ -48,6 +49,38 @@ function MapPinEnhancedSetEditorViewSidebarMixin:ToggleActiveSet(setID)
     local newSet = SetEditorBody:GetActiveSet()
     if not newSet then return end
     newSet.setEditorEntry:SetActive()
+end
+
+---@param setObject SetObject
+---@return AnyMenuEntry[]
+function MapPinEnhancedSetEditorViewSidebarMixin:GetSetEntryMenuTemplate(setObject)
+    local SetManager = MapPinEnhanced:GetModule("SetManager")
+    return {
+        {
+            type = "button",
+            label = L["Load Set"],
+            onClick = function()
+                setObject.LoadSet(IsShiftKeyDown())
+            end
+        },
+        {
+            type = "button",
+            label = L["Export Set"],
+            onClick = function()
+                self:ToggleActiveSet(setObject.setID, true)
+                SetManager:ExportSet(setObject.setID)
+            end
+        },
+        {
+            type = "button",
+            label = L["Delete Set"],
+            onClick = function()
+                self:ToggleActiveSet(setObject.setID)
+                self.body:SetActiveEditorSetID() -- set nil
+                SetManager:DeleteSet(setObject.setID)
+            end
+        }
+    }
 end
 
 ---The set list can be updated with a custom set list, if not provided the set manager will be used -> used for search
@@ -79,8 +112,13 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
         setFrame:Show()
         lastFrame = setFrame
         -- not the nicest solution but it works for now, we overwrite the OnClick function to set the active editor set and hope we dont need to update the set list too often
-        setFrame:SetScript("OnClick", function()
-            self:ToggleActiveSet(setObject.setID)
+        setFrame:SetScript("OnClick", function(buttonFrame, button)
+            if button == "LeftButton" then
+                self:ToggleActiveSet(setObject.setID)
+            else
+                local menuTemplate = self:GetSetEntryMenuTemplate(setObject)
+                MapPinEnhanced:GenerateMenu(buttonFrame, menuTemplate)
+            end
         end)
     end
 end

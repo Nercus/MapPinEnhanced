@@ -16,4 +16,5 @@
     <Include file="basics/ButtonIcon.xml" />
     <Include file="ScrollableTextarea.xml" />
     <Include file="PopupDialog.xml" />
+    <Include file="MenuInput.xml" />
 </Ui>

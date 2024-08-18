@@ -141,6 +141,12 @@ function SetManager:AddSet(name, overrideSetID, restore)
     return set
 end
 
+function SetManager:ExportSet(setID)
+    local set = self.Sets[setID]
+    if not set then return end
+    MapPinEnhanced:ShowExportFrameForSet(setID)
+end
+
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     SetManager:RestoreSets()
 end)

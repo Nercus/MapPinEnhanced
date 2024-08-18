@@ -20,6 +20,8 @@ local L = MapPinEnhanced.L
 ---@field UpdatePin fun(self, setPinID:UUID, key:string, value:any)
 ---@field GetPinByID fun(self, setPinID:UUID):setPinData
 ---@field RemovePinByID fun(self, pinsetID:UUID)
+---@field LoadSet fun(override:boolean?)
+---@field CreateMenu fun(parentFrame:Frame)
 ---@field SetName fun(self, newName:string)
 ---@field GetPinsByOrder fun():setPinData[]
 ---@field Delete fun()
@@ -173,8 +175,51 @@ function SetFactory:CreateSet(name, id)
         setEditorEntry:SetTitle(newName)
     end
 
+    ---@type AnyMenuEntry[]
+    local menuTemplate = {
+        {
+            type = "template",
+            template = "MapPinEnhancedInputTemplate",
+            initializer = function(frame)
+                ---@cast frame MapPinEnhancedInputMixin
+                frame:Setup({
+                    default = name,
+                    init = function() return name end,
+                    onChange = function(value)
+                        SetManager:UpdateSetNameByID(setID, value)
+                    end
+                })
+            end
+        },
+        {
+            type = "divider"
+        },
+        {
+            type = "button",
+            label = L["Load Set"],
+            onClick = function()
+                LoadSet(IsShiftKeyDown())
+            end
+        },
+        {
+            type = "button",
+            label = L["Export Set"],
+            onClick = function()
+                MapPinEnhanced.editorWindow.setView.sideBar:ToggleActiveSet(setID, true)
+                SetManager:ExportSet(setID)
+            end
+        },
+        {
+            type = "button",
+            label = L["Delete Set"],
+            onClick = function()
+                SetManager:DeleteSet(setID)
+            end
+        }
+    }
 
     local function CreateMenu(parentFrame)
+        MapPinEnhanced:GenerateMenu(parentFrame, menuTemplate)
     end
 
     local function HandleClick(buttonFrame, button)
@@ -206,7 +251,9 @@ function SetFactory:CreateSet(name, id)
         GetAllPinData = GetAllPinData,
         GetPinCount = GetPinCount,
         GetPinsByOrder = GetPinsByOrder,
+        CreateMenu = CreateMenu,
         Delete = Delete,
+        LoadSet = LoadSet,
         GetRawSetData = GetRawSetData,
         trackerSetEntry = trackerSetEntry,
         setEditorEntry = setEditorEntry

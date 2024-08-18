@@ -140,3 +140,15 @@ end
 function MapPinEnhancedSetEditorViewBodyMixin:GetActiveEditorSetID()
     return self.activeEditorSet
 end
+
+function MapPinEnhancedSetEditorViewBodyMixin:ExportSet(setID)
+    self:SetActiveEditorSetID(setID)
+    self.importExportFrame:ShowExportFrame()
+end
+
+function MapPinEnhanced:ShowExportFrameForSet(setID)
+    if self.editorWindow.setView.body.ExportSet then
+        self.editorWindow:Open()
+        self.editorWindow.setView.body:ExportSet(setID)
+    end
+end
