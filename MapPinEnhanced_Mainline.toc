@@ -6,6 +6,8 @@
 ## Notes: Enhances the functionality of the map pin
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
 ## SavedVariables: MapPinEnhancedDB
+## X-Curse-Project-ID: 441677
+## X-Wago-ID: RqGZqqKd
 
 libs\_imports.xml
 MapPinEnhanced.lua
