@@ -9,14 +9,12 @@ local MapPinEnhanced = select(2, ...)
 ---@field distantText FontString
 MapPinEnhancedSuperTrackedPinMixin = {}
 MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
+---@type table?
+MapPinEnhancedSuperTrackedPinMixin.queuedTracking = nil
 
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 local L = MapPinEnhanced.L
-
-function MapPinEnhancedSuperTrackedPinMixin:Clear()
-    self:Hide()
-end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     self:UpdateTextVisibility()
@@ -181,6 +179,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     -- screenWidthHalf = GetScreenWidth() / 2
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
+    self:RegisterEvent("SUPER_TRACKING_CHANGED")
     self.hooked = false
 end
 
@@ -189,6 +188,17 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
         self.navFrameCreated = true;
     elseif event == "NAVIGATION_FRAME_DESTROYED" then
         self.navFrameCreated = false;
+    elseif event == "SUPER_TRACKING_CHANGED" then
+        local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+        if isSuperTrackingCorpse then
+            self:Hide()
+            return
+        else
+            if self.queuedTracking then
+                self:ShowPin(self.queuedTracking)
+                self.queuedTracking = nil
+            end
+        end
     elseif event == "QUEST_POI_UPDATE" then
         C_Timer.After(0.1, function()
             local PinManager = MapPinEnhanced:GetModule("PinManager")
@@ -197,26 +207,35 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
     end
 end
 
+function MapPinEnhancedSuperTrackedPinMixin:ShowPin(pinData)
+    if not pinData then
+        self:Hide()
+        return
+    end
+    self:UnlockHighlight()
+    self:Setup(pinData)
+    self:SetTrackedTexture()
+    self:UpdateTimeText(nil)
+    local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+    if trackingCorpse then
+        self.queuedTracking = pinData
+        self:Hide()
+        return
+    end
+    if not self:IsShown() and not trackingCorpse then
+        self:Show()
+    end
+end
+
 ---------------------------------------------------------------------------
 
 ---@param pinData pinData | nil if nil, the super tracked pin will be hidden
----@param timeToTarget number?
-function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
+function MapPinEnhanced:SetSuperTrackedPin(pinData)
     if not self.SuperTrackedPin then
         self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
             "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
     end
-    if not pinData then
-        self.SuperTrackedPin:Clear()
-        return
-    end
-    self.SuperTrackedPin:UnlockHighlight()
-    self.SuperTrackedPin:Setup(pinData)
-    self.SuperTrackedPin:SetTrackedTexture()
-    self.SuperTrackedPin:UpdateTimeText(timeToTarget)
-    if not self.SuperTrackedPin:IsShown() then
-        self.SuperTrackedPin:Show()
-    end
+    self.SuperTrackedPin:ShowPin(pinData)
 end
 
 function MapPinEnhanced:GetSuperTrackedPin()
