@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 local PinProvider = MapPinEnhanced:CreateModule("PinProvider")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
-local GetMouseFoci = GetMouseFoci
 
 ---------------------------------------------------------------------------
 

@@ -96,7 +96,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function EnableDistanceCheck()
         local function UpdateDistance()
-            self:UpdateDistance(pinData.persistent, isClose, OnDistanceClose, OnDistanceFar)
+            self:UpdateDistance(isClose, OnDistanceClose, OnDistanceFar)
         end
         trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
         ManualDistanceCheck()

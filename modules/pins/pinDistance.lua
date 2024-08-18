@@ -3,27 +3,27 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 ---@type {distance: number, time: number}[]
 local distanceCache = {}
 local throttle_interval = 1
 local lastDistance = 0
 local lastUpdate = nil
+local IsSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+local GetDistance = C_Navigation.GetDistance()
 
-
----@param isPersistent boolean
 ---@param isClose boolean?
 ---@param OnDistanceClose function
 ---@param OnDistanceFar function
-function PinFactory:UpdateDistance(isPersistent, isClose, OnDistanceClose, OnDistanceFar)
+function PinFactory:UpdateDistance(isClose, OnDistanceClose, OnDistanceFar)
     local currentTime = GetTime()
     -- Check if we need to update based on throttle interval
     if not lastUpdate or currentTime - lastUpdate > throttle_interval then
-        local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+        ---@type boolean
+        local isSuperTrackingUserWaypoint = IsSuperTrackingUserWaypoint()
         if not isSuperTrackingUserWaypoint then return end
-
-        local distance = C_Navigation.GetDistance()
+        ---@type number
+        local distance = GetDistance()
         if distance == 0 then return end            -- No distance to get to the waypoint
         if lastDistance == distance then return end -- No need to update if the distance is the same
         lastDistance = distance

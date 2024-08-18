@@ -2,13 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 
 --@do-not-package@
-local EnableAllAddOns = C_AddOns.EnableAllAddOns
-local DisableAllAddOns = C_AddOns.DisableAllAddOns
-local EnableAddOn = C_AddOns.EnableAddOn
-local DisableAddOn = C_AddOns.DisableAddOn
-local IsAddOnLoaded = C_AddOns.IsAddOnLoaded
-local GetNumAddOns = C_AddOns.GetNumAddOns
-local GetAddOnInfo = C_AddOns.GetAddOnInfo
 ---@type function
 local ReloadUI = C_UI.Reload
 
@@ -25,7 +18,7 @@ function MapPinEnhanced:Debug(...)
         table.insert(preFiredQueue, { args })
         return
     end
-    if (IsAddOnLoaded("DevTool") == false) then
+    if (C_AddOns.IsAddOnLoaded("DevTool") == false) then
         C_Timer.After(1, function()
             MapPinEnhanced:Debug(args)
         end)
@@ -84,21 +77,21 @@ local devAddonList = {
 
 local function loadDevAddons(isDev)
     if not isDev then
-        DisableAddOn(MapPinEnhanced.addonName)
+        C_AddOns.DisableAddOn(MapPinEnhanced.addonName)
         local loadedAddons = MapPinEnhanced:GetVar("loadedAddons") or {}
         if #loadedAddons == 0 then
-            EnableAllAddOns()
+            C_AddOns.EnableAllAddOns()
             return
         end
         for i = 1, #loadedAddons do
             local name = loadedAddons[i] ---@type string
-            EnableAddOn(name)
+            C_AddOns.EnableAddOn(name)
         end
     else
-        DisableAllAddOns()
+        C_AddOns.DisableAllAddOns()
         for i = 1, #devAddonList do
             local name = devAddonList[i]
-            EnableAddOn(name)
+            C_AddOns.EnableAddOn(name)
         end
     end
 end
@@ -246,8 +239,8 @@ local function loadDevMode(_, loadedAddon)
     else
         -- check what addons are loaded right now and save them
         local loadedAddons = {}
-        for i = 1, GetNumAddOns() do
-            local name, _, _, _, reason = GetAddOnInfo(i)
+        for i = 1, C_AddOns.GetNumAddOns() do
+            local name, _, _, _, reason = C_AddOns.GetAddOnInfo(i)
             if reason ~= "DISABLED" then
                 table.insert(loadedAddons, name)
             end

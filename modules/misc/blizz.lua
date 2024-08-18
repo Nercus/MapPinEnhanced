@@ -3,12 +3,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Blizz
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 
-local CreateUIMapPointFromCoordinates = UiMapPoint.CreateFromCoordinates
-local SetUserWaypoint = C_Map.SetUserWaypoint
-local CanSetUserWaypointOnMap = C_Map.CanSetUserWaypointOnMap
-local TimerAfter = C_Timer.After
-local SuperTrackSetSuperTrackedUserWaypoint = C_SuperTrack.SetSuperTrackedUserWaypoint
-
 ---------------------------------------------------------------------------
 
 ---Wrapper for the current map the player is on
@@ -28,7 +22,7 @@ end
 ---@param y number
 ---@param mapID number
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
-    if not CanSetUserWaypointOnMap(mapID) then
+    if not C_Map.CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)
         MapPinEnhanced:Notify("Cannot set waypoint on " .. mapInfo.name, "ERROR")
         return
@@ -40,10 +34,10 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
         C_Map.ClearUserWaypoint()
     end
 
-    local uiMapPoint = CreateUIMapPointFromCoordinates(mapID, x, y, 0)
-    SetUserWaypoint(uiMapPoint)
-    TimerAfter(0.1, function()
-        SuperTrackSetSuperTrackedUserWaypoint(true)
+    local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
+    C_Map.SetUserWaypoint(uiMapPoint)
+    C_Timer.After(0.1, function()
+        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     end)
 end
 

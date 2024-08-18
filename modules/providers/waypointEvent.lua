@@ -5,8 +5,6 @@ local MapPinEnhanced = select(2, ...)
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
-local GetUserWaypoint = C_Map.GetUserWaypoint
-
 local blockEvent = false
 
 ---------------------------------------------------------------------------
@@ -15,7 +13,7 @@ local blockEvent = false
 local function OnUserWaypoint()
     if blockEvent then return end -- as super tracking a pin triggers this event we need to block it so we don't get into an infinite loop
 
-    local wp = GetUserWaypoint()
+    local wp = C_Map.GetUserWaypoint()
     if not wp then return end
     blockEvent = true
 
