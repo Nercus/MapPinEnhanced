@@ -141,7 +141,8 @@ end
 --     end
 -- end
 
-function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
+local function AddOptions()
+    local self = MapPinEnhanced:GetSuperTrackedPin()
     local Blizz = MapPinEnhanced:GetModule("Blizz")
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
@@ -212,12 +213,15 @@ function MapPinEnhancedSuperTrackedPinMixin:AddOptions()
     })
 end
 
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    AddOptions()
+end)
+
+
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     -- screenWidthHalf = GetScreenWidth() / 2
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
-
-    self:AddOptions()
     self.hooked = false
 end
 
@@ -254,4 +258,12 @@ function MapPinEnhanced:SetSuperTrackedPin(pinData, timeToTarget)
     if not self.SuperTrackedPin:IsShown() then
         self.SuperTrackedPin:Show()
     end
+end
+
+function MapPinEnhanced:GetSuperTrackedPin()
+    if not self.SuperTrackedPin then
+        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
+            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
+    end
+    return self.SuperTrackedPin
 end

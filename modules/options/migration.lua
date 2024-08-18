@@ -90,6 +90,7 @@ function MapPinEnhanced:UpdateVersionInfo()
     if not MapPinEnhanced.lastVersion or MapPinEnhanced.lastVersion ~= currentVersion then
         MapPinEnhanced:SaveVar("version", currentVersion)
         MapPinEnhanced:PrintHelp() -- show the help message after a new upate
+        C_Map.ClearUserWaypoint()  -- we always clear the waypoint on init after a new update
     end
     Options:MigrateOptionByVersion(self.lastVersion or 0)
 end
