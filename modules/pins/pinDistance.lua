@@ -9,8 +9,8 @@ local distanceCache = {}
 local throttle_interval = 1
 local lastDistance = 0
 local lastUpdate = nil
-local IsSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
-local GetDistance = C_Navigation.GetDistance()
+local IsSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint
+local GetDistance = C_Navigation.GetDistance
 
 ---@param isClose boolean?
 ---@param OnDistanceClose function
