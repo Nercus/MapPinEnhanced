@@ -76,9 +76,7 @@ function MapPinEnhancedSuperTrackedPinMixin:SetTitle(overrideTitle)
     MapPinEnhancedBasePinMixin.SetTitle(self, overrideTitle)
     self:UpdateTextVisibility()
     -- set title width dynamically based on the title
-    local numCharacters = string.len(self.title:GetText())
-    local width = numCharacters * 8
-    self.title:SetWidth(width)
+    self.title:SetWidth(0)
     local stringWidth = self.title:GetStringWidth()
     if stringWidth > SUPERTRACKEDPIN_TITLE_MAX_WIDTH then
         stringWidth = SUPERTRACKEDPIN_TITLE_MAX_WIDTH

@@ -109,9 +109,7 @@ end
 function MapPinEnhancedBasePinMixin:SetPersistentState(isPersistent)
     if isPersistent then
         self.persistentIcon:Show()
-        local offsetX = self.titlePosition == 'LEFT' and -10 or self.titlePosition == 'RIGHT' and 10 or 0
-        local offsetY = self.titlePosition == 'TOP' and 10 or self.titlePosition == 'BOTTOM' and -10 or 0
-        self:SetTitlePosition(self.titlePosition, (self.titleXOffset or 0) + offsetX, (self.titleYOffset or 0) + offsetY)
+        self:SetTitlePosition(self.titlePosition, (self.titleXOffset or 0) + 10, (self.titleYOffset or 0) + 0)
     else
         self.persistentIcon:Hide()
         self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
