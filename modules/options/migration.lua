@@ -74,25 +74,20 @@ function Options:MigrateOptionByVersion(oldVersion)
     end
 end
 
---- check if this version is a new version and return the last version
-function MapPinEnhanced:IsNewVersion()
-    local currentVersion = MapPinEnhanced.version
-    local lastVersion = MapPinEnhanced:GetVar("version")
-    if not lastVersion or lastVersion ~= currentVersion then
-        return lastVersion
-    end
-end
-
 function MapPinEnhanced:UpdateVersionInfo()
-    if MapPinEnhanced.lastVersion then return end -- only update once
-    MapPinEnhanced.lastVersion = MapPinEnhanced:GetVar("version") --[[@as number]]
-    local currentVersion = MapPinEnhanced.version
-    if not MapPinEnhanced.lastVersion or MapPinEnhanced.lastVersion ~= currentVersion then
-        MapPinEnhanced:SaveVar("version", currentVersion)
-        MapPinEnhanced:PrintHelp() -- show the help message after a new upate
-        C_Map.ClearUserWaypoint()  -- we always clear the waypoint on init after a new update
+    if self.lastVersion then return end -- only update once
+    self.lastVersion = self:GetVar("version") --[[@as number]]
+    local currentVersion = self.version
+    if not self.lastVersion or self.lastVersion ~= currentVersion then
+        self:SaveVar("version", currentVersion)
+        self:PrintHelp()          -- show the help message after a new upate
+        C_Map.ClearUserWaypoint() -- we always clear the waypoint on init after a new update
+        local PinManager = self:GetModule("PinManager")
+        PinManager:UntrackTrackedPin()
     end
     Options:MigrateOptionByVersion(self.lastVersion or 0)
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", MapPinEnhanced.UpdateVersionInfo)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    MapPinEnhanced:UpdateVersionInfo()
+end)

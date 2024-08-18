@@ -86,7 +86,7 @@ function MapPinEnhanced:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
-    self:Print(L["TomTom is loaded! You could experience some unexpected behavior."])
+    self:Print(L["TomTom is loaded! You may experience some unexpected behavior."])
 end
 
 ---------------------------------------------------------------------------

@@ -134,7 +134,7 @@ function PinManager:UntrackTrackedPin()
     if not trackedPin then
         return
     end
-    trackedPin:Untrack()
+    trackedPin.Untrack()
 end
 
 function PinManager:ClearPins()

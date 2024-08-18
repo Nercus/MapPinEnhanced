@@ -63,8 +63,8 @@ L["Toggle Editor"] = "Toggle Editor"
 L["Toggle minimap button"] = "Toggle minimap button"
 L["Toggle persistent"] = "Toggle persistent"
 L["Toggle tracker"] = "Toggle tracker"
-L["TomTom is loaded! You could experience some unexpected behavior."] =
-"TomTom is loaded! You could experience some unexpected behavior."
+L["TomTom is loaded! You may experience some unexpected behavior."] =
+"TomTom is loaded! You may experience some unexpected behavior."
 L["Tracker"] = "Tracker"
 L["X"] = "X"
 L["Y"] = "Y"
@@ -97,3 +97,5 @@ L["Edit Set Name"] = "Edit Set Name"
 L["Click to change color"] = "Click to change color"
 L["Shift click to Share to chat"] = "Shift click to Share to chat"
 L['Set "%s" loaded'] = 'Set "%s" loaded'
+L["Click to load set"] = "Click to load set"
+L["Shift-Click to load and override all pins"] = "Shift-Click to load and override all pins"

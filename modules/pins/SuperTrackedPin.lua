@@ -181,6 +181,8 @@ function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
     self:RegisterEvent("SUPER_TRACKING_CHANGED")
     self.hooked = false
+    C_Map.ClearUserWaypoint()
+    self:Hide()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
