@@ -14,4 +14,5 @@
     <Script file="textures.lua" />
     <Script file="helpers.lua" />
     <Script file="dialog.lua" />
+    <Script file="menu.lua" />
 </Ui>
