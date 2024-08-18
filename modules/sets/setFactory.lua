@@ -231,6 +231,7 @@ function SetFactory:CreateSet(name, id)
     end
 
     trackerSetEntry:SetScript("OnClick", HandleClick)
+    trackerSetEntry.tooltip = L["Click to load set"] .. "\n" .. L["Shift-Click to load and override all pins"]
 
 
     local function GetRawSetData()

@@ -4,6 +4,7 @@
     <Script file="button.lua" />
 
     <Button name="MapPinEnhancedButtonTemplate" mixin="MapPinEnhancedButtonMixin" virtual="true"
+        propagateMouseInput="Motion"
         inherits="MapPinEnhancedButtonRedTemplate">
         <Size x="200" y="30" />
     </Button>

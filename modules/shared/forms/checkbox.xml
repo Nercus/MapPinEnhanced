@@ -4,6 +4,7 @@
     <Script file="checkbox.lua" />
 
     <CheckButton name="MapPinEnhancedCheckboxTemplate" mixin="MapPinEnhancedCheckboxMixin"
+        propagateMouseInput="Motion"
         virtual="true">
         <Size x="30" y="30" />
         <NormalTexture atlas="checkbox-minimal" />

@@ -4,7 +4,7 @@
     <Script file="colorpicker.lua" />
 
     <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin"
-        virtual="true" enableMouse="true">
+        virtual="true" enableMouse="true" propagateMouseInput="Motion">
         <Size x="84" y="20" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="-1">

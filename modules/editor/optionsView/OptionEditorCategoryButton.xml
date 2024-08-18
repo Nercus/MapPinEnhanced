@@ -18,7 +18,7 @@
             <Layer level="BACKGROUND">
                 <Texture atlas="common-dropdown-bg" alpha="0.5" setAllPoints="true"
                     alphaMode="ADD">
-                    <Color r="1" g="0.82" b="0" />
+                    <Color r="1" g="1" b="1" />
                     <Anchors>
                         <Anchor point="TOPLEFT" y="5" />
                         <Anchor point="BOTTOMRIGHT" y="-5" />
@@ -26,10 +26,7 @@
                 </Texture>
                 <Texture parentKey="highlight" atlas="common-dropdown-bg" setAllPoints="true"
                     hidden="true">
-                    <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="0.82" b="0" a="1" />
-                        <MaxColor r="1" g="0.82" b="0" a="0" />
-                    </Gradient>
+                    <Color r="1" g="0.82" b="0" a="0.8" />
                     <Anchors>
                         <Anchor point="TOPLEFT" y="5" />
                         <Anchor point="BOTTOMRIGHT" y="-5" />

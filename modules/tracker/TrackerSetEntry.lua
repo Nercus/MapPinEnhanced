@@ -1,13 +1,8 @@
 -- Template: file://./TrackerSetEntry.xml#
----@class MapPinEnhanced
-local MapPinEnhanced = select(2, ...)
-
-local L = MapPinEnhanced.L
-
-
 ---@class MapPinEnhancedTrackerSetEntryMixin : Button
 ---@field title FontString
 ---@field highlight Texture
+---@field tooltip string?
 MapPinEnhancedTrackerSetEntryMixin = {}
 
 function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex() end -- not used right now
@@ -28,10 +23,10 @@ function MapPinEnhancedTrackerSetEntryMixin:SetInactive()
 end
 
 function MapPinEnhancedTrackerSetEntryMixin:ShowTooltip()
+    if not self.tooltip then return end
     ---@type string
-    local tooltip = L["Click to load set"] .. "\n" .. L["Shift-Click to load and override all pins"]
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:SetText(tooltip)
+    GameTooltip:SetText(self.tooltip)
     GameTooltip:Show()
 end
 

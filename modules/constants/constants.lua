@@ -19,7 +19,6 @@ CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(235, 15, 14, 1),   colorName = "Red" },
     { color = CreateColorFromBytes(237, 114, 63, 1),  colorName = "Orange" },
     { color = CreateColorFromBytes(235, 183, 139, 1), colorName = "Pale" },
-    { color = CreateColorFromBytes(255, 255, 255, 1), colorName = "Custom" },
 }
 
 CONSTANTS.PIN_COLORS_BY_NAME = {
@@ -32,7 +31,6 @@ CONSTANTS.PIN_COLORS_BY_NAME = {
     ["Red"] = CreateColorFromBytes(235, 15, 14, 1),
     ["Orange"] = CreateColorFromBytes(237, 114, 63, 1),
     ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
-    ["Custom"] = CreateColorFromBytes(255, 255, 255, 1),
 }
 
 CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "." or ","

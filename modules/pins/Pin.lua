@@ -164,6 +164,13 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     assert(trackedTexture, "Tracked texture not found")
     self.untrackedTexture = untrackedTexture
     self.trackedTexture = trackedTexture
-    local r, g, b, a = CONSTANTS.PIN_COLORS_BY_NAME[color]:GetRGBA()
+    local pinColor = CONSTANTS.PIN_COLORS_BY_NAME[color]
+    ---@type number, number, number, number?
+    local r, g, b, a
+    if pinColor then
+        r, g, b, a = pinColor:GetRGBA()
+    else
+        r, g, b, a = 1, 1, 1, 1
+    end
     self.swirlTexture:SetVertexColor(r, g, b, a)
 end

@@ -99,3 +99,4 @@ L["Shift click to Share to chat"] = "Shift click to Share to chat"
 L['Set "%s" loaded'] = 'Set "%s" loaded'
 L["Click to load set"] = "Click to load set"
 L["Shift-Click to load and override all pins"] = "Shift-Click to load and override all pins"
+L["No Pins to export."] = "No Pins to export."

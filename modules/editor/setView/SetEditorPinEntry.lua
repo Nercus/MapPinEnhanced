@@ -21,6 +21,8 @@ local L = MapPinEnhanced.L
 ---@field pinOptions MapPinEnhancedSelectMixin
 ---@field onChangeCallback function
 ---@field deleteButton Button
+---@field MapHelperMenuTemplate AnyMenuEntry[]
+---@field existingZoneNames table<string, number>
 ---@field initValues table<'mapID' | 'xCoord' | 'yCoord' | 'title' | 'color', string | number>
 MapPinEnhancedSetEditorPinEntryMixin = {}
 
@@ -173,19 +175,15 @@ function MapPinEnhancedSetEditorPinEntryMixin:OpenColorMenu()
     end)
 end
 
----@type table<string, number>
-local existingZoneNames = {}
----@type AnyMenuEntry[]
-local MapHelperMenuTemplate = {}
 ---@param parentTable table
 ---@param children UiMapDetails[]
 ---@param parent UiMapDetails?
-local function GenerateMenuTemplateFromMapData(parentTable, children, parent)
+function MapPinEnhancedSetEditorPinEntryMixin:GenerateMenuTemplateFromMapData(parentTable, children, parent)
     if parent then
         table.insert(parentTable, {
             type = "button",
             label = parent.name,
-            onClick = function(self)
+            onClick = function()
                 self.mapID:SetText(tostring(parent.mapID))
                 self:OnChange('title', self.title:GetText())
             end
@@ -197,10 +195,10 @@ local function GenerateMenuTemplateFromMapData(parentTable, children, parent)
     for _, child in ipairs(children) do
         if C_Map.CanSetUserWaypointOnMap(child.mapID) then
             local mapName = child.name
-            if existingZoneNames[mapName] then
-                mapName = string.format("%s (%d)", mapName, existingZoneNames[mapName] + 1)
+            if self.existingZoneNames[mapName] then
+                mapName = string.format("%s (%d)", mapName, self.existingZoneNames[mapName] + 1)
             end
-            existingZoneNames[child.name] = (existingZoneNames[child.name] or 0) + 1
+            self.existingZoneNames[child.name] = (self.existingZoneNames[child.name] or 0) + 1
             local nextChildren = C_Map.GetMapChildrenInfo(child.mapID, 3)
             if nextChildren and #nextChildren > 0 then
                 table.insert(parentTable, {
@@ -209,12 +207,12 @@ local function GenerateMenuTemplateFromMapData(parentTable, children, parent)
                     entries = {}
                 })
                 local mapInfo = C_Map.GetMapInfo(child.mapID)
-                GenerateMenuTemplateFromMapData(parentTable[#parentTable].entries, nextChildren, mapInfo)
+                self:GenerateMenuTemplateFromMapData(parentTable[#parentTable].entries, nextChildren, mapInfo)
             else
                 table.insert(parentTable, {
                     type = "button",
                     label = mapName,
-                    onClick = function(self)
+                    onClick = function()
                         self.mapID:SetText(tostring(child.mapID))
                         self:OnChange('title', self.title:GetText())
                     end
@@ -223,9 +221,17 @@ local function GenerateMenuTemplateFromMapData(parentTable, children, parent)
         end
     end
 end
+
 local continents = C_Map.GetMapChildrenInfo(947, 2) -- 947 is Azeroth, 2 is continent
-GenerateMenuTemplateFromMapData(MapHelperMenuTemplate, continents)
+function MapPinEnhancedSetEditorPinEntryMixin:GetMenuTemplate()
+    self.existingZoneNames = {}
+    self.MapHelperMenuTemplate = {}
+    if #self.MapHelperMenuTemplate == 0 then
+        self:GenerateMenuTemplateFromMapData(self.MapHelperMenuTemplate, continents)
+    end
+    return self.MapHelperMenuTemplate
+end
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
-    MapPinEnhanced:GenerateMenu(self.mapID.mapSelection, MapHelperMenuTemplate)
+    MapPinEnhanced:GenerateMenu(self.mapID.mapSelection, self:GetMenuTemplate())
 end

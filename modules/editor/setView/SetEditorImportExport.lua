@@ -67,6 +67,13 @@ end
 function MapPinEnhancedSetEditorImportExportFrameMixin:UpdateExportType(isCommand)
     local activeSet = self.body:GetActiveSet()
     if not activeSet then return end
+    local pinCount = activeSet:GetPinCount()
+    if pinCount == 0 then
+        self.editBox:SetText(L["No Pins to export."])
+        self.editBox:HighlightText()
+        self.editBox:SetFocus()
+        return
+    end
     local PinProvider = MapPinEnhanced:GetModule("PinProvider")
     if isCommand then
         local setPinData = activeSet:GetAllPinData()
@@ -131,6 +138,7 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:ConfirmImport()
     else
         self:ImportCommands(text)
     end
+    self:HideImportFrame()
 end
 
 function MapPinEnhancedSetEditorImportExportFrameMixin:OnImportTextChanged()

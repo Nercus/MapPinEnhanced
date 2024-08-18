@@ -4,6 +4,7 @@
     <Script file="input.lua" />
 
     <EditBox name="MapPinEnhancedInputTemplate" mixin="MapPinEnhancedInputMixin" virtual="true"
+        propagateMouseInput="Motion"
         font="GameFontNormal" autoFocus="false">
         <TextInsets left="5" />
         <Size x="200" y="28" />

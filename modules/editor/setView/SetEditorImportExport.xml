@@ -11,7 +11,7 @@
         <Size x="590" y="1" />
         <Anchors>
             <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
-                relativeKey="$parent.header" x="5" y="-5" />
+                relativeKey="$parent.header" x="15" y="-5" />
             <Anchor point="BOTTOMRIGHT" x="-15" y="15" />
         </Anchors>
         <Frames>

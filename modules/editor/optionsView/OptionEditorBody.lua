@@ -132,9 +132,8 @@ function MapPinEnhancedOptionEditorViewBodyMixin:SetActiveCategory(category)
             optionElement:SetPoint("TOPLEFT", lastOptionElement, "BOTTOMLEFT", 0, -GAP)
             optionElement:SetPoint("TOPRIGHT", lastOptionElement, "BOTTOMRIGHT", 0, -GAP)
         else
-            optionElement:SetPoint("TOP", self.scrollFrame.Child, 0, -10)
-            optionElement:SetPoint("LEFT", self.scrollFrame.Child, 0, -10)
-            optionElement:SetPoint("RIGHT", self.scrollFrame.Child, 0, -10)
+            optionElement:SetPoint("TOPLEFT", self.scrollFrame.Child, "TOPLEFT", 10, -GAP)
+            optionElement:SetPoint("TOPRIGHT", self.scrollFrame.Child, "TOPRIGHT", 15, -GAP)
         end
         optionElement:SetParent(self.scrollFrame.Child)
         optionElement:Show()
