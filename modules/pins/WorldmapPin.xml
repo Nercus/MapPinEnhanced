@@ -7,37 +7,36 @@
         inherits="MapPinEnhancedBasePinTemplate"
         registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="25" y="25" />
-        <Frames>
-            <Frame parentKey="CreationPulse" hidden="true">
-                <Size x="27" y="27" />
-                <Anchors>
-                    <Anchor point="CENTER" />
-                </Anchors>
-                <Layers>
-                    <Layer level="OVERLAY">
-                        <Texture parentKey="LevelUpPulse" alpha="1" alphaMode="ADD"
-                            atlas="groupfinder-eye-highlight" useAtlasSize="true">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
-                <Animations>
-                    <AnimationGroup parentKey="Anim" setToFinalAlpha="true">
-                        <Scale smoothing="NONE" duration=".25" order="1"
-                            fromScaleX="0.29" fromScaleY="0.29" toScaleX=".7" toScaleY=".7" />
-                        <Alpha duration="0.2" order="1" fromAlpha="0" toAlpha=".6" />
-                        <Alpha duration="0.3" order="2" fromAlpha=".6" toAlpha="0" />
-                        <Scripts>
-                            <OnFinished>
-                                self:GetParent():Hide();
-                            </OnFinished>
-                        </Scripts>
-                    </AnimationGroup>
-                </Animations>
-            </Frame>
-        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture alphaMode="ADD"
+                    parentKey="pulseTexture"
+                    atlas="groupfinder-eye-highlight">
+                    <Size x="60" y="60" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="pulse" setToFinalAlpha="true">
+                            <Scale smoothing="NONE" duration=".25" order="1"
+                                fromScaleX="0.10" fromScaleY="0.10" toScaleX="1" toScaleY="1" />
+                            <Alpha duration="0.2" order="1" fromAlpha="0" toAlpha=".6"
+                                smoothing="IN_OUT" />
+                            <Alpha duration="0.3" order="2" fromAlpha=".6" toAlpha="0"
+                                smoothing="IN_OUT" />
+                            <Scripts>
+                                <OnPlay>
+                                    self:GetParent():Show()
+                                </OnPlay>
+                                <OnFinished>
+                                    self:GetParent():Hide()
+                                </OnFinished>
+                            </Scripts>
+                        </AnimationGroup>
+                    </Animations>
+                </Texture>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

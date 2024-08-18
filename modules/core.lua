@@ -107,8 +107,3 @@ function MapPinEnhanced:Initialize()
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", MapPinEnhanced.Initialize)
-
-
-C_Timer.After(1, function()
-    MapPinEnhanced:ToggleEditorWindow()
-end)

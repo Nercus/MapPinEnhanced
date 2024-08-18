@@ -2,6 +2,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class SwirlTexture : Texture
+---@field swirl AnimationGroup
+---@field show AnimationGroup
+---@field hide AnimationGroup
+
+
 ---@class MapPinEnhancedBasePinMixin : Frame, PropagateMouseMotion, PropagateMouseClicks
 ---@field background Texture
 ---@field highlight Texture
@@ -18,6 +24,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field titleFont string | nil
 ---@field trackedTexture string
 ---@field untrackedTexture string
+---@field swirlTexture SwirlTexture
 MapPinEnhancedBasePinMixin = {}
 
 
@@ -96,7 +103,6 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     if not self.pinData then
         return
     end
-
     self:SetPinColor(self.pinData.color) -- set default color
     self:SetTitle()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
@@ -104,6 +110,7 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetPinIcon()
     self:SetUntrackedTexture()
     self:SetPersistentState(self.pinData.persistent)
+    self.swirlTexture:Hide()
 end
 
 function MapPinEnhancedBasePinMixin:SetPersistentState(isPersistent)
@@ -114,6 +121,23 @@ function MapPinEnhancedBasePinMixin:SetPersistentState(isPersistent)
         self.persistentIcon:Hide()
         self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
     end
+end
+
+function MapPinEnhancedBasePinMixin:ShowSwirlForSeconds(seconds)
+    self:ShowSwirl()
+    C_Timer.After(seconds, function()
+        self:HideSwirl()
+    end)
+end
+
+function MapPinEnhancedBasePinMixin:ShowSwirl()
+    self.swirlTexture:Show()
+    self.swirlTexture.swirl:Play()
+    self.swirlTexture.show:Play()
+end
+
+function MapPinEnhancedBasePinMixin:HideSwirl()
+    self.swirlTexture.hide:Play()
 end
 
 function MapPinEnhancedBasePinMixin:SetTrackedTexture()
@@ -140,4 +164,6 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     assert(trackedTexture, "Tracked texture not found")
     self.untrackedTexture = untrackedTexture
     self.trackedTexture = trackedTexture
+    local r, g, b, a = CONSTANTS.PIN_COLORS_BY_NAME[color]:GetRGBA()
+    self.swirlTexture:SetVertexColor(r, g, b, a)
 end

@@ -1,10 +1,10 @@
 -- Template: file://./WorldmapPin.xml
----@class CreationPulseFrame : Frame
----@field Anim Animation
+---@class PulseTexture : Texture
+---@field pulse AnimationGroup
 
 
 ---@class MapPinEnhancedWorldMapPinMixin : MapPinEnhancedBasePinMixin, Button
----@field CreationPulse CreationPulseFrame
+---@field pulseTexture PulseTexture
 MapPinEnhancedWorldMapPinMixin = {}
 
 -- there is no other way right now to always show animation just for world map pins and also on reused frames (onload is not triggering on reused frames)
@@ -22,9 +22,8 @@ function MapPinEnhancedWorldMapPinMixin:Setup(pinData)
     self:SetPinIcon()
     self:SetUntrackedTexture()
 
-    self.CreationPulse.Anim:Stop(); --in case there's one playing already
-    self.CreationPulse:Show();
-    self.CreationPulse.Anim:Play();
+    self.pulseTexture.pulse:Stop(); --in case there's one playing already
+    self.pulseTexture.pulse:Play();
 end
 
 function MapPinEnhancedWorldMapPinMixin:ShowTooltip()

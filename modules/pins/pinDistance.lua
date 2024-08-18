@@ -12,9 +12,11 @@ local lastDistance = 0
 local lastUpdate = nil
 
 
----@param pinID string
----@param pinData table
-function PinFactory:UpdateDistance(pinID, pinData)
+---@param isPersistent boolean
+---@param isClose boolean?
+---@param OnDistanceClose function
+---@param OnDistanceFar function
+function PinFactory:UpdateDistance(isPersistent, isClose, OnDistanceClose, OnDistanceFar)
     local currentTime = GetTime()
     -- Check if we need to update based on throttle interval
     if not lastUpdate or currentTime - lastUpdate > throttle_interval then
@@ -70,15 +72,14 @@ function PinFactory:UpdateDistance(pinID, pinData)
         if MapPinEnhanced.SuperTrackedPin then
             MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
         end
-        if distance < 20 then
-            if pinData.persistent then
-                MapPinEnhanced.SuperTrackedPin:LockHighlight()
+
+        local newIsClose = distance < 20
+
+        if isClose ~= newIsClose then
+            if newIsClose then
+                OnDistanceClose()
             else
-                PinManager:RemovePinByID(pinID)
-            end
-        else
-            if pinData.persistent then
-                MapPinEnhanced.SuperTrackedPin:UnlockHighlight()
+                OnDistanceFar()
             end
         end
         lastUpdate = currentTime

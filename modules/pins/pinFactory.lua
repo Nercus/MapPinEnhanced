@@ -53,7 +53,8 @@ function PinFactory:CreatePin(initPinData, pinID)
     local trackerPinEntry = TrackerPinEntryPool:Acquire()
     ---@cast trackerPinEntry MapPinEnhancedTrackerPinEntryMixin
 
-
+    local isClose = nil
+    local isTracked = false
     local pinData = initPinData
     local x, y, mapID = pinData.x, pinData.y, pinData.mapID
 
@@ -69,18 +70,41 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
+    local function OnDistanceClose()
+        isClose = true
+        MapPinEnhanced.SuperTrackedPin:ShowSwirl()
+        if pinData.persistent then return end
+        if not isTracked then return end
+        PinManager:RemovePinByID(pinID)
+    end
+
+    local function OnDistanceFar()
+        isClose = false
+        MapPinEnhanced.SuperTrackedPin:HideSwirl()
+    end
+
+    local function ManualDistanceCheck()
+        local distance = C_Navigation.GetDistance()
+        if distance < 20 and distance ~= 0 then
+            OnDistanceClose()
+        else
+            OnDistanceFar()
+        end
+    end
+
     local function EnableDistanceCheck()
         local function UpdateDistance()
-            self:UpdateDistance(pinID, pinData)
+            self:UpdateDistance(pinData.persistent, isClose, OnDistanceClose, OnDistanceFar)
         end
         trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
+        ManualDistanceCheck()
     end
 
     local function DisableDistanceCheck()
         trackerPinEntry:SetScript("OnUpdate", nil)
     end
 
-    local isTracked = false
+
     local function Track()
         local success = PinManager:TrackPinByID(pinID)
         if not success then
@@ -207,6 +231,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             return
         end
         OpenWorldMap(mapID);
+        worldmapPin:ShowSwirlForSeconds(3)
     end
 
 
@@ -217,6 +242,8 @@ function PinFactory:CreatePin(initPinData, pinID)
             MapPinEnhanced.SuperTrackedPin:SetPersistentState(pinData.persistent)
         end
         PinManager:PersistPins()
+        isClose = not isClose -- set to inverse to trigger the distance check
+        ManualDistanceCheck()
     end
 
 
