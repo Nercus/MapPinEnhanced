@@ -24,7 +24,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field headerTexture Texture
 
 
----@alias TrackerView 'Pins' | 'Sets' | 'Import'
+---@alias TrackerView 'Pins' | 'Sets' | 'Temporary Import'
 
 ---@class MapPinEnhancedTrackerFrameMixin : Frame
 ---@field entries table<number, MapPinEnhancedTrackerSetEntryMixin> | table<number, MapPinEnhancedTrackerPinEntryMixin>
@@ -138,7 +138,7 @@ end
 
 ---@param forceUpdate? boolean force an update
 function MapPinEnhancedTrackerFrameMixin:SetImportView(forceUpdate)
-    if self.activeView == "Import" and not forceUpdate then return end
+    if self.activeView == "Temporary Import" and not forceUpdate then return end
     self:ClearEntries()
     local cancelButton = self.scrollFrame.Child.cancelButton
     local importEditBox = self.scrollFrame.Child.importEditBox
@@ -166,7 +166,7 @@ function MapPinEnhancedTrackerFrameMixin:SetImportView(forceUpdate)
     end)
     importButton:Disable()
     table.insert(self.entries, importButton)
-    self.activeView = "Import"
+    self.activeView = "Temporary Import"
     self:UpdateEntriesPosition()
 end
 
@@ -308,7 +308,7 @@ function MapPinEnhancedTrackerFrameMixin:OnLoad()
     end)
     self.scrollFrame.ScrollBar:SetAlpha(0)
     self:AddOptions()
-    self.scrollFrame.Child.importButton:SetText(L["Import"])
+    self.scrollFrame.Child.importButton:SetText(L["Temporary Import"])
     self.scrollFrame.Child.cancelButton:SetText(L["Cancel"])
     self.header.closebutton.tooltip = L["Close Tracker"]
     self.header.editorToggle.tooltip = L["Toggle Editor"]
@@ -349,7 +349,7 @@ end
 function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
     local headerHeight = self.header:GetHeight()
     local newHeight = headerHeight + (scrollFrameHeight or 0)
-    if self:GetActiveView() == "Import" then
+    if self:GetActiveView() == "Temporary Import" then
         self:SetHeight(newHeight)
         return
     end
@@ -446,7 +446,7 @@ function MapPinEnhanced:SetPinTrackerView(viewType)
     if not self.pinTracker then
         self:TogglePinTracker(true)
     end
-    if viewType == "Import" then
+    if viewType == "Temporary Import" then
         self.pinTracker:SetImportView()
         return
     end
@@ -481,7 +481,7 @@ end, L["Toggle Tracker"])
 
 MapPinEnhanced:AddSlashCommand(L["Import"]:lower(), function()
     MapPinEnhanced:TogglePinTracker(true)
-    MapPinEnhanced:SetPinTrackerView("Import")
+    MapPinEnhanced:SetPinTrackerView("Temporary Import")
 end, L["Import a Set"])
 
 MapPinEnhanced:AddSlashCommand(L["Clear"]:lower(), function()
