@@ -17,6 +17,7 @@ L["Automatic Visibility"] = "Automatic Visibility"
 L["Automatic"] = "Automatic"
 L["Back"] = "Back"
 L["Background Opacity"] = "Background Opacity"
+L["Block World Quest Tracking"] = "Block World Quest Tracking"
 L["Block Automatic World Quest Tracking when a Pin is Tracked"] =
 "Block Automatic World Quest Tracking when a Pin is Tracked"
 L["Can't Show on Map in Combat"] = "Can't Show on Map in Combat"
