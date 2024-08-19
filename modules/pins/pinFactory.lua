@@ -290,7 +290,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                         return
                     end
                     local newSet = SetManager:AddSet(cachedSetName)
-                    newSet:AddPin(pinData)
+                    newSet:AddPin(pinData, nil, true)
                     local inputContext = MenuInputContext.MouseButton;
                     confirmNewSetElementDescription:Pick(inputContext, "LeftButton");
                     frame:ClearFocusOnKey()
@@ -326,7 +326,7 @@ function PinFactory:CreatePin(initPinData, pinID)
                             return
                         end
                         local newSet = SetManager:AddSet(cachedSetName)
-                        newSet:AddPin(pinData)
+                        newSet:AddPin(pinData, nil, true)
                         local inputContext = MenuInputContext.MouseButton;
                         confirmNewSetElementDescription:Pick(inputContext, buttonName);
                     end,
@@ -340,7 +340,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             setSubmenu:CreateDivider()
             for _, set in pairs(sets) do
                 setSubmenu:CreateButton(set.name, function()
-                    set:AddPin(pinData)
+                    set:AddPin(pinData, nil, true)
                 end)
             end
 
