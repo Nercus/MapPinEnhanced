@@ -13,7 +13,7 @@ local DEFAULTS = {
         ["showEstimatedTime"] = true,
         ["showTitle"] = true,
         -- ["showCenteredHighlight"] = true,
-        ["overrideWorldQuestTracking"] = false
+        ["blockWorldQuestTracking"] = false
     },
     ["minimapIcon"] = {
         ["hide"] = false,

@@ -144,18 +144,17 @@ local function AddOptions()
 
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
-        label = L["Override World Quest Tracking"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("floatingPin", "overrideWorldQuestTracking") --[[@as boolean]] end,
-        description =
-        "When enabled, the tracked pin will be retracted when a world quest is tracked (flying over the world quest on the map).",
+        label = L["Block World Quest Tracking"],
+        default = MapPinEnhanced:GetDefault("floatingPin", "blockWorldQuestTracking") --[[@as boolean]],
+        init = function() return MapPinEnhanced:GetVar("floatingPin", "blockWorldQuestTracking") --[[@as boolean]] end,
+        description = L["Block Automatic World Quest Tracking when a Pin is Tracked"],
         onChange = function(value)
             if value then
                 self:RegisterEvent("QUEST_POI_UPDATE");
             else
                 self:UnregisterEvent("QUEST_POI_UPDATE");
             end
-            MapPinEnhanced:SaveVar("floatingPin", "overrideWorldQuestTracking", value)
+            MapPinEnhanced:SaveVar("floatingPin", "blockWorldQuestTracking", value)
         end
     })
     Options:RegisterCheckbox({
