@@ -248,7 +248,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
-            local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
+            local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedMenuInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:Setup({
@@ -280,11 +280,10 @@ function PinFactory:CreatePin(initPinData, pinID)
             setSubmenu:CreateTitle(L["Enter New Set Name"])
             local cachedSetName = ""
             local confirmNewSetElementDescription
-            local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedInputTemplate") --[[@as BaseMenuDescriptionMixin]]
+            local newSetNameElementDescription = setSubmenu:CreateTemplate("MapPinEnhancedMenuInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             newSetNameElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:SetSize(150, 20)
-                frame:SetScript("OnEscapePressed", function() frame:ClearFocusOnKey() end)
                 frame:SetScript("OnEnterPressed", function()
                     if cachedSetName == "" then
                         return

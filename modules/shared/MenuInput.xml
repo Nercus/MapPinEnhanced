@@ -8,9 +8,10 @@
         <Scripts>
             <OnEnterPressed>
                 self:ClearFocusOnKey()
+                Menu.GetManager():CloseMenus()
             </OnEnterPressed>
             <OnEscapePressed>
-                self:ClearFocusOnKey()
+                self:ClearFocusOnKey(true)
             </OnEscapePressed>
         </Scripts>
     </EditBox>

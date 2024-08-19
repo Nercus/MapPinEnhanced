@@ -65,9 +65,12 @@ function MapPinEnhancedInputMixin:Setup(optionData)
     end)
 end
 
-function MapPinEnhancedInputMixin:ClearFocusOnKey()
-    self:SetPropagateKeyboardInput(true)
+---@param passThrough boolean?
+function MapPinEnhancedInputMixin:ClearFocusOnKey(passThrough)
     self:ClearFocus()
+    self:HighlightText()
+    if not passThrough then return end
+    self:SetPropagateKeyboardInput(true)
     C_Timer.After(0.1, function()
         self:SetPropagateKeyboardInput(false)
     end)
