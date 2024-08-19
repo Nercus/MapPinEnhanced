@@ -20,13 +20,13 @@ function MapPinEnhancedSuperTrackedPinMixin:OnClampedStateChanged()
     self:UpdateTextVisibility()
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:SetPersistentState(isPersistent)
+function MapPinEnhancedSuperTrackedPinMixin:SetLockState(isLock)
     if not self.pinData then return end
     local hasDefaultTitle = self.pinData.title == CONSTANTS.DEFAULT_PIN_NAME
-    if isPersistent and not hasDefaultTitle then
-        self.persistentIcon:Show()
+    if isLock and not hasDefaultTitle then
+        self.lockIcon:Show()
     else
-        self.persistentIcon:Hide()
+        self.lockIcon:Hide()
     end
     self:UpdateTextVisibility()
 end
@@ -36,12 +36,12 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local showTime = MapPinEnhanced:GetVar("floatingPin", "showEstimatedTime")
     local showTitle = MapPinEnhanced:GetVar("floatingPin", "showTitle")
     local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
-    local isPersistent = self.pinData and self.pinData.persistent
+    local isLock = self.pinData and self.pinData.lock
 
     if clamped or (not showTime and not showTitle) then -- clamped or dont show title and time
         self.title:Hide()
         self.distantText:Hide()
-        self.persistentIcon:Hide()
+        self.lockIcon:Hide()
         return
     end
 
@@ -51,7 +51,7 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     end
     if not showTitle then -- dont show title but show time
         self.title:Hide()
-        self.persistentIcon:Hide()
+        self.lockIcon:Hide()
         return
     end
 
@@ -59,11 +59,11 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     self.distantText:Show()
     if hasDefaultTitle then -- options has title enabled, but the title is the default title
         self.title:Hide()
-        self.persistentIcon:Hide()
+        self.lockIcon:Hide()
         return
     end
 
-    self.persistentIcon:SetShown(isPersistent)
+    self.lockIcon:SetShown(isLock)
     self.title:Show()
 end
 

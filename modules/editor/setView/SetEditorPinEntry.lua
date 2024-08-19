@@ -51,7 +51,7 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetPin(pin)
         yCoord = Round(pin.y * 10000) / 10000,
         title = pin.title,
     }
-    self:SetupPinOptions(pin.persistent)
+    self:SetupPinOptions(pin.lock)
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:SetChangeCallback(callback)
@@ -122,15 +122,15 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
     self:SetupPinButton()
 end
 
-function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
+function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initLock)
     ---@type SelectOptions
     local selectOptions = {
         default = {
-            persistent = false,
+            lock = false,
         },
         init = function()
             return {
-                persistent = initPersistent
+                lock = initLock
             }
         end,
         onChange = function(value)
@@ -142,8 +142,8 @@ function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initPersistent)
         end,
         options = {
             {
-                label = L["Persistent"],
-                value = "persistent",
+                label = L["Lock Pin"],
+                value = "lock",
                 type = "checkbox"
             },
         }

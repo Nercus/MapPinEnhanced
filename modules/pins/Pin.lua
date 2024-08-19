@@ -12,7 +12,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field background Texture
 ---@field highlight Texture
 ---@field shadow Texture
----@field persistentIcon Texture
+---@field lockIcon Texture
 ---@field texture Texture
 ---@field icon Texture
 ---@field iconMask MaskTexture
@@ -109,16 +109,16 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetTitleFont(self.titleFont or "GameFontNormal")
     self:SetPinIcon()
     self:SetUntrackedTexture()
-    self:SetPersistentState(self.pinData.persistent)
+    self:SetLockState(self.pinData.lock)
     self.swirlTexture:Hide()
 end
 
-function MapPinEnhancedBasePinMixin:SetPersistentState(isPersistent)
-    if isPersistent then
-        self.persistentIcon:Show()
+function MapPinEnhancedBasePinMixin:SetLockState(isLock)
+    if isLock then
+        self.lockIcon:Show()
         self:SetTitlePosition(self.titlePosition, (self.titleXOffset or 0) + 10, (self.titleYOffset or 0) + 0)
     else
-        self.persistentIcon:Hide()
+        self.lockIcon:Hide()
         self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
     end
 end

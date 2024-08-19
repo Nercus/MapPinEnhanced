@@ -23,7 +23,7 @@
                     justifyV="MIDDLE" justifyH="CENTER" wordwrap="false">
                     <Size x="0" y="12" />
                 </FontString>
-                <Texture parentKey="persistentIcon" hidden="true"
+                <Texture parentKey="lockIcon" hidden="true"
                     file="Interface/AddOns/MapPinEnhanced/assets/icons/IconLock_Yellow.png">
                     <Size x="12" y="12" />
                     <Anchors>

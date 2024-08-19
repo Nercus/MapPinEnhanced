@@ -19,6 +19,6 @@ MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
         x = x,
         y = y,
         setTracked = true,
-        persistent = true,
+        lock = true,
     })
 end, L["Create a Pin at Your Current Location"])

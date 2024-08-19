@@ -20,7 +20,7 @@ local L = MapPinEnhanced.L
 
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
 
----@alias changeableKeys 'mapID' | 'x' | 'y' | 'title' | 'color' | 'persistent' | 'delete'
+---@alias changeableKeys 'mapID' | 'x' | 'y' | 'title' | 'color' | 'lock' | 'delete'
 
 ---@param set SetObject
 ---@param setpinID UUID

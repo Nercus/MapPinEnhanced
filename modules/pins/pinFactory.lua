@@ -25,7 +25,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field texture string? an optional texture to use for the pin this will override the color
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
 ---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
----@field persistent boolean? if true, the pin will be not be removed automatically when it has been reached
+---@field lock boolean? if true, the pin will be not be removed automatically when it has been reached
 ---@field order number? the order of the pin: the lower the number, the higher the pin will be displayed on the tracker -> if not set, the pin will be displayed at the end of the tracker
 
 
@@ -75,7 +75,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         MapPinEnhanced.SuperTrackedPin:ShowSwirl()
         local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
         if trackingCorpse then return end
-        if pinData.persistent then return end
+        if pinData.lock then return end
         if not isTracked then return end
         PinManager:RemovePinByID(pinID)
     end
@@ -234,11 +234,11 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
 
-    local function TogglePersistentState()
-        pinData.persistent = not pinData.persistent
-        trackerPinEntry.Pin:SetPersistentState(pinData.persistent)
+    local function ToggleLockState()
+        pinData.lock = not pinData.lock
+        trackerPinEntry.Pin:SetLockState(pinData.lock)
         if MapPinEnhanced.SuperTrackedPin then
-            MapPinEnhanced.SuperTrackedPin:SetPersistentState(pinData.persistent)
+            MapPinEnhanced.SuperTrackedPin:SetLockState(pinData.lock)
         end
         PinManager:PersistPins()
         isClose = not isClose -- set to inverse to trigger the distance check
@@ -345,8 +345,9 @@ function PinFactory:CreatePin(initPinData, pinID)
             end
 
             rootDescription:CreateButton(L["Show on Map"], ShowOnMap)
-            rootDescription:CreateButton(L["Toggle Persistent"], function()
-                TogglePersistentState()
+            local lockToggleLabel = pinData.lock and L["Unlock Pin"] or L["Lock Pin"]
+            rootDescription:CreateButton(lockToggleLabel, function()
+                ToggleLockState()
             end)
 
             rootDescription:CreateButton(L["Share to Chat"], function() SharePin() end)
