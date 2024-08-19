@@ -16,7 +16,7 @@ local L = MapPinEnhanced.L
 ---@class SetObject
 ---@field setID UUID
 ---@field name string
----@field AddPin fun(self, pinData:pinData, restore:boolean?)
+---@field AddPin fun(self, pinData:pinData, restore:boolean?, override:boolean?)
 ---@field UpdatePin fun(self, setPinID:UUID, key:string, value:any)
 ---@field GetPinByID fun(self, setPinID:UUID):setPinData
 ---@field RemovePinByID fun(self, pinsetID:UUID)
@@ -45,7 +45,7 @@ local L = MapPinEnhanced.L
 function SetFactory:CreateSet(name, id)
     ---@type table<UUID, setPinData>
     local pins = {}
-    ---@type table<string, boolean>
+    ---@type table<string, UUID>
     local positions = {}
     local setID = id
 
@@ -66,26 +66,6 @@ function SetFactory:CreateSet(name, id)
         return count
     end
 
-    ---@param pinData pinData
-    ---@param restore boolean?
-    local function AddPin(_, pinData, restore)
-        local positonString = PinManager:GetPositionStringForPin(pinData)
-        if positions[positonString] then
-            return
-        end
-        local setPinID = MapPinEnhanced:GenerateUUID("setpin")
-        pinData.setTracked = false
-        if not pinData.order then
-            pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
-        end
-        pins[setPinID] = { pinData = pinData, setID = setID, setPinID = setPinID }
-        if not restore then
-            SetManager:PersistSets(setID)
-        end
-        positions[positonString] = true
-        CB:Fire('UpdateSetList')
-    end
-
     ---@param pinsetID UUID
     ---@param key 'mapID' | 'x' | 'y' | 'title'
     ---@param value any
@@ -98,6 +78,38 @@ function SetFactory:CreateSet(name, id)
         pin.pinData[key] = value
         SetManager:PersistSets(setID)
     end
+
+
+    ---@param pinData pinData
+    ---@param restore boolean?
+    ---@param override boolean?
+    local function AddPin(_, pinData, restore, override)
+        local positonString = PinManager:GetPositionStringForPin(pinData)
+        if positions[positonString] and not override then
+            return
+        end
+        if override then
+            local oldPin = pins[positions[positonString]]
+            if oldPin then
+                pins[oldPin.setPinID] = nil
+            end
+            AddPin(_, pinData)
+        end
+
+        local setPinID = MapPinEnhanced:GenerateUUID("setpin")
+        pinData.setTracked = false
+        if not pinData.order then
+            pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
+        end
+        pins[setPinID] = { pinData = pinData, setID = setID, setPinID = setPinID }
+        if not restore then
+            SetManager:PersistSets(setID)
+        end
+        positions[positonString] = setPinID
+        CB:Fire('UpdateSetList')
+    end
+
+
 
     ---@param setPinID UUID
     ---@return setPinData
@@ -166,6 +178,7 @@ function SetFactory:CreateSet(name, id)
         for _, setPinData in pairs(pins) do
             PinManager:AddPin(setPinData.pinData)
         end
+        PinManager:TrackLastTrackedPin()
         MapPinEnhanced:SetPinTrackerView('Pins')
         MapPinEnhanced:Notify(string.format(L["Set \"%s\" Loaded"], name))
     end
