@@ -2,8 +2,6 @@ name: Package Beta
 
 on:
   push:
-    branches:
-      - dev
     tags:
       - "**-alpha**"
       - "**-beta**"
