@@ -40,6 +40,20 @@
                 <Anchors>
                     <Anchor point="LEFT" x="15" />
                 </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="common-dropdown-bg">
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="0" g="0" b="0" a="1" />
+                                <MaxColor r="0" g="0" b="0" a="0" />
+                            </Gradient>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-10" y="1" />
+                                <Anchor point="BOTTOMRIGHT" x="-5" y="-5" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
                 <Frames>
                     <Button parentKey="editButton" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="13" y="13" />
