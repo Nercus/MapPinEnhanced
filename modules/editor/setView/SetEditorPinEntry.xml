@@ -60,7 +60,6 @@
                         <KeyValues>
                             <KeyValue key="icon"
                                 value="Interface/AddOns/MapPinEnhanced/assets/icons/IconMap_Yellow.png" />
-                            <KeyValue key="tooltip" value="Show Pins" />
                         </KeyValues>
                     </Button>
                 </Frames>
