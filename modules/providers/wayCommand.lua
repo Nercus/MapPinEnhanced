@@ -139,7 +139,7 @@ function PinProvider:DeserializeWayString(wayString)
     local data = {}
     for line in wayString:gmatch("[^\r\n]+") do
         local title, mapID, coords = self:ParseWayStringToData(line)
-        if title and mapID and coords then
+        if title and mapID and coords and coords[1] and coords[2] then
             table.insert(data, {
                 title = title,
                 mapID = mapID,

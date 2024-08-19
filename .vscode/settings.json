@@ -53,6 +53,7 @@
         "global": "Error"
     },
     "Lua.diagnostics.globals": [
-        "TomTom"
+        "TomTom",
+        "ScrollFrame_OnLoad"
     ],
 }

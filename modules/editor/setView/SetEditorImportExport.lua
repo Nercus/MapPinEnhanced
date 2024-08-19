@@ -151,6 +151,8 @@ function MapPinEnhancedSetEditorImportExportFrameMixin:OnImportTextChanged()
 end
 
 function MapPinEnhancedSetEditorImportExportFrameMixin:OnLoad()
+    ---@diagnostic disable-next-line: no-unknown
+    ScrollFrame_OnLoad(self)
     self.body = self:GetParent() --[[@as MapPinEnhancedSetEditorViewBodyMixin]]
 
     self.exportTypeToggle.label:SetText(L["Export as Commands"])
