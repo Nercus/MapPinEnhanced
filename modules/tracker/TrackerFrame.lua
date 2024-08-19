@@ -37,6 +37,7 @@ MapPinEnhancedTrackerFrameMixin = {}
 MapPinEnhancedTrackerFrameMixin.entries = {}
 
 local L = MapPinEnhanced.L
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 local PIN_VIEW_ICON = "Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png"
 local SET_VIEW_ICON = "Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yellow.png"
@@ -159,8 +160,19 @@ function MapPinEnhancedTrackerFrameMixin:SetImportView(forceUpdate)
         end
     end)
     importButton:SetScript("OnClick", function()
-        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
         local wayString = importEditBox.editBox:GetText()
+        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+        if string.find(wayString, CONSTANTS.PREFIX) then
+            local importedData = PinProvider:DeserializeImport(wayString) --[[@as reducedSet]]
+            if not importedData then return end
+            local PinManager = MapPinEnhanced:GetModule("PinManager")
+            for _, pinData in pairs(importedData.pins) do
+                PinManager:AddPin(pinData)
+            end
+            self:SetPinView()
+            return
+        end
+
         PinProvider:ImportFromWayString(wayString)
         self:SetPinView()
     end)
@@ -361,6 +373,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
     if newHeight > maxHeight then
         newHeight = maxHeight
     end
+    newHeight = Round(newHeight)
     self:SetHeight(newHeight)
     self.scrollFrame.ScrollBar:Update()
 end
