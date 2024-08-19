@@ -192,7 +192,7 @@ function SetFactory:CreateSet(name, id)
     local menuTemplate = {
         {
             type = "template",
-            template = "MapPinEnhancedInputTemplate",
+            template = "MapPinEnhancedMenuInputTemplate",
             initializer = function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
                 frame:Setup({
