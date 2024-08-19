@@ -151,18 +151,31 @@ function PinProvider:DeserializeWayString(wayString)
     return data
 end
 
+function PinProvider:ImportSlashCommand(msg)
+    local title, mapID, coords = self:ParseWayStringToData(msg)
+    if mapID and coords then
+        PinManager:AddPin({
+            mapID = mapID,
+            x = coords[1] / 100,
+            y = coords[2] / 100,
+            title = title or CONSTANTS.DEFAULT_PIN_NAME,
+            setTracked = true,
+        })
+    end
+end
+
 ---create pins from a multiline wayString
 ---@param wayString string
 function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
     for line in wayString:gmatch("[^\r\n]+") do
         local title, mapID, coords = self:ParseWayStringToData(line)
-        if title and mapID and coords then
+        if mapID and coords then
             PinManager:AddPin({
                 mapID = mapID,
                 x = coords[1] / 100,
                 y = coords[2] / 100,
-                title = title or "Imported Waypoint",
+                title = title or CONSTANTS.DEFAULT_PIN_NAME,
             })
         end
     end

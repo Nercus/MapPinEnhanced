@@ -32,7 +32,8 @@ local function SlashCommandHandler(msg)
     if commandList[command] then
         pcall(commandList[command], unpack(args))
     else
-        MapPinEnhanced:PrintHelp()
+        local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+        PinProvider:ImportSlashCommand(msg)
     end
 end
 
