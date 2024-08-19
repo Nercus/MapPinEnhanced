@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 local LOCALE = MapPinEnhanced.locale
 
-if LOCALE ~= "zhCN" and LOCALE ~= "zhTW" then return end
+if LOCALE ~= "zhCN" then return end
 
 ---@class Locale
 local L = MapPinEnhanced.L
