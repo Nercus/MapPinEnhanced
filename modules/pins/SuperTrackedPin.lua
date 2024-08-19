@@ -28,6 +28,7 @@ function MapPinEnhancedSuperTrackedPinMixin:SetPersistentState(isPersistent)
     else
         self.persistentIcon:Hide()
     end
+    self:UpdateTextVisibility()
 end
 
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
