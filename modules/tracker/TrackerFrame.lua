@@ -208,7 +208,6 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:UpdatePinNumberingVisibility()
     local showNumbering = MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]]
-    if showNumbering == self.showNumbering then return end
     for _, entry in ipairs(self.entries) do
         if entry.SetEntryIndexVisibility then
             ---@cast entry MapPinEnhancedTrackerPinEntryMixin
@@ -413,6 +412,9 @@ function MapPinEnhancedTrackerFrameMixin:AddEntry(entry)
     -- REVIEW: might want to refactor this to avoid a update on all entry positions
     self:UpdateEntriesPosition()
     self:UpdateVisibility()
+    if self.activeView == 'Pins' then
+        self:UpdatePinNumberingVisibility()
+    end
 end
 
 function MapPinEnhancedTrackerFrameMixin:RemoveEntry(entry)
