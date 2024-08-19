@@ -153,7 +153,7 @@ end
 
 function PinProvider:ImportSlashCommand(msg)
     local title, mapID, coords = self:ParseWayStringToData(msg)
-    if mapID and coords then
+    if mapID and coords and coords[1] and coords[2] then
         PinManager:AddPin({
             mapID = mapID,
             x = coords[1] / 100,
@@ -170,7 +170,7 @@ function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
     for line in wayString:gmatch("[^\r\n]+") do
         local title, mapID, coords = self:ParseWayStringToData(line)
-        if mapID and coords then
+        if mapID and coords and coords[1] and coords[2] then
             PinManager:AddPin({
                 mapID = mapID,
                 x = coords[1] / 100,
