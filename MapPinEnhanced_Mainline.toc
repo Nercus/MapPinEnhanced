@@ -2,7 +2,7 @@
 ## Author: Nerc and Eminos
 ## Title: Map Pin Enhanced
 ## Version: 3.0.0
-## License: GNU General Public License v3.0
+## License: GNU General Public License v3.0 and CC BY-NC-ND 4.0
 ## Notes: Enhances the functionality of the map pin
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
 ## SavedVariables: MapPinEnhancedDB
