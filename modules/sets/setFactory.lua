@@ -92,8 +92,8 @@ function SetFactory:CreateSet(name, id)
             local oldPin = pins[positions[positonString]]
             if oldPin then
                 pins[oldPin.setPinID] = nil
+                AddPin(_, pinData)
             end
-            AddPin(_, pinData)
         end
 
         local setPinID = MapPinEnhanced:GenerateUUID("setpin")
