@@ -62,7 +62,7 @@
                         <Anchor point="LEFT" x="2" y="4" />
                     </Anchors>
                 </Texture>
-                <FontString parentKey="title" font="GameFontNormalLarge" justifyH="LEFT"
+                <FontString parentKey="title" font="GameFontNormal" justifyH="LEFT"
                     justifyV="MIDDLE">
                     <Size x="1" y="10" />
                     <Anchors>
