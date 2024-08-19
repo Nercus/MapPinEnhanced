@@ -7,6 +7,15 @@
   Map Pin Enhanced enhances the ingame waypoint system.
 </p>
 
+## Licensing Overview
+
+This project is dual-licensed. The code is available under the GPLv3 license, while the media assets are under a more restrictive license.
+
+- **Code:** Licensed under GNU General Public License v3.0 (GPLv3).
+- **Media Assets:** Licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+
+Please review the LICENSE file for more details.
+
 ## Features
 
 You can do these things with Map Pin Enhanced:
