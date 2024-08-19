@@ -11,7 +11,8 @@
             <KeyValue key="titleYOffset" value="9" />
         </KeyValues>
         <Frames>
-            <Frame parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate">
+            <Frame parentKey="Pin" inherits="MapPinEnhancedBasePinTemplate"
+                propagateMouseInput="Both">
                 <Anchors>
                     <Anchor point="LEFT" x="5" />
                 </Anchors>
