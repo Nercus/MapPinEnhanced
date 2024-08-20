@@ -30,12 +30,12 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
 
     local hasUserWaypoint = C_Map.HasUserWaypoint()
     if hasUserWaypoint then
-        C_SuperTrack.ClearAllSuperTracked()
         C_Map.ClearUserWaypoint()
     end
 
     local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     C_Map.SetUserWaypoint(uiMapPoint)
+    C_SuperTrack.ClearAllSuperTracked()
     C_Timer.After(0.1, function()
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     end)
