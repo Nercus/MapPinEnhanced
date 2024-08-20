@@ -2,7 +2,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedSelectMixin : Button,PropagateMouseMotion
+---@class MapPinEnhancedSelectMixin : DropdownButton,PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field Dropdown DropdownButton
 MapPinEnhancedSelectMixin = {}
@@ -28,11 +28,11 @@ end
 ---@param disabled boolean
 function MapPinEnhancedSelectMixin:SetDisabled(disabled)
     if disabled then
-        self.Dropdown:Disable()
-        self.Dropdown:SetAlpha(0.5)
+        self:Disable()
+        self:SetAlpha(0.5)
     else
-        self.Dropdown:Enable()
-        self.Dropdown:SetAlpha(1)
+        self:Enable()
+        self:SetAlpha(1)
     end
 end
 
@@ -76,13 +76,15 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
             elseif option.type == "spacer" then
                 rootDescription:CreateSpacer() -- always use built in default extent of 10
             elseif option.type == "checkbox" then
-                rootDescription:CreateCheckbox(option.label, IsSelectedCheckbox, SetSelectedCheckbox, index)
+                rootDescription:CreateCheckbox(option.label, IsSelectedCheckbox,
+                    SetSelectedCheckbox, index)
             elseif option.type == "radio" then
-                rootDescription:CreateRadio(option.label, IsSelectedRadio, SetSelectedRadio, index)
+                rootDescription:CreateRadio(option.label, IsSelectedRadio, SetSelectedRadio,
+                    index)
             end
         end
     end
-    self.Dropdown:SetupMenu(GeneratorFunction)
+    self:SetupMenu(GeneratorFunction)
     self:SetDisabled(optionData.disabledState)
     self:SetCallback(optionData.onChange)
 end

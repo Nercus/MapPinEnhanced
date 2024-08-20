@@ -39,7 +39,7 @@ function MapPinEnhancedOptionEditorViewBodyMixin:OnLoad()
     self.checkboxes = CreateFramePool("CheckButton", nil, "MapPinEnhancedCheckboxTemplate")
     self.colorpickers = CreateFramePool("ColorSelect", nil, "MapPinEnhancedColorpickerTemplate")
     self.inputs = CreateFramePool("EditBox", nil, "MapPinEnhancedInputTemplate")
-    self.selects = CreateFramePool("Frame", nil, "MapPinEnhancedSelectTemplate")
+    self.selects = CreateFramePool("DropdownButton", nil, "MapPinEnhancedSelectTemplate")
     self.sliders = CreateFramePool("Slider", nil, "MapPinEnhancedSliderTemplate")
     self.init = true
 
