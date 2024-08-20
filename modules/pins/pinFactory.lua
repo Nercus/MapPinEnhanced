@@ -62,7 +62,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     minimapPin:Setup(pinData)
     trackerPinEntry:Setup(pinData)
 
-    HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_ENCOUNTER")
+    HBDP:AddWorldMapIconMap(MapPinEnhanced, worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_BATTLEFIELD_FLAG")
     HBDP:AddMinimapIconMap(MapPinEnhanced, minimapPin, mapID, x, y, false, false)
 
     local function GetPinData()
