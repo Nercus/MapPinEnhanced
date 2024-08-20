@@ -119,7 +119,42 @@
                     <Anchor point="RIGHT" x="-10" />
                 </Anchors>
             </Button>
-            <Frame propagateMouseInput="Motion" parentKey="pinOptions"
+            <Frame parentKey="pinOptions" enableMouse="true" propagateMouseInput="Both">
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="10" />
+                    <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.deleteButton"
+                        x="-10" />
+                </Anchors>
+                <Frames>
+                    <CheckButton inherits="MapPinEnhancedCheckboxTemplate"
+                        parentKey="checkbox"
+                        clipChildren="false">
+                        <Size x="30" y="30" />
+                        <Anchors>
+                            <Anchor point="LEFT" x="5" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <FontString inherits="GameFontNormal" parentKey="label"
+                                    text="Lock Pin">
+                                    <Anchors>
+                                        <Anchor point="LEFT" relativePoint="RIGHT" x="2" />
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
+                        </Layers>
+                    </CheckButton>
+                </Frames>
+                <Scripts>
+                    <OnMouseDown>
+                        self.checkbox:SetChecked(not self.checkbox:GetChecked())
+                        if not self.checkbox.onChangeCallback then return end
+                        self.checkbox.onChangeCallback(self.checkbox:GetChecked())
+                    </OnMouseDown>
+                </Scripts>
+            </Frame>
+            <!-- <DropdownButton parentKey="pinOptions"
                 inherits="MapPinEnhancedSelectTemplate">
                 <Size x="1" y="30" />
                 <Anchors>
@@ -127,8 +162,7 @@
                     <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.deleteButton"
                         x="-10" />
                 </Anchors>
-            </Frame>
-
+            </DropdownButton> -->
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

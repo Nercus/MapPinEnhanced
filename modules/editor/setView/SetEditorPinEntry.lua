@@ -11,6 +11,13 @@ local L = MapPinEnhanced.L
 ---@class MapIDInputBox : MapPinEnhancedInputMixin
 ---@field mapSelection Button
 
+
+---@class MapPinEnhancedCheckboxMixinWithLabel : MapPinEnhancedCheckboxMixin
+---@field label FontString
+
+---@class PinOptionsCheckboxFrame : Frame
+---@field checkbox MapPinEnhancedCheckboxMixinWithLabel
+
 ---@class MapPinEnhancedSetEditorPinEntryMixin : Frame
 ---@field Pin MapPinEnhancedBasePinMixin
 ---@field currentFocus number
@@ -18,7 +25,7 @@ local L = MapPinEnhanced.L
 ---@field xCoord MapPinEnhancedInputMixin
 ---@field yCoord MapPinEnhancedInputMixin
 ---@field title MapPinEnhancedInputMixin
----@field pinOptions MapPinEnhancedSelectMixin
+---@field pinOptions PinOptionsCheckboxFrame
 ---@field onChangeCallback function
 ---@field deleteButton Button
 ---@field MapHelperMenuTemplate AnyMenuEntry[]
@@ -28,9 +35,6 @@ MapPinEnhancedSetEditorPinEntryMixin = {}
 
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
-local tonumber = tonumber
-local tostring = tostring
-local Round = Round
 
 
 ---@param pin pinData
@@ -120,35 +124,48 @@ function MapPinEnhancedSetEditorPinEntryMixin:OnLoad()
         self.onChangeCallback('delete', true)
     end)
     self:SetupPinButton()
+    self.pinOptions.checkbox.label:SetText(L["Lock Pin"])
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:SetupPinOptions(initLock)
-    ---@type SelectOptions
-    local selectOptions = {
-        default = {
-            lock = false,
-        },
+    -- ---@type SelectOptions
+    -- local selectOptions = {
+    --     default = {
+    --         lock = false,
+    --     },
+    --     init = function()
+    --         return {
+    --             lock = initLock
+    --         }
+    --     end,
+    --     onChange = function(value)
+    --         if not value then return end
+    --         if type(value) ~= "table" then return end
+    --         for optionKey, optionValue in pairs(value) do
+    --             self:OnChange(optionKey, optionValue)
+    --         end
+    --     end,
+    --     options = {
+    --         {
+    --             label = L["Lock Pin"],
+    --             value = "lock",
+    --             type = "checkbox"
+    --         },
+    --     }
+    -- }
+
+    ---@type CheckboxOptions
+    local checkboxOptions = {
+        default = initLock,
         init = function()
-            return {
-                lock = initLock
-            }
+            return initLock
         end,
         onChange = function(value)
-            if not value then return end
-            if type(value) ~= "table" then return end
-            for optionKey, optionValue in pairs(value) do
-                self:OnChange(optionKey, optionValue)
-            end
+            self:OnChange('lock', value)
         end,
-        options = {
-            {
-                label = L["Lock Pin"],
-                value = "lock",
-                type = "checkbox"
-            },
-        }
+        disabledState = false
     }
-    self.pinOptions:Setup(selectOptions)
+    self.pinOptions.checkbox:Setup(checkboxOptions)
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenColorMenu()

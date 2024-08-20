@@ -3,14 +3,11 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedSetEditorImportExportFrameMixin : ScrollableTextarea
----@field exportTypeToggle MapPinEnhancedExportTypeToggle
+---@field exportTypeToggle MapPinEnhancedCheckboxMixinWithLabel
 ---@field confirmImportButton Button
 ---@field cancelImportButton Button
 ---@field cancelExportButton Button
 MapPinEnhancedSetEditorImportExportFrameMixin = {}
-
----@class MapPinEnhancedExportTypeToggle : MapPinEnhancedCheckboxMixin
----@field label FontString
 
 local L = MapPinEnhanced.L
 local CONSTANTS = MapPinEnhanced.CONSTANTS
