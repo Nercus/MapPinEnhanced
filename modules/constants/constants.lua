@@ -33,7 +33,7 @@ CONSTANTS.PIN_COLORS_BY_NAME = {
     ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
 }
 
-CONSTANTS.DECIMAL_SEPARATOR = tonumber("0.5") and "." or ","
+CONSTANTS.DECIMAL_SEPARATOR = IsEuropeanNumbers() and "," or "."
 CONSTANTS.MENU_COLOR_BUTTON_PATTERN =
 "|TInterface\\AddOns\\MapPinEnhanced\\assets\\forms\\ColourPicker_Body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 CONSTANTS.COORDS_TEXT_PATTERN = "(%.2f, %.2f)"
