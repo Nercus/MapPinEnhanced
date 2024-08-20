@@ -230,7 +230,7 @@ function PinFactory:CreatePin(initPinData, pinID)
             return
         end
         OpenWorldMap(mapID);
-        worldmapPin:ShowSwirlForSeconds(3)
+        worldmapPin:ShowPulseForSeconds(3)
     end
 
 
@@ -378,7 +378,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
     trackerPinEntry:SetScript("OnMouseDown", HandleClicks)
-
+    ManualDistanceCheck()
 
 
     return {

@@ -7,6 +7,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field show AnimationGroup
 ---@field hide AnimationGroup
 
+---@class PulseHighlight : Texture
+---@field pulse AnimationGroup
 
 ---@class MapPinEnhancedBasePinMixin : Frame, PropagateMouseMotion, PropagateMouseClicks
 ---@field background Texture
@@ -25,6 +27,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field trackedTexture string
 ---@field untrackedTexture string
 ---@field swirlTexture SwirlTexture
+---@field pulseHighlight PulseHighlight
+---@field pulseTimer FunctionContainer | nil
 MapPinEnhancedBasePinMixin = {}
 
 
@@ -103,6 +107,7 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     if not self.pinData then
         return
     end
+    self.swirlTexture:Hide()
     self:SetPinColor(self.pinData.color) -- set default color
     self:SetTitle()
     self:SetTitlePosition(self.titlePosition, self.titleXOffset, self.titleYOffset)
@@ -110,7 +115,6 @@ function MapPinEnhancedBasePinMixin:Setup(pinData)
     self:SetPinIcon()
     self:SetUntrackedTexture()
     self:SetLockState(self.pinData.lock)
-    self.swirlTexture:Hide()
 end
 
 function MapPinEnhancedBasePinMixin:SetLockState(isLock)
@@ -123,14 +127,31 @@ function MapPinEnhancedBasePinMixin:SetLockState(isLock)
     end
 end
 
-function MapPinEnhancedBasePinMixin:ShowSwirlForSeconds(seconds)
-    self:ShowSwirl()
-    C_Timer.After(seconds, function()
-        self:HideSwirl()
+function MapPinEnhancedBasePinMixin:ShowPulseForSeconds(seconds)
+    if self.pulseTimer then
+        self.pulseTimer:Cancel()
+    end
+    self:ShowPulse()
+    self.pulseTimer = C_Timer.NewTicker(seconds, function()
+        self:HidePulse()
     end)
 end
 
+function MapPinEnhancedBasePinMixin:ShowPulse()
+    self.pulseHighlight.pulse:Stop()
+    self.pulseHighlight:Show()
+    self.pulseHighlight.pulse:Play()
+end
+
+function MapPinEnhancedBasePinMixin:HidePulse()
+    self.pulseHighlight:Hide()
+end
+
 function MapPinEnhancedBasePinMixin:ShowSwirl()
+    self.swirlTexture:Hide()
+    self.swirlTexture.swirl:Stop()
+    self.swirlTexture.show:Stop()
+    self.swirlTexture.hide:Stop()
     self.swirlTexture:Show()
     self.swirlTexture.swirl:Play()
     self.swirlTexture.show:Play()
@@ -173,4 +194,5 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
         r, g, b, a = 1, 1, 1, 1
     end
     self.swirlTexture:SetVertexColor(r, g, b, a)
+    self.pulseHighlight:SetVertexColor(r, g, b, a)
 end
