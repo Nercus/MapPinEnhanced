@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 
----@alias MenuEntryType "button" | "title" | "checkbox" | "radio" | "divider" | "spacer" | "template" | 'submenu'
+---@alias MenuEntryType "button" | "title" | "checkbox" | "radio" | "divider" | "spacer" | "template" | "submenu"
 
 ---@class MenuEntry
 ---@field type MenuEntryType
@@ -44,10 +44,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class MenuSubmenuEntry : MenuEntry
 ---@field type "submenu"
 ---@field label string
----@field entries AnyMenuEntry[]
+---@field entries AnyMenuEntry[] | function(): AnyMenuEntry[]
 
 
----@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry
+---@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry | MenuSubmenuEntry
 
 local function GenerateMenuElement(rootDescription, entry)
     if entry.type == "title" then
@@ -69,7 +69,7 @@ local function GenerateMenuElement(rootDescription, entry)
     elseif entry.type == "submenu" then
         local subMenuButton = rootDescription:CreateButton(entry.label) --[[@as BaseMenuDescriptionMixin]]
         ---@type AnyMenuEntry[]
-        local entries = entry.entries
+        local entries = type(entry.entries) == "function" and entry.entries() or entry.entries
         for _, subEntry in ipairs(entries) do
             GenerateMenuElement(subMenuButton, subEntry)
         end

@@ -12,6 +12,59 @@ MapPinEnhanced:CreateModule("Blizz")
 
 ---------------------------------------------------------------------------
 
+---@type AnyMenuEntry[]
+local MinimapButtonTemplate = {
+    {
+        type = "title",
+        label = MapPinEnhanced.nameVersionString,
+    },
+    {
+        type = "button",
+        label = L["Toggle Tracker"],
+        onClick = function()
+            MapPinEnhanced:TogglePinTracker()
+        end,
+    },
+    {
+        type = "button",
+        label = L["Toggle Editor"],
+        onClick = function()
+            MapPinEnhanced:ToggleEditorWindow()
+        end,
+    },
+    {
+        type = "submenu",
+        label = L["Load Set"],
+        entries = function()
+            local SetManager = MapPinEnhanced:GetModule("SetManager")
+            local sets = SetManager:GetSets()
+            ---@type MenuButtonEntry[]
+            local entries = {}
+            for _, set in pairs(sets) do
+                entries[#entries + 1] = {
+                    type = "button",
+                    label = set.name,
+                    onClick = function()
+                        set.LoadSet()
+                    end
+                }
+            end
+            return entries
+        end
+    },
+    {
+        type = "divider",
+    },
+    {
+        type = "button",
+        label = L["Hide Minimap Button"],
+        onClick = function()
+            MapPinEnhanced:ToggleMinimapButton()
+        end,
+    },
+}
+
+
 function MapPinEnhanced:ToggleMinimapButton(init)
     if not self.minimapIconCreated then
         local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(self.addonName, {
@@ -22,19 +75,7 @@ function MapPinEnhanced:ToggleMinimapButton(init)
                 if button == "LeftButton" then
                     self:TogglePinTracker()
                 elseif button == "RightButton" then
-                    MenuUtil.CreateContextMenu(owner, function(_, rootDescription)
-                        rootDescription:CreateTitle(MapPinEnhanced.nameVersionString)
-                        rootDescription:CreateButton(L["Toggle Tracker"], function()
-                            MapPinEnhanced:TogglePinTracker()
-                        end)
-                        rootDescription:CreateButton(L["Toggle Editor"], function()
-                            MapPinEnhanced:ToggleEditorWindow()
-                        end)
-                        rootDescription:CreateDivider()
-                        rootDescription:CreateButton(L["Hide Minimap Button"], function()
-                            MapPinEnhanced:ToggleMinimapButton()
-                        end)
-                    end)
+                    MapPinEnhanced:GenerateMenu(owner, MinimapButtonTemplate)
                 end
             end,
         })
