@@ -21,14 +21,14 @@ function SetManager:PersistSets(targetSetID)
     if targetSetID then
         local set = self.Sets[targetSetID]
         if not set then --set was deleted
-            MapPinEnhanced:DeleteVar("Sets", targetSetID)
+            MapPinEnhanced:DeleteVar("sets", targetSetID)
             return
         end
         local setTable = {
             name = set.name,
             pins = set:GetAllPinData()
         }
-        MapPinEnhanced:SaveVar("Sets", targetSetID, setTable)
+        MapPinEnhanced:SaveVar("sets", targetSetID, setTable)
         return
     end
     ---@type table<UUID, reducedSet>
@@ -39,11 +39,11 @@ function SetManager:PersistSets(targetSetID)
             pins = set:GetAllPinData()
         }
     end
-    MapPinEnhanced:SaveVar("Sets", reducedSets)
+    MapPinEnhanced:SaveVar("sets", reducedSets)
 end
 
 function SetManager:RestoreSets()
-    local reducedSets = MapPinEnhanced:GetVar("Sets") --[[@as table<UUID, reducedSet> | nil]]
+    local reducedSets = MapPinEnhanced:GetVar("sets") --[[@as table<UUID, reducedSet> | nil]]
     if not reducedSets then
         return
     end

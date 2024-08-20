@@ -87,7 +87,7 @@ function Blizz:OnSuperTrackingChanged()
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
     local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    MapPinEnhanced:SaveVar("SuperTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
+    MapPinEnhanced:SaveVar("superTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
     if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
 
     local PinManager = MapPinEnhanced:GetModule("PinManager")

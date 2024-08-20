@@ -89,9 +89,9 @@ function MapPinEnhanced:MigrateVar(prevKeys, newKeys)
         ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
-    local prevValue = self:GetVar(unpack(prevKeys))
-    if prevValue then
-        self:SaveVar(unpack(newKeys), prevValue)
-        self:DeleteVar(unpack(prevKeys))
+    local prevValue = self:GetVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
+    if prevValue ~= nil then
+        self:SaveVar(type(newKeys) == "table" and unpack(newKeys) or newKeys, prevValue)
+        self:DeleteVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
     end
 end

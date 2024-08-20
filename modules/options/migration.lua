@@ -65,6 +65,17 @@ local function MigratePriorTo300()
     MapPinEnhanced:DeleteVar("profiles")
 end
 
+local function MigrateBetaNaming()
+    local SuperTrackingOther = MapPinEnhanced:GetVar("SuperTrackingOther")
+    if SuperTrackingOther ~= nil then
+        MapPinEnhanced:MigrateVar("SuperTrackingOther", "superTrackingOther")
+    end
+
+    local sets = MapPinEnhanced:GetVar("Sets")
+    if not sets then return end
+    MapPinEnhanced:MigrateVar("Sets", "sets")
+end
+
 
 ---Migration function to handle changes in the saved variables
 ---@param oldVersion number
@@ -72,6 +83,7 @@ function Options:MigrateOptionByVersion(oldVersion)
     if oldVersion < 300 then -- versions before 3.0.0
         MigratePriorTo300()
     end
+    MigrateBetaNaming() -- NOTE: only keep this for some time, we expect that all beta testers have moved to a newer version quickly
 end
 
 function MapPinEnhanced:UpdateVersionInfo()
