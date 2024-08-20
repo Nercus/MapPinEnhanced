@@ -6,6 +6,7 @@ local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 ---@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
+local Blizz = MapPinEnhanced:GetModule("Blizz")
 
 local HBDP = MapPinEnhanced.HBDP
 local CONSTANTS = MapPinEnhanced.CONSTANTS
@@ -40,6 +41,7 @@ local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTracke
 ---@field IsTracked fun():boolean
 ---@field Remove fun()
 ---@field GetPinData fun():pinData
+---@field GetDistanceToPin fun():number
 
 
 ---@param initPinData pinData
@@ -69,6 +71,15 @@ function PinFactory:CreatePin(initPinData, pinID)
         return pinData
     end
 
+    local function GetDistanceToPin()
+        local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
+        if not playerMap or not playerX or not playerY then return 0 end
+        local distance = MapPinEnhanced.HBD:GetZoneDistance(playerMap, playerX, playerY, pinData.mapID, pinData.x,
+            pinData.y)
+        if not distance then return 0 end
+        return distance
+    end
+
 
     local function OnDistanceClose()
         isClose = true
@@ -86,7 +97,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
     local function ManualDistanceCheck()
-        local distance = C_Navigation.GetDistance()
+        local distance = GetDistanceToPin()
         if distance < 20 and distance ~= 0 then
             OnDistanceClose()
         else
@@ -96,7 +107,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function EnableDistanceCheck()
         local function UpdateDistance()
-            self:UpdateDistance(isClose, OnDistanceClose, OnDistanceFar)
+            self:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
         end
         trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
         ManualDistanceCheck()
@@ -390,6 +401,7 @@ function PinFactory:CreatePin(initPinData, pinID)
         Track = Track,
         Untrack = Untrack,
         IsTracked = function() return isTracked end,
+        GetDistanceToPin = GetDistanceToPin,
         Remove = Remove,
         GetPinData = GetPinData
     }

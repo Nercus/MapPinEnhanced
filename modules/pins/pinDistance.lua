@@ -10,12 +10,12 @@ local throttle_interval = 1
 local lastDistance = 0
 local lastUpdate = nil
 local IsSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint
-local GetDistance = C_Navigation.GetDistance
 
+---@param GetDistanceToPin function
 ---@param isClose boolean?
 ---@param OnDistanceClose function
 ---@param OnDistanceFar function
-function PinFactory:UpdateDistance(isClose, OnDistanceClose, OnDistanceFar)
+function PinFactory:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
     local currentTime = GetTime()
     -- Check if we need to update based on throttle interval
     if not lastUpdate or currentTime - lastUpdate > throttle_interval then
@@ -23,7 +23,7 @@ function PinFactory:UpdateDistance(isClose, OnDistanceClose, OnDistanceFar)
         local isSuperTrackingUserWaypoint = IsSuperTrackingUserWaypoint()
         if not isSuperTrackingUserWaypoint then return end
         ---@type number
-        local distance = GetDistance()
+        local distance = GetDistanceToPin()
         if distance == 0 then return end            -- No distance to get to the waypoint
         if lastDistance == distance then return end -- No need to update if the distance is the same
         lastDistance = distance

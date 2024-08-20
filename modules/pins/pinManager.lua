@@ -34,10 +34,7 @@ function PinManager:TrackNearestPin()
     if not playerMap or not playerX or not playerY then return end
 
     for _, pin in pairs(self.Pins) do
-        local pinData = pin:GetPinData()
-        local distance = MapPinEnhanced.HBD:GetZoneDistance(playerMap, playerX, playerY, pinData.mapID, pinData.x,
-            pinData.y)
-        if not distance then return end
+        local distance = pin:GetDistanceToPin()
 
         if not nearestPin or distance < nearestPin.distance then -- there is no nearest pin or the current iteration pin is closer
             nearestPin = {
