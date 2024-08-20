@@ -80,6 +80,11 @@ function SetFactory:CreateSet(name, id)
     end
 
 
+    local function UpdateSetChange()
+        CB:Fire('UpdateSetList')
+    end
+
+
     ---@param pinData pinData
     ---@param restore boolean?
     ---@param override boolean?
@@ -92,10 +97,11 @@ function SetFactory:CreateSet(name, id)
             local oldPin = pins[positions[positonString]]
             if oldPin then
                 pins[oldPin.setPinID] = nil
-                AddPin(_, pinData)
+                positions[positonString] = nil
+                AddPin(_, pinData, true, false)
+                return
             end
         end
-
         local setPinID = MapPinEnhanced:GenerateUUID("setpin")
         pinData.setTracked = false
         if not pinData.order then
@@ -106,7 +112,7 @@ function SetFactory:CreateSet(name, id)
             SetManager:PersistSets(setID)
         end
         positions[positonString] = setPinID
-        CB:Fire('UpdateSetList')
+        MapPinEnhanced:DebounceChange(UpdateSetChange, 0.1)
     end
 
 
@@ -175,7 +181,8 @@ function SetFactory:CreateSet(name, id)
         if override then
             PinManager:ClearPins()
         end
-        for _, setPinData in pairs(pins) do
+        local orderedPins = GetPinsByOrder()
+        for _, setPinData in ipairs(orderedPins) do
             PinManager:AddPin(setPinData.pinData)
         end
         PinManager:TrackLastTrackedPin()

@@ -33,19 +33,10 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:ImportFromMap()
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     local activeSet = self.body:GetActiveSet()
     if not activeSet then return end
-    local pins = PinManager:GetPins()
-    for _, pin in pairs(pins) do
-        activeSet:AddPin({
-            mapID = pin.pinData.mapID,
-            x = pin.pinData.x,
-            y = pin.pinData.y,
-            title = pin.pinData.title,
-            color = pin.pinData.color,
-            lock = pin.pinData.lock,
-            setTracked = pin.pinData.setTracked,
-            texture = pin.pinData.texture,
-            usesAtlas = pin.pinData.usesAtlas,
-        }, true)
+    local pins = PinManager:GetPinsByOrder()
+    MapPinEnhanced:Debug(pins)
+    for _, pin in ipairs(pins) do
+        activeSet:AddPin(pin.pinData, true, true)
     end
     SetManager:PersistSets(activeSet.setID)
     self.body:UpdatePinList()
