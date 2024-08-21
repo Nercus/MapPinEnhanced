@@ -193,6 +193,14 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     else
         r, g, b, a = 1, 1, 1, 1
     end
+    local isSwirlPlaying = self.swirlTexture.swirl:IsPlaying()
+    local isPulsePlaying = self.pulseHighlight.pulse:IsPlaying()
     self.swirlTexture:SetVertexColor(r, g, b, a)
     self.pulseHighlight:SetVertexColor(r, g, b, a)
+    if isSwirlPlaying then
+        self:ShowSwirl()
+    end
+    if isPulsePlaying then
+        self:ShowPulseForSeconds(3)
+    end
 end
