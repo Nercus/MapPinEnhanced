@@ -6,37 +6,27 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---------------------------------------------------------------------------
 
+
+local function saveVarIfExists(path, varName, saveKey, saveValue)
+    if MapPinEnhancedDB and MapPinEnhancedDB.global and MapPinEnhancedDB.global.options and MapPinEnhancedDB.global.options[varName] ~= nil then
+        local value = MapPinEnhancedDB.global.options[varName] --[[@as number|boolean]]
+        MapPinEnhanced:SaveVar(path, saveKey, saveValue(value))
+    end
+end
+
 local function MigratePriorTo300()
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.autoOpenTracker ~= nil then
-        ---@type boolean
-        local value = MapPinEnhancedDB.global.options.autoOpenTracker
-        MapPinEnhanced:SaveVar("tracker", "autoVisibility", value and "both" or "none")
-    end
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.showInfoOnSuperTrackedFrame ~= nil then
-        ---@type boolean
-        local value = MapPinEnhancedDB.global.options.showInfoOnSuperTrackedFrame
-        MapPinEnhanced:SaveVar("floatingPin", "showTitle", value)
-    end
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.showTimeOnSuperTrackedFrame ~= nil then
-        ---@type boolean
-        local value = MapPinEnhancedDB.global.options.showTimeOnSuperTrackedFrame
-        MapPinEnhanced:SaveVar("floatingPin", "showEstimatedTime", value)
-    end
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.changedalpha ~= nil then
-        ---@type boolean
-        local value = MapPinEnhancedDB.global.options.changedalpha
-        MapPinEnhanced:SaveVar("floatingPin", "unlimitedDistance", value)
-    end
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.maxTrackerEntries ~= nil then
-        ---@type number
-        local value = MapPinEnhancedDB.global.options.maxTrackerEntries
-        MapPinEnhanced:SaveVar("tracker", "trackerHeight", value)
-    end
-    if MapPinEnhancedDB.global and MapPinEnhancedDB.global.options.autoTrackNearest ~= nil then
-        ---@type boolean
-        local value = MapPinEnhancedDB.options.autoTrackNearest
-        MapPinEnhanced:SaveVar("general", "autoTrackNearestPin", value)
-    end
+    saveVarIfExists("tracker", "autoOpenTracker", "autoVisibility",
+        function(value) return value and "both" or "none" end)
+    saveVarIfExists("floatingPin", "showInfoOnSuperTrackedFrame", "showTitle",
+        function(value) return value end)
+    saveVarIfExists("floatingPin", "showTimeOnSuperTrackedFrame", "showEstimatedTime",
+        function(value) return value end)
+    saveVarIfExists("floatingPin", "changedalpha", "unlimitedDistance",
+        function(value) return value end)
+    saveVarIfExists("tracker", "maxTrackerEntries", "trackerHeight",
+        function(value) return value end)
+    saveVarIfExists("general", "autoTrackNearest", "autoTrackNearestPin",
+        function(value) return value end)
 
 
     if MapPinEnhancedDB.global and MapPinEnhancedDB.global.presets then
@@ -80,6 +70,7 @@ end
 ---Migration function to handle changes in the saved variables
 ---@param oldVersion number
 function Options:MigrateOptionByVersion(oldVersion)
+    if not MapPinEnhancedDB then return end
     if oldVersion < 300 then -- versions before 3.0.0
         MigratePriorTo300()
     end
