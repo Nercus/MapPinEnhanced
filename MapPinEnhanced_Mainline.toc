@@ -4,7 +4,7 @@
 ## Notes: Enhances the functionality of the map pin
 
 ## Author: Nerc and Eminos
-## Version: 3.0.1
+## Version: 3.0.2
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
 ## SavedVariables: MapPinEnhancedDB
 
