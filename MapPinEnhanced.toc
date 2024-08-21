@@ -1,11 +1,10 @@
-## Interface: 110000, 110002
+## Interface: 110000,110002
 
 ## Title: Map Pin Enhanced
 ## Notes: Enhances the functionality of the map pin
 
 ## Author: Nerc and Eminos
 ## Version: 3.0.0
-
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
 ## SavedVariables: MapPinEnhancedDB
 
