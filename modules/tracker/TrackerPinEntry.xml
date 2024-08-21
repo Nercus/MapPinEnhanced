@@ -36,17 +36,17 @@
                     setAllPoints="true" hidden="true" />
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="zoneText" inherits="GameFontHighlight">
+                <FontString parentKey="coordsText" inherits="GameFontHighlightSmall">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-8" y="-9" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="zoneText" inherits="GameFontHighlight" wordwrap="false"
+                    justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.Pin" relativePoint="RIGHT" x="10"
                             y="-9" />
-                    </Anchors>
-                </FontString>
-                <FontString parentKey="coordsText" inherits="GameFontHighlightSmall">
-                    <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.zoneText"
-                            relativePoint="RIGHT"
-                            x="5" />
+                        <Anchor point="RIGHT" relativeKey="$parent.coordsText" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
             </Layer>

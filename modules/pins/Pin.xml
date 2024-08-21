@@ -17,7 +17,9 @@
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="texture" atlas="Waypoint-MapPin-Untracked" setAllPoints="true"
+                <Texture parentKey="texture"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinUntrackedYellow.png"
+                    setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
                 <FontString parentKey="title" inherits="GameFontNormal"
                     justifyV="MIDDLE" justifyH="CENTER" wordwrap="false">
@@ -35,9 +37,9 @@
             <Layer level="OVERLAY">
                 <Texture parentKey="icon"
                     hidden="true" texelSnappingBias="0" snapToPixelGrid="false">
-                    <Size x="20" y="20" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="TOPLEFT" x="4" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
                     </Anchors>
                 </Texture>
                 <MaskTexture parentKey="iconMask"
