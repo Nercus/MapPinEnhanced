@@ -373,6 +373,8 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
         newHeight = maxHeight
     end
     newHeight = Round(newHeight)
+    local currentHeight = self:GetHeight()
+    if currentHeight == newHeight then return end
     self:SetHeight(newHeight)
     self.scrollFrame.ScrollBar:Update()
 end
