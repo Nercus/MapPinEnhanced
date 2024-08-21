@@ -34,21 +34,12 @@ You can do these things with Map Pin Enhanced:
 
 ## Pin Tracker
 
-<div style="display:flex; align-items: center;">
-    <div>
-        <img width="300px" src=".github/media/PinTracker.png" />
-    </div>
-    <div style="padding-left:20px">
-        <ul>
-            <li>Save multiple Pins</li>
-            <li>Change the pin title</li>
-            <li>Customize the pin color</li>
-            <li>Ping the pin on the map</li>
-            <li>Lock the pin</li>
-            <li>Share the pin</li>
-        </ul>
-    </div>
+
+<div align="center">
+  <img width="50%" src=".github/media/PinTracker.png" /> 
+  <p> Save multiple Pins | Change the pin title | Customize the pin color | Ping the pin on the map | Lock the pin | Share the pin </p>
 </div>
+
 
 ## Set Editor
 
