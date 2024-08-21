@@ -36,7 +36,7 @@ You can do these things with Map Pin Enhanced:
 
 <div style="display:flex; align-items: center;">
     <div>
-        <img width="500px" src=".github/media/PinTracker.png" />
+        <img width="400px" src=".github/media/PinTracker.png" />
     </div>
     <div style="padding-left:20px">
         <ul>
