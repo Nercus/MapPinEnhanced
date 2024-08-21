@@ -1,9 +1,15 @@
 <h1 align="center"> Map Pin Enhanced </h1> <br>
 
-<p align="center">
-  <img width="70%" src="banner.png" />
-</p>
-<p align="center">
+<div align="center">
+    <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/441677?style=for-the-badge&label=CurseForge">
+    <img alt="CurseForge Version" src="https://img.shields.io/curseforge/v/441677?style=for-the-badge">
+    <img alt="CurseForge Game Versions" src="https://img.shields.io/curseforge/game-versions/441677?style=for-the-badge">
+</div>
+
+<div align="center">
+  <img width="70%" src=".github/media/banner.png" />
+</div>
+<p align="center" style="font-style: italic">
   Map Pin Enhanced enhances the ingame waypoint system.
 </p>
 
@@ -20,20 +26,48 @@ Please review the LICENSE file for more details.
 
 You can do these things with Map Pin Enhanced:
 
-- Set as many waypoints as you want (no "one-waypoint" limit)
-- Set waypoints via command: _/mph_, _/pin_ (or _/way_ if you don't have TomTom installed)
-- A pin tracker to see a list of all active pins
-- An importbox with support for saving presets
-- Make detected coordinates in chat clickable
-- Add Time to reach tracked pin
-- Unlimited distance for supertracking
+- Set as many waypoints as you want (no "one-waypoint" limit).
+- Set waypoints via command: _/mph_, _/pin_ or _/way_.
+- A pin tracker to see a list of all your pins.
+- A set editor to create and manage your sets.
+- Many improvements to the in-game waypoint system
 
-## Sharing Pins & Pin Sets
+## Pin Tracker
 
-## Commands
+<div style="display:flex; align-items: center;">
+    <div>
+        <img width="500px" src=".github/media/PinTracker.png" />
+    </div>
+    <div style="padding-left:20px">
+        <ul>
+            <li>Save multiple Pins</li>
+            <li>Change the pin title</li>
+            <li>Customize the pin color</li>
+            <li>Ping the pin on the map</li>
+            <li>Lock the pin</li>
+            <li>Share the pin</li>
+        </ul>
+    </div>
+</div>
 
-## Features in Development
+## Set Editor
+
+<div align="center">
+  <img width="100%" src=".github/media/SetEditor.png" />
+</div>
+
+## Importing and Exporting Pins
+
+<div align="center">
+  <img width="100%" src=".github/media/ImportExport.png" />
+</div>
+
+## Options
+
+<div align="center">
+  <img width="100%" src=".github/media/Options.png" />
+</div>
 
 ## Contributions
 
-We welcome contributions from developers!
+We welcome any contributions from developers!
