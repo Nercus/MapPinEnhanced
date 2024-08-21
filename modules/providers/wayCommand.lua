@@ -67,7 +67,7 @@ end
 
 ---parse a wayString into a coords, mapID and title
 ---@param wayString string
----@return string?, number?, number[]
+---@return string?, number?, number[]?
 function PinProvider:ParseWayStringToData(wayString)
     -- remove the slashString from the message
     wayString = wayString:gsub(SLASH_PREFIX_PATTERN_1, ""):gsub(SLASH_PREFIX_PATTERN_2, ""):gsub(SLASH_PREFIX_PATTERN_3,
@@ -88,13 +88,22 @@ function PinProvider:ParseWayStringToData(wayString)
     -- iterate reverse over tokens to find the first number
     for idx = #tokens, 1, -1 do
         -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if tonumber(tokens[idx]) or string.find(tokens[idx], "%d" .. decimal_separator .. "%d") then
+        if (tonumber(tokens[idx]) or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) and #tokens <= 3 then
             break
         else
             table.insert(titleTokens, 1, tokens[idx])
             table.remove(tokens, idx)
         end
     end
+
+    -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
+    local firstTokenIsMap = tonumber(tokens[1]) == nil
+    if not firstTokenIsMap and #tokens == 3 then
+        -- remove the last entry in tokens and add it to the front of titleTokens
+        table.insert(titleTokens, 1, tokens[#tokens])
+        table.remove(tokens, #tokens)
+    end
+
     ---@type string?
     local title = table.concat(titleTokens, " ")
     if title == "" then
@@ -129,6 +138,9 @@ function PinProvider:ParseWayStringToData(wayString)
     if not mapID or mapID == "" then
         mapID = C_Map.GetBestMapForUnit("player")
     end
+    if not coords[1] or not coords[2] then
+        coords = nil
+    end
     return title, mapID, coords
 end
 
@@ -139,9 +151,9 @@ function PinProvider:DeserializeWayString(wayString)
     local data = {}
     for line in wayString:gmatch("[^\r\n]+") do
         local title, mapID, coords = self:ParseWayStringToData(line)
-        if title and mapID and coords and coords[1] and coords[2] then
+        if mapID and coords and coords[1] and coords[2] then
             table.insert(data, {
-                title = title,
+                title = title or CONSTANTS.DEFAULT_PIN_NAME,
                 mapID = mapID,
                 x = coords[1] / 100,
                 y = coords[2] / 100,
@@ -168,16 +180,9 @@ end
 ---@param wayString string
 function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
-    for line in wayString:gmatch("[^\r\n]+") do
-        local title, mapID, coords = self:ParseWayStringToData(line)
-        if mapID and coords and coords[1] and coords[2] then
-            PinManager:AddPin({
-                mapID = mapID,
-                x = coords[1] / 100,
-                y = coords[2] / 100,
-                title = title or CONSTANTS.DEFAULT_PIN_NAME,
-            })
-        end
+    local pinData = self:DeserializeWayString(wayString)
+    for _, data in ipairs(pinData) do
+        PinManager:AddPin(data)
     end
 end
 
