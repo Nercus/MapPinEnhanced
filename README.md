@@ -1,9 +1,15 @@
 <h1 align="center"> Map Pin Enhanced </h1> <br>
 
 <div align="center">
-    <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/441677?style=for-the-badge&label=CurseForge">
-    <img alt="CurseForge Version" src="https://img.shields.io/curseforge/v/441677?style=for-the-badge">
-    <img alt="CurseForge Game Versions" src="https://img.shields.io/curseforge/game-versions/441677?style=for-the-badge">
+    <a href="https://www.curseforge.com/wow/addons/mappinenhanced" target="_blank">
+        <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/441677?style=for-the-badge&label=CurseForge"> 
+    </a>
+    <a href="https://www.curseforge.com/wow/addons/mappinenhanced" target="_blank">
+        <img alt="CurseForge Version" src="https://img.shields.io/curseforge/v/441677?style=for-the-badge">
+    </a>
+    <a href="https://www.curseforge.com/wow/addons/mappinenhanced" target="_blank">
+        <img alt="CurseForge Game Versions" src="https://img.shields.io/curseforge/game-versions/441677?style=for-the-badge">
+    </a>
 </div>
 
 <div align="center">
