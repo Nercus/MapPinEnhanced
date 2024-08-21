@@ -1,0 +1,143 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="SetEditorBodyHeader.lua" />
+    <Frame name="MapPinEnhancedSetEditorBodyHeader" mixin="MapPinEnhancedSetEditorBodyHeaderMixin"
+        parentKey="header" enableMouse="true"
+        virtual="true">
+        <Size x="1" y="45" />
+        <Anchors>
+            <Anchor point="TOPLEFT" />
+            <Anchor point="TOPRIGHT" />
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                    snapToPixelGrid="false" texelSnappingBias="0">
+                    <Size x="16" y="16" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString inherits="GameFontNormal" parentKey="infoText"
+                    text="Select a Set to Edit or Create a New One."
+                    justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="CENTER" y="-1" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <EditBox parentKey="setName" multiLine="false" letters="100" hidden="true"
+                font="GameFontNormalLarge"
+                autoFocus="false" propagateMouseInput="Clicks">
+                <TextInsets left="20" />
+                <Size x="300" y="26" />
+                <Anchors>
+                    <Anchor point="LEFT" x="15" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="common-dropdown-bg">
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="0" g="0" b="0" a="1" />
+                                <MaxColor r="0" g="0" b="0" a="0" />
+                            </Gradient>
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-10" y="1" />
+                                <Anchor point="BOTTOMRIGHT" x="-5" y="-5" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="editButton" inherits="MapPinEnhancedIconButtonTemplate">
+                        <Size x="13" y="13" />
+                        <Anchors>
+                            <Anchor point="LEFT" y="-1" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="icon"
+                                value="Interface/AddOns/MapPinEnhanced/assets/icons/IconEdit_Yellow.png" />
+                            <KeyValue key="tooltip" value="Edit Set Name" />
+                        </KeyValues>
+                        <Scripts>
+                            <OnClick>
+                                local editBox = self:GetParent()
+                                if editBox:IsEnabled() then
+                                    editBox:Disable()
+                                    editBox:HighlightText(0, 0)
+                                    self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                    self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                                    editBox:SetPropagateMouseClicks(true)
+                                    return
+                                end
+                                    editBox:Enable()
+                                    editBox:SetFocus()
+                                    editBox:HighlightText()
+                                    editBox:SetPropagateMouseClicks(false)
+                                    self:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                                    self:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png")
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+                <Scripts>
+                    <OnEnterPressed>
+                        self:Disable()
+                        self:HighlightText(0, 0)
+                        self.editButton:SetNormalTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                        self.editButton:SetPushedTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png")
+                    </OnEnterPressed>
+                </Scripts>
+            </EditBox>
+            <Button parentKey="deleteButton" hidden="true"
+                inherits="MapPinEnhancedSquareButtonRedTemplate">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" x="-43" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconTrash_Yellow.png" />
+                    <KeyValue key="tooltip" value="Delete Set" />
+                </KeyValues>
+            </Button>
+            <Button parentKey="exportButton" hidden="true"
+                inherits="MapPinEnhancedSquareButtonYellowTemplate"
+                frameStrata="HIGH">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" x="-5" relativeKey="$parent.deleteButton"
+                        relativePoint="LEFT" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconExport_Dark.png" />
+                    <KeyValue key="tooltip" value="Export Set" />
+                </KeyValues>
+            </Button>
+            <Button parentKey="importFromMapButton" hidden="true"
+                inherits="MapPinEnhancedSquareButtonYellowTemplate"
+                frameStrata="HIGH">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="RIGHT" x="-5" relativeKey="$parent.exportButton"
+                        relativePoint="LEFT" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconMap_Dark.png" />
+                    <KeyValue key="tooltip" value="Import Pins from Tracker" />
+                </KeyValues>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>

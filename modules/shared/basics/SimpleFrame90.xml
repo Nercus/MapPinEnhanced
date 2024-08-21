@@ -1,0 +1,102 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedSimpelFrame90Template" virtual="true">
+        <Size x="300" y="300" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topleft"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topright"
+                    rotation="270"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomright"
+                    rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomleft"
+                    rotation="90"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTop"
+                    rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Middle.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.topright"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottom"
+                    rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogFrame_Light_90_Middle.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderLeft"
+                    rotation="0" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogueFrame_Light_90_Middle_Side.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderRight"
+                    rotation="180" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialogframe/DialogueFrame_Light_90_Middle_Side.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topright"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+                <Texture parentKey="background">
+                    <Color r="0" g="0" b="0" a="0.9" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+</Ui>

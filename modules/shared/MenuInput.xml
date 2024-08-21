@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <EditBox inherits="MapPinEnhancedInputTemplate" name="MapPinEnhancedMenuInputTemplate"
+        virtual="true">
+        <Size x="150" y="24" />
+        <Scripts>
+            <OnEnterPressed>
+                self:ClearFocusOnKey()
+                Menu.GetManager():CloseMenus()
+            </OnEnterPressed>
+            <OnEscapePressed>
+                self:ClearFocusOnKey(true)
+            </OnEscapePressed>
+        </Scripts>
+    </EditBox>
+</Ui>

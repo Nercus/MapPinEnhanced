@@ -1,0 +1,41 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="colorpicker.lua" />
+
+    <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin"
+        virtual="true" enableMouse="true" propagateMouseInput="Motion">
+        <Size x="84" y="20" />
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="bg"
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/checkers.png"
+                    setAllPoints="true" vertTile="true" horizTile="true" />
+                <MaskTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
+                    parentKey="bgMask"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="84" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="bg" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="color"
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
+                    setAllPoints="true">
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight"
+                    file="Interface/AddOns/MapPinEnhanced/assets/formsColourPicker_Body.png"
+                    setAllPoints="true" alpha="0.5">
+                </Texture>
+            </Layer>
+        </Layers>
+    </Button>
+</Ui>

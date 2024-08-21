@@ -1,0 +1,87 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Script file="OptionEditorSidebar.lua" />
+    <Frame name="MapPinEnhancedOptionEditorViewSidebarTemplate"
+        mixin="MapPinEnhancedOptionEditorViewSidebarMixin"
+        virtual="true" hidden="true"
+        enableMouse="true">
+        <Size x="250" y="1" />
+        <Anchors>
+            <Anchor point="TOPLEFT" />
+            <Anchor point="BOTTOMLEFT" />
+        </Anchors>
+        <Frames>
+            <Frame parentKey="header">
+                <Size x="1" y="45" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                            snapToPixelGrid="false" texelSnappingBias="0">
+                            <Size x="16" y="16" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                                <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalLarge" parentKey="headerText"
+                            text="Options"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" y="-1" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Button parentKey="switchViewButton" inherits="MapPinEnhancedButtonRedTemplate"
+                text="Show Sets">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="10" y="16" />
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="16" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yellow.png" />
+                </KeyValues>
+            </Button>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header"
+                        relativePoint="BOTTOMLEFT" x="12" y="-4" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.switchViewButton"
+                        relativePoint="TOPRIGHT" x="-12" y="5" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="3" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="250" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnShow method="OnShow" />
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>

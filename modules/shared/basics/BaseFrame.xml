@@ -1,0 +1,201 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedBaseFrameTemplate" virtual="true">
+        <Frames>
+            <Frame parentKey="artLeft">
+                <Size x="32" y="64" />
+                <Anchors>
+                    <Anchor point="LEFT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture texelSnappingBias="0" snapToPixelGrid="false" rotation="90"
+                            file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Center.png"
+                        >
+                            <Size x="64" y="32" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame parentKey="artRight">
+                <Size x="32" y="64" />
+                <Anchors>
+                    <Anchor point="RIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture texelSnappingBias="0" snapToPixelGrid="false" rotation="270"
+                            file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Center.png"
+                        >
+                            <Size x="64" y="32" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topleft"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="topright"
+                    rotation="270"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomright"
+                    rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="bottomleft"
+                    rotation="90"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Corner.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="32" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="artTop"
+                    rotation="0"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="TOP" />
+                    </Anchors>
+                    <Size x="64" y="32" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="artBottom"
+                    rotation="180"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Center.png">
+                    <Anchors>
+                        <Anchor point="BOTTOM" />
+                    </Anchors>
+                    <Size x="64" y="32" />
+                </Texture>
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTopLeft"
+                    rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artTop"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderTopRight"
+                    rotation="0" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.topright"
+                            relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.artTop"
+                            relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottomLeft"
+                    rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artBottom"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderBottomRight"
+                    rotation="180" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Horizontal.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.artBottom"
+                            relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderLeftTop"
+                    rotation="0" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artLeft"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderLeftBottom"
+                    rotation="0" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomleft"
+                            relativePoint="TOPRIGHT" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.artLeft"
+                            relativePoint="BOTTOMLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+
+
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderRightTop"
+                    rotation="180" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topright"
+                            relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.artRight"
+                            relativePoint="TOPRIGHT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="borderRightBottom"
+                    rotation="180" vertTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Vertical.png">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.artRight"
+                            relativePoint="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                    </Anchors>
+                    <Size x="1" y="1" />
+                </Texture>
+                <Texture texelSnappingBias="0" snapToPixelGrid="false" parentKey="background"
+                    vertTile="true" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/baseframe/FrameBorder_Background.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.topleft"
+                            relativePoint="BOTTOMRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bottomright"
+                            relativePoint="TOPLEFT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+    </Frame>
+</Ui>

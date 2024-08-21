@@ -1,0 +1,59 @@
+{
+    "editor.tabSize": 4,
+    "workbench.colorCustomizations": {
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#f2deb6",
+        "statusBar.background": "#ebcb8b",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#e3b75f",
+        "statusBarItem.remoteBackground": "#ebcb8b",
+        "statusBarItem.remoteForeground": "#15202b",
+        "tab.activeBorder": "#f2deb6",
+        "titleBar.activeBackground": "#ebcb8b",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#ebcb8b99",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.color": "#EBCB8B",
+    "wowAPI.luals.defineKnownGlobals": false,
+    "Lua.completion.autoRequire": false,
+    "explorer.sortOrder": "default",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": true,
+    "explorer.fileNesting.patterns": {
+        "*.lua": "${capture}.lua, ${capture}.xml",
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, annotations.lua"
+    },
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.workspace.ignoreDir": [
+        ".github",
+        ".vscode",
+        "libs"
+    ],
+    "Lua.diagnostics.disable": [],
+    "Lua.diagnostics.neededFileStatus": {
+        "global-element": "Any",
+        "missing-global-doc": "Any",
+        "codestyle-check": "Any",
+        "incomplete-signature-doc": "Any",
+        "no-unknown": "Any"
+    },
+    "Lua.diagnostics.groupSeverity": {
+        "global": "Error"
+    },
+    "Lua.diagnostics.globals": [
+        "TomTom",
+        "ScrollFrame_OnLoad"
+    ],
+}

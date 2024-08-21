@@ -1,0 +1,150 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Script file="SetEditorSidebar.lua" />
+    <Frame name="MapPinEnhancedSetEditorViewSidebarTemplate"
+        mixin="MapPinEnhancedSetEditorViewSidebarMixin"
+        virtual="true" hidden="true"
+        enableMouse="true">
+        <Frames>
+            <Frame parentKey="header">
+                <Size x="1" y="45" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                            snapToPixelGrid="false" texelSnappingBias="0">
+                            <Size x="16" y="16" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" x="10" y="-4" />
+                                <Anchor point="BOTTOMRIGHT" x="-10" y="-4" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString inherits="GameFontNormalLarge" text="Sets" parentKey="title"
+                            justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="CENTER" y="-1" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchInput"
+                autoFocus="false">
+                <TextInsets left="22" right="22" top="1" />
+                <Size x="1" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-4" relativeKey="$parent.header"
+                        relativePoint="BOTTOMLEFT" />
+                    <Anchor point="TOPRIGHT" x="-12" y="-4" relativeKey="$parent.header"
+                        relativePoint="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture name="$parentSearchIcon"
+                            file="Interface/AddOns/MapPinEnhanced/assets/icons/IconSearch_Yellow_Grey.png"
+                            useAtlasSize="false">
+                            <Size x="12" y="12" />
+                            <Anchors>
+                                <Anchor point="LEFT" x="7" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <FontString inherits="GameFontHighlight" />
+                <Frames>
+                    <Button name="$parentClearButton" parentKey="clearButton" hidden="true">
+                        <Size x="12" y="12" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-7" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture
+                                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
+                                    setAllPoints="true" />
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnClick>
+                                self:GetParent():SetText("")
+                            </OnClick>
+                        </Scripts>
+                    </Button>
+                </Frames>
+            </EditBox>
+
+            <Button parentKey="switchViewButton"
+                inherits="MapPinEnhancedSquareButtonRedTemplate">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="10" y="15" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconSettings_Yellow.png" />
+                    <KeyValue key="tooltip" value="Show Options" />
+                </KeyValues>
+            </Button>
+            <Button parentKey="importButton" inherits="MapPinEnhancedSquareButtonRedTemplate">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-10" y="15" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Yellow.png" />
+                    <KeyValue key="tooltip" value="Import Set" />
+                </KeyValues>
+            </Button>
+            <Button parentKey="createSetButton" inherits="MapPinEnhancedButtonYellowTemplate"
+                text="Create Set">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="5" relativeKey="$parent.switchViewButton"
+                        relativePoint="BOTTOMRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" x="-5" relativeKey="$parent.importButton"
+                        relativePoint="BOTTOMLEFT" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconPlus_Dark.png" />
+                </KeyValues>
+            </Button>
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="5" y="0" relativeKey="$parent.searchInput"
+                        relativePoint="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" x="-25" y="45" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="scrollBarX" value="3" type="number" />
+                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
+                    <KeyValue key="scrollBarHideIfUnscrollable" value="true"
+                        type="boolean" />
+                </KeyValues>
+                <ScrollChild>
+                    <Frame parentKey="Child">
+                        <Size x="275" y="1" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="0" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        </Anchors>
+                    </Frame>
+                </ScrollChild>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

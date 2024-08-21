@@ -1,0 +1,76 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+
+    <Script file="EditorWindow.lua" />
+    <Frame name="MapPinEnhancedEditorWindowTemplate" mixin="MapPinEnhancedEditorWindowMixin"
+        virtual="true"
+        toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
+        registerForDrag="LeftButton" propagateKeyboardInput="true">
+        <Size x="900" y="500" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString inherits="GameFontWhiteTiny2" parentKey="versionText">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" x="-10" y="10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="sideBar" inherits="MapPinEnhancedBaseFrameTemplate">
+                <Size x="275" y="500" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMLEFT" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="body" inherits="MapPinEnhancedBaseFrameTemplate">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeKey="$parent.sideBar"
+                        x="-7" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+            </Frame>
+            <Button parentKey="closebutton"
+                inherits="MapPinEnhancedSquareButtonRedTemplate" frameStrata="HIGH">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-10" y="-10" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="iconTexture"
+                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" />
+                </KeyValues>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():Hide();
+                    </OnClick>
+                </Scripts>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture atlas="Tab-Divider-Top" rotation="90" horizTile="true">
+                            <Size x="22" y="12" />
+                            <Anchors>
+                                <Anchor point="CENTER" relativePoint="LEFT" x="-3" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnKeyDown>
+                if key == "ESCAPE" then
+                    self:Hide();
+                end
+            </OnKeyDown>
+        </Scripts>
+    </Frame>
+</Ui>

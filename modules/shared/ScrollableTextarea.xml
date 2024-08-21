@@ -1,0 +1,83 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+
+    <ScrollFrame name="MapPinEnhancedScrollableTextareaTemplate" virtual="true"
+        enableMouse="true" inherits="ScrollFrameTemplate">
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" name="$parentBG" atlas="common-dropdown-bg">
+                    <Color r="1" g="1" b="1" a="0.7" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-9" y="6" />
+                        <Anchor point="BOTTOMRIGHT" x="9" y="-12" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <KeyValues>
+            <KeyValue key="scrollBarX" value="-14" />
+            <KeyValue key="scrollBarTopY" value="-5" type="number" />
+            <KeyValue key="scrollBarBottomY" value="5" type="number" />
+        </KeyValues>
+        <ScrollChild>
+            <EditBox parentKey="editBox" multiLine="true" autoFocus="false"
+                font="GameFontHighlight">
+                <TextInsets left="10" top="10" right="-5" bottom="10" />
+                <Anchors>
+                    <Anchor point="TOP" x="0" y="-5" />
+                </Anchors>
+                <Scripts>
+                    <OnEditFocusLost>
+                        local parent = self:GetParent();
+                        parent.focusButton:Show();
+                    </OnEditFocusLost>
+                    <OnEditFocusGained>
+                        local parent = self:GetParent();
+                        parent.focusButton:Hide();
+                    </OnEditFocusGained>
+                    <OnShow>
+                        local parent = self:GetParent();
+                        self:SetText("");
+                    </OnShow>
+                </Scripts>
+            </EditBox>
+        </ScrollChild>
+        <Scripts>
+            <OnSizeChanged>
+                local width, height = self:GetSize();
+                self.editBox:SetSize(width - 25, height - 10);
+            </OnSizeChanged>
+        </Scripts>
+        <Frames>
+            <Frame parentKey="focusButton" setAllPoints="true" enableMouse="true"
+                propagateMouseInput="Both">
+                <Scripts>
+                    <OnMouseDown>
+                        local parent = self:GetParent();
+                        parent.editBox:SetFocus();
+                        self:Hide();
+                    </OnMouseDown>
+                    <OnShow>
+                        local parent = self:GetParent();
+                        if not parent.editBox then return end
+                        local editBoxText = parent.editBox:GetText();
+                        if editBoxText ~= "" then
+                            self.infoText:SetText("");
+                        else
+                            self.infoText:SetText(GUILD_EDIT_TEXT_LINK);
+                        end
+                    </OnShow>
+                </Scripts>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="infoText" setAllPoints="true"
+                            inherits="GameFontDisable"
+                            text="GUILD_EDIT_TEXT_LINK" justifyH="CENTER" justifyV="MIDDLE" />
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+    </ScrollFrame>
+</Ui>

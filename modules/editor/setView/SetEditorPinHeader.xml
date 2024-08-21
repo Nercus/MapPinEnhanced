@@ -1,0 +1,76 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Script file="SetEditorPinHeader.lua" />
+    <Frame name="MapPinEnhancedSetEditorPinHeaderTemplate" virtual="true"
+        mixin="MapPinEnhancedSetEditorPinHeaderMixin">
+        <Size x="560" y="25" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg" atlas="Tab-Divider-Top" horizTile="true"
+                    snapToPixelGrid="false" texelSnappingBias="0">
+                    <Size x="1" y="10" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" />
+                        <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="5" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString text="Icon" parentKey="Pin" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="30" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="20" y="0"></Anchor>
+                    </Anchors>
+                </FontString>
+
+                <FontString text="Map ID" parentKey="mapID" inherits="GameFontNormal"
+                    justifyH="LEFT">
+                    <Size x="65" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Pin" x="15" />
+                    </Anchors>
+                </FontString>
+
+                <FontString text="X" parentKey="xCoord" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="45" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.mapID"
+                            x="15" />
+                    </Anchors>
+                </FontString>
+
+                <FontString text="Y" parentKey="yCoord" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="45" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.xCoord"
+                            x="15" />
+                    </Anchors>
+                </FontString>
+
+                <FontString text="Title" parentKey="title" inherits="GameFontNormal"
+                    justifyH="LEFT">
+                    <Size x="150" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yCoord"
+                            x="15" />
+                    </Anchors>
+                </FontString>
+
+                <FontString text="Options" parentKey="options" inherits="GameFontNormal"
+                    justifyH="LEFT">
+                    <Size x="1" y="15" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title"
+                            x="10" />
+                        <Anchor point="RIGHT" x="-10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>
