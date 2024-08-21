@@ -35,8 +35,7 @@ function PinManager:TrackNearestPin()
 
     for _, pin in pairs(self.Pins) do
         local distance = pin:GetDistanceToPin()
-
-        if not nearestPin or distance < nearestPin.distance then -- there is no nearest pin or the current iteration pin is closer
+        if not nearestPin or (distance > 0 and distance < nearestPin.distance) then -- there is no nearest pin or the current iteration pin is closer
             nearestPin = {
                 pin = pin,
                 distance = distance
