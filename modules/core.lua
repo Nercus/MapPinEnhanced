@@ -139,6 +139,9 @@ end, L["Toggle Minimap Button"])
 ---------------------------------------------------------------------------
 
 function MapPinEnhanced:Initialize()
+    if not MapPinEnhancedDB then
+        MapPinEnhancedDB = {}
+    end
     if MapPinEnhanced.init then return end
     MapPinEnhanced:ToggleMinimapButton(true)
     MapPinEnhanced:RegisterAddonCompartment()
