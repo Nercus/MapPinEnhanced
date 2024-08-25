@@ -8,7 +8,9 @@ local L = setmetatable({}, {
     __index = function(t, k)
         local v = tostring(k)
         --@do-not-package@
-        MapPinEnhanced:Debug("Missing localization for: " .. v)
+        if MapPinEnhanced.Debug then
+            MapPinEnhanced:Debug("Missing localization for: " .. v)
+        end
         --@end-do-not-package@
         rawset(t, k, v)
         return v
