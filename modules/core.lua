@@ -33,6 +33,14 @@ local MinimapButtonTemplate = {
         end,
     },
     {
+        type = "button",
+        label = L["Clear All Pins"],
+        onClick = function()
+            local PinManager = MapPinEnhanced:GetModule("PinManager")
+            PinManager:ClearPins()
+        end,
+    },
+    {
         type = "submenu",
         label = L["Load Set"],
         entries = function()
@@ -73,6 +81,11 @@ function MapPinEnhanced:ToggleMinimapButton(init)
             icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
             OnClick = function(owner, button)
                 if button == "LeftButton" then
+                    if IsAltKeyDown() then
+                        local PinManager = MapPinEnhanced:GetModule("PinManager")
+                        PinManager:ClearPins()
+                        return
+                    end
                     self:TogglePinTracker()
                 elseif button == "RightButton" then
                     MapPinEnhanced:GenerateMenu(owner, MinimapButtonTemplate)
