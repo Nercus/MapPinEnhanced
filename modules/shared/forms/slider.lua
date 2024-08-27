@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedSliderMixin = {}
 
 ---@class SliderOptions
+---@field updateOnRelease boolean?
 ---@field onChange fun(value: number)
 ---@field init? fun(): number -- initial value can be nil if option has never been set before
 ---@field default number
@@ -63,9 +64,17 @@ function MapPinEnhancedSliderMixin:Setup(optionData)
     self:SetValue(init or 0)
     self.valueText:SetText(roundValueToPrecision(init or 0, optionData.step))
     self:SetDisabled(optionData.disabledState)
+    if optionData.updateOnRelease then
+        self:SetScript("OnMouseUp", function()
+            local value = self:GetValue()
+            self.valueText:SetText(roundValueToPrecision(self:GetValue(), optionData.step))
+            if not self.onChangeCallback then return end
+            self.onChangeCallback(value)
+        end)
+    end
     self:SetScript("OnValueChanged", function(_, value)
         self.valueText:SetText(roundValueToPrecision(self:GetValue(), optionData.step))
-        if not self.onChangeCallback then return end
+        if not self.onChangeCallback or optionData.updateOnRelease then return end
         self.onChangeCallback(value)
     end)
     self.Back:SetScript("OnClick", function()

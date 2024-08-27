@@ -90,6 +90,7 @@ function MapPinEnhancedEditorWindowMixin:AddOptions()
         min = 0.5,
         max = 2,
         step = 0.05,
+        updateOnRelease = true,
         default = MapPinEnhanced:GetDefault("general", "editorScale") --[[@as number]],
         init = function() return MapPinEnhanced:GetVar("general", "editorScale") --[[@as number]] end,
         onChange = function(value)
