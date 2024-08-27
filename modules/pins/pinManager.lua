@@ -258,7 +258,7 @@ function PinManager:AddPin(pinData, restored)
     PinManager.Pins[pinID] = pinObject
     PinManager.Positions[pinPositionString] = true
 
-    if pinData.setTracked and not self.wasSuperTrackingOther then
+    if pinData.setTracked then
         pinObject:Track()
     else
         pinObject.Untrack(restored)
