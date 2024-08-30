@@ -21,6 +21,8 @@ local AVAILABLE_VIEWS = {
     optionView = "optionView",
 }
 
+
+-- TODO: move set view and editor view to sub modules in editor window
 local viewConfigurations = {
     [AVAILABLE_VIEWS.setView] = function(self)
         if not self.setView then
