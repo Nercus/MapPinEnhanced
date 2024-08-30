@@ -225,15 +225,16 @@ function SetFactory:CreateSet(name, id)
             type = "button",
             label = L["Edit Set"],
             onClick = function()
-                MapPinEnhanced:ShowEditorForSet(setID)
+                local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+                EditorWindow:ShowEditorForSet(setID)
             end
         },
         {
             type = "button",
             label = L["Export Set"],
             onClick = function()
-                MapPinEnhanced.editorWindow.setView.sideBar:ToggleActiveSet(setID, true)
-                SetManager:ExportSet(setID)
+                local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+                EditorWindow:ShowExportFrameForSet(setID)
             end
         },
         {

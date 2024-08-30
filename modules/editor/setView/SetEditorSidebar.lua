@@ -176,13 +176,14 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnLoad()
         self:ToggleActiveSet(setObject.setID)
     end)
 
+
+    local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+
     self.header:SetScript("OnMouseDown", function()
-        MapPinEnhanced.editorWindow:StartMoving()
-        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+        EditorWindow:StartMoving()
     end)
     self.header:SetScript("OnMouseUp", function()
-        MapPinEnhanced.editorWindow:StopMovingOrSizing()
-        SetCursor(nil)
+        EditorWindow:StopMovingOrSizing()
     end)
 
     self.header.title:SetText(L["Sets"])
@@ -221,10 +222,14 @@ function MapPinEnhancedSetEditorViewSidebarMixin:OnShow()
     end)
 end
 
-function MapPinEnhanced:ShowEditorForSet(setID)
-    local editorWindow = self:GetEditorWindow()
-    if editorWindow.setView.sideBar.ToggleActiveSet then
-        editorWindow:Open()
-        editorWindow.setView.sideBar:ToggleActiveSet(setID, true)
+---------------------------------------------------------------------------
+
+---@class EditorWindow
+local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+
+function EditorWindow:ShowEditorForSet(setID)
+    if self.editorWindow.setView.sideBar.ToggleActiveSet then
+        self.editorWindow:Open()
+        self.editorWindow.setView.sideBar:ToggleActiveSet(setID, true)
     end
 end

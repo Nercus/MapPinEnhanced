@@ -128,17 +128,20 @@ end
 
 ---------------------------------------------------------------------------
 
+---@class EditorWindow
+local EditorWindow = MapPinEnhanced:CreateModule("EditorWindow")
+
 ---@param viewType EditorViews
-function MapPinEnhanced:SetEditorView(viewType)
+function EditorWindow:SetView(viewType)
     if not self.editorWindow then
-        self:ToggleEditorWindow()
+        self:Toggle()
     end
     self.editorWindow:SetActiveView(viewType)
 end
 
-function MapPinEnhanced:ToggleEditorWindow()
+function EditorWindow:Toggle()
     if not self.editorWindow then
-        self:GetEditorWindow()
+        self:GetWindow()
         self.editorWindow:Open()
         return
     end
@@ -149,7 +152,7 @@ function MapPinEnhanced:ToggleEditorWindow()
     end
 end
 
-function MapPinEnhanced:GetEditorWindow()
+function EditorWindow:GetWindow()
     if not self.editorWindow then
         self.editorWindow = CreateFrame("Frame", "MapPinEnhancedEditorWindow", UIParent,
             "MapPinEnhancedEditorWindowTemplate") --[[@as MapPinEnhancedEditorWindowMixin]]
@@ -157,11 +160,27 @@ function MapPinEnhanced:GetEditorWindow()
     return self.editorWindow
 end
 
+function EditorWindow:StartMoving()
+    if not self.editorWindow then
+        return
+    end
+    self.editorWindow:StartMoving()
+    SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+end
+
+function EditorWindow:StopMovingOrSizing()
+    if not self.editorWindow then
+        return
+    end
+    self.editorWindow:StopMovingOrSizing()
+    SetCursor(nil)
+end
+
 MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
-    MapPinEnhanced:ToggleEditorWindow()
+    EditorWindow:Toggle()
 end, L["Toggle Editor"])
 
 MapPinEnhanced:AddSlashCommand(L["Options"]:lower(), function()
-    MapPinEnhanced:ToggleEditorWindow()
-    MapPinEnhanced:SetEditorView("optionView")
+    EditorWindow:Toggle()
+    EditorWindow:SetView("optionView")
 end, L["Open Options"])

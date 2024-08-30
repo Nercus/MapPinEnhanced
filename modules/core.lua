@@ -29,7 +29,8 @@ local MinimapButtonTemplate = {
         type = "button",
         label = L["Toggle Editor"],
         onClick = function()
-            MapPinEnhanced:ToggleEditorWindow()
+            local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+            EditorWindow:Toggle()
         end,
     },
     {

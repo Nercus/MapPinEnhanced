@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 
 
 
----@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider"| "SetFactory" | "SetManager" |"PinManager"
+---@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider"| "SetFactory" | "SetManager" |"PinManager" | "EditorWindow"
 
 ---@param name ModuleName
 ---@return table

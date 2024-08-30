@@ -144,7 +144,8 @@ end
 function SetManager:ExportSet(setID)
     local set = self.Sets[setID]
     if not set then return end
-    MapPinEnhanced:ShowExportFrameForSet(setID)
+    local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+    EditorWindow:ShowExportFrameForSet(setID)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()

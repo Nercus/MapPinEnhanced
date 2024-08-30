@@ -146,7 +146,11 @@ function MapPinEnhancedSetEditorViewBodyMixin:ExportSet(setID)
     self.importExportFrame:ShowExportFrame()
 end
 
-function MapPinEnhanced:ShowExportFrameForSet(setID)
+---------------------------------------------------------------------------
+---@class EditorWindow
+local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
+
+function EditorWindow:ShowExportFrameForSet(setID)
     if self.editorWindow.setView.body.ExportSet then
         self.editorWindow:Open()
         self.editorWindow.setView.body:ExportSet(setID)
