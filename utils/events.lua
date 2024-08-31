@@ -59,3 +59,29 @@ MapPinEnhancedFrame:SetScript("OnEvent", function(_, event, ...)
         end
     end
 end)
+
+
+---@alias MapPinEnhancedEvent
+---| "UpdateSetList" # Update the set list
+
+
+---@param owner table Mostly this will be the mixin of the object that is registering the event
+---@param event MapPinEnhancedEvent The event to register
+---@param func function The function to call when the event is triggered
+function MapPinEnhanced:RegisterEventCallback(owner, event, func)
+    MapPinEnhanced.RegisterCallback(owner, event, func)
+end
+
+---@param owner table Mostly this will be the mixin of the object that is registering the event
+---@param event MapPinEnhancedEvent The event to unregister
+function MapPinEnhanced:UnregisterEventCallback(owner, event)
+    MapPinEnhanced.UnregisterCallback(owner, event)
+end
+
+---@param event MapPinEnhancedEvent The event to trigger
+---@param ... any The arguments to pass to the callback functions
+function MapPinEnhanced:FireEvent(event, ...)
+    MapPinEnhanced.CB:Fire(event, ...)
+end
+
+-- TODO: move all util stuff to modules aswell
