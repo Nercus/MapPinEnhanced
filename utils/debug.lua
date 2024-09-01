@@ -303,6 +303,10 @@ local function loadDevMode(_, loadedAddon)
     if (devModeEnabled) then
         MapPinEnhanced:Print("Dev mode enabled")
         AddDevReload()
+        C_Timer.After(1, function()
+            MapPinEnhanced.LDBIcon:Show("BugSack")
+            MapPinEnhanced.LDBIcon:Show(MapPinEnhanced.addonName)
+        end)
     else
         -- check what addons are loaded right now and save them
         local loadedAddons = {}
@@ -313,6 +317,10 @@ local function loadDevMode(_, loadedAddon)
             end
         end
         MapPinEnhanced:SaveVar("loadedAddons", loadedAddons)
+        C_Timer.After(1, function()
+            MapPinEnhanced.LDBIcon:Hide("BugSack")
+            MapPinEnhanced.LDBIcon:Hide(MapPinEnhanced.addonName)
+        end)
     end
 end
 
