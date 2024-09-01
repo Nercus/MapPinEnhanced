@@ -31,3 +31,37 @@ function MapPinEnhanced:DebounceChange(func, delay)
         end)
     end
 end
+
+---Batch the execution of a list of functions with a delay between each execution
+---@param funcList fun()[]
+---@param onUpdate fun(progress: integer, maxProgress: integer)?
+---@param onFinish fun()?
+function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish)
+    local frameRate = GetFramerate()
+    if frameRate == 0 then frameRate = 1 end
+    local delay = 1 / frameRate
+
+    local function Worker()
+        local maxProgress = #funcList
+        local nextTime = coroutine.yield()
+        for i = 1, maxProgress do
+            funcList[i]()
+            if onUpdate then onUpdate(i, maxProgress) end
+            if GetTimePreciseSec() > nextTime then
+                nextTime = coroutine.yield()
+            end
+        end
+    end
+
+    local workerThread = coroutine.create(Worker)
+    local ticker
+    ticker = C_Timer.NewTicker(delay,
+        function()
+            local success = coroutine.resume(workerThread, GetTimePreciseSec() + delay)
+            if not success or coroutine.status(workerThread) == "dead" then
+                ticker:Cancel()
+                if onFinish then onFinish() end
+                return
+            end
+        end)
+end
