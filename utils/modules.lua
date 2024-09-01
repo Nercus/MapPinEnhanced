@@ -8,9 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@param name ModuleName
 ---@return table
 function MapPinEnhanced:CreateModule(name)
-    local module = {
-        name = name,
-    } ---@type table
+    local module = {}
     if (not self.modules) then
         self.modules = {}
     end
