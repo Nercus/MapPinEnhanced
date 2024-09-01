@@ -15,4 +15,5 @@
     <Script file="helpers.lua" />
     <Script file="dialog.lua" />
     <Script file="menu.lua" />
+    <Script file="tests.lua" />
 </Ui>

@@ -215,12 +215,79 @@ local function AddDevReload()
     testStatusbar.text:SetFontObject(GameFontNormal)
     testStatusbar.text:SetPoint("CENTER", 0, 0)
 
+
+    local runTestsButton = CreateFrame("Button", nil, f)
+    runTestsButton:SetPoint("LEFT", testStatusbar, "RIGHT", 5, 0)
+    runTestsButton:SetSize(30, 30)
+    runTestsButton:SetFrameStrata("HIGH")
+    runTestsButton:SetNormalAtlas("CreditsScreen-Assets-Buttons-Play")
+
     local function SetStatusbarValue(min, max, current)
         testStatusbar:SetMinMaxValues(min, max)
         testStatusbar:SetValue(current)
         testStatusbar.text:SetText(string.format("Tests completed: %d/%d", current, max))
     end
-    SetStatusbarValue(0, 0, 0)
+
+    local Tests = MapPinEnhanced:GetModule("Tests")
+    local testCount = Tests:GetNumberOfTests()
+    SetStatusbarValue(0, testCount, 0)
+
+    runTestsButton:SetScript("OnClick", function()
+        local testIndex = 0
+        Tests:RunTests(function(success)
+            if not success then return end
+            testIndex = testIndex + 1
+            SetStatusbarValue(0, testCount, testIndex)
+        end, function(errorList)
+            local numErrors = #errorList
+            local allTestsPassed = numErrors == 0
+            testStatusbar.errorList = errorList
+            if allTestsPassed then
+                testStatusbar.text:SetTextColor(0, 1, 0)
+                testStatusbar.text:SetText("All tests passed")
+                return
+            end
+            testStatusbar.text:SetTextColor(1, 0, 0)
+            testStatusbar.text:SetText(string.format("Tests failed: %d", numErrors))
+        end)
+    end)
+
+    local function BuildStatusbarTooltip(errorList)
+        if not errorList then
+            GameTooltip:SetText("No tests have been run yet")
+            return
+        end
+        GameTooltip:SetText("Test results:")
+        local tests = Tests:GetTests()
+        ---@type table<string, boolean>
+        local erroredTests = {}
+        for i = 1, #errorList do
+            ---@type string[]
+            local err = errorList[i]
+            erroredTests[err[2]] = true
+        end
+
+        for _, test in ipairs(tests) do
+            local testStateIcon = "|A:common-icon-checkmark:0:0|a"
+            if erroredTests[test.name] then
+                testStateIcon = "|A:common-icon-redx:0:0|a"
+            end
+            GameTooltip:AddDoubleLine(test.name, testStateIcon, 1, 1, 1, 1, 1, 1)
+        end
+    end
+
+
+
+    testStatusbar:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(testStatusbar, "ANCHOR_TOP")
+        BuildStatusbarTooltip(testStatusbar.errorList)
+        GameTooltip:Show()
+    end)
+
+    testStatusbar:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+
 
 
     f:SetPropagateKeyboardInput(true)
