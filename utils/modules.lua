@@ -16,7 +16,7 @@ function MapPinEnhanced:CreateModule(name)
     return module
 end
 
----@generic T
+---@generic T : ModuleName
 ---@param name `T`
 ---@return T
 function MapPinEnhanced:GetModule(name)
