@@ -113,7 +113,7 @@ end
 
 ---@return number count
 function Tests:GetNumberOfTests()
-    return #self.tests
+    return #(self.tests or {})
 end
 
 function Tests:GetTests()
