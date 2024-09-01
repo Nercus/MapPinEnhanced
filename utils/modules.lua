@@ -3,7 +3,6 @@
 local MapPinEnhanced = select(2, ...)
 
 
-
 ---@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider"| "SetFactory" | "SetManager" |"PinManager" | "EditorWindow"
 
 ---@param name ModuleName
@@ -23,5 +22,8 @@ end
 ---@param name `T`
 ---@return T
 function MapPinEnhanced:GetModule(name)
+    if (not self.modules or not self.modules[name]) then
+        return self:CreateModule(name)
+    end
     return self.modules[name]
 end

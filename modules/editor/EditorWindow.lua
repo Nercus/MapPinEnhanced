@@ -131,7 +131,7 @@ end
 ---------------------------------------------------------------------------
 
 ---@class EditorWindow
-local EditorWindow = MapPinEnhanced:CreateModule("EditorWindow")
+local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
 
 ---@param viewType EditorViews
 function EditorWindow:SetView(viewType)

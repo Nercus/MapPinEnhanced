@@ -2,13 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
----------------------------------------------------------------------------
-
-MapPinEnhanced:CreateModule("PinManager")
-MapPinEnhanced:CreateModule("PinFactory")
-MapPinEnhanced:CreateModule("SetManager")
-MapPinEnhanced:CreateModule("SetFactory")
-MapPinEnhanced:CreateModule("Blizz")
 
 ---------------------------------------------------------------------------
 

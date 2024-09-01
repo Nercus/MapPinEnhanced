@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Options
-local Options = MapPinEnhanced:CreateModule("Options")
+local Options = MapPinEnhanced:GetModule("Options")
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 ---------------------------------------------------------------------------

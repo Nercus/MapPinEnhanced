@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class PinProvider
-local PinProvider = MapPinEnhanced:CreateModule("PinProvider")
+local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
