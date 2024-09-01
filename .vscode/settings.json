@@ -1,5 +1,57 @@
 {
+    "Lua.codeLens.enable": true,
+    "Lua.completion.autoRequire": false,
+    "Lua.diagnostics.disable": [],
+    "Lua.diagnostics.globals": [
+        "TomTom",
+        "ScrollFrame_OnLoad"
+    ],
+    "Lua.diagnostics.groupSeverity": {
+        "global": "Error"
+    },
+    "Lua.diagnostics.neededFileStatus": {
+        "global-element": "Any",
+        "missing-global-doc": "Any",
+        "codestyle-check": "Any",
+        "incomplete-signature-doc": "Any",
+        "no-unknown": "Any"
+    },
+    "Lua.hint.setType": true,
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.workspace.ignoreDir": [
+        ".github",
+        ".vscode",
+        "libs"
+    ],
+    "[lua]": {
+        "editor.defaultFormatter": "sumneko.lua"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "editor.formatOnSave": true,
+    "editor.indentSize": "tabSize",
+    "editor.tabCompletion": "onlySnippets",
     "editor.tabSize": 4,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": true,
+    "explorer.fileNesting.patterns": {
+        "*.lua": "${capture}.lua, ${capture}.xml",
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, annotations.lua"
+    },
+    "explorer.sortOrder": "default",
+    "peacock.color": "#EBCB8B",
     "workbench.colorCustomizations": {
         "commandCenter.border": "#15202b99",
         "sash.hoverBorder": "#f2deb6",
@@ -14,46 +66,6 @@
         "titleBar.inactiveBackground": "#ebcb8b99",
         "titleBar.inactiveForeground": "#15202b99"
     },
-    "peacock.color": "#EBCB8B",
-    "wowAPI.luals.defineKnownGlobals": false,
-    "Lua.completion.autoRequire": false,
-    "explorer.sortOrder": "default",
-    "explorer.fileNesting.enabled": true,
-    "explorer.fileNesting.expand": true,
-    "explorer.fileNesting.patterns": {
-        "*.lua": "${capture}.lua, ${capture}.xml",
-        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, annotations.lua"
-    },
-    "Lua.runtime.version": "Lua 5.1",
-    "Lua.runtime.builtin": {
-        "basic": "disable",
-        "debug": "disable",
-        "io": "disable",
-        "math": "disable",
-        "os": "disable",
-        "package": "disable",
-        "string": "disable",
-        "table": "disable",
-        "utf8": "disable"
-    },
-    "Lua.workspace.ignoreDir": [
-        ".github",
-        ".vscode",
-        "libs"
-    ],
-    "Lua.diagnostics.disable": [],
-    "Lua.diagnostics.neededFileStatus": {
-        "global-element": "Any",
-        "missing-global-doc": "Any",
-        "codestyle-check": "Any",
-        "incomplete-signature-doc": "Any",
-        "no-unknown": "Any"
-    },
-    "Lua.diagnostics.groupSeverity": {
-        "global": "Error"
-    },
-    "Lua.diagnostics.globals": [
-        "TomTom",
-        "ScrollFrame_OnLoad"
-    ],
+    "wowAPI.luals.configurationScope": "User",
+    "wowAPI.luals.defineKnownGlobals": false
 }
