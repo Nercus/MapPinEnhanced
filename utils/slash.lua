@@ -13,11 +13,11 @@ local normalColor = CreateColor(1, 0.82, 0)
 local SlashCmdList = getglobal("SlashCmdList") ---@as table<string, function>
 local helpPattern = "|A:gearupdate-arrow-bullet-point:12:12:2:-2|a %s - %s"
 function MapPinEnhanced:PrintHelp()
-    print(self:WrapTextInColor(self.nameVersionString, normalColor))
+    self:PrintUnformatted(self:WrapTextInColor(self.nameVersionString, normalColor))
     for command, help in pairs(commandHelpStrings) do
         help = self:WrapTextInColor(help, normalColor)
         local helpString = helpPattern:format(command, help)
-        print(helpString)
+        self:PrintUnformatted(helpString)
     end
 end
 

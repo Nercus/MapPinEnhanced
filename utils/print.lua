@@ -16,3 +16,12 @@ function MapPinEnhanced:Print(...)
     end
     print(prefix .. str)
 end
+
+function MapPinEnhanced:PrintUnformatted(...)
+    local str = select(1, ...)
+    local args = select(2, ...)
+    if args then
+        str = string.format(str, args) ---@type string
+    end
+    print(str)
+end

@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@type table<string, string>
+---@enum (key) MapPinEnhancedTextures
 local TEXTURES = {
     ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTrackedYellow.png",
     ["PinMask"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinMask.png",
@@ -30,26 +30,12 @@ local TEXTURES = {
     ["PinUntrackedCustom"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntrackedCustom.png",
 }
 
----@type table<string, any>
-local ATLAS = {}
-
 ---Get the texture path for a texture. If the texture is not found, an error is thrown.
----@param textureName string
+---@param textureName MapPinEnhancedTextures
 ---@return string | nil
 function MapPinEnhanced:GetTexture(textureName)
     if (TEXTURES[textureName]) then
         return TEXTURES[textureName]
     end
     assert(false, "Texture not found: " .. textureName)
-end
-
----Use the custom atlas system to apply a custom texture file to a texture.
----@param texture Texture
----@param atlasName string
-function MapPinEnhanced:ApplyCustomAtlasToTexture(texture, atlasName)
-    local atlasData = ATLAS[atlasName]
-    local texturePath = self:GetTexture(atlasData[1])
-    texture:SetSize(atlasData[3], atlasData[2])
-    texture:SetTexture(texturePath)
-    texture:SetTexCoord(atlasData[4], atlasData[5], atlasData[6], atlasData[7])
 end
