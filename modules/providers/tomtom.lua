@@ -2,8 +2,19 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+local L = MapPinEnhanced.L
 
 ---------------------------------------------------------------------------
+
+function MapPinEnhanced:CheckForTomTom()
+    self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
+    if not self.isTomTomLoaded then
+        ---@diagnostic disable-next-line: global-element slash command definition has to be global
+        SLASH_MapPinEnhanced3 = "/way"
+        return
+    end
+    self:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
+end
 
 local isHooked = false
 --- Hook TomTom's AddWaypoint function to add pins to the map when a use has TomTom installed and adds a waypoint to the map.
@@ -29,4 +40,9 @@ MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
         MapPinEnhanced.isTomTomLoaded = true
         HookTomTomAddWaypoint()
     end
+end)
+
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    MapPinEnhanced:CheckForTomTom()
 end)

@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class Blizz
 local Blizz = MapPinEnhanced:GetModule("Blizz")
+local L = MapPinEnhanced.L
 
 ---------------------------------------------------------------------------
 
@@ -78,8 +79,18 @@ end
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
 
 
+function Blizz:CheckNavigationEnabled()
+    if GetCVar("showInGameNavigation") == "1" then return end
+    MapPinEnhanced:ShowPopup({
+        text = L
+            ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"],
+        onAccept = function()
+            SetCVar("showInGameNavigation", 1)
+        end
+    })
+end
 
-
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.CheckNavigationEnabled)
 
 ---Method to handle the super tracking change event and track the last tracked pin
 function Blizz:OnSuperTrackingChanged()

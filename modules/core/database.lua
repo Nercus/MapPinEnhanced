@@ -1,8 +1,42 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@alias MapPinEnhancedDB table<string, table | number | string | boolean>
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
+
+---@alias MapPinEnhancedDB table<string, table | number | string | boolean>
+local DEFAULTS = CONSTANTS.DEFAULTS
+
+
+---@class SavedVars
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+
+-- ---@param key1 SavedVarKeys
+-- ---@param key2 SavedVarSubKeys
+-- ---@param value any
+-- function SavedVars:Save(key1, key2, value)
+-- NOTE: this implementation could be changed if multiple function annotations in a definition file are support by luals -> there is currently a PR open for this: https://github.com/LuaLS/lua-language-server/pull/2822
+-- end
+
+---Retrieves the default value for a given set of keys.
+---@param ... string A variable number of arguments representing the keys to traverse the DEFAULTS table.
+---@return table|number|boolean|string|nil The default value corresponding to the provided keys, or nil if the keys do not exist.
+function MapPinEnhanced:GetDefault(...)
+    local arg = { ... }
+    local currentTable = DEFAULTS
+    for index, key in ipairs(arg) do
+        if index == #arg then -- last key
+            if currentTable[key] == nil then
+                assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
+            end
+            return currentTable[key]
+        end
+        if currentTable[key] == nil then
+            assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
+        end
+        currentTable = currentTable[key] --[[@as table]]
+    end
+end
 
 ---save a variable to the saved variables
 ---@param ... string | number | boolean | table

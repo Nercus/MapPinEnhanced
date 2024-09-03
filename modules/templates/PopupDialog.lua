@@ -2,6 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 
 
+---@class Dialog
+local Dialog = MapPinEnhanced:GetModule("Dialog")
+
+
 
 ---@class PopupOption
 ---@field text string

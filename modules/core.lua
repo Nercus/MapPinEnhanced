@@ -1,160 +1,35 @@
 ---@class MapPinEnhanced
+---@field modules table<string, table>
+---@field GetModule fun(self, name:"Blizz"): Blizz
+---@field GetModule fun(self, name:"Options"): Options
+---@field GetModule fun(self, name:"PinFactory"): PinFactory
+---@field GetModule fun(self, name:"PinProvider"): PinProvider
+---@field GetModule fun(self, name:"SetFactory"): SetFactory
+---@field GetModule fun(self, name:"SetManager"): SetManager
+---@field GetModule fun(self, name:"PinManager"): PinManager
+---@field GetModule fun(self, name:"EditorWindow"): EditorWindow
+---@field GetModule fun(self, name:"Tests"): Tests
+---@field GetModule fun(self, name:"SavedVars"): SavedVars
+---@field GetModule fun(self, name:"Dialog"): Dialog
 local MapPinEnhanced = select(2, ...)
-local L = MapPinEnhanced.L
+
+---@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider" | "SetFactory" | "SetManager" | "PinManager" | "EditorWindow" | "SavedVars"
 
 
----------------------------------------------------------------------------
-
----@type AnyMenuEntry[]
-local MinimapButtonTemplate = {
-    {
-        type = "title",
-        label = MapPinEnhanced.nameVersionString,
-    },
-    {
-        type = "button",
-        label = L["Toggle Tracker"],
-        onClick = function()
-            MapPinEnhanced:TogglePinTracker()
-        end,
-    },
-    {
-        type = "button",
-        label = L["Toggle Editor"],
-        onClick = function()
-            local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
-            EditorWindow:Toggle()
-        end,
-    },
-    {
-        type = "button",
-        label = L["Clear All Pins"],
-        onClick = function()
-            local PinManager = MapPinEnhanced:GetModule("PinManager")
-            PinManager:ClearPins()
-        end,
-    },
-    {
-        type = "submenu",
-        label = L["Load Set"],
-        entries = function()
-            local SetManager = MapPinEnhanced:GetModule("SetManager")
-            local sets = SetManager:GetSets()
-            ---@type MenuButtonEntry[]
-            local entries = {}
-            for _, set in pairs(sets) do
-                entries[#entries + 1] = {
-                    type = "button",
-                    label = set.name,
-                    onClick = function()
-                        set.LoadSet()
-                    end
-                }
-            end
-            return entries
-        end
-    },
-    {
-        type = "divider",
-    },
-    {
-        type = "button",
-        label = L["Hide Minimap Button"],
-        onClick = function()
-            MapPinEnhanced:ToggleMinimapButton()
-        end,
-    },
-}
-
-
-function MapPinEnhanced:ToggleMinimapButton(init)
-    if not self.minimapIconCreated then
-        local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(self.addonName, {
-            type = "launcher",
-            text = self.addonName,
-            icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
-            OnClick = function(owner, button)
-                if button == "LeftButton" then
-                    if IsAltKeyDown() then
-                        local PinManager = MapPinEnhanced:GetModule("PinManager")
-                        PinManager:ClearPins()
-                        return
-                    end
-                    self:TogglePinTracker()
-                elseif button == "RightButton" then
-                    MapPinEnhanced:GenerateMenu(owner, MinimapButtonTemplate)
-                end
-            end,
-        })
-        self.minimapIconCreated = true
-        if not MapPinEnhancedDB.minimapIcon then
-            MapPinEnhancedDB.minimapIcon = MapPinEnhanced:GetDefault("minimapIcon") --[[@as table]]
-        end
-        self.LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker,
-            MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
+---@param name string
+---@return table
+function MapPinEnhanced:CreateModule(name)
+    local module = {}
+    if (not self.modules) then
+        self.modules = {}
     end
-    if init then return end
-    local currentState = MapPinEnhanced:GetVar("minimapIcon", "hide") --[[@as boolean]]
-    if currentState then
-        MapPinEnhanced:SaveVar("minimapIcon", "hide", false)
-        MapPinEnhanced:Print(L["Minimap Button Is Now Visible"])
-    else
-        MapPinEnhanced:SaveVar("minimapIcon", "hide", true)
-        MapPinEnhanced:Print(L["Minimap Button Is Now Hidden"])
+    self.modules[name] = module
+    return module
+end
+
+function MapPinEnhanced:GetModule(name)
+    if (not self.modules or not self.modules[name]) then
+        return self:CreateModule(name)
     end
-    self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
+    return self.modules[name]
 end
-
-function MapPinEnhanced:RegisterAddonCompartment()
-    AddonCompartmentFrame:RegisterAddon({
-        text = self.addonName,
-        icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
-        notCheckable = true,
-        func = function()
-            self:TogglePinTracker()
-        end,
-    })
-end
-
-function MapPinEnhanced:CheckNavigationEnabled()
-    if GetCVar("showInGameNavigation") == "1" then return end
-    self:ShowPopup({
-        text = L
-            ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"],
-        onAccept = function()
-            SetCVar("showInGameNavigation", 1)
-        end
-    })
-end
-
-function MapPinEnhanced:CheckForTomTom()
-    self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
-    if not self.isTomTomLoaded then
-        ---@diagnostic disable-next-line: global-element slash command definition has to be global
-        SLASH_MapPinEnhanced3 = "/way"
-        return
-    end
-    self:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
-end
-
----------------------------------------------------------------------------
-
-MapPinEnhanced:AddSlashCommand(L["Minimap"]:lower(), function()
-    MapPinEnhanced:ToggleMinimapButton()
-end, L["Toggle Minimap Button"])
-
----------------------------------------------------------------------------
-
-function MapPinEnhanced:Initialize()
-    if not MapPinEnhancedDB then
-        MapPinEnhancedDB = {}
-    end
-    if MapPinEnhanced.init then return end
-    MapPinEnhanced:ToggleMinimapButton(true)
-    MapPinEnhanced:RegisterAddonCompartment()
-    MapPinEnhanced:CheckNavigationEnabled()
-    MapPinEnhanced:CheckForTomTom()
-    MapPinEnhanced.init = true
-end
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", MapPinEnhanced.Initialize)

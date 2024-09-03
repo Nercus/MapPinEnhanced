@@ -7,14 +7,15 @@
         "ScrollFrame_OnLoad"
     ],
     "Lua.diagnostics.groupSeverity": {
-        "global": "Error"
+        "global": "Error",
     },
     "Lua.diagnostics.neededFileStatus": {
         "global-element": "Any",
         "missing-global-doc": "Any",
         "codestyle-check": "Any",
         "incomplete-signature-doc": "Any",
-        "no-unknown": "Any"
+        "no-unknown": "Any",
+        "param-type-mismatch": "Any"
     },
     "Lua.hint.setType": true,
     "Lua.runtime.builtin": {
@@ -48,7 +49,7 @@
     "explorer.fileNesting.expand": true,
     "explorer.fileNesting.patterns": {
         "*.lua": "${capture}.lua, ${capture}.xml",
-        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, annotations.lua"
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore"
     },
     "explorer.sortOrder": "default",
     "peacock.color": "#EBCB8B",

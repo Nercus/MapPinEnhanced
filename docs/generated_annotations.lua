@@ -48,7 +48,7 @@
 --@field bg Texture
 
 
---@class MapPinEnhancedPopupDialog : MapPinEnhancedSimpelFrame90
+--@class MapPinEnhancedPopupDialog : MapPinEnhancedSimpleFrame
 --@field accept MapPinEnhancedButtonYellow
 --@field cancel MapPinEnhancedButtonRed
 --@field text FontString
@@ -93,7 +93,7 @@
 --@field icon Texture
 
 
---@class MapPinEnhancedSimpelFrame90 : Frame
+--@class MapPinEnhancedSimpleFrame : Frame
 --@field topleft Texture
 --@field topright Texture
 --@field bottomright Texture

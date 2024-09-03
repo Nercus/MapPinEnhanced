@@ -122,6 +122,10 @@ StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
     button1 = "Yes",
     button2 = "No",
     OnAccept = function()
+        if not MapPinEnhancedDB then
+            MapPinEnhancedDB = {}
+            return
+        end
         for key, _ in pairs(MapPinEnhancedDB) do
             if not keysToKeep[key] then
                 MapPinEnhancedDB[key] = nil

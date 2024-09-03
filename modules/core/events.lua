@@ -62,7 +62,7 @@ end)
 
 
 ---@alias MapPinEnhancedEvent
----| "UpdateSetList" # Update the set list
+---| "UpdateSetList" # Update the full set list
 
 
 ---@param owner table Mostly this will be the mixin of the object that is registering the event
@@ -81,6 +81,8 @@ end
 ---@param event MapPinEnhancedEvent The event to trigger
 ---@param ... any The arguments to pass to the callback functions
 function MapPinEnhanced:FireEvent(event, ...)
+    -- TODO: debounce the fire event based on eventnames like "UpdateSet<setUUID>"
+    -- TODO: add function additional function to force the event to fire
     MapPinEnhanced.CB:Fire(event, ...)
 end
 
