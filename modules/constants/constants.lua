@@ -1,10 +1,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
---- Holds all the constants for the addon
-
 local L = MapPinEnhanced.L
 
+--- Holds all the constants for the addon
 ---@class CONSTANTS
 local CONSTANTS = {}
 MapPinEnhanced.CONSTANTS = CONSTANTS
@@ -96,8 +95,6 @@ CONSTANTS.CATEGORY_ORDER = {
 CONSTANTS.PIN_TEXTURE_OVERRIDES = {
     ["worldquest-questmarker-questbang"] = "worldquest-tracker-questmarker",
 }
-
-
 
 ---@enum (key, partial) SavedVarKeys
 CONSTANTS.DEFAULTS = {

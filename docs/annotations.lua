@@ -5,13 +5,13 @@
 local CallbackHandler = {}
 
 ---Register a callback on the given object.
----@param event MapPinEnhancedEvent
+---@param event MapPinEnhancedEvent | string
 ---@param method function
 ---@param arg any
 function CallbackHandler:RegisterCallback(event, method, arg) end
 
 ---Unregister a callback on the given object.
----@param event MapPinEnhancedEvent
+---@param event MapPinEnhancedEvent | string
 function CallbackHandler:UnregisterCallback(event) end
 
 ---Unregister all callbacks on the given object.
@@ -23,7 +23,7 @@ function CallbackHandler:UnregisterAllCallbacks() end
 local MPHCallbackHandlerRegistry = {}
 
 ---fires the given event/message into the registry
----@param eventname MapPinEnhancedEvent
+---@param eventname MapPinEnhancedEvent | string
 ---@param ... unknown passed to the functions listening to the event.
 function MPHCallbackHandlerRegistry:Fire(eventname, ...) end
 
@@ -371,8 +371,6 @@ function AddonCompartmentFrame:RegisterAddon(data) end
 FACTION_HORDE = "Horde"
 FACTION_ALLIANCE = "Alliance"
 
----@type MapPinEnhancedDB
-MapPinEnhancedDB = {}
 
 ---@class UIErrorsFrame
 UIErrorsFrame = {}

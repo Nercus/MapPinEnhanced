@@ -1,6 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class Textures
+local Textures = MapPinEnhanced:GetModule("Textures")
+
+
 ---@enum (key) MapPinEnhancedTextures
 local TEXTURES = {
     ["Icon"] = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTrackedYellow.png",
@@ -33,7 +37,7 @@ local TEXTURES = {
 ---Get the texture path for a texture. If the texture is not found, an error is thrown.
 ---@param textureName MapPinEnhancedTextures
 ---@return string | nil
-function MapPinEnhanced:GetTexture(textureName)
+function Textures:GetTexture(textureName)
     if (TEXTURES[textureName]) then
         return TEXTURES[textureName]
     end

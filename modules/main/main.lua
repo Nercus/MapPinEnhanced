@@ -21,6 +21,7 @@ local AVAILABLE_VIEWS = {
     optionView = "optionView",
 }
 
+-- TODO: rename the window to MapPinEnhancedMainFrame
 
 -- TODO: move set view and editor view to sub modules in editor window
 local viewConfigurations = {
@@ -94,10 +95,10 @@ function MapPinEnhancedEditorWindowMixin:AddOptions()
         step = 0.05,
         updateOnRelease = true,
         default = MapPinEnhanced:GetDefault("general", "editorScale") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("general", "editorScale") --[[@as number]] end,
+        init = function() return MapPinEnhanced:Get("general", "editorScale") --[[@as number]] end,
         onChange = function(value)
             self:SetScale(value)
-            MapPinEnhanced:SaveVar("general", "editorScale", value)
+            MapPinEnhanced:Save("general", "editorScale", value)
         end
     })
 end

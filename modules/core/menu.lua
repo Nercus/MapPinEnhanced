@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class Menu
+local Menu = MapPinEnhanced:GetModule("Menu")
 
 ---@alias MenuEntryType "button" | "title" | "checkbox" | "radio" | "divider" | "spacer" | "template" | "submenu"
 
@@ -77,9 +79,22 @@ local function GenerateMenuElement(rootDescription, entry)
     end
 end
 
+
+---@param menuTemplate AnyMenuEntry[]
+---@return function
+function Menu:GetGeneratorFunction(menuTemplate)
+    assert(type(menuTemplate) == "table")
+    return function(_, rootDescription)
+        ---@cast rootDescription SubMenuUtil
+        for _, entry in ipairs(menuTemplate) do
+            GenerateMenuElement(rootDescription, entry)
+        end
+    end
+end
+
 ---@param parentFrame ScriptRegion
 ---@param menuTemplate AnyMenuEntry[]
-function MapPinEnhanced:GenerateMenu(parentFrame, menuTemplate)
+function Menu:GenerateMenu(parentFrame, menuTemplate)
     assert(type(parentFrame) == "table")
     assert(type(menuTemplate) == "table")
 

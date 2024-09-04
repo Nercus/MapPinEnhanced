@@ -1,12 +1,17 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+
+---@class Events
+local Events = MapPinEnhanced:GetModule("Events")
+
+
 local MapPinEnhancedFrame = CreateFrame("Frame")
 local registeredEvents = {} ---@type table<WowEvent, table<number, function>>
 
 ---register event
 ---@param event WowEvent
 ---@param func function
-function MapPinEnhanced:RegisterEvent(event, func)
+function Events:RegisterEvent(event, func)
     if not registeredEvents[event] then
         registeredEvents[event] = {}
     end
@@ -16,7 +21,7 @@ end
 
 ---unregister event
 ---@param event WowEvent
-function MapPinEnhanced:UnregisterEvent(event)
+function Events:UnregisterEvent(event)
     registeredEvents[event] = nil
     MapPinEnhancedFrame:UnregisterEvent(event)
 end
@@ -24,7 +29,7 @@ end
 ---unregister a specific event for a specific function
 ---@param event WowEvent
 ---@param func function
-function MapPinEnhanced:UnregisterEventForFunction(event, func)
+function Events:UnregisterEventForFunction(event, func)
     if registeredEvents[event] then
         for i, f in ipairs(registeredEvents[event]) do
             if f == func then
@@ -43,7 +48,7 @@ end
 ---@param event WowEvent
 ---@param func function
 ---@return boolean
-function MapPinEnhanced:IsEventRegisteredForFunction(event, func)
+function Events:IsEventRegisteredForFunction(event, func)
     for _, f in ipairs(registeredEvents[event] or {}) do
         if f == func then
             return true
@@ -60,30 +65,52 @@ MapPinEnhancedFrame:SetScript("OnEvent", function(_, event, ...)
     end
 end)
 
+---@enum MapPinEnhancedEvent @The events that can be triggered by the MapPinEnhanced module.
+local MapPinEnhancedEvent = {
+    "UpdateSetList", -- Fired when the full set list is updated (e.g. after a set is added or removed)
+    "UpdateSet",     -- Fired when a specific set is updated (e.g. after a pin is added or removed)
+}
 
----@alias MapPinEnhancedEvent
----| "UpdateSetList" # Update the full set list
-
+function Events:CheckEventName(event)
+    ---@type string?
+    local eventName = event:match("([^:]+)")
+    if not MapPinEnhancedEvent[eventName] then
+        error("Invalid event name: " .. event)
+    end
+end
 
 ---@param owner table Mostly this will be the mixin of the object that is registering the event
----@param event MapPinEnhancedEvent The event to register
+---@param event MapPinEnhancedEvent  | string The event to register
 ---@param func function The function to call when the event is triggered
-function MapPinEnhanced:RegisterEventCallback(owner, event, func)
+function Events:RegisterEventCallback(owner, event, func)
+    self:CheckEventName(event)
     MapPinEnhanced.RegisterCallback(owner, event, func)
 end
 
 ---@param owner table Mostly this will be the mixin of the object that is registering the event
----@param event MapPinEnhancedEvent The event to unregister
-function MapPinEnhanced:UnregisterEventCallback(owner, event)
+---@param event MapPinEnhancedEvent  | string The event to unregister
+function Events:UnregisterEventCallback(owner, event)
+    self:CheckEventName(event)
     MapPinEnhanced.UnregisterCallback(owner, event)
 end
 
----@param event MapPinEnhancedEvent The event to trigger
+---@type table<MapPinEnhancedEvent|string, FunctionContainer>
+local eventTimers = {}
+
+---@param event MapPinEnhancedEvent | string The event to trigger
 ---@param ... any The arguments to pass to the callback functions
-function MapPinEnhanced:FireEvent(event, ...)
-    -- TODO: debounce the fire event based on eventnames like "UpdateSet<setUUID>"
-    -- TODO: add function additional function to force the event to fire
-    MapPinEnhanced.CB:Fire(event, ...)
+function Events:FireEvent(event, ...)
+    self:CheckEventName(event)
+    if eventTimers[event] then
+        eventTimers[event]:Cancel()
+    end
+    local args = { ... }
+    eventTimers[event] = C_Timer.NewTimer(0.1, function()
+        MapPinEnhanced.CB:Fire(event, unpack(args))
+    end)
 end
 
--- TODO: move all util stuff to modules aswell
+function Events:FireEventImmediat(event, ...)
+    self:CheckEventName(event)
+    MapPinEnhanced.CB:Fire(event, ...)
+end

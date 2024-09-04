@@ -1,6 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local Events = MapPinEnhanced:GetModule("Events")
+local Utils = MapPinEnhanced:GetModule("Utils")
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+
 --@do-not-package@
 ---@type function
 local ReloadUI = C_UI.Reload
@@ -41,7 +45,7 @@ function MapPinEnhanced:Debug(...)
 end
 
 --@do-not-package@
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+Events:RegisterEvent("PLAYER_LOGIN", function()
     playerLoginFired = true
     C_Timer.After(1, function()
         for i = 1, #preFiredQueue do
@@ -74,11 +78,14 @@ local devAddonList = {
 }
 
 
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+
+
 
 local function loadDevAddons(isDev)
     if not isDev then
         C_AddOns.DisableAddOn(MapPinEnhanced.addonName)
-        local loadedAddons = MapPinEnhanced:GetVar("loadedAddons") or {}
+        local loadedAddons = SavedVars:Get("loadedAddons") or {}
         if #loadedAddons == 0 then
             C_AddOns.EnableAllAddOns()
             return
@@ -98,23 +105,23 @@ end
 
 
 local function setDevMode()
-    local devModeEnabled = MapPinEnhanced:GetVar("devMode")
+    local devModeEnabled = SavedVars:Get("devMode")
     if (devModeEnabled) then
-        MapPinEnhanced:SaveVar("devMode", false)
+        SavedVars:Save("devMode", false)
     else
-        MapPinEnhanced:SaveVar("devMode", true)
+        SavedVars:Save("devMode", true)
     end
     loadDevAddons(not devModeEnabled)
     ReloadUI()
 end
-MapPinEnhanced:AddSlashCommand("dev", setDevMode, "Toggle dev mode")
+SlashCommand:AddSlashCommand("dev", setDevMode, "Toggle dev mode")
 
 
-
+---@enum DevModeKeysToKeep
 local keysToKeep = {
-    ["devMode"] = true,
-    ["loadedAddons"] = true,
-    ["version"] = true,
+    "devMode",
+    "loadedAddons",
+    "version",
 }
 
 StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
@@ -126,11 +133,13 @@ StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
             MapPinEnhancedDB = {}
             return
         end
-        for key, _ in pairs(MapPinEnhancedDB) do
-            if not keysToKeep[key] then
-                MapPinEnhancedDB[key] = nil
-            end
+        ---@type table<DevModeKeysToKeep, any>
+        local DBToKeep = {}
+        for i = 1, #keysToKeep do
+            local key = keysToKeep[i] --[[@as DevModeKeysToKeep]]
+            DBToKeep[key] = MapPinEnhancedDB[key]
         end
+        MapPinEnhancedDB = DBToKeep
         ReloadUI()
     end,
     timeout = 0,
@@ -303,9 +312,9 @@ local function loadDevMode(_, loadedAddon)
     if loadedAddon ~= MapPinEnhanced.addonName then
         return
     end
-    local devModeEnabled = MapPinEnhanced:GetVar("devMode")
+    local devModeEnabled = SavedVars:Get("devMode")
     if (devModeEnabled) then
-        MapPinEnhanced:Print("Dev mode enabled")
+        Utils:Print("Dev mode enabled")
         AddDevReload()
         C_Timer.After(1, function()
             MapPinEnhanced.LDBIcon:Show("BugSack")
@@ -320,7 +329,7 @@ local function loadDevMode(_, loadedAddon)
                 table.insert(loadedAddons, name)
             end
         end
-        MapPinEnhanced:SaveVar("loadedAddons", loadedAddons)
+        SavedVars:Save("loadedAddons", loadedAddons)
         C_Timer.After(1, function()
             MapPinEnhanced.LDBIcon:Hide("BugSack")
             MapPinEnhanced.LDBIcon:Hide(MapPinEnhanced.addonName)
@@ -328,6 +337,7 @@ local function loadDevMode(_, loadedAddon)
     end
 end
 
-MapPinEnhanced:RegisterEvent("ADDON_LOADED", loadDevMode)
+
+Events:RegisterEvent("ADDON_LOADED", loadDevMode)
 
 --@end-do-not-package@

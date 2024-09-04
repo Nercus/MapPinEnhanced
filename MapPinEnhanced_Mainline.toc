@@ -26,5 +26,5 @@
 
 libs\_imports.xml
 MapPinEnhanced.lua
-utils\_imports.xml
+locales\_imports.xml
 modules\_imports.xml

@@ -84,6 +84,7 @@ function MapPinEnhancedSelectMixin:Setup(optionData)
             end
         end
     end
+    -- TODO: adjust it so it uses the Menu helper
     self:SetupMenu(GeneratorFunction)
     self:SetDisabled(optionData.disabledState)
     self:SetCallback(optionData.onChange)

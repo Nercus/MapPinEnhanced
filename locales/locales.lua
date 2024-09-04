@@ -10,6 +10,13 @@ local L = setmetatable({}, {
         --@do-not-package@
         if MapPinEnhanced.Debug then
             MapPinEnhanced:Debug("Missing localization for: " .. v)
+        else
+            -- Delay the error message by 1 second if the locale is called before the full addon is loaded
+            C_Timer.After(1, function()
+                if MapPinEnhanced.Debug then
+                    MapPinEnhanced:Debug("Missing localization for: " .. v)
+                end
+            end)
         end
         --@end-do-not-package@
         rawset(t, k, v)

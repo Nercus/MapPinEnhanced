@@ -1,8 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
-
+---@class Notify
+local Notify = MapPinEnhanced:GetModule("Notify")
 
 ---@enum NotifyLevel
 local NOTIFIY_LEVELS = {
@@ -22,11 +22,23 @@ local NOTIFY_PATTERN = prefix .. " %s"
 
 ---@param text string
 ---@param level NotifyLevel?
-function MapPinEnhanced:Notify(text, level)
+function Notify:Notify(text, level)
     if not level then
         level = NOTIFIY_LEVELS.INFO
     end
     local color = NOTIFY_LEVEL_COLOR[level]
     local message = string.format(NOTIFY_PATTERN, text)
     UIErrorsFrame:AddMessage(message, color.r, color.g, color.b, color.a)
+end
+
+function Notify:Info(text)
+    self:Notify(text, NOTIFIY_LEVELS.INFO)
+end
+
+function Notify:Warning(text)
+    self:Notify(text, NOTIFIY_LEVELS.WARNING)
+end
+
+function Notify:Error(text)
+    self:Notify(text, NOTIFIY_LEVELS.ERROR)
 end

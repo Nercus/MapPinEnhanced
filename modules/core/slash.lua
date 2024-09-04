@@ -3,6 +3,12 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
+
+---@class SlashCommand
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+
+local Utils = MapPinEnhanced:GetModule("Utils")
+
 local commandList = {} ---@type table<string, function>
 local commandHelpStrings = {} ---@type table<string, string>
 
@@ -12,12 +18,12 @@ SLASH_MapPinEnhanced1, SLASH_MapPinEnhanced2 = "/mph", "/mpe"
 local normalColor = CreateColor(1, 0.82, 0)
 local SlashCmdList = getglobal("SlashCmdList") ---@as table<string, function>
 local helpPattern = "|A:gearupdate-arrow-bullet-point:12:12:2:-2|a %s - %s"
-function MapPinEnhanced:PrintHelp()
-    self:PrintUnformatted(self:WrapTextInColor(self.nameVersionString, normalColor))
+function SlashCommand:PrintHelp()
+    Utils:PrintUnformatted(Utils:WrapTextInColor(MapPinEnhanced.nameVersionString, normalColor))
     for command, help in pairs(commandHelpStrings) do
-        help = self:WrapTextInColor(help, normalColor)
+        help = Utils:WrapTextInColor(help, normalColor)
         local helpString = helpPattern:format(command, help)
-        self:PrintUnformatted(helpString)
+        Utils:PrintUnformatted(helpString)
     end
 end
 
@@ -33,7 +39,7 @@ local function SlashCommandHandler(msg)
         pcall(commandList[command], unpack(args))
     else
         if msg == "" then
-            MapPinEnhanced:PrintHelp()
+            SlashCommand:PrintHelp()
             return
         end
         local PinProvider = MapPinEnhanced:GetModule("PinProvider")
@@ -47,11 +53,11 @@ SlashCmdList["MapPinEnhanced"] = SlashCommandHandler
 ---@param command string
 ---@param func function
 ---@param help string
-function MapPinEnhanced:AddSlashCommand(command, func, help)
+function SlashCommand:AddSlashCommand(command, func, help)
     commandList[command] = func
     commandHelpStrings[command] = help
 end
 
-MapPinEnhanced:AddSlashCommand(L["Help"]:lower(), function()
-    MapPinEnhanced:PrintHelp()
+SlashCommand:AddSlashCommand(L["Help"]:lower(), function()
+    SlashCommand:PrintHelp()
 end, L["Show This Help Message"])

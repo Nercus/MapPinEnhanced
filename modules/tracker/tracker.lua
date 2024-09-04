@@ -5,5 +5,7 @@
 
 -- Add the core structure of tracker sections here
 
+-- TODO: split the setup of the different tracker views to their own files -> use templates for the scrollchild frame and inherit
 
----
+
+-- split the tracker header into its own template

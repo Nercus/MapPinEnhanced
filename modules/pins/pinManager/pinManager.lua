@@ -155,7 +155,7 @@ function PinManager:RemovePinByID(pinID)
     self.Pins[pinID] = nil
 
     self:PersistPins()
-    local optionTrackNearestPin = MapPinEnhanced:GetVar("general", "autoTrackNearestPin")
+    local optionTrackNearestPin = MapPinEnhanced:Get("general", "autoTrackNearestPin")
     if optionTrackNearestPin then
         self:TrackNearestPin()
     else
@@ -186,12 +186,12 @@ function PinManager:PersistPins()
         p.setTracked = pin.pinID == trackedPin.pinID
         table.insert(reducedPins, p)
     end
-    MapPinEnhanced:SaveVar("storedPins", reducedPins)
+    MapPinEnhanced:Save("storedPins", reducedPins)
 end
 
 function PinManager:RestorePins()
-    self.wasSuperTrackingOther = MapPinEnhanced:GetVar("superTrackingOther") --[[@as boolean]]
-    local storedPins = MapPinEnhanced:GetVar("storedPins") --[[@as table<string, pinData> | nil]]
+    self.wasSuperTrackingOther = MapPinEnhanced:Get("superTrackingOther") --[[@as boolean]]
+    local storedPins = MapPinEnhanced:Get("storedPins") --[[@as table<string, pinData> | nil]]
     if storedPins then
         for _, pinData in pairs(storedPins) do
             self:AddPin(pinData, true)
@@ -285,9 +285,9 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload
             label = L["Auto Track Nearest Pin"],
             description = "Automatically track the nearest pin when a tracked pin is removed.",
             default = MapPinEnhanced:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
-            init = function() return MapPinEnhanced:GetVar("general", "autoTrackNearestPin") --[[@as boolean]] end,
+            init = function() return MapPinEnhanced:Get("general", "autoTrackNearestPin") --[[@as boolean]] end,
             onChange = function(value)
-                MapPinEnhanced:SaveVar("general", "autoTrackNearestPin", value)
+                MapPinEnhanced:Save("general", "autoTrackNearestPin", value)
             end
         })
     end

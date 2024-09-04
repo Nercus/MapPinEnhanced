@@ -51,7 +51,7 @@ local acceptButtonText = L["Accept"]
 local cancelButtonText = L["Cancel"]
 
 ---@param options PopupOption
-function MapPinEnhanced:ShowPopup(options)
+function Dialog:ShowPopup(options)
     assert(options.text, "The popup must have text")
     assert(options.onAccept, "The popup must have an onAccept function")
     local dialog = GetPopupDialogFrame()

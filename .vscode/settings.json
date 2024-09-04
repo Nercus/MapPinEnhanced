@@ -1,23 +1,21 @@
 {
-    "Lua.codeLens.enable": true,
     "Lua.completion.autoRequire": false,
+    "Lua.completion.callSnippet": "Replace",
     "Lua.diagnostics.disable": [],
-    "Lua.diagnostics.globals": [
-        "TomTom",
-        "ScrollFrame_OnLoad"
-    ],
-    "Lua.diagnostics.groupSeverity": {
-        "global": "Error",
+    "Lua.diagnostics.groupFileStatus": {
+        "ambiguity": "Any",
+        "await": "Any",
+        "duplicate": "Any",
+        "global": "Any",
+        "luadoc": "Any",
+        "redefined": "Any",
+        "strict": "Any",
+        "strong": "Any",
+        "type-check": "Any",
+        "unbalanced": "Any",
+        "unused": "Any"
     },
-    "Lua.diagnostics.neededFileStatus": {
-        "global-element": "Any",
-        "missing-global-doc": "Any",
-        "codestyle-check": "Any",
-        "incomplete-signature-doc": "Any",
-        "no-unknown": "Any",
-        "param-type-mismatch": "Any"
-    },
-    "Lua.hint.setType": true,
+    "Lua.hint.setType": false,
     "Lua.runtime.builtin": {
         "basic": "disable",
         "debug": "disable",
@@ -27,7 +25,7 @@
         "package": "disable",
         "string": "disable",
         "table": "disable",
-        "utf8": "disable"
+        "utf8": "disable",
     },
     "Lua.runtime.version": "Lua 5.1",
     "Lua.workspace.ignoreDir": [
@@ -35,6 +33,7 @@
         ".vscode",
         "libs"
     ],
+    "Lua.diagnostics.libraryFiles": "Disable",
     "[lua]": {
         "editor.defaultFormatter": "sumneko.lua"
     },

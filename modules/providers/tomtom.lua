@@ -4,9 +4,13 @@ local MapPinEnhanced = select(2, ...)
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 local L = MapPinEnhanced.L
 
+---@class PinProvider
+local PinProvider = MapPinEnhanced:GetModule("PinProvider")
+
 ---------------------------------------------------------------------------
 
-function MapPinEnhanced:CheckForTomTom()
+
+function PinProvider:CheckForTomTom()
     self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
     if not self.isTomTomLoaded then
         ---@diagnostic disable-next-line: global-element slash command definition has to be global

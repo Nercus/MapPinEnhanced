@@ -1,27 +1,18 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-local CONSTANTS = MapPinEnhanced.CONSTANTS
-
-
----@alias MapPinEnhancedDB table<string, table | number | string | boolean>
-local DEFAULTS = CONSTANTS.DEFAULTS
-
-
 ---@class SavedVars
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 
--- ---@param key1 SavedVarKeys
--- ---@param key2 SavedVarSubKeys
--- ---@param value any
--- function SavedVars:Save(key1, key2, value)
--- NOTE: this implementation could be changed if multiple function annotations in a definition file are support by luals -> there is currently a PR open for this: https://github.com/LuaLS/lua-language-server/pull/2822
--- end
+local CONSTANTS = MapPinEnhanced.CONSTANTS
+local DEFAULTS = CONSTANTS.DEFAULTS
+
+-- The annotation could be changed if multiple function annotations in a definition file are support by luals -> there is currently a PR open for this: https://github.com/LuaLS/lua-language-server/pull/2822
 
 ---Retrieves the default value for a given set of keys.
----@param ... string A variable number of arguments representing the keys to traverse the DEFAULTS table.
+---@param ... SavedVarKeys | SavedVarSubKeys A variable number of arguments representing the keys to traverse the DEFAULTS table.
 ---@return table|number|boolean|string|nil The default value corresponding to the provided keys, or nil if the keys do not exist.
-function MapPinEnhanced:GetDefault(...)
+function SavedVars:GetDefault(...)
     local arg = { ... }
     local currentTable = DEFAULTS
     for index, key in ipairs(arg) do
@@ -39,10 +30,9 @@ function MapPinEnhanced:GetDefault(...)
 end
 
 ---save a variable to the saved variables
----@param ... string | number | boolean | table
-function MapPinEnhanced:SaveVar(...)
+---@param ... SavedVarKeys | SavedVarSubKeys | string | number | boolean | table
+function SavedVars:Save(...)
     if not MapPinEnhancedDB then
-        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
@@ -74,9 +64,8 @@ end
 ---get a variable from the saved variables
 ---@param ... string | number | boolean | table
 ---@return string | number | boolean | table | nil
-function MapPinEnhanced:GetVar(...)
+function SavedVars:Get(...)
     if not MapPinEnhancedDB then
-        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
@@ -98,9 +87,8 @@ end
 
 ---delete a variable from the saved variables
 ---@param ... string | number | boolean | table | nil
-function MapPinEnhanced:DeleteVar(...)
+function SavedVars:Delete(...)
     if not MapPinEnhancedDB then
-        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
 
@@ -118,14 +106,13 @@ function MapPinEnhanced:DeleteVar(...)
     end
 end
 
-function MapPinEnhanced:MigrateVar(prevKeys, newKeys)
+function SavedVars:MigrateVar(prevKeys, newKeys)
     if not MapPinEnhancedDB then
-        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
-    local prevValue = self:GetVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
+    local prevValue = self:Get(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
     if prevValue ~= nil then
-        self:SaveVar(type(newKeys) == "table" and unpack(newKeys) or newKeys, prevValue)
-        self:DeleteVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
+        self:Save(type(newKeys) == "table" and unpack(newKeys) or newKeys, prevValue)
+        self:Delete(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys)
     end
 end

@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
-
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 
 ---@type AnyMenuEntry[]
 local MinimapButtonTemplate = {
@@ -88,19 +88,19 @@ function MapPinEnhanced:ToggleMinimapButton(init)
         if not MapPinEnhancedDB then
             MapPinEnhancedDB = {}
         end
-        if not MapPinEnhancedDB.minimapIcon then
-            MapPinEnhancedDB.minimapIcon = MapPinEnhanced:GetDefault("minimapIcon") --[[@as table]]
-        end
+        -- if not MapPinEnhancedDB.minimapIcon then
+        --     MapPinEnhancedDB.minimapIcon = SavedVars:GetDefault("minimapIcon") --[[@as table]]
+        -- end
         self.LDBIcon:Register("MapPinEnhanced", MapPinEnhancedBroker,
             MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
     end
     if init then return end
-    local currentState = MapPinEnhanced:GetVar("minimapIcon", "hide") --[[@as boolean]]
+    local currentState = SavedVars:Get("minimapIcon", "hide") --[[@as boolean]]
     if currentState then
-        MapPinEnhanced:SaveVar("minimapIcon", "hide", false)
+        SavedVars:Save("minimapIcon", "hide", false)
         MapPinEnhanced:Print(L["Minimap Button Is Now Visible"])
     else
-        MapPinEnhanced:SaveVar("minimapIcon", "hide", true)
+        SavedVars:Save("minimapIcon", "hide", true)
         MapPinEnhanced:Print(L["Minimap Button Is Now Hidden"])
     end
     self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])

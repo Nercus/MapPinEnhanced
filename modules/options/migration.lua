@@ -10,7 +10,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 local function saveVarIfExists(path, varName, saveKey, saveValue)
     if MapPinEnhancedDB and MapPinEnhancedDB.global and MapPinEnhancedDB.global.options and MapPinEnhancedDB.global.options[varName] ~= nil then
         local value = MapPinEnhancedDB.global.options[varName] --[[@as number|boolean]]
-        MapPinEnhanced:SaveVar(path, saveKey, saveValue(value))
+        MapPinEnhanced:Save(path, saveKey, saveValue(value))
     end
 end
 
@@ -50,9 +50,9 @@ local function MigratePriorTo300()
         end
         SetManager:PersistSets()
     end
-    MapPinEnhanced:DeleteVar("global")
-    MapPinEnhanced:DeleteVar("profileKeys")
-    MapPinEnhanced:DeleteVar("profiles")
+    MapPinEnhanced:Delete("global")
+    MapPinEnhanced:Delete("profileKeys")
+    MapPinEnhanced:Delete("profiles")
 end
 
 
@@ -66,12 +66,12 @@ function Options:MigrateOptionByVersion(oldVersion)
     end
 end
 
-function MapPinEnhanced:UpdateVersionInfo()
+function Options:UpdateVersionInfo()
     if self.lastVersion then return end -- only update once
-    self.lastVersion = self:GetVar("version") --[[@as number]]
+    self.lastVersion = self:Get("version") --[[@as number]]
     local currentVersion = self.version
     if not self.lastVersion or self.lastVersion ~= currentVersion then
-        self:SaveVar("version", currentVersion)
+        self:Save("version", currentVersion)
         self:PrintHelp()          -- show the help message after a new upate
         C_Map.ClearUserWaypoint() -- we always clear the waypoint on init after a new update
         local PinManager = self:GetModule("PinManager")

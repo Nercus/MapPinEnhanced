@@ -1,7 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-function MapPinEnhanced:DebounceChange(func, delay)
+---@class Utils
+local Utils = MapPinEnhanced:GetModule("Utils")
+
+function Utils:DebounceChange(func, delay)
     ---@type FunctionContainer?
     local timer
     return function(...)
@@ -19,11 +22,12 @@ end
 ---@param funcList fun()[]
 ---@param onUpdate fun(progress: integer, maxProgress: integer)?
 ---@param onFinish fun()?
-function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish)
+function Utils:BatchExecution(funcList, onUpdate, onFinish)
     local frameRate = GetFramerate()
     if frameRate == 0 then frameRate = 1 end
     local delay = 1 / frameRate
 
+    ---@async
     local function Worker()
         local maxProgress = #funcList
         local nextTime = coroutine.yield()
@@ -52,7 +56,7 @@ end
 ---Abbreviate a number to a more readable format
 ---@param number number
 ---@return string
-function MapPinEnhanced:AbbreviateNumber(number)
+function Utils:AbbreviateNumber(number)
     if number >= 1e12 then
         return string.format("%.1fT", number / 1e12)
     elseif number >= 1e9 then
@@ -70,7 +74,7 @@ end
 ---@param text string
 ---@param color ColorMixin
 ---@return string
-function MapPinEnhanced:WrapTextInColor(text, color)
+function Utils:WrapTextInColor(text, color)
     assert(type(color) == "table", "Color must be a color object")
     local colorEscape = string.format("|cff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
     return colorEscape .. text .. "|r"
@@ -83,7 +87,7 @@ local random = math.random
 ---generate a UUID in the format of 'xxxxxxxx-xxxx'
 ---@param prefix? string optional prefix to add to the UUID
 ---@return UUID
-function MapPinEnhanced:GenerateUUID(prefix)
+function Utils:GenerateUUID(prefix)
     local template = 'xxxxxxxx-yxxx'
     local ans = string.gsub(template, '[xy]', function(c)
         local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
@@ -93,12 +97,12 @@ function MapPinEnhanced:GenerateUUID(prefix)
 end
 
 local defaultColor = ConsoleGetColorFromType(1)
-local prefix = MapPinEnhanced:WrapTextInColor(MapPinEnhanced.addonName .. ": ", defaultColor)
+local prefix = Utils:WrapTextInColor(MapPinEnhanced.addonName .. ": ", defaultColor)
 
 
 ---Print a styled message to the chat
 ---@param ... string
-function MapPinEnhanced:Print(...)
+function Utils:Print(...)
     local str = select(1, ...)
     local args = select(2, ...)
     if args then
@@ -107,7 +111,7 @@ function MapPinEnhanced:Print(...)
     print(prefix .. str)
 end
 
-function MapPinEnhanced:PrintUnformatted(...)
+function Utils:PrintUnformatted(...)
     local str = select(1, ...)
     local args = select(2, ...)
     if args then

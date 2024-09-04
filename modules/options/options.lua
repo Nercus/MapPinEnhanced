@@ -7,6 +7,8 @@ local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 ---------------------------------------------------------------------------
 
+--- TODO: move that to the sam
+
 ---check if an option with the same label already exists in the category
 ---@param label string
 ---@param category OPTIONCATEGORY

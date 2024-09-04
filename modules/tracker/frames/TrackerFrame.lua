@@ -45,7 +45,7 @@ local SET_VIEW_ICON = "Interface/AddOns/MapPinEnhanced/assets/icons/IconSets_Yel
 local ENTRY_GAP = 5
 local DEFAULT_ENTRY_HEIGHT = 37
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
-    local trackerPosition = MapPinEnhanced:GetVar("trackerPosition") ---@as table
+    local trackerPosition = MapPinEnhanced:Get("trackerPosition") ---@as table
     if trackerPosition then
         self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", trackerPosition.x, trackerPosition.y)
     else
@@ -54,7 +54,7 @@ function MapPinEnhancedTrackerFrameMixin:RestorePosition()
             defaultPosition = { x = GetScreenWidth() / 2 + 300, y = -(GetScreenHeight() / 2) }
         end
         self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", defaultPosition.x, defaultPosition.y)
-        MapPinEnhanced:SaveVar("trackerPosition", defaultPosition)
+        MapPinEnhanced:Save("trackerPosition", defaultPosition)
     end
 end
 
@@ -76,7 +76,7 @@ function MapPinEnhancedTrackerFrameMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdateVisibility()
-    local autoVisibility = MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as 'none' |  'both']]
+    local autoVisibility = MapPinEnhanced:Get("tracker", "autoVisibility") --[[@as 'none' |  'both']]
     local entryCount = #self.entries
     -- don't use GetEntryCount() here as  that will not provide the correct count for sets
     if autoVisibility == "none" then return end
@@ -185,7 +185,7 @@ end
 function MapPinEnhancedTrackerFrameMixin:Close()
     if not self:IsShown() then return end
     self:Hide()
-    MapPinEnhanced:SaveVar("trackerVisible", false)
+    MapPinEnhanced:Save("trackerVisible", false)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Open()
@@ -194,7 +194,7 @@ function MapPinEnhancedTrackerFrameMixin:Open()
     if not self.activeView or self.activeView ~= "Pins" then
         self:SetPinView(true)
     end
-    MapPinEnhanced:SaveVar("trackerVisible", true)
+    MapPinEnhanced:Save("trackerVisible", true)
     self:UpdateEntriesPosition()
 end
 
@@ -207,7 +207,7 @@ function MapPinEnhancedTrackerFrameMixin:Toggle()
 end
 
 function MapPinEnhancedTrackerFrameMixin:UpdatePinNumberingVisibility()
-    local showNumbering = MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]]
+    local showNumbering = MapPinEnhanced:Get("tracker", "showNumbering") --[[@as boolean]]
     for _, entry in ipairs(self.entries) do
         if entry.SetEntryIndexVisibility then
             ---@cast entry MapPinEnhancedTrackerPinEntryMixin
@@ -223,13 +223,13 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Automatic Visibility"],
         default = MapPinEnhanced:GetDefault("tracker", "autoVisibility") --[[@as string]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "autoVisibility") --[[@as string]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "autoVisibility") --[[@as string]] end,
         options = {
             { label = L["Disabled"],  value = "none", type = "radio" },
             { label = L["Automatic"], value = "both", type = "radio" }
         },
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "autoVisibility", value)
+            MapPinEnhanced:Save("tracker", "autoVisibility", value)
         end,
         description = L
             ["When enabled, the tracker will be shown/hidden automatically based on the number of active pins."]
@@ -239,9 +239,9 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Lock Tracker"],
         default = MapPinEnhanced:GetDefault("tracker", "lockTracker") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "lockTracker") --[[@as boolean]] end,
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "lockTracker", value)
+            MapPinEnhanced:Save("tracker", "lockTracker", value)
         end
     })
 
@@ -249,12 +249,12 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Scale"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerScale") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "trackerScale") --[[@as number]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "trackerScale") --[[@as number]] end,
         min = 0.5,
         max = 2,
         step = 0.05,
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "trackerScale", value)
+            MapPinEnhanced:Save("tracker", "trackerScale", value)
             self:SetScale(value)
         end
     })
@@ -263,12 +263,12 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Background Opacity"],
         default = MapPinEnhanced:GetDefault("tracker", "backgroundOpacity") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "backgroundOpacity") --[[@as number]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "backgroundOpacity") --[[@as number]] end,
         min = 0,
         max = 1,
         step = 0.1,
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "backgroundOpacity", value)
+            MapPinEnhanced:Save("tracker", "backgroundOpacity", value)
             self.blackBackground:SetAlpha(value)
         end
     })
@@ -277,9 +277,9 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Show Numbering"],
         default = MapPinEnhanced:GetDefault("tracker", "showNumbering") --[[@as boolean]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "showNumbering") --[[@as boolean]] end,
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "showNumbering", value)
+            MapPinEnhanced:Save("tracker", "showNumbering", value)
             self:UpdatePinNumberingVisibility()
         end
     })
@@ -288,12 +288,12 @@ function MapPinEnhancedTrackerFrameMixin:AddOptions()
         category = L["Tracker"],
         label = L["Displayed Number of Entries"],
         default = MapPinEnhanced:GetDefault("tracker", "trackerHeight") --[[@as number]],
-        init = function() return MapPinEnhanced:GetVar("tracker", "trackerHeight") --[[@as number]] end,
+        init = function() return MapPinEnhanced:Get("tracker", "trackerHeight") --[[@as number]] end,
         min = 1,
         max = 25,
         step = 1,
         onChange = function(value)
-            MapPinEnhanced:SaveVar("tracker", "trackerHeight", value)
+            MapPinEnhanced:Save("tracker", "trackerHeight", value)
             self:UpdateEntriesPosition()
         end
     })
@@ -338,7 +338,7 @@ end
 function MapPinEnhancedTrackerFrameMixin:OnMouseDown(button)
     if button ~= "LeftButton" then return end
     if not self.header:IsMouseOver() then return end
-    local isLocked = MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
+    local isLocked = MapPinEnhanced:Get("tracker", "lockTracker") --[[@as boolean]]
     if isLocked then
         MapPinEnhanced:Print("Tracker is locked. Unlock it in the options.")
         return
@@ -351,7 +351,7 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp(button)
     if button ~= "LeftButton" then return end
     local _, _, _, left, top = self:GetPoint()
     self:StopMovingOrSizing()
-    MapPinEnhanced:SaveVar("trackerPosition", { x = left, y = top })
+    MapPinEnhanced:Save("trackerPosition", { x = left, y = top })
     self:ClearAllPoints()
     self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", left, top)
     SetCursor(nil)
@@ -365,7 +365,7 @@ function MapPinEnhancedTrackerFrameMixin:UpdateFrameHeight(scrollFrameHeight)
         self:SetHeight(newHeight)
         return
     end
-    local maxEntryCount = MapPinEnhanced:GetVar("tracker", "trackerHeight")
+    local maxEntryCount = MapPinEnhanced:Get("tracker", "trackerHeight")
     if not maxEntryCount then
         maxEntryCount = MapPinEnhanced:GetDefault("tracker", "trackerHeight")
     end
@@ -448,7 +448,7 @@ function MapPinEnhancedTrackerFrameMixin:OnLeave()
 end
 
 local function RestorePinTrackerVisibility()
-    local trackerVisibility = MapPinEnhanced:GetVar("trackerVisible") --[[@as boolean]]
+    local trackerVisibility = MapPinEnhanced:Get("trackerVisible") --[[@as boolean]]
     if trackerVisibility == nil then
         trackerVisibility = MapPinEnhanced:GetDefault("trackerVisible") --[[@as boolean]]
     end
@@ -459,6 +459,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RestorePinTrackerVisibilit
 
 ---------------------------------------------------------------------------
 
+--- TODO: that should be on the tracker module
 ---@param viewType TrackerView
 function MapPinEnhanced:SetPinTrackerView(viewType)
     if not self.pinTracker then
