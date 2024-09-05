@@ -1,6 +1,8 @@
 -- Template: file://./Pin.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Textures = MapPinEnhanced:GetModule("Textures")
+
 
 ---@class SwirlTexture : Texture
 ---@field swirl AnimationGroup
@@ -179,8 +181,8 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     if not color then
         color = DEFAULT_COLOR
     end
-    local untrackedTexture = MapPinEnhanced:GetTexture("PinUntracked" .. color)
-    local trackedTexture = MapPinEnhanced:GetTexture("PinTracked" .. color)
+    local untrackedTexture = Textures:GetTexture("PinUntracked" .. color)
+    local trackedTexture = Textures:GetTexture("PinTracked" .. color)
     assert(untrackedTexture, "Untracked texture not found")
     assert(trackedTexture, "Tracked texture not found")
     self.untrackedTexture = untrackedTexture

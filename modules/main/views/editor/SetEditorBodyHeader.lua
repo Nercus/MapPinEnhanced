@@ -3,7 +3,10 @@
 local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
-local CB = MapPinEnhanced.CB
+
+local Dialog = MapPinEnhanced:GetModule("Dialog")
+local Events = MapPinEnhanced:GetModule("Events")
+
 
 ---@class MapPinEnhancedSetEditorBodyHeaderMixin : Frame
 ---@field setName SetEditorSetNameEditBox
@@ -68,8 +71,10 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:DeleteSet()
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     SetManager:DeleteSet(self.body.activeEditorSet)
     self.body:SetActiveEditorSetID()
-    CB:Fire('UpdateSetList')
+    Events:FireEvent('UpdateSetList')
 end
+
+local EditorWindow = MapPinEnhanced:GetModule("EditorWindow")
 
 function MapPinEnhancedSetEditorBodyHeaderMixin:OnLoad()
     self.body = self:GetParent() --[[@as MapPinEnhancedSetEditorViewBodyMixin]]
@@ -86,7 +91,7 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:OnLoad()
             self:DeleteSet()
             return
         end
-        MapPinEnhanced:ShowPopup({
+        Dialog:ShowPopup({
             text = L["Are you sure you want to delete this set?"],
             onAccept = function()
                 self:DeleteSet()
@@ -95,13 +100,13 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:OnLoad()
     end)
 
     local function StartMoving()
-        MapPinEnhanced.editorWindow:StartMoving()
+        EditorWindow:StartMoving()
         SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
     end
     self:SetScript("OnMouseDown", StartMoving)
 
     local function StopMoving()
-        MapPinEnhanced.editorWindow:StopMovingOrSizing()
+        EditorWindow:StopMovingOrSizing()
         SetCursor(nil)
     end
     self:SetScript("OnMouseUp", StopMoving)

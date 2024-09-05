@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+local Events = MapPinEnhanced:GetModule("Events")
 
 local blockEvent = false
 
@@ -26,7 +27,6 @@ local function OnUserWaypoint()
         C_SuperTrack.ClearAllSuperTracked()
     end
 
-
     PinManager:AddPin({
         mapID = wp.uiMapID,
         x = wp.position.x,
@@ -39,4 +39,4 @@ local function OnUserWaypoint()
     blockEvent = false
 end
 
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypoint)
+Events:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypoint)

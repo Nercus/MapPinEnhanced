@@ -3,13 +3,15 @@ local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+local Notify = MapPinEnhanced:GetModule("Notify")
 
 ---------------------------------------------------------------------------
 
-MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
+SlashCommand:AddSlashCommand(L["Back"]:lower(), function()
     local currentMapID = C_Map.GetBestMapForUnit("player")
     if not currentMapID then
-        MapPinEnhanced:Notify(L["You Are in an Instance or a Zone Where the Map Is Not Available"])
+        Notify:Info(L["You Are in an Instance or a Zone Where the Map Is Not Available"])
         return
     end
     local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()

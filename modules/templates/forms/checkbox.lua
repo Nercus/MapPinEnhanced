@@ -1,6 +1,7 @@
 -- Template: file://./checkbox.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Utils = MapPinEnhanced:GetModule("Utils")
 
 ---@class MapPinEnhancedCheckboxMixin : CheckButton, PropagateMouseMotion
 ---@field onChangeCallback function
@@ -23,7 +24,7 @@ end
 
 function MapPinEnhancedCheckboxMixin:SetCallback(callback)
     assert(type(callback) == "function")
-    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+    self.onChangeCallback = Utils:DebounceChange(callback, 0.1)
 end
 
 ---@param optionData OptionCheckboxTyped | CheckboxOptions

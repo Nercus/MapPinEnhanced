@@ -39,3 +39,8 @@ MapPinEnhancedDB = {}
 ---@field backgroundOpacity number
 ---@field showNumbering boolean
 ---@field trackerHeight number
+
+
+
+---@class OldMapPinEnhancedDB
+---@field global {options: {autoOpenTracker: boolean, showInfoOnSuperTrackedFrame: boolean, showTimeOnSuperTrackedFrame: boolean, changedalpha: boolean, maxTrackerEntries: number, autoTrackNearest: boolean}, presets: {name: string, input: string}[]}

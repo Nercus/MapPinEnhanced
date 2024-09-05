@@ -3,6 +3,9 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
+local Blizz = MapPinEnhanced:GetModule("Blizz")
+local PinManager = MapPinEnhanced:GetModule("PinManager")
+
 
 ---@type {distance: number, time: number}[]
 local distanceCache = {}
@@ -15,7 +18,7 @@ local IsSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint
 ---@param isClose boolean?
 ---@param OnDistanceClose function
 ---@param OnDistanceFar function
-function PinFactory:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
+local function UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
     local currentTime = GetTime()
     -- Check if we need to update based on throttle interval
     if not lastUpdate or currentTime - lastUpdate > throttle_interval then
@@ -51,7 +54,7 @@ function PinFactory:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, O
         ---@type number
         local speed = totalDistance / totalTime
         if speed <= 0 then
-            self.distanceCache = {}
+            distanceCache = {}
             if MapPinEnhanced.SuperTrackedPin then
                 MapPinEnhanced.SuperTrackedPin:UpdateTimeText()
             end
@@ -84,4 +87,79 @@ function PinFactory:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, O
         end
         lastUpdate = currentTime
     end
+end
+
+
+
+---@param pin PinObject
+local function EnableDistanceCheck(pin)
+    local isClose = nil
+
+    local function GetDistanceToPin()
+        local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
+        if not playerMap or not playerX or not playerY then return 0 end
+        local distance = MapPinEnhanced.HBD:GetZoneDistance(playerMap, playerX, playerY, pin.pinData.mapID, pin.pinData
+            .x,
+            pin.pinData.y)
+        if not distance then return 0 end
+        return distance
+    end
+
+    local function OnDistanceClose()
+        isClose = true
+        MapPinEnhanced.SuperTrackedPin:ShowSwirl()
+        local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+        if trackingCorpse then return end
+        if pin.pinData.lock then return end
+        if not pin:IsTracked() then return end
+        PinManager:RemovePinByID(pin.pinID)
+    end
+
+    local function OnDistanceFar()
+        isClose = false
+        MapPinEnhanced.SuperTrackedPin:HideSwirl()
+    end
+
+    local function ManualDistanceCheck()
+        local distance = GetDistanceToPin()
+        if distance < 20 and distance ~= 0 then
+            OnDistanceClose()
+        else
+            OnDistanceFar()
+        end
+    end
+
+    UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
+    pin.superTrackedPin:SetScript("OnUpdate", UpdateDistance)
+    ManualDistanceCheck()
+end
+
+local function DisableDistanceCheck(pin)
+    pin.superTrackedPin:SetScript("OnUpdate", nil)
+end
+
+---@class PinObject
+---@field EnableDistanceCheck function
+---@field DisableDistanceCheck function
+
+---@param pin PinObject
+function PinFactory:HandleDistanceCheck(pin)
+    if not pin then return end
+    function pin:EnableDistanceCheck()
+        EnableDistanceCheck(self)
+    end
+
+    function pin:DisableDistanceCheck()
+        DisableDistanceCheck(self)
+    end
+end
+
+local function ToggleLockState()
+    pinData.lock = not pinData.lock
+    trackerPinEntry.Pin:SetLockState(pinData.lock)
+    if MapPinEnhanced.SuperTrackedPin then
+        MapPinEnhanced.SuperTrackedPin:SetLockState(pinData.lock)
+    end
+    PinManager:PersistPins()
+    ManualDistanceCheck()
 end

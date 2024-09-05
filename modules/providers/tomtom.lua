@@ -6,9 +6,8 @@ local L = MapPinEnhanced.L
 
 ---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-
----------------------------------------------------------------------------
-
+local Utils = MapPinEnhanced:GetModule("Utils")
+local Events = MapPinEnhanced:GetModule("Events")
 
 function PinProvider:CheckForTomTom()
     self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
@@ -17,7 +16,7 @@ function PinProvider:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
-    self:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
+    Utils:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
 end
 
 local isHooked = false
@@ -39,7 +38,7 @@ local function HookTomTomAddWaypoint()
     end)
 end
 
-MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
+Events:RegisterEvent("ADDON_LOADED", function(_, addon)
     if addon == "TomTom" then
         MapPinEnhanced.isTomTomLoaded = true
         HookTomTomAddWaypoint()
@@ -47,6 +46,6 @@ MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
 end)
 
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    MapPinEnhanced:CheckForTomTom()
+Events:RegisterEvent("PLAYER_LOGIN", function()
+    PinProvider:CheckForTomTom()
 end)

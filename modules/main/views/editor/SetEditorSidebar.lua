@@ -1,9 +1,7 @@
 -- Template: file://./SetEditorSidebar.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
-
-local lower = string.lower
+local Menu = MapPinEnhanced:GetModule("Menu")
 
 ---@class SetListScrollFrame : ScrollFrame
 ---@field Child Frame
@@ -117,7 +115,7 @@ function MapPinEnhancedSetEditorViewSidebarMixin:UpdateSetList(sets)
                 self:ToggleActiveSet(setObject.setID)
             else
                 local menuTemplate = self:GetSetEntryMenuTemplate(setObject)
-                MapPinEnhanced:GenerateMenu(buttonFrame, menuTemplate)
+                Menu:GenerateMenu(buttonFrame, menuTemplate)
             end
         end)
     end
@@ -130,9 +128,9 @@ function MapPinEnhancedSetEditorViewSidebarMixin:GetFilteredSets(searchQuery)
     local SetManager = MapPinEnhanced:GetModule("SetManager")
     local sets = SetManager:GetAlphabeticalSortedSets()
     local filteredSets = {}
-    searchQuery = lower(searchQuery)
+    searchQuery = string.lower(searchQuery)
     for _, setObject in ipairs(sets) do
-        local setObjectName = lower(setObject.name)
+        local setObjectName = string.lower(setObject.name)
         if string.find(setObjectName, searchQuery) then
             table.insert(filteredSets, setObject)
         end

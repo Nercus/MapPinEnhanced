@@ -2,6 +2,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local Events = MapPinEnhanced:GetModule("Events")
+
 ---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
 ---@field hooked boolean
@@ -33,8 +36,8 @@ end
 
 function MapPinEnhancedSuperTrackedPinMixin:UpdateTextVisibility()
     local clamped = C_Navigation.WasClampedToScreen();
-    local showTime = MapPinEnhanced:Get("floatingPin", "showEstimatedTime")
-    local showTitle = MapPinEnhanced:Get("floatingPin", "showTitle")
+    local showTime = SavedVars:Get("floatingPin", "showEstimatedTime")
+    local showTitle = SavedVars:Get("floatingPin", "showTitle")
     local hasDefaultTitle = CONSTANTS.DEFAULT_PIN_NAME == ((self.pinData and self.pinData.title) or "")
     local isLock = self.pinData and self.pinData.lock
 
@@ -123,21 +126,21 @@ local function AddOptions()
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
         label = L["Show Estimated Arrival Time"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
-        init = function() return MapPinEnhanced:Get("floatingPin", "showEstimatedTime") --[[@as boolean]] end,
+        default = SavedVars:GetDefault("floatingPin", "showEstimatedTime") --[[@as boolean]],
+        init = function() return SavedVars:Get("floatingPin", "showEstimatedTime") --[[@as boolean]] end,
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
-            MapPinEnhanced:Save("floatingPin", "showEstimatedTime", value)
+            SavedVars:Save("floatingPin", "showEstimatedTime", value)
             self.distantText:SetShown(value)
         end
     })
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
         label = L["Show Title"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
-        init = function() return MapPinEnhanced:Get("floatingPin", "showTitle") --[[@as boolean]] end,
+        default = SavedVars:GetDefault("floatingPin", "showTitle") --[[@as boolean]],
+        init = function() return SavedVars:Get("floatingPin", "showTitle") --[[@as boolean]] end,
         onChange = function(value)
-            MapPinEnhanced:Save("floatingPin", "showTitle", value)
+            SavedVars:Save("floatingPin", "showTitle", value)
             self:UpdateTextVisibility()
         end
     })
@@ -145,8 +148,8 @@ local function AddOptions()
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
         label = L["Block World Quest Tracking"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "blockWorldQuestTracking") --[[@as boolean]],
-        init = function() return MapPinEnhanced:Get("floatingPin", "blockWorldQuestTracking") --[[@as boolean]] end,
+        default = SavedVars:GetDefault("floatingPin", "blockWorldQuestTracking") --[[@as boolean]],
+        init = function() return SavedVars:Get("floatingPin", "blockWorldQuestTracking") --[[@as boolean]] end,
         description = L["Block Automatic World Quest Tracking when a Pin is Tracked"],
         onChange = function(value)
             if value then
@@ -154,23 +157,23 @@ local function AddOptions()
             else
                 self:UnregisterEvent("QUEST_POI_UPDATE");
             end
-            MapPinEnhanced:Save("floatingPin", "blockWorldQuestTracking", value)
+            SavedVars:Save("floatingPin", "blockWorldQuestTracking", value)
         end
     })
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
         label = L["Enable Unlimited Distance"],
-        default = MapPinEnhanced:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
-        init = function() return MapPinEnhanced:Get("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
+        default = SavedVars:GetDefault("floatingPin", "unlimitedDistance") --[[@as boolean]],
+        init = function() return SavedVars:Get("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
         onChange = function(value)
-            MapPinEnhanced:Save("floatingPin", "unlimitedDistance", value)
+            SavedVars:Save("floatingPin", "unlimitedDistance", value)
             Blizz:OverrideSuperTrackedAlphaState(value)
         end,
         description = L["When enabled, the floating pin will be shown even if the tracked pin is very far away."]
     })
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+Events:RegisterEvent("PLAYER_LOGIN", function()
     AddOptions()
 end)
 

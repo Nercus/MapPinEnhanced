@@ -1,39 +1,4 @@
 {
-    "Lua.completion.autoRequire": false,
-    "Lua.completion.callSnippet": "Replace",
-    "Lua.diagnostics.disable": [],
-    "Lua.diagnostics.groupFileStatus": {
-        "ambiguity": "Any",
-        "await": "Any",
-        "duplicate": "Any",
-        "global": "Any",
-        "luadoc": "Any",
-        "redefined": "Any",
-        "strict": "Any",
-        "strong": "Any",
-        "type-check": "Any",
-        "unbalanced": "Any",
-        "unused": "Any"
-    },
-    "Lua.hint.setType": false,
-    "Lua.runtime.builtin": {
-        "basic": "disable",
-        "debug": "disable",
-        "io": "disable",
-        "math": "disable",
-        "os": "disable",
-        "package": "disable",
-        "string": "disable",
-        "table": "disable",
-        "utf8": "disable",
-    },
-    "Lua.runtime.version": "Lua 5.1",
-    "Lua.workspace.ignoreDir": [
-        ".github",
-        ".vscode",
-        "libs"
-    ],
-    "Lua.diagnostics.libraryFiles": "Disable",
     "[lua]": {
         "editor.defaultFormatter": "sumneko.lua"
     },
@@ -51,6 +16,47 @@
         "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore"
     },
     "explorer.sortOrder": "default",
+    "Lua.completion.autoRequire": false,
+    "Lua.diagnostics.disable": [],
+    "Lua.diagnostics.groupFileStatus": {
+        "ambiguity": "Any",
+        "await": "Any",
+        "duplicate": "Any",
+        "global": "Any",
+        "luadoc": "Any",
+        "redefined": "Any",
+        "strict": "Any",
+        "strong": "Any",
+        "type-check": "Any",
+        "unbalanced": "Any",
+        "unused": "Any"
+    },
+    "Lua.diagnostics.libraryFiles": "Disable",
+    "Lua.diagnostics.neededFileStatus": {
+        "undefined-field": "Any!"
+    },
+    "Lua.format.defaultConfig": {
+        "indent_size": "4",
+        "indent_style": "space"
+    },
+    "Lua.hint.setType": false,
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.workspace.ignoreDir": [
+        ".github",
+        ".vscode",
+        "libs"
+    ],
     "peacock.color": "#EBCB8B",
     "workbench.colorCustomizations": {
         "commandCenter.border": "#15202b99",

@@ -3,14 +3,19 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Options
 local Options = MapPinEnhanced:GetModule("Options")
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+local Events = MapPinEnhanced:GetModule("Events")
 
 ---------------------------------------------------------------------------
 
 
 local function saveVarIfExists(path, varName, saveKey, saveValue)
+    local MapPinEnhancedDB = MapPinEnhancedDB
+    ---@cast MapPinEnhancedDB OldMapPinEnhancedDB
     if MapPinEnhancedDB and MapPinEnhancedDB.global and MapPinEnhancedDB.global.options and MapPinEnhancedDB.global.options[varName] ~= nil then
         local value = MapPinEnhancedDB.global.options[varName] --[[@as number|boolean]]
-        MapPinEnhanced:Save(path, saveKey, saveValue(value))
+        SavedVars:Save(path, saveKey, saveValue(value))
     end
 end
 
@@ -28,7 +33,8 @@ local function MigratePriorTo300()
     saveVarIfExists("general", "autoTrackNearest", "autoTrackNearestPin",
         function(value) return value end)
 
-
+    local MapPinEnhancedDB = MapPinEnhancedDB
+    ---@cast MapPinEnhancedDB OldMapPinEnhancedDB
     if MapPinEnhancedDB.global and MapPinEnhancedDB.global.presets then
         local SetManager = MapPinEnhanced:GetModule("SetManager")
         local PinProvider = MapPinEnhanced:GetModule("PinProvider")
@@ -50,9 +56,9 @@ local function MigratePriorTo300()
         end
         SetManager:PersistSets()
     end
-    MapPinEnhanced:Delete("global")
-    MapPinEnhanced:Delete("profileKeys")
-    MapPinEnhanced:Delete("profiles")
+    SavedVars:Delete("global")
+    SavedVars:Delete("profileKeys")
+    SavedVars:Delete("profiles")
 end
 
 
@@ -68,18 +74,18 @@ end
 
 function Options:UpdateVersionInfo()
     if self.lastVersion then return end -- only update once
-    self.lastVersion = self:Get("version") --[[@as number]]
-    local currentVersion = self.version
+    self.lastVersion = SavedVars:Get("version") --[[@as number]]
+    local currentVersion = MapPinEnhanced.version
     if not self.lastVersion or self.lastVersion ~= currentVersion then
-        self:Save("version", currentVersion)
-        self:PrintHelp()          -- show the help message after a new upate
+        SavedVars:Save("version", currentVersion)
+        SlashCommand:PrintHelp()  -- show the help message after a new upate
         C_Map.ClearUserWaypoint() -- we always clear the waypoint on init after a new update
-        local PinManager = self:GetModule("PinManager")
+        local PinManager = MapPinEnhanced:GetModule("PinManager")
         PinManager:UntrackTrackedPin()
     end
     Options:MigrateOptionByVersion(self.lastVersion or 0)
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    MapPinEnhanced:UpdateVersionInfo()
+Events:RegisterEvent("PLAYER_LOGIN", function()
+    Options:UpdateVersionInfo()
 end)

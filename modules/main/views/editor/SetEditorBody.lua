@@ -18,6 +18,7 @@ MapPinEnhancedSetEditorViewBodyMixin = {}
 local L = MapPinEnhanced.L
 
 
+---@type FramePool<MapPinEnhancedSetEditorPinEntryMixin>
 local PinEntryFramePool = CreateFramePool("Frame", nil, "MapPinEnhancedSetEditorPinEntryTemplate")
 
 ---@alias changeableKeys 'mapID' | 'x' | 'y' | 'title' | 'color' | 'lock' | 'delete'

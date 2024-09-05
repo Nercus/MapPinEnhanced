@@ -2,6 +2,11 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local Menu = MapPinEnhanced:GetModule("Menu")
+local Utils = MapPinEnhanced:GetModule("Utils")
+local Events = MapPinEnhanced:GetModule("Events")
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+
 
 ---@type AnyMenuEntry[]
 local MinimapButtonTemplate = {
@@ -80,7 +85,7 @@ function MapPinEnhanced:ToggleMinimapButton(init)
                     end
                     self:TogglePinTracker()
                 elseif button == "RightButton" then
-                    MapPinEnhanced:GenerateMenu(owner, MinimapButtonTemplate)
+                    Menu:GenerateMenu(owner, MinimapButtonTemplate)
                 end
             end,
         })
@@ -98,10 +103,10 @@ function MapPinEnhanced:ToggleMinimapButton(init)
     local currentState = SavedVars:Get("minimapIcon", "hide") --[[@as boolean]]
     if currentState then
         SavedVars:Save("minimapIcon", "hide", false)
-        MapPinEnhanced:Print(L["Minimap Button Is Now Visible"])
+        Utils:Print(L["Minimap Button Is Now Visible"])
     else
         SavedVars:Save("minimapIcon", "hide", true)
-        MapPinEnhanced:Print(L["Minimap Button Is Now Hidden"])
+        Utils:Print(L["Minimap Button Is Now Hidden"])
     end
     self.LDBIcon:Refresh("MapPinEnhanced", MapPinEnhancedDB.minimapIcon --[[@as LibDBIcon.button.DB]])
 end
@@ -117,12 +122,12 @@ function MapPinEnhanced:RegisterAddonCompartment()
     })
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+Events:RegisterEvent("PLAYER_LOGIN", function()
     MapPinEnhanced:ToggleMinimapButton(true)
     MapPinEnhanced:RegisterAddonCompartment()
 end)
 
 
-MapPinEnhanced:AddSlashCommand(L["Minimap"]:lower(), function()
+SlashCommand:AddSlashCommand(L["Minimap"]:lower(), function()
     MapPinEnhanced:ToggleMinimapButton()
 end, L["Toggle Minimap Button"])

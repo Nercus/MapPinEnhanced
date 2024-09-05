@@ -15,6 +15,9 @@ MapPinEnhancedEditorWindowMixin = {}
 
 local L = MapPinEnhanced.L
 
+
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+
 ---@enum EditorViews
 local AVAILABLE_VIEWS = {
     setView = "setView",
@@ -94,11 +97,11 @@ function MapPinEnhancedEditorWindowMixin:AddOptions()
         max = 2,
         step = 0.05,
         updateOnRelease = true,
-        default = MapPinEnhanced:GetDefault("general", "editorScale") --[[@as number]],
-        init = function() return MapPinEnhanced:Get("general", "editorScale") --[[@as number]] end,
+        default = SavedVars:GetDefault("general", "editorScale") --[[@as number]],
+        init = function() return SavedVars:Get("general", "editorScale") --[[@as number]] end,
         onChange = function(value)
             self:SetScale(value)
-            MapPinEnhanced:Save("general", "editorScale", value)
+            SavedVars:Save("general", "editorScale", value)
         end
     })
 end
@@ -179,11 +182,13 @@ function EditorWindow:StopMovingOrSizing()
     SetCursor(nil)
 end
 
-MapPinEnhanced:AddSlashCommand(L["Editor"]:lower(), function()
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+
+SlashCommand:AddSlashCommand(L["Editor"]:lower(), function()
     EditorWindow:Toggle()
 end, L["Toggle Editor"])
 
-MapPinEnhanced:AddSlashCommand(L["Options"]:lower(), function()
+SlashCommand:AddSlashCommand(L["Options"]:lower(), function()
     EditorWindow:Toggle()
     EditorWindow:SetView("optionView")
 end, L["Open Options"])

@@ -1,11 +1,13 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class SetFactory
-local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 ---@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
-local lower = string.lower
-local CB = MapPinEnhanced.CB
+local SetFactory = MapPinEnhanced:GetModule("SetFactory")
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local Utils = MapPinEnhanced:GetModule("Utils")
+local Events = MapPinEnhanced:GetModule("Events")
+
+
 ---@type table<UUID, SetObject>
 SetManager.Sets = {}
 
@@ -21,14 +23,14 @@ function SetManager:PersistSets(targetSetID)
     if targetSetID then
         local set = self.Sets[targetSetID]
         if not set then --set was deleted
-            MapPinEnhanced:Delete("sets", targetSetID)
+            SavedVars:Delete("sets", targetSetID)
             return
         end
         local setTable = {
             name = set.name,
             pins = set:GetAllPinData()
         }
-        MapPinEnhanced:Save("sets", targetSetID, setTable)
+        SavedVars:Save("sets", targetSetID, setTable)
         return
     end
     ---@type table<UUID, reducedSet>
@@ -39,11 +41,11 @@ function SetManager:PersistSets(targetSetID)
             pins = set:GetAllPinData()
         }
     end
-    MapPinEnhanced:Save("sets", reducedSets)
+    SavedVars:Save("sets", reducedSets)
 end
 
 function SetManager:RestoreSets()
-    local reducedSets = MapPinEnhanced:Get("sets") --[[@as table<UUID, reducedSet> | nil]]
+    local reducedSets = SavedVars:Get("sets") --[[@as table<UUID, reducedSet> | nil]]
     if not reducedSets then
         return
     end
@@ -68,13 +70,13 @@ end
 
 function SetManager:DeleteSet(setID)
     if not self.Sets[setID] then
-        CB:Fire("UpdateSetList")
+        Events:FireEvent("UpdateSetList")
         return
     end
     self.Sets[setID]:Delete()
     self.Sets[setID] = nil
     SetManager:PersistSets(setID)
-    CB:Fire("UpdateSetList")
+    Events:FireEvent("UpdateSetList")
 end
 
 ---@return table<UUID, SetObject>
@@ -100,14 +102,14 @@ function SetManager:UpdateSetNameByID(setID, newName)
     self.Sets[setID].name = newName
     self.Sets[setID]:SetName(newName)
     SetManager:PersistSets(setID)
-    CB:Fire("UpdateSetList")
+    Events:FireEvent("UpdateSetList")
 end
 
 ---@param a SetObject
 ---@param b SetObject
 ---@return boolean
 local function SortBySetName(a, b)
-    return lower(a.name) < lower(b.name)
+    return string.lower(a.name) < string.lower(b.name)
 end
 
 ---@return SetObject[]
@@ -130,14 +132,14 @@ function SetManager:AddSet(name, overrideSetID, restore)
     if CURRENT_SET_COUNT > MAX_COUNT_SETS then
         error("Too many sets")
     end
-    local setID = overrideSetID or MapPinEnhanced:GenerateUUID("set")
+    local setID = overrideSetID or Utils:GenerateUUID("set")
     local set = SetFactory:CreateSet(name, setID)
     set.setID = setID
     self.Sets[setID] = set
     if not restore then
         SetManager:PersistSets(setID)
     end
-    CB:Fire("UpdateSetList")
+    Events:FireEvent("UpdateSetList")
     return set
 end
 
@@ -148,6 +150,6 @@ function SetManager:ExportSet(setID)
     EditorWindow:ShowExportFrameForSet(setID)
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+Events:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     SetManager:RestoreSets()
 end)

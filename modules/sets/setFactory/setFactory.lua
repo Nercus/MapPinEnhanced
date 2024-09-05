@@ -2,15 +2,18 @@
 local MapPinEnhanced = select(2, ...)
 ---@class SetFactory
 local SetFactory = MapPinEnhanced:GetModule("SetFactory")
----@class SetManager
 local SetManager = MapPinEnhanced:GetModule("SetManager")
----@class PinManager
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+local Utils = MapPinEnhanced:GetModule("Utils")
+local Menu = MapPinEnhanced:GetModule("Menu")
+local Notify = MapPinEnhanced:GetModule("Notify")
+local Events = MapPinEnhanced:GetModule("Events")
 
+---@type FramePool<MapPinEnhancedTrackerSetEntryMixin>
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
+---@type FramePool<MapPinEnhancedTrackerSetEntryMixin>
 local setEditorEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate") -- currently the same template
 
-local CB = MapPinEnhanced.CB
 local L = MapPinEnhanced.L
 
 ---@class SetObject
@@ -50,10 +53,7 @@ function SetFactory:CreateSet(name, id)
     local setID = id
 
     local trackerSetEntry = TrackerSetEntryPool:Acquire()
-    ---@cast trackerSetEntry MapPinEnhancedTrackerSetEntryMixin
-
     local setEditorEntry = setEditorEntryPool:Acquire()
-    ---@cast setEditorEntry MapPinEnhancedTrackerSetEntryMixin
 
     trackerSetEntry:SetTitle(name)
     setEditorEntry:SetTitle(name)
@@ -81,7 +81,7 @@ function SetFactory:CreateSet(name, id)
 
 
     local function UpdateSetChange()
-        CB:Fire('UpdateSetList')
+        Events:FireEvent('UpdateSetList')
     end
 
 
@@ -102,7 +102,7 @@ function SetFactory:CreateSet(name, id)
                 return
             end
         end
-        local setPinID = MapPinEnhanced:GenerateUUID("setpin")
+        local setPinID = Utils:GenerateUUID("setpin")
         pinData.setTracked = false
         if not pinData.order then
             pinData.order = GetPinCount() + 1 --> automatically set the order to the next available number
@@ -112,7 +112,7 @@ function SetFactory:CreateSet(name, id)
             SetManager:PersistSets(setID)
         end
         positions[positonString] = setPinID
-        MapPinEnhanced:DebounceChange(UpdateSetChange, 0.1)
+        Utils:DebounceChange(UpdateSetChange, 0.1)
     end
 
 
@@ -187,7 +187,7 @@ function SetFactory:CreateSet(name, id)
         end
         PinManager:TrackLastTrackedPin()
         MapPinEnhanced:SetPinTrackerView('Pins')
-        MapPinEnhanced:Notify(string.format(L["Set \"%s\" Loaded"], name))
+        Notify:Info(string.format(L["Set \"%s\" Loaded"], name))
     end
 
     local function SetName(_, newName)
@@ -247,7 +247,7 @@ function SetFactory:CreateSet(name, id)
     }
 
     local function CreateMenu(parentFrame)
-        MapPinEnhanced:GenerateMenu(parentFrame, menuTemplate)
+        Menu:GenerateMenu(parentFrame, menuTemplate)
     end
 
     local function HandleClick(buttonFrame, button)

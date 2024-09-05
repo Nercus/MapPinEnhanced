@@ -2,6 +2,7 @@
 ---@class MapPinEnhanced
 ---@field L Locale
 local MapPinEnhanced = select(2, ...)
+local Menu = MapPinEnhanced:GetModule("Menu")
 
 local L = MapPinEnhanced.L
 
@@ -254,5 +255,5 @@ function MapPinEnhancedSetEditorPinEntryMixin:GetMenuTemplate()
 end
 
 function MapPinEnhancedSetEditorPinEntryMixin:OpenMapHelperMenu()
-    MapPinEnhanced:GenerateMenu(self.mapID.mapSelection, self:GetMenuTemplate())
+    Menu:GenerateMenu(self.mapID.mapSelection, self:GetMenuTemplate())
 end

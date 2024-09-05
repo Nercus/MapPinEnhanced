@@ -34,29 +34,19 @@ function MPHCallbackHandlerRegistry:Fire(eventname, ...) end
 ---@field SetPropagateMouseMotion fun(self:Frame, propagate: boolean)
 
 
----@param frameType string
+---@param frameType FrameType | "DropdownButton"
 ---@param parent string?
----@param frameTemplate string?
+---@param frameTemplate string
 ---@param resetterFunc fun()?
 ---@param forbidden boolean?
 ---@return FramePool
 function CreateFramePool(frameType, parent, frameTemplate, resetterFunc, forbidden) end
 
----@class FramePool
-local FramePool = {}
----@return string
-function FramePool:GetTemplate() end
+---@class FramePool<T>: { Acquire: fun(): T}
+---@class FramePool<T>: { Release: fun(_, T) }
+---@class FramePool<T>: { ReleaseAll: fun() }
+---@class FramePool<T>: { EnumerateActive: fun(): T }
 
----@return Frame
-function FramePool:Acquire() end
-
----@param obj Frame
----@return boolean success
-function FramePool:Release(obj) end
-
-function FramePool:ReleaseAll() end
-
-function FramePool:EnumerateActive() end
 
 ---@return ScriptRegion region
 function GetMouseFoci() end
@@ -403,3 +393,9 @@ DEFAULT_CHAT_FRAME = {}
 -- extend herebedragons type annotation with mapData
 ---@class HereBeDragons-2.0
 ---@field mapData table<number, HereBeDragonMapData>
+
+
+
+
+---This is the onLoad function for the ScrollFrameTemplate
+function ScrollFrame_OnLoad(self) end

@@ -15,13 +15,13 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 
 ---@class MapPinEnhancedOptionEditorViewBodyMixin : Frame
----@field optionElements FramePool
----@field buttons FramePool
----@field checkboxes FramePool
----@field colorpickers FramePool
----@field inputs FramePool
----@field selects FramePool
----@field sliders FramePool
+---@field optionElements FramePool<MapPinEnhancedOptionEditorElementMixin>
+---@field buttons FramePool<MapPinEnhancedButtonMixin>
+---@field checkboxes FramePool<MapPinEnhancedCheckboxMixin>
+---@field colorpickers FramePool<MapPinEnhancedColorpickerMixin>
+---@field inputs FramePool<MapPinEnhancedInputMixin>
+---@field selects FramePool<MapPinEnhancedSelectMixin>
+---@field sliders FramePool<MapPinEnhancedSliderMixin>
 ---@field init boolean
 ---@field sideBar MapPinEnhancedOptionEditorViewSidebarMixin
 ---@field scrollFrame OptionScrollFrame

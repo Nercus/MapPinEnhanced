@@ -57,6 +57,38 @@
 --@class MapPinEnhancedMenuInput : MapPinEnhancedInput
 
 
+--@class MapPinEnhancedSimpleFrame : Frame
+--@field topleft Texture
+--@field topright Texture
+--@field bottomright Texture
+--@field bottomleft Texture
+--@field borderTop Texture
+--@field borderBottom Texture
+--@field borderLeft Texture
+--@field borderRight Texture
+--@field background Texture
+
+
+--@class MapPinEnhancedBaseFrame : Frame
+--@field artLeft Frame
+--@field artRight Frame
+--@field topleft Texture
+--@field topright Texture
+--@field bottomright Texture
+--@field bottomleft Texture
+--@field artTop Texture
+--@field artBottom Texture
+--@field borderTopLeft Texture
+--@field borderTopRight Texture
+--@field borderBottomLeft Texture
+--@field borderBottomRight Texture
+--@field borderLeftTop Texture
+--@field borderLeftBottom Texture
+--@field borderRightTop Texture
+--@field borderRightBottom Texture
+--@field background Texture
+
+
 --@class MapPinEnhancedSlider : MinimalSliderTemplate
 --@field Back Button
 --@field Forward Button
@@ -93,18 +125,6 @@
 --@field icon Texture
 
 
---@class MapPinEnhancedSimpleFrame : Frame
---@field topleft Texture
---@field topright Texture
---@field bottomright Texture
---@field bottomleft Texture
---@field borderTop Texture
---@field borderBottom Texture
---@field borderLeft Texture
---@field borderRight Texture
---@field background Texture
-
-
 --@class MapPinEnhancedButtonYellow : Button
 --@field left Texture
 --@field right Texture
@@ -122,26 +142,6 @@
 
 
 --@class MapPinEnhancedIconButton : Button
-
-
---@class MapPinEnhancedBaseFrame : Frame
---@field artLeft Frame
---@field artRight Frame
---@field topleft Texture
---@field topright Texture
---@field bottomright Texture
---@field bottomleft Texture
---@field artTop Texture
---@field artBottom Texture
---@field borderTopLeft Texture
---@field borderTopRight Texture
---@field borderBottomLeft Texture
---@field borderBottomRight Texture
---@field borderLeftTop Texture
---@field borderLeftBottom Texture
---@field borderRightTop Texture
---@field borderRightBottom Texture
---@field background Texture
 
 
 --@class MapPinEnhancedWorldmapPinPulseTexture : Texture
@@ -184,6 +184,46 @@
 --@field body MapPinEnhancedBaseFrame
 --@field closebutton MapPinEnhancedSquareButtonRed
 --@field versionText FontString
+
+
+--@class MapPinEnhancedOptionEditorViewSidebarHeader : Frame
+--@field bg Texture
+--@field headerText FontString
+
+--@class MapPinEnhancedOptionEditorViewSidebarScrollFrame : ScrollFrameTemplate
+--@field Child Frame
+
+--@class MapPinEnhancedOptionEditorViewSidebar : Frame
+--@field header MapPinEnhancedOptionEditorViewSidebarHeader
+--@field switchViewButton MapPinEnhancedButtonRed
+--@field scrollFrame MapPinEnhancedOptionEditorViewSidebarScrollFrame
+
+
+--@class MapPinEnhancedOptionEditorElement : Frame
+--@field optionHolder Frame
+--@field label FontString
+--@field info Texture
+--@field highlight Texture
+
+
+--@class MapPinEnhancedOptionEditorViewCategoryButton : Button
+--@field label FontString
+--@field highlight Texture
+
+
+--@class MapPinEnhancedOptionEditorViewBodyHeader : Frame
+--@field bg Texture
+--@field selectedCategoryName FontString
+
+--@class MapPinEnhancedOptionEditorViewBodyScrollFrame : ScrollFrameTemplate
+--@field Child Frame
+
+--@class MapPinEnhancedOptionEditorViewBody : Frame
+--@field header MapPinEnhancedOptionEditorViewBodyHeader
+--@field scrollFrame MapPinEnhancedOptionEditorViewBodyScrollFrame
+
+
+--@class MapPinEnhancedSetEditorViewSidebarSetEntry : MapPinEnhancedTrackerSetEntry
 
 
 --@class MapPinEnhancedSetEditorViewSidebarHeader : Frame
@@ -267,40 +307,3 @@
 --@field createSetButton MapPinEnhancedButtonYellow
 --@field importButton MapPinEnhancedButtonYellow
 --@field scrollFrame MapPinEnhancedSetEditorViewBodyScrollFrame
-
-
---@class MapPinEnhancedOptionEditorViewSidebarHeader : Frame
---@field bg Texture
---@field headerText FontString
-
---@class MapPinEnhancedOptionEditorViewSidebarScrollFrame : ScrollFrameTemplate
---@field Child Frame
-
---@class MapPinEnhancedOptionEditorViewSidebar : Frame
---@field header MapPinEnhancedOptionEditorViewSidebarHeader
---@field switchViewButton MapPinEnhancedButtonRed
---@field scrollFrame MapPinEnhancedOptionEditorViewSidebarScrollFrame
-
-
---@class MapPinEnhancedOptionEditorElement : Frame
---@field optionHolder Frame
---@field label FontString
---@field info Texture
---@field highlight Texture
-
-
---@class MapPinEnhancedOptionEditorViewCategoryButton : Button
---@field label FontString
---@field highlight Texture
-
-
---@class MapPinEnhancedOptionEditorViewBodyHeader : Frame
---@field bg Texture
---@field selectedCategoryName FontString
-
---@class MapPinEnhancedOptionEditorViewBodyScrollFrame : ScrollFrameTemplate
---@field Child Frame
-
---@class MapPinEnhancedOptionEditorViewBody : Frame
---@field header MapPinEnhancedOptionEditorViewBodyHeader
---@field scrollFrame MapPinEnhancedOptionEditorViewBodyScrollFrame

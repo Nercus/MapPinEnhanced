@@ -4,6 +4,12 @@ local MapPinEnhanced = select(2, ...)
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 local L = MapPinEnhanced.L
 
+
+local Notify = MapPinEnhanced:GetModule("Notify")
+local Events = MapPinEnhanced:GetModule("Events")
+local Dialog = MapPinEnhanced:GetModule("Dialog")
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+
 ---------------------------------------------------------------------------
 
 ---Wrapper for the current map the player is on
@@ -25,7 +31,7 @@ end
 function Blizz:SetBlizzardWaypoint(x, y, mapID)
     if not C_Map.CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)
-        MapPinEnhanced:Notify("Cannot set waypoint on " .. mapInfo.name, "ERROR")
+        Notify:Error("Cannot set waypoint on " .. mapInfo.name)
         return
     end
 
@@ -76,12 +82,12 @@ function Blizz:HideBlizzardPin()
     end)
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
+Events:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
 
 
 function Blizz:CheckNavigationEnabled()
     if GetCVar("showInGameNavigation") == "1" then return end
-    MapPinEnhanced:ShowPopup({
+    Dialog:ShowPopup({
         text = L
             ["The in-game navigation is disabled! Not all features of MapPinEnhanced will work properly. Do you want to enable it?"],
         onAccept = function()
@@ -90,7 +96,7 @@ function Blizz:CheckNavigationEnabled()
     })
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.CheckNavigationEnabled)
+Events:RegisterEvent("PLAYER_LOGIN", Blizz.CheckNavigationEnabled)
 
 ---Method to handle the super tracking change event and track the last tracked pin
 function Blizz:OnSuperTrackingChanged()
@@ -98,7 +104,7 @@ function Blizz:OnSuperTrackingChanged()
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
     local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    MapPinEnhanced:Save("superTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
+    SavedVars:Save("superTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
     if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
 
     local PinManager = MapPinEnhanced:GetModule("PinManager")
@@ -107,9 +113,9 @@ function Blizz:OnSuperTrackingChanged()
     end
 end
 
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
+Events:RegisterEvent("SUPER_TRACKING_CHANGED", function()
     Blizz:OnSuperTrackingChanged()
 end)
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
+Events:RegisterEvent("USER_WAYPOINT_UPDATED", function()
     Blizz:OnSuperTrackingChanged()
 end)

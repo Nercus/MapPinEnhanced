@@ -65,10 +65,10 @@ MapPinEnhancedFrame:SetScript("OnEvent", function(_, event, ...)
     end
 end)
 
----@enum MapPinEnhancedEvent @The events that can be triggered by the MapPinEnhanced module.
+---@enum (key) MapPinEnhancedEvent @The events that can be triggered by the MapPinEnhanced module.
 local MapPinEnhancedEvent = {
-    "UpdateSetList", -- Fired when the full set list is updated (e.g. after a set is added or removed)
-    "UpdateSet",     -- Fired when a specific set is updated (e.g. after a pin is added or removed)
+    UpdateSetList = true, -- Fired when the full set list is updated (e.g. after a set is added or removed)
+    UpdateSet = true,     -- Fired when a specific set is updated (e.g. after a pin is added or removed)
 }
 
 function Events:CheckEventName(event)
@@ -77,6 +77,10 @@ function Events:CheckEventName(event)
     if not MapPinEnhancedEvent[eventName] then
         error("Invalid event name: " .. event)
     end
+end
+
+function Events:GetEventNameWithID(event, id)
+    return event .. ":" .. id
 end
 
 ---@param owner table Mostly this will be the mixin of the object that is registering the event
