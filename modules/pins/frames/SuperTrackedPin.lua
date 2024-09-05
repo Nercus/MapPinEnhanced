@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local Events = MapPinEnhanced:GetModule("Events")
+local PinManager = MapPinEnhanced:GetModule("PinManager")
 
 ---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
@@ -104,6 +105,25 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetFrameStrata(f:GetFrameStrata())
     self.fadeIn:Play()
     self:UpdateTextVisibility()
+
+    -- TODO: finish moving the superTrackedPin to the core pin object
+    -- if not pinData then
+    --     self:Hide()
+    --     return
+    -- end
+    -- self:UnlockHighlight()
+    -- self:Setup(pinData)
+    -- self:SetTrackedTexture()
+    -- self:UpdateTimeText(nil)
+    -- local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
+    -- if trackingCorpse then
+    --     self.queuedTracking = pinData
+    --     self:Hide()
+    --     return
+    -- end
+    -- if not self:IsShown() and not trackingCorpse then
+    --     self:Show()
+    -- end
 end
 
 ---@param timeInSeconds number? time in seconds, if nil, ??:?? will be displayed
@@ -120,7 +140,6 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
 end
 
 local function AddOptions()
-    local self = MapPinEnhanced:GetSuperTrackedPin()
     local Blizz = MapPinEnhanced:GetModule("Blizz")
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
@@ -131,7 +150,9 @@ local function AddOptions()
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
             SavedVars:Save("floatingPin", "showEstimatedTime", value)
-            self.distantText:SetShown(value)
+            local trackedPin = PinManager:GetTrackedPin()
+            if not trackedPin then return end
+            trackedPin.superTrackedPin.distantText:SetShown(value)
         end
     })
     Options:RegisterCheckbox({
@@ -141,7 +162,9 @@ local function AddOptions()
         init = function() return SavedVars:Get("floatingPin", "showTitle") --[[@as boolean]] end,
         onChange = function(value)
             SavedVars:Save("floatingPin", "showTitle", value)
-            self:UpdateTextVisibility()
+            local trackedPin = PinManager:GetTrackedPin()
+            if not trackedPin then return end
+            trackedPin.superTrackedPin:UpdateTextVisibility()
         end
     })
 
@@ -152,10 +175,12 @@ local function AddOptions()
         init = function() return SavedVars:Get("floatingPin", "blockWorldQuestTracking") --[[@as boolean]] end,
         description = L["Block Automatic World Quest Tracking when a Pin is Tracked"],
         onChange = function(value)
+            local trackedPin = PinManager:GetTrackedPin()
+            if not trackedPin then return end
             if value then
-                self:RegisterEvent("QUEST_POI_UPDATE");
+                trackedPin.superTrackedPin:RegisterEvent("QUEST_POI_UPDATE");
             else
-                self:UnregisterEvent("QUEST_POI_UPDATE");
+                trackedPin.superTrackedPin:UnregisterEvent("QUEST_POI_UPDATE");
             end
             SavedVars:Save("floatingPin", "blockWorldQuestTracking", value)
         end
@@ -200,54 +225,14 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
             return
         else
             if self.queuedTracking then
-                self:ShowPin(self.queuedTracking)
+                -- TODO: finish moving the superTrackedPin to the core pin object
+                --self:ShowPin(self.queuedTracking)
                 self.queuedTracking = nil
             end
         end
     elseif event == "QUEST_POI_UPDATE" then
         C_Timer.After(0.1, function()
-            local PinManager = MapPinEnhanced:GetModule("PinManager")
             PinManager:TrackLastTrackedPin()
         end)
     end
-end
-
-function MapPinEnhancedSuperTrackedPinMixin:ShowPin(pinData)
-    if not pinData then
-        self:Hide()
-        return
-    end
-    self:UnlockHighlight()
-    self:Setup(pinData)
-    self:SetTrackedTexture()
-    self:UpdateTimeText(nil)
-    local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    if trackingCorpse then
-        self.queuedTracking = pinData
-        self:Hide()
-        return
-    end
-    if not self:IsShown() and not trackingCorpse then
-        self:Show()
-    end
-end
-
----------------------------------------------------------------------------
-
--- TODO: move that to the pin itself when tracking a pin
----@param pinData pinData | nil if nil, the super tracked pin will be hidden
-function MapPinEnhanced:SetSuperTrackedPin(pinData)
-    if not self.SuperTrackedPin then
-        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
-            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
-    end
-    self.SuperTrackedPin:ShowPin(pinData)
-end
-
-function MapPinEnhanced:GetSuperTrackedPin()
-    if not self.SuperTrackedPin then
-        self.SuperTrackedPin = CreateFrame("Frame", "MapPinEnhancedSuperTrackedPin", UIParent,
-            "MapPinEnhancedSuperTrackedPinTemplate") --[[@as MapPinEnhancedSuperTrackedPinMixin]]
-    end
-    return self.SuperTrackedPin
 end

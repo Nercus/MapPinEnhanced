@@ -8,6 +8,7 @@ local L = MapPinEnhanced.L
 local CONSTANTS = {}
 MapPinEnhanced.CONSTANTS = CONSTANTS
 
+---@type {color: ColorMixin, colorName: PinColors}[]
 CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(237, 179, 20, 1),  colorName = "Yellow" },
     { color = CreateColorFromBytes(96, 236, 29, 1),   colorName = "Green" },
@@ -20,6 +21,7 @@ CONSTANTS.PIN_COLORS = {
     { color = CreateColorFromBytes(235, 183, 139, 1), colorName = "Pale" },
 }
 
+---@enum (key) PinColors
 CONSTANTS.PIN_COLORS_BY_NAME = {
     ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
     ["Green"] = CreateColorFromBytes(96, 236, 29, 1),

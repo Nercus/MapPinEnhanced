@@ -2,18 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
-local SetManager = MapPinEnhanced:GetModule("SetManager")
-local Blizz = MapPinEnhanced:GetModule("Blizz")
-local Notify = MapPinEnhanced:GetModule("Notify")
 
 local HBDP = MapPinEnhanced.HBDP
-local CONSTANTS = MapPinEnhanced.CONSTANTS
-local L = MapPinEnhanced.L
-
----@class MapPinEnhancedWorldmapPinTemplate
----@field hey string
-
 
 ---@type FramePool<MapPinEnhancedWorldMapPinMixin>
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
@@ -23,7 +13,6 @@ local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTempl
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 ---@type FramePool<MapPinEnhancedSuperTrackedPinMixin>
 local SuperTrackedPinPool = CreateFramePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
-
 
 ---@class pinData
 ---@field mapID number
@@ -36,7 +25,6 @@ local SuperTrackedPinPool = CreateFramePool("Frame", nil, "MapPinEnhancedSuperTr
 ---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
 ---@field lock boolean? if true, the pin will be not be removed automatically when it has been reached
 ---@field order number? the order of the pin: the lower the number, the higher the pin will be displayed on the tracker -> if not set, the pin will be displayed at the end of the tracker
-
 
 ---@param initPinData pinData
 ---@param pinID UUID
@@ -61,92 +49,31 @@ function PinFactory:CreatePin(initPinData, pinID)
     HBDP:AddWorldMapIconMap(MapPinEnhanced, pin.worldmapPin, mapID, x, y, 3, "PIN_FRAME_LEVEL_BATTLEFIELD_FLAG")
     HBDP:AddMinimapIconMap(MapPinEnhanced, pin.minimapPin, mapID, x, y, false, false)
 
+    function pin:Remove()
+        pin:Untrack()
+        if MapPinEnhanced.pinTracker then
+            if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
+                MapPinEnhanced.pinTracker:RemoveEntry(pin.trackerPinEntry)
+            end
+        end
+        pin.worldmapPin:Hide()
+        pin.minimapPin:Hide()
+        pin.trackerPinEntry:Hide()
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, pin.minimapPin)
+        HBDP:RemoveWorldMapIcon(MapPinEnhanced, pin.worldmapPin)
+        WorldmapPool:Release(pin.worldmapPin)
+        MinimapPool:Release(pin.minimapPin)
+        TrackerPinEntryPool:Release(pin.trackerPinEntry)
+        SuperTrackedPinPool:Release(pin.superTrackedPin)
+    end
+
     self:HandleTracking(pin)
     self:HandleClick(pin)
     self:HandleDistanceCheck(pin)
-
-
-
-
-
-
-    local function SetColor(color)
-        worldmapPin:SetPinColor(color)
-        minimapPin:SetPinColor(color)
-        trackerPinEntry:SetPinColor(color)
-        if (isTracked) then
-            worldmapPin:SetTrackedTexture()
-            minimapPin:SetTrackedTexture()
-            trackerPinEntry:SetTrackedTexture()
-        else
-            worldmapPin:SetUntrackedTexture()
-            minimapPin:SetUntrackedTexture()
-            trackerPinEntry:SetUntrackedTexture()
-        end
-        pinData.color = color
-        PinManager:PersistPins()
-        if isTracked then
-            MapPinEnhanced:SetSuperTrackedPin(GetPinData())
-        end
-    end
-
-
-    local function IsColorSelected(color)
-        local colorByIndex = CONSTANTS.PIN_COLORS[color]
-        if not colorByIndex then
-            return false
-        end
-        local colorName = colorByIndex.colorName
-        return pinData.color == colorName
-    end
-
-    local function Remove()
-        Untrack()
-        if MapPinEnhanced.pinTracker then
-            if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-                MapPinEnhanced.pinTracker:RemoveEntry(trackerPinEntry)
-            end
-        end
-        worldmapPin:Hide()
-        minimapPin:Hide()
-        trackerPinEntry:Hide()
-        HBDP:RemoveMinimapIcon(MapPinEnhanced, minimapPin)
-        HBDP:RemoveWorldMapIcon(MapPinEnhanced, worldmapPin)
-        WorldmapPool:Release(worldmapPin)
-        MinimapPool:Release(minimapPin)
-        TrackerPinEntryPool:Release(trackerPinEntry)
-    end
-
-
-    local function ChangeTitle(text)
-        pinData.title = text
-        worldmapPin:SetTitle(text)
-        minimapPin:SetTitle(text)
-        trackerPinEntry:SetTitle(text)
-        PinManager:PersistPins()
-        if isTracked then
-            MapPinEnhanced:SetSuperTrackedPin(GetPinData())
-        end
-    end
-
-
-    local function SharePin()
-        if x and y and mapID then
-            Blizz:InsertWaypointLinkToChat(x, y, mapID)
-        end
-    end
-
-
-    local function ShowOnMap()
-        if InCombatLockdown() then
-            Notify:Error(L["Can't Show on Map in Combat"])
-            return
-        end
-        OpenWorldMap(mapID);
-        worldmapPin:ShowPulseForSeconds(3)
-    end
-
-
+    self:HandleLock(pin)
+    self:HandleColor(pin)
+    self:HandleMenu(pin)
+    self:HandleMisc(pin)
 
 
 

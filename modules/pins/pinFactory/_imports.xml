@@ -6,6 +6,6 @@
     <Script file="pinColor.lua" />
     <Script file="pinDistance.lua" />
     <Script file="pinMenu.lua" />
-    <Script file="pinShare.lua" />
+    <Script file="pinMisc.lua" />
     <Script file="pinFactory.lua" />
 </Ui>

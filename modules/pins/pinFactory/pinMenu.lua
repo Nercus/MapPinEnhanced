@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
+local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 local L = MapPinEnhanced.L
@@ -10,6 +11,34 @@ local L = MapPinEnhanced.L
 ---@param parentFrame Button
 ---@param pin PinObject
 local function ShowMenu(parentFrame, pin)
+    local function IsColorSelected(color)
+        return pin:IsColorSelected(color)
+    end
+
+    local function SetColor(color)
+        pin:SetColor(color)
+    end
+
+    local function SharePin()
+        pin:SharePin()
+    end
+
+    local function ShowOnMap()
+        pin:ShowOnMap()
+    end
+
+    local function ToggleLockState()
+        if pin.pinData.lock then
+            pin.pinData.lock = false
+            pin:DisableLock()
+        else
+            pin.pinData.lock = true
+            pin:EnableLock()
+        end
+    end
+
+
+
     -- TODO: use the menu templating system
     MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
         local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedMenuInputTemplate") --[[@as BaseMenuDescriptionMixin]]
@@ -19,7 +48,7 @@ local function ShowMenu(parentFrame, pin)
                 default = pin.pinData.title or CONSTANTS.DEFAULT_PIN_NAME,
                 init = function() return pin.pinData.title or CONSTANTS.DEFAULT_PIN_NAME end,
                 onChange = function(value)
-                    ChangeTitle(value)
+                    pin:ChangeTitle(value)
                 end
             })
         end);
@@ -114,13 +143,13 @@ local function ShowMenu(parentFrame, pin)
         end)
 
         rootDescription:CreateButton(L["Share to Chat"], function() SharePin() end)
-        rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pinID) end)
+        rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pin.pinID) end)
     end)
 end
 
 
 ---@class PinObject
----@field ShowMenu fun(parentFrame:Button)
+---@field ShowMenu fun(_, parentFrame:Button)
 
 function PinFactory:HandleMenu(pin)
     function pin:ShowMenu(parentFrame)
