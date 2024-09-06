@@ -1,3 +1,10 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+---@class PinTracker
+local PinTracker = MapPinEnhanced:GetModule("PinTracker")
+
+
+
 -- Note: Create the tracker module here
 -- Add functions to interact with the tracker itself
 -- Add the slash commands here (might want to split to own file)
