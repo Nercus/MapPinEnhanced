@@ -10,6 +10,8 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 ---@type function
 local ReloadUI = C_UI.Reload
 
+local L = MapPinEnhanced.L
+
 local playerLoginFired = false
 local preFiredQueue = {}
 --@end-do-not-package@
@@ -58,7 +60,7 @@ end)
 
 
 local function AddTestPins()
-    local uncategorizedSection = PinSections:GetSectionByName("Uncategorized")
+    local uncategorizedSection = PinSections:GetSectionByName(L["Uncategorized Pins"])
     if not uncategorizedSection then return end
     uncategorizedSection:AddPin({
         mapID = C_Map.GetBestMapForUnit("player") or 37, -- Elwynn Forest

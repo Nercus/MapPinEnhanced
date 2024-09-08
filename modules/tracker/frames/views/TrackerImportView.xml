@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+
+    <Script file="TrackerImportView.lua" />
+    <Frame name="MapPinEnhancedTrackerImportViewTemplate"
+        mixin="MapPinEnhancedTrackerExportViewTemplate"
+        virtual="true">
+        <Frames>
+            <ScrollFrame parentKey="textBox"
+                inherits="MapPinEnhancedScrollableTextareaTemplate"
+                hidden="true">
+                <Size x="300" y="300" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="0" />
+                </Anchors>
+            </ScrollFrame>
+
+            <Frame parentKey="radioButtons">
+                <Size x="300" y="80" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
+                        relativeKey="$parent.textBox" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString text="Radiobuttons here" inherits="GameFontNormal" />
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Button parentKey="acceptButton"
+                inherits="MapPinEnhancedButtonYellowTemplate"
+                propagateMouseInput="Motion" hidden="true" text="Accept">
+                <Size x="300" y="30" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
+                        relativeKey="$parent.radioButtons" />
+                </Anchors>
+            </Button>
+            <Button parentKey="cancelButton"
+                inherits="MapPinEnhancedButtonRedTemplate"
+                propagateMouseInput="Motion" hidden="true" text="Cancel">
+                <Size x="300" y="30" />
+
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
+                        relativeKey="$parent.acceptButton" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>

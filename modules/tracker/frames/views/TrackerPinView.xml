@@ -1,0 +1,29 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+
+    <Script file="TrackerPinView.lua" />
+    <ScrollFrame name="MapPinEnhancedTrackerPinViewTemplate"
+        mixin="MapPinEnhancedTrackerPinViewTemplate"
+        virtual="true" inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
+        propagateMouseInput="Motion">
+        <Size x="300" y="1" />
+        <KeyValues>
+            <KeyValue key="scrollBarX" value="0" type="number" />
+            <KeyValue key="scrollBarTopY" value="-4" type="number" />
+            <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
+            <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
+                type="boolean" />
+        </KeyValues>
+        <ScrollChild>
+            <Frame parentKey="Child" propagateMouseInput="Motion">
+                <Size x="300" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="0" y="0" />
+                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                </Anchors>
+            </Frame>
+        </ScrollChild>
+    </ScrollFrame>
+</Ui>

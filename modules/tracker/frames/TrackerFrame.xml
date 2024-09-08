@@ -95,7 +95,7 @@
                     </Layer>
                 </Layers>
             </Frame>
-            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
+            <Frame parentKey="frameHolder" frameStrata="MEDIUM"
                 propagateMouseInput="Motion">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
@@ -103,44 +103,7 @@
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
                 <Size x="300" y="1" />
-                <KeyValues>
-                    <KeyValue key="scrollBarX" value="0" type="number" />
-                    <KeyValue key="scrollBarTopY" value="-4" type="number" />
-                    <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
-                    <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
-                        type="boolean" />
-                </KeyValues>
-                <ScrollChild>
-                    <Frame parentKey="Child" propagateMouseInput="Motion">
-                        <Size x="300" y="1" />
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="0" y="0" />
-                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
-                        </Anchors>
-                        <Frames>
-                            <Button parentKey="importButton"
-                                inherits="MapPinEnhancedButtonYellowTemplate"
-                                propagateMouseInput="Motion" hidden="true" text="Import">
-                                <Size x="300" y="30" />
-                                <KeyValues>
-                                    <KeyValue key="iconTexture"
-                                        value="Interface/AddOns/MapPinEnhanced/assets/icons/IconImport_Dark.png" />
-                                </KeyValues>
-                            </Button>
-                            <ScrollFrame parentKey="importEditBox"
-                                inherits="MapPinEnhancedScrollableTextareaTemplate"
-                                hidden="true">
-                                <Size x="300" y="300" />
-                            </ScrollFrame>
-                            <Button parentKey="cancelButton"
-                                inherits="MapPinEnhancedButtonRedTemplate"
-                                propagateMouseInput="Motion" hidden="true" text="Cancel">
-                                <Size x="300" y="30" />
-                            </Button>
-                        </Frames>
-                    </Frame>
-                </ScrollChild>
-            </ScrollFrame>
+            </Frame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
