@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 local SetManager = MapPinEnhanced:GetModule("SetManager")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
@@ -143,7 +143,7 @@ local function ShowMenu(parentFrame, pin)
         end)
 
         rootDescription:CreateButton(L["Share to Chat"], function() SharePin() end)
-        rootDescription:CreateButton(L["Remove Pin"], function() PinManager:RemovePinByID(pin.pinID) end)
+        rootDescription:CreateButton(L["Remove Pin"], function() pin.section:RemovePin(pin.pinID) end)
     end)
 end
 

@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
@@ -27,7 +27,7 @@ function PinFactory:HandleColor(pin)
             self.trackerPinEntry:SetUntrackedTexture()
         end
         self.pinData.color = color
-        PinManager:PersistPins()
+        PinSections:PersistSections(self.section.name, self.pinID)
     end
 
     function pin:IsColorSelected(color)

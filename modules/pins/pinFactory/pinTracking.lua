@@ -2,7 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinTracking = MapPinEnhanced:GetModule("PinTracking")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 
 ---@class PinObject
@@ -15,17 +16,15 @@ local PinManager = MapPinEnhanced:GetModule("PinManager")
 function PinFactory:HandleTracking(pin)
     local isTracked = nil
     function pin:Track()
-        local success = PinManager:TrackPinByID(pin.pinID)
-        if not success then
-            return
-        end
+        local success = PinTracking:SetTrackedPin(pin)
+        if not success then return end
         pin.worldmapPin:SetTrackedTexture()
         pin.minimapPin:SetTrackedTexture()
         pin.trackerPinEntry:SetTrackedTexture()
         pin.superTrackedPin:Show()
         pin:EnableDistanceCheck()
-        PinManager:SetLastTrackedPin(pin.pinID)
         isTracked = true
+        PinSections:PersistSections(self.section.name, self.pinID)
     end
 
     function pin:Untrack()
@@ -38,6 +37,7 @@ function PinFactory:HandleTracking(pin)
         pin.superTrackedPin:Hide()
         pin:DisableDistanceCheck()
         isTracked = false
+        PinSections:PersistSections(self.section.name, self.pinID)
     end
 
     function pin:ToggleTracked()
@@ -46,7 +46,6 @@ function PinFactory:HandleTracking(pin)
         else
             self:Track()
         end
-        PinManager:PersistPins()
     end
 
     function pin:IsTracked()

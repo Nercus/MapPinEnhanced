@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 
 ---@param pin PinObject
@@ -16,7 +16,7 @@ function PinFactory:HandleClick(pin)
         if button == "LeftButton" then
             local shift, ctrl = IsShiftKeyDown(), IsControlKeyDown()
             if ctrl then
-                PinManager:RemovePinByID(pin.pinID)
+                pin.section:RemovePin(pin.pinID)
                 return
             end
             if shift then

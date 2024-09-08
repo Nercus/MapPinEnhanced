@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local Events = MapPinEnhanced:GetModule("Events")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 ---@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
 ---@field navFrameCreated boolean
@@ -105,6 +105,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:SetFrameStrata(f:GetFrameStrata())
     self.fadeIn:Play()
     self:UpdateTextVisibility()
+    self:SetTrackedTexture()
 
     -- TODO: finish moving the superTrackedPin to the core pin object
     -- if not pinData then
@@ -150,9 +151,9 @@ local function AddOptions()
         onChange = function(value)
             -- even though we disable the text, we still want to update the time -> need it for automatic removal of pins
             SavedVars:Save("floatingPin", "showEstimatedTime", value)
-            local trackedPin = PinManager:GetTrackedPin()
-            if not trackedPin then return end
-            trackedPin.superTrackedPin.distantText:SetShown(value)
+            -- local trackedPin = PinManager:GetTrackedPin()
+            -- if not trackedPin then return end
+            -- trackedPin.superTrackedPin.distantText:SetShown(value)
         end
     })
     Options:RegisterCheckbox({
@@ -162,9 +163,9 @@ local function AddOptions()
         init = function() return SavedVars:Get("floatingPin", "showTitle") --[[@as boolean]] end,
         onChange = function(value)
             SavedVars:Save("floatingPin", "showTitle", value)
-            local trackedPin = PinManager:GetTrackedPin()
-            if not trackedPin then return end
-            trackedPin.superTrackedPin:UpdateTextVisibility()
+            -- local trackedPin = PinManager:GetTrackedPin()
+            -- if not trackedPin then return end
+            -- trackedPin.superTrackedPin:UpdateTextVisibility()
         end
     })
 
@@ -175,13 +176,13 @@ local function AddOptions()
         init = function() return SavedVars:Get("floatingPin", "blockWorldQuestTracking") --[[@as boolean]] end,
         description = L["Block Automatic World Quest Tracking when a Pin is Tracked"],
         onChange = function(value)
-            local trackedPin = PinManager:GetTrackedPin()
-            if not trackedPin then return end
-            if value then
-                trackedPin.superTrackedPin:RegisterEvent("QUEST_POI_UPDATE");
-            else
-                trackedPin.superTrackedPin:UnregisterEvent("QUEST_POI_UPDATE");
-            end
+            -- local trackedPin = PinManager:GetTrackedPin()
+            -- if not trackedPin then return end
+            -- if value then
+            --     trackedPin.superTrackedPin:RegisterEvent("QUEST_POI_UPDATE");
+            -- else
+            --     trackedPin.superTrackedPin:UnregisterEvent("QUEST_POI_UPDATE");
+            -- end
             SavedVars:Save("floatingPin", "blockWorldQuestTracking", value)
         end
     })
@@ -232,7 +233,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
         end
     elseif event == "QUEST_POI_UPDATE" then
         C_Timer.After(0.1, function()
-            PinManager:TrackLastTrackedPin()
+            -- PinManager:TrackLastTrackedPin()
         end)
     end
 end

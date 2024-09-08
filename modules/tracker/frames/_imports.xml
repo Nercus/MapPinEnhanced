@@ -4,4 +4,5 @@
     <Include file="TrackerFrame.xml" />
     <Include file="TrackerPinEntry.xml" />
     <Include file="TrackerSetEntry.xml" />
+    <Include file="TrackerPinSection.xml" />
 </Ui>

@@ -3,20 +3,15 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 local Events = MapPinEnhanced:GetModule("Events")
 
-local blockEvent = false
-
+local L = MapPinEnhanced.L
 ---------------------------------------------------------------------------
 
---- USER_WAYPOINT_UPDATED event handler
-local function OnUserWaypoint()
-    if blockEvent then return end -- as super tracking a pin triggers this event we need to block it so we don't get into an infinite loop
-
-    local wp = C_Map.GetUserWaypoint()
-    if not wp then return end
-    blockEvent = true
+---@param waypointData {uiMapID: number, position: {x: number, y: number}}
+local function OnUserWaypoint(waypointData)
+    if not waypointData then return end
 
     local title, texture, usesAtlas = PinProvider:DetectMouseFocusPinInfo()
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
@@ -26,17 +21,28 @@ local function OnUserWaypoint()
     if isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingCorpse then
         C_SuperTrack.ClearAllSuperTracked()
     end
-
-    PinManager:AddPin({
-        mapID = wp.uiMapID,
-        x = wp.position.x,
-        y = wp.position.y,
+    local uncategorizedSection = PinSections:GetSectionByName(L["Uncategorized Pins"])
+    if not uncategorizedSection then return end
+    uncategorizedSection:AddPin({
+        mapID = waypointData.uiMapID,
+        x = waypointData.position.x,
+        y = waypointData.position.y,
         title = title,
         texture = texture,
         usesAtlas = usesAtlas,
         setTracked = not isSuperTrackingCorpse
     })
-    blockEvent = false
 end
 
-Events:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypoint)
+
+local isHooked = false
+local function HookSetUserWaypoint()
+    if isHooked then return end
+    if not C_Map.SetUserWaypoint then return end
+    hooksecurefunc(C_Map, "SetUserWaypoint", OnUserWaypoint)
+    isHooked = true
+end
+
+
+
+Events:RegisterEvent("PLAYER_LOGIN", HookSetUserWaypoint)

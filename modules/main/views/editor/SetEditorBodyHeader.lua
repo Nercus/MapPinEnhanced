@@ -32,16 +32,16 @@ function MapPinEnhancedSetEditorBodyHeaderMixin:SetMode(mode)
 end
 
 function MapPinEnhancedSetEditorBodyHeaderMixin:ImportFromMap()
-    local PinManager = MapPinEnhanced:GetModule("PinManager")
-    local SetManager = MapPinEnhanced:GetModule("SetManager")
-    local activeSet = self.body:GetActiveSet()
-    if not activeSet then return end
-    local pins = PinManager:GetPinsByOrder()
-    for _, pin in ipairs(pins) do
-        activeSet:AddPin(pin.pinData, true, true)
-    end
-    SetManager:PersistSets(activeSet.setID)
-    self.body:UpdatePinList()
+    -- local PinManager = MapPinEnhanced:GetModule("PinManager")
+    -- local SetManager = MapPinEnhanced:GetModule("SetManager")
+    -- local activeSet = self.body:GetActiveSet()
+    -- if not activeSet then return end
+    -- local pins = PinManager:GetPinsByOrder()
+    -- for _, pin in ipairs(pins) do
+    --     activeSet:AddPin(pin.pinData, true, true)
+    -- end
+    -- SetManager:PersistSets(activeSet.setID)
+    -- self.body:UpdatePinList()
 end
 
 function MapPinEnhancedSetEditorBodyHeaderMixin:UpdateSetName()

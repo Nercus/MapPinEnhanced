@@ -1,7 +1,7 @@
 ---@diagnostic disable: no-unknown
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 local L = MapPinEnhanced.L
 
 ---@class PinProvider
@@ -28,7 +28,9 @@ local function HookTomTomAddWaypoint()
     hooksecurefunc(TomTom, "AddWaypoint", function(_, ...)
         local mapID, x, y, info = ...
         if not mapID or not x or not y then return end
-        PinManager:AddPin({
+        local uncategorizedSection = PinSections:GetSectionByName(L["Uncategorized Pins"])
+        if not uncategorizedSection then return end
+        uncategorizedSection:AddPin({
             mapID = mapID,
             x = x,
             y = y,

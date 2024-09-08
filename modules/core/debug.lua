@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 local Events = MapPinEnhanced:GetModule("Events")
 local Utils = MapPinEnhanced:GetModule("Utils")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 --@do-not-package@
 ---@type function
@@ -57,9 +58,9 @@ end)
 
 
 local function AddTestPins()
-    ---@class PinManager
-    local PinManager = MapPinEnhanced:GetModule("PinManager")
-    PinManager:AddPin({
+    local uncategorizedSection = PinSections:GetSectionByName("Uncategorized")
+    if not uncategorizedSection then return end
+    uncategorizedSection:AddPin({
         mapID = C_Map.GetBestMapForUnit("player") or 37, -- Elwynn Forest
         x = math.random(),
         y = math.random(),

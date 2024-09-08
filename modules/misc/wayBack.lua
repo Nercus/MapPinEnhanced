@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 local Notify = MapPinEnhanced:GetModule("Notify")
 
@@ -15,7 +15,9 @@ SlashCommand:AddSlashCommand(L["Back"]:lower(), function()
         return
     end
     local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
-    PinManager:AddPin({
+    local uncategorizedSection = PinSections:GetSectionByName(L["Uncategorized Pins"])
+    if not uncategorizedSection then return end
+    uncategorizedSection:AddPin({
         title = L["My Way Back"],
         mapID = currentMapID,
         x = x,

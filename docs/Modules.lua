@@ -11,9 +11,8 @@
 ---@field GetModule fun(self, name:"Notify"): Notify
 ---@field GetModule fun(self, name:"Options"): Options
 ---@field GetModule fun(self, name:"PinFactory"): PinFactory
----@field GetModule fun(self, name:"PinManager"): PinManager
 ---@field GetModule fun(self, name:"PinProvider"): PinProvider
----@field GetModule fun(self, name:"PinTracker"): PinTracker
+---@field GetModule fun(self, name:"Tracker"): Tracker
 ---@field GetModule fun(self, name:"SavedVars"): SavedVars
 ---@field GetModule fun(self, name:"SetFactory"): SetFactory
 ---@field GetModule fun(self, name:"SetManager"): SetManager
@@ -21,3 +20,5 @@
 ---@field GetModule fun(self, name:"Tests"): Tests
 ---@field GetModule fun(self, name:"Textures"): Textures
 ---@field GetModule fun(self, name:"Utils"): Utils
+---@field GetModule fun(self, name:"PinSections"): PinSections
+---@field GetModule fun(self, name:"PinTracking"): PinTracking

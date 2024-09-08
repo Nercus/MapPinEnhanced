@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 local HBDP = MapPinEnhanced.HBDP
 
@@ -13,6 +14,8 @@ local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTempl
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 ---@type FramePool<MapPinEnhancedSuperTrackedPinMixin>
 local SuperTrackedPinPool = CreateFramePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
+
+local CONSTANTS = MapPinEnhanced.CONSTANTS
 
 ---@class pinData
 ---@field mapID number
@@ -28,8 +31,9 @@ local SuperTrackedPinPool = CreateFramePool("Frame", nil, "MapPinEnhancedSuperTr
 
 ---@param initPinData pinData
 ---@param pinID UUID
+---@param section PinSection
 ---@return PinObject
-function PinFactory:CreatePin(initPinData, pinID)
+function PinFactory:CreatePin(initPinData, pinID, section)
     ---@class PinObject
     local pin = {}
     pin.worldmapPin = WorldmapPool:Acquire()
@@ -37,9 +41,27 @@ function PinFactory:CreatePin(initPinData, pinID)
     pin.trackerPinEntry = TrackerPinEntryPool:Acquire()
     pin.superTrackedPin = SuperTrackedPinPool:Acquire()
     pin.pinID = pinID
+    pin.section = section
 
     pin.pinData = initPinData
+
+    if (pin.pinData.x > 1) then
+        pin.pinData.x = pin.pinData.x / 100
+    end
+    if (pin.pinData.y > 1) then
+        pin.pinData.y = pin.pinData.y / 100
+    end
+
     local x, y, mapID = initPinData.x, initPinData.y, initPinData.mapID
+
+
+    if (pin.pinData.texture == nil and pin.pinData.color == nil) then
+        pin.pinData.color = CONSTANTS.DEFAULT_PIN_COLOR
+    end
+
+    if pin.pinData.texture then
+        pin.pinData.color = "Custom"
+    end
 
     pin.worldmapPin:Setup(pin.pinData)
     pin.minimapPin:Setup(pin.pinData)
@@ -51,11 +73,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     function pin:Remove()
         pin:Untrack()
-        if MapPinEnhanced.pinTracker then
-            if MapPinEnhanced.pinTracker:GetActiveView() == "Pins" then
-                MapPinEnhanced.pinTracker:RemoveEntry(pin.trackerPinEntry)
-            end
-        end
+        Tracker:RemoveEntry(pin.trackerPinEntry)
         pin.worldmapPin:Hide()
         pin.minimapPin:Hide()
         pin.trackerPinEntry:Hide()
@@ -82,5 +100,13 @@ function PinFactory:CreatePin(initPinData, pinID)
         return self.pinData
     end
 
+    ---@return pinData
+    function pin:GetSavableData()
+        local pinDataToSave = self:GetPinData()
+        pinDataToSave.setTracked = self:IsTracked()
+        return pinDataToSave
+    end
+
+    pin:Untrack() -- untrack the pin by default
     return pin
 end

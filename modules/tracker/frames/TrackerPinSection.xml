@@ -1,0 +1,80 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="TrackerPinSection.lua" />
+    <Button name="MapPinEnhancedTrackerPinSectionTemplate"
+        mixin="MapPinEnhancedTrackerPinSectionMixin"
+        enableMouse="true" clipChildren="false" propagateMouseInput="Both" virtual="true">
+        <Size x="300" y="37" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture
+                    desaturated="true"
+                    parentKey="left"
+                    file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonLargeRed_Left.png">
+                    <Size x="28" y="28" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" />
+                    </Anchors>
+                </Texture>
+                <Texture
+                    desaturated="true"
+                    parentKey="right"
+                    file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonLargeRed_Right.png">
+                    <Size x="28" y="28" />
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture
+                    desaturated="true"
+                    parentKey="middle" horizTile="true"
+                    file="Interface/AddOns/MapPinEnhanced/assets/buttons/ButtonLargeRed_Centre.png">
+                    <Size x="2" y="28" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.left" relativePoint="RIGHT" />
+                        <Anchor point="RIGHT" relativeKey="$parent.right" relativePoint="LEFT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinTrackedYellow.png">
+                    <Size x="18" y="18" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.left" x="5" />
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="title" text="Section" inherits="GameFontNormal">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeKey="$parent.icon"
+                            x="3" />
+                        <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT"
+                            relativeKey="$parent.icon" x="3" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="menuButton">
+                <Size x="24" y="24" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.right" x="-2" y="-3" />
+                </Anchors>
+                <NormalTexture atlas="common-dropdown-a-button" />
+                <HighlightTexture atlas="bags-newitem" alpha="0.6">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="2" x="1" />
+                        <Anchor point="BOTTOMRIGHT" y="4" x="-1" />
+                    </Anchors>
+                </HighlightTexture>
+                <PushedTexture atlas="common-dropdown-a-button-pressedhover" />
+                <Scripts>
+                    <OnClick>
+                        print("Menu Button Clicked")
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+    </Button>
+</Ui>

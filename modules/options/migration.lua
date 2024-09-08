@@ -6,6 +6,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 local Events = MapPinEnhanced:GetModule("Events")
+local PinTracking = MapPinEnhanced:GetModule("PinTracking")
 
 ---------------------------------------------------------------------------
 
@@ -80,8 +81,7 @@ function Options:UpdateVersionInfo()
         SavedVars:Save("version", currentVersion)
         SlashCommand:PrintHelp()  -- show the help message after a new upate
         C_Map.ClearUserWaypoint() -- we always clear the waypoint on init after a new update
-        local PinManager = MapPinEnhanced:GetModule("PinManager")
-        PinManager:UntrackTrackedPin()
+        PinTracking:UntrackTrackedPin()
     end
     Options:MigrateOptionByVersion(self.lastVersion or 0)
 end

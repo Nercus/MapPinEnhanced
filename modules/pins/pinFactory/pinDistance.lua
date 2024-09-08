@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 local Blizz = MapPinEnhanced:GetModule("Blizz")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 
 ---@type {distance: number, time: number}[]
@@ -111,7 +111,7 @@ function PinFactory:HandleDistanceCheck(pin)
         if trackingCorpse then return end
         if pin.pinData.lock then return end
         if not pin:IsTracked() then return end
-        PinManager:RemovePinByID(pin.pinID)
+        pin.section:RemovePin(pin.pinID)
     end
 
     function pin:OnDistanceFar()
@@ -160,14 +160,15 @@ function PinFactory:HandleLock(pin)
         pin.pinData.lock = true
         pin.trackerPinEntry.Pin:SetLockState(true)
         pin.superTrackedPin:SetLockState(true)
+        PinSections:PersistSections(pin.section.name, pin.pinID)
     end
 
     function pin:DisableLock()
         pin.pinData.lock = false
         pin.trackerPinEntry.Pin:SetLockState(false)
         pin.superTrackedPin:SetLockState(false)
+        PinSections:PersistSections(pin.section.name, pin.pinID)
     end
 
-    PinManager:PersistPins()
     pin:ManualDistanceCheck()
 end

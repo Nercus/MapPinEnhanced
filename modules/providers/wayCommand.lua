@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
@@ -17,6 +17,7 @@ local SLASH_PREFIX_PATTERN_2 = "/[Mm][Pp][Ee]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local HBDmapData = MapPinEnhanced.HBD.mapData
+local L = MapPinEnhanced.L
 local trim = string.trim
 
 ---------------------------------------------------------------------------
@@ -165,8 +166,11 @@ end
 
 function PinProvider:ImportSlashCommand(msg)
     local title, mapID, coords = self:ParseWayStringToData(msg)
+
     if mapID and coords and coords[1] and coords[2] then
-        PinManager:AddPin({
+        local uncategorizedSection = PinSections:GetSectionByName(L["Uncategorized Pins"])
+        if not uncategorizedSection then return end
+        uncategorizedSection:AddPin({
             mapID = mapID,
             x = coords[1] / 100,
             y = coords[2] / 100,
@@ -181,8 +185,10 @@ end
 function PinProvider:ImportFromWayString(wayString)
     -- iterate over newlines
     local pinData = self:DeserializeWayString(wayString)
+    local temporaryImportSection = PinSections:GetSectionByName(L["Temporary Import"])
+    if not temporaryImportSection then return end
     for _, data in ipairs(pinData) do
-        PinManager:AddPin(data)
+        temporaryImportSection:AddPin(data)
     end
 end
 

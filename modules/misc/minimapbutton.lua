@@ -33,8 +33,8 @@ local MinimapButtonTemplate = {
         type = "button",
         label = L["Clear All Pins"],
         onClick = function()
-            local PinManager = MapPinEnhanced:GetModule("PinManager")
-            PinManager:ClearPins()
+            -- local PinManager = MapPinEnhanced:GetModule("PinManager")
+            -- PinManager:ClearPins()
         end,
     },
     {
@@ -79,8 +79,8 @@ function MapPinEnhanced:ToggleMinimapButton(init)
             OnClick = function(owner, button)
                 if button == "LeftButton" then
                     if IsAltKeyDown() then
-                        local PinManager = MapPinEnhanced:GetModule("PinManager")
-                        PinManager:ClearPins()
+                        -- local PinManager = MapPinEnhanced:GetModule("PinManager")
+                        -- PinManager:ClearPins()
                         return
                     end
                     self:TogglePinTracker()

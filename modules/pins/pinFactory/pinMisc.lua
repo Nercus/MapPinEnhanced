@@ -2,11 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 local Blizz = MapPinEnhanced:GetModule("Blizz")
 local Notify = MapPinEnhanced:GetModule("Notify")
 
-local CONSTANTS = MapPinEnhanced.CONSTANTS
 local L = MapPinEnhanced.L
 
 ---@class PinObject
@@ -22,7 +21,7 @@ function PinFactory:HandleMisc(pin)
         self.minimapPin:SetTitle(text)
         self.trackerPinEntry:SetTitle(text)
         self.superTrackedPin:SetTitle(text)
-        PinManager:PersistPins()
+        PinSections:PersistSections(self.section.name, self.pinID)
     end
 
     function pin:SharePin()

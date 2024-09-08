@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class Blizz
 local Blizz = MapPinEnhanced:GetModule("Blizz")
+local PinTracking = MapPinEnhanced:GetModule("PinTracking")
 local L = MapPinEnhanced.L
 
 
@@ -107,9 +108,8 @@ function Blizz:OnSuperTrackingChanged()
     SavedVars:Save("superTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
     if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
 
-    local PinManager = MapPinEnhanced:GetModule("PinManager")
     if isSuperTracking and not isSuperTrackingUserWaypoint then
-        PinManager:UntrackTrackedPin()
+        PinTracking:UntrackTrackedPin()
     end
 end
 

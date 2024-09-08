@@ -1,9 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@alias ModuleName "Blizz" | "Options" | "PinFactory" | "PinProvider" | "SetFactory" | "SetManager" | "PinManager" | "EditorWindow" | "SavedVars"
-
-
 ---@param name string
 ---@return table
 function MapPinEnhanced:CreateModule(name)

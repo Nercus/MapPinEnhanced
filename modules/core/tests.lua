@@ -122,6 +122,7 @@ end
 
 function Tests:RunTests(onUpdate, onFinish)
     local tests = self.tests
+    if not tests then return end
     local testCount = self:GetNumberOfTests()
     ---@type {err: string, name: string}[]
     local testErrors = {}

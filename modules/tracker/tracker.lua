@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class PinTracker
-local PinTracker = MapPinEnhanced:GetModule("PinTracker")
+---@class Tracker
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 
 
@@ -16,3 +16,9 @@ local PinTracker = MapPinEnhanced:GetModule("PinTracker")
 
 
 -- split the tracker header into its own template
+
+
+
+function Tracker:RemoveEntry(entry)
+
+end

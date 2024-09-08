@@ -69,6 +69,7 @@ end)
 local MapPinEnhancedEvent = {
     UpdateSetList = true, -- Fired when the full set list is updated (e.g. after a set is added or removed)
     UpdateSet = true,     -- Fired when a specific set is updated (e.g. after a pin is added or removed)
+    UpdateSection = true, -- Fired when a specific section is updated (e.g. after a pin is added or removed)
 }
 
 function Events:CheckEventName(event)
@@ -79,6 +80,9 @@ function Events:CheckEventName(event)
     end
 end
 
+---@param event MapPinEnhancedEvent | string The event to trigger
+---@param id string The id of the event
+---@return string
 function Events:GetEventNameWithID(event, id)
     return event .. ":" .. id
 end

@@ -105,3 +105,4 @@ L["X"] = "X"
 L["Y"] = "Y"
 L["You Are in an Instance or a Zone Where the Map Is Not Available"] =
 "You Are in an Instance or a Zone Where the Map Is Not Available"
+L["Uncategorized Pins"] = "Uncategorized Pins"

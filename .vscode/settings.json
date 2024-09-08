@@ -73,5 +73,5 @@
         "titleBar.inactiveForeground": "#15202b99"
     },
     "wowAPI.luals.configurationScope": "User",
-    "wowAPI.luals.defineKnownGlobals": false
+    "wowAPI.luals.defineKnownGlobals": false,
 }

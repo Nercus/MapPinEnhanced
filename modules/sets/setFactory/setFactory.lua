@@ -3,7 +3,8 @@ local MapPinEnhanced = select(2, ...)
 ---@class SetFactory
 local SetFactory = MapPinEnhanced:GetModule("SetFactory")
 local SetManager = MapPinEnhanced:GetModule("SetManager")
-local PinManager = MapPinEnhanced:GetModule("PinManager")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
+local PinTracking = MapPinEnhanced:GetModule("PinTracking")
 local Utils = MapPinEnhanced:GetModule("Utils")
 local Menu = MapPinEnhanced:GetModule("Menu")
 local Notify = MapPinEnhanced:GetModule("Notify")
@@ -89,7 +90,7 @@ function SetFactory:CreateSet(name, id)
     ---@param restore boolean?
     ---@param override boolean?
     local function AddPin(_, pinData, restore, override)
-        local positonString = PinManager:GetPositionStringForPin(pinData)
+        local positonString = PinSections:GetPositionStringForPin(pinData)
         if positions[positonString] and not override then
             return
         end
@@ -127,7 +128,7 @@ function SetFactory:CreateSet(name, id)
     ---@param pinsetID UUID
     local function RemovePinByID(_, pinsetID)
         local pinData = pins[pinsetID].pinData
-        local positionString = PinManager:GetPositionStringForPin(pinData)
+        local positionString = PinSections:GetPositionStringForPin(pinData)
         pins[pinsetID] = nil
         positions[positionString] = nil
         SetManager:PersistSets(setID)
@@ -177,15 +178,16 @@ function SetFactory:CreateSet(name, id)
     end
 
 
-    local function LoadSet(override)
-        if override then
-            PinManager:ClearPins()
-        end
+    local function LoadSet()
+        local sectionSet = PinSections:RegisterSection({
+            name = string.format("%s: %s", L["Loaded Set"], name),
+            icon = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSets_Yellow.png",
+            source = MapPinEnhanced.addonName
+        })
         local orderedPins = GetPinsByOrder()
         for _, setPinData in ipairs(orderedPins) do
-            PinManager:AddPin(setPinData.pinData)
+            sectionSet:AddPin(setPinData.pinData)
         end
-        PinManager:TrackLastTrackedPin()
         MapPinEnhanced:SetPinTrackerView('Pins')
         Notify:Info(string.format(L["Set \"%s\" Loaded"], name))
     end
@@ -218,7 +220,7 @@ function SetFactory:CreateSet(name, id)
             type = "button",
             label = L["Load Set"],
             onClick = function()
-                LoadSet(IsShiftKeyDown())
+                LoadSet()
             end
         },
         {
@@ -252,14 +254,14 @@ function SetFactory:CreateSet(name, id)
 
     local function HandleClick(buttonFrame, button)
         if button == "LeftButton" then
-            LoadSet(IsShiftKeyDown())
+            LoadSet()
         else
             CreateMenu(buttonFrame)
         end
     end
 
     trackerSetEntry:SetScript("OnClick", HandleClick)
-    trackerSetEntry.tooltip = L["Click to Load Set"] .. "\n" .. L["Shift-Click to Load and Override All Pins"]
+    trackerSetEntry.tooltip = L["Click to Load Set"]
 
 
     local function GetRawSetData()
