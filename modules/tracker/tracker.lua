@@ -1,11 +1,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 ---@class Tracker : MapPinEnhancedTrackerFrameMixin
----@field currentView TrackerView?
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local Events = MapPinEnhanced:GetModule("Events")
 local Options = MapPinEnhanced:GetModule("Options")
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 
 local L = MapPinEnhanced.L
 -- Note: Create the tracker module here
@@ -33,17 +33,37 @@ function Tracker:RemoveEntry(entry)
 
 end
 
----@param view TrackerViewType
-function Tracker:SetView(view)
-    if self.currentView then
-        self.currentView:Hide()
-    end
+function Tracker:SetTitle(title)
     local trackerFrame = self:GetTrackerFrame()
-    self.currentView = trackerFrame:GetViewFrameForType(view)
-    self.currentView:Show()
+    trackerFrame:SetTrackerTitle(title)
 end
 
-function Tracker:AddOptions()
+---@param view TrackerViewType
+function Tracker:SetView(view)
+    local trackerFrame = self:GetTrackerFrame()
+    trackerFrame:SetView(view)
+end
+
+function Tracker:GetActiveView()
+    local trackerFrame = self:GetTrackerFrame()
+    return trackerFrame:GetActiveView()
+end
+
+---@param forceVisibleState boolean?
+function Tracker:ToggleTracker(forceVisibleState)
+    local trackerFrame = self:GetTrackerFrame()
+    if forceVisibleState == true then
+        trackerFrame:Open()
+        return
+    elseif forceVisibleState == false then
+        trackerFrame:Close()
+        return
+    else
+        trackerFrame:Toggle()
+    end
+end
+
+function Tracker:RegisterOptions()
     Options:RegisterSelect({
         category = L["Tracker"],
         label = L["Automatic Visibility"],
@@ -123,4 +143,26 @@ function Tracker:AddOptions()
             --self:UpdateEntriesPosition()
         end
     })
+end
+
+function Tracker:RegisterSlashCommands()
+    SlashCommand:AddSlashCommand(L["Tracker"]:lower(), function()
+        self:ToggleTracker()
+    end, L["Toggle Tracker"])
+
+    SlashCommand:AddSlashCommand(L["Import"]:lower(), function()
+        self:ToggleTracker(true)
+        self:SetView("Import")
+    end, L["Import a Set"])
+end
+
+local initialized = false
+function Tracker:OnInitialize()
+    if initialized then return end
+    self:RegisterOptions()
+    self:RegisterSlashCommands()
+    local trackerFrame = self:GetTrackerFrame()
+    trackerFrame:RestoreVisibility()
+    trackerFrame:RestorePosition()
+    initialized = true
 end

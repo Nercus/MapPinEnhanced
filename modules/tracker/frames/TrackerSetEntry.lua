@@ -1,4 +1,3 @@
--- Template: file://./TrackerSetEntry.xml#
 ---@class MapPinEnhancedTrackerSetEntryMixin : Button
 ---@field title FontString
 ---@field highlight Texture

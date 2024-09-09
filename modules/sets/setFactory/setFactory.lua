@@ -9,6 +9,7 @@ local Utils = MapPinEnhanced:GetModule("Utils")
 local Menu = MapPinEnhanced:GetModule("Menu")
 local Notify = MapPinEnhanced:GetModule("Notify")
 local Events = MapPinEnhanced:GetModule("Events")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 ---@type FramePool<MapPinEnhancedTrackerSetEntryMixin>
 local TrackerSetEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerSetEntryTemplate")
@@ -188,7 +189,7 @@ function SetFactory:CreateSet(name, id)
         for _, setPinData in ipairs(orderedPins) do
             sectionSet:AddPin(setPinData.pinData)
         end
-        MapPinEnhanced:SetPinTrackerView('Pins')
+        Tracker:SetView("Pins")
         Notify:Info(string.format(L["Set \"%s\" Loaded"], name))
     end
 

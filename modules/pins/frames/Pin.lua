@@ -1,4 +1,3 @@
--- Template: file://./Pin.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Textures = MapPinEnhanced:GetModule("Textures")

@@ -1,15 +1,16 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Events = MapPinEnhanced:GetModule("Events")
 
 ---@param name string
 ---@return table
 function MapPinEnhanced:CreateModule(name)
-    local module = {}
+    local m = {}
     if (not self.modules) then
         self.modules = {}
     end
-    self.modules[name] = module
-    return module
+    self.modules[name] = m
+    return m
 end
 
 function MapPinEnhanced:GetModule(name)
@@ -18,3 +19,14 @@ function MapPinEnhanced:GetModule(name)
     end
     return self.modules[name]
 end
+
+local function OnInitialize()
+    for _, m in pairs(MapPinEnhanced.modules) do
+        if m.OnInitialize then
+            m.OnInitialize()
+        end
+    end
+end
+
+--- run all OnInitialize functions
+Events:RegisterEvent("PLAYER_LOGIN", OnInitialize)

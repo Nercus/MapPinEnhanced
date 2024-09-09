@@ -6,6 +6,8 @@ local Menu = MapPinEnhanced:GetModule("Menu")
 local Utils = MapPinEnhanced:GetModule("Utils")
 local Events = MapPinEnhanced:GetModule("Events")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
+local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 
 ---@type AnyMenuEntry[]
@@ -18,7 +20,7 @@ local MinimapButtonTemplate = {
         type = "button",
         label = L["Toggle Tracker"],
         onClick = function()
-            MapPinEnhanced:TogglePinTracker()
+            Tracker:Toggle()
         end,
     },
     {
@@ -79,11 +81,10 @@ function MapPinEnhanced:ToggleMinimapButton(init)
             OnClick = function(owner, button)
                 if button == "LeftButton" then
                     if IsAltKeyDown() then
-                        -- local PinManager = MapPinEnhanced:GetModule("PinManager")
-                        -- PinManager:ClearPins()
+                        PinSections:ClearPins()
                         return
                     end
-                    self:TogglePinTracker()
+                    Tracker:Toggle()
                 elseif button == "RightButton" then
                     Menu:GenerateMenu(owner, MinimapButtonTemplate)
                 end
@@ -117,7 +118,7 @@ function MapPinEnhanced:RegisterAddonCompartment()
         icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
         notCheckable = true,
         func = function()
-            self:TogglePinTracker()
+            Tracker:Toggle()
         end,
     })
 end

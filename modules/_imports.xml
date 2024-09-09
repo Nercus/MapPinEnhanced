@@ -10,6 +10,6 @@
     <Include file="pins\_imports.xml" />
     <Include file="sets\_imports.xml" />
     <Include file="tracker\_imports.xml" />
-    <Include file="main\_imports.xml" />
+    <Include file="window\_imports.xml" />
     <Include file="providers\_imports.xml" />
 </Ui>

@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinSections
 ---@field Sections {[string]: PinSection} all registered sections -> using the section name as key
 local PinSections = MapPinEnhanced:GetModule("PinSections")
-local Events = MapPinEnhanced:GetModule("Events")
 local Textures = MapPinEnhanced:GetModule("Textures")
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 
@@ -99,7 +98,7 @@ function PinSections:RestoreSections()
     end
 end
 
-function PinSections:LoadDefaultSections()
+function PinSections:RegisterDefaultSections()
     local uncatSection = self:RegisterSection({
         name = L["Uncategorized Pins"],
         icon = Textures:GetTexture("PinTrackedYellow"),
@@ -124,26 +123,33 @@ function PinSections:LoadDefaultSections()
     })
 end
 
-Events:RegisterEvent("PLAYER_LOGIN", function()
-    PinSections:LoadDefaultSections()
-end)
+function PinSections:RegisterOptions()
+    local Options = MapPinEnhanced:GetModule("Options")
+    Options:RegisterCheckbox({
+        category = L["General"],
+        label = L["Auto Track Nearest Pin"],
+        description = "Automatically track the nearest pin when a tracked pin is removed.",
+        default = SavedVars:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
+        init = function() return SavedVars:Get("general", "autoTrackNearestPin") --[[@as boolean]] end,
+        onChange = function(value)
+            SavedVars:Save("general", "autoTrackNearestPin", value)
+        end
+    })
+end
 
+function PinSections:RegisterSlashCommands()
+    local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
+    SlashCommand:AddSlashCommand(L["Clear"]:lower(), function()
+        self:ClearPins()
+    end, L["Clear All Pins"])
+end
 
-Events:RegisterEvent("PLAYER_ENTERING_WORLD", function(isLogin, isReload)
-    if isLogin then
-        PinSections:RestoreSections()
-    end
-    if isReload then
-        local Options = MapPinEnhanced:GetModule("Options")
-        Options:RegisterCheckbox({
-            category = L["General"],
-            label = L["Auto Track Nearest Pin"],
-            description = "Automatically track the nearest pin when a tracked pin is removed.",
-            default = SavedVars:GetDefault("general", "autoTrackNearestPin") --[[@as boolean]],
-            init = function() return SavedVars:Get("general", "autoTrackNearestPin") --[[@as boolean]] end,
-            onChange = function(value)
-                SavedVars:Save("general", "autoTrackNearestPin", value)
-            end
-        })
-    end
-end)
+local initialized = false
+function PinSections:OnInitialize()
+    if initialized then return end
+    PinSections:RegisterDefaultSections()
+    PinSections:RegisterOptions()
+    PinSections:RegisterSlashCommands()
+    PinSections:RestoreSections()
+    initialized = true
+end

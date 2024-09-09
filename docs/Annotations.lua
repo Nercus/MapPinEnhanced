@@ -394,7 +394,41 @@ DEFAULT_CHAT_FRAME = {}
 ---@class HereBeDragons-2.0
 ---@field mapData table<number, HereBeDragonMapData>
 
+--- TODO: finish annotation of ScrollFrameTemplate check for update method on scrollframe and add scrollchild
+---@class ScrollFrameTemplate : ScrollFrame
+---@field scrollBarHideIfUnscrollable boolean?
+---@field scrollBarHideTrackIfThumbExceedsTrack boolean?
+---@field scrollBarX number?
+---@field scrollBarTopY number?
+---@field scrollBarBottomY number?
+---@field ScrollBar EventFrame
+---@field GetPanExtent fun(): number
+---@field SetPanExtent fun(panExtent: number)
 
+
+---@class MinimalSliderTemplate : Slider
+---@field obeyStepOnDrag boolean?
+---@field Left Texture
+---@field Middle Texture
+---@field Right Texture
+---@field OnLoad fun()
+---@field Release fun()
+
+
+---Unfinished DropdownButtonMixin, just used to get the correct type for the dropdown button
+---@class DropdownButton : Button, CallbackRegistryMixin
+---@field intrinsic string
+---@field menuPoint string
+---@field menuPointX number
+---@field menuPointY number
+---@field menuRelativePoint string
+
+
+---@class WowStyle2DropdownTemplate : DropdownButton
+---@field ResetButton Button
+---@field Background Texture
+---@field Arrow Texture
+---@field Text FontString
 
 
 ---This is the onLoad function for the ScrollFrameTemplate

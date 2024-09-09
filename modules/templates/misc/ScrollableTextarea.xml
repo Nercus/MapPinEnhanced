@@ -7,7 +7,7 @@
         enableMouse="true" inherits="ScrollFrameTemplate">
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" name="$parentBG" atlas="common-dropdown-bg">
+                <Texture parentKey="bg" atlas="common-dropdown-bg">
                     <Color r="1" g="1" b="1" a="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-9" y="6" />

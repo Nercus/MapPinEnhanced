@@ -1,4 +1,3 @@
--- Template: file://./button.xml
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
