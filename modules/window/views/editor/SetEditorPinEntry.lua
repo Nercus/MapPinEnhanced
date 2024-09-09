@@ -128,32 +128,7 @@ function MapPinEnhancedWindowSetPinEntryMixin:OnLoad()
 end
 
 function MapPinEnhancedWindowSetPinEntryMixin:SetupPinOptions(initLock)
-    -- ---@type SelectOptions
-    -- local selectOptions = {
-    --     default = {
-    --         lock = false,
-    --     },
-    --     init = function()
-    --         return {
-    --             lock = initLock
-    --         }
-    --     end,
-    --     onChange = function(value)
-    --         if not value then return end
-    --         if type(value) ~= "table" then return end
-    --         for optionKey, optionValue in pairs(value) do
-    --             self:OnChange(optionKey, optionValue)
-    --         end
-    --     end,
-    --     options = {
-    --         {
-    --             label = L["Lock Pin"],
-    --             value = "lock",
-    --             type = "checkbox"
-    --         },
-    --     }
-    -- }
-
+    -- If more options are added change it to a dropdown list
     ---@type CheckboxOptions
     local checkboxOptions = {
         default = initLock,
