@@ -3,5 +3,6 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="window.lua" />
     <Include file="WindowFrame.xml" />
-    <Include file="views/_imports.xml" />
+    <Include file="views/editor/_imports.xml" />
+    <Include file="views/options/_imports.xml" />
 </Ui>

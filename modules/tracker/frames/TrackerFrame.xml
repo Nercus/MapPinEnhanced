@@ -106,7 +106,6 @@
             </Frame>
         </Frames>
         <Scripts>
-            <OnLoad method="OnLoad" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />
             <OnEnter method="OnEnter" />

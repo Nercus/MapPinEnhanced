@@ -166,3 +166,7 @@ function Tracker:OnInitialize()
     trackerFrame:RestorePosition()
     initialized = true
 end
+
+Events:RegisterEvent("PLAYER_LOGIN", function()
+    Tracker:OnInitialize()
+end)

@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local PinSections = MapPinEnhanced:GetModule("PinSections")
 local Textures = MapPinEnhanced:GetModule("Textures")
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local Events = MapPinEnhanced:GetModule("Events")
 
 local L = MapPinEnhanced.L
 
@@ -153,3 +154,7 @@ function PinSections:OnInitialize()
     PinSections:RestoreSections()
     initialized = true
 end
+
+Events:RegisterEvent("PLAYER_LOGIN", function()
+    PinSections:OnInitialize()
+end)

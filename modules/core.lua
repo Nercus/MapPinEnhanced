@@ -19,16 +19,3 @@ function MapPinEnhanced:GetModule(name)
     end
     return self.modules[name]
 end
-
-local function OnInitialize()
-    for _, m in pairs(MapPinEnhanced.modules) do
-        if m.OnInitialize then
-            m.OnInitialize()
-        end
-    end
-end
-
---- we run that on a independent frame as the event module doesn't exist yet
-local intializeFrame = CreateFrame("Frame")
-intializeFrame:RegisterEvent("PLAYER_LOGIN")
-intializeFrame:SetScript("OnEvent", OnInitialize)
