@@ -76,7 +76,7 @@ function PinSections:PersistSections(sectionName, pinID)
         local sectionData = section:GetSavableData()
         SavedVars:Save("sections", sectionName, sectionData)
     else
-        ---@type table<UUID, {info: SectionInfo, pins: pinData[]}>
+        ---@type table<string, {info: SectionInfo, pins: pinData[]}>
         local sectionsData = {}
         ---@diagnostic disable-next-line: redefined-local the sectionName is nil here
         for sectionName, section in pairs(self.Sections) do

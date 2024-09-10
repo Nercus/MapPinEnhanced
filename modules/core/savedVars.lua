@@ -10,10 +10,8 @@ local DEFAULTS = CONSTANTS.DEFAULTS
 -- The annotation could be changed if multiple function annotations in a definition file are support by luals -> there is currently a PR open for this: https://github.com/LuaLS/lua-language-server/pull/2822
 
 ---Retrieves the default value for a given set of keys.
----@param ... SavedVarKeys | SavedVarSubKeys A variable number of arguments representing the keys to traverse the DEFAULTS table.
----@return table|number|boolean|string|nil The default value corresponding to the provided keys, or nil if the keys do not exist.
-function SavedVars:GetDefault(...)
-    local arg = { ... }
+function SavedVars:GetDefault(key1, key2)
+    local arg = { key1, key2 }
     local currentTable = DEFAULTS
     for index, key in ipairs(arg) do
         if index == #arg then -- last key
@@ -30,14 +28,13 @@ function SavedVars:GetDefault(...)
 end
 
 ---save a variable to the saved variables
----@param ... SavedVarKeys | SavedVarSubKeys | string | number | boolean | table
-function SavedVars:Save(...)
+function SavedVars:Save(key1, key3, key4, key5)
     if not MapPinEnhancedDB then
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
-    local arg = { ... }
+    local arg = { key1, key3, key4, key5 }
     local value = arg[#arg] -- last argument is the value
 
     -- remove the last argument from the tables
@@ -62,15 +59,13 @@ function SavedVars:Save(...)
 end
 
 ---get a variable from the saved variables
----@param ... string | number | boolean | table
----@return string | number | boolean | table | nil
-function SavedVars:Get(...)
+function SavedVars:Get(key1, key3, key4)
     if not MapPinEnhancedDB then
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
-    local arg = { ... }
+    local arg = { key1, key3, key4 }
 
     ---@type table
     local dbTable = MapPinEnhancedDB
@@ -86,14 +81,13 @@ function SavedVars:Get(...)
 end
 
 ---delete a variable from the saved variables
----@param ... string | number | boolean | table | nil
-function SavedVars:Delete(...)
+function SavedVars:Delete(key1, key2, key3, key4)
     if not MapPinEnhancedDB then
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
-    local arg = { ... }
+    local arg = { key1, key2, key3, key4 }
     local dbTable = MapPinEnhancedDB
     for index, key in ipairs(arg) do
         if index == #arg then

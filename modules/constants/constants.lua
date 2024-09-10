@@ -98,33 +98,27 @@ CONSTANTS.PIN_TEXTURE_OVERRIDES = {
     ["worldquest-questmarker-questbang"] = "worldquest-tracker-questmarker",
 }
 
----@enum (key, partial) SavedVarKeys
 CONSTANTS.DEFAULTS = {
-    ---@enum (key, partial) SavedVarSubKeys
     ["trackerPosition"] = {
         ["x"] = GetScreenWidth() / 2 + 300,
         ["y"] = -(GetScreenHeight() / 2)
     },
     ["trackerVisible"] = true,
-    ---@enum (key, partial) SavedVarSubKeys
     ["floatingPin"] = {
         ["unlimitedDistance"] = true,
         ["showEstimatedTime"] = true,
         ["showTitle"] = true,
         ["blockWorldQuestTracking"] = false
     },
-    ---@enum (key, partial) SavedVarSubKeys
     ["minimapIcon"] = {
         ["hide"] = false,
         ["lock"] = false,
         ["minimapPos"] = 45
     },
-    ---@enum (key, partial) SavedVarSubKeys
     ["general"] = {
         ["editorScale"] = 1,
         ["autoTrackNearestPin"] = true
     },
-    ---@enum (key, partial) SavedVarSubKeys
     ["tracker"] = {
         ["autoVisibility"] = "none",
         ["lockTracker"] = false,
