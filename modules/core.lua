@@ -1,6 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Events = MapPinEnhanced:GetModule("Events")
+
 
 ---@param name string
 ---@return table
@@ -28,5 +28,7 @@ local function OnInitialize()
     end
 end
 
---- run all OnInitialize functions
-Events:RegisterEvent("PLAYER_LOGIN", OnInitialize)
+--- we run that on a independent frame as the event module doesn't exist yet
+local intializeFrame = CreateFrame("Frame")
+intializeFrame:RegisterEvent("PLAYER_LOGIN")
+intializeFrame:SetScript("OnEvent", OnInitialize)

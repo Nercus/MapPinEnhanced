@@ -28,13 +28,13 @@ function SavedVars:GetDefault(key1, key2)
 end
 
 ---save a variable to the saved variables
-function SavedVars:Save(key1, key3, key4, key5)
+function SavedVars:Save(key1, key2, key3, key4, key5)
     if not MapPinEnhancedDB then
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
-    local arg = { key1, key3, key4, key5 }
+    local arg = { key1, key2, key3, key4, key5 }
     local value = arg[#arg] -- last argument is the value
 
     -- remove the last argument from the tables
@@ -59,13 +59,13 @@ function SavedVars:Save(key1, key3, key4, key5)
 end
 
 ---get a variable from the saved variables
-function SavedVars:Get(key1, key3, key4)
+function SavedVars:Get(key1, key2, key3)
     if not MapPinEnhancedDB then
         MapPinEnhancedDB = {}
     end
 
     -- move all arguments into a table
-    local arg = { key1, key3, key4 }
+    local arg = { key1, key2, key3 }
 
     ---@type table
     local dbTable = MapPinEnhancedDB
@@ -96,7 +96,8 @@ function SavedVars:Delete(key1, key2, key3, key4)
         if not dbTable[key] then
             return
         end
-        dbTable = dbTable[key] ---@type table
+        -- this annotation is not fully correct as we might already have traversed into a subtable
+        dbTable = dbTable[key] --[[@as MapPinEnhancedDB]]
     end
 end
 
