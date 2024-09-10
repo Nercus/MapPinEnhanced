@@ -9,6 +9,8 @@ local Events = MapPinEnhanced:GetModule("Events")
 
 local L = MapPinEnhanced.L
 
+---@param source string
+---@return PinSection[]
 function PinSections:GetSectionsBySource(source)
     local sections = {}
     for _, section in pairs(self.Sections) do
@@ -100,28 +102,28 @@ function PinSections:RestoreSections()
 end
 
 function PinSections:RegisterDefaultSections()
-    local uncatSection = self:RegisterSection({
-        name = L["Uncategorized Pins"],
-        icon = Textures:GetTexture("PinTrackedYellow"),
-        source = MapPinEnhanced.addonName
-    })
+    -- local uncatSection = self:RegisterSection({
+    --     name = L["Uncategorized Pins"],
+    --     icon = Textures:GetTexture("PinTrackedYellow"),
+    --     source = MapPinEnhanced.addonName
+    -- })
 
-    self:RegisterSection({
-        name = L["Temporary Import"],
-        icon = Textures:GetTexture("IconImport_Yellow"),
-        source = MapPinEnhanced.addonName
-    })
+    -- self:RegisterSection({
+    --     name = L["Temporary Import"],
+    --     icon = Textures:GetTexture("IconImport_Yellow"),
+    --     source = MapPinEnhanced.addonName
+    -- })
 
-    if not uncatSection then return end
-    uncatSection:AddPin({
-        x = 0.5,
-        y = 0.5,
-        mapID = 947,
-        title = "Test Pin",
-        description = "This is a test pin",
-        icon = Textures:GetTexture("PinTrackedYellow"),
-        source = MapPinEnhanced.addonName
-    })
+    -- if not uncatSection then return end
+    -- uncatSection:AddPin({
+    --     x = 0.5,
+    --     y = 0.5,
+    --     mapID = 947,
+    --     title = "Test Pin",
+    --     description = "This is a test pin",
+    --     icon = Textures:GetTexture("PinTrackedYellow"),
+    --     source = MapPinEnhanced.addonName
+    -- })
 end
 
 function PinSections:RegisterOptions()

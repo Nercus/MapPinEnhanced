@@ -6,7 +6,7 @@
     <Frame name="MapPinEnhancedTrackerFrameTemplate" mixin="MapPinEnhancedTrackerFrameMixin"
         virtual="true"
         toplevel="true" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true"
-        registerForDrag="LeftButton" dontSavePosition="true" scale="1.01">
+        registerForDrag="LeftButton" dontSavePosition="true" scale="1.01" hidden="true">
         <!-- We set a scale to 1.01 because of a layouting bug in wow, the scale option changes it
         back to the correct one afterwards. That scale change fixes the problem of the scrollframe child
         not being rendered -->
@@ -34,7 +34,7 @@
                         propagateMouseInput="Motion" inherits="MapPinEnhancedIconButtonTemplate">
                         <Size x="18" y="18" />
                         <Anchors>
-                            <Anchor point="TOPRIGHT" x="-10" y="-5" />
+                            <Anchor point="TOPRIGHT" x="-10" y="-3" />
                         </Anchors>
                         <KeyValues>
                             <KeyValue key="icon"
@@ -98,11 +98,10 @@
             <Frame parentKey="frameHolder" frameStrata="MEDIUM"
                 propagateMouseInput="Motion">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
-                        x="-30" y="0" />
-                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
                 </Anchors>
-                <Size x="300" y="1" />
+                <Size x="1" y="1" />
             </Frame>
         </Frames>
         <Scripts>

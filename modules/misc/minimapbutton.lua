@@ -20,7 +20,7 @@ local MinimapButtonTemplate = {
         type = "button",
         label = L["Toggle Tracker"],
         onClick = function()
-            Tracker:Toggle()
+            Tracker:ToggleTracker()
         end,
     },
     {
@@ -84,7 +84,7 @@ function MapPinEnhanced:ToggleMinimapButton(init)
                         PinSections:ClearPins()
                         return
                     end
-                    Tracker:Toggle()
+                    Tracker:ToggleTracker()
                 elseif button == "RightButton" then
                     Menu:GenerateMenu(owner, MinimapButtonTemplate)
                 end
@@ -118,7 +118,7 @@ function MapPinEnhanced:RegisterAddonCompartment()
         icon = "Interface\\Addons\\MapPinEnhanced\\assets\\logo.png",
         notCheckable = true,
         func = function()
-            Tracker:Toggle()
+            Tracker:ToggleTracker()
         end,
     })
 end

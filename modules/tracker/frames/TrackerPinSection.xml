@@ -69,12 +69,11 @@
                     </Anchors>
                 </HighlightTexture>
                 <PushedTexture atlas="common-dropdown-a-button-pressedhover" />
-                <Scripts>
-                    <OnClick>
-                        print("Menu Button Clicked")
-                    </OnClick>
-                </Scripts>
+
             </Button>
         </Frames>
+        <Scripts>
+            <OnClick method="OnClick" />
+        </Scripts>
     </Button>
 </Ui>

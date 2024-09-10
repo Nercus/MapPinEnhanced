@@ -26,8 +26,8 @@
                 </KeyValues>
                 <Scripts>
                     <OnClick>
-                                self:GetParent():GetParent():Close()
-                            </OnClick>
+                        self:GetParent():GetParent():Close()
+                    </OnClick>
                 </Scripts>
             </Button>
             <Button parentKey="viewToggle" frameStrata="HIGH" hidden="true"

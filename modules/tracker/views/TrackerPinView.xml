@@ -8,7 +8,7 @@
         mixin="MapPinEnhancedTrackerPinViewTemplate"
         virtual="true" inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
         propagateMouseInput="Motion">
-        <Size x="300" y="1" />
+        <Size x="1" y="1" />
         <KeyValues>
             <KeyValue key="scrollBarX" value="0" type="number" />
             <KeyValue key="scrollBarTopY" value="-4" type="number" />
@@ -18,10 +18,10 @@
         </KeyValues>
         <ScrollChild>
             <Frame parentKey="Child" propagateMouseInput="Motion">
-                <Size x="300" y="1" />
+                <Size x="280" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="0" />
-                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
                 </Anchors>
             </Frame>
         </ScrollChild>

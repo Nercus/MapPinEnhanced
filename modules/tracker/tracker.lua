@@ -1,6 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Tracker : MapPinEnhancedTrackerFrameMixin
+---@class Tracker
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local Events = MapPinEnhanced:GetModule("Events")
 local Options = MapPinEnhanced:GetModule("Options")

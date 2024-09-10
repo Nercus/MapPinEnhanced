@@ -4,46 +4,24 @@ local MapPinEnhanced = select(2, ...)
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedTrackerScrollBar : Frame
----@field Update fun(self:MapPinEnhancedTrackerScrollBar)
-
----@class MapPinEnhancedTrackerScrollFrameChild : Frame
----@field importButton MousePropagatableButton
----@field importEditBox ScrollableTextarea
----@field cancelButton MousePropagatableButton
-
----@class MapPinEnhancedTrackerScrollFrame : ScrollFrame
----@field Child MapPinEnhancedTrackerScrollFrameChild
----@field SetPanExtent fun(self:MapPinEnhancedTrackerScrollFrame, extent:number)
----@field ScrollBar MapPinEnhancedTrackerScrollBar
-
-
----@class MapPinEnhancedTrackerHeader : Frame
----@field title FontString
----@field viewToggle MapPinEnhancedSquareButton
----@field editorToggle MapPinEnhancedSquareButton
----@field closebutton MapPinEnhancedSquareButton
----@field headerTexture Texture
-
-
----@alias TrackerView MapPinEnhancedTrackerPinViewTemplate | MapPinEnhancedTrackerSetViewTemplate | MapPinEnhancedTrackerExportViewTemplate | MapPinEnhancedTrackerImportViewTemplate
 
 ---@enum (key) TrackerViewType
 local TRACKER_VIEW_TEMPLATES = {
-    Pins = "MapPinEnhancedTrackerPinViewTemplate",
-    Sets = "MapPinEnhancedTrackerSetViewTemplate",
-    Export = "MapPinEnhancedTrackerExportViewTemplate",
-    Import = "MapPinEnhancedTrackerImportViewTemplate"
+    Pins = { frameType = "ScrollFrame", template = "MapPinEnhancedTrackerPinViewTemplate" },
+    Sets = { frameType = "ScrollFrame", template = "MapPinEnhancedTrackerSetViewTemplate" },
+    Export = { frameType = "Frame", template = "MapPinEnhancedTrackerExportViewTemplate" },
+    Import = { frameType = "Frame", template = "MapPinEnhancedTrackerImportViewTemplate" }
 }
 
----@class MapPinEnhancedTrackerFrameMixin : Frame
----@field scrollFrame MapPinEnhancedTrackerScrollFrame
----@field availableViews table<TrackerViewType, TrackerView>
----@field header MapPinEnhancedTrackerHeader
----@field blackBackground Texture
----@field showNumbering boolean?
+
 MapPinEnhancedTrackerFrameMixin = {}
-MapPinEnhancedTrackerFrameMixin.entries = {}
+
+function MapPinEnhancedTrackerFrameMixin:UpdateHeight()
+    local header = self.header:GetHeight()
+    local frameHolder = self.frameHolder:GetHeight()
+    local height = header + frameHolder
+    self:SetHeight(height)
+end
 
 function MapPinEnhancedTrackerFrameMixin:RestorePosition()
     ---@type TrackerPosition?
@@ -91,14 +69,13 @@ function MapPinEnhancedTrackerFrameMixin:Open()
     SavedVars:Save("trackerVisible", true)
 end
 
----@param view TrackerViewType
----@return TrackerView
 function MapPinEnhancedTrackerFrameMixin:GetViewFrameForType(view)
     if not self.availableViews then
         self.availableViews = {}
     end
     if not self.availableViews[view] then
-        self.availableViews[view] = CreateFrame("Frame", nil, self, TRACKER_VIEW_TEMPLATES[view]) --[[@as TrackerView]]
+        local template = TRACKER_VIEW_TEMPLATES[view]
+        self.availableViews[view] = CreateFrame(template.frameType, nil, self, template.template)
     end
     return self.availableViews[view]
 end
@@ -117,11 +94,17 @@ function MapPinEnhancedTrackerFrameMixin:SetView(view, force)
         self.activeView:Hide()
     end
     self.activeView = self:GetViewFrameForType(view)
+    self.frameHolder:SetHeight(300)
+    self.activeView:SetPoint("TOPLEFT", self.frameHolder, "TOPLEFT", 10, 0)
+    self.activeView:SetPoint("BOTTOMRIGHT", self.frameHolder, "BOTTOMRIGHT", -5, 5)
+    self.activeView:SetHeight(300)
     self.activeView:Show()
     self.activeView:Update()
+    self:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerFrameMixin:GetActiveView()
+    print(self.activeView.type)
     if not self.activeView then return end
     return self.activeView.type
 end

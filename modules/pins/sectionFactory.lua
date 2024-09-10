@@ -168,7 +168,6 @@ function PinSections:RegisterSection(sectionInfo)
         return self.header
     end
 
-    section.header = SectionHeaderPool:Acquire()
     self.Sections[section.name] = section
     PinSections:PersistSections(section.name)
     return section
