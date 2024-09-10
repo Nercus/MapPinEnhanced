@@ -127,7 +127,10 @@ function PinSections:RegisterSection(sectionInfo)
 
     function section:ClearPins()
         SectionHeaderPool:Release(self.header)
-        self.pins = {}
+        for pinID, _ in pairs(self.pins) do
+            self.pins[pinID]:Remove()
+            self.pins[pinID] = nil
+        end
         self.positions = {}
         self.pinOrder = {}
         self.pinCount = 0

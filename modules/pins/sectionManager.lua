@@ -71,7 +71,10 @@ function PinSections:PersistSections(sectionName, pinID)
         local section = self.Sections[sectionName]
         if not section then return end
         local pin = section.pins[pinID]
-        if not pin then return end
+        if not pin then
+            SavedVars:Delete("sections", sectionName, "pins", pinID)
+            return
+        end
         local pinData = pin:GetPinData()
         SavedVars:Save("sections", sectionName, "pins", pinID, pinData)
     elseif sectionName then
