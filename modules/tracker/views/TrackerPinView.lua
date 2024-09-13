@@ -27,7 +27,6 @@ function MapPinEnhancedTrackerPinViewTemplate:UpdateAllPins()
 
 
     local lastFrame = nil
-
     for _, section in ipairs(orderedSections) do
         local sectionHeader = section:GetHeader()
         sectionHeader:SetParent(self.Child)

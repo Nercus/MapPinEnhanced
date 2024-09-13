@@ -105,28 +105,22 @@ function PinSections:RestoreSections()
 end
 
 function PinSections:RegisterDefaultSections()
-    -- local uncatSection = self:RegisterSection({
-    --     name = L["Uncategorized Pins"],
-    --     icon = Textures:GetTexture("PinTrackedYellow"),
-    --     source = MapPinEnhanced.addonName
-    -- })
+    for _, section in pairs(self.Sections) do
+        if section.source == MapPinEnhanced.addonName then
+            return
+        end
+    end
+    self:RegisterSection({
+        name = L["Uncategorized Pins"],
+        icon = Textures:GetTexture("PinTrackedYellow"),
+        source = MapPinEnhanced.addonName
+    })
 
-    -- self:RegisterSection({
-    --     name = L["Temporary Import"],
-    --     icon = Textures:GetTexture("IconImport_Yellow"),
-    --     source = MapPinEnhanced.addonName
-    -- })
-
-    -- if not uncatSection then return end
-    -- uncatSection:AddPin({
-    --     x = 0.5,
-    --     y = 0.5,
-    --     mapID = 947,
-    --     title = "Test Pin",
-    --     description = "This is a test pin",
-    --     icon = Textures:GetTexture("PinTrackedYellow"),
-    --     source = MapPinEnhanced.addonName
-    -- })
+    self:RegisterSection({
+        name = L["Temporary Import"],
+        icon = Textures:GetTexture("IconImport_Yellow"),
+        source = MapPinEnhanced.addonName
+    })
 end
 
 function PinSections:RegisterOptions()
@@ -153,10 +147,10 @@ end
 local initialized = false
 function PinSections:OnInitialize()
     if initialized then return end
-    PinSections:RegisterDefaultSections()
     PinSections:RegisterOptions()
     PinSections:RegisterSlashCommands()
     PinSections:RestoreSections()
+    PinSections:RegisterDefaultSections()
     initialized = true
 end
 

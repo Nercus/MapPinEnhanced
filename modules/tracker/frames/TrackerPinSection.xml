@@ -69,7 +69,6 @@
                     </Anchors>
                 </HighlightTexture>
                 <PushedTexture atlas="common-dropdown-a-button-pressedhover" />
-
             </Button>
         </Frames>
         <Scripts>
