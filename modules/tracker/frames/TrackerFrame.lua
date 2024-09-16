@@ -13,7 +13,13 @@ local TRACKER_VIEW_TEMPLATES = {
     Import = { frameType = "Frame", template = "MapPinEnhancedTrackerImportViewTemplate" }
 }
 
+---@alias TrackerView  MapPinEnhancedTrackerPinViewTemplate | MapPinEnhancedTrackerSetViewTemplate | MapPinEnhancedTrackerExportViewTemplate | MapPinEnhancedTrackerImportViewTemplate
 
+---@class MapPinEnhancedTrackerFrame : Frame
+---@field header MapPinEnhancedTrackerFrameHeader
+---@field frameHolder Frame
+---@field blackBackground Texture
+---@field availableViews table<TrackerViewType, TrackerView>
 MapPinEnhancedTrackerFrameMixin = {}
 
 function MapPinEnhancedTrackerFrameMixin:UpdateHeight()
@@ -51,7 +57,7 @@ function MapPinEnhancedTrackerFrameMixin:RestoreVisibility()
 end
 
 function MapPinEnhancedTrackerFrameMixin:SetTrackerTitle(title)
-    self.header.title:SetText(title)
+    self.header:SetTitle(title)
 end
 
 function MapPinEnhancedTrackerFrameMixin:Close()
@@ -75,7 +81,7 @@ function MapPinEnhancedTrackerFrameMixin:GetViewFrameForType(view)
     end
     if not self.availableViews[view] then
         local template = TRACKER_VIEW_TEMPLATES[view]
-        self.availableViews[view] = CreateFrame(template.frameType, nil, self, template.template)
+        self.availableViews[view] = CreateFrame(template.frameType, nil, self, template.template) --[[@as TrackerView]]
     end
     return self.availableViews[view]
 end
@@ -94,17 +100,17 @@ function MapPinEnhancedTrackerFrameMixin:SetView(view, force)
         self.activeView:Hide()
     end
     self.activeView = self:GetViewFrameForType(view)
-    self.frameHolder:SetHeight(300)
+    local viewHeight = self.activeView:GetViewHeight()
+    self.frameHolder:SetHeight(viewHeight)
     self.activeView:SetPoint("TOPLEFT", self.frameHolder, "TOPLEFT", 10, 0)
     self.activeView:SetPoint("BOTTOMRIGHT", self.frameHolder, "BOTTOMRIGHT", -5, 5)
-    self.activeView:SetHeight(300)
     self.activeView:Show()
     self.activeView:Update()
     self:UpdateHeight()
 end
 
+---@return TrackerViewType?
 function MapPinEnhancedTrackerFrameMixin:GetActiveView()
-    print(self.activeView.type)
     if not self.activeView then return end
     return self.activeView.type
 end
@@ -132,14 +138,18 @@ function MapPinEnhancedTrackerFrameMixin:OnMouseUp(button)
 end
 
 function MapPinEnhancedTrackerFrameMixin:OnEnter()
-    self.scrollFrame.ScrollBar:SetAlpha(1)
+    if self.activeView and self.activeView.ScrollBar then
+        self.activeView.ScrollBar:SetAlpha(1)
+    end
     self.header.closebutton:Show()
     self.header.viewToggle:Show()
     self.header.editorToggle:Show()
 end
 
 function MapPinEnhancedTrackerFrameMixin:OnLeave()
-    self.scrollFrame.ScrollBar:SetAlpha(0)
+    if self.activeView and self.activeView.ScrollBar then
+        self.activeView.ScrollBar:SetAlpha(0)
+    end
     self.header.closebutton:Hide()
     self.header.viewToggle:Hide()
     self.header.editorToggle:Hide()

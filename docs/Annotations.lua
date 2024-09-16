@@ -394,7 +394,6 @@ DEFAULT_CHAT_FRAME = {}
 ---@class HereBeDragons-2.0
 ---@field mapData table<number, HereBeDragonMapData>
 
---- TODO: finish annotation of ScrollFrameTemplate check for update method on scrollframe and add scrollchild
 ---@class ScrollFrameTemplate : ScrollFrame
 ---@field scrollBarHideIfUnscrollable boolean?
 ---@field scrollBarHideTrackIfThumbExceedsTrack boolean?
@@ -404,6 +403,10 @@ DEFAULT_CHAT_FRAME = {}
 ---@field ScrollBar EventFrame
 ---@field GetPanExtent fun(): number
 ---@field SetPanExtent fun(panExtent: number)
+
+
+---@class EventFrame
+---@field Update fun(self:EventFrame)
 
 
 ---@class MinimalSliderTemplate : Slider

@@ -1,6 +1,14 @@
 ----@meta
 
----------- Aliases ----------
+------------- Aliases -------------
+---@alias MapPinEnhancedTrackerSetViewTemplate MapPinEnhancedTrackerSetView an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerPinViewTemplate MapPinEnhancedTrackerPinView an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerImportViewTemplate MapPinEnhancedTrackerImportView an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerExportViewTemplate MapPinEnhancedTrackerExportView an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerPinSectionMixin MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerPinSectionTemplate MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
+
+
 ----@alias MapPinEnhancedWindowOptionSidebarMixin MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
 ----@alias MapPinEnhancedWindowOptionSidebarTemplate MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
 ----@alias MapPinEnhancedWindowOptionBodyElementMixin MapPinEnhancedWindowOptionBodyElement an alias for the CreateFrame function
@@ -26,14 +34,10 @@
 ----@alias MapPinEnhancedWindowSetBodyTemplate MapPinEnhancedWindowSetBody an alias for the CreateFrame function
 ----@alias MapPinEnhancedWindowMixin MapPinEnhancedWindow an alias for the CreateFrame function
 ----@alias MapPinEnhancedWindowTemplate MapPinEnhancedWindow an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerSetViewTemplate MapPinEnhancedTrackerSetView an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerPinViewTemplate MapPinEnhancedTrackerPinView an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerImportViewTemplate MapPinEnhancedTrackerImportView an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerExportViewTemplate MapPinEnhancedTrackerExportView an alias for the CreateFrame function
+
 ----@alias MapPinEnhancedTrackerSetEntryMixin MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
 ----@alias MapPinEnhancedTrackerSetEntryTemplate MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerPinSectionMixin MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerPinSectionTemplate MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
+
 ----@alias MapPinEnhancedTrackerPinEntryMixin MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
 ----@alias MapPinEnhancedTrackerPinEntryTemplate MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
 ----@alias MapPinEnhancedTrackerFrameHeaderMixin MapPinEnhancedTrackerFrameHeader an alias for the CreateFrame function

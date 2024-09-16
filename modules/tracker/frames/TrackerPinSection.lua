@@ -1,22 +1,34 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Tracker = MapPinEnhanced:GetModule("Tracker")
+local Events = MapPinEnhanced:GetModule("Events")
 
----@class MapPinEnhancedTrackerPinSectionMixin : Button
+
+---@class MapPinEnhancedTrackerPinSection : Button
+---@field menuButton Button
 ---@field left Texture
 ---@field right Texture
 ---@field middle Texture
----@field title FontString
 ---@field icon Texture
----@field menuButton Button
+---@field title FontString
 MapPinEnhancedTrackerPinSectionMixin = {}
 
 
+function MapPinEnhancedTrackerPinSectionMixin:UpdateSectionTitle()
+    self.title:SetText(string.format("%s (%d/%d)", self.section.name, self.section.pinCount))
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:UpdateSection()
+    self.icon:SetTexture(self.section.icon)
+    self:UpdateSectionTitle()
+end
+
 ---@param section PinSection
 function MapPinEnhancedTrackerPinSectionMixin:SetSection(section)
-    MapPinEnhanced:Debug(section)
     self.section = section
-    self.title:SetText(section.name)
-    self.icon:SetTexture(section.icon)
+    local eventName = Events:GetEventNameWithID("UpdateSection", section.name)
+    self:UpdateSection()
+    Events:RegisterEventCallback(self, eventName, self.UpdateSection)
 end
 
 function MapPinEnhancedTrackerPinSectionMixin:Expand()
@@ -32,7 +44,12 @@ function MapPinEnhancedTrackerPinSectionMixin:Collapse()
     for _, pin in pairs(pins) do
         local trackerEntry = pin.trackerPinEntry
         trackerEntry:Hide()
+        self:GetParent()
     end
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:IsCollapsed()
+    return self.collapsed
 end
 
 function MapPinEnhancedTrackerPinSectionMixin:OnClick()
@@ -42,5 +59,10 @@ function MapPinEnhancedTrackerPinSectionMixin:OnClick()
     else
         self.collapsed = true
         self:Collapse()
+    end
+    ---@type MapPinEnhancedTrackerPinView we only update the pins if the view is active
+    local activeView = Tracker:GetActiveView()
+    if activeView.type == "Pins" then
+        activeView:UpdateHeight()
     end
 end

@@ -98,6 +98,11 @@ function SetManager:GetSetByName(name)
     end
 end
 
+---@return number
+function SetManager:GetSetCount()
+    return CURRENT_SET_COUNT
+end
+
 function SetManager:UpdateSetNameByID(setID, newName)
     self.Sets[setID].name = newName
     self.Sets[setID]:SetName(newName)

@@ -1,349 +1,301 @@
 --- TODO: move all the annotations to the correct file
 
-----@class MapPinEnhancedWindowOptionSidebarHeader : Frame
-----@field bg Texture
-----@field headerText FontString
+---@class MapPinEnhancedWindowOptionSidebarHeader : Frame
+---@field bg Texture
+---@field headerText FontString
 
-----@class MapPinEnhancedWindowOptionSidebarScrollFrame : ScrollFrameTemplate
-----@field Child Frame
+---@class MapPinEnhancedWindowOptionSidebarScrollFrame : ScrollFrameTemplate
+---@field Child Frame
 
-----@class MapPinEnhancedWindowOptionSidebar : Frame
-----@field header MapPinEnhancedWindowOptionSidebarHeader
-----@field switchViewButton MapPinEnhancedButtonRed
-----@field scrollFrame MapPinEnhancedWindowOptionSidebarScrollFrame
+---@class MapPinEnhancedWindowOptionSidebar : Frame
+---@field header MapPinEnhancedWindowOptionSidebarHeader
+---@field switchViewButton MapPinEnhancedButtonRed
+---@field scrollFrame MapPinEnhancedWindowOptionSidebarScrollFrame
 
 
-----@class MapPinEnhancedWindowOptionBodyElement : Frame
-----@field optionHolder Frame
-----@field label FontString
-----@field info Texture
-----@field highlight Texture
+---@class MapPinEnhancedWindowOptionBodyElement : Frame
+---@field optionHolder Frame
+---@field label FontString
+---@field info Texture
+---@field highlight Texture
 
 
-----@class MapPinEnhancedWindowOptionSidebarEntry : Button
-----@field label FontString
-----@field highlight Texture
+---@class MapPinEnhancedWindowOptionSidebarEntry : Button
+---@field label FontString
+---@field highlight Texture
 
 
-----@class MapPinEnhancedWindowOptionBodyHeader : Frame
-----@field bg Texture
-----@field selectedCategoryName FontString
+---@class MapPinEnhancedWindowOptionBodyHeader : Frame
+---@field bg Texture
+---@field selectedCategoryName FontString
 
-----@class MapPinEnhancedWindowOptionBodyScrollFrame : ScrollFrameTemplate
-----@field Child Frame
+---@class MapPinEnhancedWindowOptionBodyScrollFrame : ScrollFrameTemplate
+---@field Child Frame
 
-----@class MapPinEnhancedWindowOptionBody : Frame
-----@field header MapPinEnhancedWindowOptionBodyHeader
-----@field scrollFrame MapPinEnhancedWindowOptionBodyScrollFrame
+---@class MapPinEnhancedWindowOptionBody : Frame
+---@field header MapPinEnhancedWindowOptionBodyHeader
+---@field scrollFrame MapPinEnhancedWindowOptionBodyScrollFrame
 
 
-----@class MapPinEnhancedWindowSetSidebarEntry : MapPinEnhancedTrackerSetEntry
+---@class MapPinEnhancedWindowSetSidebarEntry : MapPinEnhancedTrackerSetEntry
 
 
-----@class MapPinEnhancedWindowSetSidebarHeader : Frame
-----@field bg Texture
-----@field title FontString
+---@class MapPinEnhancedWindowSetSidebarHeader : Frame
+---@field bg Texture
+---@field title FontString
 
-----@class MapPinEnhancedWindowSetSidebarSearchInput : MapPinEnhancedInput
-----@field clearButton Button
+---@class MapPinEnhancedWindowSetSidebarSearchInput : MapPinEnhancedInput
+---@field clearButton Button
 
-----@class MapPinEnhancedWindowSetSidebarScrollFrame : ScrollFrameTemplate
-----@field Child Frame
+---@class MapPinEnhancedWindowSetSidebarScrollFrame : ScrollFrameTemplate
+---@field Child Frame
 
-----@class MapPinEnhancedWindowSetSidebar : Frame
-----@field header MapPinEnhancedWindowSetSidebarHeader
-----@field searchInput MapPinEnhancedWindowSetSidebarSearchInput
-----@field switchViewButton MapPinEnhancedSquareButtonRed
-----@field importButton MapPinEnhancedSquareButtonRed
-----@field createSetButton MapPinEnhancedButtonYellow
-----@field scrollFrame MapPinEnhancedWindowSetSidebarScrollFrame
+---@class MapPinEnhancedWindowSetSidebar : Frame
+---@field header MapPinEnhancedWindowSetSidebarHeader
+---@field searchInput MapPinEnhancedWindowSetSidebarSearchInput
+---@field switchViewButton MapPinEnhancedSquareButtonRed
+---@field importButton MapPinEnhancedSquareButtonRed
+---@field createSetButton MapPinEnhancedButtonYellow
+---@field scrollFrame MapPinEnhancedWindowSetSidebarScrollFrame
 
 
-----@class MapPinEnhancedWindowSetPinHeader : Frame
-----@field bg Texture
-----@field Pin FontString
-----@field mapID FontString
-----@field xCoord FontString
-----@field yCoord FontString
-----@field title FontString
-----@field options FontString
+---@class MapPinEnhancedWindowSetPinHeader : Frame
+---@field bg Texture
+---@field Pin FontString
+---@field mapID FontString
+---@field xCoord FontString
+---@field yCoord FontString
+---@field title FontString
+---@field options FontString
 
 
-----@class MapPinEnhancedWindowSetPinEntryMapID : MapPinEnhancedInput
-----@field mapSelection MapPinEnhancedIconButton
+---@class MapPinEnhancedWindowSetPinEntryMapID : MapPinEnhancedInput
+---@field mapSelection MapPinEnhancedIconButton
 
-----@class MapPinEnhancedWindowSetPinEntryCheckbox : MapPinEnhancedCheckbox
-----@field label FontString
+---@class MapPinEnhancedWindowSetPinEntryCheckbox : MapPinEnhancedCheckbox
+---@field label FontString
 
-----@class MapPinEnhancedWindowSetPinEntryPinOptions : Frame
-----@field checkbox MapPinEnhancedWindowSetPinEntryCheckbox
+---@class MapPinEnhancedWindowSetPinEntryPinOptions : Frame
+---@field checkbox MapPinEnhancedWindowSetPinEntryCheckbox
 
-----@class MapPinEnhancedWindowSetPinEntry : Frame
-----@field Pin MapPinEnhancedBasePin
-----@field deleteButton Button
-----@field mapID MapPinEnhancedWindowSetPinEntryMapID
-----@field xCoord MapPinEnhancedInput
-----@field yCoord MapPinEnhancedInput
-----@field title MapPinEnhancedInput
-----@field pinOptions MapPinEnhancedWindowSetPinEntryPinOptions
-----@field bg Texture
-----@field highlight Texture
+---@class MapPinEnhancedWindowSetPinEntry : Frame
+---@field Pin MapPinEnhancedBasePin
+---@field deleteButton Button
+---@field mapID MapPinEnhancedWindowSetPinEntryMapID
+---@field xCoord MapPinEnhancedInput
+---@field yCoord MapPinEnhancedInput
+---@field title MapPinEnhancedInput
+---@field pinOptions MapPinEnhancedWindowSetPinEntryPinOptions
+---@field bg Texture
+---@field highlight Texture
 
 
-----@class MapPinEnhancedWindowSetImportFrameExportTypeToggle : MapPinEnhancedCheckbox
-----@field label FontString
+---@class MapPinEnhancedWindowSetImportFrameExportTypeToggle : MapPinEnhancedCheckbox
+---@field label FontString
 
-----@class MapPinEnhancedWindowSetImportFrame : MapPinEnhancedScrollableTextarea
-----@field exportTypeToggle MapPinEnhancedWindowSetImportFrameExportTypeToggle
-----@field confirmImportButton MapPinEnhancedButtonYellow
-----@field cancelImportButton MapPinEnhancedButtonRed
-----@field cancelExportButton MapPinEnhancedButtonRed
+---@class MapPinEnhancedWindowSetImportFrame : MapPinEnhancedScrollableTextarea
+---@field exportTypeToggle MapPinEnhancedWindowSetImportFrameExportTypeToggle
+---@field confirmImportButton MapPinEnhancedButtonYellow
+---@field cancelImportButton MapPinEnhancedButtonRed
+---@field cancelExportButton MapPinEnhancedButtonRed
 
 
-----@class MapPinEnhancedWindowSetExportFrameExportTypeToggle : MapPinEnhancedCheckbox
-----@field label FontString
+---@class MapPinEnhancedWindowSetExportFrameExportTypeToggle : MapPinEnhancedCheckbox
+---@field label FontString
+
+---@class MapPinEnhancedWindowSetExportFrame : MapPinEnhancedScrollableTextarea
+---@field exportTypeToggle MapPinEnhancedWindowSetExportFrameExportTypeToggle
+---@field confirmImportButton MapPinEnhancedButtonYellow
+---@field cancelImportButton MapPinEnhancedButtonRed
+---@field cancelExportButton MapPinEnhancedButtonRed
+
+
+---@class MapPinEnhancedWindowSetBodyHeaderSetName : EditBox
+---@field editButton MapPinEnhancedIconButton
+
+---@class MapPinEnhancedWindowSetBodyHeader : Frame
+---@field setName MapPinEnhancedWindowSetBodyHeaderSetName
+---@field deleteButton MapPinEnhancedSquareButtonRed
+---@field exportButton MapPinEnhancedSquareButtonYellow
+---@field importFromMapButton MapPinEnhancedSquareButtonYellow
+---@field bg Texture
+---@field infoText FontString
 
-----@class MapPinEnhancedWindowSetExportFrame : MapPinEnhancedScrollableTextarea
-----@field exportTypeToggle MapPinEnhancedWindowSetExportFrameExportTypeToggle
-----@field confirmImportButton MapPinEnhancedButtonYellow
-----@field cancelImportButton MapPinEnhancedButtonRed
-----@field cancelExportButton MapPinEnhancedButtonRed
 
+---@class MapPinEnhancedWindowSetBodyScrollFrame : ScrollFrameTemplate
+---@field Child Frame
 
-----@class MapPinEnhancedWindowSetBodyHeaderSetName : EditBox
-----@field editButton MapPinEnhancedIconButton
+---@class MapPinEnhancedWindowSetBody : Frame
+---@field pinListHeader MapPinEnhancedWindowSetPinHeader
+---@field addPinButton MapPinEnhancedButtonYellow
+---@field createSetButton MapPinEnhancedButtonYellow
+---@field importButton MapPinEnhancedButtonYellow
+---@field scrollFrame MapPinEnhancedWindowSetBodyScrollFrame
 
-----@class MapPinEnhancedWindowSetBodyHeader : Frame
-----@field setName MapPinEnhancedWindowSetBodyHeaderSetName
-----@field deleteButton MapPinEnhancedSquareButtonRed
-----@field exportButton MapPinEnhancedSquareButtonYellow
-----@field importFromMapButton MapPinEnhancedSquareButtonYellow
-----@field bg Texture
-----@field infoText FontString
 
+---@class MapPinEnhancedWindow : Frame
+---@field sideBar MapPinEnhancedBaseFrame
+---@field body MapPinEnhancedBaseFrame
+---@field closebutton MapPinEnhancedSquareButtonRed
+---@field versionText FontString
 
-----@class MapPinEnhancedWindowSetBodyScrollFrame : ScrollFrameTemplate
-----@field Child Frame
+---@class MapPinEnhancedTrackerSetEntry : Button
+---@field highlight Texture
+---@field left Texture
+---@field right Texture
+---@field icon Texture
+---@field title FontString
 
-----@class MapPinEnhancedWindowSetBody : Frame
-----@field pinListHeader MapPinEnhancedWindowSetPinHeader
-----@field addPinButton MapPinEnhancedButtonYellow
-----@field createSetButton MapPinEnhancedButtonYellow
-----@field importButton MapPinEnhancedButtonYellow
-----@field scrollFrame MapPinEnhancedWindowSetBodyScrollFrame
 
+---@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePin
+---@field numbering FontString
 
-----@class MapPinEnhancedWindow : Frame
-----@field sideBar MapPinEnhancedBaseFrame
-----@field body MapPinEnhancedBaseFrame
-----@field closebutton MapPinEnhancedSquareButtonRed
-----@field versionText FontString
+---@class MapPinEnhancedTrackerPinEntry : Button
+---@field Pin MapPinEnhancedTrackerPinEntryPin
+---@field highlight Texture
+---@field coordsText FontString
+---@field zoneText FontString
+---@field bgLeft Texture
+---@field bgRight Texture
+---@field bgMiddle Texture
 
 
-----@class MapPinEnhancedTrackerSetView : ScrollFrameTemplate
-----@field Child Frame
 
+---@class MapPinEnhancedScrollableTextareaFocusButton : Frame
+---@field infoText FontString
 
-----@class MapPinEnhancedTrackerPinView : ScrollFrameTemplate
-----@field Child Frame
+---@class MapPinEnhancedScrollableTextarea : ScrollFrameTemplate
+---@field focusButton MapPinEnhancedScrollableTextareaFocusButton
+---@field bg Texture
 
 
-----@class MapPinEnhancedTrackerImportView : Frame
-----@field textBox MapPinEnhancedScrollableTextarea
-----@field radioButtons Frame
-----@field acceptButton MapPinEnhancedButtonYellow
-----@field cancelButton MapPinEnhancedButtonRed
+---@class MapPinEnhancedPopupDialog : MapPinEnhancedSimpleFrame
+---@field accept MapPinEnhancedButtonYellow
+---@field cancel MapPinEnhancedButtonRed
+---@field text FontString
 
 
-----@class MapPinEnhancedTrackerExportViewCheckbox : MapPinEnhancedCheckbox
-----@field label FontString
+---@class MapPinEnhancedMenuInput : MapPinEnhancedInput
 
-----@class MapPinEnhancedTrackerExportViewExportMode : Frame
-----@field checkbox MapPinEnhancedTrackerExportViewCheckbox
 
-----@class MapPinEnhancedTrackerExportView : Frame
-----@field textBox MapPinEnhancedScrollableTextarea
-----@field exportMode MapPinEnhancedTrackerExportViewExportMode
-----@field cancelButton MapPinEnhancedButtonRed
+---@class MapPinEnhancedSimpleFrame : Frame
+---@field topleft Texture
+---@field topright Texture
+---@field bottomright Texture
+---@field bottomleft Texture
+---@field borderTop Texture
+---@field borderBottom Texture
+---@field borderLeft Texture
+---@field borderRight Texture
+---@field background Texture
 
 
-----@class MapPinEnhancedTrackerSetEntry : Button
-----@field highlight Texture
-----@field left Texture
-----@field right Texture
-----@field icon Texture
-----@field title FontString
+---@class MapPinEnhancedBaseFrame : Frame
+---@field artLeft Frame
+---@field artRight Frame
+---@field topleft Texture
+---@field topright Texture
+---@field bottomright Texture
+---@field bottomleft Texture
+---@field artTop Texture
+---@field artBottom Texture
+---@field borderTopLeft Texture
+---@field borderTopRight Texture
+---@field borderBottomLeft Texture
+---@field borderBottomRight Texture
+---@field borderLeftTop Texture
+---@field borderLeftBottom Texture
+---@field borderRightTop Texture
+---@field borderRightBottom Texture
+---@field background Texture
 
 
-----@class MapPinEnhancedTrackerPinSection : Button
-----@field menuButton Button
-----@field left Texture
-----@field right Texture
-----@field middle Texture
-----@field icon Texture
-----@field title FontString
+---@class MapPinEnhancedSlider : MinimalSliderTemplate
+---@field Back Button
+---@field Forward Button
+---@field valueText FontString
 
 
-----@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePin
-----@field numbering FontString
+---@class MapPinEnhancedSelect : WowStyle2DropdownTemplate
 
-----@class MapPinEnhancedTrackerPinEntry : Button
-----@field Pin MapPinEnhancedTrackerPinEntryPin
-----@field highlight Texture
-----@field coordsText FontString
-----@field zoneText FontString
-----@field bgLeft Texture
-----@field bgRight Texture
-----@field bgMiddle Texture
 
+---@class MapPinEnhancedInput : EditBox
+---@field Left Texture
+---@field Right Texture
+---@field Middle Texture
 
-----@class MapPinEnhancedTrackerFrameHeader : Frame
-----@field closebutton MapPinEnhancedIconButton
-----@field viewToggle MapPinEnhancedIconButton
-----@field editorToggle MapPinEnhancedIconButton
-----@field headerTexture Texture
-----@field title FontString
 
-----@class MapPinEnhancedTrackerFrame : Frame
-----@field header MapPinEnhancedTrackerFrameHeader
-----@field frameHolder Frame
-----@field blackBackground Texture
+---@class MapPinEnhancedColorpicker : Button
+---@field bg Texture
+---@field bgMask MaskTexture
+---@field color Texture
+---@field highlight Texture
 
 
-----@class MapPinEnhancedScrollableTextareaFocusButton : Frame
-----@field infoText FontString
+---@class MapPinEnhancedCheckbox : CheckButton
 
-----@class MapPinEnhancedScrollableTextarea : ScrollFrameTemplate
-----@field focusButton MapPinEnhancedScrollableTextareaFocusButton
-----@field bg Texture
 
+---@class MapPinEnhancedButton : MapPinEnhancedButtonRed
 
-----@class MapPinEnhancedPopupDialog : MapPinEnhancedSimpleFrame
-----@field accept MapPinEnhancedButtonYellow
-----@field cancel MapPinEnhancedButtonRed
-----@field text FontString
 
+---@class MapPinEnhancedSquareButtonYellow : Button
+---@field icon Texture
 
-----@class MapPinEnhancedMenuInput : MapPinEnhancedInput
 
+---@class MapPinEnhancedSquareButtonRed : Button
+---@field icon Texture
 
-----@class MapPinEnhancedSimpleFrame : Frame
-----@field topleft Texture
-----@field topright Texture
-----@field bottomright Texture
-----@field bottomleft Texture
-----@field borderTop Texture
-----@field borderBottom Texture
-----@field borderLeft Texture
-----@field borderRight Texture
-----@field background Texture
 
+---@class MapPinEnhancedButtonYellow : Button
+---@field left Texture
+---@field right Texture
+---@field middle Texture
+---@field highlight Texture
+---@field icon Texture
 
-----@class MapPinEnhancedBaseFrame : Frame
-----@field artLeft Frame
-----@field artRight Frame
-----@field topleft Texture
-----@field topright Texture
-----@field bottomright Texture
-----@field bottomleft Texture
-----@field artTop Texture
-----@field artBottom Texture
-----@field borderTopLeft Texture
-----@field borderTopRight Texture
-----@field borderBottomLeft Texture
-----@field borderBottomRight Texture
-----@field borderLeftTop Texture
-----@field borderLeftBottom Texture
-----@field borderRightTop Texture
-----@field borderRightBottom Texture
-----@field background Texture
 
+---@class MapPinEnhancedButtonRed : Button
+---@field left Texture
+---@field right Texture
+---@field middle Texture
+---@field highlight Texture
+---@field icon Texture
 
-----@class MapPinEnhancedSlider : MinimalSliderTemplate
-----@field Back Button
-----@field Forward Button
-----@field valueText FontString
 
+---@class MapPinEnhancedIconButton : Button
+---@field tooltip string
 
-----@class MapPinEnhancedSelect : WowStyle2DropdownTemplate
 
+---@class MapPinEnhancedWorldmapPinPulseTexture : Texture
+---@field pulse AnimationGroup
 
-----@class MapPinEnhancedInput : EditBox
-----@field Left Texture
-----@field Right Texture
-----@field Middle Texture
+---@class MapPinEnhancedWorldmapPin : MapPinEnhancedBasePin
+---@field pulseTexture MapPinEnhancedWorldmapPinPulseTexture
 
 
-----@class MapPinEnhancedColorpicker : Button
-----@field bg Texture
-----@field bgMask MaskTexture
-----@field color Texture
-----@field highlight Texture
+---@class MapPinEnhancedSuperTrackedPin : MapPinEnhancedBasePin
+---@field distantText FontString
 
 
-----@class MapPinEnhancedCheckbox : CheckButton
+---@class MapPinEnhancedBasePinSwirlTexture : Texture
+---@field swirl AnimationGroup
+---@field show AnimationGroup
+---@field hide AnimationGroup
 
+---@class MapPinEnhancedBasePinPulseHighlight : Texture
+---@field pulse AnimationGroup
 
-----@class MapPinEnhancedButton : MapPinEnhancedButtonRed
+---@class MapPinEnhancedBasePin : Frame
+---@field shadow Texture
+---@field background Texture
+---@field texture Texture
+---@field lockIcon Texture
+---@field title FontString
+---@field icon Texture
+---@field swirlTexture MapPinEnhancedBasePinSwirlTexture
+---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
+---@field iconMask MaskTexture
+---@field highlight Texture
 
 
-----@class MapPinEnhancedSquareButtonYellow : Button
-----@field icon Texture
-
-
-----@class MapPinEnhancedSquareButtonRed : Button
-----@field icon Texture
-
-
-----@class MapPinEnhancedButtonYellow : Button
-----@field left Texture
-----@field right Texture
-----@field middle Texture
-----@field highlight Texture
-----@field icon Texture
-
-
-----@class MapPinEnhancedButtonRed : Button
-----@field left Texture
-----@field right Texture
-----@field middle Texture
-----@field highlight Texture
-----@field icon Texture
-
-
-----@class MapPinEnhancedIconButton : Button
-
-
-----@class MapPinEnhancedWorldmapPinPulseTexture : Texture
-----@field pulse AnimationGroup
-
-----@class MapPinEnhancedWorldmapPin : MapPinEnhancedBasePin
-----@field pulseTexture MapPinEnhancedWorldmapPinPulseTexture
-
-
-----@class MapPinEnhancedSuperTrackedPin : MapPinEnhancedBasePin
-----@field distantText FontString
-
-
-----@class MapPinEnhancedBasePinSwirlTexture : Texture
-----@field swirl AnimationGroup
-----@field show AnimationGroup
-----@field hide AnimationGroup
-
-----@class MapPinEnhancedBasePinPulseHighlight : Texture
-----@field pulse AnimationGroup
-
-----@class MapPinEnhancedBasePin : Frame
-----@field shadow Texture
-----@field background Texture
-----@field texture Texture
-----@field lockIcon Texture
-----@field title FontString
-----@field icon Texture
-----@field swirlTexture MapPinEnhancedBasePinSwirlTexture
-----@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
-----@field iconMask MaskTexture
-----@field highlight Texture
-
-
-----@class MapPinEnhancedMinimapPin : MapPinEnhancedBasePin
+---@class MapPinEnhancedMinimapPin : MapPinEnhancedBasePin

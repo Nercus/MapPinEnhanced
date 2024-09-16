@@ -24,7 +24,7 @@ local L = MapPinEnhanced.L
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
         self.trackerFrame = CreateFrame("Frame", "MapPinEnhancedTrackerFrame", UIParent,
-            "MapPinEnhancedTrackerFrameTemplate") --[[@as MapPinEnhancedTrackerFrameMixin]]
+            "MapPinEnhancedTrackerFrameTemplate")
     end
     return self.trackerFrame
 end
