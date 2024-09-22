@@ -30,7 +30,7 @@ function MapPinEnhancedTrackerFrameHeaderMixin:SetTitle(title)
     self.title:SetText(title)
 end
 
-function MapPinEnhancedTrackerFrameHeaderMixin:SetView(view)
+function MapPinEnhancedTrackerFrameHeaderMixin:UpdateViewToggleForView(view)
     if view == "Pins" then
         self.viewToggle:SetNormalTexture(PIN_VIEW_ICON)
         self.viewToggle:SetPushedTexture(PIN_VIEW_ICON)

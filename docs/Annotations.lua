@@ -219,6 +219,7 @@ function StaticPopup_Show(dialogName) end
 SuperTrackedFrameMixin = {}
 
 ---@class SuperTrackedFrame : Frame
+---@field Icon Texture
 SuperTrackedFrame = {}
 
 ---@class WaypointLocationPinMixin
@@ -402,7 +403,7 @@ DEFAULT_CHAT_FRAME = {}
 ---@field scrollBarBottomY number?
 ---@field ScrollBar EventFrame
 ---@field GetPanExtent fun(): number
----@field SetPanExtent fun(panExtent: number)
+---@field SetPanExtent fun(_, panExtent: number)
 
 
 ---@class EventFrame

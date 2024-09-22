@@ -92,6 +92,7 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     if not f then
         return
     end
+    f.Icon:SetAlpha(0)
     if not self.hooked then
         hooksecurefunc(f, "PingNavFrame", function()
             self:UpdateTextVisibility()
@@ -106,24 +107,15 @@ function MapPinEnhancedSuperTrackedPinMixin:OnShow()
     self:UpdateTextVisibility()
     self:SetTrackedTexture()
 
-    -- TODO: finish moving the superTrackedPin to the core pin object
-    -- if not pinData then
-    --     self:Hide()
-    --     return
-    -- end
-    -- self:UnlockHighlight()
-    -- self:Setup(pinData)
-    -- self:SetTrackedTexture()
-    -- self:UpdateTimeText(nil)
-    -- local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    -- if trackingCorpse then
-    --     self.queuedTracking = pinData
-    --     self:Hide()
-    --     return
-    -- end
-    -- if not self:IsShown() and not trackingCorpse then
-    --     self:Show()
-    -- end
+    -- TODO: check for corpse tracking
+end
+
+function MapPinEnhancedSuperTrackedPinMixin:OnHide()
+    local f = SuperTrackedFrame
+    if not f then
+        return
+    end
+    f.Icon:SetAlpha(0)
 end
 
 ---@param timeInSeconds number? time in seconds, if nil, ??:?? will be displayed

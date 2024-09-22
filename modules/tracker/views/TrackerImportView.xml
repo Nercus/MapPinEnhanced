@@ -5,7 +5,7 @@
 
     <Script file="TrackerImportView.lua" />
     <Frame name="MapPinEnhancedTrackerImportViewTemplate"
-        mixin="MapPinEnhancedTrackerExportViewTemplate"
+        mixin="MapPinEnhancedTrackerImportViewMixin"
         virtual="true">
         <Frames>
             <ScrollFrame parentKey="textBox"

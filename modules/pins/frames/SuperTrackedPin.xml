@@ -16,6 +16,7 @@
             <OnLoad method="OnLoad" />
             <OnEvent method="OnEvent" />
             <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
         </Scripts>
         <Animations>
             <AnimationGroup parentKey="fadeIn" setToFinalAlpha="true">

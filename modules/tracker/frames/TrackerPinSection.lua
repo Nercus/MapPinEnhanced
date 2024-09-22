@@ -15,7 +15,7 @@ MapPinEnhancedTrackerPinSectionMixin = {}
 
 
 function MapPinEnhancedTrackerPinSectionMixin:UpdateSectionTitle()
-    self.title:SetText(string.format("%s (%d/%d)", self.section.name, self.section.pinCount))
+    self.title:SetText(string.format("%s (%d)", self.section.name, self.section.pinCount))
 end
 
 function MapPinEnhancedTrackerPinSectionMixin:UpdateSection()
@@ -28,7 +28,9 @@ function MapPinEnhancedTrackerPinSectionMixin:SetSection(section)
     self.section = section
     local eventName = Events:GetEventNameWithID("UpdateSection", section.name)
     self:UpdateSection()
-    Events:RegisterEventCallback(self, eventName, self.UpdateSection)
+    Events:RegisterEventCallback(self, eventName, function()
+        self:UpdateSection()
+    end)
 end
 
 function MapPinEnhancedTrackerPinSectionMixin:Expand()
@@ -62,7 +64,7 @@ function MapPinEnhancedTrackerPinSectionMixin:OnClick()
     end
     ---@type MapPinEnhancedTrackerPinView we only update the pins if the view is active
     local activeView = Tracker:GetActiveView()
-    if activeView.type == "Pins" then
-        activeView:UpdateHeight()
+    if activeView == "Pins" then
+        Tracker:UpdateHeight()
     end
 end

@@ -7,8 +7,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field acceptButton MapPinEnhancedButtonYellow
 ---@field cancelButton MapPinEnhancedButtonRed
 ---@field type "Import"
-MapPinEnhancedTrackerExportViewTemplate = {}
+MapPinEnhancedTrackerImportViewMixin = {}
 
 
-function MapPinEnhancedTrackerExportViewTemplate:Update()
+function MapPinEnhancedTrackerImportViewMixin:Update()
+end
+
+function MapPinEnhancedTrackerImportViewMixin:GetViewHeight()
+end
+
+function MapPinEnhancedTrackerImportViewMixin:UpdateHeight()
 end

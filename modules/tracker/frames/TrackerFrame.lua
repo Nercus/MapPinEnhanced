@@ -23,6 +23,11 @@ local TRACKER_VIEW_TEMPLATES = {
 MapPinEnhancedTrackerFrameMixin = {}
 
 function MapPinEnhancedTrackerFrameMixin:UpdateHeight()
+    if self.activeView then
+        local viewHeight = self.activeView:GetViewHeight()
+        self.frameHolder:SetHeight(viewHeight)
+        self.activeView:UpdateHeight()
+    end
     local header = self.header:GetHeight()
     local frameHolder = self.frameHolder:GetHeight()
     local height = header + frameHolder
@@ -95,15 +100,14 @@ function MapPinEnhancedTrackerFrameMixin:Toggle()
 end
 
 function MapPinEnhancedTrackerFrameMixin:SetView(view, force)
-    if not force and self.activeView and self.activeView.type == view then return end
+    if self.activeView and self.activeView.type == view and (not force) then return end
     if self.activeView then
         self.activeView:Hide()
     end
     self.activeView = self:GetViewFrameForType(view)
-    local viewHeight = self.activeView:GetViewHeight()
-    self.frameHolder:SetHeight(viewHeight)
+    MapPinEnhanced:Debug(self.activeView)
     self.activeView:SetPoint("TOPLEFT", self.frameHolder, "TOPLEFT", 10, 0)
-    self.activeView:SetPoint("BOTTOMRIGHT", self.frameHolder, "BOTTOMRIGHT", -5, 5)
+    self.activeView:SetPoint("BOTTOMRIGHT", self.frameHolder, "BOTTOMRIGHT", -5, 0)
     self.activeView:Show()
     self.activeView:Update()
     self:UpdateHeight()
@@ -147,10 +151,10 @@ function MapPinEnhancedTrackerFrameMixin:OnEnter()
 end
 
 function MapPinEnhancedTrackerFrameMixin:OnLeave()
-    if self.activeView and self.activeView.ScrollBar then
-        self.activeView.ScrollBar:SetAlpha(0)
-    end
-    self.header.closebutton:Hide()
-    self.header.viewToggle:Hide()
-    self.header.editorToggle:Hide()
+    -- if self.activeView and self.activeView.ScrollBar then
+    --     self.activeView.ScrollBar:SetAlpha(0)
+    -- end
+    -- self.header.closebutton:Hide()
+    -- self.header.viewToggle:Hide()
+    -- self.header.editorToggle:Hide()
 end

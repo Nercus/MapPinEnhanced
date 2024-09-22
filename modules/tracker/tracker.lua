@@ -33,6 +33,11 @@ function Tracker:RemoveEntry(entry)
 
 end
 
+function Tracker:UpdateHeight()
+    local trackerFrame = self:GetTrackerFrame()
+    trackerFrame:UpdateHeight()
+end
+
 function Tracker:SetTitle(title)
     local trackerFrame = self:GetTrackerFrame()
     trackerFrame:SetTrackerTitle(title)
