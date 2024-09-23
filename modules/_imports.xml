@@ -12,4 +12,5 @@
     <Include file="tracker\_imports.xml" />
     <Include file="window\_imports.xml" />
     <Include file="providers\_imports.xml" />
+    <Include file="tests\_imports.xml" />
 </Ui>
