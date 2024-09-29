@@ -108,3 +108,13 @@ function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     if self.tracked then return end
     self.Pin.numbering:SetAlpha(0.7)
 end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetNext(frame)
+    -- TODO: check if it makes sense to move the anchoring logic in here
+    self.next = frame
+    MapPinEnhanced:Debug(self)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetPrevious(frame)
+    self.previous = frame
+end

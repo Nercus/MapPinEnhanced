@@ -9,10 +9,11 @@ local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 
 local L = MapPinEnhanced.L
 
+---@return MapPinEnhancedTrackerFrame
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
         self.trackerFrame = CreateFrame("Frame", "MapPinEnhancedTrackerFrame", UIParent,
-            "MapPinEnhancedTrackerFrameTemplate")
+            "MapPinEnhancedTrackerFrameTemplate") --[[@as MapPinEnhancedTrackerFrame]]
     end
     return self.trackerFrame
 end
@@ -25,6 +26,19 @@ end
 function Tracker:SetTitle(title)
     local trackerFrame = self:GetTrackerFrame()
     trackerFrame:SetTrackerTitle(title)
+end
+
+---@param view TrackerViewType
+---@param frame MapPinEnhancedTrackerPinEntryMixin -- TODO: or the other frame types
+function Tracker:RemoveEntry(view, frame)
+    local trackerFrame = self:GetTrackerFrame()
+    local viewFrame = trackerFrame:GetViewFrameForType(view)
+    if not viewFrame then return end
+    -- check if viewFrame is the active view
+    local activeView = self:GetActiveView()
+    if not activeView then return end
+    if activeView ~= view then return end
+    viewFrame:RemoveEntry(frame)
 end
 
 ---@param view TrackerViewType

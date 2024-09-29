@@ -73,7 +73,7 @@ function PinFactory:CreatePin(initPinData, pinID, section)
 
     function pin:Remove()
         pin:Untrack()
-        Tracker:RemoveEntry(pin.trackerPinEntry)
+        Tracker:RemoveEntry("Pins", pin.trackerPinEntry)
         pin.worldmapPin:Hide()
         pin.minimapPin:Hide()
         pin.trackerPinEntry:Hide()

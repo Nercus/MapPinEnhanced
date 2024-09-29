@@ -43,6 +43,10 @@ function MapPinEnhancedTrackerPinViewMixin:UpdateAllPins()
                 sectionHeader:SetPoint("TOPRIGHT", self.Child, "TOPRIGHT", 0, 0)
             end
             sectionHeader:Show()
+            sectionHeader:SetPrevious(lastFrame)
+            if lastFrame then
+                lastFrame:SetNext(sectionHeader)
+            end
             lastFrame = sectionHeader
             for _, pin in pairs(section:GetPins()) do
                 local trackerEntry = pin.trackerPinEntry
@@ -52,6 +56,10 @@ function MapPinEnhancedTrackerPinViewMixin:UpdateAllPins()
                 trackerEntry:SetPoint("TOPRIGHT", lastFrame, "BOTTOMRIGHT", 0, -ENTRY_GAP)
                 trackerEntry:SetCollapsesLayout(true) -- This is needed to make the layout work
                 trackerEntry:Show()
+                trackerEntry:SetPrevious(lastFrame)
+                if lastFrame then
+                    lastFrame:SetNext(trackerEntry)
+                end
                 lastFrame = trackerEntry
             end
         end
@@ -86,6 +94,28 @@ function MapPinEnhancedTrackerPinViewMixin:GetViewHeight()
     end
     height = Round(height)
     return height
+end
+
+---@param entryFrame MapPinEnhancedTrackerPinEntryMixin
+function MapPinEnhancedTrackerPinViewMixin:RemoveEntry(entryFrame)
+    local nextFrame = entryFrame.next
+    local previousFrame = entryFrame.previous
+    if nextFrame then
+        nextFrame:SetPrevious(previousFrame)
+        nextFrame:ClearAllPoints()
+        if previousFrame then
+            nextFrame:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, -ENTRY_GAP)
+            nextFrame:SetPoint("TOPRIGHT", previousFrame, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+        else
+            nextFrame:SetPoint("TOPLEFT", self.Child, "TOPLEFT", 0, 0)
+            nextFrame:SetPoint("TOPRIGHT", self.Child, "TOPRIGHT", 0, 0)
+        end
+    end
+    if previousFrame then
+        previousFrame:SetNext(nextFrame)
+    end
+    entryFrame:Hide()
+    self:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerPinViewMixin:UpdateHeight()

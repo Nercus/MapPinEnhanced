@@ -62,9 +62,24 @@ function MapPinEnhancedTrackerPinSectionMixin:OnClick()
         self.collapsed = true
         self:Collapse()
     end
-    ---@type MapPinEnhancedTrackerPinView we only update the pins if the view is active
     local activeView = Tracker:GetActiveView()
     if activeView == "Pins" then
         Tracker:UpdateHeight()
     end
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:SetNext(frame)
+    self.next = frame
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:GetNext()
+    return self.next
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:SetPrevious(frame)
+    self.previous = frame
+end
+
+function MapPinEnhancedTrackerPinSectionMixin:GetPrevious()
+    return self.previous
 end
