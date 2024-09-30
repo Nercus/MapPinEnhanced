@@ -10,7 +10,9 @@
     <Include file="pins\_imports.xml" />
     <Include file="sets\_imports.xml" />
     <Include file="tracker\_imports.xml" />
-    <Include file="window\_imports.xml" />
+    <Include file="panel\_imports.xml" />
     <Include file="providers\_imports.xml" />
+    <!--@do-not-package@-->
     <Include file="tests\_imports.xml" />
+    <!--@end-do-not-package@-->
 </Ui>

@@ -38,7 +38,10 @@ function Tracker:RemoveEntry(view, frame)
     local activeView = self:GetActiveView()
     if not activeView then return end
     if activeView ~= view then return end
-    viewFrame:RemoveEntry(frame)
+    if viewFrame.RemoveEntry then
+        ---@cast viewFrame MapPinEnhancedTrackerPinView | MapPinEnhancedTrackerSetView
+        viewFrame:RemoveEntry(frame)
+    end
 end
 
 ---@param view TrackerViewType

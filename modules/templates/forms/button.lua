@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedButtonMixin : Button, PropagateMouseMotion
+---@class MapPinEnhancedButton : MapPinEnhancedButtonRed, PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field left Texture
 ---@field middle Texture

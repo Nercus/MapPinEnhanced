@@ -1,27 +1,30 @@
----@class MapPinEnhancedTrackerSetEntryMixin : Button
----@field title FontString
+---@class MapPinEnhancedTrackerSetEntry : Button
 ---@field highlight Texture
+---@field left Texture
+---@field right Texture
+---@field icon Texture
+---@field title FontString
 ---@field tooltip string?
-MapPinEnhancedTrackerSetEntryMixin = {}
+MapPinEnhancedTrackerSetEntry = {}
 
-function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex() end -- not used right now
+function MapPinEnhancedTrackerSetEntry:SetEntryIndex() end -- not used right now
 
-function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
+function MapPinEnhancedTrackerSetEntry:SetTitle(title)
     self.title:SetText(title)
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:SetActive()
+function MapPinEnhancedTrackerSetEntry:SetActive()
     self.highlight:Show()
     self.isActive = true
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:SetInactive()
+function MapPinEnhancedTrackerSetEntry:SetInactive()
     self.highlight:Hide()
     self.highlight:SetAlpha(1)
     self.isActive = false
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:ShowTooltip()
+function MapPinEnhancedTrackerSetEntry:ShowTooltip()
     if not self.tooltip then return end
     ---@type string
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -29,12 +32,12 @@ function MapPinEnhancedTrackerSetEntryMixin:ShowTooltip()
     GameTooltip:Show()
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:OnEnter()
+function MapPinEnhancedTrackerSetEntry:OnEnter()
     self.highlight:Show()
     self:ShowTooltip()
 end
 
-function MapPinEnhancedTrackerSetEntryMixin:OnLeave()
+function MapPinEnhancedTrackerSetEntry:OnLeave()
     GameTooltip:Hide()
     if self.isActive then return end
     self.highlight:Hide()

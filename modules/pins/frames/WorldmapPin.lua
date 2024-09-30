@@ -1,9 +1,8 @@
----@class PulseTexture : Texture
+---@class MapPinEnhancedWorldmapPinPulseTexture : Texture
 ---@field pulse AnimationGroup
 
-
----@class MapPinEnhancedWorldmapPinMixin : MapPinEnhancedBasePinMixin, Button
----@field pulseTexture PulseTexture
+---@class MapPinEnhancedWorldmapPin : MapPinEnhancedBasePin, Button
+---@field pulseTexture MapPinEnhancedWorldmapPinPulseTexture
 MapPinEnhancedWorldmapPinMixin = {}
 
 -- there is no other way right now to always show animation just for world map pins and also on reused frames (onload is not triggering on reused frames)

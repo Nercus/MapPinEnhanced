@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedCheckboxMixin : CheckButton, PropagateMouseMotion
+---@class MapPinEnhancedCheckbox : CheckButton, PropagateMouseMotion
 ---@field onChangeCallback function
 MapPinEnhancedCheckboxMixin = {}
 

@@ -5,7 +5,7 @@
 
     <Script file="TrackerSetView.lua" />
     <ScrollFrame name="MapPinEnhancedTrackerSetViewTemplate"
-        mixin="MapPinEnhancedTrackerSetViewTemplate"
+        mixin="MapPinEnhancedTrackerSetViewMixin"
         virtual="true" inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
         propagateMouseInput="Motion">
         <Size x="300" y="1" />

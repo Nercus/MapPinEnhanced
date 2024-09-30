@@ -2,7 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedInputMixin : EditBox, PropagateMouseMotion
+---@class MapPinEnhancedInput : EditBox, PropagateMouseMotion
+---@field Left Texture
+---@field Right Texture
+---@field Middle Texture
 ---@field isDecimal boolean
 ---@onChangeCallback function
 MapPinEnhancedInputMixin = {}

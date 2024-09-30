@@ -6,13 +6,13 @@ local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 local HBDP = MapPinEnhanced.HBDP
 
----@type FramePool<MapPinEnhancedWorldmapPinMixin>
+---@type FramePool<MapPinEnhancedWorldmapPin>
 local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
----@type FramePool<MapPinEnhancedMinimapPinMixin>
+---@type FramePool<MapPinEnhancedMinimapPin>
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
----@type FramePool<MapPinEnhancedTrackerPinEntryMixin>
+---@type FramePool<MapPinEnhancedTrackerPinEntry>
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
----@type FramePool<MapPinEnhancedSuperTrackedPinMixin>
+---@type FramePool<MapPinEnhancedSuperTrackedPin>
 local SuperTrackedPinPool = CreateFramePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS

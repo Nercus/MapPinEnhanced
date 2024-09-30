@@ -1,4 +1,4 @@
----@class MapPinEnhancedMinimapPinMixin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedMinimapPin : MapPinEnhancedBasePin
 MapPinEnhancedMinimapPinMixin = {}
 
 

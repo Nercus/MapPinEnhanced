@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedSelectMixin : DropdownButton,PropagateMouseMotion
+---@class MapPinEnhancedSelect : WowStyle2DropdownTemplate, PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field Dropdown DropdownButton
 MapPinEnhancedSelectMixin = {}

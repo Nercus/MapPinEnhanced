@@ -1,76 +1,84 @@
-----@meta
+---@meta
 
-------------- Aliases -------------
+------------- Aliases Tracker -------------
 ---@alias MapPinEnhancedTrackerSetViewTemplate MapPinEnhancedTrackerSetView an alias for the CreateFrame function
 ---@alias MapPinEnhancedTrackerPinViewTemplate MapPinEnhancedTrackerPinView an alias for the CreateFrame function
 ---@alias MapPinEnhancedTrackerImportViewTemplate MapPinEnhancedTrackerImportView an alias for the CreateFrame function
 ---@alias MapPinEnhancedTrackerExportViewTemplate MapPinEnhancedTrackerExportView an alias for the CreateFrame function
 ---@alias MapPinEnhancedTrackerPinSectionMixin MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
 ---@alias MapPinEnhancedTrackerPinSectionTemplate MapPinEnhancedTrackerPinSection an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerSetEntryMixin MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerSetEntryTemplate MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerPinEntryMixin MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerPinEntryTemplate MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerFrameHeaderMixin MapPinEnhancedTrackerFrameHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerFrameHeaderTemplate MapPinEnhancedTrackerFrameHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerFrameMixin MapPinEnhancedTrackerFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedTrackerFrameTemplate MapPinEnhancedTrackerFrame an alias for the CreateFrame function
 
 
-----@alias MapPinEnhancedWindowOptionSidebarMixin MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionSidebarTemplate MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionBodyElementMixin MapPinEnhancedWindowOptionBodyElement an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionBodyElementTemplate MapPinEnhancedWindowOptionBodyElement an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionSidebarEntryMixin MapPinEnhancedWindowOptionSidebarEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionSidebarEntryTemplate MapPinEnhancedWindowOptionSidebarEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionBodyMixin MapPinEnhancedWindowOptionBody an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowOptionBodyTemplate MapPinEnhancedWindowOptionBody an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetSidebarEntryTemplate MapPinEnhancedWindowSetSidebarEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetSidebarMixin MapPinEnhancedWindowSetSidebar an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetSidebarTemplate MapPinEnhancedWindowSetSidebar an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetPinHeaderMixin MapPinEnhancedWindowSetPinHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetPinHeaderTemplate MapPinEnhancedWindowSetPinHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetPinEntryMixin MapPinEnhancedWindowSetPinEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetPinEntryTemplate MapPinEnhancedWindowSetPinEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetImportFrameMixin MapPinEnhancedWindowSetImportFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetImportFrameTemplate MapPinEnhancedWindowSetImportFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetExportFrameMixin MapPinEnhancedWindowSetExportFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetExportFrameTemplate MapPinEnhancedWindowSetExportFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetBodyHeaderMixin MapPinEnhancedWindowSetBodyHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetBodyHeaderTemplate MapPinEnhancedWindowSetBodyHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetBodyMixin MapPinEnhancedWindowSetBody an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowSetBodyTemplate MapPinEnhancedWindowSetBody an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowMixin MapPinEnhancedWindow an alias for the CreateFrame function
-----@alias MapPinEnhancedWindowTemplate MapPinEnhancedWindow an alias for the CreateFrame function
+------------- Aliases Forms -------------
+---@alias MapPinEnhancedSliderMixin MapPinEnhancedSlider an alias for the CreateFrame function
+---@alias MapPinEnhancedSliderTemplate MapPinEnhancedSlider an alias for the CreateFrame function
+---@alias MapPinEnhancedSelectMixin MapPinEnhancedSelect an alias for the CreateFrame function
+---@alias MapPinEnhancedSelectTemplate MapPinEnhancedSelect an alias for the CreateFrame function
+---@alias MapPinEnhancedInputMixin MapPinEnhancedInput an alias for the CreateFrame function
+---@alias MapPinEnhancedInputTemplate MapPinEnhancedInput an alias for the CreateFrame function
+---@alias MapPinEnhancedColorpickerMixin MapPinEnhancedColorpicker an alias for the CreateFrame function
+---@alias MapPinEnhancedColorpickerTemplate MapPinEnhancedColorpicker an alias for the CreateFrame function
+---@alias MapPinEnhancedCheckboxMixin MapPinEnhancedCheckbox an alias for the CreateFrame function
+---@alias MapPinEnhancedCheckboxTemplate MapPinEnhancedCheckbox an alias for the CreateFrame function
+---@alias MapPinEnhancedButtonMixin MapPinEnhancedButton an alias for the CreateFrame function
+---@alias MapPinEnhancedButtonTemplate MapPinEnhancedButton an alias for the CreateFrame function
 
-----@alias MapPinEnhancedTrackerSetEntryMixin MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerSetEntryTemplate MapPinEnhancedTrackerSetEntry an alias for the CreateFrame function
 
-----@alias MapPinEnhancedTrackerPinEntryMixin MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerPinEntryTemplate MapPinEnhancedTrackerPinEntry an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerFrameHeaderMixin MapPinEnhancedTrackerFrameHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerFrameHeaderTemplate MapPinEnhancedTrackerFrameHeader an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerFrameMixin MapPinEnhancedTrackerFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedTrackerFrameTemplate MapPinEnhancedTrackerFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedScrollableTextareaTemplate MapPinEnhancedScrollableTextarea an alias for the CreateFrame function
-----@alias MapPinEnhancedPopupDialogTemplate MapPinEnhancedPopupDialog an alias for the CreateFrame function
-----@alias MapPinEnhancedMenuInputTemplate MapPinEnhancedMenuInput an alias for the CreateFrame function
-----@alias MapPinEnhancedSimpleFrameTemplate MapPinEnhancedSimpleFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedBaseFrameTemplate MapPinEnhancedBaseFrame an alias for the CreateFrame function
-----@alias MapPinEnhancedSliderMixin MapPinEnhancedSlider an alias for the CreateFrame function
-----@alias MapPinEnhancedSliderTemplate MapPinEnhancedSlider an alias for the CreateFrame function
-----@alias MapPinEnhancedSelectMixin MapPinEnhancedSelect an alias for the CreateFrame function
-----@alias MapPinEnhancedSelectTemplate MapPinEnhancedSelect an alias for the CreateFrame function
-----@alias MapPinEnhancedInputMixin MapPinEnhancedInput an alias for the CreateFrame function
-----@alias MapPinEnhancedInputTemplate MapPinEnhancedInput an alias for the CreateFrame function
-----@alias MapPinEnhancedColorpickerMixin MapPinEnhancedColorpicker an alias for the CreateFrame function
-----@alias MapPinEnhancedColorpickerTemplate MapPinEnhancedColorpicker an alias for the CreateFrame function
-----@alias MapPinEnhancedCheckboxMixin MapPinEnhancedCheckbox an alias for the CreateFrame function
-----@alias MapPinEnhancedCheckboxTemplate MapPinEnhancedCheckbox an alias for the CreateFrame function
-----@alias MapPinEnhancedButtonMixin MapPinEnhancedButton an alias for the CreateFrame function
-----@alias MapPinEnhancedButtonTemplate MapPinEnhancedButton an alias for the CreateFrame function
-----@alias MapPinEnhancedSquareButtonYellowTemplate MapPinEnhancedSquareButtonYellow an alias for the CreateFrame function
-----@alias MapPinEnhancedSquareButtonRedTemplate MapPinEnhancedSquareButtonRed an alias for the CreateFrame function
-----@alias MapPinEnhancedButtonYellowTemplate MapPinEnhancedButtonYellow an alias for the CreateFrame function
-----@alias MapPinEnhancedButtonRedTemplate MapPinEnhancedButtonRed an alias for the CreateFrame function
-----@alias MapPinEnhancedIconButtonTemplate MapPinEnhancedIconButton an alias for the CreateFrame function
-----@alias MapPinEnhancedWorldmapPinMixin MapPinEnhancedWorldmapPin an alias for the CreateFrame function
-----@alias MapPinEnhancedWorldmapPinTemplate MapPinEnhancedWorldmapPin an alias for the CreateFrame function
-----@alias MapPinEnhancedSuperTrackedPinMixin MapPinEnhancedSuperTrackedPin an alias for the CreateFrame function
-----@alias MapPinEnhancedSuperTrackedPinTemplate MapPinEnhancedSuperTrackedPin an alias for the CreateFrame function
-----@alias MapPinEnhancedBasePinMixin MapPinEnhancedBasePin an alias for the CreateFrame function
-----@alias MapPinEnhancedBasePinTemplate MapPinEnhancedBasePin an alias for the CreateFrame function
-----@alias MapPinEnhancedMinimapPinMixin MapPinEnhancedMinimapPin an alias for the CreateFrame function
-----@alias MapPinEnhancedMinimapPinTemplate MapPinEnhancedMinimapPin an alias for the CreateFrame function
+------------- Aliases Pins -------------
+---@alias MapPinEnhancedWorldmapPinMixin MapPinEnhancedWorldmapPin an alias for the CreateFrame function
+---@alias MapPinEnhancedWorldmapPinTemplate MapPinEnhancedWorldmapPin an alias for the CreateFrame function
+---@alias MapPinEnhancedSuperTrackedPinMixin MapPinEnhancedSuperTrackedPin an alias for the CreateFrame function
+---@alias MapPinEnhancedSuperTrackedPinTemplate MapPinEnhancedSuperTrackedPin an alias for the CreateFrame function
+---@alias MapPinEnhancedBasePinMixin MapPinEnhancedBasePin an alias for the CreateFrame function
+---@alias MapPinEnhancedBasePinTemplate MapPinEnhancedBasePin an alias for the CreateFrame function
+---@alias MapPinEnhancedMinimapPinMixin MapPinEnhancedMinimapPin an alias for the CreateFrame function
+---@alias MapPinEnhancedMinimapPinTemplate MapPinEnhancedMinimapPin an alias for the CreateFrame function
+
+
+------------- Aliases UI Elements -------------
+---@alias MapPinEnhancedScrollableTextareaTemplate MapPinEnhancedScrollableTextarea an alias for the CreateFrame function
+---@alias MapPinEnhancedPopupDialogTemplate MapPinEnhancedPopupDialog an alias for the CreateFrame function
+---@alias MapPinEnhancedMenuInputTemplate MapPinEnhancedMenuInput an alias for the CreateFrame function
+---@alias MapPinEnhancedSimpleFrameTemplate MapPinEnhancedSimpleFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedBaseFrameTemplate MapPinEnhancedBaseFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedSquareButtonYellowTemplate MapPinEnhancedSquareButtonYellow an alias for the CreateFrame function
+---@alias MapPinEnhancedSquareButtonRedTemplate MapPinEnhancedSquareButtonRed an alias for the CreateFrame function
+---@alias MapPinEnhancedButtonYellowTemplate MapPinEnhancedButtonYellow an alias for the CreateFrame function
+---@alias MapPinEnhancedButtonRedTemplate MapPinEnhancedButtonRed an alias for the CreateFrame function
+---@alias MapPinEnhancedIconButtonTemplate MapPinEnhancedIconButton an alias for the CreateFrame function
+
+
+------------- Aliases Main Frame -------------
+---@alias MapPinEnhancedWindowOptionSidebarMixin MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionSidebarTemplate MapPinEnhancedWindowOptionSidebar an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionBodyElementMixin MapPinEnhancedWindowOptionBodyElement an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionBodyElementTemplate MapPinEnhancedWindowOptionBodyElement an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionSidebarEntryMixin MapPinEnhancedWindowOptionSidebarEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionSidebarEntryTemplate MapPinEnhancedWindowOptionSidebarEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionBodyMixin MapPinEnhancedWindowOptionBody an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowOptionBodyTemplate MapPinEnhancedWindowOptionBody an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetSidebarEntryTemplate MapPinEnhancedWindowSetSidebarEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetSidebarMixin MapPinEnhancedWindowSetSidebar an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetSidebarTemplate MapPinEnhancedWindowSetSidebar an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetPinHeaderMixin MapPinEnhancedWindowSetPinHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetPinHeaderTemplate MapPinEnhancedWindowSetPinHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetPinEntryMixin MapPinEnhancedWindowSetPinEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetPinEntryTemplate MapPinEnhancedWindowSetPinEntry an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetImportFrameMixin MapPinEnhancedWindowSetImportFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetImportFrameTemplate MapPinEnhancedWindowSetImportFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetExportFrameMixin MapPinEnhancedWindowSetExportFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetExportFrameTemplate MapPinEnhancedWindowSetExportFrame an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetBodyHeaderMixin MapPinEnhancedWindowSetBodyHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetBodyHeaderTemplate MapPinEnhancedWindowSetBodyHeader an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetBodyMixin MapPinEnhancedWindowSetBody an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowSetBodyTemplate MapPinEnhancedWindowSetBody an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowMixin MapPinEnhancedWindow an alias for the CreateFrame function
+---@alias MapPinEnhancedWindowTemplate MapPinEnhancedWindow an alias for the CreateFrame function

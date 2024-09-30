@@ -7,16 +7,16 @@ local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 ---@class MapPinEnhancedTrackerSetView : ScrollFrameTemplate
 ---@field Child Frame
 ---@field type "Sets"
-MapPinEnhancedTrackerSetViewTemplate = {}
+MapPinEnhancedTrackerSetViewMixin = {}
 
 local ENTRY_HEIGHT = 37
 local ENTRY_GAP = 3
 
-function MapPinEnhancedTrackerSetViewTemplate:IsActiveView()
+function MapPinEnhancedTrackerSetViewMixin:IsActiveView()
     return Tracker:GetActiveView() == "Sets"
 end
 
-function MapPinEnhancedTrackerSetViewTemplate:UpdateAllPins()
+function MapPinEnhancedTrackerSetViewMixin:UpdateAllPins()
     local sets = SetManager:GetAlphabeticalSortedSets()
     local lastFrame = nil
     for _, set in ipairs(sets) do
@@ -35,7 +35,7 @@ function MapPinEnhancedTrackerSetViewTemplate:UpdateAllPins()
     end
 end
 
-function MapPinEnhancedTrackerSetViewTemplate:GetViewHeight()
+function MapPinEnhancedTrackerSetViewMixin:GetViewHeight()
     local maxEntryCount = SavedVars:Get("tracker", "trackerHeight")
     if not maxEntryCount then
         maxEntryCount = SavedVars:GetDefault("tracker", "trackerHeight")
@@ -56,14 +56,21 @@ function MapPinEnhancedTrackerSetViewTemplate:GetViewHeight()
     return height
 end
 
-function MapPinEnhancedTrackerSetViewTemplate:UpdateHeight()
+function MapPinEnhancedTrackerSetViewMixin:RemoveEntry(frame)
+    frame:Hide()
+    frame:SetParent(nil)
+    frame:SetPrevious(nil)
+    frame:SetNext(nil)
+end
+
+function MapPinEnhancedTrackerSetViewMixin:UpdateHeight()
     if not self:IsActiveView() then return end -- Only update if this is the active view
     self.Child:SetHeight(self:GetViewHeight())
     self.Child:Show()
     self.ScrollBar:Update()
 end
 
-function MapPinEnhancedTrackerSetViewTemplate:Update()
+function MapPinEnhancedTrackerSetViewMixin:Update()
     if not self:IsActiveView() then return end -- Only update if this is the active view
     Tracker:SetTitle("Sets")
     self:UpdateAllPins()

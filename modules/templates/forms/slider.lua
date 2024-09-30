@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedSliderMixin : Slider,PropagateMouseMotion
+---@class MapPinEnhancedSlider : MinimalSliderTemplate,PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field valueText FontString
 ---@field Back Button

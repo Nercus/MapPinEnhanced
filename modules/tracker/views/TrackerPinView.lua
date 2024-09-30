@@ -96,7 +96,7 @@ function MapPinEnhancedTrackerPinViewMixin:GetViewHeight()
     return height
 end
 
----@param entryFrame MapPinEnhancedTrackerPinEntryMixin
+---@param entryFrame MapPinEnhancedTrackerPinEntry
 function MapPinEnhancedTrackerPinViewMixin:RemoveEntry(entryFrame)
     local nextFrame = entryFrame.next
     local previousFrame = entryFrame.previous

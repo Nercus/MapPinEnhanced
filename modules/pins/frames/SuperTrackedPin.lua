@@ -5,11 +5,11 @@ local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local Events = MapPinEnhanced:GetModule("Events")
 local PinSections = MapPinEnhanced:GetModule("PinSections")
 
----@class MapPinEnhancedSuperTrackedPinMixin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedSuperTrackedPin : MapPinEnhancedBasePin
+---@field distantText FontString
 ---@field navFrameCreated boolean
 ---@field hooked boolean
 ---@field fadeIn AnimationGroup
----@field distantText FontString
 MapPinEnhancedSuperTrackedPinMixin = {}
 MapPinEnhancedSuperTrackedPinMixin.navFrameCreated = false;
 ---@type table?

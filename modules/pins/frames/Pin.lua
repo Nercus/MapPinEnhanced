@@ -3,33 +3,34 @@ local MapPinEnhanced = select(2, ...)
 local Textures = MapPinEnhanced:GetModule("Textures")
 
 
----@class SwirlTexture : Texture
+---@class MapPinEnhancedBasePinSwirlTexture : Texture
 ---@field swirl AnimationGroup
 ---@field show AnimationGroup
 ---@field hide AnimationGroup
 
----@class PulseHighlight : Texture
+---@class MapPinEnhancedBasePinPulseHighlight : Texture
 ---@field pulse AnimationGroup
 
----@class MapPinEnhancedBasePinMixin : Frame, PropagateMouseMotion, PropagateMouseClicks
+
+---@class MapPinEnhancedBasePin : Frame, PropagateMouseMotion, PropagateMouseClicks
 ---@field background Texture
 ---@field highlight Texture
----@field shadow Texture
----@field lockIcon Texture
----@field texture Texture
 ---@field icon Texture
 ---@field iconMask MaskTexture
----@field title FontString
+---@field lockIcon Texture
 ---@field pinData pinData | nil
+---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
+---@field pulseTimer FunctionContainer | nil
+---@field shadow Texture
+---@field swirlTexture MapPinEnhancedBasePinSwirlTexture
+---@field texture Texture
+---@field title FontString
+---@field titleFont string | nil
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
----@field titleFont string | nil
 ---@field trackedTexture string
 ---@field untrackedTexture string
----@field swirlTexture SwirlTexture
----@field pulseHighlight PulseHighlight
----@field pulseTimer FunctionContainer | nil
 MapPinEnhancedBasePinMixin = {}
 
 

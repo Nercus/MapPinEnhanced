@@ -12,6 +12,7 @@ externals:
 enable-nolib-creation: no
 
 ignore:
+  - modules/tests
   - README.md
   - CHANGELOG.md
   - annotations.lua

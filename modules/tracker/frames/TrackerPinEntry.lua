@@ -3,18 +3,21 @@ local MapPinEnhanced = select(2, ...)
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
----@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePinMixin
+---@class MapPinEnhancedTrackerPinEntryPin : MapPinEnhancedBasePin
 ---@field numbering FontString
 
 
----@class MapPinEnhancedTrackerPinEntryMixin :  Button
+---@class MapPinEnhancedTrackerPinEntry : Button
 ---@field Pin MapPinEnhancedTrackerPinEntryPin
+---@field highlight Texture
+---@field coordsText FontString
+---@field zoneText FontString
+---@field bgLeft Texture
+---@field bgRight Texture
+---@field bgMiddle Texture
 ---@field titlePosition string | nil
 ---@field titleXOffset number | nil
 ---@field titleYOffset number | nil
----@field zoneText FontString
----@field coordsText FontString
----@field highlight Texture
 ---@field tracked boolean?
 MapPinEnhancedTrackerPinEntryMixin = {}
 

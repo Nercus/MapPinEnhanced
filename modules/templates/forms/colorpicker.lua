@@ -2,13 +2,16 @@
 local MapPinEnhanced = select(2, ...)
 local Utils = MapPinEnhanced:GetModule("Utils")
 
----@class MapPinEnhancedColorpickerMixin : Button, PropagateMouseMotion
+---@class MapPinEnhancedColorpicker : Button, PropagateMouseMotion
 ---@field onChangeCallback function
 ---@field r number
 ---@field g number
 ---@field b number
 ---@field a number
 ---@field color Texture
+---@field bg Texture
+---@field bgMask MaskTexture
+---@field highlight Texture
 MapPinEnhancedColorpickerMixin = {}
 
 ---@class Color
@@ -16,7 +19,6 @@ MapPinEnhancedColorpickerMixin = {}
 ---@field g number
 ---@field b number
 ---@field a number?
-
 
 
 ---@class ColorPickerOptions
