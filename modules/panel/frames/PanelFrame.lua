@@ -23,7 +23,7 @@ local AVAILABLE_VIEWS = {
     optionView = "optionView",
 }
 
--- TODO: rename the window to MapPinEnhancedMainFrame
+-- TODO: rename the window to MapPinEnhancedPanel
 
 -- TODO: move set view and editor view to sub modules in editor window
 local viewConfigurations = {

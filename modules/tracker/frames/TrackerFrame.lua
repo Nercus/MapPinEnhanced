@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 local SavedVars = MapPinEnhanced:GetModule("SavedVars")
 local Utils = MapPinEnhanced:GetModule("Utils")
 
-
 ---@enum (key) TrackerViewType
 local TRACKER_VIEW_TEMPLATES = {
     Pins = { frameType = "ScrollFrame", template = "MapPinEnhancedTrackerPinViewTemplate" },
@@ -13,7 +12,7 @@ local TRACKER_VIEW_TEMPLATES = {
     Import = { frameType = "Frame", template = "MapPinEnhancedTrackerImportViewTemplate" }
 }
 
----@alias TrackerView  MapPinEnhancedTrackerPinViewTemplate | MapPinEnhancedTrackerSetViewTemplate | MapPinEnhancedTrackerExportViewTemplate | MapPinEnhancedTrackerImportViewTemplate
+---@alias TrackerView MapPinEnhancedTrackerPinViewTemplate | MapPinEnhancedTrackerSetViewTemplate | MapPinEnhancedTrackerExportViewTemplate | MapPinEnhancedTrackerImportViewTemplate
 
 ---@class MapPinEnhancedTrackerFrame : Frame
 ---@field header MapPinEnhancedTrackerFrameHeader

@@ -16,7 +16,7 @@ function MapPinEnhancedTrackerSetViewMixin:IsActiveView()
     return Tracker:GetActiveView() == "Sets"
 end
 
-function MapPinEnhancedTrackerSetViewMixin:UpdateAllPins()
+function MapPinEnhancedTrackerSetViewMixin:UpdateAllSets()
     local sets = SetManager:GetAlphabeticalSortedSets()
     local lastFrame = nil
     for _, set in ipairs(sets) do
@@ -56,11 +56,26 @@ function MapPinEnhancedTrackerSetViewMixin:GetViewHeight()
     return height
 end
 
-function MapPinEnhancedTrackerSetViewMixin:RemoveEntry(frame)
-    frame:Hide()
-    frame:SetParent(nil)
-    frame:SetPrevious(nil)
-    frame:SetNext(nil)
+---@param entryFrame MapPinEnhancedTrackerSetEntry
+function MapPinEnhancedTrackerSetViewMixin:RemoveEntry(entryFrame)
+    local nextFrame = entryFrame.next
+    local previousFrame = entryFrame.previous
+    if nextFrame then
+        nextFrame:SetPrevious(previousFrame)
+        nextFrame:ClearAllPoints()
+        if previousFrame then
+            nextFrame:SetPoint("TOPLEFT", previousFrame, "BOTTOMLEFT", 0, -ENTRY_GAP)
+            nextFrame:SetPoint("TOPRIGHT", previousFrame, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+        else
+            nextFrame:SetPoint("TOPLEFT", self.Child, "TOPLEFT", 0, 0)
+            nextFrame:SetPoint("TOPRIGHT", self.Child, "TOPRIGHT", 0, 0)
+        end
+    end
+    if previousFrame then
+        previousFrame:SetNext(nextFrame)
+    end
+    entryFrame:Hide()
+    self:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerSetViewMixin:UpdateHeight()
@@ -73,6 +88,6 @@ end
 function MapPinEnhancedTrackerSetViewMixin:Update()
     if not self:IsActiveView() then return end -- Only update if this is the active view
     Tracker:SetTitle("Sets")
-    self:UpdateAllPins()
+    self:UpdateAllSets()
     self:UpdateHeight()
 end

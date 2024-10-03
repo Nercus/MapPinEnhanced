@@ -72,14 +72,6 @@ function MapPinEnhancedTrackerPinSectionMixin:SetNext(frame)
     self.next = frame
 end
 
-function MapPinEnhancedTrackerPinSectionMixin:GetNext()
-    return self.next
-end
-
 function MapPinEnhancedTrackerPinSectionMixin:SetPrevious(frame)
     self.previous = frame
-end
-
-function MapPinEnhancedTrackerPinSectionMixin:GetPrevious()
-    return self.previous
 end

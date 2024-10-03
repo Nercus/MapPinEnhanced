@@ -113,9 +113,7 @@ function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetNext(frame)
-    -- TODO: check if it makes sense to move the anchoring logic in here
     self.next = frame
-    MapPinEnhanced:Debug(self)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetPrevious(frame)

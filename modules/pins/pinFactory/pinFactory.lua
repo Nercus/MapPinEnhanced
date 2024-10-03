@@ -93,8 +93,6 @@ function PinFactory:CreatePin(initPinData, pinID, section)
     self:HandleMenu(pin)
     self:HandleMisc(pin)
 
-
-
     ---@return pinData
     function pin:GetPinData()
         return self.pinData

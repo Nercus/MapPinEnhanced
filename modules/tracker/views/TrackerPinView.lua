@@ -29,6 +29,7 @@ function MapPinEnhancedTrackerPinViewMixin:UpdateAllPins()
         end
     end
 
+    -- TODO: test: anchor sections to sections and pins to the according section?
     local lastFrame = nil
     for _, section in ipairs(orderedSections) do
         if section:GetPinCount() > 0 then
@@ -94,6 +95,11 @@ function MapPinEnhancedTrackerPinViewMixin:GetViewHeight()
     end
     height = Round(height)
     return height
+end
+
+function MapPinEnhancedTrackerPinViewMixin:AddEntry(entryFrame)
+    -- get the section of the entry
+    -- find the last entry of the section
 end
 
 ---@param entryFrame MapPinEnhancedTrackerPinEntry
