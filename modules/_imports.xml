@@ -12,7 +12,4 @@
     <Include file="tracker\_imports.xml" />
     <Include file="panel\_imports.xml" />
     <Include file="providers\_imports.xml" />
-    <!--@do-not-package@-->
-    <Include file="tests\_imports.xml" />
-    <!--@end-do-not-package@-->
 </Ui>
