@@ -74,4 +74,10 @@
     },
     "wowAPI.luals.configurationScope": "User",
     "wowAPI.luals.defineKnownGlobals": false,
+    "material-icon-theme.folders.associations": {
+        "panel": "Template",
+        "sets": "Queue",
+        "tracker": "Ui",
+        "pins": "Taskfile"
+    }
 }
