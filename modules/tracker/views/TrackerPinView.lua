@@ -29,39 +29,39 @@ function MapPinEnhancedTrackerPinViewMixin:UpdateAllPins()
         end
     end
 
-    -- TODO: test: anchor sections to sections and pins to the according section?
-    local lastFrame = nil
+    local lastSection = nil
     for _, section in ipairs(orderedSections) do
         if section:GetPinCount() > 0 then
             local sectionHeader = section:GetHeader()
             sectionHeader:SetParent(self.Child)
             sectionHeader:ClearAllPoints()
-            if lastFrame then
-                sectionHeader:SetPoint("TOPLEFT", lastFrame, "BOTTOMLEFT", 0, -ENTRY_GAP)
-                sectionHeader:SetPoint("TOPRIGHT", lastFrame, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+            if lastSection then
+                sectionHeader:SetPoint("TOPLEFT", lastSection, "BOTTOMLEFT", 0, -ENTRY_GAP)
+                sectionHeader:SetPoint("TOPRIGHT", lastSection, "BOTTOMRIGHT", 0, -ENTRY_GAP)
             else
                 sectionHeader:SetPoint("TOPLEFT", self.Child, "TOPLEFT", 0, 0)
                 sectionHeader:SetPoint("TOPRIGHT", self.Child, "TOPRIGHT", 0, 0)
             end
             sectionHeader:Show()
-            sectionHeader:SetPrevious(lastFrame)
-            if lastFrame then
-                lastFrame:SetNext(sectionHeader)
+            sectionHeader:SetPrevious(lastSection)
+            if lastSection then
+                lastSection:SetNext(sectionHeader)
             end
-            lastFrame = sectionHeader
+            lastSection = sectionHeader
             for _, pin in pairs(section:GetPins()) do
+                local lastPin = nil
                 local trackerEntry = pin.trackerPinEntry
                 trackerEntry:ClearAllPoints()
                 trackerEntry:SetParent(self.Child)
-                trackerEntry:SetPoint("TOPLEFT", lastFrame, "BOTTOMLEFT", 0, -ENTRY_GAP)
-                trackerEntry:SetPoint("TOPRIGHT", lastFrame, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+                trackerEntry:SetPoint("TOPLEFT", lastPin, "BOTTOMLEFT", 0, -ENTRY_GAP)
+                trackerEntry:SetPoint("TOPRIGHT", lastPin, "BOTTOMRIGHT", 0, -ENTRY_GAP)
                 trackerEntry:SetCollapsesLayout(true) -- This is needed to make the layout work
                 trackerEntry:Show()
-                trackerEntry:SetPrevious(lastFrame)
-                if lastFrame then
-                    lastFrame:SetNext(trackerEntry)
+                trackerEntry:SetPrevious(lastPin)
+                if lastPin then
+                    lastPin:SetNext(trackerEntry)
                 end
-                lastFrame = trackerEntry
+                lastPin = trackerEntry
             end
         end
     end
@@ -98,12 +98,19 @@ function MapPinEnhancedTrackerPinViewMixin:GetViewHeight()
 end
 
 function MapPinEnhancedTrackerPinViewMixin:AddEntry(entryFrame)
-    -- get the section of the entry
-    -- find the last entry of the section
+    -- 1. Find the section for the entry.
+    -- 2. Iterate all pins in the section and stop when the pin order is higher than the one in the current iteration.
+    -- 3. Get previous and next element.
+    -- 4. Anchor to previous element and set next on previous to added pin.
+    -- 5. Reanchor the next pin to added pin and set previous to added pin.
+    -- 6. Call Update Height
 end
 
 ---@param entryFrame MapPinEnhancedTrackerPinEntry
 function MapPinEnhancedTrackerPinViewMixin:RemoveEntry(entryFrame)
+    -- TODO: differentiate between pin and section
+    -- if removed entry is a section, check if all pins are removed and remove the section
+    -- if removed entry is a pin, remove only the pin
     local nextFrame = entryFrame.next
     local previousFrame = entryFrame.previous
     if nextFrame then

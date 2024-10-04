@@ -121,6 +121,10 @@ function PinSections:RegisterSection(sectionInfo)
             PinSections:PersistSections(self.name, pinID)
         end
         if self.pinCount == 0 then
+            self.positions = {}
+            self.pinOrder = {}
+            self.pinCount = 0
+            PinSections:PersistSections(self.name)
             SectionHeaderPool:Release(self.header)
         end
     end
