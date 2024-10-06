@@ -5,6 +5,7 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 local Notify = MapPinEnhanced:GetModule("Notify")
 local Events = MapPinEnhanced:GetModule("Events")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 local MAX_COUNT_PINS_PER_SECTION = 500
 local L = MapPinEnhanced.L
@@ -83,6 +84,7 @@ function PinSections:RegisterSection(sectionInfo)
         else
             pin:Untrack()
         end
+        Tracker:AddEntry("Pins", pin.trackerPinEntry)
     end
 
     function section:GetMaxPinOrder()

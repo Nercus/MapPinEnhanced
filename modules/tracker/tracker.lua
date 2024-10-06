@@ -45,6 +45,22 @@ function Tracker:RemoveEntry(view, frame)
 end
 
 ---@param view TrackerViewType
+---@param frame MapPinEnhancedTrackerPinEntryMixin -- TODO: or the other frame types
+function Tracker:AddEntry(view, frame)
+    local trackerFrame = self:GetTrackerFrame()
+    local viewFrame = trackerFrame:GetViewFrameForType(view)
+    if not viewFrame then return end
+    -- check if viewFrame is the active view
+    local activeView = self:GetActiveView()
+    if not activeView then return end
+    if activeView ~= view then return end
+    if viewFrame.AddEntry then
+        ---@cast viewFrame MapPinEnhancedTrackerPinView | MapPinEnhancedTrackerSetView
+        viewFrame:AddEntry(frame)
+    end
+end
+
+---@param view TrackerViewType
 function Tracker:SetView(view)
     local trackerFrame = self:GetTrackerFrame()
     trackerFrame:SetView(view)

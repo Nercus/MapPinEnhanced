@@ -48,13 +48,18 @@ function MapPinEnhancedTrackerPinViewMixin:UpdateAllPins()
                 lastSection:SetNext(sectionHeader)
             end
             lastSection = sectionHeader
+            local lastPin = nil
             for _, pin in pairs(section:GetPins()) do
-                local lastPin = nil
                 local trackerEntry = pin.trackerPinEntry
                 trackerEntry:ClearAllPoints()
                 trackerEntry:SetParent(self.Child)
-                trackerEntry:SetPoint("TOPLEFT", lastPin, "BOTTOMLEFT", 0, -ENTRY_GAP)
-                trackerEntry:SetPoint("TOPRIGHT", lastPin, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+                if lastPin then
+                    trackerEntry:SetPoint("TOPLEFT", lastPin, "BOTTOMLEFT", 0, -ENTRY_GAP)
+                    trackerEntry:SetPoint("TOPRIGHT", lastPin, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+                else
+                    trackerEntry:SetPoint("TOPLEFT", sectionHeader, "BOTTOMLEFT", 0, -ENTRY_GAP)
+                    trackerEntry:SetPoint("TOPRIGHT", sectionHeader, "BOTTOMRIGHT", 0, -ENTRY_GAP)
+                end
                 trackerEntry:SetCollapsesLayout(true) -- This is needed to make the layout work
                 trackerEntry:Show()
                 trackerEntry:SetPrevious(lastPin)
@@ -105,6 +110,12 @@ function MapPinEnhancedTrackerPinViewMixin:AddEntry(entryFrame)
     -- 5. Reanchor the next pin to added pin and set previous to added pin.
     -- 6. Call Update Height
 end
+
+-- TODO: CHANGE PIN VIEW !!!
+-- Pin View is the section view, not the pin view
+-- pins are not added and ordered in here. the logic for that should be in the TrackerPinSection.lua
+-- Tracker UpdateHeight has to be exposed
+
 
 ---@param entryFrame MapPinEnhancedTrackerPinEntry
 function MapPinEnhancedTrackerPinViewMixin:RemoveEntry(entryFrame)

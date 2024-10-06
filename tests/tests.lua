@@ -3,7 +3,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Tests
 ---@field tests Test[]
-local Tests = MapPinEnhanced:GetModule("Tests")
+local Tests = {}
+MapPinEnhanced.Tests = Tests
 
 
 function Tests:FormatTestError(message, stack)

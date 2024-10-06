@@ -78,6 +78,11 @@ function MapPinEnhancedTrackerSetViewMixin:RemoveEntry(entryFrame)
     self:UpdateHeight()
 end
 
+function MapPinEnhancedTrackerSetViewMixin:AddEntry()
+    -- we update all sets here to always have a consistent order, otherwise we would need to iterate over all sets and compare the alphabetic order
+    self:UpdateAllSets()
+end
+
 function MapPinEnhancedTrackerSetViewMixin:UpdateHeight()
     if not self:IsActiveView() then return end -- Only update if this is the active view
     self.Child:SetHeight(self:GetViewHeight())

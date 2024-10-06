@@ -17,7 +17,6 @@
 ---@field GetModule fun(self, name:"SetFactory"): SetFactory
 ---@field GetModule fun(self, name:"SetManager"): SetManager
 ---@field GetModule fun(self, name:"SlashCommand"): SlashCommand
----@field GetModule fun(self, name:"Tests"): Tests
 ---@field GetModule fun(self, name:"Textures"): Textures
 ---@field GetModule fun(self, name:"Utils"): Utils
 ---@field GetModule fun(self, name:"PinSections"): PinSections

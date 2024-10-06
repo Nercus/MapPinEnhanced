@@ -11,6 +11,7 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 local ReloadUI = C_UI.Reload
 
 local L = MapPinEnhanced.L
+local Tests = MapPinEnhanced.Tests
 
 local playerLoginFired = false
 local preFiredQueue = {}
@@ -244,7 +245,6 @@ local function AddDevReload()
         testStatusbar.text:SetText(string.format("Tests completed: %d/%d", current, max))
     end
 
-    local Tests = MapPinEnhanced:GetModule("Tests")
     local testCount = Tests:GetNumberOfTests()
     SetStatusbarValue(0, testCount, 0)
 
