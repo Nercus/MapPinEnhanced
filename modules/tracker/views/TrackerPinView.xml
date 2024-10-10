@@ -6,8 +6,14 @@
     <Script file="TrackerPinView.lua" />
     <ScrollFrame name="MapPinEnhancedTrackerPinViewTemplate"
         mixin="MapPinEnhancedTrackerPinViewMixin"
-        virtual="true" inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
+        virtual="true" inherits="MapPinEnhancedTrackerViewMixin,ScrollFrameTemplate"
+        parentKey="scrollFrame" frameStrata="MEDIUM"
         propagateMouseInput="Motion">
+        <KeyValues>
+            <KeyValue key="viewName" value="Pins" type="string" />
+            <KeyValue key="fixedEntryHeight" value="37" type="number" />
+            <KeyValue key="parentKey" value="Child" type="string" />
+        </KeyValues>
         <Size x="1" y="1" />
         <KeyValues>
             <KeyValue key="scrollBarX" value="0" type="number" />
@@ -23,6 +29,11 @@
                     <Anchor point="TOPLEFT" />
                     <Anchor point="BOTTOMRIGHT" />
                 </Anchors>
+                <Scripts>
+                    <OnSizeChanged>
+                        self.ScrollBar:Update()
+                    </OnSizeChanged>
+                </Scripts>
             </Frame>
         </ScrollChild>
     </ScrollFrame>

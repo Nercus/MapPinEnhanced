@@ -5,7 +5,12 @@
     <Script file="TrackerExportView.lua" />
     <Frame name="MapPinEnhancedTrackerExportViewTemplate"
         mixin="MapPinEnhancedTrackerExportViewMixin"
+        inherits="MapPinEnhancedTrackerViewMixin"
         virtual="true">
+        <KeyValues>
+            <KeyValue key="viewName" value="Export" type="string" />
+            <KeyValue key="gap" value="2" type="number" />
+        </KeyValues>
         <Frames>
             <ScrollFrame parentKey="textBox"
                 inherits="MapPinEnhancedScrollableTextareaTemplate"

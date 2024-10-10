@@ -9,6 +9,8 @@ local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 
 local L = MapPinEnhanced.L
 
+-- TODO: rewrite the tracker, thats a mess right now
+
 ---@return MapPinEnhancedTrackerFrame
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then

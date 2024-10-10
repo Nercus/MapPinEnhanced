@@ -7,11 +7,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerExportViewExportMode : Frame
 ---@field checkbox MapPinEnhancedTrackerExportViewCheckbox
 
----@class MapPinEnhancedTrackerExportView : Frame
+---@class MapPinEnhancedTrackerExportView : MapPinEnhancedTrackerView
 ---@field textBox MapPinEnhancedScrollableTextarea
 ---@field exportMode MapPinEnhancedTrackerExportViewExportMode
 ---@field cancelButton MapPinEnhancedButtonRed
----@field type "Export"
 MapPinEnhancedTrackerExportViewMixin = {}
 
 

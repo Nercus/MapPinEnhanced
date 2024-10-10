@@ -6,8 +6,15 @@
     <Script file="TrackerSetView.lua" />
     <ScrollFrame name="MapPinEnhancedTrackerSetViewTemplate"
         mixin="MapPinEnhancedTrackerSetViewMixin"
-        virtual="true" inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
+        virtual="true" inherits="MapPinEnhancedTrackerViewMixin,ScrollFrameTemplate"
+        parentKey="scrollFrame" frameStrata="MEDIUM"
         propagateMouseInput="Motion">
+        <KeyValues>
+            <KeyValue key="viewName" value="Sets" type="string" />
+            <KeyValue key="fixedEntryHeight" value="37" type="number" />
+            <KeyValue key="gap" value="3" type="number" />
+            <KeyValue key="parentKey" value="Child" type="string" />
+        </KeyValues>
         <Size x="300" y="1" />
         <KeyValues>
             <KeyValue key="scrollBarX" value="0" type="number" />
@@ -23,6 +30,11 @@
                     <Anchor point="TOPLEFT" x="0" y="0" />
                     <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                 </Anchors>
+                <Scripts>
+                    <OnSizeChanged>
+                        self.ScrollBar:Update()
+                    </OnSizeChanged>
+                </Scripts>
             </Frame>
         </ScrollChild>
     </ScrollFrame>
