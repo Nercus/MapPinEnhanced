@@ -9,7 +9,7 @@ local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 
 local L = MapPinEnhanced.L
 
--- TODO: rewrite the tracker, thats a mess right now
+-- TODO: rewrite the tracker, thats a mess right now: use https://warcraft.wiki.gg/wiki/Making_scrollable_frames
 
 ---@return MapPinEnhancedTrackerFrame
 function Tracker:GetTrackerFrame()
