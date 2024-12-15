@@ -33,6 +33,13 @@ function Blizz:SetBlizzardWaypoint(x, y, mapID)
         C_Map.ClearUserWaypoint()
     end
 
+    if x < 0 then
+        x = 0
+    end
+    if y < 0 then
+        y = 0
+    end
+
     local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     C_Map.SetUserWaypoint(uiMapPoint)
     C_SuperTrack.ClearAllSuperTracked()
