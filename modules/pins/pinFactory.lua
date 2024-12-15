@@ -82,6 +82,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
 
     local function OnDistanceClose()
+        if isClose then return end
         isClose = true
         MapPinEnhanced.SuperTrackedPin:ShowSwirl()
         local trackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
@@ -92,6 +93,7 @@ function PinFactory:CreatePin(initPinData, pinID)
     end
 
     local function OnDistanceFar()
+        if not isClose then return end
         isClose = false
         MapPinEnhanced.SuperTrackedPin:HideSwirl()
     end

@@ -148,6 +148,7 @@ function MapPinEnhancedBasePinMixin:HidePulse()
 end
 
 function MapPinEnhancedBasePinMixin:ShowSwirl()
+    if self.pinData and not self.pinData.lock then return end
     self.swirlTexture:Hide()
     self.swirlTexture.swirl:Stop()
     self.swirlTexture.show:Stop()

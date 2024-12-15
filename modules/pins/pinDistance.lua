@@ -73,14 +73,11 @@ function PinFactory:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, O
             MapPinEnhanced.SuperTrackedPin:UpdateTimeText(timeToTarget)
         end
 
-        local newIsClose = distance < 20
-
-        if isClose ~= newIsClose then
-            if newIsClose then
-                OnDistanceClose()
-            else
-                OnDistanceFar()
-            end
+        local newIsClose = distance < 10
+        if newIsClose then
+            OnDistanceClose()
+        else
+            OnDistanceFar()
         end
         lastUpdate = currentTime
     end
