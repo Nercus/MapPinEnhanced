@@ -98,15 +98,15 @@ end
 
 ---Hide default world map Pin
 function Blizz:HideBlizzardPin()
+    if not WaypointLocationPinMixin then return end
     hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
         waypointSelf:SetAlpha(0)
         waypointSelf:EnableMouse(false)
     end)
 end
 
+Blizz:HideBlizzardPin()
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.HideBlizzardPin)
-
-
 
 
 
