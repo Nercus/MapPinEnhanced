@@ -1,5 +1,8 @@
-# 3.0.5
+# 3.0.6
 
-- Add way to clear all pins through the minimap button
-- Fix for the option to change the editor scale
-- Fix parsing of decimal numbers on russian clients
+- Update for 11.0.7
+- Added compatibility shim for TomTom
+- Improved support for other addons adding pins
+- Enhanced handling of zone names in import strings
+- Fixed bug with reaching locked-in pins
+- Corrected error with negative coordinates
