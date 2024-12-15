@@ -5,38 +5,22 @@ local MapPinEnhanced = select(2, ...)
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 local PinManager = MapPinEnhanced:GetModule("PinManager")
 
-local blockEvent = false
-
----------------------------------------------------------------------------
-
---- USER_WAYPOINT_UPDATED event handler
-local function OnUserWaypoint()
-    if blockEvent then return end -- as super tracking a pin triggers this event we need to block it so we don't get into an infinite loop
-
-    local wp = C_Map.GetUserWaypoint()
-    if not wp then return end
-    blockEvent = true
-
+---@param uiMapPoint UiMapPoint
+local function HandleSetUserWaypoint(uiMapPoint)
+    if not uiMapPoint then return end
+    local stack = debugstack(2) ---@type string
+    if stack.find(stack, MapPinEnhanced.addonName) then return end -- ignore calls from this function
     local title, texture, usesAtlas = PinProvider:DetectMouseFocusPinInfo()
-    local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
-    local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
     local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-
-    if isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingCorpse then
-        C_SuperTrack.ClearAllSuperTracked()
-    end
-
-
     PinManager:AddPin({
-        mapID = wp.uiMapID,
-        x = wp.position.x,
-        y = wp.position.y,
+        mapID = uiMapPoint.uiMapID,
+        x = uiMapPoint.position.x,
+        y = uiMapPoint.position.y,
         title = title,
         texture = texture,
         usesAtlas = usesAtlas,
         setTracked = not isSuperTrackingCorpse
     })
-    blockEvent = false
 end
 
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypoint)
+hooksecurefunc(C_Map, "SetUserWaypoint", HandleSetUserWaypoint)
