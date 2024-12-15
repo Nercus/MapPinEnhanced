@@ -53,13 +53,31 @@ end
 local function ConvertImportMapString(mapString)
     -- if first character is a # remove it and return to number
     if mapString:sub(1, 1) == "#" then
-        return tonumber(mapString:sub(2))
+        -- check if the mapID is a number and is actually a mapID
+        local mapID = tonumber(mapString:sub(2))
+        if mapID and HBDmapData[mapID] then
+            return mapID
+        else
+            MapPinEnhanced:Print("Invalid mapID: " .. mapString)
+        end
     else
         local mapID = ZONE_NAME_TO_ID[mapString]
-        if type(mapID) == "table" then
-            return mapID[1]
-        else
-            return mapID
+        if mapID then
+            if type(mapID) == "table" then
+                return mapID[1]
+            else
+                return mapID
+            end
+        end
+        -- no mapID found let's iterate and do a partial match
+        for mapName, id in pairs(ZONE_NAME_TO_ID) do
+            if mapName:lower():find(mapString:lower()) then
+                if (type(id) == "table") then
+                    return id[1]
+                else
+                    return id
+                end
+            end
         end
     end
 end
@@ -88,13 +106,14 @@ function PinProvider:ParseWayStringToData(wayString)
     -- iterate reverse over tokens to find the first number
     for idx = #tokens, 1, -1 do
         -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if (tonumber(tokens[idx]) or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) and #tokens <= 3 then
+        if (type(tonumber(tokens[idx]) == "number") or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
             break
         else
             table.insert(titleTokens, 1, tokens[idx])
             table.remove(tokens, idx)
         end
     end
+
 
     -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
     local firstTokenIsMap = tonumber(tokens[1]) == nil
@@ -110,6 +129,7 @@ function PinProvider:ParseWayStringToData(wayString)
         title = nil
     end
 
+
     local tokenLength = #tokens
     -- if length is small than 3 try to split the last element on ","
     if tokenLength < 2 then
@@ -122,19 +142,28 @@ function PinProvider:ParseWayStringToData(wayString)
         end
     end
 
-    ---@type number?
-    local mapID
+    ---@type string[]
+    local mapParts = {}
     local coords = {}
     for _, token in ipairs(tokens) do
         -- replace all wrong decimal separators with the right one
         token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
         -- if element is not a number its the mapID/zoneName
         if not tonumber(token) then
-            mapID = ConvertImportMapString(token)
+            mapParts[#mapParts + 1] = token
         else
             table.insert(coords, tonumber(token))
         end
     end
+
+    local mapID = nil
+    if #mapParts == 1 then
+        mapID = ConvertImportMapString(mapParts[1])
+    else
+        -- join the mapParts to a string and try to convert it to a mapID
+        mapID = ConvertImportMapString(table.concat(mapParts, " "))
+    end
+
     if not mapID or mapID == "" then
         mapID = C_Map.GetBestMapForUnit("player")
     end
