@@ -53,6 +53,28 @@ function Blizz:OverrideSuperTrackedAlphaState(enable)
     SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
 end
 
+---Method to block the automatic removal of pins in the game
+function Blizz:OverrideSuperTrackedReachedBehavior()
+    local superTrackMapPinTypesThatClearWhenDestinationReached = {
+        [Enum.SuperTrackingMapPinType.AreaPOI] = true,
+        [Enum.SuperTrackingMapPinType.TaxiNode] = true,
+        [Enum.SuperTrackingMapPinType.DigSite] = true,
+    };
+    SuperTrackedFrame.ShouldClearSuperTrackWhenDestinationReached = function(self, isWaypoint)
+        local superTrackType = C_SuperTrack.GetHighestPrioritySuperTrackingType();
+        if Enum.SuperTrackingType.Vignette == superTrackType then return true end
+        if Enum.SuperTrackingType.MapPin == superTrackType then
+            local pinType = C_SuperTrack.GetSuperTrackedMapPin();
+            if pinType then
+                return superTrackMapPinTypesThatClearWhenDestinationReached[pinType];
+            end
+            return false;
+        end
+    end
+end
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizz.OverrideSuperTrackedReachedBehavior)
+
 ---Method to insert a waypoint link to the chat
 ---@param x number
 ---@param y number
