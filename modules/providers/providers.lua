@@ -6,7 +6,7 @@ local PinProvider = MapPinEnhanced:GetModule("PinProvider")
 
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
----------------------------------------------------------------------------
+
 
 ---Parses the blizzard map pin info from the mouse focus. This happens when ctrl clicking on the map
 ---@param mouseFocus table

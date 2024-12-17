@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
 local PinSections = MapPinEnhanced:GetModule("PinSections")
-local Blizz = MapPinEnhanced:GetModule("Blizz")
+local Blizzard = MapPinEnhanced:GetModule("Blizzard")
 local Notify = MapPinEnhanced:GetModule("Notify")
 
 local L = MapPinEnhanced.L
@@ -27,7 +27,7 @@ function PinFactory:HandleMisc(pin)
     function pin:SharePin()
         local x, y, mapID = self.pinData.x, self.pinData.y, self.pinData.mapID
         if x and y and mapID then
-            Blizz:InsertWaypointLinkToChat(x, y, mapID)
+            Blizzard:InsertWaypointLinkToChat(x, y, mapID)
         end
     end
 

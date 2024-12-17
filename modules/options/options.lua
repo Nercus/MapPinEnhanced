@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local Options = MapPinEnhanced:GetModule("Options")
 local CONSTANTS = MapPinEnhanced.CONSTANTS
 
----------------------------------------------------------------------------
+
 
 ---check if an option with the same label already exists in the category
 ---@param label string

@@ -1,25 +1,13 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Include file="frames/BaseFrame.xml" />
-    <Include file="frames/SimpleFrame.xml" />
-
-    <Include file="buttons/SquareButtonRed.xml" />
-    <Include file="buttons/SquareButtonYellow.xml" />
-    <Include file="buttons/ButtonRed.xml" />
-    <Include file="buttons/ButtonYellow.xml" />
-    <Include file="buttons/ButtonIcon.xml" />
-
-
-    <Include file="forms/slider.xml" />
-    <Include file="forms/select.xml" />
-    <Include file="forms/input.xml" />
-    <Include file="forms/colorpicker.xml" />
-    <Include file="forms/checkbox.xml" />
-    <Include file="forms/button.xml" />
-
-
-    <Include file="misc/ScrollableTextarea.xml" />
-    <Include file="misc/PopupDialog.xml" />
-    <Include file="misc/MenuInput.xml" />
+    <Include file="BaseFrame.xml" />
+    <Include file="ButtonIcon.xml" />
+    <Include file="ButtonRed.xml" />
+    <Include file="ButtonYellow.xml" />
+    <Include file="MenuInput.xml" />
+    <Include file="ScrollableTextarea.xml" />
+    <Include file="SimpleFrame.xml" />
+    <Include file="SquareButtonRed.xml" />
+    <Include file="SquareButtonYellow.xml" />
 </Ui>

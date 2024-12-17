@@ -5,6 +5,8 @@ local Events = MapPinEnhanced:GetModule("Events")
 local Utils = MapPinEnhanced:GetModule("Utils")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 local PinSections = MapPinEnhanced:GetModule("PinSections")
+local SavedVars = MapPinEnhanced:GetModule("SavedVars")
+local Textures = MapPinEnhanced:GetModule("Textures")
 
 --@do-not-package@
 ---@type function
@@ -33,7 +35,7 @@ function MapPinEnhanced:Debug(...)
         return
     end
     local DevToolFrame = _G["DevToolFrame"] ---@type Frame
-    local DevTool = _G["DevTool"] ---@type any // dont want to type all of DevTool
+    local DevTool = _G["DevTool"] ---@type any // don't want to type all of DevTool
     DevTool:AddData(args)
     if not DevToolFrame then
         return
@@ -78,13 +80,8 @@ local devAddonList = {
     "TextureAtlasViewer",
     "DevTool",
     "MapPinEnhanced",
-    "Wowlua"
+    "ScriptLibrary"
 }
-
-
-local SavedVars = MapPinEnhanced:GetModule("SavedVars")
-
-
 
 local function loadDevAddons(isDev)
     if not isDev then
@@ -128,35 +125,30 @@ local keysToKeep = {
     "version",
 }
 
-StaticPopupDialogs["MAP_PIN_ENHANCED_RESET_SAVED_VARS"] = {
-    text = "Are you sure you want to reset all saved variables?",
-    button1 = "Yes",
-    button2 = "No",
-    OnAccept = function()
-        if not MapPinEnhancedDB then
-            MapPinEnhancedDB = {}
-            return
-        end
-        ---@type table<DevModeKeysToKeep, any>
-        local DBToKeep = {}
-        for i = 1, #keysToKeep do
-            local key = keysToKeep[i] --[[@as DevModeKeysToKeep]]
-            DBToKeep[key] = MapPinEnhancedDB[key]
-        end
-        MapPinEnhancedDB = DBToKeep
-        ReloadUI()
-    end,
-    timeout = 0,
-    whileDead = true,
-    hideOnEscape = true,
-    preferredIndex = 3,
-}
-
 local function ResetSavedVars()
-    -- use a static popup to confirm
-    StaticPopup_Show("MAP_PIN_ENHANCED_RESET_SAVED_VARS")
+    local Dialog = MapPinEnhanced:GetModule("Dialog")
+    Dialog:ShowPopup({
+        text = "Are you sure you want to reset all saved variables?",
+        onAccept = function()
+            if not MapPinEnhancedDB then
+                MapPinEnhancedDB = {}
+                return
+            end
+            ---@type table<DevModeKeysToKeep, any>
+            local DBToKeep = {}
+            for i = 1, #keysToKeep do
+                local key = keysToKeep[i] --[[@as DevModeKeysToKeep]]
+                DBToKeep[key] = MapPinEnhancedDB[key]
+            end
+            MapPinEnhancedDB = DBToKeep
+            ReloadUI()
+        end
+    })
 end
 
+
+local tickPath = Textures:GetTexture("IconTick_Yellow")
+local crossPath = Textures:GetTexture("IconCross_Yellow")
 
 local function AddDevReload()
     local f = CreateFrame("frame", nil, UIParent, "MapPinEnhancedBaseFrameTemplate")
@@ -216,21 +208,21 @@ local function AddDevReload()
 
 
     local testStatusbar = CreateFrame("StatusBar", nil, f)
-    testStatusbar:SetSize(totalWidth - 160, 17)
-    testStatusbar:SetStatusBarTexture("Skillbar_Fill_Flipbook_DefaultBlue")
+    testStatusbar:SetSize(420, 27)
+    testStatusbar:SetStatusBarTexture("delves-dashboard-bar-fill")
     testStatusbar:SetStatusBarDesaturated(true)
     testStatusbar:SetStatusBarColor(1, 1, 1)
-    testStatusbar:SetPoint("BOTTOM", 0, 20)
+    testStatusbar:SetPoint("BOTTOM", 0, 13)
 
 
     testStatusbar.border = testStatusbar:CreateTexture(nil, "BACKGROUND")
-    testStatusbar.border:SetAtlas("common-dropdown-bg")
-    testStatusbar.border:SetPoint("TOPLEFT", -5, 4)
-    testStatusbar.border:SetPoint("BOTTOMRIGHT", 5, -6)
+    testStatusbar.border:SetAtlas("delves-dashboard-bar-border")
+    testStatusbar.border:SetPoint("TOPLEFT", 1, 0)
+    testStatusbar.border:SetPoint("BOTTOMRIGHT", 0, 0)
 
     testStatusbar.text = testStatusbar:CreateFontString(nil, "OVERLAY")
     testStatusbar.text:SetFontObject(GameFontNormal)
-    testStatusbar.text:SetPoint("CENTER", 0, 0)
+    testStatusbar.text:SetPoint("CENTER", 0, 1)
 
 
     local runTestsButton = CreateFrame("Button", nil, f)
@@ -260,17 +252,17 @@ local function AddDevReload()
             testStatusbar.errorList = errorList
             if allTestsPassed then
                 testStatusbar.text:SetTextColor(0, 1, 0)
-                testStatusbar.text:SetText("All tests passed")
+            else
+                testStatusbar.text:SetTextColor(1, 0, 0)
                 return
             end
-            testStatusbar.text:SetTextColor(1, 0, 0)
-            testStatusbar.text:SetText(string.format("Tests failed: %d", numErrors))
+            testStatusbar.text:SetText(string.format("Tests successful: %d / %d", testCount - numErrors, testCount))
         end)
     end)
 
+    -- NOTE: if we have a lot of tests we might to change the tooltip to a menu element to have a scrollable list/grid
     local function BuildStatusbarTooltip(errorList)
         if not errorList then
-            GameTooltip:SetText("No tests have been run yet")
             return
         end
         GameTooltip:SetText("Test results:")
@@ -283,10 +275,11 @@ local function AddDevReload()
             erroredTests[err[2]] = true
         end
 
+
         for _, test in ipairs(tests) do
-            local testStateIcon = "|A:common-icon-checkmark:0:0|a"
+            local testStateIcon = "|T" .. tickPath .. ":16:16:0:0:16:16:0:16:0:16:255:255: 255|t"
             if erroredTests[test.name] then
-                testStateIcon = "|A:common-icon-redx:0:0|a"
+                testStateIcon = "|T" .. crossPath .. ":16:16:0:0:16:16:0:16:0:16:255:0:0|t"
             end
             GameTooltip:AddDoubleLine(test.name, testStateIcon, 1, 1, 1, 1, 1, 1)
         end

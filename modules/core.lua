@@ -19,3 +19,5 @@ function MapPinEnhanced:GetModule(name)
     end
     return self.modules[name]
 end
+
+--- TODO: CHANGE ALL FILE NAMES TO PASCAL CASE

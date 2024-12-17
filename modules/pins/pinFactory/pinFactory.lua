@@ -21,7 +21,7 @@ local CONSTANTS = MapPinEnhanced.CONSTANTS
 ---@field mapID number
 ---@field x number x coordinate between 0 and 1
 ---@field y number y coordinate between 0 and 1
----@field setTracked boolean? set to true to autotrack this pin on creation
+---@field setTracked boolean? set to true to auto-track this pin on creation
 ---@field title string? title of the pin
 ---@field texture string? an optional texture to use for the pin this will override the color
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path

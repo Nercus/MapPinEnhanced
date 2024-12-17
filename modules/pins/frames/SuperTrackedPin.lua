@@ -132,7 +132,7 @@ function MapPinEnhancedSuperTrackedPinMixin:UpdateTimeText(timeInSeconds)
 end
 
 local function AddOptions()
-    local Blizz = MapPinEnhanced:GetModule("Blizz")
+    local Blizzard = MapPinEnhanced:GetModule("Blizzard")
     local Options = MapPinEnhanced:GetModule("Options")
     Options:RegisterCheckbox({
         category = L["Floating Pin"],
@@ -184,7 +184,7 @@ local function AddOptions()
         init = function() return SavedVars:Get("floatingPin", "unlimitedDistance") --[[@as boolean]] end,
         onChange = function(value)
             SavedVars:Save("floatingPin", "unlimitedDistance", value)
-            Blizz:OverrideSuperTrackedAlphaState(value)
+            Blizzard:OverrideSuperTrackedAlphaState(value)
         end,
         description = L["When enabled, the floating pin will be shown even if the tracked pin is very far away."]
     })

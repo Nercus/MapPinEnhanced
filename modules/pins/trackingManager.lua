@@ -4,14 +4,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field TrackedPin PinObject
 local PinTracking = MapPinEnhanced:GetModule("PinTracking")
 local PinSections = MapPinEnhanced:GetModule("PinSections")
-local Blizz = MapPinEnhanced:GetModule("Blizz")
+local Blizzard = MapPinEnhanced:GetModule("Blizzard")
 
 function PinTracking:TrackNearestInSection(sectioName)
     local section = PinSections:GetSectionByName(sectioName)
     if not section then return end
     local pins = section:GetPins()
     local nearestPin = nil
-    local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
+    local playerX, playerY, playerMap = Blizzard:GetPlayerMapPosition()
     if not playerMap or not playerX or not playerY then return end
 
     for _, pin in pairs(pins) do
@@ -55,7 +55,7 @@ function PinTracking:SetTrackedPin(pin)
     end
     self.TrackedPin = pin
     local pinData = pin.pinData
-    Blizz:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
+    Blizzard:SetBlizzardWaypoint(pinData.x, pinData.y, pinData.mapID)
     return true
 end
 

@@ -16,20 +16,20 @@ local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][Hh]"
 local SLASH_PREFIX_PATTERN_2 = "/[Mm][Pp][Ee]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
-local HBDmapData = MapPinEnhanced.HBD.mapData
+local HBDMapData = MapPinEnhanced.HBD.mapData
 local L = MapPinEnhanced.L
 local trim = string.trim
 
----------------------------------------------------------------------------
+
 
 ---@type table<string, number|number[]>
 local ZONE_NAME_TO_ID = {}
-for mapID in pairs(HBDmapData) do
-    local mapType = CONSTANTS.MAPID_MAPTYPE_OVERRIDE[mapID] or HBDmapData[mapID].mapType
+for mapID in pairs(HBDMapData) do
+    local mapType = CONSTANTS.MAPID_MAPTYPE_OVERRIDE[mapID] or HBDMapData[mapID].mapType
     if mapType == Enum.UIMapType.Zone or
         mapType == Enum.UIMapType.Continent or
         mapType == Enum.UIMapType.Micro then
-        local mapName = HBDmapData[mapID].name
+        local mapName = HBDMapData[mapID].name
         if CONSTANTS.MAPID_SUFFIXES[mapID] then
             mapName = mapName .. " " .. CONSTANTS.MAPID_SUFFIXES[mapID]
         end

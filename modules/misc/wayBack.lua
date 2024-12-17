@@ -6,8 +6,6 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 local SlashCommand = MapPinEnhanced:GetModule("SlashCommand")
 local Notify = MapPinEnhanced:GetModule("Notify")
 
----------------------------------------------------------------------------
-
 SlashCommand:AddSlashCommand(L["Back"]:lower(), function()
     local currentMapID = C_Map.GetBestMapForUnit("player")
     if not currentMapID then

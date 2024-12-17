@@ -4,6 +4,7 @@
     <Script file="core.lua" />
     <Include file="constants\_imports.xml" />
     <Include file="templates\_imports.xml" />
+    <Include file="dialog\_imports.xml" />
     <Include file="core\_imports.xml" />
     <Include file="misc\_imports.xml" />
     <Include file="options\_imports.xml" />

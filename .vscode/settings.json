@@ -79,5 +79,26 @@
         "sets": "Queue",
         "tracker": "Ui",
         "pins": "Taskfile"
-    }
+    },
+    "cSpell.words": [
+        "baseframe",
+        "changedalpha",
+        "CLAMPTOBLACKADDITIVE",
+        "colorpicker",
+        "Colour",
+        "debugstack",
+        "Desaturated",
+        "dialogframe",
+        "HBDP",
+        "hooksecurefunc",
+        "horiz",
+        "MAPID",
+        "MAPTYPE",
+        "OPTIONCATEGORY",
+        "texel",
+        "toplevel",
+        "uncategorized",
+        "Unscrollable",
+        "userwaypoint"
+    ]
 }

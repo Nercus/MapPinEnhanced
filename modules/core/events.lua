@@ -2,9 +2,13 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Events
+---@field RegisterCallback fun(event: MapPinEnhancedEvent, method: function, ...)
+---@field UnregisterCallback fun(event: MapPinEnhancedEvent)
+---@field UnregisterAllCallbacks fun()
 local Events = MapPinEnhanced:GetModule("Events")
 
 
+Events.CB = Events.CB or LibStub("CallbackHandler-1.0"):New(Events)
 local MapPinEnhancedFrame = CreateFrame("Frame")
 local registeredEvents = {} ---@type table<WowEvent, table<number, function>>
 
@@ -87,19 +91,17 @@ function Events:GetEventNameWithID(event, id)
     return event .. ":" .. id
 end
 
----@param owner table Mostly this will be the mixin of the object that is registering the event
 ---@param event MapPinEnhancedEvent  | string The event to register
 ---@param func function The function to call when the event is triggered
-function Events:RegisterEventCallback(owner, event, func)
+function Events:RegisterEventCallback(event, func)
     self:CheckEventName(event)
-    MapPinEnhanced.RegisterCallback(owner, event, func)
+    self.RegisterCallback(event, func)
 end
 
----@param owner table Mostly this will be the mixin of the object that is registering the event
 ---@param event MapPinEnhancedEvent  | string The event to unregister
-function Events:UnregisterEventCallback(owner, event)
+function Events:UnregisterEventCallback(event)
     self:CheckEventName(event)
-    MapPinEnhanced.UnregisterCallback(owner, event)
+    self.UnregisterCallback(event)
 end
 
 ---@type table<MapPinEnhancedEvent|string, FunctionContainer>
@@ -114,11 +116,11 @@ function Events:FireEvent(event, ...)
     end
     local args = { ... }
     eventTimers[event] = C_Timer.NewTimer(0.1, function()
-        MapPinEnhanced.CB:Fire(event, unpack(args))
+        self.CB:Fire(event, unpack(args))
     end)
 end
 
-function Events:FireEventImmediat(event, ...)
+function Events:FireEventImmediate(event, ...)
     self:CheckEventName(event)
-    MapPinEnhanced.CB:Fire(event, ...)
+    self.CB:Fire(event, ...)
 end

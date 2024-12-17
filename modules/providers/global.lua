@@ -4,7 +4,7 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 local L = MapPinEnhanced.L
 
----------------------------------------------------------------------------
+
 
 ---Add a global table for other addons to use AddPin and AddWaypoint -> more coming in the future
 local globalMapPinEnhanced = {}

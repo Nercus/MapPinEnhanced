@@ -7,7 +7,7 @@ local PinSections = MapPinEnhanced:GetModule("PinSections")
 local Events = MapPinEnhanced:GetModule("Events")
 
 local L = MapPinEnhanced.L
----------------------------------------------------------------------------
+
 
 ---@param waypointData {uiMapID: number, position: {x: number, y: number}}
 local function OnUserWaypoint(waypointData)

@@ -8,7 +8,7 @@ local LibDeflate = MapPinEnhanced.LibDeflate
 
 ---@class PinProvider
 local PinProvider = MapPinEnhanced:GetModule("PinProvider")
----------------------------------------------------------------------------
+
 
 ---serialize a table for transmission through addon messages
 ---@param data table

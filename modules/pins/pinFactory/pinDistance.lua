@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class PinFactory
 local PinFactory = MapPinEnhanced:GetModule("PinFactory")
-local Blizz = MapPinEnhanced:GetModule("Blizz")
+local Blizzard = MapPinEnhanced:GetModule("Blizzard")
 local PinSections = MapPinEnhanced:GetModule("PinSections")
 
 
@@ -129,7 +129,7 @@ function PinFactory:HandleDistanceCheck(pin)
     end
 
     function pin:GetDistanceToPin()
-        local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
+        local playerX, playerY, playerMap = Blizzard:GetPlayerMapPosition()
         if not playerMap or not playerX or not playerY then return 0 end
         local distance = MapPinEnhanced.HBD:GetZoneDistance(
             playerMap, playerX, playerY,
