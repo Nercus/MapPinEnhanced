@@ -159,7 +159,7 @@ function PinProvider:ParseWayStringToData(wayString)
     local mapID = nil
     if #mapParts == 1 then
         mapID = ConvertImportMapString(mapParts[1])
-    else
+    elseif #mapParts > 1 then
         -- join the mapParts to a string and try to convert it to a mapID
         mapID = ConvertImportMapString(table.concat(mapParts, " "))
     end
