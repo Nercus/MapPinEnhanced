@@ -14,5 +14,8 @@
 
 libs\_imports.xml
 MapPinEnhanced.lua
+#@do-not-package@
+tests\_imports.xml
+#@end-do-not-package@
 utils\_imports.xml
 modules\_imports.xml

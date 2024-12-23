@@ -5,6 +5,8 @@ local MapPinEnhanced = select(2, ...)
 ---@type function
 local ReloadUI = C_UI.Reload
 
+
+
 local playerLoginFired = false
 local preFiredQueue = {}
 --@end-do-not-package@
@@ -196,32 +198,101 @@ local function AddDevReload()
 
     totalWidth = totalWidth + button4:GetWidth() + 10
 
-
-
     local testStatusbar = CreateFrame("StatusBar", nil, f)
-    testStatusbar:SetSize(totalWidth - 160, 17)
-    testStatusbar:SetStatusBarTexture("Skillbar_Fill_Flipbook_DefaultBlue")
+    testStatusbar:SetSize(420, 27)
+    testStatusbar:SetStatusBarTexture("delves-dashboard-bar-fill")
     testStatusbar:SetStatusBarDesaturated(true)
     testStatusbar:SetStatusBarColor(1, 1, 1)
-    testStatusbar:SetPoint("BOTTOM", 0, 20)
+    testStatusbar:SetPoint("BOTTOM", 0, 13)
 
 
     testStatusbar.border = testStatusbar:CreateTexture(nil, "BACKGROUND")
-    testStatusbar.border:SetAtlas("common-dropdown-bg")
-    testStatusbar.border:SetPoint("TOPLEFT", -5, 4)
-    testStatusbar.border:SetPoint("BOTTOMRIGHT", 5, -6)
+    testStatusbar.border:SetAtlas("delves-dashboard-bar-border")
+    testStatusbar.border:SetPoint("TOPLEFT", 1, 0)
+    testStatusbar.border:SetPoint("BOTTOMRIGHT", 0, 0)
 
     testStatusbar.text = testStatusbar:CreateFontString(nil, "OVERLAY")
     testStatusbar.text:SetFontObject(GameFontNormal)
-    testStatusbar.text:SetPoint("CENTER", 0, 0)
+    testStatusbar.text:SetPoint("CENTER", 0, 1)
+
+
+    local runTestsButton = CreateFrame("Button", nil, f)
+    runTestsButton:SetPoint("LEFT", testStatusbar, "RIGHT", 5, 0)
+    runTestsButton:SetSize(30, 30)
+    runTestsButton:SetFrameStrata("HIGH")
+    runTestsButton:SetNormalAtlas("CreditsScreen-Assets-Buttons-Play")
 
     local function SetStatusbarValue(min, max, current)
         testStatusbar:SetMinMaxValues(min, max)
         testStatusbar:SetValue(current)
         testStatusbar.text:SetText(string.format("Tests completed: %d/%d", current, max))
     end
-    SetStatusbarValue(0, 0, 0)
 
+    local Tests = MapPinEnhanced.Tests
+    local tickPath = MapPinEnhanced:GetTexture("IconTick_Yellow")
+    local crossPath = MapPinEnhanced:GetTexture("IconCross_Yellow")
+
+    local testCount = Tests:GetNumberOfTests()
+    SetStatusbarValue(0, testCount, 0)
+
+    local defaultTextColor = { testStatusbar.text:GetTextColor() }
+    runTestsButton:SetScript("OnClick", function()
+        local testIndex = 0
+        testStatusbar.text:SetTextColor(unpack(defaultTextColor))
+        Tests:RunTests(function(success)
+            if not success then return end
+            testIndex = testIndex + 1
+            SetStatusbarValue(0, testCount, testIndex)
+        end, function(errorList)
+            local numErrors = #errorList
+            local allTestsPassed = numErrors == 0
+            testStatusbar.errorList = errorList
+            if allTestsPassed then
+                testStatusbar.text:SetTextColor(0, 1, 0)
+            else
+                testStatusbar.text:SetTextColor(1, 0, 0)
+                return
+            end
+            testStatusbar.text:SetText(string.format("Tests successful: %d/%d", testCount - numErrors, testCount))
+        end)
+    end)
+
+    -- NOTE: if we have a lot of tests we might to change the tooltip to a menu element to have a scrollable list/grid
+    local function BuildStatusbarTooltip(errorList)
+        if not errorList then
+            return
+        end
+        GameTooltip:SetText("Test results:")
+        local tests = Tests:GetTests()
+        ---@type table<string, boolean>
+        local erroredTests = {}
+        for i = 1, #errorList do
+            ---@type string[]
+            local err = errorList[i]
+            erroredTests[err[2]] = true
+        end
+
+
+        for _, test in ipairs(tests) do
+            local testStateIcon = "|T" .. tickPath .. ":16:16:0:0:16:16:0:16:0:16:255:255: 255|t"
+            if erroredTests[test.name] then
+                testStateIcon = "|T" .. crossPath .. ":16:16:0:0:16:16:0:16:0:16:255:0:0|t"
+            end
+            GameTooltip:AddDoubleLine(test.name, testStateIcon, 1, 1, 1, 1, 1, 1)
+        end
+    end
+
+
+
+    testStatusbar:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(testStatusbar, "ANCHOR_TOP")
+        BuildStatusbarTooltip(testStatusbar.errorList)
+        GameTooltip:Show()
+    end)
+
+    testStatusbar:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 
     f:SetPropagateKeyboardInput(true)
     f:SetSize(totalWidth, 130)
