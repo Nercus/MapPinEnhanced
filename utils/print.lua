@@ -2,8 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 
 
-local defaultColor = ConsoleGetColorFromType(1)
-local prefix = MapPinEnhanced:WrapTextInColor(MapPinEnhanced.addonName .. ": ", defaultColor)
+local normalColor = CreateColor(1, 0.82, 0)
+local prefix = MapPinEnhanced:WrapTextInColor(MapPinEnhanced.addonName .. ": ", normalColor)
 
 
 ---Print a styled message to the chat
@@ -15,4 +15,16 @@ function MapPinEnhanced:Print(...)
         str = string.format(str, args) ---@type string
     end
     print(prefix .. str)
+end
+
+---Print a styled message to the chat,
+---@param header string
+---@param list string[]
+function MapPinEnhanced:PrintList(header, list)
+    local bulletTexture = MapPinEnhanced:GetTexture("PinTrackedCustom")
+    local bulletTextureString = string.format("|T%s:12:12:2:-2|t", bulletTexture)
+    self:Print(self:WrapTextInColor(header, normalColor))
+    for _, item in ipairs(list) do
+        print(bulletTextureString .. " " .. item)
+    end
 end

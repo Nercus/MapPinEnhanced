@@ -395,6 +395,9 @@ function ChatEdit_InsertLink(link) end
 
 ---@class DEFAULT_CHAT_FRAME
 ---@field editBox EditBox
+---@field Clear fun()
+---@field GetNumMessages fun():number
+---@field GetMessageInfo fun(_, index: number):string
 DEFAULT_CHAT_FRAME = {}
 
 
