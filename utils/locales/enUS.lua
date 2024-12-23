@@ -105,3 +105,7 @@ L["X"] = "X"
 L["Y"] = "Y"
 L["You Are in an Instance or a Zone Where the Map Is Not Available"] =
 "You Are in an Instance or a Zone Where the Map Is Not Available"
+L["Invalid way command format. Please use one of the following formats (without < and >):"] =
+"Invalid way command format. Please use one of the following formats (without < and >):"
+L["/way <map name> <x> <y> <optional title>"] = "/way <map name> <x> <y> <optional title>"
+L["/way #<mapID> <x> <y> <optional title>"] = "/way #<mapID> <x> <y> <optional title>"

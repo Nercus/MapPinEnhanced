@@ -19,6 +19,8 @@ local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 local HBDmapData = MapPinEnhanced.HBD.mapData
 local trim = string.trim
 
+local L = MapPinEnhanced.L
+
 ---------------------------------------------------------------------------
 
 ---@type table<string, number|number[]>
@@ -106,14 +108,13 @@ function PinProvider:ParseWayStringToData(wayString)
     -- iterate reverse over tokens to find the first number
     for idx = #tokens, 1, -1 do
         -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if (type(tonumber(tokens[idx]) == "number") or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
+        if type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d") then
             break
         else
             table.insert(titleTokens, 1, tokens[idx])
             table.remove(tokens, idx)
         end
     end
-
 
     -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
     local firstTokenIsMap = tonumber(tokens[1]) == nil
@@ -122,17 +123,15 @@ function PinProvider:ParseWayStringToData(wayString)
         table.insert(titleTokens, 1, tokens[#tokens])
         table.remove(tokens, #tokens)
     end
-
     ---@type string?
     local title = table.concat(titleTokens, " ")
     if title == "" then
         title = nil
     end
 
-
     local tokenLength = #tokens
     -- if length is small than 3 try to split the last element on ","
-    if tokenLength < 2 then
+    if tokenLength <= 2 then
         local last = tokens[#tokens] or ""
         local split = { string.match(last, "(.-),(.+)") }
         if #split == 2 then
@@ -167,8 +166,19 @@ function PinProvider:ParseWayStringToData(wayString)
     if not mapID or mapID == "" then
         mapID = C_Map.GetBestMapForUnit("player")
     end
-    if not coords[1] or not coords[2] then
+
+    if not coords[1] or not coords[2] or coords[1] > 100 or coords[2] > 100 then
         coords = nil
+    end
+
+    if not coords or not mapID then
+        MapPinEnhanced:PrintList(
+            L["Invalid way command format. Please use one of the following formats (without < and >):"], {
+                L["/way <map name> <x> <y> <optional title>"],
+                L["/way #<mapID> <x> <y> <optional title>"],
+            }
+        )
+        return nil, nil, nil
     end
     return title, mapID, coords
 end
@@ -225,3 +235,83 @@ function PinProvider:SerializeWayString(pinData)
     local y = pinData.y * 100
     return trim(string.format(CONSTANTS.WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))
 end
+
+--@do-not-package@
+local Tests = MapPinEnhanced.Tests
+
+Tests:Test("Import String: Simple", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50 50")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+
+Tests:Test("Import String: Separator 1", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50, 50")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("Import String: Separator 2", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50. 50")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("Import String: Decimal", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50.0 50.0")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("Import String: Decimal with Separator", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50.0, 50.0")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("Import String: Map ID", function(self)
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #2369 50.12 50.34")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(2369)
+    self:Expect(coords):ToBe({ 50.12, 50.34 })
+end)
+
+Tests:Test("Import String: Title", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 50.0,50.0 ABC")
+    self:Expect(title):ToBe("ABC")
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("(Import String: Map ID and Title)", function(self)
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #2369 50.12,50.12 ABC")
+    self:Expect(title):ToBe("ABC")
+    self:Expect(mapID):ToBe(2369)
+    self:Expect(coords):ToBe({ 50.12, 50.12 })
+end)
+
+Tests:Test("Import String: Wrong Format", function(self)
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 2369 50 12ABC")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(nil)
+    self:Expect(coords):ToBe(nil)
+
+    self:Expect(L["Invalid way command format. Please use one of the following formats (without < and >):"])
+        :ToBeChatMessage()
+    self:Expect(L["/way <map name> <x> <y> <optional title>"]):ToBeChatMessage()
+    self:Expect(L["/way #<mapID> <x> <y> <optional title>"]):ToBeChatMessage()
+end)
+
+--@end-do-not-package@
