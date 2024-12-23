@@ -108,7 +108,7 @@ function PinProvider:ParseWayStringToData(wayString)
     -- iterate reverse over tokens to find the first number
     for idx = #tokens, 1, -1 do
         -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d") then
+        if (type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
             break
         else
             table.insert(titleTokens, 1, tokens[idx])
