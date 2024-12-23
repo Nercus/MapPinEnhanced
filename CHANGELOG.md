@@ -1,3 +1,5 @@
-# 3.0.7
+# 3.0.8
 
-- Fix critical parsing error for importing pins
+- Fix another bug with the /way importing (Thanks lemieszek!)
+- Add an error message for invalid /way imports
+- Add internal testing system (no feature, just for less bugs in the future)
