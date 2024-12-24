@@ -105,16 +105,6 @@ function PinProvider:ParseWayStringToData(wayString)
     end
 
     local titleTokens = {}
-    -- iterate reverse over tokens to find the first number
-    for idx = #tokens, 1, -1 do
-        -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if (type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
-            break
-        else
-            table.insert(titleTokens, 1, tokens[idx])
-            table.remove(tokens, idx)
-        end
-    end
 
     -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
     local firstTokenIsMap = tonumber(tokens[1]) == nil
@@ -122,11 +112,6 @@ function PinProvider:ParseWayStringToData(wayString)
         -- remove the last entry in tokens and add it to the front of titleTokens
         table.insert(titleTokens, 1, tokens[#tokens])
         table.remove(tokens, #tokens)
-    end
-    ---@type string?
-    local title = table.concat(titleTokens, " ")
-    if title == "" then
-        title = nil
     end
 
     local tokenLength = #tokens
@@ -147,12 +132,23 @@ function PinProvider:ParseWayStringToData(wayString)
     for _, token in ipairs(tokens) do
         -- replace all wrong decimal separators with the right one
         token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
-        -- if element is not a number its the mapID/zoneName
-        if not tonumber(token) then
-            mapParts[#mapParts + 1] = token
+        -- If we've gotten 2 coords all we should have left is the title
+        if #coords < 2 then
+            -- if element is not a number its the mapID/zoneName
+            if not tonumber(token) then
+                mapParts[#mapParts + 1] = token
+            else
+                table.insert(coords, tonumber(token))
+            end
         else
-            table.insert(coords, tonumber(token))
+            table.insert(titleTokens, token)
         end
+    end
+
+    ---@type string?
+    local title = table.concat(titleTokens, " ")
+    if title == "" then
+        title = nil
     end
 
     local mapID = nil
