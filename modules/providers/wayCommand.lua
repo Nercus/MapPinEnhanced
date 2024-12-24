@@ -105,54 +105,39 @@ function PinProvider:ParseWayStringToData(wayString)
     end
 
     local titleTokens = {}
-    -- iterate reverse over tokens to find the first number
-    for idx = #tokens, 1, -1 do
-        -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if (type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
-            break
-        else
-            table.insert(titleTokens, 1, tokens[idx])
-            table.remove(tokens, idx)
-        end
-    end
-
-    -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
-    local firstTokenIsMap = tonumber(tokens[1]) == nil
-    if not firstTokenIsMap and #tokens == 3 then
-        -- remove the last entry in tokens and add it to the front of titleTokens
-        table.insert(titleTokens, 1, tokens[#tokens])
-        table.remove(tokens, #tokens)
-    end
-    ---@type string?
-    local title = table.concat(titleTokens, " ")
-    if title == "" then
-        title = nil
-    end
-
-    local tokenLength = #tokens
-    -- if length is small than 3 try to split the last element on ","
-    if tokenLength <= 2 then
-        local last = tokens[#tokens] or ""
-        local split = { string.match(last, "(.-),(.+)") }
-        if #split == 2 then
-            table.remove(tokens, #tokens)
-            table.insert(tokens, split[1])
-            table.insert(tokens, split[2])
-        end
-    end
 
     ---@type string[]
     local mapParts = {}
     local coords = {}
     for _, token in ipairs(tokens) do
         -- replace all wrong decimal separators with the right one
-        token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
-        -- if element is not a number its the mapID/zoneName
-        if not tonumber(token) then
-            mapParts[#mapParts + 1] = token
+        local correctedToken = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
+        -- If we've gotten 2 coords all we should have left is the title
+        if #coords < 2 then
+            -- split on the raw token value, since correctedToken would have replaced the comma here
+            local split = { string.match(token, "(.-),(.+)") }
+            if #split == 2 then
+                -- If we already have a coord then we are likely getting an invalid command like `/way 50.0 50.0,50.0`
+                if #coords > 0 then
+                    break
+                end
+                table.insert(coords, tonumber(split[1]))
+                table.insert(coords, tonumber(split[2]))
+            -- if element is not a number its the mapID/zoneName
+            elseif not tonumber(correctedToken) then
+                mapParts[#mapParts + 1] = correctedToken
+            else
+                table.insert(coords, tonumber(correctedToken))
+            end
         else
-            table.insert(coords, tonumber(token))
+            table.insert(titleTokens, token)
         end
+    end
+
+    ---@type string?
+    local title = table.concat(titleTokens, " ")
+    if title == "" then
+        title = nil
     end
 
     local mapID = nil
