@@ -104,16 +104,30 @@ function PinProvider:ParseWayStringToData(wayString)
         table.insert(tokens, token)
     end
 
+
+
     -- iterate until you we find the index of the first number
     local coordsIndex = 0
     for i = 1, #tokens do
         local token = tokens[i]
+        local nextToken = tokens[i + 1]
         if string.find(token, "[%.%,]$") then
             token = token:sub(1, -2) --[[@as string remove last character]]
             tokens[i] = token
         end
+        -- if the token and the next token both have the incorrect decimal separator then replace both with the correct one
+        if string.find(token, INVERSE_DECIMAL_SEPARATOR_PATTERN) and string.find(nextToken, INVERSE_DECIMAL_SEPARATOR_PATTERN) then
+            token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN) --[[@as string]]
+            nextToken = nextToken:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN) --[[@as string]]
+            tokens[i] = token
+            tokens[i + 1] = nextToken
+        end
         if tonumber(token) then
             coordsIndex = i
+            if string.find(nextToken, "[%.%,]$") then
+                nextToken = nextToken:sub(1, -2) --[[@as string remove last character]]
+                tokens[i + 1] = nextToken
+            end
             break
         else
             local split = { string.match(token, "(.-),(.+)") }
@@ -245,6 +259,22 @@ Tests:Test("Import String: Separator 2", function(self)
     self:Expect(title):ToBe(nil)
     self:Expect(mapID):ToBe(currentMap)
     self:Expect(coords):ToBe({ 50, 50 })
+end)
+
+Tests:Test("Import String: Separator 3", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 12.34, 56.67,")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 12.34, 56.67 })
+end)
+
+Tests:Test("Import String: Separator 4", function(self)
+    local currentMap = C_Map.GetBestMapForUnit("player")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 12,34 56,67")
+    self:Expect(title):ToBe(nil)
+    self:Expect(mapID):ToBe(currentMap)
+    self:Expect(coords):ToBe({ 12.34, 56.67 })
 end)
 
 Tests:Test("Import String: Decimal", function(self)
