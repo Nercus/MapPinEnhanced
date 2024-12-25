@@ -89,6 +89,10 @@ end
 ---@param wayString string
 ---@return string?, number?, number[]?
 function PinProvider:ParseWayStringToData(wayString)
+    local title = nil
+    local mapID = nil
+    local coords = nil
+
     -- remove the slashString from the message
     wayString = wayString:gsub(SLASH_PREFIX_PATTERN_1, ""):gsub(SLASH_PREFIX_PATTERN_2, ""):gsub(SLASH_PREFIX_PATTERN_3,
         "")
@@ -97,80 +101,59 @@ function PinProvider:ParseWayStringToData(wayString)
     ---@type string[]
     local tokens = {}
     for token in string.gmatch(wayString, "%S+") do
-        -- check if the last character in a token is either a . or a , and if so remove it
-        if string.find(token, "[%.%,]$") then
-            token = token:sub(1, -2) --[[@as string remove last character]]
-        end
         table.insert(tokens, token)
     end
 
-    local titleTokens = {}
-    -- iterate reverse over tokens to find the first number
-    for idx = #tokens, 1, -1 do
-        -- check if token is a number or a number with a decimal separator (check for different separators) else add the token to the title
-        if (type(tonumber(tokens[idx])) == "number" or string.find(tokens[idx], "%d" .. decimal_separator .. "%d")) then
+    -- iterate until you we find the index of the first number
+    local coordsIndex = 0
+    for i = 1, #tokens do
+        local token = tokens[i]
+        if string.find(token, "[%.%,]$") then
+            token = token:sub(1, -2) --[[@as string remove last character]]
+            tokens[i] = token
+        end
+        if tonumber(token) then
+            coordsIndex = i
             break
         else
-            table.insert(titleTokens, 1, tokens[idx])
-            table.remove(tokens, idx)
+            local split = { string.match(token, "(.-),(.+)") }
+            if #split == 2 then
+                table.remove(tokens, i)
+                table.insert(tokens, i, split[1])
+                table.insert(tokens, i + 1, split[2])
+                coordsIndex = i
+                break
+            end
         end
     end
 
-    -- check if the first token is a map id or a zone name -> if it is not and the length is 3 then the last token in there is a number that belongs to the title
-    local firstTokenIsMap = tonumber(tokens[1]) == nil
-    if not firstTokenIsMap and #tokens == 3 then
-        -- remove the last entry in tokens and add it to the front of titleTokens
-        table.insert(titleTokens, 1, tokens[#tokens])
-        table.remove(tokens, #tokens)
-    end
-    ---@type string?
-    local title = table.concat(titleTokens, " ")
-    if title == "" then
-        title = nil
-    end
 
-    local tokenLength = #tokens
-    -- if length is small than 3 try to split the last element on ","
-    if tokenLength <= 2 then
-        local last = tokens[#tokens] or ""
-        local split = { string.match(last, "(.-),(.+)") }
-        if #split == 2 then
-            table.remove(tokens, #tokens)
-            table.insert(tokens, split[1])
-            table.insert(tokens, split[2])
+    if coordsIndex == 2 then -- mapID in form #<mapID> or <mapName>
+        mapID = ConvertImportMapString(tokens[1])
+        table.remove(tokens, 1)
+    elseif coordsIndex > 2 then -- multi word map name
+        -- combine all tokens before the coordsIndex to a single string
+        local mapName = table.concat(tokens, " ", 1, coordsIndex - 1)
+        mapID = ConvertImportMapString(mapName)
+        for _ = 1, coordsIndex - 1 do
+            table.remove(tokens, 1)
         end
     end
-
-    ---@type string[]
-    local mapParts = {}
-    local coords = {}
-    for _, token in ipairs(tokens) do
-        -- replace all wrong decimal separators with the right one
-        token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
-        -- if element is not a number its the mapID/zoneName
-        if not tonumber(token) then
-            mapParts[#mapParts + 1] = token
-        else
-            table.insert(coords, tonumber(token))
-        end
-    end
-
-    local mapID = nil
-    if #mapParts == 1 then
-        mapID = ConvertImportMapString(mapParts[1])
-    elseif #mapParts > 1 then
-        -- join the mapParts to a string and try to convert it to a mapID
-        mapID = ConvertImportMapString(table.concat(mapParts, " "))
-    end
-
-    if not mapID or mapID == "" then
+    if not mapID then
         mapID = C_Map.GetBestMapForUnit("player")
     end
 
+
+    coords = { tonumber(tokens[1]), tonumber(tokens[2]) }
+    table.remove(tokens, 1)
+    table.remove(tokens, 1)
     if not coords[1] or not coords[2] or coords[1] > 100 or coords[2] > 100 then
         coords = nil
     end
 
+    if #tokens > 0 then
+        title = table.concat(tokens, " ")
+    end
     if not coords or not mapID then
         MapPinEnhanced:PrintList(
             L["Invalid way command format. Please use one of the following formats (without < and >):"], {
@@ -281,9 +264,9 @@ Tests:Test("Import String: Decimal with Separator", function(self)
 end)
 
 Tests:Test("Import String: Map ID", function(self)
-    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #2369 50.12 50.34")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #680 50.12 50.34")
     self:Expect(title):ToBe(nil)
-    self:Expect(mapID):ToBe(2369)
+    self:Expect(mapID):ToBe(680)
     self:Expect(coords):ToBe({ 50.12, 50.34 })
 end)
 
@@ -295,15 +278,22 @@ Tests:Test("Import String: Title", function(self)
     self:Expect(coords):ToBe({ 50, 50 })
 end)
 
-Tests:Test("(Import String: Map ID and Title)", function(self)
-    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #2369 50.12,50.12 ABC")
+Tests:Test("Import String: Title with number", function(self)
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way Blasted Lands 62.96 31.17 Ethos of War, Part 1")
+    self:Expect(title):ToBe("Ethos of War, Part 1")
+    self:Expect(mapID):ToBe(17)
+    self:Expect(coords):ToBe({ 62.96, 31.17 })
+end)
+
+Tests:Test("Import String: Map ID and Title", function(self)
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way #680 50.12,50.12 ABC")
     self:Expect(title):ToBe("ABC")
-    self:Expect(mapID):ToBe(2369)
+    self:Expect(mapID):ToBe(680)
     self:Expect(coords):ToBe({ 50.12, 50.12 })
 end)
 
 Tests:Test("Import String: Wrong Format", function(self)
-    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 2369 50 12ABC")
+    local title, mapID, coords = PinProvider:ParseWayStringToData("/way 680 50 12ABC")
     self:Expect(title):ToBe(nil)
     self:Expect(mapID):ToBe(nil)
     self:Expect(coords):ToBe(nil)
