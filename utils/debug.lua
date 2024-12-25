@@ -257,42 +257,45 @@ local function AddDevReload()
         end)
     end)
 
-    -- NOTE: if we have a lot of tests we might to change the tooltip to a menu element to have a scrollable list/grid
-    local function BuildStatusbarTooltip(errorList)
-        if not errorList then
-            return
-        end
-        GameTooltip:SetText("Test results:")
+    local function BuildStatusbarTooltip(owner, rootDescription, errorList)
+        rootDescription:SetGridMode(MenuConstants.VerticalGridDirection)
         local tests = Tests:GetTests()
         ---@type table<string, boolean>
         local erroredTests = {}
-        for i = 1, #errorList do
-            ---@type string[]
-            local err = errorList[i]
-            erroredTests[err[2]] = true
+        if errorList then
+            for i = 1, #errorList do
+                ---@type string[]
+                local err = errorList[i]
+                erroredTests[err[2]] = true
+            end
         end
-
-
         for _, test in ipairs(tests) do
-            local testStateIcon = "|T" .. tickPath .. ":16:16:0:0:16:16:0:16:0:16:255:255: 255|t"
+            local testStateIcon = "|T" .. tickPath .. ":16:16:0:0:16:16:0:16:0:16:255:255:255|t"
             if erroredTests[test.name] then
                 testStateIcon = "|T" .. crossPath .. ":16:16:0:0:16:16:0:16:0:16:255:0:0|t"
             end
-            GameTooltip:AddDoubleLine(test.name, testStateIcon, 1, 1, 1, 1, 1, 1)
+            if not errorList then
+                testStateIcon = '|A:CreditsScreen-Assets-Buttons-Play:16:16|a'
+            end
+            rootDescription:CreateButton(string.format("[%s] - %s", testStateIcon, test.name), function(data)
+                test:Run()
+            end);
         end
     end
 
 
 
-    testStatusbar:SetScript("OnEnter", function()
-        GameTooltip:SetOwner(testStatusbar, "ANCHOR_TOP")
-        BuildStatusbarTooltip(testStatusbar.errorList)
-        GameTooltip:Show()
+
+    testStatusbar:SetScript("OnEnter", function(self)
+        MenuUtil.CreateContextMenu(self, BuildStatusbarTooltip, self.errorList)
+        -- GameTooltip:SetOwner(testStatusbar, "ANCHOR_TOP")
+        -- BuildStatusbarTooltip(testStatusbar.errorList)
+        -- GameTooltip:Show()
     end)
 
-    testStatusbar:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
+    -- testStatusbar:SetScript("OnLeave", function()
+    --     GameTooltip:Hide()
+    -- end)
 
     f:SetPropagateKeyboardInput(true)
     f:SetSize(totalWidth, 130)
