@@ -1,3 +1,3 @@
-# 3.0.9
+# 3.0.10
 
-- More bug fixes with /way command parsing
+- Update for 11.1.0
