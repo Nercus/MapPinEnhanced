@@ -57,6 +57,8 @@
         "ScrollFrame_OnLoad"
     ],
     "Lua.workspace.library": [
-        "~\\.vscode\\extensions\\ketho.wow-api-0.18.2\\Annotations"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.20.6\\Annotations\\Core",
+        "~\\.vscode\\extensions\\ketho.wow-api-0.20.6\\Annotations\\FrameXML"
     ],
+    "Lua.type.weakUnionCheck": true,
 }
