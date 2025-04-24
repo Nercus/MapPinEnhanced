@@ -221,6 +221,12 @@ function PinManager:AddPin(pinData, restored)
         (pinData.color and CONSTANTS.PIN_COLORS_BY_NAME[pinData.color] or pinData.color == 'Custom') or
         not pinData.color,
         "Pin data must contain a valid color.")
+    if (type(pinData.x) ~= "number") then
+        pinData.x = tonumber(pinData.x)
+    end
+    if (type(pinData.y) ~= "number") then
+        pinData.y = tonumber(pinData.y)
+    end
 
     if (pinData.x > 1) then
         pinData.x = pinData.x / 100
