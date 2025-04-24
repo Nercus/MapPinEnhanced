@@ -381,8 +381,10 @@ function PinFactory:CreatePin(initPinData, pinID)
                 return
             end
             ToggleTracked()
-        else
+        elseif button == "RightButton" then
             CreateMenu(buttonFrame)
+        elseif button == "MiddleButton" then
+            PinManager:RemovePinByID(pinID)
         end
     end
 
