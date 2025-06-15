@@ -125,5 +125,4 @@
         "table": "disable",
         "utf8": "disable"
     },
-    "Lua.type.weakUnionCheck": true,
 }
