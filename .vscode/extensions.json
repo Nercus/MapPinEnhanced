@@ -1,6 +1,6 @@
 {
-    "recommendations": [
-        "sumneko.lua",
-        "ketho.wow-api"
-    ]
+  "recommendations": [
+    "sumneko.lua",
+    "ketho.wow-api"
+  ]
 }

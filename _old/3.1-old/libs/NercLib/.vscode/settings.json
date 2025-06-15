@@ -1,0 +1,104 @@
+{
+    "[lua]": {
+        "editor.defaultFormatter": "sumneko.lua"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "editor.formatOnSave": true,
+    "editor.indentSize": "tabSize",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.tabSize": 4,
+    "explorer.sortOrder": "default",
+    "Lua.completion.autoRequire": false,
+    "Lua.diagnostics.disable": [
+        "no-unknown",
+        "redefined-local"
+    ],
+    "Lua.diagnostics.groupFileStatus": {
+        "ambiguity": "Any",
+        "await": "Any",
+        "duplicate": "Any",
+        "global": "Any",
+        "luadoc": "Any",
+        "redefined": "Any",
+        "strict": "Any",
+        "strong": "Any",
+        "type-check": "Any",
+        "unbalanced": "Any",
+        "unused": "Any"
+    },
+    "Lua.diagnostics.libraryFiles": "Disable",
+    "Lua.diagnostics.neededFileStatus": {
+        "undefined-field": "Any!"
+    },
+    "Lua.format.defaultConfig": {
+        "indent_size": "4",
+        "indent_style": "space"
+    },
+    "Lua.hint.setType": false,
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.workspace.ignoreDir": [
+        ".github",
+        ".vscode",
+        "libs"
+    ],
+    "peacock.color": "#97D2FB",
+    "workbench.colorCustomizations": {
+        "commandCenter.border": "#15202b99",
+        "sash.hoverBorder": "#c8e7fd",
+        "statusBar.background": "#97d2fb",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#66bdf9",
+        "statusBarItem.remoteBackground": "#97d2fb",
+        "statusBarItem.remoteForeground": "#15202b",
+        "tab.activeBorder": "#c8e7fd",
+        "titleBar.activeBackground": "#97d2fb",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#97d2fb99",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "wowAPI.luals.configurationScope": "User",
+    "wowAPI.luals.defineKnownGlobals": false,
+    "cSpell.words": [
+        "BOTTOMLEFT",
+        "BOTTOMRIGHT",
+        "checkmark",
+        "clearbutton",
+        "colorpicker",
+        "Colorpicker",
+        "debugstack",
+        "FULLSCREEN",
+        "getglobal",
+        "magnifyingglass",
+        "Nerc",
+        "RESETSAVEDVARS",
+        "roundhighlight",
+        "strsplit",
+        "tinsert",
+        "TOPLEFT",
+        "TOPRIGHT",
+        "wordwrap",
+        "yxxx"
+    ],
+    "Lua.diagnostics.globals": [
+        "StaticPopupDialogs",
+        "StaticPopup_Show",
+        "CreateDataProvider",
+        "CreateScrollBoxListLinearView",
+        "ScrollUtil",
+        "UISpecialFrames",
+        "MenuConstants"
+    ],
+}
