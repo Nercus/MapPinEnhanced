@@ -1,0 +1,49 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="radiobutton.lua" />
+
+
+    <CheckButton name="MapPinEnhancedRadioButtonTemplate"
+        mixin="MapPinEnhancedRadioButtonMixin, MapPinEnhancedThemeableMixin" virtual="true">
+        <Size x="200" y="20" />
+        <NormalTexture parentKey="NormalTexture" atlas="common-radiobutton-circle">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
+            </Anchors>
+        </NormalTexture>
+        <HighlightTexture parentKey="HighlightTexture" atlas="common-radiobutton-circle"
+            alphaMode="ADD" alpha="0.2">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
+            </Anchors>
+        </HighlightTexture>
+        <CheckedTexture parentKey="CheckedTexture" atlas="common-radiobutton-dot">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
+            </Anchors>
+        </CheckedTexture>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString name="$parentText" parentKey="text" font="GameFontHighlight"
+                    justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="LEFT" x="22" y="0" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+    </CheckButton>
+
+
+    <Frame name="MapPinEnhancedRadioGroupTemplate"
+        mixin="MapPinEnhancedRadioGroupMixin" virtual="true">
+        <Size x="200" y="0" />
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+
+</Ui>
