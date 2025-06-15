@@ -1,0 +1,29 @@
+## Interface: 110105
+
+## Title: Map Pin Enhanced
+## Notes: @localization(locale="enUS", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-deDE: @localization(locale="deDE", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-ruRU: @localization(locale="ruRU", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-zhCN: @localization(locale="zhCN", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-zhTW: @localization(locale="zhTW", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-koKR: @localization(locale="koKR", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-frFR: @localization(locale="frFR", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-esES: @localization(locale="esES", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-esMX: @localization(locale="esES", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-itIT: @localization(locale="itIT", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Notes-ptBR: @localization(locale="ptBR", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
+## Author: Nerc, Eminos
+## Version: @project-version@
+## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
+
+## X-Website: https://github.com/Nercus/MapPinEnhanced
+## X-License: GNU General Public License v3.0 and CC BY-NC-ND 4.0
+## X-Curse-Project-ID: 441677
+## X-Wago-ID: RqGZqqKd
+
+## OptionalDeps: CallbackHandler-1.0, HereBeDragons, LibDataBroker-1.1, LibDBIcon-1.0, LibDeflate, LibSerialize, LibStub
+## SavedVariables: MapPinEnhancedDB
+
+libs\_imports.xml
+MapPinEnhanced.lua
+modules\_imports.xml
