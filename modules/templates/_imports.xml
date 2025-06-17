@@ -4,4 +4,5 @@
     <Include file="icon.xml" />
     <Include file="button.xml" />
     <Include file="radio.xml" />
+    <Include file="checkbox.xml" />
 </Ui>
