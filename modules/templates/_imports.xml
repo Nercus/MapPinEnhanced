@@ -6,5 +6,6 @@
     <Include file="radio.xml" />
     <Include file="checkbox.xml" />
     <Include file="slider.xml" />
+    <Include file="input.xml" />
     <Include file="statusbar.xml" />
 </Ui>
