@@ -1,11 +1,11 @@
----@class GuildBankLayouts : NercUtilsAddon
-local GuildBankLayouts = LibStub("NercUtils"):GetAddon(...)
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
 
 ---@class MapPinEnhancedThemeableMixin
 ---@field textures table<AVAILABLE_THEMES, table<Texture, table<string, string>>>
 MapPinEnhancedThemeableMixin = {}
 
-local Theme = GuildBankLayouts:GetModule("Theme")
+local Theme = MapPinEnhanced:GetModule("Theme")
 
 ---@enum (key) AVAILABLE_THEMES
 local AVAILABLE_THEMES = {

@@ -1,8 +1,8 @@
----@class GuildBankLayouts : NercUtilsAddon
-local GuildBankLayouts = LibStub("NercUtils"):GetAddon(...)
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
 
 ---@class Theme
-local Theme = GuildBankLayouts:GetModule("Theme")
+local Theme = MapPinEnhanced:GetModule("Theme")
 
 Theme.activeTheme = "Default"
 
@@ -25,7 +25,7 @@ function Theme:SetActiveTheme(theme)
     end
 end
 
-GuildBankLayouts:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     -- Initialize the theme system
     local button = CreateFrame("Button", nil, UIParent, "SharedButtonLargeTemplate")
     button:SetPoint("CENTER")
