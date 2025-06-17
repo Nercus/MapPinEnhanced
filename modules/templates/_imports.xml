@@ -5,4 +5,5 @@
     <Include file="button.xml" />
     <Include file="radio.xml" />
     <Include file="checkbox.xml" />
+    <Include file="slider.xml" />
 </Ui>

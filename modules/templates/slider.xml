@@ -1,0 +1,64 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="slider.lua" />
+
+    <Slider name="MapPinEnhancedSliderTemplate"
+        mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin"
+        virtual="true" inherits="MinimalSliderTemplate" propagateMouseInput="Motion">
+        <Size x="200" y="20" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="valueText" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="-20" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="Back">
+                <Size x="11" y="19" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="LEFT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="Minimal_SliderBar_Button_Left" useAtlasSize="true" />
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick>
+                        local parent = self:GetParent();
+                        parent:SetValue(parent:GetValue() - parent:GetValueStep());
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="Forward">
+                <Size x="9" y="18" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="Minimal_SliderBar_Button_Right" useAtlasSize="true" />
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick>
+                        local parent = self:GetParent();
+                        parent:SetValue(parent:GetValue() + parent:GetValueStep());
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Slider>
+
+
+    <Texture name="MapPinEnhancedSliderTickTemplate" virtual="true"
+        atlas="common-dropdown-icon-radialtick-yellow">
+        <Size x="10" y="10" />
+    </Texture>
+</Ui>
