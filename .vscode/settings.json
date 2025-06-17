@@ -110,8 +110,8 @@
     "wowAPI.luals.defineKnownGlobals": false,
     "Lua.workspace.library": [
         "libs\\NercUtils",
-        "~\\.vscode\\extensions\\ketho.wow-api-0.20.7\\Annotations\\Core",
-        "~\\.vscode\\extensions\\ketho.wow-api-0.20.7\\Annotations\\FrameXML"
+        "~\\.vscode\\extensions\\ketho.wow-api-0.20.8\\Annotations\\Core",
+        "~\\.vscode\\extensions\\ketho.wow-api-0.20.8\\Annotations\\FrameXML"
     ],
     "Lua.runtime.version": "Lua 5.1",
     "Lua.runtime.builtin": {
@@ -125,4 +125,5 @@
         "table": "disable",
         "utf8": "disable"
     },
+    "Lua.type.weakUnionCheck": true,
 }
