@@ -1,6 +1,3 @@
----@class MapPinEnhanced : NercUtilsAddon
-local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
-
 ---@class MapPinEnhancedRadioButtonTemplate : CheckButton
 ---@field value any
 ---@field text FontString
@@ -19,7 +16,6 @@ function MapPinEnhancedRadioGroupMixin:SetActiveOption(value)
 
     ---@param button MapPinEnhancedRadioButtonTemplate
     for button in self.pool:EnumerateActive() do
-        MapPinEnhanced:Debug(button, "Checking button for value:", value)
         button:SetChecked(button.value == value)
     end
 end
