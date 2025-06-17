@@ -4,7 +4,8 @@
 
     <Slider name="MapPinEnhancedSliderTemplate"
         mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin"
-        virtual="true" inherits="MinimalSliderTemplate" propagateMouseInput="Motion">
+        virtual="true" inherits="MinimalSliderTemplate" propagateMouseInput="Motion"
+        obeyStepOnDrag="true">
         <Size x="200" y="20" />
         <Layers>
             <Layer level="ARTWORK">
