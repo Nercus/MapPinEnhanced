@@ -1,4 +1,4 @@
-## Interface: 110105
+## Interface: 110107
 
 ## Title: Map Pin Enhanced
 ## Notes: @localization(locale="enUS", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
