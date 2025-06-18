@@ -1,4 +1,4 @@
-## Interface: 110105
+## Interface: 110107
 
 ## Title: Map Pin Enhanced
 ## Notes: Enhances the functionality of the map pin
