@@ -1,0 +1,50 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="colorpicker.lua" />
+
+    <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin"
+        virtual="true" enableMouse="true" propagateMouseInput="Motion">
+        <Size x="84" y="20" />
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="-1">
+                <Texture parentKey="bg"
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/checkers.png"
+                    vertTile="true" horizTile="true"
+                    setAllPoints="true"
+                />
+                <MaskTexture
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
+                    parentKey="bgMask"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="84" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="bg" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="color"
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
+                    setAllPoints="true">
+                </Texture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="highlight"
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
+                    alpha="0.3">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-2" y="2" />
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="2" y="-2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>

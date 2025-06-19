@@ -8,4 +8,5 @@
     <Include file="slider.xml" />
     <Include file="input.xml" />
     <Include file="statusbar.xml" />
+    <Include file="colorpicker.xml" />
 </Ui>
