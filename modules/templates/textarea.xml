@@ -1,0 +1,38 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="textarea.lua" />
+
+
+    <ScrollFrame name="MapPinEnhancedTextareaTemplate"
+        mixin="MapPinEnhancedTextareaMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        inherits="ScrollFrameTemplate">
+        <KeyValues>
+            <KeyValue key="scrollBarX" value="4" type="number" />
+            <KeyValue key="scrollBarTopY" value="-2" type="number" />
+            <KeyValue key="scrollBarBottomY" value="3" type="number" />
+        </KeyValues>
+        <Scripts>
+            <OnMouseDown method="OnMouseDown" />
+            <OnSizeChanged method="OnSizeChanged" />
+            <OnLoad method="OnLoad" />
+        </Scripts>
+        <ScrollChild>
+            <EditBox parentKey="editbox"
+                multiLine="true" autoFocus="false">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="5"
+                        y="-5" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"
+                        x="-5" y="5" />
+                </Anchors>
+                <FontString inherits="GameFontHighlight" />
+                <Scripts>
+                    <OnLoad function="ScrollingEdit_OnLoad" />
+                    <OnEscapePressed function="EditBox_ClearFocus" />
+                    <OnCursorChanged function="ScrollingEdit_OnCursorChanged" />
+                </Scripts>
+            </EditBox>
+        </ScrollChild>
+    </ScrollFrame>
+</Ui>
