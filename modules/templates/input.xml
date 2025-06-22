@@ -59,7 +59,7 @@
                         local parent = self:GetParent();
                         parent:ClearFocus();
                         parent:SetText("");
-                        parent:UpdateClearButtonVisibilityState();
+                        parent:UpdateClearButtonVisibility();
                     </OnClick>
                 </Scripts>
             </Button>
