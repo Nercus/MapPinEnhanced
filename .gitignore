@@ -9,3 +9,4 @@ desktop.ini
 libs/*
 !libs/_imports.xml
 _old
+**/test.lua
