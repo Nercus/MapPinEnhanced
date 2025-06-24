@@ -16,7 +16,6 @@ MapPinEnhancedAutocompleteMixin = {}
 ---@class MapPinEnhancedAutocompleteSearchResults : Frame
 ---@field noResultsMsg FontString
 
-
 local Utils = MapPinEnhanced:GetModule("Utils")
 local MAX_ENTRIES_TO_SHOW = 10
 
@@ -198,6 +197,7 @@ function MapPinEnhancedAutocompleteMixin:OnGlobalMouseDown()
 end
 
 function MapPinEnhancedAutocompleteMixin:OnLoad()
+    MapPinEnhancedInputMixin.OnLoad(self)
     self.pool = CreateFramePool("Button", self.SearchResults, "MapPinEnhancedAutocompleteEntryTemplate")
     self.entryList = {}
     self.selectedEntryIndex = 1

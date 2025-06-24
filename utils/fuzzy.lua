@@ -260,6 +260,12 @@ function Utils:Filter(needle, haystacks, case_sensitive)
             table.insert(result, { i = i, p = p, s = s, line = line })
         end
     end
+    ---@param a SearchResult
+    ---@param b SearchResult
+    ---@return boolean
+    table.sort(result, function(a, b)
+        return a.s > b.s
+    end)
 
     return result
 end

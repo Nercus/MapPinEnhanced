@@ -3,7 +3,8 @@
     <Script file="autocomplete.lua" />
 
     <EditBox name="MapPinEnhancedAutocompleteTemplate"
-        mixin="MapPinEnhancedAutocompleteMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        mixin="MapPinEnhancedAutocompleteMixin, MapPinEnhancedThemeableMixin"
+        virtual="true"
         font="GameFontHighlight" autoFocus="false" multiLine="false"
         inherits="MapPinEnhancedInputTemplate">
         <Frames>

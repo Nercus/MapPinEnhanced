@@ -64,7 +64,7 @@
                 </Scripts>
             </Button>
             <Frame parentKey="inlineLabel" hidden="true">
-                <Size x="100" y="1" />
+                <Size x="100" y="20" />
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture atlas="QuestSharing-QuestPane-ModifiersBG" setAllPoints="true"
@@ -84,8 +84,7 @@
                     </Layer>
                 </Layers>
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="1" />
-                    <Anchor point="BOTTOMLEFT" x="1" />
+                    <Anchor point="LEFT" x="1" />
                 </Anchors>
             </Frame>
         </Frames>
@@ -96,6 +95,7 @@
                 self.left:SetSize(height / 2.5, height)
                 self.right:SetSize(height / 2.5, height)
                 self.middle:SetSize(height / 2.5, height)
+                self.inlineLabel:SetHeight(height);
             </OnSizeChanged>
             <OnEscapePressed method="OnEscapePressed" />
             <OnEditFocusGained method="OnEditFocusGained" />
