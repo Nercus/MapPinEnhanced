@@ -1,0 +1,130 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="autocomplete.lua" />
+
+    <EditBox name="MapPinEnhancedAutocompleteTemplate"
+        mixin="MapPinEnhancedAutocompleteMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        font="GameFontHighlight" autoFocus="false" multiLine="false"
+        inherits="MapPinEnhancedInputTemplate">
+        <Frames>
+            <Frame parentKey="SearchResults" frameStrata="DIALOG" enableMouse="true" hidden="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="4" y="-3" />
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="-4" y="-3" />
+                </Anchors>
+                <Size x="0" y="150" />
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" atlas="auctionhouse-background-index"
+                            setAllPoints="true" />
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="borderLeft"
+                            file="interface/common/commonsearch" scale="0.75">
+                            <Size x="20" y="0" />
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="8" right="8"
+                                top="20" bottom="20" />
+                            <TexCoords left="0.88671875" right="0.94921875"
+                                top="0.3359375"
+                                bottom="0.6484375" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-6" y="6" />
+                                <Anchor point="BOTTOMLEFT" x="-6" y="-6" />
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="borderRight"
+                            file="interface/common/commonsearch" scale="0.75">
+                            <Size x="20" y="0" />
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="8" right="8"
+                                top="20" bottom="20" />
+                            <TexCoords left="0.00390625" right="0.06640625"
+                                top="0.6640625"
+                                bottom="0.9765625" />
+                            <Anchors>
+                                <Anchor point="TOPRIGHT" x="6" y="6" />
+                                <Anchor point="BOTTOMRIGHT" x="6" y="-6" />
+                            </Anchors>
+                        </Texture>
+                        <Texture parentKey="borderMiddle"
+                            file="interface/common/commonsearch" scale="0.75">
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="8" right="8"
+                                top="20" bottom="20" />
+                            <TexCoords left="0" right="0.0625"
+                                top="0.0078125"
+                                bottom="0.3203125" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.borderLeft"
+                                    relativePoint="TOPRIGHT" />
+                                <Anchor point="TOPRIGHT" relativeKey="$parent.borderRight"
+                                    relativePoint="TOPLEFT" />
+                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.borderLeft"
+                                    relativePoint="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.borderRight"
+                                    relativePoint="BOTTOMLEFT" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="noResultsMsg" inherits="GameFontDisableSmall"
+                            justifyH="LEFT" justifyV="MIDDLE"
+                            text="BROWSE_NO_RESULTS">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="10" />
+                                <Anchor point="BOTTOMRIGHT" x="-10" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture atlas="Spinner_Ring" hidden="true"
+                    parentKey="loadingIndicator">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="Anim" looping="REPEAT">
+                            <Rotation childKey="Spinner" order="1" duration="1" degrees="-360" />
+                        </AnimationGroup>
+                    </Animations>
+                    <Scripts>
+                        <OnShow>
+                            self.Anim:Play();
+                        </OnShow>
+                        <OnHide>
+                            self.Anim:Stop();
+                        </OnHide>
+                    </Scripts>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnTextChanged method="OnTextChanged" intrinsicOrder="postcall" />
+            <OnKeyDown method="OnKeyDown" intrinsicOrder="postcall" />
+            <OnEditFocusLost method="OnEditFocusLost" />
+        </Scripts>
+    </EditBox>
+
+
+    <Button name="MapPinEnhancedAutocompleteEntryTemplate"
+        mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
+        <Size x="0" y="20" />
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString inherits="GameFontNormalSmall" parentKey="text"
+                    justifyH="LEFT" justifyV="MIDDLE" setAllPoints="true" />
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture setAllPoints="true" atlas="AftLevelup-CloudyLineRight" alpha="0.3" />
+            </Layer>
+        </Layers>
+        <ButtonText inherits="GameFontNormalSmall" />
+    </Button>
+</Ui>

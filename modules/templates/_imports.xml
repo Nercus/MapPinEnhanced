@@ -11,4 +11,5 @@
     <Include file="colorpicker.xml" />
     <Include file="image.xml" />
     <Include file="textarea.xml" />
+    <Include file="autocomplete.xml" />
 </Ui>
