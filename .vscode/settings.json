@@ -51,7 +51,7 @@
     "explorer.fileNesting.expand": true,
     "explorer.fileNesting.patterns": {
         "*.lua": "${capture}.lua, ${capture}.xml",
-        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, LICENSE, CHANGELOG.md"
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, LICENSE, CHANGELOG.md, .pre-commit-config.yaml, install-deps.sh",
     },
     "explorer.sortOrder": "default",
     "Lua.completion.autoRequire": false,
