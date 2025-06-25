@@ -54,6 +54,7 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnValueChanged method="OnValueChanged" />
         </Scripts>
     </Slider>
 

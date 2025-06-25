@@ -1,12 +1,19 @@
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+
 ---@class MapPinEnhancedRadioButtonTemplate : CheckButton
 ---@field value any
 ---@field text FontString
-MapPinEnhancedRadioButtonMixin = {}
 
 ---@class MapPinEnhancedRadioGroupTemplate : Frame
----@field options {label: string, value: any, onValueChanged: function}[]
+---@field options MapPinEnhancedRadioGroupOption[]
 ---@field activeOption any
 MapPinEnhancedRadioGroupMixin = {}
+
+
+---@class MapPinEnhancedRadioGroupOption
+---@field label string -- The text displayed on the radio button
+---@field value any -- The value associated with the radio button
 
 --- Sets the selected radio button by value.
 ---@param value any
@@ -17,6 +24,10 @@ function MapPinEnhancedRadioGroupMixin:SetActiveOption(value)
     ---@param button MapPinEnhancedRadioButtonTemplate
     for button in self.pool:EnumerateActive() do
         button:SetChecked(button.value == value)
+    end
+
+    if self.onChangeCallback then
+        self.onChangeCallback(value)
     end
 end
 
@@ -33,7 +44,6 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
         button.value = option.value
 
         button:SetScript("OnClick", function()
-            option.onValueChanged(button:GetChecked())
             self:SetActiveOption(option.value)
         end)
 
@@ -52,7 +62,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
 end
 
 --- Sets the options for the radio button group and builds the buttons.
----@param options {label: string, value: any, onValueChanged: function}[]
+---@param options MapPinEnhancedRadioGroupOption[]
 function MapPinEnhancedRadioGroupMixin:SetOptions(options)
     assert(type(options) == "table", "Options must be a table.")
     self.options = options
@@ -81,4 +91,40 @@ function MapPinEnhancedRadioGroupMixin:SetValue(value)
         end
     end
     error("Value not found in options: " .. tostring(value))
+end
+
+---@param callback fun(isChecked: boolean)
+function MapPinEnhancedRadioGroupMixin:SetCallback(callback)
+    assert(type(callback) == "function", "Callback must be a function.")
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+end
+
+---@class MapPinEnhancedRadioGroupData
+---@field options MapPinEnhancedRadioGroupOption[] -- options for the radio buttons
+---@field onChange fun(value: any)
+---@field init? fun(): any -- initial value can be nil if option has never been set before
+
+---@param formData MapPinEnhancedRadioGroupData
+function MapPinEnhancedRadioGroupMixin:Setup(formData)
+    assert(type(formData) == "table", "Form data must be a table.")
+    assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self:SetOptions(formData.options or {})
+    if formData.init then
+        assert(type(formData.init) == "function", "init must be a function")
+        local initialValue = formData.init()
+        if initialValue ~= nil then
+            self:SetActiveOption(initialValue)
+        else
+            self:SetActiveOption(self.options[1].value) -- default to first option if init returns nil
+        end
+    else
+        if #self.options > 0 then
+            self:SetActiveOption(self.options[1].value) -- default to first option if no init function is provided
+        else
+            self:SetActiveOption(nil)                   -- no options available
+        end
+    end
+
+    self:SetCallback(formData.onChange)
 end

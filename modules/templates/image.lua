@@ -3,7 +3,7 @@
 MapPinEnhancedImageMixin = {}
 
 
-
+---@param imagePath string
 function MapPinEnhancedImageMixin:SetImage(imagePath)
     self.imagePath = imagePath
     if not self.imagePath or self.imagePath == "" then

@@ -3,7 +3,8 @@
     <Include file="checkbox.lua" />
 
     <CheckButton name="MapPinEnhancedCheckboxTemplate"
-        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true">
+        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin"
+        virtual="true">
         <Size x="200" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="checkbox-minimal">
             <Size x="20" y="20" />

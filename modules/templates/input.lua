@@ -1,3 +1,6 @@
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+
 ---@class MapPinEnhancedInputTemplate : EditBox
 ---@field left Texture
 ---@field right Texture
@@ -66,6 +69,7 @@ function MapPinEnhancedInputMixin:SetInlineLabel(label)
     self:UpdatePlaceholderPosition()
 end
 
+---@param icon MapPinEnhancedIcon
 function MapPinEnhancedInputMixin:SetInlineIcon(icon)
     if not icon then
         self:ResetInline()
@@ -127,4 +131,40 @@ function MapPinEnhancedInputMixin:OnEditFocusGained()
     self:HighlightText()
     self:UpdateClearButtonVisibility()
     self:UpdatePlaceholderVisibility()
+end
+
+---@param callback fun(isChecked: boolean)
+function MapPinEnhancedInputMixin:SetCallback(callback)
+    assert(type(callback) == "function", "Callback must be a function.")
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+end
+
+---@class MapPinEnhancedInputData
+---@field onChange fun(text: string)
+---@field init? fun(): string -- initial value can be nil if option has never been set before
+
+---@param formData MapPinEnhancedInputData
+function MapPinEnhancedInputMixin:Setup(formData)
+    assert(type(formData) == "table", "Form data must be a table.")
+    assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+
+    if formData.init then
+        assert(type(formData.init) == "function", "init must be a function")
+        local initialValue = formData.init()
+        if initialValue ~= nil then
+            self:SetText(initialValue)
+        end
+    else
+        self:SetText("") -- default to empty if no init function is provided
+    end
+
+    self:SetCallback(formData.onChange)
+    self:SetScript("OnTextChanged", function(_, userInput)
+        if self.onChangeCallback and userInput then
+            self.onChangeCallback(self:GetText())
+        end
+        self:UpdatePlaceholderVisibility()
+        self:UpdateClearButtonVisibility()
+    end)
 end

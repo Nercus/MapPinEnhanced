@@ -1,3 +1,6 @@
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+
 ---@class MapPinEnhancedSliderTemplate : Slider
 ---@field valueText FontString
 ---@field Back Button
@@ -52,33 +55,27 @@ end
 
 function MapPinEnhancedSliderMixin:OnLoad()
     self.tickPool = CreateTexturePool(self, "ARTWORK", 1, "MapPinEnhancedSliderTickTemplate")
-    -- hook into setscript and every time a script is set hook it and also hook the textformatting
-    hooksecurefunc(self, "SetScript", function(_, scriptName, func)
-        if scriptName == "OnValueChanged" then
-            self:HookScript(scriptName, function(_, ...)
-                local value = select(1, ...)
-                if value then
-                    self.valueText:SetText(roundValueToPrecision(value, self:GetValueStep()))
-                    for tickValue, tick in pairs(self.ticks) do
-                        if tickValue == value then
-                            tick:SetHeight(20)
-                        else
-                            tick:SetHeight(10)
-                        end
-                        if tickValue <= value then
-                            tick:SetDesaturated(false)
-                        else
-                            tick:SetDesaturated(true)
-                        end
-                    end
-                end
-            end)
-        end
-    end)
+end
 
-    hooksecurefunc(self, "SetValueStep", function(_, step)
-        self:UpdateTicks()
-    end)
+function MapPinEnhancedSliderMixin:OnValueChanged(value)
+    if value then
+        self.valueText:SetText(roundValueToPrecision(value, self:GetValueStep()))
+        for tickValue, tick in pairs(self.ticks) do
+            if tickValue == value then
+                tick:SetHeight(20)
+            else
+                tick:SetHeight(10)
+            end
+            if tickValue <= value then
+                tick:SetDesaturated(false)
+            else
+                tick:SetDesaturated(true)
+            end
+        end
+    end
+    if self.onChangeCallback then
+        self.onChangeCallback(value)
+    end
 end
 
 ---@param disabled boolean
@@ -98,4 +95,37 @@ function MapPinEnhancedSliderMixin:SetDisabledState(disabled)
         self.Forward:Enable()
         self.Forward:SetAlpha(1)
     end
+end
+
+---@param callback fun(isChecked: boolean)
+function MapPinEnhancedSliderMixin:SetCallback(callback)
+    assert(type(callback) == "function", "Callback must be a function.")
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+end
+
+---@class MapPinEnhancedSliderData
+---@field onChange fun(value: number)
+---@field init? fun(): number -- initial value can be nil if option has never been set before
+---@field min number -- minimum value of the slider
+---@field max number -- maximum value of the slider
+---@field step number -- step value of the slider
+
+---@param formData MapPinEnhancedSliderData
+function MapPinEnhancedSliderMixin:Setup(formData)
+    assert(type(formData) == "table", "Form data must be a table.")
+    assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self:SetMinMaxValues(formData.min, formData.max)
+    self:SetValueStep(formData.step or 1)
+    self:UpdateTicks()
+    if formData.init then
+        assert(type(formData.init) == "function", "init must be a function")
+        local initialValue = formData.init()
+        if initialValue ~= nil then
+            self:SetValue(initialValue)
+        end
+    end
+
+
+    self:SetCallback(formData.onChange)
 end

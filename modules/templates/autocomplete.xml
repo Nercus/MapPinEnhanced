@@ -107,8 +107,8 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnTextChanged method="OnTextChanged" intrinsicOrder="postcall" />
-            <OnKeyDown method="OnKeyDown" intrinsicOrder="postcall" />
+            <OnTextChanged method="OnTextChanged" />
+            <OnKeyDown method="OnKeyDown" />
             <OnEditFocusLost method="OnEditFocusLost" />
         </Scripts>
     </EditBox>

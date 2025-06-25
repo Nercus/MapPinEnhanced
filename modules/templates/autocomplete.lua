@@ -10,14 +10,36 @@ local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
 ---@field filterFunction function
 ---@field entryList MapPinEnhancedAutocompleteEntryTemplate[]
 ---@field selectedEntryIndex number
----@field options {label: string, value: any}[]
+---@field options AutocompleteOption[]
+---@field optionsValueMap table<string, any>
 MapPinEnhancedAutocompleteMixin = {}
 
 ---@class MapPinEnhancedAutocompleteSearchResults : Frame
 ---@field noResultsMsg FontString
 
+---@alias AutocompleteOption {label: string, searchString: string, value: any}
+
 local Utils = MapPinEnhanced:GetModule("Utils")
 local MAX_ENTRIES_TO_SHOW = 10
+
+---@param value any this could be the searchstring or the value of the option
+function MapPinEnhancedAutocompleteMixin:SetValue(value)
+    local option = self.optionsValueMap[value]
+    if not option then
+        for _, opt in ipairs(self.options) do
+            if opt.value == value then
+                option = opt
+                break
+            end
+        end
+    end
+    self.activeValue = option
+    self:SetText(option.label)
+    self:UpdatePlaceholderVisibility()
+    if self.onChangeCallback then
+        self.onChangeCallback(option.value)
+    end
+end
 
 ---@param results SearchResult[]
 function MapPinEnhancedAutocompleteMixin:ShowAutocomplete(results)
@@ -65,7 +87,7 @@ function MapPinEnhancedAutocompleteMixin:ShowAutocomplete(results)
         entry:Show()
 
         entry:SetScript("OnClick", function()
-            self:SetText(result.line)
+            self:SetValue(result.line)
             self.pool:ReleaseAll()
             self.SearchResults:Hide()
             self:SetLoadingIndicatorVisibility(false)
@@ -95,7 +117,15 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
         self.SearchResults:Hide()
         return
     end
+    if self.searchText == text then
+        -- No change in text, no need to update
+        return
+    end
 
+    if self.activeValue and self.activeValue.label == text then
+        -- If the value is already set to the current text, no need to update
+        return
+    end
     self:SetLoadingIndicatorVisibility(true)
     self.searchText = text
     self.filterFunction()
@@ -120,15 +150,15 @@ function MapPinEnhancedAutocompleteMixin:SetLoadingIndicatorVisibility(visible)
     end
 end
 
----@param options {label: string, value: any}[]
+---@param options AutocompleteOption[]
 function MapPinEnhancedAutocompleteMixin:SetOptions(options)
     assert(type(options) == "table", "Options must be a table.")
     self.options = options
     self.searchOptions = {}
+    self.optionsValueMap = {}
     for _, option in ipairs(options) do
-        if option.label and option.value then
-            table.insert(self.searchOptions, option.label)
-        end
+        self.optionsValueMap[option.searchString] = option
+        table.insert(self.searchOptions, option.searchString)
     end
     self.filterFunction = MapPinEnhanced:DebounceChange(function()
         self:UpdateAutocomplete()
@@ -162,7 +192,7 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
     elseif key == "ENTER" then
         local entry = self.entryList[self.selectedEntryIndex]
         if entry then
-            self:SetText(entry.resultValue)
+            self:SetValue(entry.resultValue)
             self.pool:ReleaseAll()
             self.SearchResults:Hide()
             self:SetLoadingIndicatorVisibility(false)
@@ -201,6 +231,35 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     self.pool = CreateFramePool("Button", self.SearchResults, "MapPinEnhancedAutocompleteEntryTemplate")
     self.entryList = {}
     self.selectedEntryIndex = 1
+end
+
+---@class MapPinEnhancedAutocompleteData
+---@field options AutocompleteOption[] list of options to show in the autocomplete
+---@field onChange fun(value: any) callback when an option is selected
+---@field init? fun(): any initial value for the autocomplete
+
+---@param callback fun(value: any)
+function MapPinEnhancedAutocompleteMixin:SetCallback(callback)
+    assert(type(callback) == "function", "Callback must be a function.")
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+end
+
+---@param formData MapPinEnhancedAutocompleteData
+function MapPinEnhancedAutocompleteMixin:Setup(formData)
+    assert(type(formData) == "table", "Form data must be a table.")
+    assert(type(formData.options) == "table", "Options must be a table.")
+    assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self:SetOptions(formData.options)
+    if formData.init then
+        local initialValue = formData.init()
+        if initialValue then
+            self:SetValue(initialValue)
+        end
+    end
+
+    self:SetCallback(formData.onChange)
+    self:UpdatePlaceholderVisibility()
 end
 
 ---@class MapPinEnhancedAutocompleteEntryTemplate : Button

@@ -1,12 +1,10 @@
+---@class MapPinEnhanced : NercUtilsAddon
+local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+
 ---@class MapPinEnhancedButtonTemplate : Button
 ---@field icon MapPinEnhancedIconMixin
 ---@field text FontString
 MapPinEnhancedButtonMixin = {};
-
-
-
-function MapPinEnhancedButtonMixin:OnLoad()
-end
 
 function MapPinEnhancedButtonMixin:Update()
     -- 3 different states for the button
@@ -52,4 +50,26 @@ end
 function MapPinEnhancedButtonMixin:SetLabel(label)
     self:SetText(label)
     self:Update()
+end
+
+---@param callback fun(value: mouseButton, down: boolean)
+function MapPinEnhancedButtonMixin:SetCallback(callback)
+    assert(type(callback) == "function", "Callback must be a function.")
+    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+end
+
+---@class MapPinEnhancedButtonData
+---@field onChange fun(value: mouseButton, down: boolean)
+
+---@param formData MapPinEnhancedButtonData
+function MapPinEnhancedButtonMixin:Setup(formData)
+    assert(type(formData) == "table", "Form data must be a table.")
+    assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self:SetCallback(formData.onChange)
+    self:SetScript("OnClick", function(_, button, down)
+        if self.onChangeCallback then
+            self.onChangeCallback(button, down)
+        end
+    end)
 end

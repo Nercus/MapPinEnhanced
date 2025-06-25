@@ -3,7 +3,8 @@
     <Include file="statusbar.lua" />
 
     <StatusBar name="MapPinEnhancedStatusbarTemplate"
-        mixin="MapPinEnhancedStatusbarMixin, MapPinEnhancedThemeableMixin" virtual="true">
+        mixin="MapPinEnhancedStatusbarMixin, MapPinEnhancedThemeableMixin"
+        virtual="true">
         <BarTexture atlas="plunderstorm-stormbar-fill" desaturated="true" />
 
         <Layers>

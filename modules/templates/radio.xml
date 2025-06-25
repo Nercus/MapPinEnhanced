@@ -4,7 +4,8 @@
 
 
     <CheckButton name="MapPinEnhancedRadioButtonTemplate"
-        mixin="MapPinEnhancedRadioButtonMixin, MapPinEnhancedThemeableMixin" virtual="true">
+        mixin="MapPinEnhancedThemeableMixin"
+        virtual="true">
         <Size x="200" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="common-radiobutton-circle">
             <Size x="20" y="20" />
