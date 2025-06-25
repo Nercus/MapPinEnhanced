@@ -29,7 +29,7 @@
     ],
     "dryerLint.ruleSets": [
         {
-            "glob": "{*.lua,**/!(libs)/**/*.lua}",
+            "glob": "{*.lua,**/!(libs|.hooks)/**/*.lua}",
             "language": "lua",
             "name": "WoW Addon Code Styling",
             "rules": [

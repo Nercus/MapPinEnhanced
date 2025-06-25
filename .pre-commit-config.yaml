@@ -1,0 +1,10 @@
+exclude: ^(\.hooks/|libs/)
+
+repos:
+  - repo: local
+    hooks:
+      - id: check-imports
+        name: Check Imports
+        entry: lua .hooks/check-imports.lua
+        language: system
+        types: [lua]
