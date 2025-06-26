@@ -55,6 +55,7 @@ function MapPinEnhanced:SetDefault(...)
         if not currentTable[key] then
             currentTable[key] = {}
         end
+        ---@type table<string, boolean | number | string | table>
         currentTable = currentTable[key]
     end
     if type(currentTable) ~= "table" then
