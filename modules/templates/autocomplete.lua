@@ -1,5 +1,5 @@
----@class MapPinEnhanced : NercUtilsAddon
-local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedAutocompleteTemplate : MapPinEnhancedInputTemplate
 ---@field loadingIndicator Texture
@@ -19,7 +19,6 @@ MapPinEnhancedAutocompleteMixin = {}
 
 ---@alias AutocompleteOption {label: string, searchString: string, value: any}
 
-local Utils = MapPinEnhanced:GetModule("Utils")
 local MAX_ENTRIES_TO_SHOW = 10
 
 ---@param value any this could be the searchstring or the value of the option
@@ -138,7 +137,7 @@ function MapPinEnhancedAutocompleteMixin:UpdateAutocomplete()
         return
     end
 
-    local results = Utils:Filter(self.searchText, self.searchOptions, false)
+    local results = MapPinEnhanced:Filter(self.searchText, self.searchOptions, false)
     self:ShowAutocomplete(results)
 end
 

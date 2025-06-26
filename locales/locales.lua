@@ -1,4 +1,6 @@
 ---@class MapPinEnhanced
+---@field L table<string, string> a list of localization strings for the addon
+---@field locale AceLocale.LocaleCode the locale for the addon
 local MapPinEnhanced = select(2, ...)
 
 -- might want to check out using the @localization@ in the future for curseforge translations

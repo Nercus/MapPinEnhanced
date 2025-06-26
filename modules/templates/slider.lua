@@ -1,5 +1,5 @@
----@class MapPinEnhanced : NercUtilsAddon
-local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedSliderTemplate : Slider
 ---@field valueText FontString

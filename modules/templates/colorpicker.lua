@@ -1,3 +1,6 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedColorpickerTemplate : Button
 ---@field r number
 ---@field g number
@@ -17,12 +20,6 @@ MapPinEnhancedColorpickerMixin = {}
 ---@field g number
 ---@field b number
 ---@field a number
-
-
-
----@class MapPinEnhanced : NercUtilsAddon
-local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
-
 
 local ColorPickerFrame = ColorPickerFrame
 
