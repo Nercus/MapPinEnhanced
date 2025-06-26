@@ -1,8 +1,6 @@
----@class MapPinEnhanced : NercUtilsAddon
-local MapPinEnhanced = LibStub("NercUtils"):GetAddon(...)
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
 
----@class Utils
-local Utils = MapPinEnhanced:GetModule("Utils")
 
 -- https://github.com/swarn/fzy-lua
 -- The MIT License (MIT)
@@ -252,7 +250,7 @@ end
 ---@param haystacks string[]
 ---@param case_sensitive boolean|nil
 ---@return SearchResult[]
-function Utils:Filter(needle, haystacks, case_sensitive)
+function MapPinEnhanced:Filter(needle, haystacks, case_sensitive)
     local result = {}
     for i, line in ipairs(haystacks) do
         if has_match(needle, line, case_sensitive) then

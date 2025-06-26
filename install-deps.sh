@@ -19,8 +19,5 @@ git clone https://repos.wowace.com/wow/herebedragons ./libs/HereBeDragons
 # LibDataBroker
 git clone https://github.com/tekkub/libdatabroker-1-1 ./libs/LibDataBroker-1.1
 
-# NercUtils
-git clone https://github.com/Nercus/NercUtils ./libs/NercUtils
-
 # Remove .git directories from cloned repositories
 find ./libs -type d -name ".git" -exec rm -rf {} +
