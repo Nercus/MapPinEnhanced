@@ -1,0 +1,110 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="modules.lua" />
+    <Include file="menu.lua" />
+    <Include file="persistence.lua" />
+    <Include file="print.lua" />
+    <Include file="async.lua" />
+    <Include file="events.lua" />
+    <Include file="slash.lua" />
+    <Include file="tests.lua" />
+    <Include file="debug.lua" />
+    <Include file="fuzzy.lua" />
+
+    <!--@do-not-package@-->
+    <Frame
+        name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
+        inherits="DefaultPanelTemplate"
+        frameStrata="HIGH" frameLevel="100" hidden="true" virtual="true"
+        mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">
+        <Size x="640" y="130" />
+        <Anchors>
+            <Anchor point="BOTTOM" x="0" y="5" />
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontNormal"
+                    text="Press 1 to reload UI">
+                    <Anchors>
+                        <Anchor point="TOP" x="0" y="-30" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="debugMenuButton" inherits="SharedButtonLargeTemplate"
+                text="Open Debug Menu">
+                <Size x="150" y="40" />
+                <Anchors>
+                    <Anchor point="LEFT" x="15" y="0" />
+                </Anchors>
+            </Button>
+            <Button parentKey="resetVarsButton" inherits="SharedButtonLargeTemplate"
+                text="Reset Saved Vars">
+                <Size x="150" y="40" />
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.debugMenuButton" relativePoint="RIGHT"
+                        x="5" y="0" />
+                </Anchors>
+            </Button>
+            <Button parentKey="debugAddonButton" inherits="SharedButtonLargeTemplate"
+                text="Debug Addon">
+                <Size x="150" y="40" />
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.resetVarsButton" relativePoint="RIGHT"
+                        x="5" y="0" />
+                </Anchors>
+            </Button>
+            <Button parentKey="exitDevButton" inherits="SharedButtonLargeTemplate"
+                text="Exit Dev Mode">
+                <Size x="150" y="40" />
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.debugAddonButton"
+                        relativePoint="RIGHT" x="5" y="0" />
+                </Anchors>
+            </Button>
+            <StatusBar parentKey="testStatusbar">
+                <Size x="420" y="27" />
+                <Anchors>
+                    <Anchor point="BOTTOM" x="0" y="10" />
+                </Anchors>
+                <BarTexture file="Interface/AddOns/YourAddon/delves-dashboard-bar-fill" />
+                <Layers>
+                    <Layer level="BORDER">
+                        <Texture atlas="delves-dashboard-bar-border">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-1" y="1" />
+                                <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="label" inherits="GameFontNormal"
+                            text="Test StatusBar">
+                            <Anchors>
+                                <Anchor point="CENTER" x="0" y="1" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Button parentKey="runTestsButton">
+                        <Size x="30" y="30" />
+                        <Anchors>
+                            <Anchor point="LEFT" relativePoint="RIGHT" x="5" y="0" />
+                        </Anchors>
+                        <NormalTexture
+                            atlas="CreditsScreen-Assets-Buttons-Play" setAllPoints="true" />
+                        <HighlightTexture atlas="UI-Frame-CypherChoice-Portrait-FX-GoldGlow"
+                            setAllPoints="true" alpha="0.3" />
+                    </Button>
+                </Frames>
+            </StatusBar>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnKeyDown method="OnKeyDown" />
+        </Scripts>
+    </Frame>
+    <!--@end-do-not-package@-->
+</Ui>
