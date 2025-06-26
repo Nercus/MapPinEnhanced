@@ -8,3 +8,4 @@ repos:
         entry: lua .hooks/check-imports.lua
         language: system
         types: [lua]
+        exclude: ^libs/
