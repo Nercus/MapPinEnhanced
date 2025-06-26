@@ -1,6 +1,11 @@
 ---@diagnostic disable: no-unknown, undefined-global
 
 local function check_imports(xmlfile, errors)
+    -- Exclude files in 'libs' or 'hooks' folders
+    if xmlfile:match("[/\\]libs[/\\]") or xmlfile:match("[/\\]hooks[/\\]") then
+        return
+    end
+
     local xmldir = xmlfile:match("^(.*)[/\\][^/\\]+$") or "."
     for line in io.lines(xmlfile) do
         for importfile in line:gmatch('file="([^"]+)"') do
