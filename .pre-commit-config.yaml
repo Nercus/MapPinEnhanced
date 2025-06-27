@@ -9,3 +9,8 @@ repos:
         language: system
         types: [lua]
         exclude: ^libs/
+      - id: luals-check
+        name: LuaLS Check
+        entry: lua .hooks/luals-check.lua
+        language: system
+        types:
