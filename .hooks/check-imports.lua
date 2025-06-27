@@ -1,5 +1,18 @@
 ---@diagnostic disable: no-unknown, undefined-global
 
+local function get_staged_xml_files()
+    local files = {}
+    local p = io.popen('git diff --cached --name-only')
+    if not p then return files end
+    for file in p:lines() do
+        if file:lower():match("%.xml$") then
+            table.insert(files, file)
+        end
+    end
+    p:close()
+    return files
+end
+
 local function check_imports(xmlfile, errors)
     -- Exclude files in 'libs' or 'hooks' folders
     if xmlfile:match("[/\\]libs[/\\]") or xmlfile:match("[/\\]hooks[/\\]") then
@@ -23,8 +36,8 @@ local function check_imports(xmlfile, errors)
 end
 
 local errors = {}
-for i = 1, #arg do
-    local xmlfile = arg[i]
+local staged_files = get_staged_xml_files()
+for _, xmlfile in ipairs(staged_files) do
     check_imports(xmlfile, errors)
 end
 
@@ -33,5 +46,5 @@ if #errors > 0 then
     print("Commit aborted: One or more imported files are missing.")
     os.exit(1)
 else
-    print("All XML imports in provided files exist. Proceeding.")
+    print("All XML imports in staged files exist. Proceeding.")
 end
