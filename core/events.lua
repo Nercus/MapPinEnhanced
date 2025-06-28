@@ -2,6 +2,9 @@
 ---@field registeredEvents table<WowEvent, function[]>
 local MapPinEnhanced = select(2, ...)
 
+---@type CallbackHandler-1.0
+local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0");
+
 ---Register an event for a function to be called when the event is fired
 ---@param event WowEvent the event to register for
 ---@param func function the function to call when the event is fired
@@ -64,4 +67,47 @@ function MapPinEnhanced:UnregisterEvent(event)
     end
     self.registeredEvents[event] = nil
     self.addonEventFrame:UnregisterEvent(event)
+end
+
+---@class CallbackTarget
+---@field RegisterCallback fun(self: CallbackTarget, event: string, func: function, ...)
+---@field UnregisterCallback fun(self: CallbackTarget, event: string, func: function)
+---@field UnregisterAllCallbacks fun(self: CallbackTarget, event: string)
+local callbackTarget = {}
+local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback", "UnregisterCallback",
+    "UnregisterAllCallbacks");
+
+---@enum CallbackEvent
+local CALLBACK_EVENTS = {
+    MY_TEST_EVENT = "MY_TEST_EVENT"
+}
+
+
+---@param callbackEvent CallbackEvent
+---@param func function
+---@param ... any
+function MapPinEnhanced:RegisterCallback(callbackEvent, func, ...)
+    assert(callbackEvent, "Callback event must be provided")
+    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
+    assert(func, "Function must be provided")
+
+    callbackTarget:RegisterCallback(callbackEvent, func, ...)
+end
+
+---@param callbackEvent CallbackEvent
+---@param func function
+function MapPinEnhanced:UnregisterCallback(callbackEvent, func)
+    assert(callbackEvent, "Callback event must be provided")
+    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
+    assert(func, "Function must be provided")
+
+    callbackTarget:UnregisterCallback(callbackEvent, func)
+end
+
+---@param callbackEvent CallbackEvent
+---@param ... any
+function MapPinEnhanced:FireCallback(callbackEvent, ...)
+    assert(callbackEvent, "Callback event must be provided")
+    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
+    callbackRegistry:Fire(callbackEvent, ...)
 end
