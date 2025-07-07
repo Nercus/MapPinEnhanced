@@ -9,8 +9,9 @@ local function CreatePin()
     return CreateAndInitFromMixin(MapPinEnhancedPinMixin, pinID)
 end
 
-local function ResetPin(_, pin)
+local function ResetPin(_, pin, isNew)
     if not pin then return end
+    if isNew then return end
     pin:Reset()
 end
 
@@ -25,7 +26,6 @@ function Pins:CreatePin(initPinData)
     local pin = pinsPool:Acquire()
     pin.pinData = initPinData
     pin:SetPinData(initPinData)
-    pin:Untrack() -- untrack the pin by default
     return pin
 end
 
