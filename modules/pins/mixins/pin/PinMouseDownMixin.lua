@@ -11,7 +11,7 @@ function MapPinEnhancedPinMouseDownMixin:OnMouseDown(frame, button)
     local shift, ctrl = IsShiftKeyDown(), IsControlKeyDown()
     if button == "LeftButton" then
         if ctrl then
-            -- self.group:RemovePin(self)
+            self.group:RemovePin(self.pinID)
             return
         end
         if shift then

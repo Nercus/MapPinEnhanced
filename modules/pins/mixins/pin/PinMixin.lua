@@ -53,7 +53,13 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.color = "Custom"
     end
 
-    -- update the pins on the map
+    self:SetPinColor(self.pinData.color)
+
+    if self.pinData.setTracked then
+        self:Track()
+    else
+        self:Untrack()
+    end
 
     HBDP:AddWorldMapIconMap(MapPinEnhanced, self.worldmapPin, self.pinData.mapID, self.pinData.x, self.pinData.y, 3,
         "PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
@@ -72,6 +78,9 @@ function MapPinEnhancedPinMixin:GetSavableData()
 end
 
 function MapPinEnhancedPinMixin:Reset()
+    -- untrack first to clear the pin
+    self:Untrack()
+
     -- reset pinID
     self.worldmapPin:SetPinID(nil)
     self.minimapPin:SetPinID(nil)
@@ -80,11 +89,10 @@ function MapPinEnhancedPinMixin:Reset()
     self.worldmapPin:Hide()
     self.minimapPin:Hide()
 
-
     -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
-    
+
     -- release the frames back to the pool
     if WorldmapPool:IsActive(self.worldmapPin) then
         WorldmapPool:Release(self.worldmapPin)
@@ -92,8 +100,4 @@ function MapPinEnhancedPinMixin:Reset()
     if MinimapPool:IsActive(self.minimapPin) then
         MinimapPool:Release(self.minimapPin)
     end
-
-    -- remove from world and minimap
-    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
-    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 end

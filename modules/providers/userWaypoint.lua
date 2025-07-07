@@ -7,10 +7,27 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
+-- block SetUserWaypoint calls from other addons which should not trigger the pin provider
+-- MapPinEenhanced is in here as well to prevent infinite loops when the pin provider is used to set a waypoint
+local BLOCKED_ADDON_LIST = {
+    'WorldQuestTracker',
+    MapPinEnhanced.name,
+}
 
----@param waypointData {uiMapID: number, position: {x: number, y: number}}
-local function OnUserWaypoint(waypointData)
-    if not waypointData then return end
+local function isBlockedAddon(stack)
+    for _, blockedAddon in ipairs(BLOCKED_ADDON_LIST) do
+        if stack.find(stack, blockedAddon) then
+            return true
+        end
+    end
+    return false
+end
+
+---@param uiMapPoint {uiMapID: number, position: {x: number, y: number}}
+local function OnUserWaypoint(uiMapPoint)
+    if not uiMapPoint then return end
+    local stack = debugstack(2) ---@type string
+    if isBlockedAddon(stack) then return end -- ignore calls from this function
 
     local title, texture, usesAtlas = Providers:DetectMouseFocusPinInfo()
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
@@ -23,9 +40,9 @@ local function OnUserWaypoint(waypointData)
     local uncategorizedGroup = Groups:GetGroupByName(L["Uncategorized Pins"])
     if not uncategorizedGroup then return end
     uncategorizedGroup:AddPin({
-        mapID = waypointData.uiMapID,
-        x = waypointData.position.x,
-        y = waypointData.position.y,
+        mapID = uiMapPoint.uiMapID,
+        x = uiMapPoint.position.x,
+        y = uiMapPoint.position.y,
         title = title,
         texture = texture,
         usesAtlas = usesAtlas,
@@ -41,7 +58,6 @@ local function HookSetUserWaypoint()
     hooksecurefunc(C_Map, "SetUserWaypoint", OnUserWaypoint)
     isHooked = true
 end
-
 
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HookSetUserWaypoint)

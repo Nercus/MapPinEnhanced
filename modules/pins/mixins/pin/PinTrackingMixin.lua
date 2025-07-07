@@ -7,6 +7,7 @@ MapPinEnhancedPinTrackingMixin = {}
 local Tracking = MapPinEnhanced:GetModule("Tracking")
 
 function MapPinEnhancedPinTrackingMixin:Track()
+    Tracking:UntrackTrackedPin() -- untrack any previously tracked pin
     self:SetBlizzardWaypoint()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
@@ -36,7 +37,7 @@ function MapPinEnhancedPinTrackingMixin:IsTracked()
     return self.isTracked
 end
 
-function MapPinEnhancedPinMixin:SetBlizzardWaypoint()
+function MapPinEnhancedPinTrackingMixin:SetBlizzardWaypoint()
     local x, y, mapID = self.pinData.x, self.pinData.y, self.pinData.mapID
     if not C_Map.CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)
