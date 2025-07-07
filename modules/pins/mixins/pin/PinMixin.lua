@@ -80,9 +80,18 @@ function MapPinEnhancedPinMixin:Reset()
     self.worldmapPin:Hide()
     self.minimapPin:Hide()
 
+
+    -- remove from world and minimap
+    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
+    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
+    
     -- release the frames back to the pool
-    WorldmapPool:Release(self.worldmapPin)
-    MinimapPool:Release(self.minimapPin)
+    if WorldmapPool:IsActive(self.worldmapPin) then
+        WorldmapPool:Release(self.worldmapPin)
+    end
+    if MinimapPool:IsActive(self.minimapPin) then
+        MinimapPool:Release(self.minimapPin)
+    end
 
     -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
