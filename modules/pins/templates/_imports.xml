@@ -5,5 +5,4 @@
     <Include file="WorldmapPin.xml" />
     <Include file="MinimapPin.xml" />
     <!--  <Include file="SuperTrackedPin.xml" /> -->
-    <Include file="pin.lua" />
 </Ui>
