@@ -4,6 +4,8 @@ local MapPinEnhanced = select(2, ...)
 local random = math.random
 local defaultColor = ConsoleGetColorFromType(1)
 
+---@alias UUID string a unique identifier in the format of 'xxxxxxxx-xxxx'
+
 ---Print a formatted message to the chat
 ---@param ... string
 function MapPinEnhanced:Print(...)
