@@ -37,9 +37,10 @@ function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas)
     if icon then
         self.pinData.texture = icon
         self.pinData.usesAtlas = usesAtlas
+        self:SetPinColor("Custom")
     else
         self.pinData.texture = nil
         self.pinData.usesAtlas = nil
+        self:SetPinColor(DEFAULT_PIN_COLOR)
     end
-    self:SetPinColor("Custom")
 end
