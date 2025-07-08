@@ -13,10 +13,13 @@ MapPinEnhancedPinMixin = CreateFromMixins(
     MapPinEnhancedPinMenuMixin,
     MapPinEnhancedPinMouseDownMixin,
     MapPinEnhancedPinColorMixin,
-    MapPinEnhancedPinUtilsMixin
+    MapPinEnhancedPinUtilsMixin,
+    MapPinEnhancedPinTooltipMixin
 )
 
+local L = MapPinEnhanced.L
 local HBDP = MapPinEnhanced.HBDP
+local DEFAULT_PIN_NAME = L["Map Pin"]
 
 
 ---@type FramePool<MapPinEnhancedWorldmapPinTemplate>
@@ -53,8 +56,14 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.color = "Custom"
     end
 
+    if not self.pinData.title or self.pinData.title == "" then
+        self.pinData.title = DEFAULT_PIN_NAME
+    end
+
     self:SetPinColor(self.pinData.color)
     self:SetPinIcon(self.pinData.texture, self.pinData.usesAtlas)
+    self:SetTooltip(self.pinData.tooltip)
+
 
     if self.pinData.setTracked then
         self:Track()

@@ -15,7 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field texture Texture
 ---@field trackedTexture string
 ---@field untrackedTexture string
----@field tooltipFunction function | nil
+---@field tooltipFunction function
 ---@field pinID UUID | nil
 MapPinEnhancedBasePinMixin = {}
 
@@ -118,10 +118,7 @@ end
 ---@param tooltipFun fun(tooltip: GameTooltip)
 function MapPinEnhancedBasePinMixin:UpdateTooltip(tooltipFun)
     -- pinData.tooltip is a function that sets the tooltip for the pin
-    if not tooltipFun then
-        self.tooltipFunction = nil
-        return
-    end
+    if not tooltipFun then return end
     self.tooltipFunction = tooltipFun
 end
 

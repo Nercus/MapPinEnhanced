@@ -4,7 +4,7 @@ MapPinEnhancedWorldmapPinMixin = {}
 function MapPinEnhancedWorldmapPinMixin:OnEnter()
     if not self.tooltipFunction then return end
     GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 20)
-    self.tooltipFunction(GameTooltip)
+    self.tooltipFunction()
     GameTooltip:Show()
 end
 
