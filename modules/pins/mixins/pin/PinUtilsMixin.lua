@@ -24,8 +24,5 @@ function MapPinEnhancedPinUtilsMixin:ShowOnMap()
     end
     local mapID = self.pinData.mapID
     OpenWorldMap(mapID)
-    self.worldmapPin:ShowPulse()
-    C_Timer.Afterr(3, function()
-        self.worldmapPin:HidePulse()
-    end)
+    self.worldmapPin:ShowPulseFor(3)
 end

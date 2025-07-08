@@ -53,11 +53,11 @@
                         <AnimationGroup parentKey="pulse" setToFinalAlpha="true" looping="REPEAT">
                             <Scale smoothing="NONE" duration=".25" order="1"
                                 fromScaleX="0.75" fromScaleY="0.75" toScaleX="1.1" toScaleY="1.1" />
-                            <Alpha duration="0.2" order="1" fromAlpha="0" toAlpha=".6"
+                            <Alpha duration="0.25" order="1" fromAlpha="0" toAlpha=".6"
                                 smoothing="IN_OUT" />
-                            <Alpha duration="0.3" order="2" fromAlpha=".6" toAlpha="0"
+                            <Alpha duration="0.35" order="2" fromAlpha=".6" toAlpha="0"
                                 smoothing="IN_OUT" />
-                            <Scale duration="0.3" order="2" fromScaleX="1.1" fromScaleY="1.1"
+                            <Scale duration="0.35" order="2" fromScaleX="1.1" fromScaleY="1.1"
                                 toScaleX="1" toScaleY="1"
                                 smoothing="NONE" />
 

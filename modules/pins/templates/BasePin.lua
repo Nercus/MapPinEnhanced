@@ -63,16 +63,16 @@ function MapPinEnhancedBasePinMixin:ShowPulse()
     self.pulseHighlight.pulse:Play()
 end
 
-function MapPinEnhancedBasePinMixin:ShowPulseOnce()
-    self.pulseHighlight.pulse:Stop()
-    self.pulseHighlight:Show()
-    self.pulseHighlight.pulse:SetToFinalAlpha(true)
-    self.pulseHighlight.pulse:Play()
-    self.pulseTimer = C_Timer.NewTimer(0.5, function()
-        self.pulseHighlight.pulse:SetToFinalAlpha(false)
-        self.pulseHighlight:Hide()
-        self.pulseTimer = nil
+---@param seconds number
+function MapPinEnhancedBasePinMixin:ShowPulseFor(seconds)
+    self:ShowPulse()
+    self.pulseTimer = C_Timer.After(seconds, function()
+        self:HidePulse()
     end)
+end
+
+function MapPinEnhancedBasePinMixin:ShowPulseOnce()
+    self:ShowPulseFor(0.6)
 end
 
 function MapPinEnhancedBasePinMixin:HidePulse()
