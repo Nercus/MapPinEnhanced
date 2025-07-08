@@ -54,6 +54,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
     end
 
     self:SetPinColor(self.pinData.color)
+    self:SetPinIcon(self.pinData.texture, self.pinData.usesAtlas)
 
     if self.pinData.setTracked then
         self:Track()
