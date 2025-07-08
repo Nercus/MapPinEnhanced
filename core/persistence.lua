@@ -1,20 +1,6 @@
 ---@class MapPinEnhanced
 ---@field defaults table<string, any> a list of default values for the addon
----@field db table<string, any> the saved variables for the addon
 local MapPinEnhanced = select(2, ...)
-
----Initializes the saved variables for the addon
-function MapPinEnhanced:InitDB()
-    if self.db then return end
-    local addon = self.name
-    self.defaults = self.defaults or {}
-    self.db = _G[addon .. "DB"]
-    if not self.db then
-        self.db = {}
-        ---@type table<string, any>
-        _G[addon .. "DB"] = self.db
-    end
-end
 
 ---Retrieves the default value for a given set of keys.
 ---@param ... string The keys to traverse to get the default value
@@ -68,9 +54,11 @@ end
 
 ---Save a variable to the saved variables
 ---@param ... string | number | boolean | table The last element is the value to save and the rest are keys where the value should be saved
+---@return boolean? success
 function MapPinEnhanced:SetVar(...)
-    if not self.db then
-        self:InitDB()
+    if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
+        MapPinEnhancedDB = {}
     end
     -- move all arguments into a table
     local arg = { ... }
@@ -80,7 +68,7 @@ function MapPinEnhanced:SetVar(...)
     arg[#arg] = nil
     -- iterate table and create sub-tables if needed and on last iteration set the value
 
-    local currentTable = self.db -- start at the root
+    local currentTable = MapPinEnhancedDB -- start at the root
     for index, key in ipairs(arg) do
         if index == #arg then
             break
@@ -95,20 +83,22 @@ function MapPinEnhanced:SetVar(...)
     end
     -- arg[#arg] is the last key
     currentTable[arg[#arg]] = value ---@type boolean | number | string | table
+    return true
 end
 
 ---Get a variable from the saved variables
 ---@param ... string The keys to traverse to get the value
 ---@return boolean | number | string | table | nil
 function MapPinEnhanced:GetVar(...)
-    if not self.db then
-        self:InitDB()
+    if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
+        MapPinEnhancedDB = {}
     end
     -- move all arguments into a table
     local arg = { ... }
 
 
-    local dbTable = self.db
+    local dbTable = MapPinEnhancedDB
     for index, key in ipairs(arg) do
         if index == #arg then
             return dbTable[key]
@@ -124,12 +114,13 @@ end
 ---Delete a variable from the saved variables
 ---@param ... string The keys to traverse to delete the value
 function MapPinEnhanced:DeleteVar(...)
-    if not self.db then
-        self:InitDB()
+    if not MapPinEnhancedDB then
+        ---@type MapPinEnhancedDB
+        MapPinEnhancedDB = {}
     end
     -- move all arguments into a table
     local arg = { ... }
-    local dbTable = self.db
+    local dbTable = MapPinEnhancedDB
     for index, key in ipairs(arg) do
         if index == #arg then
             dbTable[key] = nil ---@type nil
