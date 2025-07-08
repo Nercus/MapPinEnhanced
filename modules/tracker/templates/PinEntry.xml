@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="PinEntry.lua" />
+    <Button name="MapPinEnhancedTrackerPinEntryTemplate" virtual="true">
+        <Size x="272" y="47" />
+        <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_bg.png"
+            setAllPoints="true" />
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
+            alpha="0.3" setAllPoints="true" />
+        <Frames>
+            <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate">
+                <Anchors>
+                    <Anchor point="LEFT" x="3" y="0" />
+                </Anchors>
+            </Frame>
+        </Frames>
+    </Button>
+</Ui>

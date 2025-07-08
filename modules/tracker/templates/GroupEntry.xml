@@ -1,0 +1,31 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="GroupEntry.lua" />
+
+    <Button name="MapPinEnhancedTrackerGroupEntryTemplate" virtual="true">
+        <Size x="300" y="47" />
+        <NormalTexture atlas="QuestLog-tab">
+            <Size x="1" y="32" />
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" />
+                <Anchor point="BOTTOMRIGHT" />
+            </Anchors>
+        </NormalTexture>
+        <HighlightTexture atlas="QuestLog-quest-glow-yellow" alpha="0.3">
+            <Size x="1" y="32" />
+            <Anchors>
+                <Anchor point="BOTTOMLEFT" />
+                <Anchor point="BOTTOMRIGHT" />
+            </Anchors>
+        </HighlightTexture>
+        <Frames>
+            <Button>
+                <Size x="20" y="20" />
+                <NormalTexture atlas="QuestLog-icon-Expand" setAllPoints="true" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="5" y="8" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Button>
+</Ui>
