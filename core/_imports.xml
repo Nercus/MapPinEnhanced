@@ -10,6 +10,7 @@
     <Include file="tests.lua" />
     <Include file="debug.lua" />
     <Include file="fuzzy.lua" />
+    <Include file="version.lua" />
 
     <!--@do-not-package@-->
     <Frame
