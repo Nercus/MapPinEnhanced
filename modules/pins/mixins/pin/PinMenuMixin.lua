@@ -7,7 +7,7 @@ MapPinEnhancedPinMenuMixin = {}
 local L = MapPinEnhanced.L
 
 local MENU_COLOR_BUTTON_PATTERN =
-"|TInterface\\AddOns\\MapPinEnhanced\\assets\\forms\\ColourPicker_Body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
+"|TInterface\\AddOns\\MapPinEnhanced\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 local PIN_COLORS_BY_NAME = {
     ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
     ["Green"] = CreateColorFromBytes(96, 236, 29, 1),
@@ -29,47 +29,48 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
         },
         {
             type = "divider",
+        },
+        {
+            type = "submenu",
+            entries = function()
+                if self.pinData.color ~= "Custom" then
+                    local colorMenu = {}
+                    for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
+                        local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorData:GetRGBAsBytes())
+                        table.insert(colorMenu, {
+                            type = "radio",
+                            label = label,
+                            isSelected = function()
+                                return self:PinHasColor(colorName)
+                            end,
+                            setSelected = function()
+                                self:SetPinColor(colorName)
+                            end,
+                            data = colorName
+                        })
+                    end
+                    return colorMenu
+                end
+            end,
+            entry = {
+                type = "button",
+                label = L["Change Color"],
+            }
+        },
+        {
+            type = "button",
+            label = MapPinEnhanced.L["Show on Map"],
+            onClick = function()
+                self:ShowOnMap()
+            end
+        },
+        {
+            type = "button",
+            label = MapPinEnhanced.L["Share to Chat"],
+            onClick = function()
+                self:SharePin()
+            end
         }
     }
-
-    if self.pinData.color ~= "Custom" then
-        local colorMenu = {}
-        for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
-            local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorData:GetRGBAsBytes())
-            table.insert(colorMenu, {
-                type = "radio",
-                label = label,
-                isSelected = function()
-                    return self:PinHasColor(colorName)
-                end,
-                setSelected = function()
-                    self:SetPinColor(colorName)
-                end,
-                data = colorName
-            })
-        end
-        table.insert(menu, {
-            type = "submenu",
-            label = L["Change Color"],
-            submenu = colorMenu
-        })
-    end
-
-    table.insert(menu, {
-        type = "button",
-        label = MapPinEnhanced.L["Show on Map"],
-        onClick = function()
-            self:ShowOnMap()
-        end
-    })
-
-    table.insert(menu, {
-        type = "button",
-        label = MapPinEnhanced.L["Share to Chat"],
-        onClick = function()
-            self:SharePin()
-        end
-    })
-
     MapPinEnhanced:GenerateMenu(parent, menu)
 end
