@@ -16,13 +16,13 @@ function MapPinEnhancedPinTrackingMixin:Track()
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
-    if self:IsTracked() then
-        C_Map.ClearUserWaypoint()
-    end
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
+    if self:IsTracked() then
+        C_Map.ClearUserWaypoint()
+        Tracking:SetTrackedPin(nil)
+    end
     self.isTracked = false
-    Tracking:SetTrackedPin(nil)
 end
 
 function MapPinEnhancedPinTrackingMixin:ToggleTracked()

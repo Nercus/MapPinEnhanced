@@ -82,23 +82,7 @@ function MapPinEnhancedPinMixin:Reset()
     -- untrack first to clear the pin
     self:Untrack()
 
-    -- reset pinID
-    self.worldmapPin:SetPinID(nil)
-    self.minimapPin:SetPinID(nil)
-
-    -- hide the pins
-    self.worldmapPin:Hide()
-    self.minimapPin:Hide()
-
     -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
-
-    -- release the frames back to the pool
-    if WorldmapPool:IsActive(self.worldmapPin) then
-        WorldmapPool:Release(self.worldmapPin)
-    end
-    if MinimapPool:IsActive(self.minimapPin) then
-        MinimapPool:Release(self.minimapPin)
-    end
 end
