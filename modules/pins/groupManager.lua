@@ -53,6 +53,11 @@ function Groups:RegisterPinGroup(groupInfo)
             "Groups:RegisterPinGroup: groupInfo.name cannot be a default group name")
     end
 
+    local existingGroup = self:GetGroupByName(groupInfo.name)
+    if existingGroup then
+        return existingGroup
+    end
+
     local group = groupsPool:Acquire()
     group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
     group:SetName(groupInfo.name)
@@ -83,6 +88,50 @@ function Groups:GetGroupByName(name)
     return nil
 end
 
+--- TODO: use debounce to reduce the number of persist calls
+
+---@param group MapPinEnhancedPinGroupMixin
+function Groups:PersistGroup(group)
+    assert(group, "Groups:PersistGroup: group is nil")
+    local data = group:GetSaveableData()
+    assert(data, "Groups:PersistGroup: data is nil")
+    if not data or not data.name then return end
+    MapPinEnhanced:SetVar("groups", data.name, data)
+end
+
+---@param groupData SaveableGroupData
+function Groups:RestoreGroup(groupData)
+    assert(groupData, "Groups:RestoreGroup: groupInfo is nil")
+    local group = self:GetGroupByName(groupData.name)
+    if not group then
+        group = self:RegisterPinGroup(groupData)
+    end
+    assert(group, "Groups:RestoreGroup: group is nil after registration")
+
+    ---@param  pinData pinData
+    for _, pinData in ipairs(groupData.pins) do
+        assert(pinData, "Groups:RestoreGroup: pinData is nil")
+        assert(type(pinData) == "table", "Groups:RestoreGroup: pinData must be a table")
+        group:AddPin(pinData)
+    end
+end
+
+function Groups:RestoreAllGroups()
+    ---@type SaveableGroupData[] | nil
+    local groupsData = MapPinEnhanced:GetVar("groups")
+    if not groupsData then
+        return
+    end
+
+    for _, groupData in pairs(groupsData) do
+        self:RestoreGroup(groupData)
+    end
+end
+
+function Groups:EnumerateGroups()
+    return groupsPool:EnumerateActive()
+end
+
 -- Initialize default groups
 function Groups:InitializeDefaultGroups()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
@@ -94,3 +143,7 @@ function Groups:InitializeDefaultGroups()
 end
 
 Groups:InitializeDefaultGroups()
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    Groups:RestoreAllGroups()
+end)

@@ -11,6 +11,8 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 MapPinEnhancedPinGroupMixin = {}
 
 
+local Groups = MapPinEnhanced:GetModule("Groups")
+
 function MapPinEnhancedPinGroupMixin:Init()
     self.pins = {}
     self.count = 0
@@ -29,6 +31,7 @@ function MapPinEnhancedPinGroupMixin:SetName(name)
     assert(name, "MapPinEnhancedPinGroupMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedPinGroupMixin:SetName: name must be a string")
     self.name = name
+    Groups:PersistGroup(self)
 end
 
 function MapPinEnhancedPinGroupMixin:GetName()
@@ -41,6 +44,7 @@ function MapPinEnhancedPinGroupMixin:SetSource(source)
     assert(type(source) == "string", "MapPinEnhancedPinGroupMixin:SetSource: source must be a string")
     assert(C_AddOns.IsAddOnLoaded(source), "MapPinEnhancedPinGroupMixin:SetSource: source is not a loaded addon")
     self.source = source
+    Groups:PersistGroup(self)
 end
 
 function MapPinEnhancedPinGroupMixin:GetSource()
@@ -52,6 +56,7 @@ function MapPinEnhancedPinGroupMixin:SetIcon(icon)
     assert(icon, "MapPinEnhancedPinGroupMixin:SetIcon: icon is nil")
     assert(type(icon) == "string", "MapPinEnhancedPinGroupMixin:SetIcon: icon must be a string")
     self.icon = icon
+    Groups:PersistGroup(self)
 end
 
 function MapPinEnhancedPinGroupMixin:GetIcon()
@@ -65,6 +70,7 @@ function MapPinEnhancedPinGroupMixin:AddPin(pinData)
     pin.group = self
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
+    Groups:PersistGroup(self)
 end
 
 ---@param pinID UUID
@@ -73,10 +79,31 @@ function MapPinEnhancedPinGroupMixin:RemovePin(pinID)
     self.pins[pinID] = nil
     Pins:RemovePin(pinID)
     self.count = self.count - 1
+    Groups:PersistGroup(self)
 end
 
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID):UUID, MapPinEnhancedPinMixin
 ---@return MapPinEnhancedPinMixin
 function MapPinEnhancedPinGroupMixin:EnumeratePins()
     return pairs(self.pins)
+end
+
+---@class SaveableGroupData : GroupInfo
+---@field pins pinData[] a table of pin data that belongs to this group
+
+
+---@return SaveableGroupData
+function MapPinEnhancedPinGroupMixin:GetSaveableData()
+    local data = {
+        name = self.name,
+        source = self.source,
+        icon = self.icon,
+        pins = {}
+    }
+
+    for _, pin in self:EnumeratePins() do
+        table.insert(data.pins, pin:GetSaveableData())
+    end
+
+    return data
 end

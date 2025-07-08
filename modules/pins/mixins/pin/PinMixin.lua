@@ -81,7 +81,7 @@ function MapPinEnhancedPinMixin:GetPinData()
     return self.pinData
 end
 
-function MapPinEnhancedPinMixin:GetSavableData()
+function MapPinEnhancedPinMixin:GetSaveableData()
     local pinDataToSave = self:GetPinData()
     pinDataToSave.setTracked = self:IsTracked()
     return pinDataToSave
