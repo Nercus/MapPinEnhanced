@@ -1,57 +1,45 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedTrackerTemplate
+---@class MapPinEnhancedTrackerTemplate : Frame
+---@field scrollBox Frame
+---@field scrollBar Frame
+---@field scrollView ScrollBoxListTreeListViewMixin
+---@field dataProvider TreeDataProviderMixin
 MapPinEnhancedTrackerMixin = {}
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 
+---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
+
+
+function MapPinEnhancedTrackerMixin:UpdateList()
+    ---@param group MapPinEnhancedPinGroupMixin
+    for group in Groups:EnumerateGroups() do
+        local groupElement = self.dataProvider:Insert(group) --[[@as TreeNodeMixin]]
+        for _, pin in group:EnumeratePins() do
+            groupElement:Insert(pin)
+        end
+    end
+end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
-    local dataProvider = CreateTreeDataProvider()
-    local scrollView = CreateScrollBoxListTreeListView()
-    scrollView:SetDataProvider(dataProvider)
-    ScrollUtil.InitScrollBoxListWithScrollBar(self.ScrollBox, self.ScrollBar, scrollView)
+    self.dataProvider = CreateTreeDataProvider()
+    self.scrollView = CreateScrollBoxListTreeListView()
+    self.scrollView:SetDataProvider(self.dataProvider)
+    ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
-
-    local function Initializer(frame, node)
-        if not frame.pin then
-            MapPinEnhanced:Debug({ frame, node })
-            frame:SetScript("OnClick", function()
-                node:ToggleCollapsed()
-            end)
-        end
-    end
-
-    local function CustomFactory(factory, node)
+    self.scrollView:SetElementFactory(function(factory, node)
+        ---@type EntryTemplate
         local data = node:GetData()
-        local template = data.Template
-        factory(template, Initializer)
-    end
-
-    scrollView:SetElementFactory(CustomFactory)
-
-    local button = CreateFrame("Button", nil, UIParent, "MapPinEnhancedButtonTemplate")
-    button:SetPoint("CENTER")
-    button:SetText("Set Pins")
-    button:SetSize(200, 50)
-    button:SetScript("OnClick", function()
-        ---@param group MapPinEnhancedPinGroupMixin
-        for group in Groups:EnumerateGroups() do
-            local groupData = {
-                ButtonText = group:GetName(),
-                Template = "MapPinEnhancedTrackerGroupEntryTemplate",
-            }
-            local groupElement = dataProvider:Insert(groupData)
-            for _, pin in group:EnumeratePins() do
-                -- Insert a nested element for each pin in the group
-                local pinData = {
-                    ButtonText = pin.pinData.title or "Unnamed Pin",
-                    Template = "MapPinEnhancedTrackerPinEntryTemplate",
-                }
-                groupElement:Insert(pinData)
-            end
-        end
+        local template = data.template
+        factory(template, function(frame)
+            frame:Init(node, data)
+        end)
     end)
+end
+
+function MapPinEnhancedTrackerMixin:OnShow()
+    self:UpdateList()
 end
