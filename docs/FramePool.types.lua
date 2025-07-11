@@ -3,7 +3,7 @@
 ---@class FramePool<T>: {EnumerateActive: fun(self: FramePool<T>):(T, fun(self: FramePool<T>):T)},{ Acquire: fun(self: FramePool<T>): T},{Release: fun(self: FramePool<T>, obj: T): boolean},{ ReleaseAll: fun(self: FramePool<T>)},{ GetNumActive: fun(self: FramePool<T>): number}, {capacity: number}, { IsActive: fun(self: FramePool<T>, obj: T): boolean}
 
 ---@generic T
----@param frameType string
+---@param frameType FrameType
 ---@param parent Region | string
 ---@param frameTemplate `T`
 ---@param resetterFunc fun()?

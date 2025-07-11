@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="pins/_imports.xml" />
+    <Include file="tracker/_imports.xml" />
     <Include file="misc/_imports.xml" />
     <Include file="providers/_imports.xml" />
-    <Include file="tracker/_imports.xml" />
 </Ui>

@@ -8,7 +8,7 @@
         <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
             alpha="0.3" setAllPoints="true" />
         <Frames>
-            <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate">
+            <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" virtual="true">
                 <Anchors>
                     <Anchor point="LEFT" x="3" y="0" />
                 </Anchors>

@@ -11,11 +11,25 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 MapPinEnhancedPinGroupMixin = {}
 
 
+---@class Groups
+---@field framePool FramePoolCollection<MapPinEnhancedTrackerGroupEntryTemplate>
 local Groups = MapPinEnhanced:GetModule("Groups")
+
+function Groups:GetFramePool()
+    if not self.framePool then
+        self.framePool = CreateFramePoolCollection()
+        self.framePool:CreatePool("Frame", nil, "MapPinEnhancedTrackerGroupEntryTemplate")
+    end
+
+    return self.framePool
+end
 
 function MapPinEnhancedPinGroupMixin:Init()
     self.pins = {}
     self.count = 0
+
+    local framePool = Groups:GetFramePool()
+    self.trackerGroupEntry = framePool:Acquire("MapPinEnhancedTrackerGroupEntryTemplate")
 end
 
 function MapPinEnhancedPinGroupMixin:Reset()
@@ -24,6 +38,8 @@ function MapPinEnhancedPinGroupMixin:Reset()
     self.source = nil
     self.icon = nil
     self.count = 0
+    local framePool = Groups:GetFramePool()
+    framePool:Release(self.trackerGroupEntry)
 end
 
 ---@param name string
