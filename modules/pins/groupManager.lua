@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
+---@field groupsPool ObjectPool<MapPinEnhancedPinGroupMixin>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
@@ -20,9 +21,14 @@ local function ResetGroupObject(_, group)
     group:Reset()
 end
 
+function Groups:GetObjectPool()
+    if not self.objectPool then
+        self.objectPool = CreateObjectPool(CreateGroupObject, ResetGroupObject)
+        self.objectPool.capacity = 100 -- only allow 100 groups at the same time
+    end
 
-local groupsPool = CreateObjectPool(CreateGroupObject, ResetGroupObject)
-groupsPool.capacity = 100 -- only allow 100 groups at the same time
+    return self.objectPool
+end
 
 local DEFAULT_GROUPS = {
     {
@@ -58,6 +64,7 @@ function Groups:RegisterPinGroup(groupInfo)
         return existingGroup
     end
 
+    local groupsPool = Groups:GetObjectPool()
     local group = groupsPool:Acquire()
     group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
     group:SetName(groupInfo.name)
@@ -71,13 +78,14 @@ function Groups:UnregisterPinGroup(group)
     assert(type(group) == "table", "Groups:UnregisterPinGroup: group must be a table")
     assert(group.Reset, "Groups:UnregisterPinGroup: group must be a MapPinEnhancedPinGroupMixin object")
 
+    local groupsPool = Groups:GetObjectPool()
     groupsPool:Release(group)
 end
 
 function Groups:GetGroupByName(name)
     assert(name, "Groups:GetGroupByName: name is nil")
     assert(type(name) == "string", "Groups:GetGroupByName: name must be a string")
-
+    local groupsPool = Groups:GetObjectPool()
     ---@param group MapPinEnhancedPinGroupMixin
     for group in groupsPool:EnumerateActive() do
         if group:GetName() == name then
@@ -129,11 +137,13 @@ function Groups:RestoreAllGroups()
 end
 
 function Groups:EnumerateGroups()
+    local groupsPool = Groups:GetObjectPool()
     return groupsPool:EnumerateActive()
 end
 
 -- Initialize default groups
 function Groups:InitializeDefaultGroups()
+    local groupsPool = Groups:GetObjectPool()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
         local group = groupsPool:Acquire()
         group:SetIcon(groupInfo.icon)
@@ -142,8 +152,7 @@ function Groups:InitializeDefaultGroups()
     end
 end
 
-Groups:InitializeDefaultGroups()
-
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    Groups:InitializeDefaultGroups()
     Groups:RestoreAllGroups()
 end)
