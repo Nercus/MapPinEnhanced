@@ -4,10 +4,13 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinTooltipMixin = {}
 
+-- TODO: refactor the tooltipfunction mechanism as a function can't be saved persistently
+
 
 ---@param pin MapPinEnhancedPinMixin
 local function DefaultTooltip(pin)
     GameTooltip:AddLine(pin.pinData.title)
+    -- TODO: add pin source when not equal to MapPinEnhanced
 end
 
 function MapPinEnhancedPinTooltipMixin:SetTooltip(tooltipFunction)
