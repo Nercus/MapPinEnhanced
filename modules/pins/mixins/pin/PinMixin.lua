@@ -26,6 +26,7 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 ---@class Pins
 ---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Groups = MapPinEnhanced:GetModule("Groups")
 
 
 function Pins:GetFramePool()
@@ -120,4 +121,8 @@ function MapPinEnhancedPinMixin:Reset()
     -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
+end
+
+function MapPinEnhancedPinMixin:PersistPin()
+    Groups:PersistGroup(self.group)
 end

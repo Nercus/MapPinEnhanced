@@ -20,6 +20,7 @@ function MapPinEnhancedPinColorMixin:SetPinColor(color)
     end
 
     self.pinData.color = color or DEFAULT_PIN_COLOR
+    self:PersistPin()
 end
 
 function MapPinEnhancedPinColorMixin:PinHasColor(color)
@@ -43,4 +44,5 @@ function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas)
         self.pinData.usesAtlas = nil
         self:SetPinColor(DEFAULT_PIN_COLOR)
     end
+    -- persist in here is not needed as we also set the pin color
 end

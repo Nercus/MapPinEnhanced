@@ -23,4 +23,5 @@ function MapPinEnhancedPinTooltipMixin:SetTooltip(tooltipFunction)
 
     self.worldmapPin:UpdateTooltip(tooltipFunction)
     self.minimapPin:UpdateTooltip(tooltipFunction)
+    self:PersistPin()
 end

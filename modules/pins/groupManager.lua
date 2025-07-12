@@ -96,15 +96,26 @@ function Groups:GetGroupByName(name)
     return nil
 end
 
---- TODO: use debounce to reduce the number of persist calls
+---@type table<string, function>
+local debouncedPersist = {}
 
 ---@param group MapPinEnhancedPinGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")
-    local data = group:GetSaveableData()
-    assert(data, "Groups:PersistGroup: data is nil")
-    if not data or not data.name then return end
-    MapPinEnhanced:SetVar("groups", data.name, data)
+    local groupName = group:GetName()
+    assert(groupName, "Groups:PersistGroup: group name is nil")
+
+    -- Persisting the data for a group is debounced to avoid excessive calls of the function on a half second delay
+    if not debouncedPersist[groupName] then
+        debouncedPersist[groupName] = MapPinEnhanced:DebounceChange(function()
+            local data = group:GetSaveableData()
+            assert(data, "Groups:PersistGroup: data is nil")
+            if not data or not data.name then return end
+            MapPinEnhanced:SetVar("groups", data.name, data)
+        end, 0.5)
+    end
+
+    debouncedPersist[groupName]()
 end
 
 ---@param groupData SaveableGroupData
