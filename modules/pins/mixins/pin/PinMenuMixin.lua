@@ -20,6 +20,31 @@ local PIN_COLORS_BY_NAME = {
     ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
 }
 
+
+local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
+local PIN_ICONS = {
+    { icon = "poi-bountyplayer-alliance", label = "Bounty Player (Alliance)" },
+    { icon = "poi-bountyplayer-horde",    label = "Bounty Player (Horde)" },
+    { icon = "poi-door-down",             label = "Door (Down)" },
+    { icon = "poi-door-left",             label = "Door (Left)" },
+    { icon = "poi-door-right",            label = "Door (Right)" },
+    { icon = "poi-door-up",               label = "Door (Up)" },
+    { icon = "poi-door",                  label = "Door" },
+    { icon = "poi-graveyard-neutral",     label = "Graveyard" },
+    { icon = "poi-horde",                 label = "Horde" },
+    { icon = "poi-islands-table",         label = "Islands Table" },
+    { icon = "poi-majorcity",             label = "Major City" },
+    { icon = "poi-rift1",                 label = "Rift 1" },
+    { icon = "poi-rift2",                 label = "Rift 2" },
+    { icon = "poi-scrapper",              label = "Scrapper" },
+    { icon = "poi-town",                  label = "Town" },
+    { icon = "poi-transmogrifier",        label = "Transmogrifier" },
+    { icon = "poi-workorders",            label = "Work Orders" },
+}
+local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) + 0.5)
+
+
+
 ---@param parent MapPinEnhancedWorldmapPinTemplate -- TODO: complete the annotation with the tracker entry
 function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
     local menu = {
@@ -55,6 +80,33 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             entry = {
                 type = "button",
                 label = L["Change Color"],
+            }
+        },
+        {
+            type = "submenu",
+            entries = function()
+                local iconMenu = {}
+                for _, iconName in ipairs(PIN_ICONS) do
+                    table.insert(iconMenu, {
+                        type = "radio",
+                        label = string.format(MENU_ICON_BUTTON_PATTERN, iconName.icon),
+                        isSelected = function()
+                            return self.pinData.texture == iconName
+                        end,
+                        setSelected = function()
+                            self:SetPinIcon(iconName, true)
+                        end,
+                        data = iconName
+                    })
+                end
+                return iconMenu
+            end,
+            entry = {
+                type = "button",
+                label = L["Change Icon"],
+            },
+            options = {
+                gridModeColumns = PIN_ICON_MENU_COLUMNS
             }
         },
         {
