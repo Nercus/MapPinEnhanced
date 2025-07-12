@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedPinMouseDownMixin = {}
 
 
----@param frame MapPinEnhancedWorldmapPinTemplate -- TODO: complete the annotation with the tracker entry
+---@param frame MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate
 ---@param button mouseButton
 function MapPinEnhancedPinMouseDownMixin:OnMouseDown(frame, button)
     local shift, ctrl = IsShiftKeyDown(), IsControlKeyDown()

@@ -45,7 +45,7 @@ local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) + 0.5)
 
 
 
----@param parent MapPinEnhancedWorldmapPinTemplate -- TODO: complete the annotation with the tracker entry
+---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
 function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
     local menu = {
         {
