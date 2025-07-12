@@ -44,6 +44,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field type "submenu"
 ---@field entry AnyMenuEntry
 ---@field entries AnyMenuEntry[] | fun(): AnyMenuEntry[]
+---@field options? MenuOptions
 
 
 ---@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry | MenuSubmenuEntry
@@ -78,9 +79,12 @@ local function GenerateMenuElement(rootDescription, entry)
             entry.entry.type == "template", "Submenu entry must be a button, checkbox, radio or template")
         ---@diagnostic disable-next-line: missing-parameter for submenus the second and third parameter are not used
         local subMenuButton = GenerateMenuElement(rootDescription, entry.entry)
+        if entry.options and entry.options.gridModeColumns then
+            subMenuButton:SetGridMode(MenuConstants.VerticalGridDirection, entry.options.gridModeColumns)
+        end
+
         ---@type AnyMenuEntry[]
-        local entries = type(entry.entries) == "function" and entry.entries() or
-            entry.entries --[[@as AnyMenuEntry[]]
+        local entries = type(entry.entries) == "function" and entry.entries() or entry.entries --[[@as AnyMenuEntry[]]
         for _, subEntry in ipairs(entries) do
             GenerateMenuElement(subMenuButton, subEntry)
         end

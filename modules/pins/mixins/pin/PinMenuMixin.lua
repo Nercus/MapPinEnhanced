@@ -23,26 +23,17 @@ local PIN_COLORS_BY_NAME = {
 
 local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
 local PIN_ICONS = {
-    { icon = "poi-bountyplayer-alliance", label = "Bounty Player (Alliance)" },
-    { icon = "poi-bountyplayer-horde",    label = "Bounty Player (Horde)" },
-    { icon = "poi-door-down",             label = "Door (Down)" },
-    { icon = "poi-door-left",             label = "Door (Left)" },
-    { icon = "poi-door-right",            label = "Door (Right)" },
-    { icon = "poi-door-up",               label = "Door (Up)" },
-    { icon = "poi-door",                  label = "Door" },
-    { icon = "poi-graveyard-neutral",     label = "Graveyard" },
-    { icon = "poi-horde",                 label = "Horde" },
-    { icon = "poi-islands-table",         label = "Islands Table" },
-    { icon = "poi-majorcity",             label = "Major City" },
-    { icon = "poi-rift1",                 label = "Rift 1" },
-    { icon = "poi-rift2",                 label = "Rift 2" },
-    { icon = "poi-scrapper",              label = "Scrapper" },
-    { icon = "poi-town",                  label = "Town" },
-    { icon = "poi-transmogrifier",        label = "Transmogrifier" },
-    { icon = "poi-workorders",            label = "Work Orders" },
+    "poi-bountyplayer-alliance",
+    "poi-bountyplayer-horde",
+    "Auctioneer",
+    "Banker",
+    "Map-MarkedDefeated",
+    "Tormentors-Boss",
+    "QuestNormal",
+    "QuestTurnin",
+    "DungeonSkull"
 }
-local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) + 0.5)
-
+local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) - 0.5)
 
 
 ---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
@@ -58,24 +49,22 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
         {
             type = "submenu",
             entries = function()
-                if self.pinData.color ~= "Custom" then
-                    local colorMenu = {}
-                    for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
-                        local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorData:GetRGBAsBytes())
-                        table.insert(colorMenu, {
-                            type = "radio",
-                            label = label,
-                            isSelected = function()
-                                return self:PinHasColor(colorName)
-                            end,
-                            setSelected = function()
-                                self:SetPinColor(colorName)
-                            end,
-                            data = colorName
-                        })
-                    end
-                    return colorMenu
+                local colorMenu = {}
+                for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
+                    local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorData:GetRGBAsBytes())
+                    table.insert(colorMenu, {
+                        type = "radio",
+                        label = label,
+                        isSelected = function()
+                            return self:PinHasColor(colorName)
+                        end,
+                        setSelected = function()
+                            self:SetPinColor(colorName)
+                        end,
+                        data = colorName
+                    })
                 end
+                return colorMenu
             end,
             entry = {
                 type = "button",
@@ -86,17 +75,17 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             type = "submenu",
             entries = function()
                 local iconMenu = {}
-                for _, iconName in ipairs(PIN_ICONS) do
+                for _, icon in ipairs(PIN_ICONS) do
                     table.insert(iconMenu, {
                         type = "radio",
-                        label = string.format(MENU_ICON_BUTTON_PATTERN, iconName.icon),
+                        label = string.format(MENU_ICON_BUTTON_PATTERN, icon),
                         isSelected = function()
-                            return self.pinData.texture == iconName
+                            return self.pinData.texture == icon
                         end,
                         setSelected = function()
-                            self:SetPinIcon(iconName, true)
+                            self:SetPinIcon(icon, true)
                         end,
-                        data = iconName
+                        data = icon
                     })
                 end
                 return iconMenu
