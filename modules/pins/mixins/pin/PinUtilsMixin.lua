@@ -23,6 +23,8 @@ function MapPinEnhancedPinUtilsMixin:ShowOnMap()
         return
     end
     local mapID = self.pinData.mapID
-    OpenWorldMap(mapID)
-    self.worldmapPin:ShowPulseFor(3)
+    MapPinEnhanced:CallRestricted(function()
+        C_Map.OpenWorldMap(mapID)
+        self.worldmapPin:ShowPulseFor(3)
+    end, L["The world map cannot be opened automatically during combat. It will open after combat ends."])
 end

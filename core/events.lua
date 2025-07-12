@@ -111,3 +111,23 @@ function MapPinEnhanced:FireCallback(callbackEvent, ...)
     assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
     callbackRegistry:Fire(callbackEvent, ...)
 end
+
+---Call a function with restricted access, ensuring it runs outside of combat.
+---@param func function
+---@param warning string|nil A warning message to display if the function is called while in combat
+---@param ... unknown
+function MapPinEnhanced:CallRestricted(func, warning, ...)
+    local inCombat = InCombatLockdown()
+    local args = { ... }
+    if inCombat then
+        if warning then
+            self:Print(warning)
+        end
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
+            self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+            func(unpack(args))
+        end)
+    else
+        func(...)
+    end
+end
