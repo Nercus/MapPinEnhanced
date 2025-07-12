@@ -124,5 +124,6 @@ function MapPinEnhancedPinMixin:Reset()
 end
 
 function MapPinEnhancedPinMixin:PersistPin()
+    if not self.group then return end
     Groups:PersistGroup(self.group)
 end

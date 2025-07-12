@@ -66,8 +66,8 @@ function Groups:RegisterPinGroup(groupInfo)
 
     local groupsPool = Groups:GetObjectPool()
     local group = groupsPool:Acquire()
-    group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
     group:SetName(groupInfo.name)
+    group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
     group:SetSource(groupInfo.source)
 
     return group
@@ -157,8 +157,8 @@ function Groups:InitializeDefaultGroups()
     local groupsPool = Groups:GetObjectPool()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
         local group = groupsPool:Acquire()
-        group:SetIcon(groupInfo.icon)
         group:SetName(groupInfo.name)
+        group:SetIcon(groupInfo.icon)
         group:SetSource(groupInfo.source)
     end
 end
