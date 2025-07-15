@@ -80,9 +80,13 @@ function MapPinEnhancedPinGroupMixin:GetIcon()
 end
 
 ---@param pinData pinData
-function MapPinEnhancedPinGroupMixin:AddPin(pinData)
+---@param overridePinID UUID? if provided, the pin will be created with this ID instead of a new one
+function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedPinGroupMixin:AddPin: pinData is nil")
     local pin = Pins:CreatePin(pinData)
+    if overridePinID then
+        pin:OverridePinID(overridePinID)
+    end
     pin.group = self
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
@@ -104,8 +108,14 @@ function MapPinEnhancedPinGroupMixin:EnumeratePins()
     return pairs(self.pins)
 end
 
+function MapPinEnhancedPinGroupMixin:GetPinByID(pinID)
+    assert(pinID, "MapPinEnhancedPinGroupMixin:GetPinByID: pinID is nil")
+    assert(type(pinID) == "string", "MapPinEnhancedPinGroupMixin:GetPinByID: pinID must be a string")
+    return self.pins[pinID]
+end
+
 ---@class SaveableGroupData : GroupInfo
----@field pins pinData[] a table of pin data that belongs to this group
+---@field pins SaveablePinData[] a table of pin data that belongs to this group
 
 
 ---@return SaveableGroupData

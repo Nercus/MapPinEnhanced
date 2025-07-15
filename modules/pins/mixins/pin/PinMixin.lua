@@ -50,12 +50,13 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.minimapPin = framePool:Acquire('MapPinEnhancedMinimapPinTemplate')
     self.trackerPinEntry = framePool:Acquire('MapPinEnhancedTrackerPinEntryTemplate')
 
-    self.worldmapPin:SetPinID(pinID)
-    self.minimapPin:SetPinID(pinID)
-
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
     end)
+end
+
+function MapPinEnhancedPinMixin:OverridePinID(pinID)
+    self.pinID = pinID
 end
 
 ---@param pinData pinData
@@ -100,9 +101,15 @@ function MapPinEnhancedPinMixin:GetPinData()
     return self.pinData
 end
 
+---@class SaveablePinData : pinData
+---@field pinID UUID
+
+---@return SaveablePinData
 function MapPinEnhancedPinMixin:GetSaveableData()
     local pinDataToSave = self:GetPinData()
+    ---@cast pinDataToSave SaveablePinData
     pinDataToSave.setTracked = self:IsTracked()
+    pinDataToSave.pinID = self.pinID
     return pinDataToSave
 end
 

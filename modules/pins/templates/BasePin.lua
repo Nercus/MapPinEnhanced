@@ -121,8 +121,3 @@ function MapPinEnhancedBasePinMixin:UpdateTooltip(tooltipFun)
     if not tooltipFun then return end
     self.tooltipFunction = tooltipFun
 end
-
----@param pinID UUID | nil
-function MapPinEnhancedBasePinMixin:SetPinID(pinID)
-    self.pinID = pinID
-end
