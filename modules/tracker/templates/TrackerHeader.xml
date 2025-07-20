@@ -12,7 +12,7 @@
         <Layers>
             <Layer level="OVERLAY">
                 <Texture parentKey="headerTexture"
-                    atlas="common-dropdown-bg" setAllPoints="true" />
+                    atlas="auctionhouse-background-buy-noncommodities-header" setAllPoints="true" />
             </Layer>
             <Layer level="OVERLAY">
                 <FontString parentKey="title" inherits="GameFontNormalLarge"
@@ -24,5 +24,9 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnMouseDown method="OnMouseDown" />
+            <OnMouseUp method="OnMouseUp" />
+        </Scripts>
     </Frame>
 </Ui>

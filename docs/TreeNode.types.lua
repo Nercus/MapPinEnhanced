@@ -101,3 +101,13 @@ function TreeNodeMixin:ToggleCollapsed(affectChildren, skipInvalidate) end
 function TreeNodeMixin:IsCollapsed() end
 
 ---@alias TreeNode TreeNodeMixin
+
+
+
+---@class SubTreeNodeMixin
+---@field GetData fun(self: SubTreeNodeMixin): any
+---@field GetElementData fun(self: SubTreeNodeMixin): any
+---@field GetElementDataIndex fun(self: SubTreeNodeMixin): integer
+---@field ElementDataMatches fun(self: SubTreeNodeMixin, elementData: any): boolean
+---@field GetOrderIndex fun(self: SubTreeNodeMixin): integer
+---@field SetOrderIndex fun(self: SubTreeNodeMixin, orderIndex: integer)

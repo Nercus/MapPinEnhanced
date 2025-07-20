@@ -6,7 +6,6 @@ MapPinEnhancedPinTooltipMixin = {}
 
 -- TODO: refactor the tooltipfunction mechanism as a function can't be saved persistently
 
-
 ---@param pin MapPinEnhancedPinMixin
 local function DefaultTooltip(pin)
     GameTooltip:AddLine(pin.pinData.title)

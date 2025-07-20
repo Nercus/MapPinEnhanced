@@ -7,15 +7,15 @@
         <!-- We set a scale to 1.01 because of a layouting bug in wow, the scale option changes it
         back to the correct one afterwards. That scale change fixes the problem of the scrollframe child
         not being rendered -->
-        <Size x="300" y="1" />
+        <Size x="300" y="500" />
         <Frames>
             <Frame parentKey="header" frameStrata="HIGH" propagateMouseInput="Motion"
                 inherits="MapPinEnhancedTrackerHeaderTemplate" />
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
-                        x="-6" y="0" />
-                    <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                        x="5" y="-5" />
+                    <Anchor point="BOTTOMRIGHT" x="-5" y="5" />
                 </Anchors>
             </Frame>
             <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">

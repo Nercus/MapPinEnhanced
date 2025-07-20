@@ -10,13 +10,16 @@ local DEFAULT_PIN_COLOR = "Yellow"
 function MapPinEnhancedPinColorMixin:SetPinColor(color)
     self.worldmapPin:SetPinColor(color)
     self.minimapPin:SetPinColor(color)
+    self.trackerEntry:SetPinColor(color)
 
     if self:IsTracked() then
         self.worldmapPin:SetTracked()
         self.minimapPin:SetTracked()
+        self.trackerEntry:SetTracked()
     else
         self.worldmapPin:SetUntracked()
         self.minimapPin:SetUntracked()
+        self.trackerEntry:SetUntracked()
     end
 
     self.pinData.color = color or DEFAULT_PIN_COLOR
@@ -34,6 +37,7 @@ end
 function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas)
     self.worldmapPin:SetPinIcon(icon, usesAtlas)
     self.minimapPin:SetPinIcon(icon, usesAtlas)
+    self.trackerEntry:SetPinIcon(icon, usesAtlas)
 
     if icon then
         self.pinData.texture = icon
@@ -42,7 +46,7 @@ function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas)
     else
         self.pinData.texture = nil
         self.pinData.usesAtlas = nil
-        self:SetPinColor(DEFAULT_PIN_COLOR)
+        self:SetPinColor(self.pinData.color or DEFAULT_PIN_COLOR)
     end
     -- persist in here is not needed as we also set the pin color
 end

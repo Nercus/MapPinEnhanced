@@ -79,9 +79,15 @@ function MapPinEnhancedBasePinMixin:HidePulse()
     self.pulseHighlight:Hide()
 end
 
-function MapPinEnhancedBasePinMixin:SetTracked()
+---@param skipAnimation boolean?
+function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
     self.texture:SetTexture(self.trackedTexture)
-    self:ShowPulseOnce()
+    if skipAnimation then
+        self.pulseHighlight.pulse:Stop()
+        self.pulseHighlight:Hide()
+    else
+        self:ShowPulseOnce()
+    end
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
@@ -108,11 +114,7 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     else
         r, g, b, a = 1, 1, 1, 1
     end
-    local isPulsePlaying = self.pulseHighlight.pulse:IsPlaying()
     self.pulseHighlight:SetVertexColor(r, g, b, a)
-    if isPulsePlaying then
-        self:ShowPulse()
-    end
 end
 
 ---@param tooltipFun fun(tooltip: GameTooltip)

@@ -2,34 +2,28 @@
 local MapPinEnhanced = select(2, ...)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 ---@class MapPinEnhancedPinGroupMixin
 ---@field name string the name of the group
 ---@field source string the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
 ---@field pins table<UUID, MapPinEnhancedPinMixin> a table of pins that belong to this
-MapPinEnhancedPinGroupMixin = {}
+---@field trackerTemplate string the template used for the tracker entry of this group
+MapPinEnhancedPinGroupMixin = CreateFromMixins(
+    { trackerTemplate = "MapPinEnhancedTrackerGroupEntryTemplate" }
+)
 
 
 ---@class Groups
 ---@field framePool FramePoolCollection<MapPinEnhancedTrackerGroupEntryTemplate>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
-function Groups:GetFramePool()
-    if not self.framePool then
-        self.framePool = CreateFramePoolCollection()
-        self.framePool:CreatePool("Frame", nil, "MapPinEnhancedTrackerGroupEntryTemplate")
-    end
-
-    return self.framePool
-end
 
 function MapPinEnhancedPinGroupMixin:Init()
     self.pins = {}
     self.count = 0
-
-    local framePool = Groups:GetFramePool()
-    self.trackerGroupEntry = framePool:Acquire("MapPinEnhancedTrackerGroupEntryTemplate")
+    Tracker:UpdateList()
 end
 
 function MapPinEnhancedPinGroupMixin:Reset()
@@ -38,8 +32,6 @@ function MapPinEnhancedPinGroupMixin:Reset()
     self.source = nil
     self.icon = nil
     self.count = 0
-    local framePool = Groups:GetFramePool()
-    framePool:Release(self.trackerGroupEntry)
 end
 
 ---@param name string
@@ -91,6 +83,7 @@ function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
     Groups:PersistGroup(self)
+    Tracker:UpdateList()
 end
 
 ---@param pinID UUID
@@ -112,6 +105,10 @@ function MapPinEnhancedPinGroupMixin:GetPinByID(pinID)
     assert(pinID, "MapPinEnhancedPinGroupMixin:GetPinByID: pinID is nil")
     assert(type(pinID) == "string", "MapPinEnhancedPinGroupMixin:GetPinByID: pinID must be a string")
     return self.pins[pinID]
+end
+
+function MapPinEnhancedPinGroupMixin:GetPinCount()
+    return self.count
 end
 
 ---@class SaveableGroupData : GroupInfo

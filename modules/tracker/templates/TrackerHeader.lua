@@ -12,17 +12,17 @@ function MapPinEnhancedTrackerHeaderMixin:OnMouseDown(button)
         MapPinEnhanced:Print("Tracker is locked. Unlock it in the options.")
         return
     end
-    self:GetParent():StartMoving()
+    local trackerFrame = self:GetParent() --[[@as MapPinEnhancedTrackerTemplate]]
+    trackerFrame:StartMoving()
     SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
 end
 
 ---@param button mouseButton
 function MapPinEnhancedTrackerHeaderMixin:OnMouseUp(button)
     if button ~= "LeftButton" then return end
-    local _, _, _, left, top = self:GetPoint()
-    self:GetParent():StopMovingOrSizing()
-    MapPinEnhanced:SetVar("trackerPosition", { x = left, y = top })
-    self:ClearAllPoints()
-    self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", left, top)
+    local trackerFrame = self:GetParent() --[[@as MapPinEnhancedTrackerTemplate]]
+    local _, _, _, left, top = trackerFrame:GetPoint()
+    trackerFrame:StopMovingOrSizing()
+    trackerFrame:SetPosition(left, top)
     SetCursor(nil)
 end

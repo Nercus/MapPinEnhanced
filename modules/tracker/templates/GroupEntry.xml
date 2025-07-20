@@ -2,7 +2,11 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="GroupEntry.lua" />
 
-    <Button name="MapPinEnhancedTrackerGroupEntryTemplate" virtual="true">
+    <Button name="MapPinEnhancedTrackerGroupEntryTemplate" virtual="true"
+        mixin="MapPinEnhancedTrackerGroupEntryMixin">
+        <KeyValues>
+            <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
+        </KeyValues>
         <Size x="300" y="47" />
         <NormalTexture atlas="QuestLog-tab">
             <Size x="1" y="32" />
@@ -27,5 +31,8 @@
                 </Anchors>
             </Button>
         </Frames>
+        <Scripts>
+            <OnMouseDown method="OnMouseDown" />
+        </Scripts>
     </Button>
 </Ui>

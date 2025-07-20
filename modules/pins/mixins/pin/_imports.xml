@@ -7,5 +7,6 @@
     <Script file="PinTrackingMixin.lua" />
     <Script file="PinTooltipMixin.lua" />
     <Script file="PinUtilsMixin.lua" />
+    <Script file="PinTrackerMixin.lua" />
     <Script file="PinMixin.lua" />
 </Ui>
