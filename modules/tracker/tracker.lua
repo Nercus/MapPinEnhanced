@@ -32,6 +32,6 @@ function Tracker:UpdateList()
     end
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Tracker:ShowTracker()
-end)
+-- MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+--     Tracker:ShowTracker()
+-- end)

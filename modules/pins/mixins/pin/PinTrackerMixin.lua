@@ -23,6 +23,10 @@ function MapPinEnhancedTrackerPinMixin:SetPinColor(color)
         return
     end
     frame.pinFrame:SetPinColor(color)
+    local vertexColor = frame.pinFrame:GetColorValue()
+    if vertexColor and vertexColor ~= 'Custom' then
+        frame.overlayTexture:SetVertexColor(vertexColor.r, vertexColor.g, vertexColor.b)
+    end
 end
 
 function MapPinEnhancedTrackerPinMixin:SetPinIcon(icon, usesAtlas)
@@ -39,6 +43,7 @@ function MapPinEnhancedTrackerPinMixin:SetTracked(skipAnimation)
     if not frame then
         return
     end
+    frame:GetNormalTexture():SetDesaturated(false)
     frame.pinFrame:SetTracked(skipAnimation)
 end
 
@@ -47,5 +52,6 @@ function MapPinEnhancedTrackerPinMixin:SetUntracked()
     if not frame then
         return
     end
+    frame:GetNormalTexture():SetDesaturated(true)
     frame.pinFrame:SetUntracked()
 end

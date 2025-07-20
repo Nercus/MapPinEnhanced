@@ -6,8 +6,11 @@ MapPinEnhancedPinColorMixin = {}
 
 local DEFAULT_PIN_COLOR = "Yellow"
 
----@param color PinColors | 'Custom'
+---@param color PinColors | "Custom"
 function MapPinEnhancedPinColorMixin:SetPinColor(color)
+    if not color then
+        color = DEFAULT_PIN_COLOR
+    end
     self.worldmapPin:SetPinColor(color)
     self.minimapPin:SetPinColor(color)
     self.trackerEntry:SetPinColor(color)
@@ -20,6 +23,12 @@ function MapPinEnhancedPinColorMixin:SetPinColor(color)
         self.worldmapPin:SetUntracked()
         self.minimapPin:SetUntracked()
         self.trackerEntry:SetUntracked()
+    end
+
+    if color ~= "Custom" then
+        self.worldmapPin:SetPinIcon(nil, nil)
+        self.minimapPin:SetPinIcon(nil, nil)
+        self.trackerEntry:SetPinIcon(nil, nil)
     end
 
     self.pinData.color = color or DEFAULT_PIN_COLOR

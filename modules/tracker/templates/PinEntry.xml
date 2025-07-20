@@ -11,6 +11,14 @@
             setAllPoints="true" />
         <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
             alpha="0.3" setAllPoints="true" />
+
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture setAllPoints="true"
+                    parentKey="overlayTexture"
+                    file="Interface/AddOns/MapPinEnhanced/assets/tracker_overlay.png" alpha="0.3" />
+            </Layer>
+        </Layers>
         <Frames>
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate">
                 <Anchors>
@@ -20,6 +28,8 @@
         </Frames>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Button>
 </Ui>

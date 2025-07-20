@@ -13,13 +13,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field pulseTimer FunctionContainer | nil
 ---@field shadow Texture
 ---@field texture Texture
+---@field activeColor string | nil
 ---@field trackedTexture string
 ---@field untrackedTexture string
 ---@field tooltipFunction function
 ---@field pinID UUID | nil
 MapPinEnhancedBasePinMixin = {}
 
-local DEFAULT_PIN_COLOR = "Yellow"
 local UNTRACKED_PIN_TEXTURE = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntracked%s.png"
 local TRACKED_PIN_TEXTURE = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTracked%s.png"
 
@@ -94,12 +94,20 @@ function MapPinEnhancedBasePinMixin:SetUntracked()
     self.texture:SetTexture(self.untrackedTexture)
 end
 
-local DEFAULT_COLOR = DEFAULT_PIN_COLOR
+---@return ColorMixin?
+function MapPinEnhancedBasePinMixin:GetColorValue()
+    if not self.activeColor then
+        return nil
+    end
+    local pinColor = PIN_COLORS_BY_NAME[self.activeColor]
+    if not pinColor then
+        return nil
+    end
+    return pinColor
+end
+
 ---@param color PinColors
 function MapPinEnhancedBasePinMixin:SetPinColor(color)
-    if not color then
-        color = DEFAULT_COLOR
-    end
     local untrackedTexture = string.format(UNTRACKED_PIN_TEXTURE, color)
     local trackedTexture = string.format(TRACKED_PIN_TEXTURE, color)
     assert(untrackedTexture, "Untracked texture not found")
@@ -115,6 +123,7 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
         r, g, b, a = 1, 1, 1, 1
     end
     self.pulseHighlight:SetVertexColor(r, g, b, a)
+    self.activeColor = color
 end
 
 ---@param tooltipFun fun(tooltip: GameTooltip)
