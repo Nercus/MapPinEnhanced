@@ -103,14 +103,14 @@ function MapPinEnhancedSliderMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedSliderData
+---@class SliderSetup
 ---@field onChange fun(value: number)
 ---@field init? fun(): number -- initial value can be nil if option has never been set before
 ---@field min number -- minimum value of the slider
 ---@field max number -- maximum value of the slider
 ---@field step number -- step value of the slider
 
----@param formData MapPinEnhancedSliderData
+---@param formData SliderSetup
 function MapPinEnhancedSliderMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

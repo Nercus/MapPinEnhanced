@@ -16,11 +16,11 @@ function MapPinEnhancedCheckboxMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedCheckboxData
+---@class CheckboxSetup
 ---@field onChange fun(isChecked: boolean)
 ---@field init? fun(): boolean
 
----@param formData MapPinEnhancedCheckboxData
+---@param formData CheckboxSetup
 function MapPinEnhancedCheckboxMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

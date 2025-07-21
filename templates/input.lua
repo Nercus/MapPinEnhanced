@@ -139,11 +139,11 @@ function MapPinEnhancedInputMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedInputData
+---@class InputSetup
 ---@field onChange fun(text: string)
 ---@field init? fun(): string -- initial value can be nil if option has never been set before
 
----@param formData MapPinEnhancedInputData
+---@param formData InputSetup
 function MapPinEnhancedInputMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

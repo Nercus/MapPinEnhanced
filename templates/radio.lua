@@ -99,12 +99,12 @@ function MapPinEnhancedRadioGroupMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedRadioGroupData
+---@class RadioGroupSetup
 ---@field options MapPinEnhancedRadioGroupOption[] -- options for the radio buttons
 ---@field onChange fun(value: any)
 ---@field init? fun(): any -- initial value can be nil if option has never been set before
 
----@param formData MapPinEnhancedRadioGroupData
+---@param formData RadioGroupSetup
 function MapPinEnhancedRadioGroupMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

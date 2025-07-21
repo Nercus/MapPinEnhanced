@@ -67,11 +67,11 @@ function MapPinEnhancedColorpickerMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedColorpickerData
+---@class ColorPickerSetup
 ---@field onChange fun(r: number, g: number, b: number, a: number)
 ---@field init? fun(): {r: number, g: number, b: number, a: number}
 
----@param formData MapPinEnhancedColorpickerData
+---@param formData ColorPickerSetup
 function MapPinEnhancedColorpickerMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

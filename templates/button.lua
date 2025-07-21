@@ -58,10 +58,10 @@ function MapPinEnhancedButtonMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedButtonData
+---@class ButtonSetup
 ---@field onChange fun(value: mouseButton, down: boolean)
 
----@param formData MapPinEnhancedButtonData
+---@param formData ButtonSetup
 function MapPinEnhancedButtonMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")

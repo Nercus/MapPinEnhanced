@@ -21,11 +21,11 @@ function MapPinEnhancedTextareaMixin:SetCallback(callback)
     self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
----@class MapPinEnhancedTextareaData
+---@class TextareaSetup
 ---@field onChange fun(text: string)
 ---@field init? fun(): string -- initial value can be nil if option has never been set before
 
----@param formData MapPinEnhancedTextareaData
+---@param formData TextareaSetup
 function MapPinEnhancedTextareaMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
