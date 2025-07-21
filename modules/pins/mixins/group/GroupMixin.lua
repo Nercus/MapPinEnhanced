@@ -93,6 +93,7 @@ function MapPinEnhancedPinGroupMixin:RemovePin(pinID)
     Pins:RemovePin(pinID)
     self.count = self.count - 1
     Groups:PersistGroup(self)
+    Tracker:UpdateList()
 end
 
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID):UUID, MapPinEnhancedPinMixin
