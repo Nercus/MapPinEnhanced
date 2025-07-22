@@ -105,6 +105,9 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         local group = self.group
         if group then
             source = group:GetSource()
+            if source == MapPinEnhanced.name then
+                source = nil
+            end
         end
         self.pinData.tooltip = { title = self.pinData.title, text = source }
     end
