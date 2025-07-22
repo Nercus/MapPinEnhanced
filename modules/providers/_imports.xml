@@ -5,6 +5,7 @@
     <Script file="global.lua" />
     <Script file="userWaypoint.lua" />
     <Script file="wayCommand.lua" />
+    <Script file="superTracking.lua" />
     <Script file="tomtom.lua" />
     <Script file="importString.lua" />
 </Ui>

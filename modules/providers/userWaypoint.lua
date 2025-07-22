@@ -29,7 +29,7 @@ local function OnUserWaypoint(uiMapPoint)
     local stack = debugstack(2) ---@type string
     if isBlockedAddon(stack) then return end -- ignore calls from this function
 
-    local title, texture, usesAtlas = Providers:DetectMouseFocusPinInfo()
+    local mouseFocusInfo = Providers:DetectMouseFocusPinInfo()
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
     local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
@@ -41,11 +41,11 @@ local function OnUserWaypoint(uiMapPoint)
     if not uncategorizedGroup then return end
     uncategorizedGroup:AddPin({
         mapID = uiMapPoint.uiMapID,
-        x = uiMapPoint.position.x,
-        y = uiMapPoint.position.y,
-        title = title,
-        texture = texture,
-        usesAtlas = usesAtlas,
+        x = mouseFocusInfo and mouseFocusInfo.x or uiMapPoint.position.x,
+        y = mouseFocusInfo and mouseFocusInfo.y or uiMapPoint.position.y,
+        title = mouseFocusInfo and mouseFocusInfo.name or nil,
+        texture = mouseFocusInfo and mouseFocusInfo.texture or nil,
+        usesAtlas = mouseFocusInfo and mouseFocusInfo.isAtlas or false,
         setTracked = not isSuperTrackingCorpse
     })
 end
