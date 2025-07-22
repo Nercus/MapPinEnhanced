@@ -7,7 +7,7 @@
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
-        <Size x="300" y="47" />
+        <Size x="300" y="40" />
         <NormalTexture atlas="QuestLog-tab">
             <Size x="1" y="32" />
             <Anchors>
@@ -23,14 +23,25 @@
             </Anchors>
         </HighlightTexture>
         <Frames>
-            <Button>
+            <Button parentKey="expandButton">
                 <Size x="20" y="20" />
                 <NormalTexture atlas="QuestLog-icon-Expand" setAllPoints="true" />
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="5" y="8" />
+                    <Anchor point="BOTTOMLEFT" x="5" y="6" />
                 </Anchors>
             </Button>
         </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString inherits="GameFontNormalLarge" text="Test" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.expandButton" x="5"
+                            relativePoint="RIGHT" />
+                        <Anchor point="RIGHT" x="-10" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
         </Scripts>

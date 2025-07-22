@@ -38,13 +38,14 @@ function MapPinEnhancedTrackerMixin:RemoveGroup(groupTreeNode)
     self.dataProvider:Remove(groupTreeNode)
 end
 
-local MAX_HEIGHT = 500                                 -- Maximum height of the tracker frame
+local MAX_ENTRIES = 6                                 -- Maximum number of entries to display
 function MapPinEnhancedTrackerMixin:UpdateHeight()
-    local trackerHeight = self.header:GetHeight() + 10 -- header plus padding
+    local trackerHeight = self.header:GetHeight() + 3 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
-    local newHeight = numberOfEntries * 47             -- Assuming each entry takes up 30 pixels in height
-    newHeight = newHeight + trackerHeight              -- Add the height of the header
-    self:SetHeight(math.min(newHeight, MAX_HEIGHT))
+    local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
+    local newHeight = visibleEntries * 47 -- Assuming each entry takes up 47 pixels in height
+    newHeight = newHeight + trackerHeight -- Add the height of the header
+    self:SetHeight(newHeight)
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
@@ -61,7 +62,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
             frame:Init(node)
         end)
     end)
-
 
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
 end

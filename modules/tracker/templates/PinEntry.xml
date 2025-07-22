@@ -6,12 +6,11 @@
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
-        <Size x="272" y="47" />
+        <Size x="272" y="40" />
         <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_bg.png"
             setAllPoints="true" />
         <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
             alpha="0.3" setAllPoints="true" />
-
         <Layers>
             <Layer level="OVERLAY">
                 <Texture setAllPoints="true"

@@ -12,14 +12,16 @@
         <Layers>
             <Layer level="OVERLAY">
                 <Texture parentKey="headerTexture"
-                    atlas="auctionhouse-background-buy-noncommodities-header" setAllPoints="true" />
+                    atlas="GarrLanding-ShipMission-InProgress" desaturated="true"
+                    setAllPoints="true" />
             </Layer>
             <Layer level="OVERLAY">
                 <FontString parentKey="title" inherits="GameFontNormalLarge"
+                    text="Map Pin Enhanced Tracker"
                     justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
                     <Anchors>
-                        <Anchor point="LEFT" x="15" y="3" />
+                        <Anchor point="LEFT" x="30" y="0" />
                     </Anchors>
                 </FontString>
             </Layer>
