@@ -1,5 +1,9 @@
 ---@meta
 
+---@class PinTooltip
+---@field title string? the title of the tooltip
+---@field text string? the text of the tooltip
+
 ---@class pinData
 ---@field mapID number
 ---@field x number x coordinate between 0 and 1
@@ -11,4 +15,4 @@
 ---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
 ---@field lock boolean? if true, the pin will be not be removed automatically when it has been reached
 ---@field order number? the order of the pin: the lower the number, the higher the pin will be displayed on the tracker -> if not set, the pin will be displayed at the end of the tracker
----@field tooltip fun()? an optional function to set the tooltip for the pin, if not set, the title will be used as tooltip text
+---@field tooltip PinTooltip? the tooltip of the pin, if not set, the default tooltip will be used

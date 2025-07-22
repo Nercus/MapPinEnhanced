@@ -99,6 +99,16 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.title = DEFAULT_PIN_NAME
     end
 
+    if not self.pinData.tooltip then
+        ---@type string?
+        local source
+        local group = self.group
+        if group then
+            source = group:GetSource()
+        end
+        self.pinData.tooltip = { title = self.pinData.title, text = source }
+    end
+
     self:SetPinColor(self.pinData.color)
     self:SetPinIcon(self.pinData.texture, self.pinData.usesAtlas)
     self:SetTooltip(self.pinData.tooltip)

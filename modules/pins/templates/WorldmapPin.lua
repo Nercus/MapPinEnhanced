@@ -2,9 +2,16 @@
 MapPinEnhancedWorldmapPinMixin = {}
 
 function MapPinEnhancedWorldmapPinMixin:OnEnter()
-    if not self.tooltipFunction then return end
+    if not self.tooltipData then return end
     GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT", 20)
-    self.tooltipFunction()
+    local title = self.tooltipData.title
+    local text = self.tooltipData.text
+    if title then
+        GameTooltip:AddLine(self.tooltipData.title, 1, 0.82, 0)
+    end
+    if text then
+        GameTooltip:AddLine(self.tooltipData.text, 1, 1, 1)
+    end
     GameTooltip:Show()
 end
 

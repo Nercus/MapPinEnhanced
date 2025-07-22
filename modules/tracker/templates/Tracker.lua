@@ -13,6 +13,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
+--- TODO: dont update the full list, try to only remove/add elements that changed
 function MapPinEnhancedTrackerMixin:UpdateList()
     self.dataProvider:Flush()
     ---@param group MapPinEnhancedPinGroupMixin
