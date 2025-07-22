@@ -106,3 +106,8 @@ L["Y"] = "Y"
 L["You Are in an Instance or a Zone Where the Map Is Not Available"] =
 "You Are in an Instance or a Zone Where the Map Is Not Available"
 L["Uncategorized Pins"] = "Uncategorized Pins"
+L["Groups"] = "Groups"
+L["Tracker"] = "Tracker"
+L["Import/Export"] = "Import/Export"
+L["Maps"] = "Maps"
+L["Change Icon"] = "Change Icon"
