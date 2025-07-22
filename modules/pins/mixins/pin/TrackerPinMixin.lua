@@ -3,10 +3,15 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerPinMixin
 ---@field trackerEntry MapPinEnhancedTrackerPinEntryTemplate
-MapPinEnhancedTrackerPinMixin = {}
+---@field treeNode SubTreeNodeMixin
+---@field template string the template used for the tracker entry
+MapPinEnhancedTrackerPinMixin = {
+    template = "MapPinEnhancedTrackerPinEntryTemplate"
+}
 
 function MapPinEnhancedTrackerPinMixin:Reset()
     self:SetFrame(nil)
+    self:SetTreeNode(nil)
 end
 
 function MapPinEnhancedTrackerPinMixin:SetFrame(frame)
@@ -15,6 +20,14 @@ end
 
 function MapPinEnhancedTrackerPinMixin:GetFrame()
     return self.trackerEntry
+end
+
+function MapPinEnhancedTrackerPinMixin:SetTreeNode(treeNode)
+    self.treeNode = treeNode
+end
+
+function MapPinEnhancedTrackerPinMixin:GetTreeNode()
+    return self.treeNode
 end
 
 function MapPinEnhancedTrackerPinMixin:SetPinColor(color)

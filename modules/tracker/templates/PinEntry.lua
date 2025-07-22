@@ -4,19 +4,18 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerPinEntryTemplate : Button
 ---@field template string
 ---@field pinFrame MapPinEnhancedBasePinTemplate
----@field treeNode SubTreeNodeMixin
+---@field treeNode TreeNodeMixin
 ---@field pin MapPinEnhancedPinMixin
 ---@field overlayTexture Texture
 MapPinEnhancedTrackerPinEntryMixin = {}
 
----@param treeNode SubTreeNodeMixin
+---@param treeNode TreeNodeMixin
 function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
-    self:SetPin(treeNode:GetData())
-end
-
----@param pin MapPinEnhancedPinMixin
-function MapPinEnhancedTrackerPinEntryMixin:SetPin(pin)
+    ---@type MapPinEnhancedPinMixin
+    local pin = treeNode:GetData()
     self.pin = pin
+
+    pin.trackerEntry:SetTreeNode(treeNode)
     pin.trackerEntry:SetFrame(self)
     self.pin:SetPinColor(pin.pinData.color)
     self.pin:SetPinIcon(pin.pinData.texture, pin.pinData.usesAtlas)

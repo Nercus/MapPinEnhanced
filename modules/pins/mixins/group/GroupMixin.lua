@@ -1,29 +1,44 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-local Pins = MapPinEnhanced:GetModule("Pins")
-local Tracker = MapPinEnhanced:GetModule("Tracker")
-
 ---@class MapPinEnhancedPinGroupMixin
 ---@field name string the name of the group
 ---@field source string the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
 ---@field pins table<UUID, MapPinEnhancedPinMixin> a table of pins that belong to this
----@field trackerTemplate string the template used for the tracker entry of this group
-MapPinEnhancedPinGroupMixin = CreateFromMixins(
-    { trackerTemplate = "MapPinEnhancedTrackerGroupEntryTemplate" }
-)
-
+---@field trackerEntry MapPinEnhancedTrackerGroupMixin? the tracker entry for this group, if any
+MapPinEnhancedPinGroupMixin = {}
 
 ---@class Groups
+---@field trackerObjectPool ObjectPool<MapPinEnhancedTrackerGroupMixin>
 ---@field framePool FramePoolCollection<MapPinEnhancedTrackerGroupEntryTemplate>
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Pins = MapPinEnhanced:GetModule("Pins")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
+local function CreateGroupObject()
+    return CreateFromMixins(MapPinEnhancedTrackerGroupMixin)
+end
+
+---@param trackerEntry MapPinEnhancedTrackerGroupMixin
+local function ResetGroupObject(_, trackerEntry)
+    trackerEntry:Reset()
+end
+
+function Groups:GetTrackerObjectPool()
+    if not self.trackerObjectPool then
+        self.trackerObjectPool = CreateObjectPool(CreateGroupObject, ResetGroupObject)
+    end
+
+    return self.trackerObjectPool
+end
 
 function MapPinEnhancedPinGroupMixin:Init()
     self.pins = {}
     self.count = 0
-    Tracker:UpdateList()
+
+    local trackerObjectPool = Groups:GetTrackerObjectPool()
+    self.trackerEntry = trackerObjectPool:Acquire()
 end
 
 function MapPinEnhancedPinGroupMixin:Reset()
@@ -32,6 +47,9 @@ function MapPinEnhancedPinGroupMixin:Reset()
     self.source = nil
     self.icon = nil
     self.count = 0
+
+    local trackerObjectPool = Groups:GetTrackerObjectPool()
+    trackerObjectPool:Release(self.trackerEntry)
 end
 
 ---@param name string
@@ -75,6 +93,15 @@ end
 ---@param overridePinID UUID? if provided, the pin will be created with this ID instead of a new one
 function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedPinGroupMixin:AddPin: pinData is nil")
+    local treeNode = self.trackerEntry:GetTreeNode()
+    if not treeNode then
+        -- group is not initialized in the tracker yet
+        local groupNode = Tracker:AddGroup(self)
+        self.trackerEntry:SetTreeNode(groupNode)
+        self:AddPin(pinData, overridePinID) -- retry adding the pin after initializing the group
+        return
+    end
+
     local pin = Pins:CreatePin(pinData)
     if overridePinID then
         pin:OverridePinID(overridePinID)
@@ -82,18 +109,24 @@ function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     pin.group = self
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
+    self.trackerEntry:AddPin(pin)
     Groups:PersistGroup(self)
-    Tracker:UpdateList()
 end
 
 ---@param pinID UUID
 function MapPinEnhancedPinGroupMixin:RemovePin(pinID)
     assert(pinID, "MapPinEnhancedPinGroupMixin:AddPin: pinID is nil")
+    local pin = self.pins[pinID]
+    self.count = self.count - 1
+    self.trackerEntry:RemovePin(pin.trackerEntry) -- if this is the last pin, remove the group tracker entry as well
     self.pins[pinID] = nil
     Pins:RemovePin(pinID)
-    self.count = self.count - 1
     Groups:PersistGroup(self)
-    Tracker:UpdateList()
+
+    if self.count == 0 then
+        Tracker:RemoveGroup(self.trackerEntry:GetTreeNode())
+        self.trackerEntry:Reset() -- reset the tracker entry to avoid memory leaks
+    end
 end
 
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID):UUID, MapPinEnhancedPinMixin

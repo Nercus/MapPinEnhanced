@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedTrackerHeaderMixin : Frame
+---@class MapPinEnhancedTrackerHeaderTemplate : Frame
 MapPinEnhancedTrackerHeaderMixin = {}
 
 ---@param button mouseButton

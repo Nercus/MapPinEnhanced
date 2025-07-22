@@ -4,17 +4,18 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerGroupEntryTemplate
 ---@field template string
 ---@field treeNode TreeNodeMixin
+---@field group MapPinEnhancedPinGroupMixin
 MapPinEnhancedTrackerGroupEntryMixin = {}
 
 
 ---@param treeNode TreeNodeMixin
 function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
-    self:SetTreeNode(treeNode)
-end
+    local group = treeNode:GetData()
+    self.group = group
+    group.trackerEntry:SetFrame(self)
 
----@param treeNode TreeNodeMixin
-function MapPinEnhancedTrackerGroupEntryMixin:SetTreeNode(treeNode)
     self.treeNode = treeNode
+    group.trackerEntry:SetTreeNode(self.treeNode)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown()

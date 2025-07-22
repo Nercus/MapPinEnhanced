@@ -25,6 +25,23 @@ function Tracker:ShowTracker()
     frame:Show()
 end
 
+---@param group MapPinEnhancedPinGroupMixin
+---@return TreeNodeMixin?
+function Tracker:AddGroup(group)
+    local frame = self:GetTrackerFrame()
+    if frame:IsShown() then
+        return frame:AddGroup(group)
+    end
+end
+
+---@param groupTreeNode TreeNodeMixin?
+function Tracker:RemoveGroup(groupTreeNode)
+    local frame = self:GetTrackerFrame()
+    if frame:IsShown() then
+        frame:RemoveGroup(groupTreeNode)
+    end
+end
+
 function Tracker:UpdateList()
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
@@ -32,6 +49,6 @@ function Tracker:UpdateList()
     end
 end
 
--- MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
---     Tracker:ShowTracker()
--- end)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    Tracker:ShowTracker()
+end)
