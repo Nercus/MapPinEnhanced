@@ -5,5 +5,6 @@
     <Include file="mixins/_imports.xml" />
     <Include file="groupManager.lua" />
     <Include file="pinManager.lua" />
+    <Include file="setManager.lua" />
     <Include file="trackingManager.lua" />
 </Ui>
