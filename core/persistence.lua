@@ -76,7 +76,7 @@ function MapPinEnhanced:SetVar(...)
         if not currentTable[key] then
             currentTable[key] = {}
         end
-        currentTable = currentTable[key]
+        currentTable = currentTable[key] --[[@as any]]
     end
     if type(currentTable) ~= "table" then
         return
