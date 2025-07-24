@@ -20,6 +20,10 @@ function MapPinEnhancedOptionMixin:SetOptionData(optionData)
     self.optionData = optionData
 end
 
+function MapPinEnhancedOptionMixin:GetOptionData()
+    return self.optionData
+end
+
 function MapPinEnhancedOptionMixin:SetOptionType(optionType)
     self.optionType = optionType
 end

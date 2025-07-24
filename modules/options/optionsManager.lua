@@ -3,7 +3,10 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Options
 ---@field categoryObjectPool ObjectPool<MapPinEnhancedOptionCategoryMixin>
+---@field onChangeCallbacks table<string, fun(option: MapPinEnhancedOptionMixin, ... )[]>
 local Options = MapPinEnhanced:GetModule("Options")
+
+Options.onChangeCallbacks = Options.onChangeCallbacks or {}
 
 local L = MapPinEnhanced.L
 
@@ -84,6 +87,19 @@ function Options:RegisterOption(optionType, optionData)
     assert(CATEGORIES[categoryName], "Options:GetOption: categoryName '" .. tostring(categoryName) .. "' is not allowed")
     local categoryObject = self:GetCategoryByName(categoryName)
     if not categoryObject then return end
+    ---@type string
+    local key = categoryName .. ":" .. optionData.label
+    if self.onChangeCallbacks and self.onChangeCallbacks[key] then
+        local previousOnChange = optionData.onChange
+        optionData.onChange = function(option, ...)
+            for _, callback in ipairs(self.onChangeCallbacks[key]) do
+                callback(option, ...)
+            end
+            if previousOnChange then
+                previousOnChange(option, ...)
+            end
+        end
+    end
     categoryObject:AddOption(optionType, optionData)
 end
 
@@ -122,3 +138,32 @@ function Options:InitializeCategories()
 end
 
 Options:InitializeCategories()
+
+
+--- Registers an additional onChange callback for a specific option.
+---@param category OptionCategories
+---@param label string
+---@param callback fun(option: MapPinEnhancedOptionMixin, ...)
+function Options:RegisterOnChangeCallback(category, label, callback)
+    assert(type(callback) == "function", "Options:RegisterOptionOnChange: callback must be a function")
+    ---@type string
+    local key = category .. ":" .. label
+    self.onChangeCallbacks[key] = self.onChangeCallbacks[key] or {}
+    table.insert(self.onChangeCallbacks[key], callback)
+
+    -- If the option is already registered, attach immediately
+    local option = self:GetOption(category, label)
+    if option then
+        local optionData = option:GetOptionData()
+        local previousOnChange = optionData.onChange
+        optionData.onChange = function(opt, ...)
+            for _, cb in ipairs(self.onChangeCallbacks[key]) do
+                cb(opt, ...)
+            end
+            if previousOnChange then
+                previousOnChange(opt, ...)
+            end
+        end
+        option:SetOptionData(optionData) -- Update the option data with the new onChange
+    end
+end
