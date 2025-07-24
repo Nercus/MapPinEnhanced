@@ -7,11 +7,6 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
----@class GroupInfo
----@field name string the name of the group
----@field source string the name of the addon which is registering the group, used to identify the group.
----@field icon string? the icon of the group, used to display the group on the map
-
 local function CreateGroupObject()
     return CreateAndInitFromMixin(MapPinEnhancedPinGroupMixin)
 end

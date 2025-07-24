@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerGroupMixin
----@field trackerEntry MapPinEnhancedTrackerPinEntryTemplate
+---@field trackerEntry MapPinEnhancedTrackerGroupEntryTemplate
 ---@field treeNode TreeNodeMixin
 ---@field template string the template used for the tracker entry
 MapPinEnhancedTrackerGroupMixin = {
