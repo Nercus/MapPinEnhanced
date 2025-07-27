@@ -12,7 +12,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the set
 ---@field pins pinData[] a table of pins that belong to this set
 ---@field count number the number of pins in this set
-MapPinEnhancedPinSetMixin = {}
+MapPinEnhancedPinSetMixin = CreateFromMixins(MapPinEnhancedPinSetShareMixin)
 
 
 ---@class Sets

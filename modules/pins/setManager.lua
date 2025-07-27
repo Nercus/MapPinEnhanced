@@ -22,9 +22,9 @@ function Sets:GetObjectPool()
     return self.objectPool
 end
 
-function Sets:CreateSetEmptySet(name)
-    assert(name, "Sets:CreateSetEmptySet: name is nil")
-    assert(type(name) == "string", "Sets:CreateSetEmptySet: name must be a string")
+function Sets:CreateSet(name)
+    assert(name, "Sets:CreateSet: name is nil")
+    assert(type(name) == "string", "Sets:CreateSet: name must be a string")
 
     local setsPool = self:GetObjectPool()
     local set = setsPool:Acquire()
@@ -78,7 +78,7 @@ function Sets:RestoreSet(setData)
 
     local set = self:GetSetByName(setData.name)
     if not set then
-        set = self:CreateSetEmptySet(setData.name)
+        set = self:CreateSet(setData.name)
     end
 
     for _, pinData in ipairs(setData.pins or {}) do
@@ -103,4 +103,24 @@ end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Sets:RestoreAllSets()
+    -- Create a test set with test pins and load it
+    local testSetName = "TestSet"
+    local testPins = {
+        { x = 0.25, y = 0.75, mapID = 123, title = "Pin 1" },
+        { x = 0.50, y = 0.50, mapID = 123, title = "Pin 2" },
+        { x = 0.80, y = 0.20, mapID = 123, title = "Pin 3" },
+    }
+
+    local testSet = Sets:CreateSet(testSetName)
+    for _, pinData in ipairs(testPins) do
+        testSet:AddPin(pinData)
+    end
+
+    -- local button = CreateFrame("Button", nil, UIParent, "UIPanelButtonTemplate")
+    -- button:SetPoint("CENTER")
+    -- button:SetSize(100, 30)
+    -- button:SetText("Share Test Set")
+    -- button:SetScript("OnClick", function()
+    --     testSet:LinkToChat()
+    -- end)
 end)

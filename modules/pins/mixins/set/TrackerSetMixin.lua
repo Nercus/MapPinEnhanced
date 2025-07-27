@@ -7,6 +7,11 @@ MapPinEnhancedTrackerSetMixin = {
 }
 
 
+function MapPinEnhancedTrackerSetMixin:Reset()
+    self:SetFrame(nil)
+    self:SetTreeNode(nil)
+end
+
 function MapPinEnhancedTrackerSetMixin:SetFrame(frame)
     self.trackerEntry = frame
 end

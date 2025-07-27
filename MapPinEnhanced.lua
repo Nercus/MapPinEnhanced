@@ -2,6 +2,9 @@
 local MapPinEnhanced = select(2, ...)
 
 MapPinEnhanced.name = "MapPinEnhanced"
+MapPinEnhanced.me = UnitName("player")
+MapPinEnhanced.realm = GetRealmName()
+MapPinEnhanced.player = MapPinEnhanced.me .. "-" .. MapPinEnhanced.realm
 
 MapPinEnhanced.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 MapPinEnhanced.isClassic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC -- Note: Classic is not supported yet
