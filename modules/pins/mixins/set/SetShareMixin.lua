@@ -4,22 +4,11 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedPinSetMixin
 MapPinEnhancedPinSetShareMixin = {}
 
-local PROTOCOL_PREFIX = "MPH3";
 --- [AddonName: Setname-PlayerName]
 local preFilteredFormatPattern = "[%s: %s-%s]"
 local preFilteredCapturePattern = "([%w_]+): ([%w_]+)-([%w_]+)"
 local logoEscapeSequence = "|TInterface\\Addons\\MapPinEnhanced\\assets\\pins\\PinTrackedYellow.png:12|t" ..
     MapPinEnhanced.name
-
-
-
--- add test statusbar to middle of the screen
-local statusBar = CreateFrame("StatusBar", nil, UIParent, "MapPinEnhancedStatusbarTemplate")
-statusBar:SetPoint("CENTER", 0, 100)
-statusBar:SetSize(400, 40)
-statusBar:SetMinMaxValues(0, 100)
-statusBar:SetValue(0)
-statusBar:Hide()
 
 
 ---@param event WowEvent
@@ -82,53 +71,20 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", FilterFunc)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", FilterFunc)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", FilterFunc)
 
-local Chomp = MapPinEnhanced.Chomp
-
-
-
 -- Popup dialog for importing a set
 StaticPopupDialogs["MAPPINENHANCED_IMPORT_SET"] = {
     text = "Do you want to import the set '%s' from player '%s'?",
-    button1 = YES,
-    button2 = NO,
-    OnAccept = function(self, data)
-        if not data or not data.setName or not data.playerName then
-            return
-        end
-
-        -- Example: Create a big table with a lot of data
-        local bigTable = {}
-        for i = 1, 1000 do
-            bigTable[i] = {
-                id = i,
-                name = "Entry_" .. i,
-                value = math.random(1, 10000),
-                flags = { a = true, b = false, c = i % 2 == 0 },
-                nested = {
-                    subid = i * 10,
-                    description = "Nested data for entry " .. i,
-                }
-            }
-        end
-
-        -- You can use bigTable as needed here
-        -- For demonstration, just print the size
-        print("Created bigTable with entries:", #bigTable)
-
-        -- Chomp.SmartAddonMessage(PROTOCOL_PREFIX, "request:" .. data.setName .. ":" .. data.playerName, "WHISPER",
-        --     data.playerName)
-
-
-        MapPinEnhanced:Debug({
-            "SENT_DATA",
-            data = bigTable
-        })
-        local serializedTable = C_EncodingUtil.SerializeCBOR(bigTable)
-        local compressedTable = C_EncodingUtil.CompressString(serializedTable)
-        Chomp.SmartAddonMessage(PROTOCOL_PREFIX, compressedTable, "WHISPER", data.playerName, {
-            serialize = true,
-            binaryBlob = true
-        })
+    button1 = "Yes",
+    button2 = "No",
+    ---@param requestInfo { setName: string, playerName: string }
+    OnAccept = function(_, requestInfo)
+        -- request first then the sender sends the message
+        MapPinEnhanced:SendAddonMessage(
+            string.format("request-set-%s", requestInfo.setName),
+            string.format("%s:%s", requestInfo.setName, requestInfo.playerName),
+            "WHISPER",
+            requestInfo.playerName
+        )
     end,
     timeout = 0,
     whileDead = true,
@@ -136,59 +92,54 @@ StaticPopupDialogs["MAPPINENHANCED_IMPORT_SET"] = {
     preferredIndex = 3,
 }
 
--- Show popup when set link is clicked
-EventRegistry:RegisterCallback("SetItemRef", function(_, link)
-    local linkType, linkData = LinkUtil.SplitLinkData(link)
-    if linkType ~= "addonMPH" then
+
+function MapPinEnhancedPinSetShareMixin:OnShareUpdate(progress, total)
+    print(string.format("Sharing set '%s': %d/%d", self.name, progress, total))
+end
+
+function MapPinEnhancedPinSetShareMixin:OnShareComplete()
+    print(string.format("Set '%s' shared successfully!", self.name))
+end
+
+function MapPinEnhancedPinSetShareMixin:OnRequestReceived(setName, playerName)
+    if self.name ~= setName then
         return
     end
-    local setName, playerName = strsplit(":", linkData)
-    StaticPopup_Show("MAPPINENHANCED_IMPORT_SET", setName, playerName, { setName = setName, playerName = playerName })
-end, MapPinEnhanced)
-
-
+    self.transmission(self:GetSaveableData(), "WHISPER", playerName)
+end
 
 function MapPinEnhancedPinSetShareMixin:LinkToChat()
     assert(self.name, "MapPinEnhancedPinSetShareMixin:LinkToChat: name is nil")
+    self.transmission = MapPinEnhanced:RegisterTransmission({
+        event = string.format("transmit:set:%s", self.name),
+        onUpdate = function(progress, total)
+            self:OnShareUpdate(progress, total)
+        end,
+        onComplete = function()
+            self:OnShareComplete()
+        end,
+    })
+
+    MapPinEnhanced:RegisterAddonMessage(string.format("request-set-%s", self.name), function(data)
+        local setName, playerName = strsplit(":", data)
+        self:OnRequestReceived(setName, playerName)
+    end)
 
     local setName = self.name
-
     local link = string.format(preFilteredFormatPattern, MapPinEnhanced.name, setName, MapPinEnhanced.me)
     ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
     ChatEdit_InsertLink(link)
 end
 
-local PROTOCOL_SETTINGS = {
-    permitUnlogged = true,
-    permitLogged = true,
-    permitBattleNet = true,
-    fullMsgOnly = true,
-    validTypes = {
-        ["string"] = true,
-        ["table"] = true,
-    },
-    broadcastPrefix = PROTOCOL_PREFIX,
-}
-
-local function onIncrementalMessageReceived(_, data, _, sender, _, _, _, _, _, _, _, _, sessionID, msgID, msgTotal)
-    local progress = msgID / msgTotal
-    if not statusBar:IsShown() then
-        statusBar:Show()
+-- Show popup when set link is clicked
+EventRegistry:RegisterCallback("SetItemRef", function(_, link)
+    ---@type string, string
+    local linkType, linkData = LinkUtil.SplitLinkData(link)
+    if linkType ~= "addonMPH" then
+        return
     end
-    statusBar:SetValueSmooth(progress * 100)
-    print(string.format("Received incremental message from %s: %d%% complete", sender, progress * 100))
-end
-PROTOCOL_SETTINGS.rawCallback = onIncrementalMessageReceived;
-
-local function onChatMessageReceived(_, data, channel, sender)
-    local decompressedData = C_EncodingUtil.DecompressString(data)
-    local deserializedData = C_EncodingUtil.DeserializeCBOR(decompressedData)
-    MapPinEnhanced:Debug({
-        "onChatMessageReceived",
-        data = deserializedData,
-        channel = channel,
-        sender = sender,
-    })
-end
-
-Chomp.RegisterAddonPrefix(PROTOCOL_PREFIX, onChatMessageReceived, PROTOCOL_SETTINGS)
+    local setName, playerName = strsplit(":", linkData)
+    local dialog = StaticPopup_Show("MAPPINENHANCED_IMPORT_SET", setName, playerName,
+        { setName = setName, playerName = playerName })
+    dialog.data = { setName = setName, playerName = playerName }
+end, MapPinEnhanced)
