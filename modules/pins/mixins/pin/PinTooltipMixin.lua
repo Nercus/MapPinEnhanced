@@ -2,10 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedPinMixin
-MapPinEnhancedPinProxyMixin = {}
+MapPinEnhancedPinTooltipMixin = {}
 
 ---@param tooltipInfo? PinTooltip
-function MapPinEnhancedPinProxyMixin:SetTooltip(tooltipInfo)
+function MapPinEnhancedPinTooltipMixin:SetTooltip(tooltipInfo)
     self.worldmapPin:UpdateTooltip(tooltipInfo)
     self.minimapPin:UpdateTooltip(tooltipInfo)
     self:PersistPin()
