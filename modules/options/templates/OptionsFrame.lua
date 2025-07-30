@@ -10,6 +10,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedOptionsFrameMixin = {}
 
 
+
 function MapPinEnhancedOptionsFrameMixin:OnLoad()
     TabSystemOwnerMixin.OnLoad(self);
     self:SetTabSystem(self.TabSystem);
@@ -25,4 +26,5 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
         [importTabID] = self.importView,
         [setEditorTabID] = self.seteditorView,
     }
+    TabSystemOwnerMixin.SetTab(self, optionsTabID);
 end
