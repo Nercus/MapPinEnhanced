@@ -7,15 +7,25 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
-MapPinEnhancedTrackerMixin = {}
+---@field activeView 'set' | 'pin'
+MapPinEnhancedTrackerMixin = {
+    activeView = "pin", -- Default view is pin
+}
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Sets = MapPinEnhanced:GetModule("Sets")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
-function MapPinEnhancedTrackerMixin:UpdateList()
-    self.dataProvider:Flush()
+function MapPinEnhancedTrackerMixin:UpdateSetList()
+    ---@param set MapPinEnhancedPinSetMixin
+    for set in Sets:EnumerateSets() do
+        self.dataProvider:Insert(set) --[[@as TreeNodeMixin]]
+    end
+end
+
+function MapPinEnhancedTrackerMixin:UpdatePinList()
     ---@param group MapPinEnhancedPinGroupMixin
     for group in Groups:EnumerateGroups() do
         local numPins = group:GetPinCount()
@@ -25,6 +35,16 @@ function MapPinEnhancedTrackerMixin:UpdateList()
                 groupElement:Insert(pin)
             end
         end
+    end
+end
+
+function MapPinEnhancedTrackerMixin:UpdateList()
+    self.dataProvider:Flush()
+
+    if self.activeView == "set" then
+        self:UpdateSetList()
+    else
+        self:UpdatePinList()
     end
 end
 
@@ -70,6 +90,20 @@ function MapPinEnhancedTrackerMixin:SetPosition(x, y)
     self:ClearAllPoints()
     self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
     MapPinEnhanced:SetVar("trackerPosition", { x = x, y = y })
+end
+
+function MapPinEnhancedTrackerMixin:GetActiveView()
+    return self.activeView
+end
+
+function MapPinEnhancedTrackerMixin:ToggleActiveView()
+    if self.activeView == "set" then
+        self.activeView = "pin"
+    else
+        self.activeView = "set"
+    end
+    self:UpdateList()
+    self:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerMixin:OnShow()

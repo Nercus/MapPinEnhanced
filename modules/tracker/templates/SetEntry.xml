@@ -8,31 +8,20 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
         <Size x="300" y="40" />
-        <NormalTexture atlas="QuestLog-tab">
+        <NormalTexture atlas="auctionhouse-nav-button">
             <Size x="1" y="32" />
             <Anchors>
                 <Anchor point="BOTTOMLEFT" />
                 <Anchor point="BOTTOMRIGHT" />
             </Anchors>
         </NormalTexture>
-        <HighlightTexture atlas="QuestLog-quest-glow-yellow" alpha="0.3">
+        <HighlightTexture atlas="auctionhouse-nav-button-highlight" alpha="0.3">
             <Size x="1" y="32" />
             <Anchors>
                 <Anchor point="BOTTOMLEFT" />
                 <Anchor point="BOTTOMRIGHT" />
             </Anchors>
         </HighlightTexture>
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormalLarge" text="Setname" justifyH="LEFT">
-                    <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.expandButton" x="5"
-                            relativePoint="RIGHT" />
-                        <Anchor point="RIGHT" x="-10" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
         </Scripts>
