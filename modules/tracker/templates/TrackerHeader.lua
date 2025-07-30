@@ -1,7 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedTrackerHeaderTemplate : Frame
+---@class MapPinEnhancedTrackerHeaderTemplate : Frame^
+---@field viewButton Button
 MapPinEnhancedTrackerHeaderMixin = {}
 
 ---@param button mouseButton
@@ -25,4 +26,11 @@ function MapPinEnhancedTrackerHeaderMixin:OnMouseUp(button)
     trackerFrame:StopMovingOrSizing()
     trackerFrame:SetPosition(left, top)
     SetCursor(nil)
+end
+
+function MapPinEnhancedTrackerHeaderMixin:OnLoad()
+    self.viewButton:SetScript("OnClick", function()
+        local trackerFrame = self:GetParent() --[[@as MapPinEnhancedTrackerTemplate]]
+        trackerFrame:ToggleActiveView()
+    end)
 end

@@ -34,6 +34,10 @@ end
 
 ---@param pin MapPinEnhancedPinMixin
 function MapPinEnhancedTrackerGroupMixin:AddPin(pin)
+    if Tracker:GetActiveView() ~= "pin" then
+        return
+    end
+
     local treeNode = self:GetTreeNode()
     if not treeNode then
         return

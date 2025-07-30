@@ -28,6 +28,9 @@ end
 ---@param group MapPinEnhancedPinGroupMixin
 ---@return TreeNodeMixin?
 function Tracker:AddGroup(group)
+    if self:GetActiveView() ~= "pin" then
+        return nil -- Cannot add groups in set view
+    end
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
         return frame:AddGroup(group)
@@ -36,10 +39,22 @@ end
 
 ---@param groupTreeNode TreeNodeMixin?
 function Tracker:RemoveGroup(groupTreeNode)
+    if self:GetActiveView() ~= "pin" then
+        return -- Cannot remove groups in set view
+    end
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
         frame:RemoveGroup(groupTreeNode)
     end
+end
+
+---@return 'set' | 'pin'
+function Tracker:GetActiveView()
+    local frame = self:GetTrackerFrame()
+    if frame:IsShown() then
+        return frame.activeView
+    end
+    return "pin" -- Default to pin view if tracker is not shown
 end
 
 function Tracker:UpdateList()

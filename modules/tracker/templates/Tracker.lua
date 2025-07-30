@@ -58,7 +58,8 @@ function MapPinEnhancedTrackerMixin:RemoveGroup(groupTreeNode)
     self.dataProvider:Remove(groupTreeNode)
 end
 
-local MAX_ENTRIES = 6                                 -- Maximum number of entries to display
+-- Maximum number of entries to display
+local MAX_ENTRIES = 6
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local trackerHeight = self.header:GetHeight() + 3 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
