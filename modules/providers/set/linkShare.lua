@@ -33,16 +33,13 @@ local function FilterFunc(_, event, msg, player, l, cs, t, flag, channelId, ...)
     local searchedMessage = msg
 
     repeat
-        local start, finish, _, setName, playerName = searchedMessage:find(preFilteredCapturePattern);
+        local start, finish, _, setName, playerName = string.find(searchedMessage, preFilteredCapturePattern)
         if playerName and setName then
             local displayText = string.format("|cffffd100[%s]|r",
                 string.format(preFilteredFormatPattern, logoEscapeSequence, setName, playerName))
-            newMsg = newMsg .. searchedMessage:sub(1, start - 1)
-            MapPinEnhanced:Debug({ newMsg = newMsg, setName = setName, playerName = playerName })
+            newMsg = newMsg .. string.sub(searchedMessage, 1, start - 1)
             newMsg = newMsg .. LinkUtil.FormatLink("addonMPH", displayText, setName, playerName)
-            MapPinEnhanced:Debug({ newMsg = newMsg, displayText = displayText, setName = setName, playerName = playerName })
-            ---@type string
-            searchedMessage = searchedMessage:sub(finish + 1);
+            searchedMessage = string.sub(searchedMessage, finish + 1);
             setFound = true
             anySetFound = true
         else
