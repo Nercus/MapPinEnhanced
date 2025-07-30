@@ -116,6 +116,10 @@ end
 ---@param groupData SaveableGroupData
 function Groups:RestoreGroup(groupData)
     assert(groupData, "Groups:RestoreGroup: groupInfo is nil")
+    if #groupData.pins == 0 then
+        -- If there are no pins in the group, we don't need to restore it
+        return
+    end
     local group = self:GetGroupByName(groupData.name)
     if not group then
         group = self:RegisterPinGroup(groupData)
@@ -159,6 +163,7 @@ function Groups:InitializeDefaultGroups()
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Groups:InitializeDefaultGroups()
+    -- the order here is important! The restore process purges all empty groups, so we need to restore the default groups first and then create the default groups
     Groups:RestoreAllGroups()
+    Groups:InitializeDefaultGroups()
 end)

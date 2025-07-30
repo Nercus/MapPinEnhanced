@@ -16,7 +16,8 @@ MapPinEnhancedPinMixin = CreateFromMixins(
     MapPinEnhancedPinMouseDownMixin,
     MapPinEnhancedPinColorMixin,
     MapPinEnhancedPinUtilsMixin,
-    MapPinEnhancedPinTooltipMixin
+    MapPinEnhancedPinTooltipMixin,
+    MapPinEnhancedPinProxyMixin
 )
 
 local L = MapPinEnhanced.L

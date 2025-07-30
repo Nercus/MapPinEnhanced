@@ -13,7 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
-MapPinEnhancedPinGroupMixin = {}
+MapPinEnhancedPinGroupMixin = CreateFromMixins(MapPinEnhancedPinGroupProxyMixin)
 
 ---@class Groups
 ---@field trackerObjectPool ObjectPool<MapPinEnhancedTrackerGroupMixin>
@@ -97,6 +97,7 @@ end
 
 ---@param pinData pinData
 ---@param overridePinID UUID? if provided, the pin will be created with this ID instead of a new one
+---@return MapPinEnhancedPinMixin?
 function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedPinGroupMixin:AddPin: pinData is nil")
     local treeNode = self.trackerEntry:GetTreeNode()
@@ -117,6 +118,7 @@ function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     self.count = self.count + 1
     self.trackerEntry:AddPin(pin)
     Groups:PersistGroup(self)
+    return pin
 end
 
 ---@param pinID UUID
