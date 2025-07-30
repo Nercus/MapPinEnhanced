@@ -23,6 +23,15 @@ function Tracker:ShowTracker()
     end
     frame:UpdateList()
     frame:Show()
+    MapPinEnhanced:SetVar("trackerVisible", true)
+end
+
+function Tracker:HideTracker()
+    local frame = self:GetTrackerFrame()
+    if frame:IsShown() then
+        frame:Hide()
+    end
+    MapPinEnhanced:SetVar("trackerVisible", false)
 end
 
 ---@param group MapPinEnhancedPinGroupMixin
@@ -64,6 +73,23 @@ function Tracker:UpdateList()
     end
 end
 
+function Tracker:RestoreTrackerVisibility()
+    if MapPinEnhanced:GetVar("trackerVisible") then
+        self:ShowTracker()
+    else
+        self:HideTracker()
+    end
+end
+
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Tracker:ShowTracker()
+    Tracker:RestoreTrackerVisibility()
 end)
+
+
+MapPinEnhanced:AddSlashCommand("tracker", function()
+    if MapPinEnhanced:GetVar("trackerVisible") then
+        Tracker:HideTracker()
+    else
+        Tracker:ShowTracker()
+    end
+end, "Toggle the tracker visibility.")

@@ -27,15 +27,26 @@
             </Layer>
         </Layers>
         <Frames>
+            <Button parentKey="closeButton">
+                <Size x="30" y="30" />
+                <NormalTexture atlas="128-RedButton-Exit" />
+                <PushedTexture atlas="128-RedButton-Exit-Pressed" />
+                <HighlightTexture atlas="128-RedButton-Exit-Highlight" />
+                <Anchors>
+                    <Anchor point="RIGHT" x="-5" y="0" />
+                </Anchors>
+            </Button>
             <Button parentKey="viewButton">
                 <Size x="30" y="30" />
                 <NormalTexture atlas="128-RedButton-ArrowDown" />
                 <PushedTexture atlas="128-RedButton-ArrowDown-Pressed" />
                 <HighlightTexture atlas="128-RedButton-ArrowDown-Highlight" />
                 <Anchors>
-                    <Anchor point="RIGHT" x="-5" y="0" />
+                    <Anchor point="RIGHT" x="-5" y="0" relativeKey="$parent.closeButton"
+                        relativePoint="LEFT" />
                 </Anchors>
             </Button>
+
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
