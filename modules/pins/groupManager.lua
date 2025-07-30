@@ -40,7 +40,7 @@ local DEFAULT_GROUPS = {
 
 
 ---@param groupInfo GroupInfo
----@return MapPinEnhancedPinGroupMixin
+---@return MapPinEnhancedPinGroupMixin?
 function Groups:RegisterPinGroup(groupInfo)
     assert(groupInfo, "Groups:RegisterPinGroup: groupInfo is nil")
     assert(groupInfo.name, "Groups:RegisterPinGroup: groupInfo.name is nil")
@@ -48,11 +48,6 @@ function Groups:RegisterPinGroup(groupInfo)
     assert(groupInfo.source, "Groups:RegisterPinGroup: groupInfo.source is nil")
     assert(type(groupInfo.source) == "string", "Groups:RegisterPinGroup: groupInfo.source must be a string")
     assert(C_AddOns.IsAddOnLoaded(groupInfo.source), "Groups:RegisterPinGroup: groupInfo.source is not a loaded addon")
-    -- Assert that the group name is not a default group name
-    for _, defaultGroup in ipairs(DEFAULT_GROUPS) do
-        assert(groupInfo.name ~= defaultGroup.name,
-            "Groups:RegisterPinGroup: groupInfo.name cannot be a default group name")
-    end
 
     local existingGroup = self:GetGroupByName(groupInfo.name)
     if existingGroup then
