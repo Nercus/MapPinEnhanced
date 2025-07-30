@@ -5,8 +5,8 @@ local MapPinEnhanced = select(2, ...)
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Sets = MapPinEnhanced:GetModule("Sets")
 
-local preFilteredFormatPattern = "[%s: %s-%s]"
-local preFilteredCapturePattern = "([%w_]+): ([%w_]+)-([%w_]+)"
+local preFilteredFormatPattern = "%s: %s-%s"
+local preFilteredCapturePattern = "%[([%w_]+): ([%w_]+)-([%w_]+)%]"
 local logoEscapeSequence = "|TInterface\\Addons\\MapPinEnhanced\\assets\\pins\\PinTrackedYellow.png:12|t" ..
     MapPinEnhanced.name
 
@@ -33,17 +33,20 @@ local function FilterFunc(_, event, msg, player, l, cs, t, flag, channelId, ...)
     local searchedMessage = msg
 
     repeat
-        local _, finish, _, setName, playerName = searchedMessage:find(preFilteredCapturePattern);
+        local start, finish, _, setName, playerName = searchedMessage:find(preFilteredCapturePattern);
         if playerName and setName then
-            local displayText = string.format("|cffffd100" .. preFilteredFormatPattern .. "|r", logoEscapeSequence,
-                setName, playerName)
-            ---@type string
+            local displayText = string.format("|cffffd100[%s]|r",
+                string.format(preFilteredFormatPattern, logoEscapeSequence, setName, playerName))
+            newMsg = newMsg .. searchedMessage:sub(1, start - 1)
+            MapPinEnhanced:Debug({ newMsg = newMsg, setName = setName, playerName = playerName })
             newMsg = newMsg .. LinkUtil.FormatLink("addonMPH", displayText, setName, playerName)
+            MapPinEnhanced:Debug({ newMsg = newMsg, displayText = displayText, setName = setName, playerName = playerName })
             ---@type string
             searchedMessage = searchedMessage:sub(finish + 1);
             setFound = true
             anySetFound = true
         else
+            newMsg = newMsg .. searchedMessage
             setFound = false
         end
     until (not setFound)
