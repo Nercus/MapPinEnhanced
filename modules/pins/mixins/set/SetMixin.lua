@@ -117,6 +117,7 @@ function MapPinEnhancedPinSetMixin:GetPinIndexByPindata(pinData)
     return nil
 end
 
+---@return SetInfo
 function MapPinEnhancedPinSetMixin:GetSaveableData()
     return {
         name = self.name,

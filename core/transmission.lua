@@ -2,42 +2,100 @@
 local MapPinEnhanced = select(2, ...)
 
 local Chomp = MapPinEnhanced.Chomp
-local PROTOCOL_PREFIX = "MPH";
-local PROTOCOL_SETTINGS = {
+local PROTOCOL_PREFIX_DATA = "MPHData";
+local PROTOCOL_PREFIX_TEXT = "MPHText";
+
+local PROTOCOL_SETTINGS_DATA = {
+    permitUnlogged = true,
+    permitLogged = true,
+    permitBattleNet = true,
+    fullMsgOnly = true,
+    validTypes = {
+        ["table"] = true,
+    },
+    broadcastPrefix = PROTOCOL_PREFIX_DATA,
+}
+
+local PROTOCOL_SETTINGS_TEXT = {
     permitUnlogged = true,
     permitLogged = true,
     permitBattleNet = true,
     fullMsgOnly = true,
     validTypes = {
         ["string"] = true,
-        ["table"] = true,
     },
-    broadcastPrefix = PROTOCOL_PREFIX,
+    broadcastPrefix = PROTOCOL_PREFIX_TEXT,
 }
 
----@class TransmissionOptions
----@field event string
----@field onComplete fun(data: table)
----@field onUpdate fun(progress: number, total: number)
 
----@type table<string, TransmissionOptions[]>
-local registeredTransmissions = {}
 
+---@type table<string, {onSuccess: fun(data: table), onUpdate: fun(progress: number, total: number)}[]>
+local registeredDataCallbacks = {}
 ---@type table<number, string>
-local sessionIDToTransmission = {}
+local sessionIDToDataEvent = {}
+---@type table<string, fun(text: string)[]>
+local registeredTextCallbacks = {}
 
----@type table<string, fun(data: string)[]>
-local registeredAddonMessages = {}
 
+---@enum (key) ADDON_MESSAGE_EVENT
+local ALLOWED_EVENTS = {
+    TRANSMIT_SET = "TRANSMIT_SET",
+    REQUEST_SET = "REQUEST_SET",
+}
+
+
+---@param event ADDON_MESSAGE_EVENT
+---@param text string
+---@param kind string
+---@param target string
+function MapPinEnhanced:SendTextAddonMessage(event, text, kind, target)
+    assert(ALLOWED_EVENTS[event], "Invalid event: " .. tostring(event))
+    local textData = string.format("%:%s", event, text)
+    Chomp.SmartAddonMessage(PROTOCOL_PREFIX_TEXT, textData, kind, target, {
+        serialize = true,
+        binaryBlob = false
+    })
+end
+
+---@param event ADDON_MESSAGE_EVENT
+---@param callback fun(text: string)
+function MapPinEnhanced:OnTextAddonMessage(event, callback)
+    assert(ALLOWED_EVENTS[event], "Invalid event: " .. tostring(event))
+    if not registeredTextCallbacks[event] then
+        registeredTextCallbacks[event] = {}
+    end
+    table.insert(registeredTextCallbacks[event], callback)
+end
+
+local function onTextMessageReceived(_, text)
+    local event, msg = strsplit(":", text, 2)
+    if not event or not msg then
+        return
+    end
+    if registeredTextCallbacks[event] then
+        for _, callback in ipairs(registeredTextCallbacks[event]) do
+            if type(callback) == "function" then
+                callback(text)
+            end
+        end
+    end
+end
+
+
+---@param data table
+---@param event ADDON_MESSAGE_EVENT
+---@return string
 local function EncodeTableForTransmission(data, event)
     local serializedTable = C_EncodingUtil.SerializeCBOR(data)
     serializedTable = string.format("%s:%s", event, serializedTable)
     return C_EncodingUtil.CompressString(serializedTable)
 end
 
+---@param data string
+---@return table?, string?
 local function DecodeTableFromTransmission(data)
     local decompressedData = C_EncodingUtil.DecompressString(data)
-    local event, serializedTable = decompressedData:match("^(.-):(.*)$")
+    local event, serializedTable = strsplit(":", decompressedData, 2)
     if not event or not serializedTable then
         error("Failed to decode table from transmission data")
         return nil
@@ -45,123 +103,88 @@ local function DecodeTableFromTransmission(data)
     return C_EncodingUtil.DeserializeCBOR(serializedTable), event
 end
 
----@param event string
----@param text string
+---@param event ADDON_MESSAGE_EVENT
+---@param data table
 ---@param kind string
 ---@param target string
-function MapPinEnhanced:SendAddonMessage(event, text, kind, target)
-    local textData = string.format("%s:%s", event, text)
-    Chomp.SmartAddonMessage(PROTOCOL_PREFIX, textData, kind, target, {
+function MapPinEnhanced:SendDataAddonMessage(event, data, kind, target)
+    assert(type(data) == "table", "Data must be a table")
+    assert(ALLOWED_EVENTS[event], "Invalid event: " .. tostring(event))
+
+    local encodedData = EncodeTableForTransmission(data, event)
+    Chomp.SmartAddonMessage(PROTOCOL_PREFIX_DATA, encodedData, kind, target, {
         serialize = true,
-        binaryBlob = false
+        binaryBlob = true
     })
 end
 
-function MapPinEnhanced:RegisterAddonMessage(event, callback)
-    if not event or not callback then
-        error("Event and callback must be provided for registering addon message")
+---@param event ADDON_MESSAGE_EVENT
+---@param onSuccessCallback fun(data: table)
+---@param onUpdateCallback fun(progress: number, total: number)
+function MapPinEnhanced:OnDataAddonMessage(event, onSuccessCallback, onUpdateCallback)
+    assert(ALLOWED_EVENTS[event], "Invalid event: " .. tostring(event))
+    if not registeredDataCallbacks[event] then
+        registeredDataCallbacks[event] = {}
     end
-    if not registeredAddonMessages[event] then
-        registeredAddonMessages[event] = {}
-    end
-    table.insert(registeredAddonMessages[event], callback)
+    table.insert(registeredDataCallbacks[event], {
+        onSuccess = onSuccessCallback,
+        onUpdate = onUpdateCallback
+    })
 end
 
----@param transmissionOptions TransmissionOptions
----@return fun(data: table, kind: string, target: string)
-function MapPinEnhanced:RegisterTransmission(transmissionOptions)
-    if not transmissionOptions or not transmissionOptions.event then
-        error("Transmission options must include an 'event' field")
+---@param _ any
+---@param data string
+---@param ... unknown
+local function onDataMessageReceived(_, data, ...)
+    local sessionID = select(11, ...)
+    if not sessionID or not registeredDataCallbacks[sessionID] then
+        return
     end
-    if not registeredTransmissions[transmissionOptions.event] then
-        registeredTransmissions[transmissionOptions.event] = {}
+    local decodedData, event = DecodeTableFromTransmission(data)
+    if not event or not decodedData then
+        error("Failed to decode data from transmission")
+        return
     end
-    table.insert(registeredTransmissions[transmissionOptions.event], transmissionOptions)
-    return function(data, kind, target)
-        local compressedTable = EncodeTableForTransmission(data, transmissionOptions.event)
-        Chomp.SmartAddonMessage(PROTOCOL_PREFIX, compressedTable, kind, target, {
-            serialize = true,
-            binaryBlob = true
-        })
+    if not registeredDataCallbacks[event] then
+        error("Received transmission for unknown event: " .. tostring(event))
+        return
+    end
+    local callbackList = registeredDataCallbacks[event]
+    for _, callback in ipairs(callbackList) do
+        if type(callback.onSuccess) == "function" then
+            callback.onSuccess(decodedData)
+        end
     end
 end
 
-local function onDataMessageIncrementalReceived(data, sessionID, msgID, msgTotal)
+
+---@param _ any
+---@param data string
+---@param ... unknown
+local function onDataMessageIncrementalReceived(_, data, ...)
+    ---@type number, number?, number?
+    local sessionID, msgID, msgTotal = select(11, ...)
     if msgID == 1 then
         local _, event = DecodeTableFromTransmission(data)
-        if not event or not registeredTransmissions[event] then
+        if not event or not registeredDataCallbacks[event] then
             error("Received transmission for unknown event: " .. tostring(event))
             return
         end
-        sessionIDToTransmission[sessionID] = event
+        sessionIDToDataEvent[sessionID] = event
     end
-
-    local event = sessionIDToTransmission[sessionID]
-    local transmissionInfo = registeredTransmissions[event]
-    if not transmissionInfo then
-        error("No registered transmission for event: " .. tostring(event))
+    local event = sessionIDToDataEvent[sessionID]
+    if not event or not registeredDataCallbacks[event] then
+        error("Received transmission for unknown event: " .. tostring(event))
         return
     end
-    for _, transmission in ipairs(transmissionInfo) do
-        if transmission.onUpdate then
-            transmission.onUpdate(msgID, msgTotal)
+    local callbackList = registeredDataCallbacks[event]
+    for _, callback in ipairs(callbackList) do
+        if type(callback.onUpdate) == "function" then
+            callback.onUpdate(msgID, msgTotal)
         end
     end
 end
 
-
-local function onIncrementalMessageReceived(_, data, _, _, _, _, _, _, _, _, _, _, sessionID, msgID, msgTotal)
-    local dataType = type(data)
-    if dataType == "string" then
-        return -- we don't handle incremental updates of strings. if data is big enough to be split, it should be a table
-    elseif dataType == "table" then
-        onDataMessageIncrementalReceived(data, sessionID, msgID, msgTotal)
-    else
-        error("Unsupported data type received: " .. tostring(dataType))
-    end
-end
-
-local function onTextMessageReceived(data)
-    ---@type string, string
-    local event, msg = data:match("([^:]+):(.*)")
-    if not registeredAddonMessages[event] then
-        error("No registered addon message for event: " .. tostring(event))
-        return
-    end
-    for _, callback in ipairs(registeredAddonMessages[event]) do
-        callback(msg)
-    end
-end
-
-
-local function onDataMessageReceived(data, sessionID)
-    local event = sessionIDToTransmission[sessionID]
-    local transmissionInfo = registeredTransmissions[event]
-    if not transmissionInfo then
-        error("No registered transmission for event: " .. tostring(event))
-        return
-    end
-    local decodedData, eventType = DecodeTableFromTransmission(data)
-    if not decodedData or eventType ~= event then
-        error("Failed to decode data or event mismatch: " .. tostring(eventType))
-        return
-    end
-    for _, transmission in ipairs(transmissionInfo) do
-        if transmission.onComplete then
-            transmission.onComplete(decodedData)
-        end
-    end
-end
-
-
-local function onChatMessageReceived(_, data, _, _, _, _, _, _, _, _, _, _, sessionID)
-    local dataType = type(data)
-    if dataType == "string" then
-        onTextMessageReceived(data)
-    elseif dataType == "table" then
-        onDataMessageReceived(data, sessionID)
-    end
-end
-
-PROTOCOL_SETTINGS.rawCallback = onIncrementalMessageReceived;
-Chomp.RegisterAddonPrefix(PROTOCOL_PREFIX, onChatMessageReceived, PROTOCOL_SETTINGS)
+PROTOCOL_SETTINGS_DATA.rawCallback = onDataMessageIncrementalReceived
+Chomp.RegisterAddonPrefix(PROTOCOL_PREFIX_DATA, onDataMessageReceived, PROTOCOL_SETTINGS_DATA)
+Chomp.RegisterAddonPrefix(PROTOCOL_PREFIX_TEXT, onTextMessageReceived, PROTOCOL_SETTINGS_TEXT)

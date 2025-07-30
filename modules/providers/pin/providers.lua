@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Providers
+---@class Providers Providers are different ways to get pin or set information and insert that into MPH
 local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@enum PIN_TEXTURE_OVERRIDES
