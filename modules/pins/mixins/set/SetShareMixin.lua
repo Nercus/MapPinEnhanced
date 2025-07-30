@@ -26,7 +26,7 @@ function MapPinEnhancedPinSetShareMixin:LinkToChat()
     self.linkCreated = GetTime()
 
     MapPinEnhanced:OnTextAddonMessage("REQUEST_SET", function(data)
-        if string.find(data, setName) ~= 1 then
+        if not string.find(data, setName) then
             return
         end
         local set, player = strsplit(":", data)

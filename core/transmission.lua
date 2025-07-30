@@ -11,7 +11,7 @@ local PROTOCOL_SETTINGS_DATA = {
     permitBattleNet = true,
     fullMsgOnly = true,
     validTypes = {
-        ["table"] = true,
+        ["string"] = true,
     },
     broadcastPrefix = PROTOCOL_PREFIX_DATA,
 }
@@ -50,7 +50,7 @@ local ALLOWED_EVENTS = {
 ---@param target string
 function MapPinEnhanced:SendTextAddonMessage(event, text, kind, target)
     assert(ALLOWED_EVENTS[event], "Invalid event: " .. tostring(event))
-    local textData = string.format("%:%s", event, text)
+    local textData = string.format("%s:%s", event, text)
     Chomp.SmartAddonMessage(PROTOCOL_PREFIX_TEXT, textData, kind, target, {
         serialize = true,
         binaryBlob = false
@@ -75,32 +75,36 @@ local function onTextMessageReceived(_, text)
     if registeredTextCallbacks[event] then
         for _, callback in ipairs(registeredTextCallbacks[event]) do
             if type(callback) == "function" then
-                callback(text)
+                callback(msg)
             end
         end
     end
 end
 
+local encodeReplacements = { ["\000"] = "\001\001", ["\001"] = "\001\002" };
+local decodeReplacements = { ["\001\001"] = "\000", ["\001\002"] = "\001" };
 
 ---@param data table
 ---@param event ADDON_MESSAGE_EVENT
 ---@return string
 local function EncodeTableForTransmission(data, event)
     local serializedTable = C_EncodingUtil.SerializeCBOR(data)
-    serializedTable = string.format("%s:%s", event, serializedTable)
-    return C_EncodingUtil.CompressString(serializedTable)
+    local compressedString = C_EncodingUtil.CompressString(serializedTable)
+    compressedString = (string.gsub(compressedString, "[%z\001]", encodeReplacements));
+    return string.format("%s:%s", event, compressedString)
 end
 
 ---@param data string
 ---@return table?, string?
 local function DecodeTableFromTransmission(data)
-    local decompressedData = C_EncodingUtil.DecompressString(data)
-    local event, serializedTable = strsplit(":", decompressedData, 2)
-    if not event or not serializedTable then
+    local event, compressedData = strsplit(":", data, 2)
+    compressedData = (string.gsub(compressedData, "\001.", decodeReplacements))
+    local decompressedData = C_EncodingUtil.DecompressString(compressedData)
+    if not event or not decompressedData then
         error("Failed to decode table from transmission data")
         return nil
     end
-    return C_EncodingUtil.DeserializeCBOR(serializedTable), event
+    return C_EncodingUtil.DeserializeCBOR(decompressedData), event
 end
 
 ---@param event ADDON_MESSAGE_EVENT
@@ -137,7 +141,8 @@ end
 ---@param ... unknown
 local function onDataMessageReceived(_, data, ...)
     local sessionID = select(11, ...)
-    if not sessionID or not registeredDataCallbacks[sessionID] then
+    if not sessionID or not sessionIDToDataEvent[sessionID] then
+        error("Received transmission for unknown session ID: " .. tostring(sessionID))
         return
     end
     local decodedData, event = DecodeTableFromTransmission(data)
@@ -165,7 +170,7 @@ local function onDataMessageIncrementalReceived(_, data, ...)
     ---@type number, number?, number?
     local sessionID, msgID, msgTotal = select(11, ...)
     if msgID == 1 then
-        local _, event = DecodeTableFromTransmission(data)
+        local event = data:match('^"([^"]+):')
         if not event or not registeredDataCallbacks[event] then
             error("Received transmission for unknown event: " .. tostring(event))
             return

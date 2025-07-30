@@ -115,12 +115,4 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     for _, pinData in ipairs(testPins) do
         testSet:AddPin(pinData)
     end
-
-    -- local button = CreateFrame("Button", nil, UIParent, "UIPanelButtonTemplate")
-    -- button:SetPoint("CENTER")
-    -- button:SetSize(100, 30)
-    -- button:SetText("Share Test Set")
-    -- button:SetScript("OnClick", function()
-    --     testSet:LinkToChat()
-    -- end)
 end)
