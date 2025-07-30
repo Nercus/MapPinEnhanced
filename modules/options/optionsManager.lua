@@ -167,3 +167,24 @@ function Options:RegisterOnChangeCallback(category, label, callback)
         option:SetOptionData(optionData) -- Update the option data with the new onChange
     end
 end
+
+function Options:GetOptionsFrame()
+    if not self.optionsFrame then
+        self.optionsFrame = CreateFrame("Frame", "MapPinEnhancedOptionsFrame", UIParent,
+            "MapPinEnhancedOptionsFrameTemplate")
+    end
+    return self.optionsFrame
+end
+
+function Options:ToggleOptionsFrame()
+    local frame = self:GetOptionsFrame()
+    if frame:IsShown() then
+        frame:Hide()
+    else
+        frame:Show()
+    end
+end
+
+MapPinEnhanced:AddSlashCommand("options", function()
+    Options:ToggleOptionsFrame()
+end, "Open the options frame")
