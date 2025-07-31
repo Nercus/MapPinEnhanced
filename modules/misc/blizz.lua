@@ -78,7 +78,7 @@ function Blizzard:UpdateGlobalSuperTrackedFrame()
         return
     end
     -- TODO: set the correct icon here Providers:GetSuperTrackingInfo(mapID)
-    globalSuperTrackedFrame:Show()
+    --globalSuperTrackedFrame:Show()
 end
 
 ---Method to handle the super tracking change event and track the last tracked pin

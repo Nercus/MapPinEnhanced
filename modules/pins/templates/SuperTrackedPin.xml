@@ -5,22 +5,23 @@
     <Script file="SuperTrackedPin.lua" />
     <Frame name="MapPinEnhancedSuperTrackedPinTemplate"
         mixin="MapPinEnhancedSuperTrackedPinMixin"
-        inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="false"
+        virtual="true" enableMouse="false"
         clipChildren="false" hidden="true">
-        <Size x="60" y="60" />
+        <Size x="50" y="50" />
         <Layers>
             <Layer level="OVERLAY">
-                <FontString parentKey="distantText" inherits="GameFontHighlight" text="??:??">
+                <FontString parentKey="distantText" inherits="GameFontHighlight">
                     <Anchors>
                         <Anchor point="TOP" relativePoint="BOTTOM" y="-24" />
                     </Anchors>
                 </FontString>
                 <Texture parentKey="titleBG"
                     file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png">
-                    <Size x="100" y="20" />
+                    <Size x="100" y="16" />
                     <Anchors>
                         <Anchor point="CENTER" y="20" />
                     </Anchors>
+                    <Color r="1" g="0.82" b="0" a="1" />
                 </Texture>
                 <FontString inherits="GameFontNormal" text="title">
                     <Anchors>
@@ -33,7 +34,7 @@
                 <Texture parentKey="beam" alpha="0">
                     <Size x="3" y="150" />
                     <Anchors>
-                        <Anchor point="BOTTOM" relativePoint="TOP" />
+                        <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pinFrame" />
                     </Anchors>
                     <Color r="1" g="0.82" b="0" />
                     <Gradient orientation="VERTICAL">
@@ -44,30 +45,37 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="arrows">
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate">
+                <Size x="50" y="50" />
                 <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" />
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="arrows">
+                <Size x="50" y="50" />
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pinFrame" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture parentKey="arrow1"
-                            file="Interface\Transmogrify\transmog-tooltip-arrow.blp">
-                            <Size x="16" y="16" />
+                            atlas="Azerite-PointingArrow">
+                            <Size x="48" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" y="0" />
                             </Anchors>
                         </Texture>
                         <Texture parentKey="arrow2"
-                            file="Interface\Transmogrify\transmog-tooltip-arrow.blp">
-                            <Size x="16" y="16" />
+                            atlas="Azerite-PointingArrow">
+                            <Size x="48" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" relativeKey="$parent.arrow1"
                                     relativePoint="BOTTOM" y="-1" />
                             </Anchors>
                         </Texture>
                         <Texture parentKey="arrow3"
-                            file="Interface\Transmogrify\transmog-tooltip-arrow.blp">
-                            <Size x="16" y="16" />
+                            atlas="Azerite-PointingArrow">
+                            <Size x="48" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" relativeKey="$parent.arrow2"
                                     relativePoint="BOTTOM" y="-1" />
@@ -83,8 +91,6 @@
                         <Alpha childKey="arrow1" order="2" duration="0.3" fromAlpha="1"
                             toAlpha="0.2"
                             smoothing="IN_OUT" />
-
-
                         <Alpha childKey="arrow2" order="1" duration="0.3" fromAlpha="0.2"
                             toAlpha="1"
                             smoothing="IN_OUT" startDelay="0.2" />
@@ -100,42 +106,27 @@
                             smoothing="IN_OUT" startDelay="0.4" />
                     </AnimationGroup>
                 </Animations>
+                <Scripts>
+                    <OnLoad>
+                        self.PulseArrows:Play();
+                    </OnLoad>
+                </Scripts>
             </Frame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnEvent method="OnEvent" />
-            <OnShow method="OnShow" />
-            <OnHide method="OnHide" />
         </Scripts>
         <Animations>
-            <AnimationGroup parentKey="MorphToBeacon" setToFinalAlpha="true">
+            <AnimationGroup parentKey="morphToBeacon" setToFinalAlpha="true">
                 <!-- Pin shifts down -->
-                <Translation childKey="background" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="texture" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="shadow" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="icon" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="iconMask" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="pulseHighlight" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
-                <Translation childKey="highlight" order="1" duration="0.25" offsetX="0"
+                <Translation childKey="pinFrame" order="1" duration="0.25" offsetX="0"
                     offsetY="-15" />
                 <!-- Pin scales down -->
-                <Scale childKey="background" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="texture" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="shadow" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="icon" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="iconMask" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="pulseHighlight" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
-                <Scale childKey="highlight" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
+                <Scale childKey="pinFrame" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
                 <!-- Text shifts down -->
                 <Translation childKey="titleBG" order="1" duration="0.25" offsetX="0"
-                    offsetY="-30" />
+                    offsetY="-10" />
                 <!-- beam fades in -->
                 <Alpha childKey="beam" order="1" duration="0.25" fromAlpha="0"
                     toAlpha="1" smoothing="IN_OUT" />
@@ -145,30 +136,12 @@
                     toAlpha="0" smoothing="IN_OUT" />
             </AnimationGroup>
 
-            <AnimationGroup parentKey="MorphToGrounded" setToFinalAlpha="true">
+            <AnimationGroup parentKey="morphToGrounded" setToFinalAlpha="true">
                 <!-- Pin shifts up -->
-                <Translation childKey="background" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="texture" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="shadow" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="icon" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="iconMask" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="pulseHighlight" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
-                <Translation childKey="highlight" order="1" duration="0.25" offsetX="0"
+                <Translation childKey="pinFrame" order="1" duration="0.25" offsetX="0"
                     offsetY="15" />
                 <!-- Pin scales up -->
-                <Scale childKey="background" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="texture" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="shadow" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="icon" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="iconMask" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="pulseHighlight" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
-                <Scale childKey="$parent.highlight" order="1" duration=".2" scaleX=".8" scaleY=".8" />
+                <Scale childKey="pinFrame" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
                 <!-- Text shifts up -->
                 <Translation childKey="$parent.titleBG" order="1" duration=".2" offsetX="0"
                     offsetY="30" />

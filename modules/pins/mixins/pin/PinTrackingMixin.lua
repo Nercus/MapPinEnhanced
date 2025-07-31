@@ -13,6 +13,7 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
     self.supertrackedPin:SetTracked()
+    self.supertrackedPin:Show()
     if self.trackerEntry then
         self.trackerEntry:SetTracked()
     end
@@ -26,6 +27,11 @@ function MapPinEnhancedPinTrackingMixin:Track()
         if timeToTarget < 0 then timeToTarget = 0 end
 
         self.supertrackedPin:UpdateTimeText(timeToTarget)
+        if distance < 100 then
+            self.supertrackedPin:SetStyle("grounded")
+        else
+            self.supertrackedPin:SetStyle("beacon")
+        end
     end)
 end
 
@@ -33,6 +39,7 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
     self.supertrackedPin:SetUntracked()
+    self.supertrackedPin:Hide()
     if self.trackerEntry then
         self.trackerEntry:SetUntracked()
     end
