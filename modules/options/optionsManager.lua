@@ -10,7 +10,7 @@ Options.onChangeCallbacks = Options.onChangeCallbacks or {}
 
 local L = MapPinEnhanced.L
 
----@enum OptionCategories
+---@enum (key) OptionCategories
 local CATEGORIES = {
     GENERAL = L["General"],
     PINS = L["Pins"],
@@ -130,15 +130,15 @@ function Options:DisableOption(option)
     option:SetDisabled()
 end
 
-function Options:RegisterCategory(categoryName)
+function Options:RegisterCategory(categoryID, categoryName)
     local categoriesPool = self:GetCategoryObjectPool()
     local category = categoriesPool:Acquire()
     category:SetName(categoryName)
 end
 
 function Options:InitializeCategories()
-    for categoryName in pairs(CATEGORIES) do
-        self:RegisterCategory(categoryName)
+    for categoryName, categoryID in pairs(CATEGORIES) do
+        self:RegisterCategory(categoryID, categoryName)
     end
 end
 

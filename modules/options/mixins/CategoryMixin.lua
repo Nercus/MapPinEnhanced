@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionCategoryMixin
 ---@field name string
+---@field id OptionCategories
 ---@field options table<string, MapPinEnhancedOptionMixin>
 MapPinEnhancedOptionCategoryMixin = {}
 
@@ -47,6 +48,15 @@ end
 
 function MapPinEnhancedOptionCategoryMixin:GetName()
     return self.name
+end
+
+---@param id string
+function MapPinEnhancedOptionCategoryMixin:SetID(id)
+    self.id = id
+end
+
+function MapPinEnhancedOptionCategoryMixin:GetID()
+    return self.id
 end
 
 ---@param optionType OptionType
