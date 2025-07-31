@@ -40,7 +40,6 @@ end
 
 function MapPinEnhancedTrackerMixin:UpdateList()
     self.dataProvider:Flush()
-
     if self.activeView == "set" then
         self:UpdateSetList()
     else
@@ -49,12 +48,18 @@ function MapPinEnhancedTrackerMixin:UpdateList()
 end
 
 ---@param group MapPinEnhancedPinGroupMixin
----@return TreeNodeMixin
+---@return TreeNodeMixin?
 function MapPinEnhancedTrackerMixin:AddGroup(group)
+    if self.activeView ~= "pin" then
+        return nil -- Cannot add groups in set view
+    end
     return self.dataProvider:Insert(group)
 end
 
 function MapPinEnhancedTrackerMixin:RemoveGroup(groupTreeNode)
+    if self.activeView ~= "pin" then
+        return -- Cannot remove groups in set view
+    end
     self.dataProvider:Remove(groupTreeNode)
 end
 

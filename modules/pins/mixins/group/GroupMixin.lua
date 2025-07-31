@@ -101,7 +101,7 @@ end
 function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedPinGroupMixin:AddPin: pinData is nil")
     local treeNode = self.trackerEntry:GetTreeNode()
-    if not treeNode and Tracker:GetActiveView() == "pin" then
+    if not treeNode and Tracker:GetActiveView() == "pin" and Tracker:IsShown() then
         -- group is not initialized in the tracker yet
         local groupNode = Tracker:AddGroup(self)
         self.trackerEntry:SetTreeNode(groupNode)
