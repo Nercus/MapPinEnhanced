@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedPinTrackingMixin = {}
 
 local Tracking = MapPinEnhanced:GetModule("Tracking")
+local Distance = MapPinEnhanced:GetModule("Distance")
 
 function MapPinEnhancedPinTrackingMixin:Track()
     Tracking:UntrackTrackedPin() -- untrack any previously tracked pin
@@ -18,6 +19,14 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self.isTracked = true
     Tracking:SetTrackedPin(self)
     self:PersistPin()
+
+    Distance:EnableDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y, function(distance, timeToTarget)
+        if not self:IsTracked() then return end
+        if distance < 0 then distance = 0 end
+        if timeToTarget < 0 then timeToTarget = 0 end
+
+        self.supertrackedPin:UpdateTimeText(timeToTarget)
+    end)
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
@@ -33,6 +42,8 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
     end
     self.isTracked = false
     self:PersistPin()
+
+    Distance:DisableDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
 end
 
 function MapPinEnhancedPinTrackingMixin:ToggleTracked()

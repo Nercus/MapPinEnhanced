@@ -117,8 +117,19 @@ function Distance:EnableDistanceCheck(mapID, x, y, onUpdate)
     self.target = { mapID = mapID, x = x, y = y, onUpdate = onUpdate }
 end
 
-function Distance:DisableDistanceCheck()
-    self.target = nil
+---@param mapID number?
+---@param x number?
+---@param y number?
+function Distance:DisableDistanceCheck(mapID, x, y)
+    if mapID and x and y then
+        -- If specific coordinates are provided, we can clear the target
+        if self.target and self.target.mapID == mapID and self.target.x == x and self.target.y == y then
+            self.target = nil
+            return
+        end
+    else
+        self.target = nil
+    end
 end
 
 function Distance:Init()
