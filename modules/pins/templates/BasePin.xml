@@ -60,7 +60,6 @@
                             <Scale duration="0.35" order="2" fromScaleX="1.1" fromScaleY="1.1"
                                 toScaleX="1" toScaleY="1"
                                 smoothing="NONE" />
-
                         </AnimationGroup>
                     </Animations>
                 </Texture>

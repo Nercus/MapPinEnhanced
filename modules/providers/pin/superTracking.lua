@@ -18,26 +18,20 @@ local questClassificationAtlas = {
     [Enum.QuestClassification.Important] = "importantavailablequesticon",
 };
 
-local function OnSuperTrackingChanged()
-    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    if superTrackingType == Enum.SuperTrackingType.UserWaypoint then
-        return
-    end
+---@param mapID number
+---@return Vector2DMixin?
+---@return string?
+---@return string?
+function Providers:GetSuperTrackingInfo(mapID)
+    -- TODO: fix this to always use the mapID of the actual map element instead to use the current map
 
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    ---@type number UiMapID
-    local mapID = WorldMapFrame:GetMapID()
-    if not mapID then return end
-
     ---@type Vector2DMixin?
     local position
     ---@type string?
     local title
     ---@type string?
     local atlasName
-    ---@
-
-
     if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
         local areaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
         if not areaPOIInfo then return end
@@ -83,6 +77,20 @@ local function OnSuperTrackingChanged()
             end
         end
     end
+    return position, title, atlasName
+end
+
+local function OnSuperTrackingChanged()
+    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
+    if superTrackingType == Enum.SuperTrackingType.UserWaypoint then
+        return
+    end
+
+    ---@type number UiMapID
+    local mapID = WorldMapFrame:GetMapID()
+    if not mapID then return end
+
+    local position, title, atlasName = Providers:GetSuperTrackingInfo(mapID)
 
     if not position or not title or not atlasName then
         return

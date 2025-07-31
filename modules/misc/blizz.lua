@@ -49,8 +49,6 @@ end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizzard.OverrideSuperTrackedReachedBehavior)
 
----------------------------------------------------------------------------
-
 ---Hide default world map Pin
 function Blizzard:HideBlizzardPin()
     if not WaypointLocationPinMixin then return end
@@ -60,10 +58,28 @@ function Blizzard:HideBlizzardPin()
     end)
 end
 
-Blizzard:HideBlizzardPin()
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", Blizzard.HideBlizzardPin)
 
 
+
+function Blizzard:GetGlobalSuperTrackedFrame()
+    if not self.superTrackedFrame and SuperTrackedFrame then
+        self.superTrackedFrame = CreateFrame("Frame", "MapPinEnhancedGlobalSuperTrackedFrame", SuperTrackedFrame,
+            "MapPinEnhancedSuperTrackedPinTemplate")
+    end
+    return self.superTrackedFrame
+end
+
+function Blizzard:UpdateGlobalSuperTrackedFrame()
+    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
+    local globalSuperTrackedFrame = self:GetGlobalSuperTrackedFrame()
+    if not superTrackingType or superTrackingType ~= Enum.SuperTrackingType.UserWaypoint then
+        globalSuperTrackedFrame:Hide()
+        return
+    end
+    -- TODO: set the correct icon here Providers:GetSuperTrackingInfo(mapID)
+    globalSuperTrackedFrame:Show()
+end
 
 ---Method to handle the super tracking change event and track the last tracked pin
 function Blizzard:OnSuperTrackingChanged()
@@ -82,7 +98,9 @@ end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
     Blizzard:OnSuperTrackingChanged()
+    Blizzard:UpdateGlobalSuperTrackedFrame()
 end)
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
     Blizzard:OnSuperTrackingChanged()
+    Blizzard:UpdateGlobalSuperTrackedFrame()
 end)
