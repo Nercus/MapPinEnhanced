@@ -4,5 +4,5 @@
     <Include file="BasePin.xml" />
     <Include file="WorldmapPin.xml" />
     <Include file="MinimapPin.xml" />
-    <!--  <Include file="SuperTrackedPin.xml" /> -->
+    <Include file="SuperTrackedPin.xml" />
 </Ui>

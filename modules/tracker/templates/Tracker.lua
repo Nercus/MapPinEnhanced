@@ -61,6 +61,7 @@ end
 -- Maximum number of entries to display
 local MAX_ENTRIES = 6
 function MapPinEnhancedTrackerMixin:UpdateHeight()
+    -- TODO: update height also when elements get collapsed
     local trackerHeight = self.header:GetHeight() + 3 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
@@ -77,7 +78,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.scrollView:SetElementFactory(function(factory, node)
-        ---@type MapPinEnhancedPinGroupMixin | MapPinEnhancedPinMixin
+        ---@type MapPinEnhancedPinGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedPinSetMixin
         local data = node:GetData()
         factory(data.trackerEntry.template, function(frame)
             frame:Init(node)

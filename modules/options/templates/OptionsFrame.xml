@@ -22,49 +22,28 @@
                         y="2" />
                 </Anchors>
             </Frame>
-            <Frame parentKey="optionsView" frameLevel="100"
-                hidden="true">
+            <Frame parentKey="optionsView" frameLevel="100" hidden="true"
+                inherits="MapPinEnhancedOptionsViewTemplate">
                 <Size x="793" y="473" />
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="4" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" setAllPoints="true">
-                            <Color a="0.1" r="0.0" g="0.0" b="0.9" />
-                        </Texture>
-                    </Layer>
-                </Layers>
             </Frame>
 
-            <Frame parentKey="importView" frameLevel="100"
-                hidden="true">
+            <Frame parentKey="importView" frameLevel="100" hidden="true"
+                inherits="MapPinEnhancedImportViewTemplate">
                 <Size x="793" y="473" />
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="4" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" setAllPoints="true">
-                            <Color a="0.1" r="0.9" g="0.0" b="0.0" />
-                        </Texture>
-                    </Layer>
-                </Layers>
             </Frame>
 
-            <Frame parentKey="seteditorView" frameLevel="100"
-                hidden="true">
+            <Frame parentKey="seteditorView" frameLevel="100" hidden="true"
+                inherits="MapPinEnhancedSetEditorViewTemplate">
                 <Size x="793" y="473" />
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="4" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" setAllPoints="true">
-                            <Color a="0.1" r="0.0" g="0.9" b="0.0" />
-                        </Texture>
-                    </Layer>
-                </Layers>
             </Frame>
         </Frames>
         <Scripts>

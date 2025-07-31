@@ -1,0 +1,73 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="OptionsView.lua" />
+    <Frame name="MapPinEnhancedOptionsViewTemplate" mixin="MapPinEnhancedOptionsViewMixin"
+        virtual="true">
+        <Size x="793" y="473" />
+
+        <Frames>
+            <Frame parentKey="sidebar">
+                <Size x="200" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0"
+                        y="0" />
+                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="0"
+                        y="0" />
+                </Anchors>
+                <Frames>
+                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="searchBox">
+                        <Size x="1" y="30" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="5" y="-5" />
+                            <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
+                        </Anchors>
+                    </EditBox>
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                        <Anchors>
+                            <Anchor point="TOPLEFT"
+                                relativeKey="$parent.searchBox"
+                                relativePoint="BOTTOMLEFT" x="0" y="5" />
+                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="0" />
+                        </Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="TOPRIGHT"
+                                x="5" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="BOTTOMRIGHT" x="5" y="0" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture setAllPoints="true">
+                            <Color r="1" g="0" b="0" a="0.8" />
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT"
+                        x="5" y="0" />
+                    <Anchor point="BOTTOMRIGHT" x="-20" y="5" />
+                </Anchors>
+            </Frame>
+            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT"
+                        x="5" y="-5" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
+                        relativePoint="BOTTOMRIGHT" x="5" y="0" />
+                </Anchors>
+            </EventFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>

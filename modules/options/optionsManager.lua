@@ -73,6 +73,11 @@ function Options:GetCategoryByName(categoryName)
     end
 end
 
+function Options:EnumerateCategories()
+    local categoriesPool = self:GetCategoryObjectPool()
+    return categoriesPool:EnumerateActive()
+end
+
 ---@param optionType OptionType
 ---@param optionData AnyOptionData
 ---@overload fun(self: Options, optionType: "textarea", optionData: TextareaOptionData)

@@ -65,3 +65,7 @@ end
 function MapPinEnhancedOptionCategoryMixin:GetOption(label)
     return self.options[label]
 end
+
+function MapPinEnhancedOptionCategoryMixin:EnumerateOptions()
+    return pairs(self.options)
+end
