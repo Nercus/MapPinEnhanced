@@ -82,6 +82,12 @@ function MapPinEnhancedOptionsViewMixin:InitSidebar()
     self.sidebarScrollView:SetDataProvider(self.sidebarDataProvider)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.sidebar.scrollBox, self.sidebar.scrollBar, self.sidebarScrollView)
 
+    self.sidebarScrollView:SetElementInitializer("MapPinEnhancedButtonTemplate", function(button, node)
+        ---@type any
+        local data = node:GetData()
+        button:SetText(data.text)
+    end)
+
     self.sidebar.searchBox:SetScript("OnTextChanged", function()
         local searchText = self.sidebar.searchBox:GetText()
         self:UpdateSidebar(searchText)
@@ -101,6 +107,7 @@ function MapPinEnhancedOptionsViewMixin:OnLoad()
         local data = node:GetData()
         -- TODO: create the frame with the frame factory
     end)
+
 
     self:InitSidebar()
 end

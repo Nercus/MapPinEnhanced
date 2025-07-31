@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedOptionsFrameTemplate : TabSystemOwnerMixin, Frame
+---@class MapPinEnhancedOptionsFrameTemplate : TabSystemOwnerMixin, PortraitFrameTemplate
 ---@field TabSystem TabSystemTemplate
 ---@field views table<number, Frame>
 ---@field optionsView Frame
@@ -13,6 +13,7 @@ MapPinEnhancedOptionsFrameMixin = {}
 
 function MapPinEnhancedOptionsFrameMixin:OnLoad()
     TabSystemOwnerMixin.OnLoad(self);
+    self:SetPortraitTextureRaw("Interface\\AddOns\\MapPinEnhanced\\assets\\logo.png")
     self:SetTabSystem(self.TabSystem);
 
     ---@type number
