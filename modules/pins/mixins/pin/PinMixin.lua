@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field initialized boolean
 ---@field worldmapPin MapPinEnhancedWorldmapPinTemplate
 ---@field minimapPin MapPinEnhancedMinimapPinTemplate
+---@field supertrackedPin MapPinEnhancedSuperTrackedPinTemplate
 ---@field trackerEntry MapPinEnhancedTrackerPinMixin
 ---@field pinData pinData
 ---@field isTracked boolean? -- whether this pin is currently tracked
@@ -26,7 +27,7 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 
 ---@class Pins
 ---@field trackerObjectPool ObjectPool<MapPinEnhancedTrackerPinMixin>
----@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate>
+---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedSuperTrackedPinTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
@@ -36,7 +37,7 @@ function Pins:GetFramePool()
         self.framePool = CreateFramePoolCollection()
         self.framePool:CreatePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
         self.framePool:CreatePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
-        -- self.framePool:CreatePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
+        self.framePool:CreatePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
     end
     return self.framePool
 end
@@ -65,6 +66,7 @@ function MapPinEnhancedPinMixin:Init(pinID)
     local framePool = Pins:GetFramePool()
     self.worldmapPin = framePool:Acquire('MapPinEnhancedWorldmapPinTemplate')
     self.minimapPin = framePool:Acquire('MapPinEnhancedMinimapPinTemplate')
+    self.supertrackedPin = framePool:Acquire('MapPinEnhancedSuperTrackedPinTemplate')
 
     local trackerObjectPool = Pins:GetTrackerObjectPool()
     self.trackerEntry = trackerObjectPool:Acquire()
@@ -155,6 +157,7 @@ function MapPinEnhancedPinMixin:Reset()
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
+    framePool:Release(self.supertrackedPin)
 
     local trackerObjectPool = Pins:GetTrackerObjectPool()
     trackerObjectPool:Release(self.trackerEntry)

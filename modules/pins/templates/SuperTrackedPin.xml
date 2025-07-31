@@ -6,7 +6,7 @@
     <Frame name="MapPinEnhancedSuperTrackedPinTemplate"
         mixin="MapPinEnhancedSuperTrackedPinMixin"
         inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="false"
-        clipChildren="false">
+        clipChildren="false" hidden="true">
         <Size x="60" y="60" />
         <Layers>
             <Layer level="OVERLAY">

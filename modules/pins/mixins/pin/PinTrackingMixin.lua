@@ -11,6 +11,7 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self:SetBlizzardWaypoint()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
+    self.supertrackedPin:SetTracked()
     if self.trackerEntry then
         self.trackerEntry:SetTracked()
     end
@@ -22,6 +23,7 @@ end
 function MapPinEnhancedPinTrackingMixin:Untrack()
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
+    self.supertrackedPin:SetUntracked()
     if self.trackerEntry then
         self.trackerEntry:SetUntracked()
     end
