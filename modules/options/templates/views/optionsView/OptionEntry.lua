@@ -1,5 +1,6 @@
 ---@class MapPinEnhancedOptionEntryTemplate : Frame
 ---@field form AnyFormElement?
+---@field formSlot Frame
 MapPinEnhancedOptionEntryMixin = {}
 
 ---@alias AnyFormElement MapPinEnhancedButtonTemplate | MapPinEnhancedCheckboxTemplate | MapPinEnhancedColorpickerTemplate | MapPinEnhancedInputTemplate | MapPinEnhancedRadioGroupTemplate | MapPinEnhancedSliderTemplate | MapPinEnhancedTextareaTemplate

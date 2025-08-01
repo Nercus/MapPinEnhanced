@@ -16,8 +16,8 @@ MapPinEnhancedOptionsViewMixin = {}
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field searchBox MapPinEnhancedInputTemplate
 
-
 local Options = MapPinEnhanced:GetModule("Options")
+
 
 function MapPinEnhancedOptionsViewMixin:UpdateOptions()
     self.dataProvider:Flush()
@@ -39,7 +39,7 @@ function MapPinEnhancedOptionsViewMixin:UpdateSidebar(searchText)
     for category in Options:EnumerateCategories() do
         local categoryName = category:GetName()
         local categoryMatches = filter and categoryName:lower():find(filter, 1, true)
-        ---@type {text: string, value: string, isCategory: boolean}[]
+        ---@type SidebarEntryData[]
         local optionsToAdd = {}
 
         for _, option in category:EnumerateOptions() do
@@ -48,7 +48,7 @@ function MapPinEnhancedOptionsViewMixin:UpdateSidebar(searchText)
             local optionMatches = filter and optionLabel:lower():find(filter, 1, true)
             if not filter or optionMatches then
                 table.insert(optionsToAdd, {
-                    text = optionLabel,
+                    label = optionLabel,
                     value = optionLabel,
                     isCategory = false,
                 })
@@ -58,7 +58,7 @@ function MapPinEnhancedOptionsViewMixin:UpdateSidebar(searchText)
         if not filter or categoryMatches or #optionsToAdd > 0 then
             ---@type TreeNodeMixin
             local categoryNode = self.sidebarDataProvider:Insert({
-                text = categoryName,
+                label = categoryName,
                 value = category,
                 isCategory = true,
             })
@@ -82,10 +82,9 @@ function MapPinEnhancedOptionsViewMixin:InitSidebar()
     self.sidebarScrollView:SetDataProvider(self.sidebarDataProvider)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.sidebar.scrollBox, self.sidebar.scrollBar, self.sidebarScrollView)
 
-    self.sidebarScrollView:SetElementInitializer("MapPinEnhancedButtonTemplate", function(button, node)
-        ---@type any
-        local data = node:GetData()
-        button:SetText(data.text)
+    self.sidebarScrollView:SetElementInitializer("MapPinEnhancedOptionsSidebarEntryTemplate", function(button, node)
+        ---@cast button MapPinEnhancedOptionsSidebarEntryTemplate
+        button:Init(node)
     end)
 
     self.sidebar.searchBox:SetScript("OnTextChanged", function()
@@ -105,7 +104,10 @@ function MapPinEnhancedOptionsViewMixin:OnLoad()
     self.scrollView:SetElementFactory(function(factory, node)
         ---@type MapPinEnhancedOptionCategoryMixin | MapPinEnhancedOptionMixin
         local data = node:GetData()
-        -- TODO: create the frame with the frame factory
+        factory(data.template, function(frame)
+            ---@cast frame MapPinEnhancedOptionEntryTemplate
+            frame:Init(data)
+        end)
     end)
 
 

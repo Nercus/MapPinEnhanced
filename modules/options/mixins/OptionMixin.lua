@@ -6,7 +6,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field category MapPinEnhancedOptionCategoryMixin
 ---@field optionData AnyOptionData
 ---@field optionType OptionType
-MapPinEnhancedOptionMixin = {}
+---@field template string
+MapPinEnhancedOptionMixin = {
+    template = "MapPinEnhancedOptionEntryTemplate"
+}
 
 ---@class Options
 local Options = MapPinEnhanced:GetModule("Options")

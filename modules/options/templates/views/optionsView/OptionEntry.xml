@@ -4,6 +4,9 @@
     <Include file="OptionEntry.lua" />
     <Frame name="MapPinEnhancedOptionEntryTemplate" mixin="MapPinEnhancedOptionEntryMixin"
         virtual="true">
-
+        <Size x="200" y="30" />
+        <Frames>
+            <Frame parentKey="formSlot" />
+        </Frames>
     </Frame>
 </Ui>

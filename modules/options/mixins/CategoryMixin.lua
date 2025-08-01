@@ -6,7 +6,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string
 ---@field id OptionCategories
 ---@field options table<string, MapPinEnhancedOptionMixin>
-MapPinEnhancedOptionCategoryMixin = {}
+---@field template string
+MapPinEnhancedOptionCategoryMixin = {
+    template = "MapPinEnhancedCategoryEntryTemplate"
+}
 
 
 ---@class Options

@@ -1,0 +1,31 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="SidebarEntry.lua" />
+    <Button name="MapPinEnhancedOptionsSidebarEntryTemplate"
+        mixin="MapPinEnhancedOptionsSidebarEntryMixin" virtual="true">
+        <Size x="200" y="30" />
+
+        <HighlightTexture setAllPoints="true">
+            <Gradient orientation="HORIZONTAL">
+                <MinColor r="1" g="0.82" b="0" a="1" />
+                <MaxColor r="1" g="0.82" b="0" a="0" />
+            </Gradient>
+        </HighlightTexture>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="1" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+        </Layers>
+        <NormalFont style="GameFontHighlight" />
+        <HighlightFont style="GameFontNormal" />
+        <Scripts>
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>
