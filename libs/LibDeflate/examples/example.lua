@@ -1,32 +1,36 @@
 --[[
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+zlib License
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
+(C) 2018-2021 Haoqian He
 
-You should have received a copy of the GNU Lesser General Public License
-along with this program.  If not, see https://www.gnu.org/licenses/.
---]]
+This software is provided 'as-is', without any express or implied
+warranty.  In no event will the authors be held liable for any damages
+arising from the use of this software.
 
---- LibDeflate usage example
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
+--]] --- LibDeflate usage example
 -- @author Haoqian He
 -- @file example.lua
-
 local LibDeflate
 
 if LibStub then -- You are using LibDeflate as WoW addon
-	LibDeflate = LibStub:GetLibrary("LibDeflate")
+  LibDeflate = LibStub:GetLibrary("LibDeflate")
 else
-	-- You are using LibDeflate as Lua library.
-	-- Setup the path to locate LibDeflate.lua,
-	-- if 'require("LibDeflate")' fails, for example:
-	-- package.path = ("?.lua;../?.lua;")..(package.path or "")
-	LibDeflate = require("LibDeflate")
+  -- You are using LibDeflate as Lua library.
+  -- Setup the path to locate LibDeflate.lua,
+  -- if 'require("LibDeflate")' fails, for example:
+  -- package.path = ("?.lua;../?.lua;")..(package.path or "")
+  LibDeflate = require("LibDeflate")
 end
 
 local example_input = "12123123412345123456123456712345678123456789"
@@ -39,20 +43,19 @@ local decompress_deflate = LibDeflate:DecompressDeflate(compress_deflate)
 -- Check if the first return value of DecompressXXXX is non-nil to know if the
 -- decompression succeeds.
 if decompress_deflate == nil then
-	error("Decompression fails.")
+  error("Decompression fails.")
 else
-	-- Decompression succeeds.
-	assert(example_input == decompress_deflate)
+  -- Decompression succeeds.
+  assert(example_input == decompress_deflate)
 end
-
 
 -- If it is to transmit through WoW addon channel,
 -- compressed data must be encoded so NULL ("\000") is not transmitted.
 local data_to_trasmit_WoW_addon = LibDeflate:EncodeForWoWAddonChannel(
-	compress_deflate)
+                                    compress_deflate)
 -- When the receiver gets the data, decoded it first.
 local data_decoded_WoW_addon = LibDeflate:DecodeForWoWAddonChannel(
-	data_to_trasmit_WoW_addon)
+                                 data_to_trasmit_WoW_addon)
 -- Then decomrpess it
 assert(LibDeflate:DecompressDeflate(data_decoded_WoW_addon) == example_input)
 
@@ -66,7 +69,6 @@ local printable_compressed = LibDeflate:EncodeForPrint(compress_deflate)
 -- in the string before decode it.
 assert(LibDeflate:DecodeForPrint(printable_compressed) == compress_deflate)
 
-
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -79,12 +81,11 @@ assert(decompress_zlib == example_input)
 --- Control the compression level
 -- NOTE: High compression level does not make a difference here,
 -- because the input data is very small
-local compress_deflate_with_level = LibDeflate:CompressDeflate(example_input
-	, {level = 9})
+local compress_deflate_with_level = LibDeflate:CompressDeflate(example_input,
+                                                               {level = 9})
 local decompress_deflate_with_level = LibDeflate:DecompressDeflate(
-	compress_deflate_with_level)
+                                        compress_deflate_with_level)
 assert(decompress_deflate_with_level == example_input)
-
 
 -- Compress with a preset dictionary
 local dict_str = "121231234" -- example preset dictionary string.
@@ -100,16 +101,17 @@ local dict = LibDeflate:CreateDictionary(dict_str, 9, 147325380)
 
 -- Using the dictionary with raw deflate format
 local compress_deflate_with_dict = LibDeflate:CompressDeflateWithDict(
-	example_input, dict)
+                                     example_input, dict)
 assert(#compress_deflate_with_dict < #compress_deflate)
 local decompress_deflate_with_dict = LibDeflate:DecompressDeflateWithDict(
-	compress_deflate_with_dict, dict)
+                                       compress_deflate_with_dict, dict)
 assert(decompress_deflate_with_dict == example_input)
 
 -- Using the dictionary with zlib format, specifying compression level
-local compress_zlib_with_dict = LibDeflate:CompressZlibWithDict(
-	example_input, dict, {level = 9})
+local compress_zlib_with_dict = LibDeflate:CompressZlibWithDict(example_input,
+                                                                dict,
+                                                                {level = 9})
 assert(#compress_zlib_with_dict < #compress_zlib)
 local decompress_zlib_with_dict = LibDeflate:DecompressZlibWithDict(
-	compress_zlib_with_dict, dict)
+                                    compress_zlib_with_dict, dict)
 assert(decompress_zlib_with_dict == example_input)
