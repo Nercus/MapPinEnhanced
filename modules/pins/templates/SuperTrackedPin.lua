@@ -98,10 +98,10 @@ end
 function MapPinEnhancedSuperTrackedPinMixin:SetBeacon()
     -- Set scale
     self.pinFrame:SetScale(0.6)
-    -- Set translation (vertical offset)
+    -- Set translation (vertical offset) - move pin to bottom of frame
     self.pinFrame:SetPoint("CENTER", self, "CENTER", 0, -15)
-    self.titleBG:SetPoint("CENTER", self, "CENTER", 0, 10)
-    -- Set alpha
+    -- self.titleBG:SetPoint("CENTER", self, "CENTER", 0, -35)
+    -- -- Set alpha
     self.beam:SetAlpha(1)
     self.arrows:SetAlpha(0)
 end
@@ -109,10 +109,10 @@ end
 function MapPinEnhancedSuperTrackedPinMixin:SetGrounded()
     -- Set scale
     self.pinFrame:SetScale(1.0)
-    -- Set translation (vertical offset)
-    self.pinFrame:SetPoint("CENTER", self, "CENTER", 0, 50)
-    self.titleBG:SetPoint("CENTER", self, "CENTER", 0, 30)
-    -- Set alpha
+    -- Set translation (vertical offset) - move pin to top of frame
+    self.pinFrame:SetPoint("CENTER", self, "CENTER", 0, 30)
+    -- self.titleBG:SetPoint("CENTER", self, "CENTER", 0, 35)
+    -- -- Set alpha
     self.beam:SetAlpha(0)
     self.arrows:SetAlpha(1)
 end

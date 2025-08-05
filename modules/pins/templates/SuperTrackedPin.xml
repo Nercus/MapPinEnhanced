@@ -16,6 +16,7 @@
                     </Anchors>
                 </FontString>
                 <Texture parentKey="titleBG"
+                    alpha="0"
                     file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png">
                     <Size x="100" y="16" />
                     <Anchors>
@@ -85,23 +86,22 @@
                 </Layers>
                 <Animations>
                     <AnimationGroup parentKey="PulseArrows" looping="REPEAT">
-                        <Alpha childKey="arrow1" order="1" duration="0.3" fromAlpha="0.2"
+                        <Alpha childKey="arrow1" order="1" duration="1" fromAlpha="0.2"
                             toAlpha="1"
                             smoothing="IN_OUT" />
-                        <Alpha childKey="arrow1" order="2" duration="0.3" fromAlpha="1"
+                        <Alpha childKey="arrow1" order="2" duration="1" fromAlpha="1"
                             toAlpha="0.2"
                             smoothing="IN_OUT" />
-                        <Alpha childKey="arrow2" order="1" duration="0.3" fromAlpha="0.2"
+                        <Alpha childKey="arrow2" order="1" duration="1" fromAlpha="0.2"
                             toAlpha="1"
                             smoothing="IN_OUT" startDelay="0.2" />
-                        <Alpha childKey="arrow2" order="2" duration="0.3" fromAlpha="1"
+                        <Alpha childKey="arrow2" order="2" duration="1" fromAlpha="1"
                             toAlpha="0.2"
                             smoothing="IN_OUT" startDelay="0.2" />
-
-                        <Alpha childKey="arrow3" order="1" duration="0.3" fromAlpha="0.2"
+                        <Alpha childKey="arrow3" order="1" duration="1" fromAlpha="0.2"
                             toAlpha="1"
                             smoothing="IN_OUT" startDelay="0.4" />
-                        <Alpha childKey="arrow3" order="2" duration="0.3" fromAlpha="1"
+                        <Alpha childKey="arrow3" order="2" duration="1" fromAlpha="1"
                             toAlpha="0.2"
                             smoothing="IN_OUT" startDelay="0.4" />
                     </AnimationGroup>
@@ -119,31 +119,35 @@
         </Scripts>
         <Animations>
             <AnimationGroup parentKey="morphToBeacon" setToFinalAlpha="true">
-                <!-- Pin shifts down -->
-                <Translation childKey="pinFrame" order="1" duration="0.25" offsetX="0"
-                    offsetY="-15" />
+                <!-- Pin shifts down to bottom -->
+                <Translation childKey="pinFrame" order="1" duration="0.5" offsetX="0"
+                    offsetY="-45" />
                 <!-- Pin scales down -->
-                <Scale childKey="pinFrame" order="1" duration="0.25" scaleX="0.6" scaleY="0.6" />
+                <Scale childKey="pinFrame" order="2" duration="0.5" scaleX="0.6" scaleY="0.6" />
                 <!-- Text shifts down -->
-                <Translation childKey="titleBG" order="1" duration="0.25" offsetX="0"
-                    offsetY="-10" />
+                <!-- <Translation childKey="titleBG" order="1" duration="0.5" offsetX="0"
+                    offsetY="-35" /> -->
+
                 <!-- beam fades in -->
-                <Alpha childKey="beam" order="1" duration="0.25" fromAlpha="0"
+                <Alpha childKey="beam" order="2" duration="0.25" fromAlpha="0"
                     toAlpha="1" smoothing="IN_OUT" />
 
                 <!-- arrows are hidden -->
-                <Alpha childKey="$parent.arrows" order="1" duration="0.25" fromAlpha="1"
+                <Alpha childKey="arrows" order="2" duration="0.25" fromAlpha="1"
                     toAlpha="0" smoothing="IN_OUT" />
+
             </AnimationGroup>
 
             <AnimationGroup parentKey="morphToGrounded" setToFinalAlpha="true">
-                <!-- Pin shifts up -->
-                <Translation childKey="pinFrame" order="1" duration="0.25" offsetX="0"
-                    offsetY="15" />
+                <!-- Pin shifts up to top -->
+                <Translation childKey="pinFrame" order="1" duration="0.5" offsetX="0"
+                    offsetY="45" />
                 <!-- Pin scales up -->
-                <Scale childKey="pinFrame" order="1" duration="0.25" scaleX="1.0" scaleY="1.0" />
+                <Scale childKey="pinFrame" order="2" duration="0.5" scaleX="1" scaleY="1" />
                 <!-- Text shifts up -->
-                <Translation childKey="$parent.titleBG" order="1" duration=".2" offsetX="0"
+                <!-- <Translation childKey="titleBG" order="1" duration="0.5" offsetX="0"
+                    offsetY="35" /> -->
+                <Translation childKey="titleBG" order="1" duration=".2" offsetX="0"
                     offsetY="30" />
 
                 <!-- beam fades out -->
@@ -151,8 +155,9 @@
                     toAlpha="0" smoothing="IN_OUT" />
 
                 <!-- arrows are shown -->
-                <Alpha childKey="$parent.arrows" order="1" duration="0.25" fromAlpha="0"
+                <Alpha childKey="arrows" order="1" duration="0.25" fromAlpha="0"
                     toAlpha="1" smoothing="IN_OUT" />
+
             </AnimationGroup>
         </Animations>
     </Frame>
