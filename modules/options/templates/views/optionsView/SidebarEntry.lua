@@ -1,5 +1,6 @@
 ---@class MapPinEnhancedOptionsSidebarEntryTemplate : Button
 ---@field treeNode TreeNodeMixin
+---@field scrollToSelf function|nil
 MapPinEnhancedOptionsSidebarEntryMixin = {};
 
 
@@ -24,6 +25,7 @@ function MapPinEnhancedOptionsSidebarEntryMixin:OnClick()
     if self.isCategory then
         self.treeNode:ToggleCollapsed()
     else
-        -- TODO: scroll to the option here
+        assert(self.scrollToSelf, "scrollToSelf function is not set for MapPinEnhancedOptionsSidebarEntryMixin");
+        self.scrollToSelf();
     end
 end

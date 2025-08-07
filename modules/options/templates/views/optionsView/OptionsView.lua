@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionsViewTemplate
 ---@field sidebar MapPinEnhancedOptionsViewSidebar
----@field scrollBox Frame
+---@field scrollBox ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider DataProviderMixin
@@ -11,7 +11,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedOptionsViewMixin = {}
 
 ---@class MapPinEnhancedOptionsViewSidebar
----@field scrollBox Frame
+---@field scrollBox ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field searchBox MapPinEnhancedInputTemplate
@@ -85,11 +85,26 @@ function MapPinEnhancedOptionsViewMixin:InitSidebar()
     self.sidebarScrollView:SetElementInitializer("MapPinEnhancedOptionsSidebarEntryTemplate", function(button, node)
         ---@cast button MapPinEnhancedOptionsSidebarEntryTemplate
         button:Init(node)
+        ---@type SidebarEntryData
+        local nodeData = node:GetData()
+        button.scrollToSelf = function()
+            self:ScrollToOption(nodeData.value, nodeData.label)
+        end
     end)
 
     self.sidebar.searchBox:SetScript("OnTextChanged", function()
         local searchText = self.sidebar.searchBox:GetText()
         self:UpdateSidebar(searchText)
+    end)
+end
+
+function MapPinEnhancedOptionsViewMixin:ScrollToOption(category, label)
+    assert(category and label, "Category and label must be provided to scroll to an option")
+    self.scrollBox:ScrollToElementDataByPredicate(function(elementData)
+        if elementData:GetData().category == category and elementData:GetData().label == label then
+            return true
+        end
+        return false
     end)
 end
 
