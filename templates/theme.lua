@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---TODO: should be moved to the core instead
+
 ---@class Theme
 local Theme = MapPinEnhanced:GetModule("Theme")
 
