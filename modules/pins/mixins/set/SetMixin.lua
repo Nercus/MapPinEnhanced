@@ -6,12 +6,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the set
 ---@field pins pinData[] a table of pins that belong to this set
 ---@field count number the number of pins in this set
+---@field icon string? the icon of the set, if any
 
 ---@class MapPinEnhancedPinSetMixin
 ---@field trackerEntry MapPinEnhancedTrackerSetMixin?
 ---@field name string the name of the set
 ---@field pins pinData[] a table of pins that belong to this set
 ---@field count number the number of pins in this set
+---@field icon string? the icon of the set, if any
 MapPinEnhancedPinSetMixin = CreateFromMixins(MapPinEnhancedPinSetShareMixin)
 
 
@@ -40,6 +42,7 @@ end
 function MapPinEnhancedPinSetMixin:Init()
     self.pins = {}
     self.name = nil
+    self.icon = nil
     self.count = 0
 
     local trackerObjectPool = Sets:GetTrackerObjectPool()
@@ -50,6 +53,7 @@ function MapPinEnhancedPinSetMixin:Reset()
     self.pins = {}
     self.name = nil
     self.count = 0
+    self.icon = nil
 
     local trackerObjectPool = Sets:GetTrackerObjectPool()
     trackerObjectPool:Release(self.trackerEntry)
@@ -65,6 +69,19 @@ end
 ---@return string
 function MapPinEnhancedPinSetMixin:GetName()
     return self.name
+end
+
+---@param icon string
+function MapPinEnhancedPinSetMixin:SetIcon(icon)
+    assert(icon, "MapPinEnhancedPinSetMixin:SetIcon: icon is nil")
+    assert(type(icon) == "string", "MapPinEnhancedPinSetMixin:SetIcon: icon must be a string")
+    self.icon = icon
+    Sets:PersistSet(self)
+end
+
+---@return string?
+function MapPinEnhancedPinSetMixin:GetIcon()
+    return self.icon
 end
 
 function MapPinEnhancedPinSetMixin:LoadSet()
@@ -123,5 +140,6 @@ function MapPinEnhancedPinSetMixin:GetSaveableData()
         name = self.name,
         pins = self.pins, -- NOTE: this can be changed to a compressed format in the future when needed
         count = self.count,
+        icon = self.icon,
     }
 end
