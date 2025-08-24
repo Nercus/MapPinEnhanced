@@ -12,32 +12,16 @@
             <Layer level="OVERLAY">
                 <FontString parentKey="distantText" inherits="GameFontHighlight">
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" y="-24" />
+                        <Anchor point="TOP" relativePoint="BOTTOM" y="-10" />
                     </Anchors>
                 </FontString>
-                <Texture parentKey="titleBG"
-                    alpha="0"
-                    file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png">
-                    <Size x="100" y="16" />
-                    <Anchors>
-                        <Anchor point="CENTER" y="20" />
-                    </Anchors>
-                    <Color r="1" g="0.82" b="0" a="1" />
-                </Texture>
-                <FontString inherits="GameFontNormal" text="title">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT"
-                            relativeKey="$parent.titleBG" />
-                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"
-                            relativeKey="$parent.titleBG" />
-                    </Anchors>
-                </FontString>
-                <Texture parentKey="beam" alpha="0">
+
+                <Texture parentKey="beam">
                     <Size x="3" y="150" />
                     <Anchors>
-                        <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pinFrame" />
+                        <Anchor point="BOTTOM" relativePoint="CENTER" relativeKey="$parent.pinFrame" />
                     </Anchors>
-                    <Color r="1" g="0.82" b="0" />
+                    <Color r="1" g="1" b="1" />
                     <Gradient orientation="VERTICAL">
                         <MaxColor r="1" g="0.82" b="0" a="0" />
                         <MinColor r="1" g="0.82" b="0" a="1" />
@@ -49,37 +33,57 @@
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate">
                 <Size x="50" y="50" />
                 <Anchors>
+                    <Anchor point="CENTER" y="0" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="title">
+                <Size x="70" y="16" />
+                <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture parentKey="bg"
+                            file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
+                            setAllPoints="true">
+                            <Gradient orientation="VERTICAL">
+                                <MaxColor r="1" g="0.82" b="0" a="1" />
+                                <MinColor r="1" g="0.82" b="0" a="0.4" />
+                            </Gradient>
+                        </Texture>
+                        <FontString inherits="GameFontNormal" text="title" setAllPoints="true"
+                            parentKey="text" />
+                    </Layer>
+                </Layers>
             </Frame>
             <Frame parentKey="arrows">
                 <Size x="50" y="50" />
                 <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pinFrame" />
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pinFrame" y="7" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture parentKey="arrow1"
                             atlas="Azerite-PointingArrow">
-                            <Size x="48" y="16" />
+                            <Size x="32" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" y="0" />
                             </Anchors>
                         </Texture>
                         <Texture parentKey="arrow2"
                             atlas="Azerite-PointingArrow">
-                            <Size x="48" y="16" />
+                            <Size x="32" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" relativeKey="$parent.arrow1"
-                                    relativePoint="BOTTOM" y="-1" />
+                                    relativePoint="BOTTOM" y="10" />
                             </Anchors>
                         </Texture>
                         <Texture parentKey="arrow3"
                             atlas="Azerite-PointingArrow">
-                            <Size x="48" y="16" />
+                            <Size x="32" y="16" />
                             <Anchors>
                                 <Anchor point="TOP" relativeKey="$parent.arrow2"
-                                    relativePoint="BOTTOM" y="-1" />
+                                    relativePoint="BOTTOM" y="10" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -118,47 +122,19 @@
             <OnEvent method="OnEvent" />
         </Scripts>
         <Animations>
-            <AnimationGroup parentKey="morphToBeacon" setToFinalAlpha="true">
-                <!-- Pin shifts down to bottom -->
-                <Translation childKey="pinFrame" order="1" duration="0.5" offsetX="0"
-                    offsetY="-45" />
-                <!-- Pin scales down -->
-                <Scale childKey="pinFrame" order="2" duration="0.5" scaleX="0.6" scaleY="0.6" />
-                <!-- Text shifts down -->
-                <!-- <Translation childKey="titleBG" order="1" duration="0.5" offsetX="0"
-                    offsetY="-35" /> -->
-
-                <!-- beam fades in -->
-                <Alpha childKey="beam" order="2" duration="0.25" fromAlpha="0"
-                    toAlpha="1" smoothing="IN_OUT" />
-
-                <!-- arrows are hidden -->
-                <Alpha childKey="arrows" order="2" duration="0.25" fromAlpha="1"
-                    toAlpha="0" smoothing="IN_OUT" />
-
+            <AnimationGroup parentKey="FadeIn" looping="NONE">
+                <Scale order="1" duration="0.2" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1"
+                    toScaleY="1" smoothing="IN_OUT" />
+                <Alpha order="1" duration="0.2" fromAlpha="0" toAlpha="1"
+                    smoothing="IN_OUT" />
+            </AnimationGroup>
+            <AnimationGroup parentKey="FadeOut" looping="NONE">
+                <Scale order="1" duration="0.2" fromScaleX="1" fromScaleY="1" toScaleX="0.5"
+                    toScaleY="0.5" smoothing="IN_OUT" />
+                <Alpha order="1" duration="0.2" fromAlpha="1" toAlpha="0" smoothing="IN_OUT" />
             </AnimationGroup>
 
-            <AnimationGroup parentKey="morphToGrounded" setToFinalAlpha="true">
-                <!-- Pin shifts up to top -->
-                <Translation childKey="pinFrame" order="1" duration="0.5" offsetX="0"
-                    offsetY="45" />
-                <!-- Pin scales up -->
-                <Scale childKey="pinFrame" order="2" duration="0.5" scaleX="1" scaleY="1" />
-                <!-- Text shifts up -->
-                <!-- <Translation childKey="titleBG" order="1" duration="0.5" offsetX="0"
-                    offsetY="35" /> -->
-                <Translation childKey="titleBG" order="1" duration=".2" offsetX="0"
-                    offsetY="30" />
 
-                <!-- beam fades out -->
-                <Alpha childKey="beam" order="1" duration="0.25" fromAlpha="1"
-                    toAlpha="0" smoothing="IN_OUT" />
-
-                <!-- arrows are shown -->
-                <Alpha childKey="arrows" order="1" duration="0.25" fromAlpha="0"
-                    toAlpha="1" smoothing="IN_OUT" />
-
-            </AnimationGroup>
         </Animations>
     </Frame>
 </Ui>

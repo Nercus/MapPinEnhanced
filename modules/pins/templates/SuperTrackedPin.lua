@@ -1,14 +1,17 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedSuperTrackedPinTitle : Frame
+---@field text FontString
+---@field bg Texture
+
 ---@class MapPinEnhancedSuperTrackedPinTemplate : Frame
 ---@field distantText FontString
 ---@field navFrameCreated boolean
 ---@field hooked boolean
----@field fadeIn AnimationGroup
----@field morphToBeacon AnimationGroup
----@field morphToGrounded AnimationGroup
----@field titleBG Texture
+---@field FadeIn AnimationGroup
+---@field FadeOut AnimationGroup
+---@field title MapPinEnhancedSuperTrackedPinTitle
 ---@field beam Texture
 ---@field arrows Texture
 ---@field pinFrame MapPinEnhancedBasePinTemplate
@@ -43,6 +46,7 @@ function MapPinEnhancedSuperTrackedPinMixin:SetTracked()
     if not f then
         return
     end
+
     f.Icon:SetAlpha(0)
     if not self.hooked then
         hooksecurefunc(f, "PingNavFrame", function()
@@ -95,40 +99,19 @@ function MapPinEnhancedSuperTrackedPinMixin:SetPinColor(color)
     MapPinEnhancedBasePinMixin.SetPinColor(self.pinFrame, color)
 end
 
-function MapPinEnhancedSuperTrackedPinMixin:SetBeacon()
-    -- Set scale
-    self.pinFrame:SetScale(0.6)
-    -- Set translation (vertical offset) - move pin to bottom of frame
-    self.pinFrame:SetPoint("CENTER", self, "CENTER", 0, -15)
-    -- self.titleBG:SetPoint("CENTER", self, "CENTER", 0, -35)
-    -- -- Set alpha
-    self.beam:SetAlpha(1)
-    self.arrows:SetAlpha(0)
-end
-
-function MapPinEnhancedSuperTrackedPinMixin:SetGrounded()
-    -- Set scale
-    self.pinFrame:SetScale(1.0)
-    -- Set translation (vertical offset) - move pin to top of frame
-    self.pinFrame:SetPoint("CENTER", self, "CENTER", 0, 30)
-    -- self.titleBG:SetPoint("CENTER", self, "CENTER", 0, 35)
-    -- -- Set alpha
-    self.beam:SetAlpha(0)
-    self.arrows:SetAlpha(1)
-end
-
 function MapPinEnhancedSuperTrackedPinMixin:OnLoad()
     self:RegisterEvent("NAVIGATION_FRAME_CREATED");
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
     self:RegisterEvent("SUPER_TRACKING_CHANGED")
     self.hooked = false
     self.navFrameCreated = false;
-    self.morphToBeacon:SetScript("OnFinished", function()
-        self:SetBeacon()
-    end)
 
-    self.morphToGrounded:SetScript("OnFinished", function()
-        self:SetGrounded()
+    self.FadeOut:SetScript("OnFinished", function()
+        if self.activeStyle == "beacon" then
+            self:SetBeacon()
+        else
+            self:SetGrounded()
+        end
     end)
 end
 
@@ -149,15 +132,42 @@ function MapPinEnhancedSuperTrackedPinMixin:OnEvent(event)
     end
 end
 
+function MapPinEnhancedSuperTrackedPinMixin:SetBeacon()
+    local pinFrameScale = self.pinFrame:GetEffectiveScale()
+    self.pinFrame:SetPoint("CENTER", 0, -25 * pinFrameScale)
+    self.pinFrame:SetScale(0.6)
+    self.beam:Show()
+    self.arrows:Hide()
+    self.title:ClearAllPoints()
+    self.title:SetPoint("CENTER", 0, -15)
+    self.title.bg:SetRotation(math.pi)
+    self.title.bg:SetAlpha(0.5)
+    self.title:SetScale(1)
+    self.FadeIn:Play()
+    -- self.pinFrame:HidePulse()
+end
+
+function MapPinEnhancedSuperTrackedPinMixin:SetGrounded()
+    local pinFrameScale = self.pinFrame:GetEffectiveScale()
+    self.pinFrame:SetPoint("CENTER", 0, 60 * pinFrameScale)
+    self.pinFrame:SetScale(1)
+    self.beam:Hide()
+    self.arrows:Show()
+    self.title:ClearAllPoints()
+    self.title:SetPoint("CENTER", 0, 40)
+    self.title.bg:SetRotation(0)
+    self.title:SetScale(1.2)
+    self.FadeIn:Play()
+    -- self.pinFrame:ShowPulse()
+end
+
 ---@param style 'grounded' | 'beacon'
 function MapPinEnhancedSuperTrackedPinMixin:SetStyle(style)
     if self.activeStyle == style then
         return
     end
     self.activeStyle = style
-    if style == "grounded" then
-        self.morphToGrounded:Play()
-    elseif style == "beacon" then
-        self.morphToBeacon:Play()
-    end
+    self.FadeIn:Stop()
+    self.FadeOut:Stop()
+    self.FadeOut:Play() -- fade out current style
 end
