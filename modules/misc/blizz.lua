@@ -29,6 +29,7 @@ end
 
 ---Method to block the automatic removal of pins in the game
 function Blizzard:OverrideSuperTrackedReachedBehavior()
+    -- TODO: find a taint free way to do this
     local superTrackMapPinTypesThatClearWhenDestinationReached = {
         [Enum.SuperTrackingMapPinType.AreaPOI] = true,
         [Enum.SuperTrackingMapPinType.TaxiNode] = true,
@@ -99,6 +100,7 @@ end
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
     Blizzard:OnSuperTrackingChanged()
     Blizzard:UpdateGlobalSuperTrackedFrame()
+    Blizzard:OverrideSuperTrackedAlphaState(true)
 end)
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", function()
     Blizzard:OnSuperTrackingChanged()

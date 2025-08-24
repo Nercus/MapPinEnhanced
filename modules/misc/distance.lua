@@ -115,6 +115,11 @@ function Distance:EnableDistanceCheck(mapID, x, y, onUpdate)
     lastDistance = 0
     lastUpdate = nil
     self.target = { mapID = mapID, x = x, y = y, onUpdate = onUpdate }
+    -- Trigger the initial callback immediately
+    if self.target.onUpdate then
+        local initialDistance = self:GetDistanceToTarget(mapID, x, y)
+        self.target.onUpdate(initialDistance, -1) -- -1 indicates unknown time to target
+    end
 end
 
 ---@param mapID number?
