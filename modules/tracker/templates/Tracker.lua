@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerTemplate : Frame
----@field scrollBox Frame
+---@field scrollBox ScrollBoxMixin
 ---@field scrollBar ScrollBarMixin
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
@@ -80,6 +80,8 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
     self.scrollView:SetDataProvider(self.dataProvider)
+    self.scrollBar:SetInterpolateScroll(true);
+    self.scrollBox:SetInterpolateScroll(true);
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.scrollView:SetElementFactory(function(factory, node)
