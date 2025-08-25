@@ -136,7 +136,7 @@ StaticPopupDialogs[MapPinEnhanced.name .. "RESETSAVEDVARS_POPUP"] = {
 
 
 
----@class MapPinEnhancedDebugMenuFrameTemplate : Frame
+---@class MapPinEnhancedDebugMenuFrameTemplate : DefaultPanelTemplate
 ---@field title FontString
 ---@field debugMenuButton Button
 ---@field resetVarsButton Button
@@ -245,6 +245,7 @@ local function GetDebugMenuFrame()
     if not MapPinEnhanced.debugMenuFrame then
         MapPinEnhanced.debugMenuFrame = CreateFrame("Frame", "MapPinEnhancedDebugMenuFrame", UIParent,
             "MapPinEnhancedDebugMenuFrameTemplate")
+        MapPinEnhanced.debugMenuFrame:SetTitle(MapPinEnhanced.name .. " Debug Menu")
     end
     return MapPinEnhanced.debugMenuFrame
 end
