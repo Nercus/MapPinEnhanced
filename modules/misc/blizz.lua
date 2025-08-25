@@ -87,12 +87,15 @@ function Blizzard:OnSuperTrackingChanged()
     ---@type boolean
     local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
     local isSuperTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    local isSuperTrackingMapPin = C_SuperTrack.IsSuperTrackingMapPin()
     local isSuperTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    MapPinEnhanced:SetVar("superTrackingOther", isSuperTracking and not isSuperTrackingUserWaypoint)
+
+    local isSuperTrackingOther = isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingMapPin
+    MapPinEnhanced:SetVar("superTrackingOther", isSuperTrackingOther)
     if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
 
     local Tracking = MapPinEnhanced:GetModule("Tracking")
-    if isSuperTracking and not isSuperTrackingUserWaypoint then
+    if isSuperTrackingOther then
         Tracking:UntrackTrackedPin()
     end
 end

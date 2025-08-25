@@ -9,7 +9,7 @@ local Distance = MapPinEnhanced:GetModule("Distance")
 
 function MapPinEnhancedPinTrackingMixin:Track()
     Tracking:UntrackTrackedPin() -- untrack any previously tracked pin
-    self:SetBlizzardWaypoint()
+    self:SuperTrackLocation()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
     self.supertrackedPin:SetTracked()
@@ -44,7 +44,7 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
         self.trackerEntry:SetUntracked()
     end
     if self:IsTracked() then
-        C_Map.ClearUserWaypoint()
+        self:ClearLocation()
         Tracking:SetTrackedPin(nil)
     end
     self.isTracked = false
@@ -65,8 +65,10 @@ function MapPinEnhancedPinTrackingMixin:IsTracked()
     return self.isTracked
 end
 
-function MapPinEnhancedPinTrackingMixin:SetBlizzardWaypoint()
-    local x, y, mapID = self.pinData.x, self.pinData.y, self.pinData.mapID
+---@param x number
+---@param y number
+---@param mapID number
+function MapPinEnhancedPinTrackingMixin:SetUserWaypoint(x, y, mapID)
     if not C_Map.CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)
         MapPinEnhanced:Print("Cannot set waypoint on " .. mapInfo.name)
@@ -91,4 +93,34 @@ function MapPinEnhancedPinTrackingMixin:SetBlizzardWaypoint()
     C_Timer.After(0.1, function()
         C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     end)
+end
+
+---@param pinType Enum.SuperTrackingMapPinType
+---@param typeID number
+function MapPinEnhancedPinTrackingMixin:SetBlizzardMapPin(pinType, typeID)
+    C_SuperTrack.SetSuperTrackedMapPin(pinType, typeID)
+end
+
+function MapPinEnhancedPinTrackingMixin:SuperTrackLocation()
+    local x, y, mapID, pinType, typeID = self.pinData.x, self.pinData.y, self.pinData.mapID, self.pinData.pinType,
+        self.pinData.typeID
+
+    if pinType and typeID then
+        self:SetBlizzardMapPin(pinType, typeID)
+    else
+        self:SetUserWaypoint(x, y, mapID)
+    end
+end
+
+function MapPinEnhancedPinTrackingMixin:ClearLocation()
+    local pinType, typeID = self.pinData.pinType, self.pinData.typeID
+
+    if pinType and typeID then
+        C_SuperTrack.ClearSuperTrackedMapPin()
+    else
+        if C_Map.HasUserWaypoint() then
+            C_Map.ClearUserWaypoint()
+        end
+        C_SuperTrack.ClearAllSuperTracked()
+    end
 end
