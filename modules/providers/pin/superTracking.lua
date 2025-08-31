@@ -20,53 +20,6 @@ local questClassificationAtlas = {
 
 
 
---- cache areaPOIs, taxi nodes and digsites for faster lookup
----@type table<number, number>
-local areaPOICache = {}
----@type table<number, number>
-local taxiNodeCache = {}
----@type table<number, number>
-local digsiteNodeCache = {}
-
-
-local function BuildCaches()
-    for _, map in ipairs(C_Map.GetMapChildrenInfo(947, 3, true)) do
-        local areaPOIs = C_AreaPoiInfo.GetAreaPOIForMap(map.mapID)
-        local dungeonEntrances = C_EncounterJournal.GetDungeonEntrancesForMap(map.mapID)
-        local delves = C_AreaPoiInfo.GetDelvesForMap(map.mapID)
-        local dragonridingRaces = C_AreaPoiInfo.GetDragonridingRacesForMap(map.mapID)
-        local events = C_AreaPoiInfo.GetEventsForMap(map.mapID)
-        local questHubs = C_AreaPoiInfo.GetQuestHubsForMap(map.mapID)
-        for _, areaPoiID in ipairs(areaPOIs or {}) do
-            areaPOICache[areaPoiID] = map.mapID
-        end
-        for _, node in ipairs(dungeonEntrances or {}) do
-            areaPOICache[node.areaPoiID] = map.mapID
-        end
-        for _, areaPoiID in ipairs(delves or {}) do
-            areaPOICache[areaPoiID] = map.mapID
-        end
-        for _, areaPoiID in ipairs(dragonridingRaces or {}) do
-            areaPOICache[areaPoiID] = map.mapID
-        end
-        for _, areaPoiID in ipairs(events or {}) do
-            areaPOICache[areaPoiID] = map.mapID
-        end
-        for _, areaPoiID in ipairs(questHubs or {}) do
-            areaPOICache[areaPoiID] = map.mapID
-        end
-
-        --- cache taxi nodes for faster lookup
-        for _, node in ipairs(C_TaxiMap.GetTaxiNodesForMap(map.mapID) or {}) do
-            taxiNodeCache[node.nodeID] = map.mapID
-        end
-
-        for _, node in ipairs(C_ResearchInfo.GetDigSitesForMap(map.mapID) or {}) do
-            digsiteNodeCache[node.researchSiteID] = map.mapID
-        end
-    end
-end
-
 ---@return number? x
 ---@return number? y
 ---@return number? mapID
@@ -75,6 +28,12 @@ end
 ---@return Enum.SuperTrackingMapPinType? pinType
 ---@return number? typeID
 function Providers:GetSuperTrackingInfo()
+    -- TODO: make generic
+    -- TODO: support more supertrackable types: check https://warcraft.wiki.gg/wiki/API_C_SuperTrack.GetHighestPrioritySuperTrackingType
+    -- TODO: generically get title, icon, coords for supertracked types
+    -- TODO: check if detecting silverdragon and handynotes is possible
+
+
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
     ---@type string
     local title
@@ -86,9 +45,19 @@ function Providers:GetSuperTrackingInfo()
     local x
     ---@type number
     local y
+
+    local mouseFoci = GetMouseFoci();
+    for _, focus in ipairs(mouseFoci) do
+        if focus.lastOwningMapID then
+            mapID = focus.lastOwningMapID
+            break
+        end
+    end
+    if not mapID then
+        return
+    end
+
     if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
-        mapID = areaPOICache[typeID]
-        if not mapID then return end
         local areaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
         if not areaPOIInfo then return end
         x = areaPOIInfo.position.x
@@ -96,9 +65,6 @@ function Providers:GetSuperTrackingInfo()
         title = areaPOIInfo.name
         atlasName = areaPOIInfo.atlasName
     elseif pinType == Enum.SuperTrackingMapPinType.TaxiNode then
-        mapID = taxiNodeCache[typeID]
-        if not mapID then return end
-
         local mapTaxiNodes = C_TaxiMap.GetTaxiNodesForMap(mapID)
         if not mapTaxiNodes then return end
         for _, node in ipairs(mapTaxiNodes) do
@@ -112,10 +78,6 @@ function Providers:GetSuperTrackingInfo()
             end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        ---@type number?
-        mapID = GetQuestUiMapID(typeID);
-        if not mapID then return end
-
         local mapQuests = C_QuestLog.GetQuestsOnMap(mapID)
         if not mapQuests then return end
         for _, quest in ipairs(mapQuests) do
@@ -134,9 +96,6 @@ function Providers:GetSuperTrackingInfo()
             end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
-        mapID = digsiteNodeCache[typeID]
-        if not mapID then return end
-
         local mapDigsites = C_ResearchInfo.GetDigSitesForMap(mapID)
         if not mapDigsites then return end
         for _, digsite in ipairs(mapDigsites) do
@@ -166,8 +125,7 @@ local function OnSuperTrackingChanged()
     if not uncategorizedGroup then return end
     local pinExists = false
     for _, pin in pairs(uncategorizedGroup.pins) do
-        if pin.pinData.mapID == mapID and pin.pinData.x == x and pin.pinData.y == y and pin.pinData.pinType == pinType and
-            pin.pinData.typeID == typeID then
+        if pin.pinData.pinType == pinType and pin.pinData.typeID == typeID then
             pinExists = true
             break
         end
@@ -186,8 +144,4 @@ local function OnSuperTrackingChanged()
     })
 end
 
-
-
-
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", BuildCaches)
