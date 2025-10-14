@@ -10,7 +10,7 @@
             <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
         </Anchors>
         <Frames>
-            <Frame parentKey="TabSystem" inherits="TabSystemTemplate">
+            <!-- <Frame parentKey="TabSystem" inherits="TabSystemTemplate">
                 <KeyValues>
                     <KeyValue key="minTabWidth" value="100" type="number" />
                     <KeyValue key="maxTabWidth" value="150" type="number" />
@@ -44,7 +44,7 @@
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="4" />
                 </Anchors>
-            </Frame>
+            </Frame> -->
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
