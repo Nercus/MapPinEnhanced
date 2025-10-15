@@ -5,4 +5,22 @@
     <Include file="tracker/_imports.xml" />
     <Include file="misc/_imports.xml" />
     <Include file="providers/_imports.xml" />
+
+
+    <!-- <Frame name="MPHTransluscentFrame" inherits="TranslucentFrameTemplate" toplevel="true"
+        frameStrata="DIALOG" parent="UIParent" movable="true" enableMouse="true">
+        <Size x="338" y="444" />
+        <Anchors>
+            <Anchor point="CENTER"></Anchor>
+        </Anchors>
+        <Frames>
+            <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+                        <Offset x="-7" y="-7" />
+                    </Anchor>
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame> -->
 </Ui>
