@@ -5,7 +5,7 @@
         inherits="PortraitFrameTemplate, TabSystemOwnerTemplate"
         enableMouse="true" toplevel="true" parent="UIParent" movable="true" clampedToScreen="true"
         frameStrata="HIGH" hidden="true" virtual="true">
-        <Size x="800" y="500" />
+        <Size x="1004" y="689" />
         <Anchors>
             <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
         </Anchors>
