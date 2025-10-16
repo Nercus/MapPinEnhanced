@@ -175,8 +175,8 @@ end
 
 function Options:GetOptionsFrame()
     if not self.optionsFrame then
-        self.optionsFrame = CreateFrame("Frame", "MapPinEnhancedOptionsFrame", UIParent,
-            "MapPinEnhancedOptionsFrameTemplate")
+        self.optionsFrame = CreateFrame("Frame", "MapPinEnhancedOptionsView", UIParent,
+            "MapPinEnhancedOptionsViewTemplate")
     end
     return self.optionsFrame
 end

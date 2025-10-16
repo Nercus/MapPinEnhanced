@@ -1,9 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-
-    <Include file="ImportView.lua" />
-    <Frame name="MapPinEnhancedImportViewTemplate" mixin="MapPinEnhancedImportViewMixin"
-        virtual="true">
-        <Size x="793" y="473" />
-    </Frame>
+    <Script file="overrides.lua" />
+    <Script file="distance.lua" />
+    <Script file="blizzard.lua" />
 </Ui>

@@ -1,0 +1,3 @@
+-- an extension to the floating pin that already exists in the game with two different variants
+-- one variant completely replaces the in game floating pin with a custom one with animations
+-- a second is a minimalist version and only adds minor information to the existing floating pin

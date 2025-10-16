@@ -1,0 +1,13 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="EditorFrame.lua" />
+    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin"
+        inherits="PortraitFrameTemplate, TabSystemOwnerTemplate"
+        enableMouse="true" toplevel="true" parent="UIParent" movable="true" clampedToScreen="true"
+        frameStrata="HIGH" hidden="true" virtual="true">
+        <Size x="1004" y="689" />
+        <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+        </Anchors>
+    </Frame>
+</Ui>

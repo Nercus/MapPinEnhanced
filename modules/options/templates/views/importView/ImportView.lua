@@ -1,2 +1,0 @@
----@class MapPinEnhancedImportViewTemplate
-MapPinEnhancedImportViewMixin = {}
