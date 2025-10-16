@@ -2,12 +2,27 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="EditorFrame.lua" />
     <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin"
-        inherits="PortraitFrameTemplate, TabSystemOwnerTemplate"
-        enableMouse="true" toplevel="true" parent="UIParent" movable="true" clampedToScreen="true"
-        frameStrata="HIGH" hidden="true" virtual="true">
+        inherits="PortraitFrameTemplate"
+        enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true"
+    >
         <Size x="1004" y="689" />
         <Anchors>
-            <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+            <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
         </Anchors>
+        <Frames>
+            <Frame parentKey="map" inherits="MapPinEnhancedMapTemplate" useParentLevel="true"
+                parent="$parent">
+                <Size x="450" y="300" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="30" y="30" />
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                self.Bg:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\bg.png");
+                self.map:Show()
+            </OnLoad>
+        </Scripts>
     </Frame>
 </Ui>
