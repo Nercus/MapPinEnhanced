@@ -79,10 +79,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollBar:SetHideIfUnscrollable(true)
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
-    self.scrollView:SetDataProvider(self.dataProvider)
-    self.scrollBar:SetInterpolateScroll(true);
-    self.scrollBox:SetInterpolateScroll(true);
-    ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
+
 
     self.scrollView:SetElementFactory(function(factory, node)
         ---@type MapPinEnhancedPinGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedPinSetMixin
@@ -91,6 +88,11 @@ function MapPinEnhancedTrackerMixin:OnLoad()
             frame:Init(node)
         end)
     end)
+
+    self.scrollView:SetDataProvider(self.dataProvider)
+    self.scrollBar:SetInterpolateScroll(true);
+    self.scrollBox:SetInterpolateScroll(true);
+    ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
 end
