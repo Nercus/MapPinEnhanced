@@ -55,6 +55,16 @@
                         relativePoint="LEFT" />
                 </Anchors>
             </Button>
+            <Button parentKey="importButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="sets" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"
+                        relativePoint="LEFT" />
+                </Anchors>
+            </Button>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
