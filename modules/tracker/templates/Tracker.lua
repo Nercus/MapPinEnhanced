@@ -67,10 +67,10 @@ end
 local MAX_ENTRIES = 6
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     -- TODO: update height also when elements get collapsed
-    local trackerHeight = self.header:GetHeight() + 3 -- header plus padding
+    local trackerHeight = self.header:GetHeight() + 5 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
-    local newHeight = visibleEntries * 47 -- Assuming each entry takes up 47 pixels in height
+    local newHeight = visibleEntries * 35 -- Assuming each entry takes up 33 pixels in height
     newHeight = newHeight + trackerHeight -- Add the height of the header
     self:SetHeight(newHeight)
 end

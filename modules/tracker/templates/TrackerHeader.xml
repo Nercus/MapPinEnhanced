@@ -12,11 +12,20 @@
         <Layers>
             <Layer level="OVERLAY">
                 <Texture parentKey="headerTexture"
-                    atlas="GarrLanding-ShipMission-InProgress" desaturated="true"
-                    setAllPoints="true" />
+                    atlas="shop-header-menu-selected-line-middle" desaturated="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="1" />
+                        <MaxColor r="1" g="1" b="1" a="1" />
+                    </Gradient>
+                    <Size x="1" y="5" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
+                        <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                    </Anchors>
+                </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString parentKey="title" inherits="GameFontNormalLarge"
+                <FontString parentKey="title" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
@@ -27,26 +36,25 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="closeButton">
-                <Size x="30" y="30" />
-                <NormalTexture atlas="128-RedButton-Exit" />
-                <PushedTexture atlas="128-RedButton-Exit-Pressed" />
-                <HighlightTexture atlas="128-RedButton-Exit-Highlight" />
+            <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-5" y="0" />
+                    <Anchor point="RIGHT" x="-5" y="2" />
                 </Anchors>
             </Button>
-            <Button parentKey="viewButton">
-                <Size x="30" y="30" />
-                <NormalTexture atlas="128-RedButton-ArrowDown" />
-                <PushedTexture atlas="128-RedButton-ArrowDown-Pressed" />
-                <HighlightTexture atlas="128-RedButton-ArrowDown-Highlight" />
+            <Button parentKey="viewButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="sets" />
+                </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-5" y="0" relativeKey="$parent.closeButton"
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"
                         relativePoint="LEFT" />
                 </Anchors>
             </Button>
-
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

@@ -6,18 +6,16 @@
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
-        <Size x="272" y="40" />
-        <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_bg.png"
-            setAllPoints="true" />
-        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
+        <Size x="272" y="35" />
+        <NormalTexture atlas="Event-Scheduler-Ongoing-events-card-incomplete"
+        >
+            <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
+                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
+            </Anchors>
+        </NormalTexture>
+        <HighlightTexture atlas="Event-Scheduler-Event-Card-active"
             alpha="0.3" setAllPoints="true" />
-        <Layers>
-            <Layer level="OVERLAY">
-                <Texture setAllPoints="true"
-                    parentKey="overlayTexture"
-                    file="Interface/AddOns/MapPinEnhanced/assets/tracker_overlay.png" alpha="0.3" />
-            </Layer>
-        </Layers>
         <Frames>
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate">
                 <Anchors>

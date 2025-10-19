@@ -1,5 +1,5 @@
 ---@class MapPinEnhancedIconMixin : Texture
----@field icon string
+---@field icon MapPinEnhancedIcon
 MapPinEnhancedIconMixin = {}
 
 ---@enum (key) MapPinEnhancedIcon

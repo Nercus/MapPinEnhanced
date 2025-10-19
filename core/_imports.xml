@@ -70,7 +70,7 @@
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="10" />
                 </Anchors>
-                <BarTexture file="Interface/AddOns/YourAddon/delves-dashboard-bar-fill" />
+                <BarTexture file="delves-dashboard-bar-fill" />
                 <Layers>
                     <Layer level="BORDER">
                         <Texture atlas="delves-dashboard-bar-border">

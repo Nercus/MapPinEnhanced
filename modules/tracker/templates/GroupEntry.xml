@@ -7,37 +7,35 @@
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
-        <Size x="300" y="40" />
-        <NormalTexture atlas="QuestLog-tab">
-            <Size x="1" y="32" />
+        <Size x="300" y="35" />
+        <NormalTexture atlas="questlog-tab">
+            <Size x="1" y="25" />
             <Anchors>
-                <Anchor point="BOTTOMLEFT" />
-                <Anchor point="BOTTOMRIGHT" />
+                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
+                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
             </Anchors>
         </NormalTexture>
-        <HighlightTexture atlas="QuestLog-quest-glow-yellow" alpha="0.3">
-            <Size x="1" y="32" />
+        <HighlightTexture atlas="questlog-tab" alphaMode="ADD" alpha="0.4">
+            <Size x="1" y="25" />
             <Anchors>
-                <Anchor point="BOTTOMLEFT" />
-                <Anchor point="BOTTOMRIGHT" />
+                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
+                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
             </Anchors>
         </HighlightTexture>
         <Frames>
             <Button parentKey="expandButton">
-                <Size x="20" y="20" />
+                <Size x="16" y="16" />
                 <NormalTexture atlas="QuestLog-icon-Expand" setAllPoints="true" />
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="5" y="6" />
+                    <Anchor point="BOTTOMRIGHT" x="-5" y="6" />
                 </Anchors>
             </Button>
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormalLarge" text="Test" justifyH="LEFT">
+                <FontString inherits="GameFontNormal" text="Test" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.expandButton" x="5"
-                            relativePoint="RIGHT" />
-                        <Anchor point="RIGHT" x="-10" />
+                        <Anchor point="BOTTOMLEFT" y="9" x="10" />
                     </Anchors>
                 </FontString>
             </Layer>

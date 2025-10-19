@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field treeNode TreeNodeMixin
 ---@field pin MapPinEnhancedPinMixin
----@field overlayTexture Texture
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 ---@param treeNode TreeNodeMixin

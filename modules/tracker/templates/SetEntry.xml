@@ -5,23 +5,30 @@
     <Button name="MapPinEnhancedTrackerSetEntryTemplate" virtual="true"
         mixin="MapPinEnhancedTrackerSetEntryMixin">
         <KeyValues>
-            <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
+            <KeyValue key="template" value="MapPinEnhancedTrackerSetEntryTemplate" />
         </KeyValues>
-        <Size x="300" y="40" />
-        <NormalTexture atlas="auctionhouse-nav-button">
-            <Size x="1" y="32" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" />
-                <Anchor point="BOTTOMRIGHT" />
-            </Anchors>
-        </NormalTexture>
-        <HighlightTexture atlas="auctionhouse-nav-button-highlight" alpha="0.3">
-            <Size x="1" y="32" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" />
-                <Anchor point="BOTTOMRIGHT" />
-            </Anchors>
-        </HighlightTexture>
+        <Size x="300" y="30" />
+        <NormalTexture atlas="shop-header-menu-BG-right" setAllPoints="true" />
+        <HighlightTexture atlas="shop-header-menu-selected-right" alpha="0.3" setAllPoints="true" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture inherits="MapPinEnhancedIconTemplate" parentKey="iconTexture">
+                    <Size x="16" y="16" />
+                    <KeyValues>
+                        <KeyValue key="icon" value="sets" />
+                    </KeyValues>
+                    <Anchors>
+                        <Anchor point="LEFT" x="5" />
+                    </Anchors>
+                </Texture>
+                <FontString inherits="GameFontNormal" text="Test Set" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.iconTexture" relativePoint="RIGHT"
+                            x="5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
         </Scripts>

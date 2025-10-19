@@ -36,12 +36,6 @@ function MapPinEnhancedTrackerPinMixin:SetPinColor(color)
         return
     end
     frame.pinFrame:SetPinColor(color)
-    local vertexColor = frame.pinFrame:GetColorValue()
-    if vertexColor and vertexColor ~= 'Custom' then
-        frame.overlayTexture:SetVertexColor(vertexColor.r, vertexColor.g, vertexColor.b)
-    else
-        frame.overlayTexture:SetVertexColor(1, 1, 1) -- Default to white if no color is set
-    end
 end
 
 function MapPinEnhancedTrackerPinMixin:SetPinIcon(icon, usesAtlas)
