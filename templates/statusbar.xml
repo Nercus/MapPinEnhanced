@@ -6,7 +6,7 @@
         mixin="MapPinEnhancedStatusbarMixin, MapPinEnhancedThemeableMixin"
         virtual="true">
         <BarTexture atlas="UI-HUD-CoolDownManager-Bar" setAllPoints="true">
-            <Color r="1" g="0.82" b="0" />
+            <Color r="0.55" g="0" b="0" />
         </BarTexture>
         <Layers>
             <Layer level="BACKGROUND">
