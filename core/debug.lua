@@ -145,8 +145,7 @@ StaticPopupDialogs[MapPinEnhanced.name .. "RESETSAVEDVARS_POPUP"] = {
 ---@field testStatusbar MapPinEnhancedDebugMenuFrameStatusBar
 MapPinEnhancedDebugMenuFrameMixin = {}
 
----@class MapPinEnhancedDebugMenuFrameStatusBar : StatusBar
----@field label FontString
+---@class MapPinEnhancedDebugMenuFrameStatusBar : MapPinEnhancedStatusbarTemplate
 ---@field runTestsButton Button
 
 
@@ -159,8 +158,7 @@ end
 
 function MapPinEnhancedDebugMenuFrameMixin:SetStatusbarValue(min, max, value)
     self.testStatusbar:SetMinMaxValues(min, max)
-    self.testStatusbar:SetValue(value)
-    self.testStatusbar.label:SetText(string.format("Tests completed: %d/%d", value, max))
+    self.testStatusbar:SetValueSmooth(value)
 end
 
 function MapPinEnhancedDebugMenuFrameMixin:OnLoad()
@@ -197,6 +195,7 @@ function MapPinEnhancedDebugMenuFrameMixin:OnLoad()
             local numErrors = 0
             for _, v in pairs(states) do
                 if not v then
+                    ---@type number
                     numErrors = numErrors + 1
                 end
             end
@@ -208,6 +207,11 @@ function MapPinEnhancedDebugMenuFrameMixin:OnLoad()
         if not self.testStates then return end
         MapPinEnhanced:GenerateMenu(bar, self:BuildStatusBarMenu(self.testStates),
             { gridModeColumns = math.ceil(MapPinEnhanced:GetNumberOfTests() / 25) })
+    end)
+
+    self.testStatusbar:SetName("Test completed:")
+    self.testStatusbar:SetProgressFormatter(function(value, max)
+        return string.format("%d/%d", value, max)
     end)
 end
 

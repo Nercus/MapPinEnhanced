@@ -65,30 +65,11 @@
                         relativePoint="RIGHT" x="5" y="0" />
                 </Anchors>
             </Button>
-            <StatusBar parentKey="testStatusbar">
-                <Size x="420" y="27" />
+            <StatusBar parentKey="testStatusbar" inherits="MapPinEnhancedStatusbarTemplate">
+                <Size x="420" y="17" />
                 <Anchors>
                     <Anchor point="BOTTOM" x="0" y="10" />
                 </Anchors>
-                <BarTexture file="delves-dashboard-bar-fill" />
-                <Layers>
-                    <Layer level="BORDER">
-                        <Texture atlas="delves-dashboard-bar-border">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="-1" y="1" />
-                                <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                    <Layer level="OVERLAY">
-                        <FontString parentKey="label" inherits="GameFontNormal"
-                            text="Test StatusBar">
-                            <Anchors>
-                                <Anchor point="CENTER" x="0" y="1" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
                 <Frames>
                     <Button parentKey="runTestsButton">
                         <Size x="30" y="30" />
