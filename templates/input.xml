@@ -3,34 +3,25 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="input.lua" />
 
-
     <EditBox name="MapPinEnhancedInputTemplate"
         mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin"
         virtual="true"
         font="GameFontHighlight" autoFocus="false" multiLine="false">
-        <TextInsets left="10" right="15" />
+        <TextInsets left="5" right="15" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="left" atlas="common-search-border-left" useAtlasSize="false">
+                <Texture parentKey="bg"
+                    atlas="UI-HUD-CoolDownManager-Bar-BG"
+                >
                     <Anchors>
-                        <Anchor point="LEFT" x="0" y="0" />
-                    </Anchors>
-                </Texture>
-                <Texture parentKey="right" atlas="common-search-border-right">
-                    <Anchors>
-                        <Anchor point="RIGHT" x="0" y="0" />
-                    </Anchors>
-                </Texture>
-                <Texture parentKey="middle" atlas="_common-search-border-center" horizTile="true">
-                    <Size x="1" />
-                    <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.left" relativePoint="RIGHT" />
-                        <Anchor point="RIGHT" relativeKey="$parent.right" relativePoint="LEFT" />
+                        <Anchor point="TOPLEFT" x="-1" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
                     </Anchors>
                 </Texture>
             </Layer>
+
             <Layer level="OVERLAY">
-                <FontString parentKey="placeholder" inherits="GameFontNormalGraySmall"
+                <FontString parentKey="placeholderText" inherits="GameFontDisableSmall"
                     hidden="true" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" x="10" y="0" />
@@ -61,6 +52,7 @@
                         parent:ClearFocus();
                         parent:SetText("");
                         parent:UpdateClearButtonVisibility();
+                        parent:UpdatePlaceholderVisibility();
                     </OnClick>
                 </Scripts>
             </Button>
@@ -68,7 +60,7 @@
                 <Size x="100" y="20" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture atlas="QuestSharing-QuestPane-ModifiersBG" setAllPoints="true"
+                        <Texture atlas="plunderstorm-icon-key" setAllPoints="true"
                             parentKey="bg" />
                         <FontString parentKey="text" inherits="GameFontNormalSmall"
                             justifyH="CENTER" justifyV="MIDDLE">
@@ -79,13 +71,13 @@
                         <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate"
                             desaturated="true" alpha="0.8">
                             <Anchors>
-                                <Anchor point="CENTER" />
+                                <Anchor point="CENTER" x="1" />
                             </Anchors>
                         </Texture>
                     </Layer>
                 </Layers>
                 <Anchors>
-                    <Anchor point="LEFT" x="1" />
+                    <Anchor point="LEFT" x="0" />
                 </Anchors>
             </Frame>
         </Frames>
@@ -93,13 +85,11 @@
             <OnSizeChanged>
                 -- original left and right texture has a ratio of 1:2.5
                 local height = self:GetHeight()
-                self.left:SetSize(height / 2.5, height)
-                self.right:SetSize(height / 2.5, height)
-                self.middle:SetSize(height / 2.5, height)
                 self.inlineLabel:SetHeight(height);
             </OnSizeChanged>
             <OnEscapePressed method="OnEscapePressed" />
             <OnEditFocusGained method="OnEditFocusGained" />
+            <OnEditFocusLost method="OnEditFocusLost" />
             <OnChar method="OnChar" />
             <OnLoad method="OnLoad" />
             <OnEvent method="OnEvent" />

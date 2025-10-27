@@ -11,8 +11,9 @@ local MapPinEnhanced = select(2, ...)
 ---@field entryList MapPinEnhancedAutocompleteEntryTemplate[]
 ---@field selectedEntryIndex number
 ---@field options AutocompleteOption[]
----@field optionsValueMap table<string, any>
+---@field optionsValueMap table<string, AutocompleteOption>
 MapPinEnhancedAutocompleteMixin = {}
+
 
 ---@class MapPinEnhancedAutocompleteSearchResults : Frame
 ---@field noResultsMsg FontString
@@ -71,7 +72,8 @@ function MapPinEnhancedAutocompleteMixin:ShowAutocomplete(results)
         if count >= MAX_ENTRIES_TO_SHOW then break end
 
         local entry = self.pool:Acquire()
-        entry:SetText(result.line)
+        local option = self.optionsValueMap[result.line]
+        entry:SetText(option.label or result.line)
         entry.resultValue = result.line
         entry.index = index
         table.insert(self.entryList, entry)
@@ -110,6 +112,8 @@ function MapPinEnhancedAutocompleteMixin:ShowNoResultsMessage(show)
 end
 
 function MapPinEnhancedAutocompleteMixin:OnTextChanged()
+    assert(self.options, "Options must be set before using autocomplete.")
+
     local text = self:GetText()
     if not text or text == "" then
         self.pool:ReleaseAll()

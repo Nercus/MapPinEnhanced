@@ -7,10 +7,11 @@ local MapPinEnhanced = select(2, ...)
 ---@field middle Texture
 ---@field clearButton Button
 ---@field inlineLabel MapPinEnhancedInputInlineLabel
----@field placeholder FontString
+---@field placeholderText FontString
 ---@field clearOnEscape boolean?
 ---@field icon MapPinEnhancedIcon? set through keyvalues
 ---@field label string? set through keyvalues
+---@field placeholder string? set through keyvalues
 MapPinEnhancedInputMixin = {}
 
 ---@class MapPinEnhancedInputInlineLabel : Frame
@@ -21,21 +22,23 @@ MapPinEnhancedInputMixin = {}
 function MapPinEnhancedInputMixin:UpdatePlaceholderVisibility()
     local text = self:GetText()
     if not text or text == "" then
-        self.placeholder:Show()
+        self.placeholderText:Show()
     else
-        self.placeholder:Hide()
+        self.placeholderText:Hide()
     end
 end
 
 function MapPinEnhancedInputMixin:UpdatePlaceholderPosition()
     local leftInset = self:GetTextInsets() or 0
-    self.placeholder:ClearAllPoints()
-    self.placeholder:SetPoint("LEFT", self, "LEFT", leftInset + 2, 0)
+    self.placeholderText:ClearAllPoints()
+    self.placeholderText:SetPoint("LEFT", self, "LEFT", leftInset, 0)
 end
 
 function MapPinEnhancedInputMixin:UpdateClearButtonVisibility()
     local text, hasFocus = self:GetText(), self:HasFocus()
-    if not text or text == "" or not hasFocus then
+    local mouseOverClearButton = self.clearButton:IsMouseOver()
+
+    if not text or text == "" or (not hasFocus and not mouseOverClearButton) then
         self.clearButton:Hide()
     else
         self.clearButton:Show()
@@ -43,7 +46,7 @@ function MapPinEnhancedInputMixin:UpdateClearButtonVisibility()
 end
 
 function MapPinEnhancedInputMixin:SetPlaceholderText(placeholderText)
-    self.placeholder:SetText(placeholderText)
+    self.placeholderText:SetText(placeholderText)
     self:UpdatePlaceholderVisibility()
 end
 
@@ -90,6 +93,10 @@ end
 
 function MapPinEnhancedInputMixin:OnLoad()
     self:RegisterEvent("GLOBAL_MOUSE_DOWN")
+    if self.placeholder then
+        self:SetPlaceholderText(self.placeholder)
+    end
+
     if self.icon and not self.label then
         self:SetInlineIcon(self.icon)
     elseif self.label and not self.icon then
@@ -121,14 +128,17 @@ function MapPinEnhancedInputMixin:OnEscapePressed()
     if self.clearOnEscape then
         self:SetText("")
     end
-    self:ClearHighlightText()
     self:ClearFocus()
-    self:UpdateClearButtonVisibility()
-    self:UpdatePlaceholderVisibility()
 end
 
 function MapPinEnhancedInputMixin:OnEditFocusGained()
     self:HighlightText()
+    self:UpdateClearButtonVisibility()
+    self:UpdatePlaceholderVisibility()
+end
+
+function MapPinEnhancedInputMixin:OnEditFocusLost()
+    self:ClearHighlightText()
     self:UpdateClearButtonVisibility()
     self:UpdatePlaceholderVisibility()
 end
