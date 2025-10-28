@@ -2,28 +2,88 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedAutocompleteTemplate : MapPinEnhancedInputTemplate
----@field loadingIndicator Texture
----@field SearchResults MapPinEnhancedAutocompleteSearchResults
----@field pool FramePool<MapPinEnhancedAutocompleteEntryTemplate>
----@field searchText string
----@field searchOptions string[]
----@field filterFunction function
----@field entryList MapPinEnhancedAutocompleteEntryTemplate[]
----@field selectedEntryIndex number
+---@field resultsFrame MapPinEnhancedAutocompleteResults
+---@field spinner Texture
 ---@field options AutocompleteOption[]
+---@field dataProvider DataProviderMixin
+---@field selectedIndex number | nil
+---@field filterFunction function
 ---@field optionsValueMap table<string, AutocompleteOption>
+---@field searchOptions string[]
+---@field searchText string
+---@field value AutocompleteOption
 MapPinEnhancedAutocompleteMixin = {}
 
+---@class MapPinEnhancedAutocompleteResults : Frame
+---@field background Texture
+---@field borderLeft Texture
+---@field borderRight Texture
+---@field borderMiddle Texture
+---@field message FontString
+---@field scrollBox WowScrollBoxList
+---@field scrollBar MinimalScrollBar
 
----@class MapPinEnhancedAutocompleteSearchResults : Frame
----@field noResultsMsg FontString
+---@class AutocompleteOption
+---@field label string display label for the option
+---@field searchString string string to match against user input for filtering
+---@field value number | string | boolean value associated with the option
 
----@alias AutocompleteOption {label: string, searchString: string, value: any}
+function MapPinEnhancedAutocompleteMixin:OnLoad()
+    MapPinEnhancedInputMixin.OnLoad(self)
 
-local MAX_ENTRIES_TO_SHOW = 10
+    self.dataProvider = CreateDataProvider()
+    self.selectedIndex = nil
 
----@param value any this could be the searchstring or the value of the option
+    local scrollView = CreateScrollBoxListLinearView()
+    scrollView:SetElementInitializer("MapPinEnhancedAutocompleteEntryTemplate", function(entry, elementData)
+        ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
+        ---@cast elementData SearchResult
+        local optionData = self.optionsValueMap[elementData.line]
+        entry:Init(optionData)
+        entry:SetScript("OnClick", function()
+            self:SetValue(optionData.value)
+            self.resultsFrame:Hide()
+            self.spinner:Hide()
+        end)
+    end)
+    scrollView:SetElementResetter(function(entry)
+        ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
+        entry:UnlockHighlight()
+    end)
+
+    scrollView:SetDataProvider(self.dataProvider)
+    self.resultsFrame.scrollBar:SetInterpolateScroll(true);
+    self.resultsFrame.scrollBox:SetInterpolateScroll(true);
+    ScrollUtil.InitScrollBoxListWithScrollBar(self.resultsFrame.scrollBox, self.resultsFrame.scrollBar, scrollView)
+
+    self.resultsFrame.scrollBar:SetHideIfUnscrollable(true)
+    MapPinEnhanced:Debug(self.resultsFrame.scrollBar)
+end
+
+function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
+    self.resultsFrame.scrollBox:ScrollToElementDataIndex(index)
+    self.resultsFrame.scrollBox:ForEachFrame(function(frame)
+        ---@cast frame MapPinEnhancedAutocompleteEntryTemplate
+        local orderIndex = frame:GetOrderIndex()
+        if orderIndex == index then
+            frame:LockHighlight()
+        else
+            frame:UnlockHighlight()
+        end
+    end)
+end
+
+---@param value number | string | boolean | nil this could be the searchstring or the value of the option
 function MapPinEnhancedAutocompleteMixin:SetValue(value)
+    if value == nil then
+        self.value = nil
+        self:SetText("")
+        self:UpdatePlaceholderVisibility()
+        if self.onChangeCallback then
+            self.onChangeCallback(nil)
+        end
+        return
+    end
     local option = self.optionsValueMap[value]
     if not option then
         for _, opt in ipairs(self.options) do
@@ -33,82 +93,107 @@ function MapPinEnhancedAutocompleteMixin:SetValue(value)
             end
         end
     end
-    self.activeValue = option
+    self.value = option
     self:SetText(option.label)
     self:UpdatePlaceholderVisibility()
     if self.onChangeCallback then
-        self.onChangeCallback(option.value)
+        self.onChangeCallback(option)
     end
 end
+
+function MapPinEnhancedAutocompleteMixin:IncrementSelectedIndex()
+    local numEntries = self.dataProvider:GetSize()
+    if numEntries == 0 then return end
+
+    if not self.selectedIndex then
+        self.selectedIndex = 1
+    else
+        if self.selectedIndex < numEntries then
+            self.selectedIndex = self.selectedIndex + 1
+        end
+    end
+
+    self:HighlightEntry(self.selectedIndex)
+end
+
+function MapPinEnhancedAutocompleteMixin:DecrementSelectedIndex()
+    local numEntries = self.dataProvider:GetSize()
+    if numEntries == 0 then return end
+
+    if not self.selectedIndex then
+        self.selectedIndex = numEntries
+    else
+        if self.selectedIndex > 1 then
+            self.selectedIndex = self.selectedIndex - 1
+        end
+    end
+
+    self:HighlightEntry(self.selectedIndex)
+end
+
+function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
+    if key == "DOWN" then
+        self:IncrementSelectedIndex()
+    elseif key == "UP" then
+        self:DecrementSelectedIndex()
+    elseif key == "ENTER" then
+        ---@type SearchResult | nil
+        local preselectedText = self.dataProvider:Find(self.selectedIndex)
+        local preselectedEntry = preselectedText and self.optionsValueMap[preselectedText.line]
+
+        if preselectedEntry then
+            self:SetValue(preselectedEntry.value)
+            self.resultsFrame:Hide()
+            self.spinner:Hide()
+        end
+    elseif key == "ESCAPE" then
+        self.resultsFrame:Hide()
+    end
+end
+
+local MAX_HEIGHT = 200
+local ENTRY_HEIGHT = 20
 
 ---@param results SearchResult[]
-function MapPinEnhancedAutocompleteMixin:ShowAutocomplete(results)
-    self.pool:ReleaseAll()
+function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
+    self.spinner:Hide()
 
-    -- Hide if no results
+    if self.value and self.value.label == self:GetText() then
+        self.resultsFrame:Hide()
+        return
+    end
+
     if not results or #results == 0 then
-        self:SetLoadingIndicatorVisibility(false)
-        self:ShowNoResultsMessage(true)
-        self.SearchResults:Show()
-        self.SearchResults:SetHeight(25)
+        self.resultsFrame.message:Show()
+        self.resultsFrame:SetHeight(25)
+        self.resultsFrame:Show()
+        self.dataProvider:Flush()
         return
     end
 
-    -- Hide if first result is the same as the input text
-    if results[1] and results[1].line == self:GetText() then
-        self:SetLoadingIndicatorVisibility(false)
-        self.SearchResults:Hide()
-        return
+    self.dataProvider:Flush()
+    self.dataProvider:InsertTable(results)
+
+    self.resultsFrame:Show()
+    self.resultsFrame.message:Hide()
+
+    self.selectedIndex = 1
+    local totalHeight = #results * ENTRY_HEIGHT
+    if totalHeight > MAX_HEIGHT then
+        totalHeight = MAX_HEIGHT
     end
+    self.resultsFrame:SetHeight(totalHeight + 5) -- +5 for padding
 
-    self:ShowNoResultsMessage(false)
-
-    local count = 0
-    ---@type MapPinEnhancedAutocompleteEntryTemplate | nil
-    local lastEntry
-    local totalHeight = 0
-    self.entryList = {}
-    for index, result in ipairs(results) do
-        if count >= MAX_ENTRIES_TO_SHOW then break end
-
-        local entry = self.pool:Acquire()
-        local option = self.optionsValueMap[result.line]
-        entry:SetText(option.label or result.line)
-        entry.resultValue = result.line
-        entry.index = index
-        table.insert(self.entryList, entry)
-
-        if lastEntry then
-            entry:SetPoint("TOPLEFT", lastEntry, "BOTTOMLEFT", 0, -5)
-            entry:SetPoint("TOPRIGHT", lastEntry, "BOTTOMRIGHT", 0, -5)
-        else
-            entry:SetPoint("TOPLEFT", self.SearchResults, "TOPLEFT", 3, 0)
-            entry:SetPoint("TOPRIGHT", self.SearchResults, "TOPRIGHT", 0, 0)
-        end
-        entry:Show()
-
-        entry:SetScript("OnClick", function()
-            self:SetValue(result.line)
-            self.pool:ReleaseAll()
-            self.SearchResults:Hide()
-            self:SetLoadingIndicatorVisibility(false)
-        end)
-
-        lastEntry = entry
-        totalHeight = totalHeight + entry:GetHeight() + (index < #results and 5 or 0)
-        count = count + 1
-    end
-
-    self.SearchResults:SetHeight(totalHeight)
-
-    self.SearchResults:Show()
-    self:SetLoadingIndicatorVisibility(false)
-    self.selectedEntryIndex = 1
-    self:HighlightEntry(self.selectedEntryIndex)
+    self:HighlightEntry(self.selectedIndex)
 end
 
-function MapPinEnhancedAutocompleteMixin:ShowNoResultsMessage(show)
-    self.SearchResults.noResultsMsg:SetShown(show)
+function MapPinEnhancedAutocompleteMixin:UpdateOptions()
+    if not self.searchText or self.searchText == "" then
+        self.resultsFrame:Hide()
+        return
+    end
+    local results = MapPinEnhanced:Filter(self.searchText, self.searchOptions, false)
+    self:UpdateResults(results)
 end
 
 function MapPinEnhancedAutocompleteMixin:OnTextChanged()
@@ -116,8 +201,8 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
 
     local text = self:GetText()
     if not text or text == "" then
-        self.pool:ReleaseAll()
-        self.SearchResults:Hide()
+        self.resultsFrame:Hide()
+        self:SetValue(nil)
         return
     end
     if self.searchText == text then
@@ -125,31 +210,34 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
         return
     end
 
-    if self.activeValue and self.activeValue.label == text then
+    if self.value and self.value.label == text then
         -- If the value is already set to the current text, no need to update
         return
     end
-    self:SetLoadingIndicatorVisibility(true)
+    self.spinner:Show()
     self.searchText = text
     self.filterFunction()
 end
 
-function MapPinEnhancedAutocompleteMixin:UpdateAutocomplete()
-    if not self.searchText or self.searchText == "" then
-        self.pool:ReleaseAll()
-        self.SearchResults:Hide()
-        return
-    end
-
-    local results = MapPinEnhanced:Filter(self.searchText, self.searchOptions, false)
-    self:ShowAutocomplete(results)
+function MapPinEnhancedAutocompleteMixin:OnEditFocusLost()
+    MapPinEnhancedInputMixin.OnEditFocusLost(self)
+    -- if over search results, do not hide
+    if self.resultsFrame:IsShown() and self.resultsFrame:IsMouseOver() then return end
+    self.resultsFrame:Hide()
 end
 
-function MapPinEnhancedAutocompleteMixin:SetLoadingIndicatorVisibility(visible)
-    if visible then
-        self.loadingIndicator:Show()
-    else
-        self.loadingIndicator:Hide()
+function MapPinEnhancedAutocompleteMixin:OnGlobalMouseDown()
+    if not self:IsVisible() or not self.resultsFrame:IsShown() then return end
+    local foci = GetMouseFoci()
+    local inside = false
+    for _, focus in ipairs(foci) do
+        if focus == self or focus == self.resultsFrame then
+            inside = true
+            break
+        end
+    end
+    if not inside then
+        self.resultsFrame:Hide()
     end
 end
 
@@ -159,87 +247,23 @@ function MapPinEnhancedAutocompleteMixin:SetOptions(options)
     self.options = options
     self.searchOptions = {}
     self.optionsValueMap = {}
+
     for _, option in ipairs(options) do
         self.optionsValueMap[option.searchString] = option
         table.insert(self.searchOptions, option.searchString)
     end
+
     self.filterFunction = MapPinEnhanced:DebounceChange(function()
-        self:UpdateAutocomplete()
+        self:UpdateOptions()
     end, 0.2, function()
-        self:SetLoadingIndicatorVisibility(false)
+        self.spinner:Hide()
     end)
-end
-
-function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
-    if not self.entryList then return end
-    ---@param entry MapPinEnhancedAutocompleteEntryTemplate
-    for i, entry in ipairs(self.entryList) do
-        if i == index then
-            entry.text:SetTextColor(1, 1, 0) -- yellow
-            entry:LockHighlight()
-        else
-            entry.text:SetTextColor(1, 1, 1)
-            entry:UnlockHighlight()
-        end
-    end
-end
-
-function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
-    if not self.entryList or #self.entryList == 0 then return end
-    if key == "DOWN" then
-        self.selectedEntryIndex = math.min(self.selectedEntryIndex + 1, #self.entryList)
-        self:HighlightEntry(self.selectedEntryIndex)
-    elseif key == "UP" then
-        self.selectedEntryIndex = math.max(self.selectedEntryIndex - 1, 1)
-        self:HighlightEntry(self.selectedEntryIndex)
-    elseif key == "ENTER" then
-        local entry = self.entryList[self.selectedEntryIndex]
-        if entry then
-            self:SetValue(entry.resultValue)
-            self.pool:ReleaseAll()
-            self.SearchResults:Hide()
-            self:SetLoadingIndicatorVisibility(false)
-        end
-    elseif key == "ESCAPE" then
-        self.SearchResults:Hide()
-        self.pool:ReleaseAll()
-    end
-end
-
-function MapPinEnhancedAutocompleteMixin:OnEditFocusLost()
-    -- if over search results, do not hide
-    if self.SearchResults:IsShown() and self.SearchResults:IsMouseOver() then return end
-    self.SearchResults:Hide()
-    self.pool:ReleaseAll()
-end
-
-function MapPinEnhancedAutocompleteMixin:OnGlobalMouseDown()
-    if not self:IsVisible() or not self.SearchResults:IsShown() then return end
-    local foci = GetMouseFoci()
-    local inside = false
-    for _, focus in ipairs(foci) do
-        if focus == self or focus == self.SearchResults then
-            inside = true
-            break
-        end
-    end
-    if not inside then
-        self.SearchResults:Hide()
-        self.pool:ReleaseAll()
-    end
-end
-
-function MapPinEnhancedAutocompleteMixin:OnLoad()
-    MapPinEnhancedInputMixin.OnLoad(self)
-    self.pool = CreateFramePool("Button", self.SearchResults, "MapPinEnhancedAutocompleteEntryTemplate")
-    self.entryList = {}
-    self.selectedEntryIndex = 1
 end
 
 ---@class MapPinEnhancedAutocompleteData
 ---@field options AutocompleteOption[] list of options to show in the autocomplete
----@field onChange fun(value: any) callback when an option is selected
----@field init? fun(): any initial value for the autocomplete
+---@field onChange fun(value: number | string | boolean) callback when an option is selected
+---@field init? fun(): number | string | boolean initial value for the autocomplete
 
 ---@param callback fun(value: any)
 function MapPinEnhancedAutocompleteMixin:SetCallback(callback)
@@ -265,12 +289,12 @@ function MapPinEnhancedAutocompleteMixin:Setup(formData)
     self:UpdatePlaceholderVisibility()
 end
 
----@class MapPinEnhancedAutocompleteEntryTemplate : Button
+---@class MapPinEnhancedAutocompleteEntryTemplate : Button, { GetOrderIndex: fun(): number }
 ---@field text FontString
----@field resultValue string
----@field index number
 MapPinEnhancedAutocompleteEntryMixin = {}
 
-function MapPinEnhancedAutocompleteEntryMixin:SetText(text)
-    self.text:SetText(text)
+
+---@param data AutocompleteOption
+function MapPinEnhancedAutocompleteEntryMixin:Init(data)
+    self.text:SetText(data.label)
 end

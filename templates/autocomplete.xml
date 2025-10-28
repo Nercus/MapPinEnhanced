@@ -8,70 +8,27 @@
         font="GameFontHighlight" autoFocus="false" multiLine="false"
         inherits="MapPinEnhancedInputTemplate">
         <Frames>
-            <Frame parentKey="SearchResults" frameStrata="DIALOG" enableMouse="true" hidden="true">
+            <Frame parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="4" y="-3" />
-                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="-4" y="-3" />
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
                 </Anchors>
                 <Size x="0" y="150" />
                 <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture parentKey="background" atlas="auctionhouse-background-index"
-                            setAllPoints="true" />
-                    </Layer>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="borderLeft"
-                            file="interface/common/commonsearch" scale="0.75">
-                            <Size x="20" y="0" />
-                            <TextureSliceMode mode="Stretched" />
-                            <TextureSliceMargins left="8" right="8"
-                                top="20" bottom="20" />
-                            <TexCoords left="0.88671875" right="0.94921875"
-                                top="0.3359375"
-                                bottom="0.6484375" />
+                        <Texture parentKey="background" atlas="UI-HUD-CoolDownManager-Bar-BG"
+                        >
                             <Anchors>
-                                <Anchor point="TOPLEFT" x="-6" y="6" />
-                                <Anchor point="BOTTOMLEFT" x="-6" y="-6" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="borderRight"
-                            file="interface/common/commonsearch" scale="0.75">
-                            <Size x="20" y="0" />
-                            <TextureSliceMode mode="Stretched" />
-                            <TextureSliceMargins left="8" right="8"
-                                top="20" bottom="20" />
-                            <TexCoords left="0.00390625" right="0.06640625"
-                                top="0.6640625"
-                                bottom="0.9765625" />
-                            <Anchors>
-                                <Anchor point="TOPRIGHT" x="6" y="6" />
-                                <Anchor point="BOTTOMRIGHT" x="6" y="-6" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="borderMiddle"
-                            file="interface/common/commonsearch" scale="0.75">
-                            <TextureSliceMode mode="Stretched" />
-                            <TextureSliceMargins left="8" right="8"
-                                top="20" bottom="20" />
-                            <TexCoords left="0" right="0.0625"
-                                top="0.0078125"
-                                bottom="0.3203125" />
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeKey="$parent.borderLeft"
-                                    relativePoint="TOPRIGHT" />
-                                <Anchor point="TOPRIGHT" relativeKey="$parent.borderRight"
-                                    relativePoint="TOPLEFT" />
-                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.borderLeft"
-                                    relativePoint="BOTTOMRIGHT" />
-                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.borderRight"
-                                    relativePoint="BOTTOMLEFT" />
+                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />
                             </Anchors>
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString parentKey="noResultsMsg" inherits="GameFontDisableSmall"
+                        <FontString parentKey="message" inherits="GameFontDisableSmall"
                             justifyH="LEFT" justifyV="MIDDLE"
                             text="BROWSE_NO_RESULTS">
+                            <Size x="0" y="20" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="10" />
                                 <Anchor point="BOTTOMRIGHT" x="-10" />
@@ -79,12 +36,31 @@
                         </FontString>
                     </Layer>
                 </Layers>
+
+                <Frames>
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList" frameStrata="DIALOG"
+                        enableMouse="true">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="5" y="-3" />
+                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="2" />
+                        </Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="TOPRIGHT"
+                                x="-10" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="BOTTOMRIGHT" x="-10" y="0" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
             </Frame>
         </Frames>
         <Layers>
             <Layer level="OVERLAY">
                 <Texture atlas="Spinner_Ring" hidden="true"
-                    parentKey="loadingIndicator">
+                    parentKey="spinner">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
@@ -116,16 +92,54 @@
 
     <Button name="MapPinEnhancedAutocompleteEntryTemplate"
         mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
-        <Size x="0" y="20" />
+        <Size x="1" y="20" />
         <Layers>
             <Layer level="OVERLAY">
                 <FontString inherits="GameFontNormalSmall" parentKey="text"
-                    justifyH="LEFT" justifyV="MIDDLE" setAllPoints="true" />
+                    justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2" />
+                        <Anchor point="BOTTOMRIGHT" x="-10" />
+                    </Anchors>
+                </FontString>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture setAllPoints="true" atlas="AftLevelup-CloudyLineRight" alpha="0.3" />
+                <Texture setAllPoints="true" atlas="search-select" alpha="0.3" />
             </Layer>
         </Layers>
         <ButtonText inherits="GameFontNormalSmall" />
     </Button>
+
+
+    <!-- <EditBox inherits="MapPinEnhancedAutocompleteTemplate">
+        <Size x="300" y="25" />
+        <Anchors>
+            <Anchor point="CENTER" y="100"></Anchor>
+        </Anchors>
+        <KeyValues>
+            <KeyValue key="icon" value="map" />
+            <KeyValue key="placeholder" value="Search for map..." />
+        </KeyValues>
+
+        <Scripts>
+            <OnShow>
+                local HBD = LibStub:GetLibrary("HereBeDragons-2.0")
+                local HBDMapData = HBD.mapData
+                local data = {}
+                for mapID, info in pairs(HBDMapData) do
+                    if info.name then
+                        table.insert(data, {label = info.name .. " (" .. mapID ..")", searchString = info.name .. mapID,
+    value = mapID})
+                    end
+                end
+                self:Setup({
+                    options = data,
+                    onChange = function(option)
+                        if not option then print("No map selected") return end
+                        print("Selected map:", option.label, "with ID:", option.value)
+                    end,
+                })
+            </OnShow>
+        </Scripts>
+    </EditBox> -->
 </Ui>
