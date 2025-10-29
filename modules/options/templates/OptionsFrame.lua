@@ -18,6 +18,7 @@ MapPinEnhancedOptionsFrameMixin = {}
 ---@field description FontString
 
 function MapPinEnhancedOptionsFrameMixin:UpdateList()
+    self.dataProvider:Flush()
     ---@param category MapPinEnhancedOptionCategoryMixin
     for category in Options:EnumerateCategories() do
         local isEmpty = category:GetOptionCount() == 0

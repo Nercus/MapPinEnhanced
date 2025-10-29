@@ -62,12 +62,12 @@ function Options:GetCategoryObjectPool()
     return self.categoryObjectPool
 end
 
-function Options:GetCategoryByName(categoryName)
-    assert(CATEGORIES[categoryName], "Options:GetOption: categoryName '" .. tostring(categoryName) .. "' is not allowed")
+function Options:GetCategoryByName(categoryID)
+    assert(CATEGORIES[categoryID], "Options:GetOption: categoryName '" .. tostring(categoryID) .. "' is not allowed")
     local categoriesPool = self:GetCategoryObjectPool()
     ---@param categoryObject MapPinEnhancedOptionCategoryMixin
     for categoryObject in categoriesPool:EnumerateActive() do
-        if categoryName == categoryObject:GetName() then
+        if categoryID == categoryObject:GetID() then
             return categoryObject
         end
     end
@@ -135,11 +135,12 @@ end
 function Options:RegisterCategory(categoryID, categoryName)
     local categoriesPool = self:GetCategoryObjectPool()
     local category = categoriesPool:Acquire()
+    category:SetID(categoryID)
     category:SetName(categoryName)
 end
 
 function Options:InitializeCategories()
-    for categoryName, categoryID in pairs(CATEGORIES) do
+    for categoryID, categoryName in pairs(CATEGORIES) do
         self:RegisterCategory(categoryID, categoryName)
     end
 end
@@ -194,6 +195,3 @@ MapPinEnhanced:AddSlashCommand("options", function()
 end, "Open the options frame")
 
 Options:InitOptionsFrame()
-
-
-Options:ToggleOptionsFrame()

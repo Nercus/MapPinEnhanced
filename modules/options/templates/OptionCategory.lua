@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedOptionsCategoryTemplate
 ---@field treeNode TreeNodeMixin
 ---@field expandButton MapPinEnhancedTrackerGroupEntryExpandButton
+---@field title FontString
 MapPinEnhancedOptionsCategoryMixin = {}
 
 
@@ -25,9 +26,10 @@ end
 
 ---@param treeNode TreeNodeMixin
 function MapPinEnhancedOptionsCategoryMixin:Init(treeNode)
-    MapPinEnhanced:Debug(self)
     self.treeNode = treeNode
+    local data = treeNode:GetData() --[[@as MapPinEnhancedOptionCategoryMixin]]
     self:UpdateCollapseButton()
+    self.title:SetText(data:GetName())
 end
 
 function MapPinEnhancedOptionsCategoryMixin:OnMouseDown()
