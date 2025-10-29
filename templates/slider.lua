@@ -21,6 +21,7 @@ local function roundValueToPrecision(value, step)
     return string.format("%." .. precision .. "f", value)
 end
 
+-- TODO: update all standard forms to be properly resizable
 -- FIXME: ticks don't work properly when step size is small while min and max values are large
 
 function MapPinEnhancedSliderMixin:UpdateTicks()
