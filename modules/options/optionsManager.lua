@@ -25,8 +25,8 @@ local CATEGORIES = {
 ---@class OptionData
 ---@field category OptionCategories the category of the option
 ---@field label string the label of the option, used to display the option in the UI (unique withing the category)
----@field description string? the description of the option, used to display additional information in the UI
----@field descriptionImage string? reference to an image
+---@field description string the description of the option, used to display additional information in the UI
+---@field descriptionImage {texture: string, width: number, height: number}? reference to an image
 
 ---@class TextareaOptionData : OptionData, TextareaSetup
 
@@ -130,6 +130,8 @@ function Options:DisableOption(option)
     option:SetDisabled()
 end
 
+---@param categoryID OptionCategories
+---@param categoryName string
 function Options:RegisterCategory(categoryID, categoryName)
     local categoriesPool = self:GetCategoryObjectPool()
     local category = categoriesPool:Acquire()
@@ -173,23 +175,25 @@ function Options:RegisterOnChangeCallback(category, label, callback)
     end
 end
 
-function Options:GetOptionsFrame()
-    if not self.optionsFrame then
-        self.optionsFrame = CreateFrame("Frame", "MapPinEnhancedOptionsView", UIParent,
-            "MapPinEnhancedOptionsViewTemplate")
-    end
-    return self.optionsFrame
+function Options:InitOptionsFrame()
+    if self.optionsFrame then return end
+    self.optionsFrame = CreateFrame("Frame", nil, nil, "MapPinEnhancedOptionsFrameTemplate")
+    ---@type any Settings API is not typed
+    local category = Settings.RegisterCanvasLayoutCategory(self.optionsFrame, MapPinEnhanced.name)
+    category.ID = MapPinEnhanced.name
+    Settings.RegisterAddOnCategory(category)
+    self.optionsFrame:Show()
 end
 
 function Options:ToggleOptionsFrame()
-    local frame = self:GetOptionsFrame()
-    if frame:IsShown() then
-        frame:Hide()
-    else
-        frame:Show()
-    end
+    Settings.OpenToCategory(MapPinEnhanced.name)
 end
 
 MapPinEnhanced:AddSlashCommand("options", function()
     Options:ToggleOptionsFrame()
 end, "Open the options frame")
+
+Options:InitOptionsFrame()
+
+
+Options:ToggleOptionsFrame()

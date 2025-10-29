@@ -1,0 +1,94 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="OptionsFrame.lua" />
+    <Frame name="MapPinEnhancedOptionsFrameTemplate" mixin="MapPinEnhancedOptionsFrameMixin"
+        virtual="true" hidden="true">
+        <Frames>
+            <Frame parentKey="options">
+                <Size x="400" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMLEFT" />
+                </Anchors>
+                <Frames>
+                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="search">
+                        <Size x="1" y="24" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="5" y="-5" />
+                            <Anchor point="TOPRIGHT" x="-20" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="icon" value="search" />
+                            <KeyValue key="placeholder" value="SEARCH" type="global" />
+                        </KeyValues>
+                    </EditBox>
+
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.search"
+                                relativePoint="BOTTOMLEFT"
+                                x="5" y="0" />
+                            <Anchor point="BOTTOMRIGHT" x="-20" y="5" />
+                        </Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="TOPRIGHT"
+                                x="5" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="BOTTOMRIGHT" x="5" y="0" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
+            </Frame>
+            <Frame parentKey="preview">
+                <Size x="263" y="1" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="shop-bg-map-blue" setAllPoints="true" alpha="0.5"
+                            desaturated="true">
+                            <TexCoords left="0.7" bottom="0" top="1" right="0.9" />
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <Frame inherits="MapPinEnhancedImageTemplate" parentKey="image" hidden="true">
+                        <Size x="1" y="1" />
+                    </Frame>
+                </Frames>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="description" inherits="GameFontHighlight"
+                            justifyH="LEFT" maxLines="10" wordwrap="true" spacing="5" justifyV="TOP">
+                            <Size x="1" y="1" />
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="divider"
+                    atlas="CircleMask">
+                    <Color r="0.56" g="0.56" b="0.56" a="0.25" />
+                    <Size x="1" y="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.options"
+                            relativePoint="TOPRIGHT" y="1" />
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.options"
+                            relativePoint="BOTTOMRIGHT" y="-1" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>

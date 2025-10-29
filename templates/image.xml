@@ -27,5 +27,9 @@
                 </Texture>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnSizeChanged method="OnSizeChanged" />
+        </Scripts>
     </Frame>
 </Ui>

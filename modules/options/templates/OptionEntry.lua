@@ -1,7 +1,10 @@
----@class MapPinEnhancedOptionEntryTemplate : Frame
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
+---@class MapPinEnhancedOptionsEntryTemplate : Frame
 ---@field form AnyFormElement?
 ---@field formSlot Frame
-MapPinEnhancedOptionEntryMixin = {}
+MapPinEnhancedOptionsEntryMixin = {}
 
 ---@alias AnyFormElement MapPinEnhancedButtonTemplate | MapPinEnhancedCheckboxTemplate | MapPinEnhancedColorpickerTemplate | MapPinEnhancedInputTemplate | MapPinEnhancedRadioGroupTemplate | MapPinEnhancedSliderTemplate | MapPinEnhancedTextareaTemplate
 
@@ -36,23 +39,41 @@ local function GetFormByType(optionType)
     end
 end
 
----@param node MapPinEnhancedOptionMixin
-function MapPinEnhancedOptionEntryMixin:Init(node)
-    node:SetFrame(self)
-    local optionType = node.optionType
+---@param node TreeNodeMixin
+function MapPinEnhancedOptionsEntryMixin:Init(node)
+    local data = node:GetData() --[[@as MapPinEnhancedOptionMixin]]
+    local optionType = data.optionType
+    self.optionData = data.optionData
     self.form = GetFormByType(optionType)
-    self.form:Setup(node.optionData)
+    self.form:Setup(data.optionData)
+    self.form:SetParent(self.formSlot)
+    self.form:SetPoint("BOTTOMLEFT", self.formSlot, "BOTTOMLEFT")
+    self.form:SetPoint("BOTTOMRIGHT", self.formSlot, "BOTTOMRIGHT")
+    self.form:Show()
 end
 
-function MapPinEnhancedOptionEntryMixin:Reset()
+function MapPinEnhancedOptionsEntryMixin:Reset()
     if self.form then
         framePool:Release(self.form)
         self.form = nil
     end
 end
 
-function MapPinEnhancedOptionEntryMixin:SetEnabled()
+function MapPinEnhancedOptionsEntryMixin:SetEnabled()
 end
 
-function MapPinEnhancedOptionEntryMixin:SetDisabled()
+function MapPinEnhancedOptionsEntryMixin:SetDisabled()
+end
+
+local Options = MapPinEnhanced:GetModule("Options")
+
+function MapPinEnhancedOptionsEntryMixin:OnEnter()
+    Options.optionsFrame:SetDescription({
+        image = self.optionData.descriptionImage,
+        text = self.optionData.description,
+    })
+end
+
+function MapPinEnhancedOptionsEntryMixin:OnLeave()
+    Options.optionsFrame:SetDescription(nil)
 end

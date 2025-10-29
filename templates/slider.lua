@@ -21,6 +21,7 @@ local function roundValueToPrecision(value, step)
     return string.format("%." .. precision .. "f", value)
 end
 
+-- FIXME: ticks don't work properly when step size is small while min and max values are large
 
 function MapPinEnhancedSliderMixin:UpdateTicks()
     self.tickPool:ReleaseAll()
@@ -53,8 +54,13 @@ function MapPinEnhancedSliderMixin:UpdateTicks()
     end
 end
 
+function MapPinEnhancedSliderMixin:OnSizeChanged()
+    self:UpdateTicks()
+end
+
 function MapPinEnhancedSliderMixin:OnLoad()
     self.tickPool = CreateTexturePool(self, "ARTWORK", 1, "MapPinEnhancedSliderTickTemplate")
+    self:UpdateTicks()
 end
 
 function MapPinEnhancedSliderMixin:OnValueChanged(value)

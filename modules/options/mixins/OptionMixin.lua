@@ -2,13 +2,13 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionMixin
----@field frame MapPinEnhancedOptionEntryTemplate
+---@field frame MapPinEnhancedOptionsEntryTemplate
 ---@field category MapPinEnhancedOptionCategoryMixin
 ---@field optionData AnyOptionData
 ---@field optionType OptionType
 ---@field template string
 MapPinEnhancedOptionMixin = {
-    template = "MapPinEnhancedOptionEntryTemplate"
+    template = "MapPinEnhancedOptionsEntryTemplate"
 }
 
 ---@class Options
@@ -31,7 +31,7 @@ function MapPinEnhancedOptionMixin:SetOptionType(optionType)
     self.optionType = optionType
 end
 
----@param entryFrame MapPinEnhancedOptionEntryTemplate
+---@param entryFrame MapPinEnhancedOptionsEntryTemplate
 function MapPinEnhancedOptionMixin:SetFrame(entryFrame)
     self.frame = entryFrame
 end

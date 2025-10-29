@@ -5,10 +5,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedOptionCategoryMixin
 ---@field name string
 ---@field id OptionCategories
----@field options table<string, MapPinEnhancedOptionMixin>
+---@field options MapPinEnhancedOptionMixin[]
 ---@field template string
 MapPinEnhancedOptionCategoryMixin = {
-    template = "MapPinEnhancedCategoryEntryTemplate"
+    template = "MapPinEnhancedOptionsCategoryTemplate"
 }
 
 
@@ -74,11 +74,21 @@ function MapPinEnhancedOptionCategoryMixin:AddOption(optionType, optionData)
 end
 
 ---@param label string
----@return MapPinEnhancedOptionMixin
+---@return MapPinEnhancedOptionMixin | nil
 function MapPinEnhancedOptionCategoryMixin:GetOption(label)
-    return self.options[label]
+    for _, option in ipairs(self.options) do
+        local optionData = option:GetOptionData()
+        if optionData.label == label then
+            return option
+        end
+    end
+    return nil
 end
 
 function MapPinEnhancedOptionCategoryMixin:EnumerateOptions()
-    return pairs(self.options)
+    return ipairs(self.options)
+end
+
+function MapPinEnhancedOptionCategoryMixin:GetOptionCount()
+    return #self.options
 end
