@@ -11,8 +11,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="bg"
-                    atlas="UI-HUD-CoolDownManager-Bar-BG"
-                >
+                    atlas="UI-HUD-CoolDownManager-Bar-BG">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-1" y="1" />
                         <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
@@ -20,7 +19,7 @@
                 </Texture>
             </Layer>
 
-            <Layer level="OVERLAY">
+            <Layer level="ARTWORK">
                 <FontString parentKey="placeholderText" inherits="GameFontDisableSmall"
                     hidden="true" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
