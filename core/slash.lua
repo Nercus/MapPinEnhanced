@@ -75,6 +75,12 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
     end
     self.commandList[command] = func
     self.commandHelpStrings[command] = help
+
+    self:AddDebugCustomDebugAction({
+        type = "button",
+        label = "/" .. command,
+        onClick = func,
+    })
 end
 
 ---Remove a slash command from the list

@@ -58,6 +58,9 @@ end
 ---@param menuTemplate AnyMenuEntry The menu template to add the action to
 function MapPinEnhanced:AddDebugCustomDebugAction(menuTemplate)
     assert(type(menuTemplate) == "table", "Menu template not provided or not a table")
+    if not self.debugMenuTemplate then
+        self.debugMenuTemplate = {}
+    end
     table.insert(self.debugMenuTemplate, menuTemplate)
 end
 
