@@ -57,7 +57,6 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.resultsFrame.scrollBox, self.resultsFrame.scrollBar, scrollView)
 
     self.resultsFrame.scrollBar:SetHideIfUnscrollable(true)
-    MapPinEnhanced:Debug(self.resultsFrame.scrollBar)
 end
 
 function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
