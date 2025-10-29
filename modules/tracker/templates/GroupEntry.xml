@@ -25,23 +25,54 @@
         <Frames>
             <Button parentKey="expandButton">
                 <Size x="16" y="16" />
-                <NormalTexture atlas="QuestLog-icon-Expand" setAllPoints="true" />
+                <NormalTexture parentKey="normalTexture"
+                    atlas="glues-characterSelect-icon-arrowDown" setAllPoints="true" />
+                <HighlightTexture parentKey="highlightTexture"
+                    atlas="glues-characterSelect-icon-arrowDown-hover" setAllPoints="true" />
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-5" y="6" />
+                    <Anchor point="LEFT" x="5" y="-3" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup parentKey="expand">
+                        <Rotation childKey="normalTexture" duration="0.15" degrees="-90"
+                            smoothing="IN_OUT" />
+                        <Rotation childKey="highlightTexture" duration="0.15" degrees="-90"
+                            smoothing="IN_OUT" />
+                        <Scripts>
+                            <OnFinished>
+                                self:GetParent().normalTexture:SetRotation(0)
+                                self:GetParent().highlightTexture:SetRotation(0)
+                            </OnFinished>
+                        </Scripts>
+                    </AnimationGroup>
+                    <AnimationGroup parentKey="collapse">
+                        <Rotation childKey="normalTexture" duration="0.15" degrees="90"
+                            smoothing="IN_OUT" />
+                        <Rotation childKey="highlightTexture" duration="0.15" degrees="90"
+                            smoothing="IN_OUT" />
+                        <Scripts>
+                            <OnFinished>
+                                self:GetParent().normalTexture:SetRotation(math.rad(90))
+                                self:GetParent().highlightTexture:SetRotation(math.rad(90))
+                            </OnFinished>
+                        </Scripts>
+                    </AnimationGroup>
+                </Animations>
             </Button>
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormal" text="Test" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" y="9" x="10" />
+                        <Anchor point="BOTTOMLEFT" y="9" x="26" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Button>
 </Ui>
