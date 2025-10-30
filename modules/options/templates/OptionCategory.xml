@@ -5,22 +5,8 @@
     <Button name="MapPinEnhancedOptionsCategoryTemplate" mixin="MapPinEnhancedOptionsCategoryMixin"
         virtual="true">
         <Size x="200" y="30" />
-        <NormalTexture atlas="questlog-tab" desaturated="true">
-            <Size x="1" y="25" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
-            </Anchors>
-        </NormalTexture>
-        <HighlightTexture atlas="questlog-tab" alphaMode="ADD" alpha="0.4" desaturated="true">
-            <Size x="1" y="25" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
-            </Anchors>
-        </HighlightTexture>
         <Frames>
-            <Button parentKey="expandButton">
+            <Button parentKey="expandButton" propagateMouseInput="Clicks">
                 <Size x="16" y="16" />
                 <NormalTexture parentKey="normalTexture"
                     atlas="glues-characterSelect-icon-arrowDown" setAllPoints="true" />
@@ -59,12 +45,20 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormal" text="OPTION CATEGORY" justifyH="LEFT"
+                <FontString inherits="GameFontNormalLarge" text="OPTION CATEGORY" justifyH="LEFT"
                     parentKey="title">
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" y="9" x="26" />
                     </Anchors>
                 </FontString>
+                <Texture atlas="CircleMask">
+                    <Color r="0.56" g="0.56" b="0.56" a="0.25" />
+                    <Size x="1" y="1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
             </Layer>
         </Layers>
         <Scripts>
