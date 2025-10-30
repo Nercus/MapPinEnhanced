@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedOptionsEntryTemplate : Frame
 ---@field form AnyFormElement?
 ---@field formSlot Frame
+---@field label FontString
 MapPinEnhancedOptionsEntryMixin = {}
 
 ---@alias AnyFormElement MapPinEnhancedButtonTemplate | MapPinEnhancedCheckboxTemplate | MapPinEnhancedColorpickerTemplate | MapPinEnhancedInputTemplate | MapPinEnhancedRadioGroupTemplate | MapPinEnhancedSliderTemplate | MapPinEnhancedTextareaTemplate
@@ -44,11 +45,11 @@ function MapPinEnhancedOptionsEntryMixin:Init(node)
     local data = node:GetData() --[[@as MapPinEnhancedOptionMixin]]
     local optionType = data.optionType
     self.optionData = data.optionData
+    self.label:SetText(data.optionData.label)
     self.form = GetFormByType(optionType)
     self.form:Setup(data.optionData)
     self.form:SetParent(self.formSlot)
-    self.form:SetPoint("BOTTOMLEFT", self.formSlot, "BOTTOMLEFT")
-    self.form:SetPoint("BOTTOMRIGHT", self.formSlot, "BOTTOMRIGHT")
+    self.form:SetPoint("LEFT", self.formSlot, "LEFT", -2, 0)
     self.form:Show()
 end
 
