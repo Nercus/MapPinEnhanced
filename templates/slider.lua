@@ -1,11 +1,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedSliderTemplate : Slider
+---@class MapPinEnhancedSliderTemplate : Frame
 ---@field valueText FontString
----@field Back Button
----@field Forward Button
+---@field back Button
+---@field forward Button
 ---@field ticks table<number, MapPinEnhancedSliderTickTemplate>
+---@field slider MinimalSliderTemplate
 MapPinEnhancedSliderMixin = {}
 
 ---@class MapPinEnhancedSliderTickTemplate : Texture
@@ -21,28 +22,31 @@ local function roundValueToPrecision(value, step)
     return string.format("%." .. precision .. "f", value)
 end
 
--- TODO: update all standard forms to be properly resizable
--- FIXME: ticks don't work properly when step size is small while min and max values are large
+local MAX_NUM_TICKS = 15
 
 function MapPinEnhancedSliderMixin:UpdateTicks()
+    local slider = self.slider
     self.tickPool:ReleaseAll()
     self.ticks = {}
-    local currentValue = self:GetValue()
-    -- calculate the number of ticks based on the slider's range and step, never draw more than 10 ticks
-    local minValue, maxValue = self:GetMinMaxValues()
-    local step = self:GetValueStep()
-    local numTicks = math.min(10, math.ceil((maxValue - minValue) / step))
-    local tickSpacing = (self:GetWidth() - 20) / numTicks -- 20 is for the left and right buttons
+    local currentValue = slider:GetValue()
+    local minValue, maxValue = slider:GetMinMaxValues()
+    local step = slider:GetValueStep()
+    local numTicks = math.ceil((maxValue - minValue) / step)
+
+    if numTicks > MAX_NUM_TICKS then
+        return
+    end
+    local tickSpacing = (self:GetWidth() - 20) / numTicks -- 20 is for the two buttons
     for i = 0, numTicks do
         local tickValue = minValue + i * step
         if tickValue <= maxValue then
             local tick = self.tickPool:Acquire()
-            tick:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * tickSpacing + 5, 0) -- 10 is for the left button
+            tick:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * tickSpacing + 5, 5)
             tick:SetWidth(10)
             tick:Show()
             self.ticks[tickValue] = tick
             if tickValue == currentValue then
-                tick:SetHeight(20)
+                tick:SetHeight(15)
             else
                 tick:SetHeight(10)
             end
@@ -57,19 +61,25 @@ end
 
 function MapPinEnhancedSliderMixin:OnSizeChanged()
     self:UpdateTicks()
+    local height = self:GetHeight()
+    self.slider:SetHeight(height)
 end
 
 function MapPinEnhancedSliderMixin:OnLoad()
     self.tickPool = CreateTexturePool(self, "ARTWORK", 1, "MapPinEnhancedSliderTickTemplate")
     self:UpdateTicks()
+    self.slider:SetScript("OnValueChanged", function(_, value)
+        self:OnValueChanged(value)
+    end)
 end
 
 function MapPinEnhancedSliderMixin:OnValueChanged(value)
     if value then
-        self.valueText:SetText(roundValueToPrecision(value, self:GetValueStep()))
+        local slider = self.slider
+        self.valueText:SetText(roundValueToPrecision(value, slider:GetValueStep()))
         for tickValue, tick in pairs(self.ticks) do
             if tickValue == value then
-                tick:SetHeight(20)
+                tick:SetHeight(15)
             else
                 tick:SetHeight(10)
             end
@@ -88,19 +98,19 @@ end
 ---@param disabled boolean
 function MapPinEnhancedSliderMixin:SetDisabledState(disabled)
     if disabled then
-        self:Disable()
+        self.slider:Disable()
         self:SetAlpha(0.5)
-        self.Back:Disable()
-        self.Back:SetAlpha(0.5)
-        self.Forward:Disable()
-        self.Forward:SetAlpha(0.5)
+        self.back:Disable()
+        self.back:SetAlpha(0.5)
+        self.forward:Disable()
+        self.forward:SetAlpha(0.5)
     else
-        self:Enable()
+        self.slider:Enable()
         self:SetAlpha(1)
-        self.Back:Enable()
-        self.Back:SetAlpha(1)
-        self.Forward:Enable()
-        self.Forward:SetAlpha(1)
+        self.back:Enable()
+        self.back:SetAlpha(1)
+        self.forward:Enable()
+        self.forward:SetAlpha(1)
     end
 end
 
@@ -121,15 +131,15 @@ end
 function MapPinEnhancedSliderMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
-
-    self:SetMinMaxValues(formData.min, formData.max)
-    self:SetValueStep(formData.step or 1)
+    local slider = self.slider
+    slider:SetMinMaxValues(formData.min, formData.max)
+    slider:SetValueStep(formData.step or 1)
     self:UpdateTicks()
     if formData.init then
         assert(type(formData.init) == "function", "init must be a function")
         local initialValue = formData.init()
         if initialValue ~= nil then
-            self:SetValue(initialValue)
+            slider:SetValue(initialValue)
         end
     end
 

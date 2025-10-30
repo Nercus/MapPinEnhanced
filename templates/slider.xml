@@ -2,25 +2,16 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="slider.lua" />
 
-    <Slider name="MapPinEnhancedSliderTemplate"
+
+    <Frame name="MapPinEnhancedSliderTemplate"
         mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin"
-        virtual="true" inherits="MinimalSliderTemplate" propagateMouseInput="Motion"
-        obeyStepOnDrag="true">
+        virtual="true" propagateMouseInput="Both">
         <Size x="200" y="20" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString parentKey="valueText" inherits="GameFontNormalSmall">
-                    <Anchors>
-                        <Anchor point="RIGHT" relativePoint="LEFT" x="-20" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
         <Frames>
-            <Button parentKey="Back">
+            <Button parentKey="back" propagateMouseInput="Motion">
                 <Size x="11" y="19" />
                 <Anchors>
-                    <Anchor point="RIGHT" relativePoint="LEFT" />
+                    <Anchor point="LEFT" relativePoint="LEFT" x="1" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -30,14 +21,15 @@
                 <Scripts>
                     <OnClick>
                         local parent = self:GetParent();
-                        parent:SetValue(parent:GetValue() - parent:GetValueStep());
+                        local slider = parent.slider;
+                        slider:SetValue(slider:GetValue() - slider:GetValueStep());
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button parentKey="Forward">
+            <Button parentKey="forward" propagateMouseInput="Motion">
                 <Size x="9" y="18" />
                 <Anchors>
-                    <Anchor point="LEFT" relativePoint="RIGHT" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-1" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -47,17 +39,35 @@
                 <Scripts>
                     <OnClick>
                         local parent = self:GetParent();
-                        parent:SetValue(parent:GetValue() + parent:GetValueStep());
+                        local slider = parent.slider;
+                        slider:SetValue(slider:GetValue() + slider:GetValueStep());
                     </OnClick>
                 </Scripts>
             </Button>
+            <Slider inherits="MinimalSliderTemplate" obeyStepOnDrag="true" parentKey="slider"
+                propagateMouseInput="Motion">
+                <Size x="1" y="16" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.back" />
+                    <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.forward" />
+                </Anchors>
+            </Slider>
         </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="valueText" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="-5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnValueChanged method="OnValueChanged" />
             <OnSizeChanged method="OnSizeChanged" />
+            <OnValueChanged method="OnValueChanged" />
         </Scripts>
-    </Slider>
+    </Frame>
 
 
     <Texture name="MapPinEnhancedSliderTickTemplate" virtual="true"
