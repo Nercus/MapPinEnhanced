@@ -8,14 +8,14 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
         <Size x="300" y="35" />
-        <NormalTexture atlas="questlog-tab">
+        <NormalTexture atlas="questlog-tab" desaturated="true">
             <Size x="1" y="25" />
             <Anchors>
                 <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
             </Anchors>
         </NormalTexture>
-        <HighlightTexture atlas="questlog-tab" alphaMode="ADD" alpha="0.4">
+        <HighlightTexture atlas="questlog-tab" alphaMode="ADD" alpha="0.4" desaturated="true">
             <Size x="1" y="25" />
             <Anchors>
                 <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />

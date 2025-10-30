@@ -6,9 +6,9 @@
         mixin="MapPinEnhancedIconButtonMixin, MapPinEnhancedThemeableMixin"
         virtual="true">
         <NormalTexture
-            file="Interface/AddOns/MapPinEnhanced/assets/buttons/square/Normal" />
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/square/Normal" desaturated="true" />
         <PushedTexture
-            file="Interface/AddOns/MapPinEnhanced/assets/buttons/square/Pushed" />
+            file="Interface/AddOns/MapPinEnhanced/assets/buttons/square/Pushed" desaturated="true" />
         <DisabledTexture
             file="Interface/AddOns/MapPinEnhanced/assets/buttons/square/Disabled" />
         <HighlightTexture
