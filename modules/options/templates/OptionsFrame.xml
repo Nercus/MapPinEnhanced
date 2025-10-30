@@ -28,7 +28,7 @@
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeKey="$parent.search"
                                 relativePoint="BOTTOMLEFT"
-                                x="5" y="0" />
+                                x="0" y="-10" />
                             <Anchor point="BOTTOMRIGHT" x="-20" y="5" />
                         </Anchors>
                     </Frame>
