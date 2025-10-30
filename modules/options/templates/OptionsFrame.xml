@@ -5,44 +5,6 @@
     <Frame name="MapPinEnhancedOptionsFrameTemplate" mixin="MapPinEnhancedOptionsFrameMixin"
         virtual="true" hidden="true">
         <Frames>
-            <Frame parentKey="options">
-                <Size x="400" y="1" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMLEFT" />
-                </Anchors>
-                <Frames>
-                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="search">
-                        <Size x="1" y="24" />
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="5" y="-5" />
-                            <Anchor point="TOPRIGHT" x="-20" />
-                        </Anchors>
-                        <KeyValues>
-                            <KeyValue key="icon" value="search" />
-                            <KeyValue key="placeholder" value="SEARCH" type="global" />
-                        </KeyValues>
-                    </EditBox>
-
-                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.search"
-                                relativePoint="BOTTOMLEFT"
-                                x="0" y="-10" />
-                            <Anchor point="BOTTOMRIGHT" x="-20" y="5" />
-                        </Anchors>
-                    </Frame>
-                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
-                                relativePoint="TOPRIGHT"
-                                x="5" y="-5" />
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
-                                relativePoint="BOTTOMRIGHT" x="5" y="0" />
-                        </Anchors>
-                    </EventFrame>
-                </Frames>
-            </Frame>
             <Frame parentKey="preview">
                 <Size x="263" y="1" />
                 <Anchors>
@@ -71,6 +33,46 @@
                     </Layer>
                 </Layers>
             </Frame>
+            <Frame parentKey="options">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.preview"
+                        relativePoint="BOTTOMLEFT" x="0" y="0" />
+                </Anchors>
+                <Frames>
+                    <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="search">
+                        <Size x="1" y="24" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="5" y="-5" />
+                            <Anchor point="TOPRIGHT" x="-10" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="icon" value="search" />
+                            <KeyValue key="placeholder" value="SEARCH" type="global" />
+                        </KeyValues>
+                    </EditBox>
+
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.search"
+                                relativePoint="BOTTOMLEFT"
+                                x="-5" y="-10" />
+                            <Anchor point="BOTTOMRIGHT" x="-10" y="5" />
+                        </Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="TOPRIGHT"
+                                x="5" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
+                                relativePoint="BOTTOMRIGHT" x="5" y="0" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
+            </Frame>
+
         </Frames>
         <Layers>
             <Layer level="BACKGROUND">

@@ -11,9 +11,12 @@
             <Layer level="BACKGROUND" textureSubLevel="-1">
                 <Texture parentKey="bg"
                     file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/checkers.png"
-                    vertTile="true" horizTile="true"
-                    setAllPoints="true"
-                />
+                    vertTile="true" horizTile="true">
+                    <Size x="84" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </Texture>
                 <MaskTexture
                     file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
                     parentKey="bgMask"
@@ -29,17 +32,20 @@
             </Layer>
             <Layer level="BACKGROUND">
                 <Texture parentKey="color"
-                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
-                    setAllPoints="true">
+                    file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png">
+                    <Size x="84" y="20" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
                 </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight"
                     file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
                     alpha="0.3">
+                    <Size x="84" y="20" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-2" y="2" />
-                        <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="2" y="-2" />
+                        <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
             </Layer>

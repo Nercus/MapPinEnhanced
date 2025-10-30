@@ -59,12 +59,16 @@ function MapPinEnhancedButtonMixin:SetCallback(callback)
 end
 
 ---@class ButtonSetup
+---@field buttonText {icon: MapPinEnhancedIcon?, label: string?} -- text and icon for the button
 ---@field onChange fun(value: mouseButton, down: boolean)
 
 ---@param formData ButtonSetup
 function MapPinEnhancedButtonMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self:SetIcon(formData.buttonText.icon)
+    self:SetLabel(formData.buttonText.label)
 
     self:SetCallback(formData.onChange)
     self:SetScript("OnClick", function(_, button, down)

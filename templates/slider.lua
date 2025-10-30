@@ -36,12 +36,12 @@ function MapPinEnhancedSliderMixin:UpdateTicks()
     if numTicks > MAX_NUM_TICKS then
         return
     end
-    local tickSpacing = (self:GetWidth() - 20) / numTicks -- 20 is for the two buttons
+    local tickSpacing = (slider:GetWidth() - 20) / numTicks -- 20 is for the two buttons
     for i = 0, numTicks do
         local tickValue = minValue + i * step
         if tickValue <= maxValue then
             local tick = self.tickPool:Acquire()
-            tick:SetPoint("TOPLEFT", self, "BOTTOMLEFT", i * tickSpacing + 5, 5)
+            tick:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", i * tickSpacing + 5, 5)
             tick:SetWidth(10)
             tick:Show()
             self.ticks[tickValue] = tick
@@ -71,6 +71,10 @@ function MapPinEnhancedSliderMixin:OnLoad()
     self.slider:SetScript("OnValueChanged", function(_, value)
         self:OnValueChanged(value)
     end)
+end
+
+function MapPinEnhancedSliderMixin:OnShow()
+    self:OnSizeChanged()
 end
 
 function MapPinEnhancedSliderMixin:OnValueChanged(value)

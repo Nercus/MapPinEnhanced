@@ -32,6 +32,10 @@ function MapPinEnhancedOptionsCategoryMixin:Init(treeNode)
     self.title:SetText(data:GetName())
 end
 
+function MapPinEnhancedOptionsCategoryMixin:Reset()
+    self.treeNode = nil
+end
+
 function MapPinEnhancedOptionsCategoryMixin:OnMouseDown()
     assert(self.treeNode, "TreeNode is not set for MapPinEnhancedOptionsCategoryMixin")
     self.treeNode:ToggleCollapsed()

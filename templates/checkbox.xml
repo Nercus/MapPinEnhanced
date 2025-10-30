@@ -4,7 +4,38 @@
 
     <CheckButton name="MapPinEnhancedCheckboxTemplate"
         mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin"
-        virtual="true">
+        virtual="true" propagateMouseInput="Motion">
+        <Size x="200" y="20" />
+        <NormalTexture parentKey="NormalTexture" atlas="checkbox-minimal">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+            </Anchors>
+        </NormalTexture>
+        <HighlightTexture parentKey="HighlightTexture" atlas="checkbox-minimal"
+            alphaMode="ADD" alpha="0.2">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+            </Anchors>
+        </HighlightTexture>
+        <CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+            </Anchors>
+        </CheckedTexture>
+        <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled">
+            <Size x="20" y="20" />
+            <Anchors>
+                <Anchor point="CENTER" relativePoint="CENTER" x="0" y="0" />
+            </Anchors>
+        </DisabledCheckedTexture>
+    </CheckButton>
+
+    <CheckButton name="MapPinEnhancedCheckboxWithLabelTemplate"
+        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin"
+        virtual="true" propagateMouseInput="Motion">
         <Size x="200" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="checkbox-minimal">
             <Size x="20" y="20" />

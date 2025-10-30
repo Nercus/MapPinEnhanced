@@ -37,9 +37,16 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
     self.pool:ReleaseAll()
 
     local lastButton = nil
+    local isHorizontal = self.orientation == "HORIZONTAL"
+    local spacing = isHorizontal and 10 or 5
+
     for _, option in ipairs(self.options) do
         local button = self.pool:Acquire()
         button.text:SetText(option.label)
+
+        local labelWidth = button.text:GetStringWidth()
+        button:SetWidth(labelWidth + 30) -- 30 for padding and radio circle
+
         button:SetParent(self)
         button.value = option.value
 
@@ -47,8 +54,14 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
             self:SetActiveOption(option.value)
         end)
 
+
+
         if lastButton then
-            button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -5)
+            if isHorizontal then
+                button:SetPoint("TOPLEFT", lastButton, "TOPRIGHT", spacing, 0)
+            else
+                button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -spacing)
+            end
         else
             button:SetPoint("TOPLEFT", self, "TOPLEFT", 10, -10)
         end
@@ -57,7 +70,20 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
         button:Show()
     end
 
-    self:SetHeight(#self.options * 20) -- Adjust height based on number of options
+    if isHorizontal then
+        local totalWidth = 10
+        ---@param button MapPinEnhancedRadioButtonTemplate
+        for button in self.pool:EnumerateActive() do
+            totalWidth = totalWidth + button:GetWidth() + spacing
+        end
+        totalWidth = totalWidth - spacing + 10
+        self:SetWidth(totalWidth)
+        self:SetHeight(40)
+    else
+        self:SetHeight(#self.options * 25 + 10)
+        self:SetWidth(200)
+    end
+
     self:Show()
 end
 
@@ -72,6 +98,7 @@ end
 --- Initializes the radio button group.
 function MapPinEnhancedRadioGroupMixin:OnLoad()
     self.pool = CreateFramePool("CheckButton", self, "MapPinEnhancedRadioButtonTemplate")
+    self.orientation = "VERTICAL"
 end
 
 --- Gets the currently selected value.
@@ -101,6 +128,7 @@ end
 
 ---@class RadioGroupSetup
 ---@field options MapPinEnhancedRadioGroupOption[] -- options for the radio buttons
+---@field orientation? "HORIZONTAL" | "VERTICAL" -- layout orientation, default is "VERTICAL"
 ---@field onChange fun(value: any)
 ---@field init? fun(): any -- initial value can be nil if option has never been set before
 
@@ -108,6 +136,8 @@ end
 function MapPinEnhancedRadioGroupMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+
+    self.orientation = formData.orientation or "VERTICAL"
 
     self:SetOptions(formData.options or {})
     if formData.init then

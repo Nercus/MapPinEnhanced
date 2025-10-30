@@ -6,7 +6,7 @@
     <Frame name="MapPinEnhancedSliderTemplate"
         mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin"
         virtual="true" propagateMouseInput="Both">
-        <Size x="200" y="20" />
+        <Size x="1" y="20" />
         <Frames>
             <Button parentKey="back" propagateMouseInput="Motion">
                 <Size x="11" y="19" />
@@ -66,6 +66,7 @@
             <OnLoad method="OnLoad" />
             <OnSizeChanged method="OnSizeChanged" />
             <OnValueChanged method="OnValueChanged" />
+            <OnShow method="OnShow" />
         </Scripts>
     </Frame>
 

@@ -47,6 +47,11 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
         end)
     end)
 
+    self.scrollView:SetElementResetter(function(entry)
+        ---@cast entry MapPinEnhancedOptionsEntryTemplate | MapPinEnhancedOptionsCategoryTemplate
+        entry:Reset()
+    end)
+
     self.scrollView:SetDataProvider(self.dataProvider)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.options.scrollBox, self.options.scrollBar, self.scrollView)
 end

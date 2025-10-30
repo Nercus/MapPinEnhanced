@@ -47,9 +47,11 @@ function MapPinEnhancedOptionsEntryMixin:Init(node)
     self.optionData = data.optionData
     self.label:SetText(data.optionData.label)
     self.form = GetFormByType(optionType)
+    self.form:SetSize(200, 20)
     self.form:Setup(data.optionData)
     self.form:SetParent(self.formSlot)
-    self.form:SetPoint("LEFT", self.formSlot, "LEFT", -2, 0)
+    self.form:ClearAllPoints()
+    self.form:SetPoint("CENTER", self.formSlot, "CENTER")
     self.form:Show()
 end
 
