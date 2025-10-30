@@ -195,9 +195,6 @@ MapPinEnhanced:AddSlashCommand("options", function()
 end, "Open the options frame")
 
 Options:InitOptionsFrame()
-C_Timer.After(1, function()
-    Options:ToggleOptionsFrame()
-end)
 
 
 -- Example Usage for Tracker Options
