@@ -1,22 +1,72 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
     <Include file="coords.lua" />
-    <Frame name="MapPinEnhancedCoordsDisplayTemplate" mixin="MapPinEnhancedCoordsDisplayMixin"
-        movable="true">
-        <Size x="100" y="20" />
+
+    <Frame name="MapPinEnhancedCoordsDisplayTemplate"
+        mixin="MapPinEnhancedCoordsDisplayMixin"
+        movable="true" virtual="true" hidden="true" parent="UIParent">
+        <Size x="120" y="20" />
         <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="gearUpdate-minimized-BG" desaturated="true" parentKey="bg">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="20" />
+                        <Anchor point="BOTTOMRIGHT" x="-20" />
+                    </Anchors>
+                </Texture>
+            </Layer>
             <Layer level="ARTWORK">
                 <FontString inherits="GameFontNormalSmall" parentKey="coordsText" text="00.0, 00.0">
                     <Anchors>
-                        <Anchor point="CENTER" x="0" y="0" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.bg" relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bg"
+                            relativePoint="BOTTOMRIGHT" />
                     </Anchors>
                 </FontString>
+                <Texture atlas="UI-HUD-CoolDownManager-Bar-BG" alphaMode="ADD">
+                    <Color r="1" g="0.82" b="0" a="0.7" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="20" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="-18" y="-3" />
+                    </Anchors>
+                </Texture>
             </Layer>
+
         </Layers>
+        <Frames>
+            <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate"
+                hidden="true" propagateMouseInput="Motion">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="LEFT" />
+                </Anchors>
+            </Button>
+            <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate"
+                hidden="true" propagateMouseInput="Motion">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="lock" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="RIGHT" />
+                </Anchors>
+            </Button>
+        </Frames>
         <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />
             <OnUpdate method="OnUpdate" />
+            <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
+
+
 </Ui>

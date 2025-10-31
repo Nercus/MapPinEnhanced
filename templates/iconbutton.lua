@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedIconButtonMixin : Button
+---@class MapPinEnhancedIconButtonTemplate: Button
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field icon MapPinEnhancedIcon
 MapPinEnhancedIconButtonMixin = {}
