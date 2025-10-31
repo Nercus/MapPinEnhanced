@@ -62,7 +62,7 @@ function Options:GetCategoryObjectPool()
     return self.categoryObjectPool
 end
 
-function Options:GetCategoryByName(categoryID)
+function Options:GetCategoryByID(categoryID)
     assert(CATEGORIES[categoryID], "Options:GetOption: categoryName '" .. tostring(categoryID) .. "' is not allowed")
     local categoriesPool = self:GetCategoryObjectPool()
     ---@param categoryObject MapPinEnhancedOptionCategoryMixin
@@ -88,12 +88,12 @@ end
 ---@overload fun(self: Options, optionType: "slider", optionData: SliderOptionData)
 ---@overload fun(self: Options, optionType: "radiogroup", optionData: RadiogroupOptionData)
 function Options:RegisterOption(optionType, optionData)
-    local categoryName = optionData.category
-    assert(CATEGORIES[categoryName], "Options:GetOption: categoryName '" .. tostring(categoryName) .. "' is not allowed")
-    local categoryObject = self:GetCategoryByName(categoryName)
+    local categoryID = optionData.category
+    assert(CATEGORIES[categoryID], "Options:GetOption: categoryName '" .. tostring(categoryID) .. "' is not allowed")
+    local categoryObject = self:GetCategoryByID(categoryID)
     if not categoryObject then return end
     ---@type string
-    local key = categoryName .. ":" .. optionData.label
+    local key = categoryID .. ":" .. optionData.label
     if self.onChangeCallbacks and self.onChangeCallbacks[key] then
         local previousOnChange = optionData.onChange
         optionData.onChange = function(option, ...)
@@ -113,7 +113,7 @@ end
 ---@return MapPinEnhancedOptionMixin?
 function Options:GetOption(category, label)
     assert(CATEGORIES[category], "Options:GetOption: category '" .. tostring(category) .. "' is not allowed")
-    local categoryObject = self:GetCategoryByName(category)
+    local categoryObject = self:GetCategoryByID(category)
     if not categoryObject then return end
     return categoryObject:GetOption(label)
 end
