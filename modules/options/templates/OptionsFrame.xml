@@ -51,6 +51,30 @@
                             <KeyValue key="icon" value="search" />
                             <KeyValue key="placeholder" value="SEARCH" type="global" />
                         </KeyValues>
+                        <Layers>
+                            <Layer level="OVERLAY">
+                                <Texture atlas="Spinner_Ring" hidden="true" parentKey="spinner">
+                                    <Size x="20" y="20" />
+                                    <Anchors>
+                                        <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
+                                    </Anchors>
+                                    <Animations>
+                                        <AnimationGroup parentKey="Anim" looping="REPEAT">
+                                            <Rotation childKey="Spinner" order="1" duration="1"
+                                                degrees="-360" />
+                                        </AnimationGroup>
+                                    </Animations>
+                                    <Scripts>
+                                        <OnShow>
+                                            self.Anim:Play();
+                                        </OnShow>
+                                        <OnHide>
+                                            self.Anim:Stop();
+                                        </OnHide>
+                                    </Scripts>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </EditBox>
 
                     <Frame parentKey="scrollBox" inherits="WowScrollBoxList">

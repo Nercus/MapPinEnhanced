@@ -8,8 +8,11 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field preview MapPinEnhancedPreview
 MapPinEnhancedOptionsFrameMixin = {}
 
+---@class MapPinEnhancedInputWithSpinnerTemplate : MapPinEnhancedInputTemplate
+---@field spinner Texture
+
 ---@class MapPinEnhancedOptionsList : Frame
----@field search MapPinEnhancedInputTemplate
+---@field search MapPinEnhancedInputWithSpinnerTemplate
 ---@field scrollBox WowScrollBoxList
 ---@field scrollBar MinimalScrollBar
 
@@ -17,15 +20,51 @@ MapPinEnhancedOptionsFrameMixin = {}
 ---@field image MapPinEnhancedImageTemplate
 ---@field description FontString
 
-function MapPinEnhancedOptionsFrameMixin:UpdateList()
+---@param category MapPinEnhancedOptionCategoryMixin
+---@param searchString string?
+---@return boolean
+local function matchCategory(category, searchString)
+    if category:GetOptionCount() == 0 then
+        return false
+    end
+
+    if not searchString or searchString == "" then
+        return true
+    end
+
+    local categoryName = category:GetName()
+    return MapPinEnhanced:FuzzyMatch(searchString, categoryName, false)
+end
+
+---@param option MapPinEnhancedOptionMixin
+---@param searchString string?
+---@return boolean
+local function matchOption(option, searchString)
+    if not searchString or searchString == "" then
+        return true
+    end
+
+    local optionName = option:GetOptionData().label
+    return MapPinEnhanced:FuzzyMatch(searchString, optionName, false)
+end
+
+
+---@param searchString string
+function MapPinEnhancedOptionsFrameMixin:UpdateList(searchString)
     self.dataProvider:Flush()
     ---@param category MapPinEnhancedOptionCategoryMixin
     for category in Options:EnumerateCategories() do
-        local isEmpty = category:GetOptionCount() == 0
-        if not isEmpty then
-            local categoryNode = self.dataProvider:Insert(category) --[[@as TreeNodeMixin]]
-            for _, option in category:EnumerateOptions() do
-                categoryNode:Insert(option) --[[@as TreeNodeMixin]]
+        local categoryMatches = matchCategory(category, searchString)
+        local categoryNode = nil
+
+        for _, option in category:EnumerateOptions() do
+            local optionMatches = matchOption(option, searchString)
+            if categoryMatches or optionMatches then
+                if not categoryNode then
+                    ---@type TreeNodeMixin
+                    categoryNode = self.dataProvider:Insert(category)
+                end
+                categoryNode:Insert(option)
             end
         end
     end
@@ -54,6 +93,18 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
 
     self.scrollView:SetDataProvider(self.dataProvider)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.options.scrollBox, self.options.scrollBar, self.scrollView)
+
+
+    self.filterFunction = MapPinEnhanced:DebounceChange(function()
+        local text = self.options.search:GetText()
+        self:UpdateList(text)
+    end, 0.2, function()
+        self.options.search.spinner:Hide()
+    end)
+
+    self.options.search:SetScript("OnTextChanged", function()
+        self.filterFunction()
+    end)
 end
 
 ---@class DescriptionInfo
@@ -94,5 +145,5 @@ function MapPinEnhancedOptionsFrameMixin:OnDefault()
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnRefresh()
-    self:UpdateList()
+    self:UpdateList(self.options.search:GetText())
 end

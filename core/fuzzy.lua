@@ -267,3 +267,11 @@ function MapPinEnhanced:Filter(needle, haystacks, case_sensitive)
 
     return result
 end
+
+---@param searchString string
+---@param targetString string
+---@param case_sensitive boolean|nil
+---@return boolean
+function MapPinEnhanced:FuzzyMatch(searchString, targetString, case_sensitive)
+    return has_match(searchString, targetString, case_sensitive)
+end
