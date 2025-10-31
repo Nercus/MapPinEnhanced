@@ -13,4 +13,5 @@
     <Include file="image.xml" />
     <Include file="textarea.xml" />
     <Include file="autocomplete.xml" />
+    <Include file="dropdown.xml" />
 </Ui>
