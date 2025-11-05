@@ -18,6 +18,7 @@ local CATEGORIES = {
     TRACKER = L["Tracker"],
     MAPS = L["Maps"],
     IMPORT_EXPORT = L["Import/Export"],
+    MISC = L["Miscellaneous"],
 }
 
 ---@alias OptionType "textarea" | "button" | "checkbox" | "colorpicker" | "input" | "slider" | "radiogroup"

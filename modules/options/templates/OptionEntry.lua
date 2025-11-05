@@ -44,6 +44,7 @@ end
 function MapPinEnhancedOptionsEntryMixin:Init(node)
     local data = node:GetData() --[[@as MapPinEnhancedOptionMixin]]
     local optionType = data.optionType
+    data:SetFrame(self)
     self.optionData = data.optionData
     self.label:SetText(data.optionData.label)
     self.form = GetFormByType(optionType)
@@ -59,6 +60,13 @@ function MapPinEnhancedOptionsEntryMixin:Reset()
     if self.form then
         framePool:Release(self.form)
         self.form = nil
+    end
+end
+
+function MapPinEnhancedOptionsEntryMixin:Update()
+    -- FIXME: this function is not properly updating the form. there needs to be a better way of linking the frame mixin/tree node with the options data mixin, so visibility can be checked and the form updated accordingly
+    if self.form and self.optionData then
+        self.form:Setup(self.optionData)
     end
 end
 

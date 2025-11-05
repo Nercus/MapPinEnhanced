@@ -36,8 +36,17 @@ function MapPinEnhancedOptionMixin:SetFrame(entryFrame)
     self.frame = entryFrame
 end
 
+---@return MapPinEnhancedOptionsEntryTemplate
 function MapPinEnhancedOptionMixin:GetFrame()
     return self.frame
+end
+
+function MapPinEnhancedOptionMixin:UpdateFrame()
+    local frame = self:GetFrame()
+    if not frame then
+        return
+    end
+    frame:Update()
 end
 
 function MapPinEnhancedOptionMixin:SetEnabled()

@@ -11,6 +11,7 @@ MapPinEnhancedCoordsDisplayMixin = {}
 local L = MapPinEnhanced.L
 
 local Providers = MapPinEnhanced:GetModule("Providers")
+local Options = MapPinEnhanced:GetModule("Options")
 
 
 function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
@@ -87,6 +88,11 @@ function MapPinEnhancedCoordsDisplayMixin:RestorePosition()
     end
 end
 
+function MapPinEnhancedCoordsDisplayMixin:ResetPosition()
+    MapPinEnhanced:SetVar("coordsDisplay", "position", nil)
+    self:RestorePosition()
+end
+
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
@@ -135,10 +141,17 @@ end
 
 function MapPinEnhancedCoordsDisplayMixin:OnShow()
     MapPinEnhanced:SetVar("coordsDisplay", "visible", true)
+    self:RestorePosition()
+    local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
+    if not visibilityOption then return end
+    visibilityOption:UpdateFrame()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnHide()
     MapPinEnhanced:SetVar("coordsDisplay", "visible", false)
+    local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
+    if not visibilityOption then return end
+    visibilityOption:UpdateFrame()
 end
 
 local coordsDisplayFrame = nil
@@ -170,3 +183,19 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreCoordsDisplayVisibility)
 
 MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
     "Toggle display of your current coordinates on the screen.")
+
+
+Options:RegisterOption("checkbox", {
+    category = "MISC",
+    label = L["Show Coordinates Display"],
+    description = L["Toggle the on-screen display of your current coordinates."],
+    onChange = function(value)
+        InitCoordsDisplayFrame()
+        if not coordsDisplayFrame then return end
+        if value then
+            coordsDisplayFrame:Show()
+        else
+            coordsDisplayFrame:Hide()
+        end
+    end,
+})
