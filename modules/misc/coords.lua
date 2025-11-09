@@ -88,11 +88,6 @@ function MapPinEnhancedCoordsDisplayMixin:RestorePosition()
     end
 end
 
-function MapPinEnhancedCoordsDisplayMixin:ResetPosition()
-    MapPinEnhanced:SetVar("coordsDisplay", "position", nil)
-    self:RestorePosition()
-end
-
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
@@ -140,18 +135,24 @@ function MapPinEnhancedCoordsDisplayMixin:OnLeave()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnShow()
-    MapPinEnhanced:SetVar("coordsDisplay", "visible", true)
-    self:RestorePosition()
     local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
     if not visibilityOption then return end
     visibilityOption:UpdateFrame()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnHide()
-    MapPinEnhanced:SetVar("coordsDisplay", "visible", false)
     local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
     if not visibilityOption then return end
     visibilityOption:UpdateFrame()
+end
+
+function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
+    self:RestorePosition()
+    self:Show()
+end
+
+function MapPinEnhancedCoordsDisplayMixin:HideFrame()
+    self:Hide()
 end
 
 local coordsDisplayFrame = nil
@@ -165,10 +166,10 @@ local function ToggleCoordsDisplay()
     InitCoordsDisplayFrame()
     if not coordsDisplayFrame then return end
     if coordsDisplayFrame:IsShown() then
-        coordsDisplayFrame:Hide()
+        coordsDisplayFrame:HideFrame()
         MapPinEnhanced:SetVar("coordsDisplay", "visible", false)
     else
-        coordsDisplayFrame:Show()
+        coordsDisplayFrame:ShowFrame()
         MapPinEnhanced:SetVar("coordsDisplay", "visible", true)
     end
 end
@@ -193,9 +194,9 @@ Options:RegisterOption("checkbox", {
         InitCoordsDisplayFrame()
         if not coordsDisplayFrame then return end
         if value then
-            coordsDisplayFrame:Show()
+            coordsDisplayFrame:ShowFrame()
         else
-            coordsDisplayFrame:Hide()
+            coordsDisplayFrame:HideFrame()
         end
     end,
 })
