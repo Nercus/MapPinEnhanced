@@ -8,14 +8,18 @@
             <Frame parentKey="preview">
                 <Size x="263" y="1" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" />
-                    <Anchor point="BOTTOMRIGHT" />
+                    <Anchor point="TOPRIGHT" x="3" y="10" />
+                    <Anchor point="BOTTOMRIGHT" x="3" y="2" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture atlas="shop-bg-map-blue" setAllPoints="true" alpha="0.5"
+                        <Texture atlas="shop-bg-map-blue" setAllPoints="true"
                             desaturated="true">
                             <TexCoords left="0.7" bottom="0" top="1" right="0.9" />
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="1" g="1" b="1" a="0.1" />
+                                <MaxColor r="1" g="1" b="1" a="1" />
+                            </Gradient>
                         </Texture>
                     </Layer>
                 </Layers>
