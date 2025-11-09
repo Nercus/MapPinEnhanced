@@ -34,7 +34,8 @@ function MapPinEnhanced:Debug(...)
     if not DevToolFrame then
         return
     end
-    if not DevToolFrame:IsShown() then
+    local devModeEnabled = MapPinEnhanced:GetVar("devMode")
+    if not DevToolFrame:IsShown() and devModeEnabled then
         DevTool:ToggleUI()
         C_Timer.After(1, function()
             self:Debug(args)
