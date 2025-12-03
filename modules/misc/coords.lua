@@ -1,11 +1,20 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+-- FIXME: small ui scales cause the numbers to be cut off, fix that
+-- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close
+
+
 ---@class MapPinEnhancedCoordsDisplayTemplate : Frame
----@field coordsText FontString
+---@field coordsXInt FontString
+---@field coordsXDec FontString
+---@field coordsYInt FontString
+---@field coordsYDec FontString
 ---@field timeSinceLastUpdate number
 ---@field closeButton MapPinEnhancedIconButtonTemplate
 ---@field lockButton MapPinEnhancedIconButtonTemplate
+---@field x number
+---@field y number
 MapPinEnhancedCoordsDisplayMixin = {}
 
 local L = MapPinEnhanced.L
@@ -26,7 +35,7 @@ function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
         return
     end
     local x, y = position:GetXY()
-    Providers:LinkToChat(x, y, playerMap, "My Location")
+    Providers:LinkToChat(x, y, playerMap, string.format(L["%s's Position"], MapPinEnhanced.me))
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnMouseDown(button)
@@ -50,31 +59,58 @@ function MapPinEnhancedCoordsDisplayMixin:OnMouseUp(button)
     SetCursor(nil)
 end
 
-function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
-    self.timeSinceLastUpdate = (self.timeSinceLastUpdate or 0) + elapsed
-    if self.timeSinceLastUpdate < 0.2 then
+function MapPinEnhancedCoordsDisplayMixin:SetCoordsText(x, y)
+    if not x or not y then
+        self.coordsXInt:SetText("--")
+        self.coordsXDec:SetText(".--")
+        self.coordsYInt:SetText("--")
+        self.coordsYDec:SetText(".--")
         return
     end
-    self.timeSinceLastUpdate = 0
 
+    local xPercent = math.floor(x * 10000) / 100
+    local yPercent = math.floor(y * 10000) / 100
+
+    local xInt, xDec = math.modf(xPercent)
+    local yInt, yDec = math.modf(yPercent)
+
+    self.coordsXInt:SetText(string.format("%02d", xInt))
+    self.coordsXDec:SetText(string.format(".%02d", math.floor(xDec * 100)))
+    self.coordsYInt:SetText(string.format("%02d", yInt))
+    self.coordsYDec:SetText(string.format(".%02d", math.floor(yDec * 100)))
+end
+
+function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
     local currentMapID = C_Map.GetBestMapForUnit("player")
     if not currentMapID then
-        self.coordsText:SetText("N/A")
+        self:SetCoordsText(nil, nil)
         return
     end
     local position = C_Map.GetPlayerMapPosition(currentMapID, "player")
     if not position then
-        self.coordsText:SetText("N/A")
+        self:SetCoordsText(nil, nil)
         return
     end
     local x, y = position:GetXY()
     if not x or not y then
-        self.coordsText:SetText("N/A")
+        self:SetCoordsText(nil, nil)
         return
     end
-    local xPercent = math.floor(x * 10000) / 100
-    local yPercent = math.floor(y * 10000) / 100
-    self.coordsText:SetText(string.format("%.2f | %.2f", xPercent, yPercent))
+
+    local targetXPercent = math.floor(x * 10000) / 100
+    local targetYPercent = math.floor(y * 10000) / 100
+
+    if not self.displayX then
+        self.displayX = targetXPercent
+        self.displayY = targetYPercent
+    end
+
+    local newDisplayX = DeltaLerp(self.displayX, targetXPercent, .2, elapsed)
+    local newDisplayY = DeltaLerp(self.displayY, targetYPercent, .2, elapsed)
+
+    self.displayX = newDisplayX
+    self.displayY = newDisplayY
+    self:SetCoordsText(newDisplayX / 100, newDisplayY / 100)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:RestorePosition()
@@ -101,7 +137,6 @@ function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
-    self.timeSinceLastUpdate = 0
     self:RestorePosition()
 
     self.lockButton:SetScript("OnClick", function()

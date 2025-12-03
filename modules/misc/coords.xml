@@ -9,7 +9,8 @@
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="gearUpdate-minimized-BG" desaturated="true" parentKey="bg">
+                <Texture atlas="gearUpdate-glow-filigree" desaturated="true" parentKey="bg">
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" />
                         <Anchor point="BOTTOMRIGHT" x="-20" />
@@ -17,22 +18,48 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsText" text="00.0, 00.0">
+                <Texture atlas="CircleMaskScalable" parentKey="separator"
+                    desaturated="true">
+                    <Size x="1" y="20" />
+                    <Gradient orientation="VERTICAL">
+                        <MinColor r="1" g="0.82" b="0" a="0.4" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.bg" relativePoint="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.bg"
-                            relativePoint="BOTTOMRIGHT" />
-                    </Anchors>
-                </FontString>
-                <Texture atlas="UI-HUD-CoolDownManager-Bar-BG" alphaMode="ADD">
-                    <Color r="1" g="0.82" b="0" a="0.7" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="20" y="1" />
-                        <Anchor point="BOTTOMRIGHT" x="-18" y="-3" />
+                        <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
-            </Layer>
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsXDec"
+                    text=".00" justifyH="LEFT">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="RIGHT" relativeKey="$parent.separator" relativePoint="LEFT" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsXInt"
+                    text="00" justifyH="RIGHT">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="RIGHT" relativeKey="$parent.coordsXDec" relativePoint="LEFT" />
+                    </Anchors>
+                </FontString>
 
+
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt"
+                    text="00" justifyH="RIGHT">
+                    <Size x="18" y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.separator" relativePoint="RIGHT" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsYDec"
+                    text=".00" justifyH="LEFT">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.coordsYInt" relativePoint="RIGHT" />
+                    </Anchors>
+                </FontString>
+            </Layer>
         </Layers>
         <Frames>
             <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate"
