@@ -171,3 +171,7 @@ function MapPinEnhancedSuperTrackedPinMixin:SetStyle(style)
     self.FadeOut:Stop()
     self.FadeOut:Play() -- fade out current style
 end
+
+function MapPinEnhancedSuperTrackedPinMixin:SetTitle(titleText)
+    self.title.text:SetText(titleText)
+end

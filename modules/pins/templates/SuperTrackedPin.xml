@@ -12,7 +12,7 @@
             <Layer level="OVERLAY">
                 <FontString parentKey="distantText" inherits="GameFontHighlight">
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" y="-10" />
+                        <Anchor point="TOP" relativePoint="BOTTOM" y="-12" />
                     </Anchors>
                 </FontString>
 
