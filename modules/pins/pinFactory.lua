@@ -16,6 +16,8 @@ local WorldmapPool = CreateFramePool("Button", nil, "MapPinEnhancedWorldmapPinTe
 local MinimapPool = CreateFramePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
 local TrackerPinEntryPool = CreateFramePool("Button", nil, "MapPinEnhancedTrackerPinEntryTemplate")
 
+local distanceUpdateFrame = CreateFrame("Frame")
+
 
 ---@class pinData
 ---@field mapID number
@@ -111,12 +113,12 @@ function PinFactory:CreatePin(initPinData, pinID)
         local function UpdateDistance()
             self:UpdateDistance(GetDistanceToPin, isClose, OnDistanceClose, OnDistanceFar)
         end
-        trackerPinEntry:SetScript("OnUpdate", UpdateDistance)
+        distanceUpdateFrame:SetScript("OnUpdate", UpdateDistance)
         ManualDistanceCheck()
     end
 
     local function DisableDistanceCheck()
-        trackerPinEntry:SetScript("OnUpdate", nil)
+        distanceUpdateFrame:SetScript("OnUpdate", nil)
     end
 
 
