@@ -1,5 +1,5 @@
-# 3.0.14
+# 3.1.0
 
-- Update interface version number for 11.2.7
-- Fix a minor error that could happen during the loading of the addon
-- Fix distance tracking requiring the tracker to be opened
+- Update for midnight prepatch
+- Added russian localization (Thanks [Hubbotu](https://github.com/Hubbotu))
+- Added korean localization (Thanks [Crazyyoungs](https://github.com/Crazyyoungs))
