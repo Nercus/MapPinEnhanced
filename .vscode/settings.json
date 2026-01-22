@@ -55,7 +55,14 @@
     },
     "explorer.sortOrder": "default",
     "Lua.completion.autoRequire": false,
-    "Lua.diagnostics.disable": [],
+    "Lua.diagnostics.disable": [
+        "unused-local",
+        "redefined-local",
+        "empty-block",
+        "invisible",
+        "deprecated",
+        "duplicate-doc-field"
+    ],
     "Lua.diagnostics.groupFileStatus": {
         "ambiguity": "Any",
         "await": "Any",
