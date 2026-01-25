@@ -20,7 +20,7 @@
                         <Anchor point="RIGHT" x="0" y="0" />
                     </Anchors>
                 </Texture>
-                <Texture parentKey="Middle" atlas="_common-search-border-center" horizTile="true">
+                <Texture parentKey="Middle" atlas="common-search-border-middle">
                     <Size x="1" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.Left" relativePoint="RIGHT" />
