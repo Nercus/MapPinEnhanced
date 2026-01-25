@@ -1,5 +1,4 @@
-# 3.1.1
+# 3.1.2
 
-- Update for midnight prepatch
-- Added russian localization (Thanks [Hubbotu](https://github.com/Hubbotu))
-- Added korean localization (Thanks [Crazyyoungs](https://github.com/Crazyyoungs))
+- Fix minor UI issues with input boxes
+- Fix crucial bug with the menu input covering the full screen
