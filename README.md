@@ -2,7 +2,7 @@
 
 <div align="center">
     <a href="https://www.curseforge.com/wow/addons/mappinenhanced" target="_blank">
-        <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/441677?style=for-the-badge&label=CurseForge"> 
+        <img alt="CurseForge Downloads" src="https://img.shields.io/curseforge/dt/441677?style=for-the-badge&label=CurseForge">
     </a>
     <a href="https://www.curseforge.com/wow/addons/mappinenhanced" target="_blank">
         <img alt="CurseForge Version" src="https://img.shields.io/curseforge/v/441677?style=for-the-badge">
@@ -33,7 +33,7 @@ Please review the LICENSE file for more details.
 You can do these things with Map Pin Enhanced:
 
 - Set as many waypoints as you want (no "one-waypoint" limit).
-- Set waypoints via command: _/mph_, _/pin_ or _/way_.
+- Set waypoints via command: _/mph_, _/mpe or _/way_.
 - A pin tracker to see a list of all your pins.
 - A set editor to create and manage your sets.
 - Many improvements to the in-game waypoint system
@@ -42,7 +42,7 @@ You can do these things with Map Pin Enhanced:
 
 
 <div align="center">
-  <img width="50%" src=".github/media/PinTracker.png" /> 
+  <img width="50%" src=".github/media/PinTracker.png" />
   <p> Save multiple Pins | Change the pin title | Customize the pin color | Ping the pin on the map | Lock the pin | Share the pin </p>
 </div>
 
