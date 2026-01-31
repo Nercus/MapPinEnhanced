@@ -51,3 +51,12 @@ function MapPinEnhancedTextareaMixin:Setup(formData)
     end)
     self:SetCallback(formData.onChange)
 end
+
+---@param value string
+---@param triggerCallback boolean|nil
+function MapPinEnhancedTextareaMixin:SetValue(value, triggerCallback)
+    self.editbox:SetText(value)
+    if triggerCallback and self.onChangeCallback then
+        self.onChangeCallback(value)
+    end
+end

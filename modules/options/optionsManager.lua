@@ -79,6 +79,18 @@ function Options:EnumerateCategories()
     return categoriesPool:EnumerateActive()
 end
 
+--- Sets the value of a specific option.
+---@param categoryID OptionCategories
+---@param label string
+---@param value any
+---@param triggerCallback boolean|nil
+function Options:SetOptionValue(categoryID, label, value, triggerCallback)
+    local option = self:GetOption(categoryID, label)
+    if option then
+        option:SetValue(value, triggerCallback)
+    end
+end
+
 ---@param optionType OptionType
 ---@param optionData AnyOptionData
 ---@overload fun(self: Options, optionType: "textarea", optionData: TextareaOptionData)
@@ -119,12 +131,14 @@ function Options:GetOption(category, label)
     return categoryObject:GetOption(label)
 end
 
+---@param option MapPinEnhancedOptionMixin
 function Options:EnableOption(option)
     assert(option, "Options:EnableOption: option is nil")
     assert(type(option) == "table", "Options:EnableOption: option must be a table")
     option:SetEnabled()
 end
 
+---@param option MapPinEnhancedOptionMixin
 function Options:DisableOption(option)
     assert(option, "Options:DisableOption: option is nil")
     assert(type(option) == "table", "Options:DisableOption: option must be a table")
@@ -145,9 +159,6 @@ function Options:InitializeCategories()
         self:RegisterCategory(categoryID, categoryName)
     end
 end
-
-Options:InitializeCategories()
-
 
 --- Registers an additional onChange callback for a specific option.
 ---@param category OptionCategories
@@ -195,7 +206,10 @@ MapPinEnhanced:AddSlashCommand("options", function()
     Options:ToggleOptionsFrame()
 end, "Open the options frame")
 
-Options:InitOptionsFrame()
+MapPinEnhanced:OnLoad(function()
+    Options:InitializeCategories()
+    Options:InitOptionsFrame()
+end)
 
 
 -- Example Usage for Tracker Options

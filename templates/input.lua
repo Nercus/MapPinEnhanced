@@ -178,3 +178,12 @@ function MapPinEnhancedInputMixin:Setup(formData)
         self:UpdateClearButtonVisibility()
     end)
 end
+
+---@param value string
+---@param triggerCallback boolean|nil
+function MapPinEnhancedInputMixin:SetValue(value, triggerCallback)
+    self:SetText(value)
+    if triggerCallback and self.onChangeCallback then
+        self.onChangeCallback(value)
+    end
+end

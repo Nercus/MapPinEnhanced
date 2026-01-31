@@ -63,17 +63,16 @@ function MapPinEnhancedOptionsEntryMixin:Reset()
     end
 end
 
-function MapPinEnhancedOptionsEntryMixin:Update()
-    -- FIXME: this function is not properly updating the form. there needs to be a better way of linking the frame mixin/tree node with the options data mixin, so visibility can be checked and the form updated accordingly
-    if self.form and self.optionData then
-        self.form:Setup(self.optionData)
+function MapPinEnhancedOptionsEntryMixin:SetEnabled()
+    if self.form and self.form.SetEnabled then
+        self.form:SetEnabled(true)
     end
 end
 
-function MapPinEnhancedOptionsEntryMixin:SetEnabled()
-end
-
 function MapPinEnhancedOptionsEntryMixin:SetDisabled()
+    if self.form and self.form.SetEnabled then
+        self.form:SetEnabled(false)
+    end
 end
 
 local Options = MapPinEnhanced:GetModule("Options")

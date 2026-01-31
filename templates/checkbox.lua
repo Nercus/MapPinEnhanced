@@ -42,3 +42,12 @@ function MapPinEnhancedCheckboxMixin:Setup(formData)
         self:SetChecked(false) -- default to unchecked if no init function is provided
     end
 end
+
+---@param value boolean
+---@param triggerCallback boolean|nil
+function MapPinEnhancedCheckboxMixin:SetValue(value, triggerCallback)
+    self:SetChecked(value)
+    if triggerCallback and self.onChangeCallback then
+        self.onChangeCallback(value)
+    end
+end

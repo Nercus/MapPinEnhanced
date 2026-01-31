@@ -109,11 +109,15 @@ end
 
 --- Sets the selected value if it exists in the options.
 ---@param value any
-function MapPinEnhancedRadioGroupMixin:SetValue(value)
+---@param triggerCallback boolean|nil
+function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback)
     assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
     for _, option in ipairs(self.options) do
         if option.value == value then
             self:SetActiveOption(value)
+            if triggerCallback and self.onChangeCallback then
+                self.onChangeCallback(value)
+            end
             return
         end
     end

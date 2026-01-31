@@ -150,3 +150,12 @@ function MapPinEnhancedSliderMixin:Setup(formData)
 
     self:SetCallback(formData.onChange)
 end
+
+---@param value number
+---@param triggerCallback boolean|nil
+function MapPinEnhancedSliderMixin:SetValue(value, triggerCallback)
+    self.slider:SetValue(value)
+    if triggerCallback and self.onChangeCallback then
+        self.onChangeCallback(value)
+    end
+end

@@ -41,7 +41,7 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
         local optionData = self.optionsValueMap[elementData.line]
         entry:Init(optionData)
         entry:SetScript("OnClick", function()
-            self:SetValue(optionData.value)
+            self:SetValue(optionData.value, true)
             self.resultsFrame:Hide()
             self.spinner:Hide()
         end)
@@ -73,12 +73,13 @@ function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
 end
 
 ---@param value number | string | boolean | nil this could be the searchstring or the value of the option
-function MapPinEnhancedAutocompleteMixin:SetValue(value)
+---@param triggerCallback boolean|nil
+function MapPinEnhancedAutocompleteMixin:SetValue(value, triggerCallback)
     if value == nil then
         self.value = nil
         self:SetText("")
         self:UpdatePlaceholderVisibility()
-        if self.onChangeCallback then
+        if triggerCallback and self.onChangeCallback then
             self.onChangeCallback(nil)
         end
         return
@@ -95,7 +96,7 @@ function MapPinEnhancedAutocompleteMixin:SetValue(value)
     self.value = option
     self:SetText(option.label)
     self:UpdatePlaceholderVisibility()
-    if self.onChangeCallback then
+    if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(option)
     end
 end
@@ -141,7 +142,7 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
         local preselectedEntry = preselectedText and self.optionsValueMap[preselectedText.line]
 
         if preselectedEntry then
-            self:SetValue(preselectedEntry.value)
+            self:SetValue(preselectedEntry.value, true)
             self.resultsFrame:Hide()
             self.spinner:Hide()
         end
@@ -201,7 +202,7 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
     local text = self:GetText()
     if not text or text == "" then
         self.resultsFrame:Hide()
-        self:SetValue(nil)
+        self:SetValue(nil, true)
         return
     end
     if self.searchText == text then
@@ -280,7 +281,7 @@ function MapPinEnhancedAutocompleteMixin:Setup(formData)
     if formData.init then
         local initialValue = formData.init()
         if initialValue then
-            self:SetValue(initialValue)
+            self:SetValue(initialValue, true)
         end
     end
 

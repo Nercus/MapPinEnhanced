@@ -87,3 +87,12 @@ function MapPinEnhancedColorpickerMixin:Setup(formData)
     end
     self:SetCallback(formData.onChange)
 end
+
+---@param value {r: number, g: number, b: number, a: number}
+---@param triggerCallback boolean|nil
+function MapPinEnhancedColorpickerMixin:SetValue(value, triggerCallback)
+    self:SetColor(value.r, value.g, value.b, value.a)
+    if triggerCallback and self.onChangeCallback then
+        self.onChangeCallback(self.r, self.g, self.b, self.a or 1)
+    end
+end

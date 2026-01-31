@@ -41,14 +41,6 @@ function MapPinEnhancedOptionMixin:GetFrame()
     return self.frame
 end
 
-function MapPinEnhancedOptionMixin:UpdateFrame()
-    local frame = self:GetFrame()
-    if not frame then
-        return
-    end
-    frame:Update()
-end
-
 function MapPinEnhancedOptionMixin:SetEnabled()
     local frame = self:GetFrame()
     if not frame then
@@ -63,4 +55,14 @@ function MapPinEnhancedOptionMixin:SetDisabled()
         return
     end
     frame:SetDisabled()
+end
+
+---@param value any
+---@param triggerCallback boolean|nil
+function MapPinEnhancedOptionMixin:SetValue(value, triggerCallback)
+    local frame = self:GetFrame()
+    if not frame or not frame.form or not frame.form.SetValue then
+        return
+    end
+    frame.form:SetValue(value, triggerCallback)
 end

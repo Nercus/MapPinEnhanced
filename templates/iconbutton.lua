@@ -55,3 +55,11 @@ function MapPinEnhancedIconButtonMixin:Setup(formData)
         end
     end)
 end
+
+---@param triggerCallback boolean|nil
+function MapPinEnhancedIconButtonMixin:SetValue(_, triggerCallback)
+    if triggerCallback and self.onChangeCallback then
+        -- simulate a left button click
+        self.onChangeCallback("LeftButton", false)
+    end
+end
