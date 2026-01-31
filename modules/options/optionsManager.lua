@@ -154,12 +154,6 @@ function Options:RegisterCategory(categoryID, categoryName)
     category:SetName(categoryName)
 end
 
-function Options:InitializeCategories()
-    for categoryID, categoryName in pairs(CATEGORIES) do
-        self:RegisterCategory(categoryID, categoryName)
-    end
-end
-
 --- Registers an additional onChange callback for a specific option.
 ---@param category OptionCategories
 ---@param label string
@@ -206,10 +200,19 @@ MapPinEnhanced:AddSlashCommand("options", function()
     Options:ToggleOptionsFrame()
 end, "Open the options frame")
 
+
+do
+    for categoryID, categoryName in pairs(CATEGORIES) do
+        Options:RegisterCategory(categoryID, categoryName)
+    end
+end
+
+
 MapPinEnhanced:OnLoad(function()
-    Options:InitializeCategories()
     Options:InitOptionsFrame()
 end)
+
+
 
 
 -- Example Usage for Tracker Options
