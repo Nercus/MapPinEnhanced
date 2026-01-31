@@ -86,8 +86,6 @@
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
-            <OnShow method="OnShow" />
-            <OnHide method="OnHide" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />
             <OnUpdate method="OnUpdate" />
