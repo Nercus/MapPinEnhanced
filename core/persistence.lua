@@ -6,26 +6,34 @@ local MapPinEnhanced = select(2, ...)
 ---@param ... string The keys to traverse to get the default value
 ---@return boolean | number | string | table
 function MapPinEnhanced:GetDefault(...)
+    if not self.defaults then
+        self.defaults = {}
+    end
+
     local arg = { ... }
     local currentTable = self.defaults
     for index, key in ipairs(arg) do
         if index == #arg then -- last key
             if currentTable[key] == nil then
-                assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
+                assert(false, "Key does not exist in defaults table: " .. table.concat(arg, ".", 1, #arg - 1))
             end
             return currentTable[key]
         end
         if currentTable[key] == nil then
-            assert(false, "Key does not exist in DEFAULTS table: " .. table.concat(arg, ".", 1, #arg - 1))
+            assert(false, "Key does not exist in defaults table: " .. table.concat(arg, ".", 1, #arg - 1))
         end
         currentTable = currentTable[key] --[[@as table]]
     end
-    error("DEFAULT table is empty")
+    error("defaults table is empty")
 end
 
 ---Set the default value for a given set of keys.
 ---@param ... string | number | boolean | table The last element is the value to save and the rest are keys where the value should be saved
 function MapPinEnhanced:SetDefault(...)
+    if not self.defaults then
+        self.defaults = {}
+    end
+
     -- move all arguments into a table
     local arg = { ... }
     local value = arg[#arg] -- last argument is the value
@@ -91,19 +99,31 @@ end
 ---@return boolean | number | string | table | nil
 function MapPinEnhanced:GetVar(...)
     if not MapPinEnhancedDB then
-        ---@type MapPinEnhancedDB
         MapPinEnhancedDB = {}
     end
-    -- move all arguments into a table
+
     local arg = { ... }
-
-
     local dbTable = MapPinEnhancedDB
+
     for index, key in ipairs(arg) do
         if index == #arg then
-            return dbTable[key]
+            local value = dbTable[key]
+            if value ~= nil then
+                return value
+            end
+
+            if self.defaults then
+                local defaultValue = self:GetDefault(...)
+                return defaultValue
+            end
+
+            return nil
         end
         if not dbTable[key] then
+            if self.defaults then
+                local defaultValue = self:GetDefault(...)
+                return defaultValue
+            end
             return nil
         end
         dbTable = dbTable[key]
