@@ -1,9 +1,33 @@
 ---@class MapPinEnhanced
 ---@field registeredEvents table<WowEvent, function[]>
+---@field onLoadCallbacks function[]
 local MapPinEnhanced = select(2, ...)
 
 ---@type CallbackHandler-1.0
 local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0");
+
+
+local addonWasLoaded = false
+local function EventFrameHandler(self, event, ...)
+    local funcs = MapPinEnhanced.registeredEvents[event]
+    if (funcs) then
+        for _, func in ipairs(funcs) do
+            func(...)
+        end
+    end
+    if event == "ADDON_LOADED" then
+        ---@type string | nil
+        local addonName = ...
+        if not addonName or addonName ~= MapPinEnhanced.name then return end
+        if not MapPinEnhanced.onLoadCallbacks then return end
+        for _, callback in ipairs(MapPinEnhanced.onLoadCallbacks) do
+            callback()
+        end
+        addonWasLoaded = true
+        MapPinEnhanced.onLoadCallbacks = nil
+    end
+end
+
 
 ---Register an event for a function to be called when the event is fired
 ---@param event WowEvent the event to register for
@@ -20,14 +44,7 @@ function MapPinEnhanced:RegisterEvent(event, func)
     table.insert(self.registeredEvents[event], func)
     if (not self.addonEventFrame) then
         self.addonEventFrame = CreateFrame("Frame")
-        self.addonEventFrame:SetScript("OnEvent", function(_, event, ...)
-            local funcs = self.registeredEvents[event]
-            if (funcs) then
-                for _, func in ipairs(funcs) do
-                    func(...)
-                end
-            end
-        end)
+        self.addonEventFrame:SetScript("OnEvent", EventFrameHandler)
     end
     self.addonEventFrame:RegisterEvent(event)
 end
@@ -56,6 +73,18 @@ function MapPinEnhanced:UnregisterEventForFunction(event, func)
         self.registeredEvents[event] = nil
         self.addonEventFrame:UnregisterEvent(event)
     end
+end
+
+function MapPinEnhanced:OnLoad(callback)
+    -- If the addon is already loaded, call the callback immediately
+    if addonWasLoaded then
+        callback()
+        return
+    end
+    if not self.onLoadCallbacks then
+        self.onLoadCallbacks = {}
+    end
+    table.insert(self.onLoadCallbacks, callback)
 end
 
 ---Unregister an event for the addon
