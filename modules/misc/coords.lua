@@ -169,24 +169,14 @@ function MapPinEnhancedCoordsDisplayMixin:OnLeave()
     self.lockButton:Hide()
 end
 
-function MapPinEnhancedCoordsDisplayMixin:OnShow()
-    local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
-    if not visibilityOption then return end
-    visibilityOption:UpdateFrame()
-end
-
-function MapPinEnhancedCoordsDisplayMixin:OnHide()
-    local visibilityOption = Options:GetOption("MISC", L["Show Coordinates Display"])
-    if not visibilityOption then return end
-    visibilityOption:UpdateFrame()
-end
-
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
+    Options:SetOptionValue("MISC", "Show Coordinates Display", true)
     self:RestorePosition()
     self:Show()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:HideFrame()
+    Options:SetOptionValue("MISC", "Show Coordinates Display", false)
     self:Hide()
 end
 
