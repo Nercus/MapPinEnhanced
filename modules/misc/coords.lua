@@ -148,7 +148,7 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
     end)
 
     self.closeButton:SetScript("OnClick", function()
-        self:Hide()
+        self:HideFrame()
     end)
 
     local isLocked = MapPinEnhanced:GetVar("coordsDisplay", "locked") --[[@as boolean?]]
