@@ -16,7 +16,7 @@ local playerLoginFired = false
 ---Debug a value to DevTools
 ---@param ... any The value to debug
 function MapPinEnhanced:Debug(...)
-    --@do-not-package@
+    --@debug@
     local args = ...
     if (playerLoginFired == false) then
         table.insert(preFiredQueue, { args })
@@ -42,17 +42,17 @@ function MapPinEnhanced:Debug(...)
         end)
         return
     end
-    --@end-do-not-package@
+    --@end-debug@
 end
 
 ---Add an addon to the whitelist of addons to load in dev mode
 ---@param addonName string The name of the addon to add to the whitelist
 function MapPinEnhanced:AddAddonToWhitelist(addonName)
-    --@do-not-package@
+    --@debug@
     assert(type(addonName) == "string", "Addon name must be a string")
     assert(C_AddOns.GetAddOnInfo(addonName), "Addon must exist")
     table.insert(devAddonList, addonName)
-    --@end-do-not-package@
+    --@end-debug@
 end
 
 ---Add a custom action to the debug menu should be a AnyMenuEntry
@@ -65,7 +65,7 @@ function MapPinEnhanced:AddDebugCustomDebugAction(menuTemplate)
     table.insert(self.debugMenuTemplate, menuTemplate)
 end
 
---@do-not-package@
+--@debug@
 local tickAtlas = "UI-QuestTracker-Tracker-Check"
 local crossAtlas = "UI-QuestTracker-Objective-Fail"
 local pausedAtlas = "CreditsScreen-Assets-Buttons-Pause"
@@ -300,4 +300,4 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
 end)
 
 
---@do-not-package@
+--@debug@

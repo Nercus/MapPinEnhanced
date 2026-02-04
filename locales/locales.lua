@@ -9,7 +9,7 @@ local MapPinEnhanced = select(2, ...)
 local L = setmetatable({}, {
     __index = function(t, k)
         local v = tostring(k)
-        --@do-not-package@
+        --@debug@
         if MapPinEnhanced.Debug then
             MapPinEnhanced:Debug("Missing localization for: " .. v)
         else
@@ -20,7 +20,7 @@ local L = setmetatable({}, {
                 end
             end)
         end
-        --@end-do-not-package@
+        --@end-debug@
         rawset(t, k, v)
         return v
     end

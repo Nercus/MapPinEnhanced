@@ -26,7 +26,7 @@ MapPinEnhanced.numericVersion = numericVersion
 MapPinEnhanced.version = version
 
 
---@do-not-package@
+--@debug@
 
 local testVersionString = {
     "1.0.0-beta.1",
@@ -48,4 +48,4 @@ for i, ver in ipairs(testVersionString) do
     end)
 end
 
---@end-do-not-package@
+--@end-debug@

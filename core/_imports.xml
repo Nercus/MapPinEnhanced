@@ -13,7 +13,7 @@
     <Include file="version.lua" />
     <Include file="transmission.lua" />
 
-    <!--@do-not-package@-->
+    <!--@debug@-->
     <Frame
         name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
         inherits="DefaultPanelTemplate"
@@ -89,5 +89,5 @@
             <OnKeyDown method="OnKeyDown" />
         </Scripts>
     </Frame>
-    <!--@end-do-not-package@-->
+    <!--@end-debug@-->
 </Ui>
