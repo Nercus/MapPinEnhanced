@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="modules.lua" />
+    <Include file="frame.lua" />
     <Include file="menu.lua" />
     <Include file="persistence.lua" />
     <Include file="print.lua" />
@@ -12,8 +13,9 @@
     <Include file="fuzzy.lua" />
     <Include file="version.lua" />
     <Include file="transmission.lua" />
+    <Include file="secrets.lua" />
 
-    <!--@do-not-package@-->
+    <!--@debug@-->
     <Frame
         name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
         inherits="DefaultPanelTemplate"
@@ -89,5 +91,5 @@
             <OnKeyDown method="OnKeyDown" />
         </Scripts>
     </Frame>
-    <!--@end-do-not-package@-->
+    <!--@end-debug@-->
 </Ui>

@@ -22,5 +22,8 @@ git clone https://github.com/tekkub/libdatabroker-1-1 ./libs/LibDataBroker-1.1
 # Chomp
 git clone https://github.com/wow-rp-addons/Chomp.git ./libs/Chomp
 
+# LibWindow-1.1
+svn checkout https://repos.curseforge.com/wow/libwindow-1-1/trunk/LibWindow-1.1/ ./libs/LibWindow-1.1
+
 # Remove .git directories from cloned repositories
 find ./libs -type d -name ".git" -exec rm -rf {} +

@@ -137,7 +137,9 @@ function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
-    self:RestorePosition()
+    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", function()
+        return not self:IsMovable()
+    end)
 
     self.lockButton:SetScript("OnClick", function()
         if self:IsMovable() then
@@ -171,7 +173,7 @@ end
 
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
     Options:SetOptionValue("MISC", "Show Coordinates Display", true)
-    self:RestorePosition()
+    MapPinEnhanced:RestoreFrame(self)
     self:Show()
 end
 

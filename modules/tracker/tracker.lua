@@ -14,23 +14,14 @@ end
 
 function Tracker:ShowTracker()
     local frame = self:GetTrackerFrame()
-    local position = MapPinEnhanced:GetVar("trackerPosition") --[[@as { x: number, y: number }?]]
-    if position then
-        frame:ClearAllPoints()
-        frame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", position.x, position.y)
-    else
-        frame:ClearAllPoints()
-        frame:SetPoint("CENTER", UIParent, "CENTER")
-    end
-    frame:UpdateList()
-    frame:Show()
+    frame:ShowFrame()
     MapPinEnhanced:SetVar("trackerVisible", true)
 end
 
 function Tracker:HideTracker()
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
-        frame:Hide()
+        frame:HideFrame()
     end
     MapPinEnhanced:SetVar("trackerVisible", false)
 end
