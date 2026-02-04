@@ -20,6 +20,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field dragHandle Frame
 ---@field x number
 ---@field y number
+---@field buttonVisibilityTimer FunctionContainer
 MapPinEnhancedCoordsDisplayMixin = {}
 
 local L = MapPinEnhanced.L
@@ -145,12 +146,20 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
     end
 end
 
+local HOVER_TIME = 0.5
 function MapPinEnhancedCoordsDisplayMixin:OnEnter()
-    self.closeButton.fadeIn:Play()
-    self.lockButton.fadeIn:Play()
+    self.buttonVisibilityTimer = C_Timer.NewTimer(HOVER_TIME, function()
+        if not self:IsMouseOver() then return end
+        self.closeButton.fadeIn:Play()
+        self.lockButton.fadeIn:Play()
+    end)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLeave()
+    if self.buttonVisibilityTimer then
+        self.buttonVisibilityTimer:Cancel()
+        self.buttonVisibilityTimer = nil
+    end
     self.closeButton.fadeOut:Play()
     self.lockButton.fadeOut:Play()
 end
