@@ -76,6 +76,9 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
+    MapPinEnhanced:RegisterDraggableFrame(self.header, "tracker", function()
+        return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
+    end)
     self.scrollBar:SetHideIfUnscrollable(true)
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
@@ -117,6 +120,11 @@ function MapPinEnhancedTrackerMixin:ToggleActiveView()
     self:UpdateHeight()
 end
 
-function MapPinEnhancedTrackerMixin:OnShow()
+function MapPinEnhancedTrackerMixin:ShowFrame()
+    MapPinEnhanced:RestoreFrame(self.header)
     self:UpdateList()
+end
+
+function MapPinEnhancedTrackerMixin:HideFrame()
+    self:Hide()
 end
