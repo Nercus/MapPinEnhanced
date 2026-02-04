@@ -13,6 +13,7 @@
     <Include file="fuzzy.lua" />
     <Include file="version.lua" />
     <Include file="transmission.lua" />
+    <Include file="secrets.lua" />
 
     <!--@debug@-->
     <Frame
