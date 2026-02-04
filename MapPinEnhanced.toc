@@ -23,6 +23,7 @@
 
 ## OptionalDeps: CallbackHandler-1.0, HereBeDragons, LibDataBroker-1.1, LibDBIcon-1.0, LibDeflate, LibSerialize, LibStub
 ## SavedVariables: MapPinEnhancedDB
+## LoadSavedVariablesFirst: 1
 
 libs\_imports.xml
 MapPinEnhanced.lua
