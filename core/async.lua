@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---Debounce a function call to prevent it from being called too frequently
 ---@param func fun()
----@param delay number
+---@param delay number delay in seconds
 ---@param onChange? fun() a function to call when the debounced function is called
 ---@return function
 function MapPinEnhanced:DebounceChange(func, delay, onChange)
