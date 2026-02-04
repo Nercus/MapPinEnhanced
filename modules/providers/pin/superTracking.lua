@@ -106,6 +106,10 @@ function Providers:GetSuperTrackingInfo()
                 y = digsite.position.y
             end
         end
+        --elseif pinType == Enum.SuperTrackingMapPinType.HousingPlot then
+        -- TODO: implement
+    else
+        return
     end
     return x, y, mapID, title, atlasName, pinType, typeID
 end
