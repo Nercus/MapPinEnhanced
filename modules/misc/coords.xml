@@ -9,7 +9,7 @@
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="gearUpdate-glow-filigree" desaturated="true" parentKey="bg">
+                <Texture atlas="gearUpdate-glow-filigree" desaturated="true">
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" />
@@ -82,6 +82,15 @@
                     <Anchor point="RIGHT" relativePoint="RIGHT" />
                 </Anchors>
             </Button>
+            <Frame parentKey="dragHandle" propagateMouseInput="Both">
+                <Size x="100" y="20" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="TOPRIGHT"
+                        relativeKey="$parent.closeButton" x="0" y="0" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT"
+                        relativeKey="$parent.lockButton" x="0" y="0" />
+                </Anchors>
+            </Frame>
         </Frames>
         <Scripts>
             <OnEnter method="OnEnter" />

@@ -13,6 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field timeSinceLastUpdate number
 ---@field closeButton MapPinEnhancedIconButtonTemplate
 ---@field lockButton MapPinEnhancedIconButtonTemplate
+---@field dragHandle Frame
 ---@field x number
 ---@field y number
 MapPinEnhancedCoordsDisplayMixin = {}
@@ -116,7 +117,7 @@ function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
-    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", nil, function()
+    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", self.dragHandle, function()
         return not self:IsMovable()
     end)
 

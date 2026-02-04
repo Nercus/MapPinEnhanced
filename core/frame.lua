@@ -4,7 +4,7 @@ local LibWindow = LibStub("LibWindow-1.1")
 
 ---@param frame Frame
 ---@param frameName string
----@param dragArea Frame?
+---@param dragArea ScriptRegion?
 ---@param isLocked? fun(): boolean
 function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLocked)
     assert(type(frameName) == "string", "Frame name must be a string")
@@ -31,13 +31,17 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
     LibWindow.RegisterConfig(frame, framesTable[frameName])
 
     frame:SetMovable(true)
-    frame:HookScript("OnEnter", function()
+    dragArea:HookScript("OnEnter", function()
         if isLocked and isLocked() then
             return
         end
         if dragArea and dragArea:IsMouseOver() then
             SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
         end
+    end)
+
+    dragArea:HookScript("OnLeave", function()
+        ResetCursor()
     end)
 
     frame:SetScript("OnMouseDown", function(frame, button)
