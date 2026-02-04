@@ -3,7 +3,7 @@
 
     <Script file="TrackerHeader.lua" />
     <Frame name="MapPinEnhancedTrackerHeaderTemplate" mixin="MapPinEnhancedTrackerHeaderMixin"
-        virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Motion">
+        virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Both">
         <Size x="1" y="30" />
         <Anchors>
             <Anchor point="TOPLEFT" x="0" y="0" />
@@ -68,8 +68,6 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnMouseDown method="OnMouseDown" />
-            <OnMouseUp method="OnMouseUp" />
         </Scripts>
     </Frame>
 </Ui>

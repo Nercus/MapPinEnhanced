@@ -4,13 +4,19 @@ local LibWindow = LibStub("LibWindow-1.1")
 
 ---@param frame Frame
 ---@param frameName string
+---@param dragArea Frame?
 ---@param isLocked? fun(): boolean
-function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, isLocked)
+function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLocked)
     assert(type(frameName) == "string", "Frame name must be a string")
     assert(type(frame) == "table", "Frame must be a valid Frame object")
-    local onMouseDownActive, onMouseUpActive = frame:HasScript("OnMouseDown"), frame:HasScript("OnMouseUp")
+    local onMouseDownScript, onMouseUpScript = frame:GetScript("OnMouseDown"), frame:GetScript("OnMouseUp")
+    local onMouseDownActive = onMouseDownScript ~= nil
+    local onMouseUpActive = onMouseUpScript ~= nil
     if onMouseDownActive or onMouseUpActive then
         error("Cannot save position for frames with active OnMouseDown or OnMouseUp scripts.")
+    end
+    if not dragArea then
+        dragArea = frame
     end
 
     if not self:GetVar("frames") then
@@ -25,22 +31,42 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, isLocked)
     LibWindow.RegisterConfig(frame, framesTable[frameName])
 
     frame:SetMovable(true)
+    frame:HookScript("OnEnter", function()
+        if isLocked and isLocked() then
+            return
+        end
+        if dragArea and dragArea:IsMouseOver() then
+            SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
+        end
+    end)
 
     frame:SetScript("OnMouseDown", function(frame, button)
         if button ~= "LeftButton" then return end
+        if dragArea and not dragArea:IsMouseOver() then
+            return
+        end
         if isLocked and isLocked() then
             return
         end
         frame:StartMoving()
-        SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
+        SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
     end)
 
     frame:SetScript("OnMouseUp", function(frame, button)
         if button ~= "LeftButton" then return end
         frame:StopMovingOrSizing()
-        ResetCursor()
+        if dragArea and dragArea:IsMouseOver() then
+            SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
+        else
+            ResetCursor()
+        end
         LibWindow.SavePosition(frame)
     end)
+end
+
+function MapPinEnhanced:SaveFramePosition(frame)
+    assert(type(frame) == "table", "Frame must be a valid Frame object")
+    LibWindow.SavePosition(frame)
 end
 
 ---Restores position and scale of the frame

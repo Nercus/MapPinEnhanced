@@ -38,27 +38,6 @@ function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
     Providers:LinkToChat(x, y, playerMap, string.format(L["%s's Position"], MapPinEnhanced.me))
 end
 
-function MapPinEnhancedCoordsDisplayMixin:OnMouseDown(button)
-    if button ~= "LeftButton" then return end
-    if IsShiftKeyDown() then
-        self:LinkPlayerPosition()
-        return
-    end
-    if not self:IsMovable() then return end
-    self:StartMoving()
-    SetCursor("Interface/CURSOR/UI-Cursor-Move.crosshair")
-end
-
-function MapPinEnhancedCoordsDisplayMixin:OnMouseUp(button)
-    if button ~= "LeftButton" then return end
-    local _, _, _, left, top = self:GetPoint()
-    MapPinEnhanced:SetVar("coordsDisplay", "position", { x = left, y = top })
-    self:StopMovingOrSizing()
-    self:ClearAllPoints()
-    self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", left, top)
-    SetCursor(nil)
-end
-
 function MapPinEnhancedCoordsDisplayMixin:SetCoordsText(x, y)
     if not x or not y then
         self.coordsXInt:SetText("--")
@@ -137,7 +116,7 @@ function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
-    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", function()
+    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", nil, function()
         return not self:IsMovable()
     end)
 

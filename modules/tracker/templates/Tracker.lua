@@ -67,16 +67,39 @@ end
 local MAX_ENTRIES = 6
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     -- TODO: update height also when elements get collapsed
-    local trackerHeight = self.header:GetHeight() + 5 -- header plus padding
+    local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
-    local newHeight = visibleEntries * 35 -- Assuming each entry takes up 33 pixels in height
-    newHeight = newHeight + trackerHeight -- Add the height of the header
+    local newHeight = visibleEntries * 35 -- Assuming each entry takes up 35 pixels in height
+    local oldHeight = self:GetHeight()
+    newHeight = newHeight + headerHeight  -- Add the height of the header
+
+    local currentPoint, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
+    if not currentPoint or not relativeTo or not relativePoint or not xOfs or not yOfs then
+        self:SetHeight(newHeight)
+        return
+    end
+
     self:SetHeight(newHeight)
+
+    local heightDelta = newHeight - oldHeight
+    local yOffset = 0
+
+    if string.find(currentPoint:upper(), "TOP") then
+        yOffset = 0
+    elseif string.find(currentPoint:upper(), "BOTTOM") then
+        yOffset = heightDelta
+    else
+        yOffset = heightDelta / 2
+    end
+
+    self:ClearAllPoints()
+    self:SetPoint(currentPoint, relativeTo, relativePoint, xOfs, yOfs - yOffset)
+    MapPinEnhanced:SaveFramePosition(self)
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
-    MapPinEnhanced:RegisterDraggableFrame(self.header, "tracker", function()
+    MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     end)
     self.scrollBar:SetHideIfUnscrollable(true)
@@ -100,12 +123,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
 end
 
-function MapPinEnhancedTrackerMixin:SetPosition(x, y)
-    self:ClearAllPoints()
-    self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", x, y)
-    MapPinEnhanced:SetVar("trackerPosition", { x = x, y = y })
-end
-
 function MapPinEnhancedTrackerMixin:GetActiveView()
     return self.activeView
 end
@@ -121,8 +138,9 @@ function MapPinEnhancedTrackerMixin:ToggleActiveView()
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
-    MapPinEnhanced:RestoreFrame(self.header)
+    MapPinEnhanced:RestoreFrame(self)
     self:UpdateList()
+    self:Show()
 end
 
 function MapPinEnhancedTrackerMixin:HideFrame()
