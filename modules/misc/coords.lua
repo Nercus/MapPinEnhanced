@@ -4,6 +4,10 @@ local MapPinEnhanced = select(2, ...)
 -- FIXME: small ui scales cause the numbers to be cut off, fix that
 -- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close
 
+---@class MapPinEnhancedCoordsDisplayButton : MapPinEnhancedIconButtonTemplate
+---@field fadeIn AnimationGroup
+---@field fadeOut AnimationGroup
+
 
 ---@class MapPinEnhancedCoordsDisplayTemplate : Frame
 ---@field coordsXInt FontString
@@ -11,8 +15,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field coordsYInt FontString
 ---@field coordsYDec FontString
 ---@field timeSinceLastUpdate number
----@field closeButton MapPinEnhancedIconButtonTemplate
----@field lockButton MapPinEnhancedIconButtonTemplate
+---@field closeButton MapPinEnhancedCoordsDisplayButton
+---@field lockButton MapPinEnhancedCoordsDisplayButton
 ---@field dragHandle Frame
 ---@field x number
 ---@field y number
@@ -142,13 +146,13 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnEnter()
-    self.closeButton:Show()
-    self.lockButton:Show()
+    self.closeButton.fadeIn:Play()
+    self.lockButton.fadeIn:Play()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLeave()
-    self.closeButton:Hide()
-    self.lockButton:Hide()
+    self.closeButton.fadeOut:Play()
+    self.lockButton.fadeOut:Play()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()

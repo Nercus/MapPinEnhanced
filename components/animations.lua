@@ -11,10 +11,12 @@ MapPinEnhancedAnimationVisibilityMixin = {}
 
 
 function MapPinEnhancedAnimationVisibilityMixin:OnPlayShow()
+    if not self.showOnPlay then return end
     self:GetParent():Show()
 end
 
 function MapPinEnhancedAnimationVisibilityMixin:OnFinishedHide()
+    if not self.hideOnFinished then return end
     self:GetParent():Hide()
 end
 

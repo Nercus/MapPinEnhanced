@@ -14,54 +14,38 @@
         </Scripts>
     </AnimationGroup>
 
-    <AnimationGroup name="MapPinEnhancedAnimationFadeInDown"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
-        <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="20" duration="0.15" smoothing="IN_OUT" />
-        <Scripts>
-            <OnPlay method="OnPlayShow" />
-        </Scripts>
-    </AnimationGroup>
-
-    <AnimationGroup name="MapPinEnhancedAnimationFadeInUp"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
-        <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="-20" duration="0.15" smoothing="IN_OUT" />
-        <Scripts>
-            <OnPlay method="OnPlayShow" />
-        </Scripts>
-    </AnimationGroup>
-
     <AnimationGroup name="MapPinEnhancedAnimationFadeOut"
         mixin="MapPinEnhancedAnimationVisibilityMixin"
         virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
-            <OnPlay method="OnFinishedHide" />
+            <OnFinished method="OnFinishedHide" />
         </Scripts>
     </AnimationGroup>
 
-    <AnimationGroup name="MapPinEnhancedAnimationFadeOutDown"
+    <!-- Fade + Scale In/Out -->
+    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomIn"
         mixin="MapPinEnhancedAnimationVisibilityMixin"
         virtual="true">
-        <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="-20" duration="0.15" smoothing="IN_OUT" />
+        <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
+        <Scale fromScaleX="0.8" fromScaleY="0.8" toScaleX="1" toScaleY="1" duration="0.15"
+            smoothing="IN_OUT" />
         <Scripts>
-            <OnPlay method="OnFinishedHide" />
+            <OnPlay method="OnPlayShow" />
         </Scripts>
     </AnimationGroup>
 
-    <AnimationGroup name="MapPinEnhancedAnimationFadeOutUp"
+    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomOut"
         mixin="MapPinEnhancedAnimationVisibilityMixin"
         virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="20" duration="0.15" smoothing="IN_OUT" />
+        <Scale fromScaleX="1" fromScaleY="1" toScaleX="0.8" toScaleY="0.8" duration="0.15"
+            smoothing="IN_OUT" />
         <Scripts>
-            <OnPlay method="OnFinishedHide" />
+            <OnFinished method="OnFinishedHide" />
         </Scripts>
     </AnimationGroup>
+
 
     <!-- Spin -->
     <AnimationGroup name="MapPinEnhancedAnimationSpin"

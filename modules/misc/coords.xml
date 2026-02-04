@@ -71,6 +71,19 @@
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="LEFT" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomOut"
+                        parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
             </Button>
             <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate"
                 hidden="true" propagateMouseInput="Motion">
@@ -81,6 +94,19 @@
                 <Anchors>
                     <Anchor point="RIGHT" relativePoint="RIGHT" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomOut"
+                        parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
             </Button>
             <Frame parentKey="dragHandle" propagateMouseInput="Both">
                 <Size x="100" y="20" />
