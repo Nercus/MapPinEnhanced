@@ -23,15 +23,12 @@ local PIN_COLORS_BY_NAME = {
 
 local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
 local PIN_ICONS = {
-    "poi-bountyplayer-alliance",
-    "poi-bountyplayer-horde",
-    "Auctioneer",
-    "Banker",
-    "Map-MarkedDefeated",
-    "Tormentors-Boss",
-    "QuestNormal",
-    "QuestTurnin",
-    "DungeonSkull"
+    "DungeonStoneCheckpoint",
+    "Dungeon",
+    "Raid",
+    "poi-islands-table",
+    "VignetteKill-SuperTracked",
+    "poi-transmogrifier"
 }
 local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) - 0.5)
 

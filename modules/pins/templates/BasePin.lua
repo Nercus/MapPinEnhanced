@@ -5,50 +5,41 @@ local MapPinEnhanced = select(2, ...)
 ---@field pulse AnimationGroup
 
 ---@class MapPinEnhancedBasePinTemplate : Frame
+---@field shadow Texture
 ---@field background Texture
 ---@field highlight Texture
+---@field outline Texture
+---@field foreground Texture
 ---@field icon Texture
----@field iconMask MaskTexture
 ---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
 ---@field pulseTimer FunctionContainer | nil
----@field shadow Texture
----@field texture Texture
 ---@field activeColor string | nil
----@field trackedTexture string
----@field untrackedTexture string
 ---@field tooltipData PinTooltip | nil
 ---@field pinID UUID | nil
 MapPinEnhancedBasePinMixin = {}
 
-local UNTRACKED_PIN_TEXTURE = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntracked%s.png"
-local TRACKED_PIN_TEXTURE = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTracked%s.png"
-
 
 ---@enum (key) PinColors
 local PIN_COLORS_BY_NAME = {
-    ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
-    ["Green"] = CreateColorFromBytes(96, 236, 29, 1),
-    ["LightBlue"] = CreateColorFromBytes(132, 196, 237, 1),
-    ["DarkBlue"] = CreateColorFromBytes(42, 93, 237, 1),
-    ["Purple"] = CreateColorFromBytes(190, 139, 237, 1),
-    ["Pink"] = CreateColorFromBytes(251, 109, 197, 1),
-    ["Red"] = CreateColorFromBytes(235, 15, 14, 1),
-    ["Orange"] = CreateColorFromBytes(237, 114, 63, 1),
-    ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
+    ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
+    ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
+    ["Pale"] = CreateColor(0.898, 0.659, 0.369, 1),
+    ["Yellow"] = CreateColor(0.949, 0.788, 0.149, 1),
+    ["Green"] = CreateColor(0.404, 0.788, 0.263, 1),
+    ["LightBlue"] = CreateColor(0.318, 0.757, 0.878, 1),
+    ["DarkBlue"] = CreateColor(0.239, 0.239, 0.976, 1),
+    ["Purple"] = CreateColor(0.549, 0.314, 0.886, 1),
+    ["Pink"] = CreateColor(0.886, 0.427, 0.843, 1),
 }
 
+local UNTRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntrackedCenterGray.png"
+local TRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTrackedGray.png"
 
 function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
     if not icon then
         self.icon:Hide()
         return
     end
-    if type(icon) ~= "number" then
-        self.icon:RemoveMaskTexture(self.iconMask)
-    else
-        self.icon:AddMaskTexture(self.iconMask)
-    end
-
     if (usesAtlas) then
         self.icon:SetAtlas(icon)
     else
@@ -81,7 +72,7 @@ end
 
 ---@param skipAnimation boolean?
 function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
-    self.texture:SetTexture(self.trackedTexture)
+    self.foreground:SetTexture(TRACKED_FOREGROUND)
     if skipAnimation then
         self.pulseHighlight.pulse:Stop()
         self.pulseHighlight:Hide()
@@ -91,7 +82,7 @@ function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
-    self.texture:SetTexture(self.untrackedTexture)
+    self.foreground:SetTexture(UNTRACKED_FOREGROUND)
 end
 
 ---@return ColorMixin?
@@ -108,12 +99,9 @@ end
 
 ---@param color PinColors
 function MapPinEnhancedBasePinMixin:SetPinColor(color)
-    local untrackedTexture = string.format(UNTRACKED_PIN_TEXTURE, color)
-    local trackedTexture = string.format(TRACKED_PIN_TEXTURE, color)
-    assert(untrackedTexture, "Untracked texture not found")
-    assert(trackedTexture, "Tracked texture not found")
-    self.untrackedTexture = untrackedTexture
-    self.trackedTexture = trackedTexture
+    if color == 'custom' then
+        return
+    end
     local pinColor = PIN_COLORS_BY_NAME[color]
     ---@type number, number, number, number?
     local r, g, b, a
@@ -122,6 +110,7 @@ function MapPinEnhancedBasePinMixin:SetPinColor(color)
     else
         r, g, b, a = 1, 1, 1, 1
     end
+    self.foreground:SetVertexColor(r, g, b, a)
     self.pulseHighlight:SetVertexColor(r, g, b, a)
     self.activeColor = color
 end
