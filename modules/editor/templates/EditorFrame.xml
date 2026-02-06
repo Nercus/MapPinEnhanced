@@ -9,20 +9,17 @@
         <Anchors>
             <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
         </Anchors>
-        <Frames>
-            <Frame parentKey="map" inherits="MapPinEnhancedMapTemplate" useParentLevel="true"
-                parent="$parent">
-                <Size x="450" y="300" />
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="30" y="30" />
-                </Anchors>
-            </Frame>
-        </Frames>
-        <Scripts>
-            <OnLoad>
-                self.Bg:SetTexture("Interface\\AddOns\\MapPinEnhanced\\assets\\bg.png");
-                self.map:Show()
-            </OnLoad>
-        </Scripts>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="shop-bg-map-blue" setAllPoints="true"
+                    desaturated="true">
+                    <TexCoords left="0.7" bottom="0" top="1" right="0.9" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.1" />
+                        <MaxColor r="1" g="1" b="1" a="1" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+        </Layers>
     </Frame>
 </Ui>
