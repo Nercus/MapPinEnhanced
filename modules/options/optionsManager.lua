@@ -28,6 +28,7 @@ local CATEGORIES = {
 ---@field label string the label of the option, used to display the option in the UI (unique withing the category)
 ---@field description string the description of the option, used to display additional information in the UI
 ---@field descriptionImage {texture: string, width: number, height: number}? reference to an image
+---@field triggerChangeOnInit boolean? whether the onChange callback should be triggered when the option is initialized, default is false
 
 ---@class TextareaOptionData : OptionData, TextareaSetup
 
@@ -119,6 +120,14 @@ function Options:RegisterOption(optionType, optionData)
         end
     end
     categoryObject:AddOption(optionType, optionData)
+
+    if optionData.triggerChangeOnInit and optionData.onChange then
+        local option = categoryObject:GetOption(optionData.label)
+        if option and optionData.init then
+            local initialValue = optionData.init()
+            optionData.onChange(initialValue)
+        end
+    end
 end
 
 ---@param category OptionCategories
