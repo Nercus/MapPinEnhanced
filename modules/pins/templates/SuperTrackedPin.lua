@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedSuperTrackedPinTitle : Frame
 ---@field text FontString
----@field bg Texture
 
 ---@class MapPinEnhancedSuperTrackedPinTemplate : Frame
 ---@field distantText FontString
@@ -13,7 +12,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field FadeOut AnimationGroup
 ---@field title MapPinEnhancedSuperTrackedPinTitle
 ---@field beam Texture
----@field arrows Texture
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 MapPinEnhancedSuperTrackedPinMixin = {}
 
@@ -137,11 +135,8 @@ function MapPinEnhancedSuperTrackedPinMixin:SetBeacon()
     self.pinFrame:SetPoint("CENTER", 0, -25 * pinFrameScale)
     self.pinFrame:SetScale(0.6)
     self.beam:Show()
-    self.arrows:Hide()
     self.title:ClearAllPoints()
     self.title:SetPoint("CENTER", 0, -15)
-    self.title.bg:SetRotation(math.pi)
-    self.title.bg:SetAlpha(0.5)
     self.title:SetScale(1)
     self.FadeIn:Play()
     -- self.pinFrame:HidePulse()
@@ -149,14 +144,12 @@ end
 
 function MapPinEnhancedSuperTrackedPinMixin:SetGrounded()
     local pinFrameScale = self.pinFrame:GetEffectiveScale()
-    self.pinFrame:SetPoint("CENTER", 0, 60 * pinFrameScale)
+    self.pinFrame:SetPoint("CENTER", 0, 56 * pinFrameScale)
     self.pinFrame:SetScale(1)
     self.beam:Hide()
-    self.arrows:Show()
     self.title:ClearAllPoints()
-    self.title:SetPoint("CENTER", 0, 40)
-    self.title.bg:SetRotation(0)
-    self.title:SetScale(1.2)
+    self.title:SetPoint("CENTER", 0, -15)
+    self.title:SetScale(1)
     self.FadeIn:Play()
     -- self.pinFrame:ShowPulse()
 end

@@ -16,17 +16,26 @@
                     </Anchors>
                 </FontString>
 
-                <Texture parentKey="beam">
-                    <Size x="3" y="150" />
+                <Texture parentKey="beam"
+                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderLine.png">
+                    <Size x="11" y="250" />
                     <Anchors>
                         <Anchor point="BOTTOM" relativePoint="CENTER" relativeKey="$parent.pinFrame" />
                     </Anchors>
-                    <Color r="1" g="1" b="1" />
                     <Gradient orientation="VERTICAL">
                         <MaxColor r="1" g="0.82" b="0" a="0" />
                         <MinColor r="1" g="0.82" b="0" a="1" />
                     </Gradient>
                 </Texture>
+
+
+                <!-- <Texture parentKey="nearBG"
+                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderCloseBackground.png">
+                    <Size x="64" y="69" />
+                    <Anchors>
+                        <Anchor point="CENTER" y="32" />
+                    </Anchors>
+                </Texture> -->
             </Layer>
         </Layers>
         <Frames>
@@ -43,78 +52,10 @@
                 </Anchors>
                 <Layers>
                     <Layer level="OVERLAY">
-                        <Texture parentKey="bg"
-                            file="Interface/AddOns/MapPinEnhanced/assets/tracker_hover.png"
-                            setAllPoints="true">
-                            <Gradient orientation="VERTICAL">
-                                <MaxColor r="1" g="0.82" b="0" a="1" />
-                                <MinColor r="1" g="0.82" b="0" a="0.4" />
-                            </Gradient>
-                        </Texture>
                         <FontString inherits="GameFontNormal" text="title" setAllPoints="true"
                             parentKey="text" />
                     </Layer>
                 </Layers>
-            </Frame>
-            <Frame parentKey="arrows">
-                <Size x="50" y="50" />
-                <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pinFrame" y="7" />
-                </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <Texture parentKey="arrow1"
-                            atlas="Azerite-PointingArrow">
-                            <Size x="32" y="16" />
-                            <Anchors>
-                                <Anchor point="TOP" y="0" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="arrow2"
-                            atlas="Azerite-PointingArrow">
-                            <Size x="32" y="16" />
-                            <Anchors>
-                                <Anchor point="TOP" relativeKey="$parent.arrow1"
-                                    relativePoint="BOTTOM" y="10" />
-                            </Anchors>
-                        </Texture>
-                        <Texture parentKey="arrow3"
-                            atlas="Azerite-PointingArrow">
-                            <Size x="32" y="16" />
-                            <Anchors>
-                                <Anchor point="TOP" relativeKey="$parent.arrow2"
-                                    relativePoint="BOTTOM" y="10" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
-                <Animations>
-                    <AnimationGroup parentKey="PulseArrows" looping="REPEAT">
-                        <Alpha childKey="arrow1" order="1" duration="1" fromAlpha="0.2"
-                            toAlpha="1"
-                            smoothing="IN_OUT" />
-                        <Alpha childKey="arrow1" order="2" duration="1" fromAlpha="1"
-                            toAlpha="0.2"
-                            smoothing="IN_OUT" />
-                        <Alpha childKey="arrow2" order="1" duration="1" fromAlpha="0.2"
-                            toAlpha="1"
-                            smoothing="IN_OUT" startDelay="0.2" />
-                        <Alpha childKey="arrow2" order="2" duration="1" fromAlpha="1"
-                            toAlpha="0.2"
-                            smoothing="IN_OUT" startDelay="0.2" />
-                        <Alpha childKey="arrow3" order="1" duration="1" fromAlpha="0.2"
-                            toAlpha="1"
-                            smoothing="IN_OUT" startDelay="0.4" />
-                        <Alpha childKey="arrow3" order="2" duration="1" fromAlpha="1"
-                            toAlpha="0.2"
-                            smoothing="IN_OUT" startDelay="0.4" />
-                    </AnimationGroup>
-                </Animations>
-                <Scripts>
-                    <OnLoad>
-                        self.PulseArrows:Play();
-                    </OnLoad>
-                </Scripts>
             </Frame>
         </Frames>
         <Scripts>
@@ -133,8 +74,6 @@
                     toScaleY="0.5" smoothing="IN_OUT" />
                 <Alpha order="1" duration="0.2" fromAlpha="1" toAlpha="0" smoothing="IN_OUT" />
             </AnimationGroup>
-
-
         </Animations>
     </Frame>
 </Ui>
