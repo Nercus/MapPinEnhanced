@@ -34,6 +34,7 @@ local PIN_COLORS_BY_NAME = {
 
 local UNTRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntrackedCenterGray.png"
 local TRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTrackedGray.png"
+local ICON_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinIconTesterNoCircle.png"
 
 function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
     if not icon then
@@ -72,7 +73,14 @@ end
 
 ---@param skipAnimation boolean?
 function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
-    self.foreground:SetTexture(TRACKED_FOREGROUND)
+    if self.icon:IsShown() then
+        self.foreground:SetTexture(ICON_FOREGROUND)
+        self.foreground:SetVertexColor(0.949, 0.788, 0.149, 1)
+        self.outline:Hide()
+    else
+        self.foreground:SetTexture(UNTRACKED_FOREGROUND)
+        self.outline:Show()
+    end
     if skipAnimation then
         self.pulseHighlight.pulse:Stop()
         self.pulseHighlight:Hide()
@@ -82,7 +90,14 @@ function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
-    self.foreground:SetTexture(UNTRACKED_FOREGROUND)
+    if self.icon:IsShown() then
+        self.foreground:SetTexture(ICON_FOREGROUND)
+        self.foreground:SetVertexColor(0.4980, 0.2902, 0.1843, 1)
+        self.outline:Hide()
+    else
+        self.foreground:SetTexture(UNTRACKED_FOREGROUND)
+        self.outline:Show()
+    end
 end
 
 ---@return ColorMixin?

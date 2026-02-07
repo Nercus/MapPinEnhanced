@@ -10,6 +10,15 @@
         <Size x="50" y="50" />
         <Layers>
             <Layer level="OVERLAY">
+                <Texture atlas="CircleMask">
+                    <Color r="1" g="0" b="0" a="1" />
+                    <Size x="4" y="4" />
+                    <Anchors>
+                        <Anchor point="CENTER"></Anchor>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND">
                 <FontString parentKey="distantText" inherits="GameFontHighlight">
                     <Anchors>
                         <Anchor point="TOP" relativePoint="BOTTOM" y="-12" />
@@ -18,24 +27,15 @@
 
                 <Texture parentKey="beam"
                     file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderLine.png">
-                    <Size x="11" y="250" />
+                    <Size x="15" y="350" />
                     <Anchors>
                         <Anchor point="BOTTOM" relativePoint="CENTER" relativeKey="$parent.pinFrame" />
                     </Anchors>
                     <Gradient orientation="VERTICAL">
-                        <MaxColor r="1" g="0.82" b="0" a="0" />
-                        <MinColor r="1" g="0.82" b="0" a="1" />
+                        <MaxColor r="0.5" g="0.5" b="0.5" a="0" />
+                        <MinColor r="1" g="0.82" b="0" a="0.8" />
                     </Gradient>
                 </Texture>
-
-
-                <!-- <Texture parentKey="nearBG"
-                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderCloseBackground.png">
-                    <Size x="64" y="69" />
-                    <Anchors>
-                        <Anchor point="CENTER" y="32" />
-                    </Anchors>
-                </Texture> -->
             </Layer>
         </Layers>
         <Frames>
@@ -44,6 +44,17 @@
                 <Anchors>
                     <Anchor point="CENTER" y="0" />
                 </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg"
+                            file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderCloseBackground.png">
+                            <Size x="50" y="75" />
+                            <Anchors>
+                                <Anchor point="CENTER" y="-12" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
             </Frame>
             <Frame parentKey="title">
                 <Size x="70" y="16" />

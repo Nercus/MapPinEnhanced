@@ -6,21 +6,24 @@
         virtual="true" enableMouse="true" frameStrata="HIGH">
         <Size x="30" y="30" />
         <Layers>
-            <Layer level="BACKGROUND">
+            <Layer level="BACKGROUND" textureSubLevel="1">
                 <Texture parentKey="shadow"
                     file="Interface/AddOns/MapPinEnhanced/assets/pins/PinShadow.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
-            <Layer level="BORDER">
+            <Layer level="BACKGROUND" textureSubLevel="2">
                 <Texture parentKey="background"
                     file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png"
                     setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
-            <Layer level="ARTWORK">
+            <Layer level="BORDER">
                 <Texture parentKey="outline"
                     file="Interface/AddOns/MapPinEnhanced/assets/pins/PinUntrackedBorder.png"
                     setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
+            </Layer>
+            <Layer level="ARTWORK">
+
                 <Texture parentKey="foreground"
                     file="Interface/AddOns/MapPinEnhanced/assets/pins/PinUntrackedCenterGray.png"
                     setAllPoints="true"
