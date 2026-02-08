@@ -10,7 +10,7 @@ local devAddonList = {
     "BugSack",
     "TextureAtlasViewer",
     "DevTool",
-    "AddonProfiler"
+    "!!AddonProfiler"
 }
 local preFiredQueue = {}
 local playerLoginFired = false
@@ -264,7 +264,8 @@ local function loadDevMode()
             LDBIcon:Show(MapPinEnhanced.name)
         end)
 
-        if C_AddOns.IsAddOnLoaded("AddonProfiler") then
+
+        if C_AddOns.IsAddOnLoaded("!!AddonProfiler") then
             ---@diagnostic disable-next-line: no-unknown
             NumyAddonProfiler_PinContainer:PinAddon(MapPinEnhanced.name)
         end
@@ -280,12 +281,13 @@ local function loadDevMode()
         if f and f:IsShown() then
             f:Hide()
         end
+
         MapPinEnhanced:SetVar("loadedAddons", loadedAddons)
         C_Timer.After(1, function()
             LDBIcon:Hide("BugSack")
             LDBIcon:Hide(MapPinEnhanced.name)
         end)
-        if C_AddOns.IsAddOnLoaded("AddonProfiler") then
+        if C_AddOns.IsAddOnLoaded("!!AddonProfiler") then
             ---@diagnostic disable-next-line: no-unknown
             NumyAddonProfiler_PinContainer:UnpinAddon(MapPinEnhanced.name)
         end
