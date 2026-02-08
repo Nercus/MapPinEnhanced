@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 ---@class MapPinEnhanced
 ---@field debugMenuTemplate table<AnyMenuEntry[]> a list of menu templates for the debug menu
 local MapPinEnhanced = select(2, ...)
@@ -262,6 +263,11 @@ local function loadDevMode()
             LDBIcon:Show("BugSack")
             LDBIcon:Show(MapPinEnhanced.name)
         end)
+
+        if C_AddOns.IsAddOnLoaded("AddonProfiler") then
+            ---@diagnostic disable-next-line: no-unknown
+            NumyAddonProfiler_PinContainer:PinAddon(MapPinEnhanced.name)
+        end
     else
         -- check what addons are loaded right now and save them
         local loadedAddons = {}
@@ -279,6 +285,10 @@ local function loadDevMode()
             LDBIcon:Hide("BugSack")
             LDBIcon:Hide(MapPinEnhanced.name)
         end)
+        if C_AddOns.IsAddOnLoaded("AddonProfiler") then
+            ---@diagnostic disable-next-line: no-unknown
+            NumyAddonProfiler_PinContainer:UnpinAddon(MapPinEnhanced.name)
+        end
     end
 end
 
