@@ -34,7 +34,6 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnUpdate method="OnUpdate" />
             <OnValueChanged method="OnValueChanged" />
             <OnLoad method="OnLoad" />
         </Scripts>

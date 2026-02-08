@@ -13,6 +13,11 @@ function MapPinEnhancedStatusbarMixin:SetValueSmooth(targetValue)
         self.smoothValue = self:GetValue() or 0
     end
     self.smoothTarget = targetValue
+    if not self:GetScript("OnUpdate") then
+        self:SetScript("OnUpdate", function(_, elapsed)
+            self:OnUpdate(elapsed)
+        end)
+    end
 end
 
 function MapPinEnhancedStatusbarMixin:UpdatePipVisibility()
@@ -26,7 +31,10 @@ function MapPinEnhancedStatusbarMixin:UpdatePipVisibility()
 end
 
 function MapPinEnhancedStatusbarMixin:OnUpdate(elapsed)
-    if not self.smoothTarget then return end
+    if not self.smoothTarget then
+        self:SetScript("OnUpdate", nil) -- Stop updating
+        return
+    end
     local current = self.smoothValue or self:GetValue() or 0
     -- Use built-in Lerp function
     local target = self.smoothTarget
@@ -37,6 +45,7 @@ function MapPinEnhancedStatusbarMixin:OnUpdate(elapsed)
         self:SetValue(target)
         self.smoothValue = target
         self.smoothTarget = nil
+        self:SetScript("OnUpdate", nil)
     end
     self:UpdatePipVisibility()
 end
