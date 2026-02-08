@@ -9,6 +9,7 @@ local devAddonList = {
     "BugSack",
     "TextureAtlasViewer",
     "DevTool",
+    "AddonProfiler"
 }
 local preFiredQueue = {}
 local playerLoginFired = false
