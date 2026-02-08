@@ -125,16 +125,31 @@ end
 function MapPinEnhancedPinGroupMixin:RemovePin(pinID)
     assert(pinID, "MapPinEnhancedPinGroupMixin:AddPin: pinID is nil")
     local pin = self.pins[pinID]
-    self.count = self.count - 1
-    self.trackerEntry:RemovePin(pin.trackerEntry) -- if this is the last pin, remove the group tracker entry as well
+    if not pin then return end
+
+    local pinTreeNode = pin.trackerEntry:GetTreeNode()
+
     self.pins[pinID] = nil
-    Pins:RemovePin(pinID)
-    Groups:PersistGroup(self)
+    self.count = self.count - 1
+
+    if pinTreeNode then
+        local groupTreeNode = self.trackerEntry:GetTreeNode()
+        if groupTreeNode then
+            groupTreeNode:Remove(pinTreeNode, false)
+        end
+    else
+        if Tracker:IsShown() then
+            Tracker:UpdateList()
+        end
+    end
 
     if self.count == 0 then
         Tracker:RemoveGroup(self.trackerEntry:GetTreeNode())
-        self.trackerEntry:Reset() -- reset the tracker entry to avoid memory leaks
+        self.trackerEntry:Reset()
     end
+
+    Groups:PersistGroup(self)
+    Pins:ReleasePin(pinID)
 end
 
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID):UUID, MapPinEnhancedPinMixin

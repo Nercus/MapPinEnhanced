@@ -40,7 +40,7 @@ function Pins:GetPinByID(pinID)
 end
 
 ---@param pinID UUID
-function Pins:RemovePin(pinID)
+function Pins:ReleasePin(pinID)
     if not pinID then return end
     local pin = self:GetPinByID(pinID)
     pinsPool:Release(pin)

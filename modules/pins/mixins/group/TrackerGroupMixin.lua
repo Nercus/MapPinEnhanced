@@ -42,18 +42,14 @@ function MapPinEnhancedTrackerGroupMixin:AddPin(pin)
     if not treeNode then
         return
     end
-    treeNode:Insert(pin)
+    local pinTreeNode = treeNode:Insert(pin)
+    pin.trackerEntry:SetTreeNode(pinTreeNode)
 end
 
 ---@param pinTrackerEntry MapPinEnhancedTrackerPinMixin
----@param clearGroup boolean? if true, the group trackerEntry will be removed as well i.e. if the group is empty
-function MapPinEnhancedTrackerGroupMixin:RemovePin(pinTrackerEntry, clearGroup)
+function MapPinEnhancedTrackerGroupMixin:RemovePin(pinTrackerEntry)
     local treeNode = self:GetTreeNode()
     if not treeNode then return end
     local pinNode = pinTrackerEntry:GetTreeNode() --[[@as TreeNodeMixin]]
     treeNode:Remove(pinNode, false)
-
-    if clearGroup then
-        Tracker:RemoveGroup(treeNode)
-    end
 end

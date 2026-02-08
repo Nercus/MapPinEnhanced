@@ -130,10 +130,14 @@ function Distance:DisableDistanceCheck(mapID, x, y)
         -- If specific coordinates are provided, we can clear the target
         if self.target and self.target.mapID == mapID and self.target.x == x and self.target.y == y then
             self.target = nil
+            wipe(distanceCache)
+            lastDistance = 0
             return
         end
     else
         self.target = nil
+        wipe(distanceCache)
+        lastDistance = 0
     end
 end
 
