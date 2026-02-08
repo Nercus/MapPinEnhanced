@@ -45,24 +45,16 @@ function MapPinEnhanced:Debug(...)
     --@end-debug@
 end
 
----Add an addon to the whitelist of addons to load in dev mode
----@param addonName string The name of the addon to add to the whitelist
-function MapPinEnhanced:AddAddonToWhitelist(addonName)
-    --@debug@
-    assert(type(addonName) == "string", "Addon name must be a string")
-    assert(C_AddOns.GetAddOnInfo(addonName), "Addon must exist")
-    table.insert(devAddonList, addonName)
-    --@end-debug@
-end
-
 ---Add a custom action to the debug menu should be a AnyMenuEntry
 ---@param menuTemplate AnyMenuEntry The menu template to add the action to
 function MapPinEnhanced:AddDebugCustomDebugAction(menuTemplate)
+    --@debug@
     assert(type(menuTemplate) == "table", "Menu template not provided or not a table")
     if not self.debugMenuTemplate then
         self.debugMenuTemplate = {}
     end
     table.insert(self.debugMenuTemplate, menuTemplate)
+    --@end-debug@
 end
 
 --@debug@
@@ -300,4 +292,4 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
 end)
 
 
---@debug@
+--@end-debug@
