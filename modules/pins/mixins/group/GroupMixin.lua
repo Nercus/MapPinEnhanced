@@ -100,15 +100,6 @@ end
 ---@return MapPinEnhancedPinMixin?
 function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedPinGroupMixin:AddPin: pinData is nil")
-    local treeNode = self.trackerEntry:GetTreeNode()
-    if not treeNode and Tracker:GetActiveView() == "pin" and Tracker:IsShown() then
-        -- group is not initialized in the tracker yet
-        local groupNode = Tracker:AddGroup(self)
-        self.trackerEntry:SetTreeNode(groupNode)
-        self:AddPin(pinData, overridePinID) -- retry adding the pin after initializing the group
-        return
-    end
-
     local pin = Pins:CreatePin(pinData)
     if overridePinID then
         pin:OverridePinID(overridePinID)
@@ -116,7 +107,16 @@ function MapPinEnhancedPinGroupMixin:AddPin(pinData, overridePinID)
     pin.group = self
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
-    self.trackerEntry:AddPin(pin)
+    -- Only do tracker operations if tracker is visible
+    if Tracker:IsShown() and Tracker:GetActiveView() == "pin" then
+        local treeNode = self.trackerEntry:GetTreeNode()
+        if not treeNode then
+            local groupNode = Tracker:AddGroup(self)
+            self.trackerEntry:SetTreeNode(groupNode)
+        end
+        self.trackerEntry:AddPin(pin)
+    end
+
     Groups:PersistGroup(self)
     return pin
 end
@@ -127,25 +127,22 @@ function MapPinEnhancedPinGroupMixin:RemovePin(pinID)
     local pin = self.pins[pinID]
     if not pin then return end
 
-    local pinTreeNode = pin.trackerEntry:GetTreeNode()
-
     self.pins[pinID] = nil
     self.count = self.count - 1
 
-    if pinTreeNode then
-        local groupTreeNode = self.trackerEntry:GetTreeNode()
-        if groupTreeNode then
-            groupTreeNode:Remove(pinTreeNode, false)
+    if Tracker:IsShown() then
+        local pinTreeNode = pin.trackerEntry:GetTreeNode()
+        if pinTreeNode then
+            local groupTreeNode = self.trackerEntry:GetTreeNode()
+            if groupTreeNode then
+                groupTreeNode:Remove(pinTreeNode, false)
+            end
         end
-    else
-        if Tracker:IsShown() then
-            Tracker:UpdateList()
-        end
-    end
 
-    if self.count == 0 then
-        Tracker:RemoveGroup(self.trackerEntry:GetTreeNode())
-        self.trackerEntry:Reset()
+        if self.count == 0 then
+            Tracker:RemoveGroup(self.trackerEntry:GetTreeNode())
+            self.trackerEntry:Reset()
+        end
     end
 
     Groups:PersistGroup(self)
@@ -187,3 +184,44 @@ function MapPinEnhancedPinGroupMixin:GetSaveableData()
 
     return data
 end
+
+--@debug@
+MapPinEnhanced:AddDebugCustomDebugAction({
+    type = "button",
+    label = "Create 1000 random pins",
+    onClick = function()
+        local cat = Groups:GetGroupByName("Uncategorized Pins")
+        for i = 1, 1000 do
+            local pinData = {
+                mapID = C_Map.GetBestMapForUnit("player"),
+                x = math.random(),
+                y = math.random(),
+                title = "Random Pin " .. i,
+            }
+            cat:AddPin(pinData)
+        end
+        local pins = {}
+        for pinID, _ in cat:EnumeratePins() do
+            table.insert(pins, pinID)
+        end
+
+        local index = 1
+        C_Timer.NewTicker(0.05, function(ticker)
+            if not cat or not cat.RemovePin then
+                ticker:Cancel()
+                return
+            end
+
+            ---@type MapPinEnhancedPinMixin
+            local pin = pins[index]
+            if not pin then
+                ticker:Cancel()
+                return
+            end
+
+            cat:RemovePin(pin)
+            index = index + 1
+        end)
+    end
+})
+--@end-debug@

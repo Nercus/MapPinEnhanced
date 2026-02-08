@@ -39,6 +39,15 @@ local DEFAULT_GROUPS = {
 }
 
 
+function Groups:GetAllGroups()
+    local groups = {}
+    local groupsPool = Groups:GetObjectPool()
+    for group in groupsPool:EnumerateActive() do
+        table.insert(groups, group)
+    end
+    return groups
+end
+
 ---@param groupInfo GroupInfo
 ---@return MapPinEnhancedPinGroupMixin?
 function Groups:RegisterPinGroup(groupInfo)
@@ -120,13 +129,14 @@ function Groups:RestoreGroup(groupData)
         group = self:RegisterPinGroup(groupData)
     end
     assert(group, "Groups:RestoreGroup: group is nil after registration")
-
+    MapPinEnhanced:Debug(groupData)
     ---@param pinData SaveablePinData
     for _, pinData in ipairs(groupData.pins) do
         assert(pinData, "Groups:RestoreGroup: pinData is nil")
         assert(type(pinData) == "table", "Groups:RestoreGroup: pinData must be a table")
         group:AddPin(pinData, pinData.pinID)
     end
+    MapPinEnhanced:Debug(group)
 end
 
 function Groups:RestoreAllGroups()

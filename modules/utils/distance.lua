@@ -120,6 +120,9 @@ function Distance:EnableDistanceCheck(mapID, x, y, onUpdate)
         local initialDistance = self:GetDistanceToTarget(mapID, x, y)
         self.target.onUpdate(initialDistance, -1) -- -1 indicates unknown time to target
     end
+    if not self.distanceFrame:GetScript("OnUpdate") then
+        self.distanceFrame:SetScript("OnUpdate", function() self:OnUpdate() end)
+    end
 end
 
 ---@param mapID number?
@@ -132,12 +135,14 @@ function Distance:DisableDistanceCheck(mapID, x, y)
             self.target = nil
             wipe(distanceCache)
             lastDistance = 0
+            self.distanceFrame:SetScript("OnUpdate", nil)
             return
         end
     else
         self.target = nil
         wipe(distanceCache)
         lastDistance = 0
+        self.distanceFrame:SetScript("OnUpdate", nil)
     end
 end
 
@@ -148,10 +153,6 @@ function Distance:Init()
     lastDistance = 0
     lastUpdate = nil
     self.distanceFrame = CreateFrame("Frame")
-    -- Set up the frame to handle distance updates
-    self.distanceFrame:SetScript("OnUpdate", function()
-        self:OnUpdate()
-    end)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()

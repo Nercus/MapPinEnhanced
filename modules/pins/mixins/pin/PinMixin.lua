@@ -153,8 +153,9 @@ function MapPinEnhancedPinMixin:Reset()
     if not self.initialized then return end
     self.initialized = false
     -- untrack first to clear the pin
-    self:Untrack()
-
+    if self.isTracked then
+        self:Untrack()
+    end
     -- release the pins
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
