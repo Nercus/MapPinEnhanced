@@ -18,8 +18,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field closeButton MapPinEnhancedCoordsDisplayButton
 ---@field lockButton MapPinEnhancedCoordsDisplayButton
 ---@field dragHandle Frame
----@field x number
----@field y number
 ---@field buttonVisibilityTimer FunctionContainer
 MapPinEnhancedCoordsDisplayMixin = {}
 
@@ -28,6 +26,12 @@ local L = MapPinEnhanced.L
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Options = MapPinEnhanced:GetModule("Options")
 
+local GetBestMapForUnit = C_Map.GetBestMapForUnit
+local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local floor = math.floor
+local modf = math.modf
+local format = string.format
+local DeltaLerp = DeltaLerp
 
 function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
     local playerMap = C_Map.GetBestMapForUnit("player")
@@ -41,61 +45,62 @@ function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
         return
     end
     local x, y = position:GetXY()
-    Providers:LinkToChat(x, y, playerMap, string.format(L["%s's Position"], MapPinEnhanced.me))
+    Providers:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
+end
+
+function MapPinEnhancedCoordsDisplayMixin:SetUndefinedPosition()
+    self.coordsXInt:SetText("--")
+    self.coordsXDec:SetText(".--")
+    self.coordsYInt:SetText("--")
+    self.coordsYDec:SetText(".--")
 end
 
 function MapPinEnhancedCoordsDisplayMixin:SetCoordsText(x, y)
-    if not x or not y then
-        self.coordsXInt:SetText("--")
-        self.coordsXDec:SetText(".--")
-        self.coordsYInt:SetText("--")
-        self.coordsYDec:SetText(".--")
+    local xHundredths = floor(x * 10000)
+    local yHundredths = floor(y * 10000)
+
+    if self.cachedX == xHundredths and self.cachedY == yHundredths then
         return
     end
 
-    local xPercent = math.floor(x * 10000) / 100
-    local yPercent = math.floor(y * 10000) / 100
+    self.cachedX = xHundredths
+    self.cachedY = yHundredths
 
-    local xInt, xDec = math.modf(xPercent)
-    local yInt, yDec = math.modf(yPercent)
+    local xInt = floor(xHundredths / 100)
+    local xDec = xHundredths % 100
+    local yInt = floor(yHundredths / 100)
+    local yDec = yHundredths % 100
 
-    self.coordsXInt:SetText(string.format("%02d", xInt))
-    self.coordsXDec:SetText(string.format(".%02d", math.floor(xDec * 100)))
-    self.coordsYInt:SetText(string.format("%02d", yInt))
-    self.coordsYDec:SetText(string.format(".%02d", math.floor(yDec * 100)))
+    self.coordsXInt:SetText(format("%02d", xInt))
+    self.coordsXDec:SetText(format(".%02d", xDec))
+    self.coordsYInt:SetText(format("%02d", yInt))
+    self.coordsYDec:SetText(format(".%02d", yDec))
 end
 
+local UPDATE_RATE = 0.1
+---@param elapsed number
 function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
-    local currentMapID = C_Map.GetBestMapForUnit("player")
-    if not currentMapID then
-        self:SetCoordsText(nil, nil)
+    self.lastUpdate = (self.lastUpdate or 0) + elapsed
+    if self.lastUpdate < UPDATE_RATE then
         return
     end
-    local position = C_Map.GetPlayerMapPosition(currentMapID, "player")
+    self.lastUpdate = 0
+    local playerMap = GetBestMapForUnit("player")
+    if not playerMap then
+        self:SetUndefinedPosition()
+        return
+    end
+    local position = GetPlayerMapPosition(playerMap, "player")
     if not position then
-        self:SetCoordsText(nil, nil)
+        self:SetUndefinedPosition()
         return
     end
     local x, y = position:GetXY()
     if not x or not y then
-        self:SetCoordsText(nil, nil)
+        self:SetUndefinedPosition()
         return
     end
-
-    local targetXPercent = math.floor(x * 10000) / 100
-    local targetYPercent = math.floor(y * 10000) / 100
-
-    if not self.displayX then
-        self.displayX = targetXPercent
-        self.displayY = targetYPercent
-    end
-
-    local newDisplayX = DeltaLerp(self.displayX, targetXPercent, .2, elapsed)
-    local newDisplayY = DeltaLerp(self.displayY, targetYPercent, .2, elapsed)
-
-    self.displayX = newDisplayX
-    self.displayY = newDisplayY
-    self:SetCoordsText(newDisplayX / 100, newDisplayY / 100)
+    self:SetCoordsText(x, y)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:RestorePosition()
@@ -165,12 +170,14 @@ function MapPinEnhancedCoordsDisplayMixin:OnLeave()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
+    self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     Options:SetOptionValue("MISC", "Show Coordinates Display", true)
     MapPinEnhanced:RestoreFrame(self)
     self:Show()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:HideFrame()
+    self:SetScript("OnUpdate", nil)
     Options:SetOptionValue("MISC", "Show Coordinates Display", false)
     self:Hide()
 end

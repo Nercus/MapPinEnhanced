@@ -43,8 +43,6 @@
                         <Anchor point="RIGHT" relativeKey="$parent.coordsXDec" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
-
-
                 <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt"
                     text="00" justifyH="RIGHT">
                     <Size x="18" y="20" />
@@ -121,7 +119,6 @@
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
-            <OnUpdate method="OnUpdate" />
             <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
