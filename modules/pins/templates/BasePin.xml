@@ -18,21 +18,21 @@
             </Layer>
             <Layer level="BORDER">
                 <Texture parentKey="outline"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinUntrackedBorder.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinOutlineUntracked.png"
                     setAllPoints="true"
-                    texelSnappingBias="0" snapToPixelGrid="false" />
+                    texelSnappingBias="0" snapToPixelGrid="false">
+                    <Color r="0.482" g="0.314" b="0.075" />
+                </Texture>
             </Layer>
             <Layer level="ARTWORK">
-
                 <Texture parentKey="foreground"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinUntrackedCenterGray.png"
+                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinForegroundUntracked.png"
                     setAllPoints="true"
                     texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="OVERLAY">
                 <Texture parentKey="icon"
                     hidden="true" texelSnappingBias="0" snapToPixelGrid="false" useAtlasSize="true">
-
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />

@@ -5,40 +5,34 @@ local MapPinEnhanced = select(2, ...)
 ---@field pulse AnimationGroup
 
 ---@class MapPinEnhancedBasePinTemplate : Frame
----@field shadow Texture
----@field background Texture
----@field highlight Texture
----@field outline Texture
----@field foreground Texture
----@field icon Texture
+---@field shadow Texture -- static shadow
+---@field background Texture -- static blackbackground
+---@field highlight Texture -- hover highlight
+---@field outline Texture -- an outline texture to show when the pin is untracked
+---@field foreground Texture -- the main texture that is colored and changes when an icon is set
+---@field icon Texture -- the icon texture that is shown when an icon is set
 ---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
 ---@field pulseTimer FunctionContainer | nil
 ---@field activeColor string | nil
 ---@field tooltipData PinTooltip | nil
 ---@field pinID UUID | nil
+---@field color ColorMixin | nil
+---@field iconVisible boolean
 MapPinEnhancedBasePinMixin = {}
 
+local assetsPath = MapPinEnhanced.assetsPath
 
----@enum (key) PinColors
-local PIN_COLORS_BY_NAME = {
-    ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
-    ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
-    ["Pale"] = CreateColor(0.898, 0.659, 0.369, 1),
-    ["Yellow"] = CreateColor(0.949, 0.788, 0.149, 1),
-    ["Green"] = CreateColor(0.404, 0.788, 0.263, 1),
-    ["LightBlue"] = CreateColor(0.318, 0.757, 0.878, 1),
-    ["DarkBlue"] = CreateColor(0.239, 0.239, 0.976, 1),
-    ["Purple"] = CreateColor(0.549, 0.314, 0.886, 1),
-    ["Pink"] = CreateColor(0.886, 0.427, 0.843, 1),
-}
+local DEFAULT_TRACKED_COLOR = CreateColor(0.949, 0.788, 0.149, 1)
+local DEFAULT_UNTRACKED_COLOR = CreateColor(0.482, 0.314, 0.075, 1)
 
-local UNTRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinUntrackedCenterGray.png"
-local TRACKED_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinTrackedGray.png"
-local ICON_FOREGROUND = "Interface\\AddOns\\MapPinEnhanced\\assets\\pins\\PinIconTesterNoCircle.png"
+local FOREGROUND_ICON = assetsPath .. "\\pins\\PinForegroundIcon.png"
+local FOREGROUND_TRACKED = assetsPath .. "\\pins\\PinForegroundTracked.png"
+local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 
 function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
     if not icon then
         self.icon:Hide()
+        self.iconVisible = false
         return
     end
     if (usesAtlas) then
@@ -47,6 +41,7 @@ function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
         self.icon:SetTexture(icon)
     end
     self.icon:Show()
+    self.iconVisible = true
 end
 
 function MapPinEnhancedBasePinMixin:ShowPulse()
@@ -71,16 +66,32 @@ function MapPinEnhancedBasePinMixin:HidePulse()
     self.pulseHighlight:Hide()
 end
 
+function MapPinEnhancedBasePinMixin:UpdateTrackedTexture()
+    local iconVisible = self.iconVisible
+    local foreGroundTexture = iconVisible and FOREGROUND_ICON or FOREGROUND_TRACKED
+
+    self.foreground:SetTexture(foreGroundTexture)
+    self.outline:Hide()
+
+    if iconVisible then
+        self:SetPinColor(DEFAULT_TRACKED_COLOR)
+    end
+end
+
+function MapPinEnhancedBasePinMixin:UpdateUntrackedTexture()
+    local iconVisible = self.iconVisible
+    local foreGroundTexture = iconVisible and FOREGROUND_ICON or FOREGROUND_UNTRACKED
+    self.foreground:SetTexture(foreGroundTexture)
+    self.outline:Show()
+
+    if iconVisible then
+        self:SetPinColor(DEFAULT_UNTRACKED_COLOR)
+    end
+end
+
 ---@param skipAnimation boolean?
 function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
-    if self.icon:IsShown() then
-        self.foreground:SetTexture(ICON_FOREGROUND)
-        self.foreground:SetVertexColor(0.949, 0.788, 0.149, 1)
-        self.outline:Hide()
-    else
-        self.foreground:SetTexture(UNTRACKED_FOREGROUND)
-        self.outline:Show()
-    end
+    self:UpdateTrackedTexture()
     if skipAnimation then
         self.pulseHighlight.pulse:Stop()
         self.pulseHighlight:Hide()
@@ -90,44 +101,15 @@ function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
-    if self.icon:IsShown() then
-        self.foreground:SetTexture(ICON_FOREGROUND)
-        self.foreground:SetVertexColor(0.4980, 0.2902, 0.1843, 1)
-        self.outline:Hide()
-    else
-        self.foreground:SetTexture(UNTRACKED_FOREGROUND)
-        self.outline:Show()
-    end
+    self:UpdateUntrackedTexture()
 end
 
----@return ColorMixin?
-function MapPinEnhancedBasePinMixin:GetColorValue()
-    if not self.activeColor then
-        return nil
-    end
-    local pinColor = PIN_COLORS_BY_NAME[self.activeColor]
-    if not pinColor then
-        return nil
-    end
-    return pinColor
-end
-
----@param color PinColors
+---@param color ColorMixin
 function MapPinEnhancedBasePinMixin:SetPinColor(color)
-    if color == 'custom' then
-        return
-    end
-    local pinColor = PIN_COLORS_BY_NAME[color]
-    ---@type number, number, number, number?
-    local r, g, b, a
-    if pinColor then
-        r, g, b, a = pinColor:GetRGBA()
-    else
-        r, g, b, a = 1, 1, 1, 1
-    end
+    self.color = color
+    local r, g, b, a = color:GetRGBA()
     self.foreground:SetVertexColor(r, g, b, a)
     self.pulseHighlight:SetVertexColor(r, g, b, a)
-    self.activeColor = color
 end
 
 ---@param tooltipData PinTooltip
