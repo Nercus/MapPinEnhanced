@@ -17,6 +17,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field tooltipData PinTooltip | nil
 ---@field pinID UUID | nil
 ---@field color ColorMixin | nil
+---@field tracked boolean
 ---@field iconVisible boolean
 MapPinEnhancedBasePinMixin = {}
 
@@ -29,7 +30,12 @@ local FOREGROUND_ICON = assetsPath .. "\\pins\\PinForegroundIcon.png"
 local FOREGROUND_TRACKED = assetsPath .. "\\pins\\PinForegroundTracked.png"
 local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 
-function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
+
+---@param icon string? texture path or atlas name
+---@param usesAtlas boolean? if true, the icon parameter is an atlas name, otherwise it is a texture path
+---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
+---@param scale number? optional scale for the icon, if not set, it will be 1
+function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas, offset, scale)
     if not icon then
         self.icon:Hide()
         self.iconVisible = false
@@ -40,8 +46,25 @@ function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas)
     else
         self.icon:SetTexture(icon)
     end
+    self.icon:ClearAllPoints()
+    if offset then
+        self.icon:SetPoint("CENTER", offset.x, offset.y)
+    else
+        self.icon:SetPoint("CENTER", 0, 0)
+    end
+    if scale then
+        self.icon:SetScale(scale)
+    else
+        self.icon:SetScale(1)
+    end
+
     self.icon:Show()
     self.iconVisible = true
+    if self.tracked then
+        self:SetTextureColor(DEFAULT_TRACKED_COLOR)
+    else
+        self:SetTextureColor(DEFAULT_UNTRACKED_COLOR)
+    end
 end
 
 function MapPinEnhancedBasePinMixin:ShowPulse()
@@ -66,7 +89,7 @@ function MapPinEnhancedBasePinMixin:HidePulse()
     self.pulseHighlight:Hide()
 end
 
-function MapPinEnhancedBasePinMixin:UpdateTrackedTexture()
+function MapPinEnhancedBasePinMixin:SetTrackedTexture()
     local iconVisible = self.iconVisible
     local foreGroundTexture = iconVisible and FOREGROUND_ICON or FOREGROUND_TRACKED
 
@@ -74,24 +97,33 @@ function MapPinEnhancedBasePinMixin:UpdateTrackedTexture()
     self.outline:Hide()
 
     if iconVisible then
-        self:SetPinColor(DEFAULT_TRACKED_COLOR)
+        self:SetTextureColor(DEFAULT_TRACKED_COLOR)
     end
 end
 
-function MapPinEnhancedBasePinMixin:UpdateUntrackedTexture()
+function MapPinEnhancedBasePinMixin:SetUntrackedTexture()
     local iconVisible = self.iconVisible
     local foreGroundTexture = iconVisible and FOREGROUND_ICON or FOREGROUND_UNTRACKED
     self.foreground:SetTexture(foreGroundTexture)
     self.outline:Show()
 
     if iconVisible then
-        self:SetPinColor(DEFAULT_UNTRACKED_COLOR)
+        self:SetTextureColor(DEFAULT_UNTRACKED_COLOR)
+    end
+end
+
+function MapPinEnhancedBasePinMixin:UpdateTextureState()
+    if self.tracked then
+        self:SetTrackedTexture()
+    else
+        self:SetUntrackedTexture()
     end
 end
 
 ---@param skipAnimation boolean?
 function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
-    self:UpdateTrackedTexture()
+    self.tracked = true
+    self:SetTrackedTexture()
     if skipAnimation then
         self.pulseHighlight.pulse:Stop()
         self.pulseHighlight:Hide()
@@ -101,15 +133,25 @@ function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
 end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
-    self:UpdateUntrackedTexture()
+    self.tracked = false
+    self:SetUntrackedTexture()
 end
 
 ---@param color ColorMixin
-function MapPinEnhancedBasePinMixin:SetPinColor(color)
+function MapPinEnhancedBasePinMixin:SetTextureColor(color)
+    if not color then return end
+    if self.color and self.color:IsEqualTo(color) then return end
     self.color = color
     local r, g, b, a = color:GetRGBA()
     self.foreground:SetVertexColor(r, g, b, a)
     self.pulseHighlight:SetVertexColor(r, g, b, a)
+    self:UpdateTextureState()
+end
+
+---@param color ColorMixin
+function MapPinEnhancedBasePinMixin:SetPinColor(color)
+    self:SetPinIcon(nil)
+    self:SetTextureColor(color)
 end
 
 ---@param tooltipData PinTooltip

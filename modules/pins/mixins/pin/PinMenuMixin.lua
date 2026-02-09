@@ -1,6 +1,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class Pins
+local Pins = MapPinEnhanced:GetModule("Pins")
+
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinMenuMixin = {}
 
@@ -8,29 +11,12 @@ local L = MapPinEnhanced.L
 
 local MENU_COLOR_BUTTON_PATTERN =
 "|TInterface\\AddOns\\MapPinEnhanced\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
-local PIN_COLORS_BY_NAME = {
-    ["Yellow"] = CreateColorFromBytes(237, 179, 20, 1),
-    ["Green"] = CreateColorFromBytes(96, 236, 29, 1),
-    ["LightBlue"] = CreateColorFromBytes(132, 196, 237, 1),
-    ["DarkBlue"] = CreateColorFromBytes(42, 93, 237, 1),
-    ["Purple"] = CreateColorFromBytes(190, 139, 237, 1),
-    ["Pink"] = CreateColorFromBytes(251, 109, 197, 1),
-    ["Red"] = CreateColorFromBytes(235, 15, 14, 1),
-    ["Orange"] = CreateColorFromBytes(237, 114, 63, 1),
-    ["Pale"] = CreateColorFromBytes(235, 183, 139, 1),
-}
-
-
 local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
-local PIN_ICONS = {
-    "DungeonStoneCheckpoint",
-    "Dungeon",
-    "Raid",
-    "poi-islands-table",
-    "VignetteKill-SuperTracked",
-    "poi-transmogrifier"
-}
-local PIN_ICON_MENU_COLUMNS = Round(math.sqrt(#PIN_ICONS) - 0.5)
+
+
+local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
+local PIN_ICONS = Pins.PIN_ICONS
+local PIN_ICON_MENU_COLUMNS = 3
 
 
 ---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
@@ -52,6 +38,7 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
                     table.insert(colorMenu, {
                         type = "radio",
                         label = label,
+                        style = "custom",
                         isSelected = function()
                             return self:PinHasColor(colorName)
                         end,
@@ -72,15 +59,15 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             type = "submenu",
             entries = function()
                 local iconMenu = {}
-                for _, icon in ipairs(PIN_ICONS) do
+                for _, icon in pairs(PIN_ICONS) do
                     table.insert(iconMenu, {
                         type = "radio",
-                        label = string.format(MENU_ICON_BUTTON_PATTERN, icon),
+                        label = string.format(MENU_ICON_BUTTON_PATTERN, icon.path),
                         isSelected = function()
-                            return self.pinData.texture == icon
+                            return self.pinData.texture == icon.path
                         end,
                         setSelected = function()
-                            self:SetPinIcon(icon, true)
+                            self:SetPinIcon(icon.path, icon.usesAtlas, icon.offset, icon.scale)
                         end,
                         data = icon
                     })

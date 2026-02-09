@@ -1,13 +1,16 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class Pins
+local Pins = MapPinEnhanced:GetModule("Pins")
+
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinColorMixin = {}
 
-local DEFAULT_PIN_COLOR = "Yellow"
+
 
 ---@enum (key) PinColors
-local PIN_COLORS_BY_NAME = {
+Pins.PIN_COLORS_BY_NAME = {
     ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
     ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
     ["Pale"] = CreateColor(0.898, 0.659, 0.369, 1),
@@ -19,12 +22,14 @@ local PIN_COLORS_BY_NAME = {
     ["Pink"] = CreateColor(0.886, 0.427, 0.843, 1),
 }
 
----@param color PinColors | "Custom"
+Pins.DEFAULT_PIN_COLOR = "Yellow"
+
+---@param color PinColors
 function MapPinEnhancedPinColorMixin:SetPinColor(color)
     if not color then
-        color = DEFAULT_PIN_COLOR
+        color = Pins.DEFAULT_PIN_COLOR
     end
-    local colorValue = PIN_COLORS_BY_NAME[color] or DEFAULT_PIN_COLOR
+    local colorValue = Pins.PIN_COLORS_BY_NAME[color]
     self.worldmapPin:SetPinColor(colorValue)
     self.minimapPin:SetPinColor(colorValue)
     self.supertrackedPin:SetPinColor(colorValue)
@@ -42,14 +47,14 @@ function MapPinEnhancedPinColorMixin:SetPinColor(color)
         self.supertrackedPin:SetUntracked()
     end
 
-    if color ~= "Custom" then
-        self.worldmapPin:SetPinIcon(nil, nil)
-        self.minimapPin:SetPinIcon(nil, nil)
-        self.trackerEntry:SetPinIcon(nil, nil)
-        self.supertrackedPin:SetPinIcon(nil, nil)
-    end
+    self.worldmapPin:SetPinIcon(nil, nil)
+    self.minimapPin:SetPinIcon(nil, nil)
+    self.trackerEntry:SetPinIcon(nil, nil)
+    self.supertrackedPin:SetPinIcon(nil, nil)
 
-    self.pinData.color = color or DEFAULT_PIN_COLOR
+    self.pinData.color = color
+    self.pinData.texture = nil
+    self.pinData.usesAtlas = nil
     self:PersistPin()
 end
 
@@ -61,20 +66,125 @@ function MapPinEnhancedPinColorMixin:PinHasColor(color)
     return self.pinData.color == color
 end
 
-function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas)
-    self.worldmapPin:SetPinIcon(icon, usesAtlas)
-    self.minimapPin:SetPinIcon(icon, usesAtlas)
-    self.trackerEntry:SetPinIcon(icon, usesAtlas)
-    self.supertrackedPin:SetPinIcon(icon, usesAtlas)
+---@class PinIcon
+---@field path string the path to the icon, if usesAtlas is true, this is the atlas name
+---@field usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
+---@field offset {x: number, y: number}? optional offset for the icon, if not set, it will be
+---@field scale number? optional scale for the icon, if not set, it will be 1
+
+---@type PinIcon[] different icon that have some offsets and information about how to use them, icons outside this list can still be used but may look weird in some cases
+Pins.PIN_ICONS = {
+    ["delves-bountiful"] = {
+        path = "delves-bountiful",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["delves-regular"] = {
+        path = "delves-regular",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["Dungeon"] = {
+        path = "Dungeon",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1.3
+    },
+    ["Raid"] = {
+        path = "Raid",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1.3
+    },
+    ["VignetteKill-SuperTracked"] = {
+        path = "VignetteKill-SuperTracked",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["VignetteKill"] = {
+        path = "VignetteKill",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["minimap-genericevent-hornicon-supertracked"] = {
+        path = "minimap-genericevent-hornicon-supertracked",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["questbonusobjective-SuperTracked"] = {
+        path = "questbonusobjective-SuperTracked",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["vignettekillboss-SuperTracked"] = {
+        path = "vignettekillboss-SuperTracked",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["VignetteKillElite-SuperTracked"] = {
+        path = "VignetteKillElite-SuperTracked",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["QuestNormal"] = {
+        path = "QuestNormal",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["TaxiNode_Continent_Alliance"] = {
+        path = "TaxiNode_Continent_Alliance",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["AllianceWarfrontMapBanner"] = {
+        path = "AllianceWarfrontMapBanner",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+    ["HordeWarfrontMapBanner"] = {
+        path = "HordeWarfrontMapBanner",
+        usesAtlas = true,
+        offset = { x = 0, y = 0 },
+        scale = 1
+    },
+}
+
+
+---@param icon PinIcon | string the icon to set, if usesAtlas is true, this is the atlas name, otherwise it is a file path
+---@param usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
+---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
+---@param scale number? optional scale for the icon, if not set, it will be 1
+function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas, offset, scale)
+    if Pins.PIN_ICONS[icon] then
+        local pinConfig = Pins.PIN_ICONS[icon]
+        usesAtlas = pinConfig.usesAtlas
+        offset = pinConfig.offset
+        scale = pinConfig.scale
+    end
 
     if icon then
         self.pinData.texture = icon
         self.pinData.usesAtlas = usesAtlas
-        self:SetPinColor("Custom")
+        self.pinData.color = nil
     else
         self.pinData.texture = nil
         self.pinData.usesAtlas = nil
-        self:SetPinColor(self.pinData.color or DEFAULT_PIN_COLOR)
+        self.pinData.color = self.pinData.color or Pins.DEFAULT_PIN_COLOR
     end
-    -- persist in here is not needed as we also set the pin color
+
+    self.worldmapPin:SetPinIcon(icon, usesAtlas, offset, scale)
+    self.minimapPin:SetPinIcon(icon, usesAtlas, offset, scale)
+    self.trackerEntry:SetPinIcon(icon, usesAtlas, offset, scale)
+    self.supertrackedPin:SetPinIcon(icon, usesAtlas, offset, scale)
 end

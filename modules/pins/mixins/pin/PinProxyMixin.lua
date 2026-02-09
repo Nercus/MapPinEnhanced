@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedPinProxyMixin = {}
 
 ---@class PinProxy
----@field SetPinColor fun(self: PinProxy, color: PinColors | "Custom")
+---@field SetPinColor fun(self: PinProxy, color: PinColors)
 ---@field SetPinIcon fun(self: PinProxy, icon: string, usesAtlas: boolean)
 ---@field SetTooltip fun(self: PinProxy, tooltip: string)
 ---@field Track fun(self: PinProxy)

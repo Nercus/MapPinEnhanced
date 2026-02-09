@@ -94,10 +94,6 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.y = self.pinData.y / 100
     end
 
-    if self.pinData.texture then
-        self.pinData.color = "Custom"
-    end
-
     if not self.pinData.title or self.pinData.title == "" then
         self.pinData.title = DEFAULT_PIN_NAME
     end
