@@ -30,10 +30,15 @@ end
 ---@param funcList fun()[]
 ---@param onUpdate fun(progress: integer, maxProgress: integer)?
 ---@param onFinish fun()?
-function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish)
+---@param batchSize integer? number of functions to execute per batch, defaults to 1
+function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize)
     assert(type(funcList) == "table", "Function list not provided")
     assert(type(onUpdate) == "function" or onUpdate == nil, "OnUpdate not a function")
     assert(type(onFinish) == "function" or onFinish == nil, "OnFinish not a function")
+    if not batchSize or batchSize < 1 then
+        batchSize = 1
+    end
+
     local frameRate = GetFramerate()
     if frameRate == 0 then frameRate = 1 end
     local delay = 1 / frameRate
@@ -41,12 +46,19 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish)
     ---@async
     local function Worker()
         local maxProgress = #funcList
-        local nextTime = coroutine.yield()
-        for i = 1, maxProgress do
-            funcList[i]()
-            if onUpdate then onUpdate(i, maxProgress) end
-            if GetTimePreciseSec() > nextTime then
-                nextTime = coroutine.yield()
+        local i = 1
+        while i <= maxProgress do
+            -- Execute a BATCH of functions
+            local batchEnd = math.min(i + batchSize - 1, maxProgress)
+            for j = i, batchEnd do
+                funcList[j]()
+                if onUpdate then onUpdate(j, maxProgress) end
+            end
+            i = batchEnd + 1
+
+            -- Yield after each batch (except the last)
+            if i <= maxProgress then
+                coroutine.yield()
             end
         end
     end

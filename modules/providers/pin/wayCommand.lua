@@ -216,12 +216,10 @@ end
 ---@param wayString string
 function Providers:ImportFromWayString(wayString)
     -- iterate over newlines
-    local pinData = self:DeserializeWayString(wayString)
+    local pinsData = self:DeserializeWayString(wayString)
     local temporaryImportGroup = Groups:GetGroupByName(L["Temporary Import"])
     if not temporaryImportGroup then return end
-    for _, data in ipairs(pinData) do
-        temporaryImportGroup:AddPin(data)
-    end
+    temporaryImportGroup:AddMultiplePins(pinsData)
 end
 
 ---create a wayString from pinData

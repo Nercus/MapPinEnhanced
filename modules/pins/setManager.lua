@@ -80,10 +80,7 @@ function Sets:RestoreSet(setData)
     if not set then
         set = self:CreateSet(setData.name)
     end
-
-    for _, pinData in ipairs(setData.pins or {}) do
-        set:AddPin(pinData)
-    end
+    set:AddMultiplePins(setData.pins)
 end
 
 function Sets:RestoreAllSets()
@@ -103,16 +100,4 @@ end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Sets:RestoreAllSets()
-    -- Create a test set with test pins and load it
-    local testSetName = "TestSet"
-    local testPins = {
-        { x = 0.25, y = 0.75, mapID = 123, title = "Pin 1" },
-        { x = 0.50, y = 0.50, mapID = 123, title = "Pin 2" },
-        { x = 0.80, y = 0.20, mapID = 123, title = "Pin 3" },
-    }
-
-    local testSet = Sets:CreateSet(testSetName)
-    for _, pinData in ipairs(testPins) do
-        testSet:AddPin(pinData)
-    end
 end)

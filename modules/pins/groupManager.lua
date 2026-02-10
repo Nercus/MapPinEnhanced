@@ -130,12 +130,7 @@ function Groups:RestoreGroup(groupData)
         group = self:RegisterGroup(groupData)
     end
     assert(group, "Groups:RestoreGroup: group is nil after registration")
-    ---@param pinData SaveablePinData
-    for _, pinData in ipairs(groupData.pins) do
-        assert(pinData, "Groups:RestoreGroup: pinData is nil")
-        assert(type(pinData) == "table", "Groups:RestoreGroup: pinData must be a table")
-        group:AddPin(pinData, pinData.pinID)
-    end
+    group:AddMultiplePins(groupData.pins)
 end
 
 function Groups:RestoreAllGroups()
