@@ -42,6 +42,7 @@ local DEFAULT_GROUPS = {
 function Groups:GetAllGroups()
     local groups = {}
     local groupsPool = Groups:GetObjectPool()
+    ---@param group MapPinEnhancedPinGroupMixin
     for group in groupsPool:EnumerateActive() do
         table.insert(groups, group)
     end

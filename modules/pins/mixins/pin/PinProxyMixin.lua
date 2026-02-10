@@ -18,11 +18,11 @@ function MapPinEnhancedPinProxyMixin:GetProxy()
     local proxy = {}
 
     proxy.SetPinColor = function(_, color)
-        self:SetPinColor(color)
+        self:SetColor(color)
     end
 
     proxy.SetPinIcon = function(_, icon, usesAtlas)
-        self:SetPinIcon(icon, usesAtlas)
+        self:SetIcon(icon, usesAtlas)
     end
 
     proxy.SetTooltip = function(_, tooltipInfo)

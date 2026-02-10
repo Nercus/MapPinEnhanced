@@ -8,8 +8,6 @@
 ---@field mapID number UIMapID of the zone
 ---@field x number x coordinate between 0 and 1
 ---@field y number y coordinate between 0 and 1
----@field pinType Enum.SuperTrackingMapPinType? optional pin type when blizzard map pin
----@field typeID number? optional typeID when blizzard map pin
 ---@field setTracked boolean? set to true to auto-track this pin on creation
 ---@field title string? title of the pin
 ---@field texture string? an optional texture to use for the pin this will override the color

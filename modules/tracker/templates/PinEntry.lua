@@ -15,8 +15,8 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
 
     pin.trackerEntry:SetTreeNode(treeNode)
     pin.trackerEntry:SetFrame(self)
-    self.pin:SetPinColor(pin.pinData.color)
-    self.pin:SetPinIcon(pin.pinData.texture, pin.pinData.usesAtlas)
+    self.pin:SetColor(pin.pinData.color)
+    self.pin:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnMouseDown(button)

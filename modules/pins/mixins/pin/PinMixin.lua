@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field initialized boolean
 ---@field worldmapPin MapPinEnhancedWorldmapPinTemplate
 ---@field minimapPin MapPinEnhancedMinimapPinTemplate
----@field supertrackedPin MapPinEnhancedSuperTrackedPinTemplate
 ---@field trackerEntry MapPinEnhancedTrackerPinMixin
 ---@field pinData pinData
 ---@field isTracked boolean? -- whether this pin is currently tracked
@@ -27,7 +26,7 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 
 ---@class Pins
 ---@field trackerObjectPool ObjectPool<MapPinEnhancedTrackerPinMixin>
----@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedSuperTrackedPinTemplate>
+---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Distance = MapPinEnhanced:GetModule("Distance")
@@ -67,7 +66,6 @@ function MapPinEnhancedPinMixin:Init(pinID)
     local framePool = Pins:GetFramePool()
     self.worldmapPin = framePool:Acquire('MapPinEnhancedWorldmapPinTemplate')
     self.minimapPin = framePool:Acquire('MapPinEnhancedMinimapPinTemplate')
-    self.supertrackedPin = framePool:Acquire('MapPinEnhancedSuperTrackedPinTemplate')
 
     local trackerObjectPool = Pins:GetTrackerObjectPool()
     self.trackerEntry = trackerObjectPool:Acquire()
@@ -111,11 +109,10 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.tooltip = { title = self.pinData.title, text = source }
     end
 
-    self:SetPinColor(self.pinData.color)
-    self:SetPinIcon(self.pinData.texture, self.pinData.usesAtlas)
+    self:SetColor(self.pinData.color)
+    self:SetIcon(self.pinData.texture, self.pinData.usesAtlas)
     self:SetTooltip(self.pinData.tooltip)
-    self:SetPinTitle(self.pinData.title)
-
+    self:SetTitle(self.pinData.title)
 
     if self.pinData.setTracked then
         self:Track()
@@ -156,7 +153,6 @@ function MapPinEnhancedPinMixin:Reset()
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
-    framePool:Release(self.supertrackedPin)
 
     local trackerObjectPool = Pins:GetTrackerObjectPool()
     trackerObjectPool:Release(self.trackerEntry)

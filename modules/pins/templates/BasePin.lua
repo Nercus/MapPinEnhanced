@@ -35,7 +35,7 @@ local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 ---@param usesAtlas boolean? if true, the icon parameter is an atlas name, otherwise it is a texture path
 ---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
 ---@param scale number? optional scale for the icon, if not set, it will be 1
-function MapPinEnhancedBasePinMixin:SetPinIcon(icon, usesAtlas, offset, scale)
+function MapPinEnhancedBasePinMixin:SetIcon(icon, usesAtlas, offset, scale)
     if not icon then
         self.icon:Hide()
         self.iconVisible = false
@@ -149,8 +149,8 @@ function MapPinEnhancedBasePinMixin:SetTextureColor(color)
 end
 
 ---@param color ColorMixin
-function MapPinEnhancedBasePinMixin:SetPinColor(color)
-    self:SetPinIcon(nil)
+function MapPinEnhancedBasePinMixin:SetColor(color)
+    self:SetIcon(nil)
     self:SetTextureColor(color)
 end
 

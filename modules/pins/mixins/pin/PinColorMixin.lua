@@ -25,32 +25,28 @@ Pins.PIN_COLORS_BY_NAME = {
 Pins.DEFAULT_PIN_COLOR = "Yellow"
 
 ---@param color PinColors
-function MapPinEnhancedPinColorMixin:SetPinColor(color)
+function MapPinEnhancedPinColorMixin:SetColor(color)
     if not color then
         color = Pins.DEFAULT_PIN_COLOR
     end
     local colorValue = Pins.PIN_COLORS_BY_NAME[color]
-    self.worldmapPin:SetPinColor(colorValue)
-    self.minimapPin:SetPinColor(colorValue)
-    self.supertrackedPin:SetPinColor(colorValue)
+    self.worldmapPin:SetColor(colorValue)
+    self.minimapPin:SetColor(colorValue)
     self.trackerEntry:SetPinColor(colorValue)
 
     if self:IsTracked() then
         self.worldmapPin:SetTracked()
         self.minimapPin:SetTracked()
         self.trackerEntry:SetTracked()
-        self.supertrackedPin:SetTracked()
     else
         self.worldmapPin:SetUntracked()
         self.minimapPin:SetUntracked()
         self.trackerEntry:SetUntracked()
-        self.supertrackedPin:SetUntracked()
     end
 
-    self.worldmapPin:SetPinIcon(nil, nil)
-    self.minimapPin:SetPinIcon(nil, nil)
+    self.worldmapPin:SetIcon(nil, nil)
+    self.minimapPin:SetIcon(nil, nil)
     self.trackerEntry:SetPinIcon(nil, nil)
-    self.supertrackedPin:SetPinIcon(nil, nil)
 
     self.pinData.color = color
     self.pinData.texture = nil
@@ -58,7 +54,7 @@ function MapPinEnhancedPinColorMixin:SetPinColor(color)
     self:PersistPin()
 end
 
-function MapPinEnhancedPinColorMixin:PinHasColor(color)
+function MapPinEnhancedPinColorMixin:HasColor(color)
     if not self.pinData.color then
         return false
     end
@@ -165,7 +161,7 @@ Pins.PIN_ICONS = {
 ---@param usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
 ---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
 ---@param scale number? optional scale for the icon, if not set, it will be 1
-function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas, offset, scale)
+function MapPinEnhancedPinColorMixin:SetIcon(icon, usesAtlas, offset, scale)
     if Pins.PIN_ICONS[icon] then
         local pinConfig = Pins.PIN_ICONS[icon]
         usesAtlas = pinConfig.usesAtlas
@@ -183,8 +179,7 @@ function MapPinEnhancedPinColorMixin:SetPinIcon(icon, usesAtlas, offset, scale)
         self.pinData.color = self.pinData.color or Pins.DEFAULT_PIN_COLOR
     end
 
-    self.worldmapPin:SetPinIcon(icon, usesAtlas, offset, scale)
-    self.minimapPin:SetPinIcon(icon, usesAtlas, offset, scale)
+    self.worldmapPin:SetIcon(icon, usesAtlas, offset, scale)
+    self.minimapPin:SetIcon(icon, usesAtlas, offset, scale)
     self.trackerEntry:SetPinIcon(icon, usesAtlas, offset, scale)
-    self.supertrackedPin:SetPinIcon(icon, usesAtlas, offset, scale)
 end

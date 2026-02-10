@@ -12,34 +12,17 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self:SuperTrackLocation()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
-    self.supertrackedPin:SetTracked()
-    self.supertrackedPin:Show()
     if self.trackerEntry then
         self.trackerEntry:SetTracked()
     end
     self.isTracked = true
     Tracking:SetTrackedPin(self)
     self:PersistPin()
-
-    Distance:EnableDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y, function(distance, timeToTarget)
-        if not self:IsTracked() then return end
-        if distance < 0 then distance = 0 end
-        if timeToTarget < 0 then timeToTarget = 0 end
-
-        self.supertrackedPin:UpdateTimeText(timeToTarget)
-        if distance < 100 then
-            self.supertrackedPin:SetStyle("grounded")
-        else
-            self.supertrackedPin:SetStyle("beacon")
-        end
-    end)
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
-    self.supertrackedPin:SetUntracked()
-    self.supertrackedPin:Hide()
     if self.trackerEntry then
         self.trackerEntry:SetUntracked()
     end
@@ -102,25 +85,13 @@ function MapPinEnhancedPinTrackingMixin:SetBlizzardMapPin(pinType, typeID)
 end
 
 function MapPinEnhancedPinTrackingMixin:SuperTrackLocation()
-    local x, y, mapID, pinType, typeID = self.pinData.x, self.pinData.y, self.pinData.mapID, self.pinData.pinType,
-        self.pinData.typeID
-
-    if pinType and typeID then
-        self:SetBlizzardMapPin(pinType, typeID)
-    else
-        self:SetUserWaypoint(x, y, mapID)
-    end
+    local x, y, mapID = self.pinData.x, self.pinData.y, self.pinData.mapID
+    self:SetUserWaypoint(x, y, mapID)
 end
 
 function MapPinEnhancedPinTrackingMixin:ClearLocation()
-    local pinType, typeID = self.pinData.pinType, self.pinData.typeID
-
-    if pinType and typeID then
-        C_SuperTrack.ClearSuperTrackedMapPin()
-    else
-        if C_Map.HasUserWaypoint() then
-            C_Map.ClearUserWaypoint()
-        end
-        C_SuperTrack.ClearAllSuperTracked()
+    if C_Map.HasUserWaypoint() then
+        C_Map.ClearUserWaypoint()
     end
+    C_SuperTrack.ClearAllSuperTracked()
 end

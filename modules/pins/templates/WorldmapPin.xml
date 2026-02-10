@@ -7,7 +7,6 @@
         inherits="MapPinEnhancedBasePinTemplate"
         registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="25" y="25" />
-
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

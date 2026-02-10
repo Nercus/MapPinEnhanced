@@ -40,10 +40,10 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
                         label = label,
                         style = "custom",
                         isSelected = function()
-                            return self:PinHasColor(colorName)
+                            return self:HasColor(colorName)
                         end,
                         setSelected = function()
-                            self:SetPinColor(colorName)
+                            self:SetColor(colorName)
                         end,
                         data = colorName
                     })
@@ -67,7 +67,7 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
                             return self.pinData.texture == icon.path
                         end,
                         setSelected = function()
-                            self:SetPinIcon(icon.path, icon.usesAtlas, icon.offset, icon.scale)
+                            self:SetIcon(icon.path, icon.usesAtlas, icon.offset, icon.scale)
                         end,
                         data = icon
                     })

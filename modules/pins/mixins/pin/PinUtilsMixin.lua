@@ -27,6 +27,6 @@ function MapPinEnhancedPinUtilsMixin:ShowOnMap()
     end, L["The world map cannot be opened automatically during combat. It will open after combat ends."])
 end
 
-function MapPinEnhancedPinUtilsMixin:SetPinTitle(title)
-    self.supertrackedPin:SetTitle(title)
+---@param title string
+function MapPinEnhancedPinUtilsMixin:SetTitle(title)
 end

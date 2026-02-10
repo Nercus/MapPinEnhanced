@@ -35,7 +35,7 @@ function MapPinEnhancedTrackerPinMixin:SetPinColor(color)
     if not frame then
         return
     end
-    frame.pinFrame:SetPinColor(color)
+    frame.pinFrame:SetColor(color)
 end
 
 function MapPinEnhancedTrackerPinMixin:SetPinIcon(icon, usesAtlas, offset, scale)
@@ -43,7 +43,7 @@ function MapPinEnhancedTrackerPinMixin:SetPinIcon(icon, usesAtlas, offset, scale
     if not frame then
         return
     end
-    frame.pinFrame:SetPinIcon(icon, usesAtlas, offset, scale)
+    frame.pinFrame:SetIcon(icon, usesAtlas, offset, scale)
 end
 
 ---@param skipAnimation boolean?
