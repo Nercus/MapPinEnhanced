@@ -13,8 +13,6 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
     local pin = treeNode:GetData()
     self.pin = pin
 
-    pin.trackerEntry:SetTreeNode(treeNode)
-    pin.trackerEntry:SetFrame(self)
     self.pin:SetColor(pin.pinData.color)
     self.pin:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
 end

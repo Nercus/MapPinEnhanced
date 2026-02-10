@@ -2,16 +2,16 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
----@field groupsPool ObjectPool<MapPinEnhancedPinGroupMixin>
+---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
 local function CreateGroupObject()
-    return CreateAndInitFromMixin(MapPinEnhancedPinGroupMixin)
+    return CreateAndInitFromMixin(MapPinEnhancedGroupMixin)
 end
 
----@param group MapPinEnhancedPinGroupMixin
+---@param group MapPinEnhancedGroupMixin
 local function ResetGroupObject(_, group)
     group:Reset()
 end
@@ -42,7 +42,7 @@ local DEFAULT_GROUPS = {
 function Groups:GetAllGroups()
     local groups = {}
     local groupsPool = Groups:GetObjectPool()
-    ---@param group MapPinEnhancedPinGroupMixin
+    ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
         table.insert(groups, group)
     end
@@ -50,14 +50,14 @@ function Groups:GetAllGroups()
 end
 
 ---@param groupInfo GroupInfo
----@return MapPinEnhancedPinGroupMixin?
-function Groups:RegisterPinGroup(groupInfo)
-    assert(groupInfo, "Groups:RegisterPinGroup: groupInfo is nil")
-    assert(groupInfo.name, "Groups:RegisterPinGroup: groupInfo.name is nil")
-    assert(type(groupInfo.name) == "string", "Groups:RegisterPinGroup: groupInfo.name must be a string")
-    assert(groupInfo.source, "Groups:RegisterPinGroup: groupInfo.source is nil")
-    assert(type(groupInfo.source) == "string", "Groups:RegisterPinGroup: groupInfo.source must be a string")
-    assert(C_AddOns.IsAddOnLoaded(groupInfo.source), "Groups:RegisterPinGroup: groupInfo.source is not a loaded addon")
+---@return MapPinEnhancedGroupMixin?
+function Groups:RegisterGroup(groupInfo)
+    assert(groupInfo, "Groups:RegisterGroup: groupInfo is nil")
+    assert(groupInfo.name, "Groups:RegisterGroup: groupInfo.name is nil")
+    assert(type(groupInfo.name) == "string", "Groups:RegisterGroup: groupInfo.name must be a string")
+    assert(groupInfo.source, "Groups:RegisterGroup: groupInfo.source is nil")
+    assert(type(groupInfo.source) == "string", "Groups:RegisterGroup: groupInfo.source must be a string")
+    assert(C_AddOns.IsAddOnLoaded(groupInfo.source), "Groups:RegisterGroup: groupInfo.source is not a loaded addon")
 
     local existingGroup = self:GetGroupByName(groupInfo.name)
     if existingGroup then
@@ -73,10 +73,10 @@ function Groups:RegisterPinGroup(groupInfo)
     return group
 end
 
-function Groups:UnregisterPinGroup(group)
-    assert(group, "Groups:UnregisterPinGroup: group is nil")
-    assert(type(group) == "table", "Groups:UnregisterPinGroup: group must be a table")
-    assert(group.Reset, "Groups:UnregisterPinGroup: group must be a MapPinEnhancedPinGroupMixin object")
+function Groups:UnregisterGroup(group)
+    assert(group, "Groups:UnregisterGroup: group is nil")
+    assert(type(group) == "table", "Groups:UnregisterGroup: group must be a table")
+    assert(group.Reset, "Groups:UnregisterGroup: group must be a MapPinEnhancedGroupMixin object")
 
     local groupsPool = Groups:GetObjectPool()
     groupsPool:Release(group)
@@ -86,7 +86,7 @@ function Groups:GetGroupByName(name)
     assert(name, "Groups:GetGroupByName: name is nil")
     assert(type(name) == "string", "Groups:GetGroupByName: name must be a string")
     local groupsPool = Groups:GetObjectPool()
-    ---@param group MapPinEnhancedPinGroupMixin
+    ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
         if group:GetName() == name then
             return group
@@ -99,7 +99,7 @@ end
 ---@type table<string, function>
 local debouncedPersist = {}
 
----@param group MapPinEnhancedPinGroupMixin
+---@param group MapPinEnhancedGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")
     local groupName = group:GetName()
@@ -127,7 +127,7 @@ function Groups:RestoreGroup(groupData)
     end
     local group = self:GetGroupByName(groupData.name)
     if not group then
-        group = self:RegisterPinGroup(groupData)
+        group = self:RegisterGroup(groupData)
     end
     assert(group, "Groups:RestoreGroup: group is nil after registration")
     ---@param pinData SaveablePinData

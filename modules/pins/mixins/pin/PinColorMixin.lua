@@ -32,21 +32,17 @@ function MapPinEnhancedPinColorMixin:SetColor(color)
     local colorValue = Pins.PIN_COLORS_BY_NAME[color]
     self.worldmapPin:SetColor(colorValue)
     self.minimapPin:SetColor(colorValue)
-    self.trackerEntry:SetPinColor(colorValue)
 
     if self:IsTracked() then
         self.worldmapPin:SetTracked()
         self.minimapPin:SetTracked()
-        self.trackerEntry:SetTracked()
     else
         self.worldmapPin:SetUntracked()
         self.minimapPin:SetUntracked()
-        self.trackerEntry:SetUntracked()
     end
 
     self.worldmapPin:SetIcon(nil, nil)
     self.minimapPin:SetIcon(nil, nil)
-    self.trackerEntry:SetPinIcon(nil, nil)
 
     self.pinData.color = color
     self.pinData.texture = nil
@@ -181,5 +177,4 @@ function MapPinEnhancedPinColorMixin:SetIcon(icon, usesAtlas, offset, scale)
 
     self.worldmapPin:SetIcon(icon, usesAtlas, offset, scale)
     self.minimapPin:SetIcon(icon, usesAtlas, offset, scale)
-    self.trackerEntry:SetPinIcon(icon, usesAtlas, offset, scale)
 end

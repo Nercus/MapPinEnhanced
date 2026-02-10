@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerGroupEntryTemplate : Button
 ---@field treeNode TreeNodeMixin
----@field group MapPinEnhancedPinGroupMixin
+---@field group MapPinEnhancedGroupMixin
 ---@field expandButton MapPinEnhancedTrackerGroupEntryExpandButton
 MapPinEnhancedTrackerGroupEntryMixin = {}
 
@@ -28,10 +28,8 @@ end
 function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     local group = treeNode:GetData()
     self.group = group
-    group.trackerEntry:SetFrame(self)
-
     self.treeNode = treeNode
-    group.trackerEntry:SetTreeNode(self.treeNode)
+
     self:UpdateCollapseButton()
 end
 

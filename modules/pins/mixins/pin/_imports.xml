@@ -8,6 +8,5 @@
     <Script file="PinTooltipMixin.lua" />
     <Script file="PinUtilsMixin.lua" />
     <Script file="PinProxyMixin.lua" />
-    <Script file="TrackerPinMixin.lua" />
     <Script file="PinMixin.lua" />
 </Ui>

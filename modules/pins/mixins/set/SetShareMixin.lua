@@ -1,14 +1,14 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedPinSetMixin
-MapPinEnhancedPinSetShareMixin = {}
+---@class MapPinEnhancedSetMixin
+MapPinEnhancedSetShareMixin = {}
 
 --- [AddonName: Setname-PlayerName]
 local preFilteredFormatPattern = "[%s: %s-%s]"
 
 
-function MapPinEnhancedPinSetShareMixin:OnRequestReceived(setName, playerName)
+function MapPinEnhancedSetShareMixin:OnRequestReceived(setName, playerName)
     if self.name ~= setName then
         return
     end
@@ -20,8 +20,8 @@ function MapPinEnhancedPinSetShareMixin:OnRequestReceived(setName, playerName)
     MapPinEnhanced:SendDataAddonMessage("TRANSMIT_SET", setData, "WHISPER", playerName)
 end
 
-function MapPinEnhancedPinSetShareMixin:LinkToChat()
-    assert(self.name, "MapPinEnhancedPinSetShareMixin:LinkToChat: name is nil")
+function MapPinEnhancedSetShareMixin:LinkToChat()
+    assert(self.name, "MapPinEnhancedSetShareMixin:LinkToChat: name is nil")
     local setName = self.name
     self.linkCreated = GetTime()
 

@@ -1,5 +1,5 @@
----@class MapPinEnhancedPinGroupMixin
-MapPinEnhancedPinGroupProxyMixin = {}
+---@class MapPinEnhancedGroupMixin
+MapPinEnhancedGroupProxyMixin = {}
 
 
 ---@class GroupProxy
@@ -14,7 +14,7 @@ MapPinEnhancedPinGroupProxyMixin = {}
 ---@field GetPins fun(self: GroupProxy): PinProxy[]
 
 ---@return GroupProxy
-function MapPinEnhancedPinGroupProxyMixin:GetProxy()
+function MapPinEnhancedGroupProxyMixin:GetProxy()
     local proxy = {}
 
     proxy.AddPin = function(_, pinData)

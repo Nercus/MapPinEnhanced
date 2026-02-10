@@ -5,10 +5,10 @@ local MapPinEnhanced = select(2, ...)
 local Sets = MapPinEnhanced:GetModule("Sets")
 
 local function CreateGroupObject()
-    return CreateAndInitFromMixin(MapPinEnhancedPinSetMixin)
+    return CreateAndInitFromMixin(MapPinEnhancedSetMixin)
 end
 
----@param group MapPinEnhancedPinGroupMixin
+---@param group MapPinEnhancedGroupMixin
 local function ResetGroupObject(_, group)
     group:Reset()
 end
@@ -38,7 +38,7 @@ function Sets:GetSetByName(name)
     assert(type(name) == "string", "Sets:GetSetByName: name must be a string")
 
     local setsPool = self:GetObjectPool()
-    ---@param set MapPinEnhancedPinSetMixin
+    ---@param set MapPinEnhancedSetMixin
     for set in setsPool:EnumerateActive() do
         if set.name == name then
             return set
@@ -51,7 +51,7 @@ end
 ---@type table<string, function>
 local debouncedPersist = {}
 
----@param set MapPinEnhancedPinSetMixin
+---@param set MapPinEnhancedSetMixin
 function Sets:PersistSet(set)
     assert(set, "Groups:PersistGroup: group is nil")
     local setName = set:GetName()

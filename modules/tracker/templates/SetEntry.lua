@@ -3,18 +3,15 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerSetEntryTemplate
 ---@field treeNode TreeNodeMixin
----@field set MapPinEnhancedPinSetMixin
+---@field set MapPinEnhancedSetMixin
 MapPinEnhancedTrackerSetEntryMixin = {}
 
 
 function MapPinEnhancedTrackerSetEntryMixin:Init(treeNode)
-    ---@type MapPinEnhancedPinSetMixin
+    ---@type MapPinEnhancedSetMixin
     local set = treeNode:GetData()
     self.set = set
-    set.trackerEntry:SetFrame(self)
-
     self.treeNode = treeNode
-    set.trackerEntry:SetTreeNode(self.treeNode)
 end
 
 function MapPinEnhancedTrackerSetEntryMixin:OnMouseDown()

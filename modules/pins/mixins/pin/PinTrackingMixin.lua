@@ -12,9 +12,7 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self:SuperTrackLocation()
     self.worldmapPin:SetTracked()
     self.minimapPin:SetTracked()
-    if self.trackerEntry then
-        self.trackerEntry:SetTracked()
-    end
+
     self.isTracked = true
     Tracking:SetTrackedPin(self)
     self:PersistPin()
@@ -23,13 +21,11 @@ end
 function MapPinEnhancedPinTrackingMixin:Untrack()
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
-    if self.trackerEntry then
-        self.trackerEntry:SetUntracked()
-    end
     if self:IsTracked() then
         self:ClearLocation()
         Tracking:SetTrackedPin(nil)
     end
+
     self.isTracked = false
     self:PersistPin()
 

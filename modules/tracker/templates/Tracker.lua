@@ -18,15 +18,17 @@ local Sets = MapPinEnhanced:GetModule("Sets")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
+---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
+
 function MapPinEnhancedTrackerMixin:UpdateSetList()
-    ---@param set MapPinEnhancedPinSetMixin
+    ---@param set MapPinEnhancedSetMixin
     for set in Sets:EnumerateSets() do
         self.dataProvider:Insert(set) --[[@as TreeNodeMixin]]
     end
 end
 
 function MapPinEnhancedTrackerMixin:UpdatePinList()
-    ---@param group MapPinEnhancedPinGroupMixin
+    ---@param group MapPinEnhancedGroupMixin
     for group in Groups:EnumerateGroups() do
         local numPins = group:GetPinCount()
         if numPins > 0 then -- only add groups with pins
@@ -47,7 +49,7 @@ function MapPinEnhancedTrackerMixin:UpdateList()
     end
 end
 
----@param group MapPinEnhancedPinGroupMixin
+---@param group MapPinEnhancedGroupMixin
 ---@return TreeNodeMixin?
 function MapPinEnhancedTrackerMixin:AddGroup(group)
     if self.activeView ~= "pin" then
@@ -98,6 +100,16 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     MapPinEnhanced:SaveFramePosition(self)
 end
 
+---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: EntryTemplate))
+---@param node TreeNode
+local function TrackerElementFactory(factory, node)
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
+    local data = node:GetData()
+    factory(data.trackerEntry.template, function(frame)
+        frame:Init(node)
+    end)
+end
+
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
@@ -107,13 +119,8 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollView = CreateScrollBoxListTreeListView()
 
 
-    self.scrollView:SetElementFactory(function(factory, node)
-        ---@type MapPinEnhancedPinGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedPinSetMixin
-        local data = node:GetData()
-        factory(data.trackerEntry.template, function(frame)
-            frame:Init(node)
-        end)
-    end)
+    self.scrollView:SetElementFactory(TrackerElementFactory)
+
 
     self.scrollView:SetDataProvider(self.dataProvider)
     self.scrollBar:SetInterpolateScroll(true);

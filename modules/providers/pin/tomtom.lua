@@ -42,7 +42,7 @@ end
 MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
     if addon == "TomTom" then
         MapPinEnhanced.isTomTomLoaded = true
-        Groups:RegisterPinGroup({
+        Groups:RegisterGroup({
             name = L["TomTom Pins"],
             source = MapPinEnhanced.name,
             icon = "Interface\\Icons\\INV_Misc_Map_01",

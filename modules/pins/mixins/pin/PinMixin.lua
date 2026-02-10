@@ -5,12 +5,12 @@ local MapPinEnhanced = select(2, ...)
 ---@field initialized boolean
 ---@field worldmapPin MapPinEnhancedWorldmapPinTemplate
 ---@field minimapPin MapPinEnhancedMinimapPinTemplate
----@field trackerEntry MapPinEnhancedTrackerPinMixin
 ---@field pinData pinData
 ---@field isTracked boolean? -- whether this pin is currently tracked
 ---@field pinID UUID
----@field group MapPinEnhancedPinGroupMixin? -- the group this pin belongs to, if any
+---@field group MapPinEnhancedGroupMixin? -- the group this pin belongs to, if any
 MapPinEnhancedPinMixin = CreateFromMixins(
+    { classification = 'pin' },
     MapPinEnhancedPinTrackingMixin,
     MapPinEnhancedPinMenuMixin,
     MapPinEnhancedPinMouseDownMixin,
@@ -25,8 +25,7 @@ local HBDP = MapPinEnhanced.HBDP
 local DEFAULT_PIN_NAME = L["Map Pin"]
 
 ---@class Pins
----@field trackerObjectPool ObjectPool<MapPinEnhancedTrackerPinMixin>
----@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate | MapPinEnhancedTrackerPinEntryTemplate>
+---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Distance = MapPinEnhanced:GetModule("Distance")
@@ -37,26 +36,8 @@ function Pins:GetFramePool()
         self.framePool = CreateFramePoolCollection()
         self.framePool:CreatePool("Button", nil, "MapPinEnhancedWorldmapPinTemplate")
         self.framePool:CreatePool("Frame", nil, "MapPinEnhancedMinimapPinTemplate")
-        self.framePool:CreatePool("Frame", nil, "MapPinEnhancedSuperTrackedPinTemplate")
     end
     return self.framePool
-end
-
-local function CreateGroupObject()
-    return CreateFromMixins(MapPinEnhancedTrackerPinMixin)
-end
-
----@param trackerEntry MapPinEnhancedTrackerPinMixin
-local function ResetGroupObject(_, trackerEntry)
-    trackerEntry:Reset()
-end
-
-function Pins:GetTrackerObjectPool()
-    if not self.trackerObjectPool then
-        self.trackerObjectPool = CreateObjectPool(CreateGroupObject, ResetGroupObject)
-    end
-
-    return self.trackerObjectPool
 end
 
 function MapPinEnhancedPinMixin:Init(pinID)
@@ -66,9 +47,6 @@ function MapPinEnhancedPinMixin:Init(pinID)
     local framePool = Pins:GetFramePool()
     self.worldmapPin = framePool:Acquire('MapPinEnhancedWorldmapPinTemplate')
     self.minimapPin = framePool:Acquire('MapPinEnhancedMinimapPinTemplate')
-
-    local trackerObjectPool = Pins:GetTrackerObjectPool()
-    self.trackerEntry = trackerObjectPool:Acquire()
 
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
@@ -153,9 +131,6 @@ function MapPinEnhancedPinMixin:Reset()
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
-
-    local trackerObjectPool = Pins:GetTrackerObjectPool()
-    trackerObjectPool:Release(self.trackerEntry)
 
     -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)

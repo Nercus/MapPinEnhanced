@@ -26,7 +26,7 @@ function Tracker:HideTracker()
     MapPinEnhanced:SetVar("trackerVisible", false)
 end
 
----@param group MapPinEnhancedPinGroupMixin
+---@param group MapPinEnhancedGroupMixin
 ---@return TreeNodeMixin?
 function Tracker:AddGroup(group)
     local frame = self:GetTrackerFrame()
