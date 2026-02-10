@@ -10,6 +10,7 @@ local DIALOG_TYPES = {
     IMPORT = "IMPORT",
     EXPORT = "EXPORT",
 }
+-- TODO: add type CONFIRM (confirmation dialog with accept and cancel buttons), INFO (okay dialog with just an okay button), WAYFINDER (to select one or multiple wayfinders), SETUP (for the first setup of the addon)
 
 
 ---@param dialogType DialogTypes
