@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MenuEntry
 ---@field type MenuEntryType
+---@field initializer MenuDescriptionInitializer
 
 ---@class MenuButtonEntry : MenuEntry
 ---@field type "button"
@@ -53,26 +54,27 @@ local MapPinEnhanced = select(2, ...)
 ---@field gridModeColumns? number
 
 
----@param rootDescription SharedMenuDescriptionProxy
+---@param rootDescription ElementMenuDescriptionProxy
 ---@param entry AnyMenuEntry
 ---@return ElementMenuDescriptionProxy
 local function GenerateMenuElement(rootDescription, entry)
+    ---@type ElementMenuDescriptionProxy
+    local element
+
     if entry.type == "title" then
-        return rootDescription:CreateTitle(entry.label)
+        element = rootDescription:CreateTitle(entry.label)
     elseif entry.type == "button" then
-        return rootDescription:CreateButton(entry.label, entry.onClick)
+        element = rootDescription:CreateButton(entry.label, entry.onClick)
     elseif entry.type == "checkbox" then
-        return rootDescription:CreateCheckbox(entry.label, entry.isSelected, entry.setSelected, entry.data)
+        element = rootDescription:CreateCheckbox(entry.label, entry.isSelected, entry.setSelected, entry.data)
     elseif entry.type == "radio" then
-        return rootDescription:CreateRadio(entry.label, entry.isSelected, entry.setSelected, entry.data)
+        element = rootDescription:CreateRadio(entry.label, entry.isSelected, entry.setSelected, entry.data)
     elseif entry.type == "divider" then
-        return rootDescription:CreateDivider()
+        element = rootDescription:CreateDivider()
     elseif entry.type == "spacer" then
-        return rootDescription:CreateSpacer()
+        element = rootDescription:CreateSpacer()
     elseif entry.type == "template" then
-        local templateEl = rootDescription:CreateTemplate(entry.template)
-        templateEl:AddInitializer(entry.initializer)
-        return templateEl
+        element = rootDescription:CreateTemplate(entry.template)
     elseif entry.type == "submenu" then
         assert(entry.entry, "Entry for the submenu type of the submenu trigger")
         assert(entry.entry.type == "button" or entry.entry.type == "checkbox" or entry.entry.type == "radio" or
@@ -89,8 +91,16 @@ local function GenerateMenuElement(rootDescription, entry)
             GenerateMenuElement(subMenuButton, subEntry)
         end
         return subMenuButton
+    else
+        error("Unknown menu entry type received!")
     end
-    error("Unknown menu entry type received!")
+
+    -- Add initializer if provided (works for any element type)
+    if element and entry.initializer then
+        element:AddInitializer(entry.initializer)
+    end
+
+    return element
 end
 
 
