@@ -16,7 +16,7 @@ MapPinEnhancedTrackerMixin = {
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Sets = MapPinEnhanced:GetModule("Sets")
 
----@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
+---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
 
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
 
@@ -105,9 +105,20 @@ end
 local function TrackerElementFactory(factory, node)
     ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
     local data = node:GetData()
-    factory(data.trackerEntry.template, function(frame)
-        frame:Init(node)
-    end)
+
+    if data.classification == "group" then
+        factory("MapPinEnhancedTrackerGroupEntryTemplate", function(frame)
+            frame:Init(node)
+        end)
+    elseif data.classification == "pin" then
+        factory("MapPinEnhancedTrackerPinEntryTemplate", function(frame)
+            frame:Init(node)
+        end)
+    elseif data.classification == "set" then
+        factory("MapPinEnhancedTrackerSetEntryTemplate", function(frame)
+            frame:Init(node)
+        end)
+    end
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
@@ -120,11 +131,11 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
 
     self.scrollView:SetElementFactory(TrackerElementFactory)
-
-
     self.scrollView:SetDataProvider(self.dataProvider)
+
     self.scrollBar:SetInterpolateScroll(true);
     self.scrollBox:SetInterpolateScroll(true);
+
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);

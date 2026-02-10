@@ -8,6 +8,7 @@ local MapPinEnhanced = select(2, ...)
 
 
 ---@class MapPinEnhancedGroupMixin
+---@field classification 'group'
 ---@field pins table<UUID, MapPinEnhancedPinMixin> a table of pins that belong to this
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.

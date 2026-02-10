@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedTrackerSetEntryTemplate
+---@class MapPinEnhancedTrackerSetEntryTemplate : Button
 ---@field treeNode TreeNodeMixin
 ---@field set MapPinEnhancedSetMixin
 MapPinEnhancedTrackerSetEntryMixin = {}

@@ -9,6 +9,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string? the icon of the set, if any
 
 ---@class MapPinEnhancedSetMixin
+---@field classification 'set'
 ---@field name string the name of the set
 ---@field pins pinData[] a table of pins that belong to this set
 ---@field count number the number of pins in this set

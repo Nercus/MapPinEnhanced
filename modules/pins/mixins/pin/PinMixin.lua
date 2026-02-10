@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedPinMixin
+---@field classification 'pin'
 ---@field initialized boolean
 ---@field worldmapPin MapPinEnhancedWorldmapPinTemplate
 ---@field minimapPin MapPinEnhancedMinimapPinTemplate
