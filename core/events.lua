@@ -108,7 +108,9 @@ local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback",
 
 ---@enum CallbackEvent
 local CALLBACK_EVENTS = {
-    MY_TEST_EVENT = "MY_TEST_EVENT"
+    PIN_UPDATED = "PIN_UPDATED",
+    SET_UPDATED = "SET_UPDATED",
+    GROUP_UPDATED = "GROUP_UPDATED",
 }
 
 
