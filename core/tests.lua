@@ -25,10 +25,10 @@ local function serializeTable(t)
     for i = 1, #t do
         ---@type any
         value = t[i]
-        serializedValue = type(value) == 'table' and serializeTable(value) or value
+        serializedValue = type(value) == "table" and serializeTable(value) or value
         table.insert(serializedValues, serializedValue)
     end
-    return string.format("{ %s }", table.concat(serializedValues, ', '))
+    return string.format("{ %s }", table.concat(serializedValues, ", "))
 end
 
 local function ToString(value)

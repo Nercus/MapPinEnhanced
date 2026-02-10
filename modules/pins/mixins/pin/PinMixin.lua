@@ -11,7 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinID UUID
 ---@field group MapPinEnhancedGroupMixin? -- the group this pin belongs to, if any
 MapPinEnhancedPinMixin = CreateFromMixins(
-    { classification = 'pin' },
+    { classification = "pin" },
     MapPinEnhancedPinTrackingMixin,
     MapPinEnhancedPinMenuMixin,
     MapPinEnhancedPinMouseDownMixin,
@@ -46,8 +46,8 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.pinID = pinID
 
     local framePool = Pins:GetFramePool()
-    self.worldmapPin = framePool:Acquire('MapPinEnhancedWorldmapPinTemplate')
-    self.minimapPin = framePool:Acquire('MapPinEnhancedMinimapPinTemplate')
+    self.worldmapPin = framePool:Acquire("MapPinEnhancedWorldmapPinTemplate")
+    self.minimapPin = framePool:Acquire("MapPinEnhancedMinimapPinTemplate")
 
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)

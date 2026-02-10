@@ -10,7 +10,7 @@ local L = MapPinEnhanced.L
 -- block SetUserWaypoint calls from other addons which should not trigger the pin provider
 -- MapPinEenhanced is in here as well to prevent infinite loops when the pin provider is used to set a waypoint
 local BLOCKED_ADDON_LIST = {
-    'WorldQuestTracker',
+    "WorldQuestTracker",
     MapPinEnhanced.name,
 }
 

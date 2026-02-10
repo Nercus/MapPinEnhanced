@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 local function CreatePin()
-    local pinID = MapPinEnhanced:GenerateUUID('pin')
+    local pinID = MapPinEnhanced:GenerateUUID("pin")
     return CreateAndInitFromMixin(MapPinEnhancedPinMixin, pinID)
 end
 

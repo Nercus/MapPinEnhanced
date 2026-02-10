@@ -14,7 +14,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
 MapPinEnhancedGroupMixin = CreateFromMixins(
-    { classification = 'group' },
+    { classification = "group" },
     MapPinEnhancedGroupProxyMixin
 )
 

@@ -49,10 +49,10 @@ end
 ---@return string UUID a UUID in the format of 'xxxxxxxx-xxxx' or 'prefix-xxxxxxxx-xxxx'
 function MapPinEnhanced:GenerateUUID(prefix)
     assert(type(prefix) == "string" or prefix == nil, "Prefix must be a string or nil")
-    local template = 'xxxxxxxx-yxxx'
-    local ans = string.gsub(template, '[xy]', function(c)
-        local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
-        return string.format('%x', v)
+    local template = "xxxxxxxx-yxxx"
+    local ans = string.gsub(template, "[xy]", function(c)
+        local v = (c == "x") and random(0, 0xf) or random(8, 0xb)
+        return string.format("%x", v)
     end)
-    return prefix and prefix .. '-' .. ans or ans
+    return prefix and prefix .. "-" .. ans or ans
 end

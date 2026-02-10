@@ -21,10 +21,12 @@
 
 ## Licensing Overview
 
-This project is dual-licensed. The code is available under the GPLv3 license, while the media assets are under a more restrictive license.
+This project is dual-licensed. The code is available under the GPLv3 license,
+while the media assets are under a more restrictive license.
 
 - **Code:** Licensed under GNU General Public License v3.0 (GPLv3).
-- **Media Assets:** Licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+- **Media Assets:** Licensed under a Creative Commons
+  Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
 
 Please review the LICENSE file for more details.
 
@@ -40,12 +42,10 @@ You can do these things with Map Pin Enhanced:
 
 ## Pin Tracker
 
-
 <div align="center">
   <img width="50%" src=".github/media/PinTracker.png" />
   <p> Save multiple Pins | Change the pin title | Customize the pin color | Ping the pin on the map | Lock the pin | Share the pin </p>
 </div>
-
 
 ## Set Editor
 

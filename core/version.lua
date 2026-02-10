@@ -30,12 +30,12 @@ MapPinEnhanced.version = version
 
 local testVersionString = {
     "1.0.0-beta.1",
-    '3.0.2-beta.2',
-    '3.0.2-beta.23',
-    '3.0.2',
-    '3.1.0',
-    '10.0.2',
-    '99.9.9'
+    "3.0.2-beta.2",
+    "3.0.2-beta.23",
+    "3.0.2",
+    "3.1.0",
+    "10.0.2",
+    "99.9.9"
 }
 
 for i, ver in ipairs(testVersionString) do

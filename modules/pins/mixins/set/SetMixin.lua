@@ -15,7 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field count number the number of pins in this set
 ---@field icon string? the icon of the set, if any
 MapPinEnhancedSetMixin = CreateFromMixins(
-    { classification = 'set' },
+    { classification = "set" },
     MapPinEnhancedSetShareMixin
 )
 

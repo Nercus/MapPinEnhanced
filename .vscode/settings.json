@@ -85,7 +85,8 @@
     },
     "Lua.format.defaultConfig": {
         "indent_size": "4",
-        "indent_style": "space"
+        "indent_style": "space",
+        "quote_style": "double",
     },
     "Lua.hint.setType": false,
     "Lua.workspace.ignoreDir": [

@@ -2,7 +2,7 @@
 
 local function get_staged_xml_files()
     local files = {}
-    local p = io.popen('git diff --cached --name-only')
+    local p = io.popen("git diff --cached --name-only")
     if not p then return files end
     for file in p:lines() do
         if file:lower():match("%.xml$") then

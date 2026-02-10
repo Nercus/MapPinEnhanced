@@ -17,7 +17,6 @@ ignore:
   - annotations.lua
   - tests
 
-
 required-dependencies:
   - herebedragons
   - callbackhandler
