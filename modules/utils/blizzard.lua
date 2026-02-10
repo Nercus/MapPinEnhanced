@@ -15,19 +15,9 @@ function Blizzard:GetPlayerMapPosition()
     return MapPinEnhanced.HBD:GetPlayerZonePosition()
 end
 
-function Blizzard:GetGlobalSuperTrackedFrame()
-    if not self.superTrackedFrame and SuperTrackedFrame then
-        self.superTrackedFrame = CreateFrame("Frame", "MapPinEnhancedGlobalSuperTrackedFrame", SuperTrackedFrame,
-            "MapPinEnhancedSuperTrackedPinTemplate")
-    end
-    return self.superTrackedFrame
-end
-
 function Blizzard:UpdateGlobalSuperTrackedFrame()
     local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    local globalSuperTrackedFrame = self:GetGlobalSuperTrackedFrame()
     if not superTrackingType or superTrackingType ~= Enum.SuperTrackingType.UserWaypoint then
-        globalSuperTrackedFrame:Hide()
         return
     end
     -- TODO: set the correct icon here Providers:GetSuperTrackingInfo(mapID)
