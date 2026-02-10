@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field type "button"
 ---@field label string
 ---@field onClick fun()
+---@field data any
 
 ---@class MenuTitleEntry : MenuEntry
 ---@field type "title"
@@ -39,7 +40,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MenuTemplateEntry : MenuEntry
 ---@field type "template"
 ---@field template string
----@field initializer fun(frame: Frame)
+---@field data any
 
 ---@class MenuSubmenuEntry : MenuEntry
 ---@field type "submenu"
@@ -47,12 +48,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field entries AnyMenuEntry[] | fun(): AnyMenuEntry[]
 ---@field options? MenuOptions
 
-
 ---@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry | MenuSubmenuEntry
 
 ---@class MenuOptions
 ---@field gridModeColumns? number
-
 
 ---@param rootDescription ElementMenuDescriptionProxy
 ---@param entry AnyMenuEntry
@@ -60,11 +59,10 @@ local MapPinEnhanced = select(2, ...)
 local function GenerateMenuElement(rootDescription, entry)
     ---@type ElementMenuDescriptionProxy
     local element
-
     if entry.type == "title" then
         element = rootDescription:CreateTitle(entry.label)
     elseif entry.type == "button" then
-        element = rootDescription:CreateButton(entry.label, entry.onClick)
+        element = rootDescription:CreateButton(entry.label, entry.onClick, entry.data)
     elseif entry.type == "checkbox" then
         element = rootDescription:CreateCheckbox(entry.label, entry.isSelected, entry.setSelected, entry.data)
     elseif entry.type == "radio" then
@@ -74,7 +72,10 @@ local function GenerateMenuElement(rootDescription, entry)
     elseif entry.type == "spacer" then
         element = rootDescription:CreateSpacer()
     elseif entry.type == "template" then
+        -- annotations for it are off! The template takes data as an arg
+        ---@diagnostic disable-next-line: redundant-parameter
         element = rootDescription:CreateTemplate(entry.template)
+        element:SetData(entry.data)
     elseif entry.type == "submenu" then
         assert(entry.entry, "Entry for the submenu type of the submenu trigger")
         assert(entry.entry.type == "button" or entry.entry.type == "checkbox" or entry.entry.type == "radio" or
