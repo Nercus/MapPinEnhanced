@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 -- FIXME: small ui scales cause the numbers to be cut off, fix that
--- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close
+-- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
 
 ---@class MapPinEnhancedCoordsDisplayButton : MapPinEnhancedIconButtonTemplate
 ---@field fadeIn AnimationGroup
