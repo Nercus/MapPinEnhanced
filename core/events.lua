@@ -98,20 +98,35 @@ function MapPinEnhanced:UnregisterEvent(event)
     self.addonEventFrame:UnregisterEvent(event)
 end
 
+---@enum (key) CallbackEvent
+local CALLBACK_EVENTS = {
+    PIN_UPDATED = "PIN_UPDATED_%w+",
+    SET_UPDATED = "SET_UPDATED_%w+",
+    GROUP_UPDATED = "GROUP_UPDATED_%w+",
+}
+
 ---@class CallbackTarget
 ---@field RegisterCallback fun(self: CallbackTarget, event: string, func: function, ...)
----@field UnregisterCallback fun(self: CallbackTarget, event: string, func: function)
+---@field UnregisterCallback fun(self: CallbackTarget, event: string)
 ---@field UnregisterAllCallbacks fun(self: CallbackTarget, event: string)
 local callbackTarget = {}
+---@class CallbackHandlerRegistry2 : CallbackHandlerRegistry
+---@field events table<CallbackEvent, table<CallbackTarget, function[]>>
 local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback", "UnregisterCallback",
     "UnregisterAllCallbacks");
 
----@enum CallbackEvent
-local CALLBACK_EVENTS = {
-    PIN_UPDATED = "PIN_UPDATED",
-    SET_UPDATED = "SET_UPDATED",
-    GROUP_UPDATED = "GROUP_UPDATED",
-}
+
+local function IsValidCallbackEvent(event)
+    if CALLBACK_EVENTS[event] then
+        return true
+    end
+    for _, pattern in pairs(CALLBACK_EVENTS) do
+        if type(pattern) == "string" and event:match("^" .. pattern .. "$") then
+            return true
+        end
+    end
+    return false
+end
 
 
 ---@param callbackEvent CallbackEvent
@@ -119,28 +134,41 @@ local CALLBACK_EVENTS = {
 ---@param ... any
 function MapPinEnhanced:RegisterCallback(callbackEvent, func, ...)
     assert(callbackEvent, "Callback event must be provided")
-    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
+    assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
     assert(func, "Function must be provided")
 
     callbackTarget:RegisterCallback(callbackEvent, func, ...)
 end
 
 ---@param callbackEvent CallbackEvent
----@param func function
-function MapPinEnhanced:UnregisterCallback(callbackEvent, func)
+function MapPinEnhanced:UnregisterCallback(callbackEvent)
     assert(callbackEvent, "Callback event must be provided")
-    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
-    assert(func, "Function must be provided")
+    assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
 
-    callbackTarget:UnregisterCallback(callbackEvent, func)
+    callbackTarget:UnregisterCallback(callbackEvent)
 end
 
 ---@param callbackEvent CallbackEvent
 ---@param ... any
 function MapPinEnhanced:FireCallback(callbackEvent, ...)
     assert(callbackEvent, "Callback event must be provided")
-    assert(CALLBACK_EVENTS[callbackEvent], "Callback event is not valid event")
+    assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
     callbackRegistry:Fire(callbackEvent, ...)
+end
+
+---Unregister all callbacks matching a pattern
+---@param pattern string Lua pattern to match event names
+function MapPinEnhanced:UnregisterCallbacksByPattern(pattern)
+    assert(pattern, "Pattern must be provided")
+
+    -- Access CallbackHandler's event registry
+    if not callbackRegistry.events then return end
+
+    for eventName, _ in pairs(callbackRegistry.events) do
+        if string.match(pattern, eventName) then
+            self:UnregisterCallback(eventName)
+        end
+    end
 end
 
 ---Call a function with restricted access, ensuring it runs outside of combat.
