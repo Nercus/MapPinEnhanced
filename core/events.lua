@@ -111,10 +111,9 @@ local CALLBACK_EVENTS = {
 ---@field UnregisterAllCallbacks fun(self: CallbackTarget, event: string)
 local callbackTarget = {}
 ---@class CallbackHandlerRegistry2 : CallbackHandlerRegistry
----@field events table<CallbackEvent, table<CallbackTarget, function[]>>
+---@field events table<CallbackEvent | string, table<CallbackTarget, function[]>>
 local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback", "UnregisterCallback",
     "UnregisterAllCallbacks");
-
 
 local function IsValidCallbackEvent(event)
     if CALLBACK_EVENTS[event] then
@@ -129,7 +128,7 @@ local function IsValidCallbackEvent(event)
 end
 
 
----@param callbackEvent CallbackEvent
+---@param callbackEvent CallbackEvent | string
 ---@param func function
 ---@param ... any
 function MapPinEnhanced:RegisterCallback(callbackEvent, func, ...)
@@ -140,7 +139,7 @@ function MapPinEnhanced:RegisterCallback(callbackEvent, func, ...)
     callbackTarget:RegisterCallback(callbackEvent, func, ...)
 end
 
----@param callbackEvent CallbackEvent
+---@param callbackEvent CallbackEvent | string
 function MapPinEnhanced:UnregisterCallback(callbackEvent)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
@@ -148,7 +147,7 @@ function MapPinEnhanced:UnregisterCallback(callbackEvent)
     callbackTarget:UnregisterCallback(callbackEvent)
 end
 
----@param callbackEvent CallbackEvent
+---@param callbackEvent CallbackEvent | string
 ---@param ... any
 function MapPinEnhanced:FireCallback(callbackEvent, ...)
     assert(callbackEvent, "Callback event must be provided")
