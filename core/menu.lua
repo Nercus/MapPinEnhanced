@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MenuEntry
 ---@field type MenuEntryType
----@field initializer MenuDescriptionInitializer
+---@field initializer? MenuDescriptionInitializer
 
 ---@class MenuButtonEntry : MenuEntry
 ---@field type "button"
