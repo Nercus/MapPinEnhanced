@@ -16,6 +16,8 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self.isTracked = true
     Tracking:SetTrackedPin(self)
     self:PersistPin()
+
+    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, true)
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
@@ -30,6 +32,7 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
     self:PersistPin()
 
     Distance:DisableDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
+    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, false)
 end
 
 function MapPinEnhancedPinTrackingMixin:ToggleTracked()

@@ -102,9 +102,13 @@ end
 
 ---@enum (key) CallbackEvent
 local CALLBACK_EVENTS = {
-    PIN_UPDATED = { event = "PIN_UPDATED_%w+", pattern = true },
-    SET_UPDATED = { event = "SET_UPDATED_%w+", pattern = true },
-    GROUP_UPDATED = { event = "GROUP_UPDATED_%w+", pattern = true },
+    PIN_UPDATED_TRACKING = { event = "PIN_UPDATED_TRACKING_%w+", pattern = true },
+    PIN_UPDATED_TITLE = { event = "PIN_UPDATED_TITLE_%w+", pattern = true },
+    PIN_UPDATED_TOOLTIP = { event = "PIN_UPDATED_TOOLTIP_%w+", pattern = true },
+    PIN_UPDATED_ICON = { event = "PIN_UPDATED_ICON_%w+", pattern = true },
+    PIN_UPDATED_COLOR = { event = "PIN_UPDATED_COLOR_%w+", pattern = true },
+    --PIN_REMOVED = { event = "PIN_REMOVED_%w+", pattern = true },
+    --PIN_ADDED = { event = "PIN_ADDED", pattern = false },
 }
 
 ---@class CallbackTarget
@@ -136,6 +140,7 @@ function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
     assert(func, "Function must be provided")
+
 
     local eventInfo = CALLBACK_EVENTS[callbackEvent]
     if eventInfo and eventInfo.pattern and key then

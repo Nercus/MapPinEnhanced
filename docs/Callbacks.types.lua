@@ -1,17 +1,18 @@
 ---@meta
 ---@class MapPinEnhanced
----@field RegisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', func: fun(eventname: string, attribute: 'TRACKING', isTracked: boolean), key: UUID)
----@field FireCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID, attribute: 'TRACKING', isTracked: boolean)
----@field RegisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', func: fun(eventname: string, attribute: 'TITLE', title: string), key: UUID)
----@field FireCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID, attribute: 'TITLE', title: string))
----@field RegisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', func: fun(eventname: string, attribute: 'TOOLTIP', tooltipData: PinTooltip), key: UUID)
----@field FireCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID, attribute: 'TOOLTIP', tooltipData: PinTooltip)
----@field RegisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', func: fun(eventname: string, attribute: 'ICON', iconInfo: PinIcon), key: UUID)
----@field FireCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID, attribute: 'ICON', iconInfo: PinIcon)
----@field RegisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', func: fun(eventname: string, attribute: 'COLOR', color: PinColor), key: UUID)
----@field FireCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID, attribute: 'COLOR', color: PinColor)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: 'PIN_UPDATED', key: UUID)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TRACKING", func: fun(eventname: string, isTracked: boolean), key: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TITLE", func: fun(eventname: string, title: string), key: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TOOLTIP", func: fun(eventname: string, tooltipData: PinTooltip), key: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", func: fun(eventname: string, iconInfo: PinIcon), key: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", func: fun(eventname: string, color: ColorMixin), key:string)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TRACKING", key: string, isTracked: boolean)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TITLE", key: string, title: string)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TOOLTIP", key: string, tooltipData: PinTooltip)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", key: string, iconInfo: PinIcon)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", key: string, color: ColorMixin)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TRACKING", key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TITLE", key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TOOLTIP", key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", key: string)
 MapPinEnhanced = {}
-
-
--- TODO: the typings don't match the actual implementation, adjust again -> Use one event per attribute -> So PIN_UPDATED_COLOR_<pinid> or something like that

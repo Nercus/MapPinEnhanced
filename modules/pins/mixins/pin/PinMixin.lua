@@ -52,6 +52,15 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
     end)
+
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TRACKING", function(_, isTracked)
+        if self:IsTracked() == isTracked then return end
+        if isTracked then
+            self:Track()
+        else
+            self:Untrack()
+        end
+    end, self.pinID)
 end
 
 function MapPinEnhancedPinMixin:OverridePinID(pinID)

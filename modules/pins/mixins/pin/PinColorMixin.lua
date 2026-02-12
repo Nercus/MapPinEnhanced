@@ -48,6 +48,8 @@ function MapPinEnhancedPinColorMixin:SetColor(color)
     self.pinData.texture = nil
     self.pinData.usesAtlas = nil
     self:PersistPin()
+
+    MapPinEnhanced:FireCallback("PIN_UPDATED_COLOR", self.pinID, colorValue)
 end
 
 function MapPinEnhancedPinColorMixin:HasColor(color)

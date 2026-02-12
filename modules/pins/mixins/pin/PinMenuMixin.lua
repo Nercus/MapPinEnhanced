@@ -9,9 +9,7 @@ MapPinEnhancedPinMenuMixin = {}
 
 local L = MapPinEnhanced.L
 
-local MENU_COLOR_BUTTON_PATTERN = string.format(
-    "|T%s\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t", MapPinEnhanced.basePath
-)
+local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 
 local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
 
@@ -34,7 +32,8 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             entries = function()
                 local colorMenu = {}
                 for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
-                    local label = string.format(MENU_COLOR_BUTTON_PATTERN, colorData:GetRGBAsBytes())
+                    local label = string.format(MENU_COLOR_BUTTON_PATTERN, MapPinEnhanced.basePath,
+                        colorData:GetRGBAsBytes())
                     table.insert(colorMenu, {
                         type = "radio",
                         label = label,

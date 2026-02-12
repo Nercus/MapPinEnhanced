@@ -121,6 +121,12 @@ local function TrackerElementFactory(factory, node)
     end
 end
 
+---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
+---@param data any
+local function TrackerElementResetter(frame, data)
+    frame:Reset()
+end
+
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
@@ -131,6 +137,8 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
 
     self.scrollView:SetElementFactory(TrackerElementFactory)
+
+    self.scrollView:SetElementResetter(TrackerElementResetter)
     self.scrollView:SetDataProvider(self.dataProvider)
 
     self.scrollBar:SetInterpolateScroll(true);

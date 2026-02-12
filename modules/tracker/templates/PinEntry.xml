@@ -7,13 +7,6 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
         <Size x="272" y="35" />
-        <NormalTexture atlas="Event-Scheduler-Ongoing-events-card-incomplete"
-        >
-            <Anchors>
-                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
-            </Anchors>
-        </NormalTexture>
         <HighlightTexture atlas="Event-Scheduler-Event-Card-active"
             alpha="0.3" setAllPoints="true" />
         <Frames>
@@ -23,6 +16,19 @@
                 </Anchors>
             </Frame>
         </Frames>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString inherits="GameFontHighlight" parentKey="title" text="PinTitle"
+                    justifyH="LEFT"
+                    justifyV="MIDDLE">
+                    <Size x="100" y="35" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" x="10"
+                            relativeKey="$parent.pinFrame" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
             <OnEnter method="OnEnter" />
