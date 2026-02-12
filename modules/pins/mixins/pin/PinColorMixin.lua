@@ -9,7 +9,7 @@ MapPinEnhancedPinColorMixin = {}
 
 
 
----@enum (key) PinColors
+---@enum (key) PinColor
 Pins.PIN_COLORS_BY_NAME = {
     ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
     ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
@@ -24,7 +24,7 @@ Pins.PIN_COLORS_BY_NAME = {
 
 Pins.DEFAULT_PIN_COLOR = "Yellow"
 
----@param color PinColors
+---@param color PinColor
 function MapPinEnhancedPinColorMixin:SetColor(color)
     if not color then
         color = Pins.DEFAULT_PIN_COLOR

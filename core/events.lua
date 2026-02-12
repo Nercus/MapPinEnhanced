@@ -75,6 +75,8 @@ function MapPinEnhanced:UnregisterEventForFunction(event, func)
     end
 end
 
+---Run a callback when Map Pin Enhanced is loaded
+---@param callback fun()
 function MapPinEnhanced:OnLoad(callback)
     -- If the addon is already loaded, call the callback immediately
     if addonWasLoaded then
@@ -100,9 +102,9 @@ end
 
 ---@enum (key) CallbackEvent
 local CALLBACK_EVENTS = {
-    PIN_UPDATED = "PIN_UPDATED_%w+",
-    SET_UPDATED = "SET_UPDATED_%w+",
-    GROUP_UPDATED = "GROUP_UPDATED_%w+",
+    PIN_UPDATED = { event = "PIN_UPDATED_%w+", pattern = true },
+    SET_UPDATED = { event = "SET_UPDATED_%w+", pattern = true },
+    GROUP_UPDATED = { event = "GROUP_UPDATED_%w+", pattern = true },
 }
 
 ---@class CallbackTarget
@@ -110,8 +112,8 @@ local CALLBACK_EVENTS = {
 ---@field UnregisterCallback fun(self: CallbackTarget, event: string)
 ---@field UnregisterAllCallbacks fun(self: CallbackTarget, event: string)
 local callbackTarget = {}
----@class CallbackHandlerRegistry2 : CallbackHandlerRegistry
----@field events table<CallbackEvent | string, table<CallbackTarget, function[]>>
+---@class CallbackHandlerRegistryWithEvents : CallbackHandlerRegistry
+---@field events table<string, table<CallbackTarget, function[]>>
 local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback", "UnregisterCallback",
     "UnregisterAllCallbacks");
 
@@ -119,54 +121,63 @@ local function IsValidCallbackEvent(event)
     if CALLBACK_EVENTS[event] then
         return true
     end
-    for _, pattern in pairs(CALLBACK_EVENTS) do
-        if type(pattern) == "string" and event:match("^" .. pattern .. "$") then
+    for _, eventInfo in pairs(CALLBACK_EVENTS) do
+        if eventInfo.pattern and event:match("^" .. eventInfo.event .. "$") then
             return true
         end
     end
     return false
 end
 
-
----@param callbackEvent CallbackEvent | string
+---@param callbackEvent CallbackEvent
 ---@param func function
----@param ... any
-function MapPinEnhanced:RegisterCallback(callbackEvent, func, ...)
+---@param key string? if the event is a pattern, the key to replace in the pattern
+function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
     assert(func, "Function must be provided")
 
-    callbackTarget:RegisterCallback(callbackEvent, func, ...)
+    local eventInfo = CALLBACK_EVENTS[callbackEvent]
+    if eventInfo and eventInfo.pattern and key then
+        local eventName = string.gsub(eventInfo.event, "%%w%+", key)
+        callbackTarget:RegisterCallback(eventName, func)
+    elseif eventInfo then
+        callbackTarget:RegisterCallback(eventInfo.event, func)
+    else
+        callbackTarget:RegisterCallback(callbackEvent, func)
+    end
 end
 
----@param callbackEvent CallbackEvent | string
-function MapPinEnhanced:UnregisterCallback(callbackEvent)
+---@param callbackEvent CallbackEvent
+---@param key string? if the event is a pattern, the key to replace in the pattern
+function MapPinEnhanced:UnregisterCallback(callbackEvent, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
 
-    callbackTarget:UnregisterCallback(callbackEvent)
+    local eventInfo = CALLBACK_EVENTS[callbackEvent]
+    if eventInfo and eventInfo.pattern and key then
+        callbackTarget:UnregisterCallback(string.gsub(eventInfo.event, "%%w%+", key))
+    elseif eventInfo then
+        callbackTarget:UnregisterCallback(eventInfo.event)
+    else
+        callbackTarget:UnregisterCallback(callbackEvent)
+    end
 end
 
----@param callbackEvent CallbackEvent | string
+---@param callbackEvent CallbackEvent
+---@param key string? if the event is a pattern, the key to replace in the pattern
 ---@param ... any
-function MapPinEnhanced:FireCallback(callbackEvent, ...)
+function MapPinEnhanced:FireCallback(callbackEvent, key, ...)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
-    callbackRegistry:Fire(callbackEvent, ...)
-end
-
----Unregister all callbacks matching a pattern
----@param pattern string Lua pattern to match event names
-function MapPinEnhanced:UnregisterCallbacksByPattern(pattern)
-    assert(pattern, "Pattern must be provided")
-
-    -- Access CallbackHandler's event registry
-    if not callbackRegistry.events then return end
-
-    for eventName, _ in pairs(callbackRegistry.events) do
-        if string.match(pattern, eventName) then
-            self:UnregisterCallback(eventName)
-        end
+    local eventInfo = CALLBACK_EVENTS[callbackEvent]
+    if eventInfo and eventInfo.pattern and key then
+        local eventName = string.gsub(eventInfo.event, "%%w%+", key)
+        callbackRegistry:Fire(eventName, ...)
+    elseif eventInfo then
+        callbackRegistry:Fire(eventInfo.event, ...)
+    else
+        callbackRegistry:Fire(callbackEvent, ...)
     end
 end
 
