@@ -20,6 +20,9 @@ local Sets = MapPinEnhanced:GetModule("Sets")
 
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
 
+
+-- TODO: split the pin view and the set view into two different mixins
+
 function MapPinEnhancedTrackerMixin:UpdateSetList()
     ---@param set MapPinEnhancedSetMixin
     for set in Sets:EnumerateSets() do
@@ -78,6 +81,29 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
         groupNode = self.dataProvider:Insert(group)
     end
     groupNode:Insert(pin)
+end
+
+function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
+    if self.activeView ~= "pin" or not self:IsShown() then return end
+
+    ---@type TreeNodeMixin?
+    local groupNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
+        return nodeData == group
+    end, TreeDataProviderConstants.ExcludeCollapsed)
+    if not groupNode then return end
+
+    ---@type TreeNodeMixin?
+    local pinNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
+        return nodeData == pin
+    end, TreeDataProviderConstants.ExcludeCollapsed)
+    if not pinNode then return end
+
+    groupNode:Remove(pinNode)
+
+    -- if the group has no more pins, remove the group as well
+    if groupNode:GetSize() == 0 then
+        self.dataProvider:Remove(groupNode)
+    end
 end
 
 -- Maximum number of entries to display
@@ -167,6 +193,10 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function(_, group, pin)
         self:AddPinToGroup(group, pin)
+    end)
+
+    MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pin)
+        self:RemovePinFromGroup(group, pin)
     end)
 
     MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()

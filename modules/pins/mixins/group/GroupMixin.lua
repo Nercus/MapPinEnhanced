@@ -141,7 +141,7 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
     Pins:ReleasePin(pinID)
 
     if not skipCallbacks then
-        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+        MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pin)
     end
 end
 

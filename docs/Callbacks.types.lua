@@ -6,6 +6,7 @@
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", func: fun(eventname: string, iconInfo: PinIcon), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", func: fun(eventname: string, color: ColorMixin), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin))
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin))
 MapPinEnhanced = {}
 
@@ -15,6 +16,7 @@ MapPinEnhanced = {}
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", key: string, iconInfo: PinIcon)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", key: string, color: ColorMixin)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", key: nil, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", key: nil, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", key: nil, group: MapPinEnhancedGroupMixin)
 MapPinEnhanced = {}
 
