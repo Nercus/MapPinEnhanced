@@ -65,6 +65,21 @@ function MapPinEnhancedTrackerMixin:RemoveGroup(groupTreeNode)
     self.dataProvider:Remove(groupTreeNode)
 end
 
+---@param group MapPinEnhancedGroupMixin
+---@param pin MapPinEnhancedPinMixin
+function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
+    if self.activeView ~= "pin" or not self:IsShown() then return end
+
+    ---@type TreeNodeMixin?
+    local groupNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
+        return nodeData == group
+    end, TreeDataProviderConstants.ExcludeCollapsed)
+    if not groupNode then
+        groupNode = self.dataProvider:Insert(group)
+    end
+    groupNode:Insert(pin)
+end
+
 -- Maximum number of entries to display
 local MAX_ENTRIES = 6
 function MapPinEnhancedTrackerMixin:UpdateHeight()
@@ -149,6 +164,16 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
+
+    MapPinEnhanced:RegisterCallback("PIN_ADDED", function(_, group, pin)
+        self:AddPinToGroup(group, pin)
+    end)
+
+    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()
+        if self.activeView ~= "pin" or not self:IsShown() then return end
+        self:UpdateList()
+        self:UpdateHeight()
+    end)
 end
 
 function MapPinEnhancedTrackerMixin:GetActiveView()

@@ -75,8 +75,9 @@ end
 ---@param pinData pinData
 ---@param overridePinID UUID? if provided, the pin will be created with this ID instead of a new one
 ---@param skipPersist boolean? if true, the group will not be persisted after adding the pin, used for batch adding pins
+---@param skipCallbacks boolean? if true, callbacks will not be fired, used for batch adding pins
 ---@return MapPinEnhancedPinMixin?
-function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist)
+function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, skipCallbacks)
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
     local pin = Pins:CreatePin(pinData)
     if overridePinID then
@@ -87,6 +88,9 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist)
     self.count = self.count + 1
     if not skipPersist then
         Groups:PersistGroup(self)
+    end
+    if not skipCallbacks then
+        MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
     end
     return pin
 end
@@ -104,6 +108,7 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
             self:AddPin(pinData, pinData.pinID, true)
         end
         Groups:PersistGroup(self)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         return
     end
     local addingPinsFunctions = {}
@@ -115,12 +120,14 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
     MapPinEnhanced:BatchExecution(addingPinsFunctions, nil, function()
         Groups:PersistGroup(self)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end, batchSize)
 end
 
 ---@param pinID UUID
 ---@param skipPersist boolean? if true, the group will not be persisted after removing the pin, used for batch removing pins
-function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist)
+---@param skipCallbacks boolean? if true, callbacks will not be fired, used for batch removing pins
+function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
     assert(pinID, "MapPinEnhancedGroupMixin:AddPin: pinID is nil")
     local pin = self.pins[pinID]
     if not pin then return end
@@ -132,6 +139,10 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist)
         Groups:PersistGroup(self)
     end
     Pins:ReleasePin(pinID)
+
+    if not skipCallbacks then
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    end
 end
 
 ---Removes multiple pins at once including batched execution
@@ -147,6 +158,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
             self:RemovePin(pinID, true)
         end
         Groups:PersistGroup(self)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         return
     end
     local removingPinsFunctions = {}
@@ -158,6 +170,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
     MapPinEnhanced:BatchExecution(removingPinsFunctions, nil, function()
         Groups:PersistGroup(self)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end, batchSize)
 end
 

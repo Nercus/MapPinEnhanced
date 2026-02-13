@@ -61,6 +61,8 @@ function Groups:RegisterGroup(groupInfo)
 
     local existingGroup = self:GetGroupByName(groupInfo.name)
     if existingGroup then
+        MapPinEnhanced:Debug("Groups:RegisterGroup: Group with name '%s' already exists, returning existing group",
+            groupInfo.name)
         return existingGroup
     end
 

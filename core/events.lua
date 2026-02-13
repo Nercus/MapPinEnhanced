@@ -1,3 +1,4 @@
+---@diagnostic disable: incomplete-signature-doc
 ---@class MapPinEnhanced
 ---@field registeredEvents table<WowEvent, function[]>
 ---@field onLoadCallbacks function[]
@@ -106,8 +107,8 @@ local CALLBACK_EVENTS = {
     PIN_UPDATED_TITLE = { event = "PIN_UPDATED_TITLE_%w+", pattern = true },
     PIN_UPDATED_ICON = { event = "PIN_UPDATED_ICON_%w+", pattern = true },
     PIN_UPDATED_COLOR = { event = "PIN_UPDATED_COLOR_%w+", pattern = true },
-    --PIN_REMOVED = { event = "PIN_REMOVED_%w+", pattern = true },
-    --PIN_ADDED = { event = "PIN_ADDED", pattern = false },
+    PIN_ADDED = { event = "PIN_ADDED", pattern = false },
+    GROUP_UPDATED = { event = "GROUP_UPDATED", pattern = false },
 }
 
 ---@class CallbackTarget
@@ -133,8 +134,6 @@ local function IsValidCallbackEvent(event)
 end
 
 ---@param callbackEvent CallbackEvent
----@param func function
----@param key string? if the event is a pattern, the key to replace in the pattern
 function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
@@ -153,7 +152,6 @@ function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
 end
 
 ---@param callbackEvent CallbackEvent
----@param key string? if the event is a pattern, the key to replace in the pattern
 function MapPinEnhanced:UnregisterCallback(callbackEvent, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
@@ -169,8 +167,6 @@ function MapPinEnhanced:UnregisterCallback(callbackEvent, key)
 end
 
 ---@param callbackEvent CallbackEvent
----@param key string? if the event is a pattern, the key to replace in the pattern
----@param ... any
 function MapPinEnhanced:FireCallback(callbackEvent, key, ...)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
