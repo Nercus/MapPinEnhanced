@@ -124,6 +124,8 @@ end
 ---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
 ---@param data any
 local function TrackerElementResetter(frame, data)
+    -- TODO: check what type of data is coming in and reset accordingly
+    MapPinEnhanced:Debug(data)
     frame:Reset()
 end
 

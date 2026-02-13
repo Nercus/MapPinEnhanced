@@ -179,4 +179,6 @@ function MapPinEnhancedPinColorMixin:SetIcon(icon, usesAtlas, offset, scale)
 
     self.worldmapPin:SetIcon(icon, usesAtlas, offset, scale)
     self.minimapPin:SetIcon(icon, usesAtlas, offset, scale)
+    MapPinEnhanced:FireCallback("PIN_UPDATED_ICON", self.pinID,
+        { path = icon, usesAtlas = usesAtlas, offset = offset, scale = scale })
 end

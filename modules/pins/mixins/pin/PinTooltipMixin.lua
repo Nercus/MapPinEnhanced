@@ -6,6 +6,7 @@ MapPinEnhancedPinTooltipMixin = {}
 
 ---@param tooltipInfo? PinTooltip
 function MapPinEnhancedPinTooltipMixin:SetTooltip(tooltipInfo)
+    self.pinData.tooltip = tooltipInfo
     self.worldmapPin:UpdateTooltip(tooltipInfo)
     self.minimapPin:UpdateTooltip(tooltipInfo)
     self:PersistPin()

@@ -29,4 +29,7 @@ end
 
 ---@param title string
 function MapPinEnhancedPinUtilsMixin:SetTitle(title)
+    self.pinData.title = title
+    self:PersistPin()
+    MapPinEnhanced:FireCallback("PIN_UPDATED_TITLE", self.pinID, title)
 end

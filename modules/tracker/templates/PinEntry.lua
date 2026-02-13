@@ -8,18 +8,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 MapPinEnhancedTrackerPinEntryMixin = {}
 
-function MapPinEnhancedTrackerPinEntryMixin:Reset(oldPinId)
-    assert(oldPinId, "oldPinId is required to reset a pin entry")
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TRACKING", oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", oldPinId)
-    self.pin = nil
-end
-
----@param treeNode TreeNodeMixin
-function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
-    ---@type MapPinEnhancedPinMixin
-    local pin = treeNode:GetData()
-    self.pin = pin
+function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
+    local pin = self.pin
 
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_TRACKING", function(_, isTracked)
         if isTracked then
@@ -34,10 +24,36 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
         self:SetTitle(title)
     end, pin.pinID)
 
+
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", function(_, color)
         if pin.pinData.color == color then return end
         self.pinFrame:SetColor(color)
     end, pin.pinID)
+
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", function(_, iconInfo)
+        if pin.pinData.texture == iconInfo.path then return end
+        self.pinFrame:SetIcon(iconInfo.path, iconInfo.usesAtlas, iconInfo.offset, iconInfo.scale)
+    end, pin.pinID)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:UnregisterCallbackEvents(oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TRACKING", oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", oldPinId)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:Reset(oldPinId)
+    assert(oldPinId, "oldPinId is required to reset a pin entry")
+    self:UnregisterCallbackEvents(oldPinId)
+    self.pin = nil
+end
+
+---@param treeNode TreeNodeMixin
+function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
+    ---@type MapPinEnhancedPinMixin
+    local pin = treeNode:GetData()
+    self.pin = pin
 
     if pin:IsTracked() then
         self.pinFrame:SetTracked()
@@ -47,6 +63,8 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
     self.pin:SetColor(pin.pinData.color)
     self.pin:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
     self:SetTitle(pin.pinData.title)
+
+    self:RegisterCallbackEvents()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle(title)
