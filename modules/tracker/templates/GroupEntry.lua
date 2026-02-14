@@ -5,22 +5,21 @@ local MapPinEnhanced = select(2, ...)
 ---@field treeNode TreeNodeMixin
 ---@field group MapPinEnhancedGroupMixin
 ---@field expandButton MapPinEnhancedTrackerGroupEntryExpandButton
+---@field title FontString
 MapPinEnhancedTrackerGroupEntryMixin = {}
 
 
 ---@class MapPinEnhancedTrackerGroupEntryExpandButton : Button
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
----@field expand AnimationGroup
----@field collapse AnimationGroup
+---@field expandedTexture string
+---@field collapsedTexture string
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateCollapseButton()
-    self.expandButton.expand:Stop()
-    self.expandButton.collapse:Stop()
     if self.treeNode:IsCollapsed() then
-        self.expandButton.collapse:Play()
+        self.expandButton:GetNormalTexture():SetAtlas(self.expandButton.collapsedTexture)
     else
-        self.expandButton.expand:Play()
+        self.expandButton:GetNormalTexture():SetAtlas(self.expandButton.expandedTexture)
     end
 end
 
@@ -29,8 +28,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     local group = treeNode:GetData()
     self.group = group
     self.treeNode = treeNode
-
+    self:SetTitle(group:GetName())
     self:UpdateCollapseButton()
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:SetTitle(title)
+    self.title:SetText(string.upper(title))
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown()

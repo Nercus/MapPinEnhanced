@@ -10,18 +10,10 @@
             <Anchor point="TOPRIGHT" x="0" y="0" />
         </Anchors>
         <Layers>
-            <Layer level="OVERLAY">
-                <Texture parentKey="headerTexture"
-                    atlas="shop-header-menu-selected-line-middle" desaturated="true">
-                    <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="0.82" b="0" a="1" />
-                        <MaxColor r="1" g="1" b="1" a="1" />
-                    </Gradient>
-                    <Size x="1" y="5" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="0" y="0" />
-                    </Anchors>
+            <Layer level="BACKGROUND" textureSubLevel="1">
+                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5">
+                    <TextureSliceMargins left="32" right="32" top="32" bottom="32" />
+                    <TextureSliceMode mode="Stretched" />
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
@@ -42,7 +34,7 @@
                     <KeyValue key="icon" value="cross" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-5" y="2" />
+                    <Anchor point="RIGHT" x="-5" />
                 </Anchors>
             </Button>
             <Button parentKey="viewButton" inherits="MapPinEnhancedIconButtonTemplate">

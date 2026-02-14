@@ -7,7 +7,8 @@ local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@class MapPinEnhancedTrackerHeaderTemplate : Frame
 ---@field viewButton Button
 ---@field closeButton Button
----@field headerTexture Texture
+---@field headerTextureLeft Texture
+---@field headerTextureRight Texture
 MapPinEnhancedTrackerHeaderMixin = {}
 
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()

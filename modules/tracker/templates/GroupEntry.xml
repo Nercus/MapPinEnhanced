@@ -8,67 +8,43 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
         <Size x="300" y="35" />
-        <NormalTexture atlas="questlog-tab" desaturated="true">
-            <Size x="1" y="25" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
-            </Anchors>
-        </NormalTexture>
-        <HighlightTexture atlas="questlog-tab" alphaMode="ADD" alpha="0.4" desaturated="true">
-            <Size x="1" y="25" />
-            <Anchors>
-                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" y="2" />
-                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
-            </Anchors>
-        </HighlightTexture>
-        <Frames>
-            <Button parentKey="expandButton">
-                <Size x="16" y="16" />
-                <NormalTexture parentKey="normalTexture"
-                    atlas="glues-characterSelect-icon-arrowDown" setAllPoints="true" />
-                <HighlightTexture parentKey="highlightTexture"
-                    atlas="glues-characterSelect-icon-arrowDown-hover" setAllPoints="true" />
-                <Anchors>
-                    <Anchor point="LEFT" x="5" y="-3" />
-                </Anchors>
-                <Animations>
-                    <AnimationGroup parentKey="expand">
-                        <Rotation childKey="normalTexture" duration="0.15" degrees="-90"
-                            smoothing="IN_OUT" />
-                        <Rotation childKey="highlightTexture" duration="0.15" degrees="-90"
-                            smoothing="IN_OUT" />
-                        <Scripts>
-                            <OnFinished>
-                                self:GetParent().normalTexture:SetRotation(0)
-                                self:GetParent().highlightTexture:SetRotation(0)
-                            </OnFinished>
-                        </Scripts>
-                    </AnimationGroup>
-                    <AnimationGroup parentKey="collapse">
-                        <Rotation childKey="normalTexture" duration="0.15" degrees="90"
-                            smoothing="IN_OUT" />
-                        <Rotation childKey="highlightTexture" duration="0.15" degrees="90"
-                            smoothing="IN_OUT" />
-                        <Scripts>
-                            <OnFinished>
-                                self:GetParent().normalTexture:SetRotation(math.rad(90))
-                                self:GetParent().highlightTexture:SetRotation(math.rad(90))
-                            </OnFinished>
-                        </Scripts>
-                    </AnimationGroup>
-                </Animations>
-            </Button>
-        </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormal" text="Test" justifyH="LEFT">
+                <FontString parentKey="title" inherits="GameFontNormal" text="Test" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" y="9" x="26" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
+        <NormalTexture atlas="SquareMask" desaturated="true" horizTile="true">
+            <Size x="1" y="2" />
+            <Gradient orientation="HORIZONTAL">
+                <MinColor r="1" g="0.82" b="0" a="1" />
+                <MaxColor r="1" g="0.82" b="0" a="0" />
+            </Gradient>
+            <Anchors>
+                <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="5" />
+                <Anchor point="RIGHT" relativePoint="RIGHT" />
+            </Anchors>
+        </NormalTexture>
+        <Frames>
+            <Button parentKey="expandButton">
+                <KeyValues>
+                    <KeyValue key="expandedTexture" value="common-icon-minus" />
+                    <KeyValue key="collapsedTexture" value="common-icon-plus" />
+                </KeyValues>
+                <Size x="12" y="12" />
+                <NormalTexture parentKey="normalTexture"
+                    atlas="common-icon-plus" setAllPoints="true" />
+                <HighlightTexture parentKey="highlightTexture"
+                    atlas="shop-toast-sideglow" setAllPoints="true" alpha="0.5" />
+                <Anchors>
+                    <Anchor point="LEFT" x="5" y="-3" />
+                </Anchors>
+            </Button>
+        </Frames>
+
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
             <OnEnter method="OnEnter" />
