@@ -1,18 +1,22 @@
 ---@diagnostic disable: incomplete-signature-doc
 ---@class MapPinEnhanced
----@field registeredEvents table<WowEvent, function[]>
----@field onLoadCallbacks function[]
 local MapPinEnhanced = select(2, ...)
 
 ---@type CallbackHandler-1.0
 local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0");
 
 
+---@type table<WowEvent, function[]>
+local registeredEvents = {}
+
+---@type function[] | nil
+local onLoadCallbacks = {}
+
 local addonWasLoaded = false
 local function EventFrameHandler(self, event, ...)
-    local funcs = MapPinEnhanced.registeredEvents[event]
-    if (funcs) then
-        for _, func in ipairs(funcs) do
+    local functions = registeredEvents[event]
+    if (functions) then
+        for _, func in ipairs(functions) do
             func(...)
         end
     end
@@ -20,15 +24,17 @@ local function EventFrameHandler(self, event, ...)
         ---@type string | nil
         local addonName = ...
         if not addonName or addonName ~= MapPinEnhanced.name then return end
-        if not MapPinEnhanced.onLoadCallbacks then return end
-        for _, callback in ipairs(MapPinEnhanced.onLoadCallbacks) do
+        if not onLoadCallbacks then return end
+        for _, callback in ipairs(onLoadCallbacks) do
             callback()
         end
         addonWasLoaded = true
-        MapPinEnhanced.onLoadCallbacks = nil
+        onLoadCallbacks = nil
     end
 end
 
+local addonEventFrame = CreateFrame("Frame")
+addonEventFrame:SetScript("OnEvent", EventFrameHandler)
 
 ---Register an event for a function to be called when the event is fired
 ---@param event WowEvent the event to register for
@@ -36,18 +42,14 @@ end
 function MapPinEnhanced:RegisterEvent(event, func)
     assert(event, "Event must be provided")
     assert(func, "Function must be provided")
-    if not self.registeredEvents then
-        self.registeredEvents = {}
+    if not registeredEvents then
+        registeredEvents = {}
     end
-    if not self.registeredEvents[event] then
-        self.registeredEvents[event] = {}
+    if not registeredEvents[event] then
+        registeredEvents[event] = {}
     end
-    table.insert(self.registeredEvents[event], func)
-    if (not self.addonEventFrame) then
-        self.addonEventFrame = CreateFrame("Frame")
-        self.addonEventFrame:SetScript("OnEvent", EventFrameHandler)
-    end
-    self.addonEventFrame:RegisterEvent(event)
+    table.insert(registeredEvents[event], func)
+    addonEventFrame:RegisterEvent(event)
 end
 
 ---Unregister an event for a given function
@@ -56,23 +58,23 @@ end
 function MapPinEnhanced:UnregisterEventForFunction(event, func)
     assert(event, "Event must be provided")
     assert(func, "Function must be provided")
-    if not self.registeredEvents then
-        self.registeredEvents = {}
+    if not registeredEvents then
+        registeredEvents = {}
     end
-    if not self.registeredEvents[event] then
-        self.registeredEvents[event] = {}
+    if not registeredEvents[event] then
+        registeredEvents[event] = {}
     end
-    if self.registeredEvents[event] then
-        for i, f in ipairs(self.registeredEvents[event]) do
+    if registeredEvents[event] then
+        for i, f in ipairs(registeredEvents[event]) do
             if f == func then
-                table.remove(self.registeredEvents[event], i)
+                table.remove(registeredEvents[event], i)
                 break
             end
         end
     end
-    if #self.registeredEvents[event] == 0 then
-        self.registeredEvents[event] = nil
-        self.addonEventFrame:UnregisterEvent(event)
+    if #registeredEvents[event] == 0 then
+        registeredEvents[event] = nil
+        addonEventFrame:UnregisterEvent(event)
     end
 end
 
@@ -94,11 +96,11 @@ end
 ---@param event WowEvent the event to unregister for
 function MapPinEnhanced:UnregisterEvent(event)
     assert(event, "Event must be provided")
-    if not self.registeredEvents then
-        self.registeredEvents = {}
+    if not registeredEvents then
+        registeredEvents = {}
     end
-    self.registeredEvents[event] = nil
-    self.addonEventFrame:UnregisterEvent(event)
+    registeredEvents[event] = nil
+    addonEventFrame:UnregisterEvent(event)
 end
 
 ---@enum (key) CallbackEvent

@@ -1,7 +1,11 @@
 ---@class MapPinEnhanced
----@field commandList table<string, function> a list of commands and their associated functions
----@field commandHelpStrings table<string, string> a list of commands and their associated help strings
 local MapPinEnhanced = select(2, ...)
+
+---@type table<string, function> a list of commands and their associated functions
+local commandList = {}
+
+---@type table<string, string> a list of commands and their associated help strings
+local commandHelpStrings = {}
 
 ---Set a slash command trigger for the addon
 ---@param trigger string the slash command trigger
@@ -21,10 +25,10 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
             table.insert(args, word)
         end
         local command = args[1]
-        if self.commandList[command] then
-            pcall(self.commandList[command], unpack(args))
+        if commandList[command] then
+            pcall(commandList[command], unpack(args))
         else
-            local defaultAction = self.commandList["default"]
+            local defaultAction = commandList["default"]
             if defaultAction then
                 pcall(defaultAction, unpack(args))
             else
@@ -42,7 +46,7 @@ function MapPinEnhanced:PrintHelp()
     local addonVersion = C_AddOns.GetAddOnMetadata(self.name, "Version")
     local titleString = string.format("%s %s", self.name, addonVersion)
     self:PrintUnformatted(self:WrapTextInColor(titleString, normalColor))
-    for command, help in pairs(self.commandHelpStrings) do
+    for command, help in pairs(commandHelpStrings) do
         local helpString = helpPattern:format(command, self:WrapTextInColor(help, normalColor))
         self:PrintUnformatted(helpString)
     end
@@ -52,11 +56,11 @@ end
 ---@param func function the function to call when no command is provided
 function MapPinEnhanced:SetDefaultAction(func)
     assert(type(func) == "function", "Default action not provided")
-    assert(not self.commandList["default"], "Default action already set")
-    if not self.commandList then
-        self.commandList = {}
+    assert(not commandList["default"], "Default action already set")
+    if not commandList then
+        commandList = {}
     end
-    self.commandList["default"] = func
+    commandList["default"] = func
 end
 
 ---Add a slash command to the list
@@ -67,14 +71,14 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
     assert(type(command) == "string", "Command not provided")
     assert(type(func) == "function", "Function not provided")
     assert(type(help) == "string", "Help not provided")
-    if not self.commandList then
-        self.commandList = {}
+    if not commandList then
+        commandList = {}
     end
-    if not self.commandHelpStrings then
-        self.commandHelpStrings = {}
+    if not commandHelpStrings then
+        commandHelpStrings = {}
     end
-    self.commandList[command] = func
-    self.commandHelpStrings[command] = help
+    commandList[command] = func
+    commandHelpStrings[command] = help
 
     self:AddDebugCustomDebugAction({
         type = "button",
@@ -87,8 +91,8 @@ end
 ---@param command string the command to remove
 function MapPinEnhanced:RemoveSlashCommand(command)
     assert(type(command) == "string", "Command not provided")
-    self.commandList[command] = nil
-    self.commandHelpStrings[command] = nil
+    commandList[command] = nil
+    commandHelpStrings[command] = nil
 end
 
 ---Enable the help command for the addon
