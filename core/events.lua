@@ -113,9 +113,9 @@ local CALLBACK_EVENTS = {
 }
 
 ---@class CallbackTarget
----@field RegisterCallback fun(self: CallbackTarget, event: string, func: function, ...)
----@field UnregisterCallback fun(self: CallbackTarget, event: string)
----@field UnregisterAllCallbacks fun(self: CallbackTarget, event: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: string, func: function, ...)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: string)
+---@field UnregisterAllCallbacks fun(self: MapPinEnhanced, event: string)
 local callbackTarget = {}
 ---@class CallbackHandlerRegistryWithEvents : CallbackHandlerRegistry
 ---@field events table<string, table<CallbackTarget, function[]>>
@@ -144,11 +144,11 @@ function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
     local eventInfo = CALLBACK_EVENTS[callbackEvent]
     if eventInfo and eventInfo.pattern and key then
         local eventName = string.gsub(eventInfo.event, "%%w%+", key)
-        callbackTarget:RegisterCallback(eventName, func)
+        callbackTarget.RegisterCallback(self, eventName, func)
     elseif eventInfo then
-        callbackTarget:RegisterCallback(eventInfo.event, func)
+        callbackTarget.RegisterCallback(self, eventInfo.event, func)
     else
-        callbackTarget:RegisterCallback(callbackEvent, func)
+        callbackTarget.RegisterCallback(self, callbackEvent, func)
     end
 end
 
@@ -159,11 +159,11 @@ function MapPinEnhanced:UnregisterCallback(callbackEvent, key)
 
     local eventInfo = CALLBACK_EVENTS[callbackEvent]
     if eventInfo and eventInfo.pattern and key then
-        callbackTarget:UnregisterCallback(string.gsub(eventInfo.event, "%%w%+", key))
+        callbackTarget.UnregisterCallback(self, string.gsub(eventInfo.event, "%%w%+", key))
     elseif eventInfo then
-        callbackTarget:UnregisterCallback(eventInfo.event)
+        callbackTarget.UnregisterCallback(self, eventInfo.event)
     else
-        callbackTarget:UnregisterCallback(callbackEvent)
+        callbackTarget.UnregisterCallback(self, callbackEvent)
     end
 end
 

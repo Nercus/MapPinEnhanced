@@ -163,11 +163,17 @@ local function TrackerElementFactory(factory, node)
 end
 
 ---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
----@param data any
+---@param data TreeNodeMixin
 local function TrackerElementResetter(frame, data)
-    -- TODO: check what type of data is coming in and reset accordingly
-    MapPinEnhanced:Debug(data)
-    frame:Reset()
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
+    local data = data:GetData()
+    if data.classification == "group" then
+        --frame:Reset(data.pinID)
+    elseif data.classification == "pin" then
+        frame:Reset(data.pinID)
+    elseif data.classification == "set" then
+        --frame:Reset(data.setID)
+    end
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
