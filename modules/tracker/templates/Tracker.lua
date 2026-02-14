@@ -74,9 +74,11 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
     if self.activeView ~= "pin" or not self:IsShown() then return end
 
     ---@type TreeNodeMixin?
-    local groupNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
-        return nodeData == group
-    end, TreeDataProviderConstants.ExcludeCollapsed)
+    local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
+        ---@type MapPinEnhancedGroupMixin
+        local nodeData = node:GetData()
+        return nodeData.classification == "group" and nodeData.name == group.name
+    end, TreeDataProviderConstants.IncludeCollapsed)
     if not groupNode then
         groupNode = self.dataProvider:Insert(group)
     end
@@ -87,15 +89,19 @@ function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
     if self.activeView ~= "pin" or not self:IsShown() then return end
 
     ---@type TreeNodeMixin?
-    local groupNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
-        return nodeData == group
-    end, TreeDataProviderConstants.ExcludeCollapsed)
+    local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
+        ---@type MapPinEnhancedGroupMixin
+        local nodeData = node:GetData()
+        return nodeData.classification == "group" and nodeData.name == group.name
+    end, TreeDataProviderConstants.IncludeCollapsed)
     if not groupNode then return end
 
     ---@type TreeNodeMixin?
-    local pinNode = self.dataProvider:FindElementDataByPredicate(function(nodeData)
-        return nodeData == pin
-    end, TreeDataProviderConstants.ExcludeCollapsed)
+    local pinNode = self.dataProvider:FindElementDataByPredicate(function(node)
+        ---@type MapPinEnhancedPinMixin
+        local nodeData = node:GetData()
+        return nodeData.classification == "pin" and nodeData.pinID == pin.pinID
+    end, TreeDataProviderConstants.IncludeCollapsed)
     if not pinNode then return end
 
     groupNode:Remove(pinNode)
