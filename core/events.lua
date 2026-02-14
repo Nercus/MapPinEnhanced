@@ -86,10 +86,10 @@ function MapPinEnhanced:OnLoad(callback)
         callback()
         return
     end
-    if not self.onLoadCallbacks then
-        self.onLoadCallbacks = {}
+    if not onLoadCallbacks then
+        onLoadCallbacks = {}
     end
-    table.insert(self.onLoadCallbacks, callback)
+    table.insert(onLoadCallbacks, callback)
 end
 
 ---Unregister an event for the addon

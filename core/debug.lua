@@ -1,8 +1,9 @@
 ---@diagnostic disable: undefined-global
 ---@class MapPinEnhanced
----@field debugMenuTemplate table<AnyMenuEntry[]> a list of menu templates for the debug menu
 local MapPinEnhanced = select(2, ...)
 
+---@type table<AnyMenuEntry[]> a list of menu templates for the debug menu
+local debugMenuTemplate = {}
 
 local devAddonList = {
     "!!NoWarnings",
@@ -52,10 +53,10 @@ end
 function MapPinEnhanced:AddDebugCustomDebugAction(menuTemplate)
     --@debug@
     assert(type(menuTemplate) == "table", "Menu template not provided or not a table")
-    if not self.debugMenuTemplate then
-        self.debugMenuTemplate = {}
+    if not debugMenuTemplate then
+        debugMenuTemplate = {}
     end
-    table.insert(self.debugMenuTemplate, menuTemplate)
+    table.insert(debugMenuTemplate, menuTemplate)
     --@end-debug@
 end
 
@@ -161,8 +162,8 @@ end
 
 function MapPinEnhancedDebugMenuFrameMixin:OnLoad()
     self.debugMenuButton:SetScript("OnClick", function(button)
-        if not MapPinEnhanced.debugMenuTemplate or #MapPinEnhanced.debugMenuTemplate == 0 then return end
-        MapPinEnhanced:GenerateMenu(button, MapPinEnhanced.debugMenuTemplate)
+        if not debugMenuTemplate or #debugMenuTemplate == 0 then return end
+        MapPinEnhanced:GenerateMenu(button, debugMenuTemplate)
     end)
     self.resetVarsButton:SetScript("OnClick", function()
         StaticPopup_Show(MapPinEnhanced.name .. "RESETSAVEDVARS_POPUP")
@@ -243,13 +244,15 @@ function MapPinEnhancedDebugMenuFrameMixin:BuildStatusBarMenu(testsStates)
     return menuTemplate
 end
 
+---@type Frame | nil
+local debugMenuFrame
 local function GetDebugMenuFrame()
-    if not MapPinEnhanced.debugMenuFrame then
-        MapPinEnhanced.debugMenuFrame = CreateFrame("Frame", "MapPinEnhancedDebugMenuFrame", UIParent,
+    if not debugMenuFrame then
+        debugMenuFrame = CreateFrame("Frame", "MapPinEnhancedDebugMenuFrame", UIParent,
             "MapPinEnhancedDebugMenuFrameTemplate")
-        MapPinEnhanced.debugMenuFrame:SetTitle(MapPinEnhanced.name .. " Debug Menu")
+        debugMenuFrame:SetTitle(MapPinEnhanced.name .. " Debug Menu")
     end
-    return MapPinEnhanced.debugMenuFrame
+    return debugMenuFrame
 end
 
 local function loadDevMode()
