@@ -216,7 +216,7 @@ MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
 Options:RegisterOption("checkbox", {
     category = "MISC",
     label = L["Show Coordinates Display"],
-    description = L["Toggle the on-screen display of your current coordinates."],
+    description = L["Toggle the on-screen display of your current coordinates"],
     onChange = function(value)
         InitCoordsDisplayFrame()
         if not coordsDisplayFrame then return end
