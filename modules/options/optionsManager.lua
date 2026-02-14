@@ -300,26 +300,6 @@ end)
 -- })
 
 
--- Options:RegisterOption("colorpicker", {
---     category = "TRACKER",
---     label = "Tracker Header Color",
---     description = "Change the color of the tracker header.",
---     onChange = function(r, g, b, a)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         trackerFrame.header.headerTexture:SetVertexColor(r, g, b, a)
---     end,
---     init = function()
---         local trackerFrame = Tracker:GetTrackerFrame()
---         local r, g, b, a = trackerFrame.header.headerTexture:GetVertexColor()
---         return {
---             r = r,
---             g = g,
---             b = b,
---             a = a,
---         }
---     end,
--- })
-
 
 -- Options:RegisterOption("input", {
 --     category = "TRACKER",
