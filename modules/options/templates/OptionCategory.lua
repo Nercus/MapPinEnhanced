@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionsCategoryTemplate
 ---@field treeNode TreeNodeMixin
----@field expandButton MapPinEnhancedTrackerGroupEntryExpandButton
+---@field expandButton MapPinEnhancedOptionsCategoryExpandButton
 ---@field title FontString
 MapPinEnhancedOptionsCategoryMixin = {}
 
