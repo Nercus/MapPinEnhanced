@@ -8,8 +8,9 @@ local Distance = MapPinEnhanced:GetModule("Distance")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 function MapPinEnhancedPinTrackingMixin:Track()
-    if Wayfinders.trackedPin and Wayfinders.trackedPin ~= self then
-        Wayfinders.trackedPin:Untrack()
+    local trackedPin = Wayfinders:GetTrackedPin()
+    if trackedPin and trackedPin ~= self then
+        trackedPin:Untrack()
     end
 
     self.worldmapPin:SetTracked()
@@ -24,6 +25,11 @@ function MapPinEnhancedPinTrackingMixin:Track()
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
+    local trackedPin = Wayfinders:GetTrackedPin()
+    if trackedPin and trackedPin == self then
+        Wayfinders:SetTrackedPin(nil)
+    end
+
     self.worldmapPin:SetUntracked()
     self.minimapPin:SetUntracked()
 
