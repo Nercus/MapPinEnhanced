@@ -21,6 +21,8 @@ MapPinEnhancedGroupMixin = CreateFromMixins(
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Blizzard = MapPinEnhanced:GetModule("Blizzard")
+local Distance = MapPinEnhanced:GetModule("Distance")
 
 function MapPinEnhancedGroupMixin:Init()
     self.pins = {}
@@ -193,7 +195,6 @@ end
 ---@class SaveableGroupData : GroupInfo
 ---@field pins SaveablePinData[] a table of pin data that belongs to this group
 
-
 ---@return SaveableGroupData
 function MapPinEnhancedGroupMixin:GetSaveableData()
     local data = {
@@ -208,4 +209,35 @@ function MapPinEnhancedGroupMixin:GetSaveableData()
     end
 
     return data
+end
+
+function MapPinEnhancedGroupMixin:TrackNextPin()
+    for _, pin in self:EnumeratePins() do
+        local pinData = pin:GetPinData()
+        if pinData and not pin:IsTracked() then
+            pin:Track()
+            return
+        end
+    end
+end
+
+function MapPinEnhancedGroupMixin:TrackClosestPin()
+    local nearestPin = nil
+    local playerX, playerY, playerMap = Blizzard:GetPlayerMapPosition()
+    if not playerMap or not playerX or not playerY then return end
+
+    for _, pin in self:EnumeratePins() do
+        local pinData = pin:GetPinData()
+        local mapID, x, y = pinData.mapID, pinData.x, pinData.y
+        local distance = Distance:GetDistanceToTarget(mapID, x, y)
+        if not nearestPin or (distance > 0 and distance < nearestPin.distance) then -- there is no nearest pin or the current iteration pin is closer
+            nearestPin = {
+                pin = pin,
+                distance = distance
+            }
+        end
+    end
+    if nearestPin then
+        nearestPin.pin:Track()
+    end
 end

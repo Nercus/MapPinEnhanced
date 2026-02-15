@@ -8,6 +8,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 MapPinEnhancedTrackerPinEntryMixin = {}
 
+local Pins = MapPinEnhanced:GetModule("Pins")
+
 function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local pin = self.pin
 
@@ -23,7 +25,6 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
         if pin.pinData.title == title then return end
         self:SetTitle(title)
     end, pin.pinID)
-
 
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", function(_, color)
         if pin.pinData.color == color then return end
@@ -60,15 +61,20 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
     else
         self.pinFrame:SetUntracked()
     end
-    self.pin:SetColor(pin.pinData.color)
-    self.pin:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
+
+    self.pinFrame:SetColor(pin.pinData.color)
     self:SetTitle(pin.pinData.title)
 
+    self.pinFrame:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
     self:RegisterCallbackEvents()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle(title)
     self.title:SetText(title)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetIcon(icon)
+
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnMouseDown(button)

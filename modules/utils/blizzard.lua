@@ -35,11 +35,7 @@ function Blizzard:OnSuperTrackingChanged()
     local isSuperTrackingOther = isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingMapPin
     MapPinEnhanced:SetVar("superTrackingOther", isSuperTrackingOther)
     if isSuperTrackingCorpse then return end -- corpse tracking runs simultaneously with other supertracking types
-
-    local Tracking = MapPinEnhanced:GetModule("Tracking")
-    if isSuperTrackingOther then
-        Tracking:UntrackTrackedPin()
-    end
+    -- TODO: untrack currently tracked pin here
 end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()

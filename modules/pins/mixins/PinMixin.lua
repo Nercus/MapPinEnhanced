@@ -15,7 +15,7 @@ MapPinEnhancedPinMixin = CreateFromMixins(
     MapPinEnhancedPinTrackingMixin,
     MapPinEnhancedPinMenuMixin,
     MapPinEnhancedPinMouseDownMixin,
-    MapPinEnhancedPinColorMixin,
+    MapPinEnhancedPinStyleMixin,
     MapPinEnhancedPinUtilsMixin,
     MapPinEnhancedPinTooltipMixin,
     MapPinEnhancedPinProxyMixin

@@ -8,7 +8,7 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local MapPinEnhancedWayfinderArrow = {}
 
 
-function MapPinEnhancedWayfinderArrow:SetWayfinderData(pinData)
+function MapPinEnhancedWayfinderArrow:SetWayfinderPin(pinData)
 end
 
 function MapPinEnhancedWayfinderArrow:Enable()

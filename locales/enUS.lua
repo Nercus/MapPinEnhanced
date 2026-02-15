@@ -21,3 +21,7 @@ L["Create a Pin at Your Current Location"] = "Create a Pin at Your Current Locat
 L["Show Coordinates Display"] = "Show Coordinates Display"
 L["Toggle the on-screen display of your current coordinates"] =
 "Toggle the on-screen display of your current coordinates"
+L["Back"] = "Back"
+L["Change Color"] = "Change Color"
+L["Change Icon"] = "Change Icon"
+L["Show on Map"] = "Show on Map"

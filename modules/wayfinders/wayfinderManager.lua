@@ -1,17 +1,18 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Wayfinder
+---@class Wayfinders
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
----@field cachedPinData pinData|nil the last set pin data, used to refresh wayfinders when they are enabled
-local Wayfinder = MapPinEnhanced:GetModule("Wayfinder")
+---@field trackedPin MapPinEnhancedPinMixin the currently tracked pin, used to update wayfinders when the tracked pin changes
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+
 
 ---@class MapPinEnhancedWayfinder
----@field SetWayfinderData fun(self: MapPinEnhancedWayfinder, pinData: pinData | nil) sets the wayfinder data for the wayfinder
+---@field Init fun(self: MapPinEnhancedWayfinder, pin: MapPinEnhancedPinMixin | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
-Wayfinder.activeWayfinders = {}
+Wayfinders.activeWayfinders = {}
 
 ---@enum WayfinderType
 local AVAILABLE_WAYFINDERS = {
@@ -19,45 +20,54 @@ local AVAILABLE_WAYFINDERS = {
     WAYFINDER_ARROW = "WAYFINDER_ARROW",
 }
 
----@param pinData pinData | nil
-function Wayfinder:SetPinData(pinData)
+---@param pin MapPinEnhancedPinMixin | nil
+function Wayfinders:SetTrackedPin(pin)
     for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:SetWayfinderData(pinData)
+        wayfinder:Init(pin)
     end
-    self.cachedPinData = pinData
+    self.trackedPin = pin
+end
+
+function Wayfinders:UntrackTrackedPin()
+    if not self.trackedPin then return end
+    self.trackedPin:Untrack()
+    self.trackedPin = nil
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:Init(nil)
+    end
 end
 
 --- Set the wayfinder data for a specific wayfinder, used when enabling a wayfinder after pin data has already been set
 ---@param wayfinder MapPinEnhancedWayfinder
-function Wayfinder:RefreshWayfinder(wayfinder)
-    if not self.cachedPinData then return end
-    wayfinder:SetWayfinderData(self.cachedPinData)
+function Wayfinders:RefreshWayfinder(wayfinder)
+    if not self.trackedPin then return end
+    wayfinder:Init(self.trackedPin)
 end
 
 ---@param wayfinderType WayfinderType
 ---@return MapPinEnhancedWayfinder
-function Wayfinder:GetWayfinder(wayfinderType)
+function Wayfinders:GetWayfinder(wayfinderType)
     local wayfinder = self.wayfinders and self.wayfinders[wayfinderType]
-    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.SetWayfinderData,
-        "Wayfinder does not implement required methods")
+    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init,
+        "Wayfinders does not implement required methods")
     return wayfinder
 end
 
 ---@param wayfinderType WayfinderType
-function Wayfinder:EnableWayfinder(wayfinderType)
+function Wayfinders:EnableWayfinder(wayfinderType)
     local wayfinder = self:GetWayfinder(wayfinderType)
     if not wayfinder then
-        error("Wayfinder type not registered: " .. tostring(wayfinderType))
+        error("Wayfinders type not registered: " .. tostring(wayfinderType))
     end
     wayfinder:Enable()
     table.insert(self.activeWayfinders, wayfinder)
 end
 
 ---@param wayfinderType WayfinderType
-function Wayfinder:DisableWayfinder(wayfinderType)
+function Wayfinders:DisableWayfinder(wayfinderType)
     local wayfinder = self:GetWayfinder(wayfinderType)
     if not wayfinder then
-        error("Wayfinder type not registered: " .. tostring(wayfinderType))
+        error("Wayfinders type not registered: " .. tostring(wayfinderType))
     end
     wayfinder:Disable()
     for i, activeWayfinder in ipairs(self.activeWayfinders) do
