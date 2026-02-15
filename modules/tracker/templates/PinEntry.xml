@@ -7,8 +7,10 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
         <Size x="272" y="35" />
-        <HighlightTexture atlas="Event-Scheduler-Event-Card-active"
-            alpha="0.3" setAllPoints="true" />
+        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight"
+            setAllPoints="true">
+            <Color r="1" g="0.82" b="0" a="1" />
+        </HighlightTexture>
         <Frames>
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate">
                 <Anchors>
@@ -18,13 +20,20 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontHighlight" parentKey="title" text="PinTitle"
-                    justifyH="LEFT"
-                    justifyV="MIDDLE">
-                    <Size x="100" y="35" />
+                <FontString inherits="GameFontHighlight" parentKey="title" justifyH="LEFT"
+                    justifyV="MIDDLE" alpha="0.5">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="10"
+                        <Anchor point="BOTTOMLEFT" relativePoint="RIGHT" x="10" y="-5"
                             relativeKey="$parent.pinFrame" />
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalSmall" parentKey="location" justifyH="LEFT"
+                    justifyV="MIDDLE" alpha="0.5">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="RIGHT" x="10" y="5"
+                            relativeKey="$parent.pinFrame" />
+                        <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                 </FontString>
             </Layer>

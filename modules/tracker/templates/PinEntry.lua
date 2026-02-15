@@ -6,6 +6,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field treeNode TreeNodeMixin
 ---@field pin MapPinEnhancedPinMixin
 ---@field title FontString
+---@field location FontString
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -61,6 +62,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
 
     self.pinFrame:SetColor(pin.pinData.color)
     self:SetTitle(pin.pinData.title)
+    self:SetLocationText(pin.pinData.x, pin.pinData.y, pin.pinData.mapID)
 
     self.pinFrame:SetIconTexture(pin.pinData.texture, pin.pinData.usesAtlas)
     self:RegisterCallbackEvents()
@@ -68,6 +70,12 @@ end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle(title)
     self.title:SetText(title)
+end
+
+function MapPinEnhancedTrackerPinEntryMixin:SetLocationText(x, y, mapID)
+    local mapInfo = C_Map.GetMapInfo(mapID)
+    local mapName = mapInfo and mapInfo.name or ""
+    self.location:SetText(string.format("%d, %d - %s", x * 100, y * 100, mapName))
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetIcon(icon)
@@ -78,9 +86,7 @@ function MapPinEnhancedTrackerPinEntryMixin:OnMouseDown(button)
     self.pin:OnMouseDown(self, button)
 end
 
-function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
-    self.pinFrame:LockHighlight()
-
+function MapPinEnhancedTrackerPinEntryMixin:ShowTooltip()
     local tooltipData = self.pin and self.pin.pinData.tooltip
     if not tooltipData then return end
     GameTooltip:SetOwner(self, "ANCHOR_LEFT")
@@ -95,7 +101,20 @@ function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
     GameTooltip:Show()
 end
 
+function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
+    self.pinFrame:LockHighlight()
+    self:ShowTooltip()
+
+    self.title:SetAlpha(1)
+    self.location:SetAlpha(1)
+end
+
 function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     self.pinFrame:UnlockHighlight()
     GameTooltip:Hide()
+
+    if not self.pin:IsTracked() then
+        self.title:SetAlpha(0.5)
+        self.location:SetAlpha(0.5)
+    end
 end
