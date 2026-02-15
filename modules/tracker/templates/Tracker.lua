@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerTemplate : Frame
----@field scrollBox ScrollBoxMixin
+---@field scrollBox ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
@@ -15,6 +15,7 @@ MapPinEnhancedTrackerMixin = {
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Sets = MapPinEnhanced:GetModule("Sets")
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
 
@@ -108,6 +109,19 @@ function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
     if groupNode:GetSize() == 0 then
         self.dataProvider:Remove(groupNode)
     end
+end
+
+function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
+    if self.activeView ~= "pin" or not self:IsShown() then return end
+
+    local trackedPin = Wayfinders:GetTrackedPin()
+    if not trackedPin then return end
+
+    self.scrollBox:ScrollToElementDataByPredicate(function(node)
+        ---@type MapPinEnhancedPinMixin
+        local nodeData = node:GetData()
+        return nodeData.classification == "pin" and nodeData.pinID == trackedPin.pinID
+    end, TreeDataProviderConstants.IncludeCollapsed)
 end
 
 -- Maximum number of entries to display
@@ -259,6 +273,7 @@ function MapPinEnhancedTrackerMixin:ShowFrame()
     self:UpdateList()
     self:UpdateHeight()
     self:UpdateTrackerHeader()
+    self:ScrollToTrackedPin()
     self:Show()
 end
 

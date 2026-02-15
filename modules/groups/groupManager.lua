@@ -163,7 +163,7 @@ function Groups:InitializeDefaultGroups()
     end
 end
 
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+MapPinEnhanced:OnLoad(function()
     -- the order here is important! The restore process purges all empty groups, so we need to restore the default groups first and then create the default groups
     Groups:RestoreAllGroups()
     Groups:InitializeDefaultGroups()

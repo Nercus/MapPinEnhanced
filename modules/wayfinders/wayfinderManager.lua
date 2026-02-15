@@ -28,6 +28,10 @@ function Wayfinders:SetTrackedPin(pin)
     self.trackedPin = pin
 end
 
+function Wayfinders:GetTrackedPin()
+    return self.trackedPin
+end
+
 function Wayfinders:UntrackTrackedPin()
     if not self.trackedPin then return end
     self.trackedPin:Untrack()
