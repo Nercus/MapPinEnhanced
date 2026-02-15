@@ -14,10 +14,11 @@ local ICON_TEXTURES = {
     map = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMap_Yellow.png",
     plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus_Yellow.png",
     search = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSearch_Yellow.png",
-    sets = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSets_Yellow.png",
+    set = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSets_Yellow.png",
     settings = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSettings_Yellow.png",
     tick = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png",
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
+    pin = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPin_Yellow.png",
 }
 
 ---@param icon? MapPinEnhancedIcon

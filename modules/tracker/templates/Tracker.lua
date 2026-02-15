@@ -111,9 +111,8 @@ function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
 end
 
 -- Maximum number of entries to display
-local MAX_ENTRIES = 6
+local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
-    -- TODO: update height also when elements get collapsed
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
@@ -220,6 +219,30 @@ function MapPinEnhancedTrackerMixin:GetActiveView()
     return self.activeView
 end
 
+function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
+    if self.activeView == "set" then
+        local numSets = self.dataProvider:GetSize(false)
+        self.header:SetTitle(string.format("Sets (%d)", numSets))
+        self.header:SetIcon("set")
+    else
+        local totalElements = self.dataProvider:GetSize(false)
+        local numGroups = 0
+
+        ---@param node TreeNodeMixin
+        for _, node in self.dataProvider:EnumerateEntireRange() do
+            ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
+            local data = node:GetData()
+            if data.classification == "group" then
+                numGroups = numGroups + 1
+            end
+        end
+
+        local numPins = totalElements - numGroups
+        self.header:SetTitle(string.format("Pins (%d)", numPins))
+        self.header:SetIcon("pin")
+    end
+end
+
 function MapPinEnhancedTrackerMixin:ToggleActiveView()
     if self.activeView == "set" then
         self.activeView = "pin"
@@ -228,11 +251,14 @@ function MapPinEnhancedTrackerMixin:ToggleActiveView()
     end
     self:UpdateList()
     self:UpdateHeight()
+    self:UpdateTrackerHeader()
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
     MapPinEnhanced:RestoreFrame(self)
     self:UpdateList()
+    self:UpdateHeight()
+    self:UpdateTrackerHeader()
     self:Show()
 end
 

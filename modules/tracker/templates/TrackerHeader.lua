@@ -9,6 +9,8 @@ local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@field closeButton Button
 ---@field headerTextureLeft Texture
 ---@field headerTextureRight Texture
+---@field title FontString
+---@field icon MapPinEnhancedIconMixin
 MapPinEnhancedTrackerHeaderMixin = {}
 
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()
@@ -20,4 +22,12 @@ function MapPinEnhancedTrackerHeaderMixin:OnLoad()
     self.closeButton:SetScript("OnClick", function()
         Tracker:HideTracker()
     end)
+end
+
+function MapPinEnhancedTrackerHeaderMixin:SetTitle(title)
+    self.title:SetText(title)
+end
+
+function MapPinEnhancedTrackerHeaderMixin:SetIcon(icon)
+    self.icon:SetIconTexture(icon)
 end

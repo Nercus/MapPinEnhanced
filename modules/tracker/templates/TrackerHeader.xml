@@ -17,6 +17,15 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
+                <Texture inherits="MapPinEnhancedIconTemplate" parentKey="icon">
+                    <Size x="14" y="14" />
+                    <KeyValues>
+                        <KeyValue key="icon" value="set" />
+                    </KeyValues>
+                    <Anchors>
+                        <Anchor point="LEFT" x="8" />
+                    </Anchors>
+                </Texture>
                 <FontString parentKey="title" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="LEFT" justifyV="MIDDLE">
@@ -40,7 +49,7 @@
             <Button parentKey="viewButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="sets" />
+                    <KeyValue key="icon" value="set" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"
@@ -50,10 +59,10 @@
             <Button parentKey="importButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="sets" />
+                    <KeyValue key="icon" value="import" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.viewButton"
                         relativePoint="LEFT" />
                 </Anchors>
             </Button>

@@ -18,7 +18,7 @@
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="iconTexture">
                     <Size x="14" y="14" />
                     <KeyValues>
-                        <KeyValue key="icon" value="sets" />
+                        <KeyValue key="icon" value="set" />
                     </KeyValues>
                     <Anchors>
                         <Anchor point="LEFT" x="8" />
