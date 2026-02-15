@@ -155,7 +155,6 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
 
     self:ClearAllPoints()
     self:SetPoint(currentPoint, relativeTo, relativePoint, xOfs, yOfs - yOffset)
-    MapPinEnhanced:SaveFramePosition(self)
 end
 
 ---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: EntryTemplate))
