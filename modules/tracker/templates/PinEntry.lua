@@ -56,6 +56,8 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
 
     if pin:IsTracked() then
         self.pinFrame:SetTracked()
+        self.title:SetAlpha(1)
+        self.location:SetAlpha(1)
     else
         self.pinFrame:SetUntracked()
     end
