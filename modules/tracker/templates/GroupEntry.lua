@@ -8,7 +8,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 MapPinEnhancedTrackerGroupEntryMixin = {}
 
-
 ---@class MapPinEnhancedTrackerGroupEntryExpandButton : Button
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
@@ -21,6 +20,10 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateCollapseButton()
     else
         self.expandButton:GetNormalTexture():SetAtlas(self.expandButton.expandedTexture)
     end
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:Reset()
+    self:UpdateCollapseButton()
 end
 
 ---@param treeNode TreeNodeMixin

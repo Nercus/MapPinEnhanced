@@ -185,11 +185,11 @@ local function TrackerElementResetter(frame, data)
     ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
     local data = data:GetData()
     if data.classification == "group" then
-        --frame:Reset(data.pinID)
+        frame:Reset()
     elseif data.classification == "pin" then
         frame:Reset(data.pinID)
     elseif data.classification == "set" then
-        --frame:Reset(data.setID)
+        frame:Reset()
     end
 end
 

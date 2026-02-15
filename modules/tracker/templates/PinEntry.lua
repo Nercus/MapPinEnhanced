@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerPinEntryTemplate : Button
 ---@field pinFrame MapPinEnhancedBasePinTemplate
----@field treeNode TreeNodeMixin
 ---@field pin MapPinEnhancedPinMixin
 ---@field title FontString
 ---@field location FontString

@@ -2,25 +2,21 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerSetEntryTemplate : Button
----@field treeNode TreeNodeMixin
 ---@field set MapPinEnhancedSetMixin
 ---@field title FontString
 MapPinEnhancedTrackerSetEntryMixin = {}
 
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 
+function MapPinEnhancedTrackerSetEntryMixin:Reset()
+    self.set = nil
+end
 
 function MapPinEnhancedTrackerSetEntryMixin:Init(treeNode)
     ---@type MapPinEnhancedSetMixin
     local set = treeNode:GetData()
     self.set = set
-    self.treeNode = treeNode
     self.title:SetText(set.name)
-end
-
-function MapPinEnhancedTrackerSetEntryMixin:Reset()
-    self.set = nil
-    self.treeNode = nil
 end
 
 function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
