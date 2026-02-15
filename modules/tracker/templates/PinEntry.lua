@@ -46,6 +46,8 @@ function MapPinEnhancedTrackerPinEntryMixin:Reset(oldPinId)
     assert(oldPinId, "oldPinId is required to reset a pin entry")
     self:UnregisterCallbackEvents(oldPinId)
     self.pin = nil
+    self.title:SetAlpha(0.5)
+    self.location:SetAlpha(0.5)
 end
 
 ---@param treeNode TreeNodeMixin
