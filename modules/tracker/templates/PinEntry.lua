@@ -9,6 +9,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+-- FIXME: the treenode for the previous tracked frame should also update the text alpha when untracked
 
 function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local pin = self.pin
