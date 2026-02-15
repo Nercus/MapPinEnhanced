@@ -36,10 +36,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:SetTitle(title)
     self.title:SetText(string.upper(title))
 end
 
-function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown()
+function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
     assert(self.treeNode, "TreeNode is not set for MapPinEnhancedTrackerGroupEntryMixin")
-    self.treeNode:ToggleCollapsed()
-    self:UpdateCollapseButton()
+    if button == "LeftButton" then
+        self.treeNode:ToggleCollapsed()
+        self:UpdateCollapseButton()
+    end
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:OnEnter()
