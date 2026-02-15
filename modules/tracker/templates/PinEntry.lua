@@ -82,7 +82,7 @@ function MapPinEnhancedTrackerPinEntryMixin:SetLocationText(x, y, mapID)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetIcon(icon)
-
+    self.pinFrame:SetIconTexture(icon)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnMouseDown(button)
@@ -116,7 +116,7 @@ function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     self.pinFrame:UnlockHighlight()
     GameTooltip:Hide()
 
-    if not self.pin:IsTracked() then
+    if self.pin and not self.pin:IsTracked() then
         self.title:SetAlpha(0.5)
         self.location:SetAlpha(0.5)
     end
