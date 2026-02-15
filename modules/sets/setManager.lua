@@ -87,8 +87,7 @@ function Sets:RestoreAllSets()
     ---@type SetInfo[] | nil
     local setsData = MapPinEnhanced:GetVar("sets")
     if not setsData then return end
-
-    for _, setData in ipairs(setsData) do
+    for _, setData in pairs(setsData) do
         self:RestoreSet(setData)
     end
 end

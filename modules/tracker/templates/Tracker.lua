@@ -21,8 +21,6 @@ local Sets = MapPinEnhanced:GetModule("Sets")
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
 
 
--- TODO: split the pin view and the set view into two different mixins
-
 function MapPinEnhancedTrackerMixin:UpdateSetList()
     ---@param set MapPinEnhancedSetMixin
     for set in Sets:EnumerateSets() do

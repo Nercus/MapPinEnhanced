@@ -8,20 +8,23 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerSetEntryTemplate" />
         </KeyValues>
         <Size x="300" y="30" />
-        <NormalTexture atlas="shop-header-menu-BG-right" setAllPoints="true" />
-        <HighlightTexture atlas="shop-header-menu-selected-right" alpha="0.3" setAllPoints="true" />
+        <NormalTexture atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
+            <TextureSliceMargins left="32" right="32" top="32" bottom="32" />
+            <TextureSliceMode mode="Stretched" />
+        </NormalTexture>
+        <HighlightTexture atlas="Adventures_MissionList_Highlight" alpha="0.3" setAllPoints="true" />
         <Layers>
             <Layer level="ARTWORK">
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="iconTexture">
-                    <Size x="16" y="16" />
+                    <Size x="14" y="14" />
                     <KeyValues>
                         <KeyValue key="icon" value="sets" />
                     </KeyValues>
                     <Anchors>
-                        <Anchor point="LEFT" x="5" />
+                        <Anchor point="LEFT" x="8" />
                     </Anchors>
                 </Texture>
-                <FontString inherits="GameFontNormal" text="Test Set" justifyH="LEFT">
+                <FontString inherits="GameFontNormal" parentKey="title" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.iconTexture" relativePoint="RIGHT"
                             x="5" />
