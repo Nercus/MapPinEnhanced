@@ -22,18 +22,15 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     end, pin.pinID)
 
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", function(_, title)
-        if pin.pinData.title == title then return end
         self:SetTitle(title)
     end, pin.pinID)
 
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", function(_, color)
-        if pin.pinData.color == color then return end
         self.pinFrame:SetColor(color)
     end, pin.pinID)
 
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", function(_, iconInfo)
-        if pin.pinData.texture == iconInfo.path then return end
-        self.pinFrame:SetIcon(iconInfo.path, iconInfo.usesAtlas, iconInfo.offset, iconInfo.scale)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", function(_, texture, usesAtlas)
+        self.pinFrame:SetIconTexture(texture, usesAtlas)
     end, pin.pinID)
 end
 
@@ -65,7 +62,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
     self.pinFrame:SetColor(pin.pinData.color)
     self:SetTitle(pin.pinData.title)
 
-    self.pinFrame:SetIcon(pin.pinData.texture, pin.pinData.usesAtlas)
+    self.pinFrame:SetIconTexture(pin.pinData.texture, pin.pinData.usesAtlas)
     self:RegisterCallbackEvents()
 end
 

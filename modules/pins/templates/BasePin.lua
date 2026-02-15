@@ -33,28 +33,22 @@ local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
 
----@enum (key) PinColor
-local PIN_COLORS_BY_NAME = {
-    ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
-    ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
-    ["Pale"] = CreateColor(0.898, 0.659, 0.369, 1),
-    ["Yellow"] = CreateColor(0.949, 0.788, 0.149, 1),
-    ["Green"] = CreateColor(0.404, 0.788, 0.263, 1),
-    ["LightBlue"] = CreateColor(0.318, 0.757, 0.878, 1),
-    ["DarkBlue"] = CreateColor(0.239, 0.239, 0.976, 1),
-    ["Purple"] = CreateColor(0.549, 0.314, 0.886, 1),
-    ["Pink"] = CreateColor(0.886, 0.427, 0.843, 1),
-}
-
 local DEFAULT_PIN_COLOR = "Yellow"
-
-Pins.PIN_COLORS_BY_NAME = PIN_COLORS_BY_NAME
+local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
+local PIN_ICONS = Pins.PIN_ICONS
 
 ---@param icon string? texture path or atlas name
 ---@param usesAtlas boolean? if true, the icon parameter is an atlas name, otherwise it is a texture path
 ---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
 ---@param scale number? optional scale for the icon, if not set, it will be 1
-function MapPinEnhancedBasePinMixin:SetIcon(icon, usesAtlas, offset, scale)
+function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scale)
+    if PIN_ICONS[icon] then
+        local pinConfig = PIN_ICONS[icon]
+        usesAtlas = pinConfig.usesAtlas
+        offset = pinConfig.offset
+        scale = pinConfig.scale
+    end
+
     if not icon then
         self.icon:Hide()
         self.iconVisible = false
@@ -173,7 +167,7 @@ function MapPinEnhancedBasePinMixin:SetColor(color)
         color = DEFAULT_PIN_COLOR
     end
     local colorValue = PIN_COLORS_BY_NAME[color]
-    self:SetIcon(nil)
+    self:SetIconTexture(nil)
     self:SetTextureColor(colorValue)
 end
 

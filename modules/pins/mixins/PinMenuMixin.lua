@@ -85,7 +85,7 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
                                 return MenuResponse.Close;
                             end)
                             frame:SetScript("OnClick", function()
-                                self:SetIcon(data.path, data.usesAtlas, data.offset, data.scale)
+                                self:SetIcon(data.path, data.usesAtlas)
                                 description:Pick(MenuInputContext.MouseButton, "LeftButton")
                                 PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
                             end)
