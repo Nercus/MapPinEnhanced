@@ -6,7 +6,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
 ---@field trackedPin MapPinEnhancedPinMixin the currently tracked pin, used to update wayfinders when the tracked pin changes
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-
+local Distance = MapPinEnhanced:GetModule("Distance")
 
 ---@class MapPinEnhancedWayfinder
 ---@field Init fun(self: MapPinEnhancedWayfinder, pin: MapPinEnhancedPinMixin | nil) sets the wayfinder pin for the wayfinder
@@ -22,23 +22,28 @@ local AVAILABLE_WAYFINDERS = {
 
 ---@param pin MapPinEnhancedPinMixin | nil
 function Wayfinders:SetTrackedPin(pin)
+    if self.trackedPin then
+        local oldPinData = self.trackedPin:GetPinData()
+        if oldPinData then
+            Distance:DisableDistanceCheck(oldPinData.mapID, oldPinData.x, oldPinData.y)
+        end
+    end
+
+    self.trackedPin = pin
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:Init(pin)
     end
-    self.trackedPin = pin
+
+    if pin then
+        local pinData = pin:GetPinData()
+        if pinData then
+            Distance:EnableDistanceCheck(pinData.mapID, pinData.x, pinData.y)
+        end
+    end
 end
 
 function Wayfinders:GetTrackedPin()
     return self.trackedPin
-end
-
-function Wayfinders:UntrackTrackedPin()
-    if not self.trackedPin then return end
-    self.trackedPin:Untrack()
-    self.trackedPin = nil
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:Init(nil)
-    end
 end
 
 --- Set the wayfinder data for a specific wayfinder, used when enabling a wayfinder after pin data has already been set

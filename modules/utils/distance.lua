@@ -1,8 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 ---@class Distance
----@field distanceFrame Frame
----@field target {mapID: number, x: number, y: number, onUpdate: fun(distance: number, timeToTarget: number)}
 local Distance = MapPinEnhanced:GetModule("Distance")
 local Blizzard = MapPinEnhanced:GetModule("Blizzard")
 
@@ -15,6 +13,12 @@ local distanceCache = table.create(DISTANCE_CACHE_SIZE)
 local lastDistance = 0
 local lastUpdate = nil
 local throttle_interval = BASE_UPDATE_INTERVAL
+
+---@type {mapID: number, x: number, y: number}
+local target = nil
+---@type fun(distance: number, timeToTarget: number)[]
+local onUpdateCallbacks = {}
+local distanceFrame = CreateFrame("Frame")
 
 local IsSuperTracking = C_SuperTrack.IsSuperTrackingAnything
 local max = math.max
@@ -49,16 +53,16 @@ function Distance:GetDistanceToTarget(mapID, x, y)
     return self:GetDistanceBetweenPoints(playerMap, playerX, playerY, mapID, x, y)
 end
 
-function Distance:OnUpdate()
-    if not self.target then return end
+local function OnUpdate()
+    if not target then return end
 
     local currentTime = GetTime()
     if lastUpdate and (currentTime - lastUpdate < throttle_interval) then return end
 
     if not IsSuperTracking() then return end
 
-    local mapID, x, y = self.target.mapID, self.target.x, self.target.y
-    local distance = self:GetDistanceToTarget(mapID, x, y)
+    local mapID, x, y = target.mapID, target.x, target.y
+    local distance = Distance:GetDistanceToTarget(mapID, x, y)
     if distance == 0 then return end
 
     if abs(lastDistance - distance) < 1 then return end
@@ -95,33 +99,55 @@ function Distance:OnUpdate()
     -- Update uPDATE interval based on distance
     throttle_interval = max(MIN_UPDATE_INTERVAL, min(MAX_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL * (distance / 100)))
 
-    -- Call the target's onUpdate function with the distance and time to target
-    if self.target.onUpdate then
-        self.target.onUpdate(distance, timeToTarget)
+    for _, callback in ipairs(onUpdateCallbacks) do
+        if type(callback) == "function" then
+            callback(distance, timeToTarget)
+        end
     end
 
     lastDistance = distance
     lastUpdate = currentTime
 end
 
+--- Register a callback to be called when the distance to the target is updated
+---@param callback fun(distance: number, timeToTarget: number) The callback function that will be called with the updated distance and estimated time to target
+function Distance:RegisterDistanceCallback(callback)
+    if type(callback) == "function" then
+        table.insert(onUpdateCallbacks, callback)
+    end
+end
+
+--- Unregister a previously registered distance update callback
+---@param callback fun(distance: number, timeToTarget: number) The callback function to unregister
+function Distance:UnregisterDistanceCallback(callback)
+    for i, cb in ipairs(onUpdateCallbacks) do
+        if cb == callback then
+            table.remove(onUpdateCallbacks, i)
+            return
+        end
+    end
+end
+
 --- Enable distance check for a specific target
 ---@param mapID number
 ---@param x number
 ---@param y number
----@param onUpdate function(distance: number, timeToTarget: number)
-function Distance:EnableDistanceCheck(mapID, x, y, onUpdate)
+function Distance:EnableDistanceCheck(mapID, x, y)
     throttle_interval = BASE_UPDATE_INTERVAL
     wipe(distanceCache)
     lastDistance = 0
     lastUpdate = nil
-    self.target = { mapID = mapID, x = x, y = y, onUpdate = onUpdate }
-    -- Trigger the initial callback immediately
-    if self.target.onUpdate then
-        local initialDistance = self:GetDistanceToTarget(mapID, x, y)
-        self.target.onUpdate(initialDistance, -1) -- -1 indicates unknown time to target
+    self.target = { mapID = mapID, x = x, y = y }
+
+    local initialDistance = self:GetDistanceToTarget(mapID, x, y)
+    for _, callback in ipairs(onUpdateCallbacks) do
+        if type(callback) == "function" then
+            callback(initialDistance, -1) -- -1 indicates unknown time to target
+        end
     end
-    if not self.distanceFrame:GetScript("OnUpdate") then
-        self.distanceFrame:SetScript("OnUpdate", function() self:OnUpdate() end)
+
+    if not distanceFrame:GetScript("OnUpdate") then
+        distanceFrame:SetScript("OnUpdate", OnUpdate)
     end
 end
 
@@ -135,26 +161,13 @@ function Distance:DisableDistanceCheck(mapID, x, y)
             self.target = nil
             wipe(distanceCache)
             lastDistance = 0
-            self.distanceFrame:SetScript("OnUpdate", nil)
+            distanceFrame:SetScript("OnUpdate", nil)
             return
         end
     else
         self.target = nil
         wipe(distanceCache)
         lastDistance = 0
-        self.distanceFrame:SetScript("OnUpdate", nil)
+        distanceFrame:SetScript("OnUpdate", nil)
     end
 end
-
-function Distance:Init()
-    assert(not self.distanceFrame, "Distance frame already initialized")
-    throttle_interval = BASE_UPDATE_INTERVAL
-    wipe(distanceCache)
-    lastDistance = 0
-    lastUpdate = nil
-    self.distanceFrame = CreateFrame("Frame")
-end
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Distance:Init()
-end)

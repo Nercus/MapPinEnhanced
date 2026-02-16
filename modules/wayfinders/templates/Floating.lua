@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Distance = MapPinEnhanced:GetModule("Distance")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field pin MapPinEnhancedPinMixin | nil the currently tracked pin, used to update the wayfinder when the tracked pin changes
@@ -43,6 +44,10 @@ function MapPinEnhancedWayfinderFloating:Reset()
     C_Map.ClearUserWaypoint()
 end
 
+function MapPinEnhancedWayfinderFloating:OnDistanceUpdate(distance, timeToTarget)
+    MapPinEnhanced:Debug("Wayfinder distance update: " .. distance .. " yards, ETA: " .. timeToTarget .. " seconds")
+end
+
 ---@param pin MapPinEnhancedPinMixin | nil
 function MapPinEnhancedWayfinderFloating:Init(pin)
     if not pin then
@@ -59,9 +64,12 @@ function MapPinEnhancedWayfinderFloating:Init(pin)
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
+    Distance:RegisterDistanceCallback(self.OnDistanceUpdate)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
+    Distance:UnregisterDistanceCallback(self.OnDistanceUpdate)
+    self:Reset()
 end
 
 --- Inject into WayfinderManager
