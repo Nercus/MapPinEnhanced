@@ -54,6 +54,7 @@ function MapPinEnhancedGroupMixin:SetSource(source)
     assert(source, "MapPinEnhancedGroupMixin:SetSource: source is nil")
     assert(type(source) == "string", "MapPinEnhancedGroupMixin:SetSource: source must be a string")
     assert(C_AddOns.IsAddOnLoaded(source), "MapPinEnhancedGroupMixin:SetSource: source is not a loaded addon")
+    -- TODO: check if restoring groups from an unloaded addon causes problems
     self.source = source
     Groups:PersistGroup(self)
 end
