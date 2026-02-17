@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
 ---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
+---@field debouncedPersist table<string, function> a table to store the debounced persist functions for each group by group name
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
@@ -98,18 +99,15 @@ function Groups:GetGroupByName(name)
     return nil
 end
 
----@type table<string, function>
-local debouncedPersist = {}
-
+Groups.debouncedPersist = {}
 ---@param group MapPinEnhancedGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")
     local groupName = group:GetName()
     assert(groupName, "Groups:PersistGroup: group name is nil")
 
-    -- Persisting the data for a group is debounced to avoid excessive calls of the function on a half second delay
-    if not debouncedPersist[groupName] then
-        debouncedPersist[groupName] = MapPinEnhanced:DebounceChange(function()
+    if not self.debouncedPersist[groupName] then
+        self.debouncedPersist[groupName] = MapPinEnhanced:DebounceChange(function()
             local data = group:GetSaveableData()
             assert(data, "Groups:PersistGroup: data is nil")
             if not data or not data.name then return end
@@ -117,7 +115,7 @@ function Groups:PersistGroup(group)
         end, 0.5)
     end
 
-    debouncedPersist[groupName]()
+    self.debouncedPersist[groupName]()
 end
 
 ---@param groupData SaveableGroupData
@@ -156,10 +154,23 @@ end
 function Groups:InitializeDefaultGroups()
     local groupsPool = Groups:GetObjectPool()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
-        local group = groupsPool:Acquire()
-        group:SetName(groupInfo.name)
-        group:SetIcon(groupInfo.icon)
-        group:SetSource(groupInfo.source)
+        -- Check if this default group already exists (from restoration)
+        local existingGroup = self:GetGroupByName(groupInfo.name)
+        if existingGroup then
+            -- Ensure it has the correct source and icon
+            if existingGroup:GetSource() ~= groupInfo.source then
+                existingGroup:SetSource(groupInfo.source)
+            end
+            if existingGroup:GetIcon() ~= groupInfo.icon then
+                existingGroup:SetIcon(groupInfo.icon)
+            end
+        else
+            -- Only acquire a new one if it doesn't exist
+            local group = groupsPool:Acquire()
+            group:SetName(groupInfo.name)
+            group:SetIcon(groupInfo.icon)
+            group:SetSource(groupInfo.source)
+        end
     end
 end
 

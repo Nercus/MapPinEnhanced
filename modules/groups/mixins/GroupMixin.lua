@@ -41,7 +41,14 @@ end
 function MapPinEnhancedGroupMixin:SetName(name)
     assert(name, "MapPinEnhancedGroupMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedGroupMixin:SetName: name must be a string")
+
+    local oldName = self.name
     self.name = name
+
+    if oldName and oldName ~= name then
+        Groups.debouncedPersist[oldName] = nil
+    end
+
     Groups:PersistGroup(self)
 end
 
