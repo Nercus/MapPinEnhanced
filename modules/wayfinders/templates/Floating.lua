@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
----@field pin MapPinEnhancedPinMixin | nil the currently tracked pin, used to update the wayfinder when the tracked pin changes
+---@field data WayfinderData | nil
 local MapPinEnhancedWayfinderFloating = {}
 
 ---@param x number
@@ -32,26 +32,32 @@ function MapPinEnhancedWayfinderFloating:SetUserWaypoint(x, y, mapID)
 
     local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     C_Map.SetUserWaypoint(uiMapPoint)
-    C_SuperTrack.ClearAllSuperTracked()
-    C_Timer.After(0.1, function()
-        C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+end
+
+local function onUserwaypointUpdated()
+    local hasUserWaypoint = C_Map.HasUserWaypoint()
+    if not hasUserWaypoint then return end
+    C_Timer.After(0, function()
+        if C_Map.HasUserWaypoint() == true then
+            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+        end
     end)
 end
 
 function MapPinEnhancedWayfinderFloating:Reset()
-    self.pin = nil
+    self.data = nil
     C_Map.ClearUserWaypoint()
 end
 
----@param pin MapPinEnhancedPinMixin | nil
-function MapPinEnhancedWayfinderFloating:Init(pin)
-    if not pin then
+---@param wayfinderData WayfinderData | nil
+function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
+    if not wayfinderData then
         self:Reset()
         return
     end
-    self.pin = pin
-    if pin then
-        local x, y, mapID = pin.pinData.x, pin.pinData.y, pin.pinData.mapID
+    self.data = wayfinderData
+    if wayfinderData then
+        local x, y, mapID = wayfinderData.x, wayfinderData.y, wayfinderData.mapID
         self:SetUserWaypoint(x, y, mapID)
     else
         C_Map.ClearUserWaypoint()
@@ -70,7 +76,8 @@ if not Wayfinders.wayfinders then
 end
 Wayfinders.wayfinders["WAYFINDER_FLOATING"] = MapPinEnhancedWayfinderFloating
 
-
 MapPinEnhanced:OnLoad(function()
     Wayfinders:EnableWayfinder("WAYFINDER_FLOATING")
 end)
+
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", onUserwaypointUpdated)

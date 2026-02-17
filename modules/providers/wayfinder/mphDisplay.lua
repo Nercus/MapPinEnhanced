@@ -1,1 +1,0 @@
--- TODO: provide data from the addon to the wayfinder
