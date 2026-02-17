@@ -63,11 +63,12 @@ function Pins:UntrackTrackedPin()
 end
 
 local function OnSuperTrackingChanged()
-    local isWaypointTracked = C_SuperTrack.IsSuperTrackingUserWaypoint()
-    if not isWaypointTracked then
+    local isTrackingAnything = C_SuperTrack.IsSuperTrackingAnything()
+    local isTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
+    local isNotTrackingWaypoint = isTrackingAnything and not isTrackingUserWaypoint
+    if isNotTrackingWaypoint then
         Pins:UntrackTrackedPin()
     end
 end
-
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
