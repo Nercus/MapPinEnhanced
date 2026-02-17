@@ -15,7 +15,7 @@ MapPinEnhancedTrackerMixin = {
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Sets = MapPinEnhanced:GetModule("Sets")
-local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
 
@@ -114,7 +114,7 @@ end
 function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
     if self.activeView ~= "pin" or not self:IsShown() then return end
 
-    local trackedPin = Wayfinders:GetTrackedPin()
+    local trackedPin = Pins:GetTrackedPin()
     if not trackedPin then return end
 
     self.scrollBox:ScrollToElementDataByPredicate(function(node)

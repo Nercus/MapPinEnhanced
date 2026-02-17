@@ -4,12 +4,12 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
----@field trackedPin MapPinEnhancedPinMixin the currently tracked pin, used to update wayfinders when the tracked pin changes
+---@field cachedData WayfinderData? the last set wayfinder data, used to update wayfinders when they are enabled after data has already been set
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 
 ---@class MapPinEnhancedWayfinder
----@field Init fun(self: MapPinEnhancedWayfinder, pin: MapPinEnhancedPinMixin | nil) sets the wayfinder pin for the wayfinder
+---@field Init fun(self: MapPinEnhancedWayfinder, data: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
 Wayfinders.activeWayfinders = {}
@@ -20,32 +20,39 @@ local AVAILABLE_WAYFINDERS = {
     WAYFINDER_ARROW = "WAYFINDER_ARROW",
 }
 
----@param pin MapPinEnhancedPinMixin | nil
-function Wayfinders:SetTrackedPin(pin)
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:Init(pin)
-    end
-    self.trackedPin = pin
-end
+---@class WayfinderData
+---@field mapID number UIMapID of the zone
+---@field x number x coordinate between 0 and 1
+---@field y number y coordinate between 0 and 1
+---@field title string? title of the pin
+---@field texture string? an optional texture to use for the pin this will override the color
+---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
+---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
 
-function Wayfinders:GetTrackedPin()
-    return self.trackedPin
-end
-
-function Wayfinders:UntrackTrackedPin()
-    if not self.trackedPin then return end
-    self.trackedPin:Untrack()
-    self.trackedPin = nil
+--- Set the wayfinder data for the currently tracked pin, this will update all active wayfinders with the new data
+---@param data WayfinderData
+function Wayfinders:SetWayfinderData(data)
+    self.cachedData = data
     for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:Init(nil)
+        wayfinder:Init(data)
     end
 end
 
 --- Set the wayfinder data for a specific wayfinder, used when enabling a wayfinder after pin data has already been set
 ---@param wayfinder MapPinEnhancedWayfinder
 function Wayfinders:RefreshWayfinder(wayfinder)
-    if not self.trackedPin then return end
-    wayfinder:Init(self.trackedPin)
+    if self.cachedData then
+        wayfinder:Init(self.cachedData)
+    else
+        wayfinder:Init(nil)
+    end
+end
+
+function Wayfinders:ClearWayfinderData()
+    self.cachedData = nil
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:Init(nil)
+    end
 end
 
 ---@param wayfinderType WayfinderType

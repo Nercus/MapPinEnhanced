@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Pins
+---@field trackedPin MapPinEnhancedPinMixin the currently tracked pin, used to update wayfinders when the tracked pin changes
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 local function CreatePin()
@@ -44,4 +45,19 @@ function Pins:ReleasePin(pinID)
     if not pinID then return end
     local pin = self:GetPinByID(pinID)
     pinsPool:Release(pin)
+end
+
+---@param pin MapPinEnhancedPinMixin | nil
+function Pins:SetTrackedPin(pin)
+    self.trackedPin = pin
+end
+
+function Pins:GetTrackedPin()
+    return self.trackedPin
+end
+
+function Pins:UntrackTrackedPin()
+    if not self.trackedPin then return end
+    self.trackedPin:Untrack()
+    self.trackedPin = nil
 end

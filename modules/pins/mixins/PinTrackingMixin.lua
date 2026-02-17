@@ -5,10 +5,10 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedPinTrackingMixin = {}
 
 local Distance = MapPinEnhanced:GetModule("Distance")
-local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Pins = MapPinEnhanced:GetModule("Pins")
 
 function MapPinEnhancedPinTrackingMixin:Track()
-    local trackedPin = Wayfinders:GetTrackedPin()
+    local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin ~= self then
         trackedPin:Untrack()
     end
@@ -19,15 +19,15 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self.isTracked = true
     self:PersistPin()
 
-    Wayfinders:SetTrackedPin(self)
+    Pins:SetTrackedPin(self)
 
     MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, true)
 end
 
 function MapPinEnhancedPinTrackingMixin:Untrack()
-    local trackedPin = Wayfinders:GetTrackedPin()
+    local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin == self then
-        Wayfinders:SetTrackedPin(nil)
+        Pins:SetTrackedPin(nil)
     end
 
     self.worldmapPin:SetUntracked()
