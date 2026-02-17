@@ -42,6 +42,7 @@ function Providers:GetSuperTrackingInfo()
     ---@type number
     local y
 
+    ---@type MapCanvasPinMixin[]
     local mouseFoci = GetMouseFoci();
     for _, focus in ipairs(mouseFoci) do
         if focus.lastOwningMapID then
