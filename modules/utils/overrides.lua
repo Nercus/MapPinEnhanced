@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---Method to block the automatic removal of pins in the game
 local function OverrideSuperTrackedReachedBehavior()
     -- TODO: find a taint free way to do this
+    -- TODO: add this to the floating diamond as its only needed when turning on in game navigation
     local superTrackMapPinTypesThatClearWhenDestinationReached = {
         [Enum.SuperTrackingMapPinType.AreaPOI] = true,
         [Enum.SuperTrackingMapPinType.TaxiNode] = true,

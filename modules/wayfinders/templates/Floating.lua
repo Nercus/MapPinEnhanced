@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Distance = MapPinEnhanced:GetModule("Distance")
+local Map = MapPinEnhanced:GetModule("Map")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
@@ -70,11 +70,11 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
-    Distance:RegisterDistanceCallback(self.OnDistanceUpdate)
+    Map:RegisterContinuousDistanceCallback(self.OnDistanceUpdate)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
-    Distance:UnregisterDistanceCallback(self.OnDistanceUpdate)
+    Map:UnregisterContinuousDistanceCallback(self.OnDistanceUpdate)
     self:Reset()
 end
 
