@@ -229,6 +229,9 @@ Options:RegisterOption("checkbox", {
             coordsDisplayFrame:HideFrame()
         end
     end,
+    init = function()
+        return MapPinEnhanced:GetVar("coordsDisplay", "visible") --[[@as boolean?]]
+    end,
 })
 
 Options:RegisterOption("checkbox", {

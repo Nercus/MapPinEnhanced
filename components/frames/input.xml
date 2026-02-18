@@ -6,7 +6,8 @@
     <EditBox name="MapPinEnhancedInputTemplate"
         mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin"
         virtual="true"
-        font="GameFontHighlight" autoFocus="false" multiLine="false">
+        font="GameFontHighlight" autoFocus="false" multiLine="false" propagateMouseInput="Motion">
+        <Size y="20" />
         <TextInsets left="5" right="15" />
         <Layers>
             <Layer level="BACKGROUND">

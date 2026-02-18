@@ -4,10 +4,10 @@
     <Include file="OptionEntry.lua" />
     <Frame name="MapPinEnhancedOptionsEntryTemplate" mixin="MapPinEnhancedOptionsEntryMixin"
         virtual="true">
-        <Size x="1" y="40" />
+        <Size x="1" y="30" />
         <Frames>
             <Frame parentKey="formSlot">
-                <Size x="200" y="40" />
+                <Size x="200" y="30" />
                 <Anchors>
                     <Anchor point="RIGHT" />
                 </Anchors>
@@ -19,19 +19,11 @@
                     justifyV="MIDDLE">
                     <Size x="1" y="1" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPLEFT" x="10" />
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.formSlot"
                             relativePoint="BOTTOMLEFT" x="-5" />
                     </Anchors>
                 </FontString>
-            </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture atlas="UI-HUD-CoolDownManager-Bar-BG" alphaMode="ADD" alpha="0.3">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-5" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
-                    </Anchors>
-                </Texture>
             </Layer>
         </Layers>
         <Scripts>

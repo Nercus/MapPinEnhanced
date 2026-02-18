@@ -52,11 +52,9 @@ end
 ---@param searchString string
 function MapPinEnhancedOptionsFrameMixin:UpdateList(searchString)
     self.dataProvider:Flush()
-
     ---@param category MapPinEnhancedOptionCategoryMixin
     for category in Options:EnumerateCategories() do
         local categoryMatches = matchCategory(category, searchString)
-
         ---@type MapPinEnhancedOptionMixin[]
         local matchingOptions = {}
         for _, option in category:EnumerateOptions() do
@@ -78,15 +76,15 @@ function MapPinEnhancedOptionsFrameMixin:UpdateList(searchString)
                 return a:GetOptionData().label < b:GetOptionData().label
             end)
 
-            local subCategory = nil
+            local previousSubCategory = nil
             for _, option in ipairs(matchingOptions) do
-                local subCategory = option:GetOptionData().subCategory
+                local currentSubCategory = option:GetOptionData().subCategory
 
-                if subCategory and subCategory ~= subCategory then
+                if currentSubCategory and currentSubCategory ~= previousSubCategory then
                     local subCategoryMixin = CreateFromMixins(MapPinEnhancedOptionSubgroupMixin)
-                    subCategoryMixin:SetName(subCategory)
+                    subCategoryMixin:SetName(currentSubCategory)
                     categoryNode:Insert(subCategoryMixin)
-                    subCategory = subCategory
+                    previousSubCategory = currentSubCategory
                 end
 
                 categoryNode:Insert(option)

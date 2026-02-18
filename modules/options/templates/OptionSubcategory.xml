@@ -2,19 +2,20 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
 
-    <Include file="OptionEntry.lua" />
+    <Include file="OptionSubcategory.lua" />
     <Frame name="MapPinEnhancedOptionsSubgroupTemplate" virtual="true"
         mixin="MapPinEnhancedOptionsSubgroupMixin">
-        <Size x="400" y="24" />
+        <Size x="400" y="30" />
         <Anchors>
             <Anchor point="LEFT" />
             <Anchor point="RIGHT" />
         </Anchors>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontHighlight" justifyH="LEFT">
+                <FontString parentKey="title" inherits="GameFontHighlight" justifyH="LEFT"
+                    justifyV="BOTTOM" outline="THICK" alpha="1">
                     <Anchors>
-                        <Anchor point="LEFT" x="10" y="0" />
+                        <Anchor point="BOTTOMLEFT" x="0" y="0" />
                     </Anchors>
                 </FontString>
             </Layer>

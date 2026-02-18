@@ -11,16 +11,14 @@ MapPinEnhancedOptionsCategoryMixin = {}
 ---@class MapPinEnhancedOptionsCategoryExpandButton : Button
 ---@field normalTexture Texture
 ---@field highlightTexture Texture
----@field expand AnimationGroup
----@field collapse AnimationGroup
+---@field expandedTexture string
+---@field collapsedTexture string
 
 function MapPinEnhancedOptionsCategoryMixin:UpdateCollapseButton()
-    self.expandButton.expand:Stop()
-    self.expandButton.collapse:Stop()
     if self.treeNode:IsCollapsed() then
-        self.expandButton.collapse:Play()
+        self.expandButton:GetNormalTexture():SetAtlas(self.expandButton.collapsedTexture)
     else
-        self.expandButton.expand:Play()
+        self.expandButton:GetNormalTexture():SetAtlas(self.expandButton.expandedTexture)
     end
 end
 

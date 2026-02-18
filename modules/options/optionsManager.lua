@@ -230,151 +230,139 @@ end)
 
 
 -- Example Usage for Tracker Options
--- Options:RegisterOption("slider", {
---     category = "TRACKER",
---     label = "Tracker x position",
---     description = "Move the tracker left or right.",
---     descriptionImage = {
---         texture = "delve-entrance-background-zekvirs-lair",
---         width = 584,
---         height = 384,
---     },
---     min = 0,
---     max = 2000,
---     step = 500,
---     onChange = function(value)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         if trackerFrame:IsShown() then
---             local position = MapPinEnhanced:GetVar("trackerPosition") or { x = 0, y = 0 }
---             position.x = value
---             MapPinEnhanced:SetVar("trackerPosition", position)
---             trackerFrame:ClearAllPoints()
---             trackerFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", position.x, position.y)
---         end
---     end,
---     init = function()
---         local position = MapPinEnhanced:GetVar("trackerPosition") or { x = 0, y = 0 }
---         return position.x
---     end,
--- })
+Options:RegisterOption("slider", {
+    category = "TRACKER",
+    label = "Tracker x position",
+    description = "Move the tracker left or right.",
+    descriptionImage = {
+        texture = "delve-entrance-background-zekvirs-lair",
+        width = 584,
+        height = 384,
+    },
+    min = 0,
+    max = 2000,
+    step = 500,
+    onChange = function(value)
+
+    end,
+    init = function()
+        return MapPinEnhanced:GetVar("trackerPosition") and MapPinEnhanced:GetVar("trackerPosition").x or 0
+    end,
+})
 
 
--- Options:RegisterOption("slider", {
---     category = "TRACKER",
---     label = "Tracker y position",
---     description = "Move the tracker up or down.",
---     descriptionImage = {
---         texture = "delve-entrance-background-mycomancer-cavern",
---         width = 584,
---         height = 384,
---     },
---     min = -1000,
---     max = 1000,
---     step = 200,
---     onChange = function(value)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         if trackerFrame:IsShown() then
---             local position = MapPinEnhanced:GetVar("trackerPosition") or { x = 0, y = 0 }
---             position.y = value
---             MapPinEnhanced:SetVar("trackerPosition", position)
---             trackerFrame:ClearAllPoints()
---             trackerFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", position.x, position.y)
---         end
---     end,
---     init = function()
---         local position = MapPinEnhanced:GetVar("trackerPosition") or { x = 0, y = 0 }
---         return position.y
---     end,
--- })
+Options:RegisterOption("slider", {
+    category = "TRACKER",
+    label = "Tracker y position",
+    description = "Move the tracker up or down.",
+    descriptionImage = {
+        texture = "delve-entrance-background-mycomancer-cavern",
+        width = 584,
+        height = 384,
+    },
+    min = -1000,
+    max = 1000,
+    step = 200,
+    onChange = function(value)
+
+    end,
+    init = function()
+        local position = MapPinEnhanced:GetVar("trackerPosition") or { x = 0, y = 0 }
+        return position.y
+    end,
+})
 
 
--- Options:RegisterOption("checkbox", {
---     category = "TRACKER",
---     label = "Show Tracker",
---     description = "Toggle the visibility of the tracker.",
---     onChange = function(value)
---         if value then
---             Tracker:ShowTracker()
---         else
---             Tracker:HideTracker()
---         end
---     end,
---     init = function()
---         return MapPinEnhanced:GetVar("trackerVisible") or false
---     end,
--- })
+Options:RegisterOption("checkbox", {
+    category = "TRACKER",
+    label = "Show Tracker",
+    description = "Toggle the visibility of the tracker.",
+    onChange = function(value)
+        if value then
+        else
+        end
+    end,
+    init = function()
+        return MapPinEnhanced:GetVar("trackerVisible") or false
+    end,
+})
 
 
 
--- Options:RegisterOption("input", {
---     category = "TRACKER",
---     label = "Tracker Max Height",
---     description = "Set the maximum height of the tracker in pixels.",
---     onChange = function(value)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         trackerFrame:SetMaxHeight(tonumber(value) or 400)
---     end,
---     init = function()
---         local trackerFrame = Tracker:GetTrackerFrame()
---         return tostring(trackerFrame.maxHeight or 400)
---     end,
--- })
+Options:RegisterOption("input", {
+    category = "TRACKER",
+    label = "Tracker Max Height",
+    description = "Set the maximum height of the tracker in pixels.",
+    onChange = function(value)
+
+    end,
+    init = function()
+        return MapPinEnhanced:GetVar("trackerMaxHeight") or 400
+    end,
+})
 
 
--- Options:RegisterOption("button", {
---     category = "TRACKER",
---     label = "Reset Tracker Position",
---     description = "Reset the tracker position to the center of the screen.",
---     buttonText = {
---         icon = "cross",
---         label = "Reset Position",
---     },
---     onChange = function()
---         MapPinEnhanced:SetVar("trackerPosition", nil)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         if trackerFrame:IsShown() then
---             trackerFrame:ClearAllPoints()
---             trackerFrame:SetPoint("CENTER", UIParent, "CENTER")
---         end
---     end,
--- })
+Options:RegisterOption("button", {
+    category = "TRACKER",
+    label = "Reset Tracker Position",
+    description = "Reset the tracker position to the center of the screen.",
+    buttonText = {
+        icon = "cross",
+        label = "Reset Position",
+    },
+    onChange = function()
 
--- Options:RegisterOption("radiogroup", {
---     category = "TRACKER",
---     label = "Tracker View",
---     description = "Select the view mode for the tracker.",
---     orientation = "HORIZONTAL",
---     options = {
---         { label = "Pin View", value = "pin" },
---         { label = "Set View", value = "set" },
---     },
---     onChange = function(value)
---         local trackerFrame = Tracker:GetTrackerFrame()
---         if trackerFrame:IsShown() then
---             trackerFrame:SetActiveView(value)
---         end
---     end,
---     init = function()
---         local trackerFrame = Tracker:GetTrackerFrame()
---         return trackerFrame.activeView or "pin"
---     end,
--- })
+    end,
+})
+
+Options:RegisterOption("radiogroup", {
+    category = "TRACKER",
+    label = "Tracker View",
+    description = "Select the view mode for the tracker.",
+    orientation = "HORIZONTAL",
+    options = {
+        { label = "Pin View", value = "pin" },
+        { label = "Set View", value = "set" },
+    },
+    onChange = function(value)
+
+    end,
+    init = function()
+
+    end,
+})
 
 
--- Options:RegisterOption("radiogroup", {
---     category = "GENERAL",
---     label = "Test Option",
---     description = "This is a test option for demonstration purposes.",
---     orientation = "HORIZONTAL",
---     options = {
---         { label = "1", value = "1" },
---         { label = "2", value = "2" },
---         { label = "3", value = "3" },
---     },
---     onChange = function(value)
---         error("Selected value:", value)
---     end,
---     init = function()
---         return "option1"
---     end,
--- })
+Options:RegisterOption("radiogroup", {
+    category = "GENERAL",
+    label = "Test Option",
+    description = "This is a test option for demonstration purposes.",
+    orientation = "HORIZONTAL",
+    options = {
+        { label = "1", value = "1" },
+        { label = "2", value = "2" },
+        { label = "3", value = "3" },
+    },
+    onChange = function(value)
+    end,
+    init = function()
+        return "option1"
+    end,
+})
+
+
+Options:RegisterOption("checkboxgroup", {
+    category = "GENERAL",
+    label = "Auto Hide Tracker in",
+    description = "This is a test option for demonstration purposes.",
+    orientation = "HORIZONTAL",
+    options = {
+        { label = "Arena",     value = "Arena" },
+        { label = "Instances", value = "Instances" },
+    },
+    onChange = function(value)
+    end,
+    init = function()
+        return { "option1", "option3" }
+    end,
+})

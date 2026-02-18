@@ -6,53 +6,34 @@
         virtual="true">
         <Size x="200" y="30" />
         <Frames>
-            <Button parentKey="expandButton" propagateMouseInput="Clicks">
-                <Size x="16" y="16" />
+            <Button parentKey="expandButton">
+                <KeyValues>
+                    <KeyValue key="expandedTexture" value="common-icon-minus" />
+                    <KeyValue key="collapsedTexture" value="common-icon-plus" />
+                </KeyValues>
+                <Size x="12" y="12" />
                 <NormalTexture parentKey="normalTexture"
-                    atlas="glues-characterSelect-icon-arrowDown" setAllPoints="true" />
+                    atlas="common-icon-plus" setAllPoints="true" />
                 <HighlightTexture parentKey="highlightTexture"
-                    atlas="glues-characterSelect-icon-arrowDown-hover" setAllPoints="true" />
+                    atlas="shop-toast-sideglow" setAllPoints="true" alpha="0.5" />
                 <Anchors>
-                    <Anchor point="LEFT" x="5" y="0" />
+                    <Anchor point="RIGHT" x="-5" y="-3" />
                 </Anchors>
-                <Animations>
-                    <AnimationGroup parentKey="expand">
-                        <Rotation childKey="normalTexture" duration="0.15" degrees="-90"
-                            smoothing="IN_OUT" />
-                        <Rotation childKey="highlightTexture" duration="0.15" degrees="-90"
-                            smoothing="IN_OUT" />
-                        <Scripts>
-                            <OnFinished>
-                                self:GetParent().normalTexture:SetRotation(0)
-                                self:GetParent().highlightTexture:SetRotation(0)
-                            </OnFinished>
-                        </Scripts>
-                    </AnimationGroup>
-                    <AnimationGroup parentKey="collapse">
-                        <Rotation childKey="normalTexture" duration="0.15" degrees="90"
-                            smoothing="IN_OUT" />
-                        <Rotation childKey="highlightTexture" duration="0.15" degrees="90"
-                            smoothing="IN_OUT" />
-                        <Scripts>
-                            <OnFinished>
-                                self:GetParent().normalTexture:SetRotation(math.rad(90))
-                                self:GetParent().highlightTexture:SetRotation(math.rad(90))
-                            </OnFinished>
-                        </Scripts>
-                    </AnimationGroup>
-                </Animations>
             </Button>
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormalLarge" text="OPTION CATEGORY" justifyH="LEFT"
+                <FontString inherits="GameFontHighlightLarge" justifyH="LEFT"
                     parentKey="title">
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" y="9" x="26" />
+                        <Anchor point="BOTTOMLEFT" y="5" x="5" />
                     </Anchors>
                 </FontString>
                 <Texture atlas="CircleMask">
-                    <Color r="0.56" g="0.56" b="0.56" a="0.25" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="0.56" g="0.56" b="0.56" a="1" />
+                        <MaxColor r="0.56" g="0.56" b="0.56" a="0.25" />
+                    </Gradient>
                     <Size x="1" y="1" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" />

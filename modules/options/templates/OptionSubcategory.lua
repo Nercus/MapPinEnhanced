@@ -8,7 +8,8 @@ MapPinEnhancedOptionsSubgroupMixin = {}
 ---@param node TreeNodeMixin
 function MapPinEnhancedOptionsSubgroupMixin:Init(node)
     local data = node:GetData() --[[@as MapPinEnhancedOptionSubgroupMixin]]
-    self.title:SetText(data:GetName())
+    local subgroupName = data:GetName()
+    self.title:SetText(subgroupName)
 end
 
 function MapPinEnhancedOptionsSubgroupMixin:Reset()

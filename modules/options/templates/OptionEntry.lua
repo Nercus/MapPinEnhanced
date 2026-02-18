@@ -43,6 +43,19 @@ local function GetFormByType(optionType)
     end
 end
 
+local WIDTH_PER_ELEMENT = {
+    button = 100,
+    checkbox = 26,
+    colorpicker = 26,
+    input = 100,
+    radiogroup = 200,
+    checkboxgroup = 200,
+    slider = 200,
+    textarea = 200,
+}
+
+-- FIXME: form state is lost when collapsing/expanding categories
+
 ---@param node TreeNodeMixin
 function MapPinEnhancedOptionsEntryMixin:Init(node)
     local data = node:GetData() --[[@as MapPinEnhancedOptionMixin]]
@@ -51,12 +64,19 @@ function MapPinEnhancedOptionsEntryMixin:Init(node)
     self.optionData = data.optionData
     self.label:SetText(data.optionData.label)
     self.form = GetFormByType(optionType)
-    self.form:SetSize(200, 20)
+    self.form:SetWidth(WIDTH_PER_ELEMENT[optionType])
+    self.form:SetPropagateMouseMotion(true)
     self.form:Setup(data.optionData)
     self.form:SetParent(self.formSlot)
     self.form:ClearAllPoints()
-    self.form:SetPoint("CENTER", self.formSlot, "CENTER")
+    self.form:SetPoint("RIGHT", self.formSlot, "RIGHT", -30, 0)
     self.form:Show()
+
+    if self:IsMouseOver() then
+        self:SetAlpha(1)
+    else
+        self:SetAlpha(0.7)
+    end
 end
 
 function MapPinEnhancedOptionsEntryMixin:Reset()
@@ -85,8 +105,10 @@ function MapPinEnhancedOptionsEntryMixin:OnEnter()
         image = self.optionData.descriptionImage,
         text = self.optionData.description,
     })
+    self:SetAlpha(1)
 end
 
 function MapPinEnhancedOptionsEntryMixin:OnLeave()
     Options.optionsFrame:SetDescription(nil)
+    self:SetAlpha(0.7)
 end
