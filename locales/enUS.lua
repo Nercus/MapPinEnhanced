@@ -26,3 +26,7 @@ L["Change Color"] = "Change Color"
 L["Change Icon"] = "Change Icon"
 L["Show on Map"] = "Show on Map"
 L["Share to Chat"] = "Share to Chat"
+L["Coordinates Display"] = "Coordinate Display"
+L["Lock Coordinates Display"] = "Lock Coordinates Display"
+L["Toggle whether the coordinates display can be moved or not."] =
+"Toggle whether the coordinates display can be moved or not."
