@@ -260,13 +260,12 @@ local function loadDevMode()
     local LDBIcon = LibStub("LibDBIcon-1.0", true)
     local f = GetDebugMenuFrame()
     if (devModeEnabled) then
-        MapPinEnhanced:Print("Dev mode enabled")
+        MapPinEnhanced:Notify("Dev mode enabled", "ERROR")
         f:Show()
         C_Timer.After(1, function()
             LDBIcon:Show("BugSack")
             LDBIcon:Show(MapPinEnhanced.name)
         end)
-
 
         if C_AddOns.IsAddOnLoaded("!!AddonProfiler") then
             ---@diagnostic disable-next-line: no-unknown
