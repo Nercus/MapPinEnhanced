@@ -69,8 +69,63 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     end
 end
 
+---Method to block the automatic removal of pins in the game
+local function OverrideSuperTrackedReachedBehavior()
+    ---@type function | nil
+    local unregisterNavigationReachedEvent
+
+    unregisterNavigationReachedEvent = function()
+        if SuperTrackedFrame then
+            SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
+        end
+        MapPinEnhanced:UnregisterEventForFunction("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
+    end
+
+    if SuperTrackedFrame then
+        SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
+    else
+        MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
+    end
+end
+
+
+---Hide default world map Pin
+local function HideBlizzardPin()
+    if not WaypointLocationPinMixin then return end
+    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
+        waypointSelf:SetAlpha(0)
+        waypointSelf:EnableMouse(false)
+    end)
+end
+
+---Method to override the alpha state of the super tracked frame -> create unlimited distance
+---@param enable boolean
+local function OverrideSuperTrackedAlphaState(enable)
+    if enable then
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 1)
+        SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 1)
+        return
+    end
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, 0)
+    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
+end
+
+local function SetSuperTrackedAlphaState()
+    local unlimitedDistance = MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance")
+    OverrideSuperTrackedAlphaState(unlimitedDistance)
+end
+
+function MapPinEnhancedWayfinderFloating:SetOverride()
+    if self.overridesSet then return end
+    OverrideSuperTrackedReachedBehavior()
+    HideBlizzardPin()
+    SetSuperTrackedAlphaState()
+    self.overridesSet = true
+end
+
 function MapPinEnhancedWayfinderFloating:Enable()
     Map:RegisterContinuousDistanceCallback(self.OnDistanceUpdate)
+    self:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
