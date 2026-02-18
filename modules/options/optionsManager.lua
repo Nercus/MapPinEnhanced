@@ -200,13 +200,14 @@ function Options:InitOptionsFrame()
     self.optionsFrame = CreateFrame("Frame", nil, nil, "MapPinEnhancedOptionsFrameTemplate")
     ---@type any Settings API is not typed
     local category = Settings.RegisterCanvasLayoutCategory(self.optionsFrame, MapPinEnhanced.name)
-    category.ID = MapPinEnhanced.name
+    ---@type number
+    self.categoryID = category:GetID()
     Settings.RegisterAddOnCategory(category)
     self.optionsFrame:Show()
 end
 
 function Options:ToggleOptionsFrame()
-    Settings.OpenToCategory(MapPinEnhanced.name)
+    Settings.OpenToCategory(self.categoryID)
 end
 
 MapPinEnhanced:AddSlashCommand("options", function()
