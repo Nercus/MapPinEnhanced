@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedDropdownTemplate : DropdownWithSteppersTemplate
----@field Dropdown DropdownButton -- NOTE: the key has to be exactly "Dropdown" for the mixin to work properly
+---@field Dropdown DropdownButton -- the key has to be exactly "Dropdown" for the mixin to work properly
 ---@field activeValue any
 MapPinEnhancedDropdownMixin = {}
 
