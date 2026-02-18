@@ -21,7 +21,7 @@ local CATEGORIES = {
     MISC = L["Miscellaneous"],
 }
 
----@alias OptionType "textarea" | "button" | "checkbox" | "colorpicker" | "input" | "slider" | "radiogroup"
+---@alias OptionType "textarea" | "button" | "checkbox" | "colorpicker" | "input" | "slider" | "radiogroup" | "checkboxgroup"
 
 ---@class OptionData
 ---@field category OptionCategories the category of the option
@@ -44,7 +44,9 @@ local CATEGORIES = {
 
 ---@class RadiogroupOptionData : OptionData, RadioGroupSetup
 
----@alias AnyOptionData TextareaOptionData | ButtonOptionData | CheckboxOptionData | ColorpickerOptionData | InputOptionData | SliderOptionData | RadiogroupOptionData
+---@class CheckboxGroupOptionData : OptionData, CheckboxGroupSetup
+
+---@alias AnyOptionData TextareaOptionData | ButtonOptionData | CheckboxOptionData | ColorpickerOptionData | InputOptionData | SliderOptionData | RadiogroupOptionData | CheckboxGroupOptionData
 
 local function CreateObject()
     return CreateAndInitFromMixin(MapPinEnhancedOptionCategoryMixin)
@@ -101,6 +103,7 @@ end
 ---@overload fun(self: Options, optionType: "input", optionData: InputOptionData)
 ---@overload fun(self: Options, optionType: "slider", optionData: SliderOptionData)
 ---@overload fun(self: Options, optionType: "radiogroup", optionData: RadiogroupOptionData)
+---@overload fun(self: Options, optionType: "checkboxgroup", optionData: CheckboxGroupOptionData)
 function Options:RegisterOption(optionType, optionData)
     local categoryID = optionData.category
     assert(CATEGORIES[categoryID], "Options:GetOption: categoryName '" .. tostring(categoryID) .. "' is not allowed")

@@ -7,7 +7,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field label FontString
 MapPinEnhancedOptionsEntryMixin = {}
 
----@alias AnyFormElement MapPinEnhancedButtonTemplate | MapPinEnhancedCheckboxTemplate | MapPinEnhancedColorpickerTemplate | MapPinEnhancedInputTemplate | MapPinEnhancedRadioGroupTemplate | MapPinEnhancedSliderTemplate | MapPinEnhancedTextareaTemplate
+---@alias AnyFormElement MapPinEnhancedButtonTemplate | MapPinEnhancedCheckboxTemplate | MapPinEnhancedColorpickerTemplate | MapPinEnhancedInputTemplate | MapPinEnhancedRadioGroupTemplate | MapPinEnhancedSliderTemplate | MapPinEnhancedTextareaTemplate | MapPinEnhancedCheckboxGroupTemplate
 
 local framePool = CreateFramePoolCollection()
 framePool:CreatePool("Button", nil, "MapPinEnhancedButtonTemplate")
@@ -15,6 +15,7 @@ framePool:CreatePool("CheckButton", nil, "MapPinEnhancedCheckboxTemplate")
 framePool:CreatePool("Button", nil, "MapPinEnhancedColorpickerTemplate")
 framePool:CreatePool("EditBox", nil, "MapPinEnhancedInputTemplate")
 framePool:CreatePool("Frame", nil, "MapPinEnhancedRadioGroupTemplate")
+framePool:CreatePool("Frame", nil, "MapPinEnhancedCheckboxGroupTemplate")
 framePool:CreatePool("Slider", nil, "MapPinEnhancedSliderTemplate")
 framePool:CreatePool("ScrollFrame", nil, "MapPinEnhancedTextareaTemplate")
 
@@ -31,6 +32,8 @@ local function GetFormByType(optionType)
         return framePool:Acquire("MapPinEnhancedInputTemplate")
     elseif optionType == "radiogroup" then
         return framePool:Acquire("MapPinEnhancedRadioGroupTemplate")
+    elseif optionType == "checkboxgroup" then
+        return framePool:Acquire("MapPinEnhancedCheckboxGroupTemplate")
     elseif optionType == "slider" then
         return framePool:Acquire("MapPinEnhancedSliderTemplate")
     elseif optionType == "textarea" then

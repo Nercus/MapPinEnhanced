@@ -5,6 +5,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field text FontString
 MapPinEnhancedCheckboxMixin = {}
 
+---@class MapPinEnhancedCheckboxWithLabelTemplate : MapPinEnhancedCheckboxTemplate
+---@field value any This typing only exists to make it useable inside the checkboxgroup
+
+
 function MapPinEnhancedCheckboxMixin:SetLabel(label)
     assert(self.text, "CheckboxMixin requires 'text' field to be defined.")
     self.text:SetText(label)
