@@ -1,8 +1,5 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Map
-local Map = MapPinEnhanced:GetModule("Map")
-
 local MIN_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL = 0.05, 1.5 -- tune as needed
 local BASE_UPDATE_INTERVAL = 1
 local DISTANCE_CACHE_SIZE = 5
@@ -28,13 +25,13 @@ local wipe = table.wipe
 
 ---Wrapper for the current map the player is on
 ---@return number? mapID
-function Map:GetPlayerMap()
+function MapPinEnhanced:GetPlayerMap()
     return C_Map.GetBestMapForUnit("player")
 end
 
 ---Wrapper for the current map position of the player
 ---@return number x, number y, number currentPlayerUIMapID, Enum.UIMapType currentPlayerUIMapType
-function Map:GetPlayerMapPosition()
+function MapPinEnhanced:GetPlayerMapPosition()
     return MapPinEnhanced.HBD:GetPlayerZonePosition()
 end
 
@@ -46,7 +43,7 @@ end
 --- @param x2 number The X coordinate of the second location (0 to 1)
 --- @param y2 number The Y coordinate of the second location (0 to 1)
 --- @return number The distance in yards between the two locations
-function Map:GetDistanceBetweenPoints(mapID1, x1, y1, mapID2, x2, y2)
+function MapPinEnhanced:GetDistanceBetweenPoints(mapID1, x1, y1, mapID2, x2, y2)
     if not mapID1 or not x1 or not y1 or not mapID2 or not x2 or not y2 then
         return 0
     end
@@ -58,7 +55,7 @@ end
 --- @param x number The X coordinate of the target location (0 to 1)
 --- @param y number The Y coordinate of the target location (0 to 1)
 --- @return number The distance in yards from the player to the target location
-function Map:GetDistanceToTarget(mapID, x, y)
+function MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
     local playerX, playerY, playerMap = self:GetPlayerMapPosition()
     if not playerMap or not playerX or not playerY then return 0 end
     return self:GetDistanceBetweenPoints(playerMap, playerX, playerY, mapID, x, y)
@@ -73,7 +70,7 @@ local function OnUpdate()
     if not IsSuperTracking() then return end
 
     local mapID, x, y = target.mapID, target.x, target.y
-    local distance = Map:GetDistanceToTarget(mapID, x, y)
+    local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
     if distance == 0 then return end
 
     if abs(lastDistance - distance) < 1 then return end
@@ -122,7 +119,7 @@ end
 
 --- Register a callback to be called when the distance to the target is updated
 ---@param callback fun(distance: number, timeToTarget: number) The callback function that will be called with the updated distance and estimated time to target
-function Map:RegisterContinuousDistanceCallback(callback)
+function MapPinEnhanced:RegisterContinuousDistanceCallback(callback)
     if type(callback) == "function" then
         table.insert(onUpdateCallbacks, callback)
     end
@@ -130,7 +127,7 @@ end
 
 --- Unregister a previously registered distance update callback
 ---@param callback fun(distance: number, timeToTarget: number) The callback function to unregister
-function Map:UnregisterContinuousDistanceCallback(callback)
+function MapPinEnhanced:UnregisterContinuousDistanceCallback(callback)
     for i, cb in ipairs(onUpdateCallbacks) do
         if cb == callback then
             table.remove(onUpdateCallbacks, i)
@@ -143,7 +140,7 @@ end
 ---@param mapID number
 ---@param x number
 ---@param y number
-function Map:EnableContinuousDistanceCheck(mapID, x, y)
+function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
     throttle_interval = BASE_UPDATE_INTERVAL
     wipe(distanceCache)
     lastDistance = 0
@@ -165,7 +162,7 @@ end
 ---@param mapID number?
 ---@param x number?
 ---@param y number?
-function Map:DisableContinuousDistanceCheck(mapID, x, y)
+function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
     if mapID and x and y then
         -- If specific coordinates are provided, we can clear the target
         if self.target and self.target.mapID == mapID and self.target.x == x and self.target.y == y then

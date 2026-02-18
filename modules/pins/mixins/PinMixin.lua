@@ -29,8 +29,6 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 ---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
-local Map = MapPinEnhanced:GetModule("Map")
-
 
 function Pins:GetFramePool()
     if not self.framePool then
@@ -138,7 +136,7 @@ function MapPinEnhancedPinMixin:Reset()
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 
     if self.pinData and self.pinData.mapID and self.pinData.x and self.pinData.y then
-        Map:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
+        MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
     end
 end
 

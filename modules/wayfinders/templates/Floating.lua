@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Map = MapPinEnhanced:GetModule("Map")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
@@ -124,12 +123,12 @@ function MapPinEnhancedWayfinderFloating:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
-    Map:RegisterContinuousDistanceCallback(self.OnDistanceUpdate)
+    MapPinEnhanced:RegisterContinuousDistanceCallback(self.OnDistanceUpdate)
     self:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
-    Map:UnregisterContinuousDistanceCallback(self.OnDistanceUpdate)
+    MapPinEnhanced:UnregisterContinuousDistanceCallback(self.OnDistanceUpdate)
     self:Reset()
 end
 

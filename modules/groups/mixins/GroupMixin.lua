@@ -21,7 +21,6 @@ MapPinEnhancedGroupMixin = CreateFromMixins(
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
-local Map = MapPinEnhanced:GetModule("Map")
 
 function MapPinEnhancedGroupMixin:Init()
     self.pins = {}
@@ -230,13 +229,13 @@ end
 
 function MapPinEnhancedGroupMixin:TrackClosestPin()
     local nearestPin = nil
-    local playerX, playerY, playerMap = Map:GetPlayerMapPosition()
+    local playerX, playerY, playerMap = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMap or not playerX or not playerY then return end
 
     for _, pin in self:EnumeratePins() do
         local pinData = pin:GetPinData()
         local mapID, x, y = pinData.mapID, pinData.x, pinData.y
-        local distance = Map:GetDistanceToTarget(mapID, x, y)
+        local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
         if not nearestPin or (distance > 0 and distance < nearestPin.distance) then -- there is no nearest pin or the current iteration pin is closer
             nearestPin = {
                 pin = pin,

@@ -6,7 +6,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
 ---@field cachedData WayfinderData? the last set wayfinder data, used to update wayfinders when they are enabled after data has already been set
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Map = MapPinEnhanced:GetModule("Map")
 
 ---@class MapPinEnhancedWayfinder
 ---@field Init fun(self: MapPinEnhancedWayfinder, data: WayfinderData | nil) sets the wayfinder pin for the wayfinder
@@ -37,7 +36,7 @@ function Wayfinders:SetWayfinderData(data)
         wayfinder:Init(data)
     end
     if data.mapID and data.x and data.y then
-        Map:EnableContinuousDistanceCheck(data.mapID, data.x, data.y)
+        MapPinEnhanced:EnableContinuousDistanceCheck(data.mapID, data.x, data.y)
     end
 end
 
@@ -56,7 +55,7 @@ function Wayfinders:ClearWayfinderData()
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:Init(nil)
     end
-    Map:DisableContinuousDistanceCheck()
+    MapPinEnhanced:DisableContinuousDistanceCheck()
 end
 
 ---@param wayfinderType WayfinderType

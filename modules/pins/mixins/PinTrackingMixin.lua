@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinTrackingMixin = {}
 
-local Map = MapPinEnhanced:GetModule("Map")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 function MapPinEnhancedPinTrackingMixin:Track()
@@ -37,7 +36,7 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
     self.isTracked = false
     self:PersistPin()
 
-    Map:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
+    MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
 
     MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, false)
     MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, self.pinID, false)

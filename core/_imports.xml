@@ -15,6 +15,7 @@
     <Include file="transmission.lua" />
     <Include file="secrets.lua" />
     <Include file="notify.lua" />
+    <Include file="map.lua" />
 
     <!--@debug@-->
     <Frame
