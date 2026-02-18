@@ -117,12 +117,14 @@ end
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
+    Options:SetOptionValue("MISC", "Lock Coordinates Display", true)
     MapPinEnhanced:SetVar("coordsDisplay", "locked", true)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
     self:SetMovable(true)
     self.lockButton.iconTexture:SetDesaturated(true)
+    Options:SetOptionValue("MISC", "Lock Coordinates Display", false)
     MapPinEnhanced:SetVar("coordsDisplay", "locked", false)
 end
 
@@ -215,6 +217,7 @@ MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
 
 Options:RegisterOption("checkbox", {
     category = "MISC",
+    subCategory = L["Coordinates Display"],
     label = L["Show Coordinates Display"],
     description = L["Toggle the on-screen display of your current coordinates"],
     onChange = function(value)
@@ -224,6 +227,22 @@ Options:RegisterOption("checkbox", {
             coordsDisplayFrame:ShowFrame()
         else
             coordsDisplayFrame:HideFrame()
+        end
+    end,
+})
+
+Options:RegisterOption("checkbox", {
+    category = "MISC",
+    subCategory = L["Coordinates Display"],
+    label = L["Lock Coordinates Display"],
+    description = L["Toggle whether the coordinates display can be moved or not."],
+    onChange = function(value)
+        InitCoordsDisplayFrame()
+        if not coordsDisplayFrame then return end
+        if value then
+            coordsDisplayFrame:LockPosition()
+        else
+            coordsDisplayFrame:UnlockPosition()
         end
     end,
 })
