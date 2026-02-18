@@ -52,18 +52,43 @@ end
 ---@param searchString string
 function MapPinEnhancedOptionsFrameMixin:UpdateList(searchString)
     self.dataProvider:Flush()
+
     ---@param category MapPinEnhancedOptionCategoryMixin
     for category in Options:EnumerateCategories() do
         local categoryMatches = matchCategory(category, searchString)
-        local categoryNode = nil
 
+        ---@type MapPinEnhancedOptionMixin[]
+        local matchingOptions = {}
         for _, option in category:EnumerateOptions() do
             local optionMatches = matchOption(option, searchString)
             if categoryMatches or optionMatches then
-                if not categoryNode then
-                    ---@type TreeNodeMixin
-                    categoryNode = self.dataProvider:Insert(category)
+                table.insert(matchingOptions, option)
+            end
+        end
+
+        if #matchingOptions > 0 then
+            local categoryNode = self.dataProvider:Insert(category)
+
+            table.sort(matchingOptions, function(a, b)
+                local subCategoryA = a:GetOptionData().subCategory or ""
+                local subCategoryB = b:GetOptionData().subCategory or ""
+                if subCategoryA ~= subCategoryB then
+                    return subCategoryA < subCategoryB
                 end
+                return a:GetOptionData().label < b:GetOptionData().label
+            end)
+
+            local subCategory = nil
+            for _, option in ipairs(matchingOptions) do
+                local subCategory = option:GetOptionData().subCategory
+
+                if subCategory and subCategory ~= subCategory then
+                    local subCategoryMixin = CreateFromMixins(MapPinEnhancedOptionSubgroupMixin)
+                    subCategoryMixin:SetName(subCategory)
+                    categoryNode:Insert(subCategoryMixin)
+                    subCategory = subCategory
+                end
+
                 categoryNode:Insert(option)
             end
         end

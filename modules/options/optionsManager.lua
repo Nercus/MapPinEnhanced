@@ -25,6 +25,7 @@ local CATEGORIES = {
 
 ---@class OptionData
 ---@field category OptionCategories the category of the option
+---@field subCategory string? optional subcategory for visual grouping
 ---@field label string the label of the option, used to display the option in the UI (unique withing the category)
 ---@field description string the description of the option, used to display additional information in the UI
 ---@field descriptionImage {texture: string, width: number, height: number}? reference to an image
