@@ -41,7 +41,14 @@ end
 function MapPinEnhancedGroupMixin:SetName(name)
     assert(name, "MapPinEnhancedGroupMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedGroupMixin:SetName: name must be a string")
+
+    local oldName = self.name
     self.name = name
+
+    if oldName and oldName ~= name then
+        Groups.debouncedPersist[oldName] = nil
+    end
+
     Groups:PersistGroup(self)
 end
 
@@ -54,6 +61,7 @@ function MapPinEnhancedGroupMixin:SetSource(source)
     assert(source, "MapPinEnhancedGroupMixin:SetSource: source is nil")
     assert(type(source) == "string", "MapPinEnhancedGroupMixin:SetSource: source must be a string")
     assert(C_AddOns.IsAddOnLoaded(source), "MapPinEnhancedGroupMixin:SetSource: source is not a loaded addon")
+    -- TODO: check if restoring groups from an unloaded addon causes problems
     self.source = source
     Groups:PersistGroup(self)
 end

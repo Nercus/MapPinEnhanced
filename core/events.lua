@@ -111,6 +111,7 @@ local CALLBACK_EVENTS = {
     PIN_UPDATED_COLOR = { event = "PIN_UPDATED_COLOR_%w+", pattern = true },
     PIN_ADDED = { event = "PIN_ADDED", pattern = false },
     PIN_REMOVED = { event = "PIN_REMOVED", pattern = false },
+    PIN_TRACKING_CHANGED = { event = "PIN_TRACKING_CHANGED", pattern = false },
     GROUP_UPDATED = { event = "GROUP_UPDATED", pattern = false },
 }
 
