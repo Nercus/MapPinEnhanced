@@ -147,3 +147,5 @@ end
 function MapPinEnhancedOptionsFrameMixin:OnRefresh()
     self:UpdateList(self.options.search:GetText())
 end
+
+-- TODO: add category tabs for quick scroll to navigation
