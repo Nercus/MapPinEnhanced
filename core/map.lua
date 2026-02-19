@@ -10,7 +10,7 @@ local lastDistance = 0
 local lastUpdate = nil
 local throttle_interval = BASE_UPDATE_INTERVAL
 
----@type {mapID: number, x: number, y: number}
+---@type {mapID: number, x: number, y: number} | nil
 local target = nil
 ---@type fun(distance: number, timeToTarget: number)[]
 local onUpdateCallbacks = {}
@@ -104,7 +104,7 @@ local function OnUpdate()
     -- Calculate time to target
     local timeToTarget = distance / speed
 
-    -- Update uPDATE interval based on distance
+    -- Update UPDATE interval based on distance
     throttle_interval = max(MIN_UPDATE_INTERVAL, min(MAX_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL * (distance / 100)))
 
     for _, callback in ipairs(onUpdateCallbacks) do
@@ -145,7 +145,7 @@ function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
     wipe(distanceCache)
     lastDistance = 0
     lastUpdate = nil
-    self.target = { mapID = mapID, x = x, y = y }
+    target = { mapID = mapID, x = x, y = y }
 
     local initialDistance = self:GetDistanceToTarget(mapID, x, y)
     for _, callback in ipairs(onUpdateCallbacks) do
@@ -165,15 +165,15 @@ end
 function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
     if mapID and x and y then
         -- If specific coordinates are provided, we can clear the target
-        if self.target and self.target.mapID == mapID and self.target.x == x and self.target.y == y then
-            self.target = nil
+        if target and target.mapID == mapID and target.x == x and target.y == y then
+            target = nil
             wipe(distanceCache)
             lastDistance = 0
             distanceFrame:SetScript("OnUpdate", nil)
             return
         end
     else
-        self.target = nil
+        target = nil
         wipe(distanceCache)
         lastDistance = 0
         distanceFrame:SetScript("OnUpdate", nil)

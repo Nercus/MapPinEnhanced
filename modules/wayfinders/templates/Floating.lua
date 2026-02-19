@@ -50,7 +50,6 @@ function MapPinEnhancedWayfinderFloating:Reset()
 end
 
 function MapPinEnhancedWayfinderFloating:OnDistanceUpdate(distance, timeToTarget)
-    MapPinEnhanced:Debug("Wayfinder distance update: " .. distance .. " yards, ETA: " .. timeToTarget .. " seconds")
 end
 
 ---@param wayfinderData WayfinderData | nil
@@ -123,12 +122,18 @@ function MapPinEnhancedWayfinderFloating:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.OnDistanceUpdate)
+    self.distanceCallback = function(distance, timeToTarget)
+        self:OnDistanceUpdate(distance, timeToTarget)
+    end
+    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
     self:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
-    MapPinEnhanced:UnregisterContinuousDistanceCallback(self.OnDistanceUpdate)
+    if self.distanceCallback then
+        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
+        self.distanceCallback = nil
+    end
     self:Reset()
 end
 
