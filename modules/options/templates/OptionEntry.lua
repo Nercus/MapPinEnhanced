@@ -54,6 +54,8 @@ local WIDTH_PER_ELEMENT = {
     textarea = 200,
 }
 
+-- TODO: check for variable entry height based on content size i.e radiogroup, checkboxgroups being vertically aligned
+-- FIXME: change to height and width per element type. adjust so it doesn't look too cramped
 -- FIXME: form state is lost when collapsing/expanding categories
 
 ---@param node TreeNodeMixin
