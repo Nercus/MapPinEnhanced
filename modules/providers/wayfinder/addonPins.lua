@@ -33,4 +33,7 @@ end
 
 MapPinEnhanced:OnLoad(function()
     MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", onPinTrackingChanged)
+    local trackedPin = Pins:GetTrackedPin()
+    if not trackedPin then return end
+    onPinTrackingChanged("PIN_TRACKING_CHANGED", trackedPin.pinID, trackedPin:IsTracked())
 end)
