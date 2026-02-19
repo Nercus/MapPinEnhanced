@@ -49,6 +49,75 @@ local function matchOption(option, searchString)
 end
 
 
+---@param el1 TreeNodeMixin
+---@param el2 TreeNodeMixin
+---@return boolean
+local function SortComparator(el1, el2)
+    ---@type MapPinEnhancedOptionCategoryMixin | MapPinEnhancedOptionMixin | MapPinEnhancedOptionSubgroupMixin
+    local data1 = el1:GetData()
+    ---@type MapPinEnhancedOptionCategoryMixin | MapPinEnhancedOptionMixin | MapPinEnhancedOptionSubgroupMixin
+    local data2 = el2:GetData()
+    local categories = Options.CATEGORIES
+
+    local isCategory1 = data1.template == "MapPinEnhancedOptionsCategoryTemplate"
+    local isCategory2 = data2.template == "MapPinEnhancedOptionsCategoryTemplate"
+
+    -- sort categories
+    if isCategory1 and isCategory2 then
+        local order1 = categories[data1.id] and categories[data1.id].order or math.huge
+        local order2 = categories[data2.id] and categories[data2.id].order or math.huge
+        return order1 < order2
+    end
+
+
+    local isOption1 = data1.template == "MapPinEnhancedOptionsEntryTemplate"
+    local isOption2 = data2.template == "MapPinEnhancedOptionsEntryTemplate"
+    local isSubgroup1 = data1.template == "MapPinEnhancedOptionsSubgroupTemplate"
+    local isSubgroup2 = data2.template == "MapPinEnhancedOptionsSubgroupTemplate"
+
+    if isOption1 and isOption2 then
+        local sub1 = data1.optionData.subCategory or ""
+        local sub2 = data2.optionData.subCategory or ""
+
+        if sub1 == "" and sub2 ~= "" then
+            return true
+        elseif sub1 ~= "" and sub2 == "" then
+            return false
+        end
+
+        if sub1 ~= sub2 then
+            return sub1 < sub2
+        end
+        return data1.optionData.label < data2.optionData.label
+    elseif isOption1 and isSubgroup2 then
+        local sub1 = data1.optionData.subCategory or ""
+        if sub1 == "" then
+            return true
+        else
+            if sub1 ~= data2.name then
+                return sub1 < data2.name
+            end
+            return false
+        end
+    elseif isSubgroup1 and isOption2 then
+        local sub2 = data2.optionData.subCategory or ""
+        if sub2 == "" then
+            return false
+        else
+            if data1.name ~= sub2 then
+                return data1.name < sub2
+            end
+            return true
+        end
+    elseif isSubgroup1 and isSubgroup2 then
+        return data1.name < data2.name
+    end
+
+    return false
+end
+
+-- FIXME: only sort with the comparator. maybe trigger sort manually, we have to remove sorting when inserting a bunch of nodes
+
 ---@param searchString string
 function MapPinEnhancedOptionsFrameMixin:UpdateList(searchString)
     self.dataProvider:Flush()
@@ -100,6 +169,8 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
 
     self.scrollView = CreateScrollBoxListTreeListView()
     self.dataProvider = CreateTreeDataProvider()
+
+    -- self.dataProvider:SetSortComparator(SortComparator)
 
     self.scrollView:SetElementFactory(function(factory, node)
         ---@type MapPinEnhancedOptionCategoryMixin | MapPinEnhancedOptionMixin

@@ -12,14 +12,15 @@ local L = MapPinEnhanced.L
 
 ---@enum (key) OptionCategories
 local CATEGORIES = {
-    GENERAL = L["General"],
-    PINS = L["Pins"],
-    GROUPS = L["Groups"],
-    TRACKER = L["Tracker"],
-    MAPS = L["Maps"],
-    IMPORT_EXPORT = L["Import/Export"],
-    MISC = L["Miscellaneous"],
+    GENERAL = { name = L["General"], order = 1 },
+    PINS = { name = L["Pins"], order = 2 },
+    GROUPS = { name = L["Groups"], order = 3 },
+    TRACKER = { name = L["Tracker"], order = 4 },
+    MAPS = { name = L["Maps"], order = 5 },
+    IMPORT_EXPORT = { name = L["Import/Export"], order = 6 },
+    MISC = { name = L["Miscellaneous"], order = 7 },
 }
+Options.CATEGORIES = CATEGORIES
 
 ---@alias OptionType "textarea" | "button" | "checkbox" | "colorpicker" | "input" | "slider" | "radiogroup" | "checkboxgroup"
 
@@ -216,8 +217,8 @@ end, "Open the options frame")
 
 
 do
-    for categoryID, categoryName in pairs(CATEGORIES) do
-        Options:RegisterCategory(categoryID, categoryName)
+    for categoryID, categoryInfo in pairs(CATEGORIES) do
+        Options:RegisterCategory(categoryID, categoryInfo.name)
     end
 end
 
