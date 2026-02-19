@@ -35,7 +35,11 @@ local DEFAULT_GROUPS = {
     {
         name = L["Temporary Import"],
         source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\INV_Misc_QuestionMark",
+    },
+    {
+        name = L["My Way Back"],
+        source = MapPinEnhanced.name,
+        icon = "Interface\\Icons\\inv_misc_map_01",
     }
 }
 
