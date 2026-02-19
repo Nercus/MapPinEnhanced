@@ -30,11 +30,12 @@ local DEFAULT_GROUPS = {
     {
         name = L["Uncategorized Pins"],
         source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\INV_Misc_QuestionMark",
+        icon = "Interface\\Icons\\inv_misc_map08",
     },
     {
         name = L["Temporary Import"],
         source = MapPinEnhanced.name,
+        icon = "Interface\\Icons\\ability_bossmagistrix_timewarp1",
     },
     {
         name = L["My Way Back"],
