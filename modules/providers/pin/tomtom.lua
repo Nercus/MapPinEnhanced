@@ -46,6 +46,7 @@ MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
             name = L["TomTom Pins"],
             source = MapPinEnhanced.name,
             icon = "Interface\\Icons\\INV_Misc_Map_01",
+            order = GetTime()
         })
         HookTomTomAddWaypoint()
     end

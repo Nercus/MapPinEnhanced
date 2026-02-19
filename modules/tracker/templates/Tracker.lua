@@ -21,12 +21,64 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
 
+---@param groupnode1 TreeNodeMixin
+---@param groupnode2 TreeNodeMixin
+---@return boolean
+local function GroupSortComparator(groupnode1, groupnode2)
+    ---@type MapPinEnhancedGroupMixin, MapPinEnhancedGroupMixin
+    local group1, group2 = groupnode1:GetData(), groupnode2:GetData()
+
+    if group1.classification ~= "group" or group2.classification ~= "group" then
+        return false
+    end
+    local order1 = group1.order or 0
+    local order2 = group2.order or 0
+
+    if order1 ~= order2 then
+        return order1 > order2
+    end
+    return (group1.name or "") < (group2.name or "")
+end
+
+---@param setNode1 TreeNodeMixin
+---@param setNode2 TreeNodeMixin
+---@return boolean
+local function SetSortComparator(setNode1, setNode2)
+    ---@type MapPinEnhancedSetMixin, MapPinEnhancedSetMixin
+    local set1, set2 = setNode1:GetData(), setNode2:GetData()
+
+    if set1.classification ~= "set" or set2.classification ~= "set" then
+        return false
+    end
+    return (set1.name or "") < (set2.name or "")
+end
+
+local function PinSortComparator(pinNode1, pinNode2)
+    ---@type MapPinEnhancedPinMixin, MapPinEnhancedPinMixin
+    local pin1, pin2 = pinNode1:GetData(), pinNode2:GetData()
+
+    if pin1.classification ~= "pin" or pin2.classification ~= "pin" then
+        return false
+    end
+
+    local order1 = pin1.pinData.order or 0
+    local order2 = pin2.pinData.order or 0
+
+    if order1 ~= order2 then
+        return order1 > order2
+    end
+
+    local title1 = pin1.pinData.title or pin1.pinID or ""
+    local title2 = pin2.pinData.title or pin2.pinID or ""
+    return title1 < title2
+end
 
 function MapPinEnhancedTrackerMixin:UpdateSetList()
     ---@param set MapPinEnhancedSetMixin
     for set in Sets:EnumerateSets() do
         self.dataProvider:Insert(set) --[[@as TreeNodeMixin]]
     end
+    self.dataProvider:SetSortComparator(SetSortComparator, false, false)
 end
 
 function MapPinEnhancedTrackerMixin:UpdatePinList()
@@ -38,8 +90,10 @@ function MapPinEnhancedTrackerMixin:UpdatePinList()
             for _, pin in group:EnumeratePins() do
                 groupElement:Insert(pin)
             end
+            groupElement:SetSortComparator(PinSortComparator, false, false)
         end
     end
+    self.dataProvider:SetSortComparator(GroupSortComparator, false, false)
 end
 
 function MapPinEnhancedTrackerMixin:UpdateList()
@@ -49,22 +103,6 @@ function MapPinEnhancedTrackerMixin:UpdateList()
     else
         self:UpdatePinList()
     end
-end
-
----@param group MapPinEnhancedGroupMixin
----@return TreeNodeMixin?
-function MapPinEnhancedTrackerMixin:AddGroup(group)
-    if self.activeView ~= "pin" then
-        return nil -- Cannot add groups in set view
-    end
-    return self.dataProvider:Insert(group)
-end
-
-function MapPinEnhancedTrackerMixin:RemoveGroup(groupTreeNode)
-    if self.activeView ~= "pin" then
-        return -- Cannot remove groups in set view
-    end
-    self.dataProvider:Remove(groupTreeNode)
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -80,8 +118,10 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
     end, TreeDataProviderConstants.IncludeCollapsed)
     if not groupNode then
         groupNode = self.dataProvider:Insert(group)
+        groupNode:SetSortComparator(PinSortComparator, false, false)
     end
     groupNode:Insert(pin)
+    groupNode:Invalidate() -- we invalidate here to trigger a resort
 end
 
 function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
@@ -195,39 +235,6 @@ end
 
 
 
----@param el1 TreeNodeMixin
----@param el2 TreeNodeMixin
----@return boolean
-function MapPinEnhancedTrackerMixin:SortComparator(el1, el2)
-    local data1 = el1:GetData()
-    local data2 = el2:GetData()
-
-    if self.activeView == "set" then
-        --[[@cast data1 MapPinEnhancedSetMixin]]
-        --[[@cast data2 MapPinEnhancedSetMixin]]
-        return data1.name < data2.name
-    elseif self.activeView == "pin" then
-        -- Compare by order - HIGHER values first (newer at top)
-        local order1 = data1.order or 0
-        local order2 = data2.order or 0
-
-        if order1 ~= order2 then
-            return order1 > order2
-        end
-
-        -- when orders are the same, sort by name - groups first, then pins
-        if data1.classification == "group" and data2.classification == "group" then
-            return (data1.name or "") < (data2.name or "")
-        elseif data1.classification == "pin" and data2.classification == "pin" then
-            local title1 = data1.title or data1.pinID or ""
-            local title2 = data2.title or data2.pinID or ""
-            return title1 < title2
-        end
-    end
-
-    return false
-end
-
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
@@ -236,12 +243,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
 
-    self.dataProvider:SetSortComparator(function(...)
-        return self:SortComparator(...)
-    end)
-
     self.scrollView:SetElementFactory(TrackerElementFactory)
-
     self.scrollView:SetElementResetter(TrackerElementResetter)
     self.scrollView:SetDataProvider(self.dataProvider)
 

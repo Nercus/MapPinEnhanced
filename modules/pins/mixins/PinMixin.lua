@@ -75,6 +75,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
 
     if not self.pinData.order then
         self.pinData.order = GetTime()
+        self.order = self.pinData.order
     end
 
     if not self.pinData.tooltip then

@@ -26,26 +26,6 @@ function Tracker:HideTracker()
     MapPinEnhanced:SetVar("trackerVisible", false)
 end
 
----@param group MapPinEnhancedGroupMixin
----@return TreeNodeMixin?
-function Tracker:AddGroup(group)
-    local frame = self:GetTrackerFrame()
-    if frame:IsShown() then
-        return frame:AddGroup(group)
-    end
-end
-
----@param groupTreeNode TreeNodeMixin?
-function Tracker:RemoveGroup(groupTreeNode)
-    if self:GetActiveView() ~= "pin" then
-        return -- Cannot remove groups in set view
-    end
-    local frame = self:GetTrackerFrame()
-    if frame:IsShown() then
-        frame:RemoveGroup(groupTreeNode)
-    end
-end
-
 ---@return 'set' | 'pin' | nil
 function Tracker:GetActiveView()
     local frame = self:GetTrackerFrame()

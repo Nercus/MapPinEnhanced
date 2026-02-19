@@ -68,6 +68,8 @@ function MapPinEnhancedSetMixin:LoadSet()
     local group = Groups:RegisterGroup({
         name = self.name,
         source = MapPinEnhanced.name,
+        order = GetTime(),
+        icon = self.icon or "Interface\\Icons\\inv_misc_map08"
     })
     if not group then
         error("MapPinEnhancedSetMixin:LoadSet: Group not found for set name: " .. tostring(self.name))
