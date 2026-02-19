@@ -31,16 +31,19 @@ local DEFAULT_GROUPS = {
         name = L["Uncategorized Pins"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\inv_misc_map08",
+        order = -1
     },
     {
         name = L["Temporary Import"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\ability_bossmagistrix_timewarp1",
+        order = math.huge - 1, -- start of the list, but after the My Way Back group
     },
     {
         name = L["My Way Back"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\inv_misc_map_01",
+        order = math.huge, -- start of the list
     }
 }
 
@@ -77,6 +80,7 @@ function Groups:RegisterGroup(groupInfo)
     group:SetName(groupInfo.name)
     group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
     group:SetSource(groupInfo.source)
+    group:SetOrder(groupInfo.order or GetTime())
 
     return group
 end
@@ -135,6 +139,7 @@ function Groups:RestoreGroup(groupData)
         group = self:RegisterGroup(groupData)
     end
     assert(group, "Groups:RestoreGroup: group is nil after registration")
+    group:SetOrder(groupData.order or GetTime())
     group:AddMultiplePins(groupData.pins)
 end
 
@@ -159,15 +164,16 @@ end
 function Groups:InitializeDefaultGroups()
     local groupsPool = Groups:GetObjectPool()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
-        -- Check if this default group already exists (from restoration)
         local existingGroup = self:GetGroupByName(groupInfo.name)
         if existingGroup then
-            -- Ensure it has the correct source and icon
             if existingGroup:GetSource() ~= groupInfo.source then
                 existingGroup:SetSource(groupInfo.source)
             end
             if existingGroup:GetIcon() ~= groupInfo.icon then
                 existingGroup:SetIcon(groupInfo.icon)
+            end
+            if groupInfo.order and existingGroup:GetOrder() ~= groupInfo.order then
+                existingGroup:SetOrder(groupInfo.order)
             end
         else
             -- Only acquire a new one if it doesn't exist
@@ -175,6 +181,9 @@ function Groups:InitializeDefaultGroups()
             group:SetName(groupInfo.name)
             group:SetIcon(groupInfo.icon)
             group:SetSource(groupInfo.source)
+            if groupInfo.order then
+                group:SetOrder(groupInfo.order)
+            end
         end
     end
 end

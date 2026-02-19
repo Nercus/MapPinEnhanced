@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
+---@field order number the order of the group in the tracker, lower numbers are higher in the list
 
 
 ---@class MapPinEnhancedGroupMixin
@@ -13,6 +14,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
+---@field order number the order of the group in the tracker, lower numbers are higher in the list
 MapPinEnhancedGroupMixin = CreateFromMixins(
     { classification = "group" },
     MapPinEnhancedGroupProxyMixin
@@ -25,6 +27,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 function MapPinEnhancedGroupMixin:Init()
     self.pins = {}
     self.count = 0
+    self.order = GetTime()
 end
 
 function MapPinEnhancedGroupMixin:Reset()
@@ -33,6 +36,7 @@ function MapPinEnhancedGroupMixin:Reset()
     self.source = nil
     self.icon = nil
     self.count = 0
+    self.order = 0
 end
 
 ---@param name string
@@ -198,6 +202,19 @@ function MapPinEnhancedGroupMixin:GetPinCount()
     return self.count
 end
 
+---@param order number
+function MapPinEnhancedGroupMixin:SetOrder(order)
+    assert(order, "MapPinEnhancedGroupMixin:SetOrder: order is nil")
+    assert(type(order) == "number", "MapPinEnhancedGroupMixin:SetOrder: order must be a number")
+    self.order = order
+    Groups:PersistGroup(self)
+end
+
+---@return number
+function MapPinEnhancedGroupMixin:GetOrder()
+    return self.order
+end
+
 ---@class SaveableGroupData : GroupInfo
 ---@field pins SaveablePinData[] a table of pin data that belongs to this group
 
@@ -207,6 +224,7 @@ function MapPinEnhancedGroupMixin:GetSaveableData()
         name = self.name,
         source = self.source,
         icon = self.icon,
+        order = self.order,
         pins = {}
     }
 

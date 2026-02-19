@@ -193,6 +193,41 @@ local function TrackerElementResetter(frame, data)
     end
 end
 
+
+
+---@param el1 TreeNodeMixin
+---@param el2 TreeNodeMixin
+---@return boolean
+function MapPinEnhancedTrackerMixin:SortComparator(el1, el2)
+    local data1 = el1:GetData()
+    local data2 = el2:GetData()
+
+    if self.activeView == "set" then
+        --[[@cast data1 MapPinEnhancedSetMixin]]
+        --[[@cast data2 MapPinEnhancedSetMixin]]
+        return data1.name < data2.name
+    elseif self.activeView == "pin" then
+        -- Compare by order - HIGHER values first (newer at top)
+        local order1 = data1.order or 0
+        local order2 = data2.order or 0
+
+        if order1 ~= order2 then
+            return order1 > order2
+        end
+
+        -- when orders are the same, sort by name - groups first, then pins
+        if data1.classification == "group" and data2.classification == "group" then
+            return (data1.name or "") < (data2.name or "")
+        elseif data1.classification == "pin" and data2.classification == "pin" then
+            local title1 = data1.title or data1.pinID or ""
+            local title2 = data2.title or data2.pinID or ""
+            return title1 < title2
+        end
+    end
+
+    return false
+end
+
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
@@ -201,6 +236,9 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
 
+    self.dataProvider:SetSortComparator(function(...)
+        return self:SortComparator(...)
+    end)
 
     self.scrollView:SetElementFactory(TrackerElementFactory)
 
