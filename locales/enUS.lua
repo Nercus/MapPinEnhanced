@@ -30,3 +30,4 @@ L["Coordinates Display"] = "Coordinates Display"
 L["Lock Coordinates Display"] = "Lock Coordinates Display"
 L["Toggle whether the coordinates display can be moved or not."] =
 "Toggle whether the coordinates display can be moved or not."
+L["My Way Back"] = "My Way Back"
