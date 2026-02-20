@@ -24,7 +24,6 @@ MapPinEnhancedCoordsDisplayMixin = {}
 local L = MapPinEnhanced.L
 
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Options = MapPinEnhanced:GetModule("Options")
 
 local GetBestMapForUnit = C_Map.GetBestMapForUnit
 local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
@@ -117,14 +116,12 @@ end
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
-    Options:SetOptionValue("MISC", "Lock Coordinates Display", true)
     MapPinEnhanced:SetVar("coordsDisplay", "locked", true)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
     self:SetMovable(true)
     self.lockButton.iconTexture:SetDesaturated(true)
-    Options:SetOptionValue("MISC", "Lock Coordinates Display", false)
     MapPinEnhanced:SetVar("coordsDisplay", "locked", false)
 end
 
@@ -173,14 +170,12 @@ end
 
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
-    Options:SetOptionValue("MISC", "Show Coordinates Display", true)
     MapPinEnhanced:RestoreFrame(self)
     self:Show()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:HideFrame()
     self:SetScript("OnUpdate", nil)
-    Options:SetOptionValue("MISC", "Show Coordinates Display", false)
     self:Hide()
 end
 
@@ -213,39 +208,3 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreCoordsDisplayVisibility)
 
 MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
     "Toggle display of your current coordinates on the screen.")
-
-
-Options:RegisterOption("checkbox", {
-    category = "MISC",
-    subCategory = L["Coordinates Display"],
-    label = L["Show Coordinates Display"],
-    description = L["Toggle the on-screen display of your current coordinates"],
-    onChange = function(value)
-        InitCoordsDisplayFrame()
-        if not coordsDisplayFrame then return end
-        if value then
-            coordsDisplayFrame:ShowFrame()
-        else
-            coordsDisplayFrame:HideFrame()
-        end
-    end,
-    init = function()
-        return MapPinEnhanced:GetVar("coordsDisplay", "visible") --[[@as boolean?]]
-    end,
-})
-
-Options:RegisterOption("checkbox", {
-    category = "MISC",
-    subCategory = L["Coordinates Display"],
-    label = L["Lock Coordinates Display"],
-    description = L["Toggle whether the coordinates display can be moved or not."],
-    onChange = function(value)
-        InitCoordsDisplayFrame()
-        if not coordsDisplayFrame then return end
-        if value then
-            coordsDisplayFrame:LockPosition()
-        else
-            coordsDisplayFrame:UnlockPosition()
-        end
-    end,
-})

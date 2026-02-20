@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Tracker
 local Tracker = MapPinEnhanced:GetModule("Tracker")
-local Options = MapPinEnhanced:GetModule("Options")
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
