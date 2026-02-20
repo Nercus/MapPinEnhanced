@@ -28,6 +28,8 @@ MapPinEnhancedAutocompleteMixin = {}
 ---@field searchString string string to match against user input for filtering
 ---@field value number | string | boolean value associated with the option
 
+--- TODO: maybe rebuild it with the menu system
+
 function MapPinEnhancedAutocompleteMixin:OnLoad()
     MapPinEnhancedInputMixin.OnLoad(self)
 
