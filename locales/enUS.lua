@@ -31,3 +31,22 @@ L["Lock Coordinates Display"] = "Lock Coordinates Display"
 L["Toggle whether the coordinates display can be moved or not."] =
 "Toggle whether the coordinates display can be moved or not."
 L["My Way Back"] = "My Way Back"
+
+
+
+-- TODO: remove these test strings
+L["test.checkbox_LABEL"] = "Test Checkbox"
+L["test.checkbox_DESCRIPTION"] = "Description for the test checkbox"
+L["test.colorpicker_LABEL"] = "Test Colorpicker"
+L["test.colorpicker_DESCRIPTION"] = "Description for the test colorpicker"
+L["test.input_LABEL"] = "Test Input"
+L["test.input_DESCRIPTION"] = "Description for the test input"
+L["test.radiogroup_LABEL"] = "Test Radiogroup"
+L["test.radiogroup_DESCRIPTION"] = "Description for the test radiogroup"
+L["test.toggle_LABEL"] = "Test Toggle"
+L["test.toggle_DESCRIPTION"] = "Description for the test toggle"
+
+
+L["test.checkbox2_LABEL"] = "Test Checkbox2"
+L["test.checkbox2_DESCRIPTION"] = "Description for the test checkbox2"
+L["test.group.test_GROUPLABEL"] = "Group A"

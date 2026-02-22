@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedOptionInputTemplate" virtual="true"
+        inherits="MapPinEnhancedFormElementTemplate">
+        <Size x="1" y="1" />
+        <Frames>
+            <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                <Size x="200" y="25" />
+            </EditBox>
+        </Frames>
+        <Scripts>
+            <OnMouseDown>
+                self.child:SetFocus();
+            </OnMouseDown>
+        </Scripts>
+    </Frame>
+</Ui>

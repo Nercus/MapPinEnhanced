@@ -1,0 +1,51 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="toggle.lua" />
+
+    <Button name="MapPinEnhancedToggleTemplate" mixin="MapPinEnhancedToggleMixin" virtual="true"
+        clipChildren="true">
+        <Size x="50" y="25" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" scale="0.5" />
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="1">
+                <Texture parentKey="thumb" atlas="AftLevelup-WhiteIconGlow" scale="1" alpha="0.5">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="2" />
+                    </Anchors>
+                    <Color r="1" g="0.82" b="0" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Animations>
+            <AnimationGroup parentKey="checkAnimation" setToFinalAlpha="true">
+                <Alpha childKey="thumb" fromAlpha="0.5" toAlpha="1" duration="0.15"
+                />
+                <Translation childKey="thumb" offsetX="27" duration="0.15" smoothing="IN_OUT" />
+                <Scripts>
+                    <OnFinished>
+                        self:GetParent().thumb:ClearAllPoints();
+                        self:GetParent().thumb:SetPoint("LEFT", 27, 0);
+                    </OnFinished>
+                </Scripts>
+            </AnimationGroup>
+            <AnimationGroup parentKey="uncheckAnimation" setToFinalAlpha="true">
+                <Alpha childKey="thumb" fromAlpha="1" toAlpha="0.5" duration="0.15" />
+                <Translation childKey="thumb" offsetX="-27" duration="0.15" smoothing="IN_OUT" />
+                <Scripts>
+                    <OnFinished>
+                        self:GetParent().thumb:ClearAllPoints();
+                        self:GetParent().thumb:SetPoint("LEFT", 2, 0);
+                    </OnFinished>
+                </Scripts>
+            </AnimationGroup>
+        </Animations>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>

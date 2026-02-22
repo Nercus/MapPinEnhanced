@@ -12,11 +12,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="bg"
-                    atlas="UI-HUD-CoolDownManager-Bar-BG">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-1" y="1" />
-                        <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
-                    </Anchors>
+                    atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
                 </Texture>
             </Layer>
 

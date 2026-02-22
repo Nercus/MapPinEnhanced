@@ -1,0 +1,41 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="Category.lua" />
+    <Frame name="MapPinEnhancedOptionCategoryBaseTemplate"
+        mixin="MapPinEnhancedOptionCategoryBaseMixin" virtual="true">
+        <Size x="1" y="200" />
+        <Frames>
+            <Button parentKey="header">
+                <Size x="1" y="24" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate">
+                            <Size x="12" y="12" />
+                            <KeyValues>
+                                <KeyValue key="icon" value="plus" />
+                            </KeyValues>
+                            <Anchors>
+                                <Anchor point="LEFT" x="5" />
+                            </Anchors>
+                        </Texture>
+                        <FontString parentKey="title" inherits="GameFontHighlightLarge"
+                            text="Category" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="LEFT" relativeKey="$parent.icon"
+                                    relativePoint="RIGHT" x="5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnShow method="OnShow" />
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+</Ui>

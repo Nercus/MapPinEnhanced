@@ -1,0 +1,79 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedOptionCategoryGeneralTemplate" virtual="true"
+        inherits="MapPinEnhancedOptionCategoryBaseTemplate">
+        <Frames>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="test.checkbox" />
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionColorpickerTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="test.colorpicker" />
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionInputTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="test.input" />
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionToggleTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="test.toggle" />
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+            </Frame>
+            <!-- TODO: think of a way to set the options -->
+            <!-- <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="test.radiogroup" />
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+            </Frame> -->
+            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="test.group.test" />
+                </KeyValues>
+                <Frames>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                        <KeyValues>
+                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="orientation" value="vertical" />
+                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                            <KeyValue key="hideDescription" value="true" type="boolean" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                        <KeyValues>
+                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="orientation" value="vertical" />
+                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                            <KeyValue key="hideDescription" value="true" type="boolean" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                        <KeyValues>
+                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="orientation" value="vertical" />
+                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                            <KeyValue key="hideDescription" value="true" type="boolean" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                        <KeyValues>
+                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="orientation" value="vertical" />
+                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                            <KeyValue key="hideDescription" value="true" type="boolean" />
+                        </KeyValues>
+                    </Frame>
+                </Frames>
+            </Frame>
+        </Frames>
+    </Frame>
+</Ui>

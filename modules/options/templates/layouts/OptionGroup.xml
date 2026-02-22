@@ -1,0 +1,26 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="OptionGroup.lua" />
+    <Frame name="MapPinEnhancedOptionGroupTemplate" virtual="true"
+        mixin="MapPinEnhancedOptionGroupMixin">
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="label" inherits="GameFontNormalLarge" justifyH="LEFT"
+                    justifyV="TOP">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="20" y="5" />
+                        <Anchor point="TOPRIGHT" x="0" y="5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.75" />
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+
+</Ui>
