@@ -12,10 +12,24 @@ local MapPinEnhanced = select(2, ...)
 ---@field GetValue fun(self): any A function that returns the current value of the option.
 ---@field SetValue fun(self, value): nil A function that sets the value of the option.
 ---@field OnChange fun(self, callback: fun(value): nil): nil A function that allows subscribing to changes of the option's value. The callback will be called with the new value whenever it changes.
+---@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
+---@field callbacks function[] A list of callback functions that will be called when the option's value changes.
 MapPinEnhancedFormElementMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
+
+function MapPinEnhancedFormElementMixin:OnChange(callback)
+    if not self.callbacks then
+        self.callbacks = {}
+    end
+    for _, existingCallback in ipairs(self.callbacks) do
+        if existingCallback == callback then
+            return
+        end
+    end
+    table.insert(self.callbacks, callback)
+end
 
 function MapPinEnhancedFormElementMixin:GetLabelText()
     if not self.key then return nil end
@@ -97,9 +111,10 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     assert(self.child, "Form element must have a child frame")
     assert(self.key, "Form element must have an key")
 
-    assert(self.GetValue, "Form element must have a GET method")
-    assert(self.SetValue, "Form element must have a SET method")
-    assert(self.OnChange, "Form element must have a SUBSCRIBE method")
+    assert(self.GetValue, "Form element must have a GetValue method")
+    assert(self.SetValue, "Form element must have a SetValue method")
+    assert(self.OnChange, "Form element must have a OnChange method")
+    assert(self.Setup, "Form element must have a Setup method")
 
     local showLabel = self:HasLabel()
     local showDescription = self:HasDescription()
@@ -115,5 +130,6 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     end
 
     self:SetLayout(self.orientation or "vertical")
+    self:UpdateHeight()
     Options:RegisterOption(self.key, self)
 end

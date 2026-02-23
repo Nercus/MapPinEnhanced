@@ -118,6 +118,10 @@ function MapPinEnhancedSliderMixin:SetDisabledState(disabled)
     end
 end
 
+function MapPinEnhancedSliderMixin:GetValue()
+    return self.slider:GetValue()
+end
+
 ---@param callback fun(isChecked: boolean)
 function MapPinEnhancedSliderMixin:SetCallback(callback)
     assert(type(callback) == "function", "Callback must be a function.")

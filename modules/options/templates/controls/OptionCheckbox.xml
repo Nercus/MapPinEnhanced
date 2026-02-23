@@ -1,39 +1,29 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
+    <Include file="OptionCheckbox.lua" />
+
     <Frame name="MapPinEnhancedOptionCheckboxTemplate" virtual="true"
-        inherits="MapPinEnhancedFormElementTemplate">
+        inherits="MapPinEnhancedFormElementTemplate" mixin="MapPinEnhancedOptionCheckboxMixin">
         <Size x="1" y="1" />
         <Frames>
-            <CheckButton parentKey="child" inherits="MapPinEnhancedCheckboxTemplate">
-                <Size x="25" y="25" />
-            </CheckButton>
+            <CheckButton parentKey="child" inherits="MapPinEnhancedCheckboxTemplate" />
         </Frames>
         <Scripts>
-            <OnMouseDown>
-                self.child:Click();
-            </OnMouseDown>
+            <OnMouseDown method="OnMouseDown" />
         </Scripts>
     </Frame>
 
     <Frame name="MapPinEnhancedOptionCheckboxWithLabelTemplate" virtual="true"
-        inherits="MapPinEnhancedFormElementTemplate">
+        inherits="MapPinEnhancedFormElementTemplate"
+        mixin="MapPinEnhancedOptionCheckboxWithLabelMixin">
         <Size x="1" y="1" />
         <Frames>
-            <CheckButton parentKey="child" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
-                <Size x="25" y="25" />
-            </CheckButton>
+            <CheckButton parentKey="child" inherits="MapPinEnhancedCheckboxWithLabelTemplate" />
         </Frames>
         <Scripts>
-            <OnMouseDown>
-                self.child:Click();
-            </OnMouseDown>
-            <OnLoad>
-                hooksecurefunc(self, "SetLabel", function(_, label)
-                    self.child:SetLabel(label)
-                end)
-                MapPinEnhancedFormElementMixin.OnLoad(self)
-            </OnLoad>
+            <OnMouseDown method="OnMouseDown" />
+            <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
 </Ui>

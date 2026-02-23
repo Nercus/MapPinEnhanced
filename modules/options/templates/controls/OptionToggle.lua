@@ -1,6 +1,5 @@
 ---@class MapPinEnhancedOptionToggleTemplate : MapPinEnhancedFormElementTemplate
 ---@field child MapPinEnhancedToggleTemplate
----@field callbacks function[]
 MapPinEnhancedOptionToggleMixin = {}
 
 function MapPinEnhancedOptionToggleMixin:OnMouseDown()
@@ -19,14 +18,16 @@ function MapPinEnhancedOptionToggleMixin:SetValue(value)
     end
 end
 
-function MapPinEnhancedOptionToggleMixin:OnChange(callback)
-    if not self.callbacks then
-        self.callbacks = {}
-    end
-    table.insert(self.callbacks, callback)
-    self.child:SetCallback(function(isChecked)
-        for _, cb in ipairs(self.callbacks) do
-            cb(isChecked)
-        end
-    end)
+---@params initValue boolean
+function MapPinEnhancedOptionToggleMixin:Setup(initValue)
+    self.child:Setup({
+        onChange = function(isChecked)
+            if not self.callbacks then return end
+            for _, cb in ipairs(self.callbacks) do
+                cb(isChecked)
+            end
+        end,
+    })
+    assert(type(initValue) == "boolean", "Initial value for toggle must be a boolean")
+    self:SetValue(initValue)
 end

@@ -37,8 +37,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
     self.pool:ReleaseAll()
 
     local lastButton = nil
-    local isHorizontal = self.orientation == "HORIZONTAL"
-    local spacing = isHorizontal and 10 or 5
+    local spacing = 5
 
     for _, option in ipairs(self.options) do
         local button = self.pool:Acquire()
@@ -57,11 +56,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
 
 
         if lastButton then
-            if isHorizontal then
-                button:SetPoint("TOPLEFT", lastButton, "TOPRIGHT", spacing, 0)
-            else
-                button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -spacing)
-            end
+            button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -spacing)
         else
             button:SetPoint("TOPLEFT", self, "TOPLEFT", 10, -10)
         end
@@ -70,19 +65,9 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
         button:Show()
     end
 
-    if isHorizontal then
-        local totalWidth = 10
-        ---@param button MapPinEnhancedRadioButtonTemplate
-        for button in self.pool:EnumerateActive() do
-            totalWidth = totalWidth + button:GetWidth() + spacing
-        end
-        totalWidth = totalWidth - spacing + 10
-        self:SetWidth(totalWidth)
-        self:SetHeight(40)
-    else
-        self:SetHeight(#self.options * 25 + 10)
-        self:SetWidth(200)
-    end
+
+    self:SetHeight(#self.options * 25 + 10)
+    self:SetWidth(200)
 
     self:Show()
 end
@@ -98,7 +83,6 @@ end
 --- Initializes the radio button group.
 function MapPinEnhancedRadioGroupMixin:OnLoad()
     self.pool = CreateFramePool("CheckButton", self, "MapPinEnhancedRadioButtonTemplate")
-    self.orientation = "VERTICAL"
 end
 
 --- Gets the currently selected value.
@@ -132,7 +116,6 @@ end
 
 ---@class RadioGroupSetup
 ---@field options MapPinEnhancedRadioGroupOption[] -- options for the radio buttons
----@field orientation? "HORIZONTAL" | "VERTICAL" -- layout orientation, default is "VERTICAL"
 ---@field onChange fun(value: any)
 ---@field init? fun(): any -- initial value can be nil if option has never been set before
 
@@ -141,7 +124,6 @@ function MapPinEnhancedRadioGroupMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
 
-    self.orientation = formData.orientation or "VERTICAL"
 
     self:SetOptions(formData.options or {})
     if formData.init then

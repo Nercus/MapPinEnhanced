@@ -65,7 +65,6 @@
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnSizeChanged method="OnSizeChanged" />
-            <OnValueChanged method="OnValueChanged" />
             <OnShow method="OnShow" />
         </Scripts>
     </Frame>

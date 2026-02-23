@@ -15,12 +15,12 @@
                 </FontString>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.75" />
+                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.75"
+                    scale="0.5" />
             </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
-
 </Ui>

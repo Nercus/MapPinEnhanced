@@ -6,43 +6,49 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="test.checkbox" />
+                    <KeyValue key="key" value="test.checkbox" />
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionColorpickerTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="test.colorpicker" />
+                    <KeyValue key="key" value="test.colorpicker" />
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionInputTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="test.input" />
+                    <KeyValue key="key" value="test.input" />
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="test.toggle" />
+                    <KeyValue key="key" value="test.toggle" />
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
-            <!-- TODO: think of a way to set the options -->
-            <!-- <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+            <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="test.radiogroup" />
+                    <KeyValue key="key" value="test.radiogroup" />
+                    <KeyValue key="orientation" value="vertical" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionSliderTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="test.slider" />
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
-            </Frame> -->
+            </Frame>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="test.group.test" />
+                    <KeyValue key="key" value="test.group1" />
+                    <KeyValue key="columns" value="2" type="number" />
                 </KeyValues>
                 <Frames>
                     <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
                         <KeyValues>
-                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="key" value="test.checkbox2" />
                             <KeyValue key="orientation" value="vertical" />
                             <KeyValue key="hideLabel" value="true" type="boolean" />
                             <KeyValue key="hideDescription" value="true" type="boolean" />
@@ -50,7 +56,7 @@
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
                         <KeyValues>
-                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="key" value="test.checkbox3" />
                             <KeyValue key="orientation" value="vertical" />
                             <KeyValue key="hideLabel" value="true" type="boolean" />
                             <KeyValue key="hideDescription" value="true" type="boolean" />
@@ -58,7 +64,7 @@
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
                         <KeyValues>
-                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="key" value="test.checkbox4" />
                             <KeyValue key="orientation" value="vertical" />
                             <KeyValue key="hideLabel" value="true" type="boolean" />
                             <KeyValue key="hideDescription" value="true" type="boolean" />
@@ -66,7 +72,7 @@
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
                         <KeyValues>
-                            <KeyValue key="optionKey" value="test.checkbox2" />
+                            <KeyValue key="key" value="test.checkbox5" />
                             <KeyValue key="orientation" value="vertical" />
                             <KeyValue key="hideLabel" value="true" type="boolean" />
                             <KeyValue key="hideDescription" value="true" type="boolean" />

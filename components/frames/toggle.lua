@@ -1,3 +1,6 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedToggleTemplate : Button
 ---@field isChecked boolean
 ---@field checkAnimation AnimationGroup
@@ -52,6 +55,7 @@ function MapPinEnhancedToggleMixin:Setup(formData)
 
     self:SetCallback(formData.onChange)
     self:SetScript("OnClick", function()
+        self:OnClick()
         if self.onChangeCallback then
             self.onChangeCallback(self:GetChecked())
         end
