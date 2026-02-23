@@ -6,19 +6,49 @@ local MapPinEnhanced = select(2, ...)
 ---@field label FontString
 ---@field description FontString
 ---@field child Frame
----@field optionKey string The unique key for the option, used for saving values. Is of the format "category.optionName", e.g. "general.showMinimapPin".
+---@field key string The unique key for the option, used for saving values. Is of the format "category.optionName", e.g. "general.showMinimapPin".
 ---@field hideLabel boolean If true, the label will be hidden and not take up space.
 ---@field hideDescription boolean If true, the description will be hidden and not take up space.
+---@field GetValue fun(self): any A function that returns the current value of the option.
+---@field SetValue fun(self, value): nil A function that sets the value of the option.
+---@field OnChange fun(self, callback: fun(value): nil): nil A function that allows subscribing to changes of the option's value. The callback will be called with the new value whenever it changes.
 MapPinEnhancedFormElementMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
-local PADDING = 4
+function MapPinEnhancedFormElementMixin:GetLabelText()
+    if not self.key then return nil end
+    local labelKey = self.key .. "_LABEL"
+    local labelText = L[labelKey]
+    if labelText and labelText ~= labelKey then
+        return labelText
+    end
+    return nil
+end
 
+function MapPinEnhancedFormElementMixin:GetDescriptionText()
+    if not self.key then return nil end
+    local descKey = self.key .. "_DESCRIPTION"
+    local descText = L[descKey]
+    if descText and descText ~= descKey then
+        return descText
+    end
+    return nil
+end
+
+function MapPinEnhancedFormElementMixin:HasLabel()
+    return self:GetLabelText() ~= nil and not self.hideLabel
+end
+
+function MapPinEnhancedFormElementMixin:HasDescription()
+    return self:GetDescriptionText() ~= nil and not self.hideDescription
+end
+
+local PADDING = 4
 function MapPinEnhancedFormElementMixin:UpdateHeight()
-    local hasLabel = self.label:IsShown()
-    local hasDescription = self.description:IsShown()
+    local hasLabel = self:HasLabel()
+    local hasDescription = self:HasDescription()
 
     local labelHeight = hasLabel and (self.label:GetHeight() + 4) or 0
     local descriptionHeight = hasDescription and (self.description:GetHeight() + 4) or 0
@@ -37,77 +67,53 @@ function MapPinEnhancedFormElementMixin:UpdateHeight()
 end
 
 function MapPinEnhancedFormElementMixin:SetLayout(orientation)
+    assert(orientation == "vertical" or orientation == "horizontal", "Invalid orientation: " .. tostring(orientation))
+
+    self.child:ClearAllPoints()
     if orientation == "vertical" then
-        local hasLabel = self.label:IsShown()
-        local hasDescription = self.description:IsShown()
+        local hasLabel = self:HasLabel()
+        local hasDescription = self:HasDescription()
 
         ---@type Region
         local anchor = self
         local anchorPoint = "TOPLEFT"
+        local offsetY = 0
         if hasDescription then
             anchor = self.description
             anchorPoint = "BOTTOMLEFT"
+            offsetY = -PADDING
         elseif hasLabel then
             anchor = self.label
             anchorPoint = "BOTTOMLEFT"
+            offsetY = -PADDING
         end
-
-        self.child:ClearAllPoints()
-        self.child:SetPoint("TOPLEFT", anchor, anchorPoint, 0, anchor == self and 0 or -PADDING)
+        self.child:SetPoint("TOPLEFT", anchor, anchorPoint, 0, offsetY)
     elseif orientation == "horizontal" then
-        self.child:ClearAllPoints()
         self.child:SetPoint("TOPRIGHT", self, "TOPRIGHT")
-    else
-        error("Invalid orientation: " .. tostring(orientation))
     end
-    self:UpdateHeight()
-end
-
-function MapPinEnhancedFormElementMixin:OnShow()
-    self:UpdateHeight()
 end
 
 function MapPinEnhancedFormElementMixin:OnLoad()
     assert(self.child, "Form element must have a child frame")
-    assert(self.optionKey, "Form element must have an optionKey")
+    assert(self.key, "Form element must have an key")
 
-    local labelKey = self.optionKey .. "_LABEL"
-    local labelText = L[labelKey]
-    if labelText and labelText ~= labelKey then
-        self:SetLabel(labelText)
+    assert(self.GetValue, "Form element must have a GET method")
+    assert(self.SetValue, "Form element must have a SET method")
+    assert(self.OnChange, "Form element must have a SUBSCRIBE method")
+
+    local showLabel = self:HasLabel()
+    local showDescription = self:HasDescription()
+
+    self.label:SetShown(showLabel)
+    self.description:SetShown(showDescription)
+
+    if showLabel then
+        self.label:SetText(self:GetLabelText())
     end
-
-    local descKey = self.optionKey .. "_DESCRIPTION"
-    local descText = L[descKey]
-    if descText and descText ~= descKey then
-        self:SetDescription(descText)
-    else
-        self:SetDescription(nil)
+    if showDescription then
+        self.description:SetText(self:GetDescriptionText())
     end
-
-    self.label:SetShown(not self.hideLabel)
-    self.description:SetShown(not self.hideDescription)
 
     self:SetLayout(self.orientation or "vertical")
-    Options:RegisterOption(self.optionKey, self.child)
-end
-
-function MapPinEnhancedFormElementMixin:SetLabel(text)
-    if not text or text == "" then
-        self.label:Hide()
-    else
-        self.label:SetText(text)
-        self.label:Show()
-    end
-    self:UpdateHeight()
-end
-
-function MapPinEnhancedFormElementMixin:SetDescription(text)
-    if not text or text == "" then
-        self.description:Hide()
-    else
-        self.description:SetText(text)
-        self.description:Show()
-    end
-    self:UpdateHeight()
+    Options:RegisterOption(self.key, self)
 end

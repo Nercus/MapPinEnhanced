@@ -3,15 +3,13 @@
 
 
     <Frame name="MapPinEnhancedOptionToggleTemplate" virtual="true"
-        inherits="MapPinEnhancedFormElementTemplate">
+        inherits="MapPinEnhancedFormElementTemplate" mixin="MapPinEnhancedOptionToggleMixin">
         <Size x="1" y="1" />
         <Frames>
             <CheckButton parentKey="child" inherits="MapPinEnhancedToggleTemplate" />
         </Frames>
         <Scripts>
-            <OnMouseDown>
-                self.child:Click();
-            </OnMouseDown>
+            <OnMouseDown method="OnMouseDown" />
         </Scripts>
     </Frame>
 </Ui>
