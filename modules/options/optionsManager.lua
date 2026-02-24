@@ -55,6 +55,7 @@ function Options:GetOptionValue(key)
     return frame:GetValue()
 end
 
+--TODO: this should also be called on load
 function Options:SubscribeToOptionChanges(key, callback)
     local frame = self.options[key]
     if not frame then
@@ -62,4 +63,13 @@ function Options:SubscribeToOptionChanges(key, callback)
     end
     assert(frame.OnChange, "Option frame must have a OnChange method")
     frame:OnChange(callback)
+end
+
+function Options:ScrollToOption(key)
+    local frame = self.options[key]
+    if not frame then
+        error("Option with key " .. key .. " not found")
+    end
+    assert(frame.ScrollToOption, "Option frame must have a ScrollToOption method")
+    frame:ScrollToOption()
 end

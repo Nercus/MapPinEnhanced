@@ -3,19 +3,8 @@
 
     <Include file="optionsFrame.lua" />
     <Frame mixin="MapPinEnhancedOptionsFrameMixin" name="MapPinEnhancedOptionsFrame" hidden="true">
-        <Scripts>
-            <OnLoad method="OnLoad" />
-        </Scripts>
+
         <Layers>
-            <Layer level="ARTWORK">
-                <FontString parentKey="title" font="GameFontNormalLarge" justifyH="CENTER"
-                    justifyV="MIDDLE">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" y="-5" />
-                        <Anchor point="TOPRIGHT" y="-5" />
-                    </Anchors>
-                </FontString>
-            </Layer>
             <Layer level="BACKGROUND">
                 <Texture atlas="shop-bg-map-blue" setAllPoints="true"
                     desaturated="true">
@@ -27,6 +16,36 @@
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="header">
+                <Size x="1" y="25" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="title" font="GameFontNormalHuge" justifyH="CENTER"
+                            justifyV="BOTTOM">
+                            <Anchors>
+                                <Anchor point="LEFT" x="5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <EditBox inherits="MapPinEnhancedAutocompleteTemplate" parentKey="search">
+                        <Size x="300" y="25" />
+                        <Anchors>
+                            <Anchor point="RIGHT" x="-5" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="icon" value="search" />
+                            <KeyValue key="placeholder" value="Search for option..." />
+                        </KeyValues>
+                    </EditBox>
+                </Frames>
+            </Frame>
+
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
                 <Size x="1" y="1" />
                 <Anchors>
@@ -59,5 +78,9 @@
                 </ScrollChild>
             </ScrollFrame>
         </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+        </Scripts>
     </Frame>
 </Ui>

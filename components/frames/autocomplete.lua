@@ -25,10 +25,9 @@ MapPinEnhancedAutocompleteMixin = {}
 
 ---@class AutocompleteOption
 ---@field label string display label for the option
+---@field description string? additional description for the option, shown smaller below the label
 ---@field searchString string string to match against user input for filtering
 ---@field value number | string | boolean value associated with the option
-
---- TODO: maybe rebuild it with the menu system
 
 function MapPinEnhancedAutocompleteMixin:OnLoad()
     MapPinEnhancedInputMixin.OnLoad(self)
@@ -154,7 +153,7 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
 end
 
 local MAX_HEIGHT = 200
-local ENTRY_HEIGHT = 20
+local ENTRY_HEIGHT = 25
 
 ---@param results SearchResult[]
 function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
@@ -264,7 +263,7 @@ end
 
 ---@class MapPinEnhancedAutocompleteData
 ---@field options AutocompleteOption[] list of options to show in the autocomplete
----@field onChange fun(value: number | string | boolean) callback when an option is selected
+---@field onChange fun(value: AutocompleteOption) callback when an option is selected
 ---@field init? fun(): number | string | boolean initial value for the autocomplete
 
 ---@param callback fun(value: any)
@@ -292,11 +291,13 @@ function MapPinEnhancedAutocompleteMixin:Setup(formData)
 end
 
 ---@class MapPinEnhancedAutocompleteEntryTemplate : Button, { GetOrderIndex: fun(): number }
----@field text FontString
+---@field label FontString
+---@field description FontString
 MapPinEnhancedAutocompleteEntryMixin = {}
 
 
 ---@param data AutocompleteOption
 function MapPinEnhancedAutocompleteEntryMixin:Init(data)
-    self.text:SetText(data.label)
+    self.label:SetText(data.label)
+    self.description:SetText(data.description or "")
 end

@@ -19,6 +19,25 @@
                     </Anchors>
                 </FontString>
             </Layer>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="searchHighlight" setAllPoints="true"
+                    atlas="search-select" hidden="true">
+                    <Animations>
+                        <AnimationGroup looping="REPEAT" parentKey="animation">
+                            <Alpha fromAlpha="0" toAlpha="0.2" duration="0.5" smoothing="IN_OUT"
+                                order="1" />
+                            <Alpha fromAlpha="0.2" toAlpha="0" duration="0.5" smoothing="IN_OUT"
+                                order="2" />
+                        </AnimationGroup>
+                    </Animations>
+                    <Scripts>
+                        <OnShow>
+                            self.animation:Play()
+                            C_Timer.After(5, function() if self:IsShown() then self:Hide() end end)
+                        </OnShow>
+                    </Scripts>
+                </Texture>
+            </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />

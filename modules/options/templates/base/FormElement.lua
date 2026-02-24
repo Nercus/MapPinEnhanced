@@ -2,10 +2,11 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedFormElementTemplate : Frame
----@field orientation "vertical" | "horizontal" | nil
 ---@field label FontString
 ---@field description FontString
+---@field searchHighlight Texture
 ---@field child Frame
+---@field orientation "vertical" | "horizontal" | nil
 ---@field key string The unique key for the option, used for saving values. Is of the format "category.optionName", e.g. "general.showMinimapPin".
 ---@field hideLabel boolean If true, the label will be hidden and not take up space.
 ---@field hideDescription boolean If true, the description will be hidden and not take up space.
@@ -13,6 +14,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field SetValue fun(self, value): nil A function that sets the value of the option.
 ---@field OnChange fun(self, callback: fun(value): nil): nil A function that allows subscribing to changes of the option's value. The callback will be called with the new value whenever it changes.
 ---@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
+---@field ScrollToOption fun(self): nil A function that scrolls the options panel to this option. Only necessary if the option is not guaranteed to be visible when changed, e.g. because it's in a collapsible section.
 ---@field callbacks function[] A list of callback functions that will be called when the option's value changes.
 MapPinEnhancedFormElementMixin = {}
 
@@ -78,6 +80,33 @@ function MapPinEnhancedFormElementMixin:UpdateHeight()
     totalHeight = totalHeight + PADDING * 2
 
     self:SetHeight(totalHeight)
+end
+
+function MapPinEnhancedFormElementMixin:ScrollToOption()
+    local Options = MapPinEnhanced:GetModule("Options")
+    local scrollFrame = Options.frame and Options.frame.scrollFrame
+
+    if not scrollFrame then return end
+
+    local scrollChild = scrollFrame:GetScrollChild()
+    if not scrollChild then return end
+
+    local childTop = scrollChild:GetTop()
+    local selfTop = self:GetTop()
+    if not childTop or not selfTop then return end
+
+    local padding = 12
+    local target = childTop - selfTop - padding
+    local maxScroll = scrollFrame:GetVerticalScrollRange() or 0
+
+    if target < 0 then
+        target = 0
+    elseif target > maxScroll then
+        target = maxScroll
+    end
+
+    scrollFrame:SetVerticalScroll(target)
+    self.searchHighlight:Show()
 end
 
 function MapPinEnhancedFormElementMixin:SetLayout(orientation)

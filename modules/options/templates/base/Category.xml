@@ -27,7 +27,7 @@
                             <Anchors>
                                 <!-- <Anchor point="LEFT" relativeKey="$parent.icon"
                                     relativePoint="RIGHT" x="5" /> -->
-                                <Anchor point="LEFT" relativePoint="LEFT" x="5" />
+                                <Anchor point="LEFT" relativePoint="LEFT" x="10" />
                             </Anchors>
                         </FontString>
                         <Texture atlas="CircleMask">

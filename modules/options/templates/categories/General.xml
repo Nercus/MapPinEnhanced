@@ -7,37 +7,37 @@
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.checkbox" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionColorpickerTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.colorpicker" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionInputTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.input" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.toggle" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.radiogroup" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionSliderTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.slider" />
-                    <KeyValue key="orientation" value="horizontal" />
+                    <KeyValue key="orientation" value="vertical" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">

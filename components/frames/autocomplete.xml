@@ -7,17 +7,39 @@
         virtual="true"
         font="GameFontHighlight" autoFocus="false" multiLine="false"
         inherits="MapPinEnhancedInputTemplate">
+        <Layers>
+            <Layer level="OVERLAY">
+                <Texture atlas="Spinner_Ring" hidden="true"
+                    parentKey="spinner">
+                    <Size x="20" y="20" />
+                    <Anchors>
+                        <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="spin" inherits="MapPinEnhancedAnimationSpin" />
+                    </Animations>
+                    <Scripts>
+                        <OnShow>
+                            self.spin:Play();
+                        </OnShow>
+                        <OnHide>
+                            self.spin:Stop();
+                        </OnHide>
+                    </Scripts>
+                </Texture>
+            </Layer>
+        </Layers>
         <Frames>
             <Frame parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
-                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="2" />
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
                 </Anchors>
                 <Size x="0" y="150" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="background" atlas="UI-HUD-CoolDownManager-Bar-BG"
-                        >
+                        <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o"
+                            scale="0.5">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />
@@ -57,30 +79,6 @@
                 </Frames>
             </Frame>
         </Frames>
-        <Layers>
-            <Layer level="OVERLAY">
-                <Texture atlas="Spinner_Ring" hidden="true"
-                    parentKey="spinner">
-                    <Size x="20" y="20" />
-                    <Anchors>
-                        <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />
-                    </Anchors>
-                    <Animations>
-                        <AnimationGroup parentKey="Anim" looping="REPEAT">
-                            <Rotation childKey="Spinner" order="1" duration="1" degrees="-360" />
-                        </AnimationGroup>
-                    </Animations>
-                    <Scripts>
-                        <OnShow>
-                            self.Anim:Play();
-                        </OnShow>
-                        <OnHide>
-                            self.Anim:Stop();
-                        </OnHide>
-                    </Scripts>
-                </Texture>
-            </Layer>
-        </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnTextChanged method="OnTextChanged" />
@@ -92,54 +90,30 @@
 
     <Button name="MapPinEnhancedAutocompleteEntryTemplate"
         mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
-        <Size x="1" y="20" />
+        <Size x="1" y="25" />
         <Layers>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalSmall" parentKey="text"
+                <FontString inherits="GameFontNormalSmall" parentKey="label"
                     justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="2" />
-                        <Anchor point="BOTTOMRIGHT" x="-10" />
+                        <Anchor point="TOPLEFT" x="2" y="-2" />
+                        <Anchor point="TOPRIGHT" x="-2" y="-2" />
+                    </Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormalTiny" parentKey="description"
+                    justifyH="LEFT" justifyV="MIDDLE">
+                    <Color r="0.6" g="0.6" b="0.6" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
+                            relativeKey="$parent.label" />
+                        <Anchor point="BOTTOMLEFT" />
                     </Anchors>
                 </FontString>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture setAllPoints="true" atlas="search-select" alpha="0.3" />
+                <Texture setAllPoints="true" atlas="search-select" alpha="1" />
             </Layer>
         </Layers>
         <ButtonText inherits="GameFontNormalSmall" />
     </Button>
-
-
-    <!-- <EditBox inherits="MapPinEnhancedAutocompleteTemplate">
-        <Size x="300" y="25" />
-        <Anchors>
-            <Anchor point="CENTER" y="100"></Anchor>
-        </Anchors>
-        <KeyValues>
-            <KeyValue key="icon" value="map" />
-            <KeyValue key="placeholder" value="Search for map..." />
-        </KeyValues>
-
-        <Scripts>
-            <OnShow>
-                local HBD = LibStub:GetLibrary("HereBeDragons-2.0")
-                local HBDMapData = HBD.mapData
-                local data = {}
-                for mapID, info in pairs(HBDMapData) do
-                    if info.name then
-                        table.insert(data, {label = info.name .. " (" .. mapID ..")", searchString = info.name .. mapID,
-    value = mapID})
-                    end
-                end
-                self:Setup({
-                    options = data,
-                    onChange = function(option)
-                        if not option then print("No map selected") return end
-                        print("Selected map:", option.label, "with ID:", option.value)
-                    end,
-                })
-            </OnShow>
-        </Scripts>
-    </EditBox> -->
 </Ui>
