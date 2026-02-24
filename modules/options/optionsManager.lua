@@ -55,13 +55,13 @@ function Options:GetOptionValue(key)
     return frame:GetValue()
 end
 
---TODO: this should also be called on load
 function Options:SubscribeToOptionChanges(key, callback)
     local frame = self.options[key]
     if not frame then
         error("Option with key " .. key .. " not found")
     end
     assert(frame.OnChange, "Option frame must have a OnChange method")
+    callback(self:GetOptionInitValue(key))
     frame:OnChange(callback)
 end
 
