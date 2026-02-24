@@ -5,9 +5,12 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field search MapPinEnhancedAutocompleteTemplate
 
+---@class ScrollFrameTemplate
+---@field ScrollBar MinimalScrollBar
+
 ---@class MapPinEnhancedOptionsFrame : Frame
 ---@field header MapPinEnhancedOptionsFrameHeader
----@field scrollFrame ScrollFrame
+---@field scrollFrame ScrollFrameTemplate
 MapPinEnhancedOptionsFrameMixin = {}
 
 ---@class Options
@@ -52,7 +55,6 @@ function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
             if not option then return end
             Options:ScrollToOption(option.value)
         end,
-        clearOnFocus = true
     })
 
     self.searchInitialized = true
@@ -67,11 +69,12 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     self:Show()
     self:SetTitle()
 
+    self.scrollFrame.ScrollBar:SetInterpolateScroll(true)
+    Options.frame = self
+
     MapPinEnhanced:AddSlashCommand("options", function()
         self:ToggleOptionsFrame()
     end, "Open the options frame")
-    self:ToggleOptionsFrame()
-    Options.frame = self
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnShow()

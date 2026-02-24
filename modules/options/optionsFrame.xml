@@ -50,10 +50,10 @@
                 <Size x="1" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" y="-25" />
-                    <Anchor point="BOTTOMRIGHT" />
+                    <Anchor point="BOTTOMRIGHT" x="-20" />
                 </Anchors>
                 <KeyValues>
-                    <KeyValue key="scrollBarX" value="0" type="number" />
+                    <KeyValue key="scrollBarX" value="2" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
                     <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
