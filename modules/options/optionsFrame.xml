@@ -6,10 +6,33 @@
         <Scripts>
             <OnLoad method="OnLoad" />
         </Scripts>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" font="GameFontNormalLarge" justifyH="CENTER"
+                    justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="-5" />
+                        <Anchor point="TOPRIGHT" y="-5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture atlas="shop-bg-map-blue" setAllPoints="true"
+                    desaturated="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0" />
+                        <MaxColor r="1" g="1" b="1" a="0.7" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+        </Layers>
         <Frames>
-            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
-                setAllPoints="true">
-                <Size x="665" y="1" />
+            <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" y="-25" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
                 <KeyValues>
                     <KeyValue key="scrollBarX" value="0" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />

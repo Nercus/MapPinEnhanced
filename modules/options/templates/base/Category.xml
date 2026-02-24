@@ -13,7 +13,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate">
+                        <!-- <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate">
                             <Size x="12" y="12" />
                             <KeyValues>
                                 <KeyValue key="icon" value="plus" />
@@ -21,12 +21,13 @@
                             <Anchors>
                                 <Anchor point="LEFT" x="5" />
                             </Anchors>
-                        </Texture>
+                        </Texture> -->
                         <FontString parentKey="title" inherits="GameFontHighlightLarge"
                             text="Category" justifyH="LEFT">
                             <Anchors>
-                                <Anchor point="LEFT" relativeKey="$parent.icon"
-                                    relativePoint="RIGHT" x="5" />
+                                <!-- <Anchor point="LEFT" relativeKey="$parent.icon"
+                                    relativePoint="RIGHT" x="5" /> -->
+                                <Anchor point="LEFT" relativePoint="LEFT" x="5" />
                             </Anchors>
                         </FontString>
                         <Texture atlas="CircleMask">
@@ -46,7 +47,7 @@
         </Frames>
         <Scripts>
             <OnShow method="OnShow" />
-            <OnLoad method="OnLoad" />
+            <!-- <OnLoad method="OnLoad" /> -->
         </Scripts>
     </Frame>
 </Ui>

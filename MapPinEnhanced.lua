@@ -3,6 +3,7 @@
 local MapPinEnhanced = select(2, ...)
 
 MapPinEnhanced.name = "MapPinEnhanced"
+MapPinEnhanced.displayName = "Map Pin Enhanced"
 MapPinEnhanced.me = UnitName("player")
 MapPinEnhanced.realm = GetRealmName()
 MapPinEnhanced.player = MapPinEnhanced.me .. "-" .. MapPinEnhanced.realm

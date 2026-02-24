@@ -10,27 +10,27 @@ local MapPinEnhanced = select(2, ...)
 ---@field header MapPinEnhancedOptionCategoryBaseHeader
 MapPinEnhancedOptionCategoryBaseMixin = {}
 
-function MapPinEnhancedOptionCategoryBaseMixin:Collapse()
-    self.isCollapsed = true
-    for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.header then
-            child:Hide()
-        end
-    end
-    self:SetHeight(self.header:GetHeight() + 8)
-    self.header.icon:SetIconTexture("plus")
-end
+-- function MapPinEnhancedOptionCategoryBaseMixin:Collapse()
+--     self.isCollapsed = true
+--     for _, child in ipairs({ self:GetChildren() }) do
+--         if child ~= self.header then
+--             child:Hide()
+--         end
+--     end
+--     self:SetHeight(self.header:GetHeight() + 8)
+--     self.header.icon:SetIconTexture("plus")
+-- end
 
-function MapPinEnhancedOptionCategoryBaseMixin:Expand()
-    self.isCollapsed = false
-    for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.header then
-            child:Show()
-        end
-    end
-    self:UpdateHeight()
-    self.header.icon:SetIconTexture("minus")
-end
+-- function MapPinEnhancedOptionCategoryBaseMixin:Expand()
+--     self.isCollapsed = false
+--     for _, child in ipairs({ self:GetChildren() }) do
+--         if child ~= self.header then
+--             child:Show()
+--         end
+--     end
+--     self:UpdateHeight()
+--     self.header.icon:SetIconTexture("minus")
+-- end
 
 function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
     local totalHeight = self.header:GetHeight()
@@ -49,8 +49,8 @@ function MapPinEnhancedOptionCategoryBaseMixin:LayoutChildren()
     for _, child in ipairs({ self:GetChildren() }) do
         if child ~= self.header then
             child:ClearAllPoints()
-            child:SetPoint("TOPLEFT", self, "TOPLEFT", 8, offsetY)
-            child:SetPoint("TOPRIGHT", self, "TOPRIGHT", -8, offsetY)
+            child:SetPoint("TOPLEFT", self, "TOPLEFT", 16, offsetY)
+            child:SetPoint("TOPRIGHT", self, "TOPRIGHT", -16, offsetY)
             offsetY = offsetY - child:GetHeight() - 4 -- 4px spacing
         end
     end
@@ -59,17 +59,17 @@ end
 function MapPinEnhancedOptionCategoryBaseMixin:OnShow()
     self:LayoutChildren()
     self:UpdateHeight()
-    self:Expand() -- default to expanded when shown
+    -- self:Expand() -- default to expanded when shown
 end
 
-function MapPinEnhancedOptionCategoryBaseMixin:ToggleCollapse()
-    if self.isCollapsed then
-        self:Expand()
-    else
-        self:Collapse()
-    end
-end
+-- function MapPinEnhancedOptionCategoryBaseMixin:ToggleCollapse()
+--     if self.isCollapsed then
+--         self:Expand()
+--     else
+--         self:Collapse()
+--     end
+-- end
 
-function MapPinEnhancedOptionCategoryBaseMixin:OnLoad()
-    self.header:SetScript("OnClick", function() self:ToggleCollapse() end)
-end
+-- function MapPinEnhancedOptionCategoryBaseMixin:OnLoad()
+--     self.header:SetScript("OnClick", function() self:ToggleCollapse() end)
+-- end
