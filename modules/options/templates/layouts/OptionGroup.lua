@@ -39,6 +39,8 @@ function MapPinEnhancedOptionGroupMixin:OnLoad()
     assert(self.key, "OptionGroup requires a key")
     self:SetLabel(L[self.key .. "_GROUPLABEL"])
     self:UpdateLayout()
+end
+
+function MapPinEnhancedOptionGroupMixin:OnShow()
     self:UpdateHeight()
-    MapPinEnhanced:Debug(self)
 end
