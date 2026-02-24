@@ -1,15 +1,16 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedSliderValueText : FontString
+---@field fadeOut AnimationGroup
+---@field fadeIn AnimationGroup
+
 ---@class MapPinEnhancedSliderTemplate : Frame
----@field valueText FontString
+---@field valueText MapPinEnhancedSliderValueText
 ---@field back Button
 ---@field forward Button
----@field ticks table<number, MapPinEnhancedSliderTickTemplate>
 ---@field slider MinimalSliderTemplate
 MapPinEnhancedSliderMixin = {}
-
----@class MapPinEnhancedSliderTickTemplate : Texture
 
 ---@param value number
 ---@param step number
@@ -22,54 +23,26 @@ local function roundValueToPrecision(value, step)
     return string.format("%." .. precision .. "f", value)
 end
 
-local MAX_NUM_TICKS = 15
-
-function MapPinEnhancedSliderMixin:UpdateTicks()
-    local slider = self.slider
-    self.tickPool:ReleaseAll()
-    self.ticks = {}
-    local currentValue = slider:GetValue()
-    local minValue, maxValue = slider:GetMinMaxValues()
-    local step = slider:GetValueStep()
-    local numTicks = math.ceil((maxValue - minValue) / step)
-
-    if numTicks > MAX_NUM_TICKS then
-        return
-    end
-    local tickSpacing = (slider:GetWidth() - 20) / numTicks -- 20 is for the two buttons
-    for i = 0, numTicks do
-        local tickValue = minValue + i * step
-        if tickValue <= maxValue then
-            local tick = self.tickPool:Acquire()
-            tick:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", i * tickSpacing + 5, 5)
-            tick:SetWidth(10)
-            tick:Show()
-            self.ticks[tickValue] = tick
-            if tickValue == currentValue then
-                tick:SetHeight(15)
-            else
-                tick:SetHeight(10)
-            end
-            if tickValue <= currentValue then
-                tick:SetDesaturated(false)
-            else
-                tick:SetDesaturated(true)
-            end
-        end
-    end
-end
-
 function MapPinEnhancedSliderMixin:OnSizeChanged()
-    self:UpdateTicks()
     local height = self:GetHeight()
     self.slider:SetHeight(height)
 end
 
 function MapPinEnhancedSliderMixin:OnLoad()
-    self.tickPool = CreateTexturePool(self, "ARTWORK", 1, "MapPinEnhancedSliderTickTemplate")
-    self:UpdateTicks()
+    self.valueText:Hide()
+    self.valueText:SetAlpha(1)
+
     self.slider:SetScript("OnValueChanged", function(_, value)
         self:OnValueChanged(value)
+    end)
+
+    -- Hook into thumb drag events
+    self.slider:HookScript("OnMouseDown", function()
+        self:OnThumbDragStart()
+    end)
+
+    self.slider:HookScript("OnMouseUp", function()
+        self:OnThumbDragStop()
     end)
 end
 
@@ -77,22 +50,36 @@ function MapPinEnhancedSliderMixin:OnShow()
     self:OnSizeChanged()
 end
 
+function MapPinEnhancedSliderMixin:OnThumbDragStart()
+    if self.valueText.fadeOut:IsPlaying() then
+        self.valueText.fadeOut:Stop()
+    end
+    if self.valueText.fadeIn:IsPlaying() then
+        self.valueText.fadeIn:Stop()
+    end
+    self.valueText.fadeIn:Play()
+end
+
+---@type FunctionContainer
+local fadeOutDelay
+function MapPinEnhancedSliderMixin:OnThumbDragStop()
+    if self.valueText.fadeIn:IsPlaying() then
+        self.valueText.fadeIn:Stop()
+    end
+    if fadeOutDelay and not fadeOutDelay:IsCancelled() then
+        fadeOutDelay:Cancel()
+    end
+    fadeOutDelay = C_Timer.NewTimer(0.5, function()
+        if self.valueText:IsShown() then
+            self.valueText.fadeOut:Play()
+        end
+    end)
+end
+
 function MapPinEnhancedSliderMixin:OnValueChanged(value)
     if value then
         local slider = self.slider
         self.valueText:SetText(roundValueToPrecision(value, slider:GetValueStep()))
-        for tickValue, tick in pairs(self.ticks) do
-            if tickValue == value then
-                tick:SetHeight(15)
-            else
-                tick:SetHeight(10)
-            end
-            if tickValue <= value then
-                tick:SetDesaturated(false)
-            else
-                tick:SetDesaturated(true)
-            end
-        end
     end
     if self.onChangeCallback then
         self.onChangeCallback(value)
@@ -140,9 +127,10 @@ function MapPinEnhancedSliderMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
     local slider = self.slider
+    self.valueText:ClearAllPoints()
+    self.valueText:SetPoint("BOTTOM", slider.Thumb, "TOP", 0, 2)
     slider:SetMinMaxValues(formData.min, formData.max)
     slider:SetValueStep(formData.step or 1)
-    self:UpdateTicks()
     if formData.init then
         assert(type(formData.init) == "function", "init must be a function")
         local initialValue = formData.init()
@@ -150,7 +138,6 @@ function MapPinEnhancedSliderMixin:Setup(formData)
             slider:SetValue(initialValue)
         end
     end
-
 
     self:SetCallback(formData.onChange)
 end

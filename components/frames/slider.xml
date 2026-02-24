@@ -11,7 +11,7 @@
             <Button parentKey="back" propagateMouseInput="Motion">
                 <Size x="11" y="19" />
                 <Anchors>
-                    <Anchor point="LEFT" relativePoint="LEFT" x="1" />
+                    <Anchor point="LEFT" relativePoint="LEFT" x="1" y="-1" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -29,7 +29,7 @@
             <Button parentKey="forward" propagateMouseInput="Motion">
                 <Size x="9" y="18" />
                 <Anchors>
-                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-1" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-1" y="-1" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
@@ -59,6 +59,20 @@
                     <Anchors>
                         <Anchor point="RIGHT" relativePoint="LEFT" x="-5" />
                     </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="fadeIn"
+                            inherits="MapPinEnhancedAnimationFadeZoomIn">
+                            <KeyValues>
+                                <KeyValue key="showOnPlay" value="true" type="boolean" />
+                            </KeyValues>
+                        </AnimationGroup>
+                        <AnimationGroup parentKey="fadeOut"
+                            inherits="MapPinEnhancedAnimationFadeZoomOut">
+                            <KeyValues>
+                                <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                            </KeyValues>
+                        </AnimationGroup>
+                    </Animations>
                 </FontString>
             </Layer>
         </Layers>
@@ -68,10 +82,4 @@
             <OnShow method="OnShow" />
         </Scripts>
     </Frame>
-
-
-    <Texture name="MapPinEnhancedSliderTickTemplate" virtual="true"
-        atlas="common-dropdown-icon-radialtick-yellow">
-        <Size x="10" y="10" />
-    </Texture>
 </Ui>
