@@ -1,19 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
-    <Frame parent="UIParent">
-        <Size x="665" y="601" />
-        <Anchors>
-            <Anchor point="CENTER" />
-        </Anchors>
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture setAllPoints="true">
-                    <Color r="0" g="0" b="0" a="0.5" />
-                </Texture>
-            </Layer>
-        </Layers>
-
+    <Include file="optionsFrame.lua" />
+    <Frame mixin="MapPinEnhancedOptionsFrameMixin" name="MapPinEnhancedOptionsFrame" hidden="true">
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
         <Frames>
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM"
                 setAllPoints="true">
