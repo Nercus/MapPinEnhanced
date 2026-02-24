@@ -31,7 +31,7 @@
             <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.radiogroup" />
-                    <KeyValue key="orientation" value="vertical" />
+                    <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionSliderTemplate">
@@ -46,37 +46,60 @@
                     <KeyValue key="columns" value="2" type="number" />
                 </KeyValues>
                 <Frames>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="test.checkbox2" />
-                            <KeyValue key="orientation" value="vertical" />
-                            <KeyValue key="hideLabel" value="true" type="boolean" />
-                            <KeyValue key="hideDescription" value="true" type="boolean" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="test.checkbox3" />
-                            <KeyValue key="orientation" value="vertical" />
-                            <KeyValue key="hideLabel" value="true" type="boolean" />
-                            <KeyValue key="hideDescription" value="true" type="boolean" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="test.checkbox4" />
-                            <KeyValue key="orientation" value="vertical" />
-                            <KeyValue key="hideLabel" value="true" type="boolean" />
-                            <KeyValue key="hideDescription" value="true" type="boolean" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="test.checkbox5" />
-                            <KeyValue key="orientation" value="vertical" />
-                            <KeyValue key="hideLabel" value="true" type="boolean" />
-                            <KeyValue key="hideDescription" value="true" type="boolean" />
-                        </KeyValues>
+                    <Frame inherits="MapPinEnhancedOptionTwoColumnTemplate">
+                        <Frames>
+                            <Frame parentKey="column1">
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="test.checkbox2" />
+                                            <KeyValue key="orientation" value="vertical" />
+                                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                                            <KeyValue key="hideDescription" value="true"
+                                                type="boolean" />
+                                        </KeyValues>
+                                    </Frame>
+                                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="test.checkbox3" />
+                                            <KeyValue key="orientation" value="vertical" />
+                                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                                            <KeyValue key="hideDescription" value="true"
+                                                type="boolean" />
+                                        </KeyValues>
+                                    </Frame>
+                                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="test.checkbox4" />
+                                            <KeyValue key="orientation" value="vertical" />
+                                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                                            <KeyValue key="hideDescription" value="true"
+                                                type="boolean" />
+                                        </KeyValues>
+                                    </Frame>
+                                    <Frame inherits="MapPinEnhancedOptionCheckboxWithLabelTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="test.checkbox5" />
+                                            <KeyValue key="orientation" value="vertical" />
+                                            <KeyValue key="hideLabel" value="true" type="boolean" />
+                                            <KeyValue key="hideDescription" value="true"
+                                                type="boolean" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                            <Frame parentKey="column2">
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedImageTemplate">
+                                        <Size x="300" y="144" />
+                                        <KeyValues>
+                                            <KeyValue key="imagePath"
+                                                value="talents-background-hunter-survival" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                        </Frames>
                     </Frame>
                 </Frames>
             </Frame>
