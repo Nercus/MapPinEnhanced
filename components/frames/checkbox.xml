@@ -10,7 +10,36 @@
             setAllPoints="true" />
         <HighlightTexture parentKey="HighlightTexture" atlas="generic-frame-chamfered-12d-2o"
             alphaMode="ADD" alpha="0.2" setAllPoints="true" />
-        <CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal" setAllPoints="true" />
+        <CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal" setAllPoints="true">
+            <Animations>
+                <AnimationGroup parentKey="fadeIn"
+                    inherits="MapPinEnhancedAnimationFadeZoomIn">
+                    <KeyValues>
+                        <KeyValue key="showOnPlay" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+                <AnimationGroup parentKey="fadeOut"
+                    inherits="MapPinEnhancedAnimationFadeZoomOut">
+                    <KeyValues>
+                        <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+            </Animations>
+            <Scripts>
+                <OnShow>
+                    if self.fadeOut:IsPlaying() then
+                        self.fadeOut:Stop()
+                    end
+                    self.fadeIn:Play()
+                </OnShow>
+                <OnHide>
+                    if self.fadeIn:IsPlaying() then
+                        self.fadeIn:Stop()
+                    end
+                    self.fadeOut:Play()
+                </OnHide>
+            </Scripts>
+        </CheckedTexture>
         <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled"
             setAllPoints="true" />
     </CheckButton>
@@ -37,6 +66,34 @@
             <Anchors>
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
+            <Animations>
+                <AnimationGroup parentKey="fadeIn"
+                    inherits="MapPinEnhancedAnimationFadeZoomIn">
+                    <KeyValues>
+                        <KeyValue key="showOnPlay" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+                <AnimationGroup parentKey="fadeOut"
+                    inherits="MapPinEnhancedAnimationFadeZoomOut">
+                    <KeyValues>
+                        <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+            </Animations>
+            <Scripts>
+                <OnShow>
+                    if self.fadeOut:IsPlaying() then
+                        self.fadeOut:Stop()
+                    end
+                    self.fadeIn:Play()
+                </OnShow>
+                <OnHide>
+                    if self.fadeIn:IsPlaying() then
+                        self.fadeIn:Stop()
+                    end
+                    self.fadeOut:Play()
+                </OnHide>
+            </Scripts>
         </CheckedTexture>
         <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled">
             <Size x="25" y="25" />

@@ -25,6 +25,34 @@
             <Anchors>
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
+            <Animations>
+                <AnimationGroup parentKey="fadeIn"
+                    inherits="MapPinEnhancedAnimationFadeZoomIn">
+                    <KeyValues>
+                        <KeyValue key="showOnPlay" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+                <AnimationGroup parentKey="fadeOut"
+                    inherits="MapPinEnhancedAnimationFadeZoomOut">
+                    <KeyValues>
+                        <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                    </KeyValues>
+                </AnimationGroup>
+            </Animations>
+            <Scripts>
+                <OnShow>
+                    if self.fadeOut:IsPlaying() then
+                        self.fadeOut:Stop()
+                    end
+                    self.fadeIn:Play()
+                </OnShow>
+                <OnHide>
+                    if self.fadeIn:IsPlaying() then
+                        self.fadeIn:Stop()
+                    end
+                    self.fadeOut:Play()
+                </OnHide>
+            </Scripts>
         </CheckedTexture>
         <Layers>
             <Layer level="ARTWORK">
