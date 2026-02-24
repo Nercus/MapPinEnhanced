@@ -29,6 +29,17 @@
                                     relativePoint="RIGHT" x="5" />
                             </Anchors>
                         </FontString>
+                        <Texture atlas="CircleMask">
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="0.56" g="0.56" b="0.56" a="1" />
+                                <MaxColor r="0.56" g="0.56" b="0.56" a="0.25" />
+                            </Gradient>
+                            <Size x="1" y="1" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
                     </Layer>
                 </Layers>
             </Button>
