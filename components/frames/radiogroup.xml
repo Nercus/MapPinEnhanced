@@ -27,17 +27,9 @@
             </Anchors>
             <Animations>
                 <AnimationGroup parentKey="fadeIn"
-                    inherits="MapPinEnhancedAnimationFadeZoomIn">
-                    <KeyValues>
-                        <KeyValue key="showOnPlay" value="true" type="boolean" />
-                    </KeyValues>
-                </AnimationGroup>
+                    inherits="MapPinEnhancedAnimationFadeZoomIn" />
                 <AnimationGroup parentKey="fadeOut"
-                    inherits="MapPinEnhancedAnimationFadeZoomOut">
-                    <KeyValues>
-                        <KeyValue key="hideOnFinished" value="true" type="boolean" />
-                    </KeyValues>
-                </AnimationGroup>
+                    inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
             <Scripts>
                 <OnShow>
