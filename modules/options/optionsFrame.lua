@@ -75,7 +75,6 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     MapPinEnhanced:AddSlashCommand("options", function()
         self:ToggleOptionsFrame()
     end, "Open the options frame")
-    self:ToggleOptionsFrame()
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnShow()
