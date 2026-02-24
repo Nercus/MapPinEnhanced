@@ -21,6 +21,7 @@ function MapPinEnhancedOptionRadiogroupMixin:Setup(initValue)
     local options = Options.OPTIONS_CONFIG[self.key]
     assert(options, "No options found for key: " .. tostring(self.key))
     self.child:Setup({
+        orientation = self.orientation or "vertical",
         onChange = function(value)
             if not self.callbacks then return end
             for _, cb in ipairs(self.callbacks) do
