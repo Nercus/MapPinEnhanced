@@ -41,7 +41,7 @@
                         <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o"
                             scale="0.5">
                             <Anchors>
-                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="0" y="0" />
+                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />
                             </Anchors>
                         </Texture>

@@ -37,7 +37,7 @@
             <Frame inherits="MapPinEnhancedOptionSliderTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="test.slider" />
-                    <KeyValue key="orientation" value="vertical" />
+                    <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">

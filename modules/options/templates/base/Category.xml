@@ -30,15 +30,15 @@
                                 <Anchor point="LEFT" relativePoint="LEFT" x="10" />
                             </Anchors>
                         </FontString>
-                        <Texture atlas="CircleMask">
+                        <Texture atlas="SquareMask">
+                            <Size x="1" y="1" />
                             <Gradient orientation="HORIZONTAL">
                                 <MinColor r="0.56" g="0.56" b="0.56" a="1" />
-                                <MaxColor r="0.56" g="0.56" b="0.56" a="0.25" />
+                                <MaxColor r="0.56" g="0.56" b="0.56" a="0" />
                             </Gradient>
-                            <Size x="1" y="1" />
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" />
-                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMLEFT" x="5" />
+                                <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
                     </Layer>

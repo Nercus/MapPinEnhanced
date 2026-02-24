@@ -17,10 +17,10 @@
         </Layers>
         <Frames>
             <Frame parentKey="header">
-                <Size x="1" y="25" />
+                <Size x="1" y="35" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
-                    <Anchor point="TOPRIGHT" />
+                    <Anchor point="TOPRIGHT" x="-10" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
@@ -30,13 +30,25 @@
                                 <Anchor point="LEFT" x="5" />
                             </Anchors>
                         </FontString>
+                        <Texture atlas="SquareMask">
+                            <Size x="1" y="2" />
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="1" g="0.82" b="0" a="1" />
+                                <MaxColor r="1" g="0.82" b="0" a="0" />
+                            </Gradient>
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
                     </Layer>
+
                 </Layers>
                 <Frames>
                     <EditBox inherits="MapPinEnhancedAutocompleteTemplate" parentKey="search">
                         <Size x="300" y="25" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-5" />
+                            <Anchor point="RIGHT" x="-5" y="3" />
                         </Anchors>
                         <KeyValues>
                             <KeyValue key="icon" value="search" />
@@ -49,7 +61,7 @@
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
                 <Size x="1" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" y="-25" />
+                    <Anchor point="TOPLEFT" y="-36" />
                     <Anchor point="BOTTOMRIGHT" x="-20" />
                 </Anchors>
                 <KeyValues>
@@ -61,10 +73,10 @@
                 </KeyValues>
                 <ScrollChild>
                     <Frame parentKey="Child" propagateMouseInput="Motion">
-                        <Size x="665" y="1" />
+                        <Size x="634" y="1" />
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="0" y="0" />
-                            <Anchor point="BOTTOMRIGHT" x="0" y="0" />
+                            <Anchor point="TOPLEFT" />
+                            <Anchor point="BOTTOMRIGHT" />
                         </Anchors>
                         <Frames>
                             <Frame inherits="MapPinEnhancedOptionCategoryGeneralTemplate">
