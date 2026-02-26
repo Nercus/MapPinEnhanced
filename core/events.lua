@@ -196,10 +196,13 @@ function MapPinEnhanced:CallRestricted(func, warning, ...)
         if warning then
             self:Print(warning)
         end
-        self:RegisterEvent("PLAYER_REGEN_ENABLED", function()
-            self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+        ---@type function
+        local functionToRun
+        functionToRun = function()
             func(unpack(args))
-        end)
+            self:UnregisterEventForFunction("PLAYER_REGEN_ENABLED", functionToRun)
+        end
+        self:RegisterEvent("PLAYER_REGEN_ENABLED", functionToRun)
     else
         func(...)
     end
