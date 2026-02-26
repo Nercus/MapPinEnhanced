@@ -9,8 +9,7 @@
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="gearUpdate-glow-filigree" desaturated="true">
-                    <Color r="1" g="0.82" b="0" />
+                <Texture atlas="generic-frame-chamfered-12d-2o" desaturated="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" />
                         <Anchor point="BOTTOMRIGHT" x="-20" />
@@ -18,15 +17,14 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture atlas="CircleMaskScalable" parentKey="separator"
+                <Texture atlas="housing-dashboard-initiatives-fillbar-tickbar-complete"
+                    parentKey="separator"
                     desaturated="true">
-                    <Size x="1" y="20" />
-                    <Gradient orientation="VERTICAL">
-                        <MinColor r="1" g="0.82" b="0" a="0.4" />
-                        <MaxColor r="1" g="0.82" b="0" a="0" />
-                    </Gradient>
+                    <Size x="1" />
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="TOP" relativePoint="TOP" x="0" y="-2" />
+                        <Anchor point="BOTTOM" relativePoint="BOTTOM" x="0" y="2" />
                     </Anchors>
                 </Texture>
                 <FontString inherits="GameFontNormalSmall" parentKey="coordsXDec"
