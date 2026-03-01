@@ -8,7 +8,7 @@
         virtual="true"
         inherits="ScrollFrameTemplate">
         <KeyValues>
-            <KeyValue key="scrollBarX" value="4" type="number" />
+            <KeyValue key="scrollBarX" value="-10" type="number" />
             <KeyValue key="scrollBarTopY" value="-2" type="number" />
             <KeyValue key="scrollBarBottomY" value="3" type="number" />
         </KeyValues>
@@ -16,6 +16,7 @@
             <EditBox parentKey="editbox"
                 multiLine="true" autoFocus="false">
                 <Size x="1" y="1" />
+                <TextInsets left="5" top="5" bottom="5" right="10" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="5"
                         y="-5" />
