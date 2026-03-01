@@ -22,3 +22,6 @@ function Dialogs:ShowDialog(dialogType)
         error("Unknown dialog type: " .. tostring(dialogType))
     end
 end
+
+MapPinEnhanced:AddSlashCommand("import", function() Dialogs:ShowDialog(DIALOG_TYPES.IMPORT) end,
+    "Open the import dialog to import map pins from a string.")

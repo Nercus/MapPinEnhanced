@@ -9,4 +9,5 @@
     <Include file="editor/_imports.xml" />
     <Include file="misc/_imports.xml" />
     <Include file="providers/_imports.xml" />
+    <Include file="dialogs/_imports.xml" />
 </Ui>
