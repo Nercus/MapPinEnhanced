@@ -17,6 +17,9 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
     end
     if not dragArea then
         dragArea = frame
+    else
+        dragArea:EnableMouse(true)
+        dragArea:SetPropagateMouseClicks(true)
     end
 
     if not self:GetVar("frames") then
