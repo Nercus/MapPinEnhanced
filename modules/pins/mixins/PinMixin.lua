@@ -102,10 +102,17 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self:Untrack()
     end
 
-    HBDP:AddWorldMapIconMap(MapPinEnhanced, self.worldmapPin, self.pinData.mapID, self.pinData.x, self.pinData.y, 3,
+    local worldMapSuccess = HBDP:AddWorldMapIconMap(MapPinEnhanced, self.worldmapPin, self.pinData.mapID, self.pinData.x,
+        self.pinData.y, 3,
         "PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
-    HBDP:AddMinimapIconMap(MapPinEnhanced, self.minimapPin, self.pinData.mapID, self.pinData.x, self.pinData.y, false,
+    local minimapSuccess = HBDP:AddMinimapIconMap(MapPinEnhanced, self.minimapPin, self.pinData.mapID, self.pinData.x,
+        self.pinData.y, false,
         false)
+
+    if not worldMapSuccess or not minimapSuccess then
+        self:Reset()
+        MapPinEnhanced:Notify(L["Failed to place pin on the map. Please check if the coordinates are correct!"], "ERROR")
+    end
 end
 
 function MapPinEnhancedPinMixin:GetPinData()
@@ -127,16 +134,14 @@ end
 function MapPinEnhancedPinMixin:Reset()
     if not self.initialized then return end
     self.initialized = false
-    -- untrack first to clear the pin
     if self.isTracked then
         self:Untrack()
     end
-    -- release the pins
+
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
 
-    -- remove from world and minimap
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 
