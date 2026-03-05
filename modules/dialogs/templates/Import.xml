@@ -4,18 +4,37 @@
     <Include file="Import.lua" />
     <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="400" y="100" />
+        <Size x="500" y="300" />
         <Frames>
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
+                <Size x="1" y="300" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="20" y="-40" />
-                    <Anchor point="BOTTOMRIGHT" x="-15" y="60" />
+                    <Anchor point="TOPLEFT" x="10" y="-10" />
+                    <Anchor point="TOPRIGHT" x="-10" y="-10" />
                 </Anchors>
             </ScrollFrame>
+            <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.textarea"
+                        relativePoint="BOTTOMLEFT" x="0" y="-15" />
+                    <Anchor point="BOTTOMLEFT" x="10" y="10" />
+                </Anchors>
+            </Frame>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
                 <Size x="100" y="30" />
                 <Anchors>
-                    <Anchor point="BOTTOM" x="0" y="20" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.textarea"
+                        relativePoint="BOTTOMRIGHT"
+                        x="-10" y="-10" />
+                </Anchors>
+            </Button>
+            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
+                <Size x="100" y="30" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.importButton"
+                        relativePoint="BOTTOMRIGHT"
+                        x="0" y="-10" />
                 </Anchors>
             </Button>
         </Frames>

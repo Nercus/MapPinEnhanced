@@ -16,6 +16,7 @@ end
 ---@class MapPinEnhancedImportDialogContentTemplate : DefaultPanelFlatTemplate
 ---@field importButton MapPinEnhancedButtonTemplate
 ---@field textarea MapPinEnhancedTextareaTemplate
+---@field importTypeRadio MapPinEnhancedRadioGroupTemplate
 MapPinEnhancedImportDialogContentMixin = {}
 
 function MapPinEnhancedImportDialogContentMixin:Import()
@@ -28,8 +29,17 @@ function MapPinEnhancedImportDialogContentMixin:Import()
     end
 end
 
+---@type MapPinEnhancedRadioGroupOption[]
+local importOptions = {
+    { label = "Temporary Import", value = "temporary" },
+    { label = "Import to Set",    value = "set" },
+}
+
 function MapPinEnhancedImportDialogContentMixin:OnLoad()
     self.importButton:SetScript("OnClick", function()
         self:Import()
     end)
+
+    self.importTypeRadio:SetOptions(importOptions)
+    self.importTypeRadio:SetActiveOption("temporary")
 end
