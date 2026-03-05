@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
----@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder, Frame
+---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
 local MapPinEnhancedWayfinderFloating = {}
 
@@ -62,10 +62,8 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     if wayfinderData then
         local x, y, mapID = wayfinderData.x, wayfinderData.y, wayfinderData.mapID
         self:SetUserWaypoint(x, y, mapID)
-        self:Show()
     else
         C_Map.ClearUserWaypoint()
-        self:Hide()
     end
 end
 
