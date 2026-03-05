@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
----@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
+---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder, Frame
 ---@field data WayfinderData | nil
 local MapPinEnhancedWayfinderFloating = {}
 
@@ -62,8 +62,10 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     if wayfinderData then
         local x, y, mapID = wayfinderData.x, wayfinderData.y, wayfinderData.mapID
         self:SetUserWaypoint(x, y, mapID)
+        self:Show()
     else
         C_Map.ClearUserWaypoint()
+        self:Hide()
     end
 end
 
@@ -87,15 +89,6 @@ local function OverrideSuperTrackedReachedBehavior()
 end
 
 
----Hide default world map Pin
-local function HideBlizzardPin()
-    if not WaypointLocationPinMixin then return end
-    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
-        waypointSelf:SetAlpha(0)
-        waypointSelf:EnableMouse(false)
-    end)
-end
-
 ---Method to override the alpha state of the super tracked frame -> create unlimited distance
 ---@param enable boolean
 local function OverrideSuperTrackedAlphaState(enable)
@@ -108,16 +101,10 @@ local function OverrideSuperTrackedAlphaState(enable)
     SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, 0)
 end
 
-local function SetSuperTrackedAlphaState()
-    local unlimitedDistance = MapPinEnhanced:GetVar("floatingPin", "unlimitedDistance")
-    OverrideSuperTrackedAlphaState(unlimitedDistance)
-end
-
 function MapPinEnhancedWayfinderFloating:SetOverride()
     if self.overridesSet then return end
     OverrideSuperTrackedReachedBehavior()
-    HideBlizzardPin()
-    SetSuperTrackedAlphaState()
+    OverrideSuperTrackedAlphaState(true)
     self.overridesSet = true
 end
 
@@ -135,6 +122,7 @@ function MapPinEnhancedWayfinderFloating:Disable()
         self.distanceCallback = nil
     end
     self:Reset()
+    OverrideSuperTrackedAlphaState(false)
 end
 
 --- Inject into WayfinderManager

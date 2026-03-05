@@ -132,5 +132,15 @@ local function HookSetUserWaypoint()
     isHooked = true
 end
 
+---Hide default world map Pin
+local function HideBlizzardPin()
+    if not WaypointLocationPinMixin then return end
+    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
+        waypointSelf:SetAlpha(0)
+        waypointSelf:EnableMouse(false)
+    end)
+end
+
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HookSetUserWaypoint)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HideBlizzardPin)
