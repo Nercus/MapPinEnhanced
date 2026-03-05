@@ -1,6 +1,3 @@
--- an export window to export sets to strings or send to chat to share over addon comms
-
-
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
@@ -8,10 +5,13 @@ local MapPinEnhanced = select(2, ...)
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 
-function Dialogs:ShowExportDialog()
+function Dialogs:GetExportContent()
     if not self.exportDialog then
-        self.exportDialog = CreateFrame("Frame", "MapPinEnhancedExportDialog", UIParent,
-            "MapPinEnhancedExportDialogTemplate")
+        self.exportDialog = CreateFrame("Frame", "MapPinEnhancedExportDialogContent", UIParent,
+            "MapPinEnhancedExportDialogContentTemplate")
     end
-    self.exportDialog:Show()
+    return self.exportDialog
 end
+
+---@class MapPinEnhancedExportDialogContentTemplate : Frame
+MapPinEnhancedExportDialogContentMixin = {}

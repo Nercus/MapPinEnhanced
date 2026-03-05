@@ -4,4 +4,6 @@
     <Include file="Dialog.xml" />
     <Include file="Import.xml" />
     <Include file="Export.xml" />
+    <Include file="Confirm.xml" />
+    <Include file="Info.xml" />
 </Ui>

@@ -1,0 +1,39 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="Confirm.lua" />
+    <Frame name="MapPinEnhancedConfirmDialogContentTemplate" virtual="true"
+        mixin="MapPinEnhancedConfirmDialogContentMixin">
+        <Size x="400" y="100" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="messageText" inherits="GameFontNormal" justifyH="CENTER"
+                    justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="confirmButton">
+                <Size x="100" y="22" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOM" y="-10" x="-5"
+                        relativeKey="$parent.messageText" />
+                </Anchors>
+            </Button>
+            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton">
+                <Size x="100" y="22" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOM" y="-10" x="5"
+                        relativeKey="$parent.messageText" />
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnHide method="OnClose" />
+        </Scripts>
+    </Frame>
+</Ui>

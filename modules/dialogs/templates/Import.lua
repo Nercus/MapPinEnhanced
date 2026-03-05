@@ -5,35 +5,30 @@ local MapPinEnhanced = select(2, ...)
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Providers = MapPinEnhanced:GetModule("Providers")
 
-function Dialogs:ShowImportDialog()
+function Dialogs:GetImportContent()
     if not self.importDialog then
-        self.importDialog = CreateFrame("Frame", "MapPinEnhancedImportDialog", UIParent,
-            "MapPinEnhancedImportDialogTemplate")
+        self.importDialog = CreateFrame("Frame", "MapPinEnhancedImportDialogContent", UIParent,
+            "MapPinEnhancedImportDialogContentTemplate")
     end
-    self.importDialog:Show()
+    return self.importDialog
 end
 
----@class MapPinEnhancedImportDialogTemplate : DefaultPanelFlatTemplate
+---@class MapPinEnhancedImportDialogContentTemplate : DefaultPanelFlatTemplate
 ---@field importButton MapPinEnhancedButtonTemplate
 ---@field textarea MapPinEnhancedTextareaTemplate
-MapPinEnhancedImportDialogMixin = {}
+MapPinEnhancedImportDialogContentMixin = {}
 
-function MapPinEnhancedImportDialogMixin:Import()
+function MapPinEnhancedImportDialogContentMixin:Import()
     local text = self.textarea.editbox:GetText()
     if text and text ~= "" then
         self:Hide()
-        -- iterate over newlines
         for line in text:gmatch("[^\r\n]+") do
             Providers:ImportSlashCommand(line)
         end
     end
 end
 
-function MapPinEnhancedImportDialogMixin:OnLoad()
-    self:SetTitle(MapPinEnhanced.displayName .. ": Import")
-    MapPinEnhanced:RegisterDraggableFrame(self, "MapPinEnhancedImportDialog", self.TitleContainer, function()
-        return false
-    end)
+function MapPinEnhancedImportDialogContentMixin:OnLoad()
     self.importButton:SetScript("OnClick", function()
         self:Import()
     end)
