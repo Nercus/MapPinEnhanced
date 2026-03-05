@@ -32,8 +32,12 @@ L["Lock Coordinates Display"] = "Lock Coordinates Display"
 L["Toggle whether the coordinates display can be moved or not."] =
 "Toggle whether the coordinates display can be moved or not."
 L["My Way Back"] = "My Way Back"
-
-
+L["Open the import dialog to import map pins from a string."] =
+"Open the import dialog to import map pins from a string."
+L["Open the export dialog to export your map pins to a string."] =
+"Open the export dialog to export your map pins to a string."
+L["Failed to place pin on the map. Please check if the coordinates are correct!"] =
+"Failed to place pin on the map. Please check if the coordinates are correct!"
 
 -- TODO: remove these test strings
 L["test.checkbox_LABEL"] = "Test Checkbox"
