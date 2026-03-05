@@ -6,17 +6,13 @@
     <Frame name="MapPinEnhancedDialog"
         inherits="DefaultPanelFlatTemplate"
         mixin="MapPinEnhancedDialogMixin"
-        movable="true" hidden="true">
+        movable="true" hidden="true" parent="UIParent">
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
         <Frames>
-            <Frame parentKey="content">
-                <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMRIGHT" />
-                </Anchors>
-            </Frame>
+            <Button name="$parentCloseButton" parentKey="CloseButton"
+                inherits="UIPanelCloseButtonDefaultAnchors" frameStrata="HIGH" />
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

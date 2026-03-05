@@ -10,7 +10,6 @@ MapPinEnhancedDialogMixin = {}
 ---@field dialogFrame MapPinEnhancedDialog
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
-local defaultPoint = { "CENTER", nil, "CENTER", 0, 0 }
 
 ---@alias DialogContentFrame MapPinEnhancedExportDialogContentTemplate |MapPinEnhancedImportDialogContentTemplate | MapPinEnhancedConfirmDialogContentTemplate |MapPinEnhancedInfoDialogContentTemplate
 
@@ -27,16 +26,19 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
     self.content = content
     self.content:SetParent(self)
     self.content:ClearAllPoints()
-    self.content:SetPoint(unpack(defaultPoint))
+    self.content:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -20)
+    self.content:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -2, 2)
+    self.content:SetFrameStrata(self:GetFrameStrata())
+    self.content:SetFrameLevel(self:GetFrameLevel() + 10)
     self.content:Show()
 
     local contentWidth, contentHeight = self.content:GetSize()
-    local paddingX, paddingY = 40, 60
-    self:SetSize(contentWidth + paddingX, contentHeight + paddingY)
+    self:SetSize(contentWidth + 10, contentHeight + 20)
     self:Show()
 end
 
 function MapPinEnhancedDialogMixin:OnLoad()
+    self.Bg:SetFrameStrata("BACKGROUND") -- i dont know why I need this, but I can't figure out another solution
     MapPinEnhanced:RegisterDraggableFrame(self, "MapPinEnhancedDialog", self.TitleContainer, function()
         return false
     end)
