@@ -12,6 +12,17 @@
             <KeyValue key="scrollBarTopY" value="-2" type="number" />
             <KeyValue key="scrollBarBottomY" value="3" type="number" />
         </KeyValues>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="bg"
+                    atlas="generic-frame-chamfered-12d-2o" scale="0.5">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-10" y="10" />
+                        <Anchor point="BOTTOMRIGHT" x="10" y="-10" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
         <ScrollChild>
             <EditBox parentKey="editbox"
                 multiLine="true" autoFocus="false">
