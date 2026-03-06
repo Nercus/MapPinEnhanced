@@ -6,7 +6,55 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
+---@field frame MapPinEnhancedFloatingSimpleTemplate | MapPinEnhancedFloatingModernTemplate
 local MapPinEnhancedWayfinderFloating = {}
+
+
+---@param frameType WayfinderFloatingFrameType
+function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
+    -- TODO: save var here
+    if self.frameType == frameType then return end
+    self:GetFrame()
+    self:ShowFrame()
+end
+
+---@enum (key) WayfinderFloatingFrameType
+local templates = {
+    modern = "MapPinEnhancedFloatingModernTemplate",
+    simple = "MapPinEnhancedFloatingSimpleTemplate",
+}
+
+function MapPinEnhancedWayfinderFloating:GetFrame()
+    ---@type WayfinderFloatingFrameType
+    local currentType = "modern" -- TODO: get the var here
+
+    if self.frame then
+        if self.frameType == currentType then
+            return self.frame
+        else
+            self.frame:ClearAllPoints()
+            self.frame:SetParent(nil)
+            self.frame = nil
+        end
+    end
+
+    local template = templates[currentType] or templates.modern
+    self.frame = CreateFrame("Frame", nil, UIParent, template)
+    self.frameType = currentType
+
+    return self.frame
+end
+
+function MapPinEnhancedWayfinderFloating:ShowFrame()
+    local frame = self:GetFrame()
+    frame:Show()
+end
+
+function MapPinEnhancedWayfinderFloating:HideFrame()
+    if self.frame then
+        self.frame:Hide()
+    end
+end
 
 ---@param x number
 ---@param y number
@@ -47,9 +95,16 @@ end
 function MapPinEnhancedWayfinderFloating:Reset()
     self.data = nil
     C_Map.ClearUserWaypoint()
+    if self.frame then
+        self.frame:ClearAllPoints()
+        self.frame:SetParent(nil)
+        self.frame = nil
+        self.frameType = nil
+    end
 end
 
 function MapPinEnhancedWayfinderFloating:OnDistanceUpdate(distance, timeToTarget)
+    self.frame:OnDistanceUpdate(distance, timeToTarget)
 end
 
 ---@param wayfinderData WayfinderData | nil
@@ -62,8 +117,10 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     if wayfinderData then
         local x, y, mapID = wayfinderData.x, wayfinderData.y, wayfinderData.mapID
         self:SetUserWaypoint(x, y, mapID)
+        self:ShowFrame()
     else
         C_Map.ClearUserWaypoint()
+        self:HideFrame()
     end
 end
 
@@ -119,7 +176,13 @@ function MapPinEnhancedWayfinderFloating:Disable()
         MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
         self.distanceCallback = nil
     end
-    self:Reset()
+    if self.frame then
+        self.frame:ClearAllPoints()
+        self.frame:SetParent(nil)
+        self.frame = nil
+        self.frameType = nil
+    end
+    C_Map.ClearUserWaypoint()
     OverrideSuperTrackedAlphaState(false)
 end
 
