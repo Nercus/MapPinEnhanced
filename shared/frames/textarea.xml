@@ -15,7 +15,7 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="bg"
-                    atlas="generic-frame-chamfered-12d-2o" scale="0.5">
+                    atlas="generic-frame-chamfered-12d-2o" scale="0.5" alpha="0.8">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-10" y="10" />
                         <Anchor point="BOTTOMRIGHT" x="10" y="-10" />

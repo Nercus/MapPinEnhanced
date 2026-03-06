@@ -4,13 +4,77 @@
 
     <Include file="Dialog.lua" />
     <Frame name="MapPinEnhancedDialog"
-        inherits="DefaultPanelFlatTemplate"
         mixin="MapPinEnhancedDialogMixin"
-        movable="true" hidden="true" parent="UIParent">
+        movable="true" hidden="true" parent="UIParent" clipChildren="true">
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture setAllPoints="true"
+                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderBg3x.png" alpha="0.9">
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="1">
+                <Texture
+                    atlas="shop-bg-map-green">
+                    <Size x="806" y="457" />
+                    <Anchors>
+                        <Anchor point="RIGHT" />
+                    </Anchors>
+                    <Gradient>
+                        <MaxColor r="1" g="1" b="1" a="1" />
+                        <MinColor r="1" g="1" b="1" a="0.65" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture
+                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderGrey3x.png">
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2" y="-2" />
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+                    </Anchors>
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture
+                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderGrey3x.png">
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                </Texture>
+            </Layer>
+        </Layers>
         <Frames>
+            <Frame parentKey="header">
+                <Size x="1" y="20" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" y="-5" />
+                    <Anchor point="TOPRIGHT" y="-5" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="glues-characterSelect-GS-TopHUD-middle-line-selected">
+                            <Size x="1" y="2" />
+                            <Color r="1" g="0.82" b="0" a="1" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" />
+                                <Anchor point="BOTTOMRIGHT" />
+                            </Anchors>
+                        </Texture>
+
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormal" setAllPoints="true" justifyH="CENTER"
+                            justifyV="MIDDLE" parentKey="title" />
+                    </Layer>
+                </Layers>
+            </Frame>
             <Button name="$parentCloseButton" parentKey="CloseButton"
                 inherits="UIPanelCloseButtonDefaultAnchors" frameStrata="HIGH" />
         </Frames>

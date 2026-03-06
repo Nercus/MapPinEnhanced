@@ -1,9 +1,13 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedDialogHeader : Frame
+---@field title FontString
+
 -- base template for dialogs
----@class MapPinEnhancedDialog : DefaultPanelFlatTemplate
+---@class MapPinEnhancedDialog : Frame
 ---@field content DialogContentFrame
+---@field header MapPinEnhancedDialogHeader
 MapPinEnhancedDialogMixin = {}
 
 ---@class Dialogs
@@ -13,6 +17,11 @@ local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 ---@alias DialogContentFrame MapPinEnhancedExportDialogContentTemplate |MapPinEnhancedImportDialogContentTemplate | MapPinEnhancedConfirmDialogContentTemplate |MapPinEnhancedInfoDialogContentTemplate
 
+function MapPinEnhancedDialogMixin:SetTitle(title)
+    self.header.title:SetText(title)
+end
+
+-- TODO: clean up background to also clip corners
 
 ---@param content DialogContentFrame
 ---@param title string
@@ -33,13 +42,12 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
     self.content:Show()
 
     local contentWidth, contentHeight = self.content:GetSize()
-    self:SetSize(contentWidth + 10, contentHeight + 20)
+    self:SetSize(contentWidth + 20, contentHeight + 30)
     self:Show()
 end
 
 function MapPinEnhancedDialogMixin:OnLoad()
-    self.Bg:SetFrameStrata("BACKGROUND") -- i dont know why I need this, but I can't figure out another solution
-    MapPinEnhanced:RegisterDraggableFrame(self, "MapPinEnhancedDialog", self.TitleContainer, function()
+    MapPinEnhanced:RegisterDraggableFrame(self, "MapPinEnhancedDialog", self.header, function()
         return false
     end)
     Dialogs.dialogFrame = self

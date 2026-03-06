@@ -4,7 +4,7 @@
     <Include file="Import.lua" />
     <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="500" y="300" />
+        <Size x="300" y="400" />
         <Frames>
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
                 <Size x="1" y="300" />
