@@ -1,13 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
-    <Include file="Diamond.lua" />
-    <Frame name="MapPinEnhancedFloatingModernTemplate" virtual="true"
-        mixin="MapPinEnhancedFloatingModernMixin">
+    <Include file="FloatingSimple.lua" />
+    <Frame name="MapPinEnhancedFloatingSimpleTemplate" virtual="true"
+        mixin="MapPinEnhancedFloatingSimpleMixin">
         <Size x="100" y="100" />
-        <Scripts>
-            <OnLoad method="OnLoad" />
-        </Scripts>
         <Layers>
             <Layer level="ARTWORK">
                 <Texture setAllPoints="true">
@@ -15,11 +12,5 @@
                 </Texture>
             </Layer>
         </Layers>
-        <Animations>
-            <AnimationGroup parentKey="fadeIn"
-                inherits="MapPinEnhancedAnimationFadeZoomIn" />
-            <AnimationGroup parentKey="fadeOut"
-                inherits="MapPinEnhancedAnimationFadeZoomOut" />
-        </Animations>
     </Frame>
 </Ui>
