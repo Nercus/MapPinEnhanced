@@ -1,4 +1,38 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
+
+    <Include file="Arrow.lua" />
+    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent"
+        mixin="MapPinEnhancedFloatingArrowMixin">
+        <Size x="200" y="200" />
+        <Anchors>
+            <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
+        </Anchors>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="needle"
+                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/arrow.png"
+                    desaturated="true">
+                    <Size x="70" y="70" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin">
+                <Size x="40" y="40" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
 </Ui>

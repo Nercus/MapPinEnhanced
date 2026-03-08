@@ -16,6 +16,7 @@ local target = nil
 local onUpdateCallbacks = {}
 local distanceFrame = CreateFrame("Frame")
 
+local HBD = MapPinEnhanced.HBD
 local IsSuperTracking = C_SuperTrack.IsSuperTrackingAnything
 local max = math.max
 local min = math.min
@@ -32,7 +33,7 @@ end
 ---Wrapper for the current map position of the player
 ---@return number x, number y, number currentPlayerUIMapID, Enum.UIMapType currentPlayerUIMapType
 function MapPinEnhanced:GetPlayerMapPosition()
-    return MapPinEnhanced.HBD:GetPlayerZonePosition()
+    return HBD:GetPlayerZonePosition()
 end
 
 --- Get the distance between two points on the map
@@ -47,7 +48,7 @@ function MapPinEnhanced:GetDistanceBetweenPoints(mapID1, x1, y1, mapID2, x2, y2)
     if not mapID1 or not x1 or not y1 or not mapID2 or not x2 or not y2 then
         return 0
     end
-    return MapPinEnhanced.HBD:GetZoneDistance(mapID1, x1, y1, mapID2, x2, y2) or 0
+    return HBD:GetZoneDistance(mapID1, x1, y1, mapID2, x2, y2) or 0
 end
 
 --- Get the distance from the player to a target point on the map
@@ -59,6 +60,18 @@ function MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
     local playerX, playerY, playerMap = self:GetPlayerMapPosition()
     if not playerMap or not playerX or not playerY then return 0 end
     return self:GetDistanceBetweenPoints(playerMap, playerX, playerY, mapID, x, y)
+end
+
+function MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
+    local playerX, playerY, playerMap = self:GetPlayerMapPosition()
+    if not playerMap or not playerX or not playerY then return nil end
+
+    local pwx, pwy, pInst = HBD:GetWorldCoordinatesFromZone(playerX, playerY, playerMap)
+    local twx, twy, tInst = HBD:GetWorldCoordinatesFromZone(x, y, mapID)
+    if not pwx or not pwy or not twx or not twy then return nil end
+    if pInst ~= tInst then return nil end
+
+    return HBD:GetWorldVector(pInst, pwx, pwy, twx, twy)
 end
 
 local function OnUpdate()
