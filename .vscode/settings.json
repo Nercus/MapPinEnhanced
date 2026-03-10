@@ -134,4 +134,7 @@
         "utf8": "disable"
     },
     "Lua.type.weakUnionCheck": true,
+    "Lua.diagnostics.globals": [
+        "IN_GAME_NAVIGATION_RANGE"
+    ],
 }

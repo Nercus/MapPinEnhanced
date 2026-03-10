@@ -4,13 +4,49 @@
 
     <Include file="Arrow.lua" />
     <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent"
-        mixin="MapPinEnhancedFloatingArrowMixin">
-        <Size x="200" y="200" />
+        mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true">
+        <Size x="140" y="140" />
         <Anchors>
             <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
         </Anchors>
+        <Frames>
+            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin">
+                <Size x="40" y="40" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+        </Frames>
         <Layers>
             <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPRIGHT" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="distance" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pin" y="-5" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="eta" inherits="GameFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.distance"
+                            y="-5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture atlas="generic-frame-chamfered-12d-2o">
+                    <Color r="1" g="0.82" b="0" a="0.7" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.title" y="5" x="20" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.title" y="-5" x="-20" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND">
                 <Texture parentKey="needle"
                     file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/arrow.png"
                     desaturated="true">
@@ -21,18 +57,11 @@
                 </Texture>
             </Layer>
         </Layers>
-        <Frames>
-            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin">
-                <Size x="40" y="40" />
-                <Anchors>
-                    <Anchor point="CENTER" />
-                </Anchors>
-            </Frame>
-        </Frames>
+
         <Scripts>
-            <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
+            <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
 </Ui>

@@ -192,3 +192,21 @@ function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
         distanceFrame:SetScript("OnUpdate", nil)
     end
 end
+
+function MapPinEnhanced:FormatDistance(distance)
+    local distanceRound = Round(distance)
+    if distance >= 1000 then
+        return string.format(IN_GAME_NAVIGATION_RANGE, tostring(AbbreviateNumbers(distanceRound)))
+    else
+        return string.format(IN_GAME_NAVIGATION_RANGE, tostring(distanceRound))
+    end
+end
+
+function MapPinEnhanced:FormatETA(time)
+    if time < 0 then
+        return "--:--"
+    end
+    local minutes = math.floor(time / 60)
+    local seconds = math.floor(time % 60)
+    return string.format("%02d:%02d", minutes, seconds)
+end

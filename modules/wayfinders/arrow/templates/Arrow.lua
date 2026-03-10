@@ -4,29 +4,32 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedFloatingArrowTemplate : Frame
 ---@field needle Texture
 ---@field pin MapPinEnhancedBasePinTemplate
+---@field title FontString
+---@field distance FontString
+---@field eta FontString
 MapPinEnhancedFloatingArrowMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
+local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
 
-function MapPinEnhancedFloatingArrowMixin:OnLoad()
-    C_Timer.After(5, function()
-        local Pins = MapPinEnhanced:GetModule("Pins")
-        local trackedPin = Pins:GetTrackedPin()
-        local pinData = trackedPin and trackedPin:GetPinData()
-        if not pinData then return end
-        local x, y, mapID = pinData.x, pinData.y, pinData.mapID
-        if not x or not y or not mapID then return end
-        self:SetLocation(mapID, x, y)
-        local color = pinData.color
-        local colorValue = PIN_COLORS_BY_NAME[color] or PIN_COLORS_BY_NAME["Yellow"]
-        self.needle:SetVertexColor(colorValue:GetRGBA())
-        self.pin:SetColor(color)
-    end)
+---@param color PinColor
+function MapPinEnhancedFloatingArrowMixin:SetColor(color)
+    local colorValue = PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
+    self.needle:SetVertexColor(colorValue:GetRGBA())
+    self.pin:SetTextureColor(colorValue)
 end
 
-local ORBIT_RADIUS = 40
+function MapPinEnhancedFloatingArrowMixin:SetTexture(texture, usesAtlas)
+    self.pin:SetIconTexture(texture, usesAtlas)
+    self.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
+end
 
+function MapPinEnhancedFloatingArrowMixin:SetTitle(title)
+    self.title:SetText(title)
+end
+
+local ORBIT_RADIUS = 30
 function MapPinEnhancedFloatingArrowMixin:SetLocation(mapID, x, y)
     self.targetMapID = mapID
     self.targetX = x
@@ -61,10 +64,38 @@ function MapPinEnhancedFloatingArrowMixin:OnUpdate()
     end
 end
 
+function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarget)
+    if distance and timeToTarget then
+        self.distance:SetText(MapPinEnhanced:FormatDistance(distance))
+        self.eta:SetText(MapPinEnhanced:FormatETA(timeToTarget))
+    else
+        self.distance:SetText("")
+        self.eta:SetText("")
+    end
+end
+
+---@param mouseButton MouseButton
+function MapPinEnhancedFloatingArrowMixin:OnMouseDown(mouseButton)
+    if mouseButton ~= "RightButton" then return end
+    -- TODO: add a menu here
+end
+
+function MapPinEnhancedFloatingArrowMixin:OnLoad()
+    MapPinEnhanced:RegisterDraggableFrame(self, "floatingArrow", nil)
+end
+
 function MapPinEnhancedFloatingArrowMixin:OnShow()
     self:SetScript("OnUpdate", function() self:OnUpdate() end)
+    self.distanceCallback = function(distance, timeToTarget)
+        self:OnDistanceUpdate(distance, timeToTarget)
+    end
+    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnHide()
     self:SetScript("OnUpdate", nil)
+    if self.distanceCallback then
+        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
+        self.distanceCallback = nil
+    end
 end
