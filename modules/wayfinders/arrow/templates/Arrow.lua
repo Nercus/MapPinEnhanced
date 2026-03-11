@@ -13,6 +13,10 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
 
+-- TODO: the position should not update on every frame, instead throttle that and animate between location updates
+-- TODO: scale the arrow based on the distance
+-- TODO: change some scaling when location is reached
+
 ---@param color PinColor
 function MapPinEnhancedFloatingArrowMixin:SetColor(color)
     local colorValue = PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR

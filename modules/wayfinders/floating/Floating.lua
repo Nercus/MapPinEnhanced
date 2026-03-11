@@ -9,6 +9,8 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 ---@field frame MapPinEnhancedFloatingSimpleTemplate | MapPinEnhancedFloatingModernTemplate
 local MapPinEnhancedWayfinderFloating = {}
 
+-- TODO: the distant diamond should scale based on distance
+-- TODO: use the generic-frame-chamfered-12d-2o atlas to use as title background
 
 ---@param frameType WayfinderFloatingFrameType
 function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
