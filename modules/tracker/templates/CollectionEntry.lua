@@ -30,5 +30,3 @@ function MapPinEnhancedTrackerCollectionEntryMixin:OnMouseDown(button)
         Tracker:ToggleActiveView()
     end
 end
-
-MapPinEnhancedTrackerSetEntryMixin = MapPinEnhancedTrackerCollectionEntryMixin
