@@ -13,6 +13,16 @@
             <Layer level="BACKGROUND" textureSubLevel="1">
                 <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5" />
             </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture atlas="transmog-outfit-dividerLine">
+                    <Size x="1" y="1" />
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="3" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
             <Layer level="OVERLAY">
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="icon">
                     <Size x="14" y="14" />
@@ -23,12 +33,18 @@
                         <Anchor point="LEFT" x="8" />
                     </Anchors>
                 </Texture>
+                <FontString parentKey="iconSeparator" inherits="GameFontNormal" text="">
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
+                    </Anchors>
+                </FontString>
                 <FontString parentKey="title" inherits="GameFontNormal"
                     text="Map Pin Enhanced Tracker"
                     justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
                     <Anchors>
-                        <Anchor point="LEFT" x="30" y="0" />
+                        <Anchor point="LEFT" relativePoint="RIGHT"
+                            relativeKey="$parent.iconSeparator" x="5" />
                     </Anchors>
                 </FontString>
             </Layer>
