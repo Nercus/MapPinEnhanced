@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Sets = MapPinEnhanced:GetModule("Sets")
+local Collections = MapPinEnhanced:GetModule("Collections")
 
 local preFilteredFormatPattern = "%s: %s-%s"
 local preFilteredCapturePattern = "%[([%w_]+): ([%w_]+)-([%w_]+)%]"
@@ -28,30 +28,35 @@ local function FilterFunc(_, event, msg, player, l, cs, t, flag, channelId, ...)
 
     ---@type string?
     local newMsg = ""
-    local setFound = false
-    local anySetFound = false
+    local collectionFound = false
+    local anyCollectionFound = false
     local searchedMessage = msg
 
     repeat
-        local start, finish, _, setName, playerName = string.find(searchedMessage, preFilteredCapturePattern)
-        if playerName and setName then
+        local start, finish, _, foundCollectionName, foundPlayerName = string.find(searchedMessage,
+            preFilteredCapturePattern)
+        if foundPlayerName and foundCollectionName then
+            local collectionName = tostring(foundCollectionName)
+            local playerName = tostring(foundPlayerName)
+            local startPos = start or 1
+            local finishPos = finish or #searchedMessage
             local displayText = string.format("|cffffd100[%s]|r",
-                string.format(preFilteredFormatPattern, logoEscapeSequence, setName, playerName))
-            newMsg = newMsg .. string.sub(searchedMessage, 1, start - 1)
-            newMsg = newMsg .. LinkUtil.FormatLink("addonMPH", displayText, setName, playerName)
-            searchedMessage = string.sub(searchedMessage, finish + 1);
-            setFound = true
-            anySetFound = true
+                string.format(preFilteredFormatPattern, logoEscapeSequence, collectionName, playerName))
+            local linkData = string.format("%s:%s", collectionName, playerName)
+            newMsg = newMsg .. string.sub(searchedMessage, 1, startPos - 1)
+            newMsg = newMsg .. LinkUtil.FormatLink("addonMPH", displayText, linkData) --[[@as string]]
+            searchedMessage = string.sub(searchedMessage, finishPos + 1);
+            collectionFound = true
+            anyCollectionFound = true
         else
             newMsg = newMsg .. searchedMessage
-            setFound = false
+            collectionFound = false
         end
-    until (not setFound)
+    until (not collectionFound)
 
 
-    if anySetFound then
-        -- filter CHAT_MSG_WHISPER to not allow random players
-        return false, newMsg, player, l, cs, t, flag, channelId, ...; -- No set found, do not filter
+    if anyCollectionFound then
+        return false, newMsg, player, l, cs, t, flag, channelId, ...;
     end
 end
 
@@ -72,15 +77,13 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", FilterFunc)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", FilterFunc)
 
 
--- Popup dialog for importing a set
-StaticPopupDialogs["MAPPINENHANCED_IMPORT_SET"] = {
-    text = "Do you want to import the set '%s' from player '%s'?",
+StaticPopupDialogs["MAPPINENHANCED_IMPORT_COLLECTION"] = {
+    text = "Do you want to import the collection '%s' from player '%s'?",
     button1 = "Yes",
     button2 = "No",
-    ---@param requestInfo { setName: string, playerName: string }
+    ---@param requestInfo { collectionName: string, playerName: string }
     OnAccept = function(_, requestInfo)
-        -- request first then the sender sends the message
-        Providers:RequestSet(requestInfo.setName, requestInfo.playerName)
+        Providers:RequestCollection(requestInfo.collectionName, requestInfo.playerName)
     end,
     timeout = 0,
     whileDead = true,
@@ -89,34 +92,46 @@ StaticPopupDialogs["MAPPINENHANCED_IMPORT_SET"] = {
 }
 
 
-function Providers:RequestSet(setName, targetName)
-    assert(setName, "Providers:RequestSet: setName is nil")
-    assert(targetName, "Providers:RequestSet: playerName is nil")
-    local request = string.format("%s:%s", setName, targetName)
-    MapPinEnhanced:SendTextAddonMessage("REQUEST_SET", request, "WHISPER", targetName)
+function Providers:RequestCollection(collectionName, targetName)
+    assert(collectionName, "Providers:RequestCollection: collectionName is nil")
+    assert(targetName, "Providers:RequestCollection: playerName is nil")
+    local request = string.format("%s:%s", collectionName, targetName)
+    MapPinEnhanced:SendTextAddonMessage("REQUEST_COLLECTION", request, "WHISPER", targetName)
 end
 
--- Show popup when set link is clicked
 EventRegistry:RegisterCallback("SetItemRef", function(_, link)
     ---@type string, string
     local linkType, linkData = LinkUtil.SplitLinkData(link)
     if linkType ~= "addonMPH" then
         return
     end
-    local setName, playerName = strsplit(":", linkData)
-    local dialog = StaticPopup_Show("MAPPINENHANCED_IMPORT_SET", setName, playerName,
-        { setName = setName, playerName = playerName })
-    dialog.data = { setName = setName, playerName = playerName }
+    local collectionName, playerName = strsplit(":", linkData)
+    local dialog = StaticPopup_Show("MAPPINENHANCED_IMPORT_COLLECTION", collectionName, playerName,
+        { collectionName = collectionName, playerName = playerName })
+    dialog.data = { collectionName = collectionName, playerName = playerName }
 end, MapPinEnhanced)
 
-MapPinEnhanced:OnDataAddonMessage("TRANSMIT_SET", function(data)
-    ---@type SetInfo
-    local setData = data
-    Sets:RestoreSet(setData)
-    MapPinEnhanced:Print(string.format("Received set '%s' from player '%s'", setData.name, MapPinEnhanced.me))
+MapPinEnhanced:OnDataAddonMessage("TRANSMIT_COLLECTION", function(data)
+    ---@type CollectionInfo
+    local collectionData = data
+    Collections:RestoreCollection(collectionData)
+    MapPinEnhanced:Print(string.format("Received collection '%s' from player '%s'", collectionData.name,
+        MapPinEnhanced.me))
 end, function(progress, total)
-    MapPinEnhanced:Print(string.format("Receiving set data: %d/%d", progress, total))
+    MapPinEnhanced:Print(string.format("Receiving collection data: %d/%d", progress, total))
 end)
+
+MapPinEnhanced:OnDataAddonMessage("TRANSMIT_SET", function(data)
+    ---@type CollectionInfo
+    local collectionData = data
+    Collections:RestoreCollection(collectionData)
+    MapPinEnhanced:Print(string.format("Received collection '%s' from player '%s'", collectionData.name,
+        MapPinEnhanced.me))
+end, function(progress, total)
+    MapPinEnhanced:Print(string.format("Receiving collection data: %d/%d", progress, total))
+end)
+
+Providers.RequestSet = Providers.RequestCollection
 
 local MAP_PIN_PATTERN = "|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"
 local MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location"

@@ -2,10 +2,10 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="SetEntry.lua" />
 
-    <Button name="MapPinEnhancedTrackerSetEntryTemplate" virtual="true"
-        mixin="MapPinEnhancedTrackerSetEntryMixin">
+    <Button name="MapPinEnhancedTrackerCollectionEntryTemplate" virtual="true"
+        mixin="MapPinEnhancedTrackerCollectionEntryMixin">
         <KeyValues>
-            <KeyValue key="template" value="MapPinEnhancedTrackerSetEntryTemplate" />
+            <KeyValue key="template" value="MapPinEnhancedTrackerCollectionEntryTemplate" />
         </KeyValues>
         <Size x="300" y="30" />
         <NormalTexture atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
@@ -18,7 +18,7 @@
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="iconTexture">
                     <Size x="14" y="14" />
                     <KeyValues>
-                        <KeyValue key="icon" value="set" />
+                        <KeyValue key="icon" value="collection" />
                     </KeyValues>
                     <Anchors>
                         <Anchor point="LEFT" x="8" />

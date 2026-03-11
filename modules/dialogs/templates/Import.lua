@@ -31,8 +31,8 @@ end
 
 ---@type MapPinEnhancedRadioGroupOption[]
 local importOptions = {
-    { label = "Temporary Import", value = "temporary" },
-    { label = "Import to Set",    value = "set" },
+    { label = "Temporary Import",     value = "temporary" },
+    { label = "Import to Collection", value = "collection" },
 }
 
 function MapPinEnhancedImportDialogContentMixin:OnLoad()

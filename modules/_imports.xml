@@ -4,7 +4,7 @@
     <Include file="pins/_imports.xml" />
     <Include file="wayfinders/_imports.xml" />
     <Include file="groups/_imports.xml" />
-    <Include file="sets/_imports.xml" />
+    <Include file="collections/_imports.xml" />
     <Include file="tracker/_imports.xml" />
     <Include file="editor/_imports.xml" />
     <Include file="misc/_imports.xml" />

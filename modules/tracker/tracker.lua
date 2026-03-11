@@ -25,7 +25,7 @@ function Tracker:HideTracker()
     MapPinEnhanced:SetVar("trackerVisible", false)
 end
 
----@return 'set' | 'pin' | nil
+---@return 'collection' | 'pin' | nil
 function Tracker:GetActiveView()
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then

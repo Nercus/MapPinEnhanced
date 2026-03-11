@@ -17,7 +17,7 @@
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="icon">
                     <Size x="14" y="14" />
                     <KeyValues>
-                        <KeyValue key="icon" value="set" />
+                        <KeyValue key="icon" value="collection" />
                     </KeyValues>
                     <Anchors>
                         <Anchor point="LEFT" x="8" />
@@ -46,7 +46,7 @@
             <Button parentKey="viewButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="set" />
+                    <KeyValue key="icon" value="collection" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"

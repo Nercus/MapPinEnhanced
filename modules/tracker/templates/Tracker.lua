@@ -7,19 +7,19 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
----@field activeView 'set' | 'pin'
+---@field activeView 'collection' | 'pin'
 MapPinEnhancedTrackerMixin = {
     activeView = "pin", -- Default view is pin
 }
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
-local Sets = MapPinEnhanced:GetModule("Sets")
+local Collections = MapPinEnhanced:GetModule("Collections")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
----@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
+---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
 
----@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerSetEntryTemplate'
+---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerCollectionEntryTemplate'
 
 ---@param groupnode1 TreeNodeMixin
 ---@param groupnode2 TreeNodeMixin
@@ -40,17 +40,17 @@ local function GroupSortComparator(groupnode1, groupnode2)
     return (group1.name or "") < (group2.name or "")
 end
 
----@param setNode1 TreeNodeMixin
----@param setNode2 TreeNodeMixin
+---@param collectionNode1 TreeNodeMixin
+---@param collectionNode2 TreeNodeMixin
 ---@return boolean
-local function SetSortComparator(setNode1, setNode2)
-    ---@type MapPinEnhancedSetMixin, MapPinEnhancedSetMixin
-    local set1, set2 = setNode1:GetData(), setNode2:GetData()
+local function CollectionSortComparator(collectionNode1, collectionNode2)
+    ---@type MapPinEnhancedCollectionMixin, MapPinEnhancedCollectionMixin
+    local collection1, collection2 = collectionNode1:GetData(), collectionNode2:GetData()
 
-    if set1.classification ~= "set" or set2.classification ~= "set" then
+    if collection1.classification ~= "collection" or collection2.classification ~= "collection" then
         return false
     end
-    return (set1.name or "") < (set2.name or "")
+    return (collection1.name or "") < (collection2.name or "")
 end
 
 local function PinSortComparator(pinNode1, pinNode2)
@@ -73,12 +73,12 @@ local function PinSortComparator(pinNode1, pinNode2)
     return title1 < title2
 end
 
-function MapPinEnhancedTrackerMixin:UpdateSetList()
-    ---@param set MapPinEnhancedSetMixin
-    for set in Sets:EnumerateSets() do
-        self.dataProvider:Insert(set) --[[@as TreeNodeMixin]]
+function MapPinEnhancedTrackerMixin:UpdateCollectionList()
+    ---@param collection MapPinEnhancedCollectionMixin
+    for collection in Collections:EnumerateCollections() do
+        self.dataProvider:Insert(collection) --[[@as TreeNodeMixin]]
     end
-    self.dataProvider:SetSortComparator(SetSortComparator, false, false)
+    self.dataProvider:SetSortComparator(CollectionSortComparator, false, false)
 end
 
 function MapPinEnhancedTrackerMixin:UpdatePinList()
@@ -98,8 +98,8 @@ end
 
 function MapPinEnhancedTrackerMixin:UpdateList()
     self.dataProvider:Flush()
-    if self.activeView == "set" then
-        self:UpdateSetList()
+    if self.activeView == "collection" then
+        self:UpdateCollectionList()
     else
         self:UpdatePinList()
     end
@@ -201,7 +201,7 @@ end
 ---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: EntryTemplate))
 ---@param node TreeNode
 local function TrackerElementFactory(factory, node)
-    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
     local data = node:GetData()
 
     if data.classification == "group" then
@@ -212,23 +212,23 @@ local function TrackerElementFactory(factory, node)
         factory("MapPinEnhancedTrackerPinEntryTemplate", function(frame)
             frame:Init(node)
         end)
-    elseif data.classification == "set" then
-        factory("MapPinEnhancedTrackerSetEntryTemplate", function(frame)
+    elseif data.classification == "collection" then
+        factory("MapPinEnhancedTrackerCollectionEntryTemplate", function(frame)
             frame:Init(node)
         end)
     end
 end
 
----@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerSetEntryTemplate
+---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
 ---@param data TreeNodeMixin
 local function TrackerElementResetter(frame, data)
-    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedSetMixin
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
     local data = data:GetData()
     if data.classification == "group" then
         frame:Reset()
     elseif data.classification == "pin" then
         frame:Reset(data.pinID)
-    elseif data.classification == "set" then
+    elseif data.classification == "collection" then
         frame:Reset()
     end
 end
@@ -274,10 +274,10 @@ function MapPinEnhancedTrackerMixin:GetActiveView()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
-    if self.activeView == "set" then
-        local numSets = self.dataProvider:GetSize(false)
-        self.header:SetTitle(string.format("Sets (%d)", numSets))
-        self.header:SetIcon("set")
+    if self.activeView == "collection" then
+        local numCollections = self.dataProvider:GetSize(false)
+        self.header:SetTitle(string.format("Collections (%d)", numCollections))
+        self.header:SetIcon("collection")
     else
         local totalElements = self.dataProvider:GetSize(false)
         local numGroups = 0
@@ -298,10 +298,10 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
 end
 
 function MapPinEnhancedTrackerMixin:ToggleActiveView()
-    if self.activeView == "set" then
+    if self.activeView == "collection" then
         self.activeView = "pin"
     else
-        self.activeView = "set"
+        self.activeView = "collection"
     end
     self:UpdateList()
     self:UpdateHeight()

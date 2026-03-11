@@ -15,6 +15,7 @@ local ICON_TEXTURES = {
     plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus.png",
     minus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMinus.png",
     search = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSearch_Yellow.png",
+    collection = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSets_Yellow.png",
     set = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSets_Yellow.png",
     settings = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSettings_Yellow.png",
     tick = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png",

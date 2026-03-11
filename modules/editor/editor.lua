@@ -5,4 +5,4 @@ local MapPinEnhanced = select(2, ...)
 local Editor = MapPinEnhanced:GetModule("Editor")
 
 
---- TODO: don't forget to add callbacks to update between the tracker and the set editor
+--- TODO: don't forget to add callbacks to update between the tracker and the collection editor
