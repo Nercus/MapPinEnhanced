@@ -12,7 +12,7 @@
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="0">
                 <Texture setAllPoints="true"
-                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderBg3x.png" alpha="0.9">
+                    file="Interface/AddOns/MapPinEnhanced/DialogBackground.png" alpha="0.9">
                     <TextureSliceMode mode="Stretched" />
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
@@ -32,7 +32,7 @@
             </Layer>
             <Layer level="BORDER">
                 <Texture
-                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderGrey3x.png">
+                    file="Interface/AddOns/MapPinEnhanced/DialogBorderGray.png">
                     <Color r="1" g="0.82" b="0" a="1" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="2" y="-2" />
@@ -44,7 +44,7 @@
             </Layer>
             <Layer level="ARTWORK">
                 <Texture
-                    file="Interface/AddOns/MapPinEnhanced/TrackerHeaderBorderGrey3x.png">
+                    file="Interface/AddOns/MapPinEnhanced/DialogBorderGray.png">
                     <TextureSliceMode mode="Stretched" />
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
