@@ -5,8 +5,9 @@ local MapPinEnhanced = select(2, ...)
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 ---@class MapPinEnhancedTrackerHeaderTemplate : Frame
----@field viewButton Button
----@field closeButton Button
+---@field viewButton MapPinEnhancedIconButtonTemplate
+---@field closeButton MapPinEnhancedIconButtonTemplate
+---@field importButton MapPinEnhancedIconButtonTemplate
 ---@field headerTextureLeft Texture
 ---@field headerTextureRight Texture
 ---@field title FontString

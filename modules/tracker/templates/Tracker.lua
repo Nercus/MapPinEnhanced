@@ -278,6 +278,7 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
         local numCollections = self.dataProvider:GetSize(false)
         self.header:SetTitle(string.format("Collections (%d)", numCollections))
         self.header:SetIcon("collection")
+        self.header.viewButton:SetIconTexture("pin")
     else
         local totalElements = self.dataProvider:GetSize(false)
         local numGroups = 0
@@ -294,6 +295,7 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
         local numPins = totalElements - numGroups
         self.header:SetTitle(string.format("Pins (%d)", numPins))
         self.header:SetIcon("pin")
+        self.header.viewButton:SetIconTexture("collection")
     end
 end
 
