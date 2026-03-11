@@ -8,26 +8,6 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
         </KeyValues>
         <Size x="300" y="35" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal" text="Test" justifyH="LEFT">
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" y="9" x="26" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
-        <NormalTexture atlas="SquareMask" desaturated="true" horizTile="true">
-            <Size x="1" y="2" />
-            <Gradient orientation="HORIZONTAL">
-                <MinColor r="1" g="0.82" b="0" a="1" />
-                <MaxColor r="1" g="0.82" b="0" a="0" />
-            </Gradient>
-            <Anchors>
-                <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="5" />
-                <Anchor point="RIGHT" relativePoint="RIGHT" />
-            </Anchors>
-        </NormalTexture>
         <Frames>
             <Button parentKey="expandButton">
                 <KeyValues>
@@ -44,7 +24,46 @@
                 </Anchors>
             </Button>
         </Frames>
+        <Layers>
+            <Layer level="ARTWORK" textureSubLevel="1">
+                <Texture parentKey="icon"
+                    file="Interface/Icons/inv_misc_map08">
+                    <Size x="20" y="10" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT"
+                            relativeKey="$parent.expandButton" x="7" />
+                    </Anchors>
+                    <TexCoords left="0" right="1" top="0.25" bottom="0.75" />
+                </Texture>
+                <FontString parentKey="title" inherits="GameFontNormal" text="Test" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="7" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="2">
+                <Texture
+                    atlas="UI-Journeys-Delve-rewardicon-square-frame-yellow" scale="3"
+                >
 
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-1" y="1" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="1" y="-1" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <NormalTexture atlas="SquareMask" desaturated="true" horizTile="true">
+            <Size x="1" y="2" />
+            <Gradient orientation="HORIZONTAL">
+                <MinColor r="1" g="0.82" b="0" a="1" />
+                <MaxColor r="1" g="0.82" b="0" a="0" />
+            </Gradient>
+            <Anchors>
+                <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="5" />
+                <Anchor point="RIGHT" relativePoint="RIGHT" />
+            </Anchors>
+        </NormalTexture>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
             <OnEnter method="OnEnter" />
