@@ -31,7 +31,7 @@
                     <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT"
-                            relativeKey="$parent.expandButton" x="3" />
+                            relativeKey="$parent.expandButton" x="5" />
                     </Anchors>
                 </Texture>
                 <MaskTexture file="interface/common/commonmaskcircle.blp"
@@ -39,7 +39,7 @@
                     <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT"
-                            relativeKey="$parent.expandButton" x="3" />
+                            relativeKey="$parent.expandButton" x="5" />
                     </Anchors>
                     <MaskedTextures>
                         <MaskedTexture childKey="icon" />
@@ -47,7 +47,7 @@
                 </MaskTexture>
                 <FontString parentKey="title" inherits="GameFontNormal" text="Test" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="3" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
                     </Anchors>
                 </FontString>
             </Layer>
