@@ -23,6 +23,8 @@ function Collections:GetObjectPool()
     return self.objectPool
 end
 
+---@param name string
+---@return MapPinEnhancedCollectionMixin
 function Collections:CreateCollection(name)
     assert(name, "Collections:CreateCollection: name is nil")
     assert(type(name) == "string", "Collections:CreateCollection: name must be a string")
@@ -100,10 +102,3 @@ end
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Collections:RestoreAllCollections()
 end)
-
-Collections.CreateSet = Collections.CreateCollection
-Collections.GetSetByName = Collections.GetCollectionByName
-Collections.PersistSet = Collections.PersistCollection
-Collections.RestoreSet = Collections.RestoreCollection
-Collections.RestoreAllSets = Collections.RestoreAllCollections
-Collections.EnumerateSets = Collections.EnumerateCollections

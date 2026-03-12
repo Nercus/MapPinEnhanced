@@ -73,7 +73,7 @@ function MapPinEnhancedCollectionMixin:LoadCollection()
     })
     if not group then
         error("MapPinEnhancedCollectionMixin:LoadCollection: Group not found for collection name: " ..
-        tostring(self.name))
+            tostring(self.name))
     end
     group:AddMultiplePins(self.pins)
 end
@@ -186,6 +186,3 @@ function MapPinEnhancedCollectionMixin:GetSaveableData()
         icon = self.icon,
     }
 end
-
-MapPinEnhancedSetMixin = MapPinEnhancedCollectionMixin
-MapPinEnhancedCollectionMixin.LoadSet = MapPinEnhancedCollectionMixin.LoadCollection
