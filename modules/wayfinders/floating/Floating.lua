@@ -159,10 +159,10 @@ local function OverrideSuperTrackedAlphaState(enable)
 end
 
 function MapPinEnhancedWayfinderFloating:SetOverride()
-    if self.overridesSet then return end
+    if self.overrideActive then return end
     OverrideSuperTrackedReachedBehavior()
     OverrideSuperTrackedAlphaState(true)
-    self.overridesSet = true
+    self.overrideActive = true
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
