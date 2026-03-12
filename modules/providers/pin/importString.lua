@@ -2,29 +2,17 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+local Providers      = MapPinEnhanced:GetModule("Providers")
+local Groups         = MapPinEnhanced:GetModule("Groups")
 
-local PREFIX = "!MPH!"
+local L              = MapPinEnhanced.L
 
----serialize a table for import/export
----@param data table
----@return string
-function Providers:SerializeImport(data)
-    local serialized = C_EncodingUtil.SerializeCBOR(data)
-    local compressed = C_EncodingUtil.CompressString(serialized)
-    local encoded = C_EncodingUtil.EncodeBase64(compressed)
-    return PREFIX .. encoded
-end
+---@param dataString string the string to import, either a Map Pin Enhanced export string or a slash command
+function Providers:ImportTemporary(dataString)
+    local hasPrefix = MapPinEnhanced:IsSerializedData(dataString)
+    if hasPrefix then
 
----deserialize a table from a string received through import/export
----@param data string
----@return table | nil
-function Providers:DeserializeImport(data)
-    local dataWithoutPrefix = string.sub(data, #PREFIX + 1)
-    local decoded = C_EncodingUtil.DecodeBase64(dataWithoutPrefix)
-    if not decoded then return end
-    local decompressed = C_EncodingUtil.DecompressString(decoded)
-    if not decompressed then return end
-    local deserialized = C_EncodingUtil.DeserializeCBOR(decompressed)
-    return deserialized
+    else
+        self:ImportSlashCommand(dataString, L["Temporary Import"])
+    end
 end

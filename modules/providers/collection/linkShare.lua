@@ -120,33 +120,3 @@ MapPinEnhanced:OnDataAddonMessage("TRANSMIT_COLLECTION", function(data)
 end, function(progress, total)
     MapPinEnhanced:Print(string.format("Receiving collection data: %d/%d", progress, total))
 end)
-
-MapPinEnhanced:OnDataAddonMessage("TRANSMIT_SET", function(data)
-    ---@type CollectionInfo
-    local collectionData = data
-    Collections:RestoreCollection(collectionData)
-    MapPinEnhanced:Print(string.format("Received collection '%s' from player '%s'", collectionData.name,
-        MapPinEnhanced.me))
-end, function(progress, total)
-    MapPinEnhanced:Print(string.format("Receiving collection data: %d/%d", progress, total))
-end)
-
-Providers.RequestSet = Providers.RequestCollection
-
-local MAP_PIN_PATTERN = "|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"
-local MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location"
-
----@param x number
----@param y number
----@param mapID number
----@param title string?
-function Providers:LinkToChat(x, y, mapID, title)
-    if not x or not y or not mapID then return end
-    ---@type string
-    local waypointLink = (MAP_PIN_PATTERN):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
-    if title and title ~= "" then
-        waypointLink = string.format("%s (%s)", waypointLink, title)
-    end
-    ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
-    ChatEdit_InsertLink(waypointLink)
-end

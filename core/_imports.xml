@@ -12,6 +12,7 @@
     <Include file="debug.lua" />
     <Include file="fuzzy.lua" />
     <Include file="version.lua" />
+    <Include file="serialization.lua" />
     <Include file="transmission.lua" />
     <Include file="secrets.lua" />
     <Include file="notify.lua" />
