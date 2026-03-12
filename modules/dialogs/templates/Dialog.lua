@@ -8,6 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedDialog : Frame
 ---@field content DialogContentFrame
 ---@field header MapPinEnhancedDialogHeader
+---@field backgroundMask Texture
 MapPinEnhancedDialogMixin = {}
 
 ---@class Dialogs
@@ -21,8 +22,6 @@ function MapPinEnhancedDialogMixin:SetTitle(title)
     self.header.title:SetText(title)
 end
 
--- TODO: clean up background to also clip corners
-
 ---@param content DialogContentFrame
 ---@param title string
 function MapPinEnhancedDialogMixin:ShowDialog(content, title)
@@ -35,7 +34,7 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
     self.content = content
     self.content:SetParent(self)
     self.content:ClearAllPoints()
-    self.content:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -20)
+    self.content:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -25)
     self.content:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -2, 2)
     self.content:SetFrameStrata(self:GetFrameStrata())
     self.content:SetFrameLevel(self:GetFrameLevel() + 10)
@@ -43,6 +42,7 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
 
     local contentWidth, contentHeight = self.content:GetSize()
     self:SetSize(contentWidth + 20, contentHeight + 30)
+    self.backgroundMask:SetSize(contentWidth + 10, contentHeight + 20)
     self:Show()
 end
 

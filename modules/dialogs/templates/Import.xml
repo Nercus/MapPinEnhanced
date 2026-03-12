@@ -4,14 +4,14 @@
     <Include file="Import.lua" />
     <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="300" y="400" />
+        <Size x="500" y="460" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="LEFT"
-                    justifyV="TOP">
+                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER"
+                    justifyV="TOP" spacing="2">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="10" y="-10" />
-                        <Anchor point="TOPRIGHT" x="-10" y="-10" />
+                        <Anchor point="TOPLEFT" x="10" y="-20" />
+                        <Anchor point="TOPRIGHT" x="-15" y="-20" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -21,8 +21,8 @@
                 <Size x="1" y="300" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.description"
-                        relativePoint="BOTTOMLEFT" x="0" y="-10" />
-                    <Anchor point="TOPRIGHT" x="0" y="-10" relativeKey="$parent.description"
+                        relativePoint="BOTTOMLEFT" x="0" y="-20" />
+                    <Anchor point="TOPRIGHT" x="0" y="-20" relativeKey="$parent.description"
                         relativePoint="BOTTOMRIGHT" />
                 </Anchors>
             </ScrollFrame>

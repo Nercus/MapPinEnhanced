@@ -12,47 +12,50 @@
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="0">
                 <Texture setAllPoints="true"
-                    file="Interface/AddOns/MapPinEnhanced/DialogBackground.png" alpha="0.9">
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png"
+                    alpha="0.9">
                     <TextureSliceMode mode="Stretched" />
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture
-                    atlas="shop-bg-map-green">
-                    <Size x="806" y="457" />
+                <Texture parentKey="backgroundArt"
+                    atlas="shop-bg-map-blue">
+                    <Size x="1058" y="600" />
                     <Anchors>
-                        <Anchor point="RIGHT" />
+                        <Anchor point="RIGHT" x="-5" />
                     </Anchors>
                     <Gradient>
-                        <MaxColor r="1" g="1" b="1" a="1" />
                         <MinColor r="1" g="1" b="1" a="0.65" />
+                        <MaxColor r="1" g="1" b="1" a="1" />
                     </Gradient>
                 </Texture>
+                <MaskTexture file="interface/masks/squaremask.blp" parentKey="backgroundMask"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-5" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="backgroundArt" />
+                    </MaskedTextures>
+                </MaskTexture>
             </Layer>
             <Layer level="BORDER">
                 <Texture
-                    file="Interface/AddOns/MapPinEnhanced/DialogBorderGray.png">
-                    <Color r="1" g="0.82" b="0" a="1" />
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="2" y="-2" />
-                        <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                     <TextureSliceMode mode="Stretched" />
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
-            <Layer level="ARTWORK">
-                <Texture
-                    file="Interface/AddOns/MapPinEnhanced/DialogBorderGray.png">
-                    <TextureSliceMode mode="Stretched" />
-                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
-                </Texture>
-            </Layer>
+
         </Layers>
         <Frames>
             <Frame parentKey="header">
-                <Size x="1" y="20" />
+                <Size x="1" y="25" />
                 <Anchors>
                     <Anchor point="TOPLEFT" y="-5" />
                     <Anchor point="TOPRIGHT" y="-5" />
@@ -67,10 +70,10 @@
                                 <Anchor point="BOTTOMRIGHT" />
                             </Anchors>
                         </Texture>
-
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormal" setAllPoints="true" justifyH="CENTER"
+                        <FontString inherits="GameFontNormalLarge" setAllPoints="true"
+                            justifyH="CENTER"
                             justifyV="MIDDLE" parentKey="title" />
                     </Layer>
                 </Layers>
