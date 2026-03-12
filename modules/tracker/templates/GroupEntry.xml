@@ -28,27 +28,35 @@
             <Layer level="ARTWORK" textureSubLevel="1">
                 <Texture parentKey="icon"
                     file="Interface/Icons/inv_misc_map08">
-                    <Size x="20" y="10" />
+                    <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT"
-                            relativeKey="$parent.expandButton" x="7" />
+                            relativeKey="$parent.expandButton" x="3" />
                     </Anchors>
-                    <TexCoords left="0" right="1" top="0.25" bottom="0.75" />
                 </Texture>
+                <MaskTexture file="interface/common/commonmaskcircle.blp"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="16" y="16" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT"
+                            relativeKey="$parent.expandButton" x="3" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon" />
+                    </MaskedTextures>
+                </MaskTexture>
                 <FontString parentKey="title" inherits="GameFontNormal" text="Test" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="7" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="3" />
                     </Anchors>
                 </FontString>
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="2">
-                <Texture
-                    atlas="UI-Journeys-Delve-rewardicon-square-frame-yellow" scale="3"
-                >
-
+                <Texture atlas="auctionhouse-itemicon-border-color" parentKey="border">
+                    <Color r="1" g="0.82" b="0" a="1" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-1" y="1" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="1" y="-1" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-3" y="3" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="3" y="-3" />
                     </Anchors>
                 </Texture>
             </Layer>

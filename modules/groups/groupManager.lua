@@ -30,19 +30,19 @@ local DEFAULT_GROUPS = {
     {
         name = L["Uncategorized Pins"],
         source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\inv_misc_map08",
+        icon = "Interface\\Icons\\inv_ability_skyriding_glyph",
         order = -1
     },
     {
         name = L["Temporary Import"],
         source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\ability_bossmagistrix_timewarp1",
+        icon = "Interface\\Icons\\achievement_guildperk_workingovertime_rank2",
         order = math.huge - 1, -- start of the list, but after the My Way Back group
     },
     {
         name = L["My Way Back"],
         source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\inv_misc_map_01",
+        icon = "Interface\\Icons\\rogue_burstofspeed",
         order = math.huge, -- start of the list
     }
 }
