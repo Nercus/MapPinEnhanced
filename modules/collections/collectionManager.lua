@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Collections
 local Collections = MapPinEnhanced:GetModule("Collections")
-MapPinEnhanced.modules["Sets"] = Collections
 
 local function CreateGroupObject()
     return CreateAndInitFromMixin(MapPinEnhancedCollectionMixin)
@@ -87,7 +86,7 @@ end
 
 function Collections:RestoreAllCollections()
     ---@type CollectionInfo[] | nil
-    local collectionsData = MapPinEnhanced:GetVar("collections") or MapPinEnhanced:GetVar("sets")
+    local collectionsData = MapPinEnhanced:GetVar("collections") or MapPinEnhanced:GetVar("collections")
     if not collectionsData then return end
     for _, collectionData in pairs(collectionsData) do
         self:RestoreCollection(collectionData)

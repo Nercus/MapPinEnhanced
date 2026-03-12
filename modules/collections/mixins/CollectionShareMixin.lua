@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedCollectionMixin
 MapPinEnhancedCollectionShareMixin = {}
 
---- [AddonName: Setname-PlayerName]
+--- [AddonName: Collectionname-PlayerName]
 local preFilteredFormatPattern = "[%s: %s-%s]"
 
 
@@ -32,17 +32,7 @@ function MapPinEnhancedCollectionShareMixin:LinkToChat()
         self:OnRequestReceived(collection, player)
     end)
 
-    MapPinEnhanced:OnTextAddonMessage("REQUEST_SET", function(data)
-        if not string.find(data, collectionName) then
-            return
-        end
-        local collection, player = strsplit(":", data)
-        self:OnRequestReceived(collection, player)
-    end)
-
     local link = string.format(preFilteredFormatPattern, MapPinEnhanced.name, collectionName, MapPinEnhanced.me)
     ChatEdit_ActivateChat(DEFAULT_CHAT_FRAME.editBox)
     ChatEdit_InsertLink(link)
 end
-
-MapPinEnhancedSetShareMixin = MapPinEnhancedCollectionShareMixin
