@@ -50,6 +50,10 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
     end)
+    -- RightClick doesn't seem to work on minimap pins, but I guess that's just intended. It's not a bug, it's a feature ¯\_(ツ)_/¯
+    self.minimapPin:SetScript("OnMouseDown", function(_, button)
+        self:OnMouseDown(_, button)
+    end)
 end
 
 function MapPinEnhancedPinMixin:OverridePinID(pinID)
