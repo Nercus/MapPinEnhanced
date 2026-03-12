@@ -94,6 +94,8 @@ function MapPinEnhanced:SetVar(...)
     return true
 end
 
+-- TODO: add an automatic migration system that has the keys of getvar as its internal keys find any available migration and execute it before returning the value
+
 ---Get a variable from the saved variables
 ---@param ... string The keys to traverse to get the value
 ---@return boolean | number | string | table | nil
