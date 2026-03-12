@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local L = MapPinEnhanced.L
+
 ---@class Dialogs
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Providers = MapPinEnhanced:GetModule("Providers")
@@ -17,7 +19,11 @@ end
 ---@field importButton MapPinEnhancedButtonTemplate
 ---@field textarea MapPinEnhancedTextareaTemplate
 ---@field importTypeRadio MapPinEnhancedRadioGroupTemplate
+---@field description FontString
 MapPinEnhancedImportDialogContentMixin = {}
+
+
+
 
 function MapPinEnhancedImportDialogContentMixin:Import()
     local text = self.textarea.editbox:GetText()
@@ -42,4 +48,6 @@ function MapPinEnhancedImportDialogContentMixin:OnLoad()
 
     self.importTypeRadio:SetOptions(importOptions)
     self.importTypeRadio:SetActiveOption("temporary")
+    self.description:SetText(L
+        ["You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with )"])
 end
