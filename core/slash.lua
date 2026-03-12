@@ -7,6 +7,8 @@ local commandList = {}
 ---@type table<string, string> a list of commands and their associated help strings
 local commandHelpStrings = {}
 
+local Providers = MapPinEnhanced:GetModule("Providers")
+
 ---Set a slash command trigger for the addon
 ---@param trigger string the slash command trigger
 ---@param triggerIndex number a contineous number that is used to identify the trigger
@@ -25,15 +27,13 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
             table.insert(args, word)
         end
         local command = args[1]
+        local secondArg = args[2]
         if commandList[command] then
             pcall(commandList[command], unpack(args))
+        elseif secondArg == nil then
+            self:PrintHelp()
         else
-            local defaultAction = commandList["default"]
-            if defaultAction then
-                pcall(defaultAction, unpack(args))
-            else
-                self:PrintHelp()
-            end
+            Providers:ImportSlashCommand(msg)
         end
     end
 end
@@ -50,17 +50,6 @@ function MapPinEnhanced:PrintHelp()
         local helpString = helpPattern:format(command, self:WrapTextInColor(help, normalColor))
         self:PrintUnformatted(helpString)
     end
-end
-
----Set the default action for the addon when no command is provided
----@param func function the function to call when no command is provided
-function MapPinEnhanced:SetDefaultAction(func)
-    assert(type(func) == "function", "Default action not provided")
-    assert(not commandList["default"], "Default action already set")
-    if not commandList then
-        commandList = {}
-    end
-    commandList["default"] = func
 end
 
 ---Add a slash command to the list
