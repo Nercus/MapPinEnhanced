@@ -9,7 +9,6 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
--- FIXME: the treenode for the previous tracked frame should also update the text alpha when untracked
 
 function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local pin = self.pin
@@ -19,6 +18,8 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
             self.pinFrame:SetTracked()
         else
             self.pinFrame:SetUntracked()
+            self.title:SetAlpha(0.5)
+            self.location:SetAlpha(0.5)
         end
     end, pin.pinID)
 
@@ -108,7 +109,6 @@ end
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
     self.pinFrame:LockHighlight()
     self:ShowTooltip()
-
     self.title:SetAlpha(1)
     self.location:SetAlpha(1)
 end
@@ -116,7 +116,6 @@ end
 function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
     self.pinFrame:UnlockHighlight()
     GameTooltip:Hide()
-
     if self.pin and not self.pin:IsTracked() then
         self.title:SetAlpha(0.5)
         self.location:SetAlpha(0.5)
