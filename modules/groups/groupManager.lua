@@ -140,6 +140,11 @@ function Groups:RestoreGroup(groupData)
     end
     assert(group, "Groups:RestoreGroup: group is nil after registration")
     group:SetOrder(groupData.order or GetTime())
+
+    for pinID, order in pairs(groupData.pinOrder or {}) do
+        group:SetPinOrder(pinID, order, true)
+    end
+
     group:AddMultiplePins(groupData.pins)
 end
 

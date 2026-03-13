@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedGroupMixin
 ---@field classification 'group'
 ---@field pins table<UUID, MapPinEnhancedPinMixin> a table of pins that belong to this
+---@field pinOrder table<UUID, number> a table that stores tracker order by pinID
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
@@ -26,12 +27,14 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 function MapPinEnhancedGroupMixin:Init()
     self.pins = {}
+    self.pinOrder = {}
     self.count = 0
     self.order = GetTime()
 end
 
 function MapPinEnhancedGroupMixin:Reset()
     self.pins = {}
+    self.pinOrder = {}
     self.name = nil
     self.source = nil
     self.icon = nil
@@ -96,6 +99,13 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
         pin:OverridePinID(overridePinID)
     end
     pin.group = self
+
+    local currentOrder = self.pinOrder[pin.pinID]
+    if not currentOrder then
+        currentOrder = GetTime()
+    end
+    self.pinOrder[pin.pinID] = currentOrder
+
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
     if not skipPersist then
@@ -145,6 +155,7 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
     if not pin then return end
 
     self.pins[pinID] = nil
+    self.pinOrder[pinID] = nil
     self.count = self.count - 1
 
     if not skipPersist then
@@ -202,6 +213,35 @@ function MapPinEnhancedGroupMixin:GetPinCount()
     return self.count
 end
 
+---@param pinID UUID
+---@return number
+function MapPinEnhancedGroupMixin:GetPinOrder(pinID)
+    assert(pinID, "MapPinEnhancedGroupMixin:GetPinOrder: pinID is nil")
+    assert(type(pinID) == "string", "MapPinEnhancedGroupMixin:GetPinOrder: pinID must be a string")
+
+    local order = self.pinOrder[pinID]
+    if not order then
+        order = GetTime()
+        self.pinOrder[pinID] = order
+    end
+    return order
+end
+
+---@param pinID UUID
+---@param order number
+---@param skipPersist boolean? if true, the group will not be persisted after setting the order
+function MapPinEnhancedGroupMixin:SetPinOrder(pinID, order, skipPersist)
+    assert(pinID, "MapPinEnhancedGroupMixin:SetPinOrder: pinID is nil")
+    assert(type(pinID) == "string", "MapPinEnhancedGroupMixin:SetPinOrder: pinID must be a string")
+    assert(order, "MapPinEnhancedGroupMixin:SetPinOrder: order is nil")
+    assert(type(order) == "number", "MapPinEnhancedGroupMixin:SetPinOrder: order must be a number")
+
+    self.pinOrder[pinID] = order
+    if not skipPersist then
+        Groups:PersistGroup(self)
+    end
+end
+
 ---@param order number
 function MapPinEnhancedGroupMixin:SetOrder(order)
     assert(order, "MapPinEnhancedGroupMixin:SetOrder: order is nil")
@@ -217,6 +257,7 @@ end
 
 ---@class SaveableGroupData : GroupInfo
 ---@field pins SaveablePinData[] a table of pin data that belongs to this group
+---@field pinOrder table<UUID, number> a table of pin order values keyed by pinID
 
 ---@return SaveableGroupData
 function MapPinEnhancedGroupMixin:GetSaveableData()
@@ -225,8 +266,14 @@ function MapPinEnhancedGroupMixin:GetSaveableData()
         source = self.source,
         icon = self.icon,
         order = self.order,
-        pins = {}
+        pins = {},
+        pinOrder = {}
     }
+    ---@cast data SaveableGroupData
+
+    for pinID, savedOrder in pairs(self.pinOrder) do
+        data.pinOrder[pinID] = savedOrder
+    end
 
     for _, pin in self:EnumeratePins() do
         table.insert(data.pins, pin:GetSaveableData())

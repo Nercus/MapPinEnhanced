@@ -77,10 +77,6 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.title = DEFAULT_PIN_NAME
     end
 
-    if not self.pinData.order then
-        self.pinData.order = GetTime()
-        self.order = self.pinData.order
-    end
 
     if not self.pinData.tooltip then
         ---@type string?

@@ -61,8 +61,10 @@ local function PinSortComparator(pinNode1, pinNode2)
         return false
     end
 
-    local order1 = pin1.pinData.order or 0
-    local order2 = pin2.pinData.order or 0
+    local group1 = pin1.group
+    local group2 = pin2.group
+    local order1 = group1 and group1:GetPinOrder(pin1.pinID) or 0
+    local order2 = group2 and group2:GetPinOrder(pin2.pinID) or 0
 
     if order1 ~= order2 then
         return order1 > order2
