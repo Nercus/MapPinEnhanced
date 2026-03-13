@@ -22,8 +22,24 @@ end
 ---@field description FontString
 MapPinEnhancedImportDialogContentMixin = {}
 
+-- TODO: add logic for importing in here. Ignore providers. Following possibilities:
+-- wayString -> Temporary Import: nothing
+-- dataString -> Temporary Import: nothing
+-- wayString -> Insert Into Existing Collection: select collection
+-- dataString -> Insert Into Existing Collection: select collection
+-- wayString -> Create New Collection: collectionName
+-- dataString -> Create New Collection: collectionName, but prefill by dataString
 
+-- function MapPinEnhancedImportDialogContentMixin:IsSerializedData(dataString)
+--     return MapPinEnhanced:IsSerializedData(dataString)
+-- end
 
+-- function MapPinEnhancedImportDialogContentMixin:PrefillCollectionName(dataString)
+--     if not self:IsSerializedData(dataString) then return end
+--     local data = MapPinEnhanced:DeserializeData(dataString) --[[@as CollectionInfo]]
+--     if not data or not data.name then return end
+--     -- self.collectionNameEditbox:SetText(data.name)
+-- end
 
 function MapPinEnhancedImportDialogContentMixin:Import()
     local text = self.textarea.editbox:GetText()
