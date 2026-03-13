@@ -8,7 +8,6 @@ MapPinEnhanced:RegisterGlobalAPI("RegisterGroup", function(groupInfo)
     return Groups:RegisterGroup(groupInfo):GetProxy()
 end)
 
-
 MapPinEnhanced:RegisterGlobalAPI("GetGroupsBySource", function(source)
     local groups = {}
     ---@param group MapPinEnhancedGroupMixin
