@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="modules.lua" />
-    <Include file="globals.lua" />
     <Include file="frame.lua" />
     <Include file="menu.lua" />
     <Include file="persistence.lua" />
@@ -18,7 +17,6 @@
     <Include file="secrets.lua" />
     <Include file="notify.lua" />
     <Include file="map.lua" />
-
 
     <!--@debug@-->
     <Frame
