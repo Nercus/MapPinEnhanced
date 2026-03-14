@@ -38,6 +38,7 @@ L["Open the export dialog to export your map pins to a string."] =
 "Open the export dialog to export your map pins to a string."
 L["Failed to place pin on the map. Please check if the coordinates are correct!"] =
 "Failed to place pin on the map. Please check if the coordinates are correct!"
+L["Click to edit"] = "Click to edit"
 
 -- TODO: remove these test strings
 L["test.checkbox_LABEL"] = "Test Checkbox"
