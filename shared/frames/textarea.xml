@@ -42,7 +42,42 @@
                 </Scripts>
             </EditBox>
         </ScrollChild>
+        <Frames>
+            <Frame parentKey="placeholderOverlay" setAllPoints="true" propagateMouseInput="Clicks">
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="bg" atlas="RaidFrame-Shield-Overlay"
+                            alpha="0.7" setAllPoints="true" desaturated="true" vertTile="true"
+                            horizTile="true" scale="2">
+                            <Gradient>
+                                <MinColor r="1" g="1" b="1" a="0" />
+                                <MaxColor r="1" g="1" b="1" a="0.8" />
+                            </Gradient>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="text" setAllPoints="true" justifyH="CENTER"
+                            justifyV="MIDDLE" inherits="GameFontNormal" alpha="0.75" />
+                    </Layer>
+                </Layers>
+                <Animations>
+                    <AnimationGroup parentKey="fadeIn"
+                        inherits="MapPinEnhancedAnimationFadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup parentKey="fadeOut"
+                        inherits="MapPinEnhancedAnimationFadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
+            </Frame>
+        </Frames>
         <Scripts>
+            <OnLoad method="OnLoad" />
             <OnMouseDown method="OnMouseDown" />
             <OnSizeChanged method="OnSizeChanged" />
         </Scripts>
