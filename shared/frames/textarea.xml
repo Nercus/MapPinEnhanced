@@ -47,11 +47,11 @@
                 <Layers>
                     <Layer level="BACKGROUND">
                         <Texture parentKey="bg" atlas="RaidFrame-Shield-Overlay"
-                            alpha="0.7" setAllPoints="true" desaturated="true" vertTile="true"
+                            setAllPoints="true" desaturated="true" vertTile="true"
                             horizTile="true" scale="2">
                             <Gradient>
-                                <MinColor r="1" g="1" b="1" a="0" />
-                                <MaxColor r="1" g="1" b="1" a="0.8" />
+                                <MinColor r="1" g="1" b="1" a="0.5" />
+                                <MaxColor r="1" g="1" b="1" a="1" />
                             </Gradient>
                         </Texture>
                     </Layer>
