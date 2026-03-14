@@ -96,7 +96,7 @@ end
 --- Initializes the radio button group.
 function MapPinEnhancedRadioGroupMixin:OnLoad()
     self.pool = CreateFramePool("CheckButton", self, "MapPinEnhancedRadioButtonTemplate")
-    self.orientation = "VERTICAL"
+    self.orientation = self.orientation or "vertical"
 end
 
 --- Gets the currently selected value.
