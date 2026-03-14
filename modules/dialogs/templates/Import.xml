@@ -4,7 +4,7 @@
     <Include file="Import.lua" />
     <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="500" y="460" />
+        <Size x="500" y="450" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER"
@@ -34,22 +34,21 @@
                     <Anchor point="BOTTOMLEFT" x="10" y="10" />
                 </Anchors>
             </Frame>
-            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
-                <Size x="100" y="30" />
-                <Anchors>
-                    <Anchor point="TOPRIGHT" relativeKey="$parent.textarea"
-                        relativePoint="BOTTOMRIGHT"
-                        x="-10" y="-10" />
-                </Anchors>
-            </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="30" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativeKey="$parent.importButton"
-                        relativePoint="BOTTOMRIGHT"
-                        x="0" y="-10" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="10" />
                 </Anchors>
             </Button>
+            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
+                <Size x="100" y="30" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.cancelButton"
+                        relativePoint="TOPLEFT"
+                        x="-10" y="0" />
+                </Anchors>
+            </Button>
+
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

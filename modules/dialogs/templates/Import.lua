@@ -20,6 +20,7 @@ end
 ---@field textarea MapPinEnhancedTextareaTemplate
 ---@field importTypeRadio MapPinEnhancedRadioGroupTemplate
 ---@field description FontString
+---@field dataString string?
 MapPinEnhancedImportDialogContentMixin = {}
 
 -- TODO: add logic for importing in here. Ignore providers. Following possibilities:
@@ -51,6 +52,24 @@ function MapPinEnhancedImportDialogContentMixin:Import()
     end
 end
 
+function MapPinEnhancedImportDialogContentMixin:PreparseImport(dataString)
+    if not dataString or dataString == "" then return end
+    local IsSerializedData = MapPinEnhanced:IsSerializedData(dataString)
+    if not IsSerializedData then return end
+    local data = MapPinEnhanced:DeserializeData(dataString) --[[@as CollectionInfo]]
+    -- TODO: preset the collection name when input field is implemented
+end
+
+function MapPinEnhancedImportDialogContentMixin:SetupTextArea()
+    self.textarea:Setup({
+        onChange = function(text)
+            self:PreparseImport(text)
+            self.dataString = text
+        end,
+        placeholder = L["Click to paste export string or slash commands here"],
+    })
+end
+
 ---@type MapPinEnhancedRadioGroupOption[]
 local importOptions = {
     { label = "Temporary Import",     value = "temporary" },
@@ -66,4 +85,5 @@ function MapPinEnhancedImportDialogContentMixin:OnLoad()
     self.importTypeRadio:SetActiveOption("temporary")
     self.description:SetText(L
         ["You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with )"])
+    self:SetupTextArea()
 end
