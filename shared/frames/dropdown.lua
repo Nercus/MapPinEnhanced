@@ -1,26 +1,19 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedDropdownTemplate : DropdownWithSteppersTemplate
----@field Dropdown DropdownButton -- the key has to be exactly "Dropdown" for the mixin to work properly
+---@class MapPinEnhancedDropdownTemplate : WowStyle2DropdownTemplate, DropdownButton
 ---@field activeValue any
 MapPinEnhancedDropdownMixin = {}
 
 
 function MapPinEnhancedDropdownMixin:OnLoad()
-    DropdownWithSteppersMixin.OnLoad(self);
-
-
-    self.Dropdown:SetScript("Onva")
+    WowStyle2DropdownMixin.OnLoad(self);
 end
 
 ---@class DropdownSetup
 ---@field options MapPinEnhancedRadioGroupOption[]
 ---@field onChange fun(value: any)
 ---@field init? fun(): any -- initial value can be nil if option has never been set before
-
--- TODO: add line indicator at the bottom with number of options / current selection
-
 
 ---@param formData DropdownSetup
 function MapPinEnhancedDropdownMixin:Setup(formData)
@@ -51,7 +44,7 @@ function MapPinEnhancedDropdownMixin:Setup(formData)
         })
     end
     local generatorFunction = MapPinEnhanced:GetGeneratorFunction(options)
-    self.Dropdown:SetupMenu(generatorFunction)
+    self:SetupMenu(generatorFunction)
     self:SetCallback(formData.onChange)
 end
 
