@@ -5,55 +5,90 @@
     <Include file="Dialog.lua" />
     <Frame name="MapPinEnhancedDialog"
         mixin="MapPinEnhancedDialogMixin"
-        movable="true" hidden="true" parent="UIParent" clipChildren="true">
+        movable="true" hidden="true" parent="UIParent">
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
         <Layers>
-            <Layer level="BACKGROUND" textureSubLevel="0">
-                <Texture setAllPoints="true"
-                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png"
-                    alpha="0.9">
-                    <TextureSliceMode mode="Stretched" />
-                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
-                </Texture>
-            </Layer>
-            <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture parentKey="backgroundArt"
-                    atlas="shop-bg-map-blue">
-                    <Size x="1058" y="600" />
-                    <Anchors>
-                        <Anchor point="RIGHT" x="-5" />
-                    </Anchors>
-                    <Gradient>
-                        <MinColor r="1" g="1" b="1" a="0.65" />
-                        <MaxColor r="1" g="1" b="1" a="1" />
-                    </Gradient>
-                </Texture>
-                <MaskTexture file="interface/masks/squaremask.blp" parentKey="backgroundMask"
-                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Anchors>
-                        <Anchor point="RIGHT" x="-5" />
-                    </Anchors>
-                    <MaskedTextures>
-                        <MaskedTexture childKey="backgroundArt" />
-                    </MaskedTextures>
-                </MaskTexture>
-            </Layer>
             <Layer level="BORDER">
                 <Texture
                     file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png">
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="TOPLEFT" x="-2" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
                     </Anchors>
                     <TextureSliceMode mode="Stretched" />
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
-
+            <Layer level="OVERLAY" textureSubLevel="0">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo.png" parentKey="logo">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="TOPLEFT" x="7" y="-7" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture file="interface/common/commonmaskcircle.blp"
+                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="TOPLEFT" x="7" y="-7" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="logo" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="1">
+                <Texture atlas="charactercreate-ring-metallight">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.logo" x="-11" y="11" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logo" x="11" y="-11" />
+                    </Anchors>
+                </Texture>
+            </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="background" setAllPoints="true">
+                <Layers>
+                    <Layer level="BACKGROUND" textureSubLevel="0">
+                        <Texture setAllPoints="true"
+                            file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png"
+                            alpha="0.9" parentKey="bg">
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="BACKGROUND" textureSubLevel="1">
+                        <Texture parentKey="backgroundArt"
+                            atlas="shop-bg-map-blue">
+                            <Size x="1058" y="600" />
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-5" />
+                            </Anchors>
+                            <Gradient>
+                                <MinColor r="1" g="1" b="1" a="0.65" />
+                                <MaxColor r="1" g="1" b="1" a="1" />
+                            </Gradient>
+                        </Texture>
+                        <MaskTexture file="interface/masks/squaremask.blp"
+                            parentKey="backgroundMask"
+                            vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-5" />
+                            </Anchors>
+                            <MaskedTextures>
+                                <MaskedTexture childKey="backgroundArt" />
+                            </MaskedTextures>
+                        </MaskTexture>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnLoad>
+                        self:SetFrameLevel(self:GetParent():GetFrameLevel() - 1)
+                    </OnLoad>
+                </Scripts>
+            </Frame>
             <Frame parentKey="header">
                 <Size x="1" y="25" />
                 <Anchors>

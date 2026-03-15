@@ -4,11 +4,16 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedDialogHeader : Frame
 ---@field title FontString
 
+---@class MapPinEnhancedDialogBackground : Frame
+---@field bg Texture
+---@field backgroundArt Texture
+---@field backgroundMask Texture
+
 -- base template for dialogs
 ---@class MapPinEnhancedDialog : Frame
 ---@field content DialogContentFrame
 ---@field header MapPinEnhancedDialogHeader
----@field backgroundMask Texture
+---@field background MapPinEnhancedDialogBackground
 MapPinEnhancedDialogMixin = {}
 
 ---@class Dialogs
@@ -41,7 +46,7 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
 
     local contentWidth, contentHeight = self.content:GetSize()
     self:SetSize(contentWidth + 20, contentHeight + 30)
-    self.backgroundMask:SetSize(contentWidth + 10, contentHeight + 20)
+    self.background.backgroundMask:SetSize(contentWidth + 10, contentHeight + 20)
     self:Show()
 end
 
