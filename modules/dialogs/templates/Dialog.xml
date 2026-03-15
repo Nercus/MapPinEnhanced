@@ -5,7 +5,7 @@
     <Include file="Dialog.lua" />
     <Frame name="MapPinEnhancedDialog"
         mixin="MapPinEnhancedDialogMixin"
-        movable="true" hidden="true" parent="UIParent">
+        movable="true" hidden="true" parent="UIParent" toplevel="true">
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
