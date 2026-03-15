@@ -61,7 +61,7 @@
                     </Layer>
                     <Layer level="BACKGROUND" textureSubLevel="1">
                         <Texture parentKey="backgroundArt"
-                            atlas="shop-bg-map-blue">
+                            atlas="shop-bg-map-green" desaturated="true">
                             <Size x="1058" y="600" />
                             <Anchors>
                                 <Anchor point="RIGHT" x="-5" />
