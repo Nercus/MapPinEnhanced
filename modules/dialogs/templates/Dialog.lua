@@ -39,7 +39,7 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
     self.content = content
     self.content:SetParent(self)
     self.content:ClearAllPoints()
-    self.content:SetPoint("TOP", self, "TOP", 0, -25)
+    self.content:SetPoint("TOP", self, "TOP", 0, -30)
     self.content:SetFrameStrata(self:GetFrameStrata())
     self.content:SetFrameLevel(self:GetFrameLevel() + 10)
     self.content:Show()
