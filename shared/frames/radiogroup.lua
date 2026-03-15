@@ -4,12 +4,16 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedRadioButtonTemplate : CheckButton
 ---@field value any
 ---@field text FontString
+MapPinEnhancedRadioButtonMixin = {}
+
+function MapPinEnhancedRadioButtonMixin:OnDisable()
+    self:SetAlpha(0.3)
+end
 
 ---@class MapPinEnhancedRadioGroupTemplate : Frame
 ---@field options MapPinEnhancedRadioGroupOption[]
 ---@field activeOption any
 MapPinEnhancedRadioGroupMixin = {}
-
 
 ---@class MapPinEnhancedRadioGroupOption
 ---@field label string -- The text displayed on the radio button
@@ -116,6 +120,20 @@ function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback)
             if triggerCallback and self.onChangeCallback then
                 self.onChangeCallback(value)
             end
+            return
+        end
+    end
+    error("Value not found in options: " .. tostring(value))
+end
+
+---@param value any
+---@param state boolean
+function MapPinEnhancedRadioGroupMixin:SetOptionDisabledState(value, state)
+    assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
+    ---@param button MapPinEnhancedRadioButtonTemplate
+    for button in self.pool:EnumerateActive() do
+        if button.value == value then
+            button:SetEnabled(not state)
             return
         end
     end

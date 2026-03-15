@@ -4,7 +4,7 @@
 
 
     <CheckButton name="MapPinEnhancedRadioButtonTemplate"
-        mixin="MapPinEnhancedThemeableMixin"
+        mixin="MapPinEnhancedRadioButtonMixin,MapPinEnhancedThemeableMixin"
         virtual="true" propagateMouseInput="Motion">
         <Size x="100" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="common-radiobutton-circle">
@@ -56,6 +56,9 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnDisable method="OnDisable" />
+        </Scripts>
     </CheckButton>
 
 
