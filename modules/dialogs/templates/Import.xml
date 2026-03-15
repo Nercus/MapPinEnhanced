@@ -4,7 +4,7 @@
     <Include file="Import.lua" />
     <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="500" y="450" />
+        <Size x="700" y="390" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER"
@@ -18,26 +18,65 @@
         </Layers>
         <Frames>
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
-                <Size x="1" y="300" />
+                <Size x="450" y="300" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.description"
                         relativePoint="BOTTOMLEFT" x="0" y="-20" />
-                    <Anchor point="TOPRIGHT" x="0" y="-20" relativeKey="$parent.description"
-                        relativePoint="BOTTOMRIGHT" />
                 </Anchors>
             </ScrollFrame>
             <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
                 <Size x="1" y="1" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.textarea"
-                        relativePoint="BOTTOMLEFT" x="0" y="-15" />
-                    <Anchor point="BOTTOMLEFT" x="10" y="10" />
+                        relativePoint="TOPRIGHT" x="10" y="0" />
                 </Anchors>
             </Frame>
+            <DropdownButton inherits="MapPinEnhancedDropdownTemplate" parentKey="collectionDropdown"
+                hidden="true">
+                <Size x="170" y="25" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio"
+                        relativePoint="BOTTOMLEFT" x="10" y="-10" />
+                </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
+                        parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
+            </DropdownButton>
+            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="newCollectionNameInput"
+                hidden="true">
+                <Size x="170" y="25" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio"
+                        relativePoint="BOTTOMLEFT" x="10" y="-10" />
+                </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
+                        parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
+            </EditBox>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="30" />
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="10" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="15" />
                 </Anchors>
             </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
@@ -48,7 +87,6 @@
                         x="-10" y="0" />
                 </Anchors>
             </Button>
-
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
