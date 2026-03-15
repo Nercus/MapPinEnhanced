@@ -56,6 +56,8 @@ function Tracker:RestoreTrackerVisibility()
     end
 end
 
+-- FIXME: when some groups are collapsed the height is not updated and blocks some cursor actions
+
 function Tracker:IsShown()
     local frame = self:GetTrackerFrame()
     return frame and frame:IsShown() or false
