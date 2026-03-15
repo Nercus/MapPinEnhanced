@@ -18,6 +18,8 @@ local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local WAY_COMMAND_PATTERN = "/way %s %.2f %.2f %s"
 local PREFIX = "!MPH!"
+MapPinEnhanced.PREFIX = PREFIX
+
 
 local MAPID_MAPTYPE_OVERRIDE = {
     [101] = Enum.UIMapType.World,  -- Outland

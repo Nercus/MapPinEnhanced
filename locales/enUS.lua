@@ -39,6 +39,12 @@ L["Open the export dialog to export your map pins to a string."] =
 L["Failed to place pin on the map. Please check if the coordinates are correct!"] =
 "Failed to place pin on the map. Please check if the coordinates are correct!"
 L["Click to edit"] = "Click to edit"
+L["You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with %s)"] =
+"You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with %s)"
+L["Temporary Import"] = "Temporary Import"
+L["Import to Collection"] = "Import to Collection"
+L["Click to paste export string or slash commands here"] = "Click to paste export string or slash commands here"
+L["Import"] = "Import"
 
 -- TODO: remove these test strings
 L["test.checkbox_LABEL"] = "Test Checkbox"

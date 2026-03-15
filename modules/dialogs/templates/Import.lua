@@ -72,8 +72,8 @@ end
 
 ---@type MapPinEnhancedRadioGroupOption[]
 local importOptions = {
-    { label = "Temporary Import",     value = "temporary" },
-    { label = "Import to Collection", value = "collection" },
+    { label = L["Temporary Import"],     value = "temporary" },
+    { label = L["Import to Collection"], value = "collection" },
 }
 
 function MapPinEnhancedImportDialogContentMixin:OnLoad()
@@ -83,7 +83,8 @@ function MapPinEnhancedImportDialogContentMixin:OnLoad()
 
     self.importTypeRadio:SetOptions(importOptions)
     self.importTypeRadio:SetActiveOption("temporary")
-    self.description:SetText(L
-        ["You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with )"])
+    local descriptionText = L
+        ["You can import pins or collections by pasting the either multiple slash commands or a Map Pin Enhanced export string (starting with %s)"]
+    self.description:SetText(string.format(descriptionText, MapPinEnhanced.PREFIX))
     self:SetupTextArea()
 end
