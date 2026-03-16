@@ -1,8 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
---TODO: should be moved to the core instead
---TODO: Theme change should require a reload of the UI
+-- NOTE: Theme change will require a reload of the UI
 
 ---@class Theme
 local Theme = MapPinEnhanced:GetModule("Theme")
@@ -28,7 +27,6 @@ function Theme:SetActiveTheme(theme)
     end
 end
 
--- ----------------------------- Themeable Mixin ---------------------------- --
 ---@class MapPinEnhancedThemeableTemplate
 ---@field textures table<AVAILABLE_THEMES, table<Texture, table<string, string>>>
 MapPinEnhancedThemeableMixin = {}

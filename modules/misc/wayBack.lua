@@ -4,8 +4,6 @@ local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
 
----------------------------------------------------------------------------
-
 MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
     local currentMapID = C_Map.GetBestMapForUnit("player")
     if not currentMapID then

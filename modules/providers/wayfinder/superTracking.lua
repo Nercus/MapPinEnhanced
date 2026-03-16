@@ -118,15 +118,15 @@ local function OnSuperTrackingChanged()
     if not x or not y or not mapID then
         return
     end
-    -- TODO: implement a display only mode into the floating diamond wayfinder
-    -- Wayfinders:SetWayfinderData({
-    --     mapID = mapID,
-    --     x = x,
-    --     y = y,
-    --     title = title,
-    --     texture = atlasName,
-    --     usesAtlas = true,
-    -- })
+    -- TODO: implement a display only mode into the floating diamond wayfinder to not set a userwaypoint if a trackable item is detected
+    Wayfinders:SetWayfinderData({
+        mapID = mapID,
+        x = x,
+        y = y,
+        title = title,
+        texture = atlasName,
+        usesAtlas = true,
+    })
 end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
