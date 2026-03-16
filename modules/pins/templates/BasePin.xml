@@ -26,7 +26,6 @@
                         </AnimationGroup>
                     </Animations>
                 </Texture>
-
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
                 <Texture parentKey="shadow"
