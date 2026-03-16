@@ -43,7 +43,7 @@ function MapPinEnhancedDropdownMixin:Setup(formData)
             data = option.value,
         })
     end
-    local generatorFunction = MapPinEnhanced:GetGeneratorFunction(options)
+    local generatorFunction = MapPinEnhanced:GetGeneratorFunction(menuEntries)
     self:SetupMenu(generatorFunction)
     self:SetCallback(formData.onChange)
 end
