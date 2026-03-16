@@ -28,6 +28,11 @@ function Collections:CreateCollection(name)
     assert(name, "Collections:CreateCollection: name is nil")
     assert(type(name) == "string", "Collections:CreateCollection: name must be a string")
 
+    local existingCollection = self:GetCollectionByName(name)
+    if existingCollection then
+        return existingCollection
+    end
+
     local collectionsPool = self:GetObjectPool()
     local collection = collectionsPool:Acquire()
     collection:SetName(name)
