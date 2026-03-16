@@ -10,7 +10,7 @@
             <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
         </Anchors>
         <Frames>
-            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin">
+            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="PARENT">
                 <Size x="40" y="40" />
                 <Anchors>
                     <Anchor point="CENTER" />
@@ -54,10 +54,35 @@
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
+                    <Animations>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                            <KeyValues>
+                                <KeyValue key="showOnPlay" value="true" />
+                            </KeyValues>
+                        </AnimationGroup>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
+                            parentKey="fadeOut">
+                            <KeyValues>
+                                <KeyValue key="hideOnFinished" value="true" />
+                            </KeyValues>
+                        </AnimationGroup>
+                    </Animations>
                 </Texture>
             </Layer>
         </Layers>
-
+        <Animations>
+            <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                <KeyValues>
+                    <KeyValue key="showOnPlay" value="true" />
+                </KeyValues>
+            </AnimationGroup>
+            <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
+                parentKey="fadeOut">
+                <KeyValues>
+                    <KeyValue key="hideOnFinished" value="true" />
+                </KeyValues>
+            </AnimationGroup>
+        </Animations>
         <Scripts>
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />

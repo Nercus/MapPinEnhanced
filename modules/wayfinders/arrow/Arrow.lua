@@ -8,6 +8,7 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 ---@field frame MapPinEnhancedFloatingArrowTemplate
 local MapPinEnhancedWayfinderArrow = {}
 
+---@return MapPinEnhancedFloatingArrowTemplate
 function MapPinEnhancedWayfinderArrow:GetFrame()
     if not self.frame then
         self.frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingArrowTemplate")
@@ -19,25 +20,25 @@ end
 function MapPinEnhancedWayfinderArrow:Init(data)
     local frame = self:GetFrame()
     if not data or not data.mapID or not data.x or not data.y then
-        frame:Hide()
+        self.frame.fadeIn:Stop()
+        self.frame.fadeOut:Play()
         return
     end
     frame:SetLocation(data.mapID, data.x, data.y)
     frame:SetColor(data.color)
     frame:SetTitle(data.title)
-    frame:Show()
+    frame.fadeOut:Stop()
+    frame.fadeIn:Play()
 end
 
 function MapPinEnhancedWayfinderArrow:Enable()
-    local frame = self:GetFrame()
+    self:GetFrame()
 end
 
 function MapPinEnhancedWayfinderArrow:Disable()
     if self.frame then
-        self.frame:Hide()
-        self.frame:ClearAllPoints()
-        self.frame:SetParent(nil)
-        self.frame = nil
+        self.frame.fadeIn:Stop()
+        self.frame.fadeOut:Play()
     end
 end
 

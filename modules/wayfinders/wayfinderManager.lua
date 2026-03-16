@@ -11,6 +11,9 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 ---@field Init fun(self: MapPinEnhancedWayfinder, data: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
+---@field SetTitle fun(self: MapPinEnhancedWayfinder, title: string) sets the wayfinder title, if the wayfinder supports it
+---@field SetColor fun(self: MapPinEnhancedWayfinder, color: string) sets the wayfinder color, if the wayfinder supports it
+---@field SetTexture fun(self: MapPinEnhancedWayfinder, texture: string, usesAtlas: boolean) sets the wayfinder texture, if the wayfinder supports it
 Wayfinders.activeWayfinders = {}
 
 ---@enum WayfinderType
@@ -40,7 +43,32 @@ function Wayfinders:SetWayfinderData(data)
     end
 end
 
---- Set the wayfinder data for a specific wayfinder, used when enabling a wayfinder after pin data has already been set
+---@param title string
+function Wayfinders:OverrideWayfinderTitle(title)
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:SetTitle(title)
+    end
+    self.cachedData.title = title
+end
+
+---@param color string
+function Wayfinders:OverrideWayfinderColor(color)
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:SetColor(color)
+    end
+    self.cachedData.color = color
+end
+
+---@param texture string
+---@param usesAtlas boolean
+function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:SetTexture(texture, usesAtlas)
+    end
+    self.cachedData.texture = texture
+    self.cachedData.usesAtlas = usesAtlas
+end
+
 ---@param wayfinder MapPinEnhancedWayfinder
 function Wayfinders:RefreshWayfinder(wayfinder)
     if self.cachedData then
@@ -74,6 +102,7 @@ function Wayfinders:EnableWayfinder(wayfinderType)
         error("Wayfinders type not registered: " .. tostring(wayfinderType))
     end
     wayfinder:Enable()
+    self:RefreshWayfinder(wayfinder)
     table.insert(self.activeWayfinders, wayfinder)
 end
 
