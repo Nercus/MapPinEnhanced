@@ -14,7 +14,7 @@ local MapPinEnhancedWayfinderFloating = {}
 
 ---@param frameType WayfinderFloatingFrameType
 function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
-    -- TODO: save var here
+    -- TODO: hook this up to an option
     if self.frameType == frameType then return end
     self:GetFrame()
     self:ShowFrame()
