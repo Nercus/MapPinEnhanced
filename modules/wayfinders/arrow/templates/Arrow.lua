@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeIn Animation
 ---@field fadeOut Animation
 
-
 ---@class MapPinEnhancedFloatingArrowTemplate : Frame
 ---@field needle MapPinEnhancedFloatingArrowNeedle
 ---@field pin MapPinEnhancedBasePinTemplate
@@ -14,11 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field eta FontString
 ---@field fadeIn Animation
 ---@field fadeOut Animation
----@field needleX number | nil
----@field needleY number | nil
 ---@field needleRotation number | nil
----@field newNeedleX number | nil
----@field newNeedleY number | nil
 ---@field newNeedleRotation number | nil
 ---@field displayType 'close' | 'far' | nil
 MapPinEnhancedFloatingArrowMixin = {}
@@ -72,7 +67,11 @@ function MapPinEnhancedFloatingArrowMixin:SetDisplayType(displayType)
     end
 end
 
-function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition()
+local lastUpdate = 0
+function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition(elapsed)
+    if not self.targetMapID or not self.targetX or not self.targetY then return end
+    if elapsed and lastUpdate + 0.1 > GetTime() then return end
+    lastUpdate = GetTime()
     local x, y, mapID = self.targetX, self.targetY, self.targetMapID
     if not mapID or not x or not y then return end
 
@@ -85,34 +84,8 @@ function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition()
     local relativeAngle = worldAngle - facing
     relativeAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
 
-    self.newNeedleX = mathSin(relativeAngle) * ORBIT_RADIUS
-    self.newNeedleY = mathCos(relativeAngle) * ORBIT_RADIUS
     self.newNeedleRotation = relativeAngle
     self:UpdateNeedleAlpha()
-end
-
-local OFFSET_DELTA = 0.05
-
-function MapPinEnhancedFloatingArrowMixin:AnimateNeedlePosition(elapsed)
-    if not self.displayType or self.displayType == "close" then return end
-
-    local currentX, currentY = self.needleX or 0, self.needleY or 0
-    local targetX, targetY = self.newNeedleX or 0, self.newNeedleY or 0
-
-    local newX = DeltaLerp(currentX, targetX, .1, elapsed)
-    local newY = DeltaLerp(currentY, targetY, .1, elapsed)
-
-    self.needleX = newX
-    self.needleY = newY
-
-    local lastX = self.lastAppliedNeedleX
-    local lastY = self.lastAppliedNeedleY
-    if not lastX or not lastY or mathAbs(newX - lastX) > OFFSET_DELTA or mathAbs(newY - lastY) > OFFSET_DELTA then
-        self.needle:ClearAllPoints()
-        self.needle:SetPoint("CENTER", self, "CENTER", newX, newY)
-        self.lastAppliedNeedleX = newX
-        self.lastAppliedNeedleY = newY
-    end
 end
 
 function MapPinEnhancedFloatingArrowMixin:AnimateNeedleRotation(elapsed)
@@ -136,14 +109,14 @@ function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha()
     if mathAbs(relativeAngle) < 0.2 then
         self.needle:SetAlpha(1)
     else
-        self.needle:SetAlpha(0.5)
+        self.needle:SetAlpha(0.4)
     end
 end
 
 ---@param elapsed number
 function MapPinEnhancedFloatingArrowMixin:OnUpdate(elapsed)
+    self:UpdateNeedlePosition(elapsed)
     if self.displayType == "close" then return end
-    self:AnimateNeedlePosition(elapsed)
     self:AnimateNeedleRotation(elapsed)
 end
 
@@ -156,9 +129,7 @@ function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarge
         self.eta:SetText("")
     end
     self.distanceValue = distance
-    self:UpdateNeedlePosition()
-
-    if distance and distance < 100 then
+    if distance and distance < 50 then
         self:SetDisplayType("close")
     else
         self:SetDisplayType("far")
@@ -189,14 +160,8 @@ end
 
 function MapPinEnhancedFloatingArrowMixin:Reset()
     self:SetDisplayType("far")
-    self.needleX = nil
-    self.needleY = nil
     self.needleRotation = nil
-    self.newNeedleX = nil
-    self.newNeedleY = nil
     self.newNeedleRotation = nil
-    self.lastAppliedNeedleX = nil
-    self.lastAppliedNeedleY = nil
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnHide()

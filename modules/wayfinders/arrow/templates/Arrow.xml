@@ -49,11 +49,7 @@
             <Layer level="BACKGROUND">
                 <Texture parentKey="needle"
                     file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/arrow.png"
-                    desaturated="true">
-                    <Size x="70" y="70" />
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
+                    desaturated="true" setAllPoints="true">
                     <Animations>
                         <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
                             <KeyValues>
