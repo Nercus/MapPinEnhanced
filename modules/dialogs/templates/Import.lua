@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Collections = MapPinEnhanced:GetModule("Collections")
+local Groups = MapPinEnhanced:GetModule("Groups")
 
 function Dialogs:GetImportContent()
     if not self.importDialog then
@@ -26,6 +27,7 @@ end
 
 ---@class MapPinEnhancedImportDialogContentTemplate : DefaultPanelFlatTemplate
 ---@field importButton MapPinEnhancedButtonTemplate
+---@field cancelButton MapPinEnhancedButtonTemplate
 ---@field textarea MapPinEnhancedTextareaTemplate
 ---@field importTypeRadio MapPinEnhancedRadioGroupTemplate
 ---@field collectionDropdown MapPinEnhancedImportDialogContentCollectionDropdown
@@ -34,32 +36,108 @@ end
 ---@field dataString string?
 MapPinEnhancedImportDialogContentMixin = {}
 
--- TODO: add logic for importing in here. Ignore providers. Following possibilities:
--- wayString -> Temporary Import: nothing
--- dataString -> Temporary Import: nothing
--- wayString -> Insert Into Existing Collection: select collection
--- dataString -> Insert Into Existing Collection: select collection
--- wayString -> Create New Collection: collectionName
--- dataString -> Create New Collection: collectionName, but prefill by dataString
+---@type MapPinEnhancedRadioGroupOption[]
+local importOptions = {
+    { label = L["Temporary import"],           value = "temporary" },
+    { label = L["Create new collection"],      value = "create_new_collection" },
+    { label = L["Add to existing collection"], value = "add_to_collection" },
+}
 
--- function MapPinEnhancedImportDialogContentMixin:IsSerializedData(dataString)
---     return MapPinEnhanced:IsSerializedData(dataString)
--- end
+---@param data CollectionInfo | pinData[]
+---@param dataType "collection" | "pins"
+function MapPinEnhancedImportDialogContentMixin:ImportTemporary(data, dataType)
+    local group = Groups:GetGroupByName(L["Temporary Import"]) -- this is a default group and always exists
+    if not group then
+        return
+    end
+    if dataType == "collection" then
+        local pinData = data.pins
+        group:AddMultiplePins(pinData)
+    elseif dataType == "pins" then
+        group:AddMultiplePins(data)
+    end
+end
 
--- function MapPinEnhancedImportDialogContentMixin:PrefillCollectionName(dataString)
---     if not self:IsSerializedData(dataString) then return end
---     local data = MapPinEnhanced:DeserializeData(dataString) --[[@as CollectionInfo]]
---     if not data or not data.name then return end
---     -- self.collectionNameEditbox:SetText(data.name)
--- end
+---@param data CollectionInfo | pinData[]
+---@param dataType "collection" | "pins"
+---@param collectionName string
+function MapPinEnhancedImportDialogContentMixin:ImportToNewCollection(data, dataType, collectionName)
+    local collection = Collections:CreateCollection(collectionName)
+    if not collection then
+        return
+    end
+    if dataType == "collection" then
+        collection:SetIcon(data.icon)
+        collection:AddMultiplePins(data.pins)
+    elseif dataType == "pins" then
+        collection:AddMultiplePins(data)
+    end
+end
+
+---@param data CollectionInfo | pinData[]
+---@param dataType "collection" | "pins"
+---@param collectionName string
+function MapPinEnhancedImportDialogContentMixin:ImportToExistingCollection(data, dataType, collectionName)
+    local collection = Collections:GetCollectionByName(collectionName)
+    if not collection then
+        return
+    end
+    if dataType == "collection" then
+        collection:AddMultiplePins(data.pins)
+    elseif dataType == "pins" then
+        collection:AddMultiplePins(data)
+    end
+end
 
 function MapPinEnhancedImportDialogContentMixin:UpdateImportButtonDisabledState()
     local text = self.textarea.editbox:GetText()
-    self.importButton:SetEnabled(text and text ~= "")
+    local textEmpty = not text or text == ""
+
+    if self.selectedImportType == "create_new_collection" then
+        self.importButton:SetEnabled(not textEmpty and self.newCollectionName and self.newCollectionName ~= "")
+    elseif self.selectedImportType == "add_to_collection" then
+        self.importButton:SetEnabled(not textEmpty and self.selectedCollection and self.selectedCollection ~= "")
+    else
+        self.importButton:SetEnabled(not textEmpty)
+    end
 end
 
-function MapPinEnhancedImportDialogContentMixin:Import()
-    -- TODO: implement import
+---@param data CollectionInfo | pinData[]
+---@param dataType "collection" | "pins"
+function MapPinEnhancedImportDialogContentMixin:Import(data, dataType)
+    if self.selectedImportType == "temporary" then
+        self:ImportTemporary(data, dataType)
+    elseif self.selectedImportType == "create_new_collection" then
+        if not self.newCollectionName or self.newCollectionName == "" then return end
+        self:ImportToNewCollection(data, dataType, self.newCollectionName)
+    elseif self.selectedImportType == "add_to_collection" then
+        if not self.selectedCollection or self.selectedCollection == "" then return end
+        self:ImportToExistingCollection(data, dataType, self.selectedCollection)
+    end
+end
+
+function MapPinEnhancedImportDialogContentMixin:StartImport()
+    if not self.dataString or self.dataString == "" then return end
+
+    if MapPinEnhanced:IsSerializedData(self.dataString) then
+        local data = MapPinEnhanced:DeserializeData(self.dataString) --[[@as CollectionInfo | pinData[] ]]
+        if not data then return end
+        local dataType = data.pins and "collection" or "pins"
+        self:Import(data, dataType)
+    else
+        local pins = {}
+        for line in self.dataString:gmatch("[^\n]+") do
+            line = line:match("^%s*(.-)%s*$")
+            if line ~= "" then
+                local linePins = MapPinEnhanced:DeserializeWayLine(line)
+                for _, pin in ipairs(linePins) do
+                    table.insert(pins, pin)
+                end
+            end
+        end
+        if #pins == 0 then return end
+        self:Import(pins, "pins")
+    end
 end
 
 function MapPinEnhancedImportDialogContentMixin:PreparseImport(dataString)
@@ -68,7 +146,7 @@ function MapPinEnhancedImportDialogContentMixin:PreparseImport(dataString)
     if not IsSerializedData then return end
     local data = MapPinEnhanced:DeserializeData(dataString) --[[@as CollectionInfo]]
     if not data or not data.name then return end
-    self.newCollectionNameInput:SetText(data.name)
+    self.newCollectionNameInput:SetValue(data.name, true)
 end
 
 function MapPinEnhancedImportDialogContentMixin:SetupTextArea()
@@ -76,17 +154,11 @@ function MapPinEnhancedImportDialogContentMixin:SetupTextArea()
         onChange = function(text)
             self:PreparseImport(text)
             self.dataString = text
+            self:UpdateImportButtonDisabledState()
         end,
         placeholder = L["Click to paste export string or slash commands here"],
     })
 end
-
----@type MapPinEnhancedRadioGroupOption[]
-local importOptions = {
-    { label = L["Temporary import"],           value = "temporary" },
-    { label = L["Create new collection"],      value = "create_new_collection" },
-    { label = L["Add to existing collection"], value = "add_to_collection" },
-}
 
 function MapPinEnhancedImportDialogContentMixin:SetCollectionNameInputVisibility(show)
     local isShown = self.newCollectionNameInput:IsShown()
@@ -132,6 +204,7 @@ function MapPinEnhancedImportDialogContentMixin:UpdateOptionDisabledState()
             options = collectionOptions,
             onChange = function(value)
                 self.selectedCollection = value
+                self:UpdateImportButtonDisabledState()
             end,
         })
     end
@@ -143,6 +216,7 @@ function MapPinEnhancedImportDialogContentMixin:SetupTypeRadioGroup()
         onChange = function(value)
             self.selectedImportType = value
             self:UpdateImportTypeSelection()
+            self:UpdateImportButtonDisabledState()
         end,
         init = function()
             return "temporary"
@@ -154,14 +228,19 @@ function MapPinEnhancedImportDialogContentMixin:SetupNewCollectionInput()
     self.newCollectionNameInput:Setup({
         onChange = function(text)
             self.newCollectionName = text
+            self:UpdateImportButtonDisabledState()
         end,
     })
     self.newCollectionNameInput:SetPlaceholderText(L["Enter collection name"])
 end
 
 function MapPinEnhancedImportDialogContentMixin:OnLoad()
+    self.selectedImportType = "temporary"
     self.importButton:SetScript("OnClick", function()
-        self:Import()
+        self:StartImport()
+    end)
+    self.cancelButton:SetScript("OnClick", function()
+        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.IMPORT)
     end)
 
     local descriptionText = L
