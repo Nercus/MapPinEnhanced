@@ -238,6 +238,7 @@ function MapPinEnhancedImportDialogContentMixin:OnLoad()
     self.selectedImportType = "temporary"
     self.importButton:SetScript("OnClick", function()
         self:StartImport()
+        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.IMPORT)
     end)
     self.cancelButton:SetScript("OnClick", function()
         Dialogs:HideDialog(Dialogs.DIALOG_TYPES.IMPORT)
