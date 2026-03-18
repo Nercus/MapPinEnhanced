@@ -6,11 +6,9 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
----@field frame MapPinEnhancedFloatingSimpleTemplate | MapPinEnhancedFloatingModernTemplate
+---@field frames {modern: MapPinEnhancedFloatingModernTemplate, simple: MapPinEnhancedFloatingSimpleTemplate}
+---@field frameType WayfinderFloatingFrameType | nil
 local MapPinEnhancedWayfinderFloating = {}
-
--- TODO: the distant diamond should scale based on distance
--- TODO: use the generic-frame-chamfered-12d-2o atlas to use as title background
 
 ---@param frameType WayfinderFloatingFrameType
 function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
@@ -26,25 +24,22 @@ local templates = {
     simple = "MapPinEnhancedFloatingSimpleTemplate",
 }
 
+local shouldReactToUserWaypointUpdate = false
+
+---@return MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
     ---@type WayfinderFloatingFrameType
     local currentType = "modern" -- TODO: get the var here
 
-    if self.frame then
-        if self.frameType == currentType then
-            return self.frame
-        else
-            self.frame:ClearAllPoints()
-            self.frame:SetParent(nil)
-            self.frame = nil
-        end
+    if self.frames and self.frames[currentType] then
+        return self.frames[currentType]
     end
-
-    local template = templates[currentType] or templates.modern
-    self.frame = CreateFrame("Frame", nil, UIParent, template)
-    self.frameType = currentType
-
-    return self.frame
+    local template = templates[currentType]
+    if not template then
+        error("Invalid frame type: " .. tostring(currentType))
+    end
+    local frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloatingFrame" .. currentType, nil, template)
+    return frame
 end
 
 function MapPinEnhancedWayfinderFloating:ShowFrame()
@@ -53,8 +48,9 @@ function MapPinEnhancedWayfinderFloating:ShowFrame()
 end
 
 function MapPinEnhancedWayfinderFloating:HideFrame()
-    if self.frame then
-        self.frame:Hide()
+    local frame = self:GetFrame()
+    if frame then
+        frame:Hide()
     end
 end
 
@@ -81,10 +77,13 @@ function MapPinEnhancedWayfinderFloating:SetUserWaypoint(x, y, mapID)
     end
 
     local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
+    shouldReactToUserWaypointUpdate = true
     C_Map.SetUserWaypoint(uiMapPoint)
 end
 
 local function onUserwaypointUpdated()
+    if not shouldReactToUserWaypointUpdate then return end
+    shouldReactToUserWaypointUpdate = false
     local hasUserWaypoint = C_Map.HasUserWaypoint()
     if not hasUserWaypoint then return end
     C_Timer.After(0, function()
@@ -96,17 +95,9 @@ end
 
 function MapPinEnhancedWayfinderFloating:Reset()
     self.data = nil
+    shouldReactToUserWaypointUpdate = false
     C_Map.ClearUserWaypoint()
-    if self.frame then
-        self.frame:ClearAllPoints()
-        self.frame:SetParent(nil)
-        self.frame = nil
-        self.frameType = nil
-    end
-end
-
-function MapPinEnhancedWayfinderFloating:OnDistanceUpdate(distance, timeToTarget)
-    self.frame:OnDistanceUpdate(distance, timeToTarget)
+    self:HideFrame()
 end
 
 ---@param wayfinderData WayfinderData | nil
@@ -166,23 +157,14 @@ function MapPinEnhancedWayfinderFloating:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Enable()
-    self.distanceCallback = function(distance, timeToTarget)
-        self:OnDistanceUpdate(distance, timeToTarget)
-    end
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
     self:SetOverride()
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
-    if self.frame then
-        self.frame:ClearAllPoints()
-        self.frame:SetParent(nil)
-        self.frame = nil
-        self.frameType = nil
+    shouldReactToUserWaypointUpdate = false
+    local frame = self:GetFrame()
+    if frame then
+        frame:Hide()
     end
     C_Map.ClearUserWaypoint()
     OverrideSuperTrackedAlphaState(false)
