@@ -104,7 +104,7 @@ function Providers:GetSuperTrackingInfo()
             end
         end
     end
-    -- TODO: add housing entries
+    -- TODO: add housing entries: use C_HousingNeighborhood.GetNeighborhoodMapData
     return x, y, mapID, title, atlasName, pinType, typeID
 end
 
