@@ -45,7 +45,6 @@ function MapPinEnhancedFloatingArrowMixin:SetTitle(title)
     self.title:SetText(title)
 end
 
-local ORBIT_RADIUS = 30
 function MapPinEnhancedFloatingArrowMixin:SetLocation(mapID, x, y)
     self.targetMapID = mapID
     self.targetX = x
