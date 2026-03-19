@@ -14,7 +14,7 @@ L["Tracker"] = "Tracker"
 L["Maps"] = "Maps"
 L["Options"] = "Options"
 L["Import/Export"] = "Import/Export"
-L["Miscellaneous"] = "Miscellaneous"
+
 L["Map Pin"] = "Map Pin"
 L["Uncategorized Pins"] = "Uncategorized Pins"
 L["Temporary Import"] = "Temporary Import"
@@ -48,27 +48,28 @@ L["Click to paste export string or slash commands here"] = "Click to paste expor
 L["Import"] = "Import"
 L["Enter collection name"] = "Enter collection name"
 
--- TODO: remove these test strings
-L["test.checkbox_LABEL"] = "Test Checkbox"
-L["test.checkbox_DESCRIPTION"] = "Description for the test checkbox"
-L["test.colorpicker_LABEL"] = "Test Colorpicker"
-L["test.colorpicker_DESCRIPTION"] = "Description for the test colorpicker"
-L["test.input_LABEL"] = "Test Input"
-L["test.input_DESCRIPTION"] = "Description for the test input"
-L["test.radiogroup_LABEL"] = "Test Radiogroup"
-L["test.radiogroup_DESCRIPTION"] = "Description for the test radiogroup"
-L["test.toggle_LABEL"] = "Test Toggle"
-L["test.toggle_DESCRIPTION"] = "Description for the test toggle"
-L["test.slider_LABEL"] = "Test Slider"
-L["test.slider_DESCRIPTION"] = "Description for the test slider"
+
+------------------------------ Options ------------------------------
+L["Miscellaneous"] = "Miscellaneous"
+L["Miscellaneous.Coords"] = "Coordinates Display"
+L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"
+L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Toggle the on-screen display of your current coordinates"
+L["Miscellaneous.Coords.Lock_LABEL"] = "Lock Coordinates Display"
+L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Toggle whether the coordinates display can be moved or not."
+
+L["Wayfinder"] = "Wayfinder"
+L["Wayfinder.Floating"] = "Floating"
+L["Wayfinder.Floating.Enable_LABEL"] = "Enable Floating Wayfinder"
+L["Wayfinder.Floating.Enable_DESCRIPTION"] =
+"Toggle the display of a floating wayfinder showing the direction and distance to the next wayfinder in your current route."
+L["Wayfinder.Floating.Style_LABEL"] = "Floating Wayfinder Style"
+L["Wayfinder.Floating.Style_DESCRIPTION"] =
+"Change the style of the floating wayfinder. The modern style shows more information, whereas the simple style is more compact and allows for more support with other addons."
+L["Modern"] = "Modern"
+L["Simple"] = "Simple"
 
 
-L["test.checkbox2_LABEL"] = "Test Checkbox2"
-L["test.checkbox2_DESCRIPTION"] = "Description for the test checkbox2"
-L["test.checkbox3_LABEL"] = "Test Checkbox3"
-L["test.checkbox3_DESCRIPTION"] = "Description for the test checkbox3"
-L["test.checkbox4_LABEL"] = "Test Checkbox4"
-L["test.checkbox4_DESCRIPTION"] = "Description for the test checkbox4"
-L["test.checkbox5_LABEL"] = "Test Checkbox5"
-L["test.checkbox5_DESCRIPTION"] = "Description for the test checkbox5"
-L["test.group1_GROUPLABEL"] = "Group A"
+L["Wayfinder.Arrow"] = "Arrow"
+L["Wayfinder.Arrow.Enable_LABEL"] = "Enable Arrow Wayfinder"
+L["Wayfinder.Arrow.Enable_DESCRIPTION"] =
+"Toggle the display of an arrow wayfinder on the world map showing the direction to the next wayfinder in your current route."
