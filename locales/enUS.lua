@@ -51,25 +51,25 @@ L["Enter collection name"] = "Enter collection name"
 
 ------------------------------ Options ------------------------------
 L["Miscellaneous"] = "Miscellaneous"
-L["Miscellaneous.Coords"] = "Coordinates Display"
+L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"
 L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Toggle the on-screen display of your current coordinates"
 L["Miscellaneous.Coords.Lock_LABEL"] = "Lock Coordinates Display"
 L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Toggle whether the coordinates display can be moved or not."
 
 L["Wayfinder"] = "Wayfinder"
-L["Wayfinder.Floating"] = "Floating"
+L["Wayfinder.Floating_GROUPLABEL"] = "Floating"
 L["Wayfinder.Floating.Enable_LABEL"] = "Enable Floating Wayfinder"
 L["Wayfinder.Floating.Enable_DESCRIPTION"] =
-"Toggle the display of a floating wayfinder showing the direction and distance to the next wayfinder in your current route."
+"Show a floating wayfinder on your screen."
 L["Wayfinder.Floating.Style_LABEL"] = "Floating Wayfinder Style"
 L["Wayfinder.Floating.Style_DESCRIPTION"] =
-"Change the style of the floating wayfinder. The modern style shows more information, whereas the simple style is more compact and allows for more support with other addons."
+"Choose the floating wayfinder style. Modern shows more info, Simple is more compact and works better with other addons."
 L["Modern"] = "Modern"
 L["Simple"] = "Simple"
 
 
-L["Wayfinder.Arrow"] = "Arrow"
+L["Wayfinder.Arrow_GROUPLABEL"] = "Arrow"
 L["Wayfinder.Arrow.Enable_LABEL"] = "Enable Arrow Wayfinder"
 L["Wayfinder.Arrow.Enable_DESCRIPTION"] =
-"Toggle the display of an arrow wayfinder on the world map showing the direction to the next wayfinder in your current route."
+"Show an arrow on the world map pointing to the next waypoint in your route."

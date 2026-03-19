@@ -89,9 +89,9 @@
                             <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate"
                                 parentKey="Miscellaneous">
                                 <Anchors>
-                                    <Anchor point="TOPLEFT" relativeTo="Wayfinder"
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Wayfinder"
                                         relativePoint="BOTTOMLEFT" x="0" y="-8" />
-                                    <Anchor point="TOPRIGHT" relativeTo="Wayfinder"
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Wayfinder"
                                         relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>

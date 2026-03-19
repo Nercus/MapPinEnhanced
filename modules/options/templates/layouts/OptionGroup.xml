@@ -6,7 +6,7 @@
         mixin="MapPinEnhancedOptionGroupMixin">
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormalLarge" justifyH="LEFT"
+                <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT"
                     justifyV="TOP">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" y="5" />

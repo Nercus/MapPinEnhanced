@@ -55,6 +55,9 @@ function Options:GetOptionValue(key)
     return frame:GetValue()
 end
 
+local addonLoaded = false
+local cachedCallbacks = {}
+
 ---@param key string
 ---@param callback function
 ---@return fun() unsubscribe Call to remove this callback
@@ -64,9 +67,25 @@ function Options:SubscribeToOptionChanges(key, callback)
         error("Option with key " .. key .. " not found")
     end
     assert(frame.OnChange, "Option frame must have a OnChange method")
-    callback(self:GetOptionInitValue(key))
+
+    if not addonLoaded then
+        table.insert(cachedCallbacks, function()
+            callback(self:GetOptionInitValue(key))
+        end)
+    else
+        callback(self:GetOptionInitValue(key))
+    end
     return frame:OnChange(callback)
 end
+
+MapPinEnhanced:OnLoad(function()
+    if addonLoaded then return end
+    addonLoaded = true
+    while #cachedCallbacks > 0 do
+        local callback = table.remove(cachedCallbacks, 1)
+        callback()
+    end
+end)
 
 function Options:ScrollToOption(key)
     local frame = self.options[key]

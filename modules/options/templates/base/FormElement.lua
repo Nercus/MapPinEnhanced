@@ -167,8 +167,8 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     if showDescription then
         self.description:SetText(self:GetDescriptionText())
     end
-
-    self:SetLayout(self.orientation or "vertical")
+    self.orientation = self.orientation or "horizontal"
+    self:SetLayout(self.orientation)
     self:UpdateHeight()
     Options:RegisterOption(self.key, self)
 end

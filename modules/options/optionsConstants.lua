@@ -20,7 +20,7 @@ Options.DEFAULTS = {
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
     ["Wayfinder.Floating.Style"] = {
-        { label = L["Modern"],  value = "modern" },
-        { label = L["Classic"], value = "classic" },
+        { label = L["Modern"], value = "modern" },
+        { label = L["Simple"], value = "simple" },
     },
 }
