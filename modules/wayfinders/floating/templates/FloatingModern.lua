@@ -1,27 +1,49 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+
+---@class MapPinEnhancedFloatingModernNeedle : Texture
+---@field fadeIn Animation
+---@field fadeOut Animation
+
 ---@class MapPinEnhancedFloatingModernTemplate : Frame
+---@field pin MapPinEnhancedBasePinTemplate
+---@field title FontString
+---@field distance FontString
+---@field eta FontString
+---@field needle MapPinEnhancedFloatingModernNeedle
 MapPinEnhancedFloatingModernMixin = {}
 
 -- TODO: the distant diamond should scale based on distance
 -- TODO: use the generic-frame-chamfered-12d-2o atlas to use as title background
 -- TODO: use interpolation to smooth movement when clamped to the edge of the screen
 
+local Pins = MapPinEnhanced:GetModule("Pins")
+local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
+local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
+
 local needsReset = false
 local mathSqrt = math.sqrt
+local mathSin = math.sin
+local mathCos = math.cos
+local mathAtan2 = math.atan2
+local DeltaLerp = DeltaLerp
 
 ---@param color PinColor
 function MapPinEnhancedFloatingModernMixin:SetColor(color)
-
+    local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
+    self.needle:SetVertexColor(colorValue:GetRGBA())
+    self.pin:SetTextureColor(colorValue)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
+    self.pin:SetIconTexture(texture, usesAtlas)
+    self.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTitle(title)
-
+    self.title:SetText(title)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetLocation(mapID, x, y)
@@ -70,6 +92,60 @@ function MapPinEnhancedFloatingModernMixin:CheckInitializeNavigationFrame()
     end
 end
 
+---@param displayType 'close' | 'far'
+function MapPinEnhancedFloatingModernMixin:SetDisplayType(displayType)
+    if self.displayType == displayType then return end
+    self.displayType = displayType
+    if displayType == "close" then
+        self.needle.fadeIn:Stop()
+        self.needle.fadeOut:Play()
+        self.pin:ShowPulse()
+    else
+        self.needle.fadeOut:Stop()
+        self.needle.fadeIn:Play()
+        self.pin:HidePulse()
+    end
+end
+
+local UP_VECTOR = CreateVector2D(0, 1);
+local RIGHT_VECTOR = CreateVector2D(1, 0);
+local indicatorVec = CreateVector2D(0, 0);
+
+local lastUpdate = 0
+function MapPinEnhancedFloatingModernMixin:UpdateNeedlePosition(elapsed)
+    if not self.targetMapID or not self.targetX or not self.targetY then return end
+    if elapsed and lastUpdate + 0.1 > GetTime() then return end
+    lastUpdate = GetTime()
+    local x, y, mapID = self.targetX, self.targetY, self.targetMapID
+    if not mapID or not x or not y then return end
+
+    local worldAngle = MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
+    if not worldAngle then return end
+
+    local facing = GetPlayerFacing()
+    if not facing then return end
+
+    local relativeAngle = worldAngle - facing
+    relativeAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
+
+    self.newNeedleRotation = relativeAngle
+end
+
+function MapPinEnhancedFloatingModernMixin:AnimateNeedleRotation(elapsed)
+    if not self.displayType or self.displayType == "close" then return end
+    local currentRotation = self.needleRotation or 0
+    local targetRotation = self.newNeedleRotation or 0
+
+    local diff = mathAtan2(
+        mathSin(targetRotation - currentRotation),
+        mathCos(targetRotation - currentRotation)
+    )
+    local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .1, elapsed)
+    self.needleRotation = newRotation
+
+    self.needle:SetRotation(-newRotation)
+end
+
 function MapPinEnhancedFloatingModernMixin:UpdateClampedState()
     local clamped = C_Navigation.WasClampedToScreen()
     self.clampedChanged = clamped ~= self.isClamped
@@ -98,6 +174,22 @@ function MapPinEnhancedFloatingModernMixin:ClampElliptical()
     end
 end
 
+function MapPinEnhancedFloatingModernMixin:OnDistanceUpdate(distance, timeToTarget)
+    if distance and timeToTarget then
+        self.distance:SetText(MapPinEnhanced:FormatDistance(distance))
+        self.eta:SetText(MapPinEnhanced:FormatETA(timeToTarget))
+    else
+        self.distance:SetText("")
+        self.eta:SetText("")
+    end
+    self.distanceValue = distance
+    if distance and distance < 50 then
+        self:SetDisplayType("close")
+    else
+        self:SetDisplayType("far")
+    end
+end
+
 function MapPinEnhancedFloatingModernMixin:UpdatePosition()
     if self.isClamped or self.clampedChanged then
         self:ClearAllPoints()
@@ -110,12 +202,16 @@ function MapPinEnhancedFloatingModernMixin:UpdatePosition()
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:OnUpdate(_)
+function MapPinEnhancedFloatingModernMixin:OnUpdate(elapsed)
     self:CheckInitializeNavigationFrame()
 
     if not self.navFrame then return end
     self:UpdateClampedState()
     self:UpdatePosition()
+
+    self:UpdateNeedlePosition(elapsed)
+    if self.displayType == "close" then return end
+    self:AnimateNeedleRotation(elapsed)
 end
 
 function MapPinEnhancedFloatingModernMixin:OnLoad()
@@ -141,9 +237,14 @@ function MapPinEnhancedFloatingModernMixin:OnShow()
     needsReset = true
 
     self:InitializeNavigationFrame()
-    self:SetScript("OnUpdate", function(_, dt)
-        self:OnUpdate(dt)
+    self:SetScript("OnUpdate", function(_, elapsed)
+        self:OnUpdate(elapsed)
     end)
+
+    self.distanceCallback = function(distance, timeToTarget)
+        self:OnDistanceUpdate(distance, timeToTarget)
+    end
+    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
 end
 
 function MapPinEnhancedFloatingModernMixin:OnHide()
@@ -156,5 +257,10 @@ function MapPinEnhancedFloatingModernMixin:OnHide()
         SuperTrackedFrame:RegisterEvent("SUPER_TRACKING_CHANGED");
         SuperTrackedFrame:InitializeNavigationFrame();
         SuperTrackedFrame:Show();
+    end
+
+    if self.distanceCallback then
+        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
+        self.distanceCallback = nil
     end
 end
