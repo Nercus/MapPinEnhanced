@@ -264,3 +264,8 @@ function MapPinEnhancedFloatingModernMixin:OnHide()
         self.distanceCallback = nil
     end
 end
+
+function MapPinEnhancedFloatingModernMixin:Reset()
+    self:Hide()
+    needsReset = false
+end
