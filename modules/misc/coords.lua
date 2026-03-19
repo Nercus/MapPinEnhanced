@@ -24,6 +24,7 @@ MapPinEnhancedCoordsDisplayMixin = {}
 local L = MapPinEnhanced.L
 
 local Providers = MapPinEnhanced:GetModule("Providers")
+local Options = MapPinEnhanced:GetModule("Options")
 
 local GetBestMapForUnit = C_Map.GetBestMapForUnit
 local GetPlayerMapPosition = C_Map.GetPlayerMapPosition
@@ -102,27 +103,16 @@ function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
     self:SetCoordsText(x, y)
 end
 
-function MapPinEnhancedCoordsDisplayMixin:RestorePosition()
-    local position = MapPinEnhanced:GetVar("coordsDisplay", "position") --[[@as { x: number, y: number }?]]
-    if position then
-        self:ClearAllPoints()
-        self:SetPoint("TOPLEFT", UIParent, "TOPLEFT", position.x, position.y)
-    else
-        self:ClearAllPoints()
-        self:SetPoint("CENTER", UIParent, "CENTER")
-    end
-end
-
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
-    MapPinEnhanced:SetVar("coordsDisplay", "locked", true)
+    Options:SetOptionValue("Miscellaneous.Coords.Lock", true)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
     self:SetMovable(true)
     self.lockButton.iconTexture:SetDesaturated(true)
-    MapPinEnhanced:SetVar("coordsDisplay", "locked", false)
+    Options:SetOptionValue("Miscellaneous.Coords.Lock", false)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
@@ -142,7 +132,8 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
         self:HideFrame()
     end)
 
-    local isLocked = MapPinEnhanced:GetVar("coordsDisplay", "locked") --[[@as boolean?]]
+    ---@type boolean | nil
+    local isLocked = Options:GetOptionValue("Miscellaneous.Coords.Lock")
     if isLocked then
         self:LockPosition()
     else
@@ -186,25 +177,65 @@ local function InitCoordsDisplayFrame()
     coordsDisplayFrame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedCoordsDisplayTemplate")
 end
 
-local function ToggleCoordsDisplay()
+local function ShowCoordsDisplay()
     InitCoordsDisplayFrame()
-    if not coordsDisplayFrame then return end
-    if coordsDisplayFrame:IsShown() then
-        coordsDisplayFrame:HideFrame()
-        MapPinEnhanced:SetVar("coordsDisplay", "visible", false)
-    else
+    if coordsDisplayFrame then
         coordsDisplayFrame:ShowFrame()
-        MapPinEnhanced:SetVar("coordsDisplay", "visible", true)
+    end
+    Options:SetOptionValue("Miscellaneous.Coords.Enable", true)
+end
+
+
+local function HideCoordsDisplay()
+    if coordsDisplayFrame and coordsDisplayFrame:IsShown() then
+        coordsDisplayFrame:HideFrame()
+    end
+    Options:SetOptionValue("Miscellaneous.Coords.Enable", false)
+end
+
+
+
+Options:SubscribeToOptionChanges("Miscellaneous.Coords.Enable", function(value)
+    if value then
+        ShowCoordsDisplay()
+    else
+        HideCoordsDisplay()
+    end
+end)
+
+local function LockCoordsDisplay()
+    if coordsDisplayFrame then
+        coordsDisplayFrame:LockPosition()
     end
 end
 
-local function RestoreCoordsDisplayVisibility()
-    local isVisible = MapPinEnhanced:GetVar("coordsDisplay", "visible") --[[@as boolean?]]
-    if isVisible then
-        ToggleCoordsDisplay()
+local function UnlockCoordsDisplay()
+    if coordsDisplayFrame then
+        coordsDisplayFrame:UnlockPosition()
     end
 end
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreCoordsDisplayVisibility)
+
+
+Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
+    if not coordsDisplayFrame then return end
+    if value then
+        LockCoordsDisplay()
+    else
+        UnlockCoordsDisplay()
+    end
+end)
+
+local function ToggleCoordsDisplay()
+    if not coordsDisplayFrame then
+        ShowCoordsDisplay()
+        return
+    end
+    if coordsDisplayFrame:IsShown() then
+        HideCoordsDisplay()
+    else
+        ShowCoordsDisplay()
+    end
+end
 
 MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
     "Toggle display of your current coordinates on the screen.")

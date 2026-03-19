@@ -1,6 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedOptionCategoryBaseHeader : Button
 ---@field icon MapPinEnhancedIconMixin
@@ -8,29 +9,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionCategoryBaseTemplate : Frame
 ---@field header MapPinEnhancedOptionCategoryBaseHeader
+---@field categoryName string
 MapPinEnhancedOptionCategoryBaseMixin = {}
-
--- function MapPinEnhancedOptionCategoryBaseMixin:Collapse()
---     self.isCollapsed = true
---     for _, child in ipairs({ self:GetChildren() }) do
---         if child ~= self.header then
---             child:Hide()
---         end
---     end
---     self:SetHeight(self.header:GetHeight() + 8)
---     self.header.icon:SetIconTexture("plus")
--- end
-
--- function MapPinEnhancedOptionCategoryBaseMixin:Expand()
---     self.isCollapsed = false
---     for _, child in ipairs({ self:GetChildren() }) do
---         if child ~= self.header then
---             child:Show()
---         end
---     end
---     self:UpdateHeight()
---     self.header.icon:SetIconTexture("minus")
--- end
 
 function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
     local totalHeight = self.header:GetHeight()
@@ -56,20 +36,16 @@ function MapPinEnhancedOptionCategoryBaseMixin:LayoutChildren()
     end
 end
 
+function MapPinEnhancedOptionCategoryBaseMixin:UpdateTitle()
+    self.header.title:SetText(L[self.categoryName] or self.categoryName)
+end
+
+function MapPinEnhancedOptionCategoryBaseMixin:OnLoad()
+    assert(self.categoryName, "Category frame must have a categoryName keyvalue")
+    self:UpdateTitle()
+end
+
 function MapPinEnhancedOptionCategoryBaseMixin:OnShow()
     self:LayoutChildren()
     self:UpdateHeight()
-    -- self:Expand() -- default to expanded when shown
 end
-
--- function MapPinEnhancedOptionCategoryBaseMixin:ToggleCollapse()
---     if self.isCollapsed then
---         self:Expand()
---     else
---         self:Collapse()
---     end
--- end
-
--- function MapPinEnhancedOptionCategoryBaseMixin:OnLoad()
---     self.header:SetScript("OnClick", function() self:ToggleCollapse() end)
--- end

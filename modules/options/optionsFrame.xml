@@ -79,10 +79,20 @@
                             <Anchor point="BOTTOMRIGHT" />
                         </Anchors>
                         <Frames>
-                            <Frame inherits="MapPinEnhancedOptionCategoryGeneralTemplate">
+                            <Frame inherits="MapPinEnhancedOptionCategoryWayfinderTemplate"
+                                parentKey="Wayfinder">
                                 <Anchors>
                                     <Anchor point="TOPLEFT" x="0" y="-8" />
                                     <Anchor point="TOPRIGHT" x="0" y="-8" />
+                                </Anchors>
+                            </Frame>
+                            <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate"
+                                parentKey="Miscellaneous">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="Wayfinder"
+                                        relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeTo="Wayfinder"
+                                        relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
                         </Frames>

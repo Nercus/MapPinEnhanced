@@ -11,7 +11,7 @@ function MapPinEnhancedOptionSliderMixin:GetValue()
 end
 
 function MapPinEnhancedOptionSliderMixin:SetValue(value)
-    self.child:SetValue(value)
+    self.child:SetValue(value, false)
 end
 
 ---@param initValue number

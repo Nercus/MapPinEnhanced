@@ -11,7 +11,7 @@ function MapPinEnhancedOptionColorpickerMixin:GetValue()
 end
 
 function MapPinEnhancedOptionColorpickerMixin:SetValue(r, g, b, a)
-    self.child:SetColor(r, g, b, a)
+    self.child:SetColor(r, g, b, a, false)
 end
 
 ---@param initValue {r: number, g: number, b: number, a: number}

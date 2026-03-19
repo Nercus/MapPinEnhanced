@@ -1,26 +1,37 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
-
-    <Frame name="MapPinEnhancedOptionCategoryMiscellaneousTemplate" virtual="true"
+    <Frame name="MapPinEnhancedOptionCategoryWayfinderTemplate" virtual="true"
         inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
-            <KeyValue key="categoryName" value="Miscellaneous" />
+            <KeyValue key="categoryName" value="Wayfinder" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords" />
+                    <KeyValue key="key" value="Wayfinder.Floating" />
                 </KeyValues>
                 <Frames>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                         <KeyValues>
-                            <KeyValue key="key" value="Miscellaneous.Coords.Enable" />
+                            <KeyValue key="key" value="Wayfinder.Floating.Enable" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.Floating.Style" />
+                        </KeyValues>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Arrow" />
+                </KeyValues>
+                <Frames>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                         <KeyValues>
-                            <KeyValue key="key" value="Miscellaneous.Coords.Lock" />
+                            <KeyValue key="key" value="Wayfinder.Arrow.Enable" />
                         </KeyValues>
                     </Frame>
                 </Frames>

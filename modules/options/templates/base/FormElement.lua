@@ -12,7 +12,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field hideDescription boolean If true, the description will be hidden and not take up space.
 ---@field GetValue fun(self): any A function that returns the current value of the option.
 ---@field SetValue fun(self, value): nil A function that sets the value of the option.
----@field OnChange fun(self, callback: fun(value): nil): nil A function that allows subscribing to changes of the option's value. The callback will be called with the new value whenever it changes.
+---@field OnChange fun(self, callback: fun(value): nil): fun() A function that allows subscribing to changes of the option's value. Returns an unsubscribe function.
 ---@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
 ---@field ScrollToOption fun(self): nil A function that scrolls the options panel to this option. Only necessary if the option is not guaranteed to be visible when changed, e.g. because it's in a collapsible section.
 ---@field callbacks function[] A list of callback functions that will be called when the option's value changes.
@@ -21,16 +21,26 @@ MapPinEnhancedFormElementMixin = {}
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
+---@param callback function
+---@return function unsubscribe Call to remove this callback
 function MapPinEnhancedFormElementMixin:OnChange(callback)
     if not self.callbacks then
         self.callbacks = {}
     end
     for _, existingCallback in ipairs(self.callbacks) do
         if existingCallback == callback then
-            return
+            return function() end
         end
     end
     table.insert(self.callbacks, callback)
+    return function()
+        for i, cb in ipairs(self.callbacks) do
+            if cb == callback then
+                table.remove(self.callbacks, i)
+                return
+            end
+        end
+    end
 end
 
 function MapPinEnhancedFormElementMixin:GetLabelText()

@@ -29,17 +29,17 @@ function MapPinEnhancedColorpickerMixin:OnClick()
         swatchFunc = function()
             local r, g, b = ColorPickerFrame:GetColorRGB()
             local a = ColorPickerFrame:GetColorAlpha()
-            self:SetColor(r, g, b, a)
+            self:SetColor(r, g, b, a, true)
         end,
         hasOpacity = self.hasOpacity,
         opacityFunc = function()
             local r, g, b = ColorPickerFrame:GetColorRGB()
             local a = ColorPickerFrame:GetColorAlpha()
-            self:SetColor(r, g, b, a)
+            self:SetColor(r, g, b, a, true)
         end,
         opacity = (self.a or 1),
         cancelFunc = function()
-            self:SetColor(self.r, self.g, self.b, self.a)
+            self:SetColor(self.r, self.g, self.b, self.a, true)
         end,
         r = self.r or 255,
         g = self.g or 255,
@@ -53,10 +53,11 @@ end
 ---@param g number
 ---@param b number
 ---@param a number
-function MapPinEnhancedColorpickerMixin:SetColor(r, g, b, a)
+---@param triggerCallback boolean|nil
+function MapPinEnhancedColorpickerMixin:SetColor(r, g, b, a, triggerCallback)
     self.r, self.g, self.b, self.a = r, g, b, a
     self.color:SetVertexColor(r, g, b, a)
-    if self.onChangeCallback then
+    if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(self.r, self.g, self.b, self.a or 1)
     end
 end
@@ -91,8 +92,5 @@ end
 ---@param value {r: number, g: number, b: number, a: number}
 ---@param triggerCallback boolean|nil
 function MapPinEnhancedColorpickerMixin:SetValue(value, triggerCallback)
-    self:SetColor(value.r, value.g, value.b, value.a)
-    if triggerCallback and self.onChangeCallback then
-        self.onChangeCallback(self.r, self.g, self.b, self.a or 1)
-    end
+    self:SetColor(value.r, value.g, value.b, value.a, triggerCallback)
 end

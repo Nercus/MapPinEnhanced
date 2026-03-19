@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
@@ -12,7 +13,6 @@ local MapPinEnhancedWayfinderFloating = {}
 
 ---@param frameType WayfinderFloatingFrameType
 function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
-    -- TODO: hook this up to an option
     if self.frameType == frameType then return end
     self:GetFrame()
     self:ShowFrame()
@@ -29,7 +29,7 @@ local shouldReactToUserWaypointUpdate = false
 ---@return MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
     ---@type WayfinderFloatingFrameType
-    local currentType = "modern" -- TODO: get the var here
+    local currentType = Options:GetOptionValue("Wayfinder.Floating.Style")
 
     if self.frames and self.frames[currentType] then
         return self.frames[currentType]
@@ -158,6 +158,9 @@ end
 
 function MapPinEnhancedWayfinderFloating:Enable()
     self:SetOverride()
+    self.unsubscribeFrameTypeOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.Style", function(value)
+        self:SetFrameType(value)
+    end)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
@@ -168,6 +171,10 @@ function MapPinEnhancedWayfinderFloating:Disable()
     end
     C_Map.ClearUserWaypoint()
     OverrideSuperTrackedAlphaState(false)
+    if self.unsubscribeFrameTypeOption then
+        self.unsubscribeFrameTypeOption()
+        self.unsubscribeFrameTypeOption = nil
+    end
 end
 
 --- Inject into WayfinderManager
@@ -176,8 +183,13 @@ if not Wayfinders.wayfinders then
 end
 Wayfinders.wayfinders["WAYFINDER_FLOATING"] = MapPinEnhancedWayfinderFloating
 
-MapPinEnhanced:OnLoad(function()
-    Wayfinders:EnableWayfinder("WAYFINDER_FLOATING")
-end)
 
+
+Options:SubscribeToOptionChanges("Wayfinder.Arrow.Enable", function(value)
+    if value then
+        Wayfinders:EnableWayfinder("WAYFINDER_ARROW")
+    else
+        Wayfinders:DisableWayfinder("WAYFINDER_ARROW")
+    end
+end)
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", onUserwaypointUpdated)

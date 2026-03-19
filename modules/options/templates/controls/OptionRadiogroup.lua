@@ -13,7 +13,7 @@ function MapPinEnhancedOptionRadiogroupMixin:GetValue()
 end
 
 function MapPinEnhancedOptionRadiogroupMixin:SetValue(value)
-    self.child:SetActiveOption(value)
+    self.child:SetValue(value, false)
 end
 
 ---@param initValue any

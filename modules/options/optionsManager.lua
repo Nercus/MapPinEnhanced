@@ -55,6 +55,9 @@ function Options:GetOptionValue(key)
     return frame:GetValue()
 end
 
+---@param key string
+---@param callback function
+---@return fun() unsubscribe Call to remove this callback
 function Options:SubscribeToOptionChanges(key, callback)
     local frame = self.options[key]
     if not frame then
@@ -62,7 +65,7 @@ function Options:SubscribeToOptionChanges(key, callback)
     end
     assert(frame.OnChange, "Option frame must have a OnChange method")
     callback(self:GetOptionInitValue(key))
-    frame:OnChange(callback)
+    return frame:OnChange(callback)
 end
 
 function Options:ScrollToOption(key)

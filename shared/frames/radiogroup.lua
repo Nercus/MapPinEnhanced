@@ -21,7 +21,8 @@ MapPinEnhancedRadioGroupMixin = {}
 
 --- Sets the selected radio button by value.
 ---@param value any
-function MapPinEnhancedRadioGroupMixin:SetActiveOption(value)
+---@param triggerCallback boolean|nil
+function MapPinEnhancedRadioGroupMixin:SetActiveOption(value, triggerCallback)
     assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
     self.activeOption = value
 
@@ -30,7 +31,7 @@ function MapPinEnhancedRadioGroupMixin:SetActiveOption(value)
         button:SetChecked(button.value == value)
     end
 
-    if self.onChangeCallback then
+    if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(value)
     end
 end
@@ -55,7 +56,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
         button.value = option.value
 
         button:SetScript("OnClick", function()
-            self:SetActiveOption(option.value)
+            self:SetActiveOption(option.value, true)
         end)
 
         if lastButton then
@@ -116,10 +117,7 @@ function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback)
     assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
     for _, option in ipairs(self.options) do
         if option.value == value then
-            self:SetActiveOption(value)
-            if triggerCallback and self.onChangeCallback then
-                self.onChangeCallback(value)
-            end
+            self:SetActiveOption(value, triggerCallback)
             return
         end
     end

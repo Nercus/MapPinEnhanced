@@ -81,6 +81,9 @@ function MapPinEnhancedSliderMixin:OnValueChanged(value)
         local slider = self.slider
         self.valueText:SetText(roundValueToPrecision(value, slider:GetValueStep()))
     end
+    if self.suppressOnChange then
+        return
+    end
     if self.onChangeCallback then
         self.onChangeCallback(value)
     end
@@ -145,7 +148,9 @@ end
 ---@param value number
 ---@param triggerCallback boolean|nil
 function MapPinEnhancedSliderMixin:SetValue(value, triggerCallback)
+    self.suppressOnChange = not triggerCallback
     self.slider:SetValue(value)
+    self.suppressOnChange = false
     if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(value)
     end
