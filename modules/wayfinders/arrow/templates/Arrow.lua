@@ -69,7 +69,7 @@ end
 local lastUpdate = 0
 function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition(elapsed)
     if not self.targetMapID or not self.targetX or not self.targetY then return end
-    if elapsed and lastUpdate + 0.1 > GetTime() then return end
+    if elapsed and lastUpdate + .05 > GetTime() then return end
     lastUpdate = GetTime()
     local x, y, mapID = self.targetX, self.targetY, self.targetMapID
     if not mapID or not x or not y then return end
@@ -96,7 +96,7 @@ function MapPinEnhancedFloatingArrowMixin:AnimateNeedleRotation(elapsed)
         mathSin(targetRotation - currentRotation),
         mathCos(targetRotation - currentRotation)
     )
-    local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .1, elapsed)
+    local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .2, elapsed)
     self.needleRotation = newRotation
 
     self.needle:SetRotation(-newRotation)
