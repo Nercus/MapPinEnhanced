@@ -5,3 +5,5 @@
 ~*
 Thumbs.db
 desktop.ini
+libs/*
+!libs/_imports.xml
