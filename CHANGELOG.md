@@ -1,4 +1,5 @@
-# 3.1.2
+# 3.2.0
 
-- Fix minor UI issues with input boxes
-- Fix crucial bug with the menu input covering the full screen
+- Bump interface version to 12.0.5
+- Minor cleanup
+- Add mouse interactions to minimap pins
