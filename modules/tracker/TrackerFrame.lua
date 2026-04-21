@@ -208,9 +208,9 @@ end
 
 function MapPinEnhancedTrackerFrameMixin:UpdatePinNumberingVisibility()
     local showNumbering = MapPinEnhanced:GetVar("tracker", "showNumbering") --[[@as boolean]]
+    ---@param entry MapPinEnhancedTrackerPinEntryMixin
     for _, entry in ipairs(self.entries) do
         if entry.SetEntryIndexVisibility then
-            ---@cast entry MapPinEnhancedTrackerPinEntryMixin
             entry:SetEntryIndexVisibility(showNumbering)
         end
     end
@@ -394,9 +394,6 @@ function MapPinEnhancedTrackerFrameMixin:UpdateEntriesPosition()
         end
         height = height + entry:GetHeight() + ENTRY_GAP --[[@as number]]
         entry:Show()
-        if entry.SetEntryIndex then
-            entry:SetEntryIndex(i)
-        end
     end
     -- set the height of the scroll child so the scroll bar gets resized correctly
     if height < 1 then

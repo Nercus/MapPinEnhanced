@@ -5,8 +5,6 @@
 ---@field tooltip string?
 MapPinEnhancedTrackerSetEntryMixin = {}
 
-function MapPinEnhancedTrackerSetEntryMixin:SetEntryIndex() end -- not used right now
-
 function MapPinEnhancedTrackerSetEntryMixin:SetTitle(title)
     self.title:SetText(title)
 end
@@ -26,7 +24,7 @@ function MapPinEnhancedTrackerSetEntryMixin:ShowTooltip()
     if not self.tooltip then return end
     ---@type string
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:SetText(self.tooltip)
+    GameTooltip:AddLine(self.tooltip)
     GameTooltip:Show()
 end
 

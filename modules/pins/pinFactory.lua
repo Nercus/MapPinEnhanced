@@ -263,6 +263,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     local function CreateMenu(parentFrame)
         MenuUtil.CreateContextMenu(parentFrame, function(_, rootDescription)
+            ---@cast rootDescription SubMenuUtil
             local titleElementDescription = rootDescription:CreateTemplate("MapPinEnhancedMenuInputTemplate") --[[@as BaseMenuDescriptionMixin]]
             titleElementDescription:AddInitializer(function(frame)
                 ---@cast frame MapPinEnhancedInputMixin
@@ -390,9 +391,6 @@ function PinFactory:CreatePin(initPinData, pinID)
         end
     end
 
-
-
-    -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
     minimapPin:SetScript("OnMouseDown", HandleClicks)
     trackerPinEntry:SetScript("OnMouseDown", HandleClicks)

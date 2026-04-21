@@ -13,7 +13,7 @@ function MapPinEnhancedMinimapPinMixin:ShowTooltip()
     if not self.pinData then return end
     if not self.pinData.title then return end
     GameTooltip:SetOwner(self, "ANCHOR_TOP")
-    GameTooltip:SetText(self.pinData.title)
+    GameTooltip:AddLine(self.pinData.title)
     GameTooltip:Show()
 end
 

@@ -88,10 +88,15 @@ function MenuUtil.GetElementText(elementDescription) end
 
 function MenuUtil.CreateFrame() end
 
+
 function MenuUtil.CreateTemplate(template) end
 
 function MenuUtil.CreateTitle(text, color) end
 
+---@param text string
+---@param callback fun(data:any?)?
+---@param data any?
+---@return SubMenuUtil
 function MenuUtil.CreateButton(text, callback, data) end
 
 function MenuUtil.CreateCheckbox(text, isSelected, setSelected, data) end
@@ -143,10 +148,17 @@ function SubMenuUtil:GetElementText(elementDescription) end
 
 function SubMenuUtil:CreateFrame() end
 
+---@param template string
+---@return BaseMenuDescriptionMixin
 function SubMenuUtil:CreateTemplate(template) end
 
 function SubMenuUtil:CreateTitle(text, color) end
 
+
+---@param text string
+---@param callback fun(data:any?)?
+---@param data any?
+---@return SubMenuUtil
 function SubMenuUtil:CreateButton(text, callback, data) end
 
 function SubMenuUtil:CreateCheckbox(text, isSelected, setSelected, data) end
