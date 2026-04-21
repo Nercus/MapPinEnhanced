@@ -394,6 +394,7 @@ function PinFactory:CreatePin(initPinData, pinID)
 
     -- minimap pins dont have a click interaction
     worldmapPin:SetScript("OnMouseDown", HandleClicks)
+    minimapPin:SetScript("OnMouseDown", HandleClicks)
     trackerPinEntry:SetScript("OnMouseDown", HandleClicks)
     ManualDistanceCheck()
 
