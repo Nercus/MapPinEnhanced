@@ -8,7 +8,7 @@ function MapPinEnhancedOptionCheckboxMixin:OnMouseDown()
 end
 
 function MapPinEnhancedOptionCheckboxMixin:GetValue()
-    self.child:GetChecked()
+    return self.child:GetChecked()
 end
 
 function MapPinEnhancedOptionCheckboxMixin:SetValue(value)
@@ -19,10 +19,7 @@ end
 function MapPinEnhancedOptionCheckboxMixin:Setup(initValue)
     self.child:Setup({
         onChange = function(isChecked)
-            if not self.callbacks then return end
-            for _, cb in ipairs(self.callbacks) do
-                cb(isChecked)
-            end
+            self:NotifyChange(isChecked)
         end,
     })
     assert(initValue ~= nil, "Initial value for checkbox must be a boolean")

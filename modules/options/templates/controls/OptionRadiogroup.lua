@@ -23,10 +23,7 @@ function MapPinEnhancedOptionRadiogroupMixin:Setup(initValue)
     self.child:Setup({
         orientation = self.orientation or "vertical",
         onChange = function(value)
-            if not self.callbacks then return end
-            for _, cb in ipairs(self.callbacks) do
-                cb(value)
-            end
+            self:NotifyChange(value)
         end,
         options = Options.OPTIONS_CONFIG[self.key]
     })

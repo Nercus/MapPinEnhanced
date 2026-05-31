@@ -19,10 +19,7 @@ end
 function MapPinEnhancedOptionInputMixin:Setup(initValue)
     self.child:Setup({
         onChange = function(text)
-            if not self.callbacks then return end
-            for _, cb in ipairs(self.callbacks) do
-                cb(text)
-            end
+            self:NotifyChange(text)
         end,
     })
     assert(type(initValue) == "string", "Initial value for input must be a string")

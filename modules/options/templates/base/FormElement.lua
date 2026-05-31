@@ -12,6 +12,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field hideDescription boolean If true, the description will be hidden and not take up space.
 ---@field GetValue fun(self): any A function that returns the current value of the option.
 ---@field SetValue fun(self, value): nil A function that sets the value of the option.
+---@field IsValueEqual fun(self, value): boolean A function that checks whether the option already has the given value.
+---@field NotifyChange fun(self, value): nil A function that notifies subscribers that the option value changed.
 ---@field OnChange fun(self, callback: fun(value): nil): fun() A function that allows subscribing to changes of the option's value. Returns an unsubscribe function.
 ---@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
 ---@field ScrollToOption fun(self): nil A function that scrolls the options panel to this option. Only necessary if the option is not guaranteed to be visible when changed, e.g. because it's in a collapsible section.
@@ -20,6 +22,17 @@ MapPinEnhancedFormElementMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
+
+function MapPinEnhancedFormElementMixin:IsValueEqual(value)
+    return self:GetValue() == value
+end
+
+function MapPinEnhancedFormElementMixin:NotifyChange(value)
+    if not self.callbacks then return end
+    for _, callback in ipairs(self.callbacks) do
+        callback(value)
+    end
+end
 
 ---@param callback function
 ---@return function unsubscribe Call to remove this callback

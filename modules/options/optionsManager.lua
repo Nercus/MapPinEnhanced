@@ -1,13 +1,17 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@alias MapPinEnhancedOptionValue number | string | boolean | table
+
 ---@class Options
 ---@field options table<string, MapPinEnhancedFormElementTemplate> A table mapping option keys to their corresponding frames.
 local Options = MapPinEnhanced:GetModule("Options")
 Options.options = {}
 
+---@param key string
+---@return MapPinEnhancedOptionValue
 function Options:GetDefaultValue(key)
-    ---@type number | string | boolean
+    ---@type MapPinEnhancedOptionValue
     local default = self.DEFAULTS[key]
     assert(default ~= nil, "No default value found for key: " .. tostring(key))
     return default
@@ -42,8 +46,13 @@ function Options:SetOptionValue(key, value)
         error("Option with key " .. key .. " not found")
     end
     assert(frame.SetValue, "Option frame must have a SetValue method")
-    self:SaveOptionValue(key, value)
+    assert(frame.IsValueEqual, "Option frame must have an IsValueEqual method")
+    assert(frame.NotifyChange, "Option frame must have a NotifyChange method")
+    if frame:IsValueEqual(value) then
+        return
+    end
     frame:SetValue(value)
+    frame:NotifyChange(value)
 end
 
 function Options:GetOptionValue(key)

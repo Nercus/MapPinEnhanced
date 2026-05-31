@@ -7,7 +7,7 @@ function MapPinEnhancedOptionToggleMixin:OnMouseDown()
 end
 
 function MapPinEnhancedOptionToggleMixin:GetValue()
-    self.child:GetChecked()
+    return self.child:GetChecked()
 end
 
 function MapPinEnhancedOptionToggleMixin:SetValue(value)
@@ -22,10 +22,7 @@ end
 function MapPinEnhancedOptionToggleMixin:Setup(initValue)
     self.child:Setup({
         onChange = function(isChecked)
-            if not self.callbacks then return end
-            for _, cb in ipairs(self.callbacks) do
-                cb(isChecked)
-            end
+            self:NotifyChange(isChecked)
         end,
     })
     assert(type(initValue) == "boolean", "Initial value for toggle must be a boolean")

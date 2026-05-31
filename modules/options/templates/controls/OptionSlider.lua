@@ -7,7 +7,7 @@ MapPinEnhancedOptionSliderMixin = {}
 
 
 function MapPinEnhancedOptionSliderMixin:GetValue()
-    self.child.slider:GetValue()
+    return self.child.slider:GetValue()
 end
 
 function MapPinEnhancedOptionSliderMixin:SetValue(value)
@@ -18,10 +18,7 @@ end
 function MapPinEnhancedOptionSliderMixin:Setup(initValue)
     self.child:Setup({
         onChange = function(value)
-            if not self.callbacks then return end
-            for _, cb in ipairs(self.callbacks) do
-                cb(value)
-            end
+            self:NotifyChange(value)
         end,
         min = self.minValue or 1,
         max = self.maxValue or 10,

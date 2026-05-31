@@ -106,13 +106,11 @@ end
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton.iconTexture:SetDesaturated(false)
-    Options:SetOptionValue("Miscellaneous.Coords.Lock", true)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
     self:SetMovable(true)
     self.lockButton.iconTexture:SetDesaturated(true)
-    Options:SetOptionValue("Miscellaneous.Coords.Lock", false)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
@@ -121,15 +119,11 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
     end)
 
     self.lockButton:SetScript("OnClick", function()
-        if self:IsMovable() then
-            self:LockPosition()
-        else
-            self:UnlockPosition()
-        end
+        Options:SetOptionValue("Miscellaneous.Coords.Lock", self:IsMovable())
     end)
 
     self.closeButton:SetScript("OnClick", function()
-        self:HideFrame()
+        Options:SetOptionValue("Miscellaneous.Coords.Enable", false)
     end)
 
     ---@type boolean | nil
@@ -182,7 +176,6 @@ local function ShowCoordsDisplay()
     if coordsDisplayFrame then
         coordsDisplayFrame:ShowFrame()
     end
-    Options:SetOptionValue("Miscellaneous.Coords.Enable", true)
 end
 
 
@@ -190,7 +183,6 @@ local function HideCoordsDisplay()
     if coordsDisplayFrame and coordsDisplayFrame:IsShown() then
         coordsDisplayFrame:HideFrame()
     end
-    Options:SetOptionValue("Miscellaneous.Coords.Enable", false)
 end
 
 
@@ -226,15 +218,8 @@ Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
 end)
 
 local function ToggleCoordsDisplay()
-    if not coordsDisplayFrame then
-        ShowCoordsDisplay()
-        return
-    end
-    if coordsDisplayFrame:IsShown() then
-        HideCoordsDisplay()
-    else
-        ShowCoordsDisplay()
-    end
+    Options:SetOptionValue("Miscellaneous.Coords.Enable",
+        not Options:GetOptionValue("Miscellaneous.Coords.Enable"))
 end
 
 MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
