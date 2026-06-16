@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field isChecked boolean
 ---@field checkAnimation AnimationGroup
 ---@field uncheckAnimation AnimationGroup
+---@field thumb Texture
 MapPinEnhancedToggleMixin = {}
 
 
@@ -13,6 +14,7 @@ function MapPinEnhancedToggleMixin:SetChecked(skipAnimation)
     if not skipAnimation then
         self.checkAnimation:Play()
     end
+    self.thumb:SetVertexColor(1, 0.82, 0)
 end
 
 function MapPinEnhancedToggleMixin:GetChecked()
@@ -24,6 +26,7 @@ function MapPinEnhancedToggleMixin:SetUnchecked(skipAnimation)
     if not skipAnimation then
         self.uncheckAnimation:Play()
     end
+    self.thumb:SetVertexColor(0.6, 0.6, 0.6)
 end
 
 function MapPinEnhancedToggleMixin:OnClick()
