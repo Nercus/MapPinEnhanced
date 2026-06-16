@@ -17,28 +17,25 @@
         </Layers>
         <Frames>
             <Frame parentKey="header">
-                <Size x="1" y="35" />
+                <Size x="1" y="54" />
                 <Anchors>
                     <Anchor point="TOPLEFT" />
-                    <Anchor point="TOPRIGHT" x="-10" />
+                    <Anchor point="TOPRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" font="GameFontNormalHuge" justifyH="CENTER"
-                            justifyV="BOTTOM">
+                        <FontString parentKey="title" inherits="GameFontHighlightHuge"
+                            justifyH="LEFT"
+                            justifyV="MIDDLE">
+                            <Size x="320" y="24" />
                             <Anchors>
-                                <Anchor point="LEFT" x="5" />
+                                <Anchor point="TOPLEFT" x="16" y="-15" />
                             </Anchors>
                         </FontString>
-                        <Texture atlas="SquareMask">
-                            <Size x="1" y="2" />
-                            <Gradient orientation="HORIZONTAL">
-                                <MinColor r="1" g="0.82" b="0" a="1" />
-                                <MaxColor r="1" g="0.82" b="0" a="0" />
-                            </Gradient>
+                        <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" />
-                                <Anchor point="BOTTOMRIGHT" />
+                                <Anchor point="BOTTOMLEFT" x="16" y="0" />
+                                <Anchor point="BOTTOMRIGHT" x="-16" y="0" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -46,9 +43,9 @@
                 </Layers>
                 <Frames>
                     <EditBox inherits="MapPinEnhancedAutocompleteTemplate" parentKey="search">
-                        <Size x="300" y="25" />
+                        <Size x="260" y="25" />
                         <Anchors>
-                            <Anchor point="RIGHT" x="-5" y="3" />
+                            <Anchor point="TOPRIGHT" x="-16" y="-13" />
                         </Anchors>
                         <KeyValues>
                             <KeyValue key="icon" value="search" />
@@ -61,7 +58,7 @@
             <ScrollFrame inherits="ScrollFrameTemplate" parentKey="scrollFrame" frameStrata="MEDIUM">
                 <Size x="1" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" y="-36" />
+                    <Anchor point="TOPLEFT" y="-56" />
                     <Anchor point="BOTTOMRIGHT" x="-20" />
                 </Anchors>
                 <KeyValues>
@@ -92,6 +89,15 @@
                                     <Anchor point="TOPLEFT" relativeKey="$parent.Wayfinder"
                                         relativePoint="BOTTOMLEFT" x="0" y="-8" />
                                     <Anchor point="TOPRIGHT" relativeKey="$parent.Wayfinder"
+                                        relativePoint="BOTTOMRIGHT" x="0" y="-8" />
+                                </Anchors>
+                            </Frame>
+                            <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate"
+                                parentKey="Miscellaneous2">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Miscellaneous"
+                                        relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Miscellaneous"
                                         relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>

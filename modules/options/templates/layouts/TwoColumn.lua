@@ -4,11 +4,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedOptionTwoColumnTemplate : Frame
 ---@field column1 Frame
 ---@field column2 Frame
+---@field columnSpacing number
+---@field rowSpacing number
+---@field bottomPadding number
 MapPinEnhancedOptionTwoColumnMixin = {}
-
-local COLUMN_SPACING = 10 -- Space between the two columns
-local ROW_SPACING = 4     -- Space between rows in each column
-
 
 function MapPinEnhancedOptionTwoColumnMixin:LayoutColumn(column)
     if not column then return 0 end
@@ -20,16 +19,20 @@ function MapPinEnhancedOptionTwoColumnMixin:LayoutColumn(column)
     local totalHeight = 0
     for i, child in ipairs(children) do
         child:ClearAllPoints()
-        child:SetWidth(column:GetWidth() - COLUMN_SPACING)
+        child:SetWidth(column:GetWidth() - self.columnSpacing)
         if i == 1 then
             child:SetPoint("TOPLEFT", column, "TOPLEFT", 0, 0)
         else
-            child:SetPoint("TOPLEFT", children[i - 1], "BOTTOMLEFT", 0, -ROW_SPACING)
+            child:SetPoint("TOPLEFT", children[i - 1], "BOTTOMLEFT", 0, -self.rowSpacing)
         end
 
-        totalHeight = totalHeight + child:GetHeight() + ROW_SPACING
+        totalHeight = totalHeight + child:GetHeight()
+        if i < #children then
+            ---@type number
+            totalHeight = totalHeight + self.rowSpacing
+        end
     end
-    return totalHeight + (ROW_SPACING * 3)
+    return totalHeight + self.bottomPadding
 end
 
 function MapPinEnhancedOptionTwoColumnMixin:UpdateLayout()
@@ -37,14 +40,14 @@ function MapPinEnhancedOptionTwoColumnMixin:UpdateLayout()
     assert(self.column2, "TwoColumnTemplate requires a 'column2' frame")
 
     local totalWidth = self:GetWidth()
-    local columnWidth = (totalWidth - COLUMN_SPACING) / 2
+    local columnWidth = (totalWidth - self.columnSpacing) / 2
 
     self.column1:ClearAllPoints()
     self.column1:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
     self.column1:SetWidth(columnWidth)
 
     self.column2:ClearAllPoints()
-    self.column2:SetPoint("TOPLEFT", self.column1, "TOPRIGHT", COLUMN_SPACING, 0)
+    self.column2:SetPoint("TOPLEFT", self.column1, "TOPRIGHT", self.columnSpacing, 0)
     self.column2:SetWidth(columnWidth)
 
     local column1Height = self:LayoutColumn(self.column1)

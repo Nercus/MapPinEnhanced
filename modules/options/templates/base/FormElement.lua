@@ -18,6 +18,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
 ---@field ScrollToOption fun(self): nil A function that scrolls the options panel to this option. Only necessary if the option is not guaranteed to be visible when changed, e.g. because it's in a collapsible section.
 ---@field callbacks function[] A list of callback functions that will be called when the option's value changes.
+---@field padding number
+---@field labelBottomSpacing number
+---@field descriptionBottomSpacing number
+---@field scrollPadding number
 MapPinEnhancedFormElementMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
@@ -84,13 +88,12 @@ function MapPinEnhancedFormElementMixin:HasDescription()
     return self:GetDescriptionText() ~= nil and not self.hideDescription
 end
 
-local PADDING = 4
 function MapPinEnhancedFormElementMixin:UpdateHeight()
     local hasLabel = self:HasLabel()
     local hasDescription = self:HasDescription()
 
-    local labelHeight = hasLabel and (self.label:GetHeight() + 4) or 0
-    local descriptionHeight = hasDescription and (self.description:GetHeight() + 4) or 0
+    local labelHeight = hasLabel and (self.label:GetHeight() + self.labelBottomSpacing) or 0
+    local descriptionHeight = hasDescription and (self.description:GetHeight() + self.descriptionBottomSpacing) or 0
     local childHeight = self.child:GetHeight()
 
     ---@type number
@@ -100,7 +103,7 @@ function MapPinEnhancedFormElementMixin:UpdateHeight()
     elseif self.orientation == "horizontal" then
         totalHeight = math.max(labelHeight + descriptionHeight, childHeight)
     end
-    totalHeight = totalHeight + PADDING * 2
+    totalHeight = totalHeight + self.padding * 2
 
     self:SetHeight(totalHeight)
 end
@@ -118,8 +121,7 @@ function MapPinEnhancedFormElementMixin:ScrollToOption()
     local selfTop = self:GetTop()
     if not childTop or not selfTop then return end
 
-    local padding = 12
-    local target = childTop - selfTop - padding
+    local target = childTop - selfTop - self.scrollPadding
     local maxScroll = scrollFrame:GetVerticalScrollRange() or 0
 
     if target < 0 then
@@ -147,11 +149,11 @@ function MapPinEnhancedFormElementMixin:SetLayout(orientation)
         if hasDescription then
             anchor = self.description
             anchorPoint = "BOTTOMLEFT"
-            offsetY = -PADDING
+            offsetY = -self.descriptionBottomSpacing
         elseif hasLabel then
             anchor = self.label
             anchorPoint = "BOTTOMLEFT"
-            offsetY = -PADDING
+            offsetY = -self.labelBottomSpacing
         end
         self.child:SetPoint("TOPLEFT", anchor, anchorPoint, 0, offsetY)
     elseif orientation == "horizontal" then

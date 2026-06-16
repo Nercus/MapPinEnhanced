@@ -3,6 +3,12 @@
     <Include file="FormElement.lua" />
     <Frame name="MapPinEnhancedFormElementTemplate" virtual="true"
         mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true">
+        <KeyValues>
+            <KeyValue key="padding" value="8" type="number" />
+            <KeyValue key="labelBottomSpacing" value="5" type="number" />
+            <KeyValue key="descriptionBottomSpacing" value="8" type="number" />
+            <KeyValue key="scrollPadding" value="12" type="number" />
+        </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormal">

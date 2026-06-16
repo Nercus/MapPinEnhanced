@@ -4,6 +4,12 @@
     <Frame name="MapPinEnhancedOptionCategoryBaseTemplate"
         mixin="MapPinEnhancedOptionCategoryBaseMixin" virtual="true">
         <Size x="1" y="200" />
+        <KeyValues>
+            <KeyValue key="contentInsetX" value="18" type="number" />
+            <KeyValue key="headerBottomSpacing" value="14" type="number" />
+            <KeyValue key="groupSpacing" value="14" type="number" />
+            <KeyValue key="bottomPadding" value="12" type="number" />
+        </KeyValues>
         <Frames>
             <Button parentKey="header">
                 <Size x="1" y="24" />
@@ -13,18 +19,14 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontHighlightLarge"
+                        <FontString parentKey="title" inherits="GameFontNormalLarge"
                             text="Category" justifyH="LEFT">
                             <Anchors>
-                                <Anchor point="LEFT" relativePoint="LEFT" x="10" />
+                                <Anchor point="LEFT" relativePoint="LEFT" x="25" />
                             </Anchors>
                         </FontString>
-                        <Texture atlas="SquareMask">
-                            <Size x="1" y="1" />
-                            <Gradient orientation="HORIZONTAL">
-                                <MinColor r="0.56" g="0.56" b="0.56" a="1" />
-                                <MaxColor r="0.56" g="0.56" b="0.56" a="0" />
-                            </Gradient>
+                        <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
+                            <Color r="1" g="0.82" b="0" />
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" x="5" />
                                 <Anchor point="BOTTOMRIGHT" />

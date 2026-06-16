@@ -4,13 +4,21 @@
     <Include file="OptionGroup.lua" />
     <Frame name="MapPinEnhancedOptionGroupTemplate" virtual="true"
         mixin="MapPinEnhancedOptionGroupMixin">
+        <KeyValues>
+            <KeyValue key="topPadding" value="10" type="number" />
+            <KeyValue key="labelInsetX" value="18" type="number" />
+            <KeyValue key="contentInsetX" value="14" type="number" />
+            <KeyValue key="labelBottomSpacing" value="10" type="number" />
+            <KeyValue key="rowSpacing" value="8" type="number" />
+            <KeyValue key="bottomPadding" value="12" type="number" />
+        </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT"
                     justifyV="TOP">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="20" y="5" />
-                        <Anchor point="TOPRIGHT" x="0" y="5" />
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPRIGHT" />
                     </Anchors>
                 </FontString>
             </Layer>

@@ -4,6 +4,11 @@
     <Include file="TwoColumn.lua" />
     <Frame name="MapPinEnhancedOptionTwoColumnTemplate" virtual="true"
         mixin="MapPinEnhancedOptionTwoColumnMixin">
+        <KeyValues>
+            <KeyValue key="columnSpacing" value="16" type="number" />
+            <KeyValue key="rowSpacing" value="10" type="number" />
+            <KeyValue key="bottomPadding" value="12" type="number" />
+        </KeyValues>
         <Scripts>
             <OnShow method="OnShow" />
             <OnSizeChanged method="OnSizeChanged" />

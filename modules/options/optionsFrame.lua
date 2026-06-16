@@ -22,12 +22,8 @@ function MapPinEnhancedOptionsFrameMixin:ToggleOptionsFrame()
     Settings.OpenToCategory(self.categoryID)
 end
 
-local L = MapPinEnhanced.L
-local assetsPath = MapPinEnhanced.assetsPath
-
 function MapPinEnhancedOptionsFrameMixin:SetTitle()
-    local titleText = string.format("%s %s", MapPinEnhanced.displayName, L["Options"])
-    self.header.title:SetText(titleText)
+    self.header.title:SetText(MapPinEnhanced.displayName)
 end
 
 function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
