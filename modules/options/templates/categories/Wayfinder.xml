@@ -12,7 +12,7 @@
                     <KeyValue key="key" value="Wayfinder.Floating" />
                 </KeyValues>
                 <Frames>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                    <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.Floating.Enable" />
                         </KeyValues>
