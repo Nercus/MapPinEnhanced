@@ -22,6 +22,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field labelBottomSpacing number
 ---@field descriptionBottomSpacing number
 ---@field scrollPadding number
+---@field normalAlpha number
+---@field hoverAlpha number
 MapPinEnhancedFormElementMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
@@ -161,6 +163,15 @@ function MapPinEnhancedFormElementMixin:SetLayout(orientation)
     end
 end
 
+function MapPinEnhancedFormElementMixin:OnEnter()
+    self:SetAlpha(self.hoverAlpha)
+end
+
+function MapPinEnhancedFormElementMixin:OnLeave()
+    if self:IsMouseOver() then return end
+    self:SetAlpha(self.normalAlpha)
+end
+
 function MapPinEnhancedFormElementMixin:OnLoad()
     assert(self.child, "Form element must have a child frame")
     assert(self.key, "Form element must have an key")
@@ -183,7 +194,14 @@ function MapPinEnhancedFormElementMixin:OnLoad()
         self.description:SetText(self:GetDescriptionText())
     end
     self.orientation = self.orientation or "horizontal"
+    self:SetAlpha(self.normalAlpha)
     self:SetLayout(self.orientation)
     self:UpdateHeight()
+    self.child:HookScript("OnEnter", function()
+        self:OnEnter()
+    end)
+    self.child:HookScript("OnLeave", function()
+        self:OnLeave()
+    end)
     Options:RegisterOption(self.key, self)
 end

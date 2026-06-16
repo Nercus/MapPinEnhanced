@@ -2,12 +2,15 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="FormElement.lua" />
     <Frame name="MapPinEnhancedFormElementTemplate" virtual="true"
-        mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true">
+        mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true" enableMouse="true"
+        propagateMouseInput="Motion">
         <KeyValues>
             <KeyValue key="padding" value="8" type="number" />
             <KeyValue key="labelBottomSpacing" value="5" type="number" />
             <KeyValue key="descriptionBottomSpacing" value="8" type="number" />
             <KeyValue key="scrollPadding" value="12" type="number" />
+            <KeyValue key="normalAlpha" value="0.85" type="number" />
+            <KeyValue key="hoverAlpha" value="1" type="number" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
@@ -48,6 +51,8 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
 
