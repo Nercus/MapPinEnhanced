@@ -12,7 +12,8 @@
         <Layers>
             <Layer level="BORDER">
                 <Texture
-                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png">
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png"
+                    scale="0.5">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-2" y="2" />
                         <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
@@ -22,28 +23,32 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="0">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo.png" parentKey="logo">
-                    <Size x="32" y="32" />
+                <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
+                    <Size x="46" y="46" />
                     <Anchors>
                         <Anchor point="CENTER" relativePoint="TOPLEFT" x="7" y="-7" />
                     </Anchors>
+                    <Gradient orientation="VERTICAL">
+                        <MaxColor r="0.2" g="0.2" b="0.2" />
+                        <MinColor r="0" g="0" b="0" />
+                    </Gradient>
                 </Texture>
-                <MaskTexture file="interface/common/commonmaskcircle.blp"
-                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="32" y="32" />
-                    <Anchors>
-                        <Anchor point="CENTER" relativePoint="TOPLEFT" x="7" y="-7" />
-                    </Anchors>
-                    <MaskedTextures>
-                        <MaskedTexture childKey="logo" />
-                    </MaskedTextures>
-                </MaskTexture>
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="1">
-                <Texture atlas="charactercreate-ring-metallight">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png"
+                    parentKey="logo">
+                    <Size x="32" y="32" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.logo" x="-13" y="13" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logo" x="13" y="-13" />
+                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="2">
+                <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
+                    <Color r="0.9" g="0.9" b="0.9" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
                     </Anchors>
                 </Texture>
             </Layer>
