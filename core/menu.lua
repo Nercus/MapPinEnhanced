@@ -29,7 +29,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field label string
 ---@field isSelected fun(): boolean
 ---@field setSelected fun()
----@field data number
+---@field data any
 
 ---@class MenuDividerEntry : MenuEntry
 ---@field type "divider"

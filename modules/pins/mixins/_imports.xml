@@ -11,26 +11,4 @@
     <Script file="PinMixin.lua" />
 
 
-    <Button name="MapPinEnhancedPinMenuIconButton" hidden="true" virtual="true">
-        <Size x="20" y="35" />
-        <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="icon">
-                    <Size x="20" y="20" />
-                    <Anchors>
-                        <Anchor point="CENTER"></Anchor>
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="BORDER">
-                <Texture parentKey="selected" atlas="combattimeline-fx-highlight"
-                    setAllPoints="true"
-                    hidden="true" />
-            </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture atlas="combattimeline-fx-pause"
-                    setAllPoints="true" />
-            </Layer>
-        </Layers>
-    </Button>
 </Ui>

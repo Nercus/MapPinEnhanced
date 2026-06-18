@@ -11,11 +11,23 @@ local L = MapPinEnhanced.L
 
 local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 
-local MENU_ICON_BUTTON_PATTERN = "|A:%s:19:19|a"
-
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICONS = Pins.PIN_ICONS
 local PIN_ICON_MENU_COLUMNS = 3
+local PIN_ICON_MENU_ICON_SIZE = 22
+local PIN_ICON_MENU_ENTRY_WIDTH = 32
+local PIN_ICON_MENU_ENTRY_HEIGHT = 32
+
+
+---@param icon PinIcon
+---@return string
+local function GetIconLabel(icon)
+    local size = math.floor((icon.scale or 1) * PIN_ICON_MENU_ICON_SIZE + 0.5)
+    if icon.usesAtlas then
+        return string.format("|A:%s:%d:%d|a", icon.path, size, size)
+    end
+    return string.format("|T%s:%d:%d|t", icon.path, size, size)
+end
 
 ---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
 function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
@@ -59,50 +71,20 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             entries = function()
                 local iconMenu = {}
                 for _, icon in pairs(PIN_ICONS) do
+                    local iconData = icon
                     table.insert(iconMenu, {
-                        type = "template",
-                        template = "MapPinEnhancedPinMenuIconButton",
-                        data = icon,
-                        ---@type MenuDescriptionInitializer
-                        initializer = function(frame, description, menu)
-                            menu.minimumElementWidth = 20
-                            --[[@cast frame CheckButton]]
-                            ---@type PinIcon
-                            local data = description:GetData()
-                            if not data or not data.path then
-                                return
-                            end
-                            local selected = self.pinData.texture == data.path
-                            if selected then
-                                ---@diagnostic disable-next-line: undefined-field
-                                frame.selected:Show()
-                            else
-                                ---@diagnostic disable-next-line: undefined-field
-                                frame.selected:Hide()
-                            end
-
-                            description:SetResponder(function()
-                                return MenuResponse.Close;
-                            end)
-                            frame:SetScript("OnClick", function()
-                                self:SetIcon(data.path, data.usesAtlas)
-                                description:Pick(MenuInputContext.MouseButton, "LeftButton")
-                                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-                            end)
-
-                            ---@diagnostic disable-next-line: undefined-field, no-unknown
-                            local icon = frame.icon
-                            icon:SetPoint("CENTER", 0, 0)
-                            if data.usesAtlas then
-                                icon:SetAtlas(data.path)
-                            else
-                                icon:SetTexture(data.path)
-                            end
-                            if data.scale then
-                                icon:SetSize(20 * data.scale, 20 * data.scale)
-                            else
-                                icon:SetSize(20, 20)
-                            end
+                        type = "radio",
+                        label = GetIconLabel(iconData),
+                        isSelected = function()
+                            return self.pinData.texture == iconData.path
+                        end,
+                        setSelected = function()
+                            self:SetIcon(iconData.path, iconData.usesAtlas)
+                        end,
+                        data = iconData,
+                        initializer = function(_, _, menu)
+                            menu.minimumElementWidth = PIN_ICON_MENU_ENTRY_WIDTH
+                            return PIN_ICON_MENU_ENTRY_WIDTH, PIN_ICON_MENU_ENTRY_HEIGHT
                         end
                     })
                 end
