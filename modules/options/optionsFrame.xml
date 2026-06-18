@@ -92,15 +92,6 @@
                                         relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
-                            <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate"
-                                parentKey="Miscellaneous2">
-                                <Anchors>
-                                    <Anchor point="TOPLEFT" relativeKey="$parent.Miscellaneous"
-                                        relativePoint="BOTTOMLEFT" x="0" y="-8" />
-                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Miscellaneous"
-                                        relativePoint="BOTTOMRIGHT" x="0" y="-8" />
-                                </Anchors>
-                            </Frame>
                         </Frames>
                     </Frame>
                 </ScrollChild>
