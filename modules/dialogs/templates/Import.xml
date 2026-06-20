@@ -33,7 +33,7 @@
             </Frame>
             <DropdownButton inherits="MapPinEnhancedDropdownTemplate" parentKey="collectionDropdown"
                 hidden="true">
-                <Size x="170" y="25" />
+                <Size x="170" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio"
                         relativePoint="BOTTOMLEFT" x="10" y="-10" />
@@ -54,7 +54,7 @@
             </DropdownButton>
             <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="newCollectionNameInput"
                 hidden="true">
-                <Size x="170" y="25" />
+                <Size x="200" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio"
                         relativePoint="BOTTOMLEFT" x="10" y="-10" />
