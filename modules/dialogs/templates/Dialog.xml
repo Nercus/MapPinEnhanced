@@ -26,7 +26,7 @@
                 <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
                     <Size x="46" y="46" />
                     <Anchors>
-                        <Anchor point="CENTER" relativePoint="TOPLEFT" x="7" y="-7" />
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
                     </Anchors>
                     <Gradient orientation="VERTICAL">
                         <MaxColor r="0.2" g="0.2" b="0.2" />
