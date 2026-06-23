@@ -1,0 +1,113 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="Notification.lua" />
+
+    <Button name="MapPinEnhancedNotificationFrame"
+        mixin="MapPinEnhancedNotificationFrameMixin"
+        movable="true" parent="UIParent" toplevel="true" hidden="true" propagateMouseInput="Clicks">
+        <Size x="300" y="60" />
+        <Anchors>
+            <Anchor point="TOP" x="0" y="-170" />
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="Background"
+                    atlas="UI-World-Quest-Black" setAllPoints="true">
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture parentKey="DownLine" atlas="UI-World-Quest-golden-line"
+                    useAtlasSize="true" desaturated="true">
+                    <Anchors>
+                        <Anchor point="BOTTOM" relativePoint="TOP" y="-2" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="UpLine" atlas="UI-World-Quest-golden-line"
+                    useAtlasSize="true" desaturated="true">
+                    <Anchors>
+                        <Anchor point="TOP" relativePoint="BOTTOM" y="2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="0">
+                <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
+                    <Size x="46" y="46" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="TOP" x="0" y="5" />
+                    </Anchors>
+                    <Gradient orientation="VERTICAL">
+                        <MaxColor r="0.2" g="0.2" b="0.2" />
+                        <MinColor r="0" g="0" b="0" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="1">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png"
+                    parentKey="logo">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="2">
+                <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
+                    <Color r="0.9" g="0.9" b="0.9" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="text" inherits="GameFontHighlightLarge"
+                    justifyV="MIDDLE"
+                    justifyH="CENTER">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="30" />
+                        <Anchor point="BOTTOMRIGHT" x="-30" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Animations>
+            <AnimationGroup parentKey="fadeIn"
+                setToFinalAlpha="true">
+                <Alpha duration="0.12" order="1" fromAlpha="0" toAlpha="1" />
+                <Alpha childKey="Background" duration="0.12" order="1"
+                    fromAlpha="0" toAlpha="1" />
+                <Scale childKey="Background" duration="0.34" order="1"
+                    smoothing="OUT" fromScaleX="0" fromScaleY="1" toScaleX="1" toScaleY="1" />
+                <Alpha childKey="DownLine" duration="0.2" order="1"
+                    fromAlpha="0" toAlpha="1" />
+                <Scale childKey="DownLine" duration="0.34" order="1"
+                    smoothing="OUT" fromScaleX="0" fromScaleY="1" toScaleX="1" toScaleY="1" />
+                <Alpha childKey="UpLine" duration="0.2" order="1"
+                    fromAlpha="0" toAlpha="1" />
+                <Scale childKey="UpLine" duration="0.34" order="1"
+                    smoothing="OUT" fromScaleX="0" fromScaleY="1" toScaleX="1" toScaleY="1" />
+
+                <Alpha childKey="logo" duration="0.18" order="1" fromAlpha="0" toAlpha="1" />
+                <Alpha childKey="text" duration="0.34" order="1"
+                    fromAlpha="0" toAlpha="1" />
+
+                <Scripts>
+                    <OnPlay>
+                        self:GetParent():Show()
+                    </OnPlay>
+                </Scripts>
+            </AnimationGroup>
+            <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
+                parentKey="fadeOut">
+                <KeyValues>
+                    <KeyValue key="hideOnFinished" value="true" />
+                </KeyValues>
+            </AnimationGroup>
+        </Animations>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>
