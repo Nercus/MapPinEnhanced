@@ -13,6 +13,7 @@ Dialogs.DIALOG_TYPES = {
     EXPORT = "EXPORT",
     CONFIRM = "CONFIRM",
     INFO = "INFO",
+    ABOUT = "ABOUT",
 }
 
 
@@ -36,6 +37,9 @@ function Dialogs:ShowDialog(dialogType, overrideTitle)
     elseif dialogType == self.DIALOG_TYPES.INFO then
         content = self:GetInfoContent()
         title = title or L["Info"]
+    elseif dialogType == self.DIALOG_TYPES.ABOUT then
+        content = self:GetAboutContent()
+        title = title or MapPinEnhanced.version
     else
         error("Unknown dialog type: " .. tostring(dialogType))
     end
@@ -85,3 +89,8 @@ MapPinEnhanced:AddSlashCommand("import",
 MapPinEnhanced:AddSlashCommand("export",
     function() Dialogs:ShowDialog(Dialogs.DIALOG_TYPES.EXPORT) end,
     L["Open the export dialog to export your map pins to a string."])
+
+
+MapPinEnhanced:AddSlashCommand({ "version", "about" },
+    function() Dialogs:ShowDialog(Dialogs.DIALOG_TYPES.ABOUT) end,
+    L["Open the about dialog to view version information."])

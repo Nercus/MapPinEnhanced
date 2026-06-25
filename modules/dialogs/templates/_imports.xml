@@ -6,4 +6,5 @@
     <Include file="Export.xml" />
     <Include file="Confirm.xml" />
     <Include file="Info.xml" />
+    <Include file="About.xml" />
 </Ui>
