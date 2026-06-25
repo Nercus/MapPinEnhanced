@@ -1,18 +1,17 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
 
     <Include file="Dialog.lua" />
-    <Frame name="MapPinEnhancedDialog"
-        mixin="MapPinEnhancedDialogMixin"
-        movable="true" hidden="true" parent="UIParent" toplevel="true">
+    <Frame name="MapPinEnhancedDialog" mixin="MapPinEnhancedDialogMixin" movable="true"
+        hidden="true" parent="UIParent" toplevel="true">
         <Anchors>
             <Anchor point="CENTER" />
         </Anchors>
         <Layers>
             <Layer level="BORDER">
-                <Texture
-                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png"
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png"
                     scale="0.5">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-2" y="2" />
@@ -65,8 +64,8 @@
                         </Texture>
                     </Layer>
                     <Layer level="BACKGROUND" textureSubLevel="1">
-                        <Texture parentKey="backgroundArt"
-                            atlas="shop-bg-map-green" desaturated="true">
+                        <Texture parentKey="backgroundArt" atlas="shop-bg-map-green"
+                            desaturated="true">
                             <Size x="1058" y="600" />
                             <Anchors>
                                 <Anchor point="RIGHT" x="-5" />
@@ -77,8 +76,8 @@
                             </Gradient>
                         </Texture>
                         <MaskTexture file="interface/masks/squaremask.blp"
-                            parentKey="backgroundMask"
-                            vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                            parentKey="backgroundMask" vWrapMode="CLAMPTOBLACKADDITIVE"
+                            hWrapMode="CLAMPTOBLACKADDITIVE">
                             <Anchors>
                                 <Anchor point="RIGHT" x="-5" />
                             </Anchors>
@@ -113,8 +112,7 @@
                     </Layer>
                     <Layer level="ARTWORK">
                         <FontString inherits="GameFontNormalLarge" setAllPoints="true"
-                            justifyH="CENTER"
-                            justifyV="MIDDLE" parentKey="title" />
+                            justifyH="CENTER" justifyV="MIDDLE" parentKey="title" />
                     </Layer>
                 </Layers>
             </Frame>

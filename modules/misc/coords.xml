@@ -1,10 +1,10 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="coords.lua" />
 
-    <Frame name="MapPinEnhancedCoordsDisplayTemplate"
-        mixin="MapPinEnhancedCoordsDisplayMixin"
+    <Frame name="MapPinEnhancedCoordsDisplayTemplate" mixin="MapPinEnhancedCoordsDisplayMixin"
         movable="true" virtual="true" hidden="true" parent="UIParent">
         <Size x="140" y="20" />
         <Layers>
@@ -18,8 +18,7 @@
             </Layer>
             <Layer level="ARTWORK">
                 <Texture atlas="housing-dashboard-initiatives-fillbar-tickbar-complete"
-                    parentKey="separator"
-                    desaturated="true">
+                    parentKey="separator" desaturated="true">
                     <Size x="1" />
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
@@ -27,29 +26,29 @@
                         <Anchor point="BOTTOM" relativePoint="BOTTOM" x="0" y="2" />
                     </Anchors>
                 </Texture>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsXDec"
-                    text=".00" justifyH="LEFT">
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsXDec" text=".00"
+                    justifyH="LEFT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativeKey="$parent.separator" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsXInt"
-                    text="00" justifyH="RIGHT">
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsXInt" text="00"
+                    justifyH="RIGHT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativeKey="$parent.coordsXDec" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt"
-                    text="00" justifyH="RIGHT">
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt" text="00"
+                    justifyH="RIGHT">
                     <Size x="18" y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.separator" relativePoint="RIGHT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsYDec"
-                    text=".00" justifyH="LEFT">
+                <FontString inherits="GameFontNormalSmall" parentKey="coordsYDec" text=".00"
+                    justifyH="LEFT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.coordsYInt" relativePoint="RIGHT" />
@@ -81,8 +80,8 @@
                     </AnimationGroup>
                 </Animations>
             </Button>
-            <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate"
-                hidden="true" propagateMouseInput="Motion">
+            <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true"
+                propagateMouseInput="Motion">
                 <Size x="20" y="20" />
                 <KeyValues>
                     <KeyValue key="icon" value="lock" />

@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="Category.lua" />
     <Frame name="MapPinEnhancedOptionCategoryBaseTemplate"
@@ -19,8 +20,8 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontNormalLarge"
-                            text="Category" justifyH="LEFT">
+                        <FontString parentKey="title" inherits="GameFontNormalLarge" text="Category"
+                            justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT" relativePoint="LEFT" x="25" />
                             </Anchors>

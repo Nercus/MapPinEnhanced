@@ -4,15 +4,13 @@
     <Script file="input.lua" />
 
     <EditBox name="MapPinEnhancedInputTemplate"
-        mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin"
-        virtual="true"
+        mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin" virtual="true"
         font="GameFontHighlight" autoFocus="false" multiLine="false" propagateMouseInput="Motion">
         <Size y="20" />
         <TextInsets left="5" right="15" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg"
-                    atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
+                <Texture parentKey="bg" atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
                 </Texture>
             </Layer>
 
@@ -56,8 +54,7 @@
                 <Size x="100" y="20" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture atlas="plunderstorm-icon-key" setAllPoints="true"
-                            parentKey="bg" />
+                        <Texture atlas="plunderstorm-icon-key" setAllPoints="true" parentKey="bg" />
                         <FontString parentKey="text" inherits="GameFontNormalSmall"
                             justifyH="CENTER" justifyV="MIDDLE">
                             <Anchors>

@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="animations.lua" />
 
@@ -6,8 +7,7 @@
 
     <!-- Fade In/Out -->
     <AnimationGroup name="MapPinEnhancedAnimationFadeIn"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
         <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnPlay method="OnPlayShow" />
@@ -15,8 +15,7 @@
     </AnimationGroup>
 
     <AnimationGroup name="MapPinEnhancedAnimationFadeOut"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnFinished method="OnFinishedHide" />
@@ -25,8 +24,7 @@
 
     <!-- Fade + Scale In/Out -->
     <AnimationGroup name="MapPinEnhancedAnimationFadeZoomIn"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
         <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
         <Scale fromScaleX="0.8" fromScaleY="0.8" toScaleX="1" toScaleY="1" duration="0.15"
             smoothing="IN_OUT" />
@@ -36,8 +34,7 @@
     </AnimationGroup>
 
     <AnimationGroup name="MapPinEnhancedAnimationFadeZoomOut"
-        mixin="MapPinEnhancedAnimationVisibilityMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
         <Scale fromScaleX="1" fromScaleY="1" toScaleX="0.8" toScaleY="0.8" duration="0.15"
             smoothing="IN_OUT" />
@@ -48,15 +45,13 @@
 
 
     <!-- Spin -->
-    <AnimationGroup name="MapPinEnhancedAnimationSpin"
-        virtual="true" looping="REPEAT">
+    <AnimationGroup name="MapPinEnhancedAnimationSpin" virtual="true" looping="REPEAT">
         <Rotation degrees="360" duration="0.5" smoothing="IN_OUT" />
     </AnimationGroup>
 
     <!-- Rotate -->
     <AnimationGroup name="MapPinEnhancedAnimationRotateRight90"
-        mixin="MapPinEnhancedAnimationRotationMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationRotationMixin" virtual="true">
         <Rotation degrees="90" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnFinished method="OnFinishedRotateRight90" />
@@ -64,8 +59,7 @@
     </AnimationGroup>
 
     <AnimationGroup name="MapPinEnhancedAnimationRotateLeft90"
-        mixin="MapPinEnhancedAnimationRotationMixin"
-        virtual="true">
+        mixin="MapPinEnhancedAnimationRotationMixin" virtual="true">
         <Rotation degrees="-90" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnFinished method="OnFinishedRotateLeft90" />

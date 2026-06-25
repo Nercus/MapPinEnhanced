@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="About.lua" />
@@ -47,8 +48,7 @@
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="okayButton">
                 <Size x="100" y="30" />
                 <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" y="-30"
-                        relativeKey="$parent.thanks" />
+                    <Anchor point="TOP" relativePoint="BOTTOM" y="-30" relativeKey="$parent.thanks" />
                 </Anchors>
             </Button>
         </Frames>

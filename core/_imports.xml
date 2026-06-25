@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="modules.lua" />
     <Include file="frame.lua" />
@@ -19,19 +20,16 @@
     <Include file="map.lua" />
 
     <!--@debug@-->
-    <Frame
-        name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
-        inherits="DefaultPanelTemplate"
-        frameStrata="HIGH" frameLevel="100" hidden="true" virtual="true"
-        mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">
+    <Frame name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
+        inherits="DefaultPanelTemplate" frameStrata="HIGH" frameLevel="100" hidden="true"
+        virtual="true" mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">
         <Size x="640" y="130" />
         <Anchors>
             <Anchor point="BOTTOM" x="0" y="5" />
         </Anchors>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal"
-                    text="Press 1 to reload UI">
+                <FontString parentKey="title" inherits="GameFontNormal" text="Press 1 to reload UI">
                     <Anchors>
                         <Anchor point="TOP" x="0" y="-30" />
                     </Anchors>
@@ -81,8 +79,7 @@
                         <Anchors>
                             <Anchor point="LEFT" relativePoint="RIGHT" x="5" y="0" />
                         </Anchors>
-                        <NormalTexture
-                            atlas="CreditsScreen-Assets-Buttons-Play" setAllPoints="true" />
+                        <NormalTexture atlas="CreditsScreen-Assets-Buttons-Play" setAllPoints="true" />
                         <HighlightTexture atlas="UI-Frame-CypherChoice-Portrait-FX-GoldGlow"
                             setAllPoints="true" alpha="0.3" />
                     </Button>

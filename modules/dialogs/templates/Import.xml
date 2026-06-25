@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="Import.lua" />
@@ -27,8 +28,8 @@
             <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
                 <Size x="1" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.textarea"
-                        relativePoint="TOPRIGHT" x="10" y="0" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.textarea" relativePoint="TOPRIGHT"
+                        x="10" y="0" />
                 </Anchors>
             </Frame>
             <DropdownButton inherits="MapPinEnhancedDropdownTemplate" parentKey="collectionDropdown"
@@ -44,8 +45,7 @@
                             <KeyValue key="showOnPlay" value="true" />
                         </KeyValues>
                     </AnimationGroup>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
-                        parentKey="fadeOut">
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
                         <KeyValues>
                             <KeyValue key="hideOnFinished" value="true" />
                         </KeyValues>
@@ -65,8 +65,7 @@
                             <KeyValue key="showOnPlay" value="true" />
                         </KeyValues>
                     </AnimationGroup>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
-                        parentKey="fadeOut">
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
                         <KeyValues>
                             <KeyValue key="hideOnFinished" value="true" />
                         </KeyValues>
@@ -83,8 +82,7 @@
                 <Size x="100" y="30" />
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.cancelButton"
-                        relativePoint="TOPLEFT"
-                        x="-10" y="0" />
+                        relativePoint="TOPLEFT" x="-10" y="0" />
                 </Anchors>
             </Button>
         </Frames>

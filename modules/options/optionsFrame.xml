@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="optionsFrame.lua" />
@@ -6,8 +7,7 @@
 
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="shop-bg-map-blue" setAllPoints="true"
-                    desaturated="true">
+                <Texture atlas="shop-bg-map-blue" setAllPoints="true" desaturated="true">
                     <Gradient orientation="HORIZONTAL">
                         <MinColor r="1" g="1" b="1" a="0" />
                         <MaxColor r="1" g="1" b="1" a="0.7" />
@@ -25,8 +25,7 @@
                 <Layers>
                     <Layer level="ARTWORK">
                         <FontString parentKey="title" inherits="GameFontHighlightHuge"
-                            justifyH="LEFT"
-                            justifyV="MIDDLE">
+                            justifyH="LEFT" justifyV="MIDDLE">
                             <Size x="320" y="24" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="16" y="-15" />

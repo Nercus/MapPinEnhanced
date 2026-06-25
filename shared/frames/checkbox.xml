@@ -1,10 +1,11 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="checkbox.lua" />
 
     <CheckButton name="MapPinEnhancedCheckboxTemplate"
-        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin"
-        virtual="true" propagateMouseInput="Motion">
+        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        propagateMouseInput="Motion">
         <Size x="25" y="25" />
         <NormalTexture parentKey="NormalTexture" atlas="generic-frame-chamfered-12d-2o"
             setAllPoints="true" />
@@ -12,10 +13,8 @@
             alphaMode="ADD" alpha="0.2" setAllPoints="true" />
         <CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal" setAllPoints="true">
             <Animations>
-                <AnimationGroup parentKey="fadeIn"
-                    inherits="MapPinEnhancedAnimationFadeZoomIn" />
-                <AnimationGroup parentKey="fadeOut"
-                    inherits="MapPinEnhancedAnimationFadeZoomOut" />
+                <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
+                <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
             <Scripts>
                 <OnShow>
@@ -37,8 +36,8 @@
     </CheckButton>
 
     <CheckButton name="MapPinEnhancedCheckboxWithLabelTemplate"
-        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin"
-        virtual="true" propagateMouseInput="Motion">
+        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        propagateMouseInput="Motion">
         <Size x="25" y="25" />
         <NormalTexture parentKey="NormalTexture" atlas="generic-frame-chamfered-12d-2o">
             <Size x="25" y="25" />
@@ -59,10 +58,8 @@
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
             <Animations>
-                <AnimationGroup parentKey="fadeIn"
-                    inherits="MapPinEnhancedAnimationFadeZoomIn" />
-                <AnimationGroup parentKey="fadeOut"
-                    inherits="MapPinEnhancedAnimationFadeZoomOut" />
+                <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
+                <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
             <Scripts>
                 <OnShow>

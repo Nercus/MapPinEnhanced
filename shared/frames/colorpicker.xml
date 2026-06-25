@@ -4,8 +4,8 @@
     <Script file="colorpicker.lua" />
 
     <Button name="MapPinEnhancedColorpickerTemplate"
-        mixin="MapPinEnhancedColorpickerMixin, MapPinEnhancedThemeableMixin"
-        virtual="true" enableMouse="true" propagateMouseInput="Motion">
+        mixin="MapPinEnhancedColorpickerMixin, MapPinEnhancedThemeableMixin" virtual="true"
+        enableMouse="true" propagateMouseInput="Motion">
         <Size x="84" y="20" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="-1">
@@ -19,8 +19,8 @@
                 </Texture>
                 <MaskTexture
                     file="Interface/AddOns/MapPinEnhanced/assets/forms/colorpicker/body.png"
-                    parentKey="bgMask"
-                    vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    parentKey="bgMask" vWrapMode="CLAMPTOBLACKADDITIVE"
+                    hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Size x="84" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />

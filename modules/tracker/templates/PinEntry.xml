@@ -1,4 +1,5 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="PinEntry.lua" />
     <Button name="MapPinEnhancedTrackerPinEntryTemplate" virtual="true"
@@ -7,8 +8,7 @@
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
         <Size x="272" y="35" />
-        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight"
-            setAllPoints="true">
+        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight" setAllPoints="true">
             <Color r="1" g="0.82" b="0" a="1" />
         </HighlightTexture>
         <Frames>

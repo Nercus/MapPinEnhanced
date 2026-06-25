@@ -1,11 +1,12 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="radiogroup.lua" />
 
 
     <CheckButton name="MapPinEnhancedRadioButtonTemplate"
-        mixin="MapPinEnhancedRadioButtonMixin,MapPinEnhancedThemeableMixin"
-        virtual="true" propagateMouseInput="Motion">
+        mixin="MapPinEnhancedRadioButtonMixin,MapPinEnhancedThemeableMixin" virtual="true"
+        propagateMouseInput="Motion">
         <Size x="100" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="common-radiobutton-circle">
             <Size x="20" y="20" />
@@ -26,10 +27,8 @@
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
             <Animations>
-                <AnimationGroup parentKey="fadeIn"
-                    inherits="MapPinEnhancedAnimationFadeZoomIn" />
-                <AnimationGroup parentKey="fadeOut"
-                    inherits="MapPinEnhancedAnimationFadeZoomOut" />
+                <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
+                <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
             <Scripts>
                 <OnShow>
@@ -62,8 +61,8 @@
     </CheckButton>
 
 
-    <Frame name="MapPinEnhancedRadioGroupTemplate"
-        mixin="MapPinEnhancedRadioGroupMixin" virtual="true">
+    <Frame name="MapPinEnhancedRadioGroupTemplate" mixin="MapPinEnhancedRadioGroupMixin"
+        virtual="true">
         <Size x="200" y="0" />
         <Scripts>
             <OnLoad method="OnLoad" />

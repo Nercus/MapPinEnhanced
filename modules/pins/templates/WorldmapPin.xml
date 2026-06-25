@@ -3,8 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="WorldmapPin.lua" />
     <Button name="MapPinEnhancedWorldmapPinTemplate" mixin="MapPinEnhancedWorldmapPinMixin"
-        virtual="true"
-        inherits="MapPinEnhancedBasePinTemplate"
+        virtual="true" inherits="MapPinEnhancedBasePinTemplate"
         registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="25" y="25" />
         <Scripts>

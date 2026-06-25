@@ -39,9 +39,9 @@
                     "name": "NoPrint",
                     "pattern": "\\bprint\\s*\\(",
                     "severity": "Error"
-                },
+                }
             ]
-        },
+        }
     ],
     "editor.formatOnSave": true,
     "editor.indentSize": "tabSize",
@@ -51,7 +51,7 @@
     "explorer.fileNesting.expand": true,
     "explorer.fileNesting.patterns": {
         "*.lua": "${capture}.lua, ${capture}.xml",
-        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, LICENSE, CHANGELOG.md, .pre-commit-config.yaml, install-deps.sh",
+        "*.toc": ".pkgmeta, .luarc.json, README.md, .gitignore, LICENSE, CHANGELOG.md, .pre-commit-config.yaml, install-deps.sh, .editorconfig"
     },
     "explorer.sortOrder": "default",
     "Lua.completion.autoRequire": false,
@@ -86,7 +86,7 @@
     "Lua.format.defaultConfig": {
         "indent_size": "4",
         "indent_style": "space",
-        "quote_style": "double",
+        "quote_style": "double"
     },
     "Lua.hint.setType": false,
     "Lua.workspace.ignoreDir": [
@@ -136,5 +136,5 @@
     "Lua.type.weakUnionCheck": true,
     "Lua.diagnostics.globals": [
         "IN_GAME_NAVIGATION_RANGE"
-    ],
+    ]
 }
