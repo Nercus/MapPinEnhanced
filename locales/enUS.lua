@@ -48,6 +48,19 @@ L["Click to paste export string or slash commands here"] = "Click to paste expor
 L["Import"] = "Import"
 L["Enter collection name"] = "Enter collection name"
 
+L["Loaded set \"%s\"."] = "Loaded set \"%s\"."
+L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
+L["Location reached at %s."] = "Location reached at %s."
+L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
+L["It is locked."] = "It is locked."
+L["Location reached at %s."] = "Location reached at %s."
+
+L["Close"] = "Close"
+L["Version: %s (%s)"] = "Version: %s (%s)"
+L["Build: %s"] = "Build: %s"
+L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"] =
+"Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"
+L["Open the about dialog to view version information."] = "Open the about dialog to view version information."
 
 ------------------------------ Options ------------------------------
 L["Miscellaneous"] = "Miscellaneous"
