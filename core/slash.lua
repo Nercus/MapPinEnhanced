@@ -52,12 +52,14 @@ function MapPinEnhanced:PrintHelp()
     end
 end
 
+---@alias SlashCommand string|string[]
+
 ---Add a slash command to the list
----@param command string the command to add
+---@param command SlashCommand the command or command aliases to add
 ---@param func function the function to call when the command is used
 ---@param help string the help message to display when the command is used
 function MapPinEnhanced:AddSlashCommand(command, func, help)
-    assert(type(command) == "string", "Command not provided")
+    assert(type(command) == "string" or type(command) == "table", "Command not provided")
     assert(type(func) == "function", "Function not provided")
     assert(type(help) == "string", "Help not provided")
     if not commandList then
@@ -66,12 +68,20 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
     if not commandHelpStrings then
         commandHelpStrings = {}
     end
-    commandList[command] = func
-    commandHelpStrings[command] = help
+
+    local commands = type(command) == "table" and command or { command }
+    local mainCommand = commands[1]
+    assert(type(mainCommand) == "string", "Command not provided")
+
+    for _, alias in ipairs(commands) do
+        assert(type(alias) == "string", "Command alias must be a string")
+        commandList[alias] = func
+    end
+    commandHelpStrings[mainCommand] = help
 
     self:AddDebugCustomDebugAction({
         type = "button",
-        label = "/" .. command,
+        label = "/" .. mainCommand,
         onClick = func,
     })
 end
