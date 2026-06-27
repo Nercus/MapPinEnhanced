@@ -39,7 +39,7 @@ function Dialogs:ShowDialog(dialogType, overrideTitle)
         title = title or L["Info"]
     elseif dialogType == self.DIALOG_TYPES.ABOUT then
         content = self:GetAboutContent()
-        title = title or MapPinEnhanced.version
+        title = title or "by Nerc"
     else
         error("Unknown dialog type: " .. tostring(dialogType))
     end
