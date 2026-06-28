@@ -5,18 +5,18 @@
     <Include file="About.lua" />
     <Frame name="MapPinEnhancedAboutDialogContentTemplate" virtual="true"
         mixin="MapPinEnhancedAboutDialogContentMixin">
-        <Size x="400" y="235" />
+        <Size x="400" y="230" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormalLarge" justifyH="CENTER"
-                    justifyV="MIDDLE" maxLines="3" wordwrap="true">
+                    justifyV="MIDDLE" wordwrap="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" y="-10" />
                         <Anchor point="TOPRIGHT" y="-10" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="version" inherits="GameFontNormal" justifyH="CENTER"
-                    justifyV="MIDDLE" maxLines="3" wordwrap="true">
+                    justifyV="MIDDLE" wordwrap="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
                             relativeKey="$parent.title" y="-15" />
@@ -25,7 +25,7 @@
                     </Anchors>
                 </FontString>
                 <FontString parentKey="build" inherits="GameFontNormal" justifyH="CENTER"
-                    justifyV="MIDDLE" maxLines="3" wordwrap="true">
+                    justifyV="MIDDLE" wordwrap="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
                             relativeKey="$parent.version" y="-15" />
