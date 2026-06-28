@@ -109,6 +109,7 @@ local CALLBACK_EVENTS = {
     PIN_UPDATED_TITLE = { event = "PIN_UPDATED_TITLE_%w+", pattern = true },
     PIN_UPDATED_ICON = { event = "PIN_UPDATED_ICON_%w+", pattern = true },
     PIN_UPDATED_COLOR = { event = "PIN_UPDATED_COLOR_%w+", pattern = true },
+    PIN_UPDATED_LOCK = { event = "PIN_UPDATED_LOCK_%w+", pattern = true },
     PIN_ADDED = { event = "PIN_ADDED", pattern = false },
     PIN_REMOVED = { event = "PIN_REMOVED", pattern = false },
     PIN_TRACKING_CHANGED = { event = "PIN_TRACKING_CHANGED", pattern = false },

@@ -55,7 +55,14 @@
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
-
+                <Texture parentKey="lock" atlas="transmog-gearSlot-transmogrified"
+                    texelSnappingBias="0" rotation="45" snapToPixelGrid="false"
+                    desaturated="true" hidden="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-2" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
+                    </Anchors>
+                </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false"

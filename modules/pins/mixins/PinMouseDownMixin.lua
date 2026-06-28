@@ -19,7 +19,9 @@ function MapPinEnhancedPinMouseDownMixin:OnMouseDown(frame, button)
             return
         end
         self:ToggleTracked()
-    else
+    elseif button == "RightButton" then
         self:ShowMenu(frame)
+    elseif button == "MiddleButton" then
+        self:ToggleLock()
     end
 end

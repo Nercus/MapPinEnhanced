@@ -14,6 +14,7 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 ---@field SetTitle fun(self: MapPinEnhancedWayfinder, title: string) sets the wayfinder title, if the wayfinder supports it
 ---@field SetColor fun(self: MapPinEnhancedWayfinder, color: string) sets the wayfinder color, if the wayfinder supports it
 ---@field SetTexture fun(self: MapPinEnhancedWayfinder, texture: string, usesAtlas: boolean) sets the wayfinder texture, if the wayfinder supports it
+---@field SetLock fun(self: MapPinEnhancedWayfinder, lock: boolean) sets the wayfinder lock, if the wayfinder supports it
 Wayfinders.activeWayfinders = {}
 
 ---@enum WayfinderType
@@ -30,6 +31,7 @@ local AVAILABLE_WAYFINDERS = {
 ---@field texture string? an optional texture to use for the pin this will override the color
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
 ---@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
+---@field lock boolean? if true, the pin will be not be removed automatically when it has been reached
 
 --- Set the wayfinder data for the currently tracked pin, this will update all active wayfinders with the new data
 ---@param data WayfinderData
@@ -67,6 +69,13 @@ function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
     end
     self.cachedData.texture = texture
     self.cachedData.usesAtlas = usesAtlas
+end
+
+function Wayfinders:OverrideWayfinderLock(lock)
+    for _, wayfinder in ipairs(self.activeWayfinders) do
+        wayfinder:SetLock(lock)
+    end
+    self.cachedData.lock = lock
 end
 
 ---@param wayfinder MapPinEnhancedWayfinder

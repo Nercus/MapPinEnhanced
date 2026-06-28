@@ -18,7 +18,8 @@ MapPinEnhancedPinMixin = CreateFromMixins(
     MapPinEnhancedPinStyleMixin,
     MapPinEnhancedPinUtilsMixin,
     MapPinEnhancedPinTooltipMixin,
-    MapPinEnhancedPinProxyMixin
+    MapPinEnhancedPinProxyMixin,
+    MapPinEnhancedPinLockMixin
 )
 
 local L = MapPinEnhanced.L
@@ -95,6 +96,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
     self:SetIcon(self.pinData.texture, self.pinData.usesAtlas)
     self:SetTooltip(self.pinData.tooltip)
     self:SetTitle(self.pinData.title)
+    self:SetLock(self.pinData.lock)
 
     if self.pinData.setTracked then
         self:Track()
