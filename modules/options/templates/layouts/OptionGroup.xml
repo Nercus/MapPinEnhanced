@@ -15,7 +15,7 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT"
+                <FontString parentKey="label" inherits="GameFontNormalOutline" justifyH="LEFT"
                     justifyV="TOP">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
@@ -26,6 +26,16 @@
             <Layer level="BACKGROUND">
                 <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5"
                     scale="0.5" />
+                <Texture atlas="Options_HorizontalDivider" parentKey="labelDivider">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="1" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
+                    <Size x="300" y="1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.label" x="-10" y="-1" />
+                    </Anchors>
+                </Texture>
             </Layer>
         </Layers>
         <Scripts>

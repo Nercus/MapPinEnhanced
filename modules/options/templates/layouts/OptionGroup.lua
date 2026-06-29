@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionGroupTemplate : Frame
 ---@field label FontString
+---@field labelDivider Texture
 ---@field key string
 ---@field topPadding number
 ---@field labelInsetX number
@@ -16,6 +17,8 @@ local L = MapPinEnhanced.L
 
 function MapPinEnhancedOptionGroupMixin:SetLabel(text)
     self.label:SetText(text)
+    local textWidth = self.label:GetStringWidth()
+    self.labelDivider:SetWidth(textWidth + self.labelInsetX * 5)
 end
 
 function MapPinEnhancedOptionGroupMixin:UpdateLabelLayout()
