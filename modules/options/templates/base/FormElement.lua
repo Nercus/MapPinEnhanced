@@ -163,6 +163,22 @@ function MapPinEnhancedFormElementMixin:SetLayout(orientation)
     end
 end
 
+function MapPinEnhancedFormElementMixin:UpdateDescriptionWidth()
+    local elementWidth = self:GetWidth()
+    local childWidth = self.child:GetWidth()
+    local descriptionSpace = elementWidth - childWidth
+    local descriptionWidth = math.floor(descriptionSpace * 0.9)
+    self.description:SetWidth(descriptionWidth)
+end
+
+function MapPinEnhancedFormElementMixin:OnSizeChanged()
+    local showDescription = self:HasDescription()
+    if not showDescription then
+        return
+    end
+    self:UpdateDescriptionWidth()
+end
+
 function MapPinEnhancedFormElementMixin:OnEnter()
     self:SetAlpha(self.hoverAlpha)
 end
@@ -192,6 +208,7 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     end
     if showDescription then
         self.description:SetText(self:GetDescriptionText())
+        self:UpdateDescriptionWidth()
     end
     self.orientation = self.orientation or "horizontal"
     self:SetAlpha(self.normalAlpha)
