@@ -30,10 +30,30 @@
                     <KeyValue key="key" value="Wayfinder.Arrow" />
                 </KeyValues>
                 <Frames>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Arrow.Enable" />
-                        </KeyValues>
+                    <Frame inherits="MapPinEnhancedOptionTwoColumnTemplate">
+                        <Frames>
+                            <Frame parentKey="column1">
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedOptionToggleTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="Wayfinder.Arrow.Enable" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                            <Frame parentKey="column2">
+                                <Size x="150" y="150" />
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedImageTemplate">
+                                        <Size x="150" y="150" />
+                                        <KeyValues>
+                                            <KeyValue key="imagePath"
+                                                value="Interface/AddOns/MapPinEnhanced/assets/options/wayfinderArrow.png" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                        </Frames>
                     </Frame>
                 </Frames>
             </Frame>
