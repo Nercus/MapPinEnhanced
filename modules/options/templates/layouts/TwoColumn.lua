@@ -7,7 +7,16 @@ local MapPinEnhanced = select(2, ...)
 ---@field columnSpacing number
 ---@field rowSpacing number
 ---@field bottomPadding number
+---@field configuredColumn1Width number?
+---@field configuredColumn2Width number?
 MapPinEnhancedOptionTwoColumnMixin = {}
+
+---@param column Frame
+---@return number | nil
+local function GetConfiguredWidth(column)
+    local width = column:GetWidth()
+    return width > 0 and width or nil
+end
 
 function MapPinEnhancedOptionTwoColumnMixin:LayoutColumn(column)
     if not column then return 0 end
@@ -19,7 +28,7 @@ function MapPinEnhancedOptionTwoColumnMixin:LayoutColumn(column)
     local totalHeight = 0
     for i, child in ipairs(children) do
         child:ClearAllPoints()
-        child:SetWidth(column:GetWidth() - self.columnSpacing)
+        child:SetWidth(column:GetWidth())
         if i == 1 then
             child:SetPoint("TOPLEFT", column, "TOPLEFT", 0, 0)
         else
@@ -39,16 +48,26 @@ function MapPinEnhancedOptionTwoColumnMixin:UpdateLayout()
     assert(self.column1, "TwoColumnTemplate requires a 'column1' frame")
     assert(self.column2, "TwoColumnTemplate requires a 'column2' frame")
 
-    local totalWidth = self:GetWidth()
-    local columnWidth = (totalWidth - self.columnSpacing) / 2
+    local availableWidth = math.max(self:GetWidth() - self.columnSpacing, 0)
+    local column1Width = self.configuredColumn1Width
+    local column2Width = self.configuredColumn2Width
+
+    if not column1Width and not column2Width then
+        column1Width = availableWidth / 2
+        column2Width = availableWidth / 2
+    elseif not column1Width then
+        column1Width = math.max(availableWidth - column2Width, 0)
+    elseif not column2Width then
+        column2Width = math.max(availableWidth - column1Width, 0)
+    end
 
     self.column1:ClearAllPoints()
     self.column1:SetPoint("TOPLEFT", self, "TOPLEFT", 0, 0)
-    self.column1:SetWidth(columnWidth)
+    self.column1:SetWidth(column1Width)
 
     self.column2:ClearAllPoints()
     self.column2:SetPoint("TOPLEFT", self.column1, "TOPRIGHT", self.columnSpacing, 0)
-    self.column2:SetWidth(columnWidth)
+    self.column2:SetWidth(column2Width)
 
     local column1Height = self:LayoutColumn(self.column1)
     local column2Height = self:LayoutColumn(self.column2)
@@ -58,6 +77,14 @@ function MapPinEnhancedOptionTwoColumnMixin:UpdateLayout()
 
     local maxHeight = math.max(column1Height, column2Height)
     self:SetHeight(maxHeight > 0 and maxHeight or 1)
+end
+
+function MapPinEnhancedOptionTwoColumnMixin:OnLoad()
+    assert(self.column1, "TwoColumnTemplate requires a 'column1' frame")
+    assert(self.column2, "TwoColumnTemplate requires a 'column2' frame")
+
+    self.configuredColumn1Width = GetConfiguredWidth(self.column1)
+    self.configuredColumn2Width = GetConfiguredWidth(self.column2)
 end
 
 function MapPinEnhancedOptionTwoColumnMixin:OnShow()

@@ -11,6 +11,7 @@
             <KeyValue key="bottomPadding" value="12" type="number" />
         </KeyValues>
         <Scripts>
+            <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
             <OnSizeChanged method="OnSizeChanged" />
         </Scripts>
