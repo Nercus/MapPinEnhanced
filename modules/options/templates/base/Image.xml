@@ -7,21 +7,24 @@
         mixin="MapPinEnhancedImageMixin, MapPinEnhancedThemeableMixin" virtual="true">
         <Size x="400" y="300" />
         <Layers>
-            <Layer level="BACKGROUND" textureSubLevel="4">
-                <Texture parentKey="image" setAllPoints="true" />
-            </Layer>
-            <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture parentKey="bg" setAllPoints="true" atlas="spec-background" />
-            </Layer>
-            <Layer level="OVERLAY">
-                <Texture parentKey="border" file="interface/talentframe/specialization">
-                    <TextureSliceMode mode="Stretched" />
-                    <TextureSliceMargins left="161" right="161" top="101" bottom="101" />
-                    <TexCoords left="0.00048828125" right="0.15771484375" top="0.83837890625"
-                        bottom="0.93701171875" />
+            <Layer level="BORDER" textureSubLevel="1">
+                <Texture
+                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGraySquare.png"
+                    scale="0.75">
+                    <Color r="0.9" g="0.9" b="0.9" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="-6" y="6" />
-                        <Anchor point="BOTTOMRIGHT" x="6" y="-6" />
+                        <Anchor point="TOPLEFT" x="-5" y="5" />
+                        <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
+                    </Anchors>
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                </Texture>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture parentKey="image">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
             </Layer>
