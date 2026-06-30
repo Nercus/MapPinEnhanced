@@ -100,6 +100,7 @@ function MapPinEnhancedBasePinMixin:ShowPulseOnce()
 end
 
 function MapPinEnhancedBasePinMixin:HidePulse()
+    self.pulseHighlight.pulse:Stop()
     self.pulseHighlight:Hide()
 end
 
