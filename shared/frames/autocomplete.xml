@@ -87,30 +87,32 @@
 
     <Button name="MapPinEnhancedAutocompleteEntryTemplate"
         mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
-        <Size x="1" y="25" />
+        <Size x="1" y="30" />
         <Layers>
             <Layer level="OVERLAY">
                 <FontString inherits="GameFontNormalSmall" parentKey="label" justifyH="LEFT"
                     justifyV="MIDDLE">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="2" y="-2" />
-                        <Anchor point="TOPRIGHT" x="-2" y="-2" />
-                    </Anchors>
-                </FontString>
-                <FontString inherits="GameFontNormalTiny" parentKey="description" justifyH="LEFT"
-                    justifyV="MIDDLE">
-                    <Color r="0.6" g="0.6" b="0.6" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT"
-                            relativeKey="$parent.label" />
-                        <Anchor point="BOTTOMLEFT" />
+                        <Anchor point="TOPLEFT" x="15" />
+                        <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                 </FontString>
             </Layer>
-            <Layer level="HIGHLIGHT">
-                <Texture setAllPoints="true" atlas="search-select" alpha="1" />
+            <Layer level="BACKGROUND">
+                <Texture atlas="Event-Scheduler-Ongoing-events-card-hover"
+                    parentKey="glow" hidden="true" setAllPoints="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.7" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
+
+                </Texture>
             </Layer>
         </Layers>
         <ButtonText inherits="GameFontNormalSmall" />
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+        </Scripts>
     </Button>
 </Ui>

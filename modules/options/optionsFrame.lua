@@ -39,7 +39,6 @@ function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
         local searchString = optionLabel:lower() .. " " .. optionDescription:lower()
         table.insert(entries, {
             label = optionLabel,
-            description = optionDescription,
             searchString = searchString,
             value = key,
         })

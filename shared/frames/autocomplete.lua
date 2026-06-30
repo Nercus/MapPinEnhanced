@@ -152,8 +152,8 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
     end
 end
 
-local MAX_HEIGHT = 200
-local ENTRY_HEIGHT = 25
+local MAX_HEIGHT = 300
+local ENTRY_HEIGHT = 30
 
 ---@param results SearchResult[]
 function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
@@ -292,12 +292,20 @@ end
 
 ---@class MapPinEnhancedAutocompleteEntryTemplate : Button, { GetOrderIndex: fun(): number }
 ---@field label FontString
----@field description FontString
+---@field glow Texture
 MapPinEnhancedAutocompleteEntryMixin = {}
+
 
 
 ---@param data AutocompleteOption
 function MapPinEnhancedAutocompleteEntryMixin:Init(data)
     self.label:SetText(data.label)
-    self.description:SetText(data.description or "")
+end
+
+function MapPinEnhancedAutocompleteEntryMixin:OnEnter()
+    self.glow:Show()
+end
+
+function MapPinEnhancedAutocompleteEntryMixin:OnLeave()
+    self.glow:Hide()
 end
