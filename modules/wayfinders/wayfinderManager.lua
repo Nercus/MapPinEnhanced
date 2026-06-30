@@ -110,6 +110,9 @@ function Wayfinders:EnableWayfinder(wayfinderType)
     if not wayfinder then
         error("Wayfinders type not registered: " .. tostring(wayfinderType))
     end
+    for _, activeWayfinder in ipairs(self.activeWayfinders) do
+        if activeWayfinder == wayfinder then return end
+    end
     wayfinder:Enable()
     self:RefreshWayfinder(wayfinder)
     table.insert(self.activeWayfinders, wayfinder)
@@ -121,11 +124,11 @@ function Wayfinders:DisableWayfinder(wayfinderType)
     if not wayfinder then
         error("Wayfinders type not registered: " .. tostring(wayfinderType))
     end
-    wayfinder:Disable()
     for i, activeWayfinder in ipairs(self.activeWayfinders) do
         if activeWayfinder == wayfinder then
+            wayfinder:Disable()
             table.remove(self.activeWayfinders, i)
-            break
+            return
         end
     end
 end
