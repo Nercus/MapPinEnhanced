@@ -13,15 +13,35 @@
                     <KeyValue key="key" value="Wayfinder.Floating" />
                 </KeyValues>
                 <Frames>
-                    <Frame inherits="MapPinEnhancedOptionToggleTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Floating.Enable" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Floating.Style" />
-                        </KeyValues>
+                    <Frame inherits="MapPinEnhancedOptionTwoColumnTemplate">
+                        <Frames>
+                            <Frame parentKey="column1">
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedOptionToggleTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="Wayfinder.Floating.Enable" />
+                                        </KeyValues>
+                                    </Frame>
+                                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="Wayfinder.Floating.Style" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                            <Frame parentKey="column2">
+                                <Size x="150" y="150" />
+                                <Frames>
+                                    <Frame inherits="MapPinEnhancedImageTemplate">
+                                        <Size x="150" y="150" />
+                                        <KeyValues>
+                                            <KeyValue key="imagePath"
+                                                value="Interface/AddOns/MapPinEnhanced/assets/options/wayfinderFloating.png" />
+                                        </KeyValues>
+                                    </Frame>
+                                </Frames>
+                            </Frame>
+                        </Frames>
                     </Frame>
                 </Frames>
             </Frame>
