@@ -185,11 +185,11 @@ Wayfinders.wayfinders["WAYFINDER_FLOATING"] = MapPinEnhancedWayfinderFloating
 
 
 
-Options:SubscribeToOptionChanges("Wayfinder.Arrow.Enable", function(value)
+Options:SubscribeToOptionChanges("Wayfinder.Floating.Enable", function(value)
     if value then
-        Wayfinders:EnableWayfinder("WAYFINDER_ARROW")
+        Wayfinders:EnableWayfinder("WAYFINDER_FLOATING")
     else
-        Wayfinders:DisableWayfinder("WAYFINDER_ARROW")
+        Wayfinders:DisableWayfinder("WAYFINDER_FLOATING")
     end
 end)
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", onUserwaypointUpdated)
