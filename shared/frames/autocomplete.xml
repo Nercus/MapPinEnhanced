@@ -99,7 +99,7 @@
                 </FontString>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture atlas="Event-Scheduler-Ongoing-events-card-hover"
+                <Texture atlas="Professions_Recipe_Active"
                     parentKey="glow" hidden="true" setAllPoints="true">
                     <Gradient orientation="HORIZONTAL">
                         <MinColor r="1" g="1" b="1" a="0.7" />
