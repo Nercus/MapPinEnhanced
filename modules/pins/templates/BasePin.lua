@@ -87,16 +87,19 @@ function MapPinEnhancedBasePinMixin:ShowPulse()
     self.pulseHighlight.pulse:Play()
 end
 
----@param seconds number
-function MapPinEnhancedBasePinMixin:ShowPulseFor(seconds)
+local loopDuration = 0.85
+
+---@param repeats number
+function MapPinEnhancedBasePinMixin:ShowPulseLoops(repeats)
     self:ShowPulse()
+    local seconds = repeats * loopDuration
     self.pulseTimer = C_Timer.After(seconds, function()
         self:HidePulse()
     end)
 end
 
 function MapPinEnhancedBasePinMixin:ShowPulseOnce()
-    self:ShowPulseFor(0.6)
+    self:ShowPulseLoops(1)
 end
 
 function MapPinEnhancedBasePinMixin:HidePulse()
