@@ -21,6 +21,7 @@ MapPinEnhancedFloatingArrowMixin = {}
 local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
+local HBD = MapPinEnhanced.HBD
 
 local mathSin = math.sin
 local mathCos = math.cos
@@ -49,6 +50,7 @@ function MapPinEnhancedFloatingArrowMixin:SetLocation(mapID, x, y)
     self.targetMapID = mapID
     self.targetX = x
     self.targetY = y
+    self.targetWorldX, self.targetWorldY, self.targetInstance = HBD:GetWorldCoordinatesFromZone(x, y, mapID)
 end
 
 ---@param displayType 'close' | 'far'
@@ -68,17 +70,18 @@ end
 
 local lastUpdate = 0
 function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition(elapsed)
-    if not self.targetMapID or not self.targetX or not self.targetY then return end
-    if elapsed and lastUpdate + .05 > GetTime() then return end
+    if not self.targetWorldX or not self.targetWorldY or not self.targetInstance then return end
+    if elapsed and lastUpdate + .1 > GetTime() then return end
     lastUpdate = GetTime()
-    local x, y, mapID = self.targetX, self.targetY, self.targetMapID
-    if not mapID or not x or not y then return end
 
-    local worldAngle = MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
-    if not worldAngle then return end
+    local playerWorldX, playerWorldY, playerInstance = HBD:GetPlayerWorldPosition()
+    if not playerWorldX or not playerWorldY or playerInstance ~= self.targetInstance then return end
+
+    local worldAngle = HBD:GetWorldVector(playerInstance, playerWorldX, playerWorldY,
+        self.targetWorldX, self.targetWorldY)
 
     local facing = GetPlayerFacing()
-    if not facing then return end
+    if not worldAngle or not facing then return end
 
     local relativeAngle = worldAngle - facing
     relativeAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
