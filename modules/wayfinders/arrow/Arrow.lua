@@ -17,17 +17,17 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
     return self.frame
 end
 
----@param data WayfinderData?
-function MapPinEnhancedWayfinderArrow:Init(data)
+---@param wayfinderData WayfinderData | nil
+function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
-    if not data or not data.mapID or not data.x or not data.y then
+    if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
         self.frame.fadeIn:Stop()
         self.frame.fadeOut:Play()
         return
     end
-    frame:SetLocation(data.mapID, data.x, data.y)
-    frame:SetColor(data.color)
-    frame:SetTitle(data.title)
+    frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    frame:SetColor(wayfinderData.color)
+    frame:SetTitle(wayfinderData.title)
     frame.fadeOut:Stop()
     frame.fadeIn:Play()
 end
