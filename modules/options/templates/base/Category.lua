@@ -17,6 +17,7 @@ local L = MapPinEnhanced.L
 MapPinEnhancedOptionCategoryBaseMixin = {}
 
 function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
+    ---@type number
     local totalHeight = self.header:GetHeight() + self.headerBottomSpacing + self.bottomPadding
     local childCount = 0
     for _, child in ipairs({ self:GetChildren() }) do
