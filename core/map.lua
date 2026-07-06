@@ -7,7 +7,7 @@ local DISTANCE_CACHE_SIZE = 5
 ---@type {distance: number, time: number}[]
 local distanceCache = table.create(DISTANCE_CACHE_SIZE)
 local lastDistance = 0
-local lastUpdate = nil
+local elapsedSinceUpdate = 0
 local throttle_interval = BASE_UPDATE_INTERVAL
 
 ---@type {mapID: number, x: number, y: number} | nil
@@ -74,22 +74,26 @@ function MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
     return HBD:GetWorldVector(pInst, pwx, pwy, twx, twy)
 end
 
-local function OnUpdate()
+---@param _ Frame
+---@param elapsed number
+local function OnUpdate(_, elapsed)
     if not target then return end
 
+    elapsedSinceUpdate = elapsedSinceUpdate + elapsed
+    if elapsedSinceUpdate < throttle_interval then return end
+    elapsedSinceUpdate = 0
+
     local currentTime = GetTime()
-    if lastUpdate and (currentTime - lastUpdate < throttle_interval) then return end
 
     if not IsSuperTracking() then return end
 
     local mapID, x, y = target.mapID, target.x, target.y
     local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
     if distance == 0 then return end
-
     if abs(lastDistance - distance) < 1 then return end
 
     -- Maintain a cache of recent distances
-    if #distanceCache > DISTANCE_CACHE_SIZE then
+    if #distanceCache >= DISTANCE_CACHE_SIZE then
         table.remove(distanceCache, 1)
     end
     table.insert(distanceCache, { distance = distance, time = currentTime })
@@ -112,6 +116,8 @@ local function OnUpdate()
     local speed = totalDistance / totalTime
     if speed <= 0 then
         wipe(distanceCache)
+        lastDistance = distance
+        return
     end
 
     -- Calculate time to target
@@ -127,7 +133,6 @@ local function OnUpdate()
     end
 
     lastDistance = distance
-    lastUpdate = currentTime
 end
 
 --- Register a callback to be called when the distance to the target is updated
@@ -157,7 +162,7 @@ function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
     throttle_interval = BASE_UPDATE_INTERVAL
     wipe(distanceCache)
     lastDistance = 0
-    lastUpdate = nil
+    elapsedSinceUpdate = 0
     target = { mapID = mapID, x = x, y = y }
 
     local initialDistance = self:GetDistanceToTarget(mapID, x, y)
