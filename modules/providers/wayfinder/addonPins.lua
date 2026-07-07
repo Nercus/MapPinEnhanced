@@ -3,6 +3,81 @@ local MapPinEnhanced = select(2, ...)
 
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Notifications = MapPinEnhanced:GetModule("Notifications")
+
+---@type UiMapPoint?
+local placedUserWaypoint = nil
+---@type UUID?
+local trackedPinID = nil
+local shouldSuperTrackUserWaypoint = false
+local superTrackedReachedBehaviorOverridden = false
+
+local function OverrideSuperTrackedReachedBehavior()
+    if superTrackedReachedBehaviorOverridden then return end
+    superTrackedReachedBehaviorOverridden = true
+
+    ---@type function | nil
+    local unregisterNavigationReachedEvent
+
+    unregisterNavigationReachedEvent = function()
+        if SuperTrackedFrame then
+            SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
+        end
+        MapPinEnhanced:UnregisterEventForFunction("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
+    end
+
+    if SuperTrackedFrame then
+        SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
+    else
+        MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
+    end
+end
+
+---@param wayfinderData WayfinderData
+local function SetTrackedPinUserWaypoint(wayfinderData)
+    local mapID, x, y = wayfinderData.mapID, wayfinderData.x, wayfinderData.y
+    if not mapID or not x or not y then return end
+
+    if not C_Map.CanSetUserWaypointOnMap(mapID) then
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        Notifications:ShowNotification("MAP_UNAVAILABLE", (mapInfo and mapInfo.name or tostring(mapID)))
+        return
+    end
+
+    x = math.max(0, math.min(1, x))
+    y = math.max(0, math.min(1, y))
+
+    placedUserWaypoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
+    shouldSuperTrackUserWaypoint = true
+    OverrideSuperTrackedReachedBehavior()
+    C_Map.SetUserWaypoint(placedUserWaypoint)
+end
+
+
+local coordinateTolerance = 0.0001
+local function ClearTrackedPinUserWaypoint()
+    shouldSuperTrackUserWaypoint = false
+    local currentUserWaypoint = C_Map.GetUserWaypoint()
+
+    if currentUserWaypoint and placedUserWaypoint and
+        currentUserWaypoint.uiMapID == placedUserWaypoint.uiMapID and
+        math.abs(currentUserWaypoint.position.x - placedUserWaypoint.position.x) <= coordinateTolerance and
+        math.abs(currentUserWaypoint.position.y - placedUserWaypoint.position.y) <= coordinateTolerance then
+        C_Map.ClearUserWaypoint()
+    end
+    placedUserWaypoint = nil
+end
+
+local function OnUserWaypointUpdated()
+    if shouldSuperTrackUserWaypoint then
+        shouldSuperTrackUserWaypoint = false
+        C_Timer.After(0, function()
+            if C_Map.HasUserWaypoint() then
+                C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+            end
+        end)
+    end
+end
 
 ---@param pinData pinData
 ---@return WayfinderData
@@ -48,10 +123,14 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin.pinID == pinID and isTracked then
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
+        trackedPinID = pinID
+        SetTrackedPinUserWaypoint(wayfinderData)
         Wayfinders:SetWayfinderData(wayfinderData)
         SetupPinCallbacks(pinID)
         oldPinId = pinID
-    else
+    elseif pinID == trackedPinID and not isTracked then
+        trackedPinID = nil
+        ClearTrackedPinUserWaypoint()
         Wayfinders:ClearWayfinderData()
     end
 end
@@ -62,3 +141,5 @@ MapPinEnhanced:OnLoad(function()
     if not trackedPin then return end
     onPinTrackingChanged("PIN_TRACKING_CHANGED", trackedPin.pinID, trackedPin:IsTracked())
 end)
+
+MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypointUpdated)

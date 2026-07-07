@@ -24,8 +24,6 @@ local templates = {
     simple = "MapPinEnhancedFloatingSimpleTemplate",
 }
 
-local shouldReactToUserWaypointUpdate = false
-
 ---@return MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
     ---@type WayfinderFloatingFrameType
@@ -54,49 +52,8 @@ function MapPinEnhancedWayfinderFloating:HideFrame()
     end
 end
 
----@param x number
----@param y number
----@param mapID number
-function MapPinEnhancedWayfinderFloating:SetUserWaypoint(x, y, mapID)
-    if not C_Map.CanSetUserWaypointOnMap(mapID) then
-        local mapInfo = C_Map.GetMapInfo(mapID)
-        MapPinEnhanced:Print("Cannot set waypoint on " .. mapInfo.name)
-        return
-    end
-
-    local hasUserWaypoint = C_Map.HasUserWaypoint()
-    if hasUserWaypoint then
-        C_Map.ClearUserWaypoint()
-    end
-
-    if x < 0 then
-        x = 0
-    end
-    if y < 0 then
-        y = 0
-    end
-
-    local uiMapPoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
-    shouldReactToUserWaypointUpdate = true
-    C_Map.SetUserWaypoint(uiMapPoint)
-end
-
-local function onUserwaypointUpdated()
-    if not shouldReactToUserWaypointUpdate then return end
-    shouldReactToUserWaypointUpdate = false
-    local hasUserWaypoint = C_Map.HasUserWaypoint()
-    if not hasUserWaypoint then return end
-    C_Timer.After(0, function()
-        if C_Map.HasUserWaypoint() == true then
-            C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-        end
-    end)
-end
-
 function MapPinEnhancedWayfinderFloating:Reset()
     self.data = nil
-    shouldReactToUserWaypointUpdate = false
-    C_Map.ClearUserWaypoint()
     self:HideFrame()
 end
 
@@ -107,33 +64,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
         return
     end
     self.data = wayfinderData
-    if wayfinderData then
-        local x, y, mapID = wayfinderData.x, wayfinderData.y, wayfinderData.mapID
-        self:SetUserWaypoint(x, y, mapID)
-        self:ShowFrame()
-    else
-        C_Map.ClearUserWaypoint()
-        self:HideFrame()
-    end
-end
-
----Method to block the automatic removal of pins in the game
-local function OverrideSuperTrackedReachedBehavior()
-    ---@type function | nil
-    local unregisterNavigationReachedEvent
-
-    unregisterNavigationReachedEvent = function()
-        if SuperTrackedFrame then
-            SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
-        end
-        MapPinEnhanced:UnregisterEventForFunction("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
-    end
-
-    if SuperTrackedFrame then
-        SuperTrackedFrame:UnregisterEvent("NAVIGATION_DESTINATION_REACHED")
-    else
-        MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", unregisterNavigationReachedEvent)
-    end
+    self:ShowFrame()
 end
 
 
@@ -151,7 +82,6 @@ end
 
 function MapPinEnhancedWayfinderFloating:SetOverride()
     if self.overrideActive then return end
-    OverrideSuperTrackedReachedBehavior()
     OverrideSuperTrackedAlphaState(true)
     self.overrideActive = true
 end
@@ -164,12 +94,10 @@ function MapPinEnhancedWayfinderFloating:Enable()
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
-    shouldReactToUserWaypointUpdate = false
     local frame = self:GetFrame()
     if frame then
         frame:Hide()
     end
-    C_Map.ClearUserWaypoint()
     OverrideSuperTrackedAlphaState(false)
     if self.unsubscribeFrameTypeOption then
         self.unsubscribeFrameTypeOption()
@@ -192,4 +120,3 @@ Options:SubscribeToOptionChanges("Wayfinder.Floating.Enable", function(value)
         Wayfinders:DisableWayfinder("WAYFINDER_FLOATING")
     end
 end)
-MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", onUserwaypointUpdated)

@@ -54,6 +54,7 @@ L["Location reached at %s."] = "Location reached at %s."
 L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
 L["It is locked."] = "It is locked."
 L["Location reached at %s."] = "Location reached at %s."
+L["Cannot set waypoint on the %s map."] = "Cannot set waypoint on the %s map."
 
 L["Close"] = "Close"
 L["Version: %s (%s)"] = "Version: %s (%s)"

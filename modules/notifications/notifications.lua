@@ -15,21 +15,23 @@ local L = MapPinEnhanced.L
 
 local DISPLAY_DURATION_SECONDS = 2
 
----@enum NotificationTypes
+---@enum (key) NotificationTypes
 local NOTIFICATION_MESSAGES = {
     ["SET_LOADED"] = L["Loaded set \"%s\"."],
     ["PIN_NAMED_REACHED"] = L["\"%s\" reached at %s."],
     ["PIN_REACHED"] = L["Location reached at %s."],
     ["PIN_LOCKED_NAMED"] = L["\"%s\" reached at %s."] .. "\n" .. L["It is locked."],
     ["PIN_LOCKED"] = L["Location reached at %s."] .. "\n" .. L["It is locked."],
+    ["MAP_UNAVAILABLE"] = L["Cannot set waypoint on the %s map."],
 }
 
 
----@param message NotificationTypes|string
+---@param message NotificationTypes
 ---@param ... any
 ---@return string
 local function GetNotificationText(message, ...)
-    local text = NOTIFICATION_MESSAGES[message] or message
+    assert(NOTIFICATION_MESSAGES[message], "Unknown notification message: " .. tostring(message))
+    local text = NOTIFICATION_MESSAGES[message]
     if select("#", ...) > 0 then
         return string.format(text, ...)
     end
@@ -54,7 +56,7 @@ function Notifications:UpdateQueue()
     end)
 end
 
----@param message NotificationTypes|string
+---@param message NotificationTypes
 ---@param ... any
 function Notifications:ShowNotification(message, ...)
     assert(self.notificationFrame, "Notification frame not loaded.")
