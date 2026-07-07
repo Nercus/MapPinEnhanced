@@ -48,5 +48,8 @@
                 <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png" setAllPoints="true" />
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad"/>
+        </Scripts>
     </Frame>
 </Ui>

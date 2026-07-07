@@ -4,7 +4,10 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedBasePinPulseHighlight : Texture
 ---@field pulse AnimationGroup
 
----@class MapPinEnhancedBasePinTemplate : Frame
+---@class MapPinEnhancedBasePinKeyValues
+---@field hideShadow boolean
+
+---@class MapPinEnhancedBasePinTemplate : Frame, MapPinEnhancedBasePinKeyValues
 ---@field shadow Texture -- static shadow
 ---@field background Texture -- static blackbackground
 ---@field highlight Texture -- hover highlight
@@ -185,4 +188,10 @@ end
 
 function MapPinEnhancedBasePinMixin:SetLock(lock)
     self.lock:SetShown(lock)
+end
+
+function MapPinEnhancedBasePinMixin:OnLoad()
+    if self.hideShadow then
+        self.shadow:Hide()
+    end
 end
