@@ -1,11 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="toggle.lua" />
 
-    <Button name="MapPinEnhancedToggleTemplate" mixin="MapPinEnhancedToggleMixin" virtual="true"
-        clipChildren="true">
+    <Button name="MapPinEnhancedToggleTemplate" mixin="MapPinEnhancedToggleMixin" virtual="true" clipChildren="true">
         <Size x="50" y="25" />
         <Layers>
             <Layer level="BACKGROUND">

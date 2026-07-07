@@ -1,10 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="OptionGroup.lua" />
-    <Frame name="MapPinEnhancedOptionGroupTemplate" virtual="true"
-        mixin="MapPinEnhancedOptionGroupMixin">
+    <Frame name="MapPinEnhancedOptionGroupTemplate" virtual="true" mixin="MapPinEnhancedOptionGroupMixin">
         <KeyValues>
             <KeyValue key="topPadding" value="10" type="number" />
             <KeyValue key="labelInsetX" value="18" type="number" />
@@ -15,8 +13,7 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormalOutline" justifyH="LEFT"
-                    justifyV="TOP">
+                <FontString parentKey="label" inherits="GameFontNormalOutline" justifyH="LEFT" justifyV="TOP">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="TOPRIGHT" />
@@ -24,8 +21,7 @@
                 </FontString>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5"
-                    scale="0.5" />
+                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5" scale="0.5" />
                 <Texture atlas="Options_HorizontalDivider" parentKey="labelDivider">
                     <Gradient orientation="HORIZONTAL">
                         <MinColor r="1" g="0.82" b="0" a="1" />

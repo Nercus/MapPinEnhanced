@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="modules.lua" />
     <Include file="frame.lua" />
     <Include file="menu.lua" />
@@ -20,9 +19,7 @@
     <Include file="map.lua" />
 
     <!--@debug@-->
-    <Frame name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent"
-        inherits="DefaultPanelTemplate" frameStrata="HIGH" frameLevel="100" hidden="true"
-        virtual="true" mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">
+    <Frame name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent" inherits="DefaultPanelTemplate" frameStrata="HIGH" frameLevel="100" hidden="true" virtual="true" mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">
         <Size x="640" y="130" />
         <Anchors>
             <Anchor point="BOTTOM" x="0" y="5" />
@@ -37,35 +34,28 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="debugMenuButton" inherits="SharedButtonLargeTemplate"
-                text="Open Debug Menu">
+            <Button parentKey="debugMenuButton" inherits="SharedButtonLargeTemplate" text="Open Debug Menu">
                 <Size x="150" y="40" />
                 <Anchors>
                     <Anchor point="LEFT" x="15" y="0" />
                 </Anchors>
             </Button>
-            <Button parentKey="resetVarsButton" inherits="SharedButtonLargeTemplate"
-                text="Reset Saved Vars">
+            <Button parentKey="resetVarsButton" inherits="SharedButtonLargeTemplate" text="Reset Saved Vars">
                 <Size x="150" y="40" />
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.debugMenuButton" relativePoint="RIGHT"
-                        x="5" y="0" />
+                    <Anchor point="LEFT" relativeKey="$parent.debugMenuButton" relativePoint="RIGHT" x="5" y="0" />
                 </Anchors>
             </Button>
-            <Button parentKey="debugAddonButton" inherits="SharedButtonLargeTemplate"
-                text="Debug Addon">
+            <Button parentKey="debugAddonButton" inherits="SharedButtonLargeTemplate" text="Debug Addon">
                 <Size x="150" y="40" />
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.resetVarsButton" relativePoint="RIGHT"
-                        x="5" y="0" />
+                    <Anchor point="LEFT" relativeKey="$parent.resetVarsButton" relativePoint="RIGHT" x="5" y="0" />
                 </Anchors>
             </Button>
-            <Button parentKey="exitDevButton" inherits="SharedButtonLargeTemplate"
-                text="Exit Dev Mode">
+            <Button parentKey="exitDevButton" inherits="SharedButtonLargeTemplate" text="Exit Dev Mode">
                 <Size x="150" y="40" />
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.debugAddonButton"
-                        relativePoint="RIGHT" x="5" y="0" />
+                    <Anchor point="LEFT" relativeKey="$parent.debugAddonButton" relativePoint="RIGHT" x="5" y="0" />
                 </Anchors>
             </Button>
             <StatusBar parentKey="testStatusbar" inherits="MapPinEnhancedStatusbarTemplate">
@@ -80,8 +70,7 @@
                             <Anchor point="LEFT" relativePoint="RIGHT" x="5" y="0" />
                         </Anchors>
                         <NormalTexture atlas="CreditsScreen-Assets-Buttons-Play" setAllPoints="true" />
-                        <HighlightTexture atlas="UI-Frame-CypherChoice-Portrait-FX-GoldGlow"
-                            setAllPoints="true" alpha="0.3" />
+                        <HighlightTexture atlas="UI-Frame-CypherChoice-Portrait-FX-GoldGlow" setAllPoints="true" alpha="0.3" />
                     </Button>
                 </Frames>
             </StatusBar>

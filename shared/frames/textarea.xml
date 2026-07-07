@@ -1,12 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="textarea.lua" />
 
 
-    <ScrollFrame name="MapPinEnhancedTextareaTemplate"
-        mixin="MapPinEnhancedTextareaMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        inherits="ScrollFrameTemplate">
+    <ScrollFrame name="MapPinEnhancedTextareaTemplate" mixin="MapPinEnhancedTextareaMixin, MapPinEnhancedThemeableMixin" virtual="true" inherits="ScrollFrameTemplate">
         <KeyValues>
             <KeyValue key="scrollBarX" value="-10" type="number" />
             <KeyValue key="scrollBarTopY" value="-2" type="number" />
@@ -14,8 +11,7 @@
         </KeyValues>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="bg" atlas="generic-frame-chamfered-12d-2o" scale="0.5"
-                    alpha="0.8">
+                <Texture parentKey="bg" atlas="generic-frame-chamfered-12d-2o" scale="0.5" alpha="0.8">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-10" y="10" />
                         <Anchor point="BOTTOMRIGHT" x="10" y="-10" />
@@ -43,8 +39,7 @@
             <Frame parentKey="placeholderOverlay" setAllPoints="true" propagateMouseInput="Clicks">
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" atlas="RaidFrame-Shield-Overlay" setAllPoints="true"
-                            desaturated="true" vertTile="true" horizTile="true" scale="2">
+                        <Texture parentKey="bg" atlas="RaidFrame-Shield-Overlay" setAllPoints="true" desaturated="true" vertTile="true" horizTile="true" scale="2">
                             <Gradient>
                                 <MinColor r="1" g="1" b="1" a="0.5" />
                                 <MaxColor r="1" g="1" b="1" a="1" />
@@ -52,8 +47,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="text" setAllPoints="true" justifyH="CENTER"
-                            justifyV="MIDDLE" inherits="GameFontNormal" alpha="0.75" />
+                        <FontString parentKey="text" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" inherits="GameFontNormal" alpha="0.75" />
                     </Layer>
                 </Layers>
                 <Animations>

@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="optionsFrame.lua" />
     <Frame mixin="MapPinEnhancedOptionsFrameMixin" name="MapPinEnhancedOptionsFrame" hidden="true">
@@ -24,8 +23,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontHighlightHuge"
-                            justifyH="LEFT" justifyV="MIDDLE">
+                        <FontString parentKey="title" inherits="GameFontHighlightHuge" justifyH="LEFT" justifyV="MIDDLE">
                             <Size x="320" y="24" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="16" y="-15" />
@@ -64,8 +62,7 @@
                     <KeyValue key="scrollBarX" value="2" type="number" />
                     <KeyValue key="scrollBarTopY" value="-4" type="number" />
                     <KeyValue key="scrollBarHideIfUnscrollable" value="true" type="boolean" />
-                    <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true"
-                        type="boolean" />
+                    <KeyValue key="scrollBarHideTrackIfThumbExceedsTrack" value="true" type="boolean" />
                 </KeyValues>
                 <ScrollChild>
                     <Frame parentKey="Child" propagateMouseInput="Motion">
@@ -75,20 +72,16 @@
                             <Anchor point="BOTTOMRIGHT" />
                         </Anchors>
                         <Frames>
-                            <Frame inherits="MapPinEnhancedOptionCategoryWayfinderTemplate"
-                                parentKey="Wayfinder">
+                            <Frame inherits="MapPinEnhancedOptionCategoryWayfinderTemplate" parentKey="Wayfinder">
                                 <Anchors>
                                     <Anchor point="TOPLEFT" x="0" y="-8" />
                                     <Anchor point="TOPRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
-                            <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate"
-                                parentKey="Miscellaneous">
+                            <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate" parentKey="Miscellaneous">
                                 <Anchors>
-                                    <Anchor point="TOPLEFT" relativeKey="$parent.Wayfinder"
-                                        relativePoint="BOTTOMLEFT" x="0" y="-8" />
-                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Wayfinder"
-                                        relativePoint="BOTTOMRIGHT" x="0" y="-8" />
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Wayfinder" relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Wayfinder" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
                         </Frames>

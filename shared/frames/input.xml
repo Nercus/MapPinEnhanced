@@ -1,11 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="input.lua" />
 
-    <EditBox name="MapPinEnhancedInputTemplate"
-        mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        font="GameFontHighlight" autoFocus="false" multiLine="false" propagateMouseInput="Motion">
+    <EditBox name="MapPinEnhancedInputTemplate" mixin="MapPinEnhancedInputMixin, MapPinEnhancedThemeableMixin" virtual="true" font="GameFontHighlight" autoFocus="false" multiLine="false" propagateMouseInput="Motion">
         <Size y="20" />
         <TextInsets left="5" right="15" />
         <Layers>
@@ -15,8 +12,7 @@
             </Layer>
 
             <Layer level="ARTWORK">
-                <FontString parentKey="placeholderText" inherits="GameFontDisableSmall"
-                    hidden="true" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString parentKey="placeholderText" inherits="GameFontDisableSmall" hidden="true" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" x="10" y="0" />
                     </Anchors>
@@ -29,12 +25,8 @@
                 <Anchors>
                     <Anchor point="RIGHT" relativePoint="RIGHT" x="-10" />
                 </Anchors>
-                <NormalTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
-                    desaturated="true" setAllPoints="true" />
-                <PushedTexture
-                    file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png"
-                    desaturated="true">
+                <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" desaturated="true" setAllPoints="true" />
+                <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" desaturated="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="1" y="-1" />
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-1" y="1" />
@@ -55,14 +47,12 @@
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture atlas="plunderstorm-icon-key" setAllPoints="true" parentKey="bg" />
-                        <FontString parentKey="text" inherits="GameFontNormalSmall"
-                            justifyH="CENTER" justifyV="MIDDLE">
+                        <FontString parentKey="text" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
                             <Anchors>
                                 <Anchor point="CENTER" />
                             </Anchors>
                         </FontString>
-                        <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate"
-                            desaturated="true" alpha="0.8">
+                        <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate" desaturated="true" alpha="0.8">
                             <Anchors>
                                 <Anchor point="CENTER" x="1" />
                             </Anchors>

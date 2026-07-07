@@ -1,16 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="checkbox.lua" />
 
-    <CheckButton name="MapPinEnhancedCheckboxTemplate"
-        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        propagateMouseInput="Motion">
+    <CheckButton name="MapPinEnhancedCheckboxTemplate" mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true" propagateMouseInput="Motion">
         <Size x="25" y="25" />
-        <NormalTexture parentKey="NormalTexture" atlas="generic-frame-chamfered-12d-2o"
-            setAllPoints="true" />
-        <HighlightTexture parentKey="HighlightTexture" atlas="generic-frame-chamfered-12d-2o"
-            alphaMode="ADD" alpha="0.2" setAllPoints="true" />
+        <NormalTexture parentKey="NormalTexture" atlas="generic-frame-chamfered-12d-2o" setAllPoints="true" />
+        <HighlightTexture parentKey="HighlightTexture" atlas="generic-frame-chamfered-12d-2o" alphaMode="ADD" alpha="0.2" setAllPoints="true" />
         <CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal" setAllPoints="true">
             <Animations>
                 <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
@@ -31,13 +26,10 @@
                 </OnHide>
             </Scripts>
         </CheckedTexture>
-        <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled"
-            setAllPoints="true" />
+        <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled" setAllPoints="true" />
     </CheckButton>
 
-    <CheckButton name="MapPinEnhancedCheckboxWithLabelTemplate"
-        mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        propagateMouseInput="Motion">
+    <CheckButton name="MapPinEnhancedCheckboxWithLabelTemplate" mixin="MapPinEnhancedCheckboxMixin, MapPinEnhancedThemeableMixin" virtual="true" propagateMouseInput="Motion">
         <Size x="25" y="25" />
         <NormalTexture parentKey="NormalTexture" atlas="generic-frame-chamfered-12d-2o">
             <Size x="25" y="25" />
@@ -45,8 +37,7 @@
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
         </NormalTexture>
-        <HighlightTexture parentKey="HighlightTexture" atlas="generic-frame-chamfered-12d-2o"
-            alphaMode="ADD" alpha="0.2">
+        <HighlightTexture parentKey="HighlightTexture" atlas="generic-frame-chamfered-12d-2o" alphaMode="ADD" alpha="0.2">
             <Size x="25" y="25" />
             <Anchors>
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
@@ -84,11 +75,9 @@
         </DisabledCheckedTexture>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parentText" parentKey="text" font="GameFontNormalSmall"
-                    justifyH="LEFT" justifyV="MIDDLE">
+                <FontString name="$parentText" parentKey="text" font="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT"
-                            relativeKey="$parent.NormalTexture" x="3" y="0" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.NormalTexture" x="3" y="0" />
                     </Anchors>
                 </FontString>
             </Layer>

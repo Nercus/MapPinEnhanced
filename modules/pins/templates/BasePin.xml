@@ -1,59 +1,43 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="BasePin.lua" />
-    <Frame name="MapPinEnhancedBasePinTemplate" mixin="MapPinEnhancedBasePinMixin" virtual="true"
-        enableMouse="true" frameStrata="HIGH">
+    <Frame name="MapPinEnhancedBasePinTemplate" mixin="MapPinEnhancedBasePinMixin" virtual="true" enableMouse="true" frameStrata="HIGH">
         <Size x="30" y="30" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture alphaMode="ADD" parentKey="pulseHighlight"
-                    file="Interface/minimap/UI-Minimap-Ping-Expand" alpha="0"
-                    setAllPoints="true">
+                <Texture alphaMode="ADD" parentKey="pulseHighlight" file="Interface/minimap/UI-Minimap-Ping-Expand" alpha="0" setAllPoints="true">
                     <Color r="1" g="0.82" b="0" />
                     <Animations>
                         <AnimationGroup looping="REPEAT" parentKey="pulse">
                             <Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="1" />
-                            <Scale fromScaleX=".5" fromScaleY=".5" toScaleX="1.2" toScaleY="1.2"
-                                duration=".5" order="1" />
+                            <Scale fromScaleX=".5" fromScaleY=".5" toScaleX="1.2" toScaleY="1.2" duration=".5" order="1" />
                             <Alpha fromAlpha="1" toAlpha="0" duration="0.2" order="2" />
                         </AnimationGroup>
                     </Animations>
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
-                <Texture parentKey="shadow"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinShadow.png"
-                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
+                <Texture parentKey="shadow" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinShadow.png" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="3">
-                <Texture parentKey="background"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png"
-                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
+                <Texture parentKey="background" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="BORDER">
-                <Texture parentKey="outline"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinOutlineUntracked.png"
-                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false">
+                <Texture parentKey="outline" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinOutlineUntracked.png" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Color r="0.482" g="0.314" b="0.075" />
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="foreground"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinForegroundUntracked.png"
-                    setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
+                <Texture parentKey="foreground" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinForegroundUntracked.png" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="OVERLAY">
-                <Texture parentKey="icon" hidden="true" texelSnappingBias="0"
-                    snapToPixelGrid="false" useAtlasSize="true">
+                <Texture parentKey="icon" hidden="true" texelSnappingBias="0" snapToPixelGrid="false" useAtlasSize="true">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
-                <Texture parentKey="lock" atlas="transmog-gearSlot-transmogrified"
-                    texelSnappingBias="0" rotation="45" snapToPixelGrid="false"
-                    desaturated="true" hidden="true">
+                <Texture parentKey="lock" atlas="transmog-gearSlot-transmogrified" texelSnappingBias="0" rotation="45" snapToPixelGrid="false" desaturated="true" hidden="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-2" y="2" />
                         <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
@@ -61,9 +45,7 @@
                 </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false"
-                    file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png"
-                    setAllPoints="true" />
+                <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png" setAllPoints="true" />
             </Layer>
         </Layers>
     </Frame>

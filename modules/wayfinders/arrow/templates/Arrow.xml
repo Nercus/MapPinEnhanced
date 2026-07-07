@@ -1,11 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
 
     <Include file="Arrow.lua" />
-    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent"
-        mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true">
+    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent" mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true">
         <Size x="140" y="140" />
         <Anchors>
             <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
@@ -33,8 +31,7 @@
                 </FontString>
                 <FontString parentKey="eta" inherits="GameFontNormalSmall">
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.distance"
-                            y="-5" />
+                        <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.distance" y="-5" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -48,17 +45,14 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture parentKey="needle"
-                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/arrow.png"
-                    desaturated="true" setAllPoints="true">
+                <Texture parentKey="needle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/arrow.png" desaturated="true" setAllPoints="true">
                     <Animations>
                         <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
                             <KeyValues>
                                 <KeyValue key="showOnPlay" value="true" />
                             </KeyValues>
                         </AnimationGroup>
-                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut"
-                            parentKey="fadeOut">
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
                             <KeyValues>
                                 <KeyValue key="hideOnFinished" value="true" />
                             </KeyValues>

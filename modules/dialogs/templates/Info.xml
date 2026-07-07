@@ -1,15 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="Info.lua" />
-    <Frame name="MapPinEnhancedInfoDialogContentTemplate" virtual="true"
-        mixin="MapPinEnhancedInfoDialogContentMixin">
+    <Frame name="MapPinEnhancedInfoDialogContentTemplate" virtual="true" mixin="MapPinEnhancedInfoDialogContentMixin">
         <Size x="400" y="100" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="messageText" inherits="GameFontNormal" justifyH="CENTER"
-                    justifyV="MIDDLE" maxLines="3" wordwrap="true">
+                <FontString parentKey="messageText" inherits="GameFontNormal" justifyH="CENTER" justifyV="MIDDLE" maxLines="3" wordwrap="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="TOPRIGHT" />
@@ -21,8 +18,7 @@
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="okayButton">
                 <Size x="100" y="22" />
                 <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" y="-10"
-                        relativeKey="$parent.messageText" />
+                    <Anchor point="TOP" relativePoint="BOTTOM" y="-10" relativeKey="$parent.messageText" />
                 </Anchors>
             </Button>
         </Frames>

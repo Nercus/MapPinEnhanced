@@ -1,9 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="PinEntry.lua" />
-    <Button name="MapPinEnhancedTrackerPinEntryTemplate" virtual="true"
-        mixin="MapPinEnhancedTrackerPinEntryMixin">
+    <Button name="MapPinEnhancedTrackerPinEntryTemplate" virtual="true" mixin="MapPinEnhancedTrackerPinEntryMixin">
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerPinEntryTemplate" />
         </KeyValues>
@@ -12,8 +10,7 @@
             <Color r="1" g="0.82" b="0" a="1" />
         </HighlightTexture>
         <Frames>
-            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate"
-                propagateMouseInput="Both">
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" propagateMouseInput="Both">
                 <Anchors>
                     <Anchor point="LEFT" x="5" y="0" />
                 </Anchors>
@@ -21,19 +18,15 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontHighlight" parentKey="title" justifyH="LEFT"
-                    justifyV="MIDDLE" alpha="0.5">
+                <FontString inherits="GameFontHighlight" parentKey="title" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" relativePoint="RIGHT" x="10" y="-5"
-                            relativeKey="$parent.pinFrame" />
+                        <Anchor point="BOTTOMLEFT" relativePoint="RIGHT" x="10" y="-5" relativeKey="$parent.pinFrame" />
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="location" justifyH="LEFT"
-                    justifyV="MIDDLE" alpha="0.5">
+                <FontString inherits="GameFontNormalSmall" parentKey="location" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="RIGHT" x="10" y="5"
-                            relativeKey="$parent.pinFrame" />
+                        <Anchor point="TOPLEFT" relativePoint="RIGHT" x="10" y="5" relativeKey="$parent.pinFrame" />
                         <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                 </FontString>

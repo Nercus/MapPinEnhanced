@@ -1,10 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="FormElement.lua" />
-    <Frame name="MapPinEnhancedFormElementTemplate" virtual="true"
-        mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true" enableMouse="true"
-        propagateMouseInput="Motion">
+    <Frame name="MapPinEnhancedFormElementTemplate" virtual="true" mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true" enableMouse="true" propagateMouseInput="Motion">
         <KeyValues>
             <KeyValue key="padding" value="8" type="number" />
             <KeyValue key="labelBottomSpacing" value="5" type="number" />
@@ -20,13 +17,11 @@
                         <Anchor point="TOPLEFT" />
                     </Anchors>
                 </FontString>
-                <Texture parentKey="searchHighlight" atlas="common-icon-forwardarrow"
-                    desaturated="true" hidden="true">
+                <Texture parentKey="searchHighlight" atlas="common-icon-forwardarrow" desaturated="true" hidden="true">
                     <Size x="20" y="20" />
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="RIGHT" relativePoint="LEFT" x="-4"
-                            relativeKey="$parent.label" />
+                        <Anchor point="RIGHT" relativePoint="LEFT" x="-4" relativeKey="$parent.label" />
                     </Anchors>
                     <Scripts>
                         <OnShow>
@@ -38,24 +33,19 @@
                         </OnHide>
                     </Scripts>
                 </Texture>
-                <FontString parentKey="description" inherits="GameFontNormalSmall"
-                    collapsesLayout="true" wordwrap="true" justifyH="LEFT" justifyV="TOP">
+                <FontString parentKey="description" inherits="GameFontNormalSmall" collapsesLayout="true" wordwrap="true" justifyH="LEFT" justifyV="TOP">
                     <Size x="1" y="0" />
                     <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="-4"
-                            relativeKey="$parent.label" />
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="-4" relativeKey="$parent.label" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Animations>
             <AnimationGroup looping="REPEAT" parentKey="searchAnimation">
-                <Alpha childKey="searchHighlight" fromAlpha="0.55" toAlpha="1" duration="0.3"
-                    smoothing="IN_OUT" order="1" />
-                <Alpha childKey="searchHighlight" fromAlpha="1" toAlpha="0.55" duration="0.3"
-                    startDelay="0.2"
-                    smoothing="IN_OUT" order="2" />
+                <Alpha childKey="searchHighlight" fromAlpha="0.55" toAlpha="1" duration="0.3" smoothing="IN_OUT" order="1" />
+                <Alpha childKey="searchHighlight" fromAlpha="1" toAlpha="0.55" duration="0.3" startDelay="0.2" smoothing="IN_OUT" order="2" />
             </AnimationGroup>
         </Animations>
         <Scripts>

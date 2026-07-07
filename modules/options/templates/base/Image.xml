@@ -1,16 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="image.lua" />
 
-    <Frame name="MapPinEnhancedImageTemplate"
-        mixin="MapPinEnhancedImageMixin, MapPinEnhancedThemeableMixin" virtual="true">
+    <Frame name="MapPinEnhancedImageTemplate" mixin="MapPinEnhancedImageMixin, MapPinEnhancedThemeableMixin" virtual="true">
         <Size x="400" y="300" />
         <Layers>
             <Layer level="BORDER" textureSubLevel="1">
-                <Texture
-                    file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGraySquare.png"
-                    scale="0.75">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGraySquare.png" scale="0.75">
                     <Color r="0.9" g="0.9" b="0.9" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-5" y="5" />

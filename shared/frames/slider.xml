@@ -1,12 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="slider.lua" />
 
 
-    <Frame name="MapPinEnhancedSliderTemplate"
-        mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        propagateMouseInput="Both">
+    <Frame name="MapPinEnhancedSliderTemplate" mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin" virtual="true" propagateMouseInput="Both">
         <Size x="1" y="20" />
         <Frames>
             <Button parentKey="back" propagateMouseInput="Motion">
@@ -45,8 +42,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Slider inherits="MinimalSliderTemplate" obeyStepOnDrag="true" parentKey="slider"
-                propagateMouseInput="Motion">
+            <Slider inherits="MinimalSliderTemplate" obeyStepOnDrag="true" parentKey="slider" propagateMouseInput="Motion">
                 <Size x="1" y="16" />
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.back" />
@@ -61,14 +57,12 @@
                         <Anchor point="RIGHT" relativePoint="LEFT" x="-5" />
                     </Anchors>
                     <Animations>
-                        <AnimationGroup parentKey="fadeIn"
-                            inherits="MapPinEnhancedAnimationFadeZoomIn">
+                        <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn">
                             <KeyValues>
                                 <KeyValue key="showOnPlay" value="true" type="boolean" />
                             </KeyValues>
                         </AnimationGroup>
-                        <AnimationGroup parentKey="fadeOut"
-                            inherits="MapPinEnhancedAnimationFadeZoomOut">
+                        <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut">
                             <KeyValues>
                                 <KeyValue key="hideOnFinished" value="true" type="boolean" />
                             </KeyValues>

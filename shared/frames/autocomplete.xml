@@ -1,12 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="autocomplete.lua" />
 
-    <EditBox name="MapPinEnhancedAutocompleteTemplate"
-        mixin="MapPinEnhancedAutocompleteMixin, MapPinEnhancedThemeableMixin" virtual="true"
-        font="GameFontHighlight" autoFocus="false" multiLine="false"
-        inherits="MapPinEnhancedInputTemplate">
+    <EditBox name="MapPinEnhancedAutocompleteTemplate" mixin="MapPinEnhancedAutocompleteMixin, MapPinEnhancedThemeableMixin" virtual="true" font="GameFontHighlight" autoFocus="false" multiLine="false" inherits="MapPinEnhancedInputTemplate">
         <Layers>
             <Layer level="OVERLAY">
                 <Texture atlas="Spinner_Ring" hidden="true" parentKey="spinner">
@@ -37,8 +33,7 @@
                 <Size x="0" y="150" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o"
-                            scale="0.5">
+                        <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o" scale="0.5">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />
@@ -46,8 +41,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <FontString parentKey="message" inherits="GameFontDisableSmall"
-                            justifyH="LEFT" justifyV="MIDDLE" text="BROWSE_NO_RESULTS">
+                        <FontString parentKey="message" inherits="GameFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="BROWSE_NO_RESULTS">
                             <Size x="0" y="20" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="10" />
@@ -58,8 +52,7 @@
                 </Layers>
 
                 <Frames>
-                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList" frameStrata="DIALOG"
-                        enableMouse="true">
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList" frameStrata="DIALOG" enableMouse="true">
                         <Anchors>
                             <Anchor point="TOPLEFT" x="5" y="-3" />
                             <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="2" />
@@ -67,10 +60,8 @@
                     </Frame>
                     <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox"
-                                relativePoint="TOPRIGHT" x="-10" y="-5" />
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox"
-                                relativePoint="BOTTOMRIGHT" x="-10" y="0" />
+                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="-10" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="-10" y="0" />
                         </Anchors>
                     </EventFrame>
                 </Frames>
@@ -85,13 +76,11 @@
     </EditBox>
 
 
-    <Button name="MapPinEnhancedAutocompleteEntryTemplate"
-        mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
+    <Button name="MapPinEnhancedAutocompleteEntryTemplate" mixin="MapPinEnhancedAutocompleteEntryMixin, MapPinEnhancedThemeableMixin" virtual="true">
         <Size x="1" y="30" />
         <Layers>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalSmall" parentKey="label" justifyH="LEFT"
-                    justifyV="MIDDLE">
+                <FontString inherits="GameFontNormalSmall" parentKey="label" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="15" />
                         <Anchor point="BOTTOMRIGHT" />
@@ -99,8 +88,7 @@
                 </FontString>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture atlas="Professions_Recipe_Active"
-                    parentKey="glow" hidden="true" setAllPoints="true">
+                <Texture atlas="Professions_Recipe_Active" parentKey="glow" hidden="true" setAllPoints="true">
                     <Gradient orientation="HORIZONTAL">
                         <MinColor r="1" g="1" b="1" a="0.7" />
                         <MaxColor r="1" g="1" b="1" a="0" />

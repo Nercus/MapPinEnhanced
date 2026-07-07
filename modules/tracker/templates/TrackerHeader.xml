@@ -1,10 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Script file="TrackerHeader.lua" />
-    <Frame name="MapPinEnhancedTrackerHeaderTemplate" mixin="MapPinEnhancedTrackerHeaderMixin"
-        virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Both">
+    <Frame name="MapPinEnhancedTrackerHeaderTemplate" mixin="MapPinEnhancedTrackerHeaderMixin" virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Both">
         <Size x="1" y="30" />
         <Anchors>
             <Anchor point="TOPLEFT" x="0" y="0" />
@@ -39,12 +37,10 @@
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="title" inherits="GameFontNormal"
-                    text="Map Pin Enhanced Tracker" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString parentKey="title" inherits="GameFontNormal" text="Map Pin Enhanced Tracker" justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT"
-                            relativeKey="$parent.iconSeparator" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.iconSeparator" x="5" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -65,8 +61,7 @@
                     <KeyValue key="icon" value="collection" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton"
-                        relativePoint="LEFT" />
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton" relativePoint="LEFT" />
                 </Anchors>
             </Button>
             <Button parentKey="importButton" inherits="MapPinEnhancedIconButtonTemplate">
@@ -75,8 +70,7 @@
                     <KeyValue key="icon" value="import" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.viewButton"
-                        relativePoint="LEFT" />
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.viewButton" relativePoint="LEFT" />
                 </Anchors>
             </Button>
         </Frames>

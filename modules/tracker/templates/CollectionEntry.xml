@@ -1,10 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="CollectionEntry.lua" />
 
-    <Button name="MapPinEnhancedTrackerCollectionEntryTemplate" virtual="true"
-        mixin="MapPinEnhancedTrackerCollectionEntryMixin">
+    <Button name="MapPinEnhancedTrackerCollectionEntryTemplate" virtual="true" mixin="MapPinEnhancedTrackerCollectionEntryMixin">
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerCollectionEntryTemplate" />
         </KeyValues>
@@ -27,8 +25,7 @@
                 </Texture>
                 <FontString inherits="GameFontNormal" parentKey="title" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.iconTexture" relativePoint="RIGHT"
-                            x="5" />
+                        <Anchor point="LEFT" relativeKey="$parent.iconTexture" relativePoint="RIGHT" x="5" />
                     </Anchors>
                 </FontString>
             </Layer>
