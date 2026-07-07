@@ -117,9 +117,9 @@ local CALLBACK_EVENTS = {
 }
 
 ---@class CallbackTarget
----@field RegisterCallback fun(self: MapPinEnhanced, event: string, func: function, ...)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: string)
----@field UnregisterAllCallbacks fun(self: MapPinEnhanced, event: string)
+---@field RegisterCallback fun(self: string, event: string, func: function, ...)
+---@field UnregisterCallback fun(self: string, event: string)
+---@field UnregisterAllCallbacks fun(self: string)
 local callbackTarget = {}
 ---@class CallbackHandlerRegistryWithEvents : CallbackHandlerRegistry
 ---@field events table<string, table<CallbackTarget, function[]>>
@@ -139,51 +139,49 @@ local function IsValidCallbackEvent(event)
 end
 
 ---@param callbackEvent CallbackEvent
+---@param key string|nil
+---@return string
+local function GetCallbackEventName(callbackEvent, key)
+    local eventInfo = CALLBACK_EVENTS[callbackEvent]
+    if eventInfo and eventInfo.pattern and key then
+        return (string.gsub(eventInfo.event, "%%w%+", key))
+    elseif eventInfo then
+        return eventInfo.event
+    end
+    return callbackEvent
+end
+
+---@param callbackEvent CallbackEvent
+---@param func function
+---@param key string|nil
 function MapPinEnhanced:RegisterCallback(callbackEvent, func, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
-    assert(func, "Function must be provided")
+    assert(type(func) == "function", "Function must be provided")
 
-
-    local eventInfo = CALLBACK_EVENTS[callbackEvent]
-    if eventInfo and eventInfo.pattern and key then
-        local eventName = string.gsub(eventInfo.event, "%%w%+", key)
-        callbackTarget.RegisterCallback(self, eventName, func)
-    elseif eventInfo then
-        callbackTarget.RegisterCallback(self, eventInfo.event, func)
-    else
-        callbackTarget.RegisterCallback(self, callbackEvent, func)
-    end
+    local eventName = GetCallbackEventName(callbackEvent, key)
+    callbackTarget.RegisterCallback(tostring(func), eventName, func)
 end
 
 ---@param callbackEvent CallbackEvent
-function MapPinEnhanced:UnregisterCallback(callbackEvent, key)
+---@param func function
+---@param key string|nil
+function MapPinEnhanced:UnregisterCallback(callbackEvent, func, key)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
+    assert(type(func) == "function", "Function must be provided")
 
-    local eventInfo = CALLBACK_EVENTS[callbackEvent]
-    if eventInfo and eventInfo.pattern and key then
-        callbackTarget.UnregisterCallback(self, string.gsub(eventInfo.event, "%%w%+", key))
-    elseif eventInfo then
-        callbackTarget.UnregisterCallback(self, eventInfo.event)
-    else
-        callbackTarget.UnregisterCallback(self, callbackEvent)
-    end
+    local eventName = GetCallbackEventName(callbackEvent, key)
+    callbackTarget.UnregisterCallback(tostring(func), eventName)
 end
 
 ---@param callbackEvent CallbackEvent
+---@param key string|nil
 function MapPinEnhanced:FireCallback(callbackEvent, key, ...)
     assert(callbackEvent, "Callback event must be provided")
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
-    local eventInfo = CALLBACK_EVENTS[callbackEvent]
-    if eventInfo and eventInfo.pattern and key then
-        local eventName = string.gsub(eventInfo.event, "%%w%+", key)
-        callbackRegistry:Fire(eventName, ...)
-    elseif eventInfo then
-        callbackRegistry:Fire(eventInfo.event, ...)
-    else
-        callbackRegistry:Fire(callbackEvent, ...)
-    end
+    local eventName = GetCallbackEventName(callbackEvent, key)
+    callbackRegistry:Fire(eventName, ...)
 end
 
 ---Call a function with restricted access, ensuring it runs outside of combat.

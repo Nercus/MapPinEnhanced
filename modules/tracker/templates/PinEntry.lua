@@ -6,6 +6,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field pin MapPinEnhancedPinMixin
 ---@field title FontString
 ---@field location FontString
+---@field trackingCallback fun(eventname: string, isTracked: boolean)?
+---@field titleCallback fun(eventname: string, title: string)?
+---@field colorCallback fun(eventname: string, color: PinColor)?
+---@field iconCallback fun(eventname: string, texture: string, usesAtlas: boolean)?
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -13,7 +17,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local pin = self.pin
 
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TRACKING", function(_, isTracked)
+    local function trackingCallback(_, isTracked)
         if isTracked then
             self.pinFrame:SetTracked()
         else
@@ -21,26 +25,45 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
             self.title:SetAlpha(0.5)
             self.location:SetAlpha(0.5)
         end
-    end, pin.pinID)
-
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", function(_, title)
+    end
+    local function titleCallback(_, title)
         self:SetTitle(title)
-    end, pin.pinID)
-
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", function(_, color)
+    end
+    local function colorCallback(_, color)
         self.pinFrame:SetColor(color)
-    end, pin.pinID)
-
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", function(_, texture, usesAtlas)
+    end
+    local function iconCallback(_, texture, usesAtlas)
         self.pinFrame:SetIconTexture(texture, usesAtlas)
-    end, pin.pinID)
+    end
+
+    self.trackingCallback = trackingCallback
+    self.titleCallback = titleCallback
+    self.colorCallback = colorCallback
+    self.iconCallback = iconCallback
+
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TRACKING", trackingCallback, pin.pinID)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", titleCallback, pin.pinID)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", colorCallback, pin.pinID)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", iconCallback, pin.pinID)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:UnregisterCallbackEvents(oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TRACKING", oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", oldPinId)
+    if self.trackingCallback then
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TRACKING", self.trackingCallback, oldPinId)
+        self.trackingCallback = nil
+    end
+    if self.titleCallback then
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", self.titleCallback, oldPinId)
+        self.titleCallback = nil
+    end
+    if self.colorCallback then
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", self.colorCallback, oldPinId)
+        self.colorCallback = nil
+    end
+    if self.iconCallback then
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", self.iconCallback, oldPinId)
+        self.iconCallback = nil
+    end
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:Reset(oldPinId)

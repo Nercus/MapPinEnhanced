@@ -25,9 +25,9 @@ MapPinEnhanced = {}
 MapPinEnhanced = {}
 
 ---@class MapPinEnhanced
----@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TRACKING", key: string)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TITLE", key: string)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", key: string)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", key: string)
----@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TRACKING", func: fun(eventname: string, isTracked: boolean), key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_TITLE", func: fun(eventname: string, title: string), key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", func: fun(eventname: string, texture: string, usesAtlas: boolean), key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", func: fun(eventname: string, color: PinColor), key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", func: fun(eventname: string, lock: boolean), key: string)
 MapPinEnhanced = {}

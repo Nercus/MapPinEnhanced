@@ -95,25 +95,32 @@ end
 
 
 local oldPinId = nil
+---@param title string
+local function onPinTitleUpdated(_, title)
+    Wayfinders:OverrideWayfinderTitle(title)
+end
+
+---@param color PinColor
+local function onPinColorUpdated(_, color)
+    Wayfinders:OverrideWayfinderColor(color)
+end
+
+---@param texture string
+---@param usesAtlas boolean
+local function onPinIconUpdated(_, texture, usesAtlas)
+    Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
+end
+
 local function SetupPinCallbacks(pinId)
     if oldPinId and oldPinId ~= pinId then
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TRACKING", oldPinId)
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", oldPinId)
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", oldPinId)
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", oldPinId)
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, oldPinId)
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, oldPinId)
+        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, oldPinId)
     end
 
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", function(_, title)
-        Wayfinders:OverrideWayfinderTitle(title)
-    end, pinId)
-
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", function(_, color)
-        Wayfinders:OverrideWayfinderColor(color)
-    end, pinId)
-
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", function(_, texture, usesAtlas)
-        Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
-    end, pinId)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, pinId)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, pinId)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, pinId)
 end
 
 ---@param eventName "PIN_TRACKING_CHANGED"
