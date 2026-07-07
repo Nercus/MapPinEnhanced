@@ -67,7 +67,6 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     self:ShowFrame()
 end
 
-
 ---Method to override the alpha state of the super tracked frame -> create unlimited distance
 ---@param enable boolean
 local function OverrideSuperTrackedAlphaState(enable)

@@ -2,10 +2,10 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
-local Providers      = MapPinEnhanced:GetModule("Providers")
-local Groups         = MapPinEnhanced:GetModule("Groups")
+local Providers = MapPinEnhanced:GetModule("Providers")
+local Groups = MapPinEnhanced:GetModule("Groups")
 
-local L              = MapPinEnhanced.L
+local L = MapPinEnhanced.L
 
 ---@param dataString string the string to import, either a Map Pin Enhanced export string or a slash command
 function Providers:ImportTemporary(dataString)
