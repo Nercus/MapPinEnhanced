@@ -17,6 +17,27 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
     return self.frame
 end
 
+---@param title string
+function MapPinEnhancedWayfinderArrow:SetTitle(title)
+    self:GetFrame():SetTitle(title)
+end
+
+---@param color PinColor
+function MapPinEnhancedWayfinderArrow:SetColor(color)
+    self:GetFrame():SetColor(color)
+end
+
+---@param texture string
+---@param usesAtlas boolean
+function MapPinEnhancedWayfinderArrow:SetTexture(texture, usesAtlas)
+    self:GetFrame():SetTexture(texture, usesAtlas)
+end
+
+---@param lock boolean
+function MapPinEnhancedWayfinderArrow:SetLock(lock)
+    self:GetFrame().pin:SetLock(lock)
+end
+
 ---@param wayfinderData WayfinderData | nil
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
@@ -26,8 +47,13 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
         return
     end
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
-    frame:SetColor(wayfinderData.color)
-    frame:SetTitle(wayfinderData.title)
+    if wayfinderData.texture then
+        self:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
+    else
+        self:SetColor(wayfinderData.color)
+    end
+    self:SetTitle(wayfinderData.title)
+    self:SetLock(wayfinderData.lock)
     frame.fadeOut:Stop()
     if not frame:IsShown() then
         frame.fadeIn:Play()

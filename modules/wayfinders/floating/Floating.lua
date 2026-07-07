@@ -7,7 +7,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData | nil
----@field frames {modern: MapPinEnhancedFloatingModernTemplate, simple: MapPinEnhancedFloatingSimpleTemplate}
+---@field frames table<WayfinderFloatingFrameType, MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate> | nil
 ---@field frameType WayfinderFloatingFrameType | nil
 local MapPinEnhancedWayfinderFloating = {}
 
@@ -19,9 +19,15 @@ function MapPinEnhancedWayfinderFloating:SetFrameType(frameType)
 end
 
 ---@enum (key) WayfinderFloatingFrameType
-local templates = {
-    modern = "MapPinEnhancedFloatingModernTemplate",
-    simple = "MapPinEnhancedFloatingSimpleTemplate",
+local floatingFrameTypes = {
+    modern = {
+        template = "MapPinEnhancedFloatingModernTemplate",
+        name = "MapPinEnhancedWayfinderFloatingFrameModern",
+    },
+    simple = {
+        template = "MapPinEnhancedFloatingSimpleTemplate",
+        name = "MapPinEnhancedWayfinderFloatingFrameSimple",
+    },
 }
 
 ---@return MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate
@@ -32,12 +38,48 @@ function MapPinEnhancedWayfinderFloating:GetFrame()
     if self.frames and self.frames[currentType] then
         return self.frames[currentType]
     end
-    local template = templates[currentType]
-    if not template then
+    local frameType = floatingFrameTypes[currentType]
+    if not frameType then
         error("Invalid frame type: " .. tostring(currentType))
     end
-    local frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloatingFrame" .. currentType, nil, template)
+    ---@type MapPinEnhancedFloatingModernTemplate | MapPinEnhancedFloatingSimpleTemplate
+    local frame = CreateFrame("Frame", frameType.name, nil, frameType.template)
+    self.frames = self.frames or {}
+    self.frames[currentType] = frame
     return frame
+end
+
+---@param title string
+function MapPinEnhancedWayfinderFloating:SetTitle(title)
+    local frame = self:GetFrame()
+    if frame.SetTitle then
+        frame:SetTitle(title)
+    end
+end
+
+---@param color PinColor
+function MapPinEnhancedWayfinderFloating:SetColor(color)
+    local frame = self:GetFrame()
+    if frame.SetColor then
+        frame:SetColor(color)
+    end
+end
+
+---@param texture string
+---@param usesAtlas boolean
+function MapPinEnhancedWayfinderFloating:SetTexture(texture, usesAtlas)
+    local frame = self:GetFrame()
+    if frame.SetTexture then
+        frame:SetTexture(texture, usesAtlas)
+    end
+end
+
+---@param lock boolean
+function MapPinEnhancedWayfinderFloating:SetLock(lock)
+    local frame = self:GetFrame()
+    if frame.pin then
+        frame.pin:SetLock(lock)
+    end
 end
 
 function MapPinEnhancedWayfinderFloating:ShowFrame()
@@ -64,6 +106,17 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
         return
     end
     self.data = wayfinderData
+    local frame = self:GetFrame()
+    if frame.SetLocation then
+        frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    end
+    if wayfinderData.texture then
+        self:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
+    else
+        self:SetColor(wayfinderData.color)
+    end
+    self:SetTitle(wayfinderData.title)
+    self:SetLock(wayfinderData.lock)
     self:ShowFrame()
 end
 

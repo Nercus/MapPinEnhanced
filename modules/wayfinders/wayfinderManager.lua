@@ -59,6 +59,8 @@ function Wayfinders:OverrideWayfinderColor(color)
         wayfinder:SetColor(color)
     end
     self.cachedData.color = color
+    self.cachedData.texture = nil
+    self.cachedData.usesAtlas = nil
 end
 
 ---@param texture string
@@ -69,6 +71,7 @@ function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
     end
     self.cachedData.texture = texture
     self.cachedData.usesAtlas = usesAtlas
+    self.cachedData.color = nil
 end
 
 function Wayfinders:OverrideWayfinderLock(lock)
