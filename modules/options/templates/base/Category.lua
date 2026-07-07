@@ -25,6 +25,7 @@ function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
             childCount = childCount + 1
             totalHeight = totalHeight + child:GetHeight()
             if childCount > 1 then
+                ---@type number
                 totalHeight = totalHeight + self.groupSpacing
             end
         end
