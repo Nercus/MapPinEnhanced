@@ -29,7 +29,9 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     frame:SetColor(wayfinderData.color)
     frame:SetTitle(wayfinderData.title)
     frame.fadeOut:Stop()
-    frame.fadeIn:Play()
+    if not frame:IsShown() then
+        frame.fadeIn:Play()
+    end
 end
 
 function MapPinEnhancedWayfinderArrow:Enable()
