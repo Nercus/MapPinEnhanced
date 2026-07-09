@@ -9,8 +9,6 @@ local L = MapPinEnhanced.L
 
 ---@enum DialogTypes
 Dialogs.DIALOG_TYPES = {
-    IMPORT = "IMPORT",
-    EXPORT = "EXPORT",
     CONFIRM = "CONFIRM",
     INFO = "INFO",
     ABOUT = "ABOUT",
@@ -25,13 +23,7 @@ function Dialogs:ShowDialog(dialogType, overrideTitle)
     ---@type DialogContentFrame
     local content
     local title = overrideTitle
-    if dialogType == self.DIALOG_TYPES.IMPORT then
-        content = self:GetImportContent()
-        title = title or L["Import"]
-    elseif dialogType == self.DIALOG_TYPES.EXPORT then
-        content = self:GetExportContent()
-        title = title or L["Export"]
-    elseif dialogType == self.DIALOG_TYPES.CONFIRM then
+    if dialogType == self.DIALOG_TYPES.CONFIRM then
         content = self:GetConfirmContent()
         title = title or L["Confirm"]
     elseif dialogType == self.DIALOG_TYPES.INFO then
@@ -81,15 +73,6 @@ function Dialogs:HideDialog(dialogType)
     self.openDialog = nil
     self.dialogFrame:Hide()
 end
-
-MapPinEnhanced:AddSlashCommand("import",
-    function() Dialogs:ShowDialog(Dialogs.DIALOG_TYPES.IMPORT) end, L
-    ["Open the import dialog to import map pins from a string."])
-
-MapPinEnhanced:AddSlashCommand("export",
-    function() Dialogs:ShowDialog(Dialogs.DIALOG_TYPES.EXPORT) end,
-    L["Open the export dialog to export your map pins to a string."])
-
 
 MapPinEnhanced:AddSlashCommand({ "version", "about" },
     function() Dialogs:ShowDialog(Dialogs.DIALOG_TYPES.ABOUT) end,

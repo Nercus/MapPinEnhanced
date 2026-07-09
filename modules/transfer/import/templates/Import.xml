@@ -2,14 +2,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Include file="Import.lua" />
-    <Frame name="MapPinEnhancedImportDialogContentTemplate" virtual="true" mixin="MapPinEnhancedImportDialogContentMixin">
-        <Size x="700" y="390" />
+    <Frame name="MapPinEnhancedImportWindowTemplate" inherits="MapPinEnhancedWindowTemplate" virtual="true" mixin="MapPinEnhancedImportWindowMixin">
+        <Size x="720" y="420" />
+        <KeyValues>
+            <KeyValue key="windowTitle" value="Import" />
+            <KeyValue key="windowColor" value="yellow" />
+        </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER" justifyV="TOP" spacing="2">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="10" y="-20" />
-                        <Anchor point="TOPRIGHT" x="-15" y="-20" />
+                        <Anchor point="TOPLEFT" x="100" y="-50" />
+                        <Anchor point="TOPRIGHT" x="-100" y="-50" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -18,7 +22,7 @@
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
                 <Size x="450" y="300" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.description" relativePoint="BOTTOMLEFT" x="0" y="-20" />
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-100" />
                 </Anchors>
             </ScrollFrame>
             <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
@@ -76,8 +80,5 @@
                 </Anchors>
             </Button>
         </Frames>
-        <Scripts>
-            <OnLoad method="OnLoad" />
-        </Scripts>
     </Frame>
 </Ui>

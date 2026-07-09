@@ -46,14 +46,14 @@ function MapPinEnhancedConfirmDialogContentMixin:Setup(options)
         if self.onConfirm then
             self.onConfirm()
         end
-        self:GetParent():Hide()
+        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.CONFIRM)
     end)
 
     self.cancelButton:SetScript("OnClick", function()
         if self.onCancel then
             self.onCancel()
         end
-        self:GetParent():Hide()
+        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.CONFIRM)
     end)
 end
 

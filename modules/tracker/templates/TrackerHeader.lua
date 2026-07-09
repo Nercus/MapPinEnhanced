@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 
 local Tracker = MapPinEnhanced:GetModule("Tracker")
-local Dialogs = MapPinEnhanced:GetModule("Dialogs")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedTrackerHeaderTemplate : Frame
 ---@field viewButton MapPinEnhancedIconButtonTemplate
@@ -17,7 +17,7 @@ MapPinEnhancedTrackerHeaderMixin = {}
 
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()
     self.importButton:SetScript("OnClick", function()
-        Dialogs:ShowDialog("IMPORT")
+        Transfer:ShowImportWindow()
     end)
 
     self.viewButton:SetScript("OnClick", function()

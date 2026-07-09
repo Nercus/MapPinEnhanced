@@ -33,7 +33,7 @@ function MapPinEnhancedInfoDialogContentMixin:Setup(options)
     self.onClose = options.onClose
 
     self.okayButton:SetScript("OnClick", function()
-        self:GetParent():Hide()
+        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.INFO)
     end)
 end
 

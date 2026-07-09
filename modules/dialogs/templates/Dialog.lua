@@ -21,7 +21,7 @@ MapPinEnhancedDialogMixin = {}
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 
----@alias DialogContentFrame MapPinEnhancedExportDialogContentTemplate |MapPinEnhancedImportDialogContentTemplate | MapPinEnhancedConfirmDialogContentTemplate |MapPinEnhancedInfoDialogContentTemplate
+---@alias DialogContentFrame MapPinEnhancedConfirmDialogContentTemplate | MapPinEnhancedInfoDialogContentTemplate | MapPinEnhancedAboutDialogContentTemplate
 
 function MapPinEnhancedDialogMixin:SetTitle(title)
     self.header.title:SetText(title)
@@ -66,6 +66,7 @@ end
 
 function MapPinEnhancedDialogMixin:OnHide()
     PlaySound(SOUNDKIT.IG_QUEST_LOG_CLOSE)
+    Dialogs.openDialog = nil
     if self.content then
         self.content:Hide()
     end

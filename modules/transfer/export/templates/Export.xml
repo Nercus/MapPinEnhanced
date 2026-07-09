@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="Export.lua" />
+    <Frame name="MapPinEnhancedExportWindowTemplate" inherits="MapPinEnhancedWindowTemplate" virtual="true" mixin="MapPinEnhancedExportWindowMixin">
+        <Size x="420" y="130" />
+        <KeyValues>
+            <KeyValue key="windowTitle" value="Export" />
+            <KeyValue key="windowColor" value="blue" />
+        </KeyValues>
+    </Frame>
+</Ui>

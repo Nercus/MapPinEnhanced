@@ -1,0 +1,114 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="window.lua" />
+    <Frame name="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedWindowMixin" movable="true" hidden="true" parent="UIParent" toplevel="true" virtual="true">
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
+        <Layers>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png" scale="0.35" setAllPoints="true">
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="0">
+                <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
+                    <Size x="46" y="46" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
+                    </Anchors>
+                    <Gradient orientation="VERTICAL">
+                        <MaxColor r="0.2" g="0.2" b="0.2" />
+                        <MinColor r="0" g="0" b="0" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="1">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png" parentKey="logo">
+                    <Size x="32" y="32" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY" textureSubLevel="2">
+                <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
+                    <Color r="1" g="0.82" b="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="background" setAllPoints="true">
+                <Layers>
+                    <Layer level="BACKGROUND" textureSubLevel="0">
+                        <Texture setAllPoints="true" file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png" alpha="0.9" parentKey="bg">
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="BACKGROUND" textureSubLevel="1">
+                        <Texture parentKey="backgroundArt" atlas="shop-bg-map-green" desaturated="true">
+                            <Size x="1058" y="600" />
+                            <Anchors>
+                                <Anchor point="RIGHT" x="-5" />
+                            </Anchors>
+                            <Gradient>
+                                <MinColor r="1" g="1" b="1" a="0.65" />
+                                <MaxColor r="1" g="1" b="1" a="1" />
+                            </Gradient>
+                        </Texture>
+                        <MaskTexture file="interface/masks/squaremask.blp" parentKey="backgroundMask" setAllPoints="true" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                            <MaskedTextures>
+                                <MaskedTexture childKey="backgroundArt" />
+                            </MaskedTextures>
+                        </MaskTexture>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnLoad>
+                        self:SetFrameLevel(self:GetParent():GetFrameLevel() - 1)
+                    </OnLoad>
+                </Scripts>
+            </Frame>
+            <Frame parentKey="header">
+                <Size x="300" y="25" />
+                <Anchors>
+                    <Anchor point="TOP" y="5" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture setAllPoints="true" file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png" alpha="0.9" parentKey="bg">
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-2" y="2" />
+                                <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
+                            </Anchors>
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="10" right="10" top="10" bottom="10" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString inherits="GameFontNormalSmall" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" parentKey="title" />
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Button name="$parentCloseButton" parentKey="CloseButton" inherits="UIPanelCloseButtonDefaultAnchors" frameStrata="HIGH" />
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>
