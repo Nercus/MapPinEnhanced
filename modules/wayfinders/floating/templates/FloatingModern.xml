@@ -5,7 +5,7 @@
     <Frame name="MapPinEnhancedFloatingModernTemplate" virtual="true" mixin="MapPinEnhancedFloatingModernMixin">
         <Size x="50" y="50" />
         <Frames>
-            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="PARENT" enableMouse="false">
+            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="MEDIUM" enableMouse="false">
                 <Size x="30" y="30" />
                 <Anchors>
                     <Anchor point="CENTER" />

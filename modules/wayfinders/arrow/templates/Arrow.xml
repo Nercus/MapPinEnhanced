@@ -3,13 +3,13 @@
 
 
     <Include file="Arrow.lua" />
-    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent" mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true">
+    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent" mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM">
         <Size x="140" y="140" />
         <Anchors>
             <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
         </Anchors>
         <Frames>
-            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="PARENT">
+            <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="MEDIUM">
                 <KeyValues>
                     <KeyValue key="hideShadow" value="true" type="boolean" />
                 </KeyValues>
