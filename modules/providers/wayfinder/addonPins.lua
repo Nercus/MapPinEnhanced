@@ -111,16 +111,26 @@ local function onPinIconUpdated(_, texture, usesAtlas)
     Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
 end
 
+local function ClearPinCallbacks()
+    if not oldPinId then return end
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, oldPinId)
+    oldPinId = nil
+end
+
 local function SetupPinCallbacks(pinId)
-    if oldPinId and oldPinId ~= pinId then
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, oldPinId)
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, oldPinId)
-        MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, oldPinId)
+    if oldPinId == pinId then
+        return
+    end
+    if oldPinId then
+        ClearPinCallbacks()
     end
 
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, pinId)
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, pinId)
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, pinId)
+    oldPinId = pinId
 end
 
 ---@param eventName "PIN_TRACKING_CHANGED"
@@ -134,9 +144,9 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         SetTrackedPinUserWaypoint(wayfinderData)
         Wayfinders:SetWayfinderData(wayfinderData)
         SetupPinCallbacks(pinID)
-        oldPinId = pinID
     elseif pinID == trackedPinID and not isTracked then
         trackedPinID = nil
+        ClearPinCallbacks()
         ClearTrackedPinUserWaypoint()
         Wayfinders:ClearWayfinderData()
     end

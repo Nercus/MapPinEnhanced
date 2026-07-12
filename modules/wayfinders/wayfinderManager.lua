@@ -47,6 +47,7 @@ end
 
 ---@param title string
 function Wayfinders:OverrideWayfinderTitle(title)
+    if not self.cachedData then return end
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:SetTitle(title)
     end
@@ -55,6 +56,7 @@ end
 
 ---@param color string
 function Wayfinders:OverrideWayfinderColor(color)
+    if not self.cachedData then return end
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:SetColor(color)
     end
@@ -66,6 +68,7 @@ end
 ---@param texture string
 ---@param usesAtlas boolean
 function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
+    if not self.cachedData then return end
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:SetTexture(texture, usesAtlas)
     end
@@ -75,6 +78,7 @@ function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
 end
 
 function Wayfinders:OverrideWayfinderLock(lock)
+    if not self.cachedData then return end
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:SetLock(lock)
     end
