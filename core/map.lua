@@ -23,6 +23,14 @@ local min = math.min
 local abs = math.abs
 local wipe = table.wipe
 
+local function NotifyDistanceCallbacks(distance, timeToTarget)
+    for _, callback in ipairs(onUpdateCallbacks) do
+        if type(callback) == "function" then
+            callback(distance, timeToTarget)
+        end
+    end
+end
+
 
 ---Wrapper for the current map the player is on
 ---@return number? mapID
@@ -108,30 +116,22 @@ local function OnUpdate(_, elapsed)
         totalTime = totalTime + (current.time - prev.time)
     end
 
-    if totalTime == 0 then return end
-    if totalDistance == 0 then return end
+    local timeToTarget = -1
 
-    -- Calculate speed (yards per second)
-    ---@type number
-    local speed = totalDistance / totalTime
-    if speed <= 0 then
+    if totalTime > 0 and totalDistance > 0 then
+        -- Calculate speed (yards per second)
+        ---@type number
+        local speed = totalDistance / totalTime
+        timeToTarget = distance / speed
+    else
         wipe(distanceCache)
-        lastDistance = distance
-        return
+        table.insert(distanceCache, { distance = distance, time = currentTime })
     end
-
-    -- Calculate time to target
-    local timeToTarget = distance / speed
 
     -- Update UPDATE interval based on distance
     throttle_interval = max(MIN_UPDATE_INTERVAL, min(MAX_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL * (distance / 100)))
 
-    for _, callback in ipairs(onUpdateCallbacks) do
-        if type(callback) == "function" then
-            callback(distance, timeToTarget)
-        end
-    end
-
+    NotifyDistanceCallbacks(distance, timeToTarget)
     lastDistance = distance
 end
 
@@ -140,6 +140,12 @@ end
 function MapPinEnhanced:RegisterContinuousDistanceCallback(callback)
     if type(callback) == "function" then
         table.insert(onUpdateCallbacks, callback)
+        if target then
+            local distance = self:GetDistanceToTarget(target.mapID, target.x, target.y)
+            if distance > 0 then
+                callback(distance, -1)
+            end
+        end
     end
 end
 
@@ -166,10 +172,10 @@ function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
     target = { mapID = mapID, x = x, y = y }
 
     local initialDistance = self:GetDistanceToTarget(mapID, x, y)
-    for _, callback in ipairs(onUpdateCallbacks) do
-        if type(callback) == "function" then
-            callback(initialDistance, -1) -- -1 indicates unknown time to target
-        end
+    if initialDistance > 0 then
+        lastDistance = initialDistance
+        table.insert(distanceCache, { distance = initialDistance, time = GetTime() })
+        NotifyDistanceCallbacks(initialDistance, -1) -- -1 indicates unknown time to target
     end
 
     if not distanceFrame:GetScript("OnUpdate") then
