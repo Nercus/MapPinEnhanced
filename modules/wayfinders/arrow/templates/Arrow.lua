@@ -5,8 +5,11 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeIn Animation
 ---@field fadeOut Animation
 
----@class MapPinEnhancedFloatingArrowTemplate : Frame
+---@class MapPinEnhancedFloatingArrowNeedleContainer : Frame
 ---@field needle MapPinEnhancedFloatingArrowNeedle
+
+---@class MapPinEnhancedFloatingArrowTemplate : Frame
+---@field needleContainer MapPinEnhancedFloatingArrowNeedleContainer
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field title FontString
 ---@field distance FontString
@@ -23,24 +26,36 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
 local HBD = MapPinEnhanced.HBD
+local MIN_NEEDLE_SCALE = 0.7
+local MAX_NEEDLE_SCALE = 1
+local MIN_NEEDLE_ALPHA = 0.5
+local MAX_NEEDLE_ALPHA = 1
 
 local mathSin = math.sin
 local mathCos = math.cos
 local mathAtan2 = math.atan2
 local mathAbs = math.abs
+local mathPi = math.pi
 local DeltaLerp = DeltaLerp
+
+---@param rotation number
+---@return number progress A value between 0 and 1, where 0 is aligned and 1 is opposite.
+local function GetNeedleRotationProgress(rotation)
+    local normalizedRotation = mathAtan2(mathSin(rotation), mathCos(rotation))
+    return mathAbs(normalizedRotation) / mathPi
+end
 
 ---@param color PinColor
 function MapPinEnhancedFloatingArrowMixin:SetColor(color)
     local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
-    self.needle:SetVertexColor(colorValue:GetRGBA())
+    self.needleContainer.needle:SetVertexColor(colorValue:GetRGBA())
     self.pin:SetTextureColor(colorValue)
 end
 
 function MapPinEnhancedFloatingArrowMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
-    self.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
+    self.needleContainer.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
 end
 
 function MapPinEnhancedFloatingArrowMixin:SetTitle(title)
@@ -59,12 +74,12 @@ function MapPinEnhancedFloatingArrowMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if displayType == "close" then
-        self.needle.fadeIn:Stop()
-        self.needle.fadeOut:Play()
+        self.needleContainer.needle.fadeIn:Stop()
+        self.needleContainer.needle.fadeOut:Play()
         self.pin:ShowPulse()
     else
-        self.needle.fadeOut:Stop()
-        self.needle.fadeIn:Play()
+        self.needleContainer.needle.fadeOut:Stop()
+        self.needleContainer.needle.fadeIn:Play()
         self.pin:HidePulse()
     end
 end
@@ -108,6 +123,23 @@ function MapPinEnhancedFloatingArrowMixin:SetRotatePin(rotatePin)
     end
 end
 
+---@param rotation number
+function MapPinEnhancedFloatingArrowMixin:UpdateNeedleScale(rotation)
+    local scaleRange = MAX_NEEDLE_SCALE - MIN_NEEDLE_SCALE
+    local scale = MAX_NEEDLE_SCALE - (scaleRange * GetNeedleRotationProgress(rotation))
+    self.needleContainer:SetScale(scale)
+end
+
+---@param rotation number | nil
+function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha(rotation)
+    if not self.displayType or self.displayType == "close" then return end
+
+    local rotationProgress = GetNeedleRotationProgress(rotation or self.newNeedleRotation or 0)
+    local alphaRange = MAX_NEEDLE_ALPHA - MIN_NEEDLE_ALPHA
+    local alpha = MAX_NEEDLE_ALPHA - (alphaRange * rotationProgress)
+    self.needleContainer.needle:SetAlpha(alpha)
+end
+
 function MapPinEnhancedFloatingArrowMixin:AnimateRotation(elapsed)
     if not self.displayType or self.displayType == "close" then return end
     local currentRotation = self.needleRotation or 0
@@ -120,19 +152,11 @@ function MapPinEnhancedFloatingArrowMixin:AnimateRotation(elapsed)
     local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .2, elapsed)
     self.needleRotation = newRotation
 
-    self.needle:SetRotation(-newRotation)
+    self.needleContainer.needle:SetRotation(-newRotation)
+    self:UpdateNeedleScale(newRotation)
+    self:UpdateNeedleAlpha(newRotation)
     if self.rotatePin then
         self:SetPinRotation(-newRotation)
-    end
-end
-
-function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha()
-    if not self.displayType or self.displayType == "close" then return end
-    local relativeAngle = self.newNeedleRotation or 0
-    if mathAbs(relativeAngle) < 0.2 then
-        self.needle:SetAlpha(1)
-    else
-        self.needle:SetAlpha(0.4)
     end
 end
 
@@ -185,6 +209,8 @@ function MapPinEnhancedFloatingArrowMixin:Reset()
     self:SetDisplayType("far")
     self.needleRotation = nil
     self.newNeedleRotation = nil
+    self.needleContainer:SetScale(MAX_NEEDLE_SCALE)
+    self.needleContainer.needle:SetAlpha(MAX_NEEDLE_ALPHA)
     self:SetPinRotation(0)
 end
 
