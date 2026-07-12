@@ -29,9 +29,9 @@ local function GetIconLabel(icon)
     return string.format("|T%s:%d:%d|t", icon.path, size, size)
 end
 
----@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
-function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
-    local menu = {
+---@return AnyMenuEntry[]
+function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
+    return {
         {
             type = "title",
             label = self.pinData.title,
@@ -113,5 +113,10 @@ function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
             end
         }
     }
+end
+
+---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate
+function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
+    local menu = self:BuildPinMenuEntries()
     MapPinEnhanced:GenerateMenu(parent, menu)
 end

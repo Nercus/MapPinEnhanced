@@ -29,6 +29,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedFloatingArrowMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Options = MapPinEnhanced:GetModule("Options")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
 local HBD = MapPinEnhanced.HBD
@@ -49,6 +50,28 @@ local DeltaLerp = DeltaLerp
 local function GetNeedleRotationProgress(rotation)
     local normalizedRotation = mathAtan2(mathSin(rotation), mathCos(rotation))
     return mathAbs(normalizedRotation) / mathPi
+end
+
+---@return AnyMenuEntry[]
+local function BuildArrowSettingsMenuEntries()
+    return {
+        {
+            type = "title",
+            label = MapPinEnhanced.L["Wayfinder.Arrow_GROUPLABEL"],
+        },
+        {
+            type = "checkbox",
+            label = MapPinEnhanced.L["Wayfinder.Arrow.RotatePin_LABEL"],
+            isSelected = function()
+                return Options:GetOptionValue("Wayfinder.Arrow.RotatePin")
+            end,
+            setSelected = function()
+                ---@type boolean
+                local rotatePin = Options:GetOptionValue("Wayfinder.Arrow.RotatePin")
+                Options:SetOptionValue("Wayfinder.Arrow.RotatePin", not rotatePin)
+            end,
+        },
+    }
 end
 
 ---@param color PinColor
@@ -193,7 +216,20 @@ end
 function MapPinEnhancedFloatingArrowMixin:OnMouseDown(mouseButton)
     if mouseButton ~= "RightButton" then return end
 
-    -- TODO: add a menu here
+    local trackedPin = Pins:GetTrackedPin()
+    local menu = trackedPin and trackedPin:BuildPinMenuEntries() or {}
+
+    if trackedPin then
+        table.insert(menu, {
+            type = "divider",
+        })
+    end
+
+    for _, entry in ipairs(BuildArrowSettingsMenuEntries()) do
+        table.insert(menu, entry)
+    end
+
+    MapPinEnhanced:GenerateMenu(self, menu)
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnLoad()
@@ -207,6 +243,9 @@ function MapPinEnhancedFloatingArrowMixin:OnLoad()
     self.textContainer:SetFrameLevel(frameLevel + 2)
 
     MapPinEnhanced:RegisterDraggableFrame(self, "floatingArrow", nil)
+    self:HookScript("OnMouseDown", function(_, mouseButton)
+        self:OnMouseDown(mouseButton)
+    end)
     self.pin:SetTracked(true)
 end
 
