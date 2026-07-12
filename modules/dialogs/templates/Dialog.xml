@@ -20,7 +20,7 @@
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="0">
                 <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
-                    <Size x="46" y="46" />
+                    <Size x="32" y="32" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
                     </Anchors>
@@ -32,7 +32,7 @@
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="1">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png" parentKey="logo">
-                    <Size x="32" y="32" />
+                    <Size x="23" y="23" />
                     <Anchors>
                         <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" />
                     </Anchors>
@@ -42,8 +42,8 @@
                 <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
                     <Color r="0.9" g="0.9" b="0.9" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-18" y="18" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="18" y="-18" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -85,24 +85,29 @@
                 </Scripts>
             </Frame>
             <Frame parentKey="header">
-                <Size x="1" y="30" />
+                <Size x="200" y="18" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" y="-5" />
-                    <Anchor point="TOPRIGHT" y="-5" />
+                    <Anchor point="TOP" y="5" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture atlas="glues-characterSelect-GS-TopHUD-middle-line-selected">
-                            <Size x="1" y="2" />
-                            <Color r="1" g="0.82" b="0" a="1" />
+                        <Texture setAllPoints="true" file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBackground.png" alpha="0.9" parentKey="bg">
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGray.png">
                             <Anchors>
-                                <Anchor point="BOTTOMLEFT" />
-                                <Anchor point="BOTTOMRIGHT" />
+                                <Anchor point="TOPLEFT" x="-2" y="2" />
+                                <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
                             </Anchors>
+                            <TextureSliceMode mode="Stretched" />
+                            <TextureSliceMargins left="10" right="10" top="10" bottom="10" />
                         </Texture>
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString inherits="GameFontNormalLarge" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" parentKey="title" />
+                        <FontString inherits="GameFontNormalSmall" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" parentKey="title" />
                     </Layer>
                 </Layers>
             </Frame>

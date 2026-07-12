@@ -5,4 +5,5 @@
     <Include file="window.xml" />
 
     <Include file="frames/_imports.xml" />
+    <Include file="menu/_imports.xml" />
 </Ui>

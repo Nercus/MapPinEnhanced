@@ -21,7 +21,7 @@ MapPinEnhancedDialogMixin = {}
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 
----@alias DialogContentFrame MapPinEnhancedConfirmDialogContentTemplate | MapPinEnhancedInfoDialogContentTemplate | MapPinEnhancedAboutDialogContentTemplate
+---@alias DialogContentFrame MapPinEnhancedConfirmDialogContentTemplate | MapPinEnhancedInfoDialogContentTemplate | MapPinEnhancedRenamePinDialogContentTemplate | MapPinEnhancedAboutDialogContentTemplate
 
 function MapPinEnhancedDialogMixin:SetTitle(title)
     self.header.title:SetText(title)
@@ -35,7 +35,7 @@ function MapPinEnhancedDialogMixin:ShowDialog(content, title)
         self.content:SetParent(nil)
     end
 
-    self:SetTitle(string.format("%s - %s", MapPinEnhanced.displayName, title))
+    self:SetTitle(title)
     self.content = content
     self.content:SetParent(self)
     self.content:ClearAllPoints()

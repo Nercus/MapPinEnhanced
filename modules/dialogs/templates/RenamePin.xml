@@ -1,0 +1,28 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Include file="RenamePin.lua" />
+    <Frame name="MapPinEnhancedRenamePinDialogContentTemplate" virtual="true" mixin="MapPinEnhancedRenamePinDialogContentMixin">
+        <Size x="360" y="92" />
+        <Frames>
+            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="titleInput">
+                <Size x="320" y="25" />
+                <Anchors>
+                    <Anchor point="TOP" y="-10" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="icon" value="edit" />
+                </KeyValues>
+            </EditBox>
+            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="acceptButton">
+                <Size x="100" y="22" />
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.titleInput" y="-15" />
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnHide method="OnClose" />
+        </Scripts>
+    </Frame>
+</Ui>

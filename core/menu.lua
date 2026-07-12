@@ -50,6 +50,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry | MenuSubmenuEntry
 
+---@alias MenuEntryTemplateFrame MapPinEnhancedMenuTitleActionTemplate
+
 ---@class MenuOptions
 ---@field gridModeColumns? number
 
@@ -72,10 +74,13 @@ local function GenerateMenuElement(rootDescription, entry)
     elseif entry.type == "spacer" then
         element = rootDescription:CreateSpacer()
     elseif entry.type == "template" then
-        -- annotations for it are off! The template takes data as an arg
-        ---@diagnostic disable-next-line: redundant-parameter
         element = rootDescription:CreateTemplate(entry.template)
-        element:SetData(entry.data)
+        element:AddInitializer(function(frame)
+            ---@cast frame MenuEntryTemplateFrame
+            if entry.data and frame.SetData then
+                frame:SetData(entry.data)
+            end
+        end)
     elseif entry.type == "submenu" then
         assert(entry.entry, "Entry for the submenu type of the submenu trigger")
         assert(entry.entry.type == "button" or entry.entry.type == "checkbox" or entry.entry.type == "radio" or

@@ -6,6 +6,7 @@ local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 local L = MapPinEnhanced.L
 
+---@return MapPinEnhancedConfirmDialogContentTemplate
 function Dialogs:GetConfirmContent()
     if not self.confirmDialog then
         self.confirmDialog = CreateFrame("Frame", "MapPinEnhancedConfirmDialogContent", UIParent,
@@ -24,7 +25,7 @@ end
 MapPinEnhancedConfirmDialogContentMixin = {}
 
 ---@class ConfirmDialogOptions
----@field title string
+---@field title string?
 ---@field message string
 ---@field onConfirm function?
 ---@field onCancel function?
@@ -32,7 +33,7 @@ MapPinEnhancedConfirmDialogContentMixin = {}
 ---@field confirmText string?
 ---@field cancelText string?
 
-
+---@param options ConfirmDialogOptions
 function MapPinEnhancedConfirmDialogContentMixin:Setup(options)
     self.messageText:SetText(options.message or "")
     self.confirmButton:SetText(options.confirmText or L["Confirm"])

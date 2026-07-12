@@ -3,6 +3,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
+---@class Dialogs
+local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinMenuMixin = {}
@@ -31,10 +33,18 @@ end
 
 ---@return AnyMenuEntry[]
 function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
+    local title = self.pinData.title or L["Map Pin"]
     return {
         {
-            type = "title",
-            label = self.pinData.title,
+            type = "template",
+            template = "MapPinEnhancedMenuTitleActionTemplate",
+            data = {
+                label = title,
+                icon = "edit",
+                onClick = function()
+                    Dialogs:ShowRenamePinDialog(self)
+                end,
+            },
         },
         {
             type = "divider",

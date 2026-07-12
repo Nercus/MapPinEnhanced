@@ -11,6 +11,7 @@ local L = MapPinEnhanced.L
 Dialogs.DIALOG_TYPES = {
     CONFIRM = "CONFIRM",
     INFO = "INFO",
+    RENAME_PIN = "RENAME_PIN",
     ABOUT = "ABOUT",
 }
 
@@ -29,6 +30,9 @@ function Dialogs:ShowDialog(dialogType, overrideTitle)
     elseif dialogType == self.DIALOG_TYPES.INFO then
         content = self:GetInfoContent()
         title = title or L["Info"]
+    elseif dialogType == self.DIALOG_TYPES.RENAME_PIN then
+        content = self:GetRenamePinContent()
+        title = title or L["Rename Pin"]
     elseif dialogType == self.DIALOG_TYPES.ABOUT then
         content = self:GetAboutContent()
         title = title or "by Nerc"
@@ -46,6 +50,7 @@ end
 ---@param onCancel function?
 function Dialogs:ShowConfirmDialog(title, message, onConfirm, onCancel)
     local confirmContentFrame = self:ShowDialog(self.DIALOG_TYPES.CONFIRM, title)
+    ---@cast confirmContentFrame MapPinEnhancedConfirmDialogContentTemplate
     confirmContentFrame:Setup({
         title = title,
         message = message,
@@ -59,10 +64,20 @@ end
 ---@param onClose function?
 function Dialogs:ShowInfoDialog(title, message, onClose)
     local infoContentFrame = self:ShowDialog(self.DIALOG_TYPES.INFO, title)
+    ---@cast infoContentFrame MapPinEnhancedInfoDialogContentTemplate
     infoContentFrame:Setup({
         title = title,
         message = message,
         onClose = onClose,
+    })
+end
+
+---@param pin MapPinEnhancedPinMixin
+function Dialogs:ShowRenamePinDialog(pin)
+    local renamePinContentFrame = self:ShowDialog(self.DIALOG_TYPES.RENAME_PIN, L["Rename Pin"])
+    ---@cast renamePinContentFrame MapPinEnhancedRenamePinDialogContentTemplate
+    renamePinContentFrame:Setup({
+        pin = pin,
     })
 end
 

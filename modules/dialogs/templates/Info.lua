@@ -6,6 +6,7 @@ local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 local L = MapPinEnhanced.L
 
+---@return MapPinEnhancedInfoDialogContentTemplate
 function Dialogs:GetInfoContent()
     if not self.infoDialog then
         self.infoDialog = CreateFrame("Frame", "MapPinEnhancedInfoDialogContent", UIParent,
@@ -21,12 +22,12 @@ end
 MapPinEnhancedInfoDialogContentMixin = {}
 
 ---@class InfoDialogOptions
----@field title string
+---@field title string?
 ---@field message string
 ---@field onClose function?
 ---@field closeText string?
 
-
+---@param options InfoDialogOptions
 function MapPinEnhancedInfoDialogContentMixin:Setup(options)
     self.messageText:SetText(options.message or "")
     self.okayButton:SetText(options.closeText or L["Close"])

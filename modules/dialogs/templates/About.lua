@@ -6,6 +6,7 @@ local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 local L = MapPinEnhanced.L
 
+---@return MapPinEnhancedAboutDialogContentTemplate
 function Dialogs:GetAboutContent()
     if not self.aboutDialog then
         self.aboutDialog = CreateFrame("Frame", "MapPinEnhancedAboutDialogContent", UIParent,
