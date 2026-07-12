@@ -5,7 +5,7 @@
         <Size x="30" y="30" />
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture alphaMode="ADD" parentKey="pulseHighlight" file="Interface/minimap/UI-Minimap-Ping-Expand" alpha="0" hidden="true" setAllPoints="true">
+                <Texture alphaMode="ADD" parentKey="pulseHighlight" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png" alpha="0" hidden="true" setAllPoints="true">
                     <Color r="1" g="0.82" b="0" />
                     <Animations>
                         <AnimationGroup looping="REPEAT" parentKey="pulse">

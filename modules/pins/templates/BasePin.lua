@@ -168,6 +168,7 @@ function MapPinEnhancedBasePinMixin:SetTextureColor(color)
     local r, g, b, a = color:GetRGBA()
     self.foreground:SetVertexColor(r, g, b, a)
     self.pulseHighlight:SetVertexColor(r, g, b, a)
+    self.highlight:SetVertexColor(r, g, b, a)
     self:UpdateTextureState()
 end
 
