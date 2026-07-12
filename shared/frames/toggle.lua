@@ -8,25 +8,52 @@ local MapPinEnhanced = select(2, ...)
 ---@field thumb Texture
 MapPinEnhancedToggleMixin = {}
 
+local CHECKED_OFFSET_X = 27
+local UNCHECKED_OFFSET_X = 2
+local CHECKED_ALPHA = 1
+local UNCHECKED_ALPHA = 0.5
 
-function MapPinEnhancedToggleMixin:SetChecked(skipAnimation)
-    self.isChecked = true
-    if not skipAnimation then
-        self.checkAnimation:Play()
+local function SetThumbState(self, isChecked)
+    self.thumb:ClearAllPoints()
+    self.thumb:SetPoint("LEFT", isChecked and CHECKED_OFFSET_X or UNCHECKED_OFFSET_X, 0)
+    self.thumb:SetAlpha(isChecked and CHECKED_ALPHA or UNCHECKED_ALPHA)
+    if isChecked then
+        self.thumb:SetVertexColor(1, 0.82, 0)
+    else
+        self.thumb:SetVertexColor(0.6, 0.6, 0.6)
     end
-    self.thumb:SetVertexColor(1, 0.82, 0)
+end
+
+---@param skipAnimation? boolean
+function MapPinEnhancedToggleMixin:SetChecked(skipAnimation)
+    local wasChecked = self.isChecked
+    self.isChecked = true
+    self.uncheckAnimation:Stop()
+    if skipAnimation or wasChecked then
+        self.checkAnimation:Stop()
+        SetThumbState(self, true)
+    else
+        self.checkAnimation:Play()
+        self.thumb:SetVertexColor(1, 0.82, 0)
+    end
 end
 
 function MapPinEnhancedToggleMixin:GetChecked()
     return self.isChecked
 end
 
+---@param skipAnimation? boolean
 function MapPinEnhancedToggleMixin:SetUnchecked(skipAnimation)
+    local wasChecked = self.isChecked
     self.isChecked = false
-    if not skipAnimation then
+    self.checkAnimation:Stop()
+    if skipAnimation or not wasChecked then
+        self.uncheckAnimation:Stop()
+        SetThumbState(self, false)
+    else
         self.uncheckAnimation:Play()
+        self.thumb:SetVertexColor(0.6, 0.6, 0.6)
     end
-    self.thumb:SetVertexColor(0.6, 0.6, 0.6)
 end
 
 function MapPinEnhancedToggleMixin:OnClick()
@@ -39,6 +66,7 @@ end
 
 function MapPinEnhancedToggleMixin:OnLoad()
     self.isChecked = false
+    SetThumbState(self, false)
 end
 
 ---@param callback fun(isChecked: boolean)
@@ -68,17 +96,22 @@ function MapPinEnhancedToggleMixin:Setup(formData)
         assert(type(formData.init) == "function", "init must be a function")
         local initialValue = formData.init()
         if initialValue ~= nil then
-            self:SetChecked(initialValue)
+            self:SetValue(initialValue, false, true)
         end
     else
-        self:SetChecked(false) -- default to unchecked if no init function is provided
+        self:SetUnchecked(true) -- default to unchecked if no init function is provided
     end
 end
 
 ---@param value boolean
 ---@param triggerCallback boolean|nil
-function MapPinEnhancedToggleMixin:SetValue(value, triggerCallback)
-    self:SetChecked(value)
+---@param skipAnimation boolean|nil
+function MapPinEnhancedToggleMixin:SetValue(value, triggerCallback, skipAnimation)
+    if value then
+        self:SetChecked(skipAnimation)
+    else
+        self:SetUnchecked(skipAnimation)
+    end
     if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(value)
     end
