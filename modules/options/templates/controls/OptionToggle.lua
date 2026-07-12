@@ -10,6 +10,7 @@ function MapPinEnhancedOptionToggleMixin:GetValue()
     return self.child:GetChecked()
 end
 
+---@param value boolean
 ---@param skipAnimation? boolean
 function MapPinEnhancedOptionToggleMixin:SetValue(value, skipAnimation)
     if value then
