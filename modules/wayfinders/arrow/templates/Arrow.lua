@@ -15,6 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeOut Animation
 ---@field needleRotation number | nil
 ---@field newNeedleRotation number | nil
+---@field rotatePin boolean | nil
 ---@field displayType 'close' | 'far' | nil
 MapPinEnhancedFloatingArrowMixin = {}
 
@@ -90,7 +91,24 @@ function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition(elapsed)
     self:UpdateNeedleAlpha()
 end
 
-function MapPinEnhancedFloatingArrowMixin:AnimateNeedleRotation(elapsed)
+---@param rotation number
+function MapPinEnhancedFloatingArrowMixin:SetPinRotation(rotation)
+    self.pin.background:SetRotation(rotation)
+    self.pin.outline:SetRotation(rotation)
+    self.pin.foreground:SetRotation(rotation)
+    self.pin.icon:SetRotation(rotation)
+    self.pin.lock:SetRotation(rotation)
+end
+
+---@param rotatePin boolean
+function MapPinEnhancedFloatingArrowMixin:SetRotatePin(rotatePin)
+    self.rotatePin = rotatePin
+    if not rotatePin then
+        self:SetPinRotation(0)
+    end
+end
+
+function MapPinEnhancedFloatingArrowMixin:AnimateRotation(elapsed)
     if not self.displayType or self.displayType == "close" then return end
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
@@ -103,6 +121,9 @@ function MapPinEnhancedFloatingArrowMixin:AnimateNeedleRotation(elapsed)
     self.needleRotation = newRotation
 
     self.needle:SetRotation(-newRotation)
+    if self.rotatePin then
+        self:SetPinRotation(-newRotation)
+    end
 end
 
 function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha()
@@ -119,7 +140,7 @@ end
 function MapPinEnhancedFloatingArrowMixin:OnUpdate(elapsed)
     self:UpdateNeedlePosition(elapsed)
     if self.displayType == "close" then return end
-    self:AnimateNeedleRotation(elapsed)
+    self:AnimateRotation(elapsed)
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarget)
@@ -164,6 +185,7 @@ function MapPinEnhancedFloatingArrowMixin:Reset()
     self:SetDisplayType("far")
     self.needleRotation = nil
     self.newNeedleRotation = nil
+    self:SetPinRotation(0)
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnHide()

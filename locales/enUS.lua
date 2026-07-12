@@ -87,3 +87,6 @@ L["Wayfinder.Arrow_GROUPLABEL"] = "Arrow"
 L["Wayfinder.Arrow.Enable_LABEL"] = "Enable Arrow Wayfinder"
 L["Wayfinder.Arrow.Enable_DESCRIPTION"] =
 "Show an arrow on the world map pointing to the next waypoint in your route."
+L["Wayfinder.Arrow.RotatePin_LABEL"] = "Rotate Center Pin"
+L["Wayfinder.Arrow.RotatePin_DESCRIPTION"] =
+"Rotate the pin in the middle of the arrow toward the next waypoint."

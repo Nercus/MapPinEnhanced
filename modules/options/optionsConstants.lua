@@ -13,6 +13,7 @@ Options.DEFAULTS = {
     ["Wayfinder.Floating.Enable"] = false,
     ["Wayfinder.Floating.Style"] = "modern" --[[@as WayfinderFloatingFrameType]],
     ["Wayfinder.Arrow.Enable"] = true,
+    ["Wayfinder.Arrow.RotatePin"] = false,
 }
 
 

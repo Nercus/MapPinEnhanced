@@ -56,6 +56,11 @@
                                             <KeyValue key="key" value="Wayfinder.Arrow.Enable" />
                                         </KeyValues>
                                     </Frame>
+                                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                                        <KeyValues>
+                                            <KeyValue key="key" value="Wayfinder.Arrow.RotatePin" />
+                                        </KeyValues>
+                                    </Frame>
                                 </Frames>
                             </Frame>
                             <Frame parentKey="column2">

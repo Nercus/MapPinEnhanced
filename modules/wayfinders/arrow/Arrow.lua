@@ -7,6 +7,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinderArrow : MapPinEnhancedWayfinder
 ---@field frame MapPinEnhancedFloatingArrowTemplate
+---@field unsubscribeRotatePinOption fun() | nil
 local MapPinEnhancedWayfinderArrow = {}
 
 ---@return MapPinEnhancedFloatingArrowTemplate
@@ -38,6 +39,12 @@ function MapPinEnhancedWayfinderArrow:SetLock(lock)
     self:GetFrame().pin:SetLock(lock)
 end
 
+---@param rotatePin boolean
+function MapPinEnhancedWayfinderArrow:SetRotatePin(rotatePin)
+    if not self.frame then return end
+    self.frame:SetRotatePin(rotatePin)
+end
+
 ---@param wayfinderData WayfinderData | nil
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
@@ -62,12 +69,19 @@ end
 
 function MapPinEnhancedWayfinderArrow:Enable()
     self:GetFrame()
+    self.unsubscribeRotatePinOption = Options:SubscribeToOptionChanges("Wayfinder.Arrow.RotatePin", function(value)
+        self:SetRotatePin(value)
+    end)
 end
 
 function MapPinEnhancedWayfinderArrow:Disable()
     if self.frame then
         self.frame.fadeIn:Stop()
         self.frame.fadeOut:Play()
+    end
+    if self.unsubscribeRotatePinOption then
+        self.unsubscribeRotatePinOption()
+        self.unsubscribeRotatePinOption = nil
     end
 end
 
