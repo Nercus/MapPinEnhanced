@@ -131,7 +131,7 @@ function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarge
         self.eta:SetText("")
     end
     self.distanceValue = distance
-    if distance and distance < 50 then
+    if distance and distance < 10 then
         self:SetDisplayType("close")
     else
         self:SetDisplayType("far")
