@@ -7,15 +7,15 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@enum (key) PinColor
 Pins.PIN_COLORS_BY_NAME = {
-    ["Red"] = CreateColor(0.867, 0.200, 0.200, 1),
-    ["Orange"] = CreateColor(0.859, 0.529, 0.129, 1),
-    ["Pale"] = CreateColor(0.898, 0.659, 0.369, 1),
+    ["Red"] = CreateColor(0.929, 0.239, 0.212, 1),
+    ["Orange"] = CreateColor(0.953, 0.506, 0.157, 1),
+    ["Pale"] = CreateColor(0.925, 0.678, 0.412, 1),
     ["Yellow"] = CreateColor(0.949, 0.788, 0.149, 1),
-    ["Green"] = CreateColor(0.404, 0.788, 0.263, 1),
-    ["LightBlue"] = CreateColor(0.318, 0.757, 0.878, 1),
-    ["DarkBlue"] = CreateColor(0.239, 0.239, 0.976, 1),
-    ["Purple"] = CreateColor(0.549, 0.314, 0.886, 1),
-    ["Pink"] = CreateColor(0.886, 0.427, 0.843, 1),
+    ["Green"] = CreateColor(0.349, 0.780, 0.345, 1),
+    ["LightBlue"] = CreateColor(0.286, 0.753, 0.925, 1),
+    ["DarkBlue"] = CreateColor(0.349, 0.518, 1.000, 1),
+    ["Purple"] = CreateColor(0.639, 0.388, 0.925, 1),
+    ["Pink"] = CreateColor(0.925, 0.424, 0.737, 1),
 }
 
 ---@class PinIcon
