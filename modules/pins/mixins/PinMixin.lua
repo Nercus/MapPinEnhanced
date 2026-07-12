@@ -140,6 +140,9 @@ function MapPinEnhancedPinMixin:Reset()
         self:Untrack()
     end
 
+    self.worldmapPin:HidePulse()
+    self.minimapPin:HidePulse()
+
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)

@@ -156,6 +156,7 @@ end
 
 function MapPinEnhancedBasePinMixin:SetUntracked()
     self.tracked = false
+    self:HidePulse()
     self:SetUntrackedTexture()
 end
 
@@ -192,6 +193,8 @@ function MapPinEnhancedBasePinMixin:SetLock(lock)
 end
 
 function MapPinEnhancedBasePinMixin:OnLoad()
+    self:HidePulse()
+
     if self.hideShadow then
         self.shadow:Hide()
     end
