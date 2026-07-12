@@ -8,8 +8,14 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedFloatingArrowNeedleContainer : Frame
 ---@field needle MapPinEnhancedFloatingArrowNeedle
 
+---@class MapPinEnhancedFloatingArrowTextContainer : Frame
+---@field title FontString
+---@field distance FontString
+---@field eta FontString
+
 ---@class MapPinEnhancedFloatingArrowTemplate : Frame
 ---@field needleContainer MapPinEnhancedFloatingArrowNeedleContainer
+---@field textContainer MapPinEnhancedFloatingArrowTextContainer
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field title FontString
 ---@field distance FontString
@@ -186,10 +192,20 @@ end
 ---@param mouseButton MouseButton
 function MapPinEnhancedFloatingArrowMixin:OnMouseDown(mouseButton)
     if mouseButton ~= "RightButton" then return end
+
     -- TODO: add a menu here
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnLoad()
+    self.title = self.textContainer.title
+    self.distance = self.textContainer.distance
+    self.eta = self.textContainer.eta
+
+    local frameLevel = self:GetFrameLevel()
+    self.needleContainer:SetFrameLevel(frameLevel)
+    self.pin:SetFrameLevel(frameLevel + 1)
+    self.textContainer:SetFrameLevel(frameLevel + 2)
+
     MapPinEnhanced:RegisterDraggableFrame(self, "floatingArrow", nil)
     self.pin:SetTracked(true)
 end
