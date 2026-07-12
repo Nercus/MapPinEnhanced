@@ -6,6 +6,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedBasePinKeyValues
 ---@field hideShadow boolean
+---@field hideHighlight boolean
 
 ---@class MapPinEnhancedBasePinTemplate : Frame, MapPinEnhancedBasePinKeyValues
 ---@field shadow Texture -- static shadow
@@ -193,5 +194,9 @@ end
 function MapPinEnhancedBasePinMixin:OnLoad()
     if self.hideShadow then
         self.shadow:Hide()
+    end
+
+    if self.hideHighlight then
+        self.highlight:Hide()
     end
 end

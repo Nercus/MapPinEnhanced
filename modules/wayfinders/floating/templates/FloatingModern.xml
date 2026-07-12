@@ -7,6 +7,10 @@
         <Frames>
             <Frame inherits="MapPinEnhancedBasePinTemplate" parentKey="pin" frameStrata="MEDIUM" enableMouse="false">
                 <Size x="30" y="30" />
+                <KeyValues>
+                    <KeyValue key="hideShadow" value="true" type="boolean" />
+                    <KeyValue key="hideHighlight" value="true" type="boolean" />
+                </KeyValues>
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
