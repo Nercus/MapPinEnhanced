@@ -8,6 +8,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 
 Options.DEFAULTS = {
+    ["General.Distance.ShowUnit"] = true,
     ["Miscellaneous.Coords.Enable"] = true,
     ["Miscellaneous.Coords.Lock"] = false,
     ["Wayfinder.Floating.Enable"] = false,

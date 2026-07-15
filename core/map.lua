@@ -1,5 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+
+local Options = MapPinEnhanced:GetModule("Options")
+
 local MIN_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL = 0.05, 1.5 -- tune as needed
 local BASE_UPDATE_INTERVAL = 1
 local DISTANCE_CACHE_SIZE = 5
@@ -7,6 +10,7 @@ local DISTANCE_CACHE_SIZE = 5
 ---@type {distance: number, time: number}[]
 local distanceCache = table.create(DISTANCE_CACHE_SIZE)
 local lastDistance = 0
+local lastTimeToTarget = -1
 local elapsedSinceUpdate = 0
 local throttle_interval = BASE_UPDATE_INTERVAL
 
@@ -30,7 +34,6 @@ local function NotifyDistanceCallbacks(distance, timeToTarget)
         end
     end
 end
-
 
 ---Wrapper for the current map the player is on
 ---@return number? mapID
@@ -133,6 +136,7 @@ local function OnUpdate(_, elapsed)
 
     NotifyDistanceCallbacks(distance, timeToTarget)
     lastDistance = distance
+    lastTimeToTarget = timeToTarget
 end
 
 --- Register a callback to be called when the distance to the target is updated
@@ -168,12 +172,14 @@ function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
     throttle_interval = BASE_UPDATE_INTERVAL
     wipe(distanceCache)
     lastDistance = 0
+    lastTimeToTarget = -1
     elapsedSinceUpdate = 0
     target = { mapID = mapID, x = x, y = y }
 
     local initialDistance = self:GetDistanceToTarget(mapID, x, y)
     if initialDistance > 0 then
         lastDistance = initialDistance
+        lastTimeToTarget = -1
         table.insert(distanceCache, { distance = initialDistance, time = GetTime() })
         NotifyDistanceCallbacks(initialDistance, -1) -- -1 indicates unknown time to target
     end
@@ -193,6 +199,7 @@ function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
             target = nil
             wipe(distanceCache)
             lastDistance = 0
+            lastTimeToTarget = -1
             distanceFrame:SetScript("OnUpdate", nil)
             return
         end
@@ -200,17 +207,28 @@ function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
         target = nil
         wipe(distanceCache)
         lastDistance = 0
+        lastTimeToTarget = -1
         distanceFrame:SetScript("OnUpdate", nil)
     end
 end
 
 function MapPinEnhanced:FormatDistance(distance)
+    ---@type boolean
+    local showDistanceUnit = Options:GetOptionValue("General.Distance.ShowUnit")
     local distanceRound = Round(distance)
+    ---@type string
+    local distanceText
     if distance >= 1000 then
-        return string.format(IN_GAME_NAVIGATION_RANGE, tostring(AbbreviateNumbers(distanceRound)))
+        distanceText = tostring(AbbreviateNumbers(distanceRound))
     else
-        return string.format(IN_GAME_NAVIGATION_RANGE, tostring(distanceRound))
+        distanceText = tostring(distanceRound)
     end
+
+    if not showDistanceUnit then
+        return distanceText
+    end
+
+    return string.format(IN_GAME_NAVIGATION_RANGE, distanceText)
 end
 
 function MapPinEnhanced:FormatETA(time)
@@ -221,3 +239,11 @@ function MapPinEnhanced:FormatETA(time)
     local seconds = math.floor(time % 60)
     return string.format("%02d:%02d", minutes, seconds)
 end
+
+MapPinEnhanced:OnLoad(function()
+    Options:SubscribeToOptionChanges("General.Distance.ShowUnit", function()
+        if lastDistance > 0 then
+            NotifyDistanceCallbacks(lastDistance, lastTimeToTarget)
+        end
+    end)
+end)

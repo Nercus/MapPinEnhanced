@@ -67,6 +67,10 @@ L["Thanks to Eminos for the countless hours creating textures, rubber-ducking an
 L["Open the about dialog to view version information."] = "Open the about dialog to view version information."
 
 ------------------------------ Options ------------------------------
+L["General.Distance_GROUPLABEL"] = "Distance"
+L["General.Distance.ShowUnit_LABEL"] = "Show Distance Unit"
+L["General.Distance.ShowUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
+
 L["Miscellaneous"] = "Miscellaneous"
 L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"
