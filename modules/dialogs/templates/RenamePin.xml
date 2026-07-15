@@ -3,7 +3,7 @@
 
     <Include file="RenamePin.lua" />
     <Frame name="MapPinEnhancedRenamePinDialogContentTemplate" virtual="true" mixin="MapPinEnhancedRenamePinDialogContentMixin">
-        <Size x="360" y="92" />
+        <Size x="360" y="45" />
         <Frames>
             <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="titleInput">
                 <Size x="320" y="25" />
@@ -14,12 +14,6 @@
                     <KeyValue key="icon" value="edit" />
                 </KeyValues>
             </EditBox>
-            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="acceptButton">
-                <Size x="100" y="22" />
-                <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.titleInput" y="-15" />
-                </Anchors>
-            </Button>
         </Frames>
         <Scripts>
             <OnHide method="OnClose" />

@@ -17,7 +17,6 @@ end
 
 ---@class MapPinEnhancedRenamePinDialogContentTemplate : Frame
 ---@field titleInput MapPinEnhancedInputTemplate
----@field acceptButton MapPinEnhancedButtonTemplate
 ---@field pin MapPinEnhancedPinMixin | nil
 MapPinEnhancedRenamePinDialogContentMixin = {}
 
@@ -25,7 +24,7 @@ MapPinEnhancedRenamePinDialogContentMixin = {}
 ---@field pin MapPinEnhancedPinMixin
 
 function MapPinEnhancedRenamePinDialogContentMixin:Accept()
-    if not self.pin then return end
+    if not self.pin then return false end
 
     local title = strtrim(self.titleInput:GetText() or "")
     if title == "" then
@@ -33,7 +32,7 @@ function MapPinEnhancedRenamePinDialogContentMixin:Accept()
     end
 
     self.pin:SetTitle(title)
-    Dialogs:HideDialog(Dialogs.DIALOG_TYPES.RENAME_PIN)
+    return true
 end
 
 ---@param options RenamePinDialogOptions
@@ -42,12 +41,10 @@ function MapPinEnhancedRenamePinDialogContentMixin:Setup(options)
 
     self.pin = options.pin
     self.titleInput:SetPlaceholderText(L["Pin Title"])
-    self.acceptButton:SetText(L["Save"])
-    self.acceptButton:SetScript("OnClick", function()
-        self:Accept()
-    end)
     self.titleInput:SetScript("OnEnterPressed", function()
-        self:Accept()
+        if self:Accept() then
+            Dialogs:HideDialog(Dialogs.DIALOG_TYPES.RENAME_PIN)
+        end
     end)
 
     local pinData = self.pin:GetPinData()
@@ -63,3 +60,27 @@ function MapPinEnhancedRenamePinDialogContentMixin:OnClose()
     self.titleInput:SetScript("OnEnterPressed", nil)
     self.titleInput:ClearFocus()
 end
+
+Dialogs.dialogTypeConfig[Dialogs.DIALOG_TYPES.RENAME_PIN] = {
+    title = L["Rename Pin"],
+    getContent = function(dialogs)
+        return dialogs:GetRenamePinContent()
+    end,
+    setup = function(content, options)
+        ---@cast content MapPinEnhancedRenamePinDialogContentTemplate
+        ---@cast options RenamePinDialogOptions
+        content:Setup(options)
+    end,
+    buttons = function(content)
+        ---@cast content MapPinEnhancedRenamePinDialogContentTemplate
+        return {
+            {
+                label = L["Save"],
+                callback = function()
+                    content:Accept()
+                end,
+                accept = true,
+            },
+        }
+    end,
+}

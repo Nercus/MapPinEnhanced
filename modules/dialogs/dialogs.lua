@@ -7,40 +7,42 @@ local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 
 local L = MapPinEnhanced.L
 
----@enum DialogTypes
-Dialogs.DIALOG_TYPES = {
-    CONFIRM = "CONFIRM",
-    INFO = "INFO",
-    RENAME_PIN = "RENAME_PIN",
-    ABOUT = "ABOUT",
-}
+---@param config DialogTypeConfig
+---@param options table?
+---@param overrideTitle string?
+---@return string
+local function GetDialogTitle(config, options, overrideTitle)
+    if overrideTitle then
+        return overrideTitle
+    end
 
+    if type(config.title) == "function" then
+        return config.title(options)
+    end
+
+    return config.title
+end
 
 ---@param dialogType DialogTypes
 ---@param overrideTitle string?
+---@param options table?
 ---@return DialogContentFrame
-function Dialogs:ShowDialog(dialogType, overrideTitle)
+function Dialogs:ShowDialog(dialogType, overrideTitle, options)
     local dialogFrame = self.dialogFrame
-    ---@type DialogContentFrame
-    local content
-    local title = overrideTitle
-    if dialogType == self.DIALOG_TYPES.CONFIRM then
-        content = self:GetConfirmContent()
-        title = title or L["Confirm"]
-    elseif dialogType == self.DIALOG_TYPES.INFO then
-        content = self:GetInfoContent()
-        title = title or L["Info"]
-    elseif dialogType == self.DIALOG_TYPES.RENAME_PIN then
-        content = self:GetRenamePinContent()
-        title = title or L["Rename Pin"]
-    elseif dialogType == self.DIALOG_TYPES.ABOUT then
-        content = self:GetAboutContent()
-        title = title or "by Nerc"
-    else
+    local config = self.dialogTypeConfig[dialogType]
+    if not config then
         error("Unknown dialog type: " .. tostring(dialogType))
     end
+
+    options = options or {}
+    local content = config.getContent(self)
+    local title = GetDialogTitle(config, options, overrideTitle)
+    local buttons = config.buttons and config.buttons(content, options) or nil
     self.openDialog = dialogType
-    dialogFrame:ShowDialog(content, title)
+    dialogFrame:ShowDialog(content, title, buttons)
+    if config.setup then
+        config.setup(content, options)
+    end
     return content
 end
 
@@ -49,9 +51,7 @@ end
 ---@param onConfirm function?
 ---@param onCancel function?
 function Dialogs:ShowConfirmDialog(title, message, onConfirm, onCancel)
-    local confirmContentFrame = self:ShowDialog(self.DIALOG_TYPES.CONFIRM, title)
-    ---@cast confirmContentFrame MapPinEnhancedConfirmDialogContentTemplate
-    confirmContentFrame:Setup({
+    self:ShowDialog(self.DIALOG_TYPES.CONFIRM, title, {
         title = title,
         message = message,
         onConfirm = onConfirm,
@@ -63,9 +63,7 @@ end
 ---@param message string
 ---@param onClose function?
 function Dialogs:ShowInfoDialog(title, message, onClose)
-    local infoContentFrame = self:ShowDialog(self.DIALOG_TYPES.INFO, title)
-    ---@cast infoContentFrame MapPinEnhancedInfoDialogContentTemplate
-    infoContentFrame:Setup({
+    self:ShowDialog(self.DIALOG_TYPES.INFO, title, {
         title = title,
         message = message,
         onClose = onClose,
@@ -74,9 +72,7 @@ end
 
 ---@param pin MapPinEnhancedPinMixin
 function Dialogs:ShowRenamePinDialog(pin)
-    local renamePinContentFrame = self:ShowDialog(self.DIALOG_TYPES.RENAME_PIN, L["Rename Pin"])
-    ---@cast renamePinContentFrame MapPinEnhancedRenamePinDialogContentTemplate
-    renamePinContentFrame:Setup({
+    self:ShowDialog(self.DIALOG_TYPES.RENAME_PIN, L["Rename Pin"], {
         pin = pin,
     })
 end

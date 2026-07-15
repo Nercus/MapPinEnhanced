@@ -17,10 +17,6 @@ end
 
 ---@class MapPinEnhancedConfirmDialogContentTemplate : Frame
 ---@field messageText FontString
----@field confirmButton MapPinEnhancedButtonTemplate
----@field cancelButton MapPinEnhancedButtonTemplate
----@field onConfirm function? callback for when the confirm button is clicked, can be set via Setup()
----@field onCancel function? callback for when the cancel button is clicked, can be set via Setup()
 ---@field onClose function? callback for when the dialog is closed, can be set via Setup()
 MapPinEnhancedConfirmDialogContentMixin = {}
 
@@ -36,33 +32,39 @@ MapPinEnhancedConfirmDialogContentMixin = {}
 ---@param options ConfirmDialogOptions
 function MapPinEnhancedConfirmDialogContentMixin:Setup(options)
     self.messageText:SetText(options.message or "")
-    self.confirmButton:SetText(options.confirmText or L["Confirm"])
-    self.cancelButton:SetText(options.cancelText or L["Cancel"])
-
-    self.onConfirm = options.onConfirm
-    self.onCancel = options.onCancel
     self.onClose = options.onClose
-
-    self.confirmButton:SetScript("OnClick", function()
-        if self.onConfirm then
-            self.onConfirm()
-        end
-        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.CONFIRM)
-    end)
-
-    self.cancelButton:SetScript("OnClick", function()
-        if self.onCancel then
-            self.onCancel()
-        end
-        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.CONFIRM)
-    end)
 end
 
 function MapPinEnhancedConfirmDialogContentMixin:OnClose()
     if self.onClose then
         self.onClose()
     end
-    self.onConfirm = nil
-    self.onCancel = nil
     self.onClose = nil
 end
+
+Dialogs.dialogTypeConfig[Dialogs.DIALOG_TYPES.CONFIRM] = {
+    title = L["Confirm"],
+    getContent = function(dialogs)
+        return dialogs:GetConfirmContent()
+    end,
+    setup = function(content, options)
+        ---@cast content MapPinEnhancedConfirmDialogContentTemplate
+        ---@cast options ConfirmDialogOptions
+        content:Setup(options)
+    end,
+    buttons = function(_, options)
+        ---@cast options ConfirmDialogOptions
+        return {
+            {
+                label = options.confirmText or L["Confirm"],
+                callback = options.onConfirm,
+                accept = true,
+            },
+            {
+                label = options.cancelText or L["Cancel"],
+                callback = options.onCancel,
+                cancel = true,
+            },
+        }
+    end,
+}

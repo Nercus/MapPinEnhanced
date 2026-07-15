@@ -3,7 +3,7 @@
 
     <Include file="About.lua" />
     <Frame name="MapPinEnhancedAboutDialogContentTemplate" virtual="true" mixin="MapPinEnhancedAboutDialogContentMixin">
-        <Size x="400" y="230" />
+        <Size x="400" y="185" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormalLarge" justifyH="CENTER" justifyV="MIDDLE" wordwrap="true">
@@ -32,16 +32,8 @@
                 </FontString>
             </Layer>
         </Layers>
-        <Frames>
-            <Button inherits="MapPinEnhancedButtonTemplate" parentKey="okayButton">
-                <Size x="100" y="30" />
-                <Anchors>
-                    <Anchor point="TOP" relativePoint="BOTTOM" y="-30" relativeKey="$parent.thanks" />
-                </Anchors>
-            </Button>
-        </Frames>
         <Scripts>
-            <OnHide method="OnLoad" />
+            <OnLoad method="OnLoad" />
         </Scripts>
     </Frame>
 </Ui>

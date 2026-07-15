@@ -17,7 +17,6 @@ end
 
 ---@class MapPinEnhancedInfoDialogContentTemplate : Frame
 ---@field messageText FontString
----@field okayButton MapPinEnhancedButtonTemplate
 ---@field onClose function? callback for when the dialog is closed, can be set via Setup()
 MapPinEnhancedInfoDialogContentMixin = {}
 
@@ -30,12 +29,7 @@ MapPinEnhancedInfoDialogContentMixin = {}
 ---@param options InfoDialogOptions
 function MapPinEnhancedInfoDialogContentMixin:Setup(options)
     self.messageText:SetText(options.message or "")
-    self.okayButton:SetText(options.closeText or L["Close"])
     self.onClose = options.onClose
-
-    self.okayButton:SetScript("OnClick", function()
-        Dialogs:HideDialog(Dialogs.DIALOG_TYPES.INFO)
-    end)
 end
 
 function MapPinEnhancedInfoDialogContentMixin:OnClose()
@@ -44,3 +38,25 @@ function MapPinEnhancedInfoDialogContentMixin:OnClose()
     end
     self.onClose = nil
 end
+
+Dialogs.dialogTypeConfig[Dialogs.DIALOG_TYPES.INFO] = {
+    title = L["Info"],
+    getContent = function(dialogs)
+        return dialogs:GetInfoContent()
+    end,
+    setup = function(content, options)
+        ---@cast content MapPinEnhancedInfoDialogContentTemplate
+        ---@cast options InfoDialogOptions
+        content:Setup(options)
+    end,
+    buttons = function(_, options)
+        ---@cast options InfoDialogOptions
+        return {
+            {
+                label = options.closeText or L["Close"],
+                accept = true,
+                cancel = true,
+            },
+        }
+    end,
+}

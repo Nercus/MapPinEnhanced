@@ -111,12 +111,16 @@
                     </Layer>
                 </Layers>
             </Frame>
+            <Frame parentKey="buttonContainer">
+                <Size x="100" y="30" />
+            </Frame>
             <Button name="$parentCloseButton" parentKey="CloseButton" inherits="UIPanelCloseButtonDefaultAnchors" frameStrata="HIGH" />
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
+            <OnKeyDown method="OnKeyDown" />
         </Scripts>
     </Frame>
 </Ui>
