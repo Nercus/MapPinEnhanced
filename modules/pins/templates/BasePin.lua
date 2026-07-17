@@ -38,7 +38,6 @@ local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
 
-local DEFAULT_PIN_COLOR = "Yellow"
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICONS = Pins.PIN_ICONS
 
@@ -175,7 +174,7 @@ end
 ---@param color PinColor?
 function MapPinEnhancedBasePinMixin:SetColor(color)
     if not color then
-        color = DEFAULT_PIN_COLOR
+        color = Pins.DEFAULT_COLOR
     end
     local colorValue = PIN_COLORS_BY_NAME[color]
     self:SetIconTexture(nil)

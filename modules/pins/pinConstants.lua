@@ -18,6 +18,9 @@ Pins.PIN_COLORS_BY_NAME = {
     ["Pink"] = CreateColor(0.925, 0.424, 0.737, 1),
 }
 
+---@type PinColor
+Pins.DEFAULT_COLOR = "Yellow"
+
 ---@class PinIcon
 ---@field path string the path to the icon, if usesAtlas is true, this is the atlas name
 ---@field usesAtlas boolean if true, the path is an atlas, otherwise it is a file path

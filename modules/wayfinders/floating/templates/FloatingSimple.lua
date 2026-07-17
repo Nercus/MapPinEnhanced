@@ -21,7 +21,7 @@ MapPinEnhancedFloatingSimpleMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
-local DEFAULT_COLOR = PIN_COLORS_BY_NAME["Yellow"]
+local DEFAULT_COLOR = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR]
 
 ---@return SuperTrackedFrame | nil
 local function GetSuperTrackedFrame()
