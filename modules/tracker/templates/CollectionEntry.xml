@@ -6,26 +6,37 @@
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerCollectionEntryTemplate" />
         </KeyValues>
-        <Size x="300" y="30" />
-        <NormalTexture atlas="generic-frame-chamfered-12d-2o" setAllPoints="true">
-            <TextureSliceMargins left="32" right="32" top="32" bottom="32" />
-            <TextureSliceMode mode="Stretched" />
-        </NormalTexture>
+        <Size x="300" y="68" />
         <HighlightTexture atlas="Adventures_MissionList_Highlight" alpha="0.3" setAllPoints="true" />
         <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture parentKey="background" atlas="shop-bg-map-green" desaturated="true" setAllPoints="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.8" />
+                        <MaxColor r="1" g="1" b="1" a="0.18" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGraySquare.png" setAllPoints="true" alpha="0.9">
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                    <TextureSliceMode mode="Stretched" />
+                </Texture>
+            </Layer>
             <Layer level="ARTWORK">
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="iconTexture">
-                    <Size x="14" y="14" />
+                    <Size x="26" y="26" />
                     <KeyValues>
                         <KeyValue key="icon" value="collection" />
                     </KeyValues>
                     <Anchors>
-                        <Anchor point="LEFT" x="8" />
+                        <Anchor point="TOP" y="-9" />
                     </Anchors>
                 </Texture>
-                <FontString inherits="GameFontNormal" parentKey="title" justifyH="LEFT">
+                <FontString inherits="GameFontNormal" parentKey="title" justifyH="CENTER" justifyV="MIDDLE">
+                    <Size x="250" y="18" />
                     <Anchors>
-                        <Anchor point="LEFT" relativeKey="$parent.iconTexture" relativePoint="RIGHT" x="5" />
+                        <Anchor point="TOP" relativeKey="$parent.iconTexture" relativePoint="BOTTOM" y="-5" />
                     </Anchors>
                 </FontString>
             </Layer>

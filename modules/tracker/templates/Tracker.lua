@@ -1,12 +1,15 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedTrackerScrollBox : Frame, ScrollBoxListMixin
+
 ---@class MapPinEnhancedTrackerTemplate : Frame
----@field scrollBox ScrollBoxListMixin
+---@field scrollBox MapPinEnhancedTrackerScrollBox
 ---@field scrollBar ScrollBarMixin
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
+---@field searchBox MapPinEnhancedInputTemplate
 ---@field activeView 'collection' | 'pin'
 MapPinEnhancedTrackerMixin = {
     activeView = "pin", -- Default view is pin
@@ -53,6 +56,9 @@ local function CollectionSortComparator(collectionNode1, collectionNode2)
     return (collection1.name or "") < (collection2.name or "")
 end
 
+---@param pinNode1 TreeNodeMixin
+---@param pinNode2 TreeNodeMixin
+---@return boolean
 local function PinSortComparator(pinNode1, pinNode2)
     ---@type MapPinEnhancedPinMixin, MapPinEnhancedPinMixin
     local pin1, pin2 = pinNode1:GetData(), pinNode2:GetData()
@@ -76,11 +82,32 @@ local function PinSortComparator(pinNode1, pinNode2)
 end
 
 function MapPinEnhancedTrackerMixin:UpdateCollectionList()
+    local searchText = self.searchBox:GetText() or ""
+
+    if searchText == "" then
+        ---@param collection MapPinEnhancedCollectionMixin
+        for collection in Collections:EnumerateCollections() do
+            self.dataProvider:Insert(collection)
+        end
+        self.dataProvider:SetSortComparator(CollectionSortComparator, false, false)
+        return
+    end
+
+    ---@type MapPinEnhancedCollectionMixin[]
+    local collections = {}
+    ---@type string[]
+    local collectionNames = {}
+
     ---@param collection MapPinEnhancedCollectionMixin
     for collection in Collections:EnumerateCollections() do
-        self.dataProvider:Insert(collection) --[[@as TreeNodeMixin]]
+        table.insert(collections, collection)
+        table.insert(collectionNames, collection.name or "")
     end
-    self.dataProvider:SetSortComparator(CollectionSortComparator, false, false)
+
+    local results = MapPinEnhanced:Filter(searchText, collectionNames, false)
+    for _, result in ipairs(results) do
+        self.dataProvider:Insert(collections[result.i])
+    end
 end
 
 function MapPinEnhancedTrackerMixin:UpdatePinList()
@@ -126,6 +153,8 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
     groupNode:Invalidate() -- we invalidate here to trigger a resort
 end
 
+---@param group MapPinEnhancedGroupMixin
+---@param pin MapPinEnhancedPinMixin
 function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
     if self.activeView ~= "pin" or not self:IsShown() then return end
 
@@ -170,11 +199,13 @@ end
 local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
+    local entryHeight = self.activeView == "collection" and 73 or 35
+    local searchHeight = self.activeView == "collection" and 28 or 0
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
-    local newHeight = visibleEntries * 35 -- Assuming each entry takes up 35 pixels in height
+    local newHeight = visibleEntries * entryHeight
     local oldHeight = self:GetHeight()
-    newHeight = newHeight + headerHeight  -- Add the height of the header
+    newHeight = newHeight + headerHeight + searchHeight
 
     local currentPoint, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
     if not currentPoint or not relativeTo or not relativePoint or not xOfs or not yOfs then
@@ -200,37 +231,44 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     self:UpdateTrackerHeader()
 end
 
----@param factory fun(template: EntryTemplateString, initFunc: fun(frame: EntryTemplate))
----@param node TreeNode
+---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: any))
+---@param node TreeNodeMixin
 local function TrackerElementFactory(factory, node)
     ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
     local data = node:GetData()
 
     if data.classification == "group" then
         factory("MapPinEnhancedTrackerGroupEntryTemplate", function(frame)
+            ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate
             frame:Init(node)
         end)
     elseif data.classification == "pin" then
         factory("MapPinEnhancedTrackerPinEntryTemplate", function(frame)
+            ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
             frame:Init(node)
         end)
     elseif data.classification == "collection" then
         factory("MapPinEnhancedTrackerCollectionEntryTemplate", function(frame)
+            ---@cast frame MapPinEnhancedTrackerCollectionEntryTemplate
             frame:Init(node)
         end)
     end
 end
 
 ---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
----@param data TreeNodeMixin
-local function TrackerElementResetter(frame, data)
+---@param node TreeNodeMixin
+local function TrackerElementResetter(frame, node)
     ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
-    local data = data:GetData()
+    local data = node:GetData()
     if data.classification == "group" then
+        ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate
         frame:Reset()
     elseif data.classification == "pin" then
+        ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
+        ---@cast data MapPinEnhancedPinMixin
         frame:Reset(data.pinID)
     elseif data.classification == "collection" then
+        ---@cast frame MapPinEnhancedTrackerCollectionEntryTemplate
         frame:Reset()
     end
 end
@@ -254,13 +292,26 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
+    self.searchBox:Setup({
+        onChange = function()
+            if self.activeView == "collection" then
+                self:UpdateList()
+                self:UpdateTrackerHeader()
+            end
+        end,
+    })
+
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
 
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function(_, group, pin)
+        ---@cast group MapPinEnhancedGroupMixin
+        ---@cast pin MapPinEnhancedPinMixin
         self:AddPinToGroup(group, pin)
     end)
 
     MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pin)
+        ---@cast group MapPinEnhancedGroupMixin
+        ---@cast pin MapPinEnhancedPinMixin
         self:RemovePinFromGroup(group, pin)
     end)
 
@@ -301,12 +352,26 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
     end
 end
 
+function MapPinEnhancedTrackerMixin:UpdateViewLayout()
+    self.scrollBox:ClearAllPoints()
+    if self.activeView == "collection" then
+        self.searchBox:Show()
+        self.scrollBox:SetPoint("TOPLEFT", self.searchBox, "BOTTOMLEFT", 0, -4)
+    else
+        self.searchBox:Hide()
+        self.searchBox:ClearFocus()
+        self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
+    end
+    self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
+end
+
 function MapPinEnhancedTrackerMixin:ToggleActiveView()
     if self.activeView == "collection" then
         self.activeView = "pin"
     else
         self.activeView = "collection"
     end
+    self:UpdateViewLayout()
     self:UpdateList()
     self:UpdateHeight()
     self:UpdateTrackerHeader()
@@ -314,6 +379,7 @@ end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
     MapPinEnhanced:RestoreFrame(self)
+    self:UpdateViewLayout()
     self:UpdateList()
     self:UpdateHeight()
     self:UpdateTrackerHeader()

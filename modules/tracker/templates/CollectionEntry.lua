@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerCollectionEntryTemplate : Button
 ---@field collection MapPinEnhancedCollectionMixin
 ---@field title FontString
+---@field background Texture
 MapPinEnhancedTrackerCollectionEntryMixin = {}
 
 local Tracker = MapPinEnhanced:GetModule("Tracker")
@@ -16,7 +17,9 @@ end
 
 ---@param color CollectionColor
 function MapPinEnhancedTrackerCollectionEntryMixin:SetColor(color)
-    -- TODO: implement
+    local colorValue = COLLECTION_COLORS_BY_NAME[color] or COLLECTION_COLORS_BY_NAME[Collections.DEFAULT_COLOR]
+    local r, g, b = colorValue:GetRGB()
+    self.background:SetGradient("HORIZONTAL", CreateColor(r, g, b, 0.8), CreateColor(r, g, b, 0.18))
 end
 
 function MapPinEnhancedTrackerCollectionEntryMixin:Init(treeNode)
