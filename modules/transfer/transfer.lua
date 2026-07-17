@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Transfer
 ---@field importWindow MapPinEnhancedWindowTemplate?
----@field exportWindow MapPinEnhancedWindowTemplate?
+---@field exportWindow MapPinEnhancedExportWindowTemplate?
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 local L = MapPinEnhanced.L
@@ -18,7 +18,7 @@ function Transfer:GetImportWindow()
     return self.importWindow
 end
 
----@return MapPinEnhancedWindowTemplate
+---@return MapPinEnhancedExportWindowTemplate
 function Transfer:GetExportWindow()
     if not self.exportWindow then
         self.exportWindow = CreateFrame("Frame", "MapPinEnhancedExportWindow", UIParent,
@@ -38,8 +38,12 @@ function Transfer:HideImportWindow()
     end
 end
 
-function Transfer:ShowExportWindow()
-    self:GetExportWindow():Show()
+---@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin|MapPinEnhancedCollectionMixin?
+function Transfer:ShowExportWindow(target)
+    local window = self:GetExportWindow()
+    ---@cast window MapPinEnhancedExportWindowTemplate
+    window:SetExportTarget(target)
+    window:Show()
 end
 
 function Transfer:HideExportWindow()

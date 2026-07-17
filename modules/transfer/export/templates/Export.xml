@@ -3,10 +3,60 @@
 
     <Include file="Export.lua" />
     <Frame name="MapPinEnhancedExportWindowTemplate" inherits="MapPinEnhancedWindowTemplate" virtual="true" mixin="MapPinEnhancedExportWindowMixin">
-        <Size x="420" y="130" />
+        <Size x="650" y="400" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Export" />
             <KeyValue key="windowColor" value="blue" />
         </KeyValues>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="25" y="-48" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="summary" inherits="GameFontHighlightSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="TOPRIGHT" x="-25" y="-48" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="prefixLabel" inherits="GameFontHighlight" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="310" y="-75" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="warning" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" hidden="true">
+                    <Size x="600" y="35" />
+                    <Color r="1" g="0.45" b="0.1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="25" y="25" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="exportTypeRadio">
+                <KeyValues>
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="15" y="-65" />
+                </Anchors>
+            </Frame>
+            <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="prefixRadio">
+                <KeyValues>
+                    <KeyValue key="orientation" value="horizontal" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="410" y="-65" />
+                </Anchors>
+            </Frame>
+            <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
+                <Size x="600" y="235" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="25" y="-115" />
+                </Anchors>
+            </ScrollFrame>
+        </Frames>
     </Frame>
 </Ui>

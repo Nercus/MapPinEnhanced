@@ -10,6 +10,7 @@ MapPinEnhancedTrackerCollectionEntryMixin = {}
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local Collections = MapPinEnhanced:GetModule("Collections")
 local COLLECTION_COLORS_BY_NAME = Collections.COLLECTION_COLORS_BY_NAME
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 function MapPinEnhancedTrackerCollectionEntryMixin:Reset()
     self.collection = nil
@@ -39,5 +40,10 @@ function MapPinEnhancedTrackerCollectionEntryMixin:OnMouseDown(button)
     if button == "LeftButton" then
         self.collection:LoadCollection()
         Tracker:ToggleActiveView()
+    elseif button == "RightButton" then
+        MapPinEnhanced:GenerateMenu(self, {{
+            type = "button", label = MapPinEnhanced.L["Export"],
+            onClick = function() Transfer:ShowExportWindow(self.collection) end,
+        }})
     end
 end

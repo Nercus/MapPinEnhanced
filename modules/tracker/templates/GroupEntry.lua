@@ -8,6 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field icon Texture
 MapPinEnhancedTrackerGroupEntryMixin = {}
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedTrackerGroupEntryExpandButton : Button
 ---@field normalTexture Texture
@@ -51,6 +52,11 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
     if button == "LeftButton" then
         self.treeNode:ToggleCollapsed()
         self:UpdateCollapseButton()
+    elseif button == "RightButton" then
+        MapPinEnhanced:GenerateMenu(self, {{
+            type = "button", label = MapPinEnhanced.L["Export"],
+            onClick = function() Transfer:ShowExportWindow(self.group) end,
+        }})
     end
 end
 

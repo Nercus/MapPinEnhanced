@@ -197,13 +197,16 @@ end
 
 ---create a wayString from pinData
 ---@param pinData pinData
+---@param prefix "/way"|"/mph"|"/mpe"?
 ---@return string wayLine
-function MapPinEnhanced:SerializeWayLine(pinData)
+function MapPinEnhanced:SerializeWayLine(pinData, prefix)
     local mapID = pinData.mapID or ""
     local title = pinData.title or ""
     local x = pinData.x * 100
     local y = pinData.y * 100
-    return trim(string.format(WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))
+    local wayLine = trim(string.format(WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))
+    local command = wayLine:gsub("^/way", prefix or "/way", 1)
+    return command
 end
 
 ---deserialize a table from a string received through import/export

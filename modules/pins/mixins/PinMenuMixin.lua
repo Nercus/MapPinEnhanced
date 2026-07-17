@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 ---@class Dialogs
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinMenuMixin = {}
@@ -120,6 +121,13 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             label = MapPinEnhanced.L["Share to Chat"],
             onClick = function()
                 self:SharePin()
+            end
+        },
+        {
+            type = "button",
+            label = L["Export"],
+            onClick = function()
+                Transfer:ShowExportWindow(self)
             end
         }
     }
