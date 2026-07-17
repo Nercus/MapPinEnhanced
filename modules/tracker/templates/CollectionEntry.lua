@@ -7,9 +7,16 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerCollectionEntryMixin = {}
 
 local Tracker = MapPinEnhanced:GetModule("Tracker")
+local Collections = MapPinEnhanced:GetModule("Collections")
+local COLLECTION_COLORS_BY_NAME = Collections.COLLECTION_COLORS_BY_NAME
 
 function MapPinEnhancedTrackerCollectionEntryMixin:Reset()
     self.collection = nil
+end
+
+---@param color CollectionColor
+function MapPinEnhancedTrackerCollectionEntryMixin:SetColor(color)
+    -- TODO: implement
 end
 
 function MapPinEnhancedTrackerCollectionEntryMixin:Init(treeNode)
@@ -17,6 +24,7 @@ function MapPinEnhancedTrackerCollectionEntryMixin:Init(treeNode)
     local collection = treeNode:GetData()
     self.collection = collection
     self.title:SetText(collection.name)
+    self:SetColor(collection.color)
 end
 
 function MapPinEnhancedTrackerCollectionEntryMixin:SetTitle(title)

@@ -58,7 +58,12 @@ function MapPinEnhancedImportWindowMixin:ImportToNewCollection(data, dataType, c
         return
     end
     if dataType == "collection" then
-        collection:SetIcon(data.icon)
+        if data.icon then
+            collection:SetIcon(data.icon)
+        end
+        if data.color then
+            collection:SetColor(data.color)
+        end
         collection:AddMultiplePins(data.pins)
     elseif dataType == "pins" then
         collection:AddMultiplePins(data)

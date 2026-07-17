@@ -86,6 +86,12 @@ function Collections:RestoreCollection(collectionData)
     if not collection then
         collection = self:CreateCollection(collectionData.name)
     end
+    if collectionData.icon then
+        collection:SetIcon(collectionData.icon)
+    end
+    if collectionData.color then
+        collection:SetColor(collectionData.color)
+    end
     collection:AddMultiplePins(collectionData.pins)
 end
 
