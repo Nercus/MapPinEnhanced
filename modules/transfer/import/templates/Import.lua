@@ -24,7 +24,12 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field collectionDropdown MapPinEnhancedImportWindowCollectionDropdown
 ---@field newCollectionNameInput MapPinEnhancedImportWindowNewCollectionInput
 ---@field description FontString
+---@field summary FontString
 ---@field dataString string?
+---@field parsedData CollectionInfo|pinData[]?
+---@field parsedDataType "collection"|"pins"?
+---@field validPinCount number
+---@field invalidPinCount number
 MapPinEnhancedImportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 ---@type MapPinEnhancedRadioGroupOption[]
@@ -86,15 +91,14 @@ function MapPinEnhancedImportWindowMixin:ImportToExistingCollection(data, dataTy
 end
 
 function MapPinEnhancedImportWindowMixin:UpdateImportButtonDisabledState()
-    local text = self.textarea.editbox:GetText()
-    local textEmpty = not text or text == ""
+    local hasValidPins = (self.validPinCount or 0) > 0
 
     if self.selectedImportType == "create_new_collection" then
-        self.importButton:SetEnabled(not textEmpty and self.newCollectionName and self.newCollectionName ~= "")
+        self.importButton:SetEnabled(hasValidPins and self.newCollectionName and self.newCollectionName ~= "")
     elseif self.selectedImportType == "add_to_collection" then
-        self.importButton:SetEnabled(not textEmpty and self.selectedCollection and self.selectedCollection ~= "")
+        self.importButton:SetEnabled(hasValidPins and self.selectedCollection and self.selectedCollection ~= "")
     else
-        self.importButton:SetEnabled(not textEmpty)
+        self.importButton:SetEnabled(hasValidPins)
     end
 end
 
@@ -113,43 +117,109 @@ function MapPinEnhancedImportWindowMixin:Import(data, dataType)
 end
 
 function MapPinEnhancedImportWindowMixin:StartImport()
-    if not self.dataString or self.dataString == "" then return end
-
-    if MapPinEnhanced:IsSerializedData(self.dataString) then
-        local data = MapPinEnhanced:DeserializeData(self.dataString) --[[@as CollectionInfo | pinData[] ]]
-        if not data then return end
-        local dataType = data.pins and "collection" or "pins"
-        self:Import(data, dataType)
-    else
-        local pins = {}
-        for line in self.dataString:gmatch("[^\n]+") do
-            local normalizedLine = line:match("^%s*(.-)%s*$")
-            if normalizedLine ~= "" then
-                local linePins = MapPinEnhanced:DeserializeWayLine(normalizedLine)
-                for _, pin in ipairs(linePins) do
-                    table.insert(pins, pin)
-                end
-            end
-        end
-        if #pins == 0 then return end
-        self:Import(pins, "pins")
+    if not self.parsedData or not self.parsedDataType or self.validPinCount == 0 then
+        MapPinEnhanced:Notify(L["No valid pins were found to import."], "ERROR")
+        return false
     end
+    self:Import(self.parsedData, self.parsedDataType)
+    MapPinEnhanced:Notify(string.format(L["Imported %d pins; skipped %d invalid entries."],
+        self.validPinCount, self.invalidPinCount))
+    return true
+end
+
+local function IsValidPinData(pinData)
+    return type(pinData) == "table" and type(pinData.mapID) == "number" and
+        type(pinData.x) == "number" and type(pinData.y) == "number"
+end
+
+function MapPinEnhancedImportWindowMixin:UpdateSummary(formatName, pins, invalidCount)
+    local maps = {}
+    for _, pinData in ipairs(pins) do maps[pinData.mapID] = true end
+    local mapCount = 0
+    for _ in pairs(maps) do mapCount = mapCount + 1 end
+
+    local summary = string.format(L["%s: %d pins across %d maps"], formatName, #pins, mapCount)
+    if invalidCount > 0 then
+        summary = summary .. " | " .. string.format(L["%d invalid entries will be skipped"], invalidCount)
+        self.summary:SetTextColor(1, 0.45, 0.1)
+    else
+        self.summary:SetTextColor(0.4, 1, 0.4)
+    end
+    self.summary:SetText(summary)
 end
 
 function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
-    if not dataString or dataString == "" then return end
-    local IsSerializedData = MapPinEnhanced:IsSerializedData(dataString)
-    if not IsSerializedData then return end
-    local data = MapPinEnhanced:DeserializeData(dataString) --[[@as CollectionInfo]]
-    if not data or not data.name then return end
-    self.newCollectionNameInput:SetValue(data.name, true)
+    self.parsedData = nil
+    self.parsedDataType = nil
+    self.validPinCount = 0
+    self.invalidPinCount = 0
+
+    if not dataString or dataString == "" then
+        self.summary:SetText("")
+        return
+    end
+
+    local pins = {}
+    local dataType = "pins"
+    local formatName = L["Way commands"]
+    local data
+
+    if MapPinEnhanced:IsSerializedData(dataString) then
+        formatName = L["Serialized data"]
+        data = MapPinEnhanced:DeserializeData(dataString)
+        if type(data) ~= "table" then
+            self.summary:SetTextColor(1, 0.2, 0.2)
+            self.summary:SetText(L["Invalid or corrupted serialized data."])
+            return
+        end
+
+        local sourcePins = data.pins or data
+        if type(sourcePins) ~= "table" then
+            self.summary:SetTextColor(1, 0.2, 0.2)
+            self.summary:SetText(L["Invalid or corrupted serialized data."])
+            return
+        end
+        dataType = data.pins and "collection" or "pins"
+        for _, pinData in ipairs(sourcePins) do
+            if IsValidPinData(pinData) then
+                table.insert(pins, pinData)
+            else
+                self.invalidPinCount = self.invalidPinCount + 1
+            end
+        end
+        if dataType == "collection" then
+            data = CopyTable(data)
+            data.pins = pins
+            if data.name then self.newCollectionNameInput:SetValue(data.name, true) end
+        else
+            data = pins
+        end
+    else
+        for line in dataString:gmatch("[^\n]+") do
+            local normalizedLine = line:match("^%s*(.-)%s*$")
+            if normalizedLine ~= "" then
+                local linePins = MapPinEnhanced:DeserializeWayLine(normalizedLine)
+                if #linePins == 0 then
+                    self.invalidPinCount = self.invalidPinCount + 1
+                else
+                    table.insert(pins, linePins[1])
+                end
+            end
+        end
+        data = pins
+    end
+
+    self.parsedData = data
+    self.parsedDataType = dataType
+    self.validPinCount = #pins
+    self:UpdateSummary(formatName, pins, self.invalidPinCount)
 end
 
 function MapPinEnhancedImportWindowMixin:SetupTextArea()
     self.textarea:Setup({
         onChange = function(text)
-            self:PreparseImport(text)
             self.dataString = text
+            self:PreparseImport(text)
             self:UpdateImportButtonDisabledState()
         end,
         placeholder = L["Click to paste export string or slash commands here"],
@@ -234,9 +304,10 @@ function MapPinEnhancedImportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
 
     self.selectedImportType = "temporary"
+    self.validPinCount = 0
+    self.invalidPinCount = 0
     self.importButton:SetScript("OnClick", function()
-        self:StartImport()
-        Transfer:HideImportWindow()
+        if self:StartImport() then Transfer:HideImportWindow() end
     end)
     self.cancelButton:SetScript("OnClick", function()
         Transfer:HideImportWindow()

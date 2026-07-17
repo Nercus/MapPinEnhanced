@@ -16,13 +16,19 @@
                         <Anchor point="TOPRIGHT" x="-100" y="-50" />
                     </Anchors>
                 </FontString>
+                <FontString parentKey="summary" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="450" y="18" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="20" y="-82" />
+                    </Anchors>
+                </FontString>
             </Layer>
         </Layers>
         <Frames>
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
-                <Size x="450" y="300" />
+                <Size x="450" y="280" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-100" />
+                    <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-110" />
                 </Anchors>
             </ScrollFrame>
             <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
