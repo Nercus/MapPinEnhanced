@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Tracker
 local Tracker = MapPinEnhanced:GetModule("Tracker")
+local L = MapPinEnhanced.L
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
@@ -74,4 +75,4 @@ MapPinEnhanced:AddSlashCommand("tracker", function()
     else
         Tracker:ShowTracker()
     end
-end, "Toggle the tracker visibility.")
+end, L["Toggle the tracker visibility."])

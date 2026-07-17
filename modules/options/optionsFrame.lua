@@ -16,6 +16,7 @@ MapPinEnhancedOptionsFrameMixin = {}
 ---@class Options
 ---@field frame MapPinEnhancedOptionsFrame
 local Options = MapPinEnhanced:GetModule("Options")
+local L = MapPinEnhanced.L
 
 
 function MapPinEnhancedOptionsFrameMixin:ToggleOptionsFrame()
@@ -69,7 +70,7 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
 
     MapPinEnhanced:AddSlashCommand("options", function()
         self:ToggleOptionsFrame()
-    end, "Open the options frame")
+    end, L["Open the options frame"])
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnShow()

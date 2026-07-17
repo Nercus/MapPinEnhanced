@@ -6,6 +6,16 @@ local MapPinEnhanced = select(2, ...)
 ---@field text FontString
 MapPinEnhancedButtonMixin = {};
 
+local L = MapPinEnhanced.L
+
+function MapPinEnhancedButtonMixin:OnLoad()
+    local label = self:GetText()
+    if label and label ~= "" then
+        self:SetText(L[label])
+    end
+    self:Update()
+end
+
 function MapPinEnhancedButtonMixin:Update()
     -- 3 different states for the button
     -- 1. Label only

@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+local L = MapPinEnhanced.L
+
 ---@class MapPinEnhancedInputTemplate : EditBox
 ---@field left Texture
 ---@field right Texture
@@ -18,6 +20,7 @@ MapPinEnhancedInputMixin = {}
 ---@field text FontString
 ---@field icon MapPinEnhancedIconMixin
 ---@field bg Texture
+
 
 function MapPinEnhancedInputMixin:UpdatePlaceholderVisibility()
     local text = self:GetText()
@@ -94,7 +97,7 @@ end
 function MapPinEnhancedInputMixin:OnLoad()
     self:RegisterEvent("GLOBAL_MOUSE_DOWN")
     if self.placeholder then
-        self:SetPlaceholderText(self.placeholder)
+        self:SetPlaceholderText(L[self.placeholder])
     end
 
     if self.icon and not self.label then

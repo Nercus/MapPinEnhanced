@@ -37,7 +37,7 @@
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="title" inherits="GameFontNormal" text="Map Pin Enhanced Tracker" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.iconSeparator" x="5" />

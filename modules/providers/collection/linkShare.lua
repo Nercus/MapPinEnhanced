@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Collections = MapPinEnhanced:GetModule("Collections")
+local L = MapPinEnhanced.L
 
 local preFilteredFormatPattern = "%s: %s-%s"
 local preFilteredCapturePattern = "%[([%w_]+): ([%w_]+)-([%w_]+)%]"
@@ -78,9 +79,9 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", FilterFunc)
 
 
 StaticPopupDialogs["MAPPINENHANCED_IMPORT_COLLECTION"] = {
-    text = "Do you want to import the collection '%s' from player '%s'?",
-    button1 = "Yes",
-    button2 = "No",
+    text = L["Do you want to import the collection '%s' from player '%s'?"],
+    button1 = L["Yes"],
+    button2 = L["No"],
     ---@param requestInfo { collectionName: string, playerName: string }
     OnAccept = function(_, requestInfo)
         Providers:RequestCollection(requestInfo.collectionName, requestInfo.playerName)

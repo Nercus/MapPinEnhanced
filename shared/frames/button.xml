@@ -21,5 +21,8 @@
                 </Texture>
             </Layer>
         </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" inherit="append" />
+        </Scripts>
     </Button>
 </Ui>

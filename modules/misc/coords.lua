@@ -223,4 +223,4 @@ local function ToggleCoordsDisplay()
 end
 
 MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
-    "Toggle display of your current coordinates on the screen.")
+    MapPinEnhanced.L["Toggle display of your current coordinates on the screen."])

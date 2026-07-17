@@ -19,6 +19,7 @@ MapPinEnhancedTrackerMixin = {
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Collections = MapPinEnhanced:GetModule("Collections")
 local Pins = MapPinEnhanced:GetModule("Pins")
+local L = MapPinEnhanced.L
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
 
@@ -329,7 +330,7 @@ end
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
     if self.activeView == "collection" then
         local numCollections = self.dataProvider:GetSize(false)
-        self.header:SetTitle(string.format("Collections (%d)", numCollections))
+        self.header:SetTitle(string.format(L["Collections (%d)"], numCollections))
         self.header:SetIcon("collection")
         self.header.viewButton:SetIconTexture("pin")
     else
@@ -346,7 +347,7 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
         end
 
         local numPins = totalElements - numGroups
-        self.header:SetTitle(string.format("Pins (%d)", numPins))
+        self.header:SetTitle(string.format(L["Pins (%d)"], numPins))
         self.header:SetIcon("pin")
         self.header.viewButton:SetIconTexture("collection")
     end
