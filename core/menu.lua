@@ -50,7 +50,9 @@ local MapPinEnhanced = select(2, ...)
 
 ---@alias AnyMenuEntry MenuButtonEntry | MenuTitleEntry | MenuCheckboxEntry | MenuRadioEntry | MenuDividerEntry | MenuSpacerEntry | MenuTemplateEntry | MenuSubmenuEntry
 
----@alias MenuEntryTemplateFrame MapPinEnhancedMenuTitleActionTemplate
+---@class MenuEntryTemplateFrame : Frame
+---@field SetData? fun(self: MenuEntryTemplateFrame, data: any)
+---@field SetMenuDescription? fun(self: MenuEntryTemplateFrame, description: ElementMenuDescriptionProxy)
 
 ---@class MenuOptions
 ---@field gridModeColumns? number
@@ -75,10 +77,13 @@ local function GenerateMenuElement(rootDescription, entry)
         element = rootDescription:CreateSpacer()
     elseif entry.type == "template" then
         element = rootDescription:CreateTemplate(entry.template)
-        element:AddInitializer(function(frame)
+        element:AddInitializer(function(frame, description)
             ---@cast frame MenuEntryTemplateFrame
             if entry.data and frame.SetData then
                 frame:SetData(entry.data)
+            end
+            if frame.SetMenuDescription then
+                frame:SetMenuDescription(description)
             end
         end)
     elseif entry.type == "submenu" then

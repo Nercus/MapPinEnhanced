@@ -17,20 +17,7 @@ local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\forms\\colorpicker\\body.png:16
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICONS = Pins.PIN_ICONS
 local PIN_ICON_MENU_COLUMNS = 3
-local PIN_ICON_MENU_ICON_SIZE = 22
-local PIN_ICON_MENU_ENTRY_WIDTH = 32
-local PIN_ICON_MENU_ENTRY_HEIGHT = 32
-
-
----@param icon PinIcon
----@return string
-local function GetIconLabel(icon)
-    local size = math.floor((icon.scale or 1) * PIN_ICON_MENU_ICON_SIZE + 0.5)
-    if icon.usesAtlas then
-        return string.format("|A:%s:%d:%d|a", icon.path, size, size)
-    end
-    return string.format("|T%s:%d:%d|t", icon.path, size, size)
-end
+local PIN_ICON_MENU_ENTRY_SIZE = 36
 
 ---@return AnyMenuEntry[]
 function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
@@ -84,18 +71,21 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 for _, icon in pairs(PIN_ICONS) do
                     local iconData = icon
                     table.insert(iconMenu, {
-                        type = "radio",
-                        label = GetIconLabel(iconData),
-                        isSelected = function()
-                            return self.pinData.texture == iconData.path
-                        end,
-                        setSelected = function()
-                            self:SetIcon(iconData.path, iconData.usesAtlas)
-                        end,
-                        data = iconData,
+                        type = "template",
+                        template = "MapPinEnhancedMenuRadioCellTemplate",
+                        data = {
+                            owner = self,
+                            icon = iconData,
+                            isSelected = function()
+                                return self.pinData.texture == iconData.path
+                            end,
+                            onClick = function()
+                                self:SetIcon(iconData.path, iconData.usesAtlas)
+                            end,
+                        },
                         initializer = function(_, _, menu)
-                            menu.minimumElementWidth = PIN_ICON_MENU_ENTRY_WIDTH
-                            return PIN_ICON_MENU_ENTRY_WIDTH, PIN_ICON_MENU_ENTRY_HEIGHT
+                            menu.minimumElementWidth = PIN_ICON_MENU_ENTRY_SIZE
+                            return PIN_ICON_MENU_ENTRY_SIZE, PIN_ICON_MENU_ENTRY_SIZE
                         end
                     })
                 end
