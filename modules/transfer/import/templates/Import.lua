@@ -127,16 +127,22 @@ function MapPinEnhancedImportWindowMixin:StartImport()
     return true
 end
 
+---@param pinData any
+---@return boolean
 local function IsValidPinData(pinData)
     return type(pinData) == "table" and type(pinData.mapID) == "number" and
         type(pinData.x) == "number" and type(pinData.y) == "number"
 end
 
+---@param formatName string
+---@param pins pinData[]
+---@param invalidCount number
 function MapPinEnhancedImportWindowMixin:UpdateSummary(formatName, pins, invalidCount)
+    ---@type table<number, boolean>
     local maps = {}
     for _, pinData in ipairs(pins) do maps[pinData.mapID] = true end
     local mapCount = 0
-    for _ in pairs(maps) do mapCount = mapCount + 1 end
+    for _mapID in pairs(maps) do mapCount = mapCount + 1 end
 
     local summary = string.format(L["%s: %d pins across %d maps"], formatName, #pins, mapCount)
     if invalidCount > 0 then
@@ -148,6 +154,7 @@ function MapPinEnhancedImportWindowMixin:UpdateSummary(formatName, pins, invalid
     self.summary:SetText(summary)
 end
 
+---@param dataString string?
 function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
     self.parsedData = nil
     self.parsedDataType = nil
@@ -159,9 +166,14 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
         return
     end
 
+    ---@cast dataString string
+    ---@type pinData[]
     local pins = {}
+    ---@type "collection" | "pins"
     local dataType = "pins"
+    ---@type string
     local formatName = L["Way commands"]
+    ---@type CollectionInfo | pinData[] | nil
     local data
 
     if MapPinEnhanced:IsSerializedData(dataString) then
@@ -173,6 +185,8 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
             return
         end
 
+        ---@cast data CollectionInfo | pinData[]
+        ---@type pinData[]
         local sourcePins = data.pins or data
         if type(sourcePins) ~= "table" then
             self.summary:SetTextColor(1, 0.2, 0.2)
@@ -196,7 +210,7 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
         end
     else
         for line in dataString:gmatch("[^\n]+") do
-            local normalizedLine = line:match("^%s*(.-)%s*$")
+            local normalizedLine = line:match("^%s*(.-)%s*$") or ""
             if normalizedLine ~= "" then
                 local linePins = MapPinEnhanced:DeserializeWayLine(normalizedLine)
                 if #linePins == 0 then
