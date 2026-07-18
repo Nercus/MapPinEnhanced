@@ -56,6 +56,7 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
     if not icon then
         self.icon:Hide()
         self.iconVisible = false
+        self:UpdateTextureState()
         return
     end
     if (usesAtlas) then

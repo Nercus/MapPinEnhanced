@@ -34,7 +34,7 @@ local DeltaLerp = DeltaLerp
 function MapPinEnhancedFloatingModernMixin:SetColor(color)
     local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
     self.needle:SetVertexColor(colorValue:GetRGBA())
-    self.pin:SetTextureColor(colorValue)
+    self.pin:SetColor(color)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTexture(texture, usesAtlas)
@@ -221,6 +221,7 @@ function MapPinEnhancedFloatingModernMixin:OnLoad()
     self:RegisterEvent("NAVIGATION_FRAME_CREATED")
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
     self:SetEllipticalRadii(500, 200)
+    self.pin:SetTracked(true)
 end
 
 function MapPinEnhancedFloatingModernMixin:OnEvent(event)

@@ -34,7 +34,7 @@ end
 function MapPinEnhancedFloatingSimpleMixin:SetColor(color)
     local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
     self.clampedArrow.needle:SetVertexColor(colorValue:GetRGBA())
-    self.pin:SetTextureColor(colorValue)
+    self.pin:SetColor(color)
 end
 
 function MapPinEnhancedFloatingSimpleMixin:SetTexture(texture, usesAtlas)

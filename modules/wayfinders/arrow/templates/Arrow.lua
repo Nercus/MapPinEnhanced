@@ -78,7 +78,7 @@ end
 function MapPinEnhancedFloatingArrowMixin:SetColor(color)
     local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
     self.needleContainer.needle:SetVertexColor(colorValue:GetRGBA())
-    self.pin:SetTextureColor(colorValue)
+    self.pin:SetColor(color)
 end
 
 function MapPinEnhancedFloatingArrowMixin:SetTexture(texture, usesAtlas)
