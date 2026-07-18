@@ -92,8 +92,11 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self.pinData.tooltip = { title = self.pinData.title, text = source }
     end
 
-    self:SetColor(self.pinData.color)
-    self:SetIcon(self.pinData.texture, self.pinData.usesAtlas)
+    if self.pinData.texture then
+        self:SetIcon(self.pinData.texture, self.pinData.usesAtlas)
+    else
+        self:SetColor(self.pinData.color)
+    end
     self:SetTooltip(self.pinData.tooltip)
     self:SetTitle(self.pinData.title)
     self:SetLock(self.pinData.lock)

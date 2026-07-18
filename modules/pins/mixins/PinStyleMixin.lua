@@ -56,5 +56,6 @@ function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)
 
     self.worldmapPin:SetIconTexture(icon, usesAtlas)
     self.minimapPin:SetIconTexture(icon, usesAtlas)
+    self:PersistPin()
     MapPinEnhanced:FireCallback("PIN_UPDATED_ICON", self.pinID, icon, usesAtlas)
 end
