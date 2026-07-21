@@ -92,6 +92,11 @@ L["Build: %s"] = "Build: %s"
 L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"] =
 "Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"
 L["Open the about dialog to view version information."] = "Open the about dialog to view version information."
+L["Toggle the collection editor."] = "Toggle the collection editor."
+L["Editor"] = "Editor"
+L["Info"] = "Info"
+L["Confirm"] = "Confirm"
+
 
 ------------------------------ Options ------------------------------
 L["General.Distance_GROUPLABEL"] = "Distance"

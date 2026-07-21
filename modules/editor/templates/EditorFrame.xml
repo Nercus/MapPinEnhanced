@@ -1,21 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="EditorFrame.lua" />
-    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" inherits="PortraitFrameTemplate" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true">
-        <Size x="1004" y="689" />
-        <Anchors>
-            <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
-        </Anchors>
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture atlas="shop-bg-map-blue" setAllPoints="true" desaturated="true">
-                    <TexCoords left="0.7" bottom="0" top="1" right="0.9" />
-                    <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="1" b="1" a="0.1" />
-                        <MaxColor r="1" g="1" b="1" a="1" />
-                    </Gradient>
-                </Texture>
-            </Layer>
-        </Layers>
+    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" inherits="MapPinEnhancedWindowTemplate" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true" hidden="true" virtual="true">
+        <Size x="1000" y="590" />
+        <KeyValues>
+            <KeyValue key="windowTitle" value="Editor" />
+            <KeyValue key="windowColor" value="yellow" />
+        </KeyValues>
     </Frame>
 </Ui>

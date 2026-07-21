@@ -32,8 +32,6 @@ local WINDOW_COLORS = {
     ["red"] = CreateColor(0.4, 0, 0, 1),
 }
 
-
-
 ---@param colorName WindowColor
 function MapPinEnhancedWindowMixin:SetBackgroundGradientColor(colorName)
     assert(colorName, "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: colorName is nil")
@@ -44,7 +42,7 @@ function MapPinEnhancedWindowMixin:SetBackgroundGradientColor(colorName)
     assert(color, "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: unknown color: " .. colorName)
 
     local r, g, b = color:GetRGBA()
-    self.background.backgroundArt:SetGradient("HORIZONTAL", CreateColor(r, g, b, 0.65), CreateColor(1, 1, 1, 1))
+    self.background.backgroundArt:SetGradient("HORIZONTAL", CreateColor(r, g, b, 1), CreateColor(1, 1, 1, 1))
 end
 
 function MapPinEnhancedWindowMixin:OnLoad()
