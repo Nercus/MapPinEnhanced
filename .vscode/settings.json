@@ -108,13 +108,16 @@
         "statusBar.background": "#ebcb8b",
         "statusBar.foreground": "#15202b",
         "statusBarItem.hoverBackground": "#e3b75f",
-        "statusBarItem.remoteBackground": "#ebcb8b",
+        "statusBarItem.remoteBackground": "#1ca376",
         "statusBarItem.remoteForeground": "#15202b",
         "tab.activeBorder": "#f2deb6",
         "titleBar.activeBackground": "#ebcb8b",
         "titleBar.activeForeground": "#15202b",
         "titleBar.inactiveBackground": "#ebcb8b99",
-        "titleBar.inactiveForeground": "#15202b99"
+        "titleBar.inactiveForeground": "#15202b99",
+        "commandCenter.foreground": "#15202b",
+        "statusBar.debuggingBackground": "#ebcb8b",
+        "statusBar.debuggingForeground": "#15202b"
     },
     "wowAPI.luals.defineKnownGlobals": false,
     "Lua.workspace.library": [
