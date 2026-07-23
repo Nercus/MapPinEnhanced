@@ -46,7 +46,11 @@ end
 function MapPinEnhancedCollectionMixin:SetName(name)
     assert(name, "MapPinEnhancedCollectionMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedCollectionMixin:SetName: name must be a string")
+    local oldName = self.name
     self.name = name
+    if oldName and oldName ~= name then
+        MapPinEnhanced:DeleteVar("collections", oldName)
+    end
     Collections:PersistCollection(self)
 end
 

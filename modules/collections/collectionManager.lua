@@ -59,6 +59,20 @@ end
 local debouncedPersist = {}
 
 ---@param collection MapPinEnhancedCollectionMixin
+---@return boolean
+function Collections:IsCollectionActive(collection)
+    if not collection then return false end
+    local collectionsPool = self:GetObjectPool()
+    ---@param activeCollection MapPinEnhancedCollectionMixin
+    for activeCollection in collectionsPool:EnumerateActive() do
+        if activeCollection == collection then
+            return true
+        end
+    end
+    return false
+end
+
+---@param collection MapPinEnhancedCollectionMixin
 function Collections:PersistCollection(collection)
     assert(collection, "Groups:PersistGroup: group is nil")
     local collectionName = collection:GetName()
@@ -66,6 +80,7 @@ function Collections:PersistCollection(collection)
 
     if not debouncedPersist[collectionName] then
         debouncedPersist[collectionName] = MapPinEnhanced:DebounceChange(function()
+            if not self:IsCollectionActive(collection) or collection:GetName() ~= collectionName then return end
             local data = collection:GetSaveableData()
             assert(data, "Collections:PersistCollection: data is nil")
             if not data or not data.name then return end
@@ -74,6 +89,19 @@ function Collections:PersistCollection(collection)
     end
 
     debouncedPersist[collectionName]()
+end
+
+---@param collection MapPinEnhancedCollectionMixin
+function Collections:DeleteCollection(collection)
+    assert(collection, "Collections:DeleteCollection: collection is nil")
+    assert(type(collection) == "table", "Collections:DeleteCollection: collection must be a table")
+
+    local collectionName = collection:GetName()
+    assert(collectionName, "Collections:DeleteCollection: collection name is nil")
+
+    debouncedPersist[collectionName] = nil
+    MapPinEnhanced:DeleteVar("collections", collectionName)
+    self:GetObjectPool():Release(collection)
 end
 
 ---@param collectionData CollectionInfo

@@ -1,0 +1,83 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="CollectionEditor.lua" />
+    <Include file="PinList.xml" />
+
+    <Frame name="MapPinEnhancedEditorCollectionEditorTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="emptyState" inherits="GameFontDisableLarge" justifyH="CENTER" justifyV="MIDDLE" text="Select a collection to edit.">
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="editor" hidden="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <Frames>
+                    <Button parentKey="iconButton" inherits="MapPinEnhancedIconButtonTemplate" registerForClicks="LeftButtonUp">
+                        <Size x="32" y="32" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="collection" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="15" y="-35" />
+                        </Anchors>
+                    </Button>
+                    <EditBox parentKey="titleInput" inherits="MapPinEnhancedInputTemplate" font="GameFontNormal">
+                        <Size x="500" y="32" />
+                        <Anchors>
+                            <Anchor point="LEFT" relativeKey="$parent.iconButton" relativePoint="RIGHT" x="5" />
+                        </Anchors>
+                        <KeyValues>
+                            <KeyValue key="placeholder" value="Collection Title" />
+                            <KeyValue key="placeholderFont" value="GameFontDisable" />
+                            <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                        </KeyValues>
+                    </EditBox>
+                    <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
+                        <Size x="32" y="32" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="trash" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" x="-15" y="-35" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="saveButton" inherits="MapPinEnhancedIconButtonTemplate">
+                        <Size x="32" y="32" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="tick" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-5" />
+                        </Anchors>
+                    </Button>
+                    <Frame parentKey="pinList" inherits="MapPinEnhancedEditorPinListTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" y="-15" relativeKey="$parent.iconButton" relativePoint="BOTTOMLEFT" />
+                            <Anchor point="BOTTOMRIGHT" x="-25" y="3" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
+            </Frame>
+        </Frames>
+    </Frame>
+</Ui>

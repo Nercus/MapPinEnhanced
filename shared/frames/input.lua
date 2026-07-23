@@ -14,6 +14,7 @@ local L = MapPinEnhanced.L
 ---@field icon MapPinEnhancedIcon? set through keyvalues
 ---@field label string? set through keyvalues
 ---@field placeholder string? set through keyvalues
+---@field placeholderFont string? set through keyvalues
 MapPinEnhancedInputMixin = {}
 
 ---@class MapPinEnhancedInputInlineLabel : Frame
@@ -51,6 +52,17 @@ end
 function MapPinEnhancedInputMixin:SetPlaceholderText(placeholderText)
     self.placeholderText:SetText(placeholderText)
     self:UpdatePlaceholderVisibility()
+end
+
+---@param placeholderFont string
+function MapPinEnhancedInputMixin:SetPlaceholderFont(placeholderFont)
+    assert(placeholderFont, "MapPinEnhancedInputMixin:SetPlaceholderFont: placeholderFont is nil")
+    assert(type(placeholderFont) == "string",
+        "MapPinEnhancedInputMixin:SetPlaceholderFont: placeholderFont must be a string")
+
+    local fontObject = _G[placeholderFont]
+    assert(fontObject, "MapPinEnhancedInputMixin:SetPlaceholderFont: unknown font object: " .. placeholderFont)
+    self.placeholderText:SetFontObject(fontObject)
 end
 
 function MapPinEnhancedInputMixin:ResetInline()
@@ -96,6 +108,10 @@ end
 
 function MapPinEnhancedInputMixin:OnLoad()
     self:RegisterEvent("GLOBAL_MOUSE_DOWN")
+    if self.placeholderFont then
+        self:SetPlaceholderFont(self.placeholderFont)
+    end
+
     if self.placeholder then
         self:SetPlaceholderText(L[self.placeholder])
     end

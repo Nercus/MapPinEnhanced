@@ -3,6 +3,14 @@ local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedEditorTemplate : MapPinEnhancedWindowTemplate
+---@field collectionList MapPinEnhancedEditorCollectionListTemplate
+---@field collectionEditor MapPinEnhancedEditorCollectionEditorTemplate
+---@field dataProvider DataProviderMixin
+---@field pinDataProvider DataProviderMixin
+---@field selectedCollection MapPinEnhancedCollectionMixin?
+---@field pendingCollectionIcon string?
+---@field draggedPinEntry MapPinEnhancedEditorPinEntryTemplate?
+---@field pinDropTarget MapPinEnhancedEditorPinEntryTemplate?
 MapPinEnhancedEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 function MapPinEnhancedEditorMixin:SetupHeaderDragging()
@@ -40,6 +48,8 @@ end
 function MapPinEnhancedEditorMixin:ShowFrame()
     self:ClearAllPoints()
     self:SetPoint("CENTER")
+    self:UpdateCollectionList()
+    self:UpdateCollectionSelection()
     self:Show()
 end
 
@@ -62,4 +72,7 @@ function MapPinEnhancedEditorMixin:OnLoad()
     if self.windowColor then
         self:SetBackgroundGradientColor(self.windowColor)
     end
+
+    self:SetupCollectionList()
+    self:SetupCollectionEditor()
 end

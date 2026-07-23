@@ -1,0 +1,159 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="PinEntry.lua" />
+    <Script file="PinEntryFields.lua" />
+
+    <Frame name="MapPinEnhancedEditorPinEntryTemplate" virtual="true" mixin="MapPinEnhancedEditorPinEntryMixin" enableMouse="true">
+        <Size x="1" y="144" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o" alpha="0.45">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-2" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="2" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dragHighlight" atlas="Professions_Recipe_Active" alpha="0.25" hidden="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="0.6" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="6" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-6" y="4" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dropTargetHighlight" atlas="RecipeList-Divider" alpha="0.9" hidden="true">
+                    <Size x="272" y="12" />
+                    <Anchors>
+                        <Anchor point="TOP" y="5" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="headerBackground" atlas="Professions_Recipe_Active" alpha="0.35">
+                    <Size x="1" y="36" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="0.5" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="6" y="-4" />
+                        <Anchor point="TOPRIGHT" x="-6" y="-4" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="dragHandle" registerForClicks="LeftButtonDown, LeftButtonUp">
+                <Size x="26" y="26" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="11" y="-9" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture atlas="common-icon-move">
+                            <Size x="16" y="16" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Button>
+            <EditBox parentKey="titleInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="1" y="26" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.dragHandle" relativePoint="TOPRIGHT" x="6" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.duplicateButton" relativePoint="TOPLEFT" x="-6" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="placeholder" value="Pin Title" />
+                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                </KeyValues>
+            </EditBox>
+            <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate" registerForClicks="LeftButtonUp">
+                <Size x="26" y="26" />
+                <KeyValues>
+                    <KeyValue key="icon" value="trash" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-14" y="-9" />
+                </Anchors>
+            </Button>
+            <Button parentKey="duplicateButton" inherits="MapPinEnhancedIconButtonTemplate" registerForClicks="LeftButtonUp">
+                <Size x="26" y="26" />
+                <KeyValues>
+                    <KeyValue key="icon" value="duplicate" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.deleteButton" relativePoint="TOPLEFT" x="-6" />
+                </Anchors>
+            </Button>
+
+            <Frame parentKey="pinTexture" inherits="MapPinEnhancedBasePinTemplate">
+                <Size x="42" y="42" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="18" y="-58" />
+                </Anchors>
+            </Frame>
+
+            <EditBox parentKey="mapInput" inherits="MapPinEnhancedAutocompleteTemplate">
+                <Size x="1" y="28" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="74" y="-52" />
+                    <Anchor point="TOPRIGHT" x="-16" y="-52" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="placeholder" value="Map" />
+                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                </KeyValues>
+            </EditBox>
+
+            <EditBox parentKey="xInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="70" y="28" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="74" y="-91" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="placeholder" value="X" />
+                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                </KeyValues>
+            </EditBox>
+
+            <EditBox parentKey="yInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="70" y="28" />
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.xInput" relativePoint="RIGHT" x="10" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="placeholder" value="Y" />
+                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                </KeyValues>
+            </EditBox>
+
+            <CheckButton parentKey="lockCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
+                <Size x="96" y="25" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-18" y="-93" />
+                </Anchors>
+            </CheckButton>
+
+            <EditBox parentKey="tooltipInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="1" y="28" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.yInput" relativePoint="TOPRIGHT" x="10" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.lockCheckbox" relativePoint="TOPLEFT" x="-10" y="2" />
+                </Anchors>
+                <KeyValues>
+                    <KeyValue key="placeholder" value="Tooltip Description" />
+                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
+                </KeyValues>
+            </EditBox>
+        </Frames>
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnMouseUp method="OnMouseUp" />
+        </Scripts>
+    </Frame>
+</Ui>
