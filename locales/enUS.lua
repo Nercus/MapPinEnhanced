@@ -96,6 +96,9 @@ L["Toggle the collection editor."] = "Toggle the collection editor."
 L["Editor"] = "Editor"
 L["Info"] = "Info"
 L["Confirm"] = "Confirm"
+L["%d pin"] = "%d pin"
+L["%d pins"] = "%d pins"
+L["%d |4pin:pins;"] = "%d |4pin:pins;"
 
 
 ------------------------------ Options ------------------------------

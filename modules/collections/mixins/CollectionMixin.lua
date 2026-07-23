@@ -7,7 +7,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field pins pinData[] a table of pins that belong to this collection
 ---@field count number the number of pins in this collection
 ---@field icon string? the icon of the collection, if any
----@field color CollectionColor? the preset color of the collection, if any
 
 ---@class MapPinEnhancedCollectionMixin
 ---@field classification 'collection'
@@ -15,7 +14,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field pins pinData[] a table of pins that belong to this collection
 ---@field count number the number of pins in this collection
 ---@field icon string? the icon of the collection, if any
----@field color CollectionColor? the preset color of the collection, if any
 MapPinEnhancedCollectionMixin = CreateFromMixins(
     { classification = "collection" },
     MapPinEnhancedCollectionShareMixin
@@ -31,7 +29,6 @@ function MapPinEnhancedCollectionMixin:Init()
     self.pins = {}
     self.name = nil
     self.icon = nil
-    self.color = nil
     self.count = 0
 end
 
@@ -40,7 +37,10 @@ function MapPinEnhancedCollectionMixin:Reset()
     self.name = nil
     self.count = 0
     self.icon = nil
-    self.color = nil
+end
+
+function MapPinEnhancedCollectionMixin:GetPinCount()
+    return self.count
 end
 
 function MapPinEnhancedCollectionMixin:SetName(name)
@@ -68,27 +68,12 @@ function MapPinEnhancedCollectionMixin:GetIcon()
     return self.icon
 end
 
----@param color CollectionColor
-function MapPinEnhancedCollectionMixin:SetColor(color)
-    assert(color, "MapPinEnhancedCollectionMixin:SetColor: color is nil")
-    assert(type(color) == "string", "MapPinEnhancedCollectionMixin:SetColor: color must be a string")
-    assert(Collections.COLLECTION_COLORS_BY_NAME[color],
-        "MapPinEnhancedCollectionMixin:SetColor: unknown preset color: " .. color)
-    self.color = color
-    Collections:PersistCollection(self)
-end
-
----@return CollectionColor?
-function MapPinEnhancedCollectionMixin:GetColor()
-    return self.color
-end
-
 function MapPinEnhancedCollectionMixin:LoadCollection()
     local group = Groups:RegisterGroup({
         name = self.name,
         source = MapPinEnhanced.name,
         order = GetTime(),
-        icon = self.icon or "Interface\\Icons\\inv_misc_map08"
+        icon = self.icon or Collections.DEFAULT_ICON
     })
     if not group then
         error("MapPinEnhancedCollectionMixin:LoadCollection: Group not found for collection name: " ..
@@ -203,6 +188,5 @@ function MapPinEnhancedCollectionMixin:GetSaveableData()
         pins = self.pins,
         count = self.count,
         icon = self.icon,
-        color = self.color,
     }
 end

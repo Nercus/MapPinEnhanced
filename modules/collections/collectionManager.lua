@@ -89,9 +89,6 @@ function Collections:RestoreCollection(collectionData)
     if collectionData.icon then
         collection:SetIcon(collectionData.icon)
     end
-    if collectionData.color then
-        collection:SetColor(collectionData.color)
-    end
     collection:AddMultiplePins(collectionData.pins)
 end
 

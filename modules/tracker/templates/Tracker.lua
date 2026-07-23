@@ -200,7 +200,7 @@ end
 local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
-    local entryHeight = self.activeView == "collection" and 73 or 35
+    local entryHeight = self.activeView == "collection" and 50 or 35
     local searchHeight = self.activeView == "collection" and 28 or 0
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
