@@ -110,7 +110,7 @@ local function OnUserWaypoint(uiMapPoint)
     if isSuperTracking and not isSuperTrackingUserWaypoint and not isSuperTrackingCorpse then
         C_SuperTrack.ClearAllSuperTracked()
     end
-    local uncategorizedGroup = Groups:GetGroupByName(L["Uncategorized Pins"])
+    local uncategorizedGroup = Groups:GetUngroupedGroup()
     if not uncategorizedGroup then return end
     uncategorizedGroup:AddPin({
         mapID = uiMapPoint.uiMapID,

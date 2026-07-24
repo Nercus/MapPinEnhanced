@@ -146,16 +146,21 @@ function MapPinEnhancedPinMixin:Reset()
     self.worldmapPin:HidePulse()
     self.minimapPin:HidePulse()
 
+    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
+    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
+
     local framePool = Pins:GetFramePool()
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
 
-    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
-    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
-
     if self.pinData and self.pinData.mapID and self.pinData.x and self.pinData.y then
         MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
     end
+
+    self.group = nil
+    self.pinData = nil
+    self.worldmapPin = nil
+    self.minimapPin = nil
 end
 
 function MapPinEnhancedPinMixin:PersistPin()

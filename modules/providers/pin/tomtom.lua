@@ -14,6 +14,14 @@ function Providers:CheckForTomTom()
         SLASH_MapPinEnhanced3 = "/way"
         return
     end
+    if not Groups:GetGroupByName(L["TomTom Pins"]) then
+        Groups:RegisterGroup({
+            name = L["TomTom Pins"],
+            source = MapPinEnhanced.name,
+            icon = "Interface\\Icons\\INV_Misc_Map_01",
+            order = GetTime()
+        })
+    end
     MapPinEnhanced:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
 end
 
@@ -39,15 +47,17 @@ local function HookTomTomAddWaypoint()
     end)
 end
 
-MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(_, addon)
+MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(addon)
     if addon == "TomTom" then
         MapPinEnhanced.isTomTomLoaded = true
-        Groups:RegisterGroup({
-            name = L["TomTom Pins"],
-            source = MapPinEnhanced.name,
-            icon = "Interface\\Icons\\INV_Misc_Map_01",
-            order = GetTime()
-        })
+        if not Groups:GetGroupByName(L["TomTom Pins"]) then
+            Groups:RegisterGroup({
+                name = L["TomTom Pins"],
+                source = MapPinEnhanced.name,
+                icon = "Interface\\Icons\\INV_Misc_Map_01",
+                order = GetTime()
+            })
+        end
         HookTomTomAddWaypoint()
     end
 end)

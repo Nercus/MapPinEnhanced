@@ -31,47 +31,11 @@
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-110" />
                 </Anchors>
             </ScrollFrame>
-            <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="importTypeRadio">
-                <Size x="1" y="1" />
+            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="newCollectionNameInput">
+                <Size x="200" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.textarea" relativePoint="TOPRIGHT" x="10" y="0" />
                 </Anchors>
-            </Frame>
-            <DropdownButton inherits="MapPinEnhancedDropdownTemplate" parentKey="collectionDropdown" hidden="true">
-                <Size x="170" y="30" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio" relativePoint="BOTTOMLEFT" x="10" y="-10" />
-                </Anchors>
-                <Animations>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
-                        <KeyValues>
-                            <KeyValue key="showOnPlay" value="true" />
-                        </KeyValues>
-                    </AnimationGroup>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
-                        <KeyValues>
-                            <KeyValue key="hideOnFinished" value="true" />
-                        </KeyValues>
-                    </AnimationGroup>
-                </Animations>
-            </DropdownButton>
-            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="newCollectionNameInput" hidden="true">
-                <Size x="200" y="30" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.importTypeRadio" relativePoint="BOTTOMLEFT" x="10" y="-10" />
-                </Anchors>
-                <Animations>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
-                        <KeyValues>
-                            <KeyValue key="showOnPlay" value="true" />
-                        </KeyValues>
-                    </AnimationGroup>
-                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
-                        <KeyValues>
-                            <KeyValue key="hideOnFinished" value="true" />
-                        </KeyValues>
-                    </AnimationGroup>
-                </Animations>
             </EditBox>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="30" />

@@ -108,6 +108,13 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
+            label = L["Mark Reached"],
+            onClick = function()
+                self.group:MarkPinReached(self.pinID)
+            end
+        },
+        {
+            type = "button",
             label = MapPinEnhanced.L["Share to Chat"],
             onClick = function()
                 self:SharePin()
@@ -118,6 +125,16 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             label = L["Export"],
             onClick = function()
                 Transfer:ShowExportWindow(self)
+            end
+        },
+        {
+            type = "divider",
+        },
+        {
+            type = "button",
+            label = L["Delete Pin"],
+            onClick = function()
+                self.group:RemovePin(self.pinID)
             end
         }
     }

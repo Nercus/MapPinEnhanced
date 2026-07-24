@@ -32,10 +32,11 @@ Dialogs.DIALOG_TYPES = {
     CONFIRM = "CONFIRM",
     INFO = "INFO",
     RENAME_PIN = "RENAME_PIN",
+    RENAME_GROUP = "RENAME_GROUP",
     ABOUT = "ABOUT",
 }
 
----@alias DialogContentFrame MapPinEnhancedConfirmDialogContentTemplate | MapPinEnhancedInfoDialogContentTemplate | MapPinEnhancedRenamePinDialogContentTemplate | MapPinEnhancedAboutDialogContentTemplate
+---@alias DialogContentFrame MapPinEnhancedConfirmDialogContentTemplate | MapPinEnhancedInfoDialogContentTemplate | MapPinEnhancedRenamePinDialogContentTemplate | MapPinEnhancedRenameGroupDialogContentTemplate | MapPinEnhancedAboutDialogContentTemplate
 
 ---@class DialogButtonInfo
 ---@field label string

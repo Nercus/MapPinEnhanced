@@ -2,20 +2,63 @@
 local MapPinEnhanced = select(2, ...)
 
 local Groups = MapPinEnhanced:GetModule("Groups")
+local L = MapPinEnhanced.L
 
+local function ValidateGroupInfo(groupInfo, apiName)
+    if type(groupInfo) ~= "table" then
+        error(apiName .. ": groupInfo must be a table")
+    end
+    if not Groups:IsValidGroupName(groupInfo.name) then
+        error(apiName .. ": groupInfo.name must be a non-empty string")
+    end
+    if type(groupInfo.source) ~= "string" or groupInfo.source == "" then
+        error(apiName .. ": groupInfo.source must be a non-empty string")
+    end
+    if not C_AddOns.IsAddOnLoaded(groupInfo.source) then
+        error(apiName .. ": source addon is not loaded")
+    end
+    if Groups:GetGroupByName(groupInfo.name) then
+        error(apiName .. ": a group with this name already exists")
+    end
+end
 
 MapPinEnhanced:RegisterGlobalAPI("RegisterGroup", function(groupInfo)
-    return Groups:RegisterGroup(groupInfo):GetProxy()
+    ValidateGroupInfo(groupInfo, "MapPinEnhanced.RegisterGroup")
+
+    local group = Groups:RegisterGroup(groupInfo)
+    if not group then
+        error("MapPinEnhanced.RegisterGroup: failed to register group")
+    end
+
+    if group:IsHidden() and group:GetSource() ~= MapPinEnhanced.name then
+        MapPinEnhanced:Print(string.format(L["%s added hidden group \"%s\"."], group:GetSource(), group:GetName()))
+    end
+
+    return group:GetGroupID()
 end)
 
+MapPinEnhanced:RegisterGlobalAPI("AddPinToGroup", function(groupID, pinData)
+    local group = Groups:GetGroupByID(groupID)
+    if not group or group:IsProtected() then return nil end
 
-MapPinEnhanced:RegisterGlobalAPI("GetGroupsBySource", function(source)
-    local groups = {}
-    ---@param group MapPinEnhancedGroupMixin
+    local _, pinID = group:AddPin(pinData)
+    return pinID
+end)
+
+MapPinEnhanced:RegisterGlobalAPI("DeletePin", function(pinID)
     for group in Groups:EnumerateGroups() do
-        if group.source == source then
-            table.insert(groups, group:GetProxy())
+        if group:RemovePin(pinID) then
+            return true
         end
     end
-    return groups
+    return false
+end)
+
+MapPinEnhanced:RegisterGlobalAPI("MarkPinReached", function(pinID)
+    for group in Groups:EnumerateGroups() do
+        if group:MarkPinReached(pinID) then
+            return true
+        end
+    end
+    return false
 end)

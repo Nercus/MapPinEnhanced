@@ -4,5 +4,6 @@
     <Include file="Confirm.xml" />
     <Include file="Info.xml" />
     <Include file="RenamePin.xml" />
+    <Include file="RenameGroup.xml" />
     <Include file="About.xml" />
 </Ui>

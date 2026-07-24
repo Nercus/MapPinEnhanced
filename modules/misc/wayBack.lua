@@ -11,9 +11,9 @@ MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
         return
     end
     local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
-    local uncategorizedGroup = Groups:GetGroupByName(L["My Way Back"])
-    assert(uncategorizedGroup, L["Uncategorized Pins group not found. Please create it first."])
-    uncategorizedGroup:AddPin({
+    local wayBackGroup = Groups:GetWayBackGroup()
+    assert(wayBackGroup, L["My Way Back group not found. Please create it first."])
+    wayBackGroup:AddPin({
         title = L["My Way Back"],
         mapID = currentMapID,
         x = x,

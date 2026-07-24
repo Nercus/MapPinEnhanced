@@ -15,7 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field output string
 MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
----@alias ExportTarget MapPinEnhancedCollectionMixin | MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
+---@alias ExportTarget MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
 
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
@@ -56,14 +56,12 @@ local function GetPins(target)
     if not target then
         ---@param group MapPinEnhancedGroupMixin
         for group in Groups:EnumerateGroups() do
-            for _, pin in group:EnumeratePins() do AddPin(pins, pin) end
+            for _, pinData in ipairs(group:GetAllPinData()) do AddPin(pins, pinData) end
         end
     elseif target.classification == "pin" then
         AddPin(pins, target)
     elseif target.classification == "group" then
-        for _, pin in target:EnumeratePins() do AddPin(pins, pin) end
-    elseif target.classification == "collection" then
-        for _, pinData in ipairs(target.pins or {}) do AddPin(pins, pinData) end
+        for _, pinData in ipairs(target:GetAllPinData()) do AddPin(pins, pinData) end
     end
     return pins
 end
@@ -83,9 +81,15 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
         return { CleanPinData(target:GetPinData()) }
     end
 
-    ---@type SaveableGroupData | CollectionInfo
+    ---@type SaveableGroupData
     local data = CopyTable(target:GetSaveableData())
     data["source"] = nil
+    data["hidden"] = nil
+    data["systemType"] = nil
+    data["pinOrder"] = nil
+    data["pinArchive"] = nil
+    data["groupID"] = nil
+    data.pins = target:GetAllPinData()
     for index, pinData in ipairs(data.pins) do
         data.pins[index] = CleanPinData(pinData)
     end

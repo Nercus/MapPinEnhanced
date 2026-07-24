@@ -3,10 +3,16 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
 ---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
----@field debouncedPersist table<string, function> a table to store the debounced persist functions for each group by group name
+---@field debouncedPersist table<string, function> a table to store debounced persist functions by groupID
+---@field SYSTEM_GROUP_IDS table<string, string>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
+
+Groups.SYSTEM_GROUP_IDS = {
+    UNGROUPED = "system-ungrouped",
+    WAY_BACK = "system-way-back",
+}
 
 local function CreateGroupObject()
     return CreateAndInitFromMixin(MapPinEnhancedGroupMixin)
@@ -20,33 +26,51 @@ end
 function Groups:GetObjectPool()
     if not self.objectPool then
         self.objectPool = CreateObjectPool(CreateGroupObject, ResetGroupObject)
-        self.objectPool.capacity = 100 -- only allow 100 groups at the same time
+        self.objectPool.capacity = 100
     end
 
     return self.objectPool
 end
 
+---@param name string
+---@return string
+function Groups:NormalizeGroupName(name)
+    assert(name, "Groups:NormalizeGroupName: name is nil")
+    assert(type(name) == "string", "Groups:NormalizeGroupName: name must be a string")
+    return (name:gsub("^%s*(.-)%s*$", "%1"))
+end
+
+---@param name string
+---@return string
+function Groups:GetNameKey(name)
+    return string.lower(self:NormalizeGroupName(name))
+end
+
+---@param name string
+---@return boolean
+function Groups:IsValidGroupName(name)
+    if type(name) ~= "string" then return false end
+    return self:NormalizeGroupName(name) ~= ""
+end
+
 local DEFAULT_GROUPS = {
     {
-        name = L["Uncategorized Pins"],
+        groupID = Groups.SYSTEM_GROUP_IDS.UNGROUPED,
+        name = L["Ungrouped Pins"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\inv_ability_skyriding_glyph",
-        order = -1
+        order = -1,
+        systemType = "ungrouped",
     },
     {
-        name = L["Temporary Import"],
-        source = MapPinEnhanced.name,
-        icon = "Interface\\Icons\\achievement_guildperk_workingovertime_rank2",
-        order = math.huge - 1, -- start of the list, but after the My Way Back group
-    },
-    {
+        groupID = Groups.SYSTEM_GROUP_IDS.WAY_BACK,
         name = L["My Way Back"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\rogue_burstofspeed",
-        order = math.huge, -- start of the list
+        order = math.huge,
+        systemType = "wayBack",
     }
 }
-
 
 function Groups:GetAllGroups()
     local groups = {}
@@ -64,23 +88,25 @@ function Groups:RegisterGroup(groupInfo)
     assert(groupInfo, "Groups:RegisterGroup: groupInfo is nil")
     assert(groupInfo.name, "Groups:RegisterGroup: groupInfo.name is nil")
     assert(type(groupInfo.name) == "string", "Groups:RegisterGroup: groupInfo.name must be a string")
+    assert(self:IsValidGroupName(groupInfo.name), "Groups:RegisterGroup: groupInfo.name is empty")
     assert(groupInfo.source, "Groups:RegisterGroup: groupInfo.source is nil")
     assert(type(groupInfo.source) == "string", "Groups:RegisterGroup: groupInfo.source must be a string")
     assert(C_AddOns.IsAddOnLoaded(groupInfo.source), "Groups:RegisterGroup: groupInfo.source is not a loaded addon")
 
-    local existingGroup = self:GetGroupByName(groupInfo.name)
-    if existingGroup then
-        MapPinEnhanced:Debug("Groups:RegisterGroup: Group with name '%s' already exists, returning existing group",
-            groupInfo.name)
-        return existingGroup
+    if self:GetGroupByName(groupInfo.name) then
+        return nil
+    end
+
+    local groupID = groupInfo.groupID or MapPinEnhanced:GenerateUUID("group")
+    if self:GetGroupByID(groupID) then
+        return nil
     end
 
     local groupsPool = Groups:GetObjectPool()
     local group = groupsPool:Acquire()
-    group:SetName(groupInfo.name)
-    group:SetIcon(groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark") -- Default icon if not provided
-    group:SetSource(groupInfo.source)
-    group:SetOrder(groupInfo.order or GetTime())
+    groupInfo.groupID = groupID
+    group:ApplyGroupInfo(groupInfo)
+    self:PersistGroup(group)
 
     return group
 end
@@ -94,13 +120,30 @@ function Groups:UnregisterGroup(group)
     groupsPool:Release(group)
 end
 
+---@param group MapPinEnhancedGroupMixin
+---@return boolean
+function Groups:DeleteGroup(group)
+    assert(group, "Groups:DeleteGroup: group is nil")
+    if group:IsProtected() then return false end
+
+    local groupID = group:GetGroupID()
+    group.isDeleting = true
+    self.debouncedPersist[groupID] = nil
+    MapPinEnhanced:DeleteVar("groups", groupID)
+    self:UnregisterGroup(group)
+    MapPinEnhanced:FireCallback("GROUP_DELETED", nil, groupID)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil)
+    return true
+end
+
 function Groups:GetGroupByName(name)
     assert(name, "Groups:GetGroupByName: name is nil")
     assert(type(name) == "string", "Groups:GetGroupByName: name must be a string")
+    local nameKey = self:GetNameKey(name)
     local groupsPool = Groups:GetObjectPool()
     ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
-        if group:GetName() == name then
+        if self:GetNameKey(group:GetName()) == nameKey then
             return group
         end
     end
@@ -108,48 +151,126 @@ function Groups:GetGroupByName(name)
     return nil
 end
 
+function Groups:GetGroupByID(groupID)
+    if not groupID then return nil end
+    local groupsPool = Groups:GetObjectPool()
+    ---@param group MapPinEnhancedGroupMixin
+    for group in groupsPool:EnumerateActive() do
+        if group:GetGroupID() == groupID then
+            return group
+        end
+    end
+
+    return nil
+end
+
+function Groups:GetUngroupedGroup()
+    return self:GetGroupByID(self.SYSTEM_GROUP_IDS.UNGROUPED)
+end
+
+function Groups:GetWayBackGroup()
+    return self:GetGroupByID(self.SYSTEM_GROUP_IDS.WAY_BACK)
+end
+
+---@param name string
+---@return MapPinEnhancedGroupMixin?
+function Groups:CreateGroupFromUngrouped(name)
+    assert(name, "Groups:CreateGroupFromUngrouped: name is nil")
+    assert(type(name) == "string", "Groups:CreateGroupFromUngrouped: name must be a string")
+    if not self:IsValidGroupName(name) then return nil end
+
+    local normalizedName = self:NormalizeGroupName(name)
+    if self:GetGroupByName(normalizedName) then
+        return nil
+    end
+
+    local ungroupedGroup = self:GetUngroupedGroup()
+    if not ungroupedGroup then return nil end
+    if ungroupedGroup:GetTotalPinCount() == 0 then return nil end
+
+    local ungroupedData = ungroupedGroup:GetSaveableData()
+    local targetGroup = self:RegisterGroup({
+        name = normalizedName,
+        source = MapPinEnhanced.name,
+        icon = ungroupedGroup:GetIcon(),
+        order = GetTime(),
+    })
+    if not targetGroup then return nil end
+
+    for pinID, order in pairs(ungroupedData.pinOrder or {}) do
+        targetGroup:SetPinOrder(pinID, order, true)
+    end
+
+    for pinID, archivedPin in pairs(ungroupedData.pinArchive or {}) do
+        targetGroup.pinArchive[pinID] = CopyTable(archivedPin)
+    end
+
+    ungroupedGroup:ClearGroup()
+
+    if #(ungroupedData.pins or {}) > 0 then
+        targetGroup:AddMultiplePins(ungroupedData.pins)
+    else
+        self:PersistGroup(targetGroup)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, targetGroup)
+    end
+
+    return targetGroup
+end
+
 Groups.debouncedPersist = {}
 ---@param group MapPinEnhancedGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")
-    local groupName = group:GetName()
-    assert(groupName, "Groups:PersistGroup: group name is nil")
+    if group.isDeleting then return end
+    local groupID = group:GetGroupID()
+    assert(groupID, "Groups:PersistGroup: groupID is nil")
 
-    if not self.debouncedPersist[groupName] then
-        self.debouncedPersist[groupName] = MapPinEnhanced:DebounceChange(function()
+    if not self.debouncedPersist[groupID] then
+        self.debouncedPersist[groupID] = MapPinEnhanced:DebounceChange(function()
             local data = group:GetSaveableData()
             assert(data, "Groups:PersistGroup: data is nil")
-            if not data or not data.name then return end
-            MapPinEnhanced:SetVar("groups", data.name, data)
+            if not data or not data.groupID then return end
+            MapPinEnhanced:SetVar("groups", data.groupID, data)
         end, 0.5)
     end
 
-    self.debouncedPersist[groupName]()
+    self.debouncedPersist[groupID]()
 end
 
 ---@param groupData SaveableGroupData
 function Groups:RestoreGroup(groupData)
     assert(groupData, "Groups:RestoreGroup: groupInfo is nil")
-    if #groupData.pins == 0 then
-        -- If there are no pins in the group, we don't need to restore it
+    if not groupData.groupID then
         return
     end
-    local group = self:GetGroupByName(groupData.name)
+    if #(groupData.pins or {}) == 0 and not next(groupData.pinArchive or {}) and not groupData.systemType then
+        return
+    end
+
+    local group = self:GetGroupByID(groupData.groupID)
     if not group then
         group = self:RegisterGroup(groupData)
     end
-    assert(group, "Groups:RestoreGroup: group is nil after registration")
+    if not group then return end
+
+    group:ApplyGroupInfo(groupData)
     group:SetOrder(groupData.order or GetTime())
 
-    for pinID, order in pairs(groupData.pinOrder or {}) do
-        group:SetPinOrder(pinID, order, true)
+    for pinID, archivedPin in pairs(groupData.pinArchive or {}) do
+        group.pinArchive[pinID] = CopyTable(archivedPin)
     end
 
-    group:AddMultiplePins(groupData.pins)
+    if not group:IsHidden() then
+        for pinID, order in pairs(groupData.pinOrder or {}) do
+            group:SetPinOrder(pinID, order, true)
+        end
+
+        group:AddMultiplePins(groupData.pins or {})
+    end
 end
 
 function Groups:RestoreAllGroups()
-    ---@type SaveableGroupData[] | nil
+    ---@type table<string, SaveableGroupData> | nil
     local groupsData = MapPinEnhanced:GetVar("groups")
     if not groupsData then
         return
@@ -165,36 +286,28 @@ function Groups:EnumerateGroups()
     return groupsPool:EnumerateActive()
 end
 
--- Initialize default groups
+---@return string
+function Groups:GetAvailableImportGroupName()
+    local index = 1
+    while self:GetGroupByName(string.format(L["Import %d"], index)) do
+        index = index + 1
+    end
+    return string.format(L["Import %d"], index)
+end
+
 function Groups:InitializeDefaultGroups()
-    local groupsPool = Groups:GetObjectPool()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
-        local existingGroup = self:GetGroupByName(groupInfo.name)
+        local existingGroup = self:GetGroupByID(groupInfo.groupID)
         if existingGroup then
-            if existingGroup:GetSource() ~= groupInfo.source then
-                existingGroup:SetSource(groupInfo.source)
-            end
-            if existingGroup:GetIcon() ~= groupInfo.icon then
-                existingGroup:SetIcon(groupInfo.icon)
-            end
-            if groupInfo.order and existingGroup:GetOrder() ~= groupInfo.order then
-                existingGroup:SetOrder(groupInfo.order)
-            end
+            existingGroup:ApplyGroupInfo(groupInfo)
+            self:PersistGroup(existingGroup)
         else
-            -- Only acquire a new one if it doesn't exist
-            local group = groupsPool:Acquire()
-            group:SetName(groupInfo.name)
-            group:SetIcon(groupInfo.icon)
-            group:SetSource(groupInfo.source)
-            if groupInfo.order then
-                group:SetOrder(groupInfo.order)
-            end
+            self:RegisterGroup(groupInfo)
         end
     end
 end
 
 MapPinEnhanced:OnLoad(function()
-    -- the order here is important! The restore process purges all empty groups, so we need to restore the default groups first and then create the default groups
     Groups:RestoreAllGroups()
     Groups:InitializeDefaultGroups()
 end)

@@ -39,8 +39,6 @@ local registeredTextCallbacks = {}
 
 ---@enum (key) ADDON_MESSAGE_EVENT
 local ALLOWED_EVENTS = {
-    TRANSMIT_COLLECTION = "TRANSMIT_COLLECTION",
-    REQUEST_COLLECTION = "REQUEST_COLLECTION",
 }
 
 

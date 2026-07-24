@@ -5,34 +5,28 @@
     <Button name="MapPinEnhancedTrackerGroupEntryTemplate" virtual="true" mixin="MapPinEnhancedTrackerGroupEntryMixin">
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
+            <KeyValue key="expandedTexture" value="common-icon-minus" />
+            <KeyValue key="collapsedTexture" value="common-icon-plus" />
         </KeyValues>
         <Size x="300" y="35" />
-        <Frames>
-            <Button parentKey="expandButton">
-                <KeyValues>
-                    <KeyValue key="expandedTexture" value="common-icon-minus" />
-                    <KeyValue key="collapsedTexture" value="common-icon-plus" />
-                </KeyValues>
-                <Size x="12" y="12" />
-                <NormalTexture parentKey="normalTexture" atlas="common-icon-plus" setAllPoints="true" />
-                <HighlightTexture parentKey="highlightTexture" atlas="shop-toast-sideglow" setAllPoints="true" alpha="0.5" />
-                <Anchors>
-                    <Anchor point="LEFT" x="5" y="-3" />
-                </Anchors>
-            </Button>
-        </Frames>
         <Layers>
             <Layer level="ARTWORK" textureSubLevel="1">
+                <Texture parentKey="expandIcon" atlas="common-icon-plus">
+                    <Size x="12" y="12" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="5" y="-3" />
+                    </Anchors>
+                </Texture>
                 <Texture parentKey="icon" file="Interface/Icons/inv_misc_map08">
                     <Size x="16" y="16" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandButton" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="5" />
                     </Anchors>
                 </Texture>
                 <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Size x="16" y="16" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandButton" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="5" />
                     </Anchors>
                     <MaskedTextures>
                         <MaskedTexture childKey="icon" />
@@ -43,6 +37,17 @@
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
                     </Anchors>
                 </FontString>
+                <Texture parentKey="line" atlas="SquareMask" desaturated="true" horizTile="true">
+                    <Size x="1" y="2" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="0.82" b="0" a="1" />
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="5" />
+                        <Anchor point="RIGHT" relativePoint="RIGHT" />
+                    </Anchors>
+                </Texture>
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="2">
                 <Texture atlas="auctionhouse-itemicon-border-color" parentKey="border">
@@ -53,22 +58,11 @@
                     </Anchors>
                 </Texture>
             </Layer>
+
         </Layers>
-        <NormalTexture atlas="SquareMask" desaturated="true" horizTile="true">
-            <Size x="1" y="2" />
-            <Gradient orientation="HORIZONTAL">
-                <MinColor r="1" g="0.82" b="0" a="1" />
-                <MaxColor r="1" g="0.82" b="0" a="0" />
-            </Gradient>
-            <Anchors>
-                <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.title" x="5" />
-                <Anchor point="RIGHT" relativePoint="RIGHT" />
-            </Anchors>
-        </NormalTexture>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
-            <OnEnter method="OnEnter" />
-            <OnLeave method="OnLeave" />
+            <OnSizeChanged method="UpdateTitleWidth" />
         </Scripts>
     </Button>
 </Ui>

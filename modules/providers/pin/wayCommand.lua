@@ -12,10 +12,13 @@ local L = MapPinEnhanced.L
 function Providers:ImportSlashCommand(msg, groupName)
     local title, mapID, coords = MapPinEnhanced:ParseWayCommandToData(msg)
     if mapID and coords and coords[1] and coords[2] then
+        ---@type MapPinEnhancedGroupMixin?
+        local group
         if not groupName then
-            groupName = L["Uncategorized Pins"]
+            group = Groups:GetUngroupedGroup()
+        else
+            group = Groups:GetGroupByName(groupName)
         end
-        local group = Groups:GetGroupByName(groupName)
         if not group then
             return
         end

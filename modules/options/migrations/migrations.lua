@@ -1,2 +1,3 @@
 -- TODO: add migrations for 3.0.x to 3.1.0
 -- TODO: add migration for sets -> not set id -> name is unique -> migrate all sets and if a set has the same name, append a number to it
+-- TODO: migrate private sets data into stable groupID-based groups once the migration system is implemented.

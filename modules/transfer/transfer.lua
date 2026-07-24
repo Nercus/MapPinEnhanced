@@ -38,7 +38,7 @@ function Transfer:HideImportWindow()
     end
 end
 
----@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin|MapPinEnhancedCollectionMixin?
+---@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin?
 function Transfer:ShowExportWindow(target)
     local window = self:GetExportWindow()
     ---@cast window MapPinEnhancedExportWindowTemplate

@@ -22,9 +22,13 @@ pinsPool.capacity = 1000 -- only allow 1000 pins at the same time
 
 
 ---@param initPinData pinData
+---@param overridePinID UUID?
+---@param group MapPinEnhancedGroupMixin?
 ---@return MapPinEnhancedPinMixin
-function Pins:CreatePin(initPinData)
+function Pins:CreatePin(initPinData, overridePinID, group)
     local pin = pinsPool:Acquire()
+    pin:OverridePinID(overridePinID or MapPinEnhanced:GenerateUUID("pin"))
+    pin.group = group
     pin.pinData = initPinData
     pin:SetPinData(initPinData)
     return pin
@@ -44,6 +48,7 @@ end
 function Pins:ReleasePin(pinID)
     if not pinID then return end
     local pin = self:GetPinByID(pinID)
+    if not pin then return end
     pinsPool:Release(pin)
 end
 

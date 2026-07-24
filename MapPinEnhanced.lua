@@ -16,7 +16,6 @@ MapPinEnhanced.HBDP = LibStub:GetLibrary("HereBeDragons-Pins-2.0")
 MapPinEnhanced.LDBIcon = LibStub:GetLibrary("LibDBIcon-1.0")
 MapPinEnhanced.Chomp = LibStub:GetLibrary("Chomp")
 
-
 MapPinEnhanced.basePath = "Interface\\AddOns\\MapPinEnhanced"
 MapPinEnhanced.assetsPath = MapPinEnhanced.basePath .. "\\assets"
 

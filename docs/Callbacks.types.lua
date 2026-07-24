@@ -8,7 +8,9 @@
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", func: fun(eventname: string, lock: boolean), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin))
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_REACHED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pinID: UUID, savedData: SaveablePinData))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin))
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "GROUP_DELETED", func: fun(eventname: string, groupID: UUID))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_TRACKING_CHANGED", func: fun(eventname: string, pinID: UUID, isTracked: boolean))
 MapPinEnhanced = {}
 
@@ -20,7 +22,9 @@ MapPinEnhanced = {}
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", key: string, lock: boolean)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", key: nil, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", key: nil, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_REACHED", key: nil, group: MapPinEnhancedGroupMixin, pinID: UUID, savedData: SaveablePinData)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", key: nil, group: MapPinEnhancedGroupMixin)
+---@field FireCallback fun(self: MapPinEnhanced, event: "GROUP_DELETED", key: nil, groupID: UUID)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_TRACKING_CHANGED", key: nil, pinID: UUID, isTracked: boolean)
 MapPinEnhanced = {}
 

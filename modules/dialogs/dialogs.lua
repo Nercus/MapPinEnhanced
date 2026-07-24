@@ -77,6 +77,13 @@ function Dialogs:ShowRenamePinDialog(pin)
     })
 end
 
+---@param group MapPinEnhancedGroupMixin
+function Dialogs:ShowRenameGroupDialog(group)
+    self:ShowDialog(self.DIALOG_TYPES.RENAME_GROUP, L["Rename Group"], {
+        group = group,
+    })
+end
+
 function Dialogs:HideDialog(dialogType)
     if self.openDialog and dialogType ~= self.openDialog then
         return

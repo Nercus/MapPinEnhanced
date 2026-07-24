@@ -10,20 +10,16 @@ local MapPinEnhanced = select(2, ...)
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
 ---@field searchBox MapPinEnhancedInputTemplate
----@field activeView 'collection' | 'pin'
-MapPinEnhancedTrackerMixin = {
-    activeView = "pin", -- Default view is pin
-}
+MapPinEnhancedTrackerMixin = {}
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
-local Collections = MapPinEnhanced:GetModule("Collections")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 
----@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
+---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
----@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate' | 'MapPinEnhancedTrackerCollectionEntryTemplate'
+---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate'
 
 ---@param groupnode1 TreeNodeMixin
 ---@param groupnode2 TreeNodeMixin
@@ -42,19 +38,6 @@ local function GroupSortComparator(groupnode1, groupnode2)
         return order1 > order2
     end
     return (group1.name or "") < (group2.name or "")
-end
-
----@param collectionNode1 TreeNodeMixin
----@param collectionNode2 TreeNodeMixin
----@return boolean
-local function CollectionSortComparator(collectionNode1, collectionNode2)
-    ---@type MapPinEnhancedCollectionMixin, MapPinEnhancedCollectionMixin
-    local collection1, collection2 = collectionNode1:GetData(), collectionNode2:GetData()
-
-    if collection1.classification ~= "collection" or collection2.classification ~= "collection" then
-        return false
-    end
-    return (collection1.name or "") < (collection2.name or "")
 end
 
 ---@param pinNode1 TreeNodeMixin
@@ -82,40 +65,21 @@ local function PinSortComparator(pinNode1, pinNode2)
     return title1 < title2
 end
 
-function MapPinEnhancedTrackerMixin:UpdateCollectionList()
-    local searchText = self.searchBox:GetText() or ""
-
-    if searchText == "" then
-        ---@param collection MapPinEnhancedCollectionMixin
-        for collection in Collections:EnumerateCollections() do
-            self.dataProvider:Insert(collection)
+---@param group MapPinEnhancedGroupMixin
+function MapPinEnhancedTrackerMixin:RefreshGroupEntry(group)
+    self.scrollBox:ForEachFrame(function(frame)
+        ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
+        if frame.group and frame.group:GetGroupID() == group:GetGroupID() then
+            frame:UpdateTitle()
         end
-        self.dataProvider:SetSortComparator(CollectionSortComparator, false, false)
-        return
-    end
-
-    ---@type MapPinEnhancedCollectionMixin[]
-    local collections = {}
-    ---@type string[]
-    local collectionNames = {}
-
-    ---@param collection MapPinEnhancedCollectionMixin
-    for collection in Collections:EnumerateCollections() do
-        table.insert(collections, collection)
-        table.insert(collectionNames, collection.name or "")
-    end
-
-    local results = MapPinEnhanced:Filter(searchText, collectionNames, false)
-    for _, result in ipairs(results) do
-        self.dataProvider:Insert(collections[result.i])
-    end
+    end)
 end
 
 function MapPinEnhancedTrackerMixin:UpdatePinList()
     ---@param group MapPinEnhancedGroupMixin
     for group in Groups:EnumerateGroups() do
-        local numPins = group:GetPinCount()
-        if numPins > 0 then -- only add groups with pins
+        local totalPins = group:GetTotalPinCount()
+        if not group:IsHidden() and totalPins > 0 then
             local groupElement = self.dataProvider:Insert(group) --[[@as TreeNodeMixin]]
             for _, pin in group:EnumeratePins() do
                 groupElement:Insert(pin)
@@ -128,23 +92,20 @@ end
 
 function MapPinEnhancedTrackerMixin:UpdateList()
     self.dataProvider:Flush()
-    if self.activeView == "collection" then
-        self:UpdateCollectionList()
-    else
-        self:UpdatePinList()
-    end
+    self:UpdatePinList()
 end
 
 ---@param group MapPinEnhancedGroupMixin
 ---@param pin MapPinEnhancedPinMixin
 function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
-    if self.activeView ~= "pin" or not self:IsShown() then return end
+    if not self:IsShown() then return end
+    if group:IsHidden() then return end
 
     ---@type TreeNodeMixin?
     local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
         ---@type MapPinEnhancedGroupMixin
         local nodeData = node:GetData()
-        return nodeData.classification == "group" and nodeData.name == group.name
+        return nodeData.classification == "group" and nodeData:GetGroupID() == group:GetGroupID()
     end, TreeDataProviderConstants.IncludeCollapsed)
     if not groupNode then
         groupNode = self.dataProvider:Insert(group)
@@ -152,18 +113,20 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
     end
     groupNode:Insert(pin)
     groupNode:Invalidate() -- we invalidate here to trigger a resort
+    self:RefreshGroupEntry(group)
+    self:UpdateTrackerHeader()
 end
 
 ---@param group MapPinEnhancedGroupMixin
 ---@param pin MapPinEnhancedPinMixin
 function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
-    if self.activeView ~= "pin" or not self:IsShown() then return end
+    if not self:IsShown() then return end
 
     ---@type TreeNodeMixin?
     local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
         ---@type MapPinEnhancedGroupMixin
         local nodeData = node:GetData()
-        return nodeData.classification == "group" and nodeData.name == group.name
+        return nodeData.classification == "group" and nodeData:GetGroupID() == group:GetGroupID()
     end, TreeDataProviderConstants.IncludeCollapsed)
     if not groupNode then return end
 
@@ -177,14 +140,15 @@ function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
 
     groupNode:Remove(pinNode)
 
-    -- if the group has no more pins, remove the group as well
-    if groupNode:GetSize() == 0 then
+    if group:GetTotalPinCount() == 0 then
         self.dataProvider:Remove(groupNode)
+    else
+        self:UpdateList()
     end
 end
 
 function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
-    if self.activeView ~= "pin" or not self:IsShown() then return end
+    if not self:IsShown() then return end
 
     local trackedPin = Pins:GetTrackedPin()
     if not trackedPin then return end
@@ -200,8 +164,8 @@ end
 local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
-    local entryHeight = self.activeView == "collection" and 50 or 35
-    local searchHeight = self.activeView == "collection" and 28 or 0
+    local entryHeight = 35
+    local searchHeight = 0
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
     local newHeight = visibleEntries * entryHeight
@@ -235,7 +199,7 @@ end
 ---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: any))
 ---@param node TreeNodeMixin
 local function TrackerElementFactory(factory, node)
-    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
     local data = node:GetData()
 
     if data.classification == "group" then
@@ -248,18 +212,13 @@ local function TrackerElementFactory(factory, node)
             ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
             frame:Init(node)
         end)
-    elseif data.classification == "collection" then
-        factory("MapPinEnhancedTrackerCollectionEntryTemplate", function(frame)
-            ---@cast frame MapPinEnhancedTrackerCollectionEntryTemplate
-            frame:Init(node)
-        end)
     end
 end
 
----@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerCollectionEntryTemplate
+---@param frame MapPinEnhancedTrackerPinEntryTemplate | MapPinEnhancedTrackerGroupEntryTemplate
 ---@param node TreeNodeMixin
 local function TrackerElementResetter(frame, node)
-    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin | MapPinEnhancedCollectionMixin
+    ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
     local data = node:GetData()
     if data.classification == "group" then
         ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate
@@ -268,9 +227,6 @@ local function TrackerElementResetter(frame, node)
         ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
         ---@cast data MapPinEnhancedPinMixin
         frame:Reset(data.pinID)
-    elseif data.classification == "collection" then
-        ---@cast frame MapPinEnhancedTrackerCollectionEntryTemplate
-        frame:Reset()
     end
 end
 
@@ -294,12 +250,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
     self.searchBox:Setup({
-        onChange = function()
-            if self.activeView == "collection" then
-                self:UpdateList()
-                self:UpdateTrackerHeader()
-            end
-        end,
+        onChange = function() end,
     })
 
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
@@ -317,65 +268,37 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     end)
 
     MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()
-        if self.activeView ~= "pin" or not self:IsShown() then return end
+        if not self:IsShown() then return end
         self:UpdateList()
         self:UpdateHeight()
     end)
 end
 
-function MapPinEnhancedTrackerMixin:GetActiveView()
-    return self.activeView
-end
-
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
-    if self.activeView == "collection" then
-        local numCollections = self.dataProvider:GetSize(false)
-        self.header:SetTitle(string.format(L["Collections (%d)"], numCollections))
-        self.header:SetIcon("collection")
-        self.header.viewButton:SetIconTexture("pin")
-    else
-        local totalElements = self.dataProvider:GetSize(false)
-        local numGroups = 0
+    local reachedPins = 0
+    local totalPins = 0
 
-        ---@param node TreeNodeMixin
-        for _, node in self.dataProvider:EnumerateEntireRange() do
-            ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
-            local data = node:GetData()
-            if data.classification == "group" then
-                numGroups = numGroups + 1
-            end
+    ---@param node TreeNodeMixin
+    for _, node in self.dataProvider:EnumerateEntireRange() do
+        ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
+        local data = node:GetData()
+        if data.classification == "group" then
+            reachedPins = reachedPins + data:GetReachedPinCount()
+            totalPins = totalPins + data:GetTotalPinCount()
         end
-
-        local numPins = totalElements - numGroups
-        self.header:SetTitle(string.format(L["Pins (%d)"], numPins))
-        self.header:SetIcon("pin")
-        self.header.viewButton:SetIconTexture("collection")
     end
+
+    self.header:SetTitle(string.format(L["Pins (%d/%d)"], reachedPins, totalPins))
+    self.header:SetIcon("pin")
+    self.header.hiddenGroupsButton:SetIconTexture("collection")
 end
 
 function MapPinEnhancedTrackerMixin:UpdateViewLayout()
     self.scrollBox:ClearAllPoints()
-    if self.activeView == "collection" then
-        self.searchBox:Show()
-        self.scrollBox:SetPoint("TOPLEFT", self.searchBox, "BOTTOMLEFT", 0, -4)
-    else
-        self.searchBox:Hide()
-        self.searchBox:ClearFocus()
-        self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
-    end
+    self.searchBox:Hide()
+    self.searchBox:ClearFocus()
+    self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
     self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
-end
-
-function MapPinEnhancedTrackerMixin:ToggleActiveView()
-    if self.activeView == "collection" then
-        self.activeView = "pin"
-    else
-        self.activeView = "collection"
-    end
-    self:UpdateViewLayout()
-    self:UpdateList()
-    self:UpdateHeight()
-    self:UpdateTrackerHeader()
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()

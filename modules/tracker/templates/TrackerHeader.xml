@@ -26,7 +26,7 @@
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="icon">
                     <Size x="14" y="14" />
                     <KeyValues>
-                        <KeyValue key="icon" value="collection" />
+                        <KeyValue key="icon" value="pin" />
                     </KeyValues>
                     <Anchors>
                         <Anchor point="LEFT" x="8" />
@@ -55,7 +55,7 @@
                     <Anchor point="RIGHT" x="-5" />
                 </Anchors>
             </Button>
-            <Button parentKey="viewButton" inherits="MapPinEnhancedIconButtonTemplate">
+            <Button parentKey="hiddenGroupsButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
                     <KeyValue key="icon" value="collection" />
@@ -70,7 +70,7 @@
                     <KeyValue key="icon" value="import" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.viewButton" relativePoint="LEFT" />
+                    <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.hiddenGroupsButton" relativePoint="LEFT" />
                 </Anchors>
             </Button>
         </Frames>

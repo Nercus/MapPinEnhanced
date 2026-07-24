@@ -13,7 +13,7 @@
                 <Size x="1" y="24" />
                 <KeyValues>
                     <KeyValue key="icon" value="search" />
-                    <KeyValue key="placeholder" value="Search collections..." />
+                    <KeyValue key="placeholder" value="Search groups..." />
                     <KeyValue key="clearOnEscape" value="true" type="boolean" />
                 </KeyValues>
                 <Anchors>

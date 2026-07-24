@@ -2,20 +2,33 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class GroupInfo
+---@field groupID UUID? stable group identifier
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string? the icon of the group, used to display the group on the map
----@field order number the order of the group in the tracker, lower numbers are higher in the list
+---@field order number? the order of the group in the tracker, lower numbers are higher in the list
+---@field hidden boolean? true if this group is stored away and has no active map pins
+---@field systemType "ungrouped"|"wayBack"? protected system group type
 
+---@class ArchivedPinData
+---@field state "reached"|"hidden"
+---@field data SaveablePinData
+---@field order number
 
 ---@class MapPinEnhancedGroupMixin
 ---@field classification 'group'
----@field pins table<UUID, MapPinEnhancedPinMixin> a table of pins that belong to this
----@field pinOrder table<UUID, number> a table that stores tracker order by pinID
----@field name string the name of the group
----@field source string the name of the addon which is registering the group, used to identify the group.
----@field icon string? the icon of the group, used to display the group on the map
----@field order number the order of the group in the tracker, lower numbers are higher in the list
+---@field groupID UUID
+---@field pins table<UUID, MapPinEnhancedPinMixin> active pins that are currently on the map
+---@field pinOrder table<UUID, number> tracker order for active pins by pinID
+---@field pinArchive table<UUID, ArchivedPinData> non-live pin data for reached or hidden pins
+---@field name string
+---@field source string
+---@field icon string?
+---@field order number
+---@field hidden boolean
+---@field systemType "ungrouped"|"wayBack"|nil
+---@field protected boolean
+---@field count number active pin count
 MapPinEnhancedGroupMixin = CreateFromMixins(
     { classification = "group" },
     MapPinEnhancedGroupProxyMixin
@@ -25,40 +38,88 @@ MapPinEnhancedGroupMixin = CreateFromMixins(
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
+local ARCHIVE_STATE_REACHED = "reached"
+local ARCHIVE_STATE_HIDDEN = "hidden"
+
+local function CopySaveablePinData(pinData, pinID)
+    local saveablePinData = CopyTable(pinData)
+    saveablePinData.pinID = pinID or saveablePinData.pinID or MapPinEnhanced:GenerateUUID("pin")
+    saveablePinData.setTracked = nil
+    return saveablePinData
+end
+
 function MapPinEnhancedGroupMixin:Init()
+    self.groupID = nil
     self.pins = {}
     self.pinOrder = {}
+    self.pinArchive = {}
     self.count = 0
     self.order = GetTime()
+    self.hidden = false
+    self.protected = false
+    self.isDeleting = false
 end
 
 function MapPinEnhancedGroupMixin:Reset()
+    for pinID in pairs(self.pins or {}) do
+        Pins:ReleasePin(pinID)
+    end
+
+    self.groupID = nil
     self.pins = {}
     self.pinOrder = {}
+    self.pinArchive = {}
     self.name = nil
     self.source = nil
     self.icon = nil
     self.count = 0
     self.order = 0
+    self.hidden = false
+    self.systemType = nil
+    self.protected = false
+    self.isDeleting = false
+end
+
+---@param groupInfo GroupInfo
+function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
+    self.groupID = groupInfo.groupID or self.groupID or MapPinEnhanced:GenerateUUID("group")
+    self.name = Groups:NormalizeGroupName(groupInfo.name)
+    self.source = groupInfo.source
+    self.icon = groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark"
+    self.order = groupInfo.order or self.order or GetTime()
+    self.hidden = groupInfo.hidden and true or false
+    self.systemType = groupInfo.systemType
+    self.protected = self.systemType ~= nil
 end
 
 ---@param name string
+---@return boolean
 function MapPinEnhancedGroupMixin:SetName(name)
     assert(name, "MapPinEnhancedGroupMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedGroupMixin:SetName: name must be a string")
+    if self.systemType == "ungrouped" then
+        return Groups:CreateGroupFromUngrouped(name) ~= nil
+    end
+    if self.protected then return false end
 
-    local oldName = self.name
-    self.name = name
-
-    if oldName and oldName ~= name then
-        Groups.debouncedPersist[oldName] = nil
+    local normalizedName = Groups:NormalizeGroupName(name)
+    local existingGroup = Groups:GetGroupByName(normalizedName)
+    if existingGroup and existingGroup ~= self then
+        return false
     end
 
+    self.name = normalizedName
     Groups:PersistGroup(self)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
 end
 
 function MapPinEnhancedGroupMixin:GetName()
     return self.name
+end
+
+function MapPinEnhancedGroupMixin:GetGroupID()
+    return self.groupID
 end
 
 ---@param source string
@@ -66,7 +127,6 @@ function MapPinEnhancedGroupMixin:SetSource(source)
     assert(source, "MapPinEnhancedGroupMixin:SetSource: source is nil")
     assert(type(source) == "string", "MapPinEnhancedGroupMixin:SetSource: source must be a string")
     assert(C_AddOns.IsAddOnLoaded(source), "MapPinEnhancedGroupMixin:SetSource: source is not a loaded addon")
-    -- TODO: check if restoring groups from an unloaded addon causes problems
     self.source = source
     Groups:PersistGroup(self)
 end
@@ -87,18 +147,54 @@ function MapPinEnhancedGroupMixin:GetIcon()
     return self.icon
 end
 
+function MapPinEnhancedGroupMixin:IsHidden()
+    return self.hidden
+end
+
+function MapPinEnhancedGroupMixin:IsProtected()
+    return self.protected
+end
+
+---@param pinData pinData|SaveablePinData
+---@param state "reached"|"hidden"
+---@param order number?
+---@return UUID
+function MapPinEnhancedGroupMixin:ArchivePinData(pinData, state, order)
+    local pinID = pinData.pinID or MapPinEnhanced:GenerateUUID("pin")
+    local saveablePinData = CopySaveablePinData(pinData, pinID)
+    self.pinArchive[pinID] = {
+        state = state,
+        data = saveablePinData,
+        order = order or GetTime(),
+    }
+    return pinID
+end
+
 ---@param pinData pinData
 ---@param overridePinID UUID? if provided, the pin will be created with this ID instead of a new one
 ---@param skipPersist boolean? if true, the group will not be persisted after adding the pin, used for batch adding pins
 ---@param skipCallbacks boolean? if true, callbacks will not be fired, used for batch adding pins
----@return MapPinEnhancedPinMixin?
+---@return MapPinEnhancedPinMixin?, UUID?
 function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, skipCallbacks)
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
-    local pin = Pins:CreatePin(pinData)
-    if overridePinID then
-        pin:OverridePinID(overridePinID)
+
+    if self.hidden then
+        local archivePinData = pinData
+        if overridePinID then
+            archivePinData = CopyTable(pinData)
+            archivePinData.pinID = overridePinID
+        end
+        local pinID = self:ArchivePinData(archivePinData, ARCHIVE_STATE_HIDDEN)
+        if not skipPersist then
+            Groups:PersistGroup(self)
+        end
+        if not skipCallbacks then
+            MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+        end
+        return nil, pinID
     end
-    pin.group = self
+
+    local pin = Pins:CreatePin(pinData, overridePinID, self)
 
     local currentOrder = self.pinOrder[pin.pinID]
     if not currentOrder then
@@ -114,10 +210,9 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
     if not skipCallbacks then
         MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
     end
-    return pin
+    return pin, pin.pinID
 end
 
---- To add multiple pins at once including batched execution
 ---@param pinsData pinData[] | SaveablePinData[]
 function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
     assert(pinsData, "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData is nil")
@@ -127,7 +222,7 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
 
     if numberOfPins < 50 then
         for _, pinData in ipairs(pinsData) do
-            self:AddPin(pinData, pinData.pinID, true)
+            self:AddPin(pinData, pinData.pinID, true, true)
         end
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -136,7 +231,7 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
     local addingPinsFunctions = {}
     for _, pinData in ipairs(pinsData) do
         table.insert(addingPinsFunctions, function()
-            self:AddPin(pinData, pinData.pinID, true)
+            self:AddPin(pinData, pinData.pinID, true, true)
         end)
     end
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
@@ -147,28 +242,183 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
 end
 
 ---@param pinID UUID
----@param skipPersist boolean? if true, the group will not be persisted after removing the pin, used for batch removing pins
----@param skipCallbacks boolean? if true, callbacks will not be fired, used for batch removing pins
+---@param skipPersist boolean?
+---@param skipCallbacks boolean?
+---@return boolean
 function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
-    assert(pinID, "MapPinEnhancedGroupMixin:AddPin: pinID is nil")
+    assert(pinID, "MapPinEnhancedGroupMixin:RemovePin: pinID is nil")
+
     local pin = self.pins[pinID]
-    if not pin then return end
+    if pin then
+        self.pins[pinID] = nil
+        self.pinOrder[pinID] = nil
+        self.count = self.count - 1
+
+        if not skipCallbacks then
+            MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pin)
+        end
+        Pins:ReleasePin(pinID)
+
+        if not skipPersist then
+            Groups:PersistGroup(self)
+        end
+        return true
+    end
+
+    if self.pinArchive[pinID] then
+        self.pinArchive[pinID] = nil
+        if not skipPersist then
+            Groups:PersistGroup(self)
+        end
+        if not skipCallbacks then
+            MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+        end
+        return true
+    end
+
+    return false
+end
+
+---@param pinID UUID
+---@return boolean
+function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
+    assert(pinID, "MapPinEnhancedGroupMixin:MarkPinReached: pinID is nil")
+
+    local archivedPin = self.pinArchive[pinID]
+    if archivedPin then
+        return archivedPin.state == ARCHIVE_STATE_REACHED
+    end
+
+    local pin = self.pins[pinID]
+    if not pin then return false end
+
+    local wasTracked = pin:IsTracked()
+    local saveablePinData = CopySaveablePinData(pin:GetSaveableData(), pinID)
+    local order = self.pinOrder[pinID] or GetTime()
 
     self.pins[pinID] = nil
     self.pinOrder[pinID] = nil
     self.count = self.count - 1
+    self.pinArchive[pinID] = {
+        state = ARCHIVE_STATE_REACHED,
+        data = saveablePinData,
+        order = order,
+    }
 
-    if not skipPersist then
-        Groups:PersistGroup(self)
-    end
+    MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, saveablePinData)
     Pins:ReleasePin(pinID)
+    Groups:PersistGroup(self)
 
-    if not skipCallbacks then
-        MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pin)
+    if wasTracked then
+        self:TrackClosestPin()
     end
+
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
 end
 
----Removes multiple pins at once including batched execution
+---@param state "reached"|"hidden"
+---@return number
+function MapPinEnhancedGroupMixin:GetArchiveCount(state)
+    local count = 0
+    for _, archivedPin in pairs(self.pinArchive) do
+        if not state or archivedPin.state == state then
+            count = count + 1
+        end
+    end
+    return count
+end
+
+function MapPinEnhancedGroupMixin:GetReachedPinCount()
+    return self:GetArchiveCount(ARCHIVE_STATE_REACHED)
+end
+
+function MapPinEnhancedGroupMixin:GetTotalPinCount()
+    return self.count + self:GetArchiveCount()
+end
+
+---@return boolean
+function MapPinEnhancedGroupMixin:RestoreReachedPins()
+    if self.hidden then return false end
+
+    local restored = false
+    for pinID, archivedPin in pairs(self.pinArchive) do
+        if archivedPin.state == ARCHIVE_STATE_REACHED then
+            self.pinOrder[pinID] = archivedPin.order or GetTime()
+            self.pinArchive[pinID] = nil
+            self:AddPin(archivedPin.data, pinID, true, true)
+            restored = true
+        end
+    end
+
+    if restored then
+        Groups:PersistGroup(self)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    end
+    return restored
+end
+
+---@return boolean
+function MapPinEnhancedGroupMixin:HideGroup()
+    if self.protected or self.hidden then return false end
+
+    for pinID, pin in pairs(self.pins) do
+        local saveablePinData = CopySaveablePinData(pin:GetSaveableData(), pinID)
+        self.pinArchive[pinID] = {
+            state = ARCHIVE_STATE_HIDDEN,
+            data = saveablePinData,
+            order = self.pinOrder[pinID] or GetTime(),
+        }
+        Pins:ReleasePin(pinID)
+    end
+
+    for _, archivedPin in pairs(self.pinArchive) do
+        archivedPin.state = ARCHIVE_STATE_HIDDEN
+    end
+
+    self.pins = {}
+    self.pinOrder = {}
+    self.count = 0
+    self.hidden = true
+
+    Groups:PersistGroup(self)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
+end
+
+---@return boolean
+function MapPinEnhancedGroupMixin:ShowGroup()
+    if not self.hidden then return false end
+
+    self.hidden = false
+    for pinID, archivedPin in pairs(self.pinArchive) do
+        self.pinOrder[pinID] = archivedPin.order or GetTime()
+        self.pinArchive[pinID] = nil
+        self:AddPin(archivedPin.data, pinID, true, true)
+    end
+
+    Groups:PersistGroup(self)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
+end
+
+---@return boolean
+function MapPinEnhancedGroupMixin:ClearGroup()
+    if not self.protected then return false end
+
+    for pinID in pairs(self.pins) do
+        Pins:ReleasePin(pinID)
+    end
+    self.pins = {}
+    self.pinOrder = {}
+    self.pinArchive = {}
+    self.count = 0
+
+    Groups:PersistGroup(self)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
+end
+
 ---@param pinIDs UUID[]
 function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
     assert(pinIDs, "MapPinEnhancedGroupMixin:RemoveMultiplePins: pinIDs is nil")
@@ -178,7 +428,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
 
     if numberOfPins < 50 then
         for _, pinID in ipairs(pinIDs) do
-            self:RemovePin(pinID, true)
+            self:RemovePin(pinID, true, true)
         end
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -187,7 +437,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
     local removingPinsFunctions = {}
     for _, pinID in ipairs(pinIDs) do
         table.insert(removingPinsFunctions, function()
-            self:RemovePin(pinID, true)
+            self:RemovePin(pinID, true, true)
         end)
     end
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
@@ -203,10 +453,31 @@ function MapPinEnhancedGroupMixin:EnumeratePins()
     return pairs(self.pins)
 end
 
+function MapPinEnhancedGroupMixin:EnumerateArchivedPins()
+    return pairs(self.pinArchive)
+end
+
+function MapPinEnhancedGroupMixin:GetAllPinData()
+    local pins = {}
+    for _, pin in self:EnumeratePins() do
+        table.insert(pins, pin:GetSaveableData())
+    end
+    for _, archivedPin in self:EnumerateArchivedPins() do
+        table.insert(pins, archivedPin.data)
+    end
+    return pins
+end
+
 function MapPinEnhancedGroupMixin:GetPinByID(pinID)
     assert(pinID, "MapPinEnhancedGroupMixin:GetPinByID: pinID is nil")
     assert(type(pinID) == "string", "MapPinEnhancedGroupMixin:GetPinByID: pinID must be a string")
     return self.pins[pinID]
+end
+
+function MapPinEnhancedGroupMixin:GetArchivedPinByID(pinID)
+    assert(pinID, "MapPinEnhancedGroupMixin:GetArchivedPinByID: pinID is nil")
+    assert(type(pinID) == "string", "MapPinEnhancedGroupMixin:GetArchivedPinByID: pinID must be a string")
+    return self.pinArchive[pinID]
 end
 
 function MapPinEnhancedGroupMixin:GetPinCount()
@@ -256,23 +527,34 @@ function MapPinEnhancedGroupMixin:GetOrder()
 end
 
 ---@class SaveableGroupData : GroupInfo
----@field pins SaveablePinData[] a table of pin data that belongs to this group
----@field pinOrder table<UUID, number> a table of pin order values keyed by pinID
+---@field groupID UUID
+---@field hidden boolean
+---@field pins SaveablePinData[] active pin data that belongs to this group
+---@field pinOrder table<UUID, number> a table of active pin order values keyed by pinID
+---@field pinArchive table<UUID, ArchivedPinData>
 
 ---@return SaveableGroupData
 function MapPinEnhancedGroupMixin:GetSaveableData()
     local data = {
+        groupID = self.groupID,
         name = self.name,
         source = self.source,
         icon = self.icon,
         order = self.order,
+        hidden = self.hidden,
+        systemType = self.systemType,
         pins = {},
-        pinOrder = {}
+        pinOrder = {},
+        pinArchive = {},
     }
     ---@cast data SaveableGroupData
 
     for pinID, savedOrder in pairs(self.pinOrder) do
         data.pinOrder[pinID] = savedOrder
+    end
+
+    for pinID, archivedPin in pairs(self.pinArchive) do
+        data.pinArchive[pinID] = CopyTable(archivedPin)
     end
 
     for _, pin in self:EnumeratePins() do
@@ -301,7 +583,7 @@ function MapPinEnhancedGroupMixin:TrackClosestPin()
         local pinData = pin:GetPinData()
         local mapID, x, y = pinData.mapID, pinData.x, pinData.y
         local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
-        if not nearestPin or (distance > 0 and distance < nearestPin.distance) then -- there is no nearest pin or the current iteration pin is closer
+        if not nearestPin or (distance > 0 and distance < nearestPin.distance) then
             nearestPin = {
                 pin = pin,
                 distance = distance
