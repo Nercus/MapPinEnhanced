@@ -34,6 +34,8 @@ function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
             label = L["Hidden Groups"],
         }
     }
+
+    ---@type MapPinEnhancedGroupMixin[]
     local hiddenGroups = {}
 
     ---@param group MapPinEnhancedGroupMixin
@@ -45,12 +47,15 @@ function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
 
     table.sort(hiddenGroups, SortGroupsByOrder)
 
+
+
     if #hiddenGroups == 0 then
-        table.insert(menu, {
-            type = "title",
-            label = L["No hidden groups"],
-        })
-        return menu
+        return {
+            {
+                type = "title",
+                label = L["No hidden groups"],
+            },
+        }
     end
 
     for _, group in ipairs(hiddenGroups) do
