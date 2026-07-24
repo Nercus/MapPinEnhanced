@@ -281,6 +281,8 @@ function Groups:RestoreAllGroups()
     end
 end
 
+---@return fun(): MapPinEnhancedGroupMixin
+---@return any
 function Groups:EnumerateGroups()
     local groupsPool = Groups:GetObjectPool()
     return groupsPool:EnumerateActive()

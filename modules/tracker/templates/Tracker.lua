@@ -290,7 +290,7 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
 
     self.header:SetTitle(string.format(L["Pins (%d/%d)"], reachedPins, totalPins))
     self.header:SetIcon("pin")
-    self.header.hiddenGroupsButton:SetIconTexture("collection")
+    self.header.hiddenGroupsButton:SetIconTexture("tick")
 end
 
 function MapPinEnhancedTrackerMixin:UpdateViewLayout()

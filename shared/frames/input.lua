@@ -60,6 +60,7 @@ function MapPinEnhancedInputMixin:SetPlaceholderFont(placeholderFont)
     assert(type(placeholderFont) == "string",
         "MapPinEnhancedInputMixin:SetPlaceholderFont: placeholderFont must be a string")
 
+    ---@type FontObject?
     local fontObject = _G[placeholderFont]
     assert(fontObject, "MapPinEnhancedInputMixin:SetPlaceholderFont: unknown font object: " .. placeholderFont)
     self.placeholderText:SetFontObject(fontObject)

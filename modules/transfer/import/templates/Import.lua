@@ -7,19 +7,13 @@ local L = MapPinEnhanced.L
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
----@class MapPinEnhancedImportWindowCollectionDropdown : MapPinEnhancedDropdownTemplate
----@field fadeIn Animation
----@field fadeOut Animation
 
----@class MapPinEnhancedImportWindowNewCollectionInput : MapPinEnhancedInputTemplate
----@field fadeIn Animation
----@field fadeOut Animation
+
 
 ---@class MapPinEnhancedImportWindowTemplate : MapPinEnhancedWindowTemplate
 ---@field importButton MapPinEnhancedButtonTemplate
 ---@field cancelButton MapPinEnhancedButtonTemplate
 ---@field textarea MapPinEnhancedTextareaTemplate
----@field newCollectionNameInput MapPinEnhancedImportWindowNewCollectionInput
 ---@field description FontString
 ---@field summary FontString
 ---@field dataString string?
@@ -33,8 +27,11 @@ MapPinEnhancedImportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 ---@param data SaveableGroupData | pinData[]
 ---@param dataType "group" | "pins"
 ---@param groupName string
+---@return boolean
 function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupName)
+    ---@type string?
     local icon
+    ---@type SaveablePinData[]|pinData[]?
     local pins
     if dataType == "group" then
         icon = data.icon
@@ -64,6 +61,7 @@ end
 
 ---@param data SaveableGroupData | pinData[]
 ---@param dataType "group" | "pins"
+---@return boolean
 function MapPinEnhancedImportWindowMixin:Import(data, dataType)
     if not self.groupName or not Groups:IsValidGroupName(self.groupName) then return false end
     if Groups:GetGroupByName(self.groupName) then
@@ -166,7 +164,6 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
             data.pins = pins
             if data.name then
                 self.groupName = data.name
-                self.newCollectionNameInput:SetValue(data.name, true)
             end
         else
             data = pins
@@ -203,18 +200,6 @@ function MapPinEnhancedImportWindowMixin:SetupTextArea()
     })
 end
 
-function MapPinEnhancedImportWindowMixin:SetupNewCollectionInput()
-    self.newCollectionNameInput:Setup({
-        onChange = function(text)
-            self.groupName = text
-            self:UpdateImportButtonDisabledState()
-        end,
-    })
-    self.newCollectionNameInput:SetPlaceholderText(L["Enter group name"])
-    self.groupName = Groups:GetAvailableImportGroupName()
-    self.newCollectionNameInput:SetValue(self.groupName, true)
-end
-
 function MapPinEnhancedImportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
 
@@ -231,6 +216,7 @@ function MapPinEnhancedImportWindowMixin:OnLoad()
         ["You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"]
     self.description:SetText(string.format(descriptionText, MapPinEnhanced.PREFIX))
     self:SetupTextArea()
-    self:SetupNewCollectionInput()
     self:UpdateImportButtonDisabledState()
+
+    self.groupName = Groups:GetAvailableImportGroupName()
 end

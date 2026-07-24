@@ -81,7 +81,7 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
         return { CleanPinData(target:GetPinData()) }
     end
 
-    ---@type SaveableGroupData
+    ---@type table<string, any>
     local data = CopyTable(target:GetSaveableData())
     data["source"] = nil
     data["hidden"] = nil
@@ -89,10 +89,12 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     data["pinOrder"] = nil
     data["pinArchive"] = nil
     data["groupID"] = nil
-    data.pins = target:GetAllPinData()
-    for index, pinData in ipairs(data.pins) do
-        data.pins[index] = CleanPinData(pinData)
+    ---@type pinData[]
+    local cleanedPins = {}
+    for _, pinData in ipairs(target:GetAllPinData()) do
+        table.insert(cleanedPins, CleanPinData(pinData))
     end
+    data.pins = cleanedPins
     return data
 end
 

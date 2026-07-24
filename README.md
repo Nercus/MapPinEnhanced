@@ -37,7 +37,7 @@ You can do these things with Map Pin Enhanced:
 - Set as many waypoints as you want (no "one-waypoint" limit).
 - Set waypoints via command: _/mph_, _/mpe or _/way_.
 - A pin tracker to see a list of all your pins.
-- A collection editor to create and manage your collections.
+- An editor to create and manage your groups.
 - Many improvements to the in-game waypoint system
 
 ## Pin Tracker
@@ -45,12 +45,6 @@ You can do these things with Map Pin Enhanced:
 <div align="center">
   <img width="50%" src=".github/media/PinTracker.png" />
   <p> Save multiple Pins | Change the pin title | Customize the pin color | Ping the pin on the map | Lock the pin | Share the pin </p>
-</div>
-
-## Collection Editor
-
-<div align="center">
-  <img width="100%" src=".github/media/SetEditor.png" />
 </div>
 
 ## Importing and Exporting Pins

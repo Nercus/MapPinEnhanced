@@ -31,16 +31,10 @@
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-110" />
                 </Anchors>
             </ScrollFrame>
-            <EditBox inherits="MapPinEnhancedInputTemplate" parentKey="newCollectionNameInput">
-                <Size x="200" y="30" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.textarea" relativePoint="TOPRIGHT" x="10" y="0" />
-                </Anchors>
-            </EditBox>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="30" />
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="15" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="25" />
                 </Anchors>
             </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">

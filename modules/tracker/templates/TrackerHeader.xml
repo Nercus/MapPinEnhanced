@@ -58,7 +58,7 @@
             <Button parentKey="hiddenGroupsButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="collection" />
+                    <KeyValue key="icon" value="tick" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton" relativePoint="LEFT" />

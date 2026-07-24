@@ -42,6 +42,7 @@ local ARCHIVE_STATE_REACHED = "reached"
 local ARCHIVE_STATE_HIDDEN = "hidden"
 
 local function CopySaveablePinData(pinData, pinID)
+    ---@type SaveablePinData
     local saveablePinData = CopyTable(pinData)
     saveablePinData.pinID = pinID or saveablePinData.pinID or MapPinEnhanced:GenerateUUID("pin")
     saveablePinData.setTracked = nil
@@ -317,7 +318,7 @@ function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
     return true
 end
 
----@param state "reached"|"hidden"
+---@param state "reached"|"hidden"?
 ---@return number
 function MapPinEnhancedGroupMixin:GetArchiveCount(state)
     local count = 0
@@ -457,6 +458,7 @@ function MapPinEnhancedGroupMixin:EnumerateArchivedPins()
     return pairs(self.pinArchive)
 end
 
+---@return SaveablePinData[]
 function MapPinEnhancedGroupMixin:GetAllPinData()
     local pins = {}
     for _, pin in self:EnumeratePins() do
