@@ -5,8 +5,6 @@
     <Button name="MapPinEnhancedTrackerGroupEntryTemplate" virtual="true" mixin="MapPinEnhancedTrackerGroupEntryMixin">
         <KeyValues>
             <KeyValue key="template" value="MapPinEnhancedTrackerGroupEntryTemplate" />
-            <KeyValue key="expandedTexture" value="common-icon-minus" />
-            <KeyValue key="collapsedTexture" value="common-icon-plus" />
         </KeyValues>
         <Size x="300" y="35" />
         <Layers>

@@ -20,7 +20,8 @@ local RIGHT_PADDING = 5
 local MIN_LINE_WIDTH = 20
 
 function MapPinEnhancedTrackerGroupEntryMixin:IsFullyReached()
-    return self.group and not self.group:IsHidden() and self.group:GetTotalPinCount() > 0 and self.group:GetPinCount() == 0
+    return self.group and not self.group:IsHidden() and self.group:GetTotalPinCount() > 0 and
+        self.group:GetPinCount() == 0
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:CanExpandGroup()
@@ -35,9 +36,9 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateExpandIcon()
 
     self.expandIcon:Show()
     if self.treeNode:IsCollapsed() then
-        self.expandIcon:SetAtlas(self.collapsedTexture)
+        self.expandIcon:SetAtlas("common-icon-plus")
     else
-        self.expandIcon:SetAtlas(self.expandedTexture)
+        self.expandIcon:SetAtlas("common-icon-minus")
     end
 end
 
@@ -87,15 +88,17 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
-    Dialogs:ShowConfirmDialog(L["Delete Group"], string.format(L["Delete group \"%s\" and all of its pins?"], self.group:GetName()), function()
-        Groups:DeleteGroup(self.group)
-    end)
+    Dialogs:ShowConfirmDialog(L["Delete Group"],
+        string.format(L["Delete group \"%s\" and all of its pins?"], self.group:GetName()), function()
+            Groups:DeleteGroup(self.group)
+        end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
-    Dialogs:ShowConfirmDialog(L["Clear Group"], string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()), function()
-        self.group:ClearGroup()
-    end)
+    Dialogs:ShowConfirmDialog(L["Clear Group"], string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
+        function()
+            self.group:ClearGroup()
+        end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:CanRenameGroup()
@@ -116,6 +119,26 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddDeleteOrClearMenuAction(menu)
             onClick = function() self:ConfirmDeleteGroup() end,
         })
     end
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
+    if not self:CanRenameGroup() then return end
+
+    local group = self.group
+    table.insert(menu, {
+        type = "template",
+        template = "MapPinEnhancedMenuTitleActionTemplate",
+        data = {
+            label = group:GetName(),
+            icon = "edit",
+            onClick = function()
+                Dialogs:ShowRenameGroupDialog(group)
+            end,
+        },
+    })
+    table.insert(menu, {
+        type = "divider",
+    })
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
@@ -150,13 +173,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     local menu = {}
 
     if group:IsHidden() then
-        if self:CanRenameGroup() then
-            table.insert(menu, {
-                type = "button",
-                label = L["Rename Group"],
-                onClick = function() Dialogs:ShowRenameGroupDialog(group) end,
-            })
-        end
+        self:AddRenameMenuHeader(menu)
         table.insert(menu, {
             type = "button",
             label = L["Show Group"],
@@ -174,13 +191,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         return self:BuildFullyReachedMenu()
     end
 
-    if self:CanRenameGroup() then
-        table.insert(menu, {
-            type = "button",
-            label = L["Rename Group"],
-            onClick = function() Dialogs:ShowRenameGroupDialog(group) end,
-        })
-    end
+    self:AddRenameMenuHeader(menu)
 
     if group:GetReachedPinCount() > 0 then
         table.insert(menu, {
@@ -204,9 +215,6 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         onClick = function() Transfer:ShowExportWindow(group) end,
     })
 
-    table.insert(menu, {
-        type = "divider",
-    })
 
     self:AddDeleteOrClearMenuAction(menu)
 
