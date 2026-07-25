@@ -35,7 +35,7 @@ end
 function MapPinEnhancedInputMixin:UpdatePlaceholderPosition()
     local leftInset = self:GetTextInsets() or 0
     self.placeholderText:ClearAllPoints()
-    self.placeholderText:SetPoint("LEFT", self, "LEFT", leftInset, 0)
+    self.placeholderText:SetPoint("LEFT", self, "LEFT", leftInset + 3, 0)
 end
 
 function MapPinEnhancedInputMixin:UpdateClearButtonVisibility()
@@ -68,7 +68,7 @@ end
 
 function MapPinEnhancedInputMixin:ResetInline()
     self.inlineLabel:Hide()
-    self:SetTextInsets(10, 5, 0, 0)
+    self:SetTextInsets(13, 0, 0, 0)
     self:UpdatePlaceholderPosition()
 end
 
@@ -81,7 +81,7 @@ function MapPinEnhancedInputMixin:SetInlineLabel(label)
     self.inlineLabel:Show()
     local labelWidth = self.inlineLabel.text:GetStringWidth() + 20
     self.inlineLabel:SetWidth(labelWidth)
-    self:SetTextInsets(labelWidth, 5, 0, 0)
+    self:SetTextInsets(labelWidth + 3, 5, 0, 0)
     self.inlineLabel.icon:Hide()
     self.inlineLabel.text:Show()
     self.inlineLabel.bg:Show()

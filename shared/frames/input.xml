@@ -50,7 +50,12 @@
                 <Size x="100" y="20" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture atlas="plunderstorm-icon-key" setAllPoints="true" parentKey="bg" />
+                        <Texture atlas="generic-frame-chamfered-12d-2o" parentKey="bg" scale="0.5">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="2" y="-1" />
+                                <Anchor point="BOTTOMRIGHT" x="-2" y="4" />
+                            </Anchors>
+                        </Texture>
                         <FontString parentKey="text" inherits="GameFontNormalSmall" justifyH="CENTER" justifyV="MIDDLE">
                             <Anchors>
                                 <Anchor point="CENTER" />
