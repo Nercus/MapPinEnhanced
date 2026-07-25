@@ -9,18 +9,6 @@
         <Size x="315" y="1" />
         <Frames>
             <Frame parentKey="header" frameStrata="HIGH" propagateMouseInput="Motion" inherits="MapPinEnhancedTrackerHeaderTemplate" />
-            <EditBox parentKey="searchBox" inherits="MapPinEnhancedInputTemplate" hidden="true">
-                <Size x="1" y="24" />
-                <KeyValues>
-                    <KeyValue key="icon" value="search" />
-                    <KeyValue key="placeholder" value="Search groups..." />
-                    <KeyValue key="clearOnEscape" value="true" type="boolean" />
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" x="5" y="-4" />
-                    <Anchor point="TOPRIGHT" relativeKey="$parent.header" relativePoint="BOTTOMRIGHT" x="-5" y="-4" />
-                </Anchors>
-            </EditBox>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" x="5" y="0" />

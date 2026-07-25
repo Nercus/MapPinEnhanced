@@ -9,7 +9,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
----@field searchBox MapPinEnhancedInputTemplate
 MapPinEnhancedTrackerMixin = {}
 
 ---@class Groups
@@ -249,10 +248,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
-    self.searchBox:Setup({
-        onChange = function() end,
-    })
-
     self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
 
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function(_, group, pin)
@@ -295,8 +290,6 @@ end
 
 function MapPinEnhancedTrackerMixin:UpdateViewLayout()
     self.scrollBox:ClearAllPoints()
-    self.searchBox:Hide()
-    self.searchBox:ClearFocus()
     self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
     self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
 end
