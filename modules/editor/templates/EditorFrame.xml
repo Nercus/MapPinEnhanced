@@ -2,11 +2,379 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="EditorFrame.lua" />
 
+    <Button name="MapPinEnhancedEditorGroupEntryTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupEntryMixin">
+        <Size x="820" y="82" />
+        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight" setAllPoints="true" alpha="0.18">
+            <Color r="1" g="0.82" b="0" a="1" />
+        </HighlightTexture>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.55">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="4" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="1">
+                <Texture parentKey="expandIcon" atlas="common-icon-plus">
+                    <Size x="14" y="14" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="12" y="0" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
+                    <Size x="34" y="34" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="10" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="34" y="34" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="10" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon" />
+                    </MaskedTextures>
+                </MaskTexture>
+                <FontString parentKey="groupLabel" inherits="GameFontNormalLarge" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeKey="$parent.icon" x="12" y="-10" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="hiddenStatus" inherits="GameFontDisableSmall" justifyH="LEFT">
+                    <Color r="1" g="0.45" b="0.1" a="1" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="12" y="-14" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="pinCount" inherits="GameFontNormalSmall" justifyH="RIGHT">
+                    <Anchors>
+                        <Anchor point="RIGHT" x="-16" y="14" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="ARTWORK" textureSubLevel="2">
+                <Texture atlas="auctionhouse-itemicon-border-color">
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-4" y="4" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="4" y="-4" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <EditBox parentKey="nameInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="210" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Name" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="170" y="-13" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="iconInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="300" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Icon" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.nameInput" x="10" />
+                </Anchors>
+            </EditBox>
+            <CheckButton parentKey="hiddenCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
+                <Size x="72" y="25" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.iconInput" x="12" />
+                </Anchors>
+            </CheckButton>
+            <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="trash" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-14" y="0" />
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnMouseDown method="OnMouseDown" />
+            <OnMouseUp method="OnMouseUp" />
+            <OnReceiveDrag method="OnReceiveDrag" />
+        </Scripts>
+    </Button>
+
+    <Button name="MapPinEnhancedEditorPinEntryTemplate" virtual="true" mixin="MapPinEnhancedEditorPinEntryMixin" registerForDrag="LeftButton">
+        <Size x="820" y="122" />
+        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight" setAllPoints="true" alpha="0.16">
+            <Color r="1" g="0.82" b="0" a="1" />
+        </HighlightTexture>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.22">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="22" y="-4" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="dragIcon" atlas="common-icon-forwardarrow">
+                    <Size x="12" y="12" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="10" y="0" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dropLineBefore" atlas="SquareMask" hidden="true">
+                    <Size x="760" y="3" />
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="48" y="-2" />
+                        <Anchor point="TOPRIGHT" x="-12" y="-2" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dropLineAfter" atlas="SquareMask" hidden="true">
+                    <Size x="760" y="3" />
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="48" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="-12" y="2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" propagateMouseInput="Motion">
+                <Anchors>
+                    <Anchor point="LEFT" x="34" y="0" />
+                </Anchors>
+            </Frame>
+            <EditBox parentKey="nameInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="220" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Name" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="74" y="-34" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="colorInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="110" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Color" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.nameInput" x="10" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="iconInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="200" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Icon" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.colorInput" x="10" />
+                </Anchors>
+            </EditBox>
+            <CheckButton parentKey="atlasCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
+                <Size x="80" y="25" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.iconInput" x="10" />
+                </Anchors>
+            </CheckButton>
+            <EditBox parentKey="mapInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="130" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Map" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.nameInput" x="0" y="-12" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="xInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="96" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="X" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.mapInput" x="10" />
+                </Anchors>
+            </EditBox>
+            <EditBox parentKey="yInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="96" y="24" />
+                <KeyValues>
+                    <KeyValue key="label" value="Y" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.xInput" x="10" />
+                </Anchors>
+            </EditBox>
+            <CheckButton parentKey="lockedCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
+                <Size x="95" y="25" />
+                <Anchors>
+                    <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.yInput" x="14" />
+                </Anchors>
+            </CheckButton>
+            <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="trash" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-14" y="0" />
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnMouseDown method="OnMouseDown" />
+            <OnDragStart method="OnDragStart" />
+            <OnDragStop method="OnDragStop" />
+            <OnReceiveDrag method="OnReceiveDrag" />
+        </Scripts>
+    </Button>
+
+    <Button name="MapPinEnhancedEditorTocEntryTemplate" virtual="true" mixin="MapPinEnhancedEditorTocEntryMixin" registerForDrag="LeftButton">
+        <Size x="220" y="36" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="glow" atlas="Professions_Recipe_Active" hidden="true" setAllPoints="true">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.45" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
+                    <Size x="18" y="18" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="22" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="expandIcon" atlas="common-icon-plus">
+                    <Size x="12" y="12" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="5" y="-1" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dropLineBefore" atlas="SquareMask" hidden="true">
+                    <Size x="190" y="2" />
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="22" y="-1" />
+                        <Anchor point="TOPRIGHT" x="-4" y="-1" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="dropLineAfter" atlas="SquareMask" hidden="true">
+                    <Size x="190" y="2" />
+                    <Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="22" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="1" />
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="label" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeKey="$parent.icon" x="8" y="-4" />
+                        <Anchor point="RIGHT" x="-5" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="detail" inherits="GameFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.label" x="0" y="2" />
+                        <Anchor point="RIGHT" x="-5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick method="OnClick" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnDragStart method="OnDragStart" />
+            <OnDragStop method="OnDragStop" />
+            <OnReceiveDrag method="OnReceiveDrag" />
+        </Scripts>
+    </Button>
+
     <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" inherits="MapPinEnhancedWindowTemplate" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true" hidden="true" virtual="true">
-        <Size x="1000" y="590" />
+        <Size x="1180" y="590" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Editor" />
             <KeyValue key="windowColor" value="yellow" />
         </KeyValues>
+        <Frames>
+            <Frame parentKey="tocPanel">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="28" y="-46" />
+                    <Anchor point="BOTTOMLEFT" x="28" y="26" />
+                </Anchors>
+                <Size x="250" y="1" />
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.28">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-4" y="4" />
+                                <Anchor point="BOTTOMRIGHT" x="4" y="-4" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="tocTitle" inherits="GameFontNormal" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="10" y="-8" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Frames>
+                    <EditBox parentKey="tocSearch" inherits="MapPinEnhancedInputTemplate">
+                        <Size x="198" y="24" />
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-32" />
+                        </Anchors>
+                    </EditBox>
+                    <Button parentKey="createGroupButton" inherits="MapPinEnhancedIconButtonTemplate">
+                        <Size x="24" y="24" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="plus" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.tocSearch" x="8" y="0" />
+                        </Anchors>
+                    </Button>
+                    <Frame parentKey="tocScrollBox" inherits="WowScrollBoxList">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.tocSearch" relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                            <Anchor point="BOTTOMRIGHT" x="-18" y="8" />
+                        </Anchors>
+                    </Frame>
+                    <EventFrame parentKey="tocScrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.tocScrollBox" relativePoint="TOPRIGHT" x="4" y="-5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.tocScrollBox" relativePoint="BOTTOMRIGHT" x="4" y="0" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
+            </Frame>
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="310" y="-46" />
+                    <Anchor point="BOTTOMRIGHT" x="-46" y="26" />
+                </Anchors>
+            </Frame>
+            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="8" y="-5" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="8" y="0" />
+                </Anchors>
+            </EventFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
     </Frame>
 </Ui>

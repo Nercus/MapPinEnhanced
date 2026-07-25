@@ -31,6 +31,17 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
+
+---Normalizes a coordinate to a value between 0 and 1
+---@param value number
+---@return number
+local function NormalizeCoordinate(value)
+    if value > 1 then
+        return value / 100
+    end
+    return value
+end
+
 function Pins:GetFramePool()
     if not self.framePool then
         self.framePool = CreateFramePoolCollection()
@@ -67,12 +78,8 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self:Init(self.pinID) -- we need to recall init when the pin is reused as the frames are released back when reset
     end
     self.pinData = pinData
-    if (self.pinData.x > 1) then
-        self.pinData.x = self.pinData.x / 100
-    end
-    if (self.pinData.y > 1) then
-        self.pinData.y = self.pinData.y / 100
-    end
+    self.pinData.x = NormalizeCoordinate(self.pinData.x)
+    self.pinData.y = NormalizeCoordinate(self.pinData.y)
 
     if not self.pinData.title or self.pinData.title == "" then
         self.pinData.title = DEFAULT_PIN_NAME
@@ -118,6 +125,40 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
         self:Reset()
         MapPinEnhanced:Notify(L["Failed to place pin on the map. Please check if the coordinates are correct!"], "ERROR")
     end
+end
+
+---@param mapID number
+---@param x number
+---@param y number
+function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
+    assert(mapID, "MapPinEnhancedPinMixin:SetPinPosition: mapID is nil")
+    assert(type(mapID) == "number", "MapPinEnhancedPinMixin:SetPinPosition: mapID must be a number")
+    assert(x, "MapPinEnhancedPinMixin:SetPinPosition: x is nil")
+    assert(type(x) == "number", "MapPinEnhancedPinMixin:SetPinPosition: x must be a number")
+    assert(y, "MapPinEnhancedPinMixin:SetPinPosition: y is nil")
+    assert(type(y) == "number", "MapPinEnhancedPinMixin:SetPinPosition: y must be a number")
+
+    x = NormalizeCoordinate(x)
+    y = NormalizeCoordinate(y)
+
+    if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return end
+
+    local wasTracked = self:IsTracked()
+    if wasTracked then
+        MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
+    end
+
+    self.pinData.mapID = mapID
+    self.pinData.x = x
+    self.pinData.y = y
+    self.pinData.setTracked = wasTracked
+
+    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
+    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
+
+    self:SetPinData(self.pinData)
+    self:PersistPin()
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self.group)
 end
 
 function MapPinEnhancedPinMixin:GetPinData()
