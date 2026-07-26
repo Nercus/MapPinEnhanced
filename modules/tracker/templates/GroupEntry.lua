@@ -102,7 +102,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:CanRenameGroup()
-    return not self.group:IsProtected() or self.group.systemType == "ungrouped"
+    return not self.group:IsProtected() or self.group.groupType == "ungrouped"
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:AddDeleteOrClearMenuAction(menu)
@@ -138,6 +138,37 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
     })
     table.insert(menu, {
         type = "divider",
+    })
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:AddTrackingModeMenu(menu)
+    local group = self.group
+    if group:IsHidden() or group:IsProtected() then return end
+
+    local entries = {}
+    for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
+        local mode = option.value
+        local label = option.label
+        table.insert(entries, {
+            type = "radio",
+            label = label,
+            isSelected = function()
+                return group:GetTrackingMode() == mode
+            end,
+            setSelected = function()
+                group:SetTrackingMode(mode)
+            end,
+            data = mode,
+        })
+    end
+
+    table.insert(menu, {
+        type = "submenu",
+        entry = {
+            type = "button",
+            label = L["Tracking Mode"],
+        },
+        entries = entries,
     })
 end
 
@@ -192,6 +223,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     end
 
     self:AddRenameMenuHeader(menu)
+    self:AddTrackingModeMenu(menu)
 
     if group:GetReachedPinCount() > 0 then
         table.insert(menu, {

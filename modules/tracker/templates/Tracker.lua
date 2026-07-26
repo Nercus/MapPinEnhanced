@@ -20,6 +20,27 @@ local L = MapPinEnhanced.L
 
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate'
 
+---@param group MapPinEnhancedGroupMixin
+---@param pin1 MapPinEnhancedPinMixin
+---@param pin2 MapPinEnhancedPinMixin
+---@return boolean
+local function IsPinBefore(group, pin1, pin2)
+    local order1 = group:GetPinOrder(pin1.pinID)
+    local order2 = group:GetPinOrder(pin2.pinID)
+
+    if order1 ~= order2 then
+        return order1 > order2
+    end
+
+    local title1 = pin1.pinData.title or pin1.pinID or ""
+    local title2 = pin2.pinData.title or pin2.pinID or ""
+    if title1 ~= title2 then
+        return title1 < title2
+    end
+
+    return (pin1.pinID or "") < (pin2.pinID or "")
+end
+
 ---@param groupnode1 TreeNodeMixin
 ---@param groupnode2 TreeNodeMixin
 ---@return boolean
@@ -52,16 +73,11 @@ local function PinSortComparator(pinNode1, pinNode2)
 
     local group1 = pin1.group
     local group2 = pin2.group
-    local order1 = group1 and group1:GetPinOrder(pin1.pinID) or 0
-    local order2 = group2 and group2:GetPinOrder(pin2.pinID) or 0
-
-    if order1 ~= order2 then
-        return order1 > order2
+    if group1 and group1 == group2 then
+        return IsPinBefore(group1, pin1, pin2)
     end
 
-    local title1 = pin1.pinData.title or pin1.pinID or ""
-    local title2 = pin2.pinData.title or pin2.pinID or ""
-    return title1 < title2
+    return false
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -94,6 +110,15 @@ function MapPinEnhancedTrackerMixin:UpdateList()
     self:UpdatePinList()
 end
 
+function MapPinEnhancedTrackerMixin:UpdateListAndScrollToTrackedPin()
+    if not self:IsShown() then return end
+
+    self:UpdateList()
+    self:UpdateHeight()
+    self:UpdateTrackerHeader()
+    self:ScrollToTrackedPin()
+end
+
 ---@param group MapPinEnhancedGroupMixin
 ---@param pin MapPinEnhancedPinMixin
 function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
@@ -111,7 +136,8 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
         groupNode:SetSortComparator(PinSortComparator, false, false)
     end
     groupNode:Insert(pin)
-    groupNode:Invalidate() -- we invalidate here to trigger a resort
+    groupNode:Sort()
+    groupNode:Invalidate()
     self:RefreshGroupEntry(group)
     self:UpdateTrackerHeader()
 end
@@ -151,6 +177,19 @@ function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
 
     local trackedPin = Pins:GetTrackedPin()
     if not trackedPin then return end
+
+    local trackedGroup = trackedPin.group
+    if trackedGroup then
+        ---@type TreeNode?
+        local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
+            ---@type MapPinEnhancedGroupMixin
+            local nodeData = node:GetData()
+            return nodeData.classification == "group" and nodeData:GetGroupID() == trackedGroup:GetGroupID()
+        end, TreeDataProviderConstants.IncludeCollapsed)
+        if groupNode then
+            groupNode:SetCollapsed(false)
+        end
+    end
 
     self.scrollBox:ScrollToElementDataByPredicate(function(node)
         ---@type MapPinEnhancedPinMixin
@@ -254,18 +293,23 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         ---@cast group MapPinEnhancedGroupMixin
         ---@cast pin MapPinEnhancedPinMixin
         self:AddPinToGroup(group, pin)
+        self:ScrollToTrackedPin()
     end)
 
     MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pin)
         ---@cast group MapPinEnhancedGroupMixin
         ---@cast pin MapPinEnhancedPinMixin
         self:RemovePinFromGroup(group, pin)
+        self:ScrollToTrackedPin()
     end)
 
     MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()
-        if not self:IsShown() then return end
-        self:UpdateList()
-        self:UpdateHeight()
+        self:UpdateListAndScrollToTrackedPin()
+    end)
+
+    MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", function(_, _, isTracked)
+        if not isTracked then return end
+        self:ScrollToTrackedPin()
     end)
 end
 
@@ -300,8 +344,8 @@ function MapPinEnhancedTrackerMixin:ShowFrame()
     self:UpdateList()
     self:UpdateHeight()
     self:UpdateTrackerHeader()
-    self:ScrollToTrackedPin()
     self:Show()
+    self:ScrollToTrackedPin()
 end
 
 function MapPinEnhancedTrackerMixin:HideFrame()

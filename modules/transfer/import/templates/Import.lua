@@ -24,6 +24,59 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field invalidPinCount number
 MapPinEnhancedImportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
+---@param usedPinIDs table<UUID, boolean>
+---@return UUID
+local function GenerateUnusedPinID(usedPinIDs)
+    local pinID = MapPinEnhanced:GenerateUUID("pin")
+    while Groups:IsPinIDInUse(pinID) or usedPinIDs[pinID] do
+        pinID = MapPinEnhanced:GenerateUUID("pin")
+    end
+    usedPinIDs[pinID] = true
+    return pinID
+end
+
+---@param data SaveableGroupData
+---@return SaveablePinData[]
+---@return table<UUID, number>
+local function PrepareGroupImportData(data)
+    ---@type SaveablePinData[]
+    local pins = {}
+    ---@type table<UUID, number>
+    local pinOrder = {}
+    ---@type table<UUID, UUID>
+    local pinIDMap = {}
+    ---@type table<UUID, boolean>
+    local usedPinIDs = {}
+
+    for _, pinData in ipairs(data.pins or {}) do
+        local importedPinData = CopyTable(pinData)
+        ---@cast importedPinData SaveablePinData
+        local oldPinID = importedPinData.pinID
+        local newPinID = oldPinID
+
+        if not newPinID or Groups:IsPinIDInUse(newPinID) or usedPinIDs[newPinID] then
+            newPinID = GenerateUnusedPinID(usedPinIDs)
+        else
+            usedPinIDs[newPinID] = true
+        end
+
+        importedPinData.pinID = newPinID
+        if oldPinID then
+            pinIDMap[oldPinID] = newPinID
+        end
+        table.insert(pins, importedPinData)
+    end
+
+    for oldPinID, order in pairs(data.pinOrder or {}) do
+        local newPinID = pinIDMap[oldPinID]
+        if newPinID then
+            pinOrder[newPinID] = order
+        end
+    end
+
+    return pins, pinOrder
+end
+
 ---@param data SaveableGroupData | pinData[]
 ---@param dataType "group" | "pins"
 ---@param groupName string
@@ -33,9 +86,14 @@ function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupN
     local icon
     ---@type SaveablePinData[]|pinData[]?
     local pins
+    ---@type table<UUID, number>?
+    local pinOrder
+    ---@type GroupTrackingMode?
+    local trackingMode
     if dataType == "group" then
         icon = data.icon
-        pins = data.pins
+        trackingMode = data.trackingMode
+        pins, pinOrder = PrepareGroupImportData(data)
     elseif dataType == "pins" then
         pins = data
     end
@@ -45,9 +103,13 @@ function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupN
         source = MapPinEnhanced.name,
         icon = icon,
         order = GetTime(),
+        trackingMode = trackingMode,
     })
     if not group then return false end
 
+    for pinID, order in pairs(pinOrder or {}) do
+        group:SetPinOrder(pinID, order, true)
+    end
     group:AddMultiplePins(pins or {})
     return true
 end

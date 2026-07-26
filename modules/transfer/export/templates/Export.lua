@@ -32,11 +32,14 @@ local prefixOptions = {
 }
 
 ---@param pinData SaveablePinData | pinData
+---@param keepPinID boolean?
 ---@return pinData
-local function CleanPinData(pinData)
+local function CleanPinData(pinData, keepPinID)
     ---@type SaveablePinData | pinData
     local cleanPinData = CopyTable(pinData)
-    cleanPinData.pinID = nil
+    if not keepPinID then
+        cleanPinData.pinID = nil
+    end
     cleanPinData.setTracked = nil
     ---@cast cleanPinData pinData
     return cleanPinData
@@ -85,14 +88,20 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     local data = CopyTable(target:GetSaveableData())
     data["source"] = nil
     data["hidden"] = nil
-    data["systemType"] = nil
-    data["pinOrder"] = nil
+    data["groupType"] = nil
     data["pinArchive"] = nil
     data["groupID"] = nil
+    data["pinOrder"] = data["pinOrder"] or {}
+    ---@cast data SaveableGroupData
+
+    for pinID, archivedPin in target:EnumerateArchivedPins() do
+        data["pinOrder"][pinID] = archivedPin.order or GetTime()
+    end
+
     ---@type pinData[]
     local cleanedPins = {}
     for _, pinData in ipairs(target:GetAllPinData()) do
-        table.insert(cleanedPins, CleanPinData(pinData))
+        table.insert(cleanedPins, CleanPinData(pinData, true))
     end
     data.pins = cleanedPins
     return data

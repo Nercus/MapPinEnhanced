@@ -62,3 +62,19 @@ MapPinEnhanced:RegisterGlobalAPI("MarkPinReached", function(pinID)
     end
     return false
 end)
+
+MapPinEnhanced:RegisterGlobalAPI("GetGroupTrackingMode", function(groupID)
+    local group = Groups:GetGroupByID(groupID)
+    if not group then return nil end
+    return group:GetTrackingMode()
+end)
+
+MapPinEnhanced:RegisterGlobalAPI("SetGroupTrackingMode", function(groupID, mode)
+    if not Groups:IsValidTrackingMode(mode) then
+        error("MapPinEnhanced.SetGroupTrackingMode: invalid tracking mode")
+    end
+
+    local group = Groups:GetGroupByID(groupID)
+    if not group then return false end
+    return group:SetTrackingMode(mode)
+end)

@@ -8,7 +8,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string? the icon of the group, used to display the group on the map
 ---@field order number? the order of the group in the tracker, lower numbers are higher in the list
 ---@field hidden boolean? true if this group is stored away and has no active map pins
----@field systemType "ungrouped"|"wayBack"? protected system group type
+---@field groupType "ungrouped"|"wayBack"? protected system group type
+---@field trackingMode GroupTrackingMode? controls how the next tracked pin is selected
 
 ---@class ArchivedPinData
 ---@field state "reached"|"hidden"
@@ -26,12 +27,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string?
 ---@field order number
 ---@field hidden boolean
----@field systemType "ungrouped"|"wayBack"|nil
+---@field groupType "ungrouped"|"wayBack"|nil
 ---@field protected boolean
 ---@field count number active pin count
+---@field trackingMode GroupTrackingMode
+---@field trackingCursorOrder number? runtime-only order cursor used for ordered tracking
 MapPinEnhancedGroupMixin = CreateFromMixins(
     { classification = "group" },
-    MapPinEnhancedGroupProxyMixin
+    MapPinEnhancedGroupTrackingMixin
 )
 
 ---@class Groups
@@ -41,12 +44,35 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local ARCHIVE_STATE_REACHED = "reached"
 local ARCHIVE_STATE_HIDDEN = "hidden"
 
-local function CopySaveablePinData(pinData, pinID)
+local function GetSaveablePinData(pinData, pinID)
     ---@type SaveablePinData
     local saveablePinData = CopyTable(pinData)
     saveablePinData.pinID = pinID or saveablePinData.pinID or MapPinEnhanced:GenerateUUID("pin")
     saveablePinData.setTracked = nil
     return saveablePinData
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@return number
+local function GetNextPinOrder(group)
+    ---@type number?
+    local maxOrder
+    for _, order in pairs(group.pinOrder or {}) do
+        if type(order) == "number" and (not maxOrder or order > maxOrder) then
+            maxOrder = order
+        end
+    end
+    for _, archivedPin in pairs(group.pinArchive or {}) do
+        local order = archivedPin.order
+        if type(order) == "number" and (not maxOrder or order > maxOrder) then
+            maxOrder = order
+        end
+    end
+
+    if maxOrder then
+        return maxOrder + 1
+    end
+    return GetTime()
 end
 
 function MapPinEnhancedGroupMixin:Init()
@@ -57,6 +83,8 @@ function MapPinEnhancedGroupMixin:Init()
     self.count = 0
     self.order = GetTime()
     self.hidden = false
+    self.trackingMode = Groups:GetDefaultTrackingMode()
+    self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
 end
@@ -76,7 +104,9 @@ function MapPinEnhancedGroupMixin:Reset()
     self.count = 0
     self.order = 0
     self.hidden = false
-    self.systemType = nil
+    self.groupType = nil
+    self.trackingMode = nil
+    self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
 end
@@ -89,8 +119,13 @@ function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
     self.icon = groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark"
     self.order = groupInfo.order or self.order or GetTime()
     self.hidden = groupInfo.hidden and true or false
-    self.systemType = groupInfo.systemType
-    self.protected = self.systemType ~= nil
+    self.groupType = groupInfo.groupType
+    self.protected = self.groupType ~= nil
+    if self.protected then
+        self.trackingMode = Groups.TRACKING_MODE_NEAREST
+    else
+        self.trackingMode = Groups:NormalizeTrackingMode(groupInfo.trackingMode or self.trackingMode)
+    end
 end
 
 ---@param name string
@@ -98,7 +133,7 @@ end
 function MapPinEnhancedGroupMixin:SetName(name)
     assert(name, "MapPinEnhancedGroupMixin:SetName: name is nil")
     assert(type(name) == "string", "MapPinEnhancedGroupMixin:SetName: name must be a string")
-    if self.systemType == "ungrouped" then
+    if self.groupType == "ungrouped" then
         return Groups:CreateGroupFromUngrouped(name) ~= nil
     end
     if self.protected then return false end
@@ -162,11 +197,11 @@ end
 ---@return UUID
 function MapPinEnhancedGroupMixin:ArchivePinData(pinData, state, order)
     local pinID = pinData.pinID or MapPinEnhanced:GenerateUUID("pin")
-    local saveablePinData = CopySaveablePinData(pinData, pinID)
+    local saveablePinData = GetSaveablePinData(pinData, pinID)
     self.pinArchive[pinID] = {
         state = state,
         data = saveablePinData,
-        order = order or GetTime(),
+        order = order or GetNextPinOrder(self),
     }
     return pinID
 end
@@ -199,7 +234,7 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
 
     local currentOrder = self.pinOrder[pin.pinID]
     if not currentOrder then
-        currentOrder = GetTime()
+        currentOrder = GetNextPinOrder(self)
     end
     self.pinOrder[pin.pinID] = currentOrder
 
@@ -251,6 +286,10 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
 
     local pin = self.pins[pinID]
     if pin then
+        local wasTracked = pin:IsTracked()
+        local order = self.pinOrder[pinID]
+        local nextOrderedPin = wasTracked and self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and
+            self:GetOrderedTrackablePin(order) or nil
         self.pins[pinID] = nil
         self.pinOrder[pinID] = nil
         self.count = self.count - 1
@@ -262,6 +301,13 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
 
         if not skipPersist then
             Groups:PersistGroup(self)
+        end
+        if wasTracked and not skipCallbacks then
+            if nextOrderedPin and self.pins[nextOrderedPin.pinID] then
+                nextOrderedPin:Track()
+            else
+                Groups:TrackNextPinAfterGroup(self, order)
+            end
         end
         return true
     end
@@ -294,8 +340,10 @@ function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
     if not pin then return false end
 
     local wasTracked = pin:IsTracked()
-    local saveablePinData = CopySaveablePinData(pin:GetSaveableData(), pinID)
+    local saveablePinData = GetSaveablePinData(pin:GetSaveableData(), pinID)
     local order = self.pinOrder[pinID] or GetTime()
+    local nextOrderedPin = wasTracked and self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and
+        self:GetOrderedTrackablePin(order) or nil
 
     self.pins[pinID] = nil
     self.pinOrder[pinID] = nil
@@ -311,7 +359,11 @@ function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
     Groups:PersistGroup(self)
 
     if wasTracked then
-        self:TrackClosestPin()
+        if nextOrderedPin and self.pins[nextOrderedPin.pinID] then
+            nextOrderedPin:Track()
+        else
+            Groups:TrackNextPinAfterGroup(self, order)
+        end
     end
 
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -363,8 +415,12 @@ end
 function MapPinEnhancedGroupMixin:HideGroup()
     if self.protected or self.hidden then return false end
 
+    local hadTrackedPin = false
     for pinID, pin in pairs(self.pins) do
-        local saveablePinData = CopySaveablePinData(pin:GetSaveableData(), pinID)
+        if pin:IsTracked() then
+            hadTrackedPin = true
+        end
+        local saveablePinData = GetSaveablePinData(pin:GetSaveableData(), pinID)
         self.pinArchive[pinID] = {
             state = ARCHIVE_STATE_HIDDEN,
             data = saveablePinData,
@@ -384,6 +440,9 @@ function MapPinEnhancedGroupMixin:HideGroup()
 
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    if hadTrackedPin then
+        Groups:TrackNextPinAfterGroup(self)
+    end
     return true
 end
 
@@ -534,6 +593,7 @@ end
 ---@field pins SaveablePinData[] active pin data that belongs to this group
 ---@field pinOrder table<UUID, number> a table of active pin order values keyed by pinID
 ---@field pinArchive table<UUID, ArchivedPinData>
+---@field trackingMode GroupTrackingMode?
 
 ---@return SaveableGroupData
 function MapPinEnhancedGroupMixin:GetSaveableData()
@@ -544,12 +604,16 @@ function MapPinEnhancedGroupMixin:GetSaveableData()
         icon = self.icon,
         order = self.order,
         hidden = self.hidden,
-        systemType = self.systemType,
+        groupType = self.groupType,
         pins = {},
         pinOrder = {},
         pinArchive = {},
     }
     ---@cast data SaveableGroupData
+
+    if not self:IsProtected() then
+        data.trackingMode = self:GetTrackingMode()
+    end
 
     for pinID, savedOrder in pairs(self.pinOrder) do
         data.pinOrder[pinID] = savedOrder
@@ -564,35 +628,4 @@ function MapPinEnhancedGroupMixin:GetSaveableData()
     end
 
     return data
-end
-
-function MapPinEnhancedGroupMixin:TrackNextPin()
-    for _, pin in self:EnumeratePins() do
-        local pinData = pin:GetPinData()
-        if pinData and not pin:IsTracked() then
-            pin:Track()
-            return
-        end
-    end
-end
-
-function MapPinEnhancedGroupMixin:TrackClosestPin()
-    local nearestPin = nil
-    local playerX, playerY, playerMap = MapPinEnhanced:GetPlayerMapPosition()
-    if not playerMap or not playerX or not playerY then return end
-
-    for _, pin in self:EnumeratePins() do
-        local pinData = pin:GetPinData()
-        local mapID, x, y = pinData.mapID, pinData.x, pinData.y
-        local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
-        if not nearestPin or (distance > 0 and distance < nearestPin.distance) then
-            nearestPin = {
-                pin = pin,
-                distance = distance
-            }
-        end
-    end
-    if nearestPin then
-        nearestPin.pin:Track()
-    end
 end

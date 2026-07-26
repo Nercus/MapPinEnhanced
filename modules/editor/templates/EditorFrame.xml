@@ -84,6 +84,23 @@
                     <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.nameInput" x="10" />
                 </Anchors>
             </EditBox>
+            <DropdownButton parentKey="trackingModeDropdown" inherits="MapPinEnhancedDropdownTemplate">
+                <Size x="180" y="24" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="244" y="-45" />
+                </Anchors>
+            </DropdownButton>
+            <Frame parentKey="trackingModeLabel">
+                <Size x="70" y="20" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativePoint="LEFT" relativeKey="$parent.trackingModeDropdown" x="-8" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="text" inherits="GameFontNormalSmall" justifyH="RIGHT" setAllPoints="true" />
+                    </Layer>
+                </Layers>
+            </Frame>
             <CheckButton parentKey="hiddenCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
                 <Size x="72" y="25" />
                 <Anchors>

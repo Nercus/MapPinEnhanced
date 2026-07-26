@@ -19,6 +19,9 @@ function MapPinEnhancedPinTrackingMixin:Track()
     self:PersistPin()
 
     Pins:SetTrackedPin(self)
+    if self.group then
+        self.group:SetTrackingCursorPin(self)
+    end
 
     MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, true)
     MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, self.pinID, true)

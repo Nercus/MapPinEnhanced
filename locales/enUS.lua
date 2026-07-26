@@ -97,12 +97,10 @@ L["Open the options frame"] = "Open the options frame"
 L["Toggle display of your current coordinates on the screen."] =
 "Toggle display of your current coordinates on the screen."
 
-L["Loaded set \"%s\"."] = "Loaded set \"%s\"."
+L["Toggle the group editor."] = "Toggle the group editor."
 L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
 L["Location reached at %s."] = "Location reached at %s."
-L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
 L["It is locked."] = "It is locked."
-L["Location reached at %s."] = "Location reached at %s."
 L["Cannot set waypoint on the %s map."] = "Cannot set waypoint on the %s map."
 
 L["Close"] = "Close"
@@ -127,12 +125,19 @@ L["Delete group \"%s\" and all of its pins?"] = "Delete group \"%s\" and all of 
 L["Clear all pins from \"%s\"?"] = "Clear all pins from \"%s\"?"
 L["%s added hidden group \"%s\"."] = "%s added hidden group \"%s\"."
 L["My Way Back group not found. Please create it first."] = "My Way Back group not found. Please create it first."
+L["Tracking Mode"] = "Tracking Mode"
+L["Track by Distance"] = "Track by Distance"
+L["Track by Order"] = "Track by Order"
 
 
 ------------------------------ Options ------------------------------
 L["General.Distance_GROUPLABEL"] = "Distance"
 L["General.Distance.ShowUnit_LABEL"] = "Show Distance Unit"
 L["General.Distance.ShowUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
+L["General.Tracking_GROUPLABEL"] = "Tracking"
+L["General.Tracking.DefaultMode_LABEL"] = "Default Tracking Mode"
+L["General.Tracking.DefaultMode_DESCRIPTION"] =
+"Choose how newly created groups select the next pin to track."
 
 L["Miscellaneous"] = "Miscellaneous"
 L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"

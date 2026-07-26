@@ -39,6 +39,9 @@ MapPinEnhancedEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 ---@field tocScrollBox Frame
 ---@field tocScrollBar ScrollBarMixin
 
+---@class MapPinEnhancedEditorTrackingModeLabel : Frame
+---@field text FontString
+
 ---@class MapPinEnhancedEditorGroupEntryTemplate : Button
 ---@field editor MapPinEnhancedEditorTemplate
 ---@field treeNode TreeNodeMixin
@@ -50,6 +53,8 @@ MapPinEnhancedEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 ---@field pinCount FontString
 ---@field nameInput MapPinEnhancedInputTemplate
 ---@field iconInput MapPinEnhancedInputTemplate
+---@field trackingModeLabel MapPinEnhancedEditorTrackingModeLabel
+---@field trackingModeDropdown MapPinEnhancedDropdownTemplate
 ---@field hiddenCheckbox MapPinEnhancedCheckboxWithLabelTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedEditorGroupEntryMixin = {}
@@ -239,7 +244,7 @@ end
 ---@param group MapPinEnhancedGroupMixin
 ---@return boolean
 local function ShouldShowGroup(group)
-    return group.systemType ~= "wayBack"
+    return group.groupType ~= "wayBack"
 end
 
 ---@param groupnode1 TreeNodeMixin
@@ -343,6 +348,22 @@ function MapPinEnhancedEditorGroupEntryMixin:Init(treeNode, editor)
         group:SetIcon(icon)
         self.icon:SetTexture(icon)
     end)
+
+    local showTrackingMode = not group:IsProtected()
+    self.trackingModeLabel.text:SetText(L["Tracking Mode"])
+    self.trackingModeLabel:SetShown(showTrackingMode)
+    self.trackingModeDropdown:SetShown(showTrackingMode)
+    if showTrackingMode then
+        self.trackingModeDropdown:Setup({
+            options = Groups.TRACKING_MODE_OPTIONS,
+            init = function()
+                return group:GetTrackingMode()
+            end,
+            onChange = function(mode)
+                group:SetTrackingMode(mode)
+            end,
+        })
+    end
 
     self.hiddenCheckbox:SetLabel(L["Hidden"])
     self.hiddenCheckbox:SetChecked(group:IsHidden())

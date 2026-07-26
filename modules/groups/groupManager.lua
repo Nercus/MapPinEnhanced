@@ -60,7 +60,7 @@ local DEFAULT_GROUPS = {
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\inv_ability_skyriding_glyph",
         order = -1,
-        systemType = "ungrouped",
+        groupType = "ungrouped",
     },
     {
         groupID = Groups.SYSTEM_GROUP_IDS.WAY_BACK,
@@ -68,7 +68,7 @@ local DEFAULT_GROUPS = {
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\rogue_burstofspeed",
         order = math.huge,
-        systemType = "wayBack",
+        groupType = "wayBack",
     }
 }
 
@@ -172,6 +172,58 @@ function Groups:GetWayBackGroup()
     return self:GetGroupByID(self.SYSTEM_GROUP_IDS.WAY_BACK)
 end
 
+---@param pinID UUID
+---@return boolean
+function Groups:IsPinIDInUse(pinID)
+    if not pinID then return false end
+
+    for group in self:EnumerateGroups() do
+        if group:GetPinByID(pinID) or group:GetArchivedPinByID(pinID) then
+            return true
+        end
+    end
+
+    return false
+end
+
+---@param excludedGroup MapPinEnhancedGroupMixin?
+---@return MapPinEnhancedGroupMixin?, MapPinEnhancedPinMixin?
+function Groups:GetNextTrackableGroup(excludedGroup)
+    ---@type MapPinEnhancedGroupMixin?
+    local bestGroup
+    ---@type number?
+    local bestOrder
+
+    for group in self:EnumerateGroups() do
+        if group ~= excludedGroup and not group:IsHidden() and group:GetPinCount() > 0 then
+            local order = group:GetOrder() or 0
+            if not bestGroup or order > bestOrder then
+                bestGroup = group
+                bestOrder = order
+            end
+        end
+    end
+
+    if not bestGroup then return nil, nil end
+    return bestGroup, bestGroup:GetNextTrackablePin()
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@param cursorOrder number?
+---@return MapPinEnhancedPinMixin?
+function Groups:TrackNextPinAfterGroup(group, cursorOrder)
+    assert(group, "Groups:TrackNextPinAfterGroup: group is nil")
+
+    local nextPin = group:TrackNextTrackablePin(cursorOrder)
+    if nextPin then return nextPin end
+
+    local _, crossGroupPin = self:GetNextTrackableGroup(group)
+    if crossGroupPin then
+        crossGroupPin:Track()
+    end
+    return crossGroupPin
+end
+
 ---@param name string
 ---@return MapPinEnhancedGroupMixin?
 function Groups:CreateGroupFromUngrouped(name)
@@ -194,6 +246,7 @@ function Groups:CreateGroupFromUngrouped(name)
         source = MapPinEnhanced.name,
         icon = ungroupedGroup:GetIcon(),
         order = GetTime(),
+        trackingMode = self:GetDefaultTrackingMode(),
     })
     if not targetGroup then return nil end
 
@@ -243,7 +296,7 @@ function Groups:RestoreGroup(groupData)
     if not groupData.groupID then
         return
     end
-    if #(groupData.pins or {}) == 0 and not next(groupData.pinArchive or {}) and not groupData.systemType then
+    if #(groupData.pins or {}) == 0 and not next(groupData.pinArchive or {}) and not groupData.groupType then
         return
     end
 
