@@ -3,11 +3,34 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedDropdownTemplate : WowStyle2DropdownTemplate, DropdownButton
 ---@field activeValue any
+---@field options MapPinEnhancedRadioGroupOption[]?
+---@field Text FontString?
 MapPinEnhancedDropdownMixin = {}
 
 
 function MapPinEnhancedDropdownMixin:OnLoad()
     WowStyle2DropdownMixin.OnLoad(self);
+end
+
+function MapPinEnhancedDropdownMixin:RefreshSelectedLabel()
+    ---@type string?
+    local label
+    for _, option in ipairs(self.options or {}) do
+        if option.value == self.activeValue then
+            label = option.label
+            break
+        end
+    end
+
+    label = label or ""
+    if self.Text then
+        self.Text:SetText(label)
+    end
+end
+
+function MapPinEnhancedDropdownMixin:SetSelectedValue(value)
+    self.activeValue = value
+    self:RefreshSelectedLabel()
 end
 
 ---@class DropdownSetup
@@ -27,6 +50,7 @@ function MapPinEnhancedDropdownMixin:Setup(formData)
 
     local menuEntries = {}
     local options = formData.options
+    self.options = options
     for _, option in ipairs(options) do
         table.insert(menuEntries, {
             type = "radio",
@@ -35,7 +59,7 @@ function MapPinEnhancedDropdownMixin:Setup(formData)
                 return self.activeValue == option.value
             end,
             setSelected = function()
-                self.activeValue = option.value
+                self:SetSelectedValue(option.value)
                 if self.onChangeCallback then
                     self.onChangeCallback(option.value)
                 end
@@ -46,6 +70,7 @@ function MapPinEnhancedDropdownMixin:Setup(formData)
     local generatorFunction = MapPinEnhanced:GetGeneratorFunction(menuEntries)
     self:SetupMenu(generatorFunction)
     self:SetCallback(formData.onChange)
+    self:RefreshSelectedLabel()
 end
 
 ---@param callback fun(isChecked: boolean)
