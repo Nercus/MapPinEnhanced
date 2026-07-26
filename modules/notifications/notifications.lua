@@ -17,7 +17,6 @@ local DISPLAY_DURATION_SECONDS = 2
 
 ---@enum (key) NotificationTypes
 local NOTIFICATION_MESSAGES = {
-    ["SET_LOADED"] = L["Loaded set \"%s\"."],
     ["PIN_NAMED_REACHED"] = L["\"%s\" reached at %s."],
     ["PIN_REACHED"] = L["Location reached at %s."],
     ["PIN_LOCKED_NAMED"] = L["\"%s\" reached at %s."] .. "\n" .. L["It is locked."],
