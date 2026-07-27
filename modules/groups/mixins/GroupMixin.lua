@@ -43,6 +43,57 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 local ARCHIVE_STATE_REACHED = "reached"
 local ARCHIVE_STATE_HIDDEN = "hidden"
+local UNGROUPED_PIN_LIMIT = 100
+local UNGROUPED_PIN_WARNING_THRESHOLD = 90
+
+---@return number
+function MapPinEnhancedGroupMixin:PruneOldestReachedPins()
+    if self.groupType ~= "ungrouped" then return 0 end
+
+    local totalPinCount = self:GetTotalPinCount()
+    if totalPinCount >= UNGROUPED_PIN_WARNING_THRESHOLD and not self.limitWarningShown then
+        self.limitWarningShown = true
+        MapPinEnhanced:Print(string.format(
+            MapPinEnhanced.L
+            ["Ungrouped Pins is nearing its 100-pin limit (%d/100). Oldest reached pins will be removed first."],
+            totalPinCount))
+    end
+
+    local excess = totalPinCount - UNGROUPED_PIN_LIMIT
+    if excess <= 0 then return 0 end
+
+    ---@type {pinID: UUID, order: number}[]
+    local reachedPins = {}
+    for pinID, archivedPin in pairs(self.pinArchive) do
+        if archivedPin.state == ARCHIVE_STATE_REACHED then
+            table.insert(reachedPins, {
+                pinID = pinID,
+                order = archivedPin.order or math.huge,
+            })
+        end
+    end
+
+    ---@param left {pinID: UUID, order: number}
+    ---@param right {pinID: UUID, order: number}
+    ---@return boolean
+    table.sort(reachedPins, function(left, right)
+        if left.order ~= right.order then
+            return left.order < right.order
+        end
+        return left.pinID < right.pinID
+    end)
+
+    local removed = math.min(excess, #reachedPins)
+    for index = 1, removed do
+        self.pinArchive[reachedPins[index].pinID] = nil
+    end
+
+    if removed > 0 then
+        MapPinEnhanced:Notify(string.format(
+            MapPinEnhanced.L["Oldest reached pins removed from Ungrouped Pins: %d."], removed), "ERROR")
+    end
+    return removed
+end
 
 local function GetSaveablePinData(pinData, pinID)
     ---@type SaveablePinData
@@ -87,6 +138,7 @@ function MapPinEnhancedGroupMixin:Init()
     self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
+    self.limitWarningShown = false
 end
 
 function MapPinEnhancedGroupMixin:Reset()
@@ -109,6 +161,7 @@ function MapPinEnhancedGroupMixin:Reset()
     self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
+    self.limitWarningShown = false
 end
 
 ---@param groupInfo GroupInfo
@@ -240,6 +293,7 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
 
     self.pins[pin.pinID] = pin
     self.count = self.count + 1
+    self:PruneOldestReachedPins()
     if not skipPersist then
         Groups:PersistGroup(self)
     end
@@ -353,6 +407,7 @@ function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
         data = saveablePinData,
         order = order,
     }
+    self:PruneOldestReachedPins()
 
     MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, saveablePinData)
     Pins:ReleasePin(pinID)
@@ -473,6 +528,7 @@ function MapPinEnhancedGroupMixin:ClearGroup()
     self.pinOrder = {}
     self.pinArchive = {}
     self.count = 0
+    self.limitWarningShown = false
 
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)

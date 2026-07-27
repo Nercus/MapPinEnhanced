@@ -58,6 +58,17 @@
             </Layer>
 
         </Layers>
+        <Frames>
+            <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="trash" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-5" y="0" />
+                </Anchors>
+            </Button>
+        </Frames>
         <Scripts>
             <OnMouseDown method="OnMouseDown" />
             <OnSizeChanged method="UpdateTitleWidth" />

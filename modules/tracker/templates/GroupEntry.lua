@@ -8,6 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field icon Texture
 ---@field line Texture
+---@field clearButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
@@ -46,8 +47,24 @@ function MapPinEnhancedTrackerGroupEntryMixin:SetIcon(texturePath)
     self.icon:SetTexture(texturePath)
 end
 
+function MapPinEnhancedTrackerGroupEntryMixin:UpdateClearButton()
+    local showClearButton = self.group and self.group.groupType == "ungrouped" and
+        self.group:GetTotalPinCount() > 0
+    self.clearButton:SetShown(showClearButton)
+
+    self.line:ClearAllPoints()
+    self.line:SetPoint("LEFT", self.title, "RIGHT", 5, 0)
+    if showClearButton then
+        self.line:SetPoint("RIGHT", self.clearButton, "LEFT", -5, 0)
+    else
+        self.line:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+    end
+end
+
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitleWidth()
-    local availableWidth = self:GetWidth() - TITLE_LEFT_OFFSET - TITLE_LINE_GAP - RIGHT_PADDING - MIN_LINE_WIDTH
+    local clearButtonWidth = self.clearButton:IsShown() and (self.clearButton:GetWidth() + RIGHT_PADDING) or 0
+    local availableWidth = self:GetWidth() - TITLE_LEFT_OFFSET - TITLE_LINE_GAP - RIGHT_PADDING - MIN_LINE_WIDTH -
+        clearButtonWidth
     if availableWidth <= 0 then return end
 
     self.title:SetWidth(math.min(self.title:GetStringWidth(), availableWidth))
@@ -57,6 +74,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:Reset()
     self.expandIcon:Hide()
     self.title:SetText("")
     self.title:SetWidth(0)
+    self.clearButton:Hide()
 end
 
 ---@param treeNode TreeNodeMixin
@@ -68,12 +86,24 @@ function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     self:UpdateTitle()
     self:SetIcon(group:GetIcon())
     self:UpdateExpandIcon()
+    self.clearButton:SetScript("OnClick", function()
+        self:ConfirmClearGroup()
+    end)
+    self.clearButton:SetScript("OnEnter", function(button)
+        GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+        GameTooltip:AddLine(L["Clear Ungrouped Pins"])
+        GameTooltip:Show()
+    end)
+    self.clearButton:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
     local group = self.group
     if not group then return end
 
+    self:UpdateClearButton()
     local title = group:GetName()
     local totalPins = group:GetTotalPinCount()
     if group:IsHidden() then
