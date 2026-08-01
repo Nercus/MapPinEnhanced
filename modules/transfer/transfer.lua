@@ -38,8 +38,10 @@ function Transfer:HideImportWindow()
     end
 end
 
----@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin?
+---@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin
 function Transfer:ShowExportWindow(target)
+    if not target then return end
+    if target.classification == "group" and #target:GetAllPinData() == 0 then return end
     local window = self:GetExportWindow()
     ---@cast window MapPinEnhancedExportWindowTemplate
     window:SetExportTarget(target)
@@ -55,7 +57,3 @@ end
 MapPinEnhanced:AddSlashCommand("import",
     function() Transfer:ShowImportWindow() end,
     L["Open the import dialog to import map pins from a string."])
-
-MapPinEnhanced:AddSlashCommand("export",
-    function() Transfer:ShowExportWindow() end,
-    L["Open the export dialog to export your map pins to a string."])
