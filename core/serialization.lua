@@ -235,3 +235,5 @@ end
 function MapPinEnhanced:IsSerializedData(str)
     return type(str) == "string" and str:sub(1, #PREFIX) == PREFIX
 end
+
+MapPinEnhanced.EXPORT_VERSION = 1

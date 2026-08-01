@@ -16,6 +16,16 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 ---@alias ExportTarget MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
+---@class SerializedExport
+---@field version integer
+---@field group SerializedExportGroup
+
+---@class SerializedExportGroup
+---@field name string?
+---@field icon string?
+---@field trackingMode GroupTrackingMode?
+---@field pinOrder table<UUID, number>
+---@field pins pinData[]
 
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
@@ -52,16 +62,11 @@ local function AddPin(pins, pin)
     end
 end
 
----@param target ExportTarget?
+---@param target ExportTarget
 ---@return pinData[]
 local function GetPins(target)
     local pins = {}
-    if not target then
-        ---@param group MapPinEnhancedGroupMixin
-        for group in Groups:EnumerateGroups() do
-            for _, pinData in ipairs(group:GetAllPinData()) do AddPin(pins, pinData) end
-        end
-    elseif target.classification == "pin" then
+    if target.classification == "pin" then
         AddPin(pins, target)
     elseif target.classification == "group" then
         for _, pinData in ipairs(target:GetAllPinData()) do AddPin(pins, pinData) end
@@ -69,19 +74,31 @@ local function GetPins(target)
     return pins
 end
 
----@return table
+---@param group MapPinEnhancedGroupMixin
+---@return string?
+local function GetExportedGroupName(group)
+    if group:IsProtected() then return nil end
+    return group:GetName()
+end
+
+---@return SerializedExport
 function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     local target = self.exportTarget
-    if not target then
-        local pins = {}
-        for _, pinData in ipairs(GetPins(nil)) do
-            table.insert(pins, CleanPinData(pinData))
-        end
-        return pins
-    end
+    assert(target, "MapPinEnhancedExportWindowMixin:GetSerializedTarget: exportTarget is nil")
 
     if target.classification == "pin" then
-        return { CleanPinData(target:GetPinData()) }
+        local group = target.group
+        assert(group, "MapPinEnhancedExportWindowMixin:GetSerializedTarget: pin has no group")
+        return {
+            version = MapPinEnhanced.EXPORT_VERSION,
+            group = {
+                name = GetExportedGroupName(group),
+                icon = group:GetIcon(),
+                trackingMode = group:GetTrackingMode(),
+                pinOrder = {},
+                pins = { CleanPinData(target:GetPinData()) },
+            },
+        }
     end
 
     ---@type table<string, any>
@@ -91,8 +108,10 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     data["groupType"] = nil
     data["pinArchive"] = nil
     data["groupID"] = nil
+    data["name"] = GetExportedGroupName(target)
+    data["trackingMode"] = target:GetTrackingMode()
     data["pinOrder"] = data["pinOrder"] or {}
-    ---@cast data SaveableGroupData
+    ---@cast data SerializedExportGroup
 
     for pinID, archivedPin in target:EnumerateArchivedPins() do
         data["pinOrder"][pinID] = archivedPin.order or GetTime()
@@ -104,7 +123,10 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
         table.insert(cleanedPins, CleanPinData(pinData, true))
     end
     data.pins = cleanedPins
-    return data
+    return {
+        version = MapPinEnhanced.EXPORT_VERSION,
+        group = data,
+    }
 end
 
 ---@param pins pinData[]
@@ -118,6 +140,7 @@ function MapPinEnhancedExportWindowMixin:UpdateSummary(pins)
 end
 
 function MapPinEnhancedExportWindowMixin:UpdateOutput()
+    if not self.exportTarget then return end
     local pins = GetPins(self.exportTarget)
     ---@type string
     local output
@@ -148,8 +171,9 @@ function MapPinEnhancedExportWindowMixin:UpdateOutput()
     self.prefixLabel:SetShown(self.selectedExportType == "way")
 end
 
----@param target ExportTarget?
+---@param target ExportTarget
 function MapPinEnhancedExportWindowMixin:SetExportTarget(target)
+    assert(target, "MapPinEnhancedExportWindowMixin:SetExportTarget: target is nil")
     self.exportTarget = target
     if self.textarea then self:UpdateOutput() end
 end
@@ -189,5 +213,4 @@ function MapPinEnhancedExportWindowMixin:OnLoad()
     })
     self.selectedExportType = "way"
     self.selectedPrefix = "/way"
-    self:UpdateOutput()
 end

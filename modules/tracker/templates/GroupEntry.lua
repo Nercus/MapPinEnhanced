@@ -220,6 +220,14 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
         })
     end
 
+    if group:GetTotalPinCount() > 0 then
+        table.insert(menu, {
+            type = "button",
+            label = MapPinEnhanced.L["Export"],
+            onClick = function() Transfer:ShowExportWindow(group) end,
+        })
+    end
+
     table.insert(menu, {
         type = "divider",
     })
@@ -271,11 +279,13 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         })
     end
 
-    table.insert(menu, {
-        type = "button",
-        label = MapPinEnhanced.L["Export"],
-        onClick = function() Transfer:ShowExportWindow(group) end,
-    })
+    if group:GetTotalPinCount() > 0 then
+        table.insert(menu, {
+            type = "button",
+            label = MapPinEnhanced.L["Export"],
+            onClick = function() Transfer:ShowExportWindow(group) end,
+        })
+    end
 
 
     self:AddDeleteOrClearMenuAction(menu)

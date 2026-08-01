@@ -17,7 +17,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field description FontString
 ---@field summary FontString
 ---@field dataString string?
----@field parsedData SaveableGroupData|pinData[]?
+---@field parsedData SerializedExportGroup|pinData[]?
 ---@field parsedDataType "group"|"pins"?
 ---@field groupName string?
 ---@field validPinCount number
@@ -117,8 +117,7 @@ end
 function MapPinEnhancedImportWindowMixin:UpdateImportButtonDisabledState()
     local hasValidPins = (self.validPinCount or 0) > 0
     local hasValidGroupName = self.groupName and Groups:IsValidGroupName(self.groupName)
-    local hasDuplicateGroup = hasValidGroupName and Groups:GetGroupByName(self.groupName)
-    self.importButton:SetEnabled(hasValidPins and hasValidGroupName and not hasDuplicateGroup)
+    self.importButton:SetEnabled(hasValidPins and hasValidGroupName)
 end
 
 ---@param data SaveableGroupData | pinData[]
@@ -127,8 +126,7 @@ end
 function MapPinEnhancedImportWindowMixin:Import(data, dataType)
     if not self.groupName or not Groups:IsValidGroupName(self.groupName) then return false end
     if Groups:GetGroupByName(self.groupName) then
-        MapPinEnhanced:Notify(string.format(L["A group named \"%s\" already exists."], self.groupName), "ERROR")
-        return false
+        self.groupName = Groups:GetAvailableImportGroupName()
     end
     return self:ImportToNewGroup(data, dataType, self.groupName)
 end
@@ -193,27 +191,30 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
     local dataType = "pins"
     ---@type string
     local formatName = L["Way commands"]
-    ---@type SaveableGroupData | pinData[] | nil
+    ---@type SerializedExportGroup | pinData[] | nil
     local data
 
     if MapPinEnhanced:IsSerializedData(dataString) then
         formatName = L["Serialized data"]
-        data = MapPinEnhanced:DeserializeData(dataString)
-        if type(data) ~= "table" then
+        ---@type SerializedExport
+        local export = MapPinEnhanced:DeserializeData(dataString)
+        if type(export) ~= "table" or export.version ~= MapPinEnhanced.EXPORT_VERSION or
+            type(export.group) ~= "table" then
             self.summary:SetTextColor(1, 0.2, 0.2)
             self.summary:SetText(L["Invalid or corrupted serialized data."])
             return
         end
 
-        ---@cast data SaveableGroupData | pinData[]
+        data = export.group
+
         ---@type pinData[]
-        local sourcePins = data.pins or data
+        local sourcePins = data.pins
         if type(sourcePins) ~= "table" then
             self.summary:SetTextColor(1, 0.2, 0.2)
             self.summary:SetText(L["Invalid or corrupted serialized data."])
             return
         end
-        dataType = data.pins and "group" or "pins"
+        dataType = "group"
         for _, pinData in ipairs(sourcePins) do
             if IsValidPinData(pinData) then
                 table.insert(pins, pinData)
@@ -221,14 +222,12 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
                 self.invalidPinCount = self.invalidPinCount + 1
             end
         end
-        if dataType == "group" then
-            data = CopyTable(data)
-            data.pins = pins
-            if data.name then
-                self.groupName = data.name
-            end
+        data = CopyTable(data)
+        data.pins = pins
+        if Groups:IsValidGroupName(data.name) and not Groups:GetGroupByName(data.name) then
+            self.groupName = data.name
         else
-            data = pins
+            self.groupName = Groups:GetAvailableImportGroupName()
         end
     else
         for line in dataString:gmatch("[^\n]+") do
