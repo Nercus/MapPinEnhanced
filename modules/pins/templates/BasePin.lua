@@ -20,6 +20,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field pulseTimer FunctionContainer | nil
 ---@field activeColor string | nil
 ---@field tooltipData PinTooltip | nil
+---@field pin MapPinEnhancedPinMixin | nil
 ---@field pinID UUID | nil
 ---@field color ColorMixin | nil
 ---@field tracked boolean

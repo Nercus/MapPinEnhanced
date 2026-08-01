@@ -115,18 +115,8 @@ function MapPinEnhancedTrackerPinEntryMixin:OnMouseDown(button)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:ShowTooltip()
-    local tooltipData = self.pin and self.pin.pinData.tooltip
-    if not tooltipData then return end
-    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
-    local title = tooltipData.title
-    local text = tooltipData.text
-    if title then
-        GameTooltip:AddLine(tooltipData.title, 1, 0.82, 0)
-    end
-    if text then
-        GameTooltip:AddLine(tooltipData.text, 1, 1, 1)
-    end
-    GameTooltip:Show()
+    if not self.pin then return end
+    self.pin:ShowTooltip(self, "ANCHOR_LEFT")
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()

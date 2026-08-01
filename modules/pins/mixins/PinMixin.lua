@@ -58,6 +58,8 @@ function MapPinEnhancedPinMixin:Init(pinID)
     local framePool = Pins:GetFramePool()
     self.worldmapPin = framePool:Acquire("MapPinEnhancedWorldmapPinTemplate")
     self.minimapPin = framePool:Acquire("MapPinEnhancedMinimapPinTemplate")
+    self.worldmapPin.pin = self
+    self.minimapPin.pin = self
 
     self.worldmapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
@@ -191,6 +193,8 @@ function MapPinEnhancedPinMixin:Reset()
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 
     local framePool = Pins:GetFramePool()
+    self.worldmapPin.pin = nil
+    self.minimapPin.pin = nil
     framePool:Release(self.worldmapPin)
     framePool:Release(self.minimapPin)
 
