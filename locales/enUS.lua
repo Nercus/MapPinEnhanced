@@ -61,10 +61,8 @@ L["Hide Group"] = "Hide Group"
 L["Show Reached Pins Again"] = "Show Reached Pins Again"
 L["Delete group \"%s\" and all of its pins?"] = "Delete group \"%s\" and all of its pins?"
 L["Clear all pins from \"%s\"?"] = "Clear all pins from \"%s\"?"
-L["Ungrouped Pins is nearing its 100-pin limit (%d/100). Oldest reached pins will be removed first."] =
-"Ungrouped Pins is nearing its 100-pin limit (%d/100). Oldest reached pins will be removed first."
-L["Oldest reached pins removed from Ungrouped Pins: %d."] =
-"Oldest reached pins removed from Ungrouped Pins: %d."
+L["To maintain performance, Ungrouped Pins normally keeps up to 100 pins. It currently has %d; older pins will be removed automatically as more pins are reached."] =
+"To maintain performance, Ungrouped Pins normally keeps up to 100 pins. It currently has %d; older pins will be removed automatically as more pins are reached."
 L["Tracking Mode"] = "Tracking Mode"
 L["Track by Distance"] = "Track by Distance"
 L["Track by Order"] = "Track by Order"

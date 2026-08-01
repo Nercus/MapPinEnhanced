@@ -44,23 +44,19 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local ARCHIVE_STATE_REACHED = "reached"
 local ARCHIVE_STATE_HIDDEN = "hidden"
 local UNGROUPED_PIN_LIMIT = 100
-local UNGROUPED_PIN_WARNING_THRESHOLD = 90
+local UNGROUPED_PIN_CLEANUP_TARGET = 90
 
 ---@return number
 function MapPinEnhancedGroupMixin:PruneOldestReachedPins()
     if self.groupType ~= "ungrouped" then return 0 end
 
     local totalPinCount = self:GetTotalPinCount()
-    if totalPinCount >= UNGROUPED_PIN_WARNING_THRESHOLD and not self.limitWarningShown then
-        self.limitWarningShown = true
-        MapPinEnhanced:Print(string.format(
-            MapPinEnhanced.L
-            ["Ungrouped Pins is nearing its 100-pin limit (%d/100). Oldest reached pins will be removed first."],
-            totalPinCount))
+    if totalPinCount <= UNGROUPED_PIN_CLEANUP_TARGET then
+        self.limitWarningShown = false
+        return 0
     end
 
-    local excess = totalPinCount - UNGROUPED_PIN_LIMIT
-    if excess <= 0 then return 0 end
+    if totalPinCount < UNGROUPED_PIN_LIMIT then return 0 end
 
     ---@type {pinID: UUID, order: number}[]
     local reachedPins = {}
@@ -83,14 +79,22 @@ function MapPinEnhancedGroupMixin:PruneOldestReachedPins()
         return left.pinID < right.pinID
     end)
 
-    local removed = math.min(excess, #reachedPins)
+    local cleanupCount = totalPinCount - UNGROUPED_PIN_CLEANUP_TARGET
+    local removed = math.min(cleanupCount, #reachedPins)
     for index = 1, removed do
         self.pinArchive[reachedPins[index].pinID] = nil
     end
 
-    if removed > 0 then
-        MapPinEnhanced:Notify(string.format(
-            MapPinEnhanced.L["Oldest reached pins removed from Ungrouped Pins: %d."], removed), "ERROR")
+    local remainingPinCount = totalPinCount - removed
+    if remainingPinCount <= UNGROUPED_PIN_CLEANUP_TARGET then
+        self.limitWarningShown = false
+    elseif remainingPinCount > UNGROUPED_PIN_LIMIT and not self.limitWarningShown then
+        self.limitWarningShown = true
+        MapPinEnhanced:Print(string.format(
+            MapPinEnhanced.L
+            ["To maintain performance, Ungrouped Pins normally keeps up to 100 pins. " ..
+            "It currently has %d; older pins will be removed automatically as more pins are reached."],
+            remainingPinCount))
     end
     return removed
 end
@@ -347,6 +351,9 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
         self.pins[pinID] = nil
         self.pinOrder[pinID] = nil
         self.count = self.count - 1
+        if self.groupType == "ungrouped" and self:GetTotalPinCount() <= UNGROUPED_PIN_CLEANUP_TARGET then
+            self.limitWarningShown = false
+        end
 
         if not skipCallbacks then
             MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pin)
@@ -368,6 +375,9 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
 
     if self.pinArchive[pinID] then
         self.pinArchive[pinID] = nil
+        if self.groupType == "ungrouped" and self:GetTotalPinCount() <= UNGROUPED_PIN_CLEANUP_TARGET then
+            self.limitWarningShown = false
+        end
         if not skipPersist then
             Groups:PersistGroup(self)
         end
