@@ -330,11 +330,11 @@ end
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetDropTarget(placement)
     self.dropLine:ClearAllPoints()
     if placement == "before" then
-        self.dropLine:SetPoint("TOPLEFT", 48, 1)
-        self.dropLine:SetPoint("TOPRIGHT", -12, 1)
+        self.dropLine:SetPoint("TOPLEFT", 48, 2)
+        self.dropLine:SetPoint("TOPRIGHT", -12, 2)
     else
-        self.dropLine:SetPoint("BOTTOMLEFT", 48, -1)
-        self.dropLine:SetPoint("BOTTOMRIGHT", -12, -1)
+        self.dropLine:SetPoint("BOTTOMLEFT", 48, -2)
+        self.dropLine:SetPoint("BOTTOMRIGHT", -12, -2)
     end
     self.dropLine:Show()
 end

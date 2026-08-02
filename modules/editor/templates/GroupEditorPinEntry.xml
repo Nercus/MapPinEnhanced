@@ -39,7 +39,7 @@
             </Layer>
             <Layer level="ARTWORK">
                 <Texture parentKey="dropLine" atlas="shop-header-menu-selected-line-middle" hidden="true">
-                    <Size x="760" y="3" />
+                    <Size x="760" y="4" />
                     <Color r="1" g="0.82" b="0" a="1" />
                 </Texture>
             </Layer>
