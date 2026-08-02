@@ -33,7 +33,7 @@
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.22">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="22" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="-4" y="0" />
+                        <Anchor point="BOTTOMRIGHT" x="-52" y="0" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -98,7 +98,7 @@
                 </Frames>
             </Frame>
             <Frame parentKey="xField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="65" y="32" />
+                <Size x="100" y="24" />
                 <KeyValues>
                     <KeyValue key="labelText" value="X" />
                 </KeyValues>
@@ -107,12 +107,12 @@
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
-                        <Size x="65" y="32" />
+                        <Size x="100" y="24" />
                     </EditBox>
                 </Frames>
             </Frame>
             <Frame parentKey="yField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="65" y="32" />
+                <Size x="100" y="24" />
                 <KeyValues>
                     <KeyValue key="labelText" value="Y" />
                 </KeyValues>
@@ -121,7 +121,7 @@
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
-                        <Size x="65" y="32" />
+                        <Size x="100" y="24" />
                     </EditBox>
                 </Frames>
             </Frame>
