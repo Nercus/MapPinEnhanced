@@ -23,8 +23,7 @@ local Util = MapPinEnhancedEditorUtil
 ---@field xField MapPinEnhancedEditorInputField
 ---@field yField MapPinEnhancedEditorInputField
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
----@field dropLineBefore Texture
----@field dropLineAfter Texture
+---@field dropLine Texture
 MapPinEnhancedEditorGroupEditorPinEntryMixin = {}
 
 local COLOR_PATTERN = "|T%s\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
@@ -329,13 +328,19 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetDropTarget(placement)
-    self.dropLineBefore:SetShown(placement == "before")
-    self.dropLineAfter:SetShown(placement == "after")
+    self.dropLine:ClearAllPoints()
+    if placement == "before" then
+        self.dropLine:SetPoint("TOPLEFT", 48, -2)
+        self.dropLine:SetPoint("TOPRIGHT", -12, -2)
+    else
+        self.dropLine:SetPoint("BOTTOMLEFT", 48, 2)
+        self.dropLine:SetPoint("BOTTOMRIGHT", -12, 2)
+    end
+    self.dropLine:Show()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:ClearDropTarget()
-    self.dropLineBefore:Hide()
-    self.dropLineAfter:Hide()
+    self.dropLine:Hide()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:GetDropPlacement()

@@ -38,21 +38,9 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="dropLineBefore" atlas="SquareMask" hidden="true">
+                <Texture parentKey="dropLine" atlas="SquareMask" hidden="true">
                     <Size x="760" y="3" />
                     <Color r="1" g="0.82" b="0" a="1" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="48" y="-2" />
-                        <Anchor point="TOPRIGHT" x="-12" y="-2" />
-                    </Anchors>
-                </Texture>
-                <Texture parentKey="dropLineAfter" atlas="SquareMask" hidden="true">
-                    <Size x="760" y="3" />
-                    <Color r="1" g="0.82" b="0" a="1" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="48" y="2" />
-                        <Anchor point="BOTTOMRIGHT" x="-12" y="2" />
-                    </Anchors>
                 </Texture>
             </Layer>
         </Layers>
