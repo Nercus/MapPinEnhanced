@@ -8,8 +8,8 @@
             <Layer level="BACKGROUND">
                 <Texture atlas="shop-bg-map-blue" setAllPoints="true" desaturated="true">
                     <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="1" b="1" a="0" />
-                        <MaxColor r="1" g="1" b="1" a="0.7" />
+                        <MinColor r="1" g="1" b="1" a="0.3" />
+                        <MaxColor r="1" g="1" b="1" a="0.8" />
                     </Gradient>
                 </Texture>
             </Layer>
