@@ -49,7 +49,6 @@
             <Button parentKey="dragHandle" registerForDrag="LeftButton">
                 <Size x="22" y="70" /><Anchors><Anchor point="LEFT" x="2" /></Anchors>
                 <Layers><Layer level="ARTWORK"><Texture atlas="common-icon-forwardarrow" setAllPoints="true" alpha="0.7" /></Layer></Layers>
-                <Scripts><OnDragStart method="OnDragStart" /><OnDragStop method="OnDragStop" /></Scripts>
             </Button>
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" propagateMouseInput="Motion">
                 <Anchors><Anchor point="LEFT" x="34" /></Anchors>
