@@ -61,9 +61,15 @@ function MapPinEnhancedEditorGroupEditorMixin:AutoScrollForDrag()
     if cursorX < self.content.scrollBox:GetLeft() or cursorX > self.content.scrollBox:GetRight() then return end
     local top, bottom = self.content.scrollBox:GetTop(), self.content.scrollBox:GetBottom()
     if cursorY > top - 32 then
-        self.content.scrollBox:ScrollBy(-18)
+        self.content.scrollBox:ScrollToOffset(
+            self.content.scrollBox:GetDerivedScrollOffset() - 18,
+            ScrollBoxConstants.NoScrollInterpolation
+        )
     elseif cursorY < bottom + 32 then
-        self.content.scrollBox:ScrollBy(18)
+        self.content.scrollBox:ScrollToOffset(
+            self.content.scrollBox:GetDerivedScrollOffset() + 18,
+            ScrollBoxConstants.NoScrollInterpolation
+        )
     end
 end
 
