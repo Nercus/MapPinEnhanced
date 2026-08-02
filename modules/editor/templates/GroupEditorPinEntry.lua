@@ -89,6 +89,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
     self.mapInput.resultsFrame:Hide()
     self.dragHandle:SetScript("OnDragStart", nil)
     self.dragHandle:SetScript("OnDragStop", nil)
+    self.dragHandle:SetScript("OnEnter", nil)
+    self.dragHandle:SetScript("OnLeave", nil)
     self.pinFrame:SetScript("OnMouseDown", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self:ClearDropTarget()
@@ -279,7 +281,23 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
                 string.format(L["Delete pin \"%s\"?"], data.title or L["Map Pin"]), remove)
         end
     end)
-    self.dragHandle:SetScript("OnDragStart", function() editor:StartPinDrag(pinNode, self) end)
+    self.dragHandle:SetScript("OnEnter", function()
+        if editor.draggedPinNode then
+            SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
+        else
+            SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
+        end
+    end)
+    self.dragHandle:SetScript("OnLeave", function()
+        if editor.draggedPinNode then
+            SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
+        else
+            ResetCursor()
+        end
+    end)
+    self.dragHandle:SetScript("OnDragStart", function()
+        editor:StartPinDrag(pinNode, self)
+    end)
     self.dragHandle:SetScript("OnDragStop", function() editor:StopPinDrag() end)
 end
 

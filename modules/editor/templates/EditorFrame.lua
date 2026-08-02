@@ -199,6 +199,7 @@ function MapPinEnhancedEditorMixin:StartPinDrag(pinNode, sourceFrame)
     self.pinDragGhost.title:SetText(Util.GetPinData(pinNode).title or L["Map Pin"])
     self:UpdatePinDragGhostPosition()
     self.pinDragGhost:Show()
+    SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
 end
 
 function MapPinEnhancedEditorMixin:UpdatePinDragGhostPosition()
@@ -219,6 +220,11 @@ function MapPinEnhancedEditorMixin:StopPinDrag()
     else
         self.groupEditor:FinishPinDrop()
     end
+    if self.dragSourceFrame and self.dragSourceFrame.dragHandle:IsMouseOver() then
+        SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
+    else
+        ResetCursor()
+    end
     self.draggedPinNode = nil
     self.dragSourceFrame = nil
     self.groupSidebar:ClearDropTarget()
@@ -229,6 +235,7 @@ end
 function MapPinEnhancedEditorMixin:CancelPinDrag()
     self.pinDragGhost:Hide()
     if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
+    ResetCursor()
     self.draggedPinNode = nil
     self.dragSourceFrame = nil
     self.groupSidebar:ClearDropTarget()
