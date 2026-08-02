@@ -77,7 +77,8 @@
             <Layer level="ARTWORK">
                 <FontString name="$parentText" parentKey="text" font="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.NormalTexture" x="3" y="0" />
+                        <Anchor point="LEFT" relativePoint="LEFT" relativeKey="$parent" x="28" />
+                        <Anchor point="RIGHT" relativePoint="RIGHT" relativeKey="$parent" />
                     </Anchors>
                 </FontString>
             </Layer>
