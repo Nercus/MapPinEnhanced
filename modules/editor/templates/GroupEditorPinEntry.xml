@@ -38,7 +38,7 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="dropLine" atlas="SquareMask" hidden="true">
+                <Texture parentKey="dropLine" atlas="shop-header-menu-selected-line-middle" hidden="true">
                     <Size x="760" y="3" />
                     <Color r="1" g="0.82" b="0" a="1" />
                 </Texture>
