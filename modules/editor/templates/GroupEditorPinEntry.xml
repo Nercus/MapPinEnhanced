@@ -32,8 +32,8 @@
             <Layer level="BACKGROUND">
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.22">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="22" y="-4" />
-                        <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
+                        <Anchor point="TOPLEFT" x="22" y="0" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="0" />
                     </Anchors>
                 </Texture>
             </Layer>
