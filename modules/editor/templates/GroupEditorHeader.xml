@@ -2,8 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="GroupEditorHeader.lua" />
 
-    <Frame name="MapPinEnhancedEditorGroupEditorHeaderTemplate" virtual="true"
-        mixin="MapPinEnhancedEditorGroupEditorHeaderMixin">
+    <Frame name="MapPinEnhancedEditorGroupEditorHeaderTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupEditorHeaderMixin">
         <Size x="820" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
@@ -11,40 +10,71 @@
             </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="pinCount" inherits="GameFontNormalSmall" justifyH="LEFT">
-                    <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMLEFT" y="-5" /></Anchors>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMLEFT" y="-5" />
+                    </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
             <Button parentKey="iconButton">
                 <Size x="38" y="38" />
-                <Anchors><Anchor point="LEFT" x="14" y="4" /></Anchors>
+                <Anchors>
+                    <Anchor point="LEFT" x="14" y="4" />
+                </Anchors>
                 <NormalTexture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark" setAllPoints="true" />
                 <HighlightTexture atlas="communities-create-avatar-border-hover" alphaMode="ADD">
-                    <Anchors><Anchor point="TOPLEFT" x="-3" y="3" /><Anchor point="BOTTOMRIGHT" x="3" y="-3" /></Anchors>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-3" y="3" />
+                        <Anchor point="BOTTOMRIGHT" x="3" y="-3" />
+                    </Anchors>
                 </HighlightTexture>
             </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="300" y="24" />
-                <KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
-                <Anchors><Anchor point="TOPLEFT" x="70" y="-8" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="300" y="24" /></EditBox></Frames>
+                <KeyValues>
+                    <KeyValue key="labelText" value="Name" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="70" y="-8" />
+                </Anchors>
+                <Frames>
+                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                        <Size x="300" y="24" />
+                    </EditBox>
+                </Frames>
             </Frame>
             <Frame parentKey="trackingModeField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="240" y="24" />
-                <KeyValues><KeyValue key="labelText" value="Tracking Mode" /></KeyValues>
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" /></Anchors>
-                <Frames><DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate"><Size x="240" y="24" /></DropdownButton></Frames>
+                <KeyValues>
+                    <KeyValue key="labelText" value="Tracking Mode" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" />
+                </Anchors>
+                <Frames>
+                    <DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate">
+                        <Size x="240" y="24" />
+                    </DropdownButton>
+                </Frames>
             </Frame>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
-                <KeyValues><KeyValue key="icon" value="cross" /></KeyValues>
-                <Anchors><Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" /></Anchors>
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" />
+                </Anchors>
             </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
-                <KeyValues><KeyValue key="icon" value="trash" /></KeyValues>
-                <Anchors><Anchor point="RIGHT" x="-14" /></Anchors>
+                <KeyValues>
+                    <KeyValue key="icon" value="trash" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-14" />
+                </Anchors>
             </Button>
         </Frames>
     </Frame>

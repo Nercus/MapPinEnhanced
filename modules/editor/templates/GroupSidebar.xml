@@ -2,8 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="GroupSidebar.lua" />
 
-    <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true"
-        mixin="MapPinEnhancedEditorGroupSidebarMixin">
+    <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupSidebarMixin">
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.28">
@@ -15,19 +14,27 @@
             </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT">
-                    <Anchors><Anchor point="TOPLEFT" x="10" y="-8" /></Anchors>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="10" y="-8" />
+                    </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
             <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
                 <Size x="198" y="24" />
-                <Anchors><Anchor point="TOPLEFT" x="10" y="-32" /></Anchors>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="10" y="-32" />
+                </Anchors>
             </EditBox>
             <Button parentKey="createButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
-                <KeyValues><KeyValue key="icon" value="plus" /></KeyValues>
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="8" /></Anchors>
+                <KeyValues>
+                    <KeyValue key="icon" value="plus" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="8" />
+                </Anchors>
             </Button>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
@@ -42,6 +49,8 @@
                 </Anchors>
             </EventFrame>
         </Frames>
-        <Scripts><OnLoad method="OnLoad" /></Scripts>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
     </Frame>
 </Ui>

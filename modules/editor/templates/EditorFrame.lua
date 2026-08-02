@@ -73,14 +73,21 @@ function Util.GetSortedPins(group)
     local nodes = {}
     for pinID, pin in group:EnumeratePins() do
         table.insert(nodes, {
-            classification = "editorPin", group = group, pin = pin, pinID = pinID,
+            classification = "editorPin",
+            group = group,
+            pin = pin,
+            pinID = pinID,
             order = group:GetPinOrder(pinID),
         })
     end
     for pinID, archivedPin in group:EnumerateArchivedPins() do
         table.insert(nodes, {
-            classification = "editorPin", group = group, pinID = pinID, archivedPin = archivedPin,
-            archiveState = archivedPin.state, order = archivedPin.order or 0,
+            classification = "editorPin",
+            group = group,
+            pinID = pinID,
+            archivedPin = archivedPin,
+            archiveState = archivedPin.state,
+            order = archivedPin.order or 0,
         })
     end
     table.sort(nodes, function(a, b)

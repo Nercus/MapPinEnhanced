@@ -1,8 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin"
-        inherits="MapPinEnhancedWindowTemplate" enableMouse="true" parent="UIParent" movable="true"
-        clampedToScreen="true" toplevel="true" hidden="true" virtual="true">
+    <Frame name="MapPinEnhancedEditorTemplate" mixin="MapPinEnhancedEditorMixin" inherits="MapPinEnhancedWindowTemplate" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true" hidden="true" virtual="true">
         <Size x="1180" y="590" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Editor" />

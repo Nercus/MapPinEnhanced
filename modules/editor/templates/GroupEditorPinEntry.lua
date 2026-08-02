@@ -186,7 +186,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         type = "template",
                         template = "MapPinEnhancedMenuRadioCellTemplate",
                         data = {
-                            owner = self.pinNode, icon = icon,
+                            owner = self.pinNode,
+                            icon = icon,
                             isSelected = function() return Util.GetPinData(self.pinNode).texture == icon.path end,
                             onClick = function() self:SetIcon(icon) end,
                         },
@@ -290,8 +291,11 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.lockedCheckbox:SetChecked(data.lock and true or false)
     self.lockedCheckbox:SetScript("OnClick", function()
         local locked = self.lockedCheckbox:GetChecked() and true or false
-        if pinNode.pin then pinNode.pin:SetLock(locked)
-        else UpdateArchived(pinNode, function(pinData) pinData.lock = locked end) end
+        if pinNode.pin then
+            pinNode.pin:SetLock(locked)
+        else
+            UpdateArchived(pinNode, function(pinData) pinData.lock = locked end)
+        end
         self:RefreshPreview()
     end)
 
@@ -300,7 +304,9 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     end)
     self.deleteButton:SetScript("OnClick", function()
         local function remove() Util.RemovePinCompletely(pinNode.group, pinNode.pinID) end
-        if IsShiftKeyDown() then remove() else
+        if IsShiftKeyDown() then
+            remove()
+        else
             Dialogs:ShowConfirmDialog(L["Delete Pin"],
                 string.format(L["Delete pin \"%s\"?"], data.title or L["Map Pin"]), remove)
         end
