@@ -8,6 +8,7 @@ MapPinEnhancedEditorGroupEditorMixin = {}
 function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.emptyState.message:SetText(L["Select a group to start editing."])
     self.emptyState.createButton:SetText(L["Create Group"])
+    local content = self.content
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)
@@ -15,10 +16,10 @@ function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     end)
     self.scrollView:SetElementResetter(function(entry) entry:Reset() end)
     self.scrollView:SetDataProvider(self.dataProvider)
-    self.scrollBar:SetHideIfUnscrollable(true)
-    self.scrollBar:SetInterpolateScroll(true)
-    self.scrollBox:SetInterpolateScroll(true)
-    ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
+    content.scrollBar:SetHideIfUnscrollable(true)
+    content.scrollBar:SetInterpolateScroll(true)
+    content.scrollBox:SetInterpolateScroll(true)
+    ScrollUtil.InitScrollBoxListWithScrollBar(content.scrollBox, content.scrollBar, self.scrollView)
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:SetEditor(editor)
@@ -33,10 +34,10 @@ function MapPinEnhancedEditorGroupEditorMixin:SetGroup(group, focusName)
     self.content:SetShown(group ~= nil)
     self.dataProvider:Flush()
     if not group then
-        self.header:Reset()
+        self.content.header:Reset()
         return
     end
-    self.header:SetGroup(group, self.editor, focusName)
+    self.content.header:SetGroup(group, self.editor, focusName)
     for _, pinNode in ipairs(Util.GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
 end
 
@@ -51,26 +52,27 @@ end
 
 function MapPinEnhancedEditorGroupEditorMixin:ClearDropTarget()
     self.dropTarget, self.dropPlacement = nil, nil
-    self.scrollBox:ForEachFrame(function(frame) frame:ClearDropTarget() end)
+    self.content.scrollBox:ForEachFrame(function(frame) frame:ClearDropTarget() end)
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:AutoScrollForDrag()
     local cursorX, cursorY = GetCursorPosition()
-    local scale = self.scrollBox:GetEffectiveScale()
+    local scrollBox = self.content.scrollBox
+    local scale = scrollBox:GetEffectiveScale()
     cursorX, cursorY = cursorX / scale, cursorY / scale
-    if cursorX < self.scrollBox:GetLeft() or cursorX > self.scrollBox:GetRight() then return end
-    local top, bottom = self.scrollBox:GetTop(), self.scrollBox:GetBottom()
+    if cursorX < scrollBox:GetLeft() or cursorX > scrollBox:GetRight() then return end
+    local top, bottom = scrollBox:GetTop(), scrollBox:GetBottom()
     if cursorY > top - 32 then
-        self.scrollBox:ScrollBy(-18)
+        scrollBox:ScrollBy(-18)
     elseif cursorY < bottom + 32 then
-        self.scrollBox:ScrollBy(18)
+        scrollBox:ScrollBy(18)
     end
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:UpdateDrag()
     self:AutoScrollForDrag()
     local target, placement
-    self.scrollBox:ForEachFrame(function(frame)
+    self.content.scrollBox:ForEachFrame(function(frame)
         local valid = not target and frame:IsMouseOver() and self.editor.draggedPinNode and
             frame.pinNode.pinID ~= self.editor.draggedPinNode.pinID
         if valid then
