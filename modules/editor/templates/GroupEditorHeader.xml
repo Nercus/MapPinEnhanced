@@ -8,7 +8,7 @@
             <Layer level="BACKGROUND">
                 <Texture atlas="generic-frame-chamfered-12d-2o">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="42" y="-4" />
+                        <Anchor point="TOPLEFT" x="42" y="0" />
                         <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
                     </Anchors>
                 </Texture>
