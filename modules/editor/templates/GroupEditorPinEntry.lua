@@ -288,6 +288,16 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
 
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
         if button == "LeftButton" then self:ShowStyleMenu() end
+        if button == "MiddleButton" then
+            if pinNode.pin then
+                pinNode.pin:SetLock(locked)
+            else
+                UpdateArchived(pinNode, function(pinData)
+                    pinData.lock = locked
+                end)
+            end
+            self:RefreshPreview()
+        end
     end)
     self.deleteButton:SetScript("OnClick", function()
         local function remove() Util.RemovePinCompletely(pinNode.group, pinNode.pinID) end
