@@ -27,13 +27,25 @@
                 <Anchors>
                     <Anchor point="LEFT" x="0" y="4" />
                 </Anchors>
-                <NormalTexture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark" setAllPoints="true" />
-                <HighlightTexture atlas="communities-create-avatar-border-hover" alphaMode="ADD">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-3" y="3" />
-                        <Anchor point="BOTTOMRIGHT" x="3" y="-3" />
-                    </Anchors>
-                </HighlightTexture>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark" setAllPoints="true" />
+                        <MaskTexture atlas="UI-HUD-CoolDownManager-Mask" setAllPoints="true">
+                            <MaskedTextures>
+                                <MaskedTexture childKey="icon" />
+                            </MaskedTextures>
+                        </MaskTexture>
+                    </Layer>
+                    <Layer level="OVERLAY">
+                        <Texture atlas="UI-HUD-CoolDownManager-IconOverlay">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-6" y="5" />
+                                <Anchor point="BOTTOMRIGHT" x="6" y="-5" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+                <HighlightTexture atlas="UI-CooldownManager-PandemicBorder-Mask-2x" setAllPoints="true" />
             </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="300" y="24" />
