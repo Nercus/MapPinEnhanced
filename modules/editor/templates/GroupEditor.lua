@@ -25,7 +25,6 @@ MapPinEnhancedEditorGroupEditorMixin = {}
 
 function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.emptyState.message:SetText(L["Select a group to start editing."])
-    self.emptyState.createButton:SetText(L["Create Group"])
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)

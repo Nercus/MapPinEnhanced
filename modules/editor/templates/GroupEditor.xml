@@ -19,7 +19,7 @@
                     </Layer>
                 </Layers>
                 <Frames>
-                    <Button parentKey="createButton" inherits="UIPanelButtonTemplate">
+                    <Button parentKey="createButton" inherits="MapPinEnhancedButtonTemplate" text="Create Group">
                         <Size x="150" y="26" />
                         <Anchors>
                             <Anchor point="TOP" relativeKey="$parent.message" relativePoint="BOTTOM" y="-18" />
