@@ -287,7 +287,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.mapField.child:SetScript("OnEscapePressed", restore)
 
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
-        if button == "RightButton" then self:ShowStyleMenu() end
+        if button == "LeftButton" then self:ShowStyleMenu() end
     end)
     self.deleteButton:SetScript("OnClick", function()
         local function remove() Util.RemovePinCompletely(pinNode.group, pinNode.pinID) end
