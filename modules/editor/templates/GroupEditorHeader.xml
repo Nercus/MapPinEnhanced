@@ -64,7 +64,7 @@
                 </Frames>
             </Frame>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="24" y="24" />
+                <Size x="48" y="48" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                 </KeyValues>
@@ -73,7 +73,7 @@
                 </Anchors>
             </Button>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="24" y="24" />
+                <Size x="48" y="48" />
                 <KeyValues>
                     <KeyValue key="icon" value="cross" />
                 </KeyValues>
