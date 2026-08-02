@@ -4,7 +4,7 @@
 
     <Frame name="MapPinEnhancedEditorGroupEditorHeaderTemplate" virtual="true"
         mixin="MapPinEnhancedEditorGroupEditorHeaderMixin">
-        <Size x="820" y="92" />
+        <Size x="820" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.48" setAllPoints="true" />
@@ -23,7 +23,7 @@
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="190" y="24" />
                 <KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
-                <Anchors><Anchor point="TOPLEFT" x="70" y="-18" /></Anchors>
+                <Anchors><Anchor point="TOPLEFT" x="70" y="-8" /></Anchors>
                 <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="190" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="iconField" inherits="MapPinEnhancedFormFieldTemplate">

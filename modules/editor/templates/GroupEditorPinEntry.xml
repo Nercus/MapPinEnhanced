@@ -27,7 +27,7 @@
 
     <Frame name="MapPinEnhancedEditorGroupEditorPinEntryTemplate" virtual="true"
         mixin="MapPinEnhancedEditorGroupEditorPinEntryMixin">
-        <Size x="820" y="94" />
+        <Size x="820" y="60" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.22">
@@ -47,7 +47,7 @@
         </Layers>
         <Frames>
             <Button parentKey="dragHandle" registerForDrag="LeftButton">
-                <Size x="22" y="70" /><Anchors><Anchor point="LEFT" x="2" /></Anchors>
+                <Size x="22" y="52" /><Anchors><Anchor point="LEFT" x="2" /></Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture inherits="MapPinEnhancedIconTemplate">
@@ -63,7 +63,7 @@
             </Frame>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="180" y="24" /><KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
-                <Anchors><Anchor point="TOPLEFT" x="75" y="-18" /></Anchors>
+                <Anchors><Anchor point="TOPLEFT" x="75" y="-8" /></Anchors>
                 <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="180" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="mapField" inherits="MapPinEnhancedFormFieldTemplate">
