@@ -6,6 +6,7 @@ MapPinEnhancedIconMixin = {}
 local ICON_TEXTURES = {
     cross = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconCross_Yellow.png",
     duplicate = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDuplicate_Yellow.png",
+    drag = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDrag_Yellow.png",
     edit = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png",
     editor = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEditor_Yellow.png",
     export = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconExport_Yellow.png",

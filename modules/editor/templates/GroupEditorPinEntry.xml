@@ -48,7 +48,15 @@
         <Frames>
             <Button parentKey="dragHandle" registerForDrag="LeftButton">
                 <Size x="22" y="70" /><Anchors><Anchor point="LEFT" x="2" /></Anchors>
-                <Layers><Layer level="ARTWORK"><Texture atlas="common-icon-forwardarrow" setAllPoints="true" alpha="0.7" /></Layer></Layers>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture inherits="MapPinEnhancedIconTemplate">
+                            <Size x="16" y="24" />
+                            <KeyValues><KeyValue key="icon" value="drag" /></KeyValues>
+                            <Anchors><Anchor point="CENTER" /></Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
             </Button>
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" propagateMouseInput="Motion">
                 <Anchors><Anchor point="LEFT" x="34" /></Anchors>
