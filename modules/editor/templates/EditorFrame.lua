@@ -162,6 +162,7 @@ function MapPinEnhancedEditorMixin:OnUpdate()
         self.groupEditor:SetGroup(self.selectedGroup)
     end
     if self.draggedPinNode then
+        self:UpdatePinDragGhostPosition()
         self.groupEditor:UpdateDrag()
         self.groupSidebar:UpdateDropTarget()
     end
@@ -169,6 +170,7 @@ end
 
 function MapPinEnhancedEditorMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
+    self.pinDragGhost = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedEditorPinDragGhostTemplate")
     self.groupSidebar:SetEditor(self)
     self.groupEditor:SetEditor(self)
     self.groupEditor.emptyState.createButton:SetScript("OnClick", function() self:CreateNewGroup() end)
@@ -184,10 +186,32 @@ function MapPinEnhancedEditorMixin:StartPinDrag(pinNode, sourceFrame)
     self.draggedPinNode = pinNode
     self.dragSourceFrame = sourceFrame
     sourceFrame:SetAlpha(0.45)
+    if Util.GetPinData(pinNode).texture then
+        self.pinDragGhost.pinFrame:SetIconTexture(
+            Util.GetPinData(pinNode).texture,
+            Util.GetPinData(pinNode).usesAtlas
+        )
+    else
+        self.pinDragGhost.pinFrame:SetColor(Util.GetPinData(pinNode).color)
+    end
+    self.pinDragGhost.pinFrame:SetTracked(true)
+    self.pinDragGhost.pinFrame:SetLock(Util.GetPinData(pinNode).lock)
+    self.pinDragGhost.title:SetText(Util.GetPinData(pinNode).title or L["Map Pin"])
+    self:UpdatePinDragGhostPosition()
+    self.pinDragGhost:Show()
+end
+
+function MapPinEnhancedEditorMixin:UpdatePinDragGhostPosition()
+    local cursorX, cursorY = GetCursorPosition()
+    cursorX = cursorX / UIParent:GetEffectiveScale()
+    cursorY = cursorY / UIParent:GetEffectiveScale()
+    self.pinDragGhost:ClearAllPoints()
+    self.pinDragGhost:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", cursorX + 16, cursorY - 16)
 end
 
 function MapPinEnhancedEditorMixin:StopPinDrag()
     if not self.draggedPinNode then return end
+    self.pinDragGhost:Hide()
     if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
     local targetGroup = self.groupSidebar:GetDropTarget()
     if targetGroup and self.draggedPinNode then
@@ -202,6 +226,15 @@ function MapPinEnhancedEditorMixin:StopPinDrag()
     self:RequestRefresh()
 end
 
+function MapPinEnhancedEditorMixin:CancelPinDrag()
+    self.pinDragGhost:Hide()
+    if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
+    self.draggedPinNode = nil
+    self.dragSourceFrame = nil
+    self.groupSidebar:ClearDropTarget()
+    self.groupEditor:ClearDropTarget()
+end
+
 function MapPinEnhancedEditorMixin:ShowFrame()
     MapPinEnhanced:RestoreFrame(self)
     self.selectedGroup = nil
@@ -209,6 +242,11 @@ function MapPinEnhancedEditorMixin:ShowFrame()
     self.groupSidebar:Refresh()
     self.groupEditor:SetGroup(nil)
     self:Show()
+end
+
+function MapPinEnhancedEditorMixin:OnHide()
+    MapPinEnhancedWindowMixin.OnHide(self)
+    self:CancelPinDrag()
 end
 
 function MapPinEnhancedEditorMixin:HideFrame()

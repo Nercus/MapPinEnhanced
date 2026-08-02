@@ -106,11 +106,10 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetColor(color)
-    local node = self.pinNode
-    if node.pin then
-        node.pin:SetColor(color)
+    if self.pinNode.pin then
+        self.pinNode.pin:SetColor(color)
     else
-        UpdateArchived(node, function(data)
+        UpdateArchived(self.pinNode, function(data)
             data.color, data.texture, data.usesAtlas = color, nil, nil
         end)
     end
@@ -118,11 +117,10 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetColor(color)
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetIcon(icon)
-    local node = self.pinNode
-    if node.pin then
-        node.pin:SetIcon(icon.path, icon.usesAtlas)
+    if self.pinNode.pin then
+        self.pinNode.pin:SetIcon(icon.path, icon.usesAtlas)
     else
-        UpdateArchived(node, function(data)
+        UpdateArchived(self.pinNode, function(data)
             data.texture, data.usesAtlas, data.color = icon.path, icon.usesAtlas, nil
         end)
     end
@@ -130,7 +128,6 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetIcon(icon)
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
-    local node = self.pinNode
     local menu = {
         {
             type = "submenu",
@@ -143,7 +140,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         type = "radio",
                         label = string.format(COLOR_PATTERN, MapPinEnhanced.basePath, colorData:GetRGBAsBytes()),
                         style = "custom",
-                        isSelected = function() return Util.GetPinData(node).color == color end,
+                        isSelected = function() return Util.GetPinData(self.pinNode).color == color end,
                         setSelected = function() self:SetColor(color) end,
                     })
                 end
@@ -162,8 +159,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         type = "template",
                         template = "MapPinEnhancedMenuRadioCellTemplate",
                         data = {
-                            owner = node, icon = icon,
-                            isSelected = function() return Util.GetPinData(node).texture == icon.path end,
+                            owner = self.pinNode, icon = icon,
+                            isSelected = function() return Util.GetPinData(self.pinNode).texture == icon.path end,
                             onClick = function() self:SetIcon(icon) end,
                         },
                         initializer = function(_, _, dropdown)

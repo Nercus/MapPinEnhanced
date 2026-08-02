@@ -8,7 +8,6 @@ MapPinEnhancedEditorGroupEditorMixin = {}
 function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.emptyState.message:SetText(L["Select a group to start editing."])
     self.emptyState.createButton:SetText(L["Create Group"])
-    local content = self.content
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)
@@ -16,10 +15,10 @@ function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     end)
     self.scrollView:SetElementResetter(function(entry) entry:Reset() end)
     self.scrollView:SetDataProvider(self.dataProvider)
-    content.scrollBar:SetHideIfUnscrollable(true)
-    content.scrollBar:SetInterpolateScroll(true)
-    content.scrollBox:SetInterpolateScroll(true)
-    ScrollUtil.InitScrollBoxListWithScrollBar(content.scrollBox, content.scrollBar, self.scrollView)
+    self.content.scrollBar:SetHideIfUnscrollable(true)
+    self.content.scrollBar:SetInterpolateScroll(true)
+    self.content.scrollBox:SetInterpolateScroll(true)
+    ScrollUtil.InitScrollBoxListWithScrollBar(self.content.scrollBox, self.content.scrollBar, self.scrollView)
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:SetEditor(editor)
@@ -57,15 +56,14 @@ end
 
 function MapPinEnhancedEditorGroupEditorMixin:AutoScrollForDrag()
     local cursorX, cursorY = GetCursorPosition()
-    local scrollBox = self.content.scrollBox
-    local scale = scrollBox:GetEffectiveScale()
+    local scale = self.content.scrollBox:GetEffectiveScale()
     cursorX, cursorY = cursorX / scale, cursorY / scale
-    if cursorX < scrollBox:GetLeft() or cursorX > scrollBox:GetRight() then return end
-    local top, bottom = scrollBox:GetTop(), scrollBox:GetBottom()
+    if cursorX < self.content.scrollBox:GetLeft() or cursorX > self.content.scrollBox:GetRight() then return end
+    local top, bottom = self.content.scrollBox:GetTop(), self.content.scrollBox:GetBottom()
     if cursorY > top - 32 then
-        scrollBox:ScrollBy(-18)
+        self.content.scrollBox:ScrollBy(-18)
     elseif cursorY < bottom + 32 then
-        scrollBox:ScrollBy(18)
+        self.content.scrollBox:ScrollBy(18)
     end
 end
 
