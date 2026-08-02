@@ -45,7 +45,12 @@
                         </Texture>
                     </Layer>
                 </Layers>
-                <HighlightTexture atlas="UI-CooldownManager-PandemicBorder-Mask-2x" setAllPoints="true" />
+                <HighlightTexture atlas="UI-CooldownManager-PandemicBorder-Mask-2x">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
+                    </Anchors>
+                </HighlightTexture>
             </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="300" y="24" />
