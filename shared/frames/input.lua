@@ -36,9 +36,8 @@ end
 
 function MapPinEnhancedInputMixin:UpdateClearButtonVisibility()
     local text, hasFocus = self:GetText(), self:HasFocus()
-    local mouseOverClearButton = self.clearButton:IsMouseOver()
 
-    if not text or text == "" or (not hasFocus and not mouseOverClearButton) then
+    if not text or text == "" or not hasFocus then
         self.clearButton:Hide()
     else
         self.clearButton:Show()
