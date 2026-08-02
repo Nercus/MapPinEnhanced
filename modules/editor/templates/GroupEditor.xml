@@ -1,0 +1,34 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="GroupEditor.lua" />
+
+    <Frame name="MapPinEnhancedEditorGroupEditorTemplate" virtual="true"
+        mixin="MapPinEnhancedEditorGroupEditorMixin">
+        <Frames>
+            <Frame parentKey="emptyState">
+                <Anchors><Anchor point="CENTER" /></Anchors><Size x="420" y="90" />
+                <Layers><Layer level="ARTWORK"><FontString parentKey="message" inherits="GameFontNormalLarge" justifyH="CENTER">
+                    <Anchors><Anchor point="TOP" /></Anchors>
+                </FontString></Layer></Layers>
+                <Frames><Button parentKey="createButton" inherits="UIPanelButtonTemplate">
+                    <Size x="150" y="26" /><Anchors><Anchor point="TOP" relativeKey="$parent.message" relativePoint="BOTTOM" y="-18" /></Anchors>
+                </Button></Frames>
+            </Frame>
+            <Frame parentKey="content" hidden="true">
+                <Anchors><Anchor point="TOPLEFT" /><Anchor point="BOTTOMRIGHT" /></Anchors>
+                <Frames>
+                    <Frame parentKey="header" inherits="MapPinEnhancedEditorGroupEditorHeaderTemplate">
+                        <Anchors><Anchor point="TOPLEFT" /><Anchor point="TOPRIGHT" /></Anchors>
+                    </Frame>
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                        <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-10" /><Anchor point="BOTTOMRIGHT" x="-18" /></Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="5" y="-5" /><Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="5" /></Anchors>
+                    </EventFrame>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts><OnLoad method="OnLoad" /></Scripts>
+    </Frame>
+</Ui>

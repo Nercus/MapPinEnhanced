@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
---- TODO: don't forget to add callbacks to update between the editor and the group editor
 
 function Editor:GetEditorFrame()
     if not self.editorFrame then

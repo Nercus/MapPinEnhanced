@@ -1,0 +1,59 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="GroupEditorPinEntry.lua" />
+
+    <Frame name="MapPinEnhancedEditorGroupEditorPinEntryTemplate" virtual="true"
+        mixin="MapPinEnhancedEditorGroupEditorPinEntryMixin">
+        <Size x="820" y="94" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.22">
+                    <Anchors><Anchor point="TOPLEFT" x="22" y="-4" /><Anchor point="BOTTOMRIGHT" x="-4" y="4" /></Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="dropLineBefore" atlas="SquareMask" hidden="true">
+                    <Size x="760" y="3" /><Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors><Anchor point="TOPLEFT" x="48" y="-2" /><Anchor point="TOPRIGHT" x="-12" y="-2" /></Anchors>
+                </Texture>
+                <Texture parentKey="dropLineAfter" atlas="SquareMask" hidden="true">
+                    <Size x="760" y="3" /><Color r="1" g="0.82" b="0" a="1" />
+                    <Anchors><Anchor point="BOTTOMLEFT" x="48" y="2" /><Anchor point="BOTTOMRIGHT" x="-12" y="2" /></Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="dragHandle" registerForDrag="LeftButton">
+                <Size x="22" y="70" /><Anchors><Anchor point="LEFT" x="2" /></Anchors>
+                <Layers><Layer level="ARTWORK"><Texture atlas="common-icon-forwardarrow" setAllPoints="true" alpha="0.7" /></Layer></Layers>
+                <Scripts><OnDragStart method="OnDragStart" /><OnDragStop method="OnDragStop" /></Scripts>
+            </Button>
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" propagateMouseInput="Motion">
+                <Anchors><Anchor point="LEFT" x="34" /></Anchors>
+            </Frame>
+            <EditBox parentKey="nameInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="225" y="24" /><KeyValues><KeyValue key="label" value="Name" /></KeyValues>
+                <Anchors><Anchor point="TOPLEFT" x="75" y="-18" /></Anchors>
+            </EditBox>
+            <EditBox parentKey="mapInput" inherits="MapPinEnhancedAutocompleteTemplate">
+                <Size x="200" y="24" /><KeyValues><KeyValue key="label" value="Map" /></KeyValues>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameInput" relativePoint="RIGHT" x="10" /></Anchors>
+            </EditBox>
+            <EditBox parentKey="xInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="90" y="24" /><KeyValues><KeyValue key="label" value="X" /></KeyValues>
+                <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.nameInput" relativePoint="BOTTOMLEFT" y="-14" /></Anchors>
+            </EditBox>
+            <EditBox parentKey="yInput" inherits="MapPinEnhancedInputTemplate">
+                <Size x="90" y="24" /><KeyValues><KeyValue key="label" value="Y" /></KeyValues>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.xInput" relativePoint="RIGHT" x="10" /></Anchors>
+            </EditBox>
+            <CheckButton parentKey="lockedCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
+                <Size x="95" y="25" /><Anchors><Anchor point="LEFT" relativeKey="$parent.yInput" relativePoint="RIGHT" x="14" /></Anchors>
+            </CheckButton>
+            <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" /><KeyValues><KeyValue key="icon" value="trash" /></KeyValues>
+                <Anchors><Anchor point="RIGHT" x="-14" /></Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>
