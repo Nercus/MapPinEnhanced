@@ -21,7 +21,7 @@ local L = MapPinEnhanced.L
 ---@field nameField MapPinEnhancedEditorInputField
 ---@field iconField MapPinEnhancedEditorInputField
 ---@field trackingModeField MapPinEnhancedEditorDropdownField
----@field hideButton Button
+---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedEditorGroupEditorHeaderMixin = {}
 
@@ -99,11 +99,9 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
     })
 
     self.hideButton:SetEnabled(not protected)
-    self.hideButton:SetText(group:IsHidden() and L["Show"] or L["Hide"])
     self.hideButton:SetScript("OnClick", function()
         if protected then return end
         if group:IsHidden() then group:ShowGroup() else group:HideGroup() end
-        self.hideButton:SetText(group:IsHidden() and L["Show"] or L["Hide"])
         editor.groupSidebar:Refresh()
     end)
 

@@ -62,27 +62,28 @@
                 <Anchors><Anchor point="LEFT" x="34" /></Anchors>
             </Frame>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="225" y="24" /><KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
+                <Size x="180" y="24" /><KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
                 <Anchors><Anchor point="TOPLEFT" x="75" y="-18" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="225" y="24" /></EditBox></Frames>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="180" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="mapField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="200" y="24" /><KeyValues><KeyValue key="labelText" value="Map" /></KeyValues>
+                <Size x="175" y="24" /><KeyValues><KeyValue key="labelText" value="Map" /></KeyValues>
                 <Anchors><Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedAutocompleteTemplate"><Size x="200" y="24" /></EditBox></Frames>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedAutocompleteTemplate"><Size x="175" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="xField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="90" y="24" /><KeyValues><KeyValue key="labelText" value="X" /></KeyValues>
-                <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.nameField" relativePoint="BOTTOMLEFT" y="-14" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="90" y="24" /></EditBox></Frames>
+                <Size x="65" y="24" /><KeyValues><KeyValue key="labelText" value="X" /></KeyValues>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.mapField" relativePoint="RIGHT" x="10" /></Anchors>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="65" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="yField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="90" y="24" /><KeyValues><KeyValue key="labelText" value="Y" /></KeyValues>
+                <Size x="65" y="24" /><KeyValues><KeyValue key="labelText" value="Y" /></KeyValues>
                 <Anchors><Anchor point="LEFT" relativeKey="$parent.xField" relativePoint="RIGHT" x="10" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="90" y="24" /></EditBox></Frames>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="65" y="24" /></EditBox></Frames>
             </Frame>
             <CheckButton parentKey="lockedCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
-                <Size x="95" y="25" /><Anchors><Anchor point="LEFT" relativeKey="$parent.yField" relativePoint="RIGHT" x="14" /></Anchors>
+                <Size x="95" y="25" />
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.yField.child" relativePoint="RIGHT" x="14" /></Anchors>
             </CheckButton>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" /><KeyValues><KeyValue key="icon" value="trash" /></KeyValues>
