@@ -48,7 +48,7 @@
             <Button parentKey="dragHandle" registerForDrag="LeftButton">
                 <Size x="22" y="52" />
                 <Anchors>
-                    <Anchor point="LEFT" x="2" />
+                    <Anchor point="LEFT" x="0" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
@@ -75,7 +75,7 @@
                     <KeyValue key="labelText" value="Name" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="75" y="-8" />
+                    <Anchor point="LEFT" x="75" y="0" />
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
@@ -98,7 +98,7 @@
                 </Frames>
             </Frame>
             <Frame parentKey="xField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="65" y="24" />
+                <Size x="65" y="32" />
                 <KeyValues>
                     <KeyValue key="labelText" value="X" />
                 </KeyValues>
@@ -107,12 +107,12 @@
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
-                        <Size x="65" y="24" />
+                        <Size x="65" y="32" />
                     </EditBox>
                 </Frames>
             </Frame>
             <Frame parentKey="yField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="65" y="24" />
+                <Size x="65" y="32" />
                 <KeyValues>
                     <KeyValue key="labelText" value="Y" />
                 </KeyValues>
@@ -121,7 +121,7 @@
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
-                        <Size x="65" y="24" />
+                        <Size x="65" y="32" />
                     </EditBox>
                 </Frames>
             </Frame>
