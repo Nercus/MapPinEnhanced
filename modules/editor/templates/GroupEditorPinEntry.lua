@@ -22,7 +22,6 @@ local Util = MapPinEnhancedEditorUtil
 ---@field mapField MapPinEnhancedEditorAutocompleteField
 ---@field xField MapPinEnhancedEditorInputField
 ---@field yField MapPinEnhancedEditorInputField
----@field lockedCheckbox MapPinEnhancedCheckboxWithLabelTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field dropLineBefore Texture
 ---@field dropLineAfter Texture
@@ -286,18 +285,6 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
         commitPosition(editBox)
     end)
     self.mapField.child:SetScript("OnEscapePressed", restore)
-
-    self.lockedCheckbox:SetLabel(L["Locked"])
-    self.lockedCheckbox:SetChecked(data.lock and true or false)
-    self.lockedCheckbox:SetScript("OnClick", function()
-        local locked = self.lockedCheckbox:GetChecked() and true or false
-        if pinNode.pin then
-            pinNode.pin:SetLock(locked)
-        else
-            UpdateArchived(pinNode, function(pinData) pinData.lock = locked end)
-        end
-        self:RefreshPreview()
-    end)
 
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
         if button == "RightButton" then self:ShowStyleMenu() end

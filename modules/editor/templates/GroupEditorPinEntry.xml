@@ -12,7 +12,7 @@
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="58" y="-8" />
-                        <Anchor point="BOTTOMRIGHT" x="-10" y="8" />
+                        <Anchor point="BOTTOMRIGHT" x="-70" y="8" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -137,19 +137,13 @@
                     </EditBox>
                 </Frames>
             </Frame>
-            <CheckButton parentKey="lockedCheckbox" inherits="MapPinEnhancedCheckboxWithLabelTemplate">
-                <Size x="95" y="25" />
-                <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.yField.child" relativePoint="RIGHT" x="14" />
-                </Anchors>
-            </CheckButton>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="24" y="24" />
+                <Size x="64" y="64" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-14" />
+                    <Anchor point="RIGHT" x="0" />
                 </Anchors>
             </Button>
         </Frames>
