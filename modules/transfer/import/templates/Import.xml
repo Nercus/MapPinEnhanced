@@ -33,12 +33,18 @@
             </ScrollFrame>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="30" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                </KeyValues>
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="25" />
                 </Anchors>
             </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
                 <Size x="100" y="30" />
+                <KeyValues>
+                    <KeyValue key="icon" value="import" />
+                </KeyValues>
                 <Anchors>
                     <Anchor point="TOPRIGHT" relativeKey="$parent.cancelButton" relativePoint="TOPLEFT" x="-10" y="0" />
                 </Anchors>

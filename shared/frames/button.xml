@@ -13,7 +13,7 @@
         <DisabledFont style="GameFontDisable" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="icon" inherits="MapPinEnhancedIconTemplate">
+                <Texture parentKey="iconTexture" inherits="MapPinEnhancedIconTemplate">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
                     </Anchors>
