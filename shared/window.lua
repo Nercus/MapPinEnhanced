@@ -25,11 +25,11 @@ end
 
 ---@enum (key) WindowColor
 local WINDOW_COLORS = {
-    ["yellow"] = CreateColor(0.4, 0.4, 0, 1),
-    ["green"] = CreateColor(0, 0.4, 0, 1),
-    ["blue"] = CreateColor(0, 0, 0.4, 1),
-    ["purple"] = CreateColor(0.4, 0, 0.4, 1),
-    ["red"] = CreateColor(0.4, 0, 0, 1),
+    ["yellow"] = CreateColor(0.75, 0.75, 0, 1),
+    ["green"] = CreateColor(0, 0.75, 0, 1),
+    ["blue"] = CreateColor(0, 0, 0.75, 1),
+    ["purple"] = CreateColor(0.75, 0, 0.75, 1),
+    ["red"] = CreateColor(0.75, 0, 0, 1),
 }
 
 ---@param colorName WindowColor
