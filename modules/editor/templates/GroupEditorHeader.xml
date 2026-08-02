@@ -20,28 +20,27 @@
             </Layer>
         </Layers>
         <Frames>
-            <EditBox parentKey="nameInput" inherits="MapPinEnhancedInputTemplate">
+            <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="225" y="24" />
-                <KeyValues><KeyValue key="label" value="Name" /></KeyValues>
+                <KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
                 <Anchors><Anchor point="TOPLEFT" x="70" y="-18" /></Anchors>
-            </EditBox>
-            <EditBox parentKey="iconInput" inherits="MapPinEnhancedInputTemplate">
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="225" y="24" /></EditBox></Frames>
+            </Frame>
+            <Frame parentKey="iconField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="265" y="24" />
-                <KeyValues><KeyValue key="label" value="Icon" /></KeyValues>
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameInput" relativePoint="RIGHT" x="10" /></Anchors>
-            </EditBox>
-            <DropdownButton parentKey="trackingModeDropdown" inherits="MapPinEnhancedDropdownTemplate">
+                <KeyValues><KeyValue key="labelText" value="Icon" /></KeyValues>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" /></Anchors>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="265" y="24" /></EditBox></Frames>
+            </Frame>
+            <Frame parentKey="trackingModeField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="190" y="24" />
+                <KeyValues><KeyValue key="labelText" value="Tracking Mode" /></KeyValues>
                 <Anchors><Anchor point="TOPLEFT" x="105" y="-56" /></Anchors>
-            </DropdownButton>
-            <Frame parentKey="trackingModeLabel">
-                <Size x="82" y="20" />
-                <Anchors><Anchor point="RIGHT" relativeKey="$parent.trackingModeDropdown" relativePoint="LEFT" x="-8" /></Anchors>
-                <Layers><Layer level="ARTWORK"><FontString parentKey="text" inherits="GameFontNormalSmall" justifyH="RIGHT" setAllPoints="true" /></Layer></Layers>
+                <Frames><DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate"><Size x="190" y="24" /></DropdownButton></Frames>
             </Frame>
             <Button parentKey="hideButton" inherits="UIPanelButtonTemplate">
                 <Size x="72" y="24" />
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.trackingModeDropdown" relativePoint="RIGHT" x="12" /></Anchors>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.trackingModeField" relativePoint="RIGHT" x="12" /></Anchors>
             </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />

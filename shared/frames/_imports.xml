@@ -13,4 +13,5 @@
     <Include file="autocomplete.xml" />
     <Include file="dropdown.xml" />
     <Include file="toggle.xml" />
+    <Include file="formfield.xml" />
 </Ui>

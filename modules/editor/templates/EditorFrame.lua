@@ -3,6 +3,27 @@ local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 
+---@class MapPinEnhancedEditorPinNodeData
+---@field classification "editorPin"
+---@field group MapPinEnhancedGroupMixin
+---@field pin MapPinEnhancedPinMixin?
+---@field pinID UUID
+---@field archivedPin ArchivedPinData?
+---@field archiveState "reached"|"hidden"|nil
+---@field order number
+
+---@class MapPinEnhancedEditorPinDragGhost : Frame
+---@field pinFrame MapPinEnhancedBasePinTemplate
+---@field title FontString
+
+---@class MapPinEnhancedEditorTemplate : MapPinEnhancedWindowTemplate
+---@field groupSidebar MapPinEnhancedEditorGroupSidebarTemplate
+---@field groupEditor MapPinEnhancedEditorGroupEditorTemplate
+---@field pinDragGhost MapPinEnhancedEditorPinDragGhost
+---@field selectedGroup MapPinEnhancedGroupMixin?
+---@field draggedPinNode MapPinEnhancedEditorPinNodeData?
+---@field dragSourceFrame MapPinEnhancedEditorGroupEditorPinEntryTemplate?
+---@field refreshPending boolean?
 MapPinEnhancedEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 MapPinEnhancedEditorUtil = MapPinEnhancedEditorUtil or {}
 local Util = MapPinEnhancedEditorUtil

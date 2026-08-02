@@ -1,33 +1,32 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Options = MapPinEnhanced:GetModule("Options")
+local L = MapPinEnhanced.L
 
----@class MapPinEnhancedFormElementTemplate : Frame
----@field label FontString
----@field description FontString
+---@class MapPinEnhancedFormElementTemplate : MapPinEnhancedFormFieldTemplate
 ---@field searchHighlight Texture
----@field child Frame
----@field orientation "vertical" | "horizontal" | nil
----@field key string The unique key for the option, used for saving values. Is of the format "category.optionName", e.g. "general.showMinimapPin".
----@field hideLabel boolean If true, the label will be hidden and not take up space.
----@field hideDescription boolean If true, the description will be hidden and not take up space.
----@field GetValue fun(self): any A function that returns the current value of the option.
----@field SetValue fun(self, value): nil A function that sets the value of the option.
----@field IsValueEqual fun(self, value): boolean A function that checks whether the option already has the given value.
----@field NotifyChange fun(self, value): nil A function that notifies subscribers that the option value changed.
----@field OnChange fun(self, callback: fun(value): nil): fun() A function that allows subscribing to changes of the option's value. Returns an unsubscribe function.
----@field Setup fun(self, init: any): nil A function that is called when the option is registered. Can be used to perform any necessary setup, such as registering callbacks on the child frame.
----@field ScrollToOption fun(self): nil A function that scrolls the options panel to this option. Only necessary if the option is not guaranteed to be visible when changed, e.g. because it's in a collapsible section.
----@field callbacks function[] A list of callback functions that will be called when the option's value changes.
----@field padding number
----@field labelBottomSpacing number
----@field descriptionBottomSpacing number
+---@field searchAnimation AnimationGroup
+---@field key string
 ---@field scrollPadding number
 ---@field normalAlpha number
 ---@field hoverAlpha number
-MapPinEnhancedFormElementMixin = {}
+---@field callbacks function[]?
+---@field GetValue fun(self: MapPinEnhancedFormElementTemplate): any
+---@field SetValue fun(self: MapPinEnhancedFormElementTemplate, value: any)
+---@field Setup fun(self: MapPinEnhancedFormElementTemplate, initialValue: any)
+MapPinEnhancedFormElementMixin = CreateFromMixins(MapPinEnhancedFormFieldMixin)
 
-local Options = MapPinEnhanced:GetModule("Options")
-local L = MapPinEnhanced.L
+function MapPinEnhancedFormElementMixin:GetLabelText()
+    if not self.key then return nil end
+    local localizationKey = self.key .. "_LABEL"
+    return L[localizationKey] ~= localizationKey and L[localizationKey] or nil
+end
+
+function MapPinEnhancedFormElementMixin:GetDescriptionText()
+    if not self.key then return nil end
+    local localizationKey = self.key .. "_DESCRIPTION"
+    return L[localizationKey] ~= localizationKey and L[localizationKey] or nil
+end
 
 function MapPinEnhancedFormElementMixin:IsValueEqual(value)
     return self:GetValue() == value
@@ -35,148 +34,34 @@ end
 
 function MapPinEnhancedFormElementMixin:NotifyChange(value)
     if not self.callbacks then return end
-    for _, callback in ipairs(self.callbacks) do
-        callback(value)
-    end
+    for _, callback in ipairs(self.callbacks) do callback(value) end
 end
 
----@param callback function
----@return function unsubscribe Call to remove this callback
 function MapPinEnhancedFormElementMixin:OnChange(callback)
-    if not self.callbacks then
-        self.callbacks = {}
-    end
+    self.callbacks = self.callbacks or {}
     for _, existingCallback in ipairs(self.callbacks) do
-        if existingCallback == callback then
-            return function() end
-        end
+        if existingCallback == callback then return function() end end
     end
     table.insert(self.callbacks, callback)
     return function()
-        for i, cb in ipairs(self.callbacks) do
-            if cb == callback then
-                table.remove(self.callbacks, i)
+        for index, registeredCallback in ipairs(self.callbacks) do
+            if registeredCallback == callback then
+                table.remove(self.callbacks, index)
                 return
             end
         end
     end
 end
 
-function MapPinEnhancedFormElementMixin:GetLabelText()
-    if not self.key then return nil end
-    local labelKey = self.key .. "_LABEL"
-    local labelText = L[labelKey]
-    if labelText and labelText ~= labelKey then
-        return labelText
-    end
-    return nil
-end
-
-function MapPinEnhancedFormElementMixin:GetDescriptionText()
-    if not self.key then return nil end
-    local descKey = self.key .. "_DESCRIPTION"
-    local descText = L[descKey]
-    if descText and descText ~= descKey then
-        return descText
-    end
-    return nil
-end
-
-function MapPinEnhancedFormElementMixin:HasLabel()
-    return self:GetLabelText() ~= nil and not self.hideLabel
-end
-
-function MapPinEnhancedFormElementMixin:HasDescription()
-    return self:GetDescriptionText() ~= nil and not self.hideDescription
-end
-
-function MapPinEnhancedFormElementMixin:UpdateHeight()
-    local hasLabel = self:HasLabel()
-    local hasDescription = self:HasDescription()
-
-    local labelHeight = hasLabel and (self.label:GetHeight() + self.labelBottomSpacing) or 0
-    local descriptionHeight = hasDescription and (self.description:GetHeight() + self.descriptionBottomSpacing) or 0
-    local childHeight = self.child:GetHeight()
-
-    ---@type number
-    local totalHeight
-    if self.orientation == "vertical" then
-        totalHeight = labelHeight + descriptionHeight + childHeight
-    elseif self.orientation == "horizontal" then
-        totalHeight = math.max(labelHeight + descriptionHeight, childHeight)
-    end
-    totalHeight = totalHeight + self.padding * 2
-
-    self:SetHeight(totalHeight)
-end
-
 function MapPinEnhancedFormElementMixin:ScrollToOption()
-    local Options = MapPinEnhanced:GetModule("Options")
-    local scrollFrame = Options.frame and Options.frame.scrollFrame
-
-    if not scrollFrame then return end
-
-    local scrollChild = scrollFrame:GetScrollChild()
-    if not scrollChild then return end
-
-    local childTop = scrollChild:GetTop()
-    local selfTop = self:GetTop()
+    if not Options.frame or not Options.frame.scrollFrame then return end
+    if not Options.frame.scrollFrame:GetScrollChild() then return end
+    local childTop, selfTop = Options.frame.scrollFrame:GetScrollChild():GetTop(), self:GetTop()
     if not childTop or not selfTop then return end
-
-    local target = childTop - selfTop - self.scrollPadding
-    local maxScroll = scrollFrame:GetVerticalScrollRange() or 0
-
-    if target < 0 then
-        target = 0
-    elseif target > maxScroll then
-        target = maxScroll
-    end
-
-    scrollFrame:SetVerticalScroll(target)
+    local target = math.max(0, math.min(childTop - selfTop - self.scrollPadding,
+        Options.frame.scrollFrame:GetVerticalScrollRange() or 0))
+    Options.frame.scrollFrame:SetVerticalScroll(target)
     self.searchHighlight:Show()
-end
-
-function MapPinEnhancedFormElementMixin:SetLayout(orientation)
-    assert(orientation == "vertical" or orientation == "horizontal", "Invalid orientation: " .. tostring(orientation))
-
-    self.child:ClearAllPoints()
-    if orientation == "vertical" then
-        local hasLabel = self:HasLabel()
-        local hasDescription = self:HasDescription()
-
-        ---@type Region
-        local anchor = self
-        local anchorPoint = "TOPLEFT"
-        local offsetY = 0
-        if hasDescription then
-            anchor = self.description
-            anchorPoint = "BOTTOMLEFT"
-            offsetY = -self.descriptionBottomSpacing
-        elseif hasLabel then
-            anchor = self.label
-            anchorPoint = "BOTTOMLEFT"
-            offsetY = -self.labelBottomSpacing
-        end
-        self.child:SetPoint("TOPLEFT", anchor, anchorPoint, 0, offsetY)
-    elseif orientation == "horizontal" then
-        self.child:SetPoint("TOPRIGHT", self, "TOPRIGHT")
-    end
-end
-
-function MapPinEnhancedFormElementMixin:UpdateDescriptionWidth()
-    local elementWidth = self:GetWidth()
-    local childWidth = self.child:GetWidth()
-    local descriptionSpace = elementWidth - childWidth
-    local descriptionWidth = math.floor(descriptionSpace * 0.9)
-    self.description:SetWidth(descriptionWidth)
-end
-
-function MapPinEnhancedFormElementMixin:OnSizeChanged()
-    local showDescription = self:HasDescription()
-    if not showDescription then
-        return
-    end
-    self:UpdateDescriptionWidth()
 end
 
 function MapPinEnhancedFormElementMixin:OnEnter()
@@ -184,41 +69,16 @@ function MapPinEnhancedFormElementMixin:OnEnter()
 end
 
 function MapPinEnhancedFormElementMixin:OnLeave()
-    if self:IsMouseOver() then return end
-    self:SetAlpha(self.normalAlpha)
+    if not self:IsMouseOver() then self:SetAlpha(self.normalAlpha) end
 end
 
 function MapPinEnhancedFormElementMixin:OnLoad()
-    assert(self.child, "Form element must have a child frame")
-    assert(self.key, "Form element must have an key")
-
-    assert(self.GetValue, "Form element must have a GetValue method")
-    assert(self.SetValue, "Form element must have a SetValue method")
-    assert(self.OnChange, "Form element must have a OnChange method")
-    assert(self.Setup, "Form element must have a Setup method")
-
-    local showLabel = self:HasLabel()
-    local showDescription = self:HasDescription()
-
-    self.label:SetShown(showLabel)
-    self.description:SetShown(showDescription)
-
-    if showLabel then
-        self.label:SetText(self:GetLabelText())
-    end
-    if showDescription then
-        self.description:SetText(self:GetDescriptionText())
-        self:UpdateDescriptionWidth()
-    end
-    self.orientation = self.orientation or "horizontal"
+    assert(self.key, "Form element must have a key")
+    assert(self.GetValue and self.SetValue and self.OnChange and self.Setup,
+        "Form element is missing its control implementation")
+    MapPinEnhancedFormFieldMixin.OnLoad(self)
     self:SetAlpha(self.normalAlpha)
-    self:SetLayout(self.orientation)
-    self:UpdateHeight()
-    self.child:HookScript("OnEnter", function()
-        self:OnEnter()
-    end)
-    self.child:HookScript("OnLeave", function()
-        self:OnLeave()
-    end)
+    self.child:HookScript("OnEnter", function() self:OnEnter() end)
+    self.child:HookScript("OnLeave", function() self:OnLeave() end)
     Options:RegisterOption(self.key, self)
 end

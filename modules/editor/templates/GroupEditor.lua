@@ -3,6 +3,24 @@ local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local Util = MapPinEnhancedEditorUtil
 
+---@class MapPinEnhancedEditorGroupEditorEmptyState : Frame
+---@field message FontString
+---@field createButton Button
+
+---@class MapPinEnhancedEditorGroupEditorContent : Frame
+---@field header MapPinEnhancedEditorGroupEditorHeaderTemplate
+---@field scrollBox Frame|ScrollBoxListMixin
+---@field scrollBar ScrollBarMixin
+
+---@class MapPinEnhancedEditorGroupEditorTemplate : Frame
+---@field editor MapPinEnhancedEditorTemplate?
+---@field group MapPinEnhancedGroupMixin?
+---@field emptyState MapPinEnhancedEditorGroupEditorEmptyState
+---@field content MapPinEnhancedEditorGroupEditorContent
+---@field dataProvider DataProviderMixin
+---@field scrollView ScrollBoxListLinearViewMixin
+---@field dropTarget MapPinEnhancedEditorPinNodeData?
+---@field dropPlacement "before"|"after"|nil
 MapPinEnhancedEditorGroupEditorMixin = {}
 
 function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
@@ -11,9 +29,14 @@ function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)
+        ---@cast entry MapPinEnhancedEditorGroupEditorPinEntryTemplate
+        ---@cast pinNode MapPinEnhancedEditorPinNodeData
         entry:Init(pinNode, self.editor)
     end)
-    self.scrollView:SetElementResetter(function(entry) entry:Reset() end)
+    self.scrollView:SetElementResetter(function(entry)
+        ---@cast entry MapPinEnhancedEditorGroupEditorPinEntryTemplate
+        entry:Reset()
+    end)
     self.scrollView:SetDataProvider(self.dataProvider)
     self.content.scrollBar:SetHideIfUnscrollable(true)
     self.content.scrollBar:SetInterpolateScroll(true)
@@ -21,6 +44,7 @@ function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.content.scrollBox, self.content.scrollBar, self.scrollView)
 end
 
+---@param editor MapPinEnhancedEditorTemplate
 function MapPinEnhancedEditorGroupEditorMixin:SetEditor(editor)
     self.editor = editor
 end

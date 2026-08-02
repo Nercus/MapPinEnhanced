@@ -1,45 +1,35 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Include file="FormElement.lua" />
-    <Frame name="MapPinEnhancedFormElementTemplate" virtual="true" mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true" enableMouse="true" propagateMouseInput="Motion">
+    <Script file="FormElement.lua" />
+
+    <Frame name="MapPinEnhancedFormElementTemplate" virtual="true" inherits="MapPinEnhancedFormFieldTemplate"
+        mixin="MapPinEnhancedFormElementMixin" collapsesLayout="true" enableMouse="true"
+        propagateMouseInput="Motion">
         <KeyValues>
             <KeyValue key="padding" value="8" type="number" />
             <KeyValue key="labelBottomSpacing" value="5" type="number" />
             <KeyValue key="descriptionBottomSpacing" value="8" type="number" />
+            <KeyValue key="orientation" value="horizontal" />
             <KeyValue key="scrollPadding" value="12" type="number" />
             <KeyValue key="normalAlpha" value="0.85" type="number" />
             <KeyValue key="hoverAlpha" value="1" type="number" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormal">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" />
-                    </Anchors>
-                </FontString>
                 <Texture parentKey="searchHighlight" atlas="common-icon-forwardarrow" desaturated="true" hidden="true">
                     <Size x="20" y="20" />
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="RIGHT" relativePoint="LEFT" x="-4" relativeKey="$parent.label" />
+                        <Anchor point="RIGHT" relativeKey="$parent.label" relativePoint="LEFT" x="-4" />
                     </Anchors>
                     <Scripts>
                         <OnShow>
                             self:GetParent().searchAnimation:Play()
                             C_Timer.After(5, function() if self:IsShown() then self:Hide() end end)
                         </OnShow>
-                        <OnHide>
-                            self:GetParent().searchAnimation:Stop()
-                        </OnHide>
+                        <OnHide>self:GetParent().searchAnimation:Stop()</OnHide>
                     </Scripts>
                 </Texture>
-                <FontString parentKey="description" inherits="GameFontNormalSmall" collapsesLayout="true" wordwrap="true" justifyH="LEFT" justifyV="TOP">
-                    <Size x="1" y="0" />
-                    <Color r="0.7" g="0.7" b="0.7" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="-4" relativeKey="$parent.label" />
-                    </Anchors>
-                </FontString>
             </Layer>
         </Layers>
         <Animations>
@@ -52,8 +42,6 @@
             <OnLoad method="OnLoad" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
-            <OnSizeChanged method="OnSizeChanged" />
         </Scripts>
     </Frame>
-
 </Ui>

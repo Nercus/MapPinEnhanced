@@ -8,20 +8,16 @@ local L = MapPinEnhanced.L
 ---@field right Texture
 ---@field middle Texture
 ---@field clearButton Button
----@field inlineLabel MapPinEnhancedInputInlineLabel
+---@field inlineIcon MapPinEnhancedInputInlineIcon
 ---@field placeholderText FontString
 ---@field clearOnEscape boolean?
 ---@field icon MapPinEnhancedIcon? set through keyvalues
----@field label string? set through keyvalues
 ---@field placeholder string? set through keyvalues
 ---@field placeholderFont string? set through keyvalues
 MapPinEnhancedInputMixin = {}
 
----@class MapPinEnhancedInputInlineLabel : Frame
----@field text FontString
+---@class MapPinEnhancedInputInlineIcon : Frame
 ---@field icon MapPinEnhancedIconMixin
----@field bg Texture
-
 
 function MapPinEnhancedInputMixin:UpdatePlaceholderVisibility()
     local text = self:GetText()
@@ -66,44 +62,24 @@ function MapPinEnhancedInputMixin:SetPlaceholderFont(placeholderFont)
     self.placeholderText:SetFontObject(fontObject)
 end
 
-function MapPinEnhancedInputMixin:ResetInline()
-    self.inlineLabel:Hide()
+function MapPinEnhancedInputMixin:ResetInlineIcon()
+    self.inlineIcon:Hide()
     self:SetTextInsets(13, 0, 0, 0)
-    self:UpdatePlaceholderPosition()
-end
-
-function MapPinEnhancedInputMixin:SetInlineLabel(label)
-    if not label then
-        self:ResetInline()
-        return
-    end
-    self.inlineLabel.text:SetText(label)
-    self.inlineLabel:Show()
-    local labelWidth = self.inlineLabel.text:GetStringWidth() + 20
-    self.inlineLabel:SetWidth(labelWidth)
-    self:SetTextInsets(labelWidth + 3, 5, 0, 0)
-    self.inlineLabel.icon:Hide()
-    self.inlineLabel.text:Show()
-    self.inlineLabel.bg:Show()
     self:UpdatePlaceholderPosition()
 end
 
 ---@param icon MapPinEnhancedIcon
 function MapPinEnhancedInputMixin:SetInlineIcon(icon)
     if not icon then
-        self:ResetInline()
+        self:ResetInlineIcon()
         return
     end
-    self.inlineLabel.icon:SetIconTexture(icon)
-    self.inlineLabel:Show()
-    local labelHeight = self.inlineLabel:GetHeight()
-    local iconSize = labelHeight * 0.5
-    self.inlineLabel.icon:SetSize(iconSize, iconSize)
-    self:SetTextInsets(labelHeight, 5, 0, 0)
-    self.inlineLabel:SetWidth(labelHeight)
-    self.inlineLabel.icon:Show()
-    self.inlineLabel.text:Hide()
-    self.inlineLabel.bg:Hide()
+    self.inlineIcon.icon:SetIconTexture(icon)
+    self.inlineIcon:Show()
+    local iconHeight = self.inlineIcon:GetHeight()
+    self.inlineIcon.icon:SetSize(iconHeight * 0.5, iconHeight * 0.5)
+    self:SetTextInsets(iconHeight, 5, 0, 0)
+    self.inlineIcon:SetWidth(iconHeight)
     self:UpdatePlaceholderPosition()
 end
 
@@ -117,14 +93,10 @@ function MapPinEnhancedInputMixin:OnLoad()
         self:SetPlaceholderText(L[self.placeholder])
     end
 
-    if self.icon and not self.label then
+    if self.icon then
         self:SetInlineIcon(self.icon)
-    elseif self.label and not self.icon then
-        self:SetInlineLabel(self.label)
-    elseif self.icon and self.label then
-        error("MapPinEnhancedInputMixin: Cannot set both icon and label at the same time.")
     else
-        self:ResetInline()
+        self:ResetInlineIcon()
     end
 end
 

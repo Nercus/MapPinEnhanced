@@ -4,6 +4,16 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local Util = MapPinEnhancedEditorUtil
 
+---@class MapPinEnhancedEditorGroupSidebarTemplate : Frame
+---@field editor MapPinEnhancedEditorTemplate?
+---@field title FontString
+---@field search MapPinEnhancedInputTemplate
+---@field createButton MapPinEnhancedIconButtonTemplate
+---@field scrollBox Frame|ScrollBoxListMixin
+---@field scrollBar ScrollBarMixin
+---@field dataProvider DataProviderMixin
+---@field scrollView ScrollBoxListLinearViewMixin
+---@field dropTarget MapPinEnhancedGroupMixin?
 MapPinEnhancedEditorGroupSidebarMixin = {}
 
 function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
@@ -15,9 +25,14 @@ function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupSidebarEntryTemplate", function(entry, group)
+        ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
+        ---@cast group MapPinEnhancedGroupMixin
         entry:Init(group, self.editor)
     end)
-    self.scrollView:SetElementResetter(function(entry) entry:Reset() end)
+    self.scrollView:SetElementResetter(function(entry)
+        ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
+        entry:Reset()
+    end)
     self.scrollView:SetDataProvider(self.dataProvider)
     self.scrollBar:SetHideIfUnscrollable(true)
     self.scrollBar:SetInterpolateScroll(true)
@@ -34,6 +49,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
     end)
 end
 
+---@param editor MapPinEnhancedEditorTemplate
 function MapPinEnhancedEditorGroupSidebarMixin:SetEditor(editor)
     self.editor = editor
     self.createButton:SetScript("OnClick", function() editor:CreateNewGroup() end)
@@ -62,6 +78,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
     for _, group in ipairs(groups) do self.dataProvider:Insert(group) end
 end
 
+---@param group MapPinEnhancedGroupMixin?
 function MapPinEnhancedEditorGroupSidebarMixin:ScrollToGroup(group)
     if not group then return end
     self.scrollBox:ScrollToElementDataByPredicate(function(data)
