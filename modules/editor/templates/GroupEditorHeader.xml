@@ -58,15 +58,6 @@
                     </DropdownButton>
                 </Frames>
             </Frame>
-            <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="24" y="24" />
-                <KeyValues>
-                    <KeyValue key="icon" value="cross" />
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" />
-                </Anchors>
-            </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
@@ -74,6 +65,15 @@
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-14" />
+                </Anchors>
+            </Button>
+            <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="24" y="24" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" />
                 </Anchors>
             </Button>
         </Frames>
