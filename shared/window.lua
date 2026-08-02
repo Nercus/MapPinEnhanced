@@ -42,7 +42,7 @@ function MapPinEnhancedWindowMixin:SetBackgroundGradientColor(colorName)
     assert(color, "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: unknown color: " .. colorName)
 
     local r, g, b = color:GetRGBA()
-    self.background.backgroundArt:SetGradient("HORIZONTAL", CreateColor(r, g, b, 1), CreateColor(1, 1, 1, 1))
+    self.background.backgroundArt:SetVertexColor(r, g, b)
 end
 
 function MapPinEnhancedWindowMixin:OnLoad()

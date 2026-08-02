@@ -58,10 +58,6 @@
                             <Anchors>
                                 <Anchor point="RIGHT" x="-5" />
                             </Anchors>
-                            <Gradient>
-                                <MinColor r="1" g="1" b="1" a="0.65" />
-                                <MaxColor r="1" g="1" b="1" a="1" />
-                            </Gradient>
                         </Texture>
                         <MaskTexture file="interface/masks/squaremask.blp" parentKey="backgroundMask" setAllPoints="true" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                             <MaskedTextures>
