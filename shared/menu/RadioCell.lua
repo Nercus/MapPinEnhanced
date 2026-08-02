@@ -1,5 +1,5 @@
 ---@class MapPinEnhancedMenuRadioCellData
----@field owner MapPinEnhancedPinMixin
+---@field owner table
 ---@field icon PinIcon
 ---@field isSelected fun(): boolean
 ---@field onClick fun()
@@ -16,7 +16,7 @@ local ICON_SIZE = 24
 ---@type table<MapPinEnhancedMenuRadioCellTemplate, boolean>
 local activeRadioCells = setmetatable({}, { __mode = "k" })
 
----@param owner MapPinEnhancedPinMixin
+---@param owner table
 local function RefreshOwnerCells(owner)
     for cell in pairs(activeRadioCells) do
         if cell.data and cell.data.owner == owner then

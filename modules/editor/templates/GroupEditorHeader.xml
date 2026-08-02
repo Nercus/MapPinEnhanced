@@ -10,33 +10,31 @@
                 <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.48" setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
-                    <Size x="38" y="38" />
-                    <Anchors><Anchor point="LEFT" x="14" y="4" /></Anchors>
-                </Texture>
                 <FontString parentKey="pinCount" inherits="GameFontNormalSmall" justifyH="LEFT">
-                    <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="BOTTOMLEFT" y="-5" /></Anchors>
+                    <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMLEFT" y="-5" /></Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
+            <Button parentKey="iconButton">
+                <Size x="38" y="38" />
+                <Anchors><Anchor point="LEFT" x="14" y="4" /></Anchors>
+                <NormalTexture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark" setAllPoints="true" />
+                <HighlightTexture atlas="communities-create-avatar-border-hover" alphaMode="ADD">
+                    <Anchors><Anchor point="TOPLEFT" x="-3" y="3" /><Anchor point="BOTTOMRIGHT" x="3" y="-3" /></Anchors>
+                </HighlightTexture>
+            </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="190" y="24" />
+                <Size x="300" y="24" />
                 <KeyValues><KeyValue key="labelText" value="Name" /></KeyValues>
                 <Anchors><Anchor point="TOPLEFT" x="70" y="-8" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="190" y="24" /></EditBox></Frames>
-            </Frame>
-            <Frame parentKey="iconField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="215" y="24" />
-                <KeyValues><KeyValue key="labelText" value="Icon" /></KeyValues>
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" /></Anchors>
-                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="215" y="24" /></EditBox></Frames>
+                <Frames><EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate"><Size x="300" y="24" /></EditBox></Frames>
             </Frame>
             <Frame parentKey="trackingModeField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="165" y="24" />
+                <Size x="240" y="24" />
                 <KeyValues><KeyValue key="labelText" value="Tracking Mode" /></KeyValues>
-                <Anchors><Anchor point="LEFT" relativeKey="$parent.iconField" relativePoint="RIGHT" x="10" /></Anchors>
-                <Frames><DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate"><Size x="165" y="24" /></DropdownButton></Frames>
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" /></Anchors>
+                <Frames><DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate"><Size x="240" y="24" /></DropdownButton></Frames>
             </Frame>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />

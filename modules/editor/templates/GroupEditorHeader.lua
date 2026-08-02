@@ -4,6 +4,30 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local L = MapPinEnhanced.L
 
+---@type PinIcon[]
+local GROUP_ICONS = {
+    { path = "Interface\\Icons\\INV_Misc_Map_01", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_QuestionMark", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Note_01", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Book_09", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Compass_01", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Key_03", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Coin_01", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Bag_10", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Chest_Cloth_17", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_TreasureChest04b", usesAtlas = false },
+    { path = "Interface\\Icons\\INV_Misc_Flag_02", usesAtlas = false },
+    { path = "Interface\\Icons\\Ability_Hunter_Pathfinding", usesAtlas = false },
+    { path = "Interface\\Icons\\Ability_Mount_RidingHorse", usesAtlas = false },
+    { path = "Interface\\Icons\\Ability_Spy", usesAtlas = false },
+    { path = "Interface\\Icons\\Spell_Fire_Fire", usesAtlas = false },
+    { path = "Interface\\Icons\\Spell_Frost_Frost", usesAtlas = false },
+    { path = "Interface\\Icons\\Spell_Nature_Earthquake", usesAtlas = false },
+    { path = "Interface\\Icons\\Spell_Holy_MagicalSentry", usesAtlas = false },
+    { path = "Interface\\Icons\\Trade_Engineering", usesAtlas = false },
+    { path = "Interface\\Icons\\Trade_Alchemy", usesAtlas = false },
+}
+
 ---@class MapPinEnhancedEditorCommittedInput : MapPinEnhancedInputTemplate
 ---@field committedValue string
 
@@ -13,13 +37,15 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedEditorDropdownField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedDropdownTemplate
 
+---@class MapPinEnhancedEditorGroupIconButton : Button
+---@field icon Texture
+
 ---@class MapPinEnhancedEditorGroupEditorHeaderTemplate : Frame
 ---@field group MapPinEnhancedGroupMixin?
 ---@field editor MapPinEnhancedEditorTemplate?
----@field icon Texture
+---@field iconButton MapPinEnhancedEditorGroupIconButton
 ---@field pinCount FontString
 ---@field nameField MapPinEnhancedEditorInputField
----@field iconField MapPinEnhancedEditorInputField
 ---@field trackingModeField MapPinEnhancedEditorDropdownField
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
@@ -54,10 +80,38 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
     self.editor = nil
     self.nameField.child:SetScript("OnEnterPressed", nil)
     self.nameField.child:SetScript("OnEditFocusLost", nil)
-    self.iconField.child:SetScript("OnEnterPressed", nil)
-    self.iconField.child:SetScript("OnEditFocusLost", nil)
+    self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self.hideButton:SetScript("OnClick", nil)
+end
+
+function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
+    local group = assert(self.group)
+    local editor = assert(self.editor)
+    local entries = {}
+    for _, groupIcon in ipairs(GROUP_ICONS) do
+        local icon = groupIcon
+        table.insert(entries, {
+            type = "template",
+            template = "MapPinEnhancedMenuRadioCellTemplate",
+            data = {
+                owner = group,
+                icon = icon,
+                isSelected = function() return group:GetIcon() == icon.path end,
+                onClick = function()
+                    group:SetIcon(icon.path)
+                    self.iconButton.icon:SetTexture(icon.path)
+                    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+                    editor.groupSidebar:Refresh()
+                end,
+            },
+            initializer = function(_, _, menu)
+                menu.minimumElementWidth = 36
+                return 36, 36
+            end,
+        })
+    end
+    MapPinEnhanced:GenerateMenu(self.iconButton, entries, { gridModeColumns = 5 })
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -67,11 +121,12 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
     self:Reset()
     self.group, self.editor = group, editor
     local protected = group:IsProtected()
-    self.icon:SetTexture(group:GetIcon())
+    self.iconButton.icon:SetTexture(group:GetIcon())
+    self.iconButton:SetEnabled(not protected)
+    self.iconButton:SetScript("OnClick", function() self:ShowIconMenu() end)
     self.pinCount:SetText(string.format(L["%d |4pin:pins;"], group:GetTotalPinCount()))
 
     self.nameField.child:SetEnabled(not protected)
-    self.iconField.child:SetEnabled(not protected)
     SetupCommittedEditBox(self.nameField.child, group:GetName(), function(value)
         if protected then return false end
         local existing = Groups:GetGroupByName(value)
@@ -79,14 +134,6 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         local result = group:SetName(value)
         editor.groupSidebar:Refresh()
         return result ~= false
-    end)
-    SetupCommittedEditBox(self.iconField.child, group:GetIcon() or "", function(value)
-        if protected then return false end
-        group:SetIcon(value)
-        self.icon:SetTexture(value)
-        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-        editor.groupSidebar:Refresh()
-        return true
     end)
 
     self.trackingModeField.child:SetEnabled(not protected)
