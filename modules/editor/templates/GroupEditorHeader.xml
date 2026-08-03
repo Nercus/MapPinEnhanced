@@ -6,10 +6,10 @@
         <Size x="820" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="generic-frame-chamfered-12d-2o">
+                <Texture atlas="Options_HorizontalDivider">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="42" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
+                        <Anchor point="BOTTOMLEFT" x="4" y="0" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="0" />
                     </Anchors>
                 </Texture>
             </Layer>
