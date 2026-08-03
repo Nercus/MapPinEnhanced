@@ -22,6 +22,7 @@ local Util = MapPinEnhancedEditorUtil
 ---@field mapField MapPinEnhancedEditorAutocompleteField
 ---@field xField MapPinEnhancedEditorInputField
 ---@field yField MapPinEnhancedEditorInputField
+---@field duplicateButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field dropLine Texture
 MapPinEnhancedEditorGroupEditorPinEntryMixin = {}
@@ -115,6 +116,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
     self.dragHandle:SetScript("OnEnter", nil)
     self.dragHandle:SetScript("OnLeave", nil)
     self.pinFrame:SetScript("OnMouseDown", nil)
+    self.duplicateButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self:ClearDropTarget()
 end
@@ -297,6 +299,9 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
             end
             self:RefreshPreview()
         end
+    end)
+    self.duplicateButton:SetScript("OnClick", function()
+        if Util.DuplicatePin(pinNode) then editor:RequestRefresh() end
     end)
     self.deleteButton:SetScript("OnClick", function()
         local function remove() Util.RemovePinCompletely(pinNode.group, pinNode.pinID) end

@@ -120,6 +120,29 @@ function Util.RemovePinCompletely(group, pinID)
     group:RemovePin(pinID)
 end
 
+---@param pinNode MapPinEnhancedEditorPinNodeData
+---@return UUID?
+function Util.DuplicatePin(pinNode)
+    local data = CopyTable(Util.GetPinData(pinNode))
+    data.pinID = nil
+
+    local _, duplicatePinID = pinNode.group:AddPin(data)
+    if not duplicatePinID then return nil end
+
+    local ids = {}
+    for _, node in ipairs(Util.GetSortedPins(pinNode.group)) do
+        if node.pinID ~= duplicatePinID then
+            table.insert(ids, node.pinID)
+            if node.pinID == pinNode.pinID then
+                table.insert(ids, duplicatePinID)
+            end
+        end
+    end
+    Util.ApplyPinOrder(pinNode.group, ids)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, pinNode.group)
+    return duplicatePinID
+end
+
 ---@param sourceGroup MapPinEnhancedGroupMixin
 ---@param pinID UUID
 ---@param targetGroup MapPinEnhancedGroupMixin
