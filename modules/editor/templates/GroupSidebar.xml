@@ -5,10 +5,18 @@
     <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupSidebarMixin">
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.28">
+                <Texture>
+                    <Size x="1" />
+                    <Color r="0.35" g="0.35" b="0.35" a="0.8" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="-4" y="4" />
-                        <Anchor point="BOTTOMRIGHT" x="4" y="-4" />
+                        <Anchor point="TOPRIGHT" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+                <Texture atlas="Options_HorizontalDivider">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.systemGroups" relativePoint="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.systemGroups" relativePoint="TOPRIGHT" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -53,11 +61,6 @@
                 <Anchors>
                     <Anchor point="BOTTOM" y="4" />
                 </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.34" setAllPoints="true" />
-                    </Layer>
-                </Layers>
             </Frame>
             <Frame parentKey="systemHeader" enableMouse="true">
                 <Size x="120" y="22" />
