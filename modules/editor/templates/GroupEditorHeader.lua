@@ -37,8 +37,7 @@ local GROUP_ICONS = {
 ---@class MapPinEnhancedEditorRadioGroupField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedRadioGroupTemplate
 
----@class MapPinEnhancedEditorGroupIconButton : Button
----@field icon Texture
+---@class MapPinEnhancedEditorGroupIconButton : MapPinEnhancedIconButtonTemplate
 
 ---@class MapPinEnhancedEditorGroupEditorHeaderTemplate : Frame
 ---@field group MapPinEnhancedGroupMixin?
@@ -100,7 +99,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
                 isSelected = function() return group:GetIcon() == icon.path end,
                 onClick = function()
                     group:SetIcon(icon.path)
-                    self.iconButton.icon:SetTexture(icon.path)
+                    self.iconButton.iconTexture:SetTexture(icon.path)
                     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
                     editor.groupSidebar:Refresh()
                 end,
@@ -121,7 +120,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
     self:Reset()
     self.group, self.editor = group, editor
     local protected = group:IsProtected()
-    self.iconButton.icon:SetTexture(group:GetIcon())
+    self.iconButton.iconTexture:SetTexture(group:GetIcon())
     self.iconButton:SetEnabled(not protected)
     self.iconButton:SetScript("OnClick", function() self:ShowIconMenu() end)
     self.pinCount:SetText(string.format(L["%d |4pin:pins;"], group:GetTotalPinCount()))

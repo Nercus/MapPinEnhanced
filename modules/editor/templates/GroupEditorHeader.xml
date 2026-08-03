@@ -22,35 +22,28 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="iconButton">
+            <Button parentKey="iconButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="38" y="38" />
+                <KeyValues>
+                    <KeyValue key="customIcon" value="true" type="boolean" />
+                    <KeyValue key="iconSize" value="large" />
+                </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" x="0" y="4" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark" setAllPoints="true" />
-                        <MaskTexture atlas="UI-HUD-CoolDownManager-Mask" setAllPoints="true">
+                        <MaskTexture atlas="UI-HUD-CoolDownManager-Mask">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
+                            </Anchors>
                             <MaskedTextures>
-                                <MaskedTexture childKey="icon" />
+                                <MaskedTexture childKey="iconTexture" />
                             </MaskedTextures>
                         </MaskTexture>
                     </Layer>
-                    <Layer level="OVERLAY">
-                        <Texture atlas="UI-HUD-CoolDownManager-IconOverlay">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="-6" y="5" />
-                                <Anchor point="BOTTOMRIGHT" x="6" y="-5" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
                 </Layers>
-                <HighlightTexture atlas="UI-CooldownManager-PandemicBorder-Mask-2x">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-1" y="1" />
-                        <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
-                    </Anchors>
-                </HighlightTexture>
             </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="300" y="24" />

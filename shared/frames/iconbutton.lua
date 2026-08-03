@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field icon MapPinEnhancedIcon
 ---@field iconSize MapPinEnhancedIconButtonSize
+---@field customIcon boolean?
 MapPinEnhancedIconButtonMixin = {}
 
 ---@alias MapPinEnhancedIconButtonSize "small"|"medium"|"large"
@@ -34,7 +35,9 @@ function MapPinEnhancedIconButtonMixin:UpdateIconSize()
 end
 
 function MapPinEnhancedIconButtonMixin:OnLoad()
-    self:SetIconTexture()
+    if not self.customIcon then
+        self:SetIconTexture()
+    end
     self:UpdateIconSize()
 end
 
