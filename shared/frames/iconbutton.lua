@@ -4,7 +4,17 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedIconButtonTemplate: Button
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field icon MapPinEnhancedIcon
+---@field iconSize MapPinEnhancedIconButtonSize
 MapPinEnhancedIconButtonMixin = {}
+
+---@alias MapPinEnhancedIconButtonSize "small"|"medium"|"large"
+
+---@type table<MapPinEnhancedIconButtonSize, number>
+local ICON_SIZE_PERCENTAGES = {
+    small = 0.35,
+    medium = 0.5,
+    large = 0.65,
+}
 
 ---@param icon? MapPinEnhancedIcon
 function MapPinEnhancedIconButtonMixin:SetIconTexture(icon)
@@ -16,13 +26,20 @@ function MapPinEnhancedIconButtonMixin:SetIconTexture(icon)
     self.iconTexture:SetIconTexture(self.icon)
 end
 
+function MapPinEnhancedIconButtonMixin:UpdateIconSize()
+    local percentage = ICON_SIZE_PERCENTAGES[self.iconSize]
+    assert(percentage, "MapPinEnhancedIconButtonMixin: invalid iconSize: " .. tostring(self.iconSize))
+    local size = math.min(self:GetWidth(), self:GetHeight()) * percentage
+    self.iconTexture:SetSize(size, size)
+end
+
 function MapPinEnhancedIconButtonMixin:OnLoad()
     self:SetIconTexture()
-    -- set icon size to fit nicely within the button based on its size
-    local width = self:GetWidth()
-    local height = self:GetHeight()
-    local size = math.min(width, height) * 0.5
-    self.iconTexture:SetSize(size, size)
+    self:UpdateIconSize()
+end
+
+function MapPinEnhancedIconButtonMixin:OnSizeChanged()
+    self:UpdateIconSize()
 end
 
 function MapPinEnhancedIconButtonMixin:OnMouseDown()
