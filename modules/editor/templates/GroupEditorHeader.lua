@@ -34,8 +34,8 @@ local GROUP_ICONS = {
 ---@class MapPinEnhancedEditorInputField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedEditorCommittedInput
 
----@class MapPinEnhancedEditorDropdownField : MapPinEnhancedFormFieldTemplate
----@field child MapPinEnhancedDropdownTemplate
+---@class MapPinEnhancedEditorRadioGroupField : MapPinEnhancedFormFieldTemplate
+---@field child MapPinEnhancedRadioGroupTemplate
 
 ---@class MapPinEnhancedEditorGroupIconButton : Button
 ---@field icon Texture
@@ -46,7 +46,7 @@ local GROUP_ICONS = {
 ---@field iconButton MapPinEnhancedEditorGroupIconButton
 ---@field pinCount FontString
 ---@field nameField MapPinEnhancedEditorInputField
----@field trackingModeField MapPinEnhancedEditorDropdownField
+---@field trackingModeField MapPinEnhancedEditorRadioGroupField
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedEditorGroupEditorHeaderMixin = {}
@@ -136,14 +136,17 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         return result ~= false
     end)
 
-    self.trackingModeField.child:SetEnabled(not protected)
     self.trackingModeField.child:Setup({
         options = Groups.TRACKING_MODE_OPTIONS,
+        orientation = "horizontal",
         init = function() return group:GetTrackingMode() end,
         onChange = function(value)
             if not protected then group:SetTrackingMode(value) end
         end,
     })
+    for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
+        self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
+    end
 
     self.hideButton:SetEnabled(not protected)
     self.hideButton:SetScript("OnClick", function()

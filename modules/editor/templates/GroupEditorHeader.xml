@@ -75,9 +75,12 @@
                     <Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" />
                 </Anchors>
                 <Frames>
-                    <DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate">
+                    <Frame parentKey="child" inherits="MapPinEnhancedRadioGroupTemplate">
                         <Size x="240" y="24" />
-                    </DropdownButton>
+                        <KeyValues>
+                            <KeyValue key="orientation" value="horizontal" />
+                        </KeyValues>
+                    </Frame>
                 </Frames>
             </Frame>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
