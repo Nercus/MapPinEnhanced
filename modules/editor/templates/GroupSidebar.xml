@@ -14,6 +14,7 @@
                     </Anchors>
                 </Texture>
                 <Texture atlas="Options_HorizontalDivider">
+                    <Size x="1" y="1" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" relativeKey="$parent.systemGroups" relativePoint="TOPLEFT" />
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.systemGroups" relativePoint="TOPRIGHT" />
@@ -69,14 +70,12 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT"
-                            justifyV="MIDDLE">
+                        <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                             <Anchors>
                                 <Anchor point="LEFT" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="info" inherits="GameFontHighlightSmall" text="i" justifyH="CENTER"
-                            justifyV="MIDDLE">
+                        <FontString parentKey="info" inherits="GameFontHighlightSmall" text="i" justifyH="CENTER" justifyV="MIDDLE">
                             <Size x="12" y="12" />
                             <Anchors>
                                 <Anchor point="LEFT" relativeKey="$parent.title" relativePoint="RIGHT" x="5" />
