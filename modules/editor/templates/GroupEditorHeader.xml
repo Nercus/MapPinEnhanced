@@ -14,9 +14,9 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="pinCount" inherits="GameFontNormalSmall" justifyH="LEFT">
+                <FontString parentKey="pinCount" inherits="GameFontDisableSmall" justifyH="RIGHT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMLEFT" y="-5" />
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.nameField" relativePoint="TOPRIGHT" x="-2" />
                     </Anchors>
                 </FontString>
             </Layer>
