@@ -129,6 +129,7 @@
                 <Size x="40" y="40" />
                 <KeyValues>
                     <KeyValue key="icon" value="duplicate" />
+                    <KeyValue key="iconSize" value="small" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" />
@@ -138,6 +139,7 @@
                 <Size x="40" y="40" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
+                    <KeyValue key="iconSize" value="small" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="0" />
