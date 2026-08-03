@@ -3,8 +3,8 @@ local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
+local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
-local Util = MapPinEnhancedEditorUtil
 
 ---@class MapPinEnhancedEditorCommittedAutocomplete : MapPinEnhancedAutocompleteTemplate
 ---@field committedValue string
@@ -122,7 +122,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
-    local data = Util.GetPinData(self.pinNode)
+    local data = Editor:GetPinData(self.pinNode)
     if data.texture then
         self.pinFrame:SetIconTexture(data.texture, data.usesAtlas)
     else
@@ -167,7 +167,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         type = "radio",
                         label = string.format(COLOR_PATTERN, MapPinEnhanced.basePath, colorData:GetRGBAsBytes()),
                         style = "custom",
-                        isSelected = function() return Util.GetPinData(self.pinNode).color == color end,
+                        isSelected = function() return Editor:GetPinData(self.pinNode).color == color end,
                         setSelected = function() self:SetColor(color) end,
                     })
                 end
@@ -188,7 +188,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         data = {
                             owner = self.pinNode,
                             icon = icon,
-                            isSelected = function() return Util.GetPinData(self.pinNode).texture == icon.path end,
+                            isSelected = function() return Editor:GetPinData(self.pinNode).texture == icon.path end,
                             onClick = function() self:SetIcon(icon) end,
                         },
                         initializer = function(_, _, dropdown)
@@ -209,7 +209,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
     local selectedMap = self.mapField.child.value
     local mapText = self.mapField.child:GetText() or ""
     local mapID = selectedMap and selectedMap.label == mapText and selectedMap.value or FindExactMap(mapText)
-    local x, y = Util.ParsePercent(self.xField.child:GetText()), Util.ParsePercent(self.yField.child:GetText())
+    local x, y =
+        Editor:ParsePercent(self.xField.child:GetText()), Editor:ParsePercent(self.yField.child:GetText())
     if not mapID then
         self.mapField.child:SetValue(self.mapField.child.committedMapID)
         return false
@@ -224,7 +225,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
     end
     self.mapField.child.committedValue = GetMapDisplay(mapID)
     self.mapField.child.committedMapID = mapID
-    self.xField.child.committedValue, self.yField.child.committedValue = Util.FormatPercent(x), Util.FormatPercent(y)
+    self.xField.child.committedValue, self.yField.child.committedValue =
+        Editor:FormatPercent(x), Editor:FormatPercent(y)
     self.mapField.child:SetValue(mapID)
     return true
 end
@@ -233,7 +235,7 @@ end
 ---@param editor MapPinEnhancedEditorTemplate
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.pinNode, self.editor = pinNode, editor
-    local data = Util.GetPinData(pinNode)
+    local data = Editor:GetPinData(pinNode)
     self:RefreshPreview()
 
     CommitTextBox(self.nameField.child, data.title or L["Map Pin"], function(value)
@@ -259,7 +261,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.mapField.child.committedValue = GetMapDisplay(data.mapID)
     self.mapField.child.committedMapID = data.mapID
     self.xField.child.committedValue, self.yField.child.committedValue =
-        Util.FormatPercent(data.x), Util.FormatPercent(data.y)
+        Editor:FormatPercent(data.x), Editor:FormatPercent(data.y)
     self.mapField.child:SetValue(data.mapID)
     self.xField.child:SetValue(self.xField.child.committedValue)
     self.yField.child:SetValue(self.yField.child.committedValue)
@@ -301,10 +303,10 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
         end
     end)
     self.duplicateButton:SetScript("OnClick", function()
-        if Util.DuplicatePin(pinNode) then editor:RequestRefresh() end
+        if Editor:DuplicatePin(pinNode) then editor:RequestRefresh() end
     end)
     self.deleteButton:SetScript("OnClick", function()
-        local function remove() Util.RemovePinCompletely(pinNode.group, pinNode.pinID) end
+        local function remove() Editor:RemovePinCompletely(pinNode.group, pinNode.pinID) end
         if IsShiftKeyDown() then
             remove()
         else

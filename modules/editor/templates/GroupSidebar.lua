@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
-local Util = MapPinEnhancedEditorUtil
+local Editor = MapPinEnhanced:GetModule("Editor")
 
 ---@class MapPinEnhancedEditorGroupSidebarTemplate : Frame
 ---@field editor MapPinEnhancedEditorTemplate?
@@ -68,12 +68,12 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
     local groups = {}
     local search = self:GetSearch()
     for group in Groups:EnumerateGroups() do
-        if Util.ShouldShowGroup(group) and
+        if Editor:ShouldShowGroup(group) and
             (search == "" or MapPinEnhanced:FuzzyMatch(search, group:GetName())) then
             table.insert(groups, group)
         end
     end
-    table.sort(groups, Util.IsGroupBefore)
+    table.sort(groups, function(group1, group2) return Editor:IsGroupBefore(group1, group2) end)
     self.dataProvider:Flush()
     for _, group in ipairs(groups) do self.dataProvider:Insert(group) end
 end

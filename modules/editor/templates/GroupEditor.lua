@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
-local Util = MapPinEnhancedEditorUtil
+local Editor = MapPinEnhanced:GetModule("Editor")
 
 ---@class MapPinEnhancedEditorGroupEditorEmptyState : Frame
 ---@field message FontString
@@ -60,7 +60,7 @@ function MapPinEnhancedEditorGroupEditorMixin:SetGroup(group, focusName)
         return
     end
     self.content.header:SetGroup(group, self.editor, focusName)
-    for _, pinNode in ipairs(Util.GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
+    for _, pinNode in ipairs(Editor:GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:IsEditing()
@@ -118,13 +118,13 @@ function MapPinEnhancedEditorGroupEditorMixin:FinishPinDrop()
     if not moved or not target or moved.group ~= target.group or moved.pinID == target.pinID then return end
 
     local ids = {}
-    for _, node in ipairs(Util.GetSortedPins(target.group)) do
+    for _, node in ipairs(Editor:GetSortedPins(target.group)) do
         if node.pinID ~= moved.pinID then
             if node.pinID == target.pinID and placement == "before" then table.insert(ids, moved.pinID) end
             table.insert(ids, node.pinID)
             if node.pinID == target.pinID and placement == "after" then table.insert(ids, moved.pinID) end
         end
     end
-    Util.ApplyPinOrder(target.group, ids)
+    Editor:ApplyPinOrder(target.group, ids)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, target.group)
 end
