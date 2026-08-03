@@ -11,7 +11,13 @@ Editor.DEFAULT_GROUP_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
 ---@param group MapPinEnhancedGroupMixin
 ---@return boolean
 function Editor:ShouldShowGroup(group)
-    return group.groupType ~= "wayBack"
+    return not group:IsProtected()
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@return boolean
+function Editor:ShouldShowSystemGroup(group)
+    return group:IsProtected()
 end
 
 ---@param group1 MapPinEnhancedGroupMixin

@@ -39,7 +39,7 @@
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.search" relativePoint="BOTTOMLEFT" y="-8" />
-                    <Anchor point="BOTTOMRIGHT" x="-18" y="8" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.systemGroups" relativePoint="TOPRIGHT" x="-18" y="8" />
                 </Anchors>
             </Frame>
             <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
@@ -48,6 +48,50 @@
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="4" />
                 </Anchors>
             </EventFrame>
+            <Frame parentKey="systemGroups">
+                <Size x="242" y="132" />
+                <Anchors>
+                    <Anchor point="BOTTOM" y="4" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.34" setAllPoints="true" />
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame parentKey="systemHeader" enableMouse="true">
+                <Size x="120" y="22" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.systemGroups" x="8" y="-4" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT"
+                            justifyV="MIDDLE">
+                            <Anchors>
+                                <Anchor point="LEFT" />
+                            </Anchors>
+                        </FontString>
+                        <FontString parentKey="info" inherits="GameFontHighlightSmall" text="i" justifyH="CENTER"
+                            justifyV="MIDDLE">
+                            <Size x="12" y="12" />
+                            <Anchors>
+                                <Anchor point="LEFT" relativeKey="$parent.title" relativePoint="RIGHT" x="5" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Button parentKey="ungroupedPinsEntry" inherits="MapPinEnhancedEditorGroupSidebarEntryTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.systemGroups" x="6" y="-30" />
+                </Anchors>
+            </Button>
+            <Button parentKey="mywaybackEntry" inherits="MapPinEnhancedEditorGroupSidebarEntryTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.ungroupedPinsEntry" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+            </Button>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

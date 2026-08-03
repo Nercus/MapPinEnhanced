@@ -164,6 +164,9 @@ L["Wayfinder.Floating.Style_DESCRIPTION"] =
 "Choose the floating wayfinder style. Modern shows more info, Simple is more compact and works better with other addons."
 L["Modern"] = "Modern"
 L["Simple"] = "Simple"
+L["System Groups"] = "System Groups"
+L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."] =
+"System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."
 
 
 L["Wayfinder.Arrow_GROUPLABEL"] = "Arrow"

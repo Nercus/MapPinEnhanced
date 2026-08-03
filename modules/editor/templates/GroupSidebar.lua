@@ -4,6 +4,10 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local Editor = MapPinEnhanced:GetModule("Editor")
 
+---@class MapPinEnhancedEditorSystemGroupHeader : Frame
+---@field title FontString
+---@field info FontString
+
 ---@class MapPinEnhancedEditorGroupSidebarTemplate : Frame
 ---@field editor MapPinEnhancedEditorTemplate?
 ---@field title FontString
@@ -11,33 +15,48 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field createButton MapPinEnhancedIconButtonTemplate
 ---@field scrollBox Frame|ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
+---@field systemGroups Frame
+---@field systemHeader MapPinEnhancedEditorSystemGroupHeader
+---@field ungroupedPinsEntry MapPinEnhancedEditorGroupSidebarEntryTemplate
+---@field mywaybackEntry MapPinEnhancedEditorGroupSidebarEntryTemplate
+---@field systemEntries MapPinEnhancedEditorGroupSidebarEntryTemplate[]
 ---@field dataProvider DataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field dropTarget MapPinEnhancedGroupMixin?
 MapPinEnhancedEditorGroupSidebarMixin = {}
 
-function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
-    self.title:SetText(L["Groups"])
-    self.search:SetInlineIcon("search")
-    self.search:SetPlaceholderText(L["Search"])
-    self.createButton:SetIconTexture("plus")
-
-    self.dataProvider = CreateDataProvider()
-    self.scrollView = CreateScrollBoxListLinearView()
-    self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupSidebarEntryTemplate", function(entry, group)
+---@param scrollBox Frame|ScrollBoxListMixin
+---@param scrollBar ScrollBarMixin
+---@return DataProviderMixin, ScrollBoxListLinearViewMixin
+function MapPinEnhancedEditorGroupSidebarMixin:CreateGroupList(scrollBox, scrollBar)
+    local dataProvider = CreateDataProvider()
+    local scrollView = CreateScrollBoxListLinearView()
+    scrollView:SetElementInitializer("MapPinEnhancedEditorGroupSidebarEntryTemplate", function(entry, group)
         ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
         ---@cast group MapPinEnhancedGroupMixin
         entry:Init(group, self.editor)
     end)
-    self.scrollView:SetElementResetter(function(entry)
+    scrollView:SetElementResetter(function(entry)
         ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
         entry:Reset()
     end)
-    self.scrollView:SetDataProvider(self.dataProvider)
-    self.scrollBar:SetHideIfUnscrollable(true)
-    self.scrollBar:SetInterpolateScroll(true)
-    self.scrollBox:SetInterpolateScroll(true)
-    ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
+    scrollView:SetDataProvider(dataProvider)
+    scrollBar:SetHideIfUnscrollable(true)
+    scrollBar:SetInterpolateScroll(true)
+    scrollBox:SetInterpolateScroll(true)
+    ScrollUtil.InitScrollBoxListWithScrollBar(scrollBox, scrollBar, scrollView)
+    return dataProvider, scrollView
+end
+
+function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
+    self.title:SetText(L["Groups"])
+    self.systemHeader.title:SetText(L["System Groups"])
+    self.search:SetInlineIcon("search")
+    self.search:SetPlaceholderText(L["Search"])
+    self.createButton:SetIconTexture("plus")
+
+    self.dataProvider, self.scrollView = self:CreateGroupList(self.scrollBox, self.scrollBar)
+    self.systemEntries = { self.ungroupedPinsEntry, self.mywaybackEntry }
 
     self.search:SetScript("OnTextChanged", function(_, userInput)
         if userInput then self:Refresh() end
@@ -47,6 +66,15 @@ function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
         editBox:ClearFocus()
         self:Refresh()
     end)
+    self.systemHeader:SetScript("OnEnter", function(header)
+        GameTooltip:SetOwner(header, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(L["System Groups"])
+        GameTooltip:AddLine(
+            L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."],
+            1, 1, 1, true)
+        GameTooltip:Show()
+    end)
+    self.systemHeader:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
 ---@param editor MapPinEnhancedEditorTemplate
@@ -66,21 +94,36 @@ end
 function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
     if not self.dataProvider then return end
     local groups = {}
+    local systemGroups = {}
     local search = self:GetSearch()
     for group in Groups:EnumerateGroups() do
         if Editor:ShouldShowGroup(group) and
             (search == "" or MapPinEnhanced:FuzzyMatch(search, group:GetName())) then
             table.insert(groups, group)
+        elseif Editor:ShouldShowSystemGroup(group) then
+            systemGroups[group.groupType] = group
         end
     end
     table.sort(groups, function(group1, group2) return Editor:IsGroupBefore(group1, group2) end)
     self.dataProvider:Flush()
     for _, group in ipairs(groups) do self.dataProvider:Insert(group) end
+
+    local systemEntries = {
+        { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
+        { entry = self.mywaybackEntry, group = systemGroups.wayBack },
+    }
+    for _, systemEntry in ipairs(systemEntries) do
+        local entry, group = systemEntry.entry, systemEntry.group
+        entry:Reset()
+        entry:SetShown(group ~= nil)
+        if group then entry:Init(group, self.editor) end
+    end
 end
 
 ---@param group MapPinEnhancedGroupMixin?
 function MapPinEnhancedEditorGroupSidebarMixin:ScrollToGroup(group)
     if not group then return end
+    if group:IsProtected() then return end
     self.scrollBox:ScrollToElementDataByPredicate(function(data)
         return data:GetGroupID() == group:GetGroupID()
     end)
@@ -89,6 +132,7 @@ end
 function MapPinEnhancedEditorGroupSidebarMixin:ClearDropTarget()
     self.dropTarget = nil
     self.scrollBox:ForEachFrame(function(frame) frame:SetDropTarget(false) end)
+    for _, entry in ipairs(self.systemEntries) do entry:SetDropTarget(false) end
 end
 
 function MapPinEnhancedEditorGroupSidebarMixin:GetDropTarget()
@@ -97,10 +141,18 @@ end
 
 function MapPinEnhancedEditorGroupSidebarMixin:UpdateDropTarget()
     local target
-    self.scrollBox:ForEachFrame(function(frame)
-        local isTarget = not target and frame:IsMouseOver()
-        frame:SetDropTarget(isTarget)
-        if isTarget then target = frame.group end
-    end)
+    local function update(scrollBox)
+        scrollBox:ForEachFrame(function(frame)
+            local isTarget = not target and frame:IsMouseOver()
+            frame:SetDropTarget(isTarget)
+            if isTarget then target = frame.group end
+        end)
+    end
+    update(self.scrollBox)
+    for _, entry in ipairs(self.systemEntries) do
+        local isTarget = not target and entry:IsShown() and entry:IsMouseOver()
+        entry:SetDropTarget(isTarget)
+        if isTarget then target = entry.group end
+    end
     self.dropTarget = target
 end
