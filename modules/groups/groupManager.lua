@@ -298,9 +298,6 @@ function Groups:RestoreGroup(groupData)
     if not groupData.groupID then
         return
     end
-    if #(groupData.pins or {}) == 0 and not next(groupData.pinArchive or {}) and not groupData.groupType then
-        return
-    end
 
     local group = self:GetGroupByID(groupData.groupID)
     if not group then
