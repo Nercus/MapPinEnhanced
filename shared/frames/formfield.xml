@@ -13,7 +13,7 @@
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="2" />
+                        <Anchor point="TOPLEFT" x="5" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="description" inherits="GameFontNormalSmall" wordwrap="true" justifyH="LEFT" justifyV="TOP">
