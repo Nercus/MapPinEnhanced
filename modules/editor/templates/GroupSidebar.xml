@@ -4,20 +4,13 @@
 
     <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupSidebarMixin">
         <Layers>
-            <Layer level="BACKGROUND">
+            <Layer level="ARTWORK">
                 <Texture>
                     <Size x="1" />
-                    <Color r="0.35" g="0.35" b="0.35" a="0.8" />
+                    <Color r="0.5" g="0.5" b="0.5" a="0.8" />
                     <Anchors>
-                        <Anchor point="TOPRIGHT" />
-                        <Anchor point="BOTTOMRIGHT" />
-                    </Anchors>
-                </Texture>
-                <Texture atlas="Options_HorizontalDivider">
-                    <Size x="1" y="1" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" relativeKey="$parent.systemGroups" relativePoint="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.systemGroups" relativePoint="TOPRIGHT" />
+                        <Anchor point="TOPRIGHT" x="0" />
+                        <Anchor point="BOTTOMRIGHT" x="0" />
                     </Anchors>
                 </Texture>
             </Layer>
