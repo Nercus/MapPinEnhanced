@@ -5,21 +5,21 @@
     <Frame name="MapPinEnhancedFormFieldTemplate" virtual="true" mixin="MapPinEnhancedFormFieldMixin" collapsesLayout="true" propagateMouseInput="Motion">
         <KeyValues>
             <KeyValue key="padding" value="0" type="number" />
-            <KeyValue key="labelBottomSpacing" value="4" type="number" />
-            <KeyValue key="descriptionBottomSpacing" value="6" type="number" />
+            <KeyValue key="labelBottomSpacing" value="2" type="number" />
+            <KeyValue key="descriptionBottomSpacing" value="4" type="number" />
             <KeyValue key="orientation" value="vertical" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
+                        <Anchor point="TOPLEFT" x="2" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="description" inherits="GameFontNormalSmall" wordwrap="true" justifyH="LEFT" justifyV="TOP">
                     <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.label" relativePoint="BOTTOMLEFT" y="-4" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.label" relativePoint="BOTTOMLEFT" y="-4" x="2" />
                     </Anchors>
                 </FontString>
             </Layer>
