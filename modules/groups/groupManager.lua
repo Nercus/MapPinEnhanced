@@ -5,13 +5,17 @@ local MapPinEnhanced = select(2, ...)
 ---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
 ---@field debouncedPersist table<string, function> a table to store debounced persist functions by groupID
 ---@field SYSTEM_GROUP_IDS table<string, string>
+---@field RESERVED_GROUP_NAMES table<string, string>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
 Groups.SYSTEM_GROUP_IDS = {
     UNGROUPED = "system-ungrouped",
-    WAY_BACK = "system-way-back",
+}
+
+Groups.RESERVED_GROUP_NAMES = {
+    WAY_BACK = L["My Way Back"],
 }
 
 local function CreateGroupObject()
@@ -63,12 +67,10 @@ local DEFAULT_GROUPS = {
         groupType = "ungrouped",
     },
     {
-        groupID = Groups.SYSTEM_GROUP_IDS.WAY_BACK,
-        name = L["My Way Back"],
+        name = Groups.RESERVED_GROUP_NAMES.WAY_BACK,
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\rogue_burstofspeed",
         order = math.huge,
-        groupType = "wayBack",
     }
 }
 
@@ -169,7 +171,7 @@ function Groups:GetUngroupedGroup()
 end
 
 function Groups:GetWayBackGroup()
-    return self:GetGroupByID(self.SYSTEM_GROUP_IDS.WAY_BACK)
+    return self:GetGroupByName(self.RESERVED_GROUP_NAMES.WAY_BACK)
 end
 
 ---@param pinID UUID
@@ -352,7 +354,8 @@ end
 
 function Groups:InitializeDefaultGroups()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
-        local existingGroup = self:GetGroupByID(groupInfo.groupID)
+        local existingGroup = groupInfo.groupID and self:GetGroupByID(groupInfo.groupID) or
+            self:GetGroupByName(groupInfo.name)
         if existingGroup then
             existingGroup:ApplyGroupInfo(groupInfo)
             self:PersistGroup(existingGroup)

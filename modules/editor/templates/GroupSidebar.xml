@@ -49,7 +49,7 @@
                 </Anchors>
             </EventFrame>
             <Frame parentKey="systemGroups">
-                <Size x="242" y="132" />
+                <Size x="242" y="82" />
                 <Anchors>
                     <Anchor point="BOTTOM" y="4" />
                 </Anchors>
@@ -85,11 +85,6 @@
             <Button parentKey="ungroupedPinsEntry" inherits="MapPinEnhancedEditorGroupSidebarEntryTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.systemGroups" x="6" y="-30" />
-                </Anchors>
-            </Button>
-            <Button parentKey="mywaybackEntry" inherits="MapPinEnhancedEditorGroupSidebarEntryTemplate">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.ungroupedPinsEntry" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
         </Frames>

@@ -18,7 +18,6 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field systemGroups Frame
 ---@field systemHeader MapPinEnhancedEditorSystemGroupHeader
 ---@field ungroupedPinsEntry MapPinEnhancedEditorGroupSidebarEntryTemplate
----@field mywaybackEntry MapPinEnhancedEditorGroupSidebarEntryTemplate
 ---@field systemEntries MapPinEnhancedEditorGroupSidebarEntryTemplate[]
 ---@field dataProvider DataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
@@ -56,7 +55,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
     self.createButton:SetIconTexture("plus")
 
     self.dataProvider, self.scrollView = self:CreateGroupList(self.scrollBox, self.scrollBar)
-    self.systemEntries = { self.ungroupedPinsEntry, self.mywaybackEntry }
+    self.systemEntries = { self.ungroupedPinsEntry }
 
     self.search:SetScript("OnTextChanged", function(_, userInput)
         if userInput then self:Refresh() end
@@ -110,7 +109,6 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
 
     local systemEntries = {
         { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
-        { entry = self.mywaybackEntry, group = systemGroups.wayBack },
     }
     for _, systemEntry in ipairs(systemEntries) do
         local entry, group = systemEntry.entry, systemEntry.group

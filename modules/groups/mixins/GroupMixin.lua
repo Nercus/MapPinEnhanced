@@ -8,7 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string? the icon of the group, used to display the group on the map
 ---@field order number? the order of the group in the tracker, lower numbers are higher in the list
 ---@field hidden boolean? true if this group is stored away and has no active map pins
----@field groupType "ungrouped"|"wayBack"? protected system group type
+---@field groupType "ungrouped"? protected system group type
 ---@field trackingMode GroupTrackingMode? controls how the next tracked pin is selected
 
 ---@class ArchivedPinData
@@ -27,7 +27,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string?
 ---@field order number
 ---@field hidden boolean
----@field groupType "ungrouped"|"wayBack"|nil
+---@field groupType "ungrouped"|nil
 ---@field protected boolean
 ---@field count number active pin count
 ---@field trackingMode GroupTrackingMode
