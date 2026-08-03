@@ -13,9 +13,7 @@
                         <MaxColor r="1" g="0.82" b="0" a="0.08" />
                     </Gradient>
                 </Texture>
-                <Texture parentKey="dropGlow" atlas="UI-Frame-jailerstower-PendingButtonHighlight" hidden="true" setAllPoints="true">
-                    <Color r="0.2" g="0.8" b="1" a="0.85" />
-                </Texture>
+                <Texture parentKey="dropGlow" atlas="Adventures_MissionList_Highlight" hidden="true" setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
                 <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
