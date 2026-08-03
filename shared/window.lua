@@ -15,34 +15,11 @@ local L = MapPinEnhanced.L
 ---@field header MapPinEnhancedWindowHeader
 ---@field background MapPinEnhancedWindowBackground
 ---@field windowTitle string? set through keyvalues
----@field windowColor WindowColor? set through keyvalues
 MapPinEnhancedWindowMixin = {}
 
 ---@param title string
 function MapPinEnhancedWindowMixin:SetTitle(title)
     self.header.title:SetText(string.format("%s - %s", MapPinEnhanced.displayName, title))
-end
-
----@enum (key) WindowColor
-local WINDOW_COLORS = {
-    ["yellow"] = CreateColor(0.6, 0.6, 0, 1),
-    ["green"] = CreateColor(0, 0.6, 0, 1),
-    ["blue"] = CreateColor(0, 0, 0.6, 1),
-    ["purple"] = CreateColor(0.6, 0, 0.6, 1),
-    ["red"] = CreateColor(0.6, 0, 0, 1),
-}
-
----@param colorName WindowColor
-function MapPinEnhancedWindowMixin:SetBackgroundGradientColor(colorName)
-    assert(colorName, "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: colorName is nil")
-    assert(type(colorName) == "string",
-        "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: colorName must be a string")
-
-    local color = WINDOW_COLORS[colorName]
-    assert(color, "MapPinEnhancedWindowMixin:SetBackgroundGradientColor: unknown color: " .. colorName)
-
-    local r, g, b = color:GetRGBA()
-    self.background.backgroundArt:SetVertexColor(r, g, b)
 end
 
 function MapPinEnhancedWindowMixin:OnLoad()
@@ -56,10 +33,6 @@ function MapPinEnhancedWindowMixin:OnLoad()
 
     if self.windowTitle then
         self:SetTitle(L[self.windowTitle] or self.windowTitle)
-    end
-
-    if self.windowColor then
-        self:SetBackgroundGradientColor(self.windowColor)
     end
 end
 

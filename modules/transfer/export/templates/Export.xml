@@ -6,7 +6,6 @@
         <Size x="650" y="400" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Export" />
-            <KeyValue key="windowColor" value="blue" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">

@@ -6,7 +6,6 @@
         <Size x="720" y="420" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Import" />
-            <KeyValue key="windowColor" value="yellow" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">

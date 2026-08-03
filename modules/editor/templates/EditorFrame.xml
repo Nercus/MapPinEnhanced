@@ -4,7 +4,6 @@
         <Size x="1180" y="590" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Editor" />
-            <KeyValue key="windowColor" value="yellow" />
         </KeyValues>
         <Frames>
             <Frame parentKey="groupSidebar" inherits="MapPinEnhancedEditorGroupSidebarTemplate">
