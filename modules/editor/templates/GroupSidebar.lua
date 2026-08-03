@@ -106,7 +106,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
     end
     table.sort(groups, function(group1, group2) return Editor:IsGroupBefore(group1, group2) end)
     self.dataProvider:Flush()
-    for _, group in ipairs(groups) do self.dataProvider:Insert(group) end
+    self.dataProvider:InsertTable(groups)
 
     local systemEntries = {
         { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
