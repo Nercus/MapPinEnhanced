@@ -9,8 +9,8 @@
             <Frame parentKey="groupSidebar" inherits="MapPinEnhancedEditorGroupSidebarTemplate">
                 <Size x="250" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="28" y="-46" />
-                    <Anchor point="BOTTOMLEFT" x="28" y="26" />
+                    <Anchor point="TOPLEFT" x="28" y="-36" />
+                    <Anchor point="BOTTOMLEFT" x="28" y="16" />
                 </Anchors>
             </Frame>
             <Frame parentKey="groupEditor" inherits="MapPinEnhancedEditorGroupEditorTemplate">

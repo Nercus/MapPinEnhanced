@@ -8,8 +8,8 @@
                 <Texture atlas="UI-Journeys-Delve-reward-Bar-Wide-divider">
                     <Size x="1" />
                     <Anchors>
-                        <Anchor point="TOPRIGHT" y="4"/>
-                        <Anchor point="BOTTOMRIGHT" y="-4" />
+                        <Anchor point="TOPRIGHT" y="12"/>
+                        <Anchor point="BOTTOMRIGHT" y="-12" />
                     </Anchors>
                 </Texture>
             </Layer>
