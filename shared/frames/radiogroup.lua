@@ -6,6 +6,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field text FontString
 MapPinEnhancedRadioButtonMixin = {}
 
+function MapPinEnhancedRadioButtonMixin:OnEnable()
+    self:SetAlpha(1)
+end
+
 function MapPinEnhancedRadioButtonMixin:OnDisable()
     self:SetAlpha(0.3)
 end
@@ -81,7 +85,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
         end
         totalWidth = totalWidth - spacing + 10
         self:SetWidth(totalWidth)
-        self:SetHeight(30)
+        self:SetHeight(20)
     else
         self:SetHeight(#self.options * 25 + 10)
         self:SetWidth(200)

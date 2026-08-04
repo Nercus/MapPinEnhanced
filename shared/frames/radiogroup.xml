@@ -51,6 +51,7 @@
             </Layer>
         </Layers>
         <Scripts>
+            <OnEnable method="OnEnable" />
             <OnDisable method="OnDisable" />
         </Scripts>
     </CheckButton>
