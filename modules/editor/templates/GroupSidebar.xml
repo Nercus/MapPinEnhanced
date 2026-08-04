@@ -57,7 +57,12 @@
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture atlas="generic-frame-chamfered-12d-2o" setAllPoints="true" alpha="0.5" />
+                        <Texture atlas="generic-frame-chamfered-12d-2o" alpha="0.5">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" x="-2" y="2" />
+                                <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
+                            </Anchors>
+                        </Texture>
                     </Layer>
                 </Layers>
             </Frame>
