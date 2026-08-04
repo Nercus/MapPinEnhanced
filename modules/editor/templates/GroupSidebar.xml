@@ -55,6 +55,11 @@
                 <Anchors>
                     <Anchor point="BOTTOM" y="4" />
                 </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture atlas="generic-frame-chamfered-12d-2o" setAllPoints="true" alpha="0.5" />
+                    </Layer>
+                </Layers>
             </Frame>
             <Frame parentKey="systemHeader" enableMouse="true">
                 <Size x="120" y="22" />
