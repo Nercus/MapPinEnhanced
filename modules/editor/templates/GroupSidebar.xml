@@ -5,12 +5,11 @@
     <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupSidebarMixin">
         <Layers>
             <Layer level="ARTWORK">
-                <Texture>
+                <Texture atlas="UI-Journeys-Delve-reward-Bar-Wide-divider">
                     <Size x="1" />
-                    <Color r="0.5" g="0.5" b="0.5" a="0.8" />
                     <Anchors>
-                        <Anchor point="TOPRIGHT" x="0" />
-                        <Anchor point="BOTTOMRIGHT" x="0" />
+                        <Anchor point="TOPRIGHT" y="4"/>
+                        <Anchor point="BOTTOMRIGHT" y="-4" />
                     </Anchors>
                 </Texture>
             </Layer>
