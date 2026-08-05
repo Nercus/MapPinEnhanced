@@ -16,6 +16,7 @@ L["Icon Picker"] = "Icon Picker"
 L["More..."] = "More..."
 L["Select an icon"] = "Select an icon"
 L["%d icons"] = "%d icons"
+L["%d icons (loading...)"] = "%d icons (loading...)"
 L["Import"] = "Import"
 L["Save"] = "Save"
 

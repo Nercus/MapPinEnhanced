@@ -16,6 +16,8 @@ local CELL_SPACING = 4
 local ROW_HEIGHT = CELL_SIZE + CELL_SPACING
 local SEARCH_DEBOUNCE_SECONDS = 0.15
 local DOUBLE_CLICK_SECONDS = 0.35
+local PRECACHE_CHUNK_SIZE = 100
+local PRECACHE_REFRESH_INTERVAL = 5
 ---@type MapPinEnhancedIconPickerWindowTemplate?
 local iconPickerWindow
 
@@ -26,10 +28,6 @@ local function GetIconName(path)
     local name = value:match("([^\\/]+)$") or value
     return name:gsub("%.[Bb][Ll][Pp]$", ""):gsub("%.[Tt][Gg][Aa]$", "")
 end
-
----@class MapPinEnhancedIconPickerRowData
----@field icons MapPinEnhancedIconPickerEntry[]
----@field startIndex number
 
 ---@class MapPinEnhancedIconPickerRowTemplate : Frame
 ---@field buttons MapPinEnhancedIconPickerButton[]
@@ -92,10 +90,12 @@ function MapPinEnhancedIconPickerRowMixin:OnLoad()
     end
 end
 
----@param data MapPinEnhancedIconPickerRowData
-function MapPinEnhancedIconPickerRowMixin:Init(data)
+---@param rowIndex number
+function MapPinEnhancedIconPickerRowMixin:Init(rowIndex)
+    local window = assert(iconPickerWindow, "Icon picker window is not loaded")
+    local startIndex = (rowIndex - 1) * COLUMN_COUNT + 1
     for column, button in ipairs(self.buttons) do
-        local icon = data.icons[data.startIndex + column - 1]
+        local icon = window.filteredIcons[startIndex + column - 1]
         button.iconData = icon
         button:SetShown(icon ~= nil)
         if icon then
@@ -124,42 +124,63 @@ end
 ---@field scrollBar MinimalScrollBar
 ---@field cancelButton Button
 ---@field confirmButton Button
----@field dataProvider DataProviderMixin
+---@field dataProvider IndexRangeDataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field selected MapPinEnhancedIconPickerEntry?
 ---@field callback fun(path: string|number)?
 ---@field searchTimer FunctionContainer?
----@field icons MapPinEnhancedIconPickerEntry[]?
+---@field iconProvider IconDataProviderMixin?
+---@field icons MapPinEnhancedIconPickerEntry[]
+---@field filteredIcons MapPinEnhancedIconPickerEntry[]
+---@field lastQuery string?
+---@field isPrecacheStarted boolean
+---@field isPrecacheComplete boolean
 MapPinEnhancedIconPickerWindowMixin = {}
 
----@return MapPinEnhancedIconPickerEntry[]
-function MapPinEnhancedIconPickerWindowMixin:GetIcons()
-    if self.icons then return self.icons end
-
+function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
+    if self.isPrecacheStarted then return end
+    self.isPrecacheStarted = true
     ---@type IconDataProviderMixin
-    local provider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spellbook)
-    ---@type MapPinEnhancedIconPickerEntry[]
-    local icons = {}
+    local provider = assert(
+        CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spellbook),
+        "Unable to create the Blizzard icon provider")
+    self.iconProvider = provider
+    local iconCount = provider:GetNumIcons()
     ---@type table<string, boolean>
     local seen = {}
-    for index = 1, provider:GetNumIcons() do
-        local path = provider:GetIconByIndex(index)
-        if type(path) == "string" or type(path) == "number" then
-            local key = tostring(path)
-            if not seen[key] then
-                seen[key] = true
-                local name = GetIconName(path)
-                icons[#icons + 1] = {
-                    path = path,
-                    name = name,
-                    search = string.lower(name .. " " .. key),
-                }
+    ---@type fun()[]
+    local tasks = {}
+    for startIndex = 1, iconCount, PRECACHE_CHUNK_SIZE do
+        local firstIndex = startIndex
+        local lastIndex = math.min(startIndex + PRECACHE_CHUNK_SIZE - 1, iconCount)
+        tasks[#tasks + 1] = function()
+            for index = firstIndex, lastIndex do
+                local path = provider:GetIconByIndex(index)
+                if type(path) == "string" or type(path) == "number" then
+                    local key = tostring(path)
+                    if not seen[key] then
+                        seen[key] = true
+                        local name = GetIconName(path)
+                        self.icons[#self.icons + 1] = {
+                            path = path,
+                            name = name,
+                            search = string.lower(name .. " " .. key),
+                        }
+                    end
+                end
             end
         end
     end
-    provider:Release()
-    self.icons = icons
-    return icons
+
+    MapPinEnhanced:BatchExecution(tasks, function(progress)
+        if self:IsShown() and progress % PRECACHE_REFRESH_INTERVAL == 0 then
+            self:Refresh()
+        end
+    end, function()
+        self.isPrecacheComplete = true
+        self.lastQuery = nil
+        self:Refresh()
+    end, 1)
 end
 
 function MapPinEnhancedIconPickerWindowMixin:OnLoad()
@@ -169,14 +190,18 @@ function MapPinEnhancedIconPickerWindowMixin:OnLoad()
     self.search:SetPlaceholderText(L["Search"])
     self.cancelButton:SetText(L["Cancel"])
     self.confirmButton:SetText(L["Confirm"])
+    self.icons = {}
+    self.filteredIcons = self.icons
+    self.isPrecacheStarted = false
+    self.isPrecacheComplete = false
 
-    self.dataProvider = CreateDataProvider()
+    self.dataProvider = CreateIndexRangeDataProvider(0)
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementExtent(ROW_HEIGHT)
-    self.scrollView:SetElementInitializer("MapPinEnhancedIconPickerRowTemplate", function(row, data)
+    self.scrollView:SetElementInitializer("MapPinEnhancedIconPickerRowTemplate", function(row, rowIndex)
         ---@cast row MapPinEnhancedIconPickerRowTemplate
-        ---@cast data MapPinEnhancedIconPickerRowData
-        row:Init(data)
+        ---@cast rowIndex number
+        row:Init(rowIndex)
     end)
     self.scrollView:SetElementResetter(function(row)
         ---@cast row MapPinEnhancedIconPickerRowTemplate
@@ -222,8 +247,13 @@ end
 
 function MapPinEnhancedIconPickerWindowMixin:Refresh()
     local query = string.lower(strtrim(self.search:GetText() or ""))
-    local source = self:GetIcons()
-    local filtered = source
+    local source = self.icons
+    if self.isPrecacheComplete and self.lastQuery and self.lastQuery ~= "" and
+        #query >= #self.lastQuery and string.sub(query, 1, #self.lastQuery) == self.lastQuery then
+        source = self.filteredIcons
+    end
+
+    local filtered = self.icons
     if query ~= "" then
         filtered = {}
         for _, icon in ipairs(source) do
@@ -233,11 +263,15 @@ function MapPinEnhancedIconPickerWindowMixin:Refresh()
         end
     end
 
-    self.dataProvider:Flush()
-    for startIndex = 1, #filtered, COLUMN_COUNT do
-        self.dataProvider:Insert({ icons = filtered, startIndex = startIndex })
+    self.filteredIcons = filtered
+    self.lastQuery = query
+    self.dataProvider:SetSize(math.ceil(#filtered / COLUMN_COUNT))
+    self.scrollBox:ReinitializeFrames()
+    if self.isPrecacheComplete then
+        self.resultCount:SetText(string.format(L["%d icons"], #filtered))
+    else
+        self.resultCount:SetText(string.format(L["%d icons (loading...)"], #filtered))
     end
-    self.resultCount:SetText(string.format(L["%d icons"], #filtered))
 end
 
 ---@param icon MapPinEnhancedIconPickerEntry
@@ -285,6 +319,9 @@ function MapPinEnhancedIconPickerWindowMixin:Open(currentIcon, callback)
     self:Refresh()
     self:Show()
     self:Raise()
+    if not self.isPrecacheStarted then
+        C_Timer.After(0, function() self:StartPrecache() end)
+    end
 end
 
 ---@param currentIcon string|number?
@@ -292,3 +329,9 @@ end
 function MapPinEnhanced:ShowIconPicker(currentIcon, callback)
     assert(iconPickerWindow, "Icon picker window is not loaded"):Open(currentIcon, callback)
 end
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    C_Timer.After(0, function()
+        if iconPickerWindow then iconPickerWindow:StartPrecache() end
+    end)
+end)
