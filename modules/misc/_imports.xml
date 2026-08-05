@@ -3,4 +3,5 @@
     <Include file="minimapIcon.lua" />
     <Include file="wayBack.lua" />
     <Include file="coords.xml" />
+    <Include file="iconPicker.xml" />
 </Ui>

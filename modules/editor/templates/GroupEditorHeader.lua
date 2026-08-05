@@ -110,6 +110,18 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
             end,
         })
     end
+    table.insert(entries, {
+        type = "button",
+        label = L["More..."],
+        onClick = function()
+            MapPinEnhanced:ShowIconPicker(group:GetIcon(), function(path)
+                group:SetIcon(path)
+                self.iconButton.iconTexture:SetTexture(path)
+                MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+                editor.groupSidebar:Refresh()
+            end)
+        end,
+    })
     MapPinEnhanced:GenerateMenu(self.iconButton, entries, { gridModeColumns = 5 })
 end
 

@@ -89,6 +89,16 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         end
                     })
                 end
+                table.insert(iconMenu, {
+                    type = "button",
+                    label = L["More..."],
+                    onClick = function()
+                        local currentIcon = not self.pinData.usesAtlas and self.pinData.texture or nil
+                        MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
+                            self:SetIcon(path, false)
+                        end)
+                    end,
+                })
                 return iconMenu
             end,
             entry = {

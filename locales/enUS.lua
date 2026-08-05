@@ -12,6 +12,10 @@ local L = MapPinEnhanced.L
 L["Cancel"] = "Cancel"
 L["Close"] = "Close"
 L["Confirm"] = "Confirm"
+L["Icon Picker"] = "Icon Picker"
+L["More..."] = "More..."
+L["Select an icon"] = "Select an icon"
+L["%d icons"] = "%d icons"
 L["Import"] = "Import"
 L["Save"] = "Save"
 

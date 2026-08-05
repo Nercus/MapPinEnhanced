@@ -197,6 +197,17 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                         end,
                     })
                 end
+                table.insert(entries, {
+                    type = "button",
+                    label = L["More..."],
+                    onClick = function()
+                        local data = Editor:GetPinData(self.pinNode)
+                        local currentIcon = not data.usesAtlas and data.texture or nil
+                        MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
+                            self:SetIcon({ path = path, usesAtlas = false })
+                        end)
+                    end,
+                })
                 return entries
             end,
         },

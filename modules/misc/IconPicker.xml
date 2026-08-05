@@ -1,0 +1,75 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="iconPicker.lua" />
+
+    <Frame name="MapPinEnhancedIconPickerRowTemplate" mixin="MapPinEnhancedIconPickerRowMixin" virtual="true">
+        <Size x="364" y="46" />
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
+    </Frame>
+
+    <Frame name="MapPinEnhancedIconPickerWindow" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedIconPickerWindowMixin" parent="UIParent" frameStrata="DIALOG">
+        <Size x="430" y="410" />
+        <KeyValues>
+            <KeyValue key="windowTitle" value="Icon Picker" />
+        </KeyValues>
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="preview">
+                    <Size x="38" y="38" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="24" y="-45" />
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="selectedName" inherits="GameFontHighlight" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.preview" relativePoint="RIGHT" x="8" />
+                        <Anchor point="RIGHT" relativeKey="$parent.search" relativePoint="LEFT" x="-12" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="resultCount" inherits="GameFontDisableSmall" justifyH="LEFT">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="24" y="24" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
+                <Size x="190" y="24" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-24" y="-52" />
+                </Anchors>
+            </EditBox>
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList" enableMouse="true">
+                <Size x="364" y="276" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="24" y="-94" />
+                </Anchors>
+            </Frame>
+            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="8" y="-2" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="8" y="2" />
+                </Anchors>
+            </EventFrame>
+            <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonTemplate">
+                <Size x="90" y="24" />
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-24" y="18" />
+                </Anchors>
+            </Button>
+            <Button parentKey="cancelButton" inherits="MapPinEnhancedButtonTemplate">
+                <Size x="90" y="24" />
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.confirmButton" relativePoint="LEFT" x="-8" />
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field groupID UUID? stable group identifier
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
----@field icon string? the icon of the group, used to display the group on the map
+---@field icon string|number? the icon of the group, used to display the group on the map
 ---@field order number? the order of the group in the tracker, lower numbers are higher in the list
 ---@field hidden boolean? true if this group is stored away and has no active map pins
 ---@field groupType "ungrouped"? protected system group type
@@ -24,7 +24,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinArchive table<UUID, ArchivedPinData> non-live pin data for reached or hidden pins
 ---@field name string
 ---@field source string
----@field icon string?
+---@field icon string|number?
 ---@field order number
 ---@field hidden boolean
 ---@field groupType "ungrouped"|nil
@@ -228,10 +228,11 @@ function MapPinEnhancedGroupMixin:GetSource()
     return self.source
 end
 
----@param icon string
+---@param icon string|number
 function MapPinEnhancedGroupMixin:SetIcon(icon)
     assert(icon, "MapPinEnhancedGroupMixin:SetIcon: icon is nil")
-    assert(type(icon) == "string", "MapPinEnhancedGroupMixin:SetIcon: icon must be a string")
+    assert(type(icon) == "string" or type(icon) == "number",
+        "MapPinEnhancedGroupMixin:SetIcon: icon must be a string or number")
     self.icon = icon
     Groups:PersistGroup(self)
 end

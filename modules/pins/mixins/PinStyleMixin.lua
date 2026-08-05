@@ -41,7 +41,7 @@ end
 
 local PIN_ICONS = Pins.PIN_ICONS
 
----@param icon string the icon to set, if usesAtlas is true, this is the atlas name, otherwise it is a file path
+---@param icon string|number the icon to set; atlas names must be strings
 ---@param usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
 function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)
     if icon then

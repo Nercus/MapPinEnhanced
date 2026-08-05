@@ -42,7 +42,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICONS = Pins.PIN_ICONS
 
----@param icon string? texture path or atlas name
+---@param icon string|number? texture path or atlas name
 ---@param usesAtlas boolean? if true, the icon parameter is an atlas name, otherwise it is a texture path
 ---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
 ---@param scale number? optional scale for the icon, if not set, it will be 1

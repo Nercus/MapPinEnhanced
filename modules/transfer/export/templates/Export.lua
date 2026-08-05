@@ -22,7 +22,7 @@ MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 ---@class SerializedExportGroup
 ---@field name string?
----@field icon string?
+---@field icon string|number?
 ---@field trackingMode GroupTrackingMode?
 ---@field pinOrder table<UUID, number>
 ---@field pins pinData[]
