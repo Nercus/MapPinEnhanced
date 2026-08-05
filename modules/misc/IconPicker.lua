@@ -22,11 +22,16 @@ local PRECACHE_REFRESH_INTERVAL = 5
 local iconPickerWindow
 
 ---@param path MapPinEnhancedIconTexture
----@return string
+---@return string name
+---@return string filename
 local function GetIconName(path)
-    local value = tostring(path)
+    local value = type(path) == "number" and C_Texture.GetFilenameFromFileDataID(path) or tostring(path)
+    if not value or value == "" then value = tostring(path) end
+    ---@cast value string
+    ---@type string
     local name = value:match("([^\\/]+)$") or value
-    return name:gsub("%.[Bb][Ll][Pp]$", ""):gsub("%.[Tt][Gg][Aa]$", "")
+    name = name:gsub("%.[Bb][Ll][Pp]$", ""):gsub("%.[Tt][Gg][Aa]$", "")
+    return name, value
 end
 
 ---@class MapPinEnhancedIconPickerRowTemplate : Frame
@@ -160,11 +165,11 @@ function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
                     local key = tostring(path)
                     if not seen[key] then
                         seen[key] = true
-                        local name = GetIconName(path)
+                        local name, filename = GetIconName(path)
                         self.icons[#self.icons + 1] = {
                             path = path,
                             name = name,
-                            search = string.lower(name .. " " .. key),
+                            search = string.lower(name .. " " .. filename .. " " .. key),
                         }
                     end
                 end
