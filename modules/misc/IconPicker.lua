@@ -125,6 +125,7 @@ end
 ---@field preview Texture
 ---@field selectedName FontString
 ---@field resultCount FontString
+---@field loadingSpinner Texture
 ---@field scrollBox WowScrollBoxList
 ---@field scrollBar MinimalScrollBar
 ---@field cancelButton Button
@@ -272,6 +273,7 @@ function MapPinEnhancedIconPickerWindowMixin:Refresh()
     self.lastQuery = query
     self.dataProvider:SetSize(math.ceil(#filtered / COLUMN_COUNT))
     self.scrollBox:ReinitializeFrames()
+    self.loadingSpinner:SetShown(not self.isPrecacheComplete)
     if self.isPrecacheComplete then
         self.resultCount:SetText(string.format(L["%d icons"], #filtered))
     else

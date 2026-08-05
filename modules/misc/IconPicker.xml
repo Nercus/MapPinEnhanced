@@ -30,9 +30,26 @@
                 </FontString>
                 <FontString parentKey="resultCount" inherits="GameFontDisableSmall" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="24" y="24" />
+                        <Anchor point="LEFT" relativeKey="$parent.loadingSpinner" relativePoint="RIGHT" x="5" />
                     </Anchors>
                 </FontString>
+                <Texture parentKey="loadingSpinner" atlas="Spinner_Ring" hidden="true">
+                    <Size x="16" y="16" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="24" y="20" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="spin" inherits="MapPinEnhancedAnimationSpin" />
+                    </Animations>
+                    <Scripts>
+                        <OnShow>
+                            self.spin:Play();
+                        </OnShow>
+                        <OnHide>
+                            self.spin:Stop();
+                        </OnHide>
+                    </Scripts>
+                </Texture>
             </Layer>
         </Layers>
         <Frames>
