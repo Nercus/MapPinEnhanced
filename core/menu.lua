@@ -22,7 +22,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field label string
 ---@field isSelected fun(): boolean
 ---@field setSelected fun(isSelected: boolean)
----@field data number
+---@field data any
 
 ---@class MenuRadioEntry : MenuEntry
 ---@field type "radio"

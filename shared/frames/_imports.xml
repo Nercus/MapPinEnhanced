@@ -12,6 +12,7 @@
     <Include file="textarea.xml" />
     <Include file="autocomplete.xml" />
     <Include file="dropdown.xml" />
+    <Include file="multiselect.xml" />
     <Include file="toggle.xml" />
     <Include file="formfield.xml" />
 </Ui>

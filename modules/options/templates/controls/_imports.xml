@@ -4,6 +4,7 @@
     <Include file="OptionCheckbox.xml" />
     <Include file="OptionColorpicker.xml" />
     <Include file="OptionInput.xml" />
+    <Include file="OptionMultiselect.xml" />
     <Include file="OptionRadiogroup.xml" />
     <Include file="OptionSlider.xml" />
     <Include file="OptionToggle.xml" />
