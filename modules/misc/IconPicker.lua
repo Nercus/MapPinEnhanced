@@ -185,8 +185,8 @@ function MapPinEnhancedIconPickerWindowMixin:OnLoad()
     iconPickerWindow = self
     self.search:SetInlineIcon("search")
     self.search:SetPlaceholderText(L["Search"])
-    self.cancelButton:SetText(L["Cancel"])
-    self.confirmButton:SetText(L["Confirm"])
+    self.cancelButton:SetLabel(L["Cancel"])
+    self.confirmButton:SetLabel(L["Confirm"])
     self.icons = {}
     self.filteredIcons = self.icons
     self.isPrecacheStarted = false

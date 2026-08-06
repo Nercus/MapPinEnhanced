@@ -25,7 +25,7 @@
                 <FontString parentKey="selectedName" inherits="GameFontHighlight" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.preview" relativePoint="RIGHT" x="8" />
-                        <Anchor point="RIGHT" relativeKey="$parent.search" relativePoint="LEFT" x="-12" />
+                        <Anchor point="RIGHT" x="-24" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="resultCount" inherits="GameFontDisableSmall" justifyH="LEFT">
@@ -54,15 +54,16 @@
         </Layers>
         <Frames>
             <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
-                <Size x="190" y="24" />
+                <Size y="28" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" x="-24" y="-52" />
+                    <Anchor point="TOPLEFT" x="24" y="-88" />
+                    <Anchor point="TOPRIGHT" x="-24" y="-88" />
                 </Anchors>
             </EditBox>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList" enableMouse="true">
-                <Size x="364" y="276" />
+                <Size x="364" y="246" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="24" y="-94" />
+                    <Anchor point="TOPLEFT" x="24" y="-126" />
                 </Anchors>
             </Frame>
             <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
@@ -72,13 +73,13 @@
                 </Anchors>
             </EventFrame>
             <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonTemplate">
-                <Size x="90" y="24" />
+                <Size x="104" y="30" />
                 <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-24" y="18" />
+                    <Anchor point="BOTTOMRIGHT" x="-24" y="15" />
                 </Anchors>
             </Button>
             <Button parentKey="cancelButton" inherits="MapPinEnhancedButtonTemplate">
-                <Size x="90" y="24" />
+                <Size x="104" y="30" />
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.confirmButton" relativePoint="LEFT" x="-8" />
                 </Anchors>
