@@ -28,6 +28,11 @@
                             <KeyValue key="key" value="General.Tracking.DefaultMode" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="General.Tracking.ArrivalMode" />
+                        </KeyValues>
+                    </Frame>
                 </Frames>
             </Frame>
         </Frames>
