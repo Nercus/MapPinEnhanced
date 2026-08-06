@@ -130,7 +130,7 @@ function Pins:SampleTrackedPinArrival()
 
     local distance = MapPinEnhanced:GetDistanceToTarget(data.mapID, data.x, data.y)
     if not distance or distance <= 0 then return end
-
+    ---@type PinArrivalMode
     local mode = Options:GetOptionValue("General.Tracking.ArrivalMode")
     if mode == Options.ARRIVAL_MODE_STATIC then
         self:UpdateStaticArrival(pin, distance)
