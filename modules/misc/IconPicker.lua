@@ -116,8 +116,8 @@ end
 ---@field loadingSpinner Texture
 ---@field scrollBox WowScrollBoxList
 ---@field scrollBar MinimalScrollBar
----@field cancelButton Button
----@field confirmButton Button
+---@field cancelButton MapPinEnhancedButtonTemplate
+---@field confirmButton MapPinEnhancedButtonTemplate
 ---@field dataProvider IndexRangeDataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field selected MapPinEnhancedIconPickerEntry?
