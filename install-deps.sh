@@ -25,5 +25,8 @@ git clone https://github.com/wow-rp-addons/Chomp.git ./libs/Chomp
 # LibWindow-1.1
 svn checkout https://repos.curseforge.com/wow/libwindow-1-1/trunk/LibWindow-1.1/ ./libs/LibWindow-1.1
 
+# IconFileNames
+git clone https://www.townlong-yak.com/addons.git/iconfilenames ./libs/IconFileNames
+
 # Remove .git directories from cloned repositories
 find ./libs -type d -name ".git" -exec rm -rf {} +

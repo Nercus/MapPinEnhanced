@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 ---@field globalAPI table
+---@field ICON_FILE_NAMES table<number, string>
 local MapPinEnhanced = select(2, ...)
 
 MapPinEnhanced.name = "MapPinEnhanced"

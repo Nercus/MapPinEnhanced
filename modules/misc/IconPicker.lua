@@ -9,6 +9,7 @@ local L = MapPinEnhanced.L
 ---@field path MapPinEnhancedIconTexture
 ---@field name string
 ---@field search string
+---@field pathSearch string
 
 local COLUMN_COUNT = 8
 local CELL_SIZE = 42
@@ -139,6 +140,7 @@ function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
         "Unable to create the Blizzard icon provider")
     self.iconProvider = provider
     local iconCount = provider:GetNumIcons()
+    local iconFileNames = MapPinEnhanced.ICON_FILE_NAMES
     ---@type table<string, boolean>
     local seen = {}
     ---@type fun()[]
@@ -153,11 +155,13 @@ function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
                     local key = tostring(path)
                     if not seen[key] then
                         seen[key] = true
-                        -- TODO: Add real filename search when a reliable filename data source is selected.
+                        local name = type(path) == "number" and iconFileNames[path] or nil
+                        name = name or key:match("([^\\/]+)$") or key
                         self.icons[#self.icons + 1] = {
                             path = path,
-                            name = key,
-                            search = string.lower(key),
+                            name = name,
+                            search = string.lower(name),
+                            pathSearch = string.lower(key),
                         }
                     end
                 end
@@ -250,7 +254,7 @@ function MapPinEnhancedIconPickerWindowMixin:Refresh()
     if query ~= "" then
         filtered = {}
         for _, icon in ipairs(source) do
-            if string.find(icon.search, query, 1, true) then
+            if string.find(icon.search, query, 1, true) or string.find(icon.pathSearch, query, 1, true) then
                 filtered[#filtered + 1] = icon
             end
         end
@@ -305,6 +309,7 @@ function MapPinEnhancedIconPickerWindowMixin:Open(currentIcon, callback)
         path = currentIcon,
         name = tostring(currentIcon):match("([^\\/]+)$") or tostring(currentIcon),
         search = "",
+        pathSearch = "",
     } or nil
     self.preview:SetTexture(currentIcon or nil)
     self.preview:SetShown(currentIcon ~= nil)
