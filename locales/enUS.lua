@@ -77,6 +77,21 @@ L["Tracking Mode"] = "Tracking Mode"
 L["Track by Distance"] = "Track by Distance"
 L["Track by Order"] = "Track by Order"
 L["Toggle the tracker visibility."] = "Toggle the tracker visibility."
+L["Dungeon"] = "Dungeon"
+L["Raid"] = "Raid"
+L["Scenario"] = "Scenario"
+L["Battleground"] = "Battleground"
+L["Arena"] = "Arena"
+L["None"] = "None"
+L["No active pins"] = "No active pins"
+L["No coordinates available"] = "No coordinates available"
+L["Miscellaneous.Coords.Visibility_LABEL"] = "Automatic hide"
+L["Miscellaneous.Coords.Visibility_DESCRIPTION"] =
+"Hide the coordinate display when any selected condition is active."
+L["Miscellaneous.Tracker_GROUPLABEL"] = "Tracker"
+L["Miscellaneous.Tracker.Visibility_LABEL"] = "Automatic hide"
+L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] =
+"Hide the tracker when any selected condition is active."
 L["Toggle the group editor."] = "Toggle the group editor."
 
 ------------------------------ Editor ------------------------------

@@ -7,6 +7,7 @@
     <Include file="print.lua" />
     <Include file="async.lua" />
     <Include file="events.lua" />
+    <Include file="visibility.lua" />
     <Include file="slash.lua" />
     <Include file="tests.lua" />
     <Include file="debug.lua" />

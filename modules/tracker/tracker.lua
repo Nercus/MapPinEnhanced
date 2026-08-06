@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Tracker
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local L = MapPinEnhanced.L
+local Groups = MapPinEnhanced:GetModule("Groups")
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
@@ -13,17 +14,13 @@ function Tracker:GetTrackerFrame()
 end
 
 function Tracker:ShowTracker()
-    local frame = self:GetTrackerFrame()
-    frame:ShowFrame()
     MapPinEnhanced:SetVar("trackerVisible", true)
+    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
 end
 
 function Tracker:HideTracker()
-    local frame = self:GetTrackerFrame()
-    if frame:IsShown() then
-        frame:HideFrame()
-    end
     MapPinEnhanced:SetVar("trackerVisible", false)
+    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
 end
 
 function Tracker:UpdateList()
@@ -34,11 +31,7 @@ function Tracker:UpdateList()
 end
 
 function Tracker:RestoreTrackerVisibility()
-    if MapPinEnhanced:GetVar("trackerVisible") then
-        self:ShowTracker()
-    else
-        self:HideTracker()
-    end
+    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
 end
 
 -- FIXME: when some groups are collapsed the height is not updated and blocks some cursor actions
@@ -51,6 +44,29 @@ end
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Tracker:RestoreTrackerVisibility()
 end)
+
+MapPinEnhanced:RegisterVisibilityCondition("noActivePins", {
+    evaluate = function()
+        for group in Groups:EnumerateGroups() do
+            if not group:IsHidden() then
+                for _ in group:EnumeratePins() do return false end
+            end
+        end
+        return true
+    end,
+    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED" },
+})
+
+MapPinEnhanced:RegisterVisibilityTarget("tracker", {
+    optionKey = "Miscellaneous.Tracker.Visibility",
+    conditions = { "dungeon", "raid", "scenario", "battleground", "arena", "noActivePins" },
+    isManuallyEnabled = function() return MapPinEnhanced:GetVar("trackerVisible") == true end,
+    show = function() Tracker:GetTrackerFrame():ShowFrame() end,
+    hide = function()
+        local frame = Tracker.trackerFrame
+        if frame and frame:IsShown() then frame:HideFrame() end
+    end,
+})
 
 
 MapPinEnhanced:AddSlashCommand("tracker", function()

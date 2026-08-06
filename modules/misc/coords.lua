@@ -188,12 +188,32 @@ end
 
 
 Options:SubscribeToOptionChanges("Miscellaneous.Coords.Enable", function(value)
-    if value then
-        ShowCoordsDisplay()
-    else
-        HideCoordsDisplay()
-    end
+    MapPinEnhanced:EvaluateVisibilityTarget("coordinates")
 end)
+
+MapPinEnhanced:RegisterVisibilityCondition("noCoordinates", {
+    evaluate = function()
+        local playerMap = GetBestMapForUnit("player")
+        if not playerMap then return true end
+        local position = GetPlayerMapPosition(playerMap, "player")
+        if not position then return true end
+        local x, y = position:GetXY()
+        return x == nil or y == nil
+    end,
+    events = { "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA" },
+    delay = 1,
+    poll = true,
+})
+
+MapPinEnhanced:RegisterVisibilityTarget("coordinates", {
+    optionKey = "Miscellaneous.Coords.Visibility",
+    conditions = { "dungeon", "raid", "scenario", "battleground", "arena", "noCoordinates" },
+    isManuallyEnabled = function()
+        return Options:GetOptionValue("Miscellaneous.Coords.Enable") == true
+    end,
+    show = ShowCoordsDisplay,
+    hide = HideCoordsDisplay,
+})
 
 local function LockCoordsDisplay()
     if coordsDisplayFrame then

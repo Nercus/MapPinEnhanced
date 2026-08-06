@@ -26,6 +26,8 @@ Options.DEFAULTS = {
     ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
     ["Miscellaneous.Coords.Enable"] = true,
     ["Miscellaneous.Coords.Lock"] = false,
+    ["Miscellaneous.Coords.Visibility"] = {},
+    ["Miscellaneous.Tracker.Visibility"] = {},
     ["Wayfinder.Floating.Enable"] = false,
     ["Wayfinder.Floating.Style"] = "modern" --[[@as WayfinderFloatingFrameType]],
     ["Wayfinder.Arrow.Enable"] = true,
@@ -44,5 +46,21 @@ Options.OPTIONS_CONFIG = {
     ["Wayfinder.Floating.Style"] = {
         { label = L["Modern"], value = "modern" },
         { label = L["Simple"], value = "simple" },
+    },
+    ["Miscellaneous.Coords.Visibility"] = {
+        { label = L["Dungeon"],                 value = "dungeon" },
+        { label = L["Raid"],                    value = "raid" },
+        { label = L["Scenario"],                value = "scenario" },
+        { label = L["Battleground"],            value = "battleground" },
+        { label = L["Arena"],                   value = "arena" },
+        { label = L["No coordinates available"], value = "noCoordinates" },
+    },
+    ["Miscellaneous.Tracker.Visibility"] = {
+        { label = L["Dungeon"],       value = "dungeon" },
+        { label = L["Raid"],          value = "raid" },
+        { label = L["Scenario"],      value = "scenario" },
+        { label = L["Battleground"],  value = "battleground" },
+        { label = L["Arena"],         value = "arena" },
+        { label = L["No active pins"], value = "noActivePins" },
     },
 }
