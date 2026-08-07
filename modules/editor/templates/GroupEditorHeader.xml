@@ -77,6 +77,12 @@
                     </Frame>
                 </Frames>
             </Frame>
+            <Button parentKey="optimizeButton" inherits="MapPinEnhancedButtonTemplate" text="Optimize">
+                <Size x="100" y="24" />
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.optimizeButton" relativePoint="RIGHT" x="10" />
+                </Anchors>
+            </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="48" y="48" />
                 <KeyValues>

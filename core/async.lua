@@ -27,14 +27,16 @@ function MapPinEnhanced:DebounceChange(func, delay, onChange)
 end
 
 ---Batch the execution of a list of functions with a delay between each execution
----@param funcList fun()[]
+---@param funcList (fun(): boolean?)[] functions may return false to stop the batch early
 ---@param onUpdate fun(progress: integer, maxProgress: integer)?
 ---@param onFinish fun()?
 ---@param batchSize integer? number of functions to execute per batch, defaults to 1
-function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize)
+---@param onError fun(message: string)?
+function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, onError)
     assert(type(funcList) == "table", "Function list not provided")
     assert(type(onUpdate) == "function" or onUpdate == nil, "OnUpdate not a function")
     assert(type(onFinish) == "function" or onFinish == nil, "OnFinish not a function")
+    assert(type(onError) == "function" or onError == nil, "OnError not a function")
     if not batchSize or batchSize < 1 then
         batchSize = 1
     end
@@ -51,8 +53,9 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize)
             -- Execute a BATCH of functions
             local batchEnd = math.min(i + batchSize - 1, maxProgress)
             for j = i, batchEnd do
-                funcList[j]()
+                local shouldContinue = funcList[j]()
                 if onUpdate then onUpdate(j, maxProgress) end
+                if shouldContinue == false then return end
             end
             i = batchEnd + 1
 
@@ -67,8 +70,13 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize)
     local ticker
     ticker = C_Timer.NewTicker(delay,
         function()
-            local success = coroutine.resume(workerThread, GetTimePreciseSec() + delay)
-            if not success or coroutine.status(workerThread) == "dead" then
+            local success, message = coroutine.resume(workerThread)
+            if not success then
+                ticker:Cancel()
+                if onError then onError(tostring(message)) end
+                return
+            end
+            if coroutine.status(workerThread) == "dead" then
                 ticker:Cancel()
                 if onFinish then onFinish() end
                 return

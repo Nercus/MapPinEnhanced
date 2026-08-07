@@ -99,6 +99,11 @@ L["Editor"] = "Editor"
 L["Contents"] = "Contents"
 L["Search"] = "Search"
 L["Rename Pin"] = "Rename Pin"
+L["Optimize"] = "Optimize"
+L["Optimize Route"] = "Optimize Route"
+L["Optimizing will permanently reorder every pin in this group and cannot be undone."] =
+"Optimizing will permanently reorder every pin in this group and cannot be undone."
+L["Loading"] = "Loading"
 
 ------------------------------ Dialogs ------------------------------
 L["Info"] = "Info"

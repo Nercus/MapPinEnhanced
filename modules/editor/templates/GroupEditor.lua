@@ -12,6 +12,9 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field scrollBox Frame|ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
 
+---@class MapPinEnhancedEditorLoadingOverlay : Frame
+---@field message FontString
+
 ---@class MapPinEnhancedEditorGroupEditorTemplate : Frame
 ---@field editor MapPinEnhancedEditorTemplate?
 ---@field group MapPinEnhancedGroupMixin?
@@ -21,10 +24,12 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field dropTarget MapPinEnhancedEditorPinNodeData?
 ---@field dropPlacement "before"|"after"|nil
+---@field loadingOverlay MapPinEnhancedEditorLoadingOverlay
 MapPinEnhancedEditorGroupEditorMixin = {}
 
 function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.emptyState.message:SetText(L["Select a group to start editing."])
+    self.loadingOverlay.message:SetText(L["Loading"])
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
     self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)
@@ -41,6 +46,11 @@ function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
     self.content.scrollBar:SetInterpolateScroll(true)
     self.content.scrollBox:SetInterpolateScroll(true)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.content.scrollBox, self.content.scrollBar, self.scrollView)
+end
+
+---@param loading boolean
+function MapPinEnhancedEditorGroupEditorMixin:SetLoading(loading)
+    self.loadingOverlay:SetShown(loading)
 end
 
 ---@param editor MapPinEnhancedEditorTemplate

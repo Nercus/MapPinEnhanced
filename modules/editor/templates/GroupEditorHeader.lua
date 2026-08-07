@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
+local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
 ---@type PinIcon[]
@@ -46,6 +47,7 @@ local GROUP_ICONS = {
 ---@field pinCount FontString
 ---@field nameField MapPinEnhancedEditorInputField
 ---@field trackingModeField MapPinEnhancedEditorRadioGroupField
+---@field optimizeButton MapPinEnhancedButtonTemplate
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedEditorGroupEditorHeaderMixin = {}
@@ -82,6 +84,37 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
     self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self.hideButton:SetScript("OnClick", nil)
+    self.optimizeButton:SetScript("OnClick", nil)
+    self.optimizeButton:Hide()
+end
+
+function MapPinEnhancedEditorGroupEditorHeaderMixin:UpdateOptimizeButton()
+    local group = self.group
+    self.optimizeButton:SetShown(group ~= nil and not group:IsProtected() and
+        group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and group:GetTotalPinCount() > 1)
+end
+
+function MapPinEnhancedEditorGroupEditorHeaderMixin:OptimizeGroup()
+    local group, editor = assert(self.group), assert(self.editor)
+    Dialogs:ShowConfirmDialog(L["Optimize Route"],
+        L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
+            if self.group ~= group then return end
+            local pinNodes = Editor:GetSortedPins(group)
+            editor.groupEditor:SetLoading(true)
+            Editor:OptimizePinOrder(pinNodes, function(pinIDs)
+                if Groups:GetGroupByID(group:GetGroupID()) == group then
+                    Editor:ApplyPinOrder(group, pinIDs)
+                    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+                end
+                if self.group == group then
+                    editor.groupEditor:SetGroup(group)
+                end
+                editor.groupEditor:SetLoading(false)
+            end, function(message)
+                editor.groupEditor:SetLoading(false)
+                MapPinEnhanced:Print(message)
+            end)
+        end)
 end
 
 function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
@@ -152,12 +185,17 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         orientation = "horizontal",
         init = function() return group:GetTrackingMode() end,
         onChange = function(value)
-            if not protected then group:SetTrackingMode(value) end
+            if not protected then
+                group:SetTrackingMode(value)
+                self:UpdateOptimizeButton()
+            end
         end,
     })
     for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
         self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
     end
+    self.optimizeButton:SetScript("OnClick", function() self:OptimizeGroup() end)
+    self:UpdateOptimizeButton()
 
     self.hideButton:SetEnabled(not protected)
     self.hideButton:SetScript("OnClick", function()

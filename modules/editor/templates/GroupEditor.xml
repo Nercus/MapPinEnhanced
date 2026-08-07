@@ -56,6 +56,27 @@
                     </EventFrame>
                 </Frames>
             </Frame>
+            <Frame parentKey="loadingOverlay" hidden="true" enableMouse="true" frameStrata="DIALOG">
+                <!-- TODO: add an animated overlay here to indicate what happens: shuffling cards maybe? -->
+                <Anchors>
+                    <Anchor point="TOPLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture setAllPoints="true">
+                            <Color r="0" g="0" b="0" a="0.65" />
+                        </Texture>
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="message" inherits="GameFontNormalHuge">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
