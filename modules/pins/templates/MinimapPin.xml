@@ -3,6 +3,13 @@
     <Script file="MinimapPin.lua" />
     <Frame name="MapPinEnhancedMinimapPinTemplate" mixin="MapPinEnhancedMinimapPinMixin" inherits="MapPinEnhancedBasePinTemplate" virtual="true" enableMouse="true">
         <Size x="22" y="22" />
+        <Frames>
+            <Frame parentKey="groupBadge" inherits="MapPinEnhancedPinGroupBadgeTemplate">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

@@ -3,6 +3,13 @@
     <Script file="WorldmapPin.lua" />
     <Button name="MapPinEnhancedWorldmapPinTemplate" mixin="MapPinEnhancedWorldmapPinMixin" virtual="true" inherits="MapPinEnhancedBasePinTemplate" registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="25" y="25" />
+        <Frames>
+            <Frame parentKey="groupBadge" inherits="MapPinEnhancedPinGroupBadgeTemplate">
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

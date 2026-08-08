@@ -31,6 +31,18 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
+function MapPinEnhancedPinMixin:UpdateGroupIcon()
+    local group = self.group
+    if not group or group:GetGroupID() == Groups.SYSTEM_GROUP_IDS.UNGROUPED then
+        self.worldmapPin.groupBadge:SetIcon(nil)
+        self.minimapPin.groupBadge:SetIcon(nil)
+        return
+    end
+
+    self.worldmapPin.groupBadge:SetIcon(group:GetIcon())
+    self.minimapPin.groupBadge:SetIcon(group:GetIcon())
+end
+
 
 ---Normalizes a coordinate to a value between 0 and 1
 ---@param value number
@@ -109,6 +121,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData)
     self:SetTooltip(self.pinData.tooltip)
     self:SetTitle(self.pinData.title)
     self:SetLock(self.pinData.lock)
+    self:UpdateGroupIcon()
 
     if self.pinData.setTracked then
         self:Track()
@@ -188,6 +201,8 @@ function MapPinEnhancedPinMixin:Reset()
 
     self.worldmapPin:HidePulse()
     self.minimapPin:HidePulse()
+    self.worldmapPin.groupBadge:SetIcon(nil)
+    self.minimapPin.groupBadge:SetIcon(nil)
 
     HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
@@ -207,6 +222,14 @@ function MapPinEnhancedPinMixin:Reset()
     self.worldmapPin = nil
     self.minimapPin = nil
 end
+
+---@param group MapPinEnhancedGroupMixin?
+MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(group)
+    if not group then return end
+    for _, pin in group:EnumeratePins() do
+        pin:UpdateGroupIcon()
+    end
+end)
 
 function MapPinEnhancedPinMixin:PersistPin()
     if not self.group then return end

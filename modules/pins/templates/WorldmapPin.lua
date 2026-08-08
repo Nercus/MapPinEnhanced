@@ -1,4 +1,5 @@
 ---@class MapPinEnhancedWorldmapPinTemplate : MapPinEnhancedBasePinTemplate,Button
+---@field groupBadge MapPinEnhancedPinGroupBadgeTemplate
 MapPinEnhancedWorldmapPinMixin = {}
 
 function MapPinEnhancedWorldmapPinMixin:OnEnter()

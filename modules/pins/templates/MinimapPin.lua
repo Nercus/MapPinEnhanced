@@ -1,4 +1,5 @@
 ---@class MapPinEnhancedMinimapPinTemplate : MapPinEnhancedBasePinTemplate
+---@field groupBadge MapPinEnhancedPinGroupBadgeTemplate
 MapPinEnhancedMinimapPinMixin = {}
 
 function MapPinEnhancedMinimapPinMixin:OnEnter()
