@@ -1,6 +1,11 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
 ---@class MapPinEnhancedIconMixin : Texture
 ---@field icon MapPinEnhancedIcon
 MapPinEnhancedIconMixin = {}
+
+local DEFAULT_INLINE_ICON_SIZE = 16
 
 ---@enum (key) MapPinEnhancedIcon
 local ICON_TEXTURES = {
@@ -21,6 +26,22 @@ local ICON_TEXTURES = {
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
     pin = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPin_Yellow.png",
 }
+
+---Create text prefixed with a registered inline icon.
+---@param icon MapPinEnhancedIcon
+---@param text? string
+---@param size? integer
+---@return string
+function MapPinEnhanced:Iconize(icon, text, size)
+    local texturePath = assert(ICON_TEXTURES[icon], "MapPinEnhanced:Iconize: Invalid icon name: " .. tostring(icon))
+    assert(text == nil or type(text) == "string", "MapPinEnhanced:Iconize: text must be a string or nil")
+    assert(size == nil or (type(size) == "number" and size > 0 and size % 1 == 0),
+        "MapPinEnhanced:Iconize: size must be a positive integer or nil")
+
+    local iconText = string.format("|T%s:%d:%d|t", texturePath, size or DEFAULT_INLINE_ICON_SIZE,
+        size or DEFAULT_INLINE_ICON_SIZE)
+    return text and text ~= "" and string.format("%s %s", iconText, text) or iconText
+end
 
 ---@param icon? MapPinEnhancedIcon
 function MapPinEnhancedIconMixin:SetIconTexture(icon)
