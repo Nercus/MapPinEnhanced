@@ -149,7 +149,7 @@ function MapPinEnhanced:RegisterVisibilityTarget(targetID, config)
     Options:SubscribeToOptionChanges(config.optionKey, function()
         EvaluateTarget(targetID)
     end)
-    EvaluateTarget(targetID)
+    QueueEvaluateAll()
 end
 
 ---@param targetID string
@@ -169,7 +169,8 @@ end
 local INSTANCE_EVENTS = { "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA" }
 MapPinEnhanced:RegisterVisibilityCondition("dungeon", { evaluate = IsInstanceType("party"), events = INSTANCE_EVENTS })
 MapPinEnhanced:RegisterVisibilityCondition("raid", { evaluate = IsInstanceType("raid"), events = INSTANCE_EVENTS })
-MapPinEnhanced:RegisterVisibilityCondition("scenario", { evaluate = IsInstanceType("scenario"), events = INSTANCE_EVENTS })
+MapPinEnhanced:RegisterVisibilityCondition("scenario",
+    { evaluate = IsInstanceType("scenario"), events = INSTANCE_EVENTS })
 MapPinEnhanced:RegisterVisibilityCondition("battleground", { evaluate = IsInstanceType("pvp"), events = INSTANCE_EVENTS })
 MapPinEnhanced:RegisterVisibilityCondition("arena", { evaluate = IsInstanceType("arena"), events = INSTANCE_EVENTS })
 
