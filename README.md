@@ -21,14 +21,17 @@
 
 ## Licensing Overview
 
-This project is dual-licensed. The code is available under the GPLv3 license,
-while the media assets are under a more restrictive license.
+This project uses separate terms for its source code and media assets.
 
-- **Code:** Licensed under GNU General Public License v3.0 (GPLv3).
-- **Media Assets:** Licensed under a Creative Commons
-  Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+- **Code:** Licensed under the GNU General Public License, version 3.0
+  (GPL-3.0-only).
+- **Media Assets:** Copyright © 2026 Nercus. All rights
+  reserved. The assets are not licensed under the GPL and may not be reused,
+  copied, modified, or redistributed without prior written permission, except
+  as permitted by law.
 
-Please review the LICENSE file for more details.
+See [LICENSE](LICENSE) and [ASSETS-LICENSE](ASSETS-LICENSE) for the exact scope
+and terms. Bundled third-party libraries remain under their own licenses.
 
 ## Features
 
