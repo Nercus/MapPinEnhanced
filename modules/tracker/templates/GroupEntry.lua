@@ -139,13 +139,13 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddDeleteOrClearMenuAction(menu)
     if self.group:IsProtected() then
         table.insert(menu, {
             type = "button",
-            label = L["Clear Group"],
+            label = MapPinEnhanced:Iconize("trash", L["Clear Group"]),
             onClick = function() self:ConfirmClearGroup() end,
         })
     else
         table.insert(menu, {
             type = "button",
-            label = L["Delete Group"],
+            label = MapPinEnhanced:Iconize("trash", L["Delete Group"]),
             onClick = function() self:ConfirmDeleteGroup() end,
         })
     end
@@ -181,7 +181,8 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddTrackingModeMenu(menu)
         local label = option.label
         table.insert(entries, {
             type = "radio",
-            label = label,
+            -- TODO: Replace the placeholder pin with tracking-mode-specific icons.
+            label = MapPinEnhanced:Iconize("pin", label),
             isSelected = function()
                 return group:GetTrackingMode() == mode
             end,
@@ -196,7 +197,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddTrackingModeMenu(menu)
         type = "submenu",
         entry = {
             type = "button",
-            label = L["Tracking Mode"],
+            label = MapPinEnhanced:Iconize("settings", L["Tracking Mode"]),
         },
         entries = entries,
     })
@@ -208,14 +209,15 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
 
     table.insert(menu, {
         type = "button",
-        label = L["Show Reached Pins Again"],
+        -- TODO: Replace the placeholder pin with a restore/show icon.
+        label = MapPinEnhanced:Iconize("pin", L["Show Reached Pins Again"]),
         onClick = function() group:RestoreReachedPins() end,
     })
 
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
-            label = L["Hide Group"],
+            label = MapPinEnhanced:Iconize("minus", L["Hide Group"]),
             onClick = function() group:HideGroup() end,
         })
     end
@@ -223,7 +225,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
     if group:GetTotalPinCount() > 0 then
         table.insert(menu, {
             type = "button",
-            label = MapPinEnhanced.L["Export"],
+            label = MapPinEnhanced:Iconize("export", MapPinEnhanced.L["Export"]),
             onClick = function() Transfer:ShowExportWindow(group) end,
         })
     end
@@ -245,12 +247,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         self:AddRenameMenuHeader(menu)
         table.insert(menu, {
             type = "button",
-            label = L["Show Group"],
+            label = MapPinEnhanced:Iconize("plus", L["Show Group"]),
             onClick = function() group:ShowGroup() end,
         })
         table.insert(menu, {
             type = "button",
-            label = L["Delete Group"],
+            label = MapPinEnhanced:Iconize("trash", L["Delete Group"]),
             onClick = function() self:ConfirmDeleteGroup() end,
         })
         return menu
@@ -266,7 +268,8 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     if group:GetReachedPinCount() > 0 then
         table.insert(menu, {
             type = "button",
-            label = L["Show Reached Pins Again"],
+            -- TODO: Replace the placeholder pin with a restore/show icon.
+            label = MapPinEnhanced:Iconize("pin", L["Show Reached Pins Again"]),
             onClick = function() group:RestoreReachedPins() end,
         })
     end
@@ -274,7 +277,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
-            label = L["Hide Group"],
+            label = MapPinEnhanced:Iconize("minus", L["Hide Group"]),
             onClick = function() group:HideGroup() end,
         })
     end
@@ -282,7 +285,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     if group:GetTotalPinCount() > 0 then
         table.insert(menu, {
             type = "button",
-            label = MapPinEnhanced.L["Export"],
+            label = MapPinEnhanced:Iconize("export", MapPinEnhanced.L["Export"]),
             onClick = function() Transfer:ShowExportWindow(group) end,
         })
     end

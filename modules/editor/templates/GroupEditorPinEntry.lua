@@ -158,7 +158,11 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
     local menu = {
         {
             type = "submenu",
-            entry = { type = "button", label = L["Change Color"] },
+            entry = {
+                type = "button",
+                -- TODO: Replace the placeholder pin with a color icon.
+                label = MapPinEnhanced:Iconize("pin", L["Change Color"]),
+            },
             entries = function()
                 local entries = {}
                 for colorName, colorData in pairs(Pins.PIN_COLORS_BY_NAME) do
@@ -176,7 +180,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
         },
         {
             type = "submenu",
-            entry = { type = "button", label = L["Change Icon"] },
+            entry = { type = "button", label = MapPinEnhanced:Iconize("edit", L["Change Icon"]) },
             options = { gridModeColumns = 3 },
             entries = function()
                 local entries = {}

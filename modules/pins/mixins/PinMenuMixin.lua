@@ -61,7 +61,8 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             end,
             entry = {
                 type = "button",
-                label = L["Change Color"],
+                -- TODO: Replace the placeholder pin with a color icon.
+                label = MapPinEnhanced:Iconize("pin", L["Change Color"]),
             }
         },
         {
@@ -91,7 +92,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 end
                 table.insert(iconMenu, {
                     type = "button",
-                    label = L["More..."],
+                    label = MapPinEnhanced:Iconize("plus", L["More..."]),
                     onClick = function()
                         local currentIcon = not self.pinData.usesAtlas and self.pinData.texture or nil
                         MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
@@ -103,7 +104,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             end,
             entry = {
                 type = "button",
-                label = L["Change Icon"],
+                label = MapPinEnhanced:Iconize("edit", L["Change Icon"]),
             },
             options = {
                 gridModeColumns = PIN_ICON_MENU_COLUMNS
@@ -111,28 +112,29 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
-            label = MapPinEnhanced.L["Show on Map"],
+            label = MapPinEnhanced:Iconize("map", MapPinEnhanced.L["Show on Map"]),
             onClick = function()
                 self:ShowOnMap()
             end
         },
         {
             type = "button",
-            label = L["Mark Reached"],
+            label = MapPinEnhanced:Iconize("tick", L["Mark Reached"]),
             onClick = function()
                 self.group:MarkPinReached(self.pinID)
             end
         },
         {
             type = "button",
-            label = MapPinEnhanced.L["Share to Chat"],
+            -- TODO: Replace the placeholder pin with a share icon.
+            label = MapPinEnhanced:Iconize("pin", MapPinEnhanced.L["Share to Chat"]),
             onClick = function()
                 self:SharePin()
             end
         },
         {
             type = "button",
-            label = L["Export"],
+            label = MapPinEnhanced:Iconize("export", L["Export"]),
             onClick = function()
                 Transfer:ShowExportWindow(self)
             end
@@ -142,7 +144,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
-            label = L["Delete Pin"],
+            label = MapPinEnhanced:Iconize("trash", L["Delete Pin"]),
             onClick = function()
                 self.group:RemovePin(self.pinID)
             end

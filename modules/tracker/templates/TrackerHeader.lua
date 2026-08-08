@@ -61,7 +61,9 @@ function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
     for _, group in ipairs(hiddenGroups) do
         table.insert(menu, {
             type = "button",
-            label = string.format("%s (%d)", group:GetName(), group:GetTotalPinCount()),
+            -- TODO: Replace the placeholder pin with a groups/visibility icon.
+            label = MapPinEnhanced:Iconize("pin", string.format("%s (%d)", group:GetName(),
+                group:GetTotalPinCount())),
             onClick = function() group:ShowGroup() end,
         })
     end
