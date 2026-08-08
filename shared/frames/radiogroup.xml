@@ -3,7 +3,7 @@
     <Include file="radiogroup.lua" />
 
 
-    <CheckButton name="MapPinEnhancedRadioButtonTemplate" mixin="MapPinEnhancedRadioButtonMixin,MapPinEnhancedThemeableMixin" virtual="true" propagateMouseInput="Motion">
+    <CheckButton name="MapPinEnhancedRadioButtonTemplate" mixin="MapPinEnhancedRadioButtonMixin" virtual="true" propagateMouseInput="Motion">
         <Size x="100" y="20" />
         <NormalTexture parentKey="NormalTexture" atlas="common-radiobutton-circle">
             <Size x="20" y="20" />

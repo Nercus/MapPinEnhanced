@@ -3,7 +3,7 @@
     <Include file="slider.lua" />
 
 
-    <Frame name="MapPinEnhancedSliderTemplate" mixin="MapPinEnhancedSliderMixin, MapPinEnhancedThemeableMixin" virtual="true" propagateMouseInput="Both">
+    <Frame name="MapPinEnhancedSliderTemplate" mixin="MapPinEnhancedSliderMixin" virtual="true" propagateMouseInput="Both">
         <Size x="1" y="20" />
         <Frames>
             <Button parentKey="back" propagateMouseInput="Motion">
