@@ -3,9 +3,13 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerScrollBox : Frame, ScrollBoxListMixin
 
+---@class MapPinEnhancedTrackerScrollBar : ScrollBarMixin
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
 ---@class MapPinEnhancedTrackerTemplate : Frame
 ---@field scrollBox MapPinEnhancedTrackerScrollBox
----@field scrollBar ScrollBarMixin
+---@field scrollBar MapPinEnhancedTrackerScrollBar
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
@@ -268,13 +272,11 @@ local function TrackerElementResetter(frame, node)
     end
 end
 
-
-
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     end)
-    self.scrollBar:SetHideIfUnscrollable(true)
+    self.scrollBar:SetHideIfUnscrollable(false)
     self.dataProvider = CreateTreeDataProvider()
     self.scrollView = CreateScrollBoxListTreeListView()
 
@@ -311,6 +313,22 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         if not isTracked then return end
         self:ScrollToTrackedPin()
     end)
+end
+
+function MapPinEnhancedTrackerMixin:OnShow()
+    self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
+end
+
+function MapPinEnhancedTrackerMixin:OnHide()
+    self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
+end
+
+function MapPinEnhancedTrackerMixin:OnUpdate()
+    if self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
+        self.scrollBar.fadeIn:PlayShowing(self.scrollBar.fadeOut)
+    else
+        self.scrollBar.fadeOut:PlayHiding(self.scrollBar.fadeIn)
+    end
 end
 
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()

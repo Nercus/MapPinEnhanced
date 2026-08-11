@@ -20,11 +20,26 @@
                     <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="5" y="-5" />
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="5" y="0" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
             </EventFrame>
         </Frames>
 
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+            <OnUpdate method="OnUpdate" />
         </Scripts>
     </Frame>
 </Ui>
