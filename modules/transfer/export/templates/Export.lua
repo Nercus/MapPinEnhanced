@@ -11,7 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field warning FontString
 ---@field exportTarget ExportTarget?
 ---@field selectedExportType "way"|"serialized"
----@field selectedPrefix "/way"|"/mph"|"/mpe"
+---@field selectedPrefix "/way"|"/mph"|"/mappin"
 ---@field output string
 MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
@@ -38,7 +38,7 @@ local exportOptions = {
 local prefixOptions = {
     { label = "/way", value = "/way" },
     { label = "/mph", value = "/mph" },
-    { label = "/mpe", value = "/mpe" },
+    { label = "/mappin", value = "/mappin" },
 }
 
 ---@param pinData SaveablePinData | pinData
@@ -160,13 +160,19 @@ function MapPinEnhancedExportWindowMixin:UpdateOutput()
     self:UpdateSummary(pins)
 
     local losesStyle = false
+    local losesTitle = false
     for _, pinData in ipairs(pins) do
         if pinData.texture or pinData.color then
             losesStyle = true
+        end
+        if self.selectedPrefix == "/mappin" and pinData.title then
+            losesTitle = true
+        end
+        if losesStyle and losesTitle then
             break
         end
     end
-    self.warning:SetShown(self.selectedExportType == "way" and losesStyle)
+    self.warning:SetShown(self.selectedExportType == "way" and (losesStyle or losesTitle))
     self.prefixRadio:SetShown(self.selectedExportType == "way")
     self.prefixLabel:SetShown(self.selectedExportType == "way")
 end
@@ -182,7 +188,7 @@ function MapPinEnhancedExportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self.description:SetText(L["Choose an export format, then copy the text below."])
     self.prefixLabel:SetText(L["Command prefix:"])
-    self.warning:SetText(L["Warning: /way commands only preserve pin titles. Custom icons and colors will be lost."])
+    self.warning:SetText(L["Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."])
     self.textarea:Setup({ onChange = function() end })
     self.textarea.editbox:SetScript("OnTextChanged", function(_, userInput)
         if userInput then

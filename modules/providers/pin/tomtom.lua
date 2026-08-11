@@ -11,7 +11,7 @@ function Providers:CheckForTomTom()
     self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
     if not self.isTomTomLoaded then
         ---@diagnostic disable-next-line: global-element slash command definition has to be global
-        SLASH_MapPinEnhanced3 = "/way"
+        SLASH_MapPinEnhanced2 = "/way"
         return
     end
     if not Groups:GetGroupByName(L["TomTom Pins"]) then

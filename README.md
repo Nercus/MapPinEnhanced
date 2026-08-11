@@ -38,7 +38,7 @@ and terms. Bundled third-party libraries remain under their own licenses.
 You can do these things with Map Pin Enhanced:
 
 - Set as many waypoints as you want (no "one-waypoint" limit).
-- Set waypoints via command: _/mph_, _/mpe or _/way_.
+- Set waypoints via command: _/mph_, _/mappin or _/way_.
 - A pin tracker to see a list of all your pins.
 - An editor to create and manage your groups.
 - Many improvements to the in-game waypoint system

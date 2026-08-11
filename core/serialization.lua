@@ -13,10 +13,11 @@ local DECIMAL_SEPARATOR_PATTERN = decimal_separator == "." and "%." or ","
 local INVERSE_DECIMAL_SEPARATOR_PATTERN = inverse_decimal_separator == "." and "%." or ","
 
 local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][Hh]"
-local SLASH_PREFIX_PATTERN_2 = "/[Mm][Pp][Ee]"
+local SLASH_PREFIX_PATTERN_2 = "/[Mm][Aa][Pp][Pp][Ii][Nn]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local WAY_COMMAND_PATTERN = "/way %s %.2f %.2f %s"
+local MAPPIN_COMMAND_PATTERN = "/mappin %s %.6f %.6f"
 local PREFIX = "!MPH!"
 MapPinEnhanced.PREFIX = PREFIX
 
@@ -98,11 +99,56 @@ local function ConvertImportMapString(mapString)
     end
 end
 
+---@param token string
+---@return number?
+local function ParseNumberToken(token)
+    token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
+    return tonumber(token)
+end
+
+---parse Blizzard's /mappin format: mapID x y, with normalized 0..1 coordinates
+---@param mapPinString string
+---@return string?, number?, number[]?, boolean
+local function ParseMapPinCommandToData(mapPinString)
+    local hasMapPinPrefix = string.find(mapPinString, "^%s*" .. SLASH_PREFIX_PATTERN_2) ~= nil
+    if not hasMapPinPrefix then
+        return nil, nil, nil, false
+    end
+
+    mapPinString = mapPinString:gsub("^%s*" .. SLASH_PREFIX_PATTERN_2, "", 1)
+    mapPinString = trim(mapPinString)
+
+    local mapIDToken, xToken, yToken = string.match(mapPinString, "^(%S+)%s+(%S+)%s+(%S+)%s*$")
+    if not mapIDToken or not xToken or not yToken then
+        return nil, nil, nil, hasMapPinPrefix
+    end
+
+    local mapID = tonumber(mapIDToken)
+    local x = ParseNumberToken(xToken)
+    local y = ParseNumberToken(yToken)
+    if not mapID or not x or not y then
+        return nil, nil, nil, hasMapPinPrefix
+    end
+    if mapID ~= math.floor(mapID) or x < 0 or x > 1 or y < 0 or y > 1 then
+        return nil, nil, nil, hasMapPinPrefix
+    end
+
+    return nil, mapID, { x * 100, y * 100 }, true
+end
+
 
 ---parse a wayString into a coords, mapID and title
 ---@param wayString string
 ---@return string?, number?, number[]?
 function MapPinEnhanced:ParseWayCommandToData(wayString)
+    local title, mapID, coords, isMapPinCommand = ParseMapPinCommandToData(wayString)
+    if mapID and coords then
+        return title, mapID, coords
+    end
+    if isMapPinCommand then
+        return nil, nil, nil
+    end
+
     -- remove the slashString from the message
     wayString = wayString:gsub(SLASH_PREFIX_PATTERN_1, ""):gsub(SLASH_PREFIX_PATTERN_2, ""):gsub(SLASH_PREFIX_PATTERN_3,
         "")
@@ -160,13 +206,12 @@ function MapPinEnhanced:ParseWayCommandToData(wayString)
     local mapID
     local coords = {}
     for _, token in ipairs(tokens) do
-        -- replace all wrong decimal separators with the right one
-        token = token:gsub(INVERSE_DECIMAL_SEPARATOR_PATTERN, DECIMAL_SEPARATOR_PATTERN)
         -- if element is not a number its the mapID/zoneName
-        if not tonumber(token) then
+        local numberValue = ParseNumberToken(token)
+        if not numberValue then
             mapID = ConvertImportMapString(token)
         else
-            table.insert(coords, tonumber(token))
+            table.insert(coords, numberValue)
         end
     end
     if not mapID or mapID == "" then
@@ -197,11 +242,15 @@ end
 
 ---create a wayString from pinData
 ---@param pinData pinData
----@param prefix "/way"|"/mph"|"/mpe"?
+---@param prefix "/way"|"/mph"|"/mappin"?
 ---@return string wayLine
 function MapPinEnhanced:SerializeWayLine(pinData, prefix)
     local mapID = pinData.mapID or ""
     local title = pinData.title or ""
+    if prefix == "/mappin" then
+        return trim(string.format(MAPPIN_COMMAND_PATTERN, mapID, pinData.x, pinData.y))
+    end
+
     local x = pinData.x * 100
     local y = pinData.y * 100
     local wayLine = trim(string.format(WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))

@@ -133,8 +133,8 @@ L["Invalid or corrupted serialized data."] = "Invalid or corrupted serialized da
 L["No valid pins were found to import."] = "No valid pins were found to import."
 L["Imported %d pins; skipped %d invalid entries."] = "Imported %d pins; skipped %d invalid entries."
 L["Import failed."] = "Import failed."
-L["Warning: /way commands only preserve pin titles. Custom icons and colors will be lost."] =
-"Warning: /way commands only preserve pin titles. Custom icons and colors will be lost."
+L["Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."] =
+"Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."
 
 ------------------------------ Providers ------------------------------
 L["%s added hidden group \"%s\"."] = "%s added hidden group \"%s\"."
