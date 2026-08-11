@@ -2,8 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedSliderValueText : FontString
----@field fadeOut AnimationGroup
----@field fadeIn AnimationGroup
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 
 ---@class MapPinEnhancedSliderTemplate : Frame
 ---@field valueText MapPinEnhancedSliderValueText
@@ -51,27 +51,18 @@ function MapPinEnhancedSliderMixin:OnShow()
 end
 
 function MapPinEnhancedSliderMixin:OnThumbDragStart()
-    if self.valueText.fadeOut:IsPlaying() then
-        self.valueText.fadeOut:Stop()
-    end
-    if self.valueText.fadeIn:IsPlaying() then
-        self.valueText.fadeIn:Stop()
-    end
-    self.valueText.fadeIn:Play()
+    self.valueText.fadeIn:PlayShowing(self.valueText.fadeOut)
 end
 
 ---@type FunctionContainer
 local fadeOutDelay
 function MapPinEnhancedSliderMixin:OnThumbDragStop()
-    if self.valueText.fadeIn:IsPlaying() then
-        self.valueText.fadeIn:Stop()
-    end
     if fadeOutDelay and not fadeOutDelay:IsCancelled() then
         fadeOutDelay:Cancel()
     end
     fadeOutDelay = C_Timer.NewTimer(0.5, function()
         if self.valueText:IsShown() then
-            self.valueText.fadeOut:Play()
+            self.valueText.fadeOut:PlayHiding(self.valueText.fadeIn)
         end
     end)
 end

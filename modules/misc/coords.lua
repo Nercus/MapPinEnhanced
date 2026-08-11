@@ -5,8 +5,8 @@ local MapPinEnhanced = select(2, ...)
 -- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
 
 ---@class MapPinEnhancedCoordsDisplayButton : MapPinEnhancedIconButtonTemplate
----@field fadeIn AnimationGroup
----@field fadeOut AnimationGroup
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 
 ---@class MapPinEnhancedCoordsDisplayTemplate : Frame
@@ -139,8 +139,8 @@ local HOVER_TIME = 0.5
 function MapPinEnhancedCoordsDisplayMixin:OnEnter()
     self.buttonVisibilityTimer = C_Timer.NewTimer(HOVER_TIME, function()
         if not self:IsMouseOver() then return end
-        self.closeButton.fadeIn:Play()
-        self.lockButton.fadeIn:Play()
+        self.closeButton.fadeIn:PlayShowing(self.closeButton.fadeOut)
+        self.lockButton.fadeIn:PlayShowing(self.lockButton.fadeOut)
     end)
 end
 
@@ -149,8 +149,8 @@ function MapPinEnhancedCoordsDisplayMixin:OnLeave()
         self.buttonVisibilityTimer:Cancel()
         self.buttonVisibilityTimer = nil
     end
-    self.closeButton.fadeOut:Play()
-    self.lockButton.fadeOut:Play()
+    self.closeButton.fadeOut:PlayHiding(self.closeButton.fadeIn)
+    self.lockButton.fadeOut:PlayHiding(self.lockButton.fadeIn)
 end
 
 function MapPinEnhancedCoordsDisplayMixin:ShowFrame()

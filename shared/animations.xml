@@ -5,14 +5,14 @@
     <!-- We always use an animation speed of 0.15s == 150ms to feel nice but also fast -->
 
     <!-- Fade In/Out -->
-    <AnimationGroup name="MapPinEnhancedAnimationFadeIn" mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
+    <AnimationGroup name="MapPinEnhancedAnimationFadeIn" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true" virtual="true">
         <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnPlay method="OnPlayShow" />
         </Scripts>
     </AnimationGroup>
 
-    <AnimationGroup name="MapPinEnhancedAnimationFadeOut" mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
+    <AnimationGroup name="MapPinEnhancedAnimationFadeOut" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true" virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
             <OnFinished method="OnFinishedHide" />
@@ -20,7 +20,7 @@
     </AnimationGroup>
 
     <!-- Fade + Scale In/Out -->
-    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomIn" mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
+    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomIn" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true" virtual="true">
         <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
         <Scale fromScaleX="0.8" fromScaleY="0.8" toScaleX="1" toScaleY="1" duration="0.15" smoothing="IN_OUT" />
         <Scripts>
@@ -28,7 +28,7 @@
         </Scripts>
     </AnimationGroup>
 
-    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomOut" mixin="MapPinEnhancedAnimationVisibilityMixin" virtual="true">
+    <AnimationGroup name="MapPinEnhancedAnimationFadeZoomOut" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true" virtual="true">
         <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
         <Scale fromScaleX="1" fromScaleY="1" toScaleX="0.8" toScaleY="0.8" duration="0.15" smoothing="IN_OUT" />
         <Scripts>

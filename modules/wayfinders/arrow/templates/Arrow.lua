@@ -2,8 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedFloatingArrowNeedle : Texture
----@field fadeIn Animation
----@field fadeOut Animation
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 ---@class MapPinEnhancedFloatingArrowNeedleContainer : Frame
 ---@field needle MapPinEnhancedFloatingArrowNeedle
@@ -20,8 +20,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field distance FontString
 ---@field eta FontString
----@field fadeIn Animation
----@field fadeOut Animation
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 ---@field needleRotation number | nil
 ---@field newNeedleRotation number | nil
 ---@field rotatePin boolean | nil
@@ -104,12 +104,10 @@ function MapPinEnhancedFloatingArrowMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if displayType == "close" then
-        self.needleContainer.needle.fadeIn:Stop()
-        self.needleContainer.needle.fadeOut:Play()
+        self.needleContainer.needle.fadeOut:PlayHiding(self.needleContainer.needle.fadeIn)
         self.pin:ShowPulse()
     else
-        self.needleContainer.needle.fadeOut:Stop()
-        self.needleContainer.needle.fadeIn:Play()
+        self.needleContainer.needle.fadeIn:PlayShowing(self.needleContainer.needle.fadeOut)
         self.pin:HidePulse()
     end
 end

@@ -49,8 +49,7 @@ end
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
     if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
-        self.frame.fadeIn:Stop()
-        self.frame.fadeOut:Play()
+        self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
         return
     end
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
@@ -61,10 +60,7 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     end
     self:SetTitle(wayfinderData.title)
     self:SetLock(wayfinderData.lock)
-    frame.fadeOut:Stop()
-    if not frame:IsShown() then
-        frame.fadeIn:Play()
-    end
+    frame.fadeIn:PlayShowing(frame.fadeOut)
 end
 
 function MapPinEnhancedWayfinderArrow:Enable()
@@ -76,8 +72,7 @@ end
 
 function MapPinEnhancedWayfinderArrow:Disable()
     if self.frame then
-        self.frame.fadeIn:Stop()
-        self.frame.fadeOut:Play()
+        self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
     end
     if self.unsubscribeRotatePinOption then
         self.unsubscribeRotatePinOption()

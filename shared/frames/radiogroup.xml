@@ -28,16 +28,10 @@
             </Animations>
             <Scripts>
                 <OnShow>
-                    if self.fadeOut:IsPlaying() then
-                        self.fadeOut:Stop()
-                    end
-                    self.fadeIn:Play()
+                    self.fadeIn:PlayShowing(self.fadeOut)
                 </OnShow>
                 <OnHide>
-                    if self.fadeIn:IsPlaying() then
-                        self.fadeIn:Stop()
-                    end
-                    self.fadeOut:Play()
+                    self.fadeOut:PlayHiding(self.fadeIn)
                 </OnHide>
             </Scripts>
         </CheckedTexture>

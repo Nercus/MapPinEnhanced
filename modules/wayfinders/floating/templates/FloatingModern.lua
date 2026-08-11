@@ -3,8 +3,8 @@ local MapPinEnhanced = select(2, ...)
 
 
 ---@class MapPinEnhancedFloatingModernNeedle : Texture
----@field fadeIn Animation
----@field fadeOut Animation
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 ---@class MapPinEnhancedFloatingModernTemplate : Frame
 ---@field pin MapPinEnhancedBasePinTemplate
@@ -99,12 +99,10 @@ function MapPinEnhancedFloatingModernMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if displayType == "close" then
-        self.needle.fadeIn:Stop()
-        self.needle.fadeOut:Play()
+        self.needle.fadeOut:PlayHiding(self.needle.fadeIn)
         self.pin:ShowPulse()
     else
-        self.needle.fadeOut:Stop()
-        self.needle.fadeIn:Play()
+        self.needle.fadeIn:PlayShowing(self.needle.fadeOut)
         self.pin:HidePulse()
     end
 end

@@ -5,10 +5,47 @@ local MapPinEnhanced = select(2, ...)
 -- local Animations = MapPinEnhanced:GetModule("Animations")
 
 ---@class MapPinEnhancedAnimationVisibilityMixin : AnimationGroup
----@field showOnPlay boolean? Wether to show the parent when the animation plays, setable via keyvalues
----@field hideOnFinished boolean? Wether to hide the parent when the animation finishes, setable via keyvalues
+---@field showOnPlay boolean? Whether to show the parent when the animation plays, setable via keyvalues
+---@field hideOnFinished boolean? Whether to hide the parent when the animation finishes, setable via keyvalues
 MapPinEnhancedAnimationVisibilityMixin = {}
 
+---@param oppositeAnimation AnimationGroup?
+function MapPinEnhancedAnimationVisibilityMixin:PlayReplacing(oppositeAnimation)
+    if oppositeAnimation and oppositeAnimation:IsPlaying() then
+        oppositeAnimation:Stop()
+    end
+    if self:IsPlaying() then return end
+    self:Play()
+end
+
+---@param oppositeAnimation AnimationGroup?
+function MapPinEnhancedAnimationVisibilityMixin:PlayShowing(oppositeAnimation)
+    local parent = self:GetParent()
+    if parent:IsShown() and parent:GetAlpha() >= 1 and not self:IsPlaying() then return end
+    self:PlayReplacing(oppositeAnimation)
+end
+
+---@param oppositeAnimation AnimationGroup?
+function MapPinEnhancedAnimationVisibilityMixin:PlayHiding(oppositeAnimation)
+    local parent = self:GetParent()
+    if (not parent:IsShown() or parent:GetAlpha() <= 0) and not self:IsPlaying() then return end
+    self:PlayReplacing(oppositeAnimation)
+end
+
+---@param shown boolean
+---@param oppositeAnimation AnimationGroup?
+function MapPinEnhancedAnimationVisibilityMixin:SetParentShownInstantly(shown, oppositeAnimation)
+    if oppositeAnimation and oppositeAnimation:IsPlaying() then
+        oppositeAnimation:Stop()
+    end
+    if self:IsPlaying() then
+        self:Stop()
+    end
+
+    local parent = self:GetParent()
+    parent:SetAlpha(shown and 1 or 0)
+    parent:SetShown(shown)
+end
 
 function MapPinEnhancedAnimationVisibilityMixin:OnPlayShow()
     if not self.showOnPlay then return end

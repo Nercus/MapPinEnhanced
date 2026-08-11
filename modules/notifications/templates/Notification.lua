@@ -7,8 +7,8 @@ local Notifications = MapPinEnhanced:GetModule("Notifications")
 
 ---@class MapPinEnhancedNotificationFrame : Frame
 ---@field text FontString
----@field fadeIn AnimationGroup
----@field fadeOut AnimationGroup
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 MapPinEnhancedNotificationFrameMixin = {}
 
 function MapPinEnhancedNotificationFrameMixin:OnLoad()
@@ -25,30 +25,17 @@ function MapPinEnhancedNotificationFrameMixin:ShowMessage(message)
 end
 
 function MapPinEnhancedNotificationFrameMixin:FadeIn()
-    if self.fadeOut:IsPlaying() then
-        self.fadeOut:Stop()
-    end
-    self.fadeIn:Play()
+    self.fadeIn:PlayShowing(self.fadeOut)
 end
 
 function MapPinEnhancedNotificationFrameMixin:FadeOut()
-    if self.fadeOut:IsPlaying() then return end
-    if self.fadeIn:IsPlaying() then
-        self.fadeIn:Stop()
-    end
-    self.fadeOut:Play()
+    self.fadeOut:PlayHiding(self.fadeIn)
 end
 
 ---@param instant boolean?
 function MapPinEnhancedNotificationFrameMixin:HideMessage(instant)
     if instant then
-        if self.fadeIn:IsPlaying() then
-            self.fadeIn:Stop()
-        end
-        if self.fadeOut:IsPlaying() then
-            self.fadeOut:Stop()
-        end
-        self:Hide()
+        self.fadeOut:SetParentShownInstantly(false, self.fadeIn)
         return
     end
 

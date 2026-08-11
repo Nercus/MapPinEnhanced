@@ -25,12 +25,12 @@ function MapPinEnhancedTextareaMixin:OnMouseDown()
 end
 
 function MapPinEnhancedTextareaMixin:OnEditFocusGained()
-    self.placeholderOverlay.fadeOut:Play()
+    self.placeholderOverlay.fadeOut:PlayHiding(self.placeholderOverlay.fadeIn)
 end
 
 function MapPinEnhancedTextareaMixin:OnEditFocusLost()
     if self.editbox:GetText() == "" then
-        self.placeholderOverlay.fadeIn:Play()
+        self.placeholderOverlay.fadeIn:PlayShowing(self.placeholderOverlay.fadeOut)
     end
 end
 
