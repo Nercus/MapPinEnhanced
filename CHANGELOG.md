@@ -1,3 +1,3 @@
-# 3.2.1
+# 3.2.2
 
-- Bump interface version to 12.0.7
+- Bump interface version to 12.1.0
