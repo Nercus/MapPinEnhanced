@@ -224,7 +224,7 @@ function MapPinEnhancedPinMixin:Reset()
 end
 
 ---@param group MapPinEnhancedGroupMixin?
-MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(group)
+MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(_, group)
     if not group then return end
     for _, pin in group:EnumeratePins() do
         pin:UpdateGroupIcon()
