@@ -3,30 +3,35 @@ local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedWindowHeader : Frame
----@field title FontString
+---@class MapPinEnhancedWindowTitleContainer : Frame
+---@field TitleText FontString
 
----@class MapPinEnhancedWindowBackground : Frame
----@field bg Texture
----@field backgroundArt Texture
----@field backgroundMask Texture
+---@class MapPinEnhancedWindowPortraitContainer : Frame
+---@field portrait Texture
 
 ---@class MapPinEnhancedWindowTemplate : Frame
----@field header MapPinEnhancedWindowHeader
----@field background MapPinEnhancedWindowBackground
+---@field TitleContainer MapPinEnhancedWindowTitleContainer
+---@field PortraitContainer MapPinEnhancedWindowPortraitContainer
+---@field CloseButton Button
+---@field background Texture
+---@field backgroundArt Texture
+---@field backgroundMask MaskTexture
 ---@field windowTitle string? set through keyvalues
-MapPinEnhancedWindowMixin = {}
+MapPinEnhancedWindowMixin = CreateFromMixins(PortraitFrameMixin)
 
 ---@param title string
 function MapPinEnhancedWindowMixin:SetTitle(title)
-    self.header.title:SetText(string.format("%s - %s", MapPinEnhanced.displayName, title))
+    self.TitleContainer.TitleText:SetText(string.format("%s - %s", MapPinEnhanced.displayName, title))
 end
 
 function MapPinEnhancedWindowMixin:OnLoad()
     local frameName = self:GetName()
     assert(frameName, "MapPinEnhancedWindowMixin:OnLoad: window must have a global name")
 
-    MapPinEnhanced:RegisterDraggableFrame(self, frameName, self.header, function()
+    self.PortraitContainer.portrait:SetTexture(MapPinEnhanced.assetsPath .. "\\logo.png")
+    self.PortraitContainer.portrait:SetTexCoord(0, 1, 0, 1)
+
+    MapPinEnhanced:RegisterDraggableFrame(self, frameName, self.TitleContainer, function()
         return false
     end)
     table.insert(UISpecialFrames, frameName)
