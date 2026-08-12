@@ -54,6 +54,19 @@ local function AddTomTomShim()
             setTracked = true,
         })
     end
+
+    TomTom.SetClosestWaypoint = function(_, ...)
+        PinManager:TrackNearestPin()
+    end
+
+    TomTom.GetClosestWaypoint = function(_, ...)
+        return PinManager:GetNearestPin()
+    end
+
+    TomTom.ClearAllWaypoints = function(_, ...)
+        PinManager:ClearPins()
+    end
+
     _G.TomTom = TomTom
 end
 
