@@ -22,7 +22,7 @@
                         <Anchor point="LEFT" x="8" />
                     </Anchors>
                 </Texture>
-                <MaskTexture atlas="UI-HUD-CoolDownManager-Mask">
+                <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Size x="28" y="28" />
                     <Anchors>
                         <Anchor point="LEFT" x="8" />
@@ -45,7 +45,8 @@
                 </FontString>
             </Layer>
             <Layer level="OVERLAY">
-                <Texture atlas="plunderstorm-actionbar-slot-border">
+                <Texture atlas="auctionhouse-itemicon-border-color">
+                    <Color r="1" g="0.82" b="0" a="1" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-6" y="5" />
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="6" y="-5" />

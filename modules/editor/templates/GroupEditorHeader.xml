@@ -34,7 +34,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <MaskTexture atlas="UI-HUD-CoolDownManager-Mask">
+                        <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
                                 <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
@@ -43,6 +43,13 @@
                                 <MaskedTexture childKey="iconTexture" />
                             </MaskedTextures>
                         </MaskTexture>
+                        <Texture atlas="auctionhouse-itemicon-border-color">
+                            <Color r="1" g="0.82" b="0" a="1" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" x="-5" y="5" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" x="5" y="-5" />
+                            </Anchors>
+                        </Texture>
                     </Layer>
                 </Layers>
             </Button>
