@@ -18,7 +18,7 @@
                     <KeyValue key="hideShadow" value="true" type="boolean" />
                     <KeyValue key="hideHighlight" value="true" type="boolean" />
                 </KeyValues>
-                <Size x="24" y="24" />
+                <Size x="28" y="28" />
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
