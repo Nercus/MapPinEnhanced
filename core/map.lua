@@ -3,36 +3,143 @@ local MapPinEnhanced = select(2, ...)
 
 local Options = MapPinEnhanced:GetModule("Options")
 
-local MIN_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL = 0.05, 1.5 -- tune as needed
-local BASE_UPDATE_INTERVAL = 1
-local DISTANCE_CACHE_SIZE = 5
+---@alias DistanceMovementState "unknown"|"approaching"|"stationary"|"movingAway"
+---@alias DistanceSource "navigation"|"map"
 
----@type {distance: number, time: number}[]
-local distanceCache = table.create(DISTANCE_CACHE_SIZE)
-local lastDistance = 0
+local MIN_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL = 0.05, 1.5
+local DIRECTION_UPDATE_INTERVAL = 0.5
+local DISTANCE_DEAD_ZONE = 0.1
+local SPEED_SMOOTHING_WINDOW = 1
+
+---@type number?
+local lastDistance = nil
 local lastTimeToTarget = -1
+---@type number?
+local lastSampleTime = nil
+local smoothedClosingSpeed = 0
+local hasSmoothedClosingSpeed = false
+---@type DistanceMovementState
+local movementState = "unknown"
+---@type DistanceSource?
+local distanceSource = nil
+---@type number?
+local lastNotifiedDistance = nil
+---@type number?
+local lastNotifiedEta = nil
 local elapsedSinceUpdate = 0
-local throttle_interval = BASE_UPDATE_INTERVAL
+local throttleInterval = MIN_UPDATE_INTERVAL
 
 ---@type {mapID: number, x: number, y: number} | nil
 local target = nil
----@type fun(distance: number, timeToTarget: number)[]
+---@type fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)[]
 local onUpdateCallbacks = {}
+---@type fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)[]
+local onSampleCallbacks = {}
 local distanceFrame = CreateFrame("Frame")
 
 local HBD = MapPinEnhanced.HBD
 local IsSuperTracking = C_SuperTrack.IsSuperTrackingAnything
+local GetNavigationDistance = C_Navigation.GetDistance
 local max = math.max
 local min = math.min
 local abs = math.abs
-local wipe = table.wipe
+local floor = math.floor
 
-local function NotifyDistanceCallbacks(distance, timeToTarget)
+---@param distance number
+---@param timeToTarget number
+---@param force boolean?
+local function NotifyDistanceCallbacks(distance, timeToTarget, force)
+    local roundedDistance = Round(distance)
+    local roundedEta = timeToTarget < 0 and -1 or floor(timeToTarget)
+    if not force and roundedDistance == lastNotifiedDistance and roundedEta == lastNotifiedEta then return end
+
+    lastNotifiedDistance = roundedDistance
+    lastNotifiedEta = roundedEta
+    local closingSpeed = smoothedClosingSpeed
+    local nextUpdateInterval = throttleInterval
+    local currentMovementState = movementState
     for _, callback in ipairs(onUpdateCallbacks) do
         if type(callback) == "function" then
-            callback(distance, timeToTarget)
+            callback(distance, timeToTarget, closingSpeed, nextUpdateInterval, currentMovementState)
         end
     end
+end
+
+---@param distance number
+---@param timeToTarget number
+local function NotifyDistanceSampleCallbacks(distance, timeToTarget)
+    local closingSpeed = smoothedClosingSpeed
+    local nextUpdateInterval = throttleInterval
+    local currentMovementState = movementState
+    for _, callback in ipairs(onSampleCallbacks) do
+        if type(callback) == "function" then
+            callback(distance, timeToTarget, closingSpeed, nextUpdateInterval, currentMovementState)
+        end
+    end
+end
+
+---@param distance number
+---@param timeToTarget number
+local function PublishDistanceSample(distance, timeToTarget)
+    NotifyDistanceCallbacks(distance, timeToTarget)
+    NotifyDistanceSampleCallbacks(distance, timeToTarget)
+end
+
+local function ResetDistanceSampleState()
+    lastDistance = nil
+    lastTimeToTarget = -1
+    lastSampleTime = nil
+    smoothedClosingSpeed = 0
+    hasSmoothedClosingSpeed = false
+    movementState = "unknown"
+    distanceSource = nil
+    lastNotifiedDistance = nil
+    lastNotifiedEta = nil
+end
+
+---@param distance number
+---@param state DistanceMovementState
+---@return number
+local function GetDistanceUpdateInterval(distance, state)
+    local distanceInterval = max(MIN_UPDATE_INTERVAL,
+        min(MAX_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL * (distance / 100)))
+
+    if state == "movingAway" then
+        return min(distanceInterval, DIRECTION_UPDATE_INTERVAL)
+    elseif state == "stationary" then
+        return max(distanceInterval, DIRECTION_UPDATE_INTERVAL)
+    end
+
+    return distanceInterval
+end
+
+---@param distanceDelta number
+---@return DistanceMovementState
+local function GetMovementState(distanceDelta)
+    if abs(distanceDelta) < DISTANCE_DEAD_ZONE then
+        return "stationary"
+    elseif distanceDelta > 0 then
+        return "approaching"
+    end
+
+    return "movingAway"
+end
+
+---@param currentSpeed number
+---@param hasCurrentSpeed boolean
+---@param rawClosingSpeed number
+---@param sampleElapsed number
+---@return number speed
+---@return boolean hasSpeed
+local function GetSmoothedClosingSpeed(currentSpeed, hasCurrentSpeed, rawClosingSpeed, sampleElapsed)
+    local closingSpeed = max(0, rawClosingSpeed)
+    if not hasCurrentSpeed then
+        if closingSpeed <= 0 then return 0, false end
+        return closingSpeed, true
+    end
+
+    local alpha = min(1, sampleElapsed / SPEED_SMOOTHING_WINDOW)
+    return currentSpeed + alpha * (closingSpeed - currentSpeed), true
 end
 
 ---Wrapper for the current map the player is on
@@ -85,80 +192,142 @@ function MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
     return HBD:GetWorldVector(pInst, pwx, pwy, twx, twy)
 end
 
+---@param distance any
+---@return boolean
+local function IsUsableDistance(distance)
+    if MapPinEnhanced:IsSecretValue(distance) then return false end
+    return type(distance) == "number" and distance >= 0
+end
+
+---@return number?
+local function GetFallbackDistance()
+    if not target then return nil end
+
+    local playerX, playerY, playerMap = MapPinEnhanced:GetPlayerMapPosition()
+    if playerMap == nil or playerX == nil or playerY == nil then return nil end
+
+    local distance = HBD:GetZoneDistance(playerMap, playerX, playerY, target.mapID, target.x, target.y)
+    if not IsUsableDistance(distance) then return nil end
+    return distance
+end
+
+---@param allowNavigation boolean
+---@return number? distance
+---@return DistanceSource? source
+local function GetCurrentTargetDistance(allowNavigation)
+    if allowNavigation and GetNavigationDistance and IsSuperTracking() then
+        local navigationDistance = GetNavigationDistance()
+        if IsUsableDistance(navigationDistance) then
+            return navigationDistance, "navigation"
+        end
+    end
+
+    local mapDistance = GetFallbackDistance()
+    if mapDistance ~= nil then
+        return mapDistance, "map"
+    end
+end
+
+---@param distance number
+---@param source DistanceSource
+---@param currentTime number
+local function ProcessDistanceSample(distance, source, currentTime)
+    if distanceSource ~= source or lastDistance == nil or lastSampleTime == nil then
+        lastDistance = distance
+        lastSampleTime = currentTime
+        lastTimeToTarget = -1
+        smoothedClosingSpeed = 0
+        hasSmoothedClosingSpeed = false
+        movementState = "unknown"
+        distanceSource = source
+        throttleInterval = GetDistanceUpdateInterval(distance, movementState)
+        PublishDistanceSample(distance, lastTimeToTarget)
+        return
+    end
+
+    local sampleElapsed = currentTime - lastSampleTime
+    if sampleElapsed <= 0 then return end
+
+    local distanceDelta = lastDistance - distance
+    movementState = GetMovementState(distanceDelta)
+
+    local rawClosingSpeed = distanceDelta / sampleElapsed
+    smoothedClosingSpeed, hasSmoothedClosingSpeed = GetSmoothedClosingSpeed(smoothedClosingSpeed,
+        hasSmoothedClosingSpeed, rawClosingSpeed, sampleElapsed)
+    throttleInterval = GetDistanceUpdateInterval(distance, movementState)
+
+    if movementState == "approaching" and smoothedClosingSpeed > 0 then
+        lastTimeToTarget = distance / smoothedClosingSpeed
+    else
+        lastTimeToTarget = -1
+    end
+
+    lastDistance = distance
+    lastSampleTime = currentTime
+    PublishDistanceSample(distance, lastTimeToTarget)
+end
+
+---@param allowNavigation boolean
+local function SampleTargetDistance(allowNavigation)
+    local distance, source = GetCurrentTargetDistance(allowNavigation)
+    if distance == nil or not source then
+        ResetDistanceSampleState()
+        throttleInterval = DIRECTION_UPDATE_INTERVAL
+        return
+    end
+
+    ProcessDistanceSample(distance, source, GetTime())
+end
+
 ---@param _ Frame
 ---@param elapsed number
 local function OnUpdate(_, elapsed)
     if not target then return end
 
     elapsedSinceUpdate = elapsedSinceUpdate + elapsed
-    if elapsedSinceUpdate < throttle_interval then return end
+    if elapsedSinceUpdate < throttleInterval then return end
     elapsedSinceUpdate = 0
-
-    local currentTime = GetTime()
-
-    if not IsSuperTracking() then return end
-
-    local mapID, x, y = target.mapID, target.x, target.y
-    local distance = MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
-    if distance == 0 then return end
-    if abs(lastDistance - distance) < 1 then return end
-
-    -- Maintain a cache of recent distances
-    if #distanceCache >= DISTANCE_CACHE_SIZE then
-        table.remove(distanceCache, 1)
-    end
-    table.insert(distanceCache, { distance = distance, time = currentTime })
-
-    -- Calculate total distance and time from the cache
-    local totalDistance = 0
-    local totalTime = 0
-    for i = 2, #distanceCache do
-        local prev = distanceCache[i - 1]
-        local current = distanceCache[i]
-        totalDistance = totalDistance + (prev.distance - current.distance)
-        totalTime = totalTime + (current.time - prev.time)
-    end
-
-    local timeToTarget = -1
-
-    if totalTime > 0 and totalDistance > 0 then
-        -- Calculate speed (yards per second)
-        ---@type number
-        local speed = totalDistance / totalTime
-        timeToTarget = distance / speed
-    else
-        wipe(distanceCache)
-        table.insert(distanceCache, { distance = distance, time = currentTime })
-    end
-
-    -- Update UPDATE interval based on distance
-    throttle_interval = max(MIN_UPDATE_INTERVAL, min(MAX_UPDATE_INTERVAL, MAX_UPDATE_INTERVAL * (distance / 100)))
-
-    NotifyDistanceCallbacks(distance, timeToTarget)
-    lastDistance = distance
-    lastTimeToTarget = timeToTarget
+    SampleTargetDistance(true)
 end
 
 --- Register a callback to be called when the distance to the target is updated
----@param callback fun(distance: number, timeToTarget: number) The callback function that will be called with the updated distance and estimated time to target
+---@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState) The callback function that will be called with the current navigation sample
 function MapPinEnhanced:RegisterContinuousDistanceCallback(callback)
     if type(callback) == "function" then
         table.insert(onUpdateCallbacks, callback)
-        if target then
-            local distance = self:GetDistanceToTarget(target.mapID, target.x, target.y)
-            if distance > 0 then
-                callback(distance, -1)
-            end
+        if target and lastDistance ~= nil then
+            callback(lastDistance, lastTimeToTarget, smoothedClosingSpeed, throttleInterval, movementState)
         end
     end
 end
 
 --- Unregister a previously registered distance update callback
----@param callback fun(distance: number, timeToTarget: number) The callback function to unregister
+---@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState) The callback function to unregister
 function MapPinEnhanced:UnregisterContinuousDistanceCallback(callback)
     for i, cb in ipairs(onUpdateCallbacks) do
         if cb == callback then
             table.remove(onUpdateCallbacks, i)
+            return
+        end
+    end
+end
+
+--- Register a callback for every valid navigation sample, including samples
+--- whose rounded distance and ETA have not changed.
+---@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)
+function MapPinEnhanced:RegisterContinuousDistanceSampleCallback(callback)
+    if type(callback) ~= "function" then return end
+    table.insert(onSampleCallbacks, callback)
+    if target and lastDistance ~= nil then
+        callback(lastDistance, lastTimeToTarget, smoothedClosingSpeed, throttleInterval, movementState)
+    end
+end
+
+---@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)
+function MapPinEnhanced:UnregisterContinuousDistanceSampleCallback(callback)
+    for i, currentCallback in ipairs(onSampleCallbacks) do
+        if currentCallback == callback then
+            table.remove(onSampleCallbacks, i)
             return
         end
     end
@@ -169,20 +338,14 @@ end
 ---@param x number
 ---@param y number
 function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
-    throttle_interval = BASE_UPDATE_INTERVAL
-    wipe(distanceCache)
-    lastDistance = 0
-    lastTimeToTarget = -1
     elapsedSinceUpdate = 0
     target = { mapID = mapID, x = x, y = y }
+    ResetDistanceSampleState()
 
-    local initialDistance = self:GetDistanceToTarget(mapID, x, y)
-    if initialDistance > 0 then
-        lastDistance = initialDistance
-        lastTimeToTarget = -1
-        table.insert(distanceCache, { distance = initialDistance, time = GetTime() })
-        NotifyDistanceCallbacks(initialDistance, -1) -- -1 indicates unknown time to target
-    end
+    -- The super-tracked destination may still be changing. Seed from the explicit
+    -- map target, then prefer Blizzard navigation on the next sample.
+    SampleTargetDistance(false)
+    throttleInterval = MIN_UPDATE_INTERVAL
 
     if not distanceFrame:GetScript("OnUpdate") then
         distanceFrame:SetScript("OnUpdate", OnUpdate)
@@ -197,20 +360,25 @@ function MapPinEnhanced:DisableContinuousDistanceCheck(mapID, x, y)
         -- If specific coordinates are provided, we can clear the target
         if target and target.mapID == mapID and target.x == x and target.y == y then
             target = nil
-            wipe(distanceCache)
-            lastDistance = 0
-            lastTimeToTarget = -1
+            ResetDistanceSampleState()
             distanceFrame:SetScript("OnUpdate", nil)
             return
         end
     else
         target = nil
-        wipe(distanceCache)
-        lastDistance = 0
-        lastTimeToTarget = -1
+        ResetDistanceSampleState()
         distanceFrame:SetScript("OnUpdate", nil)
     end
 end
+
+local function OnSuperTrackingChanged()
+    if not target then return end
+    ResetDistanceSampleState()
+    elapsedSinceUpdate = 0
+    throttleInterval = MIN_UPDATE_INTERVAL
+end
+
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
 
 function MapPinEnhanced:FormatDistance(distance)
     ---@type boolean
@@ -242,8 +410,8 @@ end
 
 MapPinEnhanced:OnLoad(function()
     Options:SubscribeToOptionChanges("General.Distance.ShowUnit", function()
-        if lastDistance > 0 then
-            NotifyDistanceCallbacks(lastDistance, lastTimeToTarget)
+        if lastDistance ~= nil then
+            NotifyDistanceCallbacks(lastDistance, lastTimeToTarget, true)
         end
     end)
 end)

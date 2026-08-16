@@ -14,6 +14,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field textContainer MapPinEnhancedFloatingSimpleTextContainer
 ---@field distanceCallback fun(distance: number, timeToTarget: number) | nil
+---@field lastDistanceText string?
+---@field lastEtaText string?
 MapPinEnhancedFloatingSimpleMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -52,13 +54,22 @@ end
 ---@param distance number?
 ---@param timeToTarget number?
 function MapPinEnhancedFloatingSimpleMixin:OnDistanceUpdate(distance, timeToTarget)
+    local distanceText = ""
+    local etaText = ""
     if distance and timeToTarget then
-        self.textContainer.distance:SetText(MapPinEnhanced:FormatDistance(distance))
-        self.textContainer.eta:SetText(MapPinEnhanced:FormatETA(timeToTarget))
-    else
-        self.textContainer.distance:SetText("")
-        self.textContainer.eta:SetText("")
+        distanceText = MapPinEnhanced:FormatDistance(distance)
+        etaText = MapPinEnhanced:FormatETA(timeToTarget)
     end
+
+    if self.lastDistanceText ~= distanceText then
+        self.lastDistanceText = distanceText
+        self.textContainer.distance:SetText(distanceText)
+    end
+    if self.lastEtaText ~= etaText then
+        self.lastEtaText = etaText
+        self.textContainer.eta:SetText(etaText)
+    end
+
     if distance and distance < 10 then
         self.pin:ShowPulse()
     else
@@ -162,6 +173,8 @@ end
 function MapPinEnhancedFloatingSimpleMixin:Reset()
     self.textContainer.distance:SetText("")
     self.textContainer.eta:SetText("")
+    self.lastDistanceText = ""
+    self.lastEtaText = ""
     self.pin:HidePulse()
     self.clampedArrow:Hide()
     self.clampedArrow.needle:SetRotation(0)

@@ -175,7 +175,7 @@ L["General.Tracking.DefaultMode_DESCRIPTION"] =
 "Choose how newly created groups select the next pin to track."
 L["General.Tracking.ArrivalMode_LABEL"] = "Pin Arrival Detection"
 L["General.Tracking.ArrivalMode_DESCRIPTION"] =
-"Dynamic waits for a close stop or a confirmed pass. Static completes a pin as soon as you are within 10 metres."
+"Dynamic adjusts the arrival distance based on your approach speed. Static completes a pin as soon as you are within 10 metres."
 L["Dynamic"] = "Dynamic"
 L["Static"] = "Static"
 

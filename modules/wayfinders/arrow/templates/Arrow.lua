@@ -26,6 +26,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field newNeedleRotation number | nil
 ---@field rotatePin boolean | nil
 ---@field displayType 'close' | 'far' | nil
+---@field lastDistanceText string?
+---@field lastEtaText string?
 MapPinEnhancedFloatingArrowMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -196,13 +198,22 @@ function MapPinEnhancedFloatingArrowMixin:OnUpdate(elapsed)
 end
 
 function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarget)
+    local distanceText = ""
+    local etaText = ""
     if distance and timeToTarget then
-        self.distance:SetText(MapPinEnhanced:FormatDistance(distance))
-        self.eta:SetText(MapPinEnhanced:FormatETA(timeToTarget))
-    else
-        self.distance:SetText("")
-        self.eta:SetText("")
+        distanceText = MapPinEnhanced:FormatDistance(distance)
+        etaText = MapPinEnhanced:FormatETA(timeToTarget)
     end
+
+    if self.lastDistanceText ~= distanceText then
+        self.lastDistanceText = distanceText
+        self.distance:SetText(distanceText)
+    end
+    if self.lastEtaText ~= etaText then
+        self.lastEtaText = etaText
+        self.eta:SetText(etaText)
+    end
+
     self.distanceValue = distance
     if distance and distance < 10 then
         self:SetDisplayType("close")
@@ -261,6 +272,10 @@ end
 
 function MapPinEnhancedFloatingArrowMixin:Reset()
     self:SetDisplayType("far")
+    self.distance:SetText("")
+    self.eta:SetText("")
+    self.lastDistanceText = ""
+    self.lastEtaText = ""
     self.needleRotation = nil
     self.newNeedleRotation = nil
     self.needleContainer:SetScale(MAX_NEEDLE_SCALE)

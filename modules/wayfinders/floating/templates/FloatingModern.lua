@@ -12,6 +12,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field distance FontString
 ---@field eta FontString
 ---@field needle MapPinEnhancedFloatingModernNeedle
+---@field lastDistanceText string?
+---@field lastEtaText string?
 MapPinEnhancedFloatingModernMixin = {}
 
 -- TODO: the distant diamond should scale based on distance
@@ -176,13 +178,22 @@ function MapPinEnhancedFloatingModernMixin:ClampElliptical()
 end
 
 function MapPinEnhancedFloatingModernMixin:OnDistanceUpdate(distance, timeToTarget)
+    local distanceText = ""
+    local etaText = ""
     if distance and timeToTarget then
-        self.distance:SetText(MapPinEnhanced:FormatDistance(distance))
-        self.eta:SetText(MapPinEnhanced:FormatETA(timeToTarget))
-    else
-        self.distance:SetText("")
-        self.eta:SetText("")
+        distanceText = MapPinEnhanced:FormatDistance(distance)
+        etaText = MapPinEnhanced:FormatETA(timeToTarget)
     end
+
+    if self.lastDistanceText ~= distanceText then
+        self.lastDistanceText = distanceText
+        self.distance:SetText(distanceText)
+    end
+    if self.lastEtaText ~= etaText then
+        self.lastEtaText = etaText
+        self.eta:SetText(etaText)
+    end
+
     self.distanceValue = distance
     if distance and distance < 50 then
         self:SetDisplayType("close")
@@ -269,5 +280,9 @@ end
 
 function MapPinEnhancedFloatingModernMixin:Reset()
     self:Hide()
+    self.distance:SetText("")
+    self.eta:SetText("")
+    self.lastDistanceText = ""
+    self.lastEtaText = ""
     needsReset = false
 end
