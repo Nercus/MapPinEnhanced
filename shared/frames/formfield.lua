@@ -47,7 +47,7 @@ function MapPinEnhancedFormFieldMixin:SetLayout()
     elseif self:HasDescription() then
         self.child:SetPoint("TOPLEFT", self.description, "BOTTOMLEFT", 0, -self.descriptionBottomSpacing)
     elseif self:HasLabel() then
-        self.child:SetPoint("TOPLEFT", self.label, "BOTTOMLEFT", 0, -self.labelBottomSpacing)
+        self.child:SetPoint("TOPLEFT", self.label, "BOTTOMLEFT", -10, -self.labelBottomSpacing)
     else
         self.child:SetPoint("TOPLEFT")
     end
