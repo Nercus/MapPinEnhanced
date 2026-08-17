@@ -5,8 +5,9 @@
     <Frame name="MapPinEnhancedEditorGroupSidebarTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupSidebarMixin">
         <Layers>
             <Layer level="ARTWORK">
-                <Texture atlas="UI-Journeys-Delve-reward-Bar-Wide-divider">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerVertical.png">
                     <Size x="1" />
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
                         <Anchor point="TOPRIGHT" y="12"/>
                         <Anchor point="BOTTOMRIGHT" y="-12" />

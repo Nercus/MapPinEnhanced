@@ -6,11 +6,12 @@
         <Size x="820" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="Options_HorizontalDivider">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" setAllPoints="true">
                     <Size x="1" y="1" />
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="4" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="-4" y="0" />
+                        <Anchor point="BOTTOMLEFT" y="0" />
+                        <Anchor point="BOTTOMRIGHT" y="0" />
                     </Anchors>
                 </Texture>
             </Layer>
