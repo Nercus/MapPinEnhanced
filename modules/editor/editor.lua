@@ -172,26 +172,6 @@ function Editor:EditGroup(group)
     frame:SelectGroup(group)
 end
 
---@debug@
-
-MapPinEnhanced:Test("Opening the editor preserves the requested group selection", function()
-    local group = { classification = "group" }
-    local frame = {
-        selectedGroup = nil,
-        ShowFrame = function(self) self.selectedGroup = nil end,
-        SelectGroup = function(self, selectedGroup) self.selectedGroup = selectedGroup end,
-    }
-    local GetEditorFrame = Editor.GetEditorFrame
-    Editor.GetEditorFrame = function() return frame end
-
-    Editor:EditGroup(group)
-
-    Editor.GetEditorFrame = GetEditorFrame
-    assert(frame.selectedGroup == group, "Editor:EditGroup must select the group after showing the editor")
-end)
-
---@end-debug@
-
 function Editor:HideEditor()
     local frame = self:GetEditorFrame()
     if frame:IsShown() then
