@@ -9,7 +9,8 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="Background" atlas="UI-World-Quest-Black" setAllPoints="true">
+                <Texture parentKey="Background" file="Interface/AddOns/MapPinEnhanced/assets/shared/HoriztonalGradient.png" setAllPoints="true">
+                    <Color r="0" g="0" b="0" />
                 </Texture>
             </Layer>
             <Layer level="BORDER">
