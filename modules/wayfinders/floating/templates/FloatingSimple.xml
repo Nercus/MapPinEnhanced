@@ -6,10 +6,10 @@
         <Size x="140" y="110" />
         <Frames>
             <Frame parentKey="clampedArrow" hidden="true">
-                <Size x="80" y="80" />
+                <Size x="20" y="20" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="needle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/arrowClose.png" desaturated="true" setAllPoints="true" />
+                        <Texture parentKey="needle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/diamond/WayfinderArrowClose.png" desaturated="true" setAllPoints="true" />
                     </Layer>
                 </Layers>
             </Frame>
