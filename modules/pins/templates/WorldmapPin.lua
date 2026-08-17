@@ -9,7 +9,7 @@ MapPinEnhancedWorldmapPinMixin = {}
 
 local Options = MapPinEnhanced:GetModule("Options")
 
-local HOVER_SCALE = 1.2
+local HOVER_SCALE = 1.4
 local HOVER_SCALE_DURATION = 0.15
 local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / HOVER_SCALE_DURATION
 
