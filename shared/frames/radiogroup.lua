@@ -70,7 +70,7 @@ function MapPinEnhancedRadioGroupMixin:BuildRadioButtons()
                 button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, -spacing)
             end
         else
-            button:SetPoint("TOPLEFT", self, "TOPLEFT", 10, -10)
+            button:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
         end
 
         lastButton = button
