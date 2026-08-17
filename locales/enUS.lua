@@ -63,6 +63,7 @@ L["Import %d"] = "Import %d"
 L["%d |4pin:pins;"] = "%d |4pin:pins;"
 L["A group named \"%s\" already exists."] = "A group named \"%s\" already exists."
 L["Rename Group"] = "Rename Group"
+L["Add to New Group"] = "Add to New Group"
 L["Delete Group"] = "Delete Group"
 L["Clear Group"] = "Clear Group"
 L["Clear Ungrouped Pins"] = "Clear Ungrouped Pins"
@@ -161,6 +162,7 @@ L["My Way Back group not found. Please create it first."] = "My Way Back group n
 
 ------------------------------ Options ------------------------------
 L["General"] = "General"
+L["Pins"] = "Pins"
 L["Miscellaneous"] = "Miscellaneous"
 L["Wayfinder"] = "Wayfinder"
 L["Search for option..."] = "Search for option..."
@@ -178,6 +180,11 @@ L["General.Tracking.ArrivalMode_DESCRIPTION"] =
 "Dynamic adjusts the arrival distance based on your approach speed. Static completes a pin as soon as you are within 10 metres."
 L["Dynamic"] = "Dynamic"
 L["Static"] = "Static"
+
+L["Pins.Miscellaneous_GROUPLABEL"] = "Miscellaneous"
+L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Scale Pins on Hover"
+L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] =
+"Enlarge world map and minimap pins while the mouse is over them."
 
 L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"

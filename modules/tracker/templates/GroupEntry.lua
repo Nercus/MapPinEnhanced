@@ -8,7 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field icon Texture
 ---@field line Texture
----@field clearButton MapPinEnhancedIconButtonTemplate
+---@field actionButtons Frame | { restoreButton: MapPinEnhancedIconButtonTemplate, clearButton: MapPinEnhancedIconButtonTemplate, fadeIn: MapPinEnhancedAnimationVisibilityMixin, fadeOut: MapPinEnhancedAnimationVisibilityMixin }
 MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
@@ -47,24 +47,20 @@ function MapPinEnhancedTrackerGroupEntryMixin:SetIcon(texturePath)
     self.icon:SetTexture(texturePath)
 end
 
-function MapPinEnhancedTrackerGroupEntryMixin:UpdateClearButton()
-    local showClearButton = self.group and self.group.groupType == "ungrouped" and
-        self.group:GetTotalPinCount() > 0
-    self.clearButton:SetShown(showClearButton)
+function MapPinEnhancedTrackerGroupEntryMixin:UpdateActionButtons()
+    local group = self.group
+    self.actionButtons.restoreButton:SetEnabled(group and not group:IsHidden() and group:GetReachedPinCount() > 0)
+    self.actionButtons.clearButton:SetEnabled(group and group:GetTotalPinCount() > 0)
 
     self.line:ClearAllPoints()
     self.line:SetPoint("LEFT", self.title, "RIGHT", 5, 0)
-    if showClearButton then
-        self.line:SetPoint("RIGHT", self.clearButton, "LEFT", -5, 0)
-    else
-        self.line:SetPoint("RIGHT", self, "RIGHT", 0, 0)
-    end
+    self.line:SetPoint("RIGHT", self.actionButtons, "LEFT", -5, 0)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitleWidth()
-    local clearButtonWidth = self.clearButton:IsShown() and (self.clearButton:GetWidth() + RIGHT_PADDING) or 0
+    local actionButtonsWidth = self.actionButtons:GetWidth() + RIGHT_PADDING
     local availableWidth = self:GetWidth() - TITLE_LEFT_OFFSET - TITLE_LINE_GAP - RIGHT_PADDING - MIN_LINE_WIDTH -
-        clearButtonWidth
+        actionButtonsWidth
     if availableWidth <= 0 then return end
 
     self.title:SetWidth(math.min(self.title:GetStringWidth(), availableWidth))
@@ -74,7 +70,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:Reset()
     self.expandIcon:Hide()
     self.title:SetText("")
     self.title:SetWidth(0)
-    self.clearButton:Hide()
+    self.actionButtons.fadeOut:SetParentShownInstantly(false, self.actionButtons.fadeIn)
 end
 
 ---@param treeNode TreeNodeMixin
@@ -86,15 +82,26 @@ function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     self:UpdateTitle()
     self:SetIcon(group:GetIcon())
     self:UpdateExpandIcon()
-    self.clearButton:SetScript("OnClick", function()
-        self:ConfirmClearGroup()
+    self.actionButtons.restoreButton:SetScript("OnClick", function()
+        self.group:RestoreReachedPins()
     end)
-    self.clearButton:SetScript("OnEnter", function(button)
+    self.actionButtons.restoreButton:SetScript("OnEnter", function(button)
         GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-        GameTooltip:AddLine(L["Clear Ungrouped Pins"])
+        GameTooltip:AddLine(L["Show Reached Pins Again"])
         GameTooltip:Show()
     end)
-    self.clearButton:SetScript("OnLeave", function()
+    self.actionButtons.restoreButton:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
+    self.actionButtons.clearButton:SetScript("OnClick", function()
+        self:ConfirmClearGroup()
+    end)
+    self.actionButtons.clearButton:SetScript("OnEnter", function(button)
+        GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+        GameTooltip:AddLine(L["Clear Group"])
+        GameTooltip:Show()
+    end)
+    self.actionButtons.clearButton:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
 end
@@ -103,7 +110,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
     local group = self.group
     if not group then return end
 
-    self:UpdateClearButton()
+    self:UpdateActionButtons()
     local title = group:GetName()
     local totalPins = group:GetTotalPinCount()
     if group:IsHidden() then
@@ -115,6 +122,15 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
     local reachedPins = group:GetReachedPinCount()
     self.title:SetText(string.upper(string.format("%s (%d/%d)", title, reachedPins, totalPins)))
     self:UpdateTitleWidth()
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:OnEnter()
+    self.actionButtons.fadeIn:PlayShowing(self.actionButtons.fadeOut)
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:OnLeave()
+    if self:IsMouseOver() then return end
+    self.actionButtons.fadeOut:PlayHiding(self.actionButtons.fadeIn)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
@@ -155,11 +171,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
     if not self:CanRenameGroup() then return end
 
     local group = self.group
+    local label = group.groupType == "ungrouped" and L["Add to New Group"] or group:GetName()
     table.insert(menu, {
         type = "template",
         template = "MapPinEnhancedMenuTitleActionTemplate",
         data = {
-            label = group:GetName(),
+            label = label,
             icon = "edit",
             onClick = function()
                 Dialogs:ShowRenameGroupDialog(group)

@@ -59,17 +59,48 @@
 
         </Layers>
         <Frames>
-            <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true">
-                <Size x="20" y="20" />
-                <KeyValues>
-                    <KeyValue key="icon" value="trash" />
-                </KeyValues>
+            <Frame parentKey="actionButtons" hidden="true">
+                <Size x="45" y="20" />
                 <Anchors>
                     <Anchor point="RIGHT" x="-5" y="0" />
                 </Anchors>
-            </Button>
+                <Frames>
+                    <Button parentKey="restoreButton" inherits="MapPinEnhancedIconButtonTemplate" propagateMouseInput="Motion">
+                        <Size x="20" y="20" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="pin" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="LEFT" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate" propagateMouseInput="Motion">
+                        <Size x="20" y="20" />
+                        <KeyValues>
+                            <KeyValue key="icon" value="trash" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="RIGHT" />
+                        </Anchors>
+                    </Button>
+                </Frames>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
+            </Frame>
         </Frames>
         <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
             <OnMouseDown method="OnMouseDown" />
             <OnSizeChanged method="UpdateTitleWidth" />
         </Scripts>
