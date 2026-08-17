@@ -81,8 +81,10 @@ end
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateActionButtons()
     local group = self.group
     local canRestorePins = group ~= nil and not group:IsHidden() and group:GetReachedPinCount() > 0
+    local isUngrouped = group ~= nil and group.groupType == "ungrouped"
+    local canDeleteOrClear = group ~= nil and (not isUngrouped or group:GetTotalPinCount() > 0)
     SetActionButtonEnabled(self.actionButtons.restoreButton, canRestorePins)
-    self.actionButtons.clearButton:SetEnabled(group and group:GetTotalPinCount() > 0)
+    SetActionButtonEnabled(self.actionButtons.clearButton, canDeleteOrClear)
 
     self.line:ClearAllPoints()
     self.line:SetPoint("LEFT", self.title, "RIGHT", 5, 0)
@@ -103,7 +105,28 @@ function MapPinEnhancedTrackerGroupEntryMixin:Reset()
     self.title:SetText("")
     self.title:SetWidth(0)
     SetActionButtonEnabled(self.actionButtons.restoreButton, false)
+    SetActionButtonEnabled(self.actionButtons.clearButton, false)
     self.actionButtons.fadeOut:SetParentShownInstantly(false, self.actionButtons.fadeIn)
+end
+
+function MapPinEnhancedTrackerGroupEntryMixin:SetupDeleteOrClearButton()
+    local isUngrouped = self.group.groupType == "ungrouped"
+    local label = isUngrouped and L["Clear Group"] or L["Delete Group"]
+    self.actionButtons.clearButton:SetScript("OnClick", function()
+        if isUngrouped then
+            self:ConfirmClearGroup()
+        else
+            self:ConfirmDeleteGroup()
+        end
+    end)
+    self.actionButtons.clearButton:SetScript("OnEnter", function(button)
+        GameTooltip:SetOwner(button, "ANCHOR_LEFT")
+        GameTooltip:AddLine(label)
+        GameTooltip:Show()
+    end)
+    self.actionButtons.clearButton:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 end
 
 ---@param treeNode TreeNodeMixin
@@ -126,17 +149,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     self.actionButtons.restoreButton:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
-    self.actionButtons.clearButton:SetScript("OnClick", function()
-        self:ConfirmClearGroup()
-    end)
-    self.actionButtons.clearButton:SetScript("OnEnter", function(button)
-        GameTooltip:SetOwner(button, "ANCHOR_LEFT")
-        GameTooltip:AddLine(L["Clear Group"])
-        GameTooltip:Show()
-    end)
-    self.actionButtons.clearButton:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
+    self:SetupDeleteOrClearButton()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
@@ -373,3 +386,36 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
         MapPinEnhanced:GenerateMenu(self, self:BuildMenu())
     end
 end
+
+--@debug@
+
+MapPinEnhanced:Test("Group entry action clears only Ungrouped Pins", function()
+    local onClick = function() end
+    ---@param _ table
+    ---@param script string
+    ---@param callback function
+    local function SetScript(_, script, callback)
+        if script == "OnClick" then onClick = callback end
+    end
+    local button = { SetScript = SetScript }
+    local confirmedAction = ""
+    local entry = {
+        group = { groupType = "ungrouped" },
+        actionButtons = { clearButton = button },
+        ConfirmClearGroup = function() confirmedAction = "clear" end,
+        ConfirmDeleteGroup = function() confirmedAction = "delete" end,
+    }
+
+    MapPinEnhancedTrackerGroupEntryMixin.SetupDeleteOrClearButton(entry)
+    onClick()
+    local ungroupedAction = confirmedAction
+
+    entry.group = {}
+    MapPinEnhancedTrackerGroupEntryMixin.SetupDeleteOrClearButton(entry)
+    onClick()
+
+    assert(ungroupedAction == "clear", "Ungrouped Pins action must clear the group")
+    assert(confirmedAction == "delete", "Normal group action must delete the group")
+end)
+
+--@end-debug@
