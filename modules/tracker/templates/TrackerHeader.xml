@@ -13,7 +13,7 @@
                 <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.5" />
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/HorizontalGradient.png">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
                     <Size x="1" y="1" />
                     <Color r="1" g="0.82" b="0" a="1" />
                     <Anchors>
