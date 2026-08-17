@@ -1,6 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedCheckboxCheckedTexture : Texture
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
 ---@class MapPinEnhancedCheckboxTemplate : CheckButton
 ---@field text FontString
 MapPinEnhancedCheckboxMixin = {}
@@ -40,16 +44,22 @@ function MapPinEnhancedCheckboxMixin:Setup(formData)
         assert(type(formData.init) == "function", "init must be a function")
         local initialValue = formData.init()
         if initialValue ~= nil then
-            self:SetChecked(initialValue)
+            self:SetValue(initialValue, false, true)
         end
     else
-        self:SetChecked(false) -- default to unchecked if no init function is provided
+        self:SetValue(false, false, true) -- default to unchecked if no init function is provided
     end
 end
 
 ---@param value boolean
 ---@param triggerCallback boolean|nil
-function MapPinEnhancedCheckboxMixin:SetValue(value, triggerCallback)
+---@param skipAnimation boolean|nil
+function MapPinEnhancedCheckboxMixin:SetValue(value, triggerCallback, skipAnimation)
+    if skipAnimation then
+        local checkedTexture = self:GetCheckedTexture()
+        ---@cast checkedTexture MapPinEnhancedCheckboxCheckedTexture
+        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
+    end
     self:SetChecked(value)
     if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(value)

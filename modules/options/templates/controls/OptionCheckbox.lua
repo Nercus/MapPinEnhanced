@@ -11,19 +11,20 @@ function MapPinEnhancedOptionCheckboxMixin:GetValue()
     return self.child:GetChecked()
 end
 
+---@param value boolean
 function MapPinEnhancedOptionCheckboxMixin:SetValue(value)
-    self.child:SetChecked(value)
+    self.child:SetValue(value, false)
 end
 
 ---@param initValue boolean
 function MapPinEnhancedOptionCheckboxMixin:Setup(initValue)
+    assert(type(initValue) == "boolean", "Initial value for checkbox must be a boolean")
     self.child:Setup({
         onChange = function(isChecked)
             self:NotifyChange(isChecked)
         end,
+        init = function() return initValue end,
     })
-    assert(initValue ~= nil, "Initial value for checkbox must be a boolean")
-    self:SetValue(initValue)
 end
 
 ---@class MapPinEnhancedOptionCheckboxWithLabelTemplate : MapPinEnhancedOptionCheckboxTemplate
