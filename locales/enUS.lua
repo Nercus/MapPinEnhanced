@@ -184,7 +184,7 @@ L["Static"] = "Static"
 L["Pins.Miscellaneous_GROUPLABEL"] = "Miscellaneous"
 L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Scale Pins on Hover"
 L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] =
-"Enlarge world map and minimap pins while the mouse is over them."
+"Enlarge world map while the mouse is over them."
 
 L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"
