@@ -21,6 +21,35 @@ local TITLE_LEFT_OFFSET = 43
 local TITLE_LINE_GAP = 5
 local RIGHT_PADDING = 5
 local MIN_LINE_WIDTH = 20
+local DISABLED_ACTION_ALPHA = 0.3
+
+---@param button MapPinEnhancedIconButtonTemplate
+---@param enabled boolean
+local function SetActionButtonEnabled(button, enabled)
+    button:SetEnabled(enabled)
+    button.iconTexture:SetAlpha(enabled and 1 or DISABLED_ACTION_ALPHA)
+end
+
+--@debug@
+
+MapPinEnhanced:Test("Group restore action has a visible disabled state", function()
+    local button = {
+        iconTexture = {
+            SetAlpha = function(self, alpha) self.alpha = alpha end,
+        },
+        SetEnabled = function(self, enabled) self.enabled = enabled end,
+    }
+
+    SetActionButtonEnabled(button, false)
+    local isDisabled = button.enabled == false and button.iconTexture.alpha == DISABLED_ACTION_ALPHA
+    SetActionButtonEnabled(button, true)
+    local isEnabled = button.enabled == true and button.iconTexture.alpha == 1
+
+    assert(isDisabled, "Group restore action must look disabled when unavailable")
+    assert(isEnabled, "Group restore action must look enabled when available")
+end)
+
+--@end-debug@
 
 function MapPinEnhancedTrackerGroupEntryMixin:IsFullyReached()
     return self.group and not self.group:IsHidden() and self.group:GetTotalPinCount() > 0 and
@@ -51,7 +80,8 @@ end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateActionButtons()
     local group = self.group
-    self.actionButtons.restoreButton:SetEnabled(group and not group:IsHidden() and group:GetReachedPinCount() > 0)
+    local canRestorePins = group ~= nil and not group:IsHidden() and group:GetReachedPinCount() > 0
+    SetActionButtonEnabled(self.actionButtons.restoreButton, canRestorePins)
     self.actionButtons.clearButton:SetEnabled(group and group:GetTotalPinCount() > 0)
 
     self.line:ClearAllPoints()
@@ -72,6 +102,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:Reset()
     self.expandIcon:Hide()
     self.title:SetText("")
     self.title:SetWidth(0)
+    SetActionButtonEnabled(self.actionButtons.restoreButton, false)
     self.actionButtons.fadeOut:SetParentShownInstantly(false, self.actionButtons.fadeIn)
 end
 
