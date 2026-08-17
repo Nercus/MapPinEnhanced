@@ -97,6 +97,7 @@ L["Toggle the group editor."] = "Toggle the group editor."
 
 ------------------------------ Editor ------------------------------
 L["Editor"] = "Editor"
+L["Edit Group"] = "Edit Group"
 L["Contents"] = "Contents"
 L["Search"] = "Search"
 L["Rename Pin"] = "Rename Pin"

@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Editor
+---@field EditGroup fun(self: Editor, group: MapPinEnhancedGroupMixin)
 local Editor = MapPinEnhanced:GetModule("Editor")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
@@ -162,6 +163,34 @@ function Editor:ShowEditor()
     local frame = self:GetEditorFrame()
     frame:ShowFrame()
 end
+
+---@param group MapPinEnhancedGroupMixin
+function Editor:EditGroup(group)
+    assert(type(group) == "table" and group.classification == "group", "Editor:EditGroup requires a group")
+    local frame = self:GetEditorFrame()
+    frame:ShowFrame()
+    frame:SelectGroup(group)
+end
+
+--@debug@
+
+MapPinEnhanced:Test("Opening the editor preserves the requested group selection", function()
+    local group = { classification = "group" }
+    local frame = {
+        selectedGroup = nil,
+        ShowFrame = function(self) self.selectedGroup = nil end,
+        SelectGroup = function(self, selectedGroup) self.selectedGroup = selectedGroup end,
+    }
+    local GetEditorFrame = Editor.GetEditorFrame
+    Editor.GetEditorFrame = function() return frame end
+
+    Editor:EditGroup(group)
+
+    Editor.GetEditorFrame = GetEditorFrame
+    assert(frame.selectedGroup == group, "Editor:EditGroup must select the group after showing the editor")
+end)
+
+--@end-debug@
 
 function Editor:HideEditor()
     local frame = self:GetEditorFrame()

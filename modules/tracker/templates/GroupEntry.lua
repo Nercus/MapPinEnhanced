@@ -13,6 +13,8 @@ MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Groups = MapPinEnhanced:GetModule("Groups")
+---@type { EditGroup: fun(self: table, group: MapPinEnhancedGroupMixin) }
+local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
 local TITLE_LEFT_OFFSET = 43
@@ -220,9 +222,20 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddTrackingModeMenu(menu)
     })
 end
 
+function MapPinEnhancedTrackerGroupEntryMixin:AddEditGroupMenuAction(menu)
+    local group = self.group
+    table.insert(menu, {
+        type = "button",
+        label = MapPinEnhanced:Iconize("edit", L["Edit Group"]),
+        onClick = function() Editor:EditGroup(group) end,
+    })
+end
+
 function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
     local menu = {}
     local group = self.group
+
+    self:AddEditGroupMenuAction(menu)
 
     table.insert(menu, {
         type = "button",
@@ -262,6 +275,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
 
     if group:IsHidden() then
         self:AddRenameMenuHeader(menu)
+        self:AddEditGroupMenuAction(menu)
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("plus", L["Show Group"]),
@@ -280,6 +294,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     end
 
     self:AddRenameMenuHeader(menu)
+    self:AddEditGroupMenuAction(menu)
     self:AddTrackingModeMenu(menu)
 
     if group:GetReachedPinCount() > 0 then
