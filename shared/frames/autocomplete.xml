@@ -33,7 +33,7 @@
                 <Size x="0" y="150" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="background" atlas="generic-frame-chamfered-12d-2o" scale="0.5">
+                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
                                 <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />

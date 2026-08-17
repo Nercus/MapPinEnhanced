@@ -36,7 +36,7 @@
                 </FontString>
             </Layer>
             <Layer level="BORDER">
-                <Texture atlas="generic-frame-chamfered-12d-2o">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate">
                     <Color r="1" g="0.82" b="0" a="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.title" y="5" x="20" />

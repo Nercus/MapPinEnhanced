@@ -7,7 +7,7 @@
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="generic-frame-chamfered-12d-2o" desaturated="true">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" desaturated="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" />
                         <Anchor point="BOTTOMRIGHT" x="-20" />

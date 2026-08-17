@@ -7,7 +7,7 @@
         <Size x="50" y="25" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" scale="0.5" />
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5" />
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="1">
                 <Texture parentKey="thumb" atlas="AftLevelup-WhiteIconGlow" scale="1" alpha="0.5">

@@ -21,7 +21,7 @@
                 </FontString>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true" atlas="generic-frame-chamfered-12d-2o" alpha="0.5" scale="0.5" />
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.5" scale="0.5" />
                 <Texture atlas="Options_HorizontalDivider" parentKey="labelDivider">
                     <Gradient orientation="HORIZONTAL">
                         <MinColor r="1" g="0.82" b="0" a="1" />
