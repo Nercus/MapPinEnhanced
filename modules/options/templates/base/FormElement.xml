@@ -9,7 +9,7 @@
             <KeyValue key="descriptionBottomSpacing" value="8" type="number" />
             <KeyValue key="orientation" value="horizontal" />
             <KeyValue key="scrollPadding" value="12" type="number" />
-            <KeyValue key="normalAlpha" value="0.85" type="number" />
+            <KeyValue key="normalAlpha" value="0.75" type="number" />
             <KeyValue key="hoverAlpha" value="1" type="number" />
         </KeyValues>
         <Layers>
