@@ -5,8 +5,9 @@ local MapPinEnhanced = select(2, ...)
 ---@field title FontString
 ---@field search MapPinEnhancedAutocompleteTemplate
 
----@class ScrollFrameTemplate
+---@class ScrollFrameTemplate : ScrollFrame
 ---@field ScrollBar MinimalScrollBar
+---@field SetPanExtent fun(self: ScrollFrameTemplate, panExtent: number)
 
 ---@class MapPinEnhancedOptionsFrame : Frame
 ---@field header MapPinEnhancedOptionsFrameHeader
@@ -66,6 +67,7 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     self:SetTitle()
 
     self.scrollFrame.ScrollBar:SetInterpolateScroll(true)
+    self.scrollFrame:SetPanExtent(80)
     Options.frame = self
 
     MapPinEnhanced:AddSlashCommand("options", function()
