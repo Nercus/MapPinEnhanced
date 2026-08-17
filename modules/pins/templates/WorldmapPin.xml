@@ -11,6 +11,8 @@
             </Frame>
         </Frames>
         <Scripts>
+            <OnLoad method="OnLoad" inherit="append" />
+            <OnHide method="OnHide" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>

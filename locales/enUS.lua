@@ -162,6 +162,7 @@ L["My Way Back group not found. Please create it first."] = "My Way Back group n
 
 ------------------------------ Options ------------------------------
 L["General"] = "General"
+L["Pins"] = "Pins"
 L["Miscellaneous"] = "Miscellaneous"
 L["Wayfinder"] = "Wayfinder"
 L["Search for option..."] = "Search for option..."
@@ -179,6 +180,11 @@ L["General.Tracking.ArrivalMode_DESCRIPTION"] =
 "Dynamic waits for a close stop or a confirmed pass. Static completes a pin as soon as you are within 10 metres."
 L["Dynamic"] = "Dynamic"
 L["Static"] = "Static"
+
+L["Pins.Miscellaneous_GROUPLABEL"] = "Miscellaneous"
+L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Scale Pins on Hover"
+L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] =
+"Enlarge world map and minimap pins while the mouse is over them."
 
 L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Enable Coordinates Display"

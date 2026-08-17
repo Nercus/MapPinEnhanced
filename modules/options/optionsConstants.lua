@@ -24,6 +24,7 @@ Options.DEFAULTS = {
     ["General.Distance.ShowUnit"] = true,
     ["General.Tracking.DefaultMode"] = Options.TRACKING_MODE_NEAREST --[[@as GroupTrackingMode]],
     ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
+    ["Pins.Miscellaneous.ScaleOnHover"] = false,
     ["Miscellaneous.Coords.Enable"] = true,
     ["Miscellaneous.Coords.Lock"] = false,
     ["Miscellaneous.Coords.Visibility"] = {},

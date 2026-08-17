@@ -78,10 +78,16 @@
                                     <Anchor point="TOPRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
-                            <Frame inherits="MapPinEnhancedOptionCategoryWayfinderTemplate" parentKey="Wayfinder">
+                            <Frame inherits="MapPinEnhancedOptionCategoryPinsTemplate" parentKey="Pins">
                                 <Anchors>
                                     <Anchor point="TOPLEFT" relativeKey="$parent.General" relativePoint="BOTTOMLEFT" x="0" y="-8" />
                                     <Anchor point="TOPRIGHT" relativeKey="$parent.General" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
+                                </Anchors>
+                            </Frame>
+                            <Frame inherits="MapPinEnhancedOptionCategoryWayfinderTemplate" parentKey="Wayfinder">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Pins" relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Pins" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
                             <Frame inherits="MapPinEnhancedOptionCategoryMiscellaneousTemplate" parentKey="Miscellaneous">
