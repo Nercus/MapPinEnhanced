@@ -1,6 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+---@class MapPinEnhancedRadioButtonCheckedTexture : Texture
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
 ---@class MapPinEnhancedRadioButtonTemplate : CheckButton
 ---@field value any
 ---@field text FontString
@@ -12,6 +16,17 @@ end
 
 function MapPinEnhancedRadioButtonMixin:OnDisable()
     self:SetAlpha(0.3)
+end
+
+---@param value boolean
+---@param skipAnimation boolean|nil
+function MapPinEnhancedRadioButtonMixin:SetValue(value, skipAnimation)
+    if skipAnimation then
+        local checkedTexture = self:GetCheckedTexture()
+        ---@cast checkedTexture MapPinEnhancedRadioButtonCheckedTexture
+        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
+    end
+    self:SetChecked(value)
 end
 
 ---@class MapPinEnhancedRadioGroupTemplate : Frame
@@ -26,13 +41,14 @@ MapPinEnhancedRadioGroupMixin = {}
 --- Sets the selected radio button by value.
 ---@param value any
 ---@param triggerCallback boolean|nil
-function MapPinEnhancedRadioGroupMixin:SetActiveOption(value, triggerCallback)
+---@param skipAnimation boolean|nil
+function MapPinEnhancedRadioGroupMixin:SetActiveOption(value, triggerCallback, skipAnimation)
     assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
     self.activeOption = value
 
     ---@param button MapPinEnhancedRadioButtonTemplate
     for button in self.pool:EnumerateActive() do
-        button:SetChecked(button.value == value)
+        button:SetValue(button.value == value, skipAnimation)
     end
 
     if triggerCallback and self.onChangeCallback then
@@ -117,11 +133,12 @@ end
 --- Sets the selected value if it exists in the options.
 ---@param value any
 ---@param triggerCallback boolean|nil
-function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback)
+---@param skipAnimation boolean|nil
+function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback, skipAnimation)
     assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
     for _, option in ipairs(self.options) do
         if option.value == value then
-            self:SetActiveOption(value, triggerCallback)
+            self:SetActiveOption(value, triggerCallback, skipAnimation)
             return
         end
     end
@@ -166,15 +183,15 @@ function MapPinEnhancedRadioGroupMixin:Setup(formData)
         assert(type(formData.init) == "function", "init must be a function")
         local initialValue = formData.init()
         if initialValue ~= nil then
-            self:SetActiveOption(initialValue)
+            self:SetActiveOption(initialValue, false, true)
         else
-            self:SetActiveOption(self.options[1].value) -- default to first option if init returns nil
+            self:SetActiveOption(self.options[1].value, false, true) -- default to first option if init returns nil
         end
     else
         if #self.options > 0 then
-            self:SetActiveOption(self.options[1].value) -- default to first option if no init function is provided
+            self:SetActiveOption(self.options[1].value, false, true) -- default to first option if no init function is provided
         else
-            self:SetActiveOption(nil)                   -- no options available
+            self:SetActiveOption(nil, false, true) -- no options available
         end
     end
 
