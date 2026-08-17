@@ -143,7 +143,6 @@ local function OnSuperTrackingChanged()
     if not x or not y or not mapID then
         return
     end
-    -- TODO: implement a display only mode into the floating diamond wayfinder to not set a userwaypoint if a trackable item is detected
     local wayfinderData = {
         mapID = mapID,
         x = x,

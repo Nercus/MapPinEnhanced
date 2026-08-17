@@ -15,7 +15,6 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedFloatingModernMixin = {}
 
 -- TODO: the distant diamond should scale based on distance
--- TODO: use the generic-frame-chamfered-12d-2o atlas to use as title background
 -- TODO: use interpolation to smooth movement when clamped to the edge of the screen
 
 local Pins = MapPinEnhanced:GetModule("Pins")
