@@ -155,11 +155,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
     if not self:CanRenameGroup() then return end
 
     local group = self.group
+    local label = group.groupType == "ungrouped" and L["Add to New Group"] or group:GetName()
     table.insert(menu, {
         type = "template",
         template = "MapPinEnhancedMenuTitleActionTemplate",
         data = {
-            label = group:GetName(),
+            label = label,
             icon = "edit",
             onClick = function()
                 Dialogs:ShowRenameGroupDialog(group)
