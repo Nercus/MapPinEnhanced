@@ -5,8 +5,28 @@ local MapPinEnhanced = select(2, ...)
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 
+local SAVED_DATA_KEY = "superTrackingWayfinder"
+
+local supportedPinTypes = {
+    [Enum.SuperTrackingMapPinType.AreaPOI] = true,
+    [Enum.SuperTrackingMapPinType.TaxiNode] = true,
+    [Enum.SuperTrackingMapPinType.QuestOffer] = true,
+    [Enum.SuperTrackingMapPinType.DigSite] = true,
+}
+
+local function ClearSavedData()
+    MapPinEnhanced:DeleteVar(SAVED_DATA_KEY)
+end
+
+local function ClearWayfinderData()
+    ClearSavedData()
+    if not Pins:GetTrackedPin() then
+        Wayfinders:ClearWayfinderData()
+    end
+end
 
 local questClassificationAtlas = {
     [Enum.QuestClassification.Normal] = "QuestNormal",
@@ -113,20 +133,50 @@ local function OnSuperTrackingChanged()
     if superTrackingType == Enum.SuperTrackingType.UserWaypoint then
         return
     end
+    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
+    if not supportedPinTypes[pinType] or not typeID then
+        ClearWayfinderData()
+        return
+    end
     local x, y, mapID, title, atlasName, pinType, typeID = Providers:GetSuperTrackingInfo()
 
     if not x or not y or not mapID then
         return
     end
     -- TODO: implement a display only mode into the floating diamond wayfinder to not set a userwaypoint if a trackable item is detected
-    Wayfinders:SetWayfinderData({
+    local wayfinderData = {
         mapID = mapID,
         x = x,
         y = y,
         title = title,
         texture = atlasName,
         usesAtlas = true,
+    }
+    MapPinEnhanced:SetVar(SAVED_DATA_KEY, {
+        pinType = pinType,
+        typeID = typeID,
+        data = wayfinderData,
     })
+    Wayfinders:SetWayfinderData(wayfinderData)
 end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
+
+local function RestoreSuperTrackingWayfinder()
+    local saved = MapPinEnhanced:GetVar(SAVED_DATA_KEY)
+    if type(saved) ~= "table" or type(saved.data) ~= "table" then return end
+
+    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
+    if superTrackingType == Enum.SuperTrackingType.UserWaypoint then return end
+
+    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
+    if pinType ~= saved.pinType or typeID ~= saved.typeID or
+        not supportedPinTypes[pinType] then
+        ClearWayfinderData()
+        return
+    end
+
+    Wayfinders:SetWayfinderData(saved.data)
+end
+
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreSuperTrackingWayfinder)
