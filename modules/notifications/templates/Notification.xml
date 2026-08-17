@@ -9,7 +9,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="Background" file="Interface/AddOns/MapPinEnhanced/assets/shared/HoriztonalGradient.png" setAllPoints="true">
+                <Texture parentKey="Background" file="Interface/AddOns/MapPinEnhanced/assets/shared/HorizontalGradient.png" setAllPoints="true">
                     <Color r="0" g="0" b="0" />
                 </Texture>
             </Layer>
