@@ -39,10 +39,10 @@
             <Frame parentKey="placeholderOverlay" setAllPoints="true" propagateMouseInput="Clicks">
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture parentKey="bg" atlas="RaidFrame-Shield-Overlay" setAllPoints="true" desaturated="true" vertTile="true" horizTile="true" scale="2">
+                        <Texture parentKey="bg" file="Interface/AddOns/MapPinEnhanced/assets/shared/RepeatableStripes.png" setAllPoints="true" vertTile="true" horizTile="true" scale="2">
                             <Gradient>
-                                <MinColor r="1" g="1" b="1" a="0.5" />
-                                <MaxColor r="1" g="1" b="1" a="1" />
+                                <MinColor r="0.3" g="0.3" b="0.3" a="0.7" />
+                                <MaxColor r="0.3" g="0.3" b="0.3" a="0" />
                             </Gradient>
                         </Texture>
                     </Layer>
