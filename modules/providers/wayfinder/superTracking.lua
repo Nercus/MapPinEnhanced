@@ -166,6 +166,19 @@ end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
 
+-- Blizzard can invalidate a vanished vignette target without firing SUPER_TRACKING_CHANGED.
+local function OnVignettesUpdated()
+    local saved = MapPinEnhanced:GetVar(SAVED_DATA_KEY)
+    if type(saved) ~= "table" or type(saved.data) ~= "table" then return end
+
+    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
+    if pinType == saved.pinType and typeID == saved.typeID then return end
+
+    ClearWayfinderData()
+end
+
+MapPinEnhanced:RegisterEvent("VIGNETTES_UPDATED", OnVignettesUpdated)
+
 local function RestoreSuperTrackingWayfinder()
     local saved = MapPinEnhanced:GetVar(SAVED_DATA_KEY)
     if type(saved) ~= "table" or type(saved.data) ~= "table" then return end
