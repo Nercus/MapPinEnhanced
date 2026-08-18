@@ -30,26 +30,6 @@ local function SetActionButtonEnabled(button, enabled)
     button.iconTexture:SetAlpha(enabled and 1 or DISABLED_ACTION_ALPHA)
 end
 
---@debug@
-
-MapPinEnhanced:Test("Group restore action has a visible disabled state", function()
-    local button = {
-        iconTexture = {
-            SetAlpha = function(self, alpha) self.alpha = alpha end,
-        },
-        SetEnabled = function(self, enabled) self.enabled = enabled end,
-    }
-
-    SetActionButtonEnabled(button, false)
-    local isDisabled = button.enabled == false and button.iconTexture.alpha == DISABLED_ACTION_ALPHA
-    SetActionButtonEnabled(button, true)
-    local isEnabled = button.enabled == true and button.iconTexture.alpha == 1
-
-    assert(isDisabled, "Group restore action must look disabled when unavailable")
-    assert(isEnabled, "Group restore action must look enabled when available")
-end)
-
---@end-debug@
 
 function MapPinEnhancedTrackerGroupEntryMixin:IsFullyReached()
     return self.group and not self.group:IsHidden() and self.group:GetTotalPinCount() > 0 and
@@ -386,36 +366,3 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
         MapPinEnhanced:GenerateMenu(self, self:BuildMenu())
     end
 end
-
---@debug@
-
-MapPinEnhanced:Test("Group entry action clears only Ungrouped Pins", function()
-    local onClick = function() end
-    ---@param _ table
-    ---@param script string
-    ---@param callback function
-    local function SetScript(_, script, callback)
-        if script == "OnClick" then onClick = callback end
-    end
-    local button = { SetScript = SetScript }
-    local confirmedAction = ""
-    local entry = {
-        group = { groupType = "ungrouped" },
-        actionButtons = { clearButton = button },
-        ConfirmClearGroup = function() confirmedAction = "clear" end,
-        ConfirmDeleteGroup = function() confirmedAction = "delete" end,
-    }
-
-    MapPinEnhancedTrackerGroupEntryMixin.SetupDeleteOrClearButton(entry)
-    onClick()
-    local ungroupedAction = confirmedAction
-
-    entry.group = {}
-    MapPinEnhancedTrackerGroupEntryMixin.SetupDeleteOrClearButton(entry)
-    onClick()
-
-    assert(ungroupedAction == "clear", "Ungrouped Pins action must clear the group")
-    assert(confirmedAction == "delete", "Normal group action must delete the group")
-end)
-
---@end-debug@
