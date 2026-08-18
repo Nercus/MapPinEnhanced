@@ -90,6 +90,7 @@ local function TransformPinDataToWayfinderData(pinData)
         texture = pinData.texture,
         usesAtlas = pinData.usesAtlas,
         color = pinData.color,
+        lock = pinData.lock,
     }
 end
 
@@ -111,11 +112,17 @@ local function onPinIconUpdated(_, texture, usesAtlas)
     Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
 end
 
+---@param lock boolean
+local function onPinLockUpdated(_, lock)
+    Wayfinders:OverrideWayfinderLock(lock)
+end
+
 local function ClearPinCallbacks()
     if not oldPinId then return end
     MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, oldPinId)
     MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, oldPinId)
     MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, oldPinId)
+    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_LOCK", onPinLockUpdated, oldPinId)
     oldPinId = nil
 end
 
@@ -130,7 +137,17 @@ local function SetupPinCallbacks(pinId)
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, pinId)
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, pinId)
     MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, pinId)
+    MapPinEnhanced:RegisterCallback("PIN_UPDATED_LOCK", onPinLockUpdated, pinId)
     oldPinId = pinId
+end
+
+---@param pinID UUID
+local function RemoveTrackedPin(pinID)
+    local pin = Pins:GetPinByID(pinID)
+    local group = pin and pin.group
+    if group then
+        group:MarkPinReached(pinID)
+    end
 end
 
 ---@param eventName "PIN_TRACKING_CHANGED"
@@ -142,7 +159,9 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
-        Wayfinders:SetWayfinderData(wayfinderData)
+        Wayfinders:SetWayfinderData(wayfinderData, function()
+            RemoveTrackedPin(pinID)
+        end)
         SetupPinCallbacks(pinID)
     elseif pinID == trackedPinID and not isTracked then
         trackedPinID = nil

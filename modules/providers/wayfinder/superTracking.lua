@@ -28,6 +28,11 @@ local function ClearWayfinderData()
     end
 end
 
+local function RemoveSuperTrackedTarget()
+    ClearWayfinderData()
+    C_SuperTrack.ClearAllSuperTracked()
+end
+
 local questClassificationAtlas = {
     [Enum.QuestClassification.Normal] = "QuestNormal",
     [Enum.QuestClassification.Questline] = "QuestNormal",
@@ -156,7 +161,7 @@ local function OnSuperTrackingChanged()
         typeID = typeID,
         data = wayfinderData,
     })
-    Wayfinders:SetWayfinderData(wayfinderData)
+    Wayfinders:SetWayfinderData(wayfinderData, RemoveSuperTrackedTarget)
 end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
@@ -175,7 +180,7 @@ local function RestoreSuperTrackingWayfinder()
         return
     end
 
-    Wayfinders:SetWayfinderData(saved.data)
+    Wayfinders:SetWayfinderData(saved.data, RemoveSuperTrackedTarget)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreSuperTrackingWayfinder)

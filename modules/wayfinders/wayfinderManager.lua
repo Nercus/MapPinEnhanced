@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
 ---@field cachedData WayfinderData? the last set wayfinder data, used to update wayfinders when they are enabled after data has already been set
+---@field removeTarget fun()? provider-owned operation that removes the current target when it is reached
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinder
@@ -27,16 +28,23 @@ local AVAILABLE_WAYFINDERS = {
 ---@field mapID number UIMapID of the zone
 ---@field x number x coordinate between 0 and 1
 ---@field y number y coordinate between 0 and 1
----@field title string? title of the pin
----@field texture string|number? an optional texture to use for the pin this will override the color
+---@field title string? title of the target
+---@field texture string|number? an optional texture to use for the target; this overrides the color
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
----@field color string? the color of the pin, if texture is set, this will be ignored -> the colors are predefined names in CONSTANTS.PIN_COLORS
----@field lock boolean? if true, the pin will be not be removed automatically when it has been reached
+---@field color string? the target color; ignored when texture is set
+---@field lock boolean? if true, the target will not be removed automatically when reached
 
---- Set the wayfinder data for the currently tracked pin, this will update all active wayfinders with the new data
+--- Set the current target data and the provider-owned operation used to remove it on arrival.
 ---@param data WayfinderData
-function Wayfinders:SetWayfinderData(data)
+---@param removeTarget fun()?
+function Wayfinders:SetWayfinderData(data, removeTarget)
+    assert(type(data) == "table", "Wayfinders:SetWayfinderData: data must be a table")
+    assert(removeTarget == nil or type(removeTarget) == "function",
+        "Wayfinders:SetWayfinderData: removeTarget must be a function or nil")
+
     self.cachedData = data
+    self.removeTarget = removeTarget
+    self:ResetArrivalDetection()
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:Init(data)
     end
@@ -96,6 +104,8 @@ end
 
 function Wayfinders:ClearWayfinderData()
     self.cachedData = nil
+    self.removeTarget = nil
+    self:ResetArrivalDetection()
     for _, wayfinder in ipairs(self.activeWayfinders) do
         wayfinder:Init(nil)
     end

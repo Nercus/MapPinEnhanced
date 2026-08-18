@@ -4,5 +4,4 @@
     <Include file="templates/_imports.xml" />
     <Include file="mixins/_imports.xml" />
     <Include file="pinManager.lua" />
-    <Include file="pinArrival.lua" />
 </Ui>

@@ -3,4 +3,5 @@
     <Include file="floating/_imports.xml" />
     <Include file="arrow/_imports.xml" />
     <Include file="wayfinderManager.lua" />
+    <Include file="wayfinderArrival.lua" />
 </Ui>
