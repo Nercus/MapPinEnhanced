@@ -12,7 +12,7 @@ MapPinEnhancedPinMenuMixin = {}
 
 local L = MapPinEnhanced.L
 
-local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\forms\\colorpicker\\body.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
+local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\shared\\ColorpickerBody.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICON_MENU_ICONS = Pins.PIN_ICON_MENU_ICONS
