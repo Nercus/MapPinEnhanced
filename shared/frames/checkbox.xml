@@ -11,14 +11,6 @@
                 <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
                 <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
-            <Scripts>
-                <OnShow>
-                    self.fadeIn:PlayShowing(self.fadeOut)
-                </OnShow>
-                <OnHide>
-                    self.fadeOut:PlayHiding(self.fadeIn)
-                </OnHide>
-            </Scripts>
         </CheckedTexture>
         <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled" setAllPoints="true" />
     </CheckButton>
@@ -46,14 +38,6 @@
                 <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
                 <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut" />
             </Animations>
-            <Scripts>
-                <OnShow>
-                    self.fadeIn:PlayShowing(self.fadeOut)
-                </OnShow>
-                <OnHide>
-                    self.fadeOut:PlayHiding(self.fadeIn)
-                </OnHide>
-            </Scripts>
         </CheckedTexture>
         <DisabledCheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal-disabled">
             <Size x="25" y="25" />

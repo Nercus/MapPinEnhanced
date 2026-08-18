@@ -10,6 +10,22 @@ local MapPinEnhanced = select(2, ...)
 ---@field text FontString
 MapPinEnhancedRadioButtonMixin = {}
 
+---@param button MapPinEnhancedRadioButtonTemplate
+---@param value boolean
+---@param skipAnimation? boolean
+local function UpdateCheckedTexture(button, value, skipAnimation)
+    local checkedTexture = button:GetCheckedTexture()
+    ---@cast checkedTexture MapPinEnhancedRadioButtonCheckedTexture
+    if skipAnimation then
+        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
+    elseif value then
+        checkedTexture.fadeIn:PlayShowing(checkedTexture.fadeOut)
+    else
+        checkedTexture:Show()
+        checkedTexture.fadeOut:PlayHiding(checkedTexture.fadeIn)
+    end
+end
+
 function MapPinEnhancedRadioButtonMixin:OnEnable()
     self:SetAlpha(1)
 end
@@ -20,13 +36,13 @@ end
 
 ---@param value boolean
 ---@param skipAnimation boolean|nil
-function MapPinEnhancedRadioButtonMixin:SetValue(value, skipAnimation)
-    if skipAnimation then
-        local checkedTexture = self:GetCheckedTexture()
-        ---@cast checkedTexture MapPinEnhancedRadioButtonCheckedTexture
-        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
-    end
+---@param forceAnimation? boolean
+function MapPinEnhancedRadioButtonMixin:SetValue(value, skipAnimation, forceAnimation)
+    local valueChanged = self:GetChecked() ~= value
     self:SetChecked(value)
+    if skipAnimation or valueChanged or forceAnimation then
+        UpdateCheckedTexture(self, value, skipAnimation)
+    end
 end
 
 ---@class MapPinEnhancedRadioGroupTemplate : Frame
@@ -48,7 +64,8 @@ function MapPinEnhancedRadioGroupMixin:SetActiveOption(value, triggerCallback, s
 
     ---@param button MapPinEnhancedRadioButtonTemplate
     for button in self.pool:EnumerateActive() do
-        button:SetValue(button.value == value, skipAnimation)
+        local isSelected = button.value == value
+        button:SetValue(isSelected, skipAnimation, triggerCallback and isSelected)
     end
 
     if triggerCallback and self.onChangeCallback then
