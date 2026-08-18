@@ -184,7 +184,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
             options = { gridModeColumns = 3 },
             entries = function()
                 local entries = {}
-                for _, iconData in pairs(Pins.PIN_ICONS) do
+                for _, iconData in ipairs(Pins.PIN_ICON_MENU_ICONS) do
                     local icon = iconData
                     table.insert(entries, {
                         type = "template",

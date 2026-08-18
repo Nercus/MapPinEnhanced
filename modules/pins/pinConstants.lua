@@ -3524,3 +3524,20 @@ Pins.PIN_ICONS = {
         color = CreateColor(0.70, 0.60, 0.07)
     },
 }
+
+-- TODO: maybe change these to standard icons instead of the atlas ones
+---@type PinIcon[]
+Pins.PIN_ICON_MENU_ICONS = {
+    Pins.PIN_ICONS["SmallQuestBang"],
+    Pins.PIN_ICONS["quest-important-available"],
+    Pins.PIN_ICONS["QuestDaily"],
+    Pins.PIN_ICONS["Raid"],
+    Pins.PIN_ICONS["Dungeon"],
+    Pins.PIN_ICONS["Lairs"],
+    Pins.PIN_ICONS["PlayerEnemy"],
+    Pins.PIN_ICONS["PlayerFriend"],
+    Pins.PIN_ICONS["PlayerNeutral"],
+    Pins.PIN_ICONS["TaxiNode_Continent_Alliance"],
+    Pins.PIN_ICONS["TaxiNode_Continent_Horde"],
+    Pins.PIN_ICONS["TaxiNode_Continent_Neutral"],
+}
