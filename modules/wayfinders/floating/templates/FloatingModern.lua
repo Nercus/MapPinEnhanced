@@ -6,11 +6,17 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
+---@class MapPinEnhancedFloatingModernTitleContainer : Frame
+---@field title FontString
+---@field titleBackground Texture
+---@field titleGradient Texture
+
 ---@class MapPinEnhancedFloatingModernTemplate : Frame
 ---@field pin MapPinEnhancedBasePinTemplate
----@field title FontString
 ---@field distance FontString
 ---@field eta FontString
+---@field titleContainer MapPinEnhancedFloatingModernTitleContainer
+---@field beam Texture
 ---@field needle MapPinEnhancedFloatingModernNeedle
 ---@field lastDistanceText string?
 ---@field lastEtaText string?
@@ -26,22 +32,85 @@ local mathSqrt = math.sqrt
 local mathSin = math.sin
 local mathCos = math.cos
 local mathAtan2 = math.atan2
+local mathCeil = math.ceil
+local mathMin = math.min
+local stringByte = string.byte
+local stringSub = string.sub
 local DeltaLerp = DeltaLerp
+local MAX_TITLE_WIDTH = 450
+local TITLE_ELLIPSIS = "..."
+
+---@param text string
+---@param endIndex number
+---@return string
+local function GetUTF8Prefix(text, endIndex)
+    while endIndex > 0 do
+        local nextByte = stringByte(text, endIndex + 1)
+        if not nextByte or nextByte < 0x80 or nextByte >= 0xC0 then break end
+        endIndex = endIndex - 1
+    end
+    return stringSub(text, 1, endIndex)
+end
+
+---@param fontString FontString
+---@param text string
+local function SetTruncatedTitle(fontString, text)
+    fontString:SetWidth(0)
+    fontString:SetText(text)
+
+    local fullWidth = fontString:GetUnboundedStringWidth()
+    if fullWidth <= MAX_TITLE_WIDTH then
+        fontString:SetWidth(mathCeil(fullWidth))
+        return
+    end
+
+    local low = 0
+    local high = #text
+    local truncatedText = TITLE_ELLIPSIS
+    while low <= high do
+        local middle = math.floor((low + high) / 2)
+        local candidate = GetUTF8Prefix(text, middle) .. TITLE_ELLIPSIS
+        fontString:SetText(candidate)
+        if fontString:GetUnboundedStringWidth() <= MAX_TITLE_WIDTH then
+            truncatedText = candidate
+            low = middle + 1
+        else
+            high = middle - 1
+        end
+    end
+
+    fontString:SetText(truncatedText)
+    fontString:SetWidth(mathMin(MAX_TITLE_WIDTH, mathCeil(fontString:GetUnboundedStringWidth())))
+end
+
+---@param frame MapPinEnhancedFloatingModernTemplate
+local function ApplyWayfinderColor(frame)
+    local activeColor = frame.pin:GetActiveStyleColor()
+    local r, g, b, a = activeColor:GetRGBA()
+    frame.needle:SetVertexColor(r, g, b, a)
+    frame.titleContainer.titleBackground:SetVertexColor(r, g, b, 1)
+    frame.titleContainer.titleGradient:SetVertexColor(r, g, b, a)
+    frame.beam:SetGradient("VERTICAL", CreateColor(r, g, b, a), CreateColor(r, g, b, 0))
+end
 
 ---@param color PinColor
 function MapPinEnhancedFloatingModernMixin:SetColor(color)
     self.pin:SetColor(color)
-    self.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
+    ApplyWayfinderColor(self)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
-    self.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
+    ApplyWayfinderColor(self)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTitle(title)
-    self.title:SetText(title)
+    local titleFontString = self.titleContainer.title
+    titleFontString:SetMaxLines(1)
+    titleFontString:SetWordWrap(false)
+    SetTruncatedTitle(titleFontString, title)
+    self.titleContainer:SetSize(titleFontString:GetWidth() + 10, titleFontString:GetHeight() + 10)
 end
 
 function MapPinEnhancedFloatingModernMixin:SetLocation(mapID, x, y)
