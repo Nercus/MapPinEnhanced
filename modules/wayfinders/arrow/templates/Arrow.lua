@@ -32,8 +32,6 @@ MapPinEnhancedFloatingArrowMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
-local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
-local DEFAULT_COLOR = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR]
 local HBD = MapPinEnhanced.HBD
 local MIN_NEEDLE_SCALE = 0.7
 local MAX_NEEDLE_SCALE = 1
@@ -79,15 +77,14 @@ end
 
 ---@param color PinColor
 function MapPinEnhancedFloatingArrowMixin:SetColor(color)
-    local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
-    self.needleContainer.needle:SetVertexColor(colorValue:GetRGBA())
     self.pin:SetColor(color)
+    self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 function MapPinEnhancedFloatingArrowMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
-    self.needleContainer.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
+    self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 function MapPinEnhancedFloatingArrowMixin:SetTitle(title)

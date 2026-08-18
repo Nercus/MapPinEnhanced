@@ -20,9 +20,6 @@ function MapPinEnhancedPinStyleMixin:SetColor(color)
         self.minimapPin:SetUntracked()
     end
 
-    self.worldmapPin:SetIconTexture(nil, nil)
-    self.minimapPin:SetIconTexture(nil, nil)
-
     self.pinData.color = color
     self.pinData.texture = nil
     self.pinData.usesAtlas = nil
@@ -39,20 +36,17 @@ function MapPinEnhancedPinStyleMixin:HasColor(color)
     return self.pinData.color == color
 end
 
-local PIN_ICONS = Pins.PIN_ICONS
-
----@param icon string|number the icon to set; atlas names must be strings
----@param usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
+---@param icon string|number? the icon to set; atlas names must be strings
+---@param usesAtlas boolean? if true, the path is an atlas, otherwise it is a file path
 function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)
-    if icon then
-        self.pinData.texture = icon
-        self.pinData.usesAtlas = usesAtlas
-        self.pinData.color = nil
-    else
-        self.pinData.texture = nil
-        self.pinData.usesAtlas = nil
-        self.pinData.color = self.pinData.color
+    if not icon then
+        self:SetColor(Pins.DEFAULT_COLOR)
+        return
     end
+
+    self.pinData.texture = icon
+    self.pinData.usesAtlas = usesAtlas
+    self.pinData.color = nil
 
     self.worldmapPin:SetIconTexture(icon, usesAtlas)
     self.minimapPin:SetIconTexture(icon, usesAtlas)

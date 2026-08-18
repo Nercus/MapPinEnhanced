@@ -19,9 +19,6 @@ MapPinEnhancedFloatingModernMixin = {}
 -- TODO: the distant diamond should scale based on distance
 -- TODO: use interpolation to smooth movement when clamped to the edge of the screen
 
-local Pins = MapPinEnhanced:GetModule("Pins")
-local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
-local DEFAULT_COLOR = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR]
 local HBD = MapPinEnhanced.HBD
 
 local needsReset = false
@@ -33,15 +30,14 @@ local DeltaLerp = DeltaLerp
 
 ---@param color PinColor
 function MapPinEnhancedFloatingModernMixin:SetColor(color)
-    local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
-    self.needle:SetVertexColor(colorValue:GetRGBA())
     self.pin:SetColor(color)
+    self.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
-    self.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
+    self.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 function MapPinEnhancedFloatingModernMixin:SetTitle(title)

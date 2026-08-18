@@ -18,10 +18,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field lastEtaText string?
 MapPinEnhancedFloatingSimpleMixin = {}
 
-local Pins = MapPinEnhanced:GetModule("Pins")
-local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
-local DEFAULT_COLOR = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR]
-
 ---@return SuperTrackedFrame | nil
 local function GetSuperTrackedFrame()
     local superTrackedFrame = SuperTrackedFrame
@@ -31,16 +27,14 @@ end
 
 ---@param color PinColor
 function MapPinEnhancedFloatingSimpleMixin:SetColor(color)
-    local colorValue = color and PIN_COLORS_BY_NAME[color] or DEFAULT_COLOR
-    self.clampedArrow.needle:SetVertexColor(colorValue:GetRGBA())
     self.pin:SetColor(color)
+    self.clampedArrow.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 function MapPinEnhancedFloatingSimpleMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
-    self.clampedArrow.needle:SetVertexColor(DEFAULT_COLOR:GetRGBA())
-    self.pin:SetTextureColor(DEFAULT_COLOR)
+    self.clampedArrow.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 ---@param title string?
