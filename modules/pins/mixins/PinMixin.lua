@@ -172,6 +172,9 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 
     self:SetPinData(self.pinData)
+    if self.group then
+        self.group:TouchOrder()
+    end
     self:PersistPin()
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self.group)
 end

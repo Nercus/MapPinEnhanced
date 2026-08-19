@@ -142,6 +142,8 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
     groupNode:Insert(pin)
     groupNode:Sort()
     groupNode:Invalidate()
+    self.dataProvider:Sort()
+    self.dataProvider:Invalidate()
     self:RefreshGroupEntry(group)
     self:UpdateTrackerHeader()
 end

@@ -317,7 +317,7 @@ function Groups:RestoreGroup(groupData)
             group:SetPinOrder(pinID, order, true)
         end
 
-        group:AddMultiplePins(groupData.pins or {})
+        group:AddMultiplePins(groupData.pins or {}, true)
     end
 end
 

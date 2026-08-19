@@ -13,6 +13,7 @@ MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@type { EditGroup: fun(self: table, group: MapPinEnhancedGroupMixin) }
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
@@ -362,6 +363,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
         if not self:CanExpandGroup() then return end
         self.treeNode:ToggleCollapsed()
         self:UpdateExpandIcon()
+        Tracker:GetTrackerFrame():UpdateHeight()
     elseif button == "RightButton" then
         MapPinEnhanced:GenerateMenu(self, self:BuildMenu())
     end

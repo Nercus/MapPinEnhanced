@@ -202,6 +202,7 @@ function MapPinEnhancedGroupMixin:SetName(name)
     end
 
     self.name = normalizedName
+    self:TouchOrder()
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
@@ -234,6 +235,7 @@ function MapPinEnhancedGroupMixin:SetIcon(icon)
     assert(type(icon) == "string" or type(icon) == "number",
         "MapPinEnhancedGroupMixin:SetIcon: icon must be a string or number")
     self.icon = icon
+    self:TouchOrder()
     Groups:PersistGroup(self)
 end
 
@@ -280,6 +282,7 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
         end
         local pinID = self:ArchivePinData(archivePinData, ARCHIVE_STATE_HIDDEN)
         if not skipPersist then
+            self:TouchOrder()
             Groups:PersistGroup(self)
         end
         if not skipCallbacks then
@@ -300,6 +303,7 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
     self.count = self.count + 1
     self:PruneOldestReachedPins()
     if not skipPersist then
+        self:TouchOrder()
         Groups:PersistGroup(self)
     end
     if not skipCallbacks then
@@ -309,7 +313,8 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
 end
 
 ---@param pinsData pinData[] | SaveablePinData[]
-function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
+---@param preserveGroupOrder boolean? used when restoring persisted pins
+function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData, preserveGroupOrder)
     assert(pinsData, "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData is nil")
     assert(type(pinsData) == "table", "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData must be a table")
     local numberOfPins = #pinsData
@@ -318,6 +323,9 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
     if numberOfPins < 50 then
         for _, pinData in ipairs(pinsData) do
             self:AddPin(pinData, pinData.pinID, true, true)
+        end
+        if not preserveGroupOrder then
+            self:TouchOrder()
         end
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -331,6 +339,9 @@ function MapPinEnhancedGroupMixin:AddMultiplePins(pinsData)
     end
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
     MapPinEnhanced:BatchExecution(addingPinsFunctions, nil, function()
+        if not preserveGroupOrder then
+            self:TouchOrder()
+        end
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end, batchSize)
@@ -362,6 +373,7 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
         Pins:ReleasePin(pinID)
 
         if not skipPersist then
+            self:TouchOrder()
             Groups:PersistGroup(self)
         end
         if wasTracked and not skipCallbacks then
@@ -380,6 +392,7 @@ function MapPinEnhancedGroupMixin:RemovePin(pinID, skipPersist, skipCallbacks)
             self.limitWarningShown = false
         end
         if not skipPersist then
+            self:TouchOrder()
             Groups:PersistGroup(self)
         end
         if not skipCallbacks then
@@ -419,6 +432,7 @@ function MapPinEnhancedGroupMixin:MarkPinReached(pinID)
         order = order,
     }
     self:PruneOldestReachedPins()
+    self:TouchOrder()
 
     MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, saveablePinData)
     Pins:ReleasePin(pinID)
@@ -471,6 +485,7 @@ function MapPinEnhancedGroupMixin:RestoreReachedPins()
     end
 
     if restored then
+        self:TouchOrder()
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end
@@ -504,6 +519,7 @@ function MapPinEnhancedGroupMixin:HideGroup()
     self.count = 0
     self.hidden = true
 
+    self:TouchOrder()
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     if hadTrackedPin then
@@ -523,6 +539,7 @@ function MapPinEnhancedGroupMixin:ShowGroup()
         self:AddPin(archivedPin.data, pinID, true, true)
     end
 
+    self:TouchOrder()
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
@@ -541,6 +558,7 @@ function MapPinEnhancedGroupMixin:ClearGroup()
     self.count = 0
     self.limitWarningShown = false
 
+    self:TouchOrder()
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
@@ -557,6 +575,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
         for _, pinID in ipairs(pinIDs) do
             self:RemovePin(pinID, true, true)
         end
+        self:TouchOrder()
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         return
@@ -569,6 +588,7 @@ function MapPinEnhancedGroupMixin:RemoveMultiplePins(pinIDs)
     end
     local batchSize = math.min(math.max(math.ceil(numberOfPins / 60), 10), 100)
     MapPinEnhanced:BatchExecution(removingPinsFunctions, nil, function()
+        self:TouchOrder()
         Groups:PersistGroup(self)
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end, batchSize)
@@ -647,6 +667,11 @@ function MapPinEnhancedGroupMixin:SetOrder(order)
     assert(type(order) == "number", "MapPinEnhancedGroupMixin:SetOrder: order must be a number")
     self.order = order
     Groups:PersistGroup(self)
+end
+
+function MapPinEnhancedGroupMixin:TouchOrder()
+    if self.protected then return end
+    self.order = GetTime()
 end
 
 ---@return number
