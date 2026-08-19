@@ -6,6 +6,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
 ---@field cachedData WayfinderData? the last set wayfinder data, used to update wayfinders when they are enabled after data has already been set
 ---@field removeTarget fun()? provider-owned operation that removes the current target when it is reached
+---@field TARGET_TYPE_PIN WayfinderTargetType
+---@field TARGET_TYPE_BLIZZARD WayfinderTargetType
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinder
@@ -14,9 +16,16 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
 ---@field SetTitle fun(self: MapPinEnhancedWayfinder, title: string) sets the wayfinder title, if the wayfinder supports it
 ---@field SetColor fun(self: MapPinEnhancedWayfinder, color: string) sets the wayfinder color, if the wayfinder supports it
----@field SetTexture fun(self: MapPinEnhancedWayfinder, texture: string, usesAtlas: boolean) sets the wayfinder texture, if the wayfinder supports it
+---@field SetTexture fun(self: MapPinEnhancedWayfinder, texture: string|number, usesAtlas: boolean) sets the wayfinder texture, if the wayfinder supports it
+---@field SetTargetType fun(self: MapPinEnhancedWayfinder, targetType: WayfinderTargetType) sets the target style type
 ---@field SetLock fun(self: MapPinEnhancedWayfinder, lock: boolean) sets the wayfinder lock, if the wayfinder supports it
 Wayfinders.activeWayfinders = {}
+
+local Pins = MapPinEnhanced:GetModule("Pins")
+
+---@alias WayfinderTargetType "pin" | "blizzard"
+Wayfinders.TARGET_TYPE_PIN = "pin"
+Wayfinders.TARGET_TYPE_BLIZZARD = "blizzard"
 
 ---@enum WayfinderType
 local AVAILABLE_WAYFINDERS = {
@@ -33,6 +42,25 @@ local AVAILABLE_WAYFINDERS = {
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
 ---@field color string? the target color; ignored when texture is set
 ---@field lock boolean? if true, the target will not be removed automatically when reached
+---@field targetType WayfinderTargetType? the target owner; missing or unknown values safely use the pin presentation
+
+---@param targetType string?
+---@return WayfinderTargetType
+function Wayfinders:NormalizeTargetType(targetType)
+    if targetType == self.TARGET_TYPE_BLIZZARD then
+        return self.TARGET_TYPE_BLIZZARD
+    end
+    return self.TARGET_TYPE_PIN
+end
+
+---@param targetType string?
+---@return PinStyleMode
+function Wayfinders:GetTargetStyleMode(targetType)
+    if self:NormalizeTargetType(targetType) == self.TARGET_TYPE_BLIZZARD then
+        return Pins.STYLE_MODE_OUTLINE
+    end
+    return Pins.STYLE_MODE_PIN
+end
 
 --- Set the current target data and the provider-owned operation used to remove it on arrival.
 ---@param data WayfinderData
@@ -42,6 +70,7 @@ function Wayfinders:SetWayfinderData(data, removeTarget)
     assert(removeTarget == nil or type(removeTarget) == "function",
         "Wayfinders:SetWayfinderData: removeTarget must be a function or nil")
 
+    data.targetType = self:NormalizeTargetType(data.targetType)
     self.cachedData = data
     self.removeTarget = removeTarget
     self:ResetArrivalDetection()
@@ -73,7 +102,7 @@ function Wayfinders:OverrideWayfinderColor(color)
     self.cachedData.usesAtlas = nil
 end
 
----@param texture string
+---@param texture string|number
 ---@param usesAtlas boolean
 function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
     if not self.cachedData then return end
@@ -116,7 +145,7 @@ end
 ---@return MapPinEnhancedWayfinder
 function Wayfinders:GetWayfinder(wayfinderType)
     local wayfinder = self.wayfinders and self.wayfinders[wayfinderType]
-    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init,
+    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and wayfinder.SetTargetType,
         "Wayfinders does not implement required methods")
     return wayfinder
 end

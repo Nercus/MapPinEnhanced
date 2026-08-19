@@ -139,6 +139,7 @@ function MapPinEnhancedFloatingArrowMixin:SetPinRotation(rotation)
     self.pin.outline:SetRotation(rotation)
     self.pin.foreground:SetRotation(rotation)
     self.pin.icon:SetRotation(rotation)
+    self.pin.iconMask:SetRotation(rotation)
     self.pin.lock:SetRotation(rotation)
 end
 

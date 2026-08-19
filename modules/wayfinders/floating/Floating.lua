@@ -73,12 +73,20 @@ function MapPinEnhancedWayfinderFloating:SetColor(color)
     end
 end
 
----@param texture string
+---@param texture string|number
 ---@param usesAtlas boolean
 function MapPinEnhancedWayfinderFloating:SetTexture(texture, usesAtlas)
     local frame = self:GetFrame()
     if frame.SetTexture then
         frame:SetTexture(texture, usesAtlas)
+    end
+end
+
+---@param targetType WayfinderTargetType
+function MapPinEnhancedWayfinderFloating:SetTargetType(targetType)
+    local frame = self:GetFrame()
+    if frame.pin then
+        frame.pin:SetStyleMode(Wayfinders:GetTargetStyleMode(targetType))
     end
 end
 
@@ -115,6 +123,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     end
     self.data = wayfinderData
     local frame = self:GetFrame()
+    self:SetTargetType(wayfinderData.targetType)
     if frame.SetLocation then
         frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
     end

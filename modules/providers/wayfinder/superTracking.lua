@@ -90,6 +90,7 @@ end
 function Providers:SetSuperTrackingWayfinderData(source, identity, data, removeTarget)
     self.activeSuperTrackingSource = source
     self:ClearSuperTrackingReport(identity)
+    data.targetType = Wayfinders.TARGET_TYPE_BLIZZARD
     Wayfinders:SetWayfinderData(data, removeTarget)
 end
 

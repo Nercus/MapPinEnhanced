@@ -15,6 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field outline Texture -- the pin outline texture
 ---@field foreground Texture -- the colored pin foreground texture
 ---@field icon Texture -- the icon texture that is shown when an icon is set
+---@field iconMask MaskTexture -- the diamond mask applied to unconfigured outline artwork
 ---@field lock Texture -- the lock texture that is shown when the pin is locked
 ---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
 ---@field pulseTimer FunctionContainer | nil
@@ -23,7 +24,9 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinID UUID | nil
 ---@field standardColor ColorMixin
 ---@field iconConfig PinIcon | nil
----@field styleMode BasePinStyleMode
+---@field renderMode BasePinRenderMode
+---@field styleMode PinStyleMode
+---@field iconMaskApplied boolean
 ---@field tracked boolean
 MapPinEnhancedBasePinMixin = {}
 
@@ -38,12 +41,13 @@ local FOREGROUND_TRACKED = assetsPath .. "\\pins\\PinForegroundTracked.png"
 local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 local OUTLINE_CONFIGURED_ICON = assetsPath .. "\\pins\\PinOutlineConfiguredIcon.png"
 local OUTLINE_UNTRACKED = assetsPath .. "\\pins\\PinOutlineUntracked.png"
+local FALLBACK_NAVIGATION_ATLAS = "Navigation-Tracked-Icon"
 local GENERIC_ICON_SIZE = 20
 
----@alias BasePinStyleMode "standard" | "configuredIcon" | "genericIcon"
+---@alias BasePinRenderMode "standard" | "pinIcon" | "outlineIcon"
 local STYLE_STANDARD = "standard"
-local STYLE_CONFIGURED_ICON = "configuredIcon"
-local STYLE_GENERIC_ICON = "genericIcon"
+local STYLE_PIN_ICON = "pinIcon"
+local STYLE_OUTLINE_ICON = "outlineIcon"
 
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -73,15 +77,27 @@ function MapPinEnhancedBasePinMixin:ResetIconGeometry()
 end
 
 function MapPinEnhancedBasePinMixin:ClearIconTexture()
+    self:SetIconMaskEnabled(false)
     self:ResetIconGeometry()
     self.icon:SetTexture(nil)
     self.icon:Hide()
     self.iconConfig = nil
 end
 
+---@param enabled boolean
+function MapPinEnhancedBasePinMixin:SetIconMaskEnabled(enabled)
+    if enabled and not self.iconMaskApplied then
+        self.icon:AddMaskTexture(self.iconMask)
+        self.iconMaskApplied = true
+    elseif not enabled and self.iconMaskApplied then
+        self.icon:RemoveMaskTexture(self.iconMask)
+        self.iconMaskApplied = false
+    end
+end
+
 ---@return ColorMixin
 function MapPinEnhancedBasePinMixin:GetActiveStyleColor()
-    if self.styleMode == STYLE_STANDARD then
+    if self.renderMode == STYLE_STANDARD then
         return self.standardColor or DEFAULT_TRACKED_COLOR
     end
 
@@ -90,7 +106,7 @@ function MapPinEnhancedBasePinMixin:GetActiveStyleColor()
     end
 
     local configuredColor = self.iconConfig and self.iconConfig.color
-    if self.styleMode == STYLE_CONFIGURED_ICON and IsColor(configuredColor) then
+    if self.renderMode == STYLE_OUTLINE_ICON and IsColor(configuredColor) then
         return configuredColor
     end
 
@@ -110,7 +126,7 @@ function MapPinEnhancedBasePinMixin:ApplyStandardStyle()
     self.icon:Hide()
 end
 
-function MapPinEnhancedBasePinMixin:ApplyConfiguredIconStyle()
+function MapPinEnhancedBasePinMixin:ApplyOutlineIconStyle()
     local activeColor = self:GetActiveStyleColor()
     self.background:SetTexture(nil)
     self.background:Hide()
@@ -123,7 +139,7 @@ function MapPinEnhancedBasePinMixin:ApplyConfiguredIconStyle()
     self.icon:Show()
 end
 
-function MapPinEnhancedBasePinMixin:ApplyGenericIconStyle()
+function MapPinEnhancedBasePinMixin:ApplyPinIconStyle()
     local activeColor = self:GetActiveStyleColor()
     self.background:SetTexture(BACKGROUND_STANDARD)
     self.background:Show()
@@ -133,14 +149,15 @@ function MapPinEnhancedBasePinMixin:ApplyGenericIconStyle()
     self.foreground:SetTexture(FOREGROUND_ICON)
     self.foreground:Show()
     SetVertexColor(self.foreground, activeColor)
+    self.icon:SetSize(GENERIC_ICON_SIZE, GENERIC_ICON_SIZE)
     self.icon:Show()
 end
 
 function MapPinEnhancedBasePinMixin:ApplyStyle()
-    if self.styleMode == STYLE_CONFIGURED_ICON then
-        self:ApplyConfiguredIconStyle()
-    elseif self.styleMode == STYLE_GENERIC_ICON then
-        self:ApplyGenericIconStyle()
+    if self.renderMode == STYLE_OUTLINE_ICON then
+        self:ApplyOutlineIconStyle()
+    elseif self.renderMode == STYLE_PIN_ICON then
+        self:ApplyPinIconStyle()
     else
         self:ApplyStandardStyle()
     end
@@ -148,6 +165,36 @@ function MapPinEnhancedBasePinMixin:ApplyStyle()
     local activeColor = self:GetActiveStyleColor()
     SetVertexColor(self.pulseHighlight, activeColor)
     SetVertexColor(self.highlight, activeColor)
+end
+
+---@param styleMode PinStyleMode
+function MapPinEnhancedBasePinMixin:SetStyleMode(styleMode)
+    assert(styleMode == Pins.STYLE_MODE_PIN or styleMode == Pins.STYLE_MODE_OUTLINE,
+        "MapPinEnhancedBasePinMixin:SetStyleMode: invalid style mode")
+
+    self.styleMode = styleMode
+    if self.renderMode ~= STYLE_STANDARD then
+        if styleMode == Pins.STYLE_MODE_OUTLINE then
+            self.renderMode = STYLE_OUTLINE_ICON
+            self:SetIconMaskEnabled(self.iconConfig == nil)
+        else
+            self.renderMode = STYLE_PIN_ICON
+            self:SetIconMaskEnabled(false)
+        end
+    end
+    self:ApplyStyle()
+end
+
+---@param icon string|number
+---@param usesAtlas boolean?
+---@param pinConfig PinIcon?
+---@return boolean
+local function IsValidIcon(icon, usesAtlas, pinConfig)
+    if not usesAtlas then return true end
+    if type(icon) ~= "string" then return false end
+    if pinConfig then return true end
+    if not C_Texture or not C_Texture.GetAtlasInfo then return true end
+    return C_Texture.GetAtlasInfo(icon) ~= nil
 end
 
 ---@param icon string|number? texture path or atlas name
@@ -162,8 +209,21 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
         scale = pinConfig.scale
     end
 
+    if icon and not IsValidIcon(icon, usesAtlas, pinConfig) then
+        icon = nil
+        pinConfig = nil
+    end
+
+    if not icon and self.styleMode == Pins.STYLE_MODE_OUTLINE then
+        icon = FALLBACK_NAVIGATION_ATLAS
+        usesAtlas = true
+        offset = nil
+        scale = nil
+        pinConfig = PIN_ICONS[icon]
+    end
+
     if not icon then
-        self.styleMode = STYLE_STANDARD
+        self.renderMode = STYLE_STANDARD
         self:ClearIconTexture()
         self:ApplyStyle()
         return
@@ -174,6 +234,16 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
         self.icon:SetAtlas(icon, pinConfig ~= nil)
     else
         self.icon:SetTexture(icon)
+        if not self.icon:GetTexture() then
+            if self.styleMode == Pins.STYLE_MODE_OUTLINE then
+                self:SetIconTexture(nil)
+            else
+                self.renderMode = STYLE_STANDARD
+                self:ClearIconTexture()
+                self:ApplyStyle()
+            end
+            return
+        end
     end
 
     self.icon:ClearAllPoints()
@@ -190,7 +260,13 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
 
     self.icon:Show()
     self.iconConfig = pinConfig
-    self.styleMode = pinConfig and STYLE_CONFIGURED_ICON or STYLE_GENERIC_ICON
+    if self.styleMode == Pins.STYLE_MODE_OUTLINE then
+        self.renderMode = STYLE_OUTLINE_ICON
+        self:SetIconMaskEnabled(pinConfig == nil)
+    else
+        self.renderMode = STYLE_PIN_ICON
+        self:SetIconMaskEnabled(false)
+    end
     self:ApplyStyle()
 end
 
@@ -261,7 +337,9 @@ end
 
 function MapPinEnhancedBasePinMixin:OnLoad()
     self.standardColor = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR] or DEFAULT_TRACKED_COLOR
-    self.styleMode = STYLE_STANDARD
+    self.styleMode = Pins.STYLE_MODE_PIN
+    self.renderMode = STYLE_STANDARD
+    self.iconMaskApplied = false
     self.tracked = false
     self:ClearIconTexture()
     self:ApplyStyle()

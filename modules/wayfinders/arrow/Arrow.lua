@@ -28,10 +28,15 @@ function MapPinEnhancedWayfinderArrow:SetColor(color)
     self:GetFrame():SetColor(color)
 end
 
----@param texture string
+---@param texture string|number
 ---@param usesAtlas boolean
 function MapPinEnhancedWayfinderArrow:SetTexture(texture, usesAtlas)
     self:GetFrame():SetTexture(texture, usesAtlas)
+end
+
+---@param targetType WayfinderTargetType
+function MapPinEnhancedWayfinderArrow:SetTargetType(targetType)
+    self:GetFrame().pin:SetStyleMode(Wayfinders:GetTargetStyleMode(targetType))
 end
 
 ---@param lock boolean
@@ -52,6 +57,7 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
         return
     end
+    self:SetTargetType(wayfinderData.targetType)
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
     if wayfinderData.texture then
         self:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)

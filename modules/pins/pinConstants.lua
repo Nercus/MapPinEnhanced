@@ -2,6 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Pins
+---@field STYLE_MODE_PIN PinStyleMode
+---@field STYLE_MODE_OUTLINE PinStyleMode
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 
@@ -21,14 +23,18 @@ Pins.PIN_COLORS_BY_NAME = {
 ---@type PinColor
 Pins.DEFAULT_COLOR = "Yellow"
 
+---@alias PinStyleMode "pin" | "outline"
+Pins.STYLE_MODE_PIN = "pin"
+Pins.STYLE_MODE_OUTLINE = "outline"
+
 ---@class PinIcon
 ---@field path string the path to the icon, if usesAtlas is true, this is the atlas name
 ---@field usesAtlas boolean if true, the path is an atlas, otherwise it is a file path
 ---@field offset {x: number, y: number}? optional offset for the icon, if not set, it will be
 ---@field scale number? optional scale for the icon, if not set, it will be 1
----@field color ColorMixin the color used when the configured icon is tracked
+---@field color ColorMixin the color used by the configured outline presentation when tracked
 
----@type table<string|number, PinIcon> configured icons with rendering metadata; other icons use the generic style
+---@type table<string|number, PinIcon> configured icons with rendering metadata; other icons use default geometry
 Pins.PIN_ICONS = {
     ["WildBattlePet"] = {
         path = "WildBattlePet",

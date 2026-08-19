@@ -92,6 +92,7 @@ local function TransformPinDataToWayfinderData(pinData)
         usesAtlas = pinData.usesAtlas,
         color = pinData.color,
         lock = pinData.lock,
+        targetType = Wayfinders.TARGET_TYPE_PIN,
     }
 end
 
@@ -107,7 +108,7 @@ local function onPinColorUpdated(_, color)
     Wayfinders:OverrideWayfinderColor(color)
 end
 
----@param texture string
+---@param texture string|number
 ---@param usesAtlas boolean
 local function onPinIconUpdated(_, texture, usesAtlas)
     Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
