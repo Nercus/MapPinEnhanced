@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Notifications = MapPinEnhanced:GetModule("Notifications")
+local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@type UiMapPoint?
 local placedUserWaypoint = nil
@@ -159,6 +160,7 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
+        Providers:ReleaseActiveSuperTrackingSource()
         Wayfinders:SetWayfinderData(wayfinderData, function()
             RemoveTrackedPin(pinID)
         end)

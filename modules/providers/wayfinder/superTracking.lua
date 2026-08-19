@@ -2,198 +2,122 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
+---@field superTrackingProviderTypes table<Enum.SuperTrackingType, string>
+---@field activeSuperTrackingSource string?
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Groups = MapPinEnhanced:GetModule("Groups")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 
-local SAVED_DATA_KEY = "superTrackingWayfinder"
+Providers.superTrackingProviderTypes = {}
 
-local supportedPinTypes = {
-    [Enum.SuperTrackingMapPinType.AreaPOI] = true,
-    [Enum.SuperTrackingMapPinType.TaxiNode] = true,
-    [Enum.SuperTrackingMapPinType.QuestOffer] = true,
-    [Enum.SuperTrackingMapPinType.DigSite] = true,
-}
+---@alias SuperTrackingDiagnosticValue string|number|boolean
+---@alias SuperTrackingDiagnostics table<string, SuperTrackingDiagnosticValue>
 
-local function ClearSavedData()
-    MapPinEnhanced:DeleteVar(SAVED_DATA_KEY)
+---@type fun(uiMapID: number): number?, number?, string?
+local GetNextWaypointForMap = C_Navigation.GetNextWaypointForMap
+
+MapPinEnhanced:OnLoad(function()
+    MapPinEnhanced:DeleteVar("superTrackingWayfinder")
+end)
+
+---@param value SuperTrackingDiagnosticValue
+---@return string
+local function FormatDiagnosticValue(value)
+    return value == nil and "nil" or tostring(value)
 end
 
-local function ClearWayfinderData()
-    ClearSavedData()
-    if not Pins:GetTrackedPin() then
-        Wayfinders:ClearWayfinderData()
+---@param fields SuperTrackingDiagnostics
+---@return string
+local function FormatDiagnostics(fields)
+    ---@type string[]
+    local keys = {}
+    for key in pairs(fields) do
+        table.insert(keys, key)
     end
+    table.sort(keys)
+
+    local values = {}
+    for _, key in ipairs(keys) do
+        table.insert(values, string.format("%s=%s", key, FormatDiagnosticValue(fields[key])))
+    end
+    return table.concat(values, ", ")
 end
 
-local function RemoveSuperTrackedTarget()
-    ClearWayfinderData()
-    C_SuperTrack.ClearAllSuperTracked()
+---@type table<string, boolean>
+local reportedTargets = {}
+
+---@param identity string
+---@param targetType string
+---@param fields SuperTrackingDiagnostics
+function Providers:ReportUnresolvedSuperTrackingTarget(identity, targetType, fields)
+    if reportedTargets[identity] then return end
+    reportedTargets[identity] = true
+    MapPinEnhanced:Print(string.format(
+        L["Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."],
+        targetType, FormatDiagnostics(fields)))
 end
 
-local questClassificationAtlas = {
-    [Enum.QuestClassification.Normal] = "QuestNormal",
-    [Enum.QuestClassification.Questline] = "QuestNormal",
-    [Enum.QuestClassification.Recurring] = "UI-QuestPoiRecurring-QuestBang",
-    [Enum.QuestClassification.Meta] = "quest-wrapper-available",
-    [Enum.QuestClassification.Calling] = "Quest-DailyCampaign-Available",
-    [Enum.QuestClassification.Campaign] = "Quest-Campaign-Available",
-    [Enum.QuestClassification.Legendary] = "UI-QuestPoiLegendary-QuestBang",
-    [Enum.QuestClassification.Important] = "importantavailablequesticon",
-};
+---@param identity string
+---@param fields SuperTrackingDiagnostics
+function Providers:ReportUnsupportedSuperTrackingTarget(identity, fields)
+    if reportedTargets[identity] then return end
+    reportedTargets[identity] = true
+    MapPinEnhanced:Print(string.format(
+        L["Unsupported super-tracking target (%s). Please provide this information to the addon author."],
+        FormatDiagnostics(fields)))
+end
 
--- TODO: support more supertrackable types: check https://warcraft.wiki.gg/wiki/API_C_SuperTrack.GetHighestPrioritySuperTrackingType
--- TODO: check if detecting silverdragon and handynotes is possible
+---@param identity string
+function Providers:ClearSuperTrackingReport(identity)
+    reportedTargets[identity] = nil
+end
+
+---@param source string
+---@param superTrackingType Enum.SuperTrackingType
+function Providers:RegisterSuperTrackingProvider(source, superTrackingType)
+    assert(type(source) == "string", "Providers:RegisterSuperTrackingProvider: source must be a string")
+    assert(type(superTrackingType) == "number",
+        "Providers:RegisterSuperTrackingProvider: superTrackingType must be a number")
+    assert(not self.superTrackingProviderTypes[superTrackingType],
+        "Providers:RegisterSuperTrackingProvider: superTrackingType is already registered")
+    self.superTrackingProviderTypes[superTrackingType] = source
+end
+
+---@param source string
+---@param identity string
+---@param data WayfinderData
+---@param removeTarget fun()?
+function Providers:SetSuperTrackingWayfinderData(source, identity, data, removeTarget)
+    self.activeSuperTrackingSource = source
+    self:ClearSuperTrackingReport(identity)
+    Wayfinders:SetWayfinderData(data, removeTarget)
+end
+
+---@param source string
+function Providers:ClearSuperTrackingWayfinderData(source)
+    if self.activeSuperTrackingSource ~= source then return end
+    self.activeSuperTrackingSource = nil
+    Wayfinders:ClearWayfinderData()
+end
+
+function Providers:ClearActiveSuperTrackingWayfinderData()
+    if not self.activeSuperTrackingSource then return end
+    self.activeSuperTrackingSource = nil
+    Wayfinders:ClearWayfinderData()
+end
+
+function Providers:ReleaseActiveSuperTrackingSource()
+    self.activeSuperTrackingSource = nil
+end
 
 ---@return number? x
 ---@return number? y
 ---@return number? mapID
----@return string?
----@return string?
----@return Enum.SuperTrackingMapPinType? pinType
----@return number? typeID
-function Providers:GetSuperTrackingInfo()
-    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    ---@type string
-    local title
-    ---@type string
-    local atlasName
-    ---@type number
-    local mapID
-    ---@type number
-    local x
-    ---@type number
-    local y
-
-    ---@type MapCanvasPinMixin[]
-    local mouseFoci = GetMouseFoci();
-    for _, focus in ipairs(mouseFoci) do
-        if focus.lastOwningMapID then
-            mapID = focus.lastOwningMapID
-            break
-        end
-    end
-    if not mapID then
-        return
-    end
-
-    if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
-        local areaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
-        if not areaPOIInfo then return end
-        x = areaPOIInfo.position.x
-        y = areaPOIInfo.position.y
-        title = areaPOIInfo.name
-        atlasName = areaPOIInfo.atlasName
-    elseif pinType == Enum.SuperTrackingMapPinType.TaxiNode then
-        local mapTaxiNodes = C_TaxiMap.GetTaxiNodesForMap(mapID)
-        if not mapTaxiNodes then return end
-        for _, node in ipairs(mapTaxiNodes) do
-            if node.nodeID == typeID then
-                title = node.name
-                atlasName = node.atlasName
-                x = node.position.x
-                y = node.position.y
-                -- FIXME: taxi nodes can break and sometimes return coords higher than 1
-                break
-            end
-        end
-    elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        local mapQuests = C_QuestLog.GetQuestsOnMap(mapID)
-        if not mapQuests then return end
-        for _, quest in ipairs(mapQuests) do
-            if quest.questID == typeID then
-                title = C_QuestLog.GetTitleForQuestID(quest.questID)
-                x = quest.x
-                y = quest.y
-                local questClassification = C_QuestInfoSystem.GetQuestClassification(quest.questID);
-                local questAtlas = questClassificationAtlas[questClassification]
-                if questAtlas then
-                    atlasName = questAtlas
-                else
-                    atlasName = "QuestLog-tab-icon-quest"
-                end
-                break
-            end
-        end
-    elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
-        local mapDigsites = C_ResearchInfo.GetDigSitesForMap(mapID)
-        if not mapDigsites then return end
-        for _, digsite in ipairs(mapDigsites) do
-            if digsite.researchSiteID == typeID then
-                title = digsite.name
-                atlasName = "ArchBlob"
-                x = digsite.position.x
-                y = digsite.position.y
-            end
-        end
-    end
-    -- TODO: add housing entries: use C_HousingNeighborhood.GetNeighborhoodMapData
-    return x, y, mapID, title, atlasName, pinType, typeID
+---@return string? waypointDescription
+function Providers:GetSuperTrackingWaypoint()
+    local mapID = C_Map.GetBestMapForUnit("player")
+    if not mapID then return end
+    local x, y, waypointDescription = GetNextWaypointForMap(mapID)
+    if x == nil or y == nil then return end
+    return x, y, mapID, waypointDescription
 end
-
-local function OnSuperTrackingChanged()
-    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    if superTrackingType == Enum.SuperTrackingType.UserWaypoint then
-        return
-    end
-    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    if not supportedPinTypes[pinType] or not typeID then
-        ClearWayfinderData()
-        return
-    end
-    local x, y, mapID, title, atlasName, pinType, typeID = Providers:GetSuperTrackingInfo()
-
-    if not x or not y or not mapID then
-        return
-    end
-    local wayfinderData = {
-        mapID = mapID,
-        x = x,
-        y = y,
-        title = title,
-        texture = atlasName,
-        usesAtlas = true,
-    }
-    MapPinEnhanced:SetVar(SAVED_DATA_KEY, {
-        pinType = pinType,
-        typeID = typeID,
-        data = wayfinderData,
-    })
-    Wayfinders:SetWayfinderData(wayfinderData, RemoveSuperTrackedTarget)
-end
-
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
-
--- Blizzard can invalidate a vanished vignette target without firing SUPER_TRACKING_CHANGED.
-local function OnVignettesUpdated()
-    local saved = MapPinEnhanced:GetVar(SAVED_DATA_KEY)
-    if type(saved) ~= "table" or type(saved.data) ~= "table" then return end
-
-    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    if pinType == saved.pinType and typeID == saved.typeID then return end
-
-    ClearWayfinderData()
-end
-
-MapPinEnhanced:RegisterEvent("VIGNETTES_UPDATED", OnVignettesUpdated)
-
-local function RestoreSuperTrackingWayfinder()
-    local saved = MapPinEnhanced:GetVar(SAVED_DATA_KEY)
-    if type(saved) ~= "table" or type(saved.data) ~= "table" then return end
-
-    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    if superTrackingType == Enum.SuperTrackingType.UserWaypoint then return end
-
-    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    if pinType ~= saved.pinType or typeID ~= saved.typeID or
-        not supportedPinTypes[pinType] then
-        ClearWayfinderData()
-        return
-    end
-
-    Wayfinders:SetWayfinderData(saved.data, RemoveSuperTrackedTarget)
-end
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RestoreSuperTrackingWayfinder)

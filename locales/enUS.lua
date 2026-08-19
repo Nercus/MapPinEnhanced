@@ -148,6 +148,19 @@ L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
 L["Location reached at %s."] = "Location reached at %s."
 L["It is locked."] = "It is locked."
 L["Cannot set waypoint on the %s map."] = "Cannot set waypoint on the %s map."
+L["Accept: %s"] = "Accept: %s"
+L["Turn in: %s"] = "Turn in: %s"
+L["%s — %s"] = "%s — %s"
+L["Corpse"] = "Corpse"
+L["Quest"] = "Quest"
+L["Content"] = "Content"
+L["Vignette"] = "Vignette"
+L["House"] = "House"
+L["%s's House"] = "%s's House"
+L["Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."] =
+"Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."
+L["Unsupported super-tracking target (%s). Please provide this information to the addon author."] =
+"Unsupported super-tracking target (%s). Please provide this information to the addon author."
 
 ------------------------------ Miscellaneous ------------------------------
 L["Back"] = "Back"
