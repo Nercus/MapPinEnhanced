@@ -43,7 +43,6 @@ function MapPinEnhancedPinMixin:UpdateGroupIcon()
     self.minimapPin.groupBadge:SetIcon(group:GetIcon())
 end
 
-
 ---Normalizes a coordinate to a value between 0 and 1
 ---@param value number
 ---@return number

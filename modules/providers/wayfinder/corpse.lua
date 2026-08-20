@@ -17,7 +17,8 @@ local function RefreshCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Corpse"], {
             hasCoordinates = x ~= nil and y ~= nil,
-            isSuperTrackingCorpse = isTrackingCorpse, mapID = mapID,
+            isSuperTrackingCorpse = isTrackingCorpse,
+            mapID = mapID,
         }, RefreshCorpse)
         return
     end

@@ -36,8 +36,8 @@ local exportOptions = {
 }
 
 local prefixOptions = {
-    { label = "/way", value = "/way" },
-    { label = "/mph", value = "/mph" },
+    { label = "/way",    value = "/way" },
+    { label = "/mph",    value = "/mph" },
     { label = "/mappin", value = "/mappin" },
 }
 
@@ -188,7 +188,8 @@ function MapPinEnhancedExportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self.description:SetText(L["Choose an export format, then copy the text below."])
     self.prefixLabel:SetText(L["Command prefix:"])
-    self.warning:SetText(L["Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."])
+    self.warning:SetText(L
+        ["Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."])
     self.textarea:Setup({ onChange = function() end })
     self.textarea.editbox:SetScript("OnTextChanged", function(_, userInput)
         if userInput then

@@ -208,7 +208,7 @@ function MapPinEnhancedRadioGroupMixin:Setup(formData)
         if #self.options > 0 then
             self:SetActiveOption(self.options[1].value, false, true) -- default to first option if no init function is provided
         else
-            self:SetActiveOption(nil, false, true) -- no options available
+            self:SetActiveOption(nil, false, true)                   -- no options available
         end
     end
 
