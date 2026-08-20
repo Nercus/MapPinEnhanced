@@ -14,11 +14,11 @@ local function RefreshCorpse()
     local identity = "corpse"
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
-    if not isTrackingCorpse or not x or not y or not mapID then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        Providers:ReportUnresolvedSuperTrackingTarget(identity, L["Corpse"], {
+    if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Corpse"], {
+            hasCoordinates = x ~= nil and y ~= nil,
             isSuperTrackingCorpse = isTrackingCorpse, mapID = mapID,
-        })
+        }, RefreshCorpse)
         return
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {

@@ -6,14 +6,6 @@ local L = MapPinEnhanced.L
 local SOURCE = "content"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Content
 
----@type table<Enum.ContentTrackingType, boolean>
-local supportedContentTypes = {
-    [Enum.ContentTrackingType.Appearance] = true,
-    [Enum.ContentTrackingType.Mount] = true,
-    [Enum.ContentTrackingType.Achievement] = true,
-    [Enum.ContentTrackingType.Decor] = true,
-}
-
 ---@param trackableType Enum.ContentTrackingType
 ---@param trackableID number
 ---@return string|number? texture
@@ -37,6 +29,19 @@ local function ClearContent()
     C_SuperTrack.ClearSuperTrackedContent()
 end
 
+---@param trackableType Enum.ContentTrackingType
+---@param trackableID number
+---@param mapID number
+---@return number? x
+---@return number? y
+---@return string? waypointText
+local function GetContentWaypointForMap(trackableType, trackableID, mapID)
+    if not C_ContentTracking or not C_ContentTracking.GetNextWaypointForTrackable then return end
+    local _, mapInfo = C_ContentTracking.GetNextWaypointForTrackable(trackableType, trackableID, mapID)
+    if not mapInfo then return end
+    return mapInfo.x, mapInfo.y, mapInfo.waypointText
+end
+
 local function RefreshContent()
     if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
         Providers:ClearSuperTrackingWayfinderData(SOURCE)
@@ -44,19 +49,24 @@ local function RefreshContent()
     end
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
     local identity = string.format("content:%s:%s", tostring(trackableType), tostring(trackableID))
-    if trackableType ~= nil and not supportedContentTypes[trackableType] then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        Providers:ReportUnsupportedSuperTrackingTarget(identity, {
-            trackableID = trackableID, trackableType = trackableType,
-        })
-        return
+    local hasTrackable = trackableType ~= nil and trackableID ~= nil
+    local x, y, mapID = Providers:GetSuperTrackingWaypoint(hasTrackable and function(candidateMapID)
+        return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
+    end or nil)
+    if hasTrackable and (x == nil or y == nil or mapID == nil) and
+        C_ContentTracking and C_ContentTracking.GetBestMapForTrackable then
+        local _, bestMapID = C_ContentTracking.GetBestMapForTrackable(trackableType, trackableID)
+        if bestMapID then
+            x, y = GetContentWaypointForMap(trackableType, trackableID, bestMapID)
+            mapID = x ~= nil and y ~= nil and bestMapID or nil
+        end
     end
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint()
-    if trackableType == nil or not trackableID or not x or not y or not mapID then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        Providers:ReportUnresolvedSuperTrackingTarget(identity, L["Content"], {
-            mapID = mapID, trackableID = trackableID, trackableType = trackableType,
-        })
+    if trackableType == nil or trackableID == nil or x == nil or y == nil or mapID == nil then
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Content"], {
+            hasCoordinates = x ~= nil and y ~= nil,
+            trackableID = trackableID,
+            trackableType = trackableType,
+        }, RefreshContent)
         return
     end
     local title, description = C_SuperTrack.GetSuperTrackedItemName()

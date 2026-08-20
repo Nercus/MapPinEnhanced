@@ -20,17 +20,33 @@ local questClassificationAtlas = {
     [Enum.QuestClassification.Important] = "importantavailablequesticon",
 }
 
+---@param questID number
+---@param mapID number
+---@return number? x
+---@return number? y
+local function GetQuestWaypointForMap(questID, mapID)
+    return C_QuestLog.GetNextWaypointForMap(questID, mapID)
+end
+
 local function RefreshQuest()
     if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
         Providers:ClearSuperTrackingWayfinderData(SOURCE)
         return
     end
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
+    if questID == 0 then questID = nil end
     local identity = string.format("quest:%s", tostring(questID))
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint()
-    if not questID or not x or not y or not mapID then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        Providers:ReportUnresolvedSuperTrackingTarget(identity, L["Quest"], { mapID = mapID, questID = questID })
+    local x, y, mapID = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
+        return GetQuestWaypointForMap(questID, candidateMapID)
+    end or nil)
+    if questID and (x == nil or y == nil or mapID == nil) then
+        mapID, x, y = C_QuestLog.GetNextWaypoint(questID)
+    end
+    if questID == nil or x == nil or y == nil or mapID == nil then
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Quest"], {
+            hasCoordinates = x ~= nil and y ~= nil,
+            questID = questID,
+        }, RefreshQuest)
         return
     end
     local questTitle = C_QuestLog.GetTitleForQuestID(questID)
