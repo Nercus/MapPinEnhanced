@@ -202,6 +202,7 @@ end
 ---@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
 ---@param scale number? optional scale for the icon, if not set, it will be 1
 function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scale)
+    ---@type PinIcon | nil
     local pinConfig = PIN_ICONS[icon]
     if pinConfig then
         usesAtlas = pinConfig.usesAtlas
