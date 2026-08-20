@@ -5,6 +5,8 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
+---@type table<number, boolean>
+local pendingQuestTitles = {}
 
 ---@type table<Enum.QuestClassification, string>
 local questClassificationAtlas = {
@@ -32,6 +34,10 @@ local function RefreshQuest()
         return
     end
     local questTitle = C_QuestLog.GetTitleForQuestID(questID)
+    if not questTitle and not pendingQuestTitles[questID] then
+        pendingQuestTitles[questID] = true
+        C_QuestLog.RequestLoadQuestByID(questID)
+    end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
     questTitle = questTitle or superTrackedName or L["Quest"]
     local waypointText = C_QuestLog.GetNextWaypointText(questID)
@@ -52,9 +58,18 @@ local function RefreshQuest()
     })
 end
 
+---@param questID number
+---@param success boolean
+local function OnQuestDataLoadResult(questID, success)
+    if not pendingQuestTitles[questID] then return end
+    pendingQuestTitles[questID] = nil
+    if success and questID == C_SuperTrack.GetSuperTrackedQuestID() then RefreshQuest() end
+end
+
 Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshQuest)
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshQuest)
 MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", RefreshQuest)
 MapPinEnhanced:RegisterEvent("QUEST_POI_UPDATE", RefreshQuest)
+MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", OnQuestDataLoadResult)
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshQuest)
