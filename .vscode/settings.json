@@ -25,7 +25,8 @@
         "toplevel",
         "uncategorized",
         "Unscrollable",
-        "userwaypoint"
+        "userwaypoint",
+        "Iconize"
     ],
     "dryerLint.ruleSets": [
         {
