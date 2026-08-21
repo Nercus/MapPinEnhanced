@@ -49,12 +49,7 @@ function Wayfinders:ResetArrivalDetection()
 end
 
 function Wayfinders:CompleteArrival()
-    local removeTarget = self.removeTarget
-    if not removeTarget then return end
-
-    self.removeTarget = nil
-    self:ResetArrivalDetection()
-    removeTarget()
+    self:RemoveActiveTargetOnArrival()
 end
 
 ---@param distance number
@@ -100,8 +95,7 @@ end
 ---@param nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Wayfinders:ProcessArrivalSample(distance, closingSpeed, nextUpdateInterval, movementState)
-    local data = self.cachedData
-    if not data or data.lock or not self.removeTarget then
+    if not self:CanRemoveActiveTargetOnArrival() then
         self:ResetArrivalDetection()
         return
     end

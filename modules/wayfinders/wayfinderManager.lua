@@ -4,8 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinders MapPinEnhancedWayfinder[] a list of currently active wayfind
----@field cachedData WayfinderData? the last set wayfinder data, used to update wayfinders when they are enabled after data has already been set
----@field removeTarget fun()? provider-owned operation that removes the current target when it is reached
 ---@field TARGET_TYPE_PIN WayfinderTargetType
 ---@field TARGET_TYPE_BLIZZARD WayfinderTargetType
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
@@ -44,6 +42,58 @@ local AVAILABLE_WAYFINDERS = {
 ---@field lock boolean? if true, the target will not be removed automatically when reached
 ---@field targetType WayfinderTargetType? the target owner; missing or unknown values safely use the pin presentation
 
+---@alias WayfinderTargetRemoval fun(owner: string, identity: string, revision: integer)
+
+---@class ActiveWayfinderTarget
+---@field owner string
+---@field identity string
+---@field revision integer
+---@field data WayfinderData
+---@field removeTarget WayfinderTargetRemoval?
+
+---@class ActiveWayfinderTargetSnapshot
+---@field owner string
+---@field identity string
+---@field revision integer
+---@field data WayfinderData
+
+---@type ActiveWayfinderTarget?
+local activeTarget
+local targetRevision = 0
+
+---@param data WayfinderData
+---@return WayfinderData
+local function CopyWayfinderData(data)
+    return {
+        mapID = data.mapID,
+        x = data.x,
+        y = data.y,
+        title = data.title,
+        texture = data.texture,
+        usesAtlas = data.usesAtlas,
+        color = data.color,
+        lock = data.lock,
+        targetType = Wayfinders:NormalizeTargetType(data.targetType),
+    }
+end
+
+---@param target ActiveWayfinderTarget?
+local function ApplyActiveTarget(target)
+    activeTarget = target
+    Wayfinders:ResetArrivalDetection()
+
+    local data = target and target.data or nil
+    for _, wayfinder in ipairs(Wayfinders.activeWayfinders) do
+        wayfinder:Init(data)
+    end
+
+    if data and data.mapID and data.x and data.y then
+        MapPinEnhanced:EnableContinuousDistanceCheck(data.mapID, data.x, data.y)
+    else
+        MapPinEnhanced:DisableContinuousDistanceCheck()
+    end
+end
+
 ---@param targetType string?
 ---@return WayfinderTargetType
 function Wayfinders:NormalizeTargetType(targetType)
@@ -62,83 +112,118 @@ function Wayfinders:GetTargetStyleMode(targetType)
     return Pins.STYLE_MODE_PIN
 end
 
---- Set the current target data and the provider-owned operation used to remove it on arrival.
+--- Replace the active target without invoking the superseded target's removal operation.
+---@param owner string
+---@param identity string
 ---@param data WayfinderData
----@param removeTarget fun()?
-function Wayfinders:SetWayfinderData(data, removeTarget)
-    assert(type(data) == "table", "Wayfinders:SetWayfinderData: data must be a table")
+---@param removeTarget WayfinderTargetRemoval?
+---@return integer revision
+function Wayfinders:SetTarget(owner, identity, data, removeTarget)
+    assert(type(owner) == "string" and owner ~= "", "Wayfinders:SetTarget: owner must be a non-empty string")
+    assert(type(identity) == "string" and identity ~= "",
+        "Wayfinders:SetTarget: identity must be a non-empty string")
+    assert(type(data) == "table", "Wayfinders:SetTarget: data must be a table")
     assert(removeTarget == nil or type(removeTarget) == "function",
-        "Wayfinders:SetWayfinderData: removeTarget must be a function or nil")
+        "Wayfinders:SetTarget: removeTarget must be a function or nil")
 
-    data.targetType = self:NormalizeTargetType(data.targetType)
-    self.cachedData = data
-    self.removeTarget = removeTarget
+    targetRevision = targetRevision + 1
+    ApplyActiveTarget({
+        owner = owner,
+        identity = identity,
+        revision = targetRevision,
+        data = CopyWayfinderData(data),
+        removeTarget = removeTarget,
+    })
+    return targetRevision
+end
+
+--- Update only the target version observed by the caller.
+---@param owner string
+---@param identity string
+---@param revision integer
+---@param data WayfinderData
+---@return integer? revision
+function Wayfinders:UpdateTarget(owner, identity, revision, data)
+    assert(type(data) == "table", "Wayfinders:UpdateTarget: data must be a table")
+    if not self:IsTargetActive(owner, identity, revision) then return nil end
+
+    targetRevision = targetRevision + 1
+    ApplyActiveTarget({
+        owner = owner,
+        identity = identity,
+        revision = targetRevision,
+        data = CopyWayfinderData(data),
+        removeTarget = activeTarget and activeTarget.removeTarget or nil,
+    })
+    return targetRevision
+end
+
+---@param owner string
+---@param identity string?
+---@param revision integer?
+---@return boolean
+function Wayfinders:IsTargetActive(owner, identity, revision)
+    if not activeTarget or activeTarget.owner ~= owner then return false end
+    if identity and activeTarget.identity ~= identity then return false end
+    if revision and activeTarget.revision ~= revision then return false end
+    return true
+end
+
+---@return string? owner
+---@return string? identity
+---@return integer revision
+function Wayfinders:GetActiveTargetIdentity()
+    if not activeTarget then return nil, nil, targetRevision end
+    return activeTarget.owner, activeTarget.identity, activeTarget.revision
+end
+
+---@return ActiveWayfinderTargetSnapshot?
+function Wayfinders:GetActiveTargetSnapshot()
+    if not activeTarget then return nil end
+    return {
+        owner = activeTarget.owner,
+        identity = activeTarget.identity,
+        revision = activeTarget.revision,
+        data = CopyWayfinderData(activeTarget.data),
+    }
+end
+
+---@param owner string
+---@param identity string?
+---@param revision integer?
+---@return boolean
+function Wayfinders:ClearTarget(owner, identity, revision)
+    if not self:IsTargetActive(owner, identity, revision) then return false end
+    targetRevision = targetRevision + 1
+    ApplyActiveTarget(nil)
+    return true
+end
+
+---@return boolean
+function Wayfinders:CanRemoveActiveTargetOnArrival()
+    return activeTarget ~= nil and not activeTarget.data.lock and activeTarget.removeTarget ~= nil
+end
+
+function Wayfinders:RemoveActiveTargetOnArrival()
+    if not self:CanRemoveActiveTargetOnArrival() then return end
+
+    local target = activeTarget
+    if not target then return end
+    local removeTarget = target.removeTarget
+    target.removeTarget = nil
     self:ResetArrivalDetection()
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:Init(data)
+    if removeTarget then
+        removeTarget(target.owner, target.identity, target.revision)
     end
-    if data.mapID and data.x and data.y then
-        MapPinEnhanced:EnableContinuousDistanceCheck(data.mapID, data.x, data.y)
-    end
-end
-
----@param title string
-function Wayfinders:OverrideWayfinderTitle(title)
-    if not self.cachedData then return end
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:SetTitle(title)
-    end
-    self.cachedData.title = title
-end
-
----@param color string
-function Wayfinders:OverrideWayfinderColor(color)
-    if not self.cachedData then return end
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:SetColor(color)
-    end
-    self.cachedData.color = color
-    self.cachedData.texture = nil
-    self.cachedData.usesAtlas = nil
-end
-
----@param texture string|number
----@param usesAtlas boolean
-function Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
-    if not self.cachedData then return end
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:SetTexture(texture, usesAtlas)
-    end
-    self.cachedData.texture = texture
-    self.cachedData.usesAtlas = usesAtlas
-    self.cachedData.color = nil
-end
-
-function Wayfinders:OverrideWayfinderLock(lock)
-    if not self.cachedData then return end
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:SetLock(lock)
-    end
-    self.cachedData.lock = lock
 end
 
 ---@param wayfinder MapPinEnhancedWayfinder
 function Wayfinders:RefreshWayfinder(wayfinder)
-    if self.cachedData then
-        wayfinder:Init(self.cachedData)
+    if activeTarget then
+        wayfinder:Init(activeTarget.data)
     else
         wayfinder:Init(nil)
     end
-end
-
-function Wayfinders:ClearWayfinderData()
-    self.cachedData = nil
-    self.removeTarget = nil
-    self:ResetArrivalDetection()
-    for _, wayfinder in ipairs(self.activeWayfinders) do
-        wayfinder:Init(nil)
-    end
-    MapPinEnhanced:DisableContinuousDistanceCheck()
 end
 
 ---@param wayfinderType WayfinderType

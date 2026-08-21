@@ -24,8 +24,11 @@ local function GetContentIcon(trackableType, trackableID)
     end
 end
 
-local function ClearContent()
-    Providers:ClearSuperTrackingWayfinderData(SOURCE)
+---@param _ string
+---@param identity string
+---@param revision integer
+local function ClearContent(_, identity, revision)
+    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, identity, revision) then return end
     C_SuperTrack.ClearSuperTrackedContent()
 end
 

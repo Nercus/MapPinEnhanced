@@ -5,11 +5,14 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Notifications = MapPinEnhanced:GetModule("Notifications")
 local Providers = MapPinEnhanced:GetModule("Providers")
+local TARGET_OWNER = "addonPins"
 
 ---@type UiMapPoint?
 local placedUserWaypoint = nil
 ---@type UUID?
 local trackedPinID = nil
+---@type integer?
+local trackedTargetRevision = nil
 local shouldSuperTrackUserWaypoint = false
 local superTrackedReachedBehaviorOverridden = false
 
@@ -98,26 +101,22 @@ end
 
 
 local oldPinId = nil
----@param title string
-local function onPinTitleUpdated(_, title)
-    Wayfinders:OverrideWayfinderTitle(title)
+local function UpdateTrackedPinTarget()
+    if not trackedPinID or not trackedTargetRevision then return end
+    local pin = Pins:GetPinByID(trackedPinID)
+    if not pin or not pin:IsTracked() then return end
+
+    local revision = Wayfinders:UpdateTarget(TARGET_OWNER, trackedPinID, trackedTargetRevision,
+        TransformPinDataToWayfinderData(pin:GetPinData()))
+    if revision and Wayfinders:IsTargetActive(TARGET_OWNER, trackedPinID, revision) then
+        trackedTargetRevision = revision
+    end
 end
 
----@param color PinColor
-local function onPinColorUpdated(_, color)
-    Wayfinders:OverrideWayfinderColor(color)
-end
-
----@param texture string|number
----@param usesAtlas boolean
-local function onPinIconUpdated(_, texture, usesAtlas)
-    Wayfinders:OverrideWayfinderTexture(texture, usesAtlas)
-end
-
----@param lock boolean
-local function onPinLockUpdated(_, lock)
-    Wayfinders:OverrideWayfinderLock(lock)
-end
+local function onPinTitleUpdated() UpdateTrackedPinTarget() end
+local function onPinColorUpdated() UpdateTrackedPinTarget() end
+local function onPinIconUpdated() UpdateTrackedPinTarget() end
+local function onPinLockUpdated() UpdateTrackedPinTarget() end
 
 local function ClearPinCallbacks()
     if not oldPinId then return end
@@ -161,16 +160,21 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
-        Providers:ReleaseActiveSuperTrackingSource()
-        Wayfinders:SetWayfinderData(wayfinderData, function()
+        Providers:CancelPendingSuperTrackingResolutions()
+        trackedTargetRevision = nil
+        local revision = Wayfinders:SetTarget(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
             RemoveTrackedPin(pinID)
         end)
-        SetupPinCallbacks(pinID)
+        if Wayfinders:IsTargetActive(TARGET_OWNER, pinID, revision) then
+            trackedTargetRevision = revision
+            SetupPinCallbacks(pinID)
+        end
     elseif pinID == trackedPinID and not isTracked then
-        trackedPinID = nil
         ClearPinCallbacks()
         ClearTrackedPinUserWaypoint()
-        Wayfinders:ClearWayfinderData()
+        Wayfinders:ClearTarget(TARGET_OWNER, trackedPinID, trackedTargetRevision)
+        trackedPinID = nil
+        trackedTargetRevision = nil
     end
 end
 

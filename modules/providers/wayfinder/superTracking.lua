@@ -3,8 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
 ---@field superTrackingProviderTypes table<Enum.SuperTrackingType, string>
----@field activeSuperTrackingSource string?
----@field activeSuperTrackingIdentity string?
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local L = MapPinEnhanced.L
@@ -22,6 +20,7 @@ local RESOLUTION_RETRY_DELAYS = { 0.1, 0.25, 0.5, 1, 2 }
 
 ---@class PendingSuperTrackingResolution
 ---@field identity string
+---@field revision integer
 ---@field attempts number
 ---@field timer FunctionContainer?
 
@@ -115,10 +114,9 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
 
     -- Keep valid data while Blizzard rebuilds the path for the same target. If the
     -- target itself changed, the old coordinates must not remain visible.
-    if self.activeSuperTrackingSource == source and self.activeSuperTrackingIdentity ~= identity then
-        self.activeSuperTrackingSource = nil
-        self.activeSuperTrackingIdentity = nil
-        Wayfinders:ClearWayfinderData()
+    local activeOwner, activeIdentity, activeRevision = Wayfinders:GetActiveTargetIdentity()
+    if activeOwner == source and activeIdentity ~= identity then
+        Wayfinders:ClearTarget(source, activeIdentity, activeRevision)
     end
     if reportedTargets[identity] then return end
 
@@ -128,7 +126,8 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
     end
     pending = pendingResolutions[source]
     if not pending then
-        pending = { identity = identity, attempts = 0 }
+        local _, _, revision = Wayfinders:GetActiveTargetIdentity()
+        pending = { identity = identity, revision = revision, attempts = 0 }
         pendingResolutions[source] = pending
     end
     if pending.timer then return end
@@ -136,11 +135,7 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
     local retryDelay = RESOLUTION_RETRY_DELAYS[pending.attempts + 1]
     if not retryDelay then
         pendingResolutions[source] = nil
-        if self.activeSuperTrackingSource == source and self.activeSuperTrackingIdentity == identity then
-            self.activeSuperTrackingSource = nil
-            self.activeSuperTrackingIdentity = nil
-            Wayfinders:ClearWayfinderData()
-        end
+        Wayfinders:ClearTarget(source, identity, pending.revision)
         self:ReportUnresolvedSuperTrackingTarget(identity, targetType, fields)
         return
     end
@@ -148,6 +143,11 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
     pending.attempts = pending.attempts + 1
     pending.timer = C_Timer.NewTimer(retryDelay, function()
         if pendingResolutions[source] ~= pending then return end
+        local _, _, revision = Wayfinders:GetActiveTargetIdentity()
+        if revision ~= pending.revision then
+            pendingResolutions[source] = nil
+            return
+        end
         pending.timer = nil
         refresh()
     end)
@@ -167,36 +167,26 @@ end
 ---@param source string
 ---@param identity string
 ---@param data WayfinderData
----@param removeTarget fun()?
+---@param removeTarget WayfinderTargetRemoval?
+---@return integer revision
 function Providers:SetSuperTrackingWayfinderData(source, identity, data, removeTarget)
     CancelPendingResolution(source)
     CancelOtherPendingResolutions(source)
-    self.activeSuperTrackingSource = source
-    self.activeSuperTrackingIdentity = identity
     self:ClearSuperTrackingReport(identity)
     data.targetType = Wayfinders.TARGET_TYPE_BLIZZARD
-    Wayfinders:SetWayfinderData(data, removeTarget)
+    return Wayfinders:SetTarget(source, identity, data, removeTarget)
 end
 
 ---@param source string
-function Providers:ClearSuperTrackingWayfinderData(source)
+---@param identity string?
+---@param revision integer?
+---@return boolean
+function Providers:ClearSuperTrackingWayfinderData(source, identity, revision)
     CancelPendingResolution(source)
-    if self.activeSuperTrackingSource ~= source then return end
-    self.activeSuperTrackingSource = nil
-    self.activeSuperTrackingIdentity = nil
-    Wayfinders:ClearWayfinderData()
+    return Wayfinders:ClearTarget(source, identity, revision)
 end
 
-function Providers:ClearActiveSuperTrackingWayfinderData()
-    if not self.activeSuperTrackingSource then return end
-    self.activeSuperTrackingSource = nil
-    self.activeSuperTrackingIdentity = nil
-    Wayfinders:ClearWayfinderData()
-end
-
-function Providers:ReleaseActiveSuperTrackingSource()
-    self.activeSuperTrackingSource = nil
-    self.activeSuperTrackingIdentity = nil
+function Providers:CancelPendingSuperTrackingResolutions()
     local pendingSources = {}
     for source in pairs(pendingResolutions) do
         table.insert(pendingSources, source)

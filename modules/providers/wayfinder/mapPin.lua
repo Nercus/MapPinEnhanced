@@ -96,8 +96,11 @@ local function GetMapPinPositionForMap(pinType, typeID, mapID)
     end
 end
 
-local function ClearMapPin()
-    Providers:ClearSuperTrackingWayfinderData(SOURCE)
+---@param _ string
+---@param identity string
+---@param revision integer
+local function ClearMapPin(_, identity, revision)
+    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, identity, revision) then return end
     C_SuperTrack.ClearSuperTrackedMapPin()
 end
 
