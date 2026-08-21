@@ -225,23 +225,42 @@ function Providers:GetSuperTrackingMapIDs()
     ---@type number?
     local playerMapID = C_Map.GetBestMapForUnit("player")
     ---@type number?
+    local displayMapID
+    if MapUtil and MapUtil.GetDisplayableMapForPlayer then
+        displayMapID = MapUtil.GetDisplayableMapForPlayer()
+    end
+    ---@type number?
     local visibleMapID
     if WorldMapFrame and WorldMapFrame.GetMapID then
         visibleMapID = WorldMapFrame:GetMapID()
     end
 
-    -- Prefer the player's map so cross-map navigation points at the next route
-    -- step. The visible world map is a useful fallback while tracking a clicked
-    -- destination, matching Blizzard's waypoint UI behavior.
+    -- The player's most specific map and Blizzard's displayable map can differ,
+    -- especially in instances and subzones. Super-tracking paths may only be
+    -- projected onto the displayable map. The visible world map is also needed
+    -- for destinations selected from a map other than the player's current map.
     AddMapID(mapIDs, seenMapIDs, playerMapID)
+    AddMapID(mapIDs, seenMapIDs, displayMapID)
     AddMapID(mapIDs, seenMapIDs, visibleMapID)
 
-    -- Some map types expose the route only on a parent/continent map.
+    -- Some routes are exposed only on a map adjacent to the player's, display,
+    -- or visible map. Do not fan out from continents: their zone lists are too
+    -- broad to be useful resolution candidates.
     ---@type number[]
     local initialMapIDs = {}
     if playerMapID then table.insert(initialMapIDs, playerMapID) end
-    if visibleMapID and visibleMapID ~= playerMapID then table.insert(initialMapIDs, visibleMapID) end
+    if displayMapID and displayMapID ~= playerMapID then table.insert(initialMapIDs, displayMapID) end
+    if visibleMapID and visibleMapID ~= playerMapID and visibleMapID ~= displayMapID then
+        table.insert(initialMapIDs, visibleMapID)
+    end
     for _, initialMapID in ipairs(initialMapIDs) do
+        local initialMapInfo = C_Map.GetMapInfo(initialMapID)
+        if initialMapInfo and initialMapInfo.mapType ~= Enum.UIMapType.Continent then
+            for _, childMapInfo in ipairs(C_Map.GetMapChildrenInfo(initialMapID) or {}) do
+                AddMapID(mapIDs, seenMapIDs, childMapInfo.mapID)
+            end
+        end
+
         ---@type number
         local mapID = initialMapID
         for _ = 1, 4 do
