@@ -106,6 +106,8 @@ L["Optimize"] = "Optimize"
 L["Optimize Route"] = "Optimize Route"
 L["Optimizing will permanently reorder every pin in this group and cannot be undone."] =
 "Optimizing will permanently reorder every pin in this group and cannot be undone."
+L["Route optimization was canceled because the group changed."] =
+"Route optimization was canceled because the group changed."
 L["Loading"] = "Loading"
 
 ------------------------------ Dialogs ------------------------------

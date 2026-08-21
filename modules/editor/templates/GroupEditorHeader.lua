@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
-local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
 ---@type PinIcon[]
@@ -99,13 +98,8 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:OptimizeGroup()
     Dialogs:ShowConfirmDialog(L["Optimize Route"],
         L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
             if self.group ~= group then return end
-            local pinNodes = Editor:GetSortedPins(group)
             editor.groupEditor:SetLoading(true)
-            Editor:OptimizePinOrder(pinNodes, function(pinIDs)
-                if Groups:GetGroupByID(group:GetGroupID()) == group then
-                    Editor:ApplyPinOrder(group, pinIDs)
-                    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-                end
+            Groups:OptimizeGroupRoute(group, function()
                 if self.group == group then
                     editor.groupEditor:SetGroup(group)
                 end

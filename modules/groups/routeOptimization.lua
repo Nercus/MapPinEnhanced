@@ -1,0 +1,301 @@
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+
+---@class Groups
+local Groups = MapPinEnhanced:GetModule("Groups")
+
+local HBD = MapPinEnhanced.HBD
+local L = MapPinEnhanced.L
+local abs = math.abs
+local sqrt = math.sqrt
+
+local EPSILON = 0.000001
+local FULL_TWO_OPT_LIMIT = 150
+local LIMITED_TWO_OPT_LIMIT = 500
+local LIMITED_TWO_OPT_IMPROVEMENTS = 64
+
+---@class MapPinEnhancedRouteSnapshotEntry
+---@field pinID UUID
+---@field order number
+---@field title string
+---@field mapID number?
+---@field x number?
+---@field y number?
+---@field pin MapPinEnhancedPinMixin?
+---@field archivedPin ArchivedPinData?
+---@field archiveState "reached"|"hidden"|nil
+
+---@class MapPinEnhancedRouteSnapshot
+---@field group MapPinEnhancedGroupMixin
+---@field groupID UUID
+---@field entries MapPinEnhancedRouteSnapshotEntry[]
+
+---@class MapPinEnhancedRouteNode
+---@field pinID UUID
+---@field x number
+---@field y number
+---@field originalIndex integer
+
+---@param left MapPinEnhancedRouteNode
+---@param right MapPinEnhancedRouteNode
+---@return number
+local function Distance(left, right)
+    local dx, dy = left.x - right.x, left.y - right.y
+    return sqrt(dx * dx + dy * dy)
+end
+
+---@param path MapPinEnhancedRouteNode[]
+---@param first integer
+---@param last integer
+local function Reverse(path, first, last)
+    while first < last do
+        path[first], path[last] = path[last], path[first]
+        first, last = first + 1, last - 1
+    end
+end
+
+---@param nodes MapPinEnhancedRouteNode[]
+---@return MapPinEnhancedRouteNode[]
+local function BuildNearestNeighbourPath(nodes)
+    if #nodes < 2 then return nodes end
+
+    ---@type MapPinEnhancedRouteNode[]
+    local path = { nodes[1] }
+    ---@type table<integer, boolean>
+    local used = { [1] = true }
+
+    for pathIndex = 2, #nodes do
+        local previous = path[pathIndex - 1]
+        local bestIndex, bestDistance
+        for index = 2, #nodes do
+            if not used[index] then
+                local distance = Distance(previous, nodes[index])
+                if not bestDistance or distance < bestDistance - EPSILON or
+                    (abs(distance - bestDistance) <= EPSILON and
+                        nodes[index].originalIndex < nodes[assert(bestIndex)].originalIndex) then
+                    bestIndex, bestDistance = index, distance
+                end
+            end
+        end
+        bestIndex = assert(bestIndex)
+        path[pathIndex] = nodes[bestIndex]
+        used[bestIndex] = true
+    end
+    return path
+end
+
+---@param path MapPinEnhancedRouteNode[]
+---@param maxImprovements integer?
+local function ImproveWithTwoOpt(path, maxImprovements)
+    if #path < 4 or maxImprovements == 0 then return end
+
+    local improvements = 0
+    while not maxImprovements or improvements < maxImprovements do
+        local improved = false
+        for first = 2, #path - 1 do
+            local before, oldFirst = path[first - 1], path[first]
+            for last = first + 1, #path do
+                local oldLast = path[last]
+                local delta = Distance(before, oldLast) - Distance(before, oldFirst)
+                if last < #path then
+                    delta = delta + Distance(oldFirst, path[last + 1]) - Distance(oldLast, path[last + 1])
+                end
+                if delta < -EPSILON then
+                    Reverse(path, first, last)
+                    improvements = improvements + 1
+                    improved = true
+                    break
+                end
+            end
+            if improved then break end
+        end
+        if not improved then return end
+    end
+end
+
+---@param nodes MapPinEnhancedRouteNode[]
+---@return MapPinEnhancedRouteNode[]
+local function OptimizeCluster(nodes)
+    local path = BuildNearestNeighbourPath(nodes)
+    if #path <= FULL_TWO_OPT_LIMIT then
+        ImproveWithTwoOpt(path)
+    elseif #path <= LIMITED_TWO_OPT_LIMIT then
+        ImproveWithTwoOpt(path, LIMITED_TWO_OPT_IMPROVEMENTS)
+    end
+    return path
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@param entry MapPinEnhancedRouteSnapshotEntry
+---@return boolean
+local function IsSnapshotEntryCurrent(group, entry)
+    if entry.pin then
+        if group:GetPinByID(entry.pinID) ~= entry.pin then return false end
+        if group:GetArchivedPinByID(entry.pinID) then return false end
+        if (group.pinOrder[entry.pinID] or 0) ~= entry.order then return false end
+
+        local data = entry.pin:GetPinData()
+        return data ~= nil and data.mapID == entry.mapID and data.x == entry.x and data.y == entry.y and
+            (data.title or "") == entry.title
+    end
+
+    local archivedPin = assert(entry.archivedPin)
+    return group:GetArchivedPinByID(entry.pinID) == archivedPin and
+        not group:GetPinByID(entry.pinID) and archivedPin.state == entry.archiveState and
+        (archivedPin.order or 0) == entry.order and archivedPin.data.mapID == entry.mapID and
+        archivedPin.data.x == entry.x and archivedPin.data.y == entry.y and
+        (archivedPin.data.title or "") == entry.title
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@return MapPinEnhancedRouteSnapshot
+local function BuildSnapshot(group)
+    ---@type MapPinEnhancedRouteSnapshotEntry[]
+    local entries = {}
+    for pinID, pin in group:EnumeratePins() do
+        local data = pin:GetPinData()
+        entries[#entries + 1] = {
+            pinID = pinID,
+            order = group.pinOrder[pinID] or 0,
+            title = data.title or "",
+            mapID = data.mapID,
+            x = data.x,
+            y = data.y,
+            pin = pin,
+        }
+    end
+    for pinID, archivedPin in group:EnumerateArchivedPins() do
+        local data = archivedPin.data
+        entries[#entries + 1] = {
+            pinID = pinID,
+            order = archivedPin.order or 0,
+            title = data.title or "",
+            mapID = data.mapID,
+            x = data.x,
+            y = data.y,
+            archivedPin = archivedPin,
+            archiveState = archivedPin.state,
+        }
+    end
+    table.sort(entries, function(left, right)
+        if left.order ~= right.order then return left.order > right.order end
+        if left.title ~= right.title then return left.title < right.title end
+        return left.pinID < right.pinID
+    end)
+
+    return {
+        group = group,
+        groupID = assert(group:GetGroupID()),
+        entries = entries,
+    }
+end
+
+---@param entries MapPinEnhancedRouteSnapshotEntry[]
+---@return MapPinEnhancedRouteNode[][], MapPinEnhancedRouteSnapshotEntry[]
+local function BuildClusters(entries)
+    ---@type MapPinEnhancedRouteNode[][]
+    local clusters = {}
+    ---@type table<number, MapPinEnhancedRouteNode[]>
+    local clustersByInstance = {}
+    ---@type MapPinEnhancedRouteSnapshotEntry[]
+    local unavailable = {}
+
+    for index, entry in ipairs(entries) do
+        ---@type number?, number?, number?
+        local worldX, worldY, instance = nil, nil, nil
+        if entry.mapID and entry.x and entry.y then
+            worldX, worldY, instance = HBD:GetWorldCoordinatesFromZone(entry.x, entry.y, entry.mapID)
+        end
+        if worldX and worldY and instance then
+            local cluster = clustersByInstance[instance]
+            if not cluster then
+                cluster = {}
+                clustersByInstance[instance] = cluster
+                clusters[#clusters + 1] = cluster
+            end
+            cluster[#cluster + 1] = {
+                pinID = entry.pinID,
+                x = worldX,
+                y = worldY,
+                originalIndex = index,
+            }
+        else
+            unavailable[#unavailable + 1] = entry
+        end
+    end
+    return clusters, unavailable
+end
+
+---@param groups Groups
+---@param snapshot MapPinEnhancedRouteSnapshot
+---@return boolean
+local function IsSnapshotCurrent(groups, snapshot)
+    local group = snapshot.group
+    if group:GetGroupID() ~= snapshot.groupID or groups:GetGroupByID(snapshot.groupID) ~= group then
+        return false
+    end
+    if group:GetTotalPinCount() ~= #snapshot.entries then return false end
+
+    -- Optimization yields between instance clusters. Only apply if every field
+    -- that shaped the route still belongs to the same registered group state.
+    for _, entry in ipairs(snapshot.entries) do
+        if not IsSnapshotEntryCurrent(group, entry) then return false end
+    end
+    return true
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@param pinIDs UUID[]
+local function ApplyOptimizedOrder(group, pinIDs)
+    local count = #pinIDs
+    for index, pinID in ipairs(pinIDs) do
+        local order = count - index + 1
+        local archivedPin = group:GetArchivedPinByID(pinID)
+        if archivedPin then
+            archivedPin.order = order
+            group.pinOrder[pinID] = nil
+        else
+            group.pinOrder[pinID] = order
+        end
+    end
+    Groups:PersistGroup(group)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+end
+
+---@param group MapPinEnhancedGroupMixin
+---@param onComplete fun()
+---@param onError fun(message: string)?
+function Groups:OptimizeGroupRoute(group, onComplete, onError)
+    assert(type(group) == "table" and group.classification == "group",
+        "Groups:OptimizeGroupRoute: group must be a MapPinEnhancedGroupMixin object")
+    assert(type(onComplete) == "function", "Groups:OptimizeGroupRoute: onComplete must be a function")
+    assert(type(onError) == "function" or onError == nil,
+        "Groups:OptimizeGroupRoute: onError must be a function or nil")
+
+    local snapshot = BuildSnapshot(group)
+    local clusters, unavailable = BuildClusters(snapshot.entries)
+    ---@type UUID[]
+    local result = {}
+    ---@type (fun(): boolean?)[]
+    local tasks = {}
+    for _, cluster in ipairs(clusters) do
+        local currentCluster = cluster
+        tasks[#tasks + 1] = function()
+            for _, node in ipairs(OptimizeCluster(currentCluster)) do
+                result[#result + 1] = node.pinID
+            end
+        end
+    end
+
+    MapPinEnhanced:BatchExecution(tasks, nil, function()
+        for _, entry in ipairs(unavailable) do
+            result[#result + 1] = entry.pinID
+        end
+        if not IsSnapshotCurrent(self, snapshot) then
+            if onError then onError(L["Route optimization was canceled because the group changed."]) end
+            return
+        end
+        ApplyOptimizedOrder(group, result)
+        onComplete()
+    end, 1, onError)
+end
