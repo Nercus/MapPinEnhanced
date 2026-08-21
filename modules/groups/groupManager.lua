@@ -107,6 +107,7 @@ end
 
 ---@param groupInfo GroupInfo
 ---@return MapPinEnhancedGroupMixin?
+---@return string? failureReason
 function Groups:RegisterGroup(groupInfo)
     assert(groupInfo, "Groups:RegisterGroup: groupInfo is nil")
     assert(groupInfo.name, "Groups:RegisterGroup: groupInfo.name is nil")
@@ -114,15 +115,35 @@ function Groups:RegisterGroup(groupInfo)
     assert(self:IsValidGroupName(groupInfo.name), "Groups:RegisterGroup: groupInfo.name is empty")
     assert(groupInfo.source, "Groups:RegisterGroup: groupInfo.source is nil")
     assert(type(groupInfo.source) == "string", "Groups:RegisterGroup: groupInfo.source must be a string")
+    assert(groupInfo.source ~= "", "Groups:RegisterGroup: groupInfo.source is empty")
     assert(C_AddOns.IsAddOnLoaded(groupInfo.source), "Groups:RegisterGroup: groupInfo.source is not a loaded addon")
-
-    if self:GetGroupByName(groupInfo.name) then
-        return nil
-    end
+    assert(groupInfo.groupID == nil or type(groupInfo.groupID) == "string",
+        "Groups:RegisterGroup: groupInfo.groupID must be a string")
+    assert(groupInfo.groupID == nil or groupInfo.groupID ~= "",
+        "Groups:RegisterGroup: groupInfo.groupID must not be empty")
 
     local groupID = groupInfo.groupID or MapPinEnhanced:GenerateUUID("group")
-    if self:GetGroupByID(groupID) then
-        return nil
+    if groupInfo.groupID then
+        local deferredSource = self:GetDeferredGroupSource(groupID)
+        if deferredSource and deferredSource ~= groupInfo.source then
+            return nil, "a saved group with this ID belongs to another source addon"
+        end
+        if deferredSource then
+            self:RestoreDeferredExternalGroups(deferredSource)
+            if not self:GetGroupByID(groupID) then
+                return nil, "the saved group could not be restored"
+            end
+        end
+    end
+
+    local existingGroup = self:GetGroupByID(groupID)
+    if existingGroup then
+        if existingGroup:GetSource() == groupInfo.source then return existingGroup end
+        return nil, "a group with this ID belongs to another source addon"
+    end
+
+    if self:GetGroupByName(groupInfo.name) then
+        return nil, "a group with this name already exists"
     end
 
     local groupsPool = Groups:GetObjectPool()
@@ -318,47 +339,6 @@ function Groups:PersistGroup(group)
     end
 
     self.debouncedPersist[groupID]()
-end
-
----@param groupData SaveableGroupData
-function Groups:RestoreGroup(groupData)
-    assert(groupData, "Groups:RestoreGroup: groupInfo is nil")
-    if not groupData.groupID then
-        return
-    end
-
-    local group = self:GetGroupByID(groupData.groupID)
-    if not group then
-        group = self:RegisterGroup(groupData)
-    end
-    if not group then return end
-
-    group:ApplyGroupInfo(groupData)
-    group:SetOrder(groupData.order or GetTime())
-
-    for pinID, archivedPin in pairs(groupData.pinArchive or {}) do
-        group.pinArchive[pinID] = CopyTable(archivedPin)
-    end
-
-    if not group:IsHidden() then
-        for pinID, order in pairs(groupData.pinOrder or {}) do
-            group:SetPinOrder(pinID, order, true)
-        end
-
-        group:AddMultiplePins(groupData.pins or {}, true)
-    end
-end
-
-function Groups:RestoreAllGroups()
-    ---@type table<string, SaveableGroupData> | nil
-    local groupsData = MapPinEnhanced:GetVar("groups")
-    if not groupsData then
-        return
-    end
-
-    for _, groupData in pairs(groupsData) do
-        self:RestoreGroup(groupData)
-    end
 end
 
 ---@return fun(): MapPinEnhancedGroupMixin

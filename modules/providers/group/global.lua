@@ -14,23 +14,23 @@ local function ValidateGroupInfo(groupInfo, apiName)
     if type(groupInfo.source) ~= "string" or groupInfo.source == "" then
         error(apiName .. ": groupInfo.source must be a non-empty string")
     end
+    if type(groupInfo.groupID) ~= "string" or groupInfo.groupID == "" then
+        error(apiName .. ": groupInfo.groupID must be a non-empty stable ID")
+    end
     if not C_AddOns.IsAddOnLoaded(groupInfo.source) then
         error(apiName .. ": source addon is not loaded")
     end
     if groupInfo.groupType ~= nil or Groups:GetSystemGroupType(groupInfo.groupID) ~= nil then
         error(apiName .. ": system groups cannot be registered through the public API")
     end
-    if Groups:GetGroupByName(groupInfo.name) then
-        error(apiName .. ": a group with this name already exists")
-    end
 end
 
 MapPinEnhanced:RegisterGlobalAPI("RegisterGroup", function(groupInfo)
     ValidateGroupInfo(groupInfo, "MapPinEnhanced.RegisterGroup")
 
-    local group = Groups:RegisterGroup(groupInfo)
+    local group, failureReason = Groups:RegisterGroup(groupInfo)
     if not group then
-        error("MapPinEnhanced.RegisterGroup: failed to register group")
+        error("MapPinEnhanced.RegisterGroup: " .. (failureReason or "failed to register group"))
     end
 
     if group:IsHidden() and group:GetSource() ~= MapPinEnhanced.name then
