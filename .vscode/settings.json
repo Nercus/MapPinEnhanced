@@ -93,7 +93,6 @@
         ".github",
         ".vscode",
         "libs",
-        "modules/editor",
         "_old"
     ],
     "material-icon-theme.folders.associations": {
