@@ -6,8 +6,8 @@ externals:
   libs/LibDBIcon-1.0: https://repos.wowace.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
   libs/LibStub: https://repos.wowace.com/wow/libstub/trunk
   libs/HereBeDragons: https://repos.wowace.com/wow/herebedragons
-  libs/LibDeflate: https://github.com/SafeteeWoW/LibDeflate
-  libs/LibSerialize: https://github.com/rossnichols/LibSerialize
+  libs/Chomp: https://github.com/wow-rp-addons/Chomp.git
+  libs/LibWindow-1.1: https://repos.wowace.com/wow/libwindow-1-1/trunk/LibWindow-1.1
   libs/IconFileNames:
     url: https://www.townlong-yak.com/addons.git/iconfilenames
     commit: default
@@ -19,14 +19,6 @@ ignore:
   - CHANGELOG.md
   - annotations.lua
   - tests
-
-required-dependencies:
-  - herebedragons
-  - callbackhandler
-  - libdatabroker-1-1
-  - libdbicon-1-0
-  - libstub
-  - libdeflate
 
 manual-changelog:
   filename: CHANGELOG.md

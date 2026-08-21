@@ -21,7 +21,7 @@
 ## X-Curse-Project-ID: 441677
 ## X-Wago-ID: RqGZqqKd
 
-## OptionalDeps: CallbackHandler-1.0, HereBeDragons, LibDataBroker-1.1, LibDBIcon-1.0, LibDeflate, LibSerialize, LibStub
+## OptionalDeps: CallbackHandler-1.0, Chomp, HereBeDragons, LibDataBroker-1.1, LibDBIcon-1.0, LibStub, LibWindow-1.1
 ## SavedVariables: MapPinEnhancedDB
 ## LoadSavedVariablesFirst: 1
 
