@@ -1,6 +1,11 @@
+---@class MapPinEnhancedMenuRadioCellIcon
+---@field path string
+---@field usesAtlas boolean
+---@field scale number?
+
 ---@class MapPinEnhancedMenuRadioCellData
 ---@field owner table
----@field icon PinIcon
+---@field icon MapPinEnhancedMenuRadioCellIcon
 ---@field isSelected fun(): boolean
 ---@field onClick fun()
 

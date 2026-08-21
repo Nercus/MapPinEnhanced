@@ -92,7 +92,9 @@ end
 
 function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
     if not self.dataProvider then return end
+    ---@type MapPinEnhancedGroupMixin[]
     local groups = {}
+    ---@type table<string, MapPinEnhancedGroupMixin>
     local systemGroups = {}
     local search = self:GetSearch()
     for group in Groups:EnumerateGroups() do
@@ -100,7 +102,8 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
             (search == "" or MapPinEnhanced:FuzzyMatch(search, group:GetName())) then
             table.insert(groups, group)
         elseif Editor:ShouldShowSystemGroup(group) then
-            systemGroups[group.groupType] = group
+            local groupType = group.groupType
+            if groupType then systemGroups[groupType] = group end
         end
     end
     table.sort(groups, function(group1, group2) return Groups:IsGroupBefore(group1, group2) end)
@@ -109,6 +112,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
         self.dataProvider:Insert(group)
     end
 
+    ---@type {entry: MapPinEnhancedEditorGroupSidebarEntryTemplate, group: MapPinEnhancedGroupMixin?}[]
     local systemEntries = {
         { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
     }
@@ -140,8 +144,11 @@ function MapPinEnhancedEditorGroupSidebarMixin:GetDropTarget()
 end
 
 function MapPinEnhancedEditorGroupSidebarMixin:UpdateDropTarget()
+    ---@type MapPinEnhancedGroupMixin?
     local target
+    ---@param scrollBox Frame|ScrollBoxListMixin
     local function update(scrollBox)
+        ---@param frame MapPinEnhancedEditorGroupSidebarEntryTemplate
         scrollBox:ForEachFrame(function(frame)
             local isTarget = not target and frame:IsMouseOver()
             frame:SetDropTarget(isTarget)

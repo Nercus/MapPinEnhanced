@@ -4,7 +4,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local L = MapPinEnhanced.L
 
----@type PinIcon[]
+---@type MapPinEnhancedMenuRadioCellIcon[]
 local GROUP_ICONS = {
     { path = "Interface\\Icons\\INV_Misc_Map_01",            usesAtlas = false },
     { path = "Interface\\Icons\\INV_Misc_QuestionMark",      usesAtlas = false },
