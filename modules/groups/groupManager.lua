@@ -5,18 +5,25 @@ local MapPinEnhanced = select(2, ...)
 ---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
 ---@field debouncedPersist table<string, function> a table to store debounced persist functions by groupID
 ---@field SYSTEM_GROUP_IDS table<string, string>
----@field RESERVED_GROUP_NAMES table<string, string>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
 Groups.SYSTEM_GROUP_IDS = {
     UNGROUPED = "system-ungrouped",
+    WAY_BACK = "system-way-back",
 }
 
-Groups.RESERVED_GROUP_NAMES = {
-    WAY_BACK = L["My Way Back"],
+local SYSTEM_GROUP_TYPES = {
+    [Groups.SYSTEM_GROUP_IDS.UNGROUPED] = "ungrouped",
+    [Groups.SYSTEM_GROUP_IDS.WAY_BACK] = "way-back",
 }
+
+---@param groupID UUID?
+---@return "ungrouped"|"way-back"?
+function Groups:GetSystemGroupType(groupID)
+    return groupID and SYSTEM_GROUP_TYPES[groupID] or nil
+end
 
 local function CreateGroupObject()
     return CreateAndInitFromMixin(MapPinEnhancedGroupMixin)
@@ -67,10 +74,12 @@ local DEFAULT_GROUPS = {
         groupType = "ungrouped",
     },
     {
-        name = Groups.RESERVED_GROUP_NAMES.WAY_BACK,
+        groupID = Groups.SYSTEM_GROUP_IDS.WAY_BACK,
+        name = L["My Way Back"],
         source = MapPinEnhanced.name,
         icon = "Interface\\Icons\\rogue_burstofspeed",
         order = math.huge,
+        groupType = "way-back",
     }
 }
 
@@ -183,7 +192,18 @@ function Groups:GetUngroupedGroup()
 end
 
 function Groups:GetWayBackGroup()
-    return self:GetGroupByName(self.RESERVED_GROUP_NAMES.WAY_BACK)
+    return self:GetGroupByID(self.SYSTEM_GROUP_IDS.WAY_BACK)
+end
+
+---@param pinData pinData
+---@return UUID?
+function Groups:SetWayBackPin(pinData)
+    assert(pinData, "Groups:SetWayBackPin: pinData is nil")
+    local group = self:GetWayBackGroup()
+    if not group then return nil end
+
+    local _, pinID = group:AddPin(pinData)
+    return pinID
 end
 
 ---@param pinID UUID

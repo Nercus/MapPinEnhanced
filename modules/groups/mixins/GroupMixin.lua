@@ -8,7 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string|number? the icon of the group, used to display the group on the map
 ---@field order number? the order of the group in the tracker, higher numbers are earlier in the list
 ---@field hidden boolean? true if this group is stored away and has no active map pins
----@field groupType "ungrouped"? protected system group type
+---@field groupType "ungrouped"|"way-back"? protected system group type
 ---@field trackingMode GroupTrackingMode? controls how the next tracked pin is selected
 
 ---@class ArchivedPinData
@@ -27,7 +27,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field icon string|number?
 ---@field order number
 ---@field hidden boolean
----@field groupType "ungrouped"|nil
+---@field groupType "ungrouped"|"way-back"|nil
 ---@field protected boolean
 ---@field count number active pin count
 ---@field trackingMode GroupTrackingMode
@@ -175,9 +175,9 @@ function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
     self.source = groupInfo.source
     self.icon = groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark"
     self.order = groupInfo.order or self.order or GetTime()
-    self.hidden = groupInfo.hidden and true or false
-    self.groupType = groupInfo.groupType
+    self.groupType = Groups:GetSystemGroupType(self.groupID)
     self.protected = self.groupType ~= nil
+    self.hidden = not self.protected and groupInfo.hidden and true or false
     if self.protected then
         self.trackingMode = Groups.TRACKING_MODE_NEAREST
     else
@@ -274,6 +274,12 @@ end
 function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, skipCallbacks)
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
 
+    local replacedWayBackPin = false
+    if self.groupType == "way-back" and self:GetTotalPinCount() > 0 then
+        self:ClearGroup(true, true)
+        replacedWayBackPin = true
+    end
+
     if self.hidden then
         local archivePinData = pinData
         if overridePinID then
@@ -308,6 +314,9 @@ function MapPinEnhancedGroupMixin:AddPin(pinData, overridePinID, skipPersist, sk
     end
     if not skipCallbacks then
         MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
+        if replacedWayBackPin then
+            MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+        end
     end
     return pin, pin.pinID
 end
@@ -545,8 +554,10 @@ function MapPinEnhancedGroupMixin:ShowGroup()
     return true
 end
 
+---@param skipPersist boolean?
+---@param skipCallbacks boolean?
 ---@return boolean
-function MapPinEnhancedGroupMixin:ClearGroup()
+function MapPinEnhancedGroupMixin:ClearGroup(skipPersist, skipCallbacks)
     if not self.protected then return false end
 
     for pinID in pairs(self.pins) do
@@ -558,9 +569,13 @@ function MapPinEnhancedGroupMixin:ClearGroup()
     self.count = 0
     self.limitWarningShown = false
 
-    self:TouchOrder()
-    Groups:PersistGroup(self)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    if not skipPersist then
+        self:TouchOrder()
+        Groups:PersistGroup(self)
+    end
+    if not skipCallbacks then
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    end
     return true
 end
 

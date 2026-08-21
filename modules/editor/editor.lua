@@ -18,7 +18,7 @@ end
 ---@param group MapPinEnhancedGroupMixin
 ---@return boolean
 function Editor:ShouldShowSystemGroup(group)
-    return group:IsProtected()
+    return group.groupType == "ungrouped"
 end
 
 ---@param value string|number|nil
@@ -158,6 +158,7 @@ end
 ---@param group MapPinEnhancedGroupMixin
 function Editor:EditGroup(group)
     assert(type(group) == "table" and group.classification == "group", "Editor:EditGroup requires a group")
+    if not self:ShouldShowGroup(group) and not self:ShouldShowSystemGroup(group) then return end
     local frame = self:GetEditorFrame()
     frame:ShowFrame()
     frame:SelectGroup(group)

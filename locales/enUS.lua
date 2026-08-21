@@ -175,7 +175,8 @@ L["Unable to determine your current position on the map."] = "Unable to determin
 L["%s's Position"] = "%s's Position"
 L["You Are in an Instance or a Zone Where the Map Is Not Available"] =
 "You Are in an Instance or a Zone Where the Map Is Not Available"
-L["My Way Back group not found. Please create it first."] = "My Way Back group not found. Please create it first."
+L["My Way Back is unavailable on the map you are on right now."] =
+"My Way Back is unavailable on the map you are on right now."
 
 ------------------------------ Options ------------------------------
 L["General"] = "General"

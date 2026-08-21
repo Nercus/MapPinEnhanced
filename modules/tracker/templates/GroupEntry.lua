@@ -91,10 +91,10 @@ function MapPinEnhancedTrackerGroupEntryMixin:Reset()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:SetupDeleteOrClearButton()
-    local isUngrouped = self.group.groupType == "ungrouped"
-    local label = isUngrouped and L["Clear Group"] or L["Delete Group"]
+    local isProtected = self.group:IsProtected()
+    local label = isProtected and L["Clear Group"] or L["Delete Group"]
     self.actionButtons.clearButton:SetScript("OnClick", function()
-        if isUngrouped then
+        if isProtected then
             self:ConfirmClearGroup()
         else
             self:ConfirmDeleteGroup()
@@ -249,6 +249,7 @@ end
 
 function MapPinEnhancedTrackerGroupEntryMixin:AddEditGroupMenuAction(menu)
     local group = self.group
+    if group.groupType == "way-back" then return end
     table.insert(menu, {
         type = "button",
         label = MapPinEnhanced:Iconize("edit", L["Edit Group"]),

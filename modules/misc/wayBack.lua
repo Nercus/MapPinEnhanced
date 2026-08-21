@@ -11,13 +11,14 @@ MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
         return
     end
     local x, y = C_Map.GetPlayerMapPosition(currentMapID, "player"):GetXY()
-    local wayBackGroup = Groups:GetWayBackGroup()
-    assert(wayBackGroup, L["My Way Back group not found. Please create it first."])
-    wayBackGroup:AddPin({
+    local pinID = Groups:SetWayBackPin({
         title = L["My Way Back"],
         mapID = currentMapID,
         x = x,
         y = y,
         setTracked = false,
     })
+    if not pinID then
+        MapPinEnhanced:Print(L["My Way Back is unavailable on the map you are on right now."])
+    end
 end, L["Create a Pin at Your Current Location"])

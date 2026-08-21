@@ -17,6 +17,9 @@ local function ValidateGroupInfo(groupInfo, apiName)
     if not C_AddOns.IsAddOnLoaded(groupInfo.source) then
         error(apiName .. ": source addon is not loaded")
     end
+    if groupInfo.groupType ~= nil or Groups:GetSystemGroupType(groupInfo.groupID) ~= nil then
+        error(apiName .. ": system groups cannot be registered through the public API")
+    end
     if Groups:GetGroupByName(groupInfo.name) then
         error(apiName .. ": a group with this name already exists")
     end
@@ -47,7 +50,7 @@ end)
 
 MapPinEnhanced:RegisterGlobalAPI("DeletePin", function(pinID)
     for group in Groups:EnumerateGroups() do
-        if group:RemovePin(pinID) then
+        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:RemovePin(pinID) then
             return true
         end
     end
@@ -56,7 +59,7 @@ end)
 
 MapPinEnhanced:RegisterGlobalAPI("MarkPinReached", function(pinID)
     for group in Groups:EnumerateGroups() do
-        if group:MarkPinReached(pinID) then
+        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:MarkPinReached(pinID) then
             return true
         end
     end
