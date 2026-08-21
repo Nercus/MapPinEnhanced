@@ -6,7 +6,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field name string the name of the group
 ---@field source string the name of the addon which is registering the group, used to identify the group.
 ---@field icon string|number? the icon of the group, used to display the group on the map
----@field order number? the order of the group in the tracker, lower numbers are higher in the list
+---@field order number? the order of the group in the tracker, higher numbers are earlier in the list
 ---@field hidden boolean? true if this group is stored away and has no active map pins
 ---@field groupType "ungrouped"? protected system group type
 ---@field trackingMode GroupTrackingMode? controls how the next tracked pin is selected

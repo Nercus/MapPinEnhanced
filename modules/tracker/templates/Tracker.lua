@@ -55,13 +55,7 @@ local function GroupSortComparator(groupnode1, groupnode2)
     if group1.classification ~= "group" or group2.classification ~= "group" then
         return false
     end
-    local order1 = group1.order or 0
-    local order2 = group2.order or 0
-
-    if order1 ~= order2 then
-        return order1 > order2
-    end
-    return (group1.name or "") < (group2.name or "")
+    return Groups:IsGroupBefore(group1, group2)
 end
 
 ---@param pinNode1 TreeNodeMixin

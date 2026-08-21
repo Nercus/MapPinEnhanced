@@ -84,6 +84,18 @@ function Groups:GetAllGroups()
     return groups
 end
 
+---@param group1 MapPinEnhancedGroupMixin
+---@param group2 MapPinEnhancedGroupMixin
+---@return boolean
+function Groups:IsGroupBefore(group1, group2)
+    local order1 = group1:GetOrder() or 0
+    local order2 = group2:GetOrder() or 0
+    if order1 ~= order2 then
+        return order1 > order2
+    end
+    return (group1:GetName() or "") < (group2:GetName() or "")
+end
+
 ---@param groupInfo GroupInfo
 ---@return MapPinEnhancedGroupMixin?
 function Groups:RegisterGroup(groupInfo)
@@ -193,15 +205,11 @@ end
 function Groups:GetNextTrackableGroup(excludedGroup)
     ---@type MapPinEnhancedGroupMixin?
     local bestGroup
-    ---@type number?
-    local bestOrder
 
     for group in self:EnumerateGroups() do
         if group ~= excludedGroup and not group:IsHidden() and group:GetPinCount() > 0 then
-            local order = group:GetOrder() or 0
-            if not bestGroup or order > bestOrder then
+            if not bestGroup or self:IsGroupBefore(group, bestGroup) then
                 bestGroup = group
-                bestOrder = order
             end
         end
     end

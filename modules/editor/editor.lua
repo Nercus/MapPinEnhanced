@@ -21,15 +21,6 @@ function Editor:ShouldShowSystemGroup(group)
     return group:IsProtected()
 end
 
----@param group1 MapPinEnhancedGroupMixin
----@param group2 MapPinEnhancedGroupMixin
----@return boolean
-function Editor:IsGroupBefore(group1, group2)
-    local order1, order2 = group1.order or 0, group2.order or 0
-    if order1 ~= order2 then return order1 > order2 end
-    return (group1.name or "") < (group2.name or "")
-end
-
 ---@param value string|number|nil
 ---@return number?
 function Editor:ParsePercent(value)

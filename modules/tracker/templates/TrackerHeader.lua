@@ -17,16 +17,6 @@ local L = MapPinEnhanced.L
 ---@field icon MapPinEnhancedIconMixin
 MapPinEnhancedTrackerHeaderMixin = {}
 
-local function SortGroupsByOrder(group1, group2)
-    local order1 = group1:GetOrder() or 0
-    local order2 = group2:GetOrder() or 0
-
-    if order1 ~= order2 then
-        return order1 > order2
-    end
-    return (group1:GetName() or "") < (group2:GetName() or "")
-end
-
 function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
     local menu = {
         {
@@ -45,9 +35,7 @@ function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
         end
     end
 
-    table.sort(hiddenGroups, SortGroupsByOrder)
-
-
+    table.sort(hiddenGroups, function(group1, group2) return Groups:IsGroupBefore(group1, group2) end)
 
     if #hiddenGroups == 0 then
         return {
