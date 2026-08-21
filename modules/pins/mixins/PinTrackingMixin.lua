@@ -6,43 +6,69 @@ MapPinEnhancedPinTrackingMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 
-function MapPinEnhancedPinTrackingMixin:Track()
+---@param pin MapPinEnhancedPinMixin
+---@param persist boolean
+local function Track(pin, persist)
     local trackedPin = Pins:GetTrackedPin()
-    if trackedPin and trackedPin ~= self then
-        trackedPin:Untrack()
+    if trackedPin and trackedPin ~= pin then
+        if not persist and trackedPin.group == pin.group then
+            trackedPin:UntrackAfterGroupCommit()
+        else
+            trackedPin:Untrack()
+        end
     end
 
-    self.worldmapPin:SetTracked()
-    self.minimapPin:SetTracked()
+    pin.worldmapPin:SetTracked()
+    pin.minimapPin:SetTracked()
 
-    self.isTracked = true
-    self:PersistPin()
+    pin.isTracked = true
+    if persist then pin:PersistPin() end
 
-    Pins:SetTrackedPin(self)
-    if self.group then
-        self.group:SetTrackingCursorPin(self)
+    Pins:SetTrackedPin(pin)
+    if pin.group then
+        pin.group:SetTrackingCursorPin(pin)
     end
 
-    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, true)
-    MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, self.pinID, true)
+    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", pin.pinID, true)
+    MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, pin.pinID, true)
 end
 
-function MapPinEnhancedPinTrackingMixin:Untrack()
+function MapPinEnhancedPinTrackingMixin:Track()
+    Track(self, true)
+end
+
+-- The group already requested a save, so do not request another one here.
+function MapPinEnhancedPinTrackingMixin:TrackAfterGroupCommit()
+    Track(self, false)
+end
+
+---@param pin MapPinEnhancedPinMixin
+---@param persist boolean
+local function Untrack(pin, persist)
     local trackedPin = Pins:GetTrackedPin()
-    if trackedPin and trackedPin == self then
+    if trackedPin and trackedPin == pin then
         Pins:SetTrackedPin(nil)
     end
 
-    self.worldmapPin:SetUntracked()
-    self.minimapPin:SetUntracked()
+    pin.worldmapPin:SetUntracked()
+    pin.minimapPin:SetUntracked()
 
-    self.isTracked = false
-    self:PersistPin()
+    pin.isTracked = false
+    if persist then pin:PersistPin() end
 
-    MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
+    MapPinEnhanced:DisableContinuousDistanceCheck(pin.pinData.mapID, pin.pinData.x, pin.pinData.y)
 
-    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", self.pinID, false)
-    MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, self.pinID, false)
+    MapPinEnhanced:FireCallback("PIN_UPDATED_TRACKING", pin.pinID, false)
+    MapPinEnhanced:FireCallback("PIN_TRACKING_CHANGED", nil, pin.pinID, false)
+end
+
+function MapPinEnhancedPinTrackingMixin:Untrack()
+    Untrack(self, true)
+end
+
+-- The group already requested a save, so do not request another one here.
+function MapPinEnhancedPinTrackingMixin:UntrackAfterGroupCommit()
+    Untrack(self, false)
 end
 
 function MapPinEnhancedPinTrackingMixin:ToggleTracked()

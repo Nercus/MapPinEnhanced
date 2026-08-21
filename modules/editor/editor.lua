@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Editor
 ---@field EditGroup fun(self: Editor, group: MapPinEnhancedGroupMixin)
 local Editor = MapPinEnhanced:GetModule("Editor")
-local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 
 Editor.DEFAULT_GROUP_ICON = "Interface\\Icons\\INV_Misc_QuestionMark"
@@ -38,32 +37,27 @@ function Editor:FormatPercent(value)
 end
 
 ---@param pinNode MapPinEnhancedEditorPinNodeData
----@return SaveablePinData
+---@return pinData
 function Editor:GetPinData(pinNode)
-    return pinNode.pin and pinNode.pin:GetPinData() or pinNode.archivedPin.data
+    if pinNode.pin then return pinNode.pin:GetPinData() end
+    local archivedPin = pinNode.group:GetArchivedPinByID(pinNode.pinID)
+    return archivedPin and archivedPin.data or pinNode.pinData
 end
 
 ---@param group MapPinEnhancedGroupMixin
 ---@return MapPinEnhancedEditorPinNodeData[]
 function Editor:GetSortedPins(group)
+    ---@type MapPinEnhancedEditorPinNodeData[]
     local nodes = {}
-    for pinID, pin in group:EnumeratePins() do
+    for _, entry in ipairs(group:GetPinEntries()) do
         table.insert(nodes, {
             classification = "editorPin",
             group = group,
-            pin = pin,
-            pinID = pinID,
-            order = group:GetPinOrder(pinID),
-        })
-    end
-    for pinID, archivedPin in group:EnumerateArchivedPins() do
-        table.insert(nodes, {
-            classification = "editorPin",
-            group = group,
-            pinID = pinID,
-            archivedPin = archivedPin,
-            archiveState = archivedPin.state,
-            order = archivedPin.order or 0,
+            pin = entry.pin,
+            pinID = entry.pinID,
+            pinData = entry.data,
+            archiveState = entry.state ~= "active" and entry.state or nil,
+            order = entry.order,
         })
     end
     table.sort(nodes, function(a, b)
@@ -76,18 +70,7 @@ end
 ---@param group MapPinEnhancedGroupMixin
 ---@param pinIDs UUID[]
 function Editor:ApplyPinOrder(group, pinIDs)
-    local count = #pinIDs
-    for index, pinID in ipairs(pinIDs) do
-        local order = count - index + 1
-        local archivedPin = group:GetArchivedPinByID(pinID)
-        if archivedPin then
-            archivedPin.order = order
-            group.pinOrder[pinID] = nil
-        else
-            group:SetPinOrder(pinID, order, true)
-        end
-    end
-    Groups:PersistGroup(group)
+    group:ReorderPins(pinIDs)
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -99,24 +82,7 @@ end
 ---@param pinNode MapPinEnhancedEditorPinNodeData
 ---@return UUID?
 function Editor:DuplicatePin(pinNode)
-    local data = CopyTable(self:GetPinData(pinNode))
-    data.pinID = nil
-
-    local _, duplicatePinID = pinNode.group:AddPin(data)
-    if not duplicatePinID then return nil end
-
-    local ids = {}
-    for _, node in ipairs(self:GetSortedPins(pinNode.group)) do
-        if node.pinID ~= duplicatePinID then
-            table.insert(ids, node.pinID)
-            if node.pinID == pinNode.pinID then
-                table.insert(ids, duplicatePinID)
-            end
-        end
-    end
-    self:ApplyPinOrder(pinNode.group, ids)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, pinNode.group)
-    return duplicatePinID
+    return pinNode.group:DuplicatePin(pinNode.pinID)
 end
 
 ---@param sourceGroup MapPinEnhancedGroupMixin
@@ -124,23 +90,7 @@ end
 ---@param targetGroup MapPinEnhancedGroupMixin
 ---@return boolean
 function Editor:MovePinToGroup(sourceGroup, pinID, targetGroup)
-    if sourceGroup == targetGroup then return false end
-    local pin = sourceGroup:GetPinByID(pinID)
-    local archivedPin = sourceGroup:GetArchivedPinByID(pinID)
-    local data = pin and CopyTable(pin:GetSaveableData()) or
-        (archivedPin and CopyTable(archivedPin.data) or nil)
-    if not data then return false end
-
-    self:RemovePinCompletely(sourceGroup, pinID)
-    local targetNodes = self:GetSortedPins(targetGroup)
-    targetGroup:AddPin(data, pinID, true, true)
-    local ids = {}
-    for _, node in ipairs(targetNodes) do table.insert(ids, node.pinID) end
-    table.insert(ids, pinID)
-    self:ApplyPinOrder(targetGroup, ids)
-    Groups:PersistGroup(targetGroup)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, targetGroup)
-    return true
+    return sourceGroup:MovePinToGroup(pinID, targetGroup)
 end
 
 function Editor:GetEditorFrame()

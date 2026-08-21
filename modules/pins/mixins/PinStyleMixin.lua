@@ -25,7 +25,9 @@ function MapPinEnhancedPinStyleMixin:SetColor(color)
     self.pinData.usesAtlas = nil
     self:PersistPin()
 
-    MapPinEnhanced:FireCallback("PIN_UPDATED_COLOR", self.pinID, color)
+    if not self.suppressChangePublication then
+        MapPinEnhanced:FireCallback("PIN_UPDATED_COLOR", self.pinID, color)
+    end
 end
 
 function MapPinEnhancedPinStyleMixin:HasColor(color)
@@ -51,5 +53,7 @@ function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)
     self.worldmapPin:SetIconTexture(icon, usesAtlas)
     self.minimapPin:SetIconTexture(icon, usesAtlas)
     self:PersistPin()
-    MapPinEnhanced:FireCallback("PIN_UPDATED_ICON", self.pinID, icon, usesAtlas)
+    if not self.suppressChangePublication then
+        MapPinEnhanced:FireCallback("PIN_UPDATED_ICON", self.pinID, icon, usesAtlas)
+    end
 end

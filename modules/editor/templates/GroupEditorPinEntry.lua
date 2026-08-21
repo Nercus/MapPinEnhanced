@@ -1,6 +1,5 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Editor = MapPinEnhanced:GetModule("Editor")
@@ -27,11 +26,23 @@ local L = MapPinEnhanced.L
 ---@field dropLine Texture
 MapPinEnhancedEditorGroupEditorPinEntryMixin = {}
 
+---@class MapPinEnhancedEditorMapEntry
+---@field mapID number
+---@field name string
+---@field search string
+
 local COLOR_PATTERN = "|T%s\\assets\\shared\\ColorpickerBody.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
-local mapCache, mapNames, mapOptions
+local mapCacheReady = false
+---@type table<number, MapPinEnhancedEditorMapEntry>
+local mapCache = {}
+---@type MapPinEnhancedEditorMapEntry[]
+local mapNames = {}
+---@type AutocompleteOption[]
+local mapOptions = {}
 
 local function EnsureMapCache()
-    if mapCache then return end
+    if mapCacheReady then return end
+    mapCacheReady = true
     mapCache, mapNames, mapOptions = {}, {}, {}
     -- UI map IDs are sparse. GetMapInfo is cheap and this runs once, lazily on first editor use.
     for mapID = 1, 5000 do
@@ -61,6 +72,7 @@ local function FindExactMap(text)
     local mapID = tonumber(text:match("^%s*(%d+)%s*$") or text:match("%((%d+)%)%s*$"))
     if mapID and mapCache[mapID] then return mapID end
     local lowered = string.lower(strtrim(text))
+    ---@type number?
     local match
     for _, entry in ipairs(mapNames) do
         if string.lower(entry.name) == lowered then
@@ -69,16 +81,6 @@ local function FindExactMap(text)
         end
     end
     return match
-end
-
----@param node MapPinEnhancedEditorPinNodeData
----@param callback fun(pinData: SaveablePinData)
-local function UpdateArchived(node, callback)
-    if node.pin then return false end
-    callback(node.archivedPin.data)
-    Groups:PersistGroup(node.group)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, node.group)
-    return true
 end
 
 ---@param editBox MapPinEnhancedEditorCommittedInput
@@ -133,24 +135,12 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetColor(color)
-    if self.pinNode.pin then
-        self.pinNode.pin:SetColor(color)
-    else
-        UpdateArchived(self.pinNode, function(data)
-            data.color, data.texture, data.usesAtlas = color, nil, nil
-        end)
-    end
+    self.pinNode.group:SetPinColor(self.pinNode.pinID, color)
     self:RefreshPreview()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetIcon(icon)
-    if self.pinNode.pin then
-        self.pinNode.pin:SetIcon(icon.path, icon.usesAtlas)
-    else
-        UpdateArchived(self.pinNode, function(data)
-            data.texture, data.usesAtlas, data.color = icon.path, icon.usesAtlas, nil
-        end)
-    end
+    self.pinNode.group:SetPinIcon(self.pinNode.pinID, icon.path, icon.usesAtlas)
     self:RefreshPreview()
 end
 
@@ -231,13 +221,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
         return false
     end
     if not x or not y then return false end
-    if node.pin then
-        node.pin:SetPinPosition(mapID, x, y)
-    else
-        UpdateArchived(node, function(pinData)
-            pinData.mapID, pinData.x, pinData.y = mapID, x, y
-        end)
-    end
+    node.group:SetPinPosition(node.pinID, mapID, x, y)
     self.mapField.child.committedValue = GetMapDisplay(mapID)
     self.mapField.child.committedMapID = mapID
     self.xField.child.committedValue, self.yField.child.committedValue =
@@ -255,14 +239,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
 
     CommitTextBox(self.nameField.child, data.title or L["Map Pin"], function(value)
         if value == "" then value = L["Map Pin"] end
-        if pinNode.pin then
-            pinNode.pin:SetTitle(value)
-        else
-            UpdateArchived(pinNode, function(pinData)
-                pinData.title = value
-                if pinData.tooltip then pinData.tooltip.title = value end
-            end)
-        end
+        pinNode.group:SetPinTitle(pinNode.pinID, value)
         return value
     end)
 
@@ -307,13 +284,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
         if button == "LeftButton" then self:ShowStyleMenu() end
         if button == "MiddleButton" then
-            if pinNode.pin then
-                pinNode.pin:SetLock(locked)
-            else
-                UpdateArchived(pinNode, function(pinData)
-                    pinData.lock = locked
-                end)
-            end
+            local pinData = Editor:GetPinData(pinNode)
+            pinNode.group:SetPinLock(pinNode.pinID, not pinData.lock)
             self:RefreshPreview()
         end
     end)
@@ -349,6 +321,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.dragHandle:SetScript("OnDragStop", function() editor:StopPinDrag() end)
 end
 
+---@param placement "before"|"after"
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetDropTarget(placement)
     self.dropLine:ClearAllPoints()
     if placement == "before" then
@@ -365,6 +338,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ClearDropTarget()
     self.dropLine:Hide()
 end
 
+---@return "before"|"after"
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:GetDropPlacement()
     local _, cursorY = GetCursorPosition()
     cursorY = cursorY / self:GetEffectiveScale()

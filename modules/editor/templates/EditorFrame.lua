@@ -9,7 +9,7 @@ local L = MapPinEnhanced.L
 ---@field group MapPinEnhancedGroupMixin
 ---@field pin MapPinEnhancedPinMixin?
 ---@field pinID UUID
----@field archivedPin ArchivedPinData?
+---@field pinData SaveablePinData
 ---@field archiveState "reached"|"hidden"|nil
 ---@field order number
 

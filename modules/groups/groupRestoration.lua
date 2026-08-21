@@ -24,17 +24,7 @@ function Groups:RestoreGroup(groupData)
 
     group = group or self:GetObjectPool():Acquire()
     group:ApplyGroupInfo(groupData)
-
-    for pinID, archivedPin in pairs(groupData.pinArchive or {}) do
-        group.pinArchive[pinID] = CopyTable(archivedPin)
-    end
-
-    if not group:IsHidden() then
-        for pinID, order in pairs(groupData.pinOrder or {}) do
-            group:SetPinOrder(pinID, order, true)
-        end
-        group:AddMultiplePins(groupData.pins or {}, true)
-    end
+    group:RestorePinState(groupData)
 
     return group
 end
@@ -42,6 +32,7 @@ end
 function Groups:RestoreAllGroups()
     local groupsData = MapPinEnhanced:GetVar("groups")
     if type(groupsData) ~= "table" then return end
+    ---@cast groupsData table<UUID, SaveableGroupData>
 
     for _, groupData in pairs(groupsData) do
         if type(groupData) == "table" then
@@ -67,10 +58,7 @@ function Groups:RestoreDeferredExternalGroups(source)
     self.deferredExternalGroups[source] = nil
 
     for _, groupData in pairs(groupsData) do
-        local group = self:RestoreGroup(groupData)
-        if group then
-            MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-        end
+        self:RestoreGroup(groupData)
     end
 end
 

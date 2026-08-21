@@ -15,7 +15,9 @@ function MapPinEnhancedPinLockMixin:SetLock(lock)
     self.worldmapPin:SetLock(lock)
     self.minimapPin:SetLock(lock)
 
-    MapPinEnhanced:FireCallback("PIN_UPDATED_LOCK", self.pinID, lock)
+    if not self.suppressChangePublication then
+        MapPinEnhanced:FireCallback("PIN_UPDATED_LOCK", self.pinID, lock)
+    end
 end
 
 ---@return boolean

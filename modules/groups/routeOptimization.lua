@@ -21,13 +21,12 @@ local LIMITED_TWO_OPT_IMPROVEMENTS = 64
 ---@field mapID number?
 ---@field x number?
 ---@field y number?
----@field pin MapPinEnhancedPinMixin?
----@field archivedPin ArchivedPinData?
----@field archiveState "reached"|"hidden"|nil
+---@field state "active"|"reached"|"hidden"
 
 ---@class MapPinEnhancedRouteSnapshot
 ---@field group MapPinEnhancedGroupMixin
 ---@field groupID UUID
+---@field revision number
 ---@field entries MapPinEnhancedRouteSnapshotEntry[]
 
 ---@class MapPinEnhancedRouteNode
@@ -66,7 +65,10 @@ local function BuildNearestNeighbourPath(nodes)
 
     for pathIndex = 2, #nodes do
         local previous = path[pathIndex - 1]
-        local bestIndex, bestDistance
+        ---@type integer?
+        local bestIndex
+        ---@type number?
+        local bestDistance
         for index = 2, #nodes do
             if not used[index] then
                 local distance = Distance(previous, nodes[index])
@@ -126,55 +128,20 @@ local function OptimizeCluster(nodes)
 end
 
 ---@param group MapPinEnhancedGroupMixin
----@param entry MapPinEnhancedRouteSnapshotEntry
----@return boolean
-local function IsSnapshotEntryCurrent(group, entry)
-    if entry.pin then
-        if group:GetPinByID(entry.pinID) ~= entry.pin then return false end
-        if group:GetArchivedPinByID(entry.pinID) then return false end
-        if (group.pinOrder[entry.pinID] or 0) ~= entry.order then return false end
-
-        local data = entry.pin:GetPinData()
-        return data ~= nil and data.mapID == entry.mapID and data.x == entry.x and data.y == entry.y and
-            (data.title or "") == entry.title
-    end
-
-    local archivedPin = assert(entry.archivedPin)
-    return group:GetArchivedPinByID(entry.pinID) == archivedPin and
-        not group:GetPinByID(entry.pinID) and archivedPin.state == entry.archiveState and
-        (archivedPin.order or 0) == entry.order and archivedPin.data.mapID == entry.mapID and
-        archivedPin.data.x == entry.x and archivedPin.data.y == entry.y and
-        (archivedPin.data.title or "") == entry.title
-end
-
----@param group MapPinEnhancedGroupMixin
 ---@return MapPinEnhancedRouteSnapshot
 local function BuildSnapshot(group)
     ---@type MapPinEnhancedRouteSnapshotEntry[]
     local entries = {}
-    for pinID, pin in group:EnumeratePins() do
-        local data = pin:GetPinData()
+    for _, pinEntry in ipairs(group:GetPinEntries()) do
+        local data = pinEntry.data
         entries[#entries + 1] = {
-            pinID = pinID,
-            order = group.pinOrder[pinID] or 0,
+            pinID = pinEntry.pinID,
+            order = pinEntry.order,
             title = data.title or "",
             mapID = data.mapID,
             x = data.x,
             y = data.y,
-            pin = pin,
-        }
-    end
-    for pinID, archivedPin in group:EnumerateArchivedPins() do
-        local data = archivedPin.data
-        entries[#entries + 1] = {
-            pinID = pinID,
-            order = archivedPin.order or 0,
-            title = data.title or "",
-            mapID = data.mapID,
-            x = data.x,
-            y = data.y,
-            archivedPin = archivedPin,
-            archiveState = archivedPin.state,
+            state = pinEntry.state,
         }
     end
     table.sort(entries, function(left, right)
@@ -186,6 +153,7 @@ local function BuildSnapshot(group)
     return {
         group = group,
         groupID = assert(group:GetGroupID()),
+        revision = group:GetPinStateRevision(),
         entries = entries,
     }
 end
@@ -234,12 +202,22 @@ local function IsSnapshotCurrent(groups, snapshot)
     if group:GetGroupID() ~= snapshot.groupID or groups:GetGroupByID(snapshot.groupID) ~= group then
         return false
     end
+    if group:GetPinStateRevision() ~= snapshot.revision then return false end
     if group:GetTotalPinCount() ~= #snapshot.entries then return false end
 
     -- Optimization yields between instance clusters. Only apply if every field
     -- that shaped the route still belongs to the same registered group state.
-    for _, entry in ipairs(snapshot.entries) do
-        if not IsSnapshotEntryCurrent(group, entry) then return false end
+    ---@type table<UUID, MapPinEnhancedGroupPinEntry>
+    local currentByID = {}
+    for _, entry in ipairs(group:GetPinEntries()) do currentByID[entry.pinID] = entry end
+    for _, snapshotEntry in ipairs(snapshot.entries) do
+        local current = currentByID[snapshotEntry.pinID]
+        local data = current and current.data or nil
+        if not current or current.state ~= snapshotEntry.state or current.order ~= snapshotEntry.order or
+            not data or data.mapID ~= snapshotEntry.mapID or data.x ~= snapshotEntry.x or
+            data.y ~= snapshotEntry.y or (data.title or "") ~= snapshotEntry.title then
+            return false
+        end
     end
     return true
 end
@@ -247,19 +225,8 @@ end
 ---@param group MapPinEnhancedGroupMixin
 ---@param pinIDs UUID[]
 local function ApplyOptimizedOrder(group, pinIDs)
-    local count = #pinIDs
-    for index, pinID in ipairs(pinIDs) do
-        local order = count - index + 1
-        local archivedPin = group:GetArchivedPinByID(pinID)
-        if archivedPin then
-            archivedPin.order = order
-            group.pinOrder[pinID] = nil
-        else
-            group.pinOrder[pinID] = order
-        end
-    end
-    Groups:PersistGroup(group)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+    assert(group:ReorderPins(pinIDs),
+        "Groups:OptimizeGroupRoute: optimized order does not contain every retained pin")
 end
 
 ---@param group MapPinEnhancedGroupMixin

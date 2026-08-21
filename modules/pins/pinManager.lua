@@ -24,13 +24,14 @@ pinsPool.capacity = 1000 -- only allow 1000 pins at the same time
 ---@param initPinData pinData
 ---@param overridePinID UUID?
 ---@param group MapPinEnhancedGroupMixin?
+---@param deferCommit boolean? true while the group is still adding the pin
 ---@return MapPinEnhancedPinMixin
-function Pins:CreatePin(initPinData, overridePinID, group)
+function Pins:CreatePin(initPinData, overridePinID, group, deferCommit)
     local pin = pinsPool:Acquire()
     pin:OverridePinID(overridePinID or MapPinEnhanced:GenerateUUID("pin"))
     pin.group = group
     pin.pinData = initPinData
-    pin:SetPinData(initPinData)
+    pin:SetPinData(initPinData, deferCommit)
     return pin
 end
 

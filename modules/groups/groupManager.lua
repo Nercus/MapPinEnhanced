@@ -265,8 +265,12 @@ end
 function Groups:TrackNextPinAfterGroup(group, cursorOrder)
     assert(group, "Groups:TrackNextPinAfterGroup: group is nil")
 
-    local nextPin = group:TrackNextTrackablePin(cursorOrder)
-    if nextPin then return nextPin end
+    local nextPin = group:GetNextTrackablePin(cursorOrder)
+    if nextPin then
+        -- The group was already saved, so tracking this pin must not save it again.
+        nextPin:TrackAfterGroupCommit()
+        return nextPin
+    end
 
     local _, crossGroupPin = self:GetNextTrackableGroup(group)
     if crossGroupPin then
@@ -301,22 +305,8 @@ function Groups:CreateGroupFromUngrouped(name)
     })
     if not targetGroup then return nil end
 
-    for pinID, order in pairs(ungroupedData.pinOrder or {}) do
-        targetGroup:SetPinOrder(pinID, order, true)
-    end
-
-    for pinID, archivedPin in pairs(ungroupedData.pinArchive or {}) do
-        targetGroup.pinArchive[pinID] = CopyTable(archivedPin)
-    end
-
     ungroupedGroup:ClearGroup()
-
-    if #(ungroupedData.pins or {}) > 0 then
-        targetGroup:AddMultiplePins(ungroupedData.pins)
-    else
-        self:PersistGroup(targetGroup)
-        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, targetGroup)
-    end
+    targetGroup:RestorePinState(ungroupedData)
 
     return targetGroup
 end

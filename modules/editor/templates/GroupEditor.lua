@@ -74,6 +74,7 @@ function MapPinEnhancedEditorGroupEditorMixin:SetGroup(group, focusName)
 end
 
 function MapPinEnhancedEditorGroupEditorMixin:IsEditing()
+    ---@type ScriptRegion?
     local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
     while focused do
         if focused == self then return true end
@@ -108,7 +109,11 @@ end
 
 function MapPinEnhancedEditorGroupEditorMixin:UpdateDrag()
     self:AutoScrollForDrag()
-    local target, placement
+    ---@type MapPinEnhancedEditorPinNodeData?
+    local target
+    ---@type "before"|"after"|nil
+    local placement
+    ---@param frame MapPinEnhancedEditorGroupEditorPinEntryTemplate
     self.content.scrollBox:ForEachFrame(function(frame)
         local valid = not target and frame:IsMouseOver() and self.editor.draggedPinNode and
             frame.pinNode.pinID ~= self.editor.draggedPinNode.pinID
@@ -136,5 +141,4 @@ function MapPinEnhancedEditorGroupEditorMixin:FinishPinDrop()
         end
     end
     Editor:ApplyPinOrder(target.group, ids)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, target.group)
 end

@@ -143,8 +143,8 @@ function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
 end
 
 ---@param group MapPinEnhancedGroupMixin
----@param pin MapPinEnhancedPinMixin
-function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
+---@param pinID UUID
+function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pinID)
     if not self:IsShown() then return end
 
     ---@type TreeNodeMixin?
@@ -159,7 +159,7 @@ function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pin)
     local pinNode = self.dataProvider:FindElementDataByPredicate(function(node)
         ---@type MapPinEnhancedPinMixin
         local nodeData = node:GetData()
-        return nodeData.classification == "pin" and nodeData.pinID == pin.pinID
+        return nodeData.classification == "pin" and nodeData.pinID == pinID
     end, TreeDataProviderConstants.IncludeCollapsed)
     if not pinNode then return end
 
@@ -294,10 +294,10 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         self:ScrollToTrackedPin()
     end)
 
-    MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pin)
+    MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pinID)
         ---@cast group MapPinEnhancedGroupMixin
-        ---@cast pin MapPinEnhancedPinMixin
-        self:RemovePinFromGroup(group, pin)
+        ---@cast pinID UUID
+        self:RemovePinFromGroup(group, pinID)
         self:ScrollToTrackedPin()
     end)
 

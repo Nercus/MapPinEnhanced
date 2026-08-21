@@ -107,10 +107,7 @@ function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupN
     })
     if not group then return false end
 
-    for pinID, order in pairs(pinOrder or {}) do
-        group:SetPinOrder(pinID, order, true)
-    end
-    group:AddMultiplePins(pins or {})
+    group:AddMultiplePins(pins or {}, false, pinOrder)
     return true
 end
 
