@@ -6,6 +6,12 @@ local L = MapPinEnhanced.L
 local SOURCE = "content"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Content
 
+---@return string
+local function GetContentIdentity()
+    local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
+    return string.format("content:%s:%s", tostring(trackableType), tostring(trackableID))
+end
+
 ---@param trackableType Enum.ContentTrackingType
 ---@param trackableID number
 ---@return string|number? texture
@@ -46,12 +52,8 @@ local function GetContentWaypointForMap(trackableType, trackableID, mapID)
 end
 
 local function RefreshContent()
-    if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        return
-    end
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
-    local identity = string.format("content:%s:%s", tostring(trackableType), tostring(trackableID))
+    local identity = GetContentIdentity()
     local hasTrackable = trackableType ~= nil and trackableID ~= nil
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(hasTrackable and function(candidateMapID)
         return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
@@ -69,7 +71,7 @@ local function RefreshContent()
             hasCoordinates = x ~= nil and y ~= nil,
             trackableID = trackableID,
             trackableType = trackableType,
-        }, RefreshContent)
+        })
         return
     end
     local title, description = C_SuperTrack.GetSuperTrackedItemName()
@@ -81,10 +83,10 @@ local function RefreshContent()
     }, ClearContent)
 end
 
-Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshContent)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshContent)
-MapPinEnhanced:RegisterEvent("CONTENT_TRACKING_UPDATE", RefreshContent)
-MapPinEnhanced:RegisterEvent("TRACKABLE_INFO_UPDATE", RefreshContent)
-MapPinEnhanced:RegisterEvent("TRACKING_TARGET_INFO_UPDATE", RefreshContent)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshContent)
+Providers:RegisterSuperTrackingProvider({
+    source = SOURCE,
+    superTrackingType = SUPER_TRACKING_TYPE,
+    getIdentity = GetContentIdentity,
+    refresh = RefreshContent,
+    events = { "CONTENT_TRACKING_UPDATE", "TRACKABLE_INFO_UPDATE", "TRACKING_TARGET_INFO_UPDATE" },
+})

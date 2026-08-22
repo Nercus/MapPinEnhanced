@@ -6,12 +6,13 @@ local L = MapPinEnhanced.L
 local SOURCE = "corpse"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Corpse
 
+---@return string
+local function GetCorpseIdentity()
+    return "corpse"
+end
+
 local function RefreshCorpse()
-    if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        return
-    end
-    local identity = "corpse"
+    local identity = GetCorpseIdentity()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
@@ -19,7 +20,7 @@ local function RefreshCorpse()
             hasCoordinates = x ~= nil and y ~= nil,
             isSuperTrackingCorpse = isTrackingCorpse,
             mapID = mapID,
-        }, RefreshCorpse)
+        })
         return
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
@@ -32,10 +33,10 @@ local function RefreshCorpse()
     })
 end
 
-Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshCorpse)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshCorpse)
-MapPinEnhanced:RegisterEvent("PLAYER_DEAD", RefreshCorpse)
-MapPinEnhanced:RegisterEvent("PLAYER_ALIVE", RefreshCorpse)
-MapPinEnhanced:RegisterEvent("PLAYER_UNGHOST", RefreshCorpse)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshCorpse)
+Providers:RegisterSuperTrackingProvider({
+    source = SOURCE,
+    superTrackingType = SUPER_TRACKING_TYPE,
+    getIdentity = GetCorpseIdentity,
+    refresh = RefreshCorpse,
+    events = { "PLAYER_DEAD", "PLAYER_ALIVE", "PLAYER_UNGHOST" },
+})

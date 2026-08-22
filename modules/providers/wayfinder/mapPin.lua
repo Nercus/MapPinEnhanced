@@ -6,6 +6,12 @@ local L = MapPinEnhanced.L
 local SOURCE = "mapPin"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.MapPin
 
+---@return string
+local function GetMapPinIdentity()
+    local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
+    return string.format("mapPin:%s:%s", tostring(pinType), tostring(typeID))
+end
+
 ---@type table<Enum.QuestClassification, string>
 local questClassificationAtlas = {
     [Enum.QuestClassification.Normal] = "QuestNormal",
@@ -105,12 +111,8 @@ local function ClearMapPin(_, identity, revision)
 end
 
 local function RefreshMapPin()
-    if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        return
-    end
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    local identity = string.format("mapPin:%s:%s", tostring(pinType), tostring(typeID))
+    local identity = GetMapPinIdentity()
     local hasPin = pinType ~= nil and typeID ~= nil
     local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(hasPin and function(candidateMapID)
         return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
@@ -120,7 +122,7 @@ local function RefreshMapPin()
             hasCoordinates = x ~= nil and y ~= nil,
             pinType = pinType,
             typeID = typeID,
-        }, RefreshMapPin)
+        })
         return
     end
     local title, texture, usesAtlas = GetMapPinDisplayInfo(pinType, typeID, mapID)
@@ -135,8 +137,10 @@ local function RefreshMapPin()
     }, ClearMapPin)
 end
 
-Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshMapPin)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshMapPin)
-MapPinEnhanced:RegisterEvent("NEIGHBORHOOD_MAP_DATA_UPDATED", RefreshMapPin)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshMapPin)
+Providers:RegisterSuperTrackingProvider({
+    source = SOURCE,
+    superTrackingType = SUPER_TRACKING_TYPE,
+    getIdentity = GetMapPinIdentity,
+    refresh = RefreshMapPin,
+    events = { "NEIGHBORHOOD_MAP_DATA_UPDATED" },
+})

@@ -6,6 +6,11 @@ local L = MapPinEnhanced.L
 local SOURCE = "vignette"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Vignette
 
+---@return string
+local function GetVignetteIdentity()
+    return string.format("vignette:%s", tostring(C_SuperTrack.GetSuperTrackedVignette()))
+end
+
 ---@param vignetteGUID WOWGUID
 ---@param mapID number
 ---@return number? x
@@ -17,12 +22,8 @@ local function GetVignettePositionForMap(vignetteGUID, mapID)
 end
 
 local function RefreshVignette()
-    if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        return
-    end
     local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
-    local identity = string.format("vignette:%s", tostring(vignetteGUID))
+    local identity = GetVignetteIdentity()
     local vignetteInfo = vignetteGUID and C_VignetteInfo.GetVignetteInfo(vignetteGUID)
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(vignetteGUID and function(candidateMapID)
         return GetVignettePositionForMap(vignetteGUID, candidateMapID)
@@ -33,7 +34,7 @@ local function RefreshVignette()
             hasVignetteInfo = vignetteInfo ~= nil,
             vignetteGUID = vignetteGUID,
             vignetteID = vignetteInfo and vignetteInfo.vignetteID,
-        }, RefreshVignette)
+        })
         return
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
@@ -46,8 +47,10 @@ local function RefreshVignette()
     })
 end
 
-Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshVignette)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshVignette)
-MapPinEnhanced:RegisterEvent("VIGNETTES_UPDATED", RefreshVignette)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshVignette)
+Providers:RegisterSuperTrackingProvider({
+    source = SOURCE,
+    superTrackingType = SUPER_TRACKING_TYPE,
+    getIdentity = GetVignetteIdentity,
+    refresh = RefreshVignette,
+    events = { "VIGNETTES_UPDATED" },
+})

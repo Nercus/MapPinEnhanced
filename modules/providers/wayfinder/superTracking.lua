@@ -2,21 +2,38 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Providers
----@field superTrackingProviderTypes table<Enum.SuperTrackingType, string>
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local L = MapPinEnhanced.L
 
-Providers.superTrackingProviderTypes = {}
-
 ---@alias SuperTrackingDiagnosticValue string|number|boolean|nil
 ---@alias SuperTrackingDiagnostics table<string, SuperTrackingDiagnosticValue>
----@alias SuperTrackingWaypointResolver fun(mapID: number): number?, number?, string?
 
----@type SuperTrackingWaypointResolver
-local GetNextWaypointForMap = C_SuperTrack.GetNextWaypointForMap
+---@class SuperTrackingProviderDescriptor
+---@field source string
+---@field superTrackingType Enum.SuperTrackingType
+---@field getIdentity fun(): string
+---@field refresh fun()
+---@field events WowEvent[]?
+
+---@class SuperTrackingFallbackDescriptor
+---@field source string
+---@field getIdentity fun(): string
+---@field refresh fun()
+---@field events WowEvent[]?
+
+---@alias SuperTrackingDescriptor SuperTrackingProviderDescriptor|SuperTrackingFallbackDescriptor
 
 local RESOLUTION_RETRY_DELAYS = { 0.1, 0.25, 0.5, 1, 2 }
+
+---@type table<Enum.SuperTrackingType, SuperTrackingProviderDescriptor>
+local providersByType = {}
+---@type table<string, SuperTrackingDescriptor>
+local providersBySource = {}
+---@type SuperTrackingFallbackDescriptor?
+local fallbackProvider
+---@type table<WowEvent, table<string, boolean>>
+local sourceEventProviders = {}
 
 ---@class PendingSuperTrackingResolution
 ---@field identity string
@@ -26,6 +43,13 @@ local RESOLUTION_RETRY_DELAYS = { 0.1, 0.25, 0.5, 1, 2 }
 
 ---@type table<string, PendingSuperTrackingResolution>
 local pendingResolutions = {}
+
+---@return SuperTrackingDescriptor?
+local function GetActiveProvider()
+    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
+    if superTrackingType == nil or superTrackingType == Enum.SuperTrackingType.UserWaypoint then return nil end
+    return providersByType[superTrackingType] or fallbackProvider
+end
 
 MapPinEnhanced:OnLoad(function()
     MapPinEnhanced:DeleteVar("superTrackingWayfinder")
@@ -103,14 +127,94 @@ local function CancelOtherPendingResolutions(source)
     end
 end
 
+---@param activeSource string?
+local function CancelInactivePendingResolutions(activeSource)
+    local pendingSources = {}
+    for pendingSource in pairs(pendingResolutions) do
+        if pendingSource ~= activeSource then table.insert(pendingSources, pendingSource) end
+    end
+    for _, pendingSource in ipairs(pendingSources) do
+        CancelPendingResolution(pendingSource)
+    end
+end
+
+---@param provider SuperTrackingDescriptor?
+local function ClearInactiveProviderTarget(provider)
+    local owner, identity, revision = Wayfinders:GetActiveTargetIdentity()
+    if not owner or not providersBySource[owner] then return end
+    if provider and provider.source == owner then return end
+    CancelPendingResolution(owner)
+    Wayfinders:ClearTarget(owner, identity, revision)
+end
+
+---@param provider SuperTrackingDescriptor?
+local function RefreshProvider(provider)
+    ClearInactiveProviderTarget(provider)
+    CancelInactivePendingResolutions(provider and provider.source or nil)
+    if provider then provider.refresh() end
+end
+
+local function RefreshActiveProvider()
+    RefreshProvider(GetActiveProvider())
+end
+
+---@param event WowEvent
+local function OnSourceEvent(event)
+    local provider = GetActiveProvider()
+    if not provider then
+        RefreshProvider(nil)
+        return
+    end
+    local eventProviders = sourceEventProviders[event]
+    if eventProviders and eventProviders[provider.source] then RefreshProvider(provider) end
+end
+
+---@param provider SuperTrackingDescriptor
+local function RegisterSourceEvents(provider)
+    local seenEvents = {}
+    for _, event in ipairs(provider.events or {}) do
+        assert(type(event) == "string" and event ~= "",
+            "Providers:RegisterSuperTrackingProvider: events must contain non-empty strings")
+        assert(event ~= "SUPER_TRACKING_CHANGED" and event ~= "SUPER_TRACKING_PATH_UPDATED" and
+            event ~= "PLAYER_LOGIN",
+            "Providers:RegisterSuperTrackingProvider: common events are registered by the coordinator")
+        assert(not seenEvents[event],
+            "Providers:RegisterSuperTrackingProvider: descriptor contains a duplicate event")
+        seenEvents[event] = true
+
+        local eventProviders = sourceEventProviders[event]
+        if not eventProviders then
+            eventProviders = {}
+            sourceEventProviders[event] = eventProviders
+            local sourceEvent = event
+            MapPinEnhanced:RegisterEvent(sourceEvent, function() OnSourceEvent(sourceEvent) end)
+        end
+        eventProviders[provider.source] = true
+    end
+end
+
+---@param provider SuperTrackingDescriptor
+local function ValidateProvider(provider)
+    assert(type(provider) == "table", "Providers:RegisterSuperTrackingProvider: descriptor must be a table")
+    assert(type(provider.source) == "string" and provider.source ~= "",
+        "Providers:RegisterSuperTrackingProvider: source must be a non-empty string")
+    assert(type(provider.getIdentity) == "function",
+        "Providers:RegisterSuperTrackingProvider: getIdentity must be a function")
+    assert(type(provider.refresh) == "function",
+        "Providers:RegisterSuperTrackingProvider: refresh must be a function")
+    assert(provider.events == nil or type(provider.events) == "table",
+        "Providers:RegisterSuperTrackingProvider: events must be a table or nil")
+    assert(not providersBySource[provider.source],
+        "Providers:RegisterSuperTrackingProvider: source is already registered")
+end
+
 ---@param source string
 ---@param identity string
 ---@param targetType string
 ---@param fields SuperTrackingDiagnostics
----@param refresh fun()
-function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetType, fields, refresh)
-    assert(type(refresh) == "function",
-        "Providers:HandleUnresolvedSuperTrackingTarget: refresh must be a function")
+function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetType, fields)
+    local provider = providersBySource[source]
+    assert(provider, "Providers:HandleUnresolvedSuperTrackingTarget: source is not registered")
 
     -- Keep valid data while Blizzard rebuilds the path for the same target. If the
     -- target itself changed, the old coordinates must not remain visible.
@@ -143,25 +247,46 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
     pending.attempts = pending.attempts + 1
     pending.timer = C_Timer.NewTimer(retryDelay, function()
         if pendingResolutions[source] ~= pending then return end
+        local activeProvider = GetActiveProvider()
+        if activeProvider ~= provider or activeProvider.getIdentity() ~= pending.identity then
+            pendingResolutions[source] = nil
+            return
+        end
         local _, _, revision = Wayfinders:GetActiveTargetIdentity()
         if revision ~= pending.revision then
             pendingResolutions[source] = nil
             return
         end
         pending.timer = nil
-        refresh()
+        provider.refresh()
     end)
 end
 
----@param source string
----@param superTrackingType Enum.SuperTrackingType
-function Providers:RegisterSuperTrackingProvider(source, superTrackingType)
-    assert(type(source) == "string", "Providers:RegisterSuperTrackingProvider: source must be a string")
-    assert(type(superTrackingType) == "number",
+---@param provider SuperTrackingProviderDescriptor
+function Providers:RegisterSuperTrackingProvider(provider)
+    ValidateProvider(provider)
+    assert(type(provider.superTrackingType) == "number",
         "Providers:RegisterSuperTrackingProvider: superTrackingType must be a number")
-    assert(not self.superTrackingProviderTypes[superTrackingType],
+    assert(not providersByType[provider.superTrackingType],
         "Providers:RegisterSuperTrackingProvider: superTrackingType is already registered")
-    self.superTrackingProviderTypes[superTrackingType] = source
+    providersByType[provider.superTrackingType] = provider
+    providersBySource[provider.source] = provider
+    RegisterSourceEvents(provider)
+end
+
+---@param provider SuperTrackingFallbackDescriptor
+function Providers:RegisterSuperTrackingFallback(provider)
+    ValidateProvider(provider)
+    assert(not fallbackProvider, "Providers:RegisterSuperTrackingFallback: fallback is already registered")
+    fallbackProvider = provider
+    providersBySource[provider.source] = provider
+    RegisterSourceEvents(provider)
+end
+
+---@param source string
+function Providers:RefreshSuperTrackingProvider(source)
+    local provider = GetActiveProvider()
+    if provider and provider.source == source then RefreshProvider(provider) end
 end
 
 ---@param source string
@@ -197,94 +322,6 @@ function Providers:CancelPendingSuperTrackingResolutions()
     end
 end
 
----@param mapIDs number[]
----@param seenMapIDs table<number, boolean>
----@param mapID number?
-local function AddMapID(mapIDs, seenMapIDs, mapID)
-    if not mapID or seenMapIDs[mapID] then return end
-    seenMapIDs[mapID] = true
-    table.insert(mapIDs, mapID)
-end
-
----@return number[] mapIDs
-function Providers:GetSuperTrackingMapIDs()
-    ---@type number[]
-    local mapIDs = {}
-    ---@type table<number, boolean>
-    local seenMapIDs = {}
-    ---@type number?
-    local playerMapID = C_Map.GetBestMapForUnit("player")
-    ---@type number?
-    local displayMapID
-    if MapUtil and MapUtil.GetDisplayableMapForPlayer then
-        displayMapID = MapUtil.GetDisplayableMapForPlayer()
-    end
-    ---@type number?
-    local visibleMapID
-    if WorldMapFrame and WorldMapFrame.GetMapID then
-        visibleMapID = WorldMapFrame:GetMapID()
-    end
-
-    -- The player's most specific map and Blizzard's displayable map can differ,
-    -- especially in instances and subzones. Super-tracking paths may only be
-    -- projected onto the displayable map. The visible world map is also needed
-    -- for destinations selected from a map other than the player's current map.
-    AddMapID(mapIDs, seenMapIDs, playerMapID)
-    AddMapID(mapIDs, seenMapIDs, displayMapID)
-    AddMapID(mapIDs, seenMapIDs, visibleMapID)
-
-    -- Some routes are exposed only on a map adjacent to the player's, display,
-    -- or visible map. Do not fan out from continents: their zone lists are too
-    -- broad to be useful resolution candidates.
-    ---@type number[]
-    local initialMapIDs = {}
-    if playerMapID then table.insert(initialMapIDs, playerMapID) end
-    if displayMapID and displayMapID ~= playerMapID then table.insert(initialMapIDs, displayMapID) end
-    if visibleMapID and visibleMapID ~= playerMapID and visibleMapID ~= displayMapID then
-        table.insert(initialMapIDs, visibleMapID)
-    end
-    for _, initialMapID in ipairs(initialMapIDs) do
-        local initialMapInfo = C_Map.GetMapInfo(initialMapID)
-        if initialMapInfo and initialMapInfo.mapType ~= Enum.UIMapType.Continent then
-            for _, childMapInfo in ipairs(C_Map.GetMapChildrenInfo(initialMapID) or {}) do
-                AddMapID(mapIDs, seenMapIDs, childMapInfo.mapID)
-            end
-        end
-
-        ---@type number
-        local mapID = initialMapID
-        for _ = 1, 4 do
-            local mapInfo = C_Map.GetMapInfo(mapID)
-            local parentMapID = mapInfo and mapInfo.parentMapID or nil
-            if not parentMapID or parentMapID == 0 then break end
-            mapID = parentMapID
-            AddMapID(mapIDs, seenMapIDs, parentMapID)
-        end
-    end
-
-    return mapIDs
-end
-
----@param fallback? SuperTrackingWaypointResolver provider-specific resolver
----@return number? x
----@return number? y
----@return number? mapID
----@return string? waypointDescription
-function Providers:GetSuperTrackingWaypoint(fallback)
-    local mapIDs = self:GetSuperTrackingMapIDs()
-    for _, mapID in ipairs(mapIDs) do
-        local x, y, waypointDescription = GetNextWaypointForMap(mapID)
-        if type(x) == "number" and type(y) == "number" then
-            return x, y, mapID, waypointDescription
-        end
-    end
-
-    if fallback then
-        for _, mapID in ipairs(mapIDs) do
-            local x, y, waypointDescription = fallback(mapID)
-            if type(x) == "number" and type(y) == "number" then
-                return x, y, mapID, waypointDescription
-            end
-        end
-    end
-end
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshActiveProvider)
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshActiveProvider)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshActiveProvider)

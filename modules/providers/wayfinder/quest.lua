@@ -8,6 +8,13 @@ local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
 
+---@return string
+local function GetQuestIdentity()
+    local questID = C_SuperTrack.GetSuperTrackedQuestID()
+    if questID == 0 then questID = nil end
+    return string.format("quest:%s", tostring(questID))
+end
+
 ---@type table<Enum.QuestClassification, string>
 local questClassificationAtlas = {
     [Enum.QuestClassification.Normal] = "Navigation-Tracked-Icon",
@@ -29,13 +36,9 @@ local function GetQuestWaypointForMap(questID, mapID)
 end
 
 local function RefreshQuest()
-    if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= SUPER_TRACKING_TYPE then
-        Providers:ClearSuperTrackingWayfinderData(SOURCE)
-        return
-    end
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
-    local identity = string.format("quest:%s", tostring(questID))
+    local identity = GetQuestIdentity()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
         return GetQuestWaypointForMap(questID, candidateMapID)
     end or nil)
@@ -46,7 +49,7 @@ local function RefreshQuest()
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Quest"], {
             hasCoordinates = x ~= nil and y ~= nil,
             questID = questID,
-        }, RefreshQuest)
+        })
         return
     end
     local questTitle = C_QuestLog.GetTitleForQuestID(questID)
@@ -79,13 +82,16 @@ end
 local function OnQuestDataLoadResult(questID, success)
     if not pendingQuestTitles[questID] then return end
     pendingQuestTitles[questID] = nil
-    if success and questID == C_SuperTrack.GetSuperTrackedQuestID() then RefreshQuest() end
+    if success and questID == C_SuperTrack.GetSuperTrackedQuestID() then
+        Providers:RefreshSuperTrackingProvider(SOURCE)
+    end
 end
 
-Providers:RegisterSuperTrackingProvider(SOURCE, SUPER_TRACKING_TYPE)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshQuest)
-MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshQuest)
-MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", RefreshQuest)
-MapPinEnhanced:RegisterEvent("QUEST_POI_UPDATE", RefreshQuest)
+Providers:RegisterSuperTrackingProvider({
+    source = SOURCE,
+    superTrackingType = SUPER_TRACKING_TYPE,
+    getIdentity = GetQuestIdentity,
+    refresh = RefreshQuest,
+    events = { "QUEST_LOG_UPDATE", "QUEST_POI_UPDATE" },
+})
 MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", OnQuestDataLoadResult)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshQuest)
