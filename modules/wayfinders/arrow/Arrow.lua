@@ -66,7 +66,11 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     end
     self:SetTitle(wayfinderData.title)
     self:SetLock(wayfinderData.lock)
-    frame.fadeIn:PlayShowing(frame.fadeOut)
+    if frame:IsShown() then
+        frame.fadeIn:SetParentShownInstantly(true, frame.fadeOut)
+    else
+        frame.fadeIn:PlayShowing(frame.fadeOut)
+    end
 end
 
 function MapPinEnhancedWayfinderArrow:Enable()
