@@ -123,7 +123,6 @@ end
 ---@field selected MapPinEnhancedIconPickerEntry?
 ---@field callback fun(path: string|number)?
 ---@field searchTimer FunctionContainer?
----@field iconProvider IconDataProviderMixin?
 ---@field icons MapPinEnhancedIconPickerEntry[]
 ---@field filteredIcons MapPinEnhancedIconPickerEntry[]
 ---@field lastQuery string?
@@ -134,37 +133,33 @@ MapPinEnhancedIconPickerWindowMixin = {}
 function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
     if self.isPrecacheStarted then return end
     self.isPrecacheStarted = true
-    ---@type IconDataProviderMixin
-    local provider = assert(
-        CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spellbook),
-        "Unable to create the Blizzard icon provider")
-    self.iconProvider = provider
-    local iconCount = provider:GetNumIcons()
     local iconFileNames = MapPinEnhanced.ICON_FILE_NAMES
-    ---@type table<string, boolean>
-    local seen = {}
+    assert(type(iconFileNames) == "table",
+        "MapPinEnhancedIconPickerWindowMixin:StartPrecache: icon file names are unavailable")
+    ---@type number[]
+    local iconFileIDs = {}
+    for fileID in pairs(iconFileNames) do
+        if type(fileID) == "number" then
+            iconFileIDs[#iconFileIDs + 1] = fileID
+        end
+    end
+    table.sort(iconFileIDs)
+
     ---@type fun()[]
     local tasks = {}
-    for startIndex = 1, iconCount, PRECACHE_CHUNK_SIZE do
+    for startIndex = 1, #iconFileIDs, PRECACHE_CHUNK_SIZE do
         local firstIndex = startIndex
-        local lastIndex = math.min(startIndex + PRECACHE_CHUNK_SIZE - 1, iconCount)
+        local lastIndex = math.min(startIndex + PRECACHE_CHUNK_SIZE - 1, #iconFileIDs)
         tasks[#tasks + 1] = function()
             for index = firstIndex, lastIndex do
-                local path = provider:GetIconByIndex(index)
-                if type(path) == "string" or type(path) == "number" then
-                    local key = tostring(path)
-                    if not seen[key] then
-                        seen[key] = true
-                        local name = type(path) == "number" and iconFileNames[path] or nil
-                        name = name or key:match("([^\\/]+)$") or key
-                        self.icons[#self.icons + 1] = {
-                            path = path,
-                            name = name,
-                            search = string.lower(name),
-                            pathSearch = string.lower(key),
-                        }
-                    end
-                end
+                local fileID = iconFileIDs[index]
+                local name = iconFileNames[fileID]
+                self.icons[#self.icons + 1] = {
+                    path = fileID,
+                    name = name,
+                    search = string.lower(name),
+                    pathSearch = tostring(fileID),
+                }
             end
         end
     end
