@@ -71,6 +71,7 @@ local function FormatDiagnostics(fields)
     end
     table.sort(keys)
 
+    ---@type string[]
     local values = {}
     for _, key in ipairs(keys) do
         table.insert(values, string.format("%s=%s", key, FormatDiagnosticValue(fields[key])))
@@ -117,11 +118,11 @@ end
 
 ---@param source string
 local function CancelOtherPendingResolutions(source)
+    ---@type string[]
     local pendingSources = {}
     for pendingSource in pairs(pendingResolutions) do
         if pendingSource ~= source then table.insert(pendingSources, pendingSource) end
     end
-    ---@param pendingSource string
     for _, pendingSource in ipairs(pendingSources) do
         CancelPendingResolution(pendingSource)
     end
@@ -129,6 +130,7 @@ end
 
 ---@param activeSource string?
 local function CancelInactivePendingResolutions(activeSource)
+    ---@type string[]
     local pendingSources = {}
     for pendingSource in pairs(pendingResolutions) do
         if pendingSource ~= activeSource then table.insert(pendingSources, pendingSource) end
@@ -171,6 +173,7 @@ end
 
 ---@param provider SuperTrackingDescriptor
 local function RegisterSourceEvents(provider)
+    ---@type table<WowEvent, boolean>
     local seenEvents = {}
     for _, event in ipairs(provider.events or {}) do
         assert(type(event) == "string" and event ~= "",
@@ -248,7 +251,7 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, identity, targetT
     pending.timer = C_Timer.NewTimer(retryDelay, function()
         if pendingResolutions[source] ~= pending then return end
         local activeProvider = GetActiveProvider()
-        if activeProvider ~= provider or activeProvider.getIdentity() ~= pending.identity then
+        if not activeProvider or activeProvider ~= provider or activeProvider.getIdentity() ~= pending.identity then
             pendingResolutions[source] = nil
             return
         end
@@ -312,11 +315,11 @@ function Providers:ClearSuperTrackingWayfinderData(source, identity, revision)
 end
 
 function Providers:CancelPendingSuperTrackingResolutions()
+    ---@type string[]
     local pendingSources = {}
     for source in pairs(pendingResolutions) do
         table.insert(pendingSources, source)
     end
-    ---@param source string
     for _, source in ipairs(pendingSources) do
         CancelPendingResolution(source)
     end
