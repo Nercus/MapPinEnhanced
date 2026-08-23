@@ -20,7 +20,6 @@ MapPinEnhancedPinMixin = CreateFromMixins(
     MapPinEnhancedPinStyleMixin,
     MapPinEnhancedPinUtilsMixin,
     MapPinEnhancedPinTooltipMixin,
-    MapPinEnhancedPinProxyMixin,
     MapPinEnhancedPinLockMixin
 )
 
