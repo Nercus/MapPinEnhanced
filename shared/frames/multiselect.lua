@@ -26,6 +26,20 @@ local function CopySet(value)
     return result
 end
 
+---@param left MapPinEnhancedMultiselectValue?
+---@param right MapPinEnhancedMultiselectValue?
+---@return boolean
+local function SetsEqual(left, right)
+    left, right = CopySet(left), CopySet(right)
+    for key in pairs(left) do
+        if not right[key] then return false end
+    end
+    for key in pairs(right) do
+        if not left[key] then return false end
+    end
+    return true
+end
+
 function MapPinEnhancedMultiselectMixin:OnLoad()
     WowStyle2DropdownMixin.OnLoad(self)
 end
@@ -50,6 +64,12 @@ function MapPinEnhancedMultiselectMixin:GetValue()
     return CopySet(self.selected)
 end
 
+---@param value MapPinEnhancedMultiselectValue?
+---@return boolean
+function MapPinEnhancedMultiselectMixin:IsValueEqual(value)
+    return SetsEqual(self.selected, value)
+end
+
 ---@param options MapPinEnhancedMultiselectOption[]
 ---@param onChange fun(value: MapPinEnhancedMultiselectValue)
 function MapPinEnhancedMultiselectMixin:Setup(options, onChange)
@@ -57,7 +77,7 @@ function MapPinEnhancedMultiselectMixin:Setup(options, onChange)
     assert(type(onChange) == "function", "Multiselect onChange must be a function")
 
     self.options = options
-    self.selected = self.selected or {}
+    self.selected = CopySet(self.selected)
     ---@type AnyMenuEntry[]
     local entries = {}
     for _, option in ipairs(options) do
