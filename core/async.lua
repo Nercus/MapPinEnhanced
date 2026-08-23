@@ -5,6 +5,8 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedPackedArguments : table
 ---@field n integer
 
+
+---@param ... any
 ---@return MapPinEnhancedPackedArguments
 local function PackArguments(...)
     return { n = select("#", ...), ... }
