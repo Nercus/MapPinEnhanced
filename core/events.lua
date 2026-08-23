@@ -177,6 +177,50 @@ function MapPinEnhanced:UnregisterCallback(callbackEvent, func, key)
     callbackTarget.UnregisterCallback(tostring(func), eventName)
 end
 
+---@param key string
+---@param callbacks table<CallbackEvent, function>
+---@return fun() unsubscribe Call to unregister every callback in this set
+function MapPinEnhanced:RegisterKeyedCallbacks(key, callbacks)
+    assert(type(key) == "string", "MapPinEnhanced:RegisterKeyedCallbacks requires a string key")
+    assert(type(callbacks) == "table", "MapPinEnhanced:RegisterKeyedCallbacks requires a callback table")
+
+    ---@type { callbackEvent: CallbackEvent, func: function }[]
+    local registrations = {}
+    for callbackEvent, func in pairs(callbacks) do
+        table.insert(registrations, {
+            callbackEvent = callbackEvent,
+            func = func,
+        })
+    end
+
+    local registeredCount = 0
+    for _, registration in ipairs(registrations) do
+        local succeeded, failure = pcall(function()
+            ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
+            self:RegisterCallback(registration.callbackEvent, registration.func, key)
+        end)
+        if not succeeded then
+            for index = registeredCount, 1, -1 do
+                local registered = registrations[index]
+                ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
+                self:UnregisterCallback(registered.callbackEvent, registered.func, key)
+            end
+            error(failure, 0)
+        end
+        registeredCount = registeredCount + 1
+    end
+
+    local isSubscribed = true
+    return function()
+        if not isSubscribed then return end
+        isSubscribed = false
+        for _, registration in ipairs(registrations) do
+            ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
+            self:UnregisterCallback(registration.callbackEvent, registration.func, key)
+        end
+    end
+end
+
 ---@param callbackEvent CallbackEvent
 ---@param key string|nil
 function MapPinEnhanced:FireCallback(callbackEvent, key, ...)

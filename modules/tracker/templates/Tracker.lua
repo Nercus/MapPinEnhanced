@@ -263,8 +263,7 @@ local function TrackerElementResetter(frame, node)
         frame:Reset()
     elseif data.classification == "pin" then
         ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
-        ---@cast data MapPinEnhancedPinMixin
-        frame:Reset(data.pinID)
+        frame:Reset()
     end
 end
 

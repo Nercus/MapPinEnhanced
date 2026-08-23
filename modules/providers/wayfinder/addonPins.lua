@@ -100,7 +100,10 @@ local function TransformPinDataToWayfinderData(pinData)
 end
 
 
-local oldPinId = nil
+---@type UUID?
+local boundPinID = nil
+---@type fun()?
+local unsubscribePinCallbacks = nil
 local function UpdateTrackedPinTarget()
     if not trackedPinID or not trackedTargetRevision then return end
     local pin = Pins:GetPinByID(trackedPinID)
@@ -119,27 +122,29 @@ local function onPinIconUpdated() UpdateTrackedPinTarget() end
 local function onPinLockUpdated() UpdateTrackedPinTarget() end
 
 local function ClearPinCallbacks()
-    if not oldPinId then return end
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, oldPinId)
-    MapPinEnhanced:UnregisterCallback("PIN_UPDATED_LOCK", onPinLockUpdated, oldPinId)
-    oldPinId = nil
+    if unsubscribePinCallbacks then
+        unsubscribePinCallbacks()
+        unsubscribePinCallbacks = nil
+    end
+    boundPinID = nil
 end
 
-local function SetupPinCallbacks(pinId)
-    if oldPinId == pinId then
+---@param pinID UUID
+local function SetupPinCallbacks(pinID)
+    if boundPinID == pinID then
         return
     end
-    if oldPinId then
+    if boundPinID then
         ClearPinCallbacks()
     end
 
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_TITLE", onPinTitleUpdated, pinId)
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_COLOR", onPinColorUpdated, pinId)
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_ICON", onPinIconUpdated, pinId)
-    MapPinEnhanced:RegisterCallback("PIN_UPDATED_LOCK", onPinLockUpdated, pinId)
-    oldPinId = pinId
+    unsubscribePinCallbacks = MapPinEnhanced:RegisterKeyedCallbacks(pinID, {
+        PIN_UPDATED_TITLE = onPinTitleUpdated,
+        PIN_UPDATED_COLOR = onPinColorUpdated,
+        PIN_UPDATED_ICON = onPinIconUpdated,
+        PIN_UPDATED_LOCK = onPinLockUpdated,
+    })
+    boundPinID = pinID
 end
 
 ---@param pinID UUID
