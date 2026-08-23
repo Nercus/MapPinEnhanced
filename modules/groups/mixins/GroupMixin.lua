@@ -223,8 +223,7 @@ function MapPinEnhancedGroupMixin:SetPinOrder(pinID, order)
     assert(type(pinID) == "string", "MapPinEnhancedGroupMixin:SetPinOrder: pinID must be a string")
     assert(type(order) == "number", "MapPinEnhancedGroupMixin:SetPinOrder: order must be a number")
     if not self.pinState:SetOrder(pinID, order) then return false end
-    self.pinState:AssertInvariants()
-    Groups:PersistGroup(self)
+    self:PersistPinChanges()
     return true
 end
 
@@ -243,6 +242,14 @@ end
 function MapPinEnhancedGroupMixin:TouchOrder()
     if self.protected then return end
     self.order = GetTime()
+end
+
+---Check the complete pin state, then optionally update group order before scheduling persistence.
+---@param updateGroupOrder boolean?
+function MapPinEnhancedGroupMixin:PersistPinChanges(updateGroupOrder)
+    self.pinState:AssertInvariants()
+    if updateGroupOrder then self:TouchOrder() end
+    Groups:PersistGroup(self)
 end
 
 ---@return number

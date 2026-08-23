@@ -1,8 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Groups
-local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@class MapPinEnhancedGroupMixin
@@ -14,19 +12,13 @@ local function NormalizeCoordinate(value)
     return value > 1 and value / 100 or value
 end
 
----@param group MapPinEnhancedGroupMixin
-local function Commit(group)
-    group.pinState:AssertInvariants()
-    Groups:PersistGroup(group)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-end
-
 ---@param pinIDs UUID[]
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:ReorderPins(pinIDs)
     assert(type(pinIDs) == "table", "MapPinEnhancedGroupMixin:ReorderPins: pinIDs must be a table")
     if not self.pinState:Reorder(pinIDs) then return false end
-    Commit(self)
+    self:PersistPinChanges()
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
 end
 
@@ -36,7 +28,8 @@ end
 ---@return boolean
 local function UpdateArchived(group, pinID, update)
     if not group.pinState:UpdateArchived(pinID, update) then return false end
-    Commit(group)
+    group:PersistPinChanges()
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
     return true
 end
 

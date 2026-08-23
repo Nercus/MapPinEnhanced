@@ -1,21 +1,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Groups
-local Groups = MapPinEnhanced:GetModule("Groups")
-
 local ARCHIVE_STATE_REACHED = "reached"
 local ARCHIVE_STATE_HIDDEN = "hidden"
 
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinRestorationMixin = {}
-
----@param group MapPinEnhancedGroupMixin
-local function Commit(group)
-    group.pinState:AssertInvariants()
-    Groups:PersistGroup(group)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-end
 
 ---@param pinData SaveablePinData
 ---@return SaveablePinData, UUID?
@@ -75,5 +65,6 @@ function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
         self:AddMultiplePins(activePins, true, pinOrders)
         return
     end
-    Commit(self)
+    self:PersistPinChanges()
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
 end

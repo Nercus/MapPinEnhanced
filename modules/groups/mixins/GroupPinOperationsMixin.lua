@@ -13,14 +13,6 @@ local UNGROUPED_PIN_CLEANUP_TARGET = 90
 MapPinEnhancedGroupPinOperationsMixin = {}
 
 ---@param group MapPinEnhancedGroupMixin
----@param touchOrder boolean?
-local function Commit(group, touchOrder)
-    group.pinState:AssertInvariants()
-    if touchOrder then group:TouchOrder() end
-    Groups:PersistGroup(group)
-end
-
----@param group MapPinEnhancedGroupMixin
 ---@param pinData pinData|SaveablePinData
 ---@param overridePinID UUID?
 ---@param order number?
@@ -82,7 +74,7 @@ function MapPinEnhancedGroupPinOperationsMixin:AddPin(pinData, overridePinID)
 
     local pin, pinID, replacedWayBackPin, shouldTrack = AddWithoutCommit(self, pinData, overridePinID)
     self:PruneOldestReachedPins()
-    Commit(self, true)
+    self:PersistPinChanges(true)
     if shouldTrack and pin then pin:TrackAfterGroupCommit() end
     if pin then
         MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
@@ -115,7 +107,7 @@ function MapPinEnhancedGroupPinOperationsMixin:AddMultiplePins(pinsData, preserv
 
     local function finish()
         self:PruneOldestReachedPins()
-        Commit(self, not preserveGroupOrder)
+        self:PersistPinChanges(not preserveGroupOrder)
         if trackedPin then trackedPin:TrackAfterGroupCommit() end
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end
@@ -150,7 +142,7 @@ function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
     if not removedPin and not archivedPin then return false end
 
     ResetLimitWarningIfBelowTarget(self)
-    Commit(self, true)
+    self:PersistPinChanges(true)
     if removedPin then
         self.pinState:ReleaseDetachedPin(pinID)
         MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pinID)
@@ -185,7 +177,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
     if not changed then return false end
 
     self:PruneOldestReachedPins()
-    Commit(self, true)
+    self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, data)
     if wasTracked then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
@@ -202,7 +194,7 @@ end
 function MapPinEnhancedGroupPinOperationsMixin:RestoreReachedPins()
     if self.hidden then return false end
     if self.pinState:RestoreArchived(ARCHIVE_STATE_REACHED) == 0 then return false end
-    Commit(self, true)
+    self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
 end
@@ -212,7 +204,7 @@ function MapPinEnhancedGroupPinOperationsMixin:HideGroup()
     if self.protected or self.hidden then return false end
     local hadTrackedPin = self.pinState:ArchiveAll(ARCHIVE_STATE_HIDDEN)
     self.hidden = true
-    Commit(self, true)
+    self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     if hadTrackedPin then Groups:TrackNextPinAfterGroup(self) end
     return true
@@ -223,7 +215,7 @@ function MapPinEnhancedGroupPinOperationsMixin:ShowGroup()
     if not self.hidden then return false end
     self.hidden = false
     self.pinState:RestoreArchived()
-    Commit(self, true)
+    self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
 end
@@ -233,7 +225,7 @@ function MapPinEnhancedGroupPinOperationsMixin:ClearGroup()
     if not self.protected then return false end
     self.pinState:Reset()
     self.limitWarningShown = false
-    Commit(self, true)
+    self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return true
 end
@@ -253,7 +245,7 @@ function MapPinEnhancedGroupPinOperationsMixin:RemoveMultiplePins(pinIDs)
     end
     local function finish()
         ResetLimitWarningIfBelowTarget(self)
-        Commit(self, true)
+        self:PersistPinChanges(true)
         for _, pinID in ipairs(detachedPinIDs) do self.pinState:ReleaseDetachedPin(pinID) end
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end
@@ -298,7 +290,7 @@ function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     end
     assert(self.pinState:Reorder(pinIDs),
         "MapPinEnhancedGroupMixin:DuplicatePin: could not apply complete pin order")
-    Commit(self, true)
+    self:PersistPinChanges(true)
     if shouldTrack and pin then pin:TrackAfterGroupCommit() end
     if pin then MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin) end
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -325,7 +317,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
         self:GetOrderedTrackablePin(cursorOrder) or nil
     self.pinState:Remove(pinID)
     ResetLimitWarningIfBelowTarget(self)
-    Commit(self, true)
+    self:PersistPinChanges(true)
     if sourcePin then
         self.pinState:ReleaseDetachedPin(pinID)
         MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pinID)
@@ -343,7 +335,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
     assert(targetGroup.pinState:Reorder(targetOrder),
         "MapPinEnhancedGroupMixin:MovePinToGroup: could not apply target pin order")
 
-    Commit(targetGroup, true)
+    targetGroup:PersistPinChanges(true)
     if shouldTrack and targetPin then targetPin:TrackAfterGroupCommit() end
     if targetPin then MapPinEnhanced:FireCallback("PIN_ADDED", nil, targetGroup, targetPin) end
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
