@@ -1,7 +1,9 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local L = MapPinEnhanced.L
 
 ---@alias MapPinEnhancedOptionValue number | string | boolean | table
+---@alias OptionReloadRequirement "onEnable"|"onDisable"|"both"
 
 ---@class Options
 ---@field options table<string, MapPinEnhancedFormElementTemplate> A table mapping option keys to their corresponding frames.
@@ -33,11 +35,108 @@ end
 ---@param frame MapPinEnhancedFormElementTemplate
 function Options:RegisterOption(key, frame)
     assert(self.options[key] == nil, "Option with key " .. key .. " is already registered")
+    assert(frame.requireReload == nil or frame.requireReload == "onEnable" or frame.requireReload == "onDisable" or
+        frame.requireReload == "both", "Options:RegisterOption: invalid requireReload value for " .. key)
     self.options[key] = frame
     frame:Setup(self:GetOptionInitValue(key))
+    frame.lastValue = frame:GetValue()
+    if frame.requireReload == "onEnable" or frame.requireReload == "onDisable" then
+        assert(type(frame:GetValue()) == "boolean",
+            "Options:RegisterOption: " .. frame.requireReload .. " requires a boolean option: " .. key)
+    end
     self:SubscribeToOptionChanges(key, function(value)
         self:SaveOptionValue(key, value)
     end)
+end
+
+---@class PendingReloadOption
+---@field value any
+
+---@type table<string, PendingReloadOption>
+local pendingReloadOptions = {}
+---@type string[]
+local pendingReloadOrder = {}
+local reloadDialogOpen = false
+---@type MapPinEnhancedStaticDialogFrame?
+local reloadDialog
+
+local function HasPendingReloadOptions()
+    return next(pendingReloadOptions) ~= nil
+end
+
+local function DismissReloadDialog()
+    if reloadDialog then reloadDialog:Hide() end
+    reloadDialog = nil
+    reloadDialogOpen = false
+end
+
+function Options:RequestReload()
+    if reloadDialogOpen then return end
+    reloadDialogOpen = true
+    reloadDialog = MapPinEnhanced:ShowConfirmDialog(L["Reload UI"],
+        L["This change requires a UI reload. Reload now?"],
+        function()
+            ReloadUI()
+        end,
+        nil,
+        function()
+            reloadDialog = nil
+            reloadDialogOpen = false
+        end)
+    if not reloadDialog then reloadDialogOpen = false end
+end
+
+---@param frame MapPinEnhancedFormElementTemplate
+---@param previousValue any
+---@param value any
+function Options:HandleReloadRequiredChange(frame, previousValue, value)
+    local requirement = frame.requireReload
+    if not requirement then return end
+    if requirement ~= "both" then
+        assert(type(value) == "boolean",
+            "Options:HandleReloadRequiredChange: transition requirement needs a boolean value")
+    end
+
+    local requiresReload = requirement == "both" or requirement == "onEnable" and value or
+        requirement == "onDisable" and not value
+    if requiresReload and not pendingReloadOptions[frame.key] then
+        pendingReloadOptions[frame.key] = { value = previousValue }
+        table.insert(pendingReloadOrder, frame.key)
+    end
+
+    local pending = pendingReloadOptions[frame.key]
+    if pending and frame:IsValueEqual(pending.value) then
+        pendingReloadOptions[frame.key] = nil
+    end
+
+    if requiresReload and pendingReloadOptions[frame.key] then
+        self:RequestReload()
+    elseif not HasPendingReloadOptions() then
+        DismissReloadDialog()
+    end
+end
+
+function Options:RestorePendingReloadOptions()
+    if not HasPendingReloadOptions() then return end
+
+    local optionsToRestore = pendingReloadOptions
+    local restoreOrder = pendingReloadOrder
+    pendingReloadOptions = {}
+    pendingReloadOrder = {}
+    DismissReloadDialog()
+
+    for index = #restoreOrder, 1, -1 do
+        local key = restoreOrder[index]
+        local pending = optionsToRestore[key]
+        if pending then
+            local frame = self.options[key]
+            assert(frame, "Options:RestorePendingReloadOptions: option not found: " .. key)
+            if not frame:IsValueEqual(pending.value) then
+                frame:SetValue(pending.value)
+                frame:NotifyChange(pending.value, true)
+            end
+        end
+    end
 end
 
 function Options:SetOptionValue(key, value)
@@ -62,6 +161,17 @@ function Options:GetOptionValue(key)
     end
     assert(frame.GetValue, "Option frame must have a Get method")
     return frame:GetValue()
+end
+
+---@param key string
+---@param enabled boolean
+function Options:SetOptionEnabled(key, enabled)
+    local frame = self.options[key]
+    if not frame then
+        error("Option with key " .. key .. " not found")
+    end
+    assert(frame.SetEnabledState, "Option frame must have a SetEnabledState method")
+    frame:SetEnabledState(enabled)
 end
 
 local addonLoaded = false

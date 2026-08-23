@@ -15,7 +15,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field ClearFocus fun(self: MapPinEnhancedStaticDialogEditBox)
 ---@field HighlightText fun(self: MapPinEnhancedStaticDialogEditBox)
 
----@class MapPinEnhancedStaticDialogFrame
+---@class MapPinEnhancedStaticDialogFrame : Frame
 ---@field editBox MapPinEnhancedStaticDialogEditBox?
 ---@field button1 MapPinEnhancedStaticDialogButton?
 ---@field button2 MapPinEnhancedStaticDialogButton?
@@ -40,13 +40,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field OnShow? fun(self: MapPinEnhancedStaticDialogFrame, data: table?)
 ---@field OnAccept? fun(self: MapPinEnhancedStaticDialogFrame, data: table?): boolean?
 ---@field OnCancel? fun(self: MapPinEnhancedStaticDialogFrame, data: table?, reason: string?)
----@field OnHide? fun(self: MapPinEnhancedStaticDialogFrame)
+---@field OnHide? fun(self: MapPinEnhancedStaticDialogFrame, data: table?)
 ---@field EditBoxOnEnterPressed? fun(editBox: MapPinEnhancedStaticDialogEditBox)
 ---@field EditBoxOnEscapePressed? fun(editBox: MapPinEnhancedStaticDialogEditBox)
 
 ---@class ConfirmDialogData
 ---@field onConfirm function?
 ---@field onCancel function?
+---@field onHide function?
 
 ---@class RenamePinDialogData
 ---@field pin MapPinEnhancedPinMixin
@@ -176,6 +177,12 @@ RegisterStaticDialog(CONFIRM_DIALOG_NAME, {
             data.onCancel()
         end
     end,
+    OnHide = function(_, data)
+        ---@cast data ConfirmDialogData
+        if data and data.onHide then
+            data.onHide()
+        end
+    end,
 })
 
 RegisterStaticDialog(RENAME_PIN_DIALOG_NAME, {
@@ -286,12 +293,14 @@ RegisterStaticDialog(ABOUT_DIALOG_NAME, {
 ---@param message string
 ---@param onConfirm function?
 ---@param onCancel function?
+---@param onHide function?
 ---@return MapPinEnhancedStaticDialogFrame?
-function MapPinEnhanced:ShowConfirmDialog(title, message, onConfirm, onCancel)
+function MapPinEnhanced:ShowConfirmDialog(title, message, onConfirm, onCancel, onHide)
     ---@type ConfirmDialogData
     local data = {
         onConfirm = onConfirm,
         onCancel = onCancel,
+        onHide = onHide,
     }
 
     return ShowStaticDialog(CONFIRM_DIALOG_NAME, BuildDialogText(title or L["Confirm"], message), data)

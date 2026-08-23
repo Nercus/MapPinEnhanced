@@ -76,5 +76,6 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnShow()
+    Options:RestorePendingReloadOptions()
     self:SetupOptionSearch()
 end

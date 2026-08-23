@@ -4,6 +4,7 @@ MapPinEnhancedOptionCheckboxMixin = {}
 
 
 function MapPinEnhancedOptionCheckboxMixin:OnMouseDown()
+    if not self:IsOptionEnabled() then return end
     self.child:Click()
 end
 

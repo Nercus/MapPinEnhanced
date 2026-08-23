@@ -197,6 +197,8 @@ L["General.Tracking.ArrivalMode_DESCRIPTION"] =
 "Dynamic adjusts the arrival distance based on your approach speed. Static completes a target as soon as you are within 10 metres."
 L["Dynamic"] = "Dynamic"
 L["Static"] = "Static"
+L["Reload UI"] = "Reload UI"
+L["This change requires a UI reload. Reload now?"] = "This change requires a UI reload. Reload now?"
 
 L["Pins.Miscellaneous_GROUPLABEL"] = "Miscellaneous"
 L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Scale Pins on Hover"
