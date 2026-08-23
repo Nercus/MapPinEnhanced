@@ -8,6 +8,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field dataProvider DataProviderMixin
 ---@field selectedIndex number | nil
 ---@field filterFunction function
+---@field cancelFilterFunction function?
 ---@field optionsValueMap table<string, AutocompleteOption>
 ---@field searchOptions string[]
 ---@field searchText string
@@ -202,6 +203,11 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
 
     local text = self:GetText()
     if not text or text == "" then
+        if self.cancelFilterFunction then
+            self.cancelFilterFunction()
+        end
+        self.spinner:Hide()
+        self.searchText = ""
         self.resultsFrame:Hide()
         self:SetValue(nil, true)
         return
@@ -245,6 +251,10 @@ end
 ---@param options AutocompleteOption[]
 function MapPinEnhancedAutocompleteMixin:SetOptions(options)
     assert(type(options) == "table", "Options must be a table.")
+    if self.cancelFilterFunction then
+        self.cancelFilterFunction()
+    end
+    self.spinner:Hide()
     self.options = options
     self.searchOptions = {}
     self.optionsValueMap = {}
@@ -254,7 +264,7 @@ function MapPinEnhancedAutocompleteMixin:SetOptions(options)
         table.insert(self.searchOptions, option.searchString)
     end
 
-    self.filterFunction = MapPinEnhanced:DebounceChange(function()
+    self.filterFunction, self.cancelFilterFunction = MapPinEnhanced:DebounceChange(function()
         self:UpdateOptions()
     end, 0.2, function()
         self.spinner:Hide()

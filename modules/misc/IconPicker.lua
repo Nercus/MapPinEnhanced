@@ -122,7 +122,9 @@ end
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field selected MapPinEnhancedIconPickerEntry?
 ---@field callback fun(path: string|number)?
----@field searchTimer FunctionContainer?
+---@field scheduleSearch fun()
+---@field cancelSearch fun()
+---@field flushSearch fun()
 ---@field icons MapPinEnhancedIconPickerEntry[]
 ---@field filteredIcons MapPinEnhancedIconPickerEntry[]
 ---@field lastQuery string?
@@ -203,23 +205,20 @@ function MapPinEnhancedIconPickerWindowMixin:OnLoad()
     self.scrollBar:SetHideIfUnscrollable(true)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
+    self.scheduleSearch, self.cancelSearch, self.flushSearch = MapPinEnhanced:DebounceChange(function()
+        self:Refresh()
+    end, SEARCH_DEBOUNCE_SECONDS)
+
     self.search:SetScript("OnTextChanged", function(_, userInput)
         if not userInput then return end
-        if self.searchTimer then self.searchTimer:Cancel() end
-        self.searchTimer = C_Timer.NewTimer(SEARCH_DEBOUNCE_SECONDS, function()
-            self.searchTimer = nil
-            self:Refresh()
-        end)
+        self.scheduleSearch()
     end)
     self.search:SetScript("OnEnterPressed", function(editBox)
         editBox:ClearFocus()
-        if self.searchTimer then
-            self.searchTimer:Cancel()
-            self.searchTimer = nil
-        end
-        self:Refresh()
+        self.flushSearch()
     end)
     self.search:SetScript("OnEscapePressed", function(editBox)
+        self.cancelSearch()
         editBox:SetText("")
         editBox:ClearFocus()
         self:Refresh()
@@ -230,10 +229,7 @@ end
 
 function MapPinEnhancedIconPickerWindowMixin:OnHide()
     MapPinEnhancedWindowMixin.OnHide(self)
-    if self.searchTimer then
-        self.searchTimer:Cancel()
-        self.searchTimer = nil
-    end
+    self.cancelSearch()
     self.callback = nil
 end
 
