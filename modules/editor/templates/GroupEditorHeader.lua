@@ -27,11 +27,8 @@ local GROUP_ICONS = {
     { path = "Interface\\Icons\\Trade_Alchemy",              usesAtlas = false },
 }
 
----@class MapPinEnhancedEditorCommittedInput : MapPinEnhancedInputTemplate
----@field committedValue string
-
 ---@class MapPinEnhancedEditorInputField : MapPinEnhancedFormFieldTemplate
----@field child MapPinEnhancedEditorCommittedInput
+---@field child MapPinEnhancedInputTemplate
 
 ---@class MapPinEnhancedEditorRadioGroupField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedRadioGroupTemplate
@@ -50,35 +47,10 @@ local GROUP_ICONS = {
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedEditorGroupEditorHeaderMixin = {}
 
----@param editBox MapPinEnhancedEditorCommittedInput
----@param initialValue string
----@param commit fun(value: string): boolean?
-local function SetupCommittedEditBox(editBox, initialValue, commit)
-    editBox.committedValue = initialValue or ""
-    editBox:SetValue(editBox.committedValue)
-    local function apply()
-        local value = strtrim(editBox:GetText() or "")
-        if value == "" or commit(value) == false then
-            editBox:SetValue(editBox.committedValue)
-        else
-            editBox.committedValue = value
-            editBox:SetValue(value)
-        end
-        editBox:ClearFocus()
-    end
-    editBox:SetScript("OnEnterPressed", apply)
-    editBox:SetScript("OnEditFocusLost", apply)
-    editBox:SetScript("OnEscapePressed", function()
-        editBox:SetValue(editBox.committedValue)
-        editBox:ClearFocus()
-    end)
-end
-
 function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
+    self.nameField.child:ClearTextApply()
     self.group = nil
     self.editor = nil
-    self.nameField.child:SetScript("OnEnterPressed", nil)
-    self.nameField.child:SetScript("OnEditFocusLost", nil)
     self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self.hideButton:SetScript("OnClick", nil)
@@ -164,13 +136,14 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
     self.pinCount:SetText(string.format(L["%d |4pin:pins;"], group:GetTotalPinCount()))
 
     self.nameField.child:SetEnabled(not protected)
-    SetupCommittedEditBox(self.nameField.child, group:GetName(), function(value)
-        if protected then return false end
+    self.nameField.child:SetTextApply(group:GetName(), function(value)
+        if value == "" or protected then return nil end
         local existing = Groups:GetGroupByName(value)
-        if existing and existing ~= group then return false end
+        if existing and existing ~= group then return nil end
         local result = group:SetName(value)
+        if result == false then return nil end
         editor.groupSidebar:Refresh()
-        return result ~= false
+        return group:GetName()
     end)
 
     self.trackingModeField.child:Setup({

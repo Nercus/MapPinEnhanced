@@ -5,11 +5,17 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedEditorCommittedAutocomplete : MapPinEnhancedAutocompleteTemplate
----@field committedValue string
----@field committedMapID number
+---@field committedValue string?
+---@field committedMapID number?
 
 ---@class MapPinEnhancedEditorAutocompleteField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedEditorCommittedAutocomplete
+
+---@class MapPinEnhancedEditorPositionInput : MapPinEnhancedInputTemplate
+---@field committedValue string?
+
+---@class MapPinEnhancedEditorPositionField : MapPinEnhancedFormFieldTemplate
+---@field child MapPinEnhancedEditorPositionInput
 
 ---@class MapPinEnhancedEditorGroupEditorPinEntryTemplate : Frame
 ---@field pinNode MapPinEnhancedEditorPinNodeData?
@@ -18,8 +24,8 @@ local L = MapPinEnhanced.L
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field nameField MapPinEnhancedEditorInputField
 ---@field mapField MapPinEnhancedEditorAutocompleteField
----@field xField MapPinEnhancedEditorInputField
----@field yField MapPinEnhancedEditorInputField
+---@field xField MapPinEnhancedEditorPositionField
+---@field yField MapPinEnhancedEditorPositionField
 ---@field duplicateButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field dropLine Texture
@@ -82,36 +88,23 @@ local function FindExactMap(text)
     return match
 end
 
----@param editBox MapPinEnhancedEditorCommittedInput
----@param initialValue string
----@param callback fun(value: string): boolean|string?
-local function CommitTextBox(editBox, initialValue, callback)
-    editBox.committedValue = initialValue or ""
-    editBox:SetValue(editBox.committedValue)
-    local function commit()
-        local value = strtrim(editBox:GetText() or "")
-        local result = callback(value)
-        if result == false then
-            value = editBox.committedValue
-        elseif type(result) == "string" then
-            value = result
-        end
-        editBox.committedValue = value
-        editBox:SetValue(value)
+function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
+    self.nameField.child:ClearTextApply()
+    self.mapField.child.onChangeCallback = nil
+    self.mapField.child.committedValue = nil
+    self.mapField.child.committedMapID = nil
+    self.mapField.child:SetScript("OnEditFocusLost", MapPinEnhancedAutocompleteMixin.OnEditFocusLost)
+    self.mapField.child:SetScript("OnEscapePressed", MapPinEnhancedInputMixin.OnEscapePressed)
+    self.mapField.child:ClearFocus()
+    self.mapField.child.resultsFrame:Hide()
+    for _, editBox in ipairs({ self.xField.child, self.yField.child }) do
+        editBox.committedValue = nil
+        editBox:SetScript("OnEnterPressed", nil)
+        editBox:SetScript("OnEditFocusLost", MapPinEnhancedInputMixin.OnEditFocusLost)
+        editBox:SetScript("OnEscapePressed", MapPinEnhancedInputMixin.OnEscapePressed)
         editBox:ClearFocus()
     end
-    editBox:SetScript("OnEnterPressed", commit)
-    editBox:SetScript("OnEditFocusLost", commit)
-    editBox:SetScript("OnEscapePressed", function()
-        editBox:SetValue(editBox.committedValue)
-        editBox:ClearFocus()
-    end)
-end
-
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
     self.pinNode, self.editor = nil, nil
-    self.mapField.child.onChangeCallback = nil
-    self.mapField.child.resultsFrame:Hide()
     self.dragHandle:SetScript("OnDragStart", nil)
     self.dragHandle:SetScript("OnDragStop", nil)
     self.dragHandle:SetScript("OnEnter", nil)
@@ -216,7 +209,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
     local x, y =
         Editor:ParsePercent(self.xField.child:GetText()), Editor:ParsePercent(self.yField.child:GetText())
     if not mapID then
-        self.mapField.child:SetValue(self.mapField.child.committedMapID)
+        self.mapField.child:SetValue(assert(self.mapField.child.committedMapID,
+            "MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition: committedMapID is nil"))
         return false
     end
     if not x or not y then return false end
@@ -236,7 +230,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     local data = Editor:GetPinData(pinNode)
     self:RefreshPreview()
 
-    CommitTextBox(self.nameField.child, data.title or L["Map Pin"], function(value)
+    self.nameField.child:SetTextApply(data.title or L["Map Pin"], function(value)
         if value == "" then value = L["Map Pin"] end
         pinNode.group:SetPinTitle(pinNode.pinID, value)
         return value
@@ -263,9 +257,11 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     end
     local function restore(editBox)
         if editBox == self.mapField.child then
-            editBox:SetValue(editBox.committedMapID)
+            editBox:SetValue(assert(editBox.committedMapID,
+                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: committedMapID is nil"))
         else
-            editBox:SetValue(editBox.committedValue)
+            editBox:SetValue(assert(editBox.committedValue,
+                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: committedValue is nil"))
         end
         editBox:ClearFocus()
     end

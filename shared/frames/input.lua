@@ -3,6 +3,11 @@ local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
 
+---@class MapPinEnhancedTextApplyScripts
+---@field onEnter function?
+---@field onFocusLost function?
+---@field onEscape function?
+
 ---@class MapPinEnhancedInputTemplate : EditBox
 ---@field left Texture
 ---@field right Texture
@@ -14,6 +19,10 @@ local L = MapPinEnhanced.L
 ---@field icon MapPinEnhancedIcon? set through keyvalues
 ---@field placeholder string? set through keyvalues
 ---@field placeholderFont string? set through keyvalues
+---@field appliedText string?
+---@field applyText? fun(text: string, previousText: string): string?
+---@field textApplyScripts MapPinEnhancedTextApplyScripts?
+---@field applyingText boolean?
 MapPinEnhancedInputMixin = {}
 
 ---@class MapPinEnhancedInputInlineIcon : Frame
@@ -132,6 +141,79 @@ function MapPinEnhancedInputMixin:OnEditFocusLost()
     self:ClearHighlightText()
     self:UpdateClearButtonVisibility()
     self:UpdatePlaceholderVisibility()
+end
+
+---Set up text that applies on Enter or focus loss and restores on Escape.
+---The apply function receives trimmed text and the previously applied text. It
+---returns the text to display, or nil to keep the previous text.
+---@param startingText string
+---@param apply fun(text: string, previousText: string): string?
+function MapPinEnhancedInputMixin:SetTextApply(startingText, apply)
+    assert(type(startingText) == "string",
+        "MapPinEnhancedInputMixin:SetTextApply: startingText must be a string")
+    assert(type(apply) == "function",
+        "MapPinEnhancedInputMixin:SetTextApply: apply must be a function")
+
+    self:ClearTextApply()
+    self.textApplyScripts = {
+        onEnter = self:GetScript("OnEnterPressed"),
+        onFocusLost = self:GetScript("OnEditFocusLost"),
+        onEscape = self:GetScript("OnEscapePressed"),
+    }
+    self.appliedText = startingText
+    self.applyText = apply
+    self:SetValue(startingText)
+
+    ---@param editBox MapPinEnhancedInputTemplate
+    local function applyCurrentText(editBox)
+        if editBox.applyingText then return end
+        local applyText = editBox.applyText
+        local previousText = editBox.appliedText
+        if not applyText or previousText == nil then return end
+
+        editBox.applyingText = true
+        local newText = applyText(strtrim(editBox:GetText() or ""), previousText)
+        if editBox.applyText == applyText then
+            assert(newText == nil or type(newText) == "string",
+                "MapPinEnhancedInputMixin:SetTextApply: apply must return a string or nil")
+            if newText == nil then newText = previousText end
+            editBox.appliedText = newText
+            editBox:SetValue(newText)
+            editBox:ClearFocus()
+            local scripts = editBox.textApplyScripts
+            if scripts and scripts.onFocusLost then scripts.onFocusLost(editBox) end
+            editBox.applyingText = nil
+        end
+    end
+
+    ---@param editBox MapPinEnhancedInputTemplate
+    local function restoreAppliedText(editBox)
+        if editBox.applyingText or editBox.appliedText == nil then return end
+        editBox.applyingText = true
+        editBox:SetValue(editBox.appliedText)
+        editBox:ClearFocus()
+        local scripts = editBox.textApplyScripts
+        if scripts and scripts.onFocusLost then scripts.onFocusLost(editBox) end
+        editBox.applyingText = nil
+    end
+
+    self:SetScript("OnEnterPressed", applyCurrentText)
+    self:SetScript("OnEditFocusLost", applyCurrentText)
+    self:SetScript("OnEscapePressed", restoreAppliedText)
+end
+
+function MapPinEnhancedInputMixin:ClearTextApply()
+    local scripts = self.textApplyScripts
+    if not scripts then return end
+
+    self.applyText = nil
+    self.appliedText = nil
+    self.textApplyScripts = nil
+    self.applyingText = nil
+    self:SetScript("OnEnterPressed", scripts.onEnter)
+    self:SetScript("OnEditFocusLost", scripts.onFocusLost)
+    self:SetScript("OnEscapePressed", scripts.onEscape)
+    self:ClearFocus()
 end
 
 ---@param callback fun(isChecked: boolean)
