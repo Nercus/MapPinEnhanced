@@ -20,6 +20,12 @@ end
 local pinsPool = CreateObjectPool(CreatePin, ResetPin)
 pinsPool.capacity = 1000 -- only allow 1000 pins at the same time
 
+---@param value number
+---@return number
+function Pins:NormalizeCoordinate(value)
+    assert(type(value) == "number", "Pins:NormalizeCoordinate: value must be a number")
+    return value > 1 and value / 100 or value
+end
 
 ---@param initPinData pinData
 ---@param overridePinID UUID?

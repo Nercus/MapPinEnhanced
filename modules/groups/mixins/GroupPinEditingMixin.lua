@@ -6,12 +6,6 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinEditingMixin = {}
 
----@param value number
----@return number
-local function NormalizeCoordinate(value)
-    return value > 1 and value / 100 or value
-end
-
 ---@param pinIDs UUID[]
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:ReorderPins(pinIDs)
@@ -75,7 +69,7 @@ function MapPinEnhancedGroupPinEditingMixin:SetPinPosition(pinID, mapID, x, y)
     assert(type(mapID) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: mapID must be a number")
     assert(type(x) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: x must be a number")
     assert(type(y) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: y must be a number")
-    x, y = NormalizeCoordinate(x), NormalizeCoordinate(y)
+    x, y = Pins:NormalizeCoordinate(x), Pins:NormalizeCoordinate(y)
     local pin = self:GetPinByID(pinID)
     if pin then
         pin:SetPinPosition(mapID, x, y)

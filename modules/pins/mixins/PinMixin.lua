@@ -44,16 +44,6 @@ function MapPinEnhancedPinMixin:UpdateGroupIcon()
     self.minimapPin.groupBadge:SetIcon(group:GetIcon())
 end
 
----Normalizes a coordinate to a value between 0 and 1
----@param value number
----@return number
-local function NormalizeCoordinate(value)
-    if value > 1 then
-        return value / 100
-    end
-    return value
-end
-
 function Pins:GetFramePool()
     if not self.framePool then
         self.framePool = CreateFramePoolCollection()
@@ -94,8 +84,8 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, deferCommit)
     end
     self.pinData = pinData
     self.suppressChangePublication = deferCommit and true or nil
-    self.pinData.x = NormalizeCoordinate(self.pinData.x)
-    self.pinData.y = NormalizeCoordinate(self.pinData.y)
+    self.pinData.x = Pins:NormalizeCoordinate(self.pinData.x)
+    self.pinData.y = Pins:NormalizeCoordinate(self.pinData.y)
 
     if not self.pinData.title or self.pinData.title == "" then
         self.pinData.title = DEFAULT_PIN_NAME
@@ -158,8 +148,8 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     assert(y, "MapPinEnhancedPinMixin:SetPinPosition: y is nil")
     assert(type(y) == "number", "MapPinEnhancedPinMixin:SetPinPosition: y must be a number")
 
-    x = NormalizeCoordinate(x)
-    y = NormalizeCoordinate(y)
+    x = Pins:NormalizeCoordinate(x)
+    y = Pins:NormalizeCoordinate(y)
 
     if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return end
 
