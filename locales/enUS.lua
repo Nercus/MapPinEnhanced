@@ -211,6 +211,10 @@ L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Toggle the on-screen display of 
 L["Miscellaneous.Coords.Lock_LABEL"] = "Lock Coordinates Display"
 L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Toggle whether the coordinates display can be moved or not."
 
+L["Wayfinder.General_GROUPLABEL"] = "General"
+L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Hide Blizzard Floating Diamond"
+L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
+"Hide Blizzard's floating navigation diamond when the Map Pin Enhanced floating wayfinder is disabled."
 L["Wayfinder.Floating_GROUPLABEL"] = "Floating"
 L["Wayfinder.Floating.Enable_LABEL"] = "Enable Floating Wayfinder"
 L["Wayfinder.Floating.Enable_DESCRIPTION"] =

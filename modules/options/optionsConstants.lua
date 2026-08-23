@@ -29,6 +29,7 @@ Options.DEFAULTS = {
     ["Miscellaneous.Coords.Lock"] = false,
     ["Miscellaneous.Coords.Visibility"] = {},
     ["Miscellaneous.Tracker.Visibility"] = {},
+    ["Wayfinder.General.HideBlizzardFloatingDiamond"] = false,
     ["Wayfinder.Floating.Enable"] = false,
     ["Wayfinder.Floating.Style"] = "modern",
     ["Wayfinder.Arrow.Enable"] = true,

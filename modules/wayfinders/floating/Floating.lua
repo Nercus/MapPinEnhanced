@@ -12,11 +12,13 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field frames table<FloatingStyle, MapPinEnhancedWayfinderFloatingEnhancedTemplate|MapPinEnhancedWayfinderFloatingBasicTemplate>?
 ---@field style FloatingStyle?
 ---@field runtimeEnabled boolean?
+---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeStyleOption fun()?
 local MapPinEnhancedWayfinderFloating = {}
 
 local ENABLE_OPTION = "Wayfinder.Floating.Enable"
 local STYLE_OPTION = "Wayfinder.Floating.Style"
+local HIDE_BLIZZARD_OPTION = "Wayfinder.General.HideBlizzardFloatingDiamond"
 
 local savedStyleToStyle = {
     modern = "enhanced",
@@ -133,9 +135,29 @@ local function OverrideSuperTrackedAlphaState(enable)
     SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, alpha)
 end
 
+function MapPinEnhancedWayfinderFloating:RestoreBlizzardForFloating()
+    if not self.blizzardHiddenByOption then return end
+    SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_CREATED")
+    SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+    SuperTrackedFrame:RegisterEvent("SUPER_TRACKING_CHANGED")
+    SuperTrackedFrame:InitializeNavigationFrame()
+    self.blizzardHiddenByOption = nil
+end
+
+function MapPinEnhancedWayfinderFloating:HideBlizzardForSession()
+    if self.blizzardHiddenByOption then return end
+    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_CREATED")
+    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
+    SuperTrackedFrame:UnregisterEvent("SUPER_TRACKING_CHANGED")
+    SuperTrackedFrame:ShutdownNavigationFrame()
+    SuperTrackedFrame:Hide()
+    self.blizzardHiddenByOption = true
+end
+
 function MapPinEnhancedWayfinderFloating:Enable()
     if self.runtimeEnabled then return end
     self.runtimeEnabled = true
+    self:RestoreBlizzardForFloating()
     OverrideSuperTrackedAlphaState(true)
     self.unsubscribeStyleOption = Options:SubscribeToOptionChanges(STYLE_OPTION, function(value)
         self:SetStyle(value)
@@ -158,10 +180,14 @@ end
 if not Wayfinders.wayfinders then Wayfinders.wayfinders = {} end
 Wayfinders.wayfinders["WAYFINDER_FLOATING"] = MapPinEnhancedWayfinderFloating
 
+---@type boolean?
+local configuredEnabled
 Options:SubscribeToOptionChanges(ENABLE_OPTION, function(value)
+    Options:SetOptionEnabled(HIDE_BLIZZARD_OPTION, not value)
     if value then
         Wayfinders:EnableWayfinder("WAYFINDER_FLOATING")
-    else
-        Wayfinders:DisableWayfinder("WAYFINDER_FLOATING")
+    elseif configuredEnabled == nil and Options:GetOptionValue(HIDE_BLIZZARD_OPTION) then
+        MapPinEnhancedWayfinderFloating:HideBlizzardForSession()
     end
+    configuredEnabled = value
 end)

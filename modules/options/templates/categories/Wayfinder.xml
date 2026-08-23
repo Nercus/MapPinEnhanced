@@ -8,6 +8,19 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">
                 <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.General" />
+                </KeyValues>
+                <Frames>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
+                            <KeyValue key="requireReload" value="both" />
+                        </KeyValues>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+                <KeyValues>
                     <KeyValue key="key" value="Wayfinder.Floating" />
                 </KeyValues>
                 <Frames>
@@ -18,6 +31,7 @@
                                     <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                                         <KeyValues>
                                             <KeyValue key="key" value="Wayfinder.Floating.Enable" />
+                                            <KeyValue key="requireReload" value="onDisable" />
                                         </KeyValues>
                                     </Frame>
                                     <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
