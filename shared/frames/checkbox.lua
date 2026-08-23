@@ -12,22 +12,6 @@ MapPinEnhancedCheckboxMixin = {}
 ---@class MapPinEnhancedCheckboxWithLabelTemplate : MapPinEnhancedCheckboxTemplate
 ---@field value any This typing only exists to make it useable inside the checkboxgroup
 
----@param checkbox MapPinEnhancedCheckboxTemplate
----@param value boolean
----@param skipAnimation? boolean
-local function UpdateCheckedTexture(checkbox, value, skipAnimation)
-    local checkedTexture = checkbox:GetCheckedTexture()
-    ---@cast checkedTexture MapPinEnhancedCheckboxCheckedTexture
-    if skipAnimation then
-        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
-    elseif value then
-        checkedTexture.fadeIn:PlayShowing(checkedTexture.fadeOut)
-    else
-        checkedTexture:Show()
-        checkedTexture.fadeOut:PlayHiding(checkedTexture.fadeIn)
-    end
-end
-
 function MapPinEnhancedCheckboxMixin:SetLabel(label)
     assert(self.text, "CheckboxMixin requires 'text' field to be defined.")
     self.text:SetText(label)
@@ -51,7 +35,9 @@ function MapPinEnhancedCheckboxMixin:Setup(formData)
     self:SetCallback(formData.onChange)
     self:SetScript("OnClick", function()
         local isChecked = self:GetChecked()
-        UpdateCheckedTexture(self, isChecked, false)
+        local checkedTexture = self:GetCheckedTexture()
+        ---@cast checkedTexture MapPinEnhancedCheckboxCheckedTexture
+        checkedTexture.fadeIn:ApplyParentShown(isChecked, checkedTexture.fadeOut)
         if self.onChangeCallback then
             self.onChangeCallback(isChecked)
         end
@@ -75,7 +61,9 @@ function MapPinEnhancedCheckboxMixin:SetValue(value, triggerCallback, skipAnimat
     local valueChanged = self:GetChecked() ~= value
     self:SetChecked(value)
     if skipAnimation or valueChanged then
-        UpdateCheckedTexture(self, value, skipAnimation)
+        local checkedTexture = self:GetCheckedTexture()
+        ---@cast checkedTexture MapPinEnhancedCheckboxCheckedTexture
+        checkedTexture.fadeIn:ApplyParentShown(value, checkedTexture.fadeOut, skipAnimation)
     end
     if triggerCallback and self.onChangeCallback then
         self.onChangeCallback(value)

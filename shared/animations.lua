@@ -47,6 +47,20 @@ function MapPinEnhancedAnimationVisibilityMixin:SetParentShownInstantly(shown, o
     parent:SetShown(shown)
 end
 
+---@param shown boolean
+---@param oppositeAnimation MapPinEnhancedAnimationVisibilityMixin
+---@param instantly? boolean
+function MapPinEnhancedAnimationVisibilityMixin:ApplyParentShown(shown, oppositeAnimation, instantly)
+    if instantly then
+        self:SetParentShownInstantly(shown, oppositeAnimation)
+    elseif shown then
+        self:PlayShowing(oppositeAnimation)
+    else
+        self:GetParent():Show()
+        oppositeAnimation:PlayHiding(self)
+    end
+end
+
 function MapPinEnhancedAnimationVisibilityMixin:OnPlayShow()
     if not self.showOnPlay then return end
     self:GetParent():Show()

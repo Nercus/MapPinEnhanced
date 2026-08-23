@@ -10,22 +10,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field text FontString
 MapPinEnhancedRadioButtonMixin = {}
 
----@param button MapPinEnhancedRadioButtonTemplate
----@param value boolean
----@param skipAnimation? boolean
-local function UpdateCheckedTexture(button, value, skipAnimation)
-    local checkedTexture = button:GetCheckedTexture()
-    ---@cast checkedTexture MapPinEnhancedRadioButtonCheckedTexture
-    if skipAnimation then
-        checkedTexture.fadeIn:SetParentShownInstantly(value, checkedTexture.fadeOut)
-    elseif value then
-        checkedTexture.fadeIn:PlayShowing(checkedTexture.fadeOut)
-    else
-        checkedTexture:Show()
-        checkedTexture.fadeOut:PlayHiding(checkedTexture.fadeIn)
-    end
-end
-
 function MapPinEnhancedRadioButtonMixin:OnEnable()
     self:SetAlpha(1)
 end
@@ -41,7 +25,9 @@ function MapPinEnhancedRadioButtonMixin:SetValue(value, skipAnimation, forceAnim
     local valueChanged = self:GetChecked() ~= value
     self:SetChecked(value)
     if skipAnimation or valueChanged or forceAnimation then
-        UpdateCheckedTexture(self, value, skipAnimation)
+        local checkedTexture = self:GetCheckedTexture()
+        ---@cast checkedTexture MapPinEnhancedRadioButtonCheckedTexture
+        checkedTexture.fadeIn:ApplyParentShown(value, checkedTexture.fadeOut, skipAnimation)
     end
 end
 
