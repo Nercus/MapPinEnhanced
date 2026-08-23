@@ -11,7 +11,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field actionButtons Frame | { restoreButton: MapPinEnhancedIconButtonTemplate, clearButton: MapPinEnhancedIconButtonTemplate, fadeIn: MapPinEnhancedAnimationVisibilityMixin, fadeOut: MapPinEnhancedAnimationVisibilityMixin }
 MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
-local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@type { EditGroup: fun(self: table, group: MapPinEnhancedGroupMixin) }
@@ -161,14 +160,14 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnLeave()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
-    Dialogs:ShowConfirmDialog(L["Delete Group"],
+    MapPinEnhanced:ShowConfirmDialog(L["Delete Group"],
         string.format(L["Delete group \"%s\" and all of its pins?"], self.group:GetName()), function()
             Groups:DeleteGroup(self.group)
         end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
-    Dialogs:ShowConfirmDialog(L["Clear Group"], string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
+    MapPinEnhanced:ShowConfirmDialog(L["Clear Group"], string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
         function()
             self.group:ClearGroup()
         end)
@@ -206,7 +205,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
             label = label,
             icon = "edit",
             onClick = function()
-                Dialogs:ShowRenameGroupDialog(group)
+                MapPinEnhanced:ShowRenameGroupDialog(group)
             end,
         },
     })

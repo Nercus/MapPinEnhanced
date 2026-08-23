@@ -3,8 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
----@class Dialogs
-local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedPinMixin
@@ -30,7 +28,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 label = title,
                 icon = "edit",
                 onClick = function()
-                    Dialogs:ShowRenamePinDialog(self)
+                    MapPinEnhanced:ShowRenamePinDialog(self)
                 end,
             },
         },

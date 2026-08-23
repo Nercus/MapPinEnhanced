@@ -18,6 +18,7 @@
     <Include file="secrets.lua" />
     <Include file="notify.lua" />
     <Include file="map.lua" />
+    <Include file="dialogs.lua" />
 
     <!--@debug@-->
     <Frame name="MapPinEnhancedDebugMenuFrameTemplate" parent="UIParent" inherits="DefaultPanelTemplate" frameStrata="HIGH" frameLevel="100" hidden="true" virtual="true" mixin="MapPinEnhancedDebugMenuFrameMixin" propagateKeyboardInput="true">

@@ -111,7 +111,6 @@ L["Route optimization was canceled because the group changed."] =
 L["Loading"] = "Loading"
 
 ------------------------------ Dialogs ------------------------------
-L["Info"] = "Info"
 L["Version: %s (%s)"] = "Version: %s (%s)"
 L["Build: %s"] = "Build: %s"
 L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"] =

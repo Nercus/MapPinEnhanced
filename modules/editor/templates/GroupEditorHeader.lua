@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
-local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local L = MapPinEnhanced.L
 
 ---@type MapPinEnhancedMenuRadioCellIcon[]
@@ -95,7 +94,7 @@ end
 
 function MapPinEnhancedEditorGroupEditorHeaderMixin:OptimizeGroup()
     local group, editor = assert(self.group), assert(self.editor)
-    Dialogs:ShowConfirmDialog(L["Optimize Route"],
+    MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
         L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
             if self.group ~= group then return end
             editor.groupEditor:SetLoading(true)
@@ -211,10 +210,10 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         if IsShiftKeyDown() then
             destroy()
         elseif protected then
-            Dialogs:ShowConfirmDialog(L["Clear Group"],
+            MapPinEnhanced:ShowConfirmDialog(L["Clear Group"],
                 string.format(L["Clear all pins from \"%s\"?"], group:GetName()), destroy)
         else
-            Dialogs:ShowConfirmDialog(L["Delete Group"],
+            MapPinEnhanced:ShowConfirmDialog(L["Delete Group"],
                 string.format(L["Delete group \"%s\" and all of its pins?"], group:GetName()), destroy)
         end
     end)

@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
-local Dialogs = MapPinEnhanced:GetModule("Dialogs")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
@@ -297,7 +296,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
         if IsShiftKeyDown() then
             remove()
         else
-            Dialogs:ShowConfirmDialog(L["Delete Pin"],
+            MapPinEnhanced:ShowConfirmDialog(L["Delete Pin"],
                 string.format(L["Delete pin \"%s\"?"], data.title or L["Map Pin"]), remove)
         end
     end)
