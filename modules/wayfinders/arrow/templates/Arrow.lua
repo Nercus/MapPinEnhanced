@@ -1,21 +1,21 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedFloatingArrowNeedle : Texture
+---@class MapPinEnhancedArrowNeedle : Texture
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
----@class MapPinEnhancedFloatingArrowNeedleContainer : Frame
----@field needle MapPinEnhancedFloatingArrowNeedle
+---@class MapPinEnhancedArrowNeedleContainer : Frame
+---@field needle MapPinEnhancedArrowNeedle
 
----@class MapPinEnhancedFloatingArrowTextContainer : Frame
+---@class MapPinEnhancedArrowTextContainer : Frame
 ---@field title FontString
 ---@field distance FontString
 ---@field eta FontString
 
----@class MapPinEnhancedFloatingArrowTemplate : Frame
----@field needleContainer MapPinEnhancedFloatingArrowNeedleContainer
----@field textContainer MapPinEnhancedFloatingArrowTextContainer
+---@class MapPinEnhancedWayfinderArrowTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin
+---@field needleContainer MapPinEnhancedArrowNeedleContainer
+---@field textContainer MapPinEnhancedArrowTextContainer
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field title FontString
 ---@field distance FontString
@@ -28,11 +28,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field displayType 'close' | 'far' | nil
 ---@field lastDistanceText string?
 ---@field lastEtaText string?
-MapPinEnhancedFloatingArrowMixin = {}
+MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
-local HBD = MapPinEnhanced.HBD
 local MIN_NEEDLE_SCALE = 0.7
 local MAX_NEEDLE_SCALE = 1
 local MIN_NEEDLE_ALPHA = 0.5
@@ -76,30 +75,27 @@ local function BuildArrowSettingsMenuEntries()
 end
 
 ---@param color PinColor
-function MapPinEnhancedFloatingArrowMixin:SetColor(color)
+function MapPinEnhancedWayfinderArrowMixin:SetColor(color)
     self.pin:SetColor(color)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
-function MapPinEnhancedFloatingArrowMixin:SetTexture(texture, usesAtlas)
+function MapPinEnhancedWayfinderArrowMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
-function MapPinEnhancedFloatingArrowMixin:SetTitle(title)
+function MapPinEnhancedWayfinderArrowMixin:SetTitle(title)
     self.title:SetText(title)
 end
 
-function MapPinEnhancedFloatingArrowMixin:SetLocation(mapID, x, y)
-    self.targetMapID = mapID
-    self.targetX = x
-    self.targetY = y
-    self.targetWorldX, self.targetWorldY, self.targetInstance = HBD:GetWorldCoordinatesFromZone(x, y, mapID)
+function MapPinEnhancedWayfinderArrowMixin:SetLocation(mapID, x, y)
+    self:SetTargetLocation(mapID, x, y)
 end
 
 ---@param displayType 'close' | 'far'
-function MapPinEnhancedFloatingArrowMixin:SetDisplayType(displayType)
+function MapPinEnhancedWayfinderArrowMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if displayType == "close" then
@@ -111,30 +107,15 @@ function MapPinEnhancedFloatingArrowMixin:SetDisplayType(displayType)
     end
 end
 
-local lastUpdate = 0
-function MapPinEnhancedFloatingArrowMixin:UpdateNeedlePosition(elapsed)
-    if not self.targetWorldX or not self.targetWorldY or not self.targetInstance then return end
-    if elapsed and lastUpdate + .1 > GetTime() then return end
-    lastUpdate = GetTime()
-
-    local playerWorldX, playerWorldY, playerInstance = HBD:GetPlayerWorldPosition()
-    if not playerWorldX or not playerWorldY or playerInstance ~= self.targetInstance then return end
-
-    local worldAngle = HBD:GetWorldVector(playerInstance, playerWorldX, playerWorldY,
-        self.targetWorldX, self.targetWorldY)
-
-    local facing = GetPlayerFacing()
-    if not worldAngle or not facing then return end
-
-    local relativeAngle = worldAngle - facing
-    relativeAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
-
-    self.newNeedleRotation = relativeAngle
+function MapPinEnhancedWayfinderArrowMixin:UpdateNeedlePosition(elapsed)
+    local angle = self:SampleTargetAngle(elapsed)
+    if angle == nil then return end
+    self.newNeedleRotation = angle
     self:UpdateNeedleAlpha()
 end
 
 ---@param rotation number
-function MapPinEnhancedFloatingArrowMixin:SetPinRotation(rotation)
+function MapPinEnhancedWayfinderArrowMixin:SetPinRotation(rotation)
     self.pin.background:SetRotation(rotation)
     self.pin.outline:SetRotation(rotation)
     self.pin.foreground:SetRotation(rotation)
@@ -144,7 +125,7 @@ function MapPinEnhancedFloatingArrowMixin:SetPinRotation(rotation)
 end
 
 ---@param rotatePin boolean
-function MapPinEnhancedFloatingArrowMixin:SetRotatePin(rotatePin)
+function MapPinEnhancedWayfinderArrowMixin:SetRotatePin(rotatePin)
     self.rotatePin = rotatePin
     if not rotatePin then
         self:SetPinRotation(0)
@@ -152,14 +133,14 @@ function MapPinEnhancedFloatingArrowMixin:SetRotatePin(rotatePin)
 end
 
 ---@param rotation number
-function MapPinEnhancedFloatingArrowMixin:UpdateNeedleScale(rotation)
+function MapPinEnhancedWayfinderArrowMixin:UpdateNeedleScale(rotation)
     local scaleRange = MAX_NEEDLE_SCALE - MIN_NEEDLE_SCALE
     local scale = MAX_NEEDLE_SCALE - (scaleRange * GetNeedleRotationProgress(rotation))
     self.needleContainer:SetScale(scale)
 end
 
 ---@param rotation number | nil
-function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha(rotation)
+function MapPinEnhancedWayfinderArrowMixin:UpdateNeedleAlpha(rotation)
     if not self.displayType or self.displayType == "close" then return end
 
     local rotationProgress = GetNeedleRotationProgress(rotation or self.newNeedleRotation or 0)
@@ -168,7 +149,7 @@ function MapPinEnhancedFloatingArrowMixin:UpdateNeedleAlpha(rotation)
     self.needleContainer.needle:SetAlpha(alpha)
 end
 
-function MapPinEnhancedFloatingArrowMixin:AnimateRotation(elapsed)
+function MapPinEnhancedWayfinderArrowMixin:AnimateRotation(elapsed)
     if not self.displayType or self.displayType == "close" then return end
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
@@ -189,29 +170,13 @@ function MapPinEnhancedFloatingArrowMixin:AnimateRotation(elapsed)
 end
 
 ---@param elapsed number
-function MapPinEnhancedFloatingArrowMixin:OnUpdate(elapsed)
+function MapPinEnhancedWayfinderArrowMixin:OnUpdate(elapsed)
     self:UpdateNeedlePosition(elapsed)
     if self.displayType == "close" then return end
     self:AnimateRotation(elapsed)
 end
 
-function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarget)
-    local distanceText = ""
-    local etaText = ""
-    if distance and timeToTarget then
-        distanceText = MapPinEnhanced:FormatDistance(distance)
-        etaText = MapPinEnhanced:FormatETA(timeToTarget)
-    end
-
-    if self.lastDistanceText ~= distanceText then
-        self.lastDistanceText = distanceText
-        self.distance:SetText(distanceText)
-    end
-    if self.lastEtaText ~= etaText then
-        self.lastEtaText = etaText
-        self.eta:SetText(etaText)
-    end
-
+function MapPinEnhancedWayfinderArrowMixin:OnDistanceUpdate(distance, timeToTarget)
     self.distanceValue = distance
     if distance and distance < 10 then
         self:SetDisplayType("close")
@@ -221,7 +186,7 @@ function MapPinEnhancedFloatingArrowMixin:OnDistanceUpdate(distance, timeToTarge
 end
 
 ---@param mouseButton MouseButton
-function MapPinEnhancedFloatingArrowMixin:OnMouseDown(mouseButton)
+function MapPinEnhancedWayfinderArrowMixin:OnMouseDown(mouseButton)
     if mouseButton ~= "RightButton" then return end
 
     local trackedPin = Pins:GetTrackedPin()
@@ -240,7 +205,7 @@ function MapPinEnhancedFloatingArrowMixin:OnMouseDown(mouseButton)
     MapPinEnhanced:GenerateMenu(self, menu)
 end
 
-function MapPinEnhancedFloatingArrowMixin:OnLoad()
+function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     self.title = self.textContainer.title
     self.distance = self.textContainer.distance
     self.eta = self.textContainer.eta
@@ -257,23 +222,21 @@ function MapPinEnhancedFloatingArrowMixin:OnLoad()
     self.pin:SetTracked(true)
 end
 
-function MapPinEnhancedFloatingArrowMixin:OnShow()
+function MapPinEnhancedWayfinderArrowMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
-    self.distanceCallback = function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.distance, self.eta, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
-    end
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
+    end)
     self:UpdateNeedlePosition()
     self:UpdateNeedleAlpha()
     self:SetDisplayType("far")
 end
 
-function MapPinEnhancedFloatingArrowMixin:Reset()
-    self:SetDisplayType("far")
-    self.distance:SetText("")
-    self.eta:SetText("")
-    self.lastDistanceText = ""
-    self.lastEtaText = ""
+function MapPinEnhancedWayfinderArrowMixin:Reset()
+    self.displayType = "far"
+    self.needleContainer.needle.fadeIn:SetParentShownInstantly(true, self.needleContainer.needle.fadeOut)
+    self.pin:HidePulse()
+    self:ResetDirectionSampling()
     self.needleRotation = nil
     self.newNeedleRotation = nil
     self.needleContainer:SetScale(MAX_NEEDLE_SCALE)
@@ -281,11 +244,8 @@ function MapPinEnhancedFloatingArrowMixin:Reset()
     self:SetPinRotation(0)
 end
 
-function MapPinEnhancedFloatingArrowMixin:OnHide()
+function MapPinEnhancedWayfinderArrowMixin:OnHide()
     self:SetScript("OnUpdate", nil)
+    self:StopDistanceUpdates()
     self:Reset()
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
 end

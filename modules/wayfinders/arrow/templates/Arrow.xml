@@ -3,7 +3,7 @@
 
 
     <Include file="Arrow.lua" />
-    <Frame name="MapPinEnhancedFloatingArrowTemplate" parent="UIParent" mixin="MapPinEnhancedFloatingArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM" enableMouse="true">
+    <Frame name="MapPinEnhancedWayfinderArrowTemplate" parent="UIParent" mixin="MapPinEnhancedWayfinderArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM" enableMouse="true">
         <Size x="140" y="140" />
         <Anchors>
             <Anchor point="BOTTOMRIGHT" x="-500" y="500" />

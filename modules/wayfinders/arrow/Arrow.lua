@@ -6,14 +6,14 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinderArrow : MapPinEnhancedWayfinder
----@field frame MapPinEnhancedFloatingArrowTemplate
+---@field frame MapPinEnhancedWayfinderArrowTemplate
 ---@field unsubscribeRotatePinOption fun() | nil
 local MapPinEnhancedWayfinderArrow = {}
 
----@return MapPinEnhancedFloatingArrowTemplate
+---@return MapPinEnhancedWayfinderArrowTemplate
 function MapPinEnhancedWayfinderArrow:GetFrame()
     if not self.frame then
-        self.frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingArrowTemplate")
+        self.frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedWayfinderArrowTemplate")
     end
     return self.frame
 end

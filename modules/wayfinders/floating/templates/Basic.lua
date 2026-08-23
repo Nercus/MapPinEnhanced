@@ -1,22 +1,22 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedFloatingSimpleTextContainer : Frame
+---@class MapPinEnhancedFloatingBasicTextContainer : Frame
 ---@field title FontString
 ---@field distance FontString
 ---@field eta FontString
 
----@class MapPinEnhancedFloatingSimpleClampedArrow : Frame
+---@class MapPinEnhancedFloatingBasicClampedArrow : Frame
 ---@field needle Texture
 
----@class MapPinEnhancedFloatingSimpleTemplate : Frame
----@field clampedArrow MapPinEnhancedFloatingSimpleClampedArrow
+---@class MapPinEnhancedWayfinderFloatingBasicTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin
+---@field clampedArrow MapPinEnhancedFloatingBasicClampedArrow
 ---@field pin MapPinEnhancedBasePinTemplate
----@field textContainer MapPinEnhancedFloatingSimpleTextContainer
+---@field textContainer MapPinEnhancedFloatingBasicTextContainer
 ---@field distanceCallback fun(distance: number, timeToTarget: number) | nil
 ---@field lastDistanceText string?
 ---@field lastEtaText string?
-MapPinEnhancedFloatingSimpleMixin = {}
+MapPinEnhancedWayfinderFloatingBasicMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin)
 
 ---@return SuperTrackedFrame | nil
 local function GetSuperTrackedFrame()
@@ -26,44 +26,28 @@ local function GetSuperTrackedFrame()
 end
 
 ---@param color PinColor
-function MapPinEnhancedFloatingSimpleMixin:SetColor(color)
+function MapPinEnhancedWayfinderFloatingBasicMixin:SetColor(color)
     self.pin:SetColor(color)
     self.clampedArrow.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
-function MapPinEnhancedFloatingSimpleMixin:SetTexture(texture, usesAtlas)
+function MapPinEnhancedWayfinderFloatingBasicMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
     self.clampedArrow.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 ---@param title string?
-function MapPinEnhancedFloatingSimpleMixin:SetTitle(title)
+function MapPinEnhancedWayfinderFloatingBasicMixin:SetTitle(title)
     self.textContainer.title:SetText(title or "")
 end
 
-function MapPinEnhancedFloatingSimpleMixin:SetLocation(_mapID, _x, _y)
+function MapPinEnhancedWayfinderFloatingBasicMixin:SetLocation(_mapID, _x, _y)
 end
 
 ---@param distance number?
 ---@param timeToTarget number?
-function MapPinEnhancedFloatingSimpleMixin:OnDistanceUpdate(distance, timeToTarget)
-    local distanceText = ""
-    local etaText = ""
-    if distance and timeToTarget then
-        distanceText = MapPinEnhanced:FormatDistance(distance)
-        etaText = MapPinEnhanced:FormatETA(timeToTarget)
-    end
-
-    if self.lastDistanceText ~= distanceText then
-        self.lastDistanceText = distanceText
-        self.textContainer.distance:SetText(distanceText)
-    end
-    if self.lastEtaText ~= etaText then
-        self.lastEtaText = etaText
-        self.textContainer.eta:SetText(etaText)
-    end
-
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnDistanceUpdate(distance, timeToTarget)
     if distance and distance < 10 then
         self.pin:ShowPulse()
     else
@@ -71,7 +55,7 @@ function MapPinEnhancedFloatingSimpleMixin:OnDistanceUpdate(distance, timeToTarg
     end
 end
 
-function MapPinEnhancedFloatingSimpleMixin:UpdateClampedArrow()
+function MapPinEnhancedWayfinderFloatingBasicMixin:UpdateClampedArrow()
     local superTrackedFrame = GetSuperTrackedFrame()
     local arrow = superTrackedFrame and superTrackedFrame.Arrow
     if not arrow or not C_Navigation.WasClampedToScreen() then
@@ -94,11 +78,11 @@ function MapPinEnhancedFloatingSimpleMixin:UpdateClampedArrow()
     end
 end
 
-function MapPinEnhancedFloatingSimpleMixin:OnUpdate()
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnUpdate()
     self:UpdateClampedArrow()
 end
 
-function MapPinEnhancedFloatingSimpleMixin:AttachToSuperTrackedFrame()
+function MapPinEnhancedWayfinderFloatingBasicMixin:AttachToSuperTrackedFrame()
     local superTrackedFrame = GetSuperTrackedFrame()
     if not superTrackedFrame then return end
 
@@ -114,7 +98,7 @@ function MapPinEnhancedFloatingSimpleMixin:AttachToSuperTrackedFrame()
     self.textContainer:SetFrameLevel(frameLevel + 12)
 end
 
-function MapPinEnhancedFloatingSimpleMixin:HideSuperTrackedRegions()
+function MapPinEnhancedWayfinderFloatingBasicMixin:HideSuperTrackedRegions()
     local superTrackedFrame = GetSuperTrackedFrame()
     if not superTrackedFrame then return end
 
@@ -126,7 +110,7 @@ function MapPinEnhancedFloatingSimpleMixin:HideSuperTrackedRegions()
     superTrackedFrame.DistanceText:Hide()
 end
 
-function MapPinEnhancedFloatingSimpleMixin:RestoreSuperTrackedRegions()
+function MapPinEnhancedWayfinderFloatingBasicMixin:RestoreSuperTrackedRegions()
     local superTrackedFrame = GetSuperTrackedFrame()
     if not superTrackedFrame then return end
     superTrackedFrame.Arrow:SetAlpha(1)
@@ -137,50 +121,44 @@ function MapPinEnhancedFloatingSimpleMixin:RestoreSuperTrackedRegions()
     superTrackedFrame.DistanceText:Show()
 end
 
-function MapPinEnhancedFloatingSimpleMixin:OnLoad()
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnLoad()
     self.pin:SetTracked(true)
-    self:RegisterEvent("NAVIGATION_FRAME_CREATED")
 end
 
 ---@param event string
-function MapPinEnhancedFloatingSimpleMixin:OnEvent(event)
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnEvent(event)
     if event ~= "NAVIGATION_FRAME_CREATED" or not self:IsShown() then return end
 
     self:AttachToSuperTrackedFrame()
     self:HideSuperTrackedRegions()
 end
 
-function MapPinEnhancedFloatingSimpleMixin:OnShow()
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnShow()
+    self:RegisterEvent("NAVIGATION_FRAME_CREATED")
+    local superTrackedFrame = GetSuperTrackedFrame()
+    if superTrackedFrame then superTrackedFrame:Show() end
     self:AttachToSuperTrackedFrame()
     self:HideSuperTrackedRegions()
     self:SetScript("OnUpdate", function()
         self:OnUpdate()
     end)
 
-    self.distanceCallback = function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.textContainer.distance, self.textContainer.eta, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
-    end
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
+    end)
     self:UpdateClampedArrow()
 end
 
-function MapPinEnhancedFloatingSimpleMixin:Reset()
-    self.textContainer.distance:SetText("")
-    self.textContainer.eta:SetText("")
-    self.lastDistanceText = ""
-    self.lastEtaText = ""
+function MapPinEnhancedWayfinderFloatingBasicMixin:Reset()
     self.pin:HidePulse()
     self.clampedArrow:Hide()
     self.clampedArrow.needle:SetRotation(0)
 end
 
-function MapPinEnhancedFloatingSimpleMixin:OnHide()
+function MapPinEnhancedWayfinderFloatingBasicMixin:OnHide()
     self:SetScript("OnUpdate", nil)
+    self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
+    self:StopDistanceUpdates()
     self:Reset()
     self:RestoreSuperTrackedRegions()
-
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
 end

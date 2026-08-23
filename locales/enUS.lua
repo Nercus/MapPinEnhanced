@@ -217,9 +217,9 @@ L["Wayfinder.Floating.Enable_DESCRIPTION"] =
 "Show a floating wayfinder on your screen."
 L["Wayfinder.Floating.Style_LABEL"] = "Floating Wayfinder Style"
 L["Wayfinder.Floating.Style_DESCRIPTION"] =
-"Choose the floating wayfinder style. Modern shows more info, Simple is more compact and works better with other addons."
-L["Modern"] = "Modern"
-L["Simple"] = "Simple"
+"Choose the floating wayfinder style. Enhanced shows more information; Basic is compact and works better with other addons."
+L["Enhanced"] = "Enhanced"
+L["Basic"] = "Basic"
 L["System Groups"] = "System Groups"
 L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."] =
 "System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."

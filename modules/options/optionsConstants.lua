@@ -30,7 +30,7 @@ Options.DEFAULTS = {
     ["Miscellaneous.Coords.Visibility"] = {},
     ["Miscellaneous.Tracker.Visibility"] = {},
     ["Wayfinder.Floating.Enable"] = false,
-    ["Wayfinder.Floating.Style"] = "modern" --[[@as WayfinderFloatingFrameType]],
+    ["Wayfinder.Floating.Style"] = "modern",
     ["Wayfinder.Arrow.Enable"] = true,
     ["Wayfinder.Arrow.RotatePin"] = false,
 }
@@ -45,8 +45,8 @@ Options.OPTIONS_CONFIG = {
         { label = L["Static"],  value = Options.ARRIVAL_MODE_STATIC },
     },
     ["Wayfinder.Floating.Style"] = {
-        { label = L["Modern"], value = "modern" },
-        { label = L["Simple"], value = "simple" },
+        { label = L["Enhanced"], value = "modern" },
+        { label = L["Basic"],    value = "simple" },
     },
     ["Miscellaneous.Coords.Visibility"] = {
         { label = L["Dungeon"],                  value = "dungeon" },

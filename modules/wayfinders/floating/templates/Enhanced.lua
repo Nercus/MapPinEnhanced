@@ -2,32 +2,31 @@
 local MapPinEnhanced = select(2, ...)
 
 
----@class MapPinEnhancedFloatingModernNeedle : Texture
+---@class MapPinEnhancedFloatingEnhancedNeedle : Texture
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
----@class MapPinEnhancedFloatingModernTitleContainer : Frame
+---@class MapPinEnhancedFloatingEnhancedTitleContainer : Frame
 ---@field title FontString
 ---@field titleBackground Texture
 ---@field titleGradient Texture
 
----@class MapPinEnhancedFloatingModernTemplate : Frame
+---@class MapPinEnhancedWayfinderFloatingEnhancedTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field distance FontString
 ---@field eta FontString
----@field titleContainer MapPinEnhancedFloatingModernTitleContainer
+---@field titleContainer MapPinEnhancedFloatingEnhancedTitleContainer
 ---@field beam Texture
----@field needle MapPinEnhancedFloatingModernNeedle
+---@field needle MapPinEnhancedFloatingEnhancedNeedle
+---@field needsBlizzardReset boolean?
 ---@field lastDistanceText string?
 ---@field lastEtaText string?
-MapPinEnhancedFloatingModernMixin = {}
+MapPinEnhancedWayfinderFloatingEnhancedMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
+    MapPinEnhancedWayfinderDirectionMixin)
 
--- TODO: the distant diamond should scale based on distance
+-- TODO: the distant floating marker should scale based on distance
 -- TODO: use interpolation to smooth movement when clamped to the edge of the screen
 
-local HBD = MapPinEnhanced.HBD
-
-local needsReset = false
 local mathSqrt = math.sqrt
 local mathSin = math.sin
 local mathCos = math.cos
@@ -83,7 +82,7 @@ local function SetTruncatedTitle(fontString, text)
     fontString:SetWidth(mathMin(MAX_TITLE_WIDTH, mathCeil(fontString:GetUnboundedStringWidth())))
 end
 
----@param frame MapPinEnhancedFloatingModernTemplate
+---@param frame MapPinEnhancedWayfinderFloatingEnhancedTemplate
 local function ApplyWayfinderColor(frame)
     local activeColor = frame.pin:GetActiveStyleColor()
     local r, g, b, a = activeColor:GetRGBA()
@@ -94,18 +93,18 @@ local function ApplyWayfinderColor(frame)
 end
 
 ---@param color PinColor
-function MapPinEnhancedFloatingModernMixin:SetColor(color)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetColor(color)
     self.pin:SetColor(color)
     ApplyWayfinderColor(self)
 end
 
-function MapPinEnhancedFloatingModernMixin:SetTexture(texture, usesAtlas)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     self.pin:SetIconTexture(texture, usesAtlas)
     ApplyWayfinderColor(self)
 end
 
-function MapPinEnhancedFloatingModernMixin:SetTitle(title)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetTitle(title)
     local titleFontString = self.titleContainer.title
     titleFontString:SetMaxLines(1)
     titleFontString:SetWordWrap(false)
@@ -113,22 +112,19 @@ function MapPinEnhancedFloatingModernMixin:SetTitle(title)
     self.titleContainer:SetSize(titleFontString:GetWidth() + 10, titleFontString:GetHeight() + 10)
 end
 
-function MapPinEnhancedFloatingModernMixin:SetLocation(mapID, x, y)
-    self.targetMapID = mapID
-    self.targetX = x
-    self.targetY = y
-    self.targetWorldX, self.targetWorldY, self.targetInstance = HBD:GetWorldCoordinatesFromZone(x, y, mapID)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetLocation(mapID, x, y)
+    self:SetTargetLocation(mapID, x, y)
 end
 
 local function GetCenterScreenPoint()
-    local centerX, centerY = WorldFrame:GetCenter();
-    local scale = UIParent:GetEffectiveScale() or 1;
-    return centerX / scale, centerY / scale;
+    local centerX, centerY = WorldFrame:GetCenter()
+    local scale = UIParent:GetEffectiveScale() or 1
+    return centerX / scale, centerY / scale
 end
 
 ---@param major number
 ---@param minor number
-function MapPinEnhancedFloatingModernMixin:SetEllipticalRadii(major, minor)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetEllipticalRadii(major, minor)
     self.majorAxis = major
     self.minorAxis = minor
     self.majorAxisSquared = major * major
@@ -136,10 +132,10 @@ function MapPinEnhancedFloatingModernMixin:SetEllipticalRadii(major, minor)
     self.axesMultiplied = major * minor
 end
 
-function MapPinEnhancedFloatingModernMixin:InitializeNavigationFrame()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:InitializeNavigationFrame()
     if self.navFrame then return end
     self.navFrame = C_Navigation.GetFrame()
-    self:SetShown(self.navFrame ~= nil)
+    self:SetAlpha(self.navFrame and 1 or 0)
 
     if self.navFrame then
         self:ClearAllPoints()
@@ -147,21 +143,22 @@ function MapPinEnhancedFloatingModernMixin:InitializeNavigationFrame()
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:ShutdownNavigationFrame()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:ShutdownNavigationFrame()
     self:ClearAllPoints()
+    self:SetAlpha(0)
     self.navFrame = nil
     self.isClamped = nil
     self.clampedChanged = nil
 end
 
-function MapPinEnhancedFloatingModernMixin:CheckInitializeNavigationFrame()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:CheckInitializeNavigationFrame()
     if not self.navFrame then
         self:InitializeNavigationFrame()
     end
 end
 
 ---@param displayType 'close' | 'far'
-function MapPinEnhancedFloatingModernMixin:SetDisplayType(displayType)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if displayType == "close" then
@@ -173,32 +170,13 @@ function MapPinEnhancedFloatingModernMixin:SetDisplayType(displayType)
     end
 end
 
-local UP_VECTOR = CreateVector2D(0, 1);
-local RIGHT_VECTOR = CreateVector2D(1, 0);
-local indicatorVec = CreateVector2D(0, 0);
-
-local lastUpdate = 0
-function MapPinEnhancedFloatingModernMixin:UpdateNeedlePosition(elapsed)
-    if not self.targetWorldX or not self.targetWorldY or not self.targetInstance then return end
-    if elapsed and lastUpdate + 0.1 > GetTime() then return end
-    lastUpdate = GetTime()
-
-    local playerWorldX, playerWorldY, playerInstance = HBD:GetPlayerWorldPosition()
-    if not playerWorldX or not playerWorldY or playerInstance ~= self.targetInstance then return end
-
-    local worldAngle = HBD:GetWorldVector(playerInstance, playerWorldX, playerWorldY,
-        self.targetWorldX, self.targetWorldY)
-
-    local facing = GetPlayerFacing()
-    if not worldAngle or not facing then return end
-
-    local relativeAngle = worldAngle - facing
-    relativeAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
-
-    self.newNeedleRotation = relativeAngle
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:UpdateNeedlePosition(elapsed)
+    local angle = self:SampleTargetAngle(elapsed)
+    if angle == nil then return end
+    self.newNeedleRotation = angle
 end
 
-function MapPinEnhancedFloatingModernMixin:AnimateNeedleRotation(elapsed)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:AnimateNeedleRotation(elapsed)
     if not self.displayType or self.displayType == "close" then return end
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
@@ -213,13 +191,13 @@ function MapPinEnhancedFloatingModernMixin:AnimateNeedleRotation(elapsed)
     self.needle:SetRotation(-newRotation)
 end
 
-function MapPinEnhancedFloatingModernMixin:UpdateClampedState()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:UpdateClampedState()
     local clamped = C_Navigation.WasClampedToScreen()
     self.clampedChanged = clamped ~= self.isClamped
     self.isClamped = clamped
 end
 
-function MapPinEnhancedFloatingModernMixin:ClampElliptical()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:ClampElliptical()
     local centerX, centerY = GetCenterScreenPoint()
     local navX, navY = self.navFrame:GetCenter()
 
@@ -241,23 +219,7 @@ function MapPinEnhancedFloatingModernMixin:ClampElliptical()
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:OnDistanceUpdate(distance, timeToTarget)
-    local distanceText = ""
-    local etaText = ""
-    if distance and timeToTarget then
-        distanceText = MapPinEnhanced:FormatDistance(distance)
-        etaText = MapPinEnhanced:FormatETA(timeToTarget)
-    end
-
-    if self.lastDistanceText ~= distanceText then
-        self.lastDistanceText = distanceText
-        self.distance:SetText(distanceText)
-    end
-    if self.lastEtaText ~= etaText then
-        self.lastEtaText = etaText
-        self.eta:SetText(etaText)
-    end
-
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnDistanceUpdate(distance, timeToTarget)
     self.distanceValue = distance
     if distance and distance < 50 then
         self:SetDisplayType("close")
@@ -266,7 +228,7 @@ function MapPinEnhancedFloatingModernMixin:OnDistanceUpdate(distance, timeToTarg
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:UpdatePosition()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:UpdatePosition()
     if self.isClamped or self.clampedChanged then
         self:ClearAllPoints()
 
@@ -278,7 +240,7 @@ function MapPinEnhancedFloatingModernMixin:UpdatePosition()
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:OnUpdate(elapsed)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnUpdate(elapsed)
     self:CheckInitializeNavigationFrame()
 
     if not self.navFrame then return end
@@ -290,14 +252,12 @@ function MapPinEnhancedFloatingModernMixin:OnUpdate(elapsed)
     self:AnimateNeedleRotation(elapsed)
 end
 
-function MapPinEnhancedFloatingModernMixin:OnLoad()
-    self:RegisterEvent("NAVIGATION_FRAME_CREATED")
-    self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnLoad()
     self:SetEllipticalRadii(500, 200)
     self.pin:SetTracked(true)
 end
 
-function MapPinEnhancedFloatingModernMixin:OnEvent(event)
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnEvent(event)
     if event == "NAVIGATION_FRAME_CREATED" then
         self:InitializeNavigationFrame()
     elseif event == "NAVIGATION_FRAME_DESTROYED" then
@@ -305,48 +265,50 @@ function MapPinEnhancedFloatingModernMixin:OnEvent(event)
     end
 end
 
-function MapPinEnhancedFloatingModernMixin:OnShow()
-    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_CREATED");
-    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_DESTROYED");
-    SuperTrackedFrame:UnregisterEvent("SUPER_TRACKING_CHANGED");
-    SuperTrackedFrame:ShutdownNavigationFrame();
-    SuperTrackedFrame:Hide();
-    needsReset = true
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnShow()
+    self:RegisterEvent("NAVIGATION_FRAME_CREATED")
+    self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_CREATED")
+    SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
+    SuperTrackedFrame:UnregisterEvent("SUPER_TRACKING_CHANGED")
+    SuperTrackedFrame:ShutdownNavigationFrame()
+    SuperTrackedFrame:Hide()
+    self.needsBlizzardReset = true
 
     self:InitializeNavigationFrame()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
 
-    self.distanceCallback = function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.distance, self.eta, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
-    end
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
+    end)
 end
 
-function MapPinEnhancedFloatingModernMixin:OnHide()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnHide()
     self:SetScript("OnUpdate", nil)
+    self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
+    self:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
+    self:StopDistanceUpdates()
+    self:ResetDirectionSampling()
     self:ShutdownNavigationFrame()
 
-    if needsReset then
-        SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_CREATED");
-        SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_DESTROYED");
-        SuperTrackedFrame:RegisterEvent("SUPER_TRACKING_CHANGED");
-        SuperTrackedFrame:InitializeNavigationFrame();
-        SuperTrackedFrame:Show();
+    if self.needsBlizzardReset then
+        SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_CREATED")
+        SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+        SuperTrackedFrame:RegisterEvent("SUPER_TRACKING_CHANGED")
+        SuperTrackedFrame:InitializeNavigationFrame()
+        SuperTrackedFrame:Show()
     end
-
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
+    self.needsBlizzardReset = nil
+    self:Reset()
 end
 
-function MapPinEnhancedFloatingModernMixin:Reset()
-    self:Hide()
-    self.distance:SetText("")
-    self.eta:SetText("")
-    self.lastDistanceText = ""
-    self.lastEtaText = ""
-    needsReset = false
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:Reset()
+    self.displayType = "far"
+    self.needle.fadeIn:SetParentShownInstantly(true, self.needle.fadeOut)
+    self.needleRotation = nil
+    self.newNeedleRotation = nil
+    self.needle:SetRotation(0)
+    self.pin:HidePulse()
 end
