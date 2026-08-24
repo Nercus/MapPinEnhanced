@@ -48,7 +48,7 @@
                     </Frame>
                     <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
                         <Anchors>
-                            <Anchor poi nt="CENTER" />
+                            <Anchor point="CENTER" />
                         </Anchors>
                     </Frame>
                 </Frames>
