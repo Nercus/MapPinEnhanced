@@ -320,9 +320,13 @@ function MapPinEnhanced:ShowRenameGroupDialog(group)
     return ShowStaticDialog(RENAME_GROUP_DIALOG_NAME, L["Rename Group"], { group = group })
 end
 
+local MPHLogoSequence = "|T" .. MapPinEnhanced.assetsPath .. "\\logo_transparent.png" .. ":64:64|t"
+local HeartIcon = " |A:" .. "delves-scenario-heart-icon" .. ":16:16|a"
+
 ---@return MapPinEnhancedStaticDialogFrame?
 function MapPinEnhanced:ShowAboutDialog()
     local text = table.concat({
+        MPHLogoSequence,
         MapPinEnhanced.displayName,
         "by Nerc",
         "",
@@ -330,7 +334,8 @@ function MapPinEnhanced:ShowAboutDialog()
         string.format(L["Build: %s"], GetBuildInfo()),
         "",
         L
-            ["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs! <3"],
+        ["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs!"] ..
+        HeartIcon,
     }, "\n")
 
     return ShowStaticDialog(ABOUT_DIALOG_NAME, text, nil)
