@@ -15,12 +15,12 @@ end
 
 function Tracker:ShowTracker()
     MapPinEnhanced:SetVar("trackerVisible", true)
-    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
+    MapPinEnhanced:UpdateVisibilityTarget("tracker")
 end
 
 function Tracker:HideTracker()
     MapPinEnhanced:SetVar("trackerVisible", false)
-    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
+    MapPinEnhanced:UpdateVisibilityTarget("tracker")
 end
 
 function Tracker:UpdateList()
@@ -31,7 +31,7 @@ function Tracker:UpdateList()
 end
 
 function Tracker:RestoreTrackerVisibility()
-    MapPinEnhanced:EvaluateVisibilityTarget("tracker")
+    MapPinEnhanced:UpdateVisibilityTarget("tracker")
 end
 
 function Tracker:IsShown()
@@ -43,8 +43,8 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Tracker:RestoreTrackerVisibility()
 end)
 
-MapPinEnhanced:RegisterVisibilityCondition("noActivePins", {
-    evaluate = function()
+MapPinEnhanced:AddVisibilityRule("noActivePins", {
+    isActive = function()
         for group in Groups:EnumerateGroups() do
             if not group:IsHidden() then
                 for _ in group:EnumeratePins() do return false end
@@ -57,7 +57,7 @@ MapPinEnhanced:RegisterVisibilityCondition("noActivePins", {
 
 MapPinEnhanced:RegisterVisibilityTarget("tracker", {
     optionKey = "Miscellaneous.Tracker.Visibility",
-    conditions = { "dungeon", "raid", "scenario", "battleground", "arena", "noActivePins" },
+    rules = { "dungeon", "raid", "scenario", "battleground", "arena", "noActivePins" },
     isManuallyEnabled = function() return MapPinEnhanced:GetVar("trackerVisible") == true end,
     show = function() Tracker:GetTrackerFrame():ShowFrame() end,
     hide = function()

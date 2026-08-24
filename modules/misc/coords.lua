@@ -188,11 +188,11 @@ end
 
 
 Options:SubscribeToOptionChanges("Miscellaneous.Coords.Enable", function(value)
-    MapPinEnhanced:EvaluateVisibilityTarget("coordinates")
+    MapPinEnhanced:UpdateVisibilityTarget("coordinates")
 end)
 
-MapPinEnhanced:RegisterVisibilityCondition("noCoordinates", {
-    evaluate = function()
+MapPinEnhanced:AddVisibilityRule("noCoordinates", {
+    isActive = function()
         local playerMap = GetBestMapForUnit("player")
         if not playerMap then return true end
         local position = GetPlayerMapPosition(playerMap, "player")
@@ -207,7 +207,7 @@ MapPinEnhanced:RegisterVisibilityCondition("noCoordinates", {
 
 MapPinEnhanced:RegisterVisibilityTarget("coordinates", {
     optionKey = "Miscellaneous.Coords.Visibility",
-    conditions = { "dungeon", "raid", "scenario", "battleground", "arena", "noCoordinates" },
+    rules = { "dungeon", "raid", "scenario", "battleground", "arena", "noCoordinates" },
     isManuallyEnabled = function()
         return Options:GetOptionValue("Miscellaneous.Coords.Enable") == true
     end,

@@ -9,8 +9,8 @@ local MapPinEnhanced = select(2, ...)
 ---| "GROUP_UPDATED"
 ---| "GROUP_DELETED"
 
----@class VisibilityCondition
----@field evaluate fun(): boolean
+---@class VisibilityRule
+---@field isActive fun(): boolean
 ---@field events? WowEvent[]
 ---@field callbacks? VisibilityCallbackEvent[]
 ---@field delay? number
@@ -18,32 +18,32 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class VisibilityTarget
 ---@field optionKey string
----@field conditions table<string, boolean>
+---@field rules table<string, boolean>
 ---@field isManuallyEnabled fun(): boolean
 ---@field show fun()
 ---@field hide fun()
----@field conditionStartedAt table<string, number>
----@field effectiveVisible boolean?
+---@field ruleStartedAt table<string, number>
+---@field isShown boolean?
 
----@class VisibilityTargetConfig
+---@class VisibilityTargetSettings
 ---@field optionKey string
----@field conditions string[]
+---@field rules string[]
 ---@field isManuallyEnabled fun(): boolean
 ---@field show fun()
 ---@field hide fun()
 
----@type table<string, VisibilityCondition>
-local conditions = {}
+---@type table<string, VisibilityRule>
+local rules = {}
 ---@type table<string, VisibilityTarget>
 local targets = {}
 ---@type table<WowEvent, boolean>
 local registeredEvents = {}
 ---@type table<VisibilityCallbackEvent, boolean>
 local registeredCallbacks = {}
-local evaluationQueued = false
+local updateQueued = false
 
 ---@param targetID string
-local function EvaluateTarget(targetID)
+local function UpdateTargetVisibility(targetID)
     local target = targets[targetID]
     if not target then return end
 
@@ -52,29 +52,29 @@ local function EvaluateTarget(targetID)
         local Options = MapPinEnhanced:GetModule("Options")
         local selected = Options:GetOptionValue(target.optionKey) --[[@as MapPinEnhancedMultiselectValue]]
         local now = GetTime()
-        for conditionID in pairs(target.conditions) do
-            local condition = conditions[conditionID]
-            assert(condition, "Visibility target references an unregistered condition: " .. conditionID)
-            if selected[conditionID] and condition.evaluate() then
-                local startedAt = target.conditionStartedAt[conditionID]
+        for ruleID in pairs(target.rules) do
+            local rule = rules[ruleID]
+            assert(rule, "Visibility target references an unregistered rule: " .. ruleID)
+            if selected[ruleID] and rule.isActive() then
+                local startedAt = target.ruleStartedAt[ruleID]
                 if not startedAt then
                     startedAt = now
-                    target.conditionStartedAt[conditionID] = startedAt
+                    target.ruleStartedAt[ruleID] = startedAt
                 end
-                if not condition.delay or now - startedAt >= condition.delay then
+                if not rule.delay or now - startedAt >= rule.delay then
                     shouldShow = false
                     break
                 end
             else
-                target.conditionStartedAt[conditionID] = nil
+                target.ruleStartedAt[ruleID] = nil
             end
         end
     else
-        wipe(target.conditionStartedAt)
+        wipe(target.ruleStartedAt)
     end
 
-    if target.effectiveVisible == shouldShow then return end
-    target.effectiveVisible = shouldShow
+    if target.isShown == shouldShow then return end
+    target.isShown = shouldShow
     if shouldShow then
         target.show()
     else
@@ -82,79 +82,79 @@ local function EvaluateTarget(targetID)
     end
 end
 
-local function EvaluateAll()
+local function UpdateAllTargetVisibility()
     for targetID in pairs(targets) do
-        EvaluateTarget(targetID)
+        UpdateTargetVisibility(targetID)
     end
 end
 
-local function QueueEvaluateAll()
-    if evaluationQueued then return end
-    evaluationQueued = true
+local function QueueAllTargetVisibilityUpdates()
+    if updateQueued then return end
+    updateQueued = true
     C_Timer.After(0, function()
-        evaluationQueued = false
-        EvaluateAll()
+        updateQueued = false
+        UpdateAllTargetVisibility()
     end)
 end
 
----@param conditionID string
----@param condition VisibilityCondition
-function MapPinEnhanced:RegisterVisibilityCondition(conditionID, condition)
-    assert(type(conditionID) == "string" and conditionID ~= "", "Visibility condition ID is required")
-    assert(not conditions[conditionID], "Visibility condition already registered: " .. conditionID)
-    assert(type(condition.evaluate) == "function", "Visibility condition evaluator is required")
-    conditions[conditionID] = condition
+---@param ruleID string
+---@param rule VisibilityRule
+function MapPinEnhanced:AddVisibilityRule(ruleID, rule)
+    assert(type(ruleID) == "string" and ruleID ~= "", "Visibility rule ID is required")
+    assert(not rules[ruleID], "Visibility rule already registered: " .. ruleID)
+    assert(type(rule.isActive) == "function", "Visibility rule predicate is required")
+    rules[ruleID] = rule
 
-    for _, event in ipairs(condition.events or {}) do
+    for _, event in ipairs(rule.events or {}) do
         if not registeredEvents[event] then
             registeredEvents[event] = true
-            self:RegisterEvent(event, EvaluateAll)
+            self:RegisterEvent(event, UpdateAllTargetVisibility)
         end
     end
-    for _, callback in ipairs(condition.callbacks or {}) do
+    for _, callback in ipairs(rule.callbacks or {}) do
         if not registeredCallbacks[callback] then
             registeredCallbacks[callback] = true
-            self:RegisterCallback(callback, QueueEvaluateAll)
+            self:RegisterCallback(callback, QueueAllTargetVisibilityUpdates)
         end
     end
 end
 
 ---@param targetID string
----@param config VisibilityTargetConfig
-function MapPinEnhanced:RegisterVisibilityTarget(targetID, config)
+---@param settings VisibilityTargetSettings
+function MapPinEnhanced:RegisterVisibilityTarget(targetID, settings)
     assert(type(targetID) == "string" and targetID ~= "", "Visibility target ID is required")
     assert(not targets[targetID], "Visibility target already registered: " .. targetID)
-    assert(type(config.optionKey) == "string", "Visibility target option key is required")
-    assert(type(config.isManuallyEnabled) == "function", "Visibility target manual predicate is required")
-    assert(type(config.show) == "function" and type(config.hide) == "function",
+    assert(type(settings.optionKey) == "string", "Visibility target option key is required")
+    assert(type(settings.isManuallyEnabled) == "function", "Visibility target manual predicate is required")
+    assert(type(settings.show) == "function" and type(settings.hide) == "function",
         "Visibility target show/hide adapters are required")
 
     ---@type table<string, boolean>
     local allowed = {}
-    for _, conditionID in ipairs(config.conditions or {}) do
-        assert(conditions[conditionID], "Unknown visibility condition: " .. tostring(conditionID))
-        allowed[conditionID] = true
+    for _, ruleID in ipairs(settings.rules or {}) do
+        assert(rules[ruleID], "Unknown visibility rule: " .. tostring(ruleID))
+        allowed[ruleID] = true
     end
 
     targets[targetID] = {
-        optionKey = config.optionKey,
-        conditions = allowed,
-        isManuallyEnabled = config.isManuallyEnabled,
-        show = config.show,
-        hide = config.hide,
-        conditionStartedAt = {},
+        optionKey = settings.optionKey,
+        rules = allowed,
+        isManuallyEnabled = settings.isManuallyEnabled,
+        show = settings.show,
+        hide = settings.hide,
+        ruleStartedAt = {},
     }
 
     local Options = self:GetModule("Options")
-    Options:SubscribeToOptionChanges(config.optionKey, function()
-        EvaluateTarget(targetID)
+    Options:SubscribeToOptionChanges(settings.optionKey, function()
+        UpdateTargetVisibility(targetID)
     end)
-    QueueEvaluateAll()
+    QueueAllTargetVisibilityUpdates()
 end
 
 ---@param targetID string
-function MapPinEnhanced:EvaluateVisibilityTarget(targetID)
-    EvaluateTarget(targetID)
+function MapPinEnhanced:UpdateVisibilityTarget(targetID)
+    UpdateTargetVisibility(targetID)
 end
 
 ---@param instanceType string
@@ -167,20 +167,20 @@ local function IsInstanceType(instanceType)
 end
 
 local INSTANCE_EVENTS = { "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA" }
-MapPinEnhanced:RegisterVisibilityCondition("dungeon", { evaluate = IsInstanceType("party"), events = INSTANCE_EVENTS })
-MapPinEnhanced:RegisterVisibilityCondition("raid", { evaluate = IsInstanceType("raid"), events = INSTANCE_EVENTS })
-MapPinEnhanced:RegisterVisibilityCondition("scenario",
-    { evaluate = IsInstanceType("scenario"), events = INSTANCE_EVENTS })
-MapPinEnhanced:RegisterVisibilityCondition("battleground", { evaluate = IsInstanceType("pvp"), events = INSTANCE_EVENTS })
-MapPinEnhanced:RegisterVisibilityCondition("arena", { evaluate = IsInstanceType("arena"), events = INSTANCE_EVENTS })
+MapPinEnhanced:AddVisibilityRule("dungeon", { isActive = IsInstanceType("party"), events = INSTANCE_EVENTS })
+MapPinEnhanced:AddVisibilityRule("raid", { isActive = IsInstanceType("raid"), events = INSTANCE_EVENTS })
+MapPinEnhanced:AddVisibilityRule("scenario",
+    { isActive = IsInstanceType("scenario"), events = INSTANCE_EVENTS })
+MapPinEnhanced:AddVisibilityRule("battleground", { isActive = IsInstanceType("pvp"), events = INSTANCE_EVENTS })
+MapPinEnhanced:AddVisibilityRule("arena", { isActive = IsInstanceType("arena"), events = INSTANCE_EVENTS })
 
 local function InitVisibility()
     C_Timer.NewTicker(0.25, function()
         for targetID, target in pairs(targets) do
-            for conditionID in pairs(target.conditions) do
-                local condition = conditions[conditionID]
-                if condition and condition.poll then
-                    EvaluateTarget(targetID)
+            for ruleID in pairs(target.rules) do
+                local rule = rules[ruleID]
+                if rule and rule.poll then
+                    UpdateTargetVisibility(targetID)
                     break
                 end
             end
