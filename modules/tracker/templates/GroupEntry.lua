@@ -167,7 +167,8 @@ function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
-    MapPinEnhanced:ShowConfirmDialog(L["Clear Group"], string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
+    MapPinEnhanced:ShowConfirmDialog(L["Clear Group"],
+        string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
         function()
             self.group:ClearGroup()
         end)
@@ -197,18 +198,29 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
     if not self:CanRenameGroup() then return end
 
     local group = self.group
-    local label = group.groupType == "ungrouped" and L["Add to New Group"] or group:GetName()
-    table.insert(menu, {
-        type = "template",
-        template = "MapPinEnhancedMenuTitleActionTemplate",
-        data = {
-            label = label,
-            icon = "edit",
+    if group.groupType == "ungrouped" then
+        table.insert(menu, {
+            type = "button",
+            label = MapPinEnhanced:Iconize("plus", L["Add to New Group"]),
             onClick = function()
                 MapPinEnhanced:ShowRenameGroupDialog(group)
-            end,
-        },
-    })
+            end
+        })
+    else
+        table.insert(menu, {
+            type = "template",
+            template = "MapPinEnhancedMenuTitleActionTemplate",
+            data = {
+                label = group:GetName(),
+                icon = "edit",
+                onClick = function()
+                    MapPinEnhanced:ShowRenameGroupDialog(group)
+                end,
+            },
+        })
+    end
+
+
     table.insert(menu, {
         type = "divider",
     })
