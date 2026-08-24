@@ -5,7 +5,9 @@
         <NormalTexture atlas="common-button-tertiary-normal-small" setAllPoints="true" />
         <PushedTexture atlas="common-button-tertiary-pressed-small" setAllPoints="true" />
         <DisabledTexture atlas="common-button-tertiary-disabled-small" setAllPoints="true" />
-        <HighlightTexture atlas="common-button-tertiary-hover-small" setAllPoints="true" />
+        <HighlightTexture atlas="common-button-tertiary-normal-small" alphaMode="ADD" alpha="0.6" setAllPoints="true">
+            <Color r="1" g="0.82" b="0.00" />
+        </HighlightTexture>
         <PushedTextOffset x="-2" y="-1" />
         <ButtonText parentKey="text">
         </ButtonText>
@@ -24,6 +26,8 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnable method="OnEnable" />
+            <OnDisable method="OnDisable" />
         </Scripts>
     </Button>
 </Ui>

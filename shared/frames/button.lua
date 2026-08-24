@@ -102,3 +102,13 @@ function MapPinEnhancedButtonMixin:SetValue(_, triggerCallback)
         self.onChangeCallback("LeftButton", false)
     end
 end
+
+function MapPinEnhancedButtonMixin:OnEnable()
+    if not self.icon then return end
+    self.iconTexture:SetDesaturated(false)
+end
+
+function MapPinEnhancedButtonMixin:OnDisable()
+    if not self.icon then return end
+    self.iconTexture:SetDesaturated(true)
+end
