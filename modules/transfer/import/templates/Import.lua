@@ -35,10 +35,10 @@ local function GenerateUnusedPinID(usedPinIDs)
     return pinID
 end
 
----@param data SaveableGroupData
+---@param savedGroup SerializedExportGroup
 ---@return SaveablePinData[]
 ---@return table<UUID, number>
-local function PrepareGroupImportData(data)
+local function CopyImportedPins(savedGroup)
     ---@type SaveablePinData[]
     local pins = {}
     ---@type table<UUID, number>
@@ -48,7 +48,7 @@ local function PrepareGroupImportData(data)
     ---@type table<UUID, boolean>
     local usedPinIDs = {}
 
-    for _, pinData in ipairs(data.pins or {}) do
+    for _, pinData in ipairs(savedGroup.pins or {}) do
         local importedPinData = CopyTable(pinData)
         ---@cast importedPinData SaveablePinData
         local oldPinID = importedPinData.pinID
@@ -67,7 +67,7 @@ local function PrepareGroupImportData(data)
         table.insert(pins, importedPinData)
     end
 
-    for oldPinID, order in pairs(data.pinOrder or {}) do
+    for oldPinID, order in pairs(savedGroup.pinOrder or {}) do
         local newPinID = pinIDMap[oldPinID]
         if newPinID then
             pinOrder[newPinID] = order
@@ -77,11 +77,11 @@ local function PrepareGroupImportData(data)
     return pins, pinOrder
 end
 
----@param data SaveableGroupData | pinData[]
+---@param parsedData SerializedExportGroup | pinData[]
 ---@param dataType "group" | "pins"
 ---@param groupName string
 ---@return boolean
-function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupName)
+function MapPinEnhancedImportWindowMixin:ImportToNewGroup(parsedData, dataType, groupName)
     ---@type string?
     local icon
     ---@type SaveablePinData[]|pinData[]?
@@ -91,11 +91,14 @@ function MapPinEnhancedImportWindowMixin:ImportToNewGroup(data, dataType, groupN
     ---@type GroupTrackingMode?
     local trackingMode
     if dataType == "group" then
-        icon = data.icon
-        trackingMode = data.trackingMode
-        pins, pinOrder = PrepareGroupImportData(data)
+        ---@type SerializedExportGroup
+        local savedGroup = parsedData
+        icon = savedGroup.icon
+        trackingMode = savedGroup.trackingMode
+        pins, pinOrder = CopyImportedPins(savedGroup)
     elseif dataType == "pins" then
-        pins = data
+        ---@cast parsedData pinData[]
+        pins = parsedData
     end
 
     local group = Groups:RegisterGroup({
@@ -117,15 +120,15 @@ function MapPinEnhancedImportWindowMixin:UpdateImportButtonDisabledState()
     self.importButton:SetEnabled(hasValidPins and hasValidGroupName)
 end
 
----@param data SaveableGroupData | pinData[]
+---@param parsedData SerializedExportGroup | pinData[]
 ---@param dataType "group" | "pins"
 ---@return boolean
-function MapPinEnhancedImportWindowMixin:Import(data, dataType)
+function MapPinEnhancedImportWindowMixin:Import(parsedData, dataType)
     if not self.groupName or not Groups:IsValidGroupName(self.groupName) then return false end
     if Groups:GetGroupByName(self.groupName) then
         self.groupName = Groups:GetAvailableImportGroupName()
     end
-    return self:ImportToNewGroup(data, dataType, self.groupName)
+    return self:ImportToNewGroup(parsedData, dataType, self.groupName)
 end
 
 function MapPinEnhancedImportWindowMixin:StartImport()
@@ -189,7 +192,7 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
     ---@type string
     local formatName = L["Way commands"]
     ---@type SerializedExportGroup | pinData[] | nil
-    local data
+    local parsedData
 
     if MapPinEnhanced:IsSerializedData(dataString) then
         formatName = L["Serialized data"]
@@ -202,10 +205,11 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
             return
         end
 
-        data = export.group
+        ---@type SerializedExportGroup
+        local savedGroup = export.group
 
         ---@type pinData[]
-        local sourcePins = data.pins
+        local sourcePins = savedGroup.pins
         if type(sourcePins) ~= "table" then
             self.summary:SetTextColor(1, 0.2, 0.2)
             self.summary:SetText(L["Invalid or corrupted serialized data."])
@@ -219,13 +223,14 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
                 self.invalidPinCount = self.invalidPinCount + 1
             end
         end
-        data = CopyTable(data)
-        data.pins = pins
-        if Groups:IsValidGroupName(data.name) and not Groups:GetGroupByName(data.name) then
-            self.groupName = data.name
+        savedGroup = CopyTable(savedGroup)
+        savedGroup.pins = pins
+        if Groups:IsValidGroupName(savedGroup.name) and not Groups:GetGroupByName(savedGroup.name) then
+            self.groupName = savedGroup.name
         else
             self.groupName = Groups:GetAvailableImportGroupName()
         end
+        parsedData = savedGroup
     else
         for line in dataString:gmatch("[^\n]+") do
             local normalizedLine = line:match("^%s*(.-)%s*$") or ""
@@ -238,10 +243,10 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
                 end
             end
         end
-        data = pins
+        parsedData = pins
     end
 
-    self.parsedData = data
+    self.parsedData = parsedData
     self.parsedDataType = dataType
     self.validPinCount = #pins
     self:UpdateSummary(formatName, pins, self.invalidPinCount)

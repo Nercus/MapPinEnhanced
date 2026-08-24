@@ -102,19 +102,19 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     end
 
     ---@type table<string, any>
-    local data = CopyTable(target:GetSaveableData())
-    data["source"] = nil
-    data["hidden"] = nil
-    data["groupType"] = nil
-    data["pinArchive"] = nil
-    data["groupID"] = nil
-    data["name"] = GetExportedGroupName(target)
-    data["trackingMode"] = target:GetTrackingMode()
-    data["pinOrder"] = data["pinOrder"] or {}
-    ---@cast data SerializedExportGroup
+    local exportGroup = CopyTable(target:GetSaveableData())
+    exportGroup["source"] = nil
+    exportGroup["hidden"] = nil
+    exportGroup["groupType"] = nil
+    exportGroup["pinArchive"] = nil
+    exportGroup["groupID"] = nil
+    exportGroup["name"] = GetExportedGroupName(target)
+    exportGroup["trackingMode"] = target:GetTrackingMode()
+    exportGroup["pinOrder"] = exportGroup["pinOrder"] or {}
+    ---@cast exportGroup SerializedExportGroup
 
     for pinID, archivedPin in target:EnumerateArchivedPins() do
-        data["pinOrder"][pinID] = archivedPin.order or GetTime()
+        exportGroup["pinOrder"][pinID] = archivedPin.order or GetTime()
     end
 
     ---@type pinData[]
@@ -122,10 +122,10 @@ function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
     for _, pinData in ipairs(target:GetAllPinData()) do
         table.insert(cleanedPins, CleanPinData(pinData, true))
     end
-    data.pins = cleanedPins
+    exportGroup.pins = cleanedPins
     return {
         version = MapPinEnhanced.EXPORT_VERSION,
-        group = data,
+        group = exportGroup,
     }
 end
 
