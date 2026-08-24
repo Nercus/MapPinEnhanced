@@ -12,7 +12,7 @@ local function Track(pin, persist)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin ~= pin then
         if not persist and trackedPin.group == pin.group then
-            trackedPin:UntrackAfterGroupCommit()
+            trackedPin:UntrackWithoutPersisting()
         else
             trackedPin:Untrack()
         end
@@ -38,7 +38,7 @@ function MapPinEnhancedPinTrackingMixin:Track()
 end
 
 -- The group already requested a save, so do not request another one here.
-function MapPinEnhancedPinTrackingMixin:TrackAfterGroupCommit()
+function MapPinEnhancedPinTrackingMixin:TrackWithoutPersisting()
     Track(self, false)
 end
 
@@ -67,7 +67,7 @@ function MapPinEnhancedPinTrackingMixin:Untrack()
 end
 
 -- The group already requested a save, so do not request another one here.
-function MapPinEnhancedPinTrackingMixin:UntrackAfterGroupCommit()
+function MapPinEnhancedPinTrackingMixin:UntrackWithoutPersisting()
     Untrack(self, false)
 end
 

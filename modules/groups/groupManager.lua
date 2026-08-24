@@ -45,23 +45,23 @@ end
 
 ---@param name string
 ---@return string
-function Groups:NormalizeGroupName(name)
-    assert(name, "Groups:NormalizeGroupName: name is nil")
-    assert(type(name) == "string", "Groups:NormalizeGroupName: name must be a string")
+function Groups:CleanGroupName(name)
+    assert(name, "Groups:CleanGroupName: name is nil")
+    assert(type(name) == "string", "Groups:CleanGroupName: name must be a string")
     return (name:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 ---@param name string
 ---@return string
 function Groups:GetNameKey(name)
-    return string.lower(self:NormalizeGroupName(name))
+    return string.lower(self:CleanGroupName(name))
 end
 
 ---@param name string
 ---@return boolean
 function Groups:IsValidGroupName(name)
     if type(name) ~= "string" then return false end
-    return self:NormalizeGroupName(name) ~= ""
+    return self:CleanGroupName(name) ~= ""
 end
 
 local DEFAULT_GROUPS = {
@@ -268,7 +268,7 @@ function Groups:TrackNextPinAfterGroup(group, cursorOrder)
     local nextPin = group:GetNextTrackablePin(cursorOrder)
     if nextPin then
         -- The group was already saved, so tracking this pin must not save it again.
-        nextPin:TrackAfterGroupCommit()
+        nextPin:TrackWithoutPersisting()
         return nextPin
     end
 
@@ -286,8 +286,8 @@ function Groups:CreateGroupFromUngrouped(name)
     assert(type(name) == "string", "Groups:CreateGroupFromUngrouped: name must be a string")
     if not self:IsValidGroupName(name) then return nil end
 
-    local normalizedName = self:NormalizeGroupName(name)
-    if self:GetGroupByName(normalizedName) then
+    local cleanName = self:CleanGroupName(name)
+    if self:GetGroupByName(cleanName) then
         return nil
     end
 
@@ -297,7 +297,7 @@ function Groups:CreateGroupFromUngrouped(name)
 
     local ungroupedData = ungroupedGroup:GetSaveableData()
     local targetGroup = self:RegisterGroup({
-        name = normalizedName,
+        name = cleanName,
         source = MapPinEnhanced.name,
         icon = ungroupedGroup:GetIcon(),
         order = GetTime(),
@@ -347,7 +347,7 @@ function Groups:GetAvailableImportGroupName()
     return string.format(L["Import %d"], index)
 end
 
-function Groups:InitializeDefaultGroups()
+function Groups:CreateDefaultGroups()
     for _, groupInfo in ipairs(DEFAULT_GROUPS) do
         local existingGroup = groupInfo.groupID and self:GetGroupByID(groupInfo.groupID) or
             self:GetGroupByName(groupInfo.name)
@@ -362,5 +362,5 @@ end
 
 MapPinEnhanced:OnLoad(function()
     Groups:RestoreAllGroups()
-    Groups:InitializeDefaultGroups()
+    Groups:CreateDefaultGroups()
 end)

@@ -9,7 +9,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field orders table<UUID, number>
 ---@field archive table<UUID, ArchivedPinData>
 ---@field count number
----@field revision number
+---@field changeNumber number
 MapPinEnhancedGroupPinStateMixin = CreateFromMixins(MapPinEnhancedGroupPinStateReadMixin)
 
 ---@param pinData pinData|SaveablePinData
@@ -30,7 +30,7 @@ function MapPinEnhancedGroupPinStateMixin:Init(group)
     self.orders = {}
     self.archive = {}
     self.count = 0
-    self.revision = 0
+    self.changeNumber = 0
 end
 
 function MapPinEnhancedGroupPinStateMixin:Reset()
@@ -39,14 +39,14 @@ function MapPinEnhancedGroupPinStateMixin:Reset()
     self.orders = {}
     self.archive = {}
     self.count = 0
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     for pinID, pin in pairs(pins) do
         pin.suppressPersistence = true
         Pins:ReleasePin(pinID)
     end
 end
 
-function MapPinEnhancedGroupPinStateMixin:AssertInvariants()
+function MapPinEnhancedGroupPinStateMixin:CheckPinState()
     local count = 0
     for pinID in pairs(self.pins) do
         assert(not self.archive[pinID],
@@ -118,7 +118,7 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
     self.pins[pinID] = pin
     self.orders[pinID] = type(order) == "number" and order or self:GetNextOrder()
     self.count = self.count + 1
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     return pin, shouldTrack
 end
 
@@ -139,7 +139,7 @@ function MapPinEnhancedGroupPinStateMixin:AddArchived(pinData, state, order, ove
         data = data,
         order = type(order) == "number" and order or self:GetNextOrder(),
     }
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     return pinID
 end
 
@@ -152,14 +152,14 @@ function MapPinEnhancedGroupPinStateMixin:Remove(pinID)
         self.pins[pinID] = nil
         self.orders[pinID] = nil
         self.count = self.count - 1
-        self.revision = self.revision + 1
+        self.changeNumber = self.changeNumber + 1
         return pin, nil, order
     end
 
     local archivedPin = self.archive[pinID]
     if archivedPin then
         self.archive[pinID] = nil
-        self.revision = self.revision + 1
+        self.changeNumber = self.changeNumber + 1
         return nil, archivedPin, archivedPin.order
     end
 end
@@ -189,7 +189,7 @@ function MapPinEnhancedGroupPinStateMixin:ArchiveActive(pinID, state)
     self.orders[pinID] = nil
     self.count = self.count - 1
     self.archive[pinID] = { state = state, data = data, order = order }
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     pin.suppressPersistence = true
     Pins:ReleasePin(pinID)
     return true, data, wasTracked, order
@@ -222,7 +222,7 @@ function MapPinEnhancedGroupPinStateMixin:ArchiveAll(state)
     self.pins = {}
     self.orders = {}
     self.count = 0
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     for _, pinID in ipairs(pinIDs) do
         local pin = Pins:GetPinByID(pinID)
         if pin then pin.suppressPersistence = true end
@@ -261,7 +261,7 @@ function MapPinEnhancedGroupPinStateMixin:SetOrder(pinID, order)
     else
         return false
     end
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -286,7 +286,7 @@ function MapPinEnhancedGroupPinStateMixin:Reorder(pinIDs)
             self.orders[pinID] = order
         end
     end
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -299,7 +299,7 @@ function MapPinEnhancedGroupPinStateMixin:UpdateArchived(pinID, update)
     update(archivedPin.data)
     archivedPin.data.pinID = pinID
     archivedPin.data.setTracked = nil
-    self.revision = self.revision + 1
+    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -322,6 +322,6 @@ function MapPinEnhancedGroupPinStateMixin:PruneOldestReached(keepCount)
     for index = 1, removeCount do
         self.archive[reachedPins[index].pinID] = nil
     end
-    if removeCount > 0 then self.revision = self.revision + 1 end
+    if removeCount > 0 then self.changeNumber = self.changeNumber + 1 end
     return removeCount
 end

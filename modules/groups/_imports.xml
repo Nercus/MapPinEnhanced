@@ -3,5 +3,5 @@
     <Include file="mixins/_imports.xml" />
     <Include file="groupManager.lua" />
     <Include file="groupRestoration.lua" />
-    <Include file="routeOptimization.lua" />
+    <Include file="routeOrdering.lua" />
 </Ui>

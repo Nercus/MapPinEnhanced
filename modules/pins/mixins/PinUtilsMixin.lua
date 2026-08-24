@@ -35,7 +35,7 @@ function MapPinEnhancedPinUtilsMixin:SetTitle(title)
         self:SetTooltip(self.pinData.tooltip)
     end
     self:PersistPin()
-    if not self.suppressChangePublication then
+    if not self.groupIsAddingPin then
         MapPinEnhanced:FireCallback("PIN_UPDATED_TITLE", self.pinID, title)
     end
 end

@@ -69,7 +69,7 @@ function MapPinEnhancedGroupPinEditingMixin:SetPinPosition(pinID, mapID, x, y)
     assert(type(mapID) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: mapID must be a number")
     assert(type(x) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: x must be a number")
     assert(type(y) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: y must be a number")
-    x, y = Pins:NormalizeCoordinate(x), Pins:NormalizeCoordinate(y)
+    x, y = Pins:ConvertPercentCoordinate(x), Pins:ConvertPercentCoordinate(y)
     local pin = self:GetPinByID(pinID)
     if pin then
         pin:SetPinPosition(mapID, x, y)

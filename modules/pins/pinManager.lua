@@ -22,22 +22,22 @@ pinsPool.capacity = 1000 -- only allow 1000 pins at the same time
 
 ---@param value number
 ---@return number
-function Pins:NormalizeCoordinate(value)
-    assert(type(value) == "number", "Pins:NormalizeCoordinate: value must be a number")
+function Pins:ConvertPercentCoordinate(value)
+    assert(type(value) == "number", "Pins:ConvertPercentCoordinate: value must be a number")
     return value > 1 and value / 100 or value
 end
 
 ---@param initPinData pinData
 ---@param overridePinID UUID?
 ---@param group MapPinEnhancedGroupMixin?
----@param deferCommit boolean? true while the group is still adding the pin
+---@param groupWillPersist boolean? true while the group is still adding the pin
 ---@return MapPinEnhancedPinMixin
-function Pins:CreatePin(initPinData, overridePinID, group, deferCommit)
+function Pins:CreatePin(initPinData, overridePinID, group, groupWillPersist)
     local pin = pinsPool:Acquire()
     pin:OverridePinID(overridePinID or MapPinEnhanced:GenerateUUID("pin"))
     pin.group = group
     pin.pinData = initPinData
-    pin:SetPinData(initPinData, deferCommit)
+    pin:SetPinData(initPinData, groupWillPersist)
     return pin
 end
 

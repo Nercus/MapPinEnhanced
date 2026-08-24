@@ -10,7 +10,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field isTracked boolean? -- whether this pin is currently tracked
 ---@field pinID UUID
 ---@field group MapPinEnhancedGroupMixin? -- the group this pin belongs to, if any
----@field suppressChangePublication boolean? true while the group is still adding the pin
+---@field groupIsAddingPin boolean? true while the group is still adding the pin
 ---@field suppressPersistence boolean? true when the group already saved the pin change
 MapPinEnhancedPinMixin = CreateFromMixins(
     { classification = "pin" },
@@ -77,15 +77,15 @@ function MapPinEnhancedPinMixin:OverridePinID(pinID)
 end
 
 ---@param pinData pinData
----@param deferCommit boolean? true while the group is still adding the pin
-function MapPinEnhancedPinMixin:SetPinData(pinData, deferCommit)
+---@param groupWillPersist boolean? true while the group is still adding the pin
+function MapPinEnhancedPinMixin:SetPinData(pinData, groupWillPersist)
     if not self.initialized and self.pinID then
         self:Init(self.pinID) -- we need to recall init when the pin is reused as the frames are released back when reset
     end
     self.pinData = pinData
-    self.suppressChangePublication = deferCommit and true or nil
-    self.pinData.x = Pins:NormalizeCoordinate(self.pinData.x)
-    self.pinData.y = Pins:NormalizeCoordinate(self.pinData.y)
+    self.groupIsAddingPin = groupWillPersist and true or nil
+    self.pinData.x = Pins:ConvertPercentCoordinate(self.pinData.x)
+    self.pinData.y = Pins:ConvertPercentCoordinate(self.pinData.y)
 
     if not self.pinData.title or self.pinData.title == "" then
         self.pinData.title = DEFAULT_PIN_NAME
@@ -115,14 +115,14 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, deferCommit)
     self:SetLock(self.pinData.lock)
     self:UpdateGroupIcon()
 
-    if not deferCommit then
+    if not groupWillPersist then
         if self.pinData.setTracked then
             self:Track()
         else
             self:Untrack()
         end
     end
-    self.suppressChangePublication = nil
+    self.groupIsAddingPin = nil
 
     local worldMapSuccess = HBDP:AddWorldMapIconMap(MapPinEnhanced, self.worldmapPin, self.pinData.mapID, self.pinData.x,
         self.pinData.y, 3,
@@ -148,8 +148,8 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     assert(y, "MapPinEnhancedPinMixin:SetPinPosition: y is nil")
     assert(type(y) == "number", "MapPinEnhancedPinMixin:SetPinPosition: y must be a number")
 
-    x = Pins:NormalizeCoordinate(x)
-    y = Pins:NormalizeCoordinate(y)
+    x = Pins:ConvertPercentCoordinate(x)
+    y = Pins:ConvertPercentCoordinate(y)
 
     if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return end
 
@@ -219,7 +219,7 @@ function MapPinEnhancedPinMixin:Reset()
     self.pinData = nil
     self.worldmapPin = nil
     self.minimapPin = nil
-    self.suppressChangePublication = nil
+    self.groupIsAddingPin = nil
     self.suppressPersistence = nil
 end
 
@@ -232,7 +232,7 @@ MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(_, group)
 end)
 
 function MapPinEnhancedPinMixin:PersistPin()
-    if self.suppressChangePublication or self.suppressPersistence then return end
+    if self.groupIsAddingPin or self.suppressPersistence then return end
     if not self.group then return end
     Groups:PersistGroup(self.group)
 end

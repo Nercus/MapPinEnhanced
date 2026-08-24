@@ -17,7 +17,7 @@ MapPinEnhancedGroupPinOperationsMixin = {}
 ---@param overridePinID UUID?
 ---@param order number?
 ---@return MapPinEnhancedPinMixin?, UUID, boolean replacedWayBackPin, boolean shouldTrack
-local function AddWithoutCommit(group, pinData, overridePinID, order)
+local function AddBeforePersist(group, pinData, overridePinID, order)
     local replacedWayBackPin = false
     if group.groupType == "way-back" and group:GetTotalPinCount() > 0 then
         group.pinState:Reset()
@@ -72,10 +72,10 @@ end
 function MapPinEnhancedGroupPinOperationsMixin:AddPin(pinData, overridePinID)
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
 
-    local pin, pinID, replacedWayBackPin, shouldTrack = AddWithoutCommit(self, pinData, overridePinID)
+    local pin, pinID, replacedWayBackPin, shouldTrack = AddBeforePersist(self, pinData, overridePinID)
     self:PruneOldestReachedPins()
     self:PersistPinChanges(true)
-    if shouldTrack and pin then pin:TrackAfterGroupCommit() end
+    if shouldTrack and pin then pin:TrackWithoutPersisting() end
     if pin then
         MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
     else
@@ -100,7 +100,7 @@ function MapPinEnhancedGroupPinOperationsMixin:AddMultiplePins(pinsData, preserv
     ---@param pinData pinData|SaveablePinData
     local function addPin(pinData)
         local pinID = pinData.pinID
-        local pin, _, _, shouldTrack = AddWithoutCommit(self, pinData, pinID,
+        local pin, _, _, shouldTrack = AddBeforePersist(self, pinData, pinID,
             pinID and pinOrders and pinOrders[pinID] or nil)
         if shouldTrack then trackedPin = pin end
     end
@@ -108,7 +108,7 @@ function MapPinEnhancedGroupPinOperationsMixin:AddMultiplePins(pinsData, preserv
     local function finish()
         self:PruneOldestReachedPins()
         self:PersistPinChanges(not preserveGroupOrder)
-        if trackedPin then trackedPin:TrackAfterGroupCommit() end
+        if trackedPin then trackedPin:TrackWithoutPersisting() end
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     end
 
@@ -152,7 +152,7 @@ function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
 
     if wasTracked then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
-            nextOrderedPin:TrackAfterGroupCommit()
+            nextOrderedPin:TrackWithoutPersisting()
         else
             Groups:TrackNextPinAfterGroup(self, order)
         end
@@ -181,7 +181,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
     MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, data)
     if wasTracked then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
-            nextOrderedPin:TrackAfterGroupCommit()
+            nextOrderedPin:TrackWithoutPersisting()
         else
             Groups:TrackNextPinAfterGroup(self, order)
         end
@@ -277,7 +277,7 @@ function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     if not sourceData then return nil end
 
     sourceData.pinID = nil
-    local pin, duplicatePinID, replacedWayBackPin, shouldTrack = AddWithoutCommit(self, sourceData)
+    local pin, duplicatePinID, replacedWayBackPin, shouldTrack = AddBeforePersist(self, sourceData)
     ---@type UUID[]
     local pinIDs = {}
     if not replacedWayBackPin then
@@ -291,7 +291,7 @@ function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     assert(self.pinState:Reorder(pinIDs),
         "MapPinEnhancedGroupMixin:DuplicatePin: could not apply complete pin order")
     self:PersistPinChanges(true)
-    if shouldTrack and pin then pin:TrackAfterGroupCommit() end
+    if shouldTrack and pin then pin:TrackWithoutPersisting() end
     if pin then MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin) end
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     return duplicatePinID
@@ -325,7 +325,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
 
     local targetEntries = targetGroup:GetPinEntries()
     local targetPin, _, replacedWayBackPin, shouldTrack =
-        AddWithoutCommit(targetGroup, sourceEntry.data, pinID)
+        AddBeforePersist(targetGroup, sourceEntry.data, pinID)
     ---@type UUID[]
     local targetOrder = {}
     if not replacedWayBackPin then
@@ -336,14 +336,14 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
         "MapPinEnhancedGroupMixin:MovePinToGroup: could not apply target pin order")
 
     targetGroup:PersistPinChanges(true)
-    if shouldTrack and targetPin then targetPin:TrackAfterGroupCommit() end
+    if shouldTrack and targetPin then targetPin:TrackWithoutPersisting() end
     if targetPin then MapPinEnhanced:FireCallback("PIN_ADDED", nil, targetGroup, targetPin) end
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, targetGroup)
 
     if wasTracked and not targetPin then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
-            nextOrderedPin:TrackAfterGroupCommit()
+            nextOrderedPin:TrackWithoutPersisting()
         else
             Groups:TrackNextPinAfterGroup(self, cursorOrder)
         end

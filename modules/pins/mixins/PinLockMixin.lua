@@ -15,7 +15,7 @@ function MapPinEnhancedPinLockMixin:SetLock(lock)
     self.worldmapPin:SetLock(lock)
     self.minimapPin:SetLock(lock)
 
-    if not self.suppressChangePublication then
+    if not self.groupIsAddingPin then
         MapPinEnhanced:FireCallback("PIN_UPDATED_LOCK", self.pinID, lock)
     end
 end

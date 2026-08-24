@@ -9,7 +9,7 @@ MapPinEnhancedGroupPinRestorationMixin = {}
 
 ---@param pinData SaveablePinData
 ---@return SaveablePinData, UUID?
-local function NormalizeRestoredPinData(pinData)
+local function CleanRestoredPinData(pinData)
     if type(pinData.pinID) == "string" then return pinData, pinData.pinID end
     ---@type SaveablePinData
     local normalized = CopyTable(pinData)
@@ -43,7 +43,7 @@ function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
     for _, rawPinData in ipairs(pins) do
         if type(rawPinData) == "table" then
             ---@cast rawPinData SaveablePinData
-            local pinData, pinID = NormalizeRestoredPinData(rawPinData)
+            local pinData, pinID = CleanRestoredPinData(rawPinData)
             if pinID and retainedIDs[pinID] then
                 ---@type SaveablePinData
                 pinData = CopyTable(pinData)

@@ -68,7 +68,7 @@ end
 ---@param groupInfo GroupInfo
 function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
     self.groupID = groupInfo.groupID or self.groupID or MapPinEnhanced:GenerateUUID("group")
-    self.name = Groups:NormalizeGroupName(groupInfo.name)
+    self.name = Groups:CleanGroupName(groupInfo.name)
     self.source = groupInfo.source
     self.icon = groupInfo.icon or "Interface\\Icons\\INV_Misc_QuestionMark"
     self.order = groupInfo.order or self.order or GetTime()
@@ -78,7 +78,7 @@ function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
     if self.protected then
         self.trackingMode = Groups.TRACKING_MODE_NEAREST
     else
-        self.trackingMode = Groups:NormalizeTrackingMode(groupInfo.trackingMode or self.trackingMode)
+        self.trackingMode = Groups:GetTrackingModeOrDefault(groupInfo.trackingMode or self.trackingMode)
     end
 end
 
@@ -92,11 +92,11 @@ function MapPinEnhancedGroupMixin:SetName(name)
     end
     if self.protected then return false end
 
-    local normalizedName = Groups:NormalizeGroupName(name)
-    local existingGroup = Groups:GetGroupByName(normalizedName)
+    local cleanName = Groups:CleanGroupName(name)
+    local existingGroup = Groups:GetGroupByName(cleanName)
     if existingGroup and existingGroup ~= self then return false end
 
-    self.name = normalizedName
+    self.name = cleanName
     self:TouchOrder()
     Groups:PersistGroup(self)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -228,8 +228,8 @@ function MapPinEnhancedGroupMixin:SetPinOrder(pinID, order)
 end
 
 ---@return number
-function MapPinEnhancedGroupMixin:GetPinStateRevision()
-    return self.pinState.revision
+function MapPinEnhancedGroupMixin:GetPinChangeNumber()
+    return self.pinState.changeNumber
 end
 
 ---@param order number
@@ -247,7 +247,7 @@ end
 ---Check the complete pin state, then optionally update group order before scheduling persistence.
 ---@param updateGroupOrder boolean?
 function MapPinEnhancedGroupMixin:PersistPinChanges(updateGroupOrder)
-    self.pinState:AssertInvariants()
+    self.pinState:CheckPinState()
     if updateGroupOrder then self:TouchOrder() end
     Groups:PersistGroup(self)
 end

@@ -58,19 +58,19 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
     self.optimizeButton:Hide()
 end
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:UpdateOptimizeButton()
+function MapPinEnhancedEditorGroupEditorHeaderMixin:UpdateRouteOrderButton()
     local group = self.group
     self.optimizeButton:SetShown(group ~= nil and not group:IsProtected() and
         group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and group:GetTotalPinCount() > 1)
 end
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:OptimizeGroup()
+function MapPinEnhancedEditorGroupEditorHeaderMixin:OrderRouteByDistance()
     local group, editor = assert(self.group), assert(self.editor)
     MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
         L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
             if self.group ~= group then return end
             editor.groupEditor:SetLoading(true)
-            Groups:OptimizeGroupRoute(group, function()
+            Groups:OrderGroupByDistance(group, function()
                 if self.group == group then
                     editor.groupEditor:SetGroup(group)
                 end
@@ -140,8 +140,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         if value == "" or protected then return nil end
         local existing = Groups:GetGroupByName(value)
         if existing and existing ~= group then return nil end
-        local result = group:SetName(value)
-        if result == false then return nil end
+        if not group:SetName(value) then return nil end
         editor.groupSidebar:Refresh()
         return group:GetName()
     end)
@@ -153,15 +152,15 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         onChange = function(value)
             if not protected then
                 group:SetTrackingMode(value)
-                self:UpdateOptimizeButton()
+                self:UpdateRouteOrderButton()
             end
         end,
     })
     for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
         self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
     end
-    self.optimizeButton:SetScript("OnClick", function() self:OptimizeGroup() end)
-    self:UpdateOptimizeButton()
+    self.optimizeButton:SetScript("OnClick", function() self:OrderRouteByDistance() end)
+    self:UpdateRouteOrderButton()
 
     self.hideButton:SetEnabled(not protected)
     self.hideButton:SetScript("OnClick", function()

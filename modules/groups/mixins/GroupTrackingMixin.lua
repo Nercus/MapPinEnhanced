@@ -39,7 +39,7 @@ end
 
 ---@param mode any
 ---@return GroupTrackingMode
-function Groups:NormalizeTrackingMode(mode)
+function Groups:GetTrackingModeOrDefault(mode)
     if self:IsValidTrackingMode(mode) then
         return mode --[[@as GroupTrackingMode]]
     end
@@ -78,7 +78,7 @@ function MapPinEnhancedGroupTrackingMixin:GetTrackingMode()
     if self:IsProtected() then
         return Groups.TRACKING_MODE_NEAREST
     end
-    return Groups:NormalizeTrackingMode(self.trackingMode)
+    return Groups:GetTrackingModeOrDefault(self.trackingMode)
 end
 
 ---@param mode GroupTrackingMode
