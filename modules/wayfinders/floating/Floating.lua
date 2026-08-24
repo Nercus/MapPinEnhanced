@@ -92,7 +92,12 @@ end
 
 ---@param targetType WayfinderTargetType
 function MapPinEnhancedWayfinderFloating:SetTargetType(targetType)
-    self:GetFrame().pin:SetStyleMode(Wayfinders:GetTargetStyleMode(targetType))
+    local frame = self:GetFrame()
+    local normalizedTargetType = Wayfinders:GetTargetTypeOrDefault(targetType)
+    frame.pin:SetStyleMode(Wayfinders:GetTargetStyleMode(normalizedTargetType))
+    if frame.SetTargetType then
+        frame:SetTargetType(normalizedTargetType)
+    end
 end
 
 ---@param lock boolean
@@ -116,7 +121,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
 
     self.data = wayfinderData
     local frame = self:GetFrame()
-    frame.pin:SetStyleMode(Wayfinders:GetTargetStyleMode(wayfinderData.targetType))
+    self:SetTargetType(wayfinderData.targetType)
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
     if wayfinderData.texture then
         frame:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)

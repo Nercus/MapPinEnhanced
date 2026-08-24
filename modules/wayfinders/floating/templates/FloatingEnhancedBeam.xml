@@ -1,0 +1,35 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="FloatingEnhancedBeam.lua" />
+
+    <Frame name="MapPinEnhancedWayfinderFloatingEnhancedBeamTemplate" virtual="true"
+        mixin="MapPinEnhancedWayfinderFloatingEnhancedBeamMixin" hidden="true">
+        <Size x="11" y="250" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="line"
+                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarLine.png"
+                    setAllPoints="true">
+                    <Gradient orientation="VERTICAL">
+                        <MaxColor r="1" g="0.82" b="0" a="0" />
+                        <MinColor r="1" g="0.82" b="0" a="1" />
+                    </Gradient>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="glow"
+                    file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarGlow.png"
+                    alphaMode="ADD" desaturated="true" texelSnappingBias="0" snapToPixelGrid="false">
+                    <Size x="9" y="18" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="BOTTOM" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnUpdate method="OnUpdate" />
+        </Scripts>
+    </Frame>
+</Ui>

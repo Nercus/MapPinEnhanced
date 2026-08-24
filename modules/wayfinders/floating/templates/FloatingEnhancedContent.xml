@@ -1,0 +1,67 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="FloatingEnhancedContent.lua" />
+
+    <Frame name="MapPinEnhancedWayfinderFloatingEnhancedContentTemplate" virtual="true"
+        mixin="MapPinEnhancedWayfinderFloatingEnhancedContentMixin" hidden="true">
+        <Size x="50" y="50" />
+        <Frames>
+            <Frame parentKey="needle" inherits="MapPinEnhancedWayfinderFloatingEnhancedNeedleTemplate">
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="visual" hidden="true">
+                <Size x="50" y="50" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+                <Frames>
+                    <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" frameStrata="MEDIUM"
+                        enableMouse="false">
+                        <Size x="30" y="30" />
+                        <KeyValues>
+                            <KeyValue key="hideShadow" value="true" type="boolean" />
+                            <KeyValue key="hideHighlight" value="true" type="boolean" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="CENTER" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="beam" inherits="MapPinEnhancedWayfinderFloatingEnhancedBeamTemplate">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pin" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="carets" inherits="MapPinEnhancedWayfinderFloatingEnhancedCaretsTemplate">
+                        <Anchors>
+                            <Anchor point="CENTER" relativeKey="$parent.pin" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="downArrows"
+                        inherits="MapPinEnhancedWayfinderFloatingEnhancedDownArrowsTemplate">
+                        <Anchors>
+                            <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pin" y="-4" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="title"
+                        inherits="MapPinEnhancedWayfinderFloatingEnhancedTitleTemplate">
+                        <Anchors>
+                            <Anchor point="CENTER" relativePoint="TOP" relativeKey="$parent.pin" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="readout"
+                        inherits="MapPinEnhancedWayfinderFloatingEnhancedReadoutTemplate">
+                        <Anchors>
+                            <Anchor point="CENTER" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnUpdate method="OnUpdate" />
+        </Scripts>
+    </Frame>
+</Ui>
