@@ -73,16 +73,6 @@ function MapPinEnhancedEditorGroupEditorMixin:SetGroup(group, focusName)
     for _, pinNode in ipairs(Editor:GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
 end
 
-function MapPinEnhancedEditorGroupEditorMixin:IsEditing()
-    ---@type ScriptRegion?
-    local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
-    while focused do
-        if focused == self then return true end
-        focused = focused.GetParent and focused:GetParent()
-    end
-    return false
-end
-
 function MapPinEnhancedEditorGroupEditorMixin:ClearDropTarget()
     self.dropTarget, self.dropPlacement = nil, nil
     self.content.scrollBox:ForEachFrame(function(frame) frame:ClearDropTarget() end)

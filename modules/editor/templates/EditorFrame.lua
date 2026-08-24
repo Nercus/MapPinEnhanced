@@ -64,7 +64,18 @@ function MapPinEnhancedEditorMixin:RequestRefresh()
 end
 
 function MapPinEnhancedEditorMixin:OnUpdate()
-    if self.refreshPending and not self.groupEditor:IsEditing() and not self.draggedPinNode then
+    ---@type ScriptRegion?
+    local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
+    local groupEditorHasFocus = false
+    while focused do
+        if focused == self.groupEditor then
+            groupEditorHasFocus = true
+            break
+        end
+        focused = focused.GetParent and focused:GetParent()
+    end
+
+    if self.refreshPending and not groupEditorHasFocus and not self.draggedPinNode then
         self.refreshPending = nil
         if self.selectedGroup and not Groups:GetGroupByID(self.selectedGroup:GetGroupID()) then
             self.selectedGroup = nil
