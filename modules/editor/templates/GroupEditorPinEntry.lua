@@ -4,15 +4,15 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedEditorCommittedAutocomplete : MapPinEnhancedAutocompleteTemplate
----@field committedValue string?
----@field committedMapID number?
+---@class MapPinEnhancedEditorAppliedAutocomplete : MapPinEnhancedAutocompleteTemplate
+---@field appliedText string?
+---@field appliedMapID number?
 
 ---@class MapPinEnhancedEditorAutocompleteField : MapPinEnhancedFormFieldTemplate
----@field child MapPinEnhancedEditorCommittedAutocomplete
+---@field child MapPinEnhancedEditorAppliedAutocomplete
 
 ---@class MapPinEnhancedEditorPositionInput : MapPinEnhancedInputTemplate
----@field committedValue string?
+---@field appliedText string?
 
 ---@class MapPinEnhancedEditorPositionField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedEditorPositionInput
@@ -51,15 +51,15 @@ local function EnsureMapCache()
     mapCache, mapNames, mapOptions = {}, {}, {}
     -- UI map IDs are sparse. GetMapInfo is cheap and this runs once, lazily on first editor use.
     for mapID = 1, 5000 do
-        local info = C_Map.GetMapInfo(mapID)
-        if info and info.name and info.name ~= "" then
-            local entry = { mapID = mapID, name = info.name, search = info.name .. " " .. mapID }
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        if mapInfo and mapInfo.name and mapInfo.name ~= "" then
+            local entry = { mapID = mapID, name = mapInfo.name, search = mapInfo.name .. " " .. mapID }
             mapCache[mapID] = entry
             table.insert(mapNames, entry)
             table.insert(mapOptions, {
-                label = string.format("%s (%d)", info.name, mapID),
+                label = string.format("%s (%d)", mapInfo.name, mapID),
                 description = tostring(mapID),
-                searchString = info.name .. " " .. mapID,
+                searchString = mapInfo.name .. " " .. mapID,
                 value = mapID,
             })
         end
@@ -91,14 +91,14 @@ end
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
     self.nameField.child:ClearTextApply()
     self.mapField.child.onChangeCallback = nil
-    self.mapField.child.committedValue = nil
-    self.mapField.child.committedMapID = nil
+    self.mapField.child.appliedText = nil
+    self.mapField.child.appliedMapID = nil
     self.mapField.child:SetScript("OnEditFocusLost", MapPinEnhancedAutocompleteMixin.OnEditFocusLost)
     self.mapField.child:SetScript("OnEscapePressed", MapPinEnhancedInputMixin.OnEscapePressed)
     self.mapField.child:ClearFocus()
     self.mapField.child.resultsFrame:Hide()
     for _, editBox in ipairs({ self.xField.child, self.yField.child }) do
-        editBox.committedValue = nil
+        editBox.appliedText = nil
         editBox:SetScript("OnEnterPressed", nil)
         editBox:SetScript("OnEditFocusLost", MapPinEnhancedInputMixin.OnEditFocusLost)
         editBox:SetScript("OnEscapePressed", MapPinEnhancedInputMixin.OnEscapePressed)
@@ -116,14 +116,14 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
-    local data = Editor:GetPinData(self.pinNode)
-    if data.texture then
-        self.pinFrame:SetIconTexture(data.texture, data.usesAtlas)
+    local pinData = Editor:GetPinData(self.pinNode)
+    if pinData.texture then
+        self.pinFrame:SetIconTexture(pinData.texture, pinData.usesAtlas)
     else
-        self.pinFrame:SetColor(data.color or Pins.DEFAULT_COLOR)
+        self.pinFrame:SetColor(pinData.color or Pins.DEFAULT_COLOR)
     end
     self.pinFrame:SetTracked(true)
-    self.pinFrame:SetLock(data.lock)
+    self.pinFrame:SetLock(pinData.lock)
 end
 
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetColor(color)
@@ -187,8 +187,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
                     type = "button",
                     label = L["More..."],
                     onClick = function()
-                        local data = Editor:GetPinData(self.pinNode)
-                        local currentIcon = not data.usesAtlas and data.texture or nil
+                        local pinData = Editor:GetPinData(self.pinNode)
+                        local currentIcon = not pinData.usesAtlas and pinData.texture or nil
                         MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
                             self:SetIcon({ path = path, usesAtlas = false })
                         end)
@@ -201,7 +201,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
     MapPinEnhanced:GenerateMenu(self.pinFrame, menu)
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
+function MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition()
     local node = assert(self.pinNode)
     local selectedMap = self.mapField.child.value
     local mapText = self.mapField.child:GetText() or ""
@@ -209,15 +209,15 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition()
     local x, y =
         Editor:ParsePercent(self.xField.child:GetText()), Editor:ParsePercent(self.yField.child:GetText())
     if not mapID then
-        self.mapField.child:SetValue(assert(self.mapField.child.committedMapID,
-            "MapPinEnhancedEditorGroupEditorPinEntryMixin:CommitPosition: committedMapID is nil"))
+        self.mapField.child:SetValue(assert(self.mapField.child.appliedMapID,
+            "MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition: appliedMapID is nil"))
         return false
     end
     if not x or not y then return false end
     node.group:SetPinPosition(node.pinID, mapID, x, y)
-    self.mapField.child.committedValue = GetMapDisplay(mapID)
-    self.mapField.child.committedMapID = mapID
-    self.xField.child.committedValue, self.yField.child.committedValue =
+    self.mapField.child.appliedText = GetMapDisplay(mapID)
+    self.mapField.child.appliedMapID = mapID
+    self.xField.child.appliedText, self.yField.child.appliedText =
         Editor:FormatPercent(x), Editor:FormatPercent(y)
     self.mapField.child:SetValue(mapID)
     return true
@@ -227,10 +227,10 @@ end
 ---@param editor MapPinEnhancedEditorTemplate
 function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.pinNode, self.editor = pinNode, editor
-    local data = Editor:GetPinData(pinNode)
+    local pinData = Editor:GetPinData(pinNode)
     self:RefreshPreview()
 
-    self.nameField.child:SetTextApply(data.title or L["Map Pin"], function(value)
+    self.nameField.child:SetTextApply(pinData.title or L["Map Pin"], function(value)
         if value == "" then value = L["Map Pin"] end
         pinNode.group:SetPinTitle(pinNode.pinID, value)
         return value
@@ -240,39 +240,39 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     self.mapField.child.onChangeCallback = nil
     self.mapField.child:Setup({
         options = mapOptions,
-        init = function() return data.mapID end,
-        onChange = function() self:CommitPosition() end,
+        init = function() return pinData.mapID end,
+        onChange = function() self:ApplyPosition() end,
     })
-    self.mapField.child.committedValue = GetMapDisplay(data.mapID)
-    self.mapField.child.committedMapID = data.mapID
-    self.xField.child.committedValue, self.yField.child.committedValue =
-        Editor:FormatPercent(data.x), Editor:FormatPercent(data.y)
-    self.mapField.child:SetValue(data.mapID)
-    self.xField.child:SetValue(self.xField.child.committedValue)
-    self.yField.child:SetValue(self.yField.child.committedValue)
+    self.mapField.child.appliedText = GetMapDisplay(pinData.mapID)
+    self.mapField.child.appliedMapID = pinData.mapID
+    self.xField.child.appliedText, self.yField.child.appliedText =
+        Editor:FormatPercent(pinData.x), Editor:FormatPercent(pinData.y)
+    self.mapField.child:SetValue(pinData.mapID)
+    self.xField.child:SetValue(self.xField.child.appliedText)
+    self.yField.child:SetValue(self.yField.child.appliedText)
 
-    local function commitPosition(editBox)
-        self:CommitPosition()
+    local function applyPosition(editBox)
+        self:ApplyPosition()
         editBox:ClearFocus()
     end
     local function restore(editBox)
         if editBox == self.mapField.child then
-            editBox:SetValue(assert(editBox.committedMapID,
-                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: committedMapID is nil"))
+            editBox:SetValue(assert(editBox.appliedMapID,
+                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: appliedMapID is nil"))
         else
-            editBox:SetValue(assert(editBox.committedValue,
-                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: committedValue is nil"))
+            editBox:SetValue(assert(editBox.appliedText,
+                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: appliedText is nil"))
         end
         editBox:ClearFocus()
     end
     for _, editBox in ipairs({ self.xField.child, self.yField.child }) do
-        editBox:SetScript("OnEnterPressed", commitPosition)
-        editBox:SetScript("OnEditFocusLost", commitPosition)
+        editBox:SetScript("OnEnterPressed", applyPosition)
+        editBox:SetScript("OnEditFocusLost", applyPosition)
         editBox:SetScript("OnEscapePressed", restore)
     end
     self.mapField.child:SetScript("OnEditFocusLost", function(editBox)
         MapPinEnhancedAutocompleteMixin.OnEditFocusLost(editBox)
-        commitPosition(editBox)
+        applyPosition(editBox)
     end)
     self.mapField.child:SetScript("OnEscapePressed", restore)
 
@@ -293,7 +293,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
             remove()
         else
             MapPinEnhanced:ShowConfirmDialog(L["Delete Pin"],
-                string.format(L["Delete pin \"%s\"?"], data.title or L["Map Pin"]), remove)
+                string.format(L["Delete pin \"%s\"?"], pinData.title or L["Map Pin"]), remove)
         end
     end)
     self.dragHandle:SetScript("OnEnter", function()
