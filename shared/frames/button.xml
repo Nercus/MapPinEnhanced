@@ -1,10 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="button.lua" />
-    <Button name="MapPinEnhancedButtonTemplate" inherits="ThreeSliceButtonTemplate" mixin="MapPinEnhancedButtonMixin" virtual="true">
-        <KeyValues>
-            <KeyValue key="atlasName" value="128-RedButton" type="string" />
-        </KeyValues>
+    <Button name="MapPinEnhancedButtonTemplate" mixin="MapPinEnhancedButtonMixin" virtual="true">
+        <NormalTexture atlas="common-button-tertiary-normal-small" setAllPoints="true" />
+        <PushedTexture atlas="common-button-tertiary-pressed-small" setAllPoints="true" />
+        <DisabledTexture atlas="common-button-tertiary-disabled-small" setAllPoints="true" />
+        <HighlightTexture atlas="common-button-tertiary-hover-small" setAllPoints="true" />
         <PushedTextOffset x="-2" y="-1" />
         <ButtonText parentKey="text">
         </ButtonText>
@@ -22,7 +23,7 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad method="OnLoad" inherit="append" />
+            <OnLoad method="OnLoad" />
         </Scripts>
     </Button>
 </Ui>

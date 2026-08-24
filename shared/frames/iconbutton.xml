@@ -6,10 +6,10 @@
         <KeyValues>
             <KeyValue key="iconSize" value="medium" />
         </KeyValues>
-        <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/forms/squarebutton/Normal" desaturated="true" />
-        <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/forms/squarebutton/Pushed" desaturated="true" />
-        <DisabledTexture file="Interface/AddOns/MapPinEnhanced/assets/forms/squarebutton/Disabled" />
-        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/forms/squarebutton/Highlight" />
+        <NormalTexture atlas="common-button-tertiary-square-normal" setAllPoints="true" />
+        <PushedTexture atlas="common-button-tertiary-square-pressed" setAllPoints="true" />
+        <DisabledTexture atlas="common-button-tertiary-square-disabled" setAllPoints="true" />
+        <HighlightTexture atlas="common-button-tertiary-square-hover" setAllPoints="true" />
 
         <Layers>
             <Layer level="OVERLAY">
