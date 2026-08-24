@@ -93,15 +93,16 @@ function Editor:MovePinToGroup(sourceGroup, pinID, targetGroup)
     return sourceGroup:MovePinToGroup(pinID, targetGroup)
 end
 
-function Editor:GetEditorFrame()
-    if not self.editorFrame then
-        self.editorFrame = CreateFrame("Frame", "MapPinEnhancedEditor", UIParent, "MapPinEnhancedEditorTemplate")
+function Editor:GetGroupEditorFrame()
+    if not self.groupEditor then
+        self.groupEditor = CreateFrame("Frame", "MapPinEnhancedGroupEditor", UIParent,
+            "MapPinEnhancedGroupEditorTemplate")
     end
-    return self.editorFrame
+    return self.groupEditor
 end
 
 function Editor:ShowEditor()
-    local frame = self:GetEditorFrame()
+    local frame = self:GetGroupEditorFrame()
     frame:ShowFrame()
 end
 
@@ -109,20 +110,20 @@ end
 function Editor:EditGroup(group)
     assert(type(group) == "table" and group.classification == "group", "Editor:EditGroup requires a group")
     if not self:ShouldShowGroup(group) and not self:ShouldShowSystemGroup(group) then return end
-    local frame = self:GetEditorFrame()
+    local frame = self:GetGroupEditorFrame()
     frame:ShowFrame()
     frame:SelectGroup(group)
 end
 
 function Editor:HideEditor()
-    local frame = self:GetEditorFrame()
+    local frame = self:GetGroupEditorFrame()
     if frame:IsShown() then
         frame:HideFrame()
     end
 end
 
 function Editor:IsShown()
-    local frame = self:GetEditorFrame()
+    local frame = self:GetGroupEditorFrame()
     return frame and frame:IsShown() or false
 end
 

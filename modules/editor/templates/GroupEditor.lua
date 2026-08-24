@@ -1,134 +1,183 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local L = MapPinEnhanced.L
+local Groups = MapPinEnhanced:GetModule("Groups")
 local Editor = MapPinEnhanced:GetModule("Editor")
+local L = MapPinEnhanced.L
 
----@class MapPinEnhancedEditorGroupEditorEmptyState : Frame
----@field message FontString
----@field createButton Button
+---@class MapPinEnhancedEditorPinNodeData
+---@field classification "editorPin"
+---@field group MapPinEnhancedGroupMixin
+---@field pin MapPinEnhancedPinMixin?
+---@field pinID UUID
+---@field pinData SaveablePinData
+---@field archiveState "reached"|"hidden"|nil
+---@field order number
 
----@class MapPinEnhancedEditorGroupEditorContent : Frame
----@field header MapPinEnhancedEditorGroupEditorHeaderTemplate
----@field scrollBox Frame|ScrollBoxListMixin
----@field scrollBar ScrollBarMixin
+---@class MapPinEnhancedEditorPinDragGhost : Frame
+---@field pinFrame MapPinEnhancedBasePinTemplate
+---@field title FontString
 
----@class MapPinEnhancedEditorLoadingOverlay : Frame
----@field message FontString
+---@class MapPinEnhancedGroupEditorTemplate : MapPinEnhancedWindowTemplate
+---@field groupEditorSidebar MapPinEnhancedGroupEditorSidebarTemplate
+---@field groupEditorContent MapPinEnhancedGroupEditorContentTemplate
+---@field pinDragGhost MapPinEnhancedEditorPinDragGhost
+---@field selectedGroup MapPinEnhancedGroupMixin?
+---@field draggedPinNode MapPinEnhancedEditorPinNodeData?
+---@field dragSourceFrame MapPinEnhancedGroupEditorContentPinEntryTemplate?
+---@field refreshPending boolean?
+MapPinEnhancedGroupEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
----@class MapPinEnhancedEditorGroupEditorTemplate : Frame
----@field editor MapPinEnhancedEditorTemplate?
----@field group MapPinEnhancedGroupMixin?
----@field emptyState MapPinEnhancedEditorGroupEditorEmptyState
----@field content MapPinEnhancedEditorGroupEditorContent
----@field dataProvider DataProviderMixin
----@field scrollView ScrollBoxListLinearViewMixin
----@field dropTarget MapPinEnhancedEditorPinNodeData?
----@field dropPlacement "before"|"after"|nil
----@field loadingOverlay MapPinEnhancedEditorLoadingOverlay
-MapPinEnhancedEditorGroupEditorMixin = {}
-
-function MapPinEnhancedEditorGroupEditorMixin:OnLoad()
-    self.emptyState.message:SetText(L["Select a group to start editing."])
-    self.loadingOverlay.message:SetText(L["Loading"])
-    self.dataProvider = CreateDataProvider()
-    self.scrollView = CreateScrollBoxListLinearView()
-    self.scrollView:SetElementInitializer("MapPinEnhancedEditorGroupEditorPinEntryTemplate", function(entry, pinNode)
-        ---@cast entry MapPinEnhancedEditorGroupEditorPinEntryTemplate
-        ---@cast pinNode MapPinEnhancedEditorPinNodeData
-        entry:Init(pinNode, self.editor)
-    end)
-    self.scrollView:SetElementResetter(function(entry)
-        ---@cast entry MapPinEnhancedEditorGroupEditorPinEntryTemplate
-        entry:Reset()
-    end)
-    self.scrollView:SetDataProvider(self.dataProvider)
-    self.content.scrollBar:SetHideIfUnscrollable(true)
-    self.content.scrollBar:SetInterpolateScroll(true)
-    self.content.scrollBox:SetInterpolateScroll(true)
-    ScrollUtil.InitScrollBoxListWithScrollBar(self.content.scrollBox, self.content.scrollBar, self.scrollView)
+function MapPinEnhancedGroupEditorMixin:GetAvailableNewGroupName()
+    local index = 1
+    local name = string.format(L["New Group %d"], index)
+    while Groups:GetGroupByName(name) do
+        index = index + 1
+        name = string.format(L["New Group %d"], index)
+    end
+    return name
 end
 
----@param loading boolean
-function MapPinEnhancedEditorGroupEditorMixin:SetLoading(loading)
-    self.loadingOverlay:SetShown(loading)
-end
-
----@param editor MapPinEnhancedEditorTemplate
-function MapPinEnhancedEditorGroupEditorMixin:SetEditor(editor)
-    self.editor = editor
+function MapPinEnhancedGroupEditorMixin:CreateNewGroup()
+    self.groupEditorSidebar:ClearSearch()
+    local group = Groups:RegisterGroup({
+        name = self:GetAvailableNewGroupName(),
+        source = MapPinEnhanced.name,
+        icon = Editor.DEFAULT_GROUP_ICON,
+        order = GetTime(),
+    })
+    if not group then return end
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
+    self:SelectGroup(group, true)
 end
 
 ---@param group MapPinEnhancedGroupMixin?
 ---@param focusName boolean?
-function MapPinEnhancedEditorGroupEditorMixin:SetGroup(group, focusName)
-    self.group = group
-    self.emptyState:SetShown(not group)
-    self.content:SetShown(group ~= nil)
-    self.dataProvider:Flush()
-    if not group then
-        self.content.header:Reset()
-        return
+function MapPinEnhancedGroupEditorMixin:SelectGroup(group, focusName)
+    self.selectedGroup = group
+    self.groupEditorSidebar:Refresh()
+    self.groupEditorContent:SetGroup(group, focusName)
+    if group then self.groupEditorSidebar:ScrollToGroup(group) end
+end
+
+function MapPinEnhancedGroupEditorMixin:RequestRefresh()
+    self.refreshPending = true
+end
+
+function MapPinEnhancedGroupEditorMixin:OnUpdate()
+    ---@type ScriptRegion?
+    local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
+    local groupEditorContentHasFocus = false
+    while focused do
+        if focused == self.groupEditorContent then
+            groupEditorContentHasFocus = true
+            break
+        end
+        focused = focused.GetParent and focused:GetParent()
     end
-    self.content.header:SetGroup(group, self.editor, focusName)
-    for _, pinNode in ipairs(Editor:GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
+
+    if self.refreshPending and not groupEditorContentHasFocus and not self.draggedPinNode then
+        self.refreshPending = nil
+        if self.selectedGroup and not Groups:GetGroupByID(self.selectedGroup:GetGroupID()) then
+            self.selectedGroup = nil
+        end
+        self.groupEditorSidebar:Refresh()
+        self.groupEditorContent:SetGroup(self.selectedGroup)
+    end
+    if self.draggedPinNode then
+        self:UpdatePinDragGhostPosition()
+        self.groupEditorContent:UpdateDrag()
+        self.groupEditorSidebar:UpdateDropTarget()
+    end
 end
 
-function MapPinEnhancedEditorGroupEditorMixin:ClearDropTarget()
-    self.dropTarget, self.dropPlacement = nil, nil
-    self.content.scrollBox:ForEachFrame(function(frame) frame:ClearDropTarget() end)
+function MapPinEnhancedGroupEditorMixin:OnLoad()
+    MapPinEnhancedWindowMixin.OnLoad(self)
+    self.pinDragGhost = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedEditorPinDragGhostTemplate")
+    self.groupEditorSidebar:SetEditor(self)
+    self.groupEditorContent:SetEditor(self)
+    self.groupEditorContent.emptyState.createButton:SetScript("OnClick", function() self:CreateNewGroup() end)
+
+    local function refresh() self:RequestRefresh() end
+    MapPinEnhanced:RegisterCallback("PIN_ADDED", refresh)
+    MapPinEnhanced:RegisterCallback("PIN_REMOVED", refresh)
+    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", refresh)
+    MapPinEnhanced:RegisterCallback("GROUP_DELETED", refresh)
 end
 
-function MapPinEnhancedEditorGroupEditorMixin:AutoScrollForDrag()
+function MapPinEnhancedGroupEditorMixin:StartPinDrag(pinNode, sourceFrame)
+    self.draggedPinNode = pinNode
+    self.dragSourceFrame = sourceFrame
+    sourceFrame:SetAlpha(0.45)
+    if Editor:GetPinData(pinNode).texture then
+        self.pinDragGhost.pinFrame:SetIconTexture(
+            Editor:GetPinData(pinNode).texture,
+            Editor:GetPinData(pinNode).usesAtlas
+        )
+    else
+        self.pinDragGhost.pinFrame:SetColor(Editor:GetPinData(pinNode).color)
+    end
+    self.pinDragGhost.pinFrame:SetTracked(true)
+    self.pinDragGhost.pinFrame:SetLock(Editor:GetPinData(pinNode).lock)
+    self.pinDragGhost.title:SetText(Editor:GetPinData(pinNode).title or L["Map Pin"])
+    self:UpdatePinDragGhostPosition()
+    self.pinDragGhost:Show()
+    SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
+end
+
+function MapPinEnhancedGroupEditorMixin:UpdatePinDragGhostPosition()
     local cursorX, cursorY = GetCursorPosition()
-    local scale = self.content.scrollBox:GetEffectiveScale()
-    cursorX, cursorY = cursorX / scale, cursorY / scale
-    if cursorX < self.content.scrollBox:GetLeft() or cursorX > self.content.scrollBox:GetRight() then return end
-    local top, bottom = self.content.scrollBox:GetTop(), self.content.scrollBox:GetBottom()
-    if cursorY > top - 32 then
-        self.content.scrollBox:ScrollToOffset(
-            self.content.scrollBox:GetDerivedScrollOffset() - 18,
-            ScrollBoxConstants.NoScrollInterpolation
-        )
-    elseif cursorY < bottom + 32 then
-        self.content.scrollBox:ScrollToOffset(
-            self.content.scrollBox:GetDerivedScrollOffset() + 18,
-            ScrollBoxConstants.NoScrollInterpolation
-        )
-    end
+    cursorX = cursorX / UIParent:GetEffectiveScale()
+    cursorY = cursorY / UIParent:GetEffectiveScale()
+    self.pinDragGhost:ClearAllPoints()
+    self.pinDragGhost:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", cursorX + 16, cursorY - 16)
 end
 
-function MapPinEnhancedEditorGroupEditorMixin:UpdateDrag()
-    self:AutoScrollForDrag()
-    ---@type MapPinEnhancedEditorPinNodeData?
-    local target
-    ---@type "before"|"after"|nil
-    local placement
-    ---@param frame MapPinEnhancedEditorGroupEditorPinEntryTemplate
-    self.content.scrollBox:ForEachFrame(function(frame)
-        local valid = not target and frame:IsMouseOver() and self.editor.draggedPinNode and
-            frame.pinNode.pinID ~= self.editor.draggedPinNode.pinID
-        if valid then
-            target, placement = frame.pinNode, frame:GetDropPlacement()
-            frame:SetDropTarget(placement)
-        else
-            frame:ClearDropTarget()
-        end
-    end)
-    self.dropTarget, self.dropPlacement = target, placement
+function MapPinEnhancedGroupEditorMixin:StopPinDrag()
+    if not self.draggedPinNode then return end
+    self.pinDragGhost:Hide()
+    if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
+    local targetGroup = self.groupEditorSidebar:GetDropTarget()
+    if targetGroup and self.draggedPinNode then
+        Editor:MovePinToGroup(self.draggedPinNode.group, self.draggedPinNode.pinID, targetGroup)
+    else
+        self.groupEditorContent:FinishPinDrop()
+    end
+    if self.dragSourceFrame and self.dragSourceFrame.dragHandle:IsMouseOver() then
+        SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
+    else
+        ResetCursor()
+    end
+    self.draggedPinNode = nil
+    self.dragSourceFrame = nil
+    self.groupEditorSidebar:ClearDropTarget()
+    self.groupEditorContent:ClearDropTarget()
+    self:RequestRefresh()
 end
 
-function MapPinEnhancedEditorGroupEditorMixin:FinishPinDrop()
-    local moved = self.editor.draggedPinNode
-    local target, placement = self.dropTarget, self.dropPlacement
-    if not moved or not target or moved.group ~= target.group or moved.pinID == target.pinID then return end
+function MapPinEnhancedGroupEditorMixin:CancelPinDrag()
+    self.pinDragGhost:Hide()
+    if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
+    ResetCursor()
+    self.draggedPinNode = nil
+    self.dragSourceFrame = nil
+    self.groupEditorSidebar:ClearDropTarget()
+    self.groupEditorContent:ClearDropTarget()
+end
 
-    local ids = {}
-    for _, node in ipairs(Editor:GetSortedPins(target.group)) do
-        if node.pinID ~= moved.pinID then
-            if node.pinID == target.pinID and placement == "before" then table.insert(ids, moved.pinID) end
-            table.insert(ids, node.pinID)
-            if node.pinID == target.pinID and placement == "after" then table.insert(ids, moved.pinID) end
-        end
-    end
-    Editor:ApplyPinOrder(target.group, ids)
+function MapPinEnhancedGroupEditorMixin:ShowFrame()
+    MapPinEnhanced:RestoreFrame(self)
+    self.selectedGroup = nil
+    self.groupEditorSidebar:ClearSearch()
+    self.groupEditorSidebar:Refresh()
+    self.groupEditorContent:SetGroup(nil)
+    self:Show()
+end
+
+function MapPinEnhancedGroupEditorMixin:OnHide()
+    MapPinEnhancedWindowMixin.OnHide(self)
+    self:CancelPinDrag()
+end
+
+function MapPinEnhancedGroupEditorMixin:HideFrame()
+    self:Hide()
 end

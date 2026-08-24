@@ -35,9 +35,9 @@ local GROUP_ICONS = {
 
 ---@class MapPinEnhancedEditorGroupIconButton : MapPinEnhancedIconButtonTemplate
 
----@class MapPinEnhancedEditorGroupEditorHeaderTemplate : Frame
+---@class MapPinEnhancedGroupEditorContentHeaderTemplate : Frame
 ---@field group MapPinEnhancedGroupMixin?
----@field editor MapPinEnhancedEditorTemplate?
+---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field iconButton MapPinEnhancedEditorGroupIconButton
 ---@field pinCount FontString
 ---@field nameField MapPinEnhancedEditorInputField
@@ -45,9 +45,9 @@ local GROUP_ICONS = {
 ---@field optimizeButton MapPinEnhancedButtonTemplate
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
-MapPinEnhancedEditorGroupEditorHeaderMixin = {}
+MapPinEnhancedGroupEditorContentHeaderMixin = {}
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
+function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.nameField.child:ClearTextApply()
     self.group = nil
     self.editor = nil
@@ -58,31 +58,31 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:Reset()
     self.optimizeButton:Hide()
 end
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:UpdateRouteOrderButton()
+function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateRouteOrderButton()
     local group = self.group
     self.optimizeButton:SetShown(group ~= nil and not group:IsProtected() and
         group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and group:GetTotalPinCount() > 1)
 end
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:OrderRouteByDistance()
+function MapPinEnhancedGroupEditorContentHeaderMixin:OrderRouteByDistance()
     local group, editor = assert(self.group), assert(self.editor)
     MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
         L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
             if self.group ~= group then return end
-            editor.groupEditor:SetLoading(true)
+            editor.groupEditorContent:SetLoading(true)
             Groups:OrderGroupByDistance(group, function()
                 if self.group == group then
-                    editor.groupEditor:SetGroup(group)
+                    editor.groupEditorContent:SetGroup(group)
                 end
-                editor.groupEditor:SetLoading(false)
+                editor.groupEditorContent:SetLoading(false)
             end, function(message)
-                editor.groupEditor:SetLoading(false)
+                editor.groupEditorContent:SetLoading(false)
                 MapPinEnhanced:Print(message)
             end)
         end)
 end
 
-function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
+function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
     local group = assert(self.group)
     local editor = assert(self.editor)
     local entries = {}
@@ -99,7 +99,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
                     group:SetIcon(icon.path)
                     self.iconButton.iconTexture:SetTexture(icon.path)
                     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-                    editor.groupSidebar:Refresh()
+                    editor.groupEditorSidebar:Refresh()
                 end,
             },
             initializer = function(_, _, menu)
@@ -116,7 +116,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
                 group:SetIcon(path)
                 self.iconButton.iconTexture:SetTexture(path)
                 MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
-                editor.groupSidebar:Refresh()
+                editor.groupEditorSidebar:Refresh()
             end)
         end,
     })
@@ -124,9 +124,9 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:ShowIconMenu()
 end
 
 ---@param group MapPinEnhancedGroupMixin
----@param editor MapPinEnhancedEditorTemplate
+---@param editor MapPinEnhancedGroupEditorTemplate
 ---@param focusName boolean?
-function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focusName)
+function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, focusName)
     self:Reset()
     self.group, self.editor = group, editor
     local protected = group:IsProtected()
@@ -141,7 +141,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
         local existing = Groups:GetGroupByName(value)
         if existing and existing ~= group then return nil end
         if not group:SetName(value) then return nil end
-        editor.groupSidebar:Refresh()
+        editor.groupEditorSidebar:Refresh()
         return group:GetName()
     end)
 
@@ -166,7 +166,7 @@ function MapPinEnhancedEditorGroupEditorHeaderMixin:SetGroup(group, editor, focu
     self.hideButton:SetScript("OnClick", function()
         if protected then return end
         if group:IsHidden() then group:ShowGroup() else group:HideGroup() end
-        editor.groupSidebar:Refresh()
+        editor.groupEditorSidebar:Refresh()
     end)
 
     self.deleteButton:SetScript("OnClick", function()

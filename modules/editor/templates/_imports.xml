@@ -1,10 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Script file="EditorFrame.lua" />
-    <Include file="GroupSidebarEntry.xml" />
-    <Include file="GroupSidebar.xml" />
-    <Include file="GroupEditorHeader.xml" />
-    <Include file="GroupEditorPinEntry.xml" />
+    <Script file="GroupEditor.lua" />
+    <Include file="GroupEditorSidebarEntry.xml" />
+    <Include file="GroupEditorSidebar.xml" />
+    <Include file="GroupEditorContentHeader.xml" />
+    <Include file="GroupEditorContentPinEntry.xml" />
+    <Include file="GroupEditorContent.xml" />
     <Include file="GroupEditor.xml" />
-    <Include file="EditorFrame.xml" />
 </Ui>

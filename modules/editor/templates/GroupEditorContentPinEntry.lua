@@ -17,9 +17,9 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedEditorPositionField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedEditorPositionInput
 
----@class MapPinEnhancedEditorGroupEditorPinEntryTemplate : Frame
+---@class MapPinEnhancedGroupEditorContentPinEntryTemplate : Frame
 ---@field pinNode MapPinEnhancedEditorPinNodeData?
----@field editor MapPinEnhancedEditorTemplate?
+---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field dragHandle Button
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field nameField MapPinEnhancedEditorInputField
@@ -29,7 +29,7 @@ local L = MapPinEnhanced.L
 ---@field duplicateButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field dropLine Texture
-MapPinEnhancedEditorGroupEditorPinEntryMixin = {}
+MapPinEnhancedGroupEditorContentPinEntryMixin = {}
 
 ---@class MapPinEnhancedEditorMapEntry
 ---@field mapID number
@@ -88,7 +88,7 @@ local function FindExactMap(text)
     return match
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:Reset()
     self.nameField.child:ClearTextApply()
     self.mapField.child.onChangeCallback = nil
     self.mapField.child.appliedText = nil
@@ -115,7 +115,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Reset()
     self:ClearDropTarget()
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:RefreshPreview()
     local pinData = Editor:GetPinData(self.pinNode)
     if pinData.texture then
         self.pinFrame:SetIconTexture(pinData.texture, pinData.usesAtlas)
@@ -126,17 +126,17 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:RefreshPreview()
     self.pinFrame:SetLock(pinData.lock)
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetColor(color)
+function MapPinEnhancedGroupEditorContentPinEntryMixin:SetColor(color)
     self.pinNode.group:SetPinColor(self.pinNode.pinID, color)
     self:RefreshPreview()
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetIcon(icon)
+function MapPinEnhancedGroupEditorContentPinEntryMixin:SetIcon(icon)
     self.pinNode.group:SetPinIcon(self.pinNode.pinID, icon.path, icon.usesAtlas)
     self:RefreshPreview()
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
     local menu = {
         {
             type = "submenu",
@@ -201,7 +201,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ShowStyleMenu()
     MapPinEnhanced:GenerateMenu(self.pinFrame, menu)
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition()
     local node = assert(self.pinNode)
     local selectedMap = self.mapField.child.value
     local mapText = self.mapField.child:GetText() or ""
@@ -210,7 +210,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition()
         Editor:ParsePercent(self.xField.child:GetText()), Editor:ParsePercent(self.yField.child:GetText())
     if not mapID then
         self.mapField.child:SetValue(assert(self.mapField.child.appliedMapID,
-            "MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition: appliedMapID is nil"))
+            "MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition: appliedMapID is nil"))
         return false
     end
     if not x or not y then return false end
@@ -224,8 +224,8 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:ApplyPosition()
 end
 
 ---@param pinNode MapPinEnhancedEditorPinNodeData
----@param editor MapPinEnhancedEditorTemplate
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
+---@param editor MapPinEnhancedGroupEditorTemplate
+function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     self.pinNode, self.editor = pinNode, editor
     local pinData = Editor:GetPinData(pinNode)
     self:RefreshPreview()
@@ -258,10 +258,10 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
     local function restore(editBox)
         if editBox == self.mapField.child then
             editBox:SetValue(assert(editBox.appliedMapID,
-                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: appliedMapID is nil"))
+                "MapPinEnhancedGroupEditorContentPinEntryMixin:Init: appliedMapID is nil"))
         else
             editBox:SetValue(assert(editBox.appliedText,
-                "MapPinEnhancedEditorGroupEditorPinEntryMixin:Init: appliedText is nil"))
+                "MapPinEnhancedGroupEditorContentPinEntryMixin:Init: appliedText is nil"))
         end
         editBox:ClearFocus()
     end
@@ -317,7 +317,7 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:Init(pinNode, editor)
 end
 
 ---@param placement "before"|"after"
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetDropTarget(placement)
+function MapPinEnhancedGroupEditorContentPinEntryMixin:SetDropTarget(placement)
     self.dropLine:ClearAllPoints()
     if placement == "before" then
         self.dropLine:SetPoint("TOPLEFT", 48, 2)
@@ -329,12 +329,12 @@ function MapPinEnhancedEditorGroupEditorPinEntryMixin:SetDropTarget(placement)
     self.dropLine:Show()
 end
 
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:ClearDropTarget()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:ClearDropTarget()
     self.dropLine:Hide()
 end
 
 ---@return "before"|"after"
-function MapPinEnhancedEditorGroupEditorPinEntryMixin:GetDropPlacement()
+function MapPinEnhancedGroupEditorContentPinEntryMixin:GetDropPlacement()
     local _, cursorY = GetCursorPosition()
     cursorY = cursorY / self:GetEffectiveScale()
     return cursorY >= self:GetTop() - self:GetHeight() / 2 and "before" or "after"

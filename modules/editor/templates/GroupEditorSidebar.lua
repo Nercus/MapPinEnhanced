@@ -8,8 +8,8 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field title FontString
 ---@field info FontString
 
----@class MapPinEnhancedEditorGroupSidebarTemplate : Frame
----@field editor MapPinEnhancedEditorTemplate?
+---@class MapPinEnhancedGroupEditorSidebarTemplate : Frame
+---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field title FontString
 ---@field search MapPinEnhancedInputTemplate
 ---@field createButton MapPinEnhancedIconButtonTemplate
@@ -17,26 +17,26 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field scrollBar ScrollBarMixin
 ---@field systemGroups Frame
 ---@field systemHeader MapPinEnhancedEditorSystemGroupHeader
----@field ungroupedPinsEntry MapPinEnhancedEditorGroupSidebarEntryTemplate
----@field systemEntries MapPinEnhancedEditorGroupSidebarEntryTemplate[]
+---@field ungroupedPinsEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
+---@field systemEntries MapPinEnhancedGroupEditorSidebarEntryTemplate[]
 ---@field dataProvider DataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field dropTarget MapPinEnhancedGroupMixin?
-MapPinEnhancedEditorGroupSidebarMixin = {}
+MapPinEnhancedGroupEditorSidebarMixin = {}
 
 ---@param scrollBox Frame|ScrollBoxListMixin
 ---@param scrollBar ScrollBarMixin
 ---@return DataProviderMixin, ScrollBoxListLinearViewMixin
-function MapPinEnhancedEditorGroupSidebarMixin:CreateGroupList(scrollBox, scrollBar)
+function MapPinEnhancedGroupEditorSidebarMixin:CreateGroupList(scrollBox, scrollBar)
     local dataProvider = CreateDataProvider()
     local scrollView = CreateScrollBoxListLinearView()
-    scrollView:SetElementInitializer("MapPinEnhancedEditorGroupSidebarEntryTemplate", function(entry, group)
-        ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
+    scrollView:SetElementInitializer("MapPinEnhancedGroupEditorSidebarEntryTemplate", function(entry, group)
+        ---@cast entry MapPinEnhancedGroupEditorSidebarEntryTemplate
         ---@cast group MapPinEnhancedGroupMixin
         entry:Init(group, self.editor)
     end)
     scrollView:SetElementResetter(function(entry)
-        ---@cast entry MapPinEnhancedEditorGroupSidebarEntryTemplate
+        ---@cast entry MapPinEnhancedGroupEditorSidebarEntryTemplate
         entry:Reset()
     end)
     scrollView:SetDataProvider(dataProvider)
@@ -47,7 +47,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:CreateGroupList(scrollBox, scroll
     return dataProvider, scrollView
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
+function MapPinEnhancedGroupEditorSidebarMixin:OnLoad()
     self.title:SetText(L["Groups"])
     self.systemHeader.title:SetText(L["System Groups"])
     self.search:SetInlineIcon("search")
@@ -76,21 +76,21 @@ function MapPinEnhancedEditorGroupSidebarMixin:OnLoad()
     self.systemHeader:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
----@param editor MapPinEnhancedEditorTemplate
-function MapPinEnhancedEditorGroupSidebarMixin:SetEditor(editor)
+---@param editor MapPinEnhancedGroupEditorTemplate
+function MapPinEnhancedGroupEditorSidebarMixin:SetEditor(editor)
     self.editor = editor
     self.createButton:SetScript("OnClick", function() editor:CreateNewGroup() end)
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:ClearSearch()
+function MapPinEnhancedGroupEditorSidebarMixin:ClearSearch()
     self.search:SetText("")
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:GetSearch()
+function MapPinEnhancedGroupEditorSidebarMixin:GetSearch()
     return strtrim(self.search:GetText() or "")
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
+function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
     if not self.dataProvider then return end
     ---@type MapPinEnhancedGroupMixin[]
     local groups = {}
@@ -112,7 +112,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
         self.dataProvider:Insert(group)
     end
 
-    ---@type {entry: MapPinEnhancedEditorGroupSidebarEntryTemplate, group: MapPinEnhancedGroupMixin?}[]
+    ---@type {entry: MapPinEnhancedGroupEditorSidebarEntryTemplate, group: MapPinEnhancedGroupMixin?}[]
     local systemEntries = {
         { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
     }
@@ -125,7 +125,7 @@ function MapPinEnhancedEditorGroupSidebarMixin:Refresh()
 end
 
 ---@param group MapPinEnhancedGroupMixin?
-function MapPinEnhancedEditorGroupSidebarMixin:ScrollToGroup(group)
+function MapPinEnhancedGroupEditorSidebarMixin:ScrollToGroup(group)
     if not group then return end
     if group:IsProtected() then return end
     self.scrollBox:ScrollToElementDataByPredicate(function(data)
@@ -133,22 +133,22 @@ function MapPinEnhancedEditorGroupSidebarMixin:ScrollToGroup(group)
     end)
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:ClearDropTarget()
+function MapPinEnhancedGroupEditorSidebarMixin:ClearDropTarget()
     self.dropTarget = nil
     self.scrollBox:ForEachFrame(function(frame) frame:SetDropTarget(false) end)
     for _, entry in ipairs(self.systemEntries) do entry:SetDropTarget(false) end
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:GetDropTarget()
+function MapPinEnhancedGroupEditorSidebarMixin:GetDropTarget()
     return self.dropTarget
 end
 
-function MapPinEnhancedEditorGroupSidebarMixin:UpdateDropTarget()
+function MapPinEnhancedGroupEditorSidebarMixin:UpdateDropTarget()
     ---@type MapPinEnhancedGroupMixin?
     local target
     ---@param scrollBox Frame|ScrollBoxListMixin
     local function update(scrollBox)
-        ---@param frame MapPinEnhancedEditorGroupSidebarEntryTemplate
+        ---@param frame MapPinEnhancedGroupEditorSidebarEntryTemplate
         scrollBox:ForEachFrame(function(frame)
             local isTarget = not target and frame:IsMouseOver()
             frame:SetDropTarget(isTarget)

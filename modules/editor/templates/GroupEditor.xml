@@ -1,85 +1,28 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Include file="GroupEditor.lua" />
-
-    <Frame name="MapPinEnhancedEditorGroupEditorTemplate" virtual="true" mixin="MapPinEnhancedEditorGroupEditorMixin">
+    <Frame name="MapPinEnhancedGroupEditorTemplate" mixin="MapPinEnhancedGroupEditorMixin" inherits="MapPinEnhancedWindowTemplate" enableMouse="true" parent="UIParent" movable="true" clampedToScreen="true" toplevel="true" hidden="true" virtual="true">
+        <Size x="1180" y="590" />
+        <KeyValues>
+            <KeyValue key="windowTitle" value="Editor" />
+        </KeyValues>
         <Frames>
-            <Frame parentKey="emptyState">
+            <Frame parentKey="groupEditorSidebar" inherits="MapPinEnhancedGroupEditorSidebarTemplate">
+                <Size x="250" y="1" />
                 <Anchors>
-                    <Anchor point="CENTER" />
+                    <Anchor point="TOPLEFT" x="28" y="-36" />
+                    <Anchor point="BOTTOMLEFT" x="28" y="16" />
                 </Anchors>
-                <Size x="420" y="90" />
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString parentKey="message" inherits="GameFontNormalLarge" justifyH="CENTER">
-                            <Anchors>
-                                <Anchor point="TOP" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Frames>
-                    <Button parentKey="createButton" inherits="MapPinEnhancedButtonTemplate" text="Create Group">
-                        <Size x="150" y="26" />
-                        <KeyValues>
-                            <KeyValue key="icon" value="plus" />
-                        </KeyValues>
-                        <Anchors>
-                            <Anchor point="TOP" relativeKey="$parent.message" relativePoint="BOTTOM" y="-18" />
-                        </Anchors>
-                    </Button>
-                </Frames>
             </Frame>
-            <Frame parentKey="content" hidden="true">
+            <Frame parentKey="groupEditorContent" inherits="MapPinEnhancedGroupEditorContentTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMRIGHT" />
+                    <Anchor point="TOPLEFT" x="310" y="-46" />
+                    <Anchor point="BOTTOMRIGHT" x="-28" y="26" />
                 </Anchors>
-                <Frames>
-                    <Frame parentKey="header" inherits="MapPinEnhancedEditorGroupEditorHeaderTemplate">
-                        <Anchors>
-                            <Anchor point="TOPLEFT" />
-                            <Anchor point="TOPRIGHT" />
-                        </Anchors>
-                    </Frame>
-                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-10" />
-                            <Anchor point="BOTTOMRIGHT" x="-18" />
-                        </Anchors>
-                    </Frame>
-                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="5" y="-5" />
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="5" />
-                        </Anchors>
-                    </EventFrame>
-                </Frames>
-            </Frame>
-            <Frame parentKey="loadingOverlay" hidden="true" enableMouse="true" frameStrata="DIALOG">
-                <!-- TODO: add an animated overlay here to indicate what happens: shuffling cards maybe? -->
-                <Anchors>
-                    <Anchor point="TOPLEFT" />
-                    <Anchor point="BOTTOMRIGHT" />
-                </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <Texture setAllPoints="true">
-                            <Color r="0" g="0" b="0" a="0.65" />
-                        </Texture>
-                    </Layer>
-                    <Layer level="ARTWORK">
-                        <FontString parentKey="message" inherits="GameFontNormalHuge">
-                            <Anchors>
-                                <Anchor point="CENTER" />
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
             </Frame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnUpdate method="OnUpdate" />
         </Scripts>
     </Frame>
 </Ui>
