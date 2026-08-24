@@ -195,6 +195,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddDeleteOrClearMenuAction(menu)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
+    if self.group.groupType == "way-back" then return end
     if not self:CanRenameGroup() then return end
 
     local group = self.group
