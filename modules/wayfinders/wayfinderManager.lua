@@ -9,7 +9,7 @@ local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinder
----@field Init fun(self: MapPinEnhancedWayfinder, data: WayfinderData | nil) sets the wayfinder pin for the wayfinder
+---@field Init fun(self: MapPinEnhancedWayfinder, targetData: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
 ---@field SetTitle fun(self: MapPinEnhancedWayfinder, title: string) sets the wayfinder title, if the wayfinder supports it
@@ -42,38 +42,38 @@ local AVAILABLE_WAYFINDERS = {
 ---@field lock boolean? if true, the target will not be removed automatically when reached
 ---@field targetType WayfinderTargetType? the target owner; missing or unknown values safely use the pin presentation
 
----@alias WayfinderTargetRemoval fun(owner: string, identity: string, revision: integer)
+---@alias WayfinderTargetRemoval fun(owner: string, targetID: string, changeNumber: integer)
 
 ---@class ActiveWayfinderTarget
 ---@field owner string
----@field identity string
----@field revision integer
----@field data WayfinderData
+---@field targetID string
+---@field changeNumber integer
+---@field targetData WayfinderData
 ---@field removeTarget WayfinderTargetRemoval?
 
----@class ActiveWayfinderTargetSnapshot
+---@class ActiveWayfinderTargetCopy
 ---@field owner string
----@field identity string
----@field revision integer
----@field data WayfinderData
+---@field targetID string
+---@field changeNumber integer
+---@field targetData WayfinderData
 
 ---@type ActiveWayfinderTarget?
 local activeTarget
-local targetRevision = 0
+local targetChangeNumber = 0
 
----@param data WayfinderData
+---@param targetData WayfinderData
 ---@return WayfinderData
-local function CopyWayfinderData(data)
+local function CopyWayfinderData(targetData)
     return {
-        mapID = data.mapID,
-        x = data.x,
-        y = data.y,
-        title = data.title,
-        texture = data.texture,
-        usesAtlas = data.usesAtlas,
-        color = data.color,
-        lock = data.lock,
-        targetType = Wayfinders:NormalizeTargetType(data.targetType),
+        mapID = targetData.mapID,
+        x = targetData.x,
+        y = targetData.y,
+        title = targetData.title,
+        texture = targetData.texture,
+        usesAtlas = targetData.usesAtlas,
+        color = targetData.color,
+        lock = targetData.lock,
+        targetType = Wayfinders:GetTargetTypeOrDefault(targetData.targetType),
     }
 end
 
@@ -82,13 +82,13 @@ local function ApplyActiveTarget(target)
     activeTarget = target
     Wayfinders:ResetArrivalDetection()
 
-    local data = target and target.data or nil
+    local targetData = target and target.targetData or nil
     for _, wayfinder in ipairs(Wayfinders.activeWayfinders) do
-        wayfinder:Init(data)
+        wayfinder:Init(targetData)
     end
 
-    if data and data.mapID and data.x and data.y then
-        MapPinEnhanced:EnableContinuousDistanceCheck(data.mapID, data.x, data.y)
+    if targetData and targetData.mapID and targetData.x and targetData.y then
+        MapPinEnhanced:EnableContinuousDistanceCheck(targetData.mapID, targetData.x, targetData.y)
     else
         MapPinEnhanced:DisableContinuousDistanceCheck()
     end
@@ -96,7 +96,7 @@ end
 
 ---@param targetType string?
 ---@return WayfinderTargetType
-function Wayfinders:NormalizeTargetType(targetType)
+function Wayfinders:GetTargetTypeOrDefault(targetType)
     if targetType == self.TARGET_TYPE_BLIZZARD then
         return self.TARGET_TYPE_BLIZZARD
     end
@@ -106,7 +106,7 @@ end
 ---@param targetType string?
 ---@return PinStyleMode
 function Wayfinders:GetTargetStyleMode(targetType)
-    if self:NormalizeTargetType(targetType) == self.TARGET_TYPE_BLIZZARD then
+    if self:GetTargetTypeOrDefault(targetType) == self.TARGET_TYPE_BLIZZARD then
         return Pins.STYLE_MODE_OUTLINE
     end
     return Pins.STYLE_MODE_PIN
@@ -114,94 +114,94 @@ end
 
 --- Replace the active target without invoking the superseded target's removal operation.
 ---@param owner string
----@param identity string
----@param data WayfinderData
+---@param targetID string
+---@param targetData WayfinderData
 ---@param removeTarget WayfinderTargetRemoval?
----@return integer revision
-function Wayfinders:SetTarget(owner, identity, data, removeTarget)
+---@return integer changeNumber
+function Wayfinders:SetTarget(owner, targetID, targetData, removeTarget)
     assert(type(owner) == "string" and owner ~= "", "Wayfinders:SetTarget: owner must be a non-empty string")
-    assert(type(identity) == "string" and identity ~= "",
-        "Wayfinders:SetTarget: identity must be a non-empty string")
-    assert(type(data) == "table", "Wayfinders:SetTarget: data must be a table")
+    assert(type(targetID) == "string" and targetID ~= "",
+        "Wayfinders:SetTarget: targetID must be a non-empty string")
+    assert(type(targetData) == "table", "Wayfinders:SetTarget: targetData must be a table")
     assert(removeTarget == nil or type(removeTarget) == "function",
         "Wayfinders:SetTarget: removeTarget must be a function or nil")
 
-    targetRevision = targetRevision + 1
+    targetChangeNumber = targetChangeNumber + 1
     ApplyActiveTarget({
         owner = owner,
-        identity = identity,
-        revision = targetRevision,
-        data = CopyWayfinderData(data),
+        targetID = targetID,
+        changeNumber = targetChangeNumber,
+        targetData = CopyWayfinderData(targetData),
         removeTarget = removeTarget,
     })
-    return targetRevision
+    return targetChangeNumber
 end
 
 --- Update only the target version observed by the caller.
 ---@param owner string
----@param identity string
----@param revision integer
----@param data WayfinderData
----@return integer? revision
-function Wayfinders:UpdateTarget(owner, identity, revision, data)
-    assert(type(data) == "table", "Wayfinders:UpdateTarget: data must be a table")
-    if not self:IsTargetActive(owner, identity, revision) then return nil end
+---@param targetID string
+---@param changeNumber integer
+---@param targetData WayfinderData
+---@return integer? changeNumber
+function Wayfinders:UpdateTarget(owner, targetID, changeNumber, targetData)
+    assert(type(targetData) == "table", "Wayfinders:UpdateTarget: targetData must be a table")
+    if not self:IsTargetActive(owner, targetID, changeNumber) then return nil end
 
-    targetRevision = targetRevision + 1
+    targetChangeNumber = targetChangeNumber + 1
     ApplyActiveTarget({
         owner = owner,
-        identity = identity,
-        revision = targetRevision,
-        data = CopyWayfinderData(data),
+        targetID = targetID,
+        changeNumber = targetChangeNumber,
+        targetData = CopyWayfinderData(targetData),
         removeTarget = activeTarget and activeTarget.removeTarget or nil,
     })
-    return targetRevision
+    return targetChangeNumber
 end
 
 ---@param owner string
----@param identity string?
----@param revision integer?
+---@param targetID string?
+---@param changeNumber integer?
 ---@return boolean
-function Wayfinders:IsTargetActive(owner, identity, revision)
+function Wayfinders:IsTargetActive(owner, targetID, changeNumber)
     if not activeTarget or activeTarget.owner ~= owner then return false end
-    if identity and activeTarget.identity ~= identity then return false end
-    if revision and activeTarget.revision ~= revision then return false end
+    if targetID and activeTarget.targetID ~= targetID then return false end
+    if changeNumber and activeTarget.changeNumber ~= changeNumber then return false end
     return true
 end
 
 ---@return string? owner
----@return string? identity
----@return integer revision
-function Wayfinders:GetActiveTargetIdentity()
-    if not activeTarget then return nil, nil, targetRevision end
-    return activeTarget.owner, activeTarget.identity, activeTarget.revision
+---@return string? targetID
+---@return integer changeNumber
+function Wayfinders:GetActiveTargetState()
+    if not activeTarget then return nil, nil, targetChangeNumber end
+    return activeTarget.owner, activeTarget.targetID, activeTarget.changeNumber
 end
 
----@return ActiveWayfinderTargetSnapshot?
+---@return ActiveWayfinderTargetCopy?
 function Wayfinders:GetActiveTargetSnapshot()
     if not activeTarget then return nil end
     return {
         owner = activeTarget.owner,
-        identity = activeTarget.identity,
-        revision = activeTarget.revision,
-        data = CopyWayfinderData(activeTarget.data),
+        targetID = activeTarget.targetID,
+        changeNumber = activeTarget.changeNumber,
+        targetData = CopyWayfinderData(activeTarget.targetData),
     }
 end
 
 ---@param owner string
----@param identity string?
----@param revision integer?
+---@param targetID string?
+---@param changeNumber integer?
 ---@return boolean
-function Wayfinders:ClearTarget(owner, identity, revision)
-    if not self:IsTargetActive(owner, identity, revision) then return false end
-    targetRevision = targetRevision + 1
+function Wayfinders:ClearTarget(owner, targetID, changeNumber)
+    if not self:IsTargetActive(owner, targetID, changeNumber) then return false end
+    targetChangeNumber = targetChangeNumber + 1
     ApplyActiveTarget(nil)
     return true
 end
 
 ---@return boolean
 function Wayfinders:CanRemoveActiveTargetOnArrival()
-    return activeTarget ~= nil and not activeTarget.data.lock and activeTarget.removeTarget ~= nil
+    return activeTarget ~= nil and not activeTarget.targetData.lock and activeTarget.removeTarget ~= nil
 end
 
 function Wayfinders:RemoveActiveTargetOnArrival()
@@ -213,14 +213,14 @@ function Wayfinders:RemoveActiveTargetOnArrival()
     target.removeTarget = nil
     self:ResetArrivalDetection()
     if removeTarget then
-        removeTarget(target.owner, target.identity, target.revision)
+        removeTarget(target.owner, target.targetID, target.changeNumber)
     end
 end
 
 ---@param wayfinder MapPinEnhancedWayfinder
 function Wayfinders:RefreshWayfinder(wayfinder)
     if activeTarget then
-        wayfinder:Init(activeTarget.data)
+        wayfinder:Init(activeTarget.targetData)
     else
         wayfinder:Init(nil)
     end

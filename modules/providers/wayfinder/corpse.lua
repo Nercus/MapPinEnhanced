@@ -7,23 +7,23 @@ local SOURCE = "corpse"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Corpse
 
 ---@return string
-local function GetCorpseIdentity()
+local function GetCorpseTargetID()
     return "corpse"
 end
 
 local function RefreshCorpse()
-    local identity = GetCorpseIdentity()
+    local targetID = GetCorpseTargetID()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Corpse"], {
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Corpse"], {
             hasCoordinates = x ~= nil and y ~= nil,
             isSuperTrackingCorpse = isTrackingCorpse,
             mapID = mapID,
         })
         return
     end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
+    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
@@ -36,7 +36,7 @@ end
 Providers:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
-    getIdentity = GetCorpseIdentity,
+    getTargetID = GetCorpseTargetID,
     refresh = RefreshCorpse,
     events = { "PLAYER_DEAD", "PLAYER_ALIVE", "PLAYER_UNGHOST" },
 })

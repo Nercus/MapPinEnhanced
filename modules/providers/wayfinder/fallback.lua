@@ -6,7 +6,7 @@ local L = MapPinEnhanced.L
 local SOURCE = "fallback"
 
 ---@return string
-local function GetFallbackIdentity()
+local function GetFallbackTargetID()
     local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
     local pinType, pinTypeID = C_SuperTrack.GetSuperTrackedMapPin()
     local contentType, contentID = C_SuperTrack.GetSuperTrackedContent()
@@ -23,11 +23,11 @@ local function RefreshFallbackTarget()
     local contentType, contentID = C_SuperTrack.GetSuperTrackedContent()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
-    local identity = GetFallbackIdentity()
+    local targetID = GetFallbackTargetID()
 
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     if x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Target"], {
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Target"], {
             contentID = contentID,
             contentType = contentType,
             hasCoordinates = x ~= nil and y ~= nil,
@@ -41,7 +41,7 @@ local function RefreshFallbackTarget()
     end
 
     local name, description = C_SuperTrack.GetSuperTrackedItemName()
-    Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
+    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
@@ -53,7 +53,7 @@ end
 
 Providers:RegisterSuperTrackingFallback({
     source = SOURCE,
-    getIdentity = GetFallbackIdentity,
+    getTargetID = GetFallbackTargetID,
     refresh = RefreshFallbackTarget,
     events = { "GROUP_ROSTER_UPDATE", "ZONE_CHANGED_NEW_AREA" },
 })

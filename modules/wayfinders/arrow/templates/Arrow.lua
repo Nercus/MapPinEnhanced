@@ -154,11 +154,11 @@ function MapPinEnhancedWayfinderArrowMixin:AnimateRotation(elapsed)
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
 
-    local diff = mathAtan2(
+    local angleDifference = mathAtan2(
         mathSin(targetRotation - currentRotation),
         mathCos(targetRotation - currentRotation)
     )
-    local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .2, elapsed)
+    local newRotation = DeltaLerp(currentRotation, currentRotation + angleDifference, .2, elapsed)
     self.needleRotation = newRotation
 
     self.needleContainer.needle:SetRotation(-newRotation)

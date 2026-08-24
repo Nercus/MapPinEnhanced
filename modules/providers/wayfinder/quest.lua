@@ -9,7 +9,7 @@ local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 local pendingQuestTitles = {}
 
 ---@return string
-local function GetQuestIdentity()
+local function GetQuestTargetID()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
     return string.format("quest:%s", tostring(questID))
@@ -38,7 +38,7 @@ end
 local function RefreshQuest()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
-    local identity = GetQuestIdentity()
+    local targetID = GetQuestTargetID()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
         return GetQuestWaypointForMap(questID, candidateMapID)
     end or nil)
@@ -46,7 +46,7 @@ local function RefreshQuest()
         mapID, x, y = C_QuestLog.GetNextWaypoint(questID)
     end
     if questID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Quest"], {
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Quest"], {
             hasCoordinates = x ~= nil and y ~= nil,
             questID = questID,
         })
@@ -67,7 +67,7 @@ local function RefreshQuest()
         title = string.format(L["%s — %s"], waypointText, questTitle)
     end
     local classification = C_QuestInfoSystem.GetQuestClassification(questID)
-    Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
+    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
@@ -90,7 +90,7 @@ end
 Providers:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
-    getIdentity = GetQuestIdentity,
+    getTargetID = GetQuestTargetID,
     refresh = RefreshQuest,
     events = { "QUEST_LOG_UPDATE", "QUEST_POI_UPDATE" },
 })

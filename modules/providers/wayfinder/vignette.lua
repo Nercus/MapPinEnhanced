@@ -7,7 +7,7 @@ local SOURCE = "vignette"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Vignette
 
 ---@return string
-local function GetVignetteIdentity()
+local function GetVignetteTargetID()
     return string.format("vignette:%s", tostring(C_SuperTrack.GetSuperTrackedVignette()))
 end
 
@@ -23,13 +23,13 @@ end
 
 local function RefreshVignette()
     local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
-    local identity = GetVignetteIdentity()
+    local targetID = GetVignetteTargetID()
     local vignetteInfo = vignetteGUID and C_VignetteInfo.GetVignetteInfo(vignetteGUID)
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(vignetteGUID and function(candidateMapID)
         return GetVignettePositionForMap(vignetteGUID, candidateMapID)
     end or nil)
     if not vignetteGUID or not vignetteInfo or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Vignette"], {
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Vignette"], {
             hasCoordinates = x ~= nil and y ~= nil,
             hasVignetteInfo = vignetteInfo ~= nil,
             vignetteGUID = vignetteGUID,
@@ -37,7 +37,7 @@ local function RefreshVignette()
         })
         return
     end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
+    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
@@ -50,7 +50,7 @@ end
 Providers:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
-    getIdentity = GetVignetteIdentity,
+    getTargetID = GetVignetteTargetID,
     refresh = RefreshVignette,
     events = { "VIGNETTES_UPDATED" },
 })

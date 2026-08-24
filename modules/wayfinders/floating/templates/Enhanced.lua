@@ -132,7 +132,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetEllipticalRadii(major, 
     self.axesMultiplied = major * minor
 end
 
-function MapPinEnhancedWayfinderFloatingEnhancedMixin:InitializeNavigationFrame()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetUpNavigationFrame()
     if self.navFrame then return end
     self.navFrame = C_Navigation.GetFrame()
     self:SetAlpha(self.navFrame and 1 or 0)
@@ -151,9 +151,9 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:ShutdownNavigationFrame()
     self.clampedChanged = nil
 end
 
-function MapPinEnhancedWayfinderFloatingEnhancedMixin:CheckInitializeNavigationFrame()
+function MapPinEnhancedWayfinderFloatingEnhancedMixin:EnsureNavigationFrameIsSetUp()
     if not self.navFrame then
-        self:InitializeNavigationFrame()
+        self:SetUpNavigationFrame()
     end
 end
 
@@ -181,11 +181,11 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:AnimateNeedleRotation(elap
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
 
-    local diff = mathAtan2(
+    local angleDifference = mathAtan2(
         mathSin(targetRotation - currentRotation),
         mathCos(targetRotation - currentRotation)
     )
-    local newRotation = DeltaLerp(currentRotation, currentRotation + diff, .1, elapsed)
+    local newRotation = DeltaLerp(currentRotation, currentRotation + angleDifference, .1, elapsed)
     self.needleRotation = newRotation
 
     self.needle:SetRotation(-newRotation)
@@ -207,14 +207,14 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:ClampElliptical()
     local minorAxisSquared = self.minorAxisSquared or 0
     local axesMultiplied = self.axesMultiplied or 0
 
-    local pX = navX - centerX
-    local pY = navY - centerY
-    local denominator = mathSqrt(majorAxisSquared * pY * pY + minorAxisSquared * pX * pX)
+    local offsetX = navX - centerX
+    local offsetY = navY - centerY
+    local denominator = mathSqrt(majorAxisSquared * offsetY * offsetY + minorAxisSquared * offsetX * offsetX)
 
     if denominator ~= 0 then
         local ratio = axesMultiplied / denominator
-        local intersectionX = pX * ratio
-        local intersectionY = pY * ratio
+        local intersectionX = offsetX * ratio
+        local intersectionY = offsetY * ratio
         self:SetPoint("CENTER", WorldFrame, "CENTER", intersectionX, intersectionY)
     end
 end
@@ -241,7 +241,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:UpdatePosition()
 end
 
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnUpdate(elapsed)
-    self:CheckInitializeNavigationFrame()
+    self:EnsureNavigationFrameIsSetUp()
 
     if not self.navFrame then return end
     self:UpdateClampedState()
@@ -259,7 +259,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnEvent(event)
     if event == "NAVIGATION_FRAME_CREATED" then
-        self:InitializeNavigationFrame()
+        self:SetUpNavigationFrame()
     elseif event == "NAVIGATION_FRAME_DESTROYED" then
         self:ShutdownNavigationFrame()
     end
@@ -275,7 +275,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnShow()
     SuperTrackedFrame:Hide()
     self.needsBlizzardReset = true
 
-    self:InitializeNavigationFrame()
+    self:SetUpNavigationFrame()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)

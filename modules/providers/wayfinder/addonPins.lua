@@ -12,7 +12,7 @@ local placedUserWaypoint = nil
 ---@type UUID?
 local trackedPinID = nil
 ---@type integer?
-local trackedTargetRevision = nil
+local trackedTargetChangeNumber = nil
 local shouldSuperTrackUserWaypoint = false
 local superTrackedReachedBehaviorOverridden = false
 
@@ -105,14 +105,14 @@ local boundPinID = nil
 ---@type fun()?
 local unsubscribePinCallbacks = nil
 local function UpdateTrackedPinTarget()
-    if not trackedPinID or not trackedTargetRevision then return end
+    if not trackedPinID or not trackedTargetChangeNumber then return end
     local pin = Pins:GetPinByID(trackedPinID)
     if not pin or not pin:IsTracked() then return end
 
-    local revision = Wayfinders:UpdateTarget(TARGET_OWNER, trackedPinID, trackedTargetRevision,
+    local changeNumber = Wayfinders:UpdateTarget(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber,
         TransformPinDataToWayfinderData(pin:GetPinData()))
-    if revision and Wayfinders:IsTargetActive(TARGET_OWNER, trackedPinID, revision) then
-        trackedTargetRevision = revision
+    if changeNumber and Wayfinders:IsTargetActive(TARGET_OWNER, trackedPinID, changeNumber) then
+        trackedTargetChangeNumber = changeNumber
     end
 end
 
@@ -165,21 +165,21 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
-        Providers:CancelPendingSuperTrackingResolutions()
-        trackedTargetRevision = nil
-        local revision = Wayfinders:SetTarget(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
+        Providers:CancelSuperTrackingTargetRetries()
+        trackedTargetChangeNumber = nil
+        local changeNumber = Wayfinders:SetTarget(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
             RemoveTrackedPin(pinID)
         end)
-        if Wayfinders:IsTargetActive(TARGET_OWNER, pinID, revision) then
-            trackedTargetRevision = revision
+        if Wayfinders:IsTargetActive(TARGET_OWNER, pinID, changeNumber) then
+            trackedTargetChangeNumber = changeNumber
             SetupPinCallbacks(pinID)
         end
     elseif pinID == trackedPinID and not isTracked then
         ClearPinCallbacks()
         ClearTrackedPinUserWaypoint()
-        Wayfinders:ClearTarget(TARGET_OWNER, trackedPinID, trackedTargetRevision)
+        Wayfinders:ClearTarget(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber)
         trackedPinID = nil
-        trackedTargetRevision = nil
+        trackedTargetChangeNumber = nil
     end
 end
 

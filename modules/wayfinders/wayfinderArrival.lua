@@ -94,7 +94,7 @@ end
 ---@param closingSpeed number
 ---@param nextUpdateInterval number
 ---@param movementState DistanceMovementState
-function Wayfinders:ProcessArrivalSample(distance, closingSpeed, nextUpdateInterval, movementState)
+function Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, movementState)
     if not self:CanRemoveActiveTargetOnArrival() then
         self:ResetArrivalDetection()
         return
@@ -115,7 +115,7 @@ end
 ---@param nextUpdateInterval number
 ---@param movementState DistanceMovementState
 local function OnDistanceUpdate(distance, _, closingSpeed, nextUpdateInterval, movementState)
-    Wayfinders:ProcessArrivalSample(distance, closingSpeed, nextUpdateInterval, movementState)
+    Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, movementState)
 end
 
 MapPinEnhanced:RegisterContinuousDistanceSampleCallback(OnDistanceUpdate)

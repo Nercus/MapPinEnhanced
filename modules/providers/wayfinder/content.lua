@@ -7,7 +7,7 @@ local SOURCE = "content"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Content
 
 ---@return string
-local function GetContentIdentity()
+local function GetContentTargetID()
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
     return string.format("content:%s:%s", tostring(trackableType), tostring(trackableID))
 end
@@ -31,10 +31,10 @@ local function GetContentIcon(trackableType, trackableID)
 end
 
 ---@param _ string
----@param identity string
----@param revision integer
-local function ClearContent(_, identity, revision)
-    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, identity, revision) then return end
+---@param targetID string
+---@param changeNumber integer
+local function ClearContent(_, targetID, changeNumber)
+    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, targetID, changeNumber) then return end
     C_SuperTrack.ClearSuperTrackedContent()
 end
 
@@ -53,7 +53,7 @@ end
 
 local function RefreshContent()
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
-    local identity = GetContentIdentity()
+    local targetID = GetContentTargetID()
     local hasTrackable = trackableType ~= nil and trackableID ~= nil
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(hasTrackable and function(candidateMapID)
         return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
@@ -67,7 +67,7 @@ local function RefreshContent()
         end
     end
     if trackableType == nil or trackableID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, identity, L["Content"], {
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Content"], {
             hasCoordinates = x ~= nil and y ~= nil,
             trackableID = trackableID,
             trackableType = trackableType,
@@ -78,7 +78,7 @@ local function RefreshContent()
     title = title or description
     if not title and C_ContentTracking then title = C_ContentTracking.GetTitle(trackableType, trackableID) end
     local texture, usesAtlas = GetContentIcon(trackableType, trackableID)
-    Providers:SetSuperTrackingWayfinderData(SOURCE, identity, {
+    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID, x = x, y = y, title = title, texture = texture, usesAtlas = usesAtlas,
     }, ClearContent)
 end
@@ -86,7 +86,7 @@ end
 Providers:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
-    getIdentity = GetContentIdentity,
+    getTargetID = GetContentTargetID,
     refresh = RefreshContent,
     events = { "CONTENT_TRACKING_UPDATE", "TRACKABLE_INFO_UPDATE", "TRACKING_TARGET_INFO_UPDATE" },
 })
