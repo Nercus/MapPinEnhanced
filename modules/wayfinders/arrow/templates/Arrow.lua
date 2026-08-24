@@ -10,24 +10,20 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedArrowTextContainer : Frame
 ---@field title FontString
----@field distance FontString
----@field eta FontString
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 
 ---@class MapPinEnhancedWayfinderArrowTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin
 ---@field needleContainer MapPinEnhancedArrowNeedleContainer
 ---@field textContainer MapPinEnhancedArrowTextContainer
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field title FontString
----@field distance FontString
----@field eta FontString
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 ---@field needleRotation number | nil
 ---@field newNeedleRotation number | nil
 ---@field rotatePin boolean | nil
 ---@field displayType 'close' | 'far' | nil
----@field lastDistanceText string?
----@field lastEtaText string?
 MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -91,6 +87,7 @@ function MapPinEnhancedWayfinderArrowMixin:SetTitle(title)
 end
 
 function MapPinEnhancedWayfinderArrowMixin:SetLocation(mapID, x, y)
+    self:ResetDistanceReadout()
     self:SetTargetLocation(mapID, x, y)
 end
 
@@ -207,8 +204,7 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     self.title = self.textContainer.title
-    self.distance = self.textContainer.distance
-    self.eta = self.textContainer.eta
+    self.readout = self.textContainer.readout
 
     local frameLevel = self:GetFrameLevel()
     self.needleContainer:SetFrameLevel(frameLevel)
@@ -224,7 +220,7 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
-    self:StartDistanceUpdates(self.distance, self.eta, function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
     end)
     self:UpdateNeedlePosition()

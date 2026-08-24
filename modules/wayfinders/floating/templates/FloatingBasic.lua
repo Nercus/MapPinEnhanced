@@ -3,8 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedFloatingBasicTextContainer : Frame
 ---@field title FontString
----@field distance FontString
----@field eta FontString
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 
 ---@class MapPinEnhancedFloatingBasicClampedArrow : Frame
 ---@field needle Texture
@@ -13,9 +12,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field clampedArrow MapPinEnhancedFloatingBasicClampedArrow
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field textContainer MapPinEnhancedFloatingBasicTextContainer
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field distanceCallback fun(distance: number, timeToTarget: number) | nil
----@field lastDistanceText string?
----@field lastEtaText string?
 MapPinEnhancedWayfinderFloatingBasicMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin)
 
 ---@return SuperTrackedFrame | nil
@@ -43,6 +41,7 @@ function MapPinEnhancedWayfinderFloatingBasicMixin:SetTitle(title)
 end
 
 function MapPinEnhancedWayfinderFloatingBasicMixin:SetLocation(_mapID, _x, _y)
+    self:ResetDistanceReadout()
 end
 
 ---@param distance number?
@@ -122,6 +121,7 @@ function MapPinEnhancedWayfinderFloatingBasicMixin:RestoreSuperTrackedRegions()
 end
 
 function MapPinEnhancedWayfinderFloatingBasicMixin:OnLoad()
+    self.readout = self.textContainer.readout
     self.pin:SetTracked(true)
 end
 
@@ -143,7 +143,7 @@ function MapPinEnhancedWayfinderFloatingBasicMixin:OnShow()
         self:OnUpdate()
     end)
 
-    self:StartDistanceUpdates(self.textContainer.distance, self.textContainer.eta, function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
     end)
     self:UpdateClampedArrow()

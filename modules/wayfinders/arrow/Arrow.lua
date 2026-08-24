@@ -54,6 +54,7 @@ end
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
     if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
+        frame:ResetDistanceReadout()
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
         return
     end

@@ -1,0 +1,36 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="WayfinderReadout.lua" />
+
+    <Frame name="MapPinEnhancedWayfinderReadoutTemplate" virtual="true"
+        mixin="MapPinEnhancedWayfinderReadoutMixin">
+        <Size x="1" y="1" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="primaryText" inherits="GameFontNormalSmall" hidden="true">
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="fadeSlideIn" inherits="MapPinEnhancedAnimationFadeSlideUpIn" />
+                        <AnimationGroup parentKey="fadeSlideOut" inherits="MapPinEnhancedAnimationFadeSlideUpOut" />
+                    </Animations>
+                </FontString>
+                <FontString parentKey="secondaryText" inherits="GameFontNormalSmall" hidden="true">
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="fadeSlideIn" inherits="MapPinEnhancedAnimationFadeSlideUpIn" />
+                        <AnimationGroup parentKey="fadeSlideOut" inherits="MapPinEnhancedAnimationFadeSlideUpOut" />
+                    </Animations>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

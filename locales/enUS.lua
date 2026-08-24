@@ -215,6 +215,14 @@ L["Wayfinder.General_GROUPLABEL"] = "General"
 L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Hide Blizzard Floating Diamond"
 L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
 "Hide Blizzard's floating navigation diamond when the Map Pin Enhanced floating wayfinder is disabled."
+L["Wayfinder.General.ReadoutMode_LABEL"] = "Readout"
+L["Wayfinder.General.ReadoutMode_DESCRIPTION"] =
+"Choose whether wayfinders show the ETA, distance, both values, or cycle between them."
+L["ETA"] = "ETA"
+L["Distance"] = "Distance"
+L["Combined"] = "Combined"
+L["Cycling"] = "Cycling"
+L["%s - %s"] = "%s - %s"
 L["Wayfinder.Floating_GROUPLABEL"] = "Floating"
 L["Wayfinder.Floating.Enable_LABEL"] = "Enable Floating Wayfinder"
 L["Wayfinder.Floating.Enable_DESCRIPTION"] =

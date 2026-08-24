@@ -3,7 +3,6 @@
 
     <Script file="FloatingEnhancedConstants.lua" />
     <Include file="FloatingEnhancedTitle.xml" />
-    <Include file="FloatingEnhancedReadout.xml" />
     <Include file="FloatingEnhancedBeam.xml" />
     <Include file="FloatingEnhancedCarets.xml" />
     <Include file="FloatingEnhancedDownArrows.xml" />

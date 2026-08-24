@@ -24,7 +24,7 @@ local CLOSE_OFFSET = Constants.CONTENT_CLOSE_OFFSET
 ---@field carets MapPinEnhancedWayfinderFloatingEnhancedCaretsTemplate
 ---@field downArrows MapPinEnhancedWayfinderFloatingEnhancedDownArrowsTemplate
 ---@field title MapPinEnhancedWayfinderFloatingEnhancedTitleTemplate
----@field readout MapPinEnhancedWayfinderFloatingEnhancedReadoutTemplate
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 
 ---@class MapPinEnhancedWayfinderFloatingEnhancedContentTemplate : Frame
 ---@field visual MapPinEnhancedWayfinderFloatingEnhancedContentVisual
@@ -33,7 +33,7 @@ local CLOSE_OFFSET = Constants.CONTENT_CLOSE_OFFSET
 ---@field carets MapPinEnhancedWayfinderFloatingEnhancedCaretsTemplate
 ---@field downArrows MapPinEnhancedWayfinderFloatingEnhancedDownArrowsTemplate
 ---@field title MapPinEnhancedWayfinderFloatingEnhancedTitleTemplate
----@field readout MapPinEnhancedWayfinderFloatingEnhancedReadoutTemplate
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field needle MapPinEnhancedWayfinderFloatingEnhancedNeedleTemplate
 ---@field currentPresentation FloatingEnhancedPresentation?
 ---@field requestedPresentation FloatingEnhancedPresentation?
@@ -136,6 +136,15 @@ function MapPinEnhancedWayfinderFloatingEnhancedContentMixin:DeactivateDecoratio
     self.downArrows:SetActive(false)
 end
 
+---@param point FramePoint
+---@param relativeTo Region
+---@param relativePoint FramePoint
+---@param offsetY number
+function MapPinEnhancedWayfinderFloatingEnhancedContentMixin:LayoutReadout(point, relativeTo, relativePoint, offsetY)
+    self.readout:ClearAllPoints()
+    self.readout:SetPoint(point, relativeTo, relativePoint, 0, offsetY)
+end
+
 function MapPinEnhancedWayfinderFloatingEnhancedContentMixin:ApplyClampedLayout()
     self:DeactivateDecorations()
     self.title:SetVisible(false, true)
@@ -161,21 +170,21 @@ function MapPinEnhancedWayfinderFloatingEnhancedContentMixin:ApplyUnclampedLayou
         self.beam:SetActive(true)
         self.carets:SetActive(false)
         self.downArrows:SetActive(false)
-        self.readout:LayoutBelow(self.pin)
+        self:LayoutReadout("TOP", self.pin, "BOTTOM", -5)
         self.title:SetVisible(presentation == BLIZZARD_CLOSE, titleInstantly)
     elseif presentation == PLANAR_CLOSE then
         self:SetVisualOffset(CLOSE_OFFSET)
         self.beam:SetActive(false)
         self.carets:SetActive(false)
         self.downArrows:SetActive(true)
-        self.readout:LayoutAbove(self.title)
+        self:LayoutReadout("BOTTOM", self.title, "TOP", 5)
         self.title:SetVisible(true, true)
     else
         self:SetVisualOffset(0)
         self.beam:SetActive(false)
         self.carets:SetActive(true)
         self.downArrows:SetActive(false)
-        self.readout:LayoutBelow(self.carets)
+        self:LayoutReadout("TOP", self.carets, "BOTTOM", -5)
         self.title:SetVisible(false, true)
     end
 

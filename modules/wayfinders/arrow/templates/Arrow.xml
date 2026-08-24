@@ -51,18 +51,15 @@
                                 <Anchor point="TOP" relativePoint="CENTER" y="-22" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="distance" inherits="GameFontNormalSmall">
-                            <Anchors>
-                                <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" />
-                            </Anchors>
-                        </FontString>
-                        <FontString parentKey="eta" inherits="GameFontNormalSmall">
-                            <Anchors>
-                                <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.distance" y="-2" />
-                            </Anchors>
-                        </FontString>
                     </Layer>
                 </Layers>
+                <Frames>
+                    <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
+                        <Anchors>
+                            <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
             </Frame>
         </Frames>
         <Animations>

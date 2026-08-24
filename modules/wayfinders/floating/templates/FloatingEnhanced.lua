@@ -10,8 +10,7 @@ local Constants = MapPinEnhanced.WayfinderFloatingEnhancedConstants
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field needle MapPinEnhancedWayfinderFloatingEnhancedNeedleTemplate
 ---@field titleContainer MapPinEnhancedWayfinderFloatingEnhancedTitleTemplate
----@field distance FontString
----@field eta FontString
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field targetType WayfinderTargetType?
 ---@field displayType 'close' | 'far'?
 ---@field presentationInitialized boolean?
@@ -60,6 +59,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:SetTitle(title)
 end
 
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:PrepareForTarget()
+    self:ResetDistanceReadout()
     self:ResetDirectionSampling()
     self.distanceValue = nil
     self.displayType = "far"
@@ -232,8 +232,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnLoad()
     self.pin = self.content.pin
     self.needle = self.content.needle
     self.titleContainer = self.content.title
-    self.distance = self.content.readout.distance
-    self.eta = self.content.readout.eta
+    self.readout = self.content.readout
 
     self:SetEllipticalRadii(500, 200)
     self.pin:SetTracked(true)
@@ -262,7 +261,7 @@ function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
-    self:StartDistanceUpdates(self.distance, self.eta, function(distance, timeToTarget)
+    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
     end)
 end

@@ -17,6 +17,11 @@
                             <KeyValue key="requireReload" value="both" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.General.ReadoutMode" />
+                        </KeyValues>
+                    </Frame>
                 </Frames>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">
