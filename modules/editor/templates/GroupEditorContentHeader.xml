@@ -96,7 +96,7 @@
                     <KeyValue key="iconSize" value="small" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-16" />
+                    <Anchor point="RIGHT" x="-24" />
                 </Anchors>
             </Button>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
@@ -106,7 +106,7 @@
                     <KeyValue key="iconSize" value="small" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" />
+                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2" />
                 </Anchors>
             </Button>
         </Frames>

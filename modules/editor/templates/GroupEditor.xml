@@ -16,7 +16,7 @@
             <Frame parentKey="groupEditorContent" inherits="MapPinEnhancedGroupEditorContentTemplate">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.groupEditorSidebar" relativePoint="TOPRIGHT" x="12" y="0" />
-                    <Anchor point="BOTTOMRIGHT" x="-12" y="16" />
+                    <Anchor point="BOTTOMRIGHT" x="-12" y="2" />
                 </Anchors>
             </Frame>
         </Frames>

@@ -27,13 +27,13 @@
     </Frame>
 
     <Frame name="MapPinEnhancedGroupEditorContentPinEntryTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentPinEntryMixin">
-        <Size x="820" y="64" />
+        <Size x="830" y="52" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.22">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="22" y="0" />
-                        <Anchor point="BOTTOMRIGHT" x="-82" y="0" />
+                        <Anchor point="BOTTOMRIGHT" x="0" y="0" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -75,7 +75,7 @@
                     <KeyValue key="labelText" value="Name" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="LEFT" x="75" y="0" />
+                    <Anchor point="LEFT" x="75" y="-2" />
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
@@ -125,24 +125,24 @@
                     </EditBox>
                 </Frames>
             </Frame>
-            <Button parentKey="duplicateButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="40" y="40" />
-                <KeyValues>
-                    <KeyValue key="icon" value="duplicate" />
-                    <KeyValue key="iconSize" value="small" />
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" />
-                </Anchors>
-            </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="40" y="40" />
+                <Size x="32" y="32" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                     <KeyValue key="iconSize" value="small" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="0" />
+                    <Anchor point="RIGHT" x="-8" y="-1" />
+                </Anchors>
+            </Button>
+            <Button parentKey="duplicateButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="32" y="32" />
+                <KeyValues>
+                    <KeyValue key="icon" value="duplicate" />
+                    <KeyValue key="iconSize" value="small" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2"/>
                 </Anchors>
             </Button>
         </Frames>
