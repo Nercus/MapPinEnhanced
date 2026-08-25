@@ -54,7 +54,10 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self.hideButton:SetScript("OnClick", nil)
+    if GameTooltip:GetOwner() == self.optimizeButton then GameTooltip:Hide() end
     self.optimizeButton:SetScript("OnClick", nil)
+    self.optimizeButton:SetScript("OnEnter", nil)
+    self.optimizeButton:SetScript("OnLeave", nil)
     self.optimizeButton:Hide()
 end
 
@@ -67,7 +70,7 @@ end
 function MapPinEnhancedGroupEditorContentHeaderMixin:OrderRouteByDistance()
     local group, editor = assert(self.group), assert(self.editor)
     MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
-        L["Optimizing will permanently reorder every pin in this group and cannot be undone."], function()
+        L["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."], function()
             if self.group ~= group then return end
             editor.groupEditorContent:SetLoading(true)
             Groups:OrderGroupByDistance(group, function()
@@ -160,6 +163,13 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
         self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
     end
     self.optimizeButton:SetScript("OnClick", function() self:OrderRouteByDistance() end)
+    self.optimizeButton:SetScript("OnEnter", function(button)
+        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(L["Optimize Route"])
+        GameTooltip:AddLine(L["Reorder nearby pins together to reduce travel time and backtracking."], 1, 1, 1, true)
+        GameTooltip:Show()
+    end)
+    self.optimizeButton:SetScript("OnLeave", function() GameTooltip:Hide() end)
     self:UpdateRouteOrderButton()
 
     self.hideButton:SetEnabled(not protected)

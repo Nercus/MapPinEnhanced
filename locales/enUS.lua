@@ -105,8 +105,10 @@ L["Search"] = "Search"
 L["Rename Pin"] = "Rename Pin"
 L["Optimize"] = "Optimize"
 L["Optimize Route"] = "Optimize Route"
-L["Optimizing will permanently reorder every pin in this group and cannot be undone."] =
-"Optimizing will permanently reorder every pin in this group and cannot be undone."
+L["Reorder nearby pins together to reduce travel time and backtracking."] =
+"Reorder nearby pins together to reduce travel time and backtracking."
+L["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."] =
+"Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."
 L["Route optimization was canceled because the group changed."] =
 "Route optimization was canceled because the group changed."
 L["Loading"] = "Loading"
