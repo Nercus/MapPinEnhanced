@@ -16,7 +16,6 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yel
 ---@field group MapPinEnhancedGroupMixin?
 ---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field iconButton MapPinEnhancedEditorGroupIconButton
----@field pinCount FontString
 ---@field nameField MapPinEnhancedEditorInputField
 ---@field trackingModeField MapPinEnhancedEditorRadioGroupField
 ---@field optimizeButton MapPinEnhancedButtonTemplate
@@ -122,7 +121,6 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     self.iconButton.iconTexture:SetTexture(group:GetIcon())
     self.iconButton:SetEnabled(not protected)
     self.iconButton:SetScript("OnClick", function() self:ShowIconMenu() end)
-    self.pinCount:SetText(string.format(L["%d |4pin:pins;"], group:GetTotalPinCount()))
 
     self.nameField.child:SetEnabled(not protected)
     self.nameField.child:SetTextApply(group:GetName(), function(value)
