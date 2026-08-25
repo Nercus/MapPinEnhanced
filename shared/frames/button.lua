@@ -3,11 +3,33 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedButtonTemplate : Button
 ---@field icon MapPinEnhancedIcon?
+---@field fontSize MapPinEnhancedButtonFontSize
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field text FontString
 MapPinEnhancedButtonMixin = {};
 
 local L = MapPinEnhanced.L
+
+---@alias MapPinEnhancedButtonFontSize "small"|"medium"|"large"
+
+---@type table<MapPinEnhancedButtonFontSize, {normal: Font, highlight: Font, disabled: Font}>
+local FONT_OBJECTS = {
+    small = {
+        normal = GameFontNormalSmall,
+        highlight = GameFontHighlightSmall,
+        disabled = GameFontDisableSmall,
+    },
+    medium = {
+        normal = GameFontNormal,
+        highlight = GameFontHighlight,
+        disabled = GameFontDisable,
+    },
+    large = {
+        normal = GameFontNormalLarge,
+        highlight = GameFontHighlightLarge,
+        disabled = GameFontDisableLarge,
+    },
+}
 
 function MapPinEnhancedButtonMixin:OnLoad()
     local label = self:GetText()
@@ -17,15 +39,22 @@ function MapPinEnhancedButtonMixin:OnLoad()
     if self.icon then
         self.iconTexture:SetIconTexture(self.icon)
     end
+    self:UpdateFontSize()
+end
+
+function MapPinEnhancedButtonMixin:OnShow()
     self:Update()
 end
 
-function MapPinEnhancedButtonMixin:Update()
-    -- 3 different states for the button
-    -- 1. Label only
-    -- 2. Icon only
-    -- 3. Icon left then label
+function MapPinEnhancedButtonMixin:UpdateFontSize()
+    local fonts = FONT_OBJECTS[self.fontSize]
+    assert(fonts, "MapPinEnhancedButtonMixin: invalid fontSize: " .. tostring(self.fontSize))
+    self:SetNormalFontObject(fonts.normal)
+    self:SetHighlightFontObject(fonts.highlight)
+    self:SetDisabledFontObject(fonts.disabled)
+end
 
+function MapPinEnhancedButtonMixin:Update()
     local hasIcon = self.icon ~= nil
     local hasLabel = self:GetText() and self:GetText() ~= ""
     self.iconTexture:ClearAllPoints()
