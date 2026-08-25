@@ -87,7 +87,7 @@
                     <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.trackingModeField" relativePoint="BOTTOMRIGHT" x="4" y="2" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.trackingModeField" relativePoint="BOTTOMRIGHT" x="8" y="1" />
                 </Anchors>
             </Button>
 
