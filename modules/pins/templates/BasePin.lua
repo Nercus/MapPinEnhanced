@@ -24,6 +24,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinID UUID | nil
 ---@field standardColor ColorMixin
 ---@field iconConfig PinIcon | nil
+---@field iconUsesAtlas boolean | nil
 ---@field renderMode BasePinRenderMode
 ---@field styleMode PinStyleMode
 ---@field iconMaskApplied boolean
@@ -82,6 +83,7 @@ function MapPinEnhancedBasePinMixin:ClearIconTexture()
     self.icon:SetTexture(nil)
     self.icon:Hide()
     self.iconConfig = nil
+    self.iconUsesAtlas = nil
 end
 
 ---@param enabled boolean
@@ -176,11 +178,10 @@ function MapPinEnhancedBasePinMixin:SetStyleMode(styleMode)
     if self.renderMode ~= STYLE_STANDARD then
         if styleMode == Pins.STYLE_MODE_OUTLINE then
             self.renderMode = STYLE_OUTLINE_ICON
-            self:SetIconMaskEnabled(self.iconConfig == nil)
         else
             self.renderMode = STYLE_PIN_ICON
-            self:SetIconMaskEnabled(false)
         end
+        self:SetIconMaskEnabled(not self.iconUsesAtlas)
     end
     self:ApplyStyle()
 end
@@ -261,13 +262,13 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
 
     self.icon:Show()
     self.iconConfig = pinConfig
+    self.iconUsesAtlas = usesAtlas == true
     if self.styleMode == Pins.STYLE_MODE_OUTLINE then
         self.renderMode = STYLE_OUTLINE_ICON
-        self:SetIconMaskEnabled(pinConfig == nil)
     else
         self.renderMode = STYLE_PIN_ICON
-        self:SetIconMaskEnabled(false)
     end
+    self:SetIconMaskEnabled(not self.iconUsesAtlas)
     self:ApplyStyle()
 end
 
