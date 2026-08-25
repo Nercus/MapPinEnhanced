@@ -20,7 +20,7 @@
                 </Layers>
                 <Frames>
                     <Button parentKey="createButton" inherits="MapPinEnhancedButtonTemplate" text="Create Group">
-                        <Size x="150" y="26" />
+                        <Size x="150" y="36" />
                         <KeyValues>
                             <KeyValue key="icon" value="plus" />
                         </KeyValues>
