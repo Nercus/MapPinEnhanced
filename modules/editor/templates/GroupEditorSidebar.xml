@@ -15,67 +15,66 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT">
+                <FontString parentKey="title" inherits="GameFontNormalLarge" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="10" y="-8" />
+                        <Anchor point="TOP" x="0" y="-4" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
             <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
-                <Size x="198" y="24" />
+                <Size x="210" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="10" y="-32" />
+                    <Anchor point="TOPLEFT" x="0" y="-30" />
                 </Anchors>
             </EditBox>
             <Button parentKey="createButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="24" y="24" />
+                <Size x="27" y="27" />
                 <KeyValues>
                     <KeyValue key="icon" value="plus" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="8" />
+                    <Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="2" />
                 </Anchors>
             </Button>
-            <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+            <Frame parentKey="systemGroups" enableMouse="true">
+                <Size y="92" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.search" relativePoint="BOTTOMLEFT" y="-8" />
-                    <Anchor point="BOTTOMRIGHT" x="-18" y="94" />
-                </Anchors>
-            </Frame>
-            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="4" y="-5" />
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="4" />
-                </Anchors>
-            </EventFrame>
-            <Frame parentKey="systemGroups">
-                <Size x="242" y="82" />
-                <Anchors>
-                    <Anchor point="BOTTOM" y="4" />
+                    <Anchor point="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="BACKGROUND">
-                        <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.5">
+                        <Texture atlas="SquareMask">
+                            <Size y="30" />
                             <Anchors>
-                                <Anchor point="TOPLEFT" x="-2" y="2" />
-                                <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
+                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.divider" relativePoint="TOPLEFT" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.divider" relativePoint="TOPRIGHT" />
                             </Anchors>
+                            <Gradient orientation="VERTICAL">
+                                <MinColor r="0" g="0" b="0" a="1" />
+                                <MaxColor r="0" g="0" b="0" a="0" />
+                            </Gradient>
                         </Texture>
                     </Layer>
-                </Layers>
-            </Frame>
-            <Frame parentKey="systemHeader" enableMouse="true">
-                <Size x="120" y="22" />
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.systemGroups" x="8" y="-4" />
-                </Anchors>
-                <Layers>
+                    <Layer level="BORDER">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" parentKey="divider">
+                            <Size y="2" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.ungroupedPinsEntry" relativePoint="TOPLEFT" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.ungroupedPinsEntry" relativePoint="TOPRIGHT" x="28" />
+                            </Anchors>
+                            <Gradient orientation="HORIZONTAL">
+                                <MinColor r="1" g="0.82" b="0" a="1" />
+                                <MaxColor r="0" g="0" b="0" a="0.8" />
+                            </Gradient>
+                        </Texture>
+                    </Layer>
                     <Layer level="ARTWORK">
                         <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                             <Anchors>
-                                <Anchor point="LEFT" />
+                                <Anchor point="BOTTOMLEFT" relativeKey="$parent.divider" relativePoint="TOPLEFT" x="8" y="2" />
                             </Anchors>
                         </FontString>
                         <FontString parentKey="info" inherits="GameFontHighlightSmall" text="i" justifyH="CENTER" justifyV="MIDDLE">
@@ -86,12 +85,31 @@
                         </FontString>
                     </Layer>
                 </Layers>
+                <Frames>
+                    <Button parentKey="wayBackEntry" inherits="MapPinEnhancedGroupEditorSidebarEntryTemplate">
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" />
+                        </Anchors>
+                    </Button>
+                    <Button parentKey="ungroupedPinsEntry" inherits="MapPinEnhancedGroupEditorSidebarEntryTemplate">
+                        <Anchors>
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.wayBackEntry" relativePoint="TOPLEFT" />
+                        </Anchors>
+                    </Button>
+                </Frames>
             </Frame>
-            <Button parentKey="ungroupedPinsEntry" inherits="MapPinEnhancedGroupEditorSidebarEntryTemplate">
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.systemGroups" x="6" y="-30" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.search" relativePoint="BOTTOMLEFT" y="-8" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.systemGroups" relativePoint="TOPRIGHT" x="-18" y="26" />
                 </Anchors>
-            </Button>
+            </Frame>
+            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="4" y="-5" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="4" />
+                </Anchors>
+            </EventFrame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

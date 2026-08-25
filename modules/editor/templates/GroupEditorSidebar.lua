@@ -4,9 +4,12 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local Editor = MapPinEnhanced:GetModule("Editor")
 
----@class MapPinEnhancedEditorSystemGroupHeader : Frame
+---@class MapPinEnhancedEditorSystemGroups : Frame
 ---@field title FontString
 ---@field info FontString
+---@field ungroupedPinsEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
+---@field wayBackEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
+---@field entries MapPinEnhancedGroupEditorSidebarEntryTemplate[]
 
 ---@class MapPinEnhancedGroupEditorSidebarTemplate : Frame
 ---@field editor MapPinEnhancedGroupEditorTemplate?
@@ -15,10 +18,7 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field createButton MapPinEnhancedIconButtonTemplate
 ---@field scrollBox Frame|ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
----@field systemGroups Frame
----@field systemHeader MapPinEnhancedEditorSystemGroupHeader
----@field ungroupedPinsEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
----@field systemEntries MapPinEnhancedGroupEditorSidebarEntryTemplate[]
+---@field systemGroups MapPinEnhancedEditorSystemGroups
 ---@field dataProvider DataProviderMixin
 ---@field scrollView ScrollBoxListLinearViewMixin
 ---@field dropTarget MapPinEnhancedGroupMixin?
@@ -49,13 +49,14 @@ end
 
 function MapPinEnhancedGroupEditorSidebarMixin:OnLoad()
     self.title:SetText(L["Groups"])
-    self.systemHeader.title:SetText(L["System Groups"])
+    local systemGroups = self.systemGroups
+    systemGroups.title:SetText(L["System Groups"])
     self.search:SetInlineIcon("search")
     self.search:SetPlaceholderText(L["Search"])
     self.createButton:SetIconTexture("plus")
 
     self.dataProvider, self.scrollView = self:CreateGroupList(self.scrollBox, self.scrollBar)
-    self.systemEntries = { self.ungroupedPinsEntry }
+    systemGroups.entries = { systemGroups.ungroupedPinsEntry, systemGroups.wayBackEntry }
 
     self.search:SetScript("OnTextChanged", function(_, userInput)
         if userInput then self:Refresh() end
@@ -65,15 +66,15 @@ function MapPinEnhancedGroupEditorSidebarMixin:OnLoad()
         editBox:ClearFocus()
         self:Refresh()
     end)
-    self.systemHeader:SetScript("OnEnter", function(header)
-        GameTooltip:SetOwner(header, "ANCHOR_RIGHT")
+    systemGroups.info:SetScript("OnEnter", function(frame)
+        GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
         GameTooltip:AddLine(L["System Groups"])
         GameTooltip:AddLine(
             L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."],
             1, 1, 1, true)
         GameTooltip:Show()
     end)
-    self.systemHeader:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    systemGroups.info:SetScript("OnLeave", function() GameTooltip:Hide() end)
 end
 
 ---@param editor MapPinEnhancedGroupEditorTemplate
@@ -95,7 +96,7 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
     ---@type MapPinEnhancedGroupMixin[]
     local groups = {}
     ---@type table<string, MapPinEnhancedGroupMixin>
-    local systemGroups = {}
+    local systemGroupsByType = {}
     local search = self:GetSearch()
     for group in Groups:EnumerateGroups() do
         if Editor:ShouldShowGroup(group) and
@@ -103,7 +104,7 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
             table.insert(groups, group)
         elseif Editor:ShouldShowSystemGroup(group) then
             local groupType = group.groupType
-            if groupType then systemGroups[groupType] = group end
+            if groupType then systemGroupsByType[groupType] = group end
         end
     end
     table.sort(groups, function(group1, group2) return Groups:IsGroupBefore(group1, group2) end)
@@ -114,7 +115,8 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
 
     ---@type {entry: MapPinEnhancedGroupEditorSidebarEntryTemplate, group: MapPinEnhancedGroupMixin?}[]
     local systemEntries = {
-        { entry = self.ungroupedPinsEntry, group = systemGroups.ungrouped },
+        { entry = self.systemGroups.ungroupedPinsEntry, group = systemGroupsByType.ungrouped },
+        { entry = self.systemGroups.wayBackEntry,       group = systemGroupsByType["way-back"] },
     }
     for _, systemEntry in ipairs(systemEntries) do
         local entry, group = systemEntry.entry, systemEntry.group
@@ -136,7 +138,7 @@ end
 function MapPinEnhancedGroupEditorSidebarMixin:ClearDropTarget()
     self.dropTarget = nil
     self.scrollBox:ForEachFrame(function(frame) frame:SetDropTarget(false) end)
-    for _, entry in ipairs(self.systemEntries) do entry:SetDropTarget(false) end
+    for _, entry in ipairs(self.systemGroups.entries) do entry:SetDropTarget(false) end
 end
 
 function MapPinEnhancedGroupEditorSidebarMixin:GetDropTarget()
@@ -156,7 +158,7 @@ function MapPinEnhancedGroupEditorSidebarMixin:UpdateDropTarget()
         end)
     end
     update(self.scrollBox)
-    for _, entry in ipairs(self.systemEntries) do
+    for _, entry in ipairs(self.systemGroups.entries) do
         local isTarget = not target and entry:IsShown() and entry:IsMouseOver()
         entry:SetDropTarget(isTarget)
         if isTarget then target = entry.group end

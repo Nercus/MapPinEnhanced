@@ -17,7 +17,7 @@ end
 ---@param group MapPinEnhancedGroupMixin
 ---@return boolean
 function Editor:ShouldShowSystemGroup(group)
-    return group.groupType == "ungrouped"
+    return group.groupType == "ungrouped" or group.groupType == "way-back"
 end
 
 ---@param value string|number|nil
