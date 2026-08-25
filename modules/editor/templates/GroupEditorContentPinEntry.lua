@@ -185,7 +185,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
                 end
                 table.insert(entries, {
                     type = "button",
-                    label = L["More..."],
+                    label = MapPinEnhanced:Iconize("more"),
                     onClick = function()
                         local pinData = Editor:GetPinData(self.pinNode)
                         local currentIcon = not pinData.usesAtlas and pinData.texture or nil

@@ -113,7 +113,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
     end
     table.insert(entries, {
         type = "button",
-        label = MapPinEnhanced:Iconize("plus", L["More..."]),
+        label = MapPinEnhanced:Iconize("more"),
         onClick = function()
             MapPinEnhanced:ShowIconPicker(group:GetIcon(), function(path)
                 group:SetIcon(path)
