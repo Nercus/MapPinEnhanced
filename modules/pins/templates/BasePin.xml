@@ -43,7 +43,7 @@
                         <Anchor point="CENTER" />
                     </Anchors>
                 </MaskTexture>
-                <Texture parentKey="lock" atlas="transmog-gearSlot-transmogrified" texelSnappingBias="0" rotation="45" snapToPixelGrid="false" desaturated="true" hidden="true">
+                <Texture parentKey="lock" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinLockOutline.png" texelSnappingBias="0" snapToPixelGrid="false" desaturated="true" hidden="true">
                     <Size x="32" y="32" />
                     <Anchors>
                         <Anchor point="CENTER" />
