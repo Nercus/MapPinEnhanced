@@ -28,11 +28,6 @@ local ICON_TEXTURES = {
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
 }
 
----@type table<MapPinEnhancedIcon, number>
-local ICON_ASPECT_RATIOS = {
-    more = 3,
-}
-
 ---Create text prefixed with a registered inline icon.
 ---@param icon MapPinEnhancedIcon
 ---@param text? string
@@ -44,9 +39,8 @@ function MapPinEnhanced:Iconize(icon, text, size)
     assert(size == nil or (type(size) == "number" and size > 0 and size % 1 == 0),
         "MapPinEnhanced:Iconize: size must be a positive integer or nil")
 
-    local iconHeight = size or DEFAULT_INLINE_ICON_SIZE
-    local iconWidth = iconHeight * (ICON_ASPECT_RATIOS[icon] or 1)
-    local iconText = string.format("|T%s:%d:%d|t", texturePath, iconHeight, iconWidth)
+    local iconText = string.format("|T%s:%d:%d|t", texturePath, size or DEFAULT_INLINE_ICON_SIZE,
+        size or DEFAULT_INLINE_ICON_SIZE)
     return text and text ~= "" and string.format("%s %s", iconText, text) or iconText
 end
 

@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
 
 ---@type MapPinEnhancedMenuRadioCellIcon[]
 local GROUP_ICONS = {
@@ -70,7 +71,9 @@ end
 function MapPinEnhancedGroupEditorContentHeaderMixin:OrderRouteByDistance()
     local group, editor = assert(self.group), assert(self.editor)
     MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
-        L["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."], function()
+        L
+        ["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."],
+        function()
             if self.group ~= group then return end
             editor.groupEditorContent:SetLoading(true)
             Groups:OrderGroupByDistance(group, function()
@@ -113,7 +116,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
     end
     table.insert(entries, {
         type = "button",
-        label = MapPinEnhanced:Iconize("more"),
+        label = "",
         onClick = function()
             MapPinEnhanced:ShowIconPicker(group:GetIcon(), function(path)
                 group:SetIcon(path)
@@ -121,6 +124,16 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
                 MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
                 editor.groupEditorSidebar:Refresh()
             end)
+        end,
+        initializer = function(button, _, menu)
+            ---@type Texture
+            local texture = button:AttachTexture()
+            texture:SetSize(18, 6)
+            texture:SetPoint("CENTER")
+            texture:SetTexture(MORE_ICON_PATH)
+            button.fontString:Hide()
+            menu.minimumElementWidth = 36
+            return 36, 36
         end,
     })
     MapPinEnhanced:GenerateMenu(self.iconButton, entries, { gridModeColumns = 5 })
