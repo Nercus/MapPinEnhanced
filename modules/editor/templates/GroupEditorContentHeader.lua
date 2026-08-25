@@ -4,30 +4,6 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
 
----@type MapPinEnhancedMenuRadioCellIcon[]
-local GROUP_ICONS = {
-    { path = "Interface\\Icons\\INV_Misc_Map_01",            usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_QuestionMark",      usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Note_01",           usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Book_09",           usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Compass_01",        usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Key_03",            usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Coin_01",           usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Bag_10",            usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Chest_Cloth_17",         usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_TreasureChest04b",  usesAtlas = false },
-    { path = "Interface\\Icons\\INV_Misc_Flag_02",           usesAtlas = false },
-    { path = "Interface\\Icons\\Ability_Hunter_Pathfinding", usesAtlas = false },
-    { path = "Interface\\Icons\\Ability_Mount_RidingHorse",  usesAtlas = false },
-    { path = "Interface\\Icons\\Ability_Spy",                usesAtlas = false },
-    { path = "Interface\\Icons\\Spell_Fire_Fire",            usesAtlas = false },
-    { path = "Interface\\Icons\\Spell_Frost_Frost",          usesAtlas = false },
-    { path = "Interface\\Icons\\Spell_Nature_Earthquake",    usesAtlas = false },
-    { path = "Interface\\Icons\\Spell_Holy_MagicalSentry",   usesAtlas = false },
-    { path = "Interface\\Icons\\Trade_Engineering",          usesAtlas = false },
-    { path = "Interface\\Icons\\Trade_Alchemy",              usesAtlas = false },
-}
-
 ---@class MapPinEnhancedEditorInputField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedInputTemplate
 
@@ -92,7 +68,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
     local group = assert(self.group)
     local editor = assert(self.editor)
     local entries = {}
-    for _, groupIcon in ipairs(GROUP_ICONS) do
+    for _, groupIcon in ipairs(Groups.GROUP_ICON_MENU_ICONS) do
         local icon = groupIcon
         table.insert(entries, {
             type = "template",
@@ -136,7 +112,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
             return 36, 36
         end,
     })
-    MapPinEnhanced:GenerateMenu(self.iconButton, entries, { gridModeColumns = 5 })
+    MapPinEnhanced:GenerateMenu(self.iconButton, entries, { gridModeColumns = 4 })
 end
 
 ---@param group MapPinEnhancedGroupMixin

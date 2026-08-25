@@ -15,7 +15,7 @@ local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\shared\\ColorpickerBody.png:16:
 
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICON_MENU_ICONS = Pins.PIN_ICON_MENU_ICONS
-local PIN_ICON_MENU_COLUMNS = 3
+local PIN_ICON_MENU_COLUMNS = 4
 local PIN_ICON_MENU_ENTRY_SIZE = 36
 
 ---@return AnyMenuEntry[]

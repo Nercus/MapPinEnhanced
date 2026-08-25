@@ -164,7 +164,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
         {
             type = "submenu",
             entry = { type = "button", label = MapPinEnhanced:Iconize("edit", L["Change Icon"]) },
-            options = { gridModeColumns = 3 },
+            options = { gridModeColumns = 4 },
             entries = function()
                 local entries = {}
                 for _, iconData in ipairs(Pins.PIN_ICON_MENU_ICONS) do

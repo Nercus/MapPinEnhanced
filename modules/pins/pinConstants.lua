@@ -3531,19 +3531,21 @@ Pins.PIN_ICONS = {
     },
 }
 
--- TODO: maybe change these to standard icons instead of the atlas ones
 ---@type PinIcon[]
 Pins.PIN_ICON_MENU_ICONS = {
-    Pins.PIN_ICONS["SmallQuestBang"],
-    Pins.PIN_ICONS["quest-important-available"],
-    Pins.PIN_ICONS["QuestDaily"],
-    Pins.PIN_ICONS["Raid"],
+    Pins.PIN_ICONS["QuestNormal"],
     Pins.PIN_ICONS["Dungeon"],
-    Pins.PIN_ICONS["Lairs"],
-    Pins.PIN_ICONS["PlayerEnemy"],
-    Pins.PIN_ICONS["PlayerFriend"],
-    Pins.PIN_ICONS["PlayerNeutral"],
+    Pins.PIN_ICONS["AllianceWarfrontMapBanner"],
+    Pins.PIN_ICONS["minimap-playeractivity"],
+    Pins.PIN_ICONS["quest-recurring-available"],
+    Pins.PIN_ICONS["Raid"],
+    Pins.PIN_ICONS["HordeWarfrontMapBanner"],
+    Pins.PIN_ICONS["TaxiNode_Undiscovered"],
+    Pins.PIN_ICONS["delves-bountiful"],
+    Pins.PIN_ICONS["DungeonSkull"],
     Pins.PIN_ICONS["TaxiNode_Continent_Alliance"],
+    Pins.PIN_ICONS["poi-prey"],
+    Pins.PIN_ICONS["VignetteLoot"],
+    Pins.PIN_ICONS["BuildanAbomination-32x32"],
     Pins.PIN_ICONS["TaxiNode_Continent_Horde"],
-    Pins.PIN_ICONS["TaxiNode_Continent_Neutral"],
 }
