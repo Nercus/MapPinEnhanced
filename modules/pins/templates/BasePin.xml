@@ -38,15 +38,15 @@
                     </Anchors>
                 </Texture>
                 <MaskTexture parentKey="iconMask" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="19" y="19" />
+                    <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </MaskTexture>
                 <Texture parentKey="lock" atlas="transmog-gearSlot-transmogrified" texelSnappingBias="0" rotation="45" snapToPixelGrid="false" desaturated="true" hidden="true">
+                    <Size x="32" y="32" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="-2" y="2" />
-                        <Anchor point="BOTTOMRIGHT" x="2" y="-2" />
+                        <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
             </Layer>
@@ -56,6 +56,7 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad"/>
+            <OnSizeChanged method="OnSizeChanged"/>
         </Scripts>
     </Frame>
 </Ui>

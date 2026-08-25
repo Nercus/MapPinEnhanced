@@ -43,7 +43,7 @@ local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 local OUTLINE_CONFIGURED_ICON = assetsPath .. "\\pins\\PinOutlineConfiguredIcon.png"
 local OUTLINE_UNTRACKED = assetsPath .. "\\pins\\PinOutlineUntracked.png"
 local FALLBACK_NAVIGATION_ATLAS = "Navigation-Tracked-Icon"
-local GENERIC_ICON_SIZE = 20
+
 
 ---@alias BasePinRenderMode "standard" | "pinIcon" | "outlineIcon"
 local STYLE_STANDARD = "standard"
@@ -68,10 +68,33 @@ local function IsColor(color)
     return type(color) == "table" and type(color.GetRGBA) == "function"
 end
 
+
+local BASE_PIN_SIZE = 30
+local ICON_SIZE_RATIO = 20 / BASE_PIN_SIZE
+local OUTLINE_ICON_SIZE_RATIO = 19 / BASE_PIN_SIZE
+local ICON_MASK_SIZE_RATIO = 20 / BASE_PIN_SIZE
+local LOCK_SIZE_RATIO = 32 / BASE_PIN_SIZE
+function MapPinEnhancedBasePinMixin:UpdateRegionSizes()
+    local pinSize = math.min(self:GetWidth(), self:GetHeight())
+    if pinSize <= 0 then return end
+
+    local iconSizeRatio = self.renderMode == STYLE_OUTLINE_ICON and OUTLINE_ICON_SIZE_RATIO or ICON_SIZE_RATIO
+    local iconSize = pinSize * iconSizeRatio
+    local iconMaskSize = pinSize * ICON_MASK_SIZE_RATIO
+    local lockSize = pinSize * LOCK_SIZE_RATIO
+    self.icon:SetSize(iconSize, iconSize)
+    self.iconMask:SetSize(iconMaskSize, iconMaskSize)
+    self.lock:SetSize(lockSize, lockSize)
+end
+
+function MapPinEnhancedBasePinMixin:OnSizeChanged()
+    self:UpdateRegionSizes()
+end
+
 function MapPinEnhancedBasePinMixin:ResetIconGeometry()
     self.icon:ClearAllPoints()
     self.icon:SetPoint("CENTER", 0, 0)
-    self.icon:SetSize(GENERIC_ICON_SIZE, GENERIC_ICON_SIZE)
+    self:UpdateRegionSizes()
     self.icon:SetScale(1)
     self.icon:SetTexCoord(0, 1, 0, 1)
     self.icon:SetVertexColor(1, 1, 1, 1)
@@ -137,7 +160,6 @@ function MapPinEnhancedBasePinMixin:ApplyOutlineIconStyle()
     SetVertexColor(self.outline, activeColor)
     self.foreground:SetTexture(nil)
     self.foreground:Hide()
-    self.icon:SetSize(19, 19)
     self.icon:Show()
 end
 
@@ -151,11 +173,11 @@ function MapPinEnhancedBasePinMixin:ApplyPinIconStyle()
     self.foreground:SetTexture(FOREGROUND_ICON)
     self.foreground:Show()
     SetVertexColor(self.foreground, activeColor)
-    self.icon:SetSize(GENERIC_ICON_SIZE, GENERIC_ICON_SIZE)
     self.icon:Show()
 end
 
 function MapPinEnhancedBasePinMixin:ApplyStyle()
+    self:UpdateRegionSizes()
     if self.renderMode == STYLE_OUTLINE_ICON then
         self:ApplyOutlineIconStyle()
     elseif self.renderMode == STYLE_PIN_ICON then
