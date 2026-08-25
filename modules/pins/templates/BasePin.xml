@@ -32,13 +32,13 @@
             </Layer>
             <Layer level="OVERLAY">
                 <Texture parentKey="icon" hidden="true" texelSnappingBias="0" snapToPixelGrid="false" useAtlasSize="true">
-                    <Size x="20" y="20" />
+                    <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
                 <MaskTexture parentKey="iconMask" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinBackground.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="20" y="20" />
+                    <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>

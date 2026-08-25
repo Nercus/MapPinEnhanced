@@ -70,9 +70,9 @@ end
 
 
 local BASE_PIN_SIZE = 30
-local ICON_SIZE_RATIO = 20 / BASE_PIN_SIZE
+local ICON_SIZE_RATIO = 16 / BASE_PIN_SIZE
 local OUTLINE_ICON_SIZE_RATIO = 19 / BASE_PIN_SIZE
-local ICON_MASK_SIZE_RATIO = 20 / BASE_PIN_SIZE
+local ICON_MASK_SIZE_RATIO = 16 / BASE_PIN_SIZE
 local LOCK_SIZE_RATIO = 32 / BASE_PIN_SIZE
 function MapPinEnhancedBasePinMixin:UpdateRegionSizes()
     local pinSize = math.min(self:GetWidth(), self:GetHeight())
