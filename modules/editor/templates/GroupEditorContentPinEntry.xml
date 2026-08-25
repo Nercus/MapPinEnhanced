@@ -130,6 +130,7 @@
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Permanently delete this pin." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-8" y="-1" />
@@ -140,6 +141,7 @@
                 <KeyValues>
                     <KeyValue key="icon" value="duplicate" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Create a copy of this pin." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2"/>

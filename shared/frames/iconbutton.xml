@@ -2,7 +2,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="iconbutton.lua" />
 
-    <Button name="MapPinEnhancedIconButtonTemplate" mixin="MapPinEnhancedIconButtonMixin" virtual="true">
+    <Button name="MapPinEnhancedIconButtonTemplate" mixin="MapPinEnhancedIconButtonMixin,MapPinEnhancedTooltipMixin" virtual="true">
         <KeyValues>
             <KeyValue key="iconSize" value="medium" />
         </KeyValues>

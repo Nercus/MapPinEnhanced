@@ -107,6 +107,14 @@ L["Optimize"] = "Optimize"
 L["Optimize Route"] = "Optimize Route"
 L["Reorder nearby pins together to reduce travel time and backtracking."] =
 "Reorder nearby pins together to reduce travel time and backtracking."
+L["Create a new pin group."] = "Create a new pin group."
+L["Choose an icon for this group."] = "Choose an icon for this group."
+L["Delete this group and all of its pins. System groups are cleared instead."] =
+"Delete this group and all of its pins. System groups are cleared instead."
+L["Hide or show this group."] = "Hide or show this group."
+L["Drag to reorder this pin."] = "Drag to reorder this pin."
+L["Permanently delete this pin."] = "Permanently delete this pin."
+L["Create a copy of this pin."] = "Create a copy of this pin."
 L["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."] =
 "Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."
 L["Route optimization was canceled because the group changed."] =

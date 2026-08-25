@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedButtonTemplate : Button
+---@class MapPinEnhancedButtonTemplate : Button, MapPinEnhancedTooltipMixin
 ---@field icon MapPinEnhancedIcon?
 ---@field fontSize MapPinEnhancedButtonFontSize
 ---@field iconTexture MapPinEnhancedIconMixin
@@ -32,6 +32,7 @@ local FONT_OBJECTS = {
 }
 
 function MapPinEnhancedButtonMixin:OnLoad()
+    self:OnTooltipLoad()
     local label = self:GetText()
     assert(type(label) == "string" and label ~= "", "MapPinEnhancedButtonMixin: button requires a label")
     self:SetText(L[label])

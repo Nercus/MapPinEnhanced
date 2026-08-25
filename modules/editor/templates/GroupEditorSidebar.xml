@@ -33,6 +33,7 @@
                 <Size x="27" y="27" />
                 <KeyValues>
                     <KeyValue key="icon" value="plus" />
+                    <KeyValue key="tooltip" value="Create a new pin group." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="2" />

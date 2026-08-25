@@ -29,6 +29,7 @@
                 <KeyValues>
                     <KeyValue key="customIcon" value="true" type="boolean" />
                     <KeyValue key="iconSize" value="large" />
+                    <KeyValue key="tooltip" value="Choose an icon for this group." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" x="16" y="0" />
@@ -83,6 +84,7 @@
                 <KeyValues>
                     <KeyValue key="icon" value="settings" />
                     <KeyValue key="fontSize" value="small" />
+                    <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.trackingModeField" relativePoint="BOTTOMRIGHT" x="4" y="2" />
@@ -94,6 +96,7 @@
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Delete this group and all of its pins. System groups are cleared instead." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-24" />
@@ -104,6 +107,7 @@
                 <KeyValues>
                     <KeyValue key="icon" value="cross" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Hide or show this group." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2" />

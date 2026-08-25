@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedIconButtonTemplate: Button
+---@class MapPinEnhancedIconButtonTemplate: Button, MapPinEnhancedTooltipMixin
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field icon MapPinEnhancedIcon
 ---@field iconSize MapPinEnhancedIconButtonSize
@@ -35,6 +35,7 @@ function MapPinEnhancedIconButtonMixin:UpdateIconSize()
 end
 
 function MapPinEnhancedIconButtonMixin:OnLoad()
+    self:OnTooltipLoad()
     if not self.customIcon then
         self:SetIconTexture()
     end
