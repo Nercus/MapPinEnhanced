@@ -10,14 +10,13 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 ---@field icon Texture
 ---@field name FontString
 ---@field detail FontString
----@field selectedGlow Texture
 ---@field dropGlow Texture
 MapPinEnhancedGroupEditorSidebarEntryMixin = {}
 
 function MapPinEnhancedGroupEditorSidebarEntryMixin:Reset()
     self.group = nil
     self.editor = nil
-    self.selectedGlow:Hide()
+    self:UnlockHighlight()
     self.dropGlow:Hide()
 end
 
@@ -31,7 +30,9 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:Init(group, editor)
     local detail = string.format(L["%d |4pin:pins;"], group:GetTotalPinCount())
     if group:IsHidden() then detail = L["Hidden"] .. " · " .. detail end
     self.detail:SetText(detail)
-    self.selectedGlow:SetShown(editor.selectedGroup == group)
+    local selected = editor.selectedGroup == group
+    if selected then self:LockHighlight() else self:UnlockHighlight() end
+    self:SetAlpha(selected and 1 or 0.5)
 end
 
 ---@param isTarget boolean
