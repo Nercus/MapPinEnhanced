@@ -130,6 +130,11 @@ end
 function MapPinEnhancedGroupEditorSidebarMixin:ScrollToGroup(group)
     if not group then return end
     if group:IsProtected() then return end
+    local isVisible = false
+    self.scrollBox:ForEachFrame(function(frame)
+        if frame.group == group then isVisible = true end
+    end)
+    if isVisible then return end
     self.scrollBox:ScrollToElementDataByPredicate(function(data)
         return data:GetGroupID() == group:GetGroupID()
     end)
