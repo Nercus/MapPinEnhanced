@@ -17,8 +17,8 @@ local CELL_SPACING = 4
 local ROW_HEIGHT = CELL_SIZE + CELL_SPACING
 local SEARCH_DEBOUNCE_SECONDS = 0.15
 local DOUBLE_CLICK_SECONDS = 0.35
-local PRECACHE_CHUNK_SIZE = 100
-local PRECACHE_REFRESH_INTERVAL = 5
+local PRECACHE_CHUNK_SIZE = 200
+local PRECACHE_REFRESH_INTERVAL = 20
 ---@type MapPinEnhancedIconPickerWindowTemplate?
 local iconPickerWindow
 
@@ -145,7 +145,6 @@ function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
             iconFileIDs[#iconFileIDs + 1] = fileID
         end
     end
-    table.sort(iconFileIDs)
 
     ---@type fun()[]
     local tasks = {}
