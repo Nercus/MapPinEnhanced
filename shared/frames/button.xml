@@ -18,7 +18,7 @@
         <HighlightFont style="GameFontHighlight" />
         <DisabledFont style="GameFontDisable" />
         <Layers>
-            <Layer level="ARTWORK">
+            <Layer level="OVERLAY">
                 <Texture parentKey="iconTexture" inherits="MapPinEnhancedIconTemplate">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
@@ -29,6 +29,7 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
             <OnEnable method="OnEnable" />
             <OnDisable method="OnDisable" />
         </Scripts>
