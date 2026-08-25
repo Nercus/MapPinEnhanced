@@ -99,6 +99,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         end)
                     end,
                     initializer = function(button, _, menu)
+                        ---@type Texture
                         local texture = button:AttachTexture()
                         texture:SetSize(18, 6)
                         texture:SetPoint("CENTER")
