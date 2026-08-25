@@ -33,9 +33,8 @@ local FONT_OBJECTS = {
 
 function MapPinEnhancedButtonMixin:OnLoad()
     local label = self:GetText()
-    if label and label ~= "" then
-        self:SetText(L[label])
-    end
+    assert(type(label) == "string" and label ~= "", "MapPinEnhancedButtonMixin: button requires a label")
+    self:SetText(L[label])
     if self.icon then
         self.iconTexture:SetIconTexture(self.icon)
     end
@@ -56,24 +55,15 @@ end
 
 function MapPinEnhancedButtonMixin:Update()
     local hasIcon = self.icon ~= nil
-    local hasLabel = self:GetText() and self:GetText() ~= ""
+    assert(self:GetText() and self:GetText() ~= "", "MapPinEnhancedButtonMixin: button requires a label")
     self.iconTexture:ClearAllPoints()
     self.text:ClearAllPoints()
-    if hasIcon and not hasLabel then
-        self.iconTexture:Show()
-        local buttonHeight = self:GetHeight()
-        local padding = buttonHeight * 0.3
-        self.text:SetText("")
-        self.text:SetAllPoints()
-        self.iconTexture:SetPoint("TOPLEFT", self.text, "TOPLEFT", padding, -padding)
-        self.iconTexture:SetPoint("BOTTOMRIGHT", self.text, "BOTTOMRIGHT", -padding, padding)
-    elseif hasLabel and not hasIcon then
+    self.text:Show()
+    if not hasIcon then
         self.iconTexture:Hide()
         self.text:SetAllPoints(self)
-        self.text:Show()
-    elseif hasIcon and hasLabel then
-        -- calculate the width of the label set the size of the icon to match the height of the button -> sum the width values add some padding and then position correctly
-        local labelHeight = self.text:GetLineHeight()
+    else
+        local _, labelHeight = self.text:GetFont()
         self.iconTexture:SetSize(labelHeight, labelHeight)
         local padding = labelHeight * 0.25
         local labelOffset = labelHeight / 2 + padding
@@ -94,6 +84,7 @@ end
 
 ---@param label string
 function MapPinEnhancedButtonMixin:SetLabel(label)
+    assert(type(label) == "string" and label ~= "", "MapPinEnhancedButtonMixin:SetLabel: label is empty")
     self:SetText(label)
     self:Update()
 end
@@ -105,13 +96,16 @@ function MapPinEnhancedButtonMixin:SetCallback(callback)
 end
 
 ---@class ButtonSetup
----@field buttonText {icon: MapPinEnhancedIcon?, label: string?} -- text and icon for the button
+---@field buttonText {icon: MapPinEnhancedIcon?, label: string} text and optional icon for the button
 ---@field onChange fun(value: mouseButton, down: boolean)
 
 ---@param formData ButtonSetup
 function MapPinEnhancedButtonMixin:Setup(formData)
     assert(type(formData) == "table", "Form data must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
+    assert(type(formData.buttonText) == "table", "MapPinEnhancedButtonMixin:Setup: buttonText is missing")
+    assert(type(formData.buttonText.label) == "string" and formData.buttonText.label ~= "",
+        "MapPinEnhancedButtonMixin:Setup: buttonText.label is empty")
 
     self:SetIcon(formData.buttonText.icon)
     self:SetLabel(formData.buttonText.label)
