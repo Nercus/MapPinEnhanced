@@ -31,7 +31,7 @@
                 </Anchors>
             </ScrollFrame>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
-                <Size x="100" y="30" />
+                <Size x="100" y="34" />
                 <KeyValues>
                     <KeyValue key="icon" value="cross" />
                 </KeyValues>
@@ -40,7 +40,7 @@
                 </Anchors>
             </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="importButton" text="Import">
-                <Size x="100" y="30" />
+                <Size x="100" y="34" />
                 <KeyValues>
                     <KeyValue key="icon" value="import" />
                 </KeyValues>

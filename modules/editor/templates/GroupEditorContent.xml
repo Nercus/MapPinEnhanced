@@ -20,7 +20,7 @@
                 </Layers>
                 <Frames>
                     <Button parentKey="createButton" inherits="MapPinEnhancedButtonTemplate" text="Create Group">
-                        <Size x="150" y="26" />
+                        <Size x="150" y="36" />
                         <KeyValues>
                             <KeyValue key="icon" value="plus" />
                         </KeyValues>
@@ -44,14 +44,14 @@
                     </Frame>
                     <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-10" />
-                            <Anchor point="BOTTOMRIGHT" x="-18" />
+                            <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-1" x="64" />
+                            <Anchor point="BOTTOMRIGHT" x="-48"/>
                         </Anchors>
                     </Frame>
                     <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="5" y="-5" />
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="5" />
+                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="5" y="5" />
                         </Anchors>
                     </EventFrame>
                 </Frames>

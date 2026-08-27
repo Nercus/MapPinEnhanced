@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
 
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -14,7 +15,7 @@ local MENU_COLOR_BUTTON_PATTERN = "|T%s\\assets\\shared\\ColorpickerBody.png:16:
 
 local PIN_COLORS_BY_NAME = Pins.PIN_COLORS_BY_NAME
 local PIN_ICON_MENU_ICONS = Pins.PIN_ICON_MENU_ICONS
-local PIN_ICON_MENU_COLUMNS = 3
+local PIN_ICON_MENU_COLUMNS = 4
 local PIN_ICON_MENU_ENTRY_SIZE = 36
 
 ---@return AnyMenuEntry[]
@@ -90,12 +91,22 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 end
                 table.insert(iconMenu, {
                     type = "button",
-                    label = MapPinEnhanced:Iconize("plus", L["More..."]),
+                    label = "",
                     onClick = function()
                         local currentIcon = not self.pinData.usesAtlas and self.pinData.texture or nil
                         MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
                             self:SetIcon(path, false)
                         end)
+                    end,
+                    initializer = function(button, _, menu)
+                        ---@type Texture
+                        local texture = button:AttachTexture()
+                        texture:SetSize(18, 6)
+                        texture:SetPoint("CENTER")
+                        texture:SetTexture(MORE_ICON_PATH)
+                        button.fontString:Hide()
+                        menu.minimumElementWidth = PIN_ICON_MENU_ENTRY_SIZE
+                        return PIN_ICON_MENU_ENTRY_SIZE, PIN_ICON_MENU_ENTRY_SIZE
                     end,
                 })
                 return iconMenu

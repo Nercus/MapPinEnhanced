@@ -9,17 +9,32 @@
             <Frame parentKey="groupEditorSidebar" inherits="MapPinEnhancedGroupEditorSidebarTemplate">
                 <Size x="250" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="28" y="-36" />
-                    <Anchor point="BOTTOMLEFT" x="28" y="16" />
+                    <Anchor point="TOPLEFT" x="12" y="-26" />
+                    <Anchor point="BOTTOMLEFT" x="12" y="16" />
                 </Anchors>
             </Frame>
             <Frame parentKey="groupEditorContent" inherits="MapPinEnhancedGroupEditorContentTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="310" y="-46" />
-                    <Anchor point="BOTTOMRIGHT" x="-28" y="26" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.groupEditorSidebar" relativePoint="TOPRIGHT" x="12" y="0" />
+                    <Anchor point="BOTTOMRIGHT" x="-12" y="2" />
                 </Anchors>
             </Frame>
         </Frames>
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture atlas="characterupdate_background" rotation="180">
+                    <Size x="450" y="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2"/>
+                        <Anchor point="BOTTOMLEFT" y="2" x="2"/>
+                    </Anchors>
+                    <Gradient>
+                        <MaxColor r="1" g="0.82" b="0" a="0.8"/>
+                        <MinColor r="0" g="0" b="0" a="0"/>
+                    </Gradient>
+                </Texture>
+            </Layer>
+        </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnUpdate method="OnUpdate" />

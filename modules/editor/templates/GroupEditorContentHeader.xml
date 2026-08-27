@@ -3,7 +3,7 @@
     <Include file="GroupEditorContentHeader.lua" />
 
     <Frame name="MapPinEnhancedGroupEditorContentHeaderTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentHeaderMixin">
-        <Size x="820" y="64" />
+        <Size x="1" y="64" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" setAllPoints="true">
@@ -15,27 +15,21 @@
                     </Anchors>
                 </Texture>
             </Layer>
-            <Layer level="ARTWORK">
-                <FontString parentKey="pinCount" inherits="GameFontDisableSmall" justifyH="RIGHT">
-                    <Anchors>
-                        <Anchor point="TOPRIGHT" relativeKey="$parent.nameField" relativePoint="TOPRIGHT" x="-2" />
-                    </Anchors>
-                </FontString>
-            </Layer>
         </Layers>
         <Frames>
             <Button parentKey="iconButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="38" y="38" />
+                <Size x="45" y="45" />
                 <KeyValues>
                     <KeyValue key="customIcon" value="true" type="boolean" />
                     <KeyValue key="iconSize" value="large" />
+                    <KeyValue key="tooltip" value="Choose an icon for this group." />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="LEFT" x="0" y="4" />
+                    <Anchor point="LEFT" x="16" y="0" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                        <MaskTexture atlas="talents-node-apex-active-large-mask" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
                                 <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
@@ -44,13 +38,6 @@
                                 <MaskedTexture childKey="iconTexture" />
                             </MaskedTextures>
                         </MaskTexture>
-                        <Texture atlas="auctionhouse-itemicon-border-color">
-                            <Color r="1" g="0.82" b="0" a="1" />
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" x="-5" y="5" />
-                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" x="5" y="-5" />
-                            </Anchors>
-                        </Texture>
                     </Layer>
                 </Layers>
             </Button>
@@ -60,7 +47,7 @@
                     <KeyValue key="labelText" value="Name" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="70" y="-8" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMRIGHT" x="12" y="2"/>
                 </Anchors>
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
@@ -74,7 +61,7 @@
                     <KeyValue key="labelText" value="Tracking Mode" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="10" />
+                    <Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="12" />
                 </Anchors>
                 <Frames>
                     <Frame parentKey="child" inherits="MapPinEnhancedRadioGroupTemplate">
@@ -86,29 +73,37 @@
                 </Frames>
             </Frame>
             <Button parentKey="optimizeButton" inherits="MapPinEnhancedButtonTemplate" text="Optimize">
-                <Size x="100" y="24" />
+                <Size x="70" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="settings" />
+                    <KeyValue key="fontSize" value="small" />
+                    <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
+                </KeyValues>
                 <Anchors>
-                    <Anchor point="LEFT" relativeKey="$parent.optimizeButton" relativePoint="RIGHT" x="10" />
+                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.trackingModeField" relativePoint="BOTTOMRIGHT" x="8" y="1" />
                 </Anchors>
             </Button>
+
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="48" y="48" />
+                <Size x="32" y="32" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Delete this group and all of its pins. System groups are cleared instead." />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-14" />
+                    <Anchor point="RIGHT" x="-24" />
                 </Anchors>
             </Button>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="48" y="48" />
+                <Size x="32" y="32" />
                 <KeyValues>
                     <KeyValue key="icon" value="cross" />
                     <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Hide or show this group." />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-6" />
+                    <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2" />
                 </Anchors>
             </Button>
         </Frames>

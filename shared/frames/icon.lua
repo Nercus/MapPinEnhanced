@@ -10,21 +10,22 @@ local DEFAULT_INLINE_ICON_SIZE = 16
 ---@enum (key) MapPinEnhancedIcon
 local ICON_TEXTURES = {
     cross = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconCross_Yellow.png",
-    duplicate = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDuplicate_Yellow.png",
     drag = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDrag_Yellow.png",
+    duplicate = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDuplicate_Yellow.png",
     edit = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png",
     editor = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEditor_Yellow.png",
     export = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconExport_Yellow.png",
     import = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconImport_Yellow.png",
     lock = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconLock_Yellow.png",
     map = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMap_Yellow.png",
-    plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus.png",
     minus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMinus.png",
+    more = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMore_Yellow.png",
+    pin = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPin_Yellow.png",
+    plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus.png",
     search = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSearch_Yellow.png",
     settings = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSettings_Yellow.png",
     tick = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png",
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
-    pin = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPin_Yellow.png",
 }
 
 ---Create text prefixed with a registered inline icon.

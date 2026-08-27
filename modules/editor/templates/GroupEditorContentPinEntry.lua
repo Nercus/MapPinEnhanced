@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
 
 ---@class MapPinEnhancedEditorAppliedAutocomplete : MapPinEnhancedAutocompleteTemplate
 ---@field appliedText string?
@@ -163,7 +164,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
         {
             type = "submenu",
             entry = { type = "button", label = MapPinEnhanced:Iconize("edit", L["Change Icon"]) },
-            options = { gridModeColumns = 3 },
+            options = { gridModeColumns = 4 },
             entries = function()
                 local entries = {}
                 for _, iconData in ipairs(Pins.PIN_ICON_MENU_ICONS) do
@@ -185,13 +186,23 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
                 end
                 table.insert(entries, {
                     type = "button",
-                    label = L["More..."],
+                    label = "",
                     onClick = function()
                         local pinData = Editor:GetPinData(self.pinNode)
                         local currentIcon = not pinData.usesAtlas and pinData.texture or nil
                         MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
                             self:SetIcon({ path = path, usesAtlas = false })
                         end)
+                    end,
+                    initializer = function(button, _, menu)
+                        ---@type Texture
+                        local texture = button:AttachTexture()
+                        texture:SetSize(18, 6)
+                        texture:SetPoint("CENTER")
+                        texture:SetTexture(MORE_ICON_PATH)
+                        button.fontString:Hide()
+                        menu.minimumElementWidth = 36
+                        return 36, 36
                     end,
                 })
                 return entries

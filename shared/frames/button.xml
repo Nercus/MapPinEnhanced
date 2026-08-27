@@ -1,11 +1,16 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="button.lua" />
-    <Button name="MapPinEnhancedButtonTemplate" mixin="MapPinEnhancedButtonMixin" virtual="true">
+    <Button name="MapPinEnhancedButtonTemplate" mixin="MapPinEnhancedButtonMixin,MapPinEnhancedTooltipMixin" virtual="true">
+        <KeyValues>
+            <KeyValue key="fontSize" value="medium" />
+        </KeyValues>
         <NormalTexture atlas="common-button-tertiary-normal-small" setAllPoints="true" />
         <PushedTexture atlas="common-button-tertiary-pressed-small" setAllPoints="true" />
         <DisabledTexture atlas="common-button-tertiary-disabled-small" setAllPoints="true" />
-        <HighlightTexture atlas="common-button-tertiary-hover-small" setAllPoints="true" />
+        <HighlightTexture atlas="common-button-tertiary-normal-small" alphaMode="ADD" alpha="0.6" setAllPoints="true">
+            <Color r="1" g="0.82" b="0.00" />
+        </HighlightTexture>
         <PushedTextOffset x="-2" y="-1" />
         <ButtonText parentKey="text">
         </ButtonText>
@@ -13,7 +18,7 @@
         <HighlightFont style="GameFontHighlight" />
         <DisabledFont style="GameFontDisable" />
         <Layers>
-            <Layer level="ARTWORK">
+            <Layer level="OVERLAY">
                 <Texture parentKey="iconTexture" inherits="MapPinEnhancedIconTemplate">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
@@ -24,6 +29,9 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnEnable method="OnEnable" />
+            <OnDisable method="OnDisable" />
         </Scripts>
     </Button>
 </Ui>

@@ -2,18 +2,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="GroupEditorSidebarEntry.lua" />
 
-    <Button name="MapPinEnhancedGroupEditorSidebarEntryTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorSidebarEntryMixin">
+    <Button name="MapPinEnhancedGroupEditorSidebarEntryTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorSidebarEntryMixin" registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="214" y="46" />
-        <HighlightTexture atlas="UI-Frame-jailerstower-PendingButtonHighlight" setAllPoints="true" alpha="0.18" />
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" setAllPoints="true" alpha="0.25" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="selectedGlow" atlas="Professions_Recipe_Active" hidden="true" setAllPoints="true">
+                <Texture parentKey="dropGlow" file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" hidden="true" setAllPoints="true">
                     <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="0.82" b="0" a="0.55" />
-                        <MaxColor r="1" g="0.82" b="0" a="0.08" />
+                        <MinColor r="0.28" g="0.75" b="0.93" a="0.8" />
+                        <MaxColor r="0" g="0" b="0" a="0" />
                     </Gradient>
                 </Texture>
-                <Texture parentKey="dropGlow" atlas="Adventures_MissionList_Highlight" hidden="true" setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
                 <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
@@ -45,16 +44,17 @@
                 </FontString>
             </Layer>
             <Layer level="OVERLAY">
-                <Texture atlas="auctionhouse-itemicon-border-color">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/Ring.png">
                     <Color r="1" g="0.82" b="0" a="1" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-6" y="5" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="6" y="-5" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-4" y="4" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="4" y="-4" />
                     </Anchors>
                 </Texture>
             </Layer>
         </Layers>
         <Scripts>
+            <OnLoad method="OnTooltipLoad" />
             <OnClick method="OnClick" />
             <OnMouseUp method="OnMouseUp" />
             <OnReceiveDrag method="OnReceiveDrag" />
