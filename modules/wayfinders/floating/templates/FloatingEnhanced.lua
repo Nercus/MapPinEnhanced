@@ -61,7 +61,6 @@ end
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:PrepareForTarget()
     self:ResetDistanceReadout()
     self:ResetDirectionSampling()
-    self.distanceValue = nil
     self.displayType = "far"
     self.presentationInitialized = nil
     self.content:PrepareForTarget()
@@ -181,7 +180,6 @@ end
 ---@param distance number?
 ---@param timeToTarget number?
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:OnDistanceUpdate(distance, timeToTarget)
-    self.distanceValue = distance
     self:SetDisplayType(distance and distance < Constants.CLOSE_DISTANCE and "close" or "far")
 end
 
@@ -288,7 +286,6 @@ end
 function MapPinEnhancedWayfinderFloatingEnhancedMixin:Reset()
     self.targetType = Wayfinders.TARGET_TYPE_PIN
     self.displayType = "far"
-    self.distanceValue = nil
     self.presentationInitialized = nil
     self.content:Reset()
     self.needleRotation = nil

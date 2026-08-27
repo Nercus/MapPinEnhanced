@@ -24,7 +24,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field newNeedleRotation number | nil
 ---@field rotatePin boolean | nil
 ---@field displayType 'close' | 'far' | nil
-MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin)
+MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
+    MapPinEnhancedWayfinderDirectionMixin)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
@@ -174,7 +175,6 @@ function MapPinEnhancedWayfinderArrowMixin:OnUpdate(elapsed)
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnDistanceUpdate(distance, timeToTarget)
-    self.distanceValue = distance
     if distance and distance < 10 then
         self:SetDisplayType("close")
     else
