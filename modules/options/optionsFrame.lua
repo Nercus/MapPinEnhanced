@@ -9,9 +9,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field ScrollBar MinimalScrollBar
 ---@field SetPanExtent fun(self: ScrollFrameTemplate, panExtent: number)
 
+---@class MapPinEnhancedOptionsScrollFrame : ScrollFrameTemplate
+---@field Child Frame
+
 ---@class MapPinEnhancedOptionsFrame : Frame
+---@field layoutReady boolean?
 ---@field header MapPinEnhancedOptionsFrameHeader
----@field scrollFrame ScrollFrameTemplate
+---@field scrollFrame MapPinEnhancedOptionsScrollFrame
 MapPinEnhancedOptionsFrameMixin = {}
 
 ---@class Options
@@ -69,6 +73,8 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     self.scrollFrame.ScrollBar:SetInterpolateScroll(true)
     self.scrollFrame:SetPanExtent(80)
     Options.frame = self
+    self.layoutReady = true
+    self:UpdateLayout()
 
     MapPinEnhanced:AddSlashCommand("options", function()
         self:ToggleOptionsFrame()
@@ -78,4 +84,29 @@ end
 function MapPinEnhancedOptionsFrameMixin:OnShow()
     Options:RestorePendingReloadOptions()
     self:SetupOptionSearch()
+end
+
+function MapPinEnhancedOptionsFrameMixin:UpdateLayout()
+    if not self.layoutReady then return end
+    local scrollFrame = self.scrollFrame
+    if not scrollFrame or not scrollFrame.Child then return end
+    local child = scrollFrame.Child
+    child:SetWidth(scrollFrame:GetWidth())
+    local height = 8
+    ---@param category MapPinEnhancedOptionCategoryBaseTemplate
+    for _, category in ipairs({ child:GetChildren() }) do
+        category:LayoutChildren()
+        category:UpdateHeight()
+        height = height + category:GetHeight() + 8
+    end
+    child:SetHeight(height)
+    scrollFrame:UpdateScrollChildRect()
+    scrollFrame:SetVerticalScroll(math.min(scrollFrame:GetVerticalScroll(),
+        scrollFrame:GetVerticalScrollRange()))
+end
+
+function MapPinEnhancedOptionsFrameMixin:OnHide()
+    for _, option in pairs(Options.options) do
+        option.searchHighlight:Hide()
+    end
 end

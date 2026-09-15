@@ -21,7 +21,7 @@ function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
     local totalHeight = self.header:GetHeight() + self.headerBottomSpacing + self.bottomPadding
     local childCount = 0
     for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.header then
+        if child ~= self.header and child:IsShown() then
             childCount = childCount + 1
             totalHeight = totalHeight + child:GetHeight()
             if childCount > 1 then
@@ -39,16 +39,12 @@ function MapPinEnhancedOptionCategoryBaseMixin:LayoutChildren()
 
     ---@param child MapPinEnhancedFormElementTemplate | MapPinEnhancedOptionTwoColumnTemplate | MapPinEnhancedOptionGroupTemplate
     for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.header then
-            if child.UpdateLayout then
-                child:UpdateLayout()
-            end
-            if child.UpdateHeight then
-                child:UpdateHeight()
-            end
+        if child ~= self.header and child:IsShown() then
             child:ClearAllPoints()
             child:SetPoint("TOPLEFT", self, "TOPLEFT", self.contentInsetX, offsetY)
             child:SetPoint("TOPRIGHT", self, "TOPRIGHT", -self.contentInsetX, offsetY)
+            if child.UpdateLayout then child:UpdateLayout() end
+            if child.UpdateHeight then child:UpdateHeight() end
             offsetY = offsetY - child:GetHeight() - self.groupSpacing
         end
     end

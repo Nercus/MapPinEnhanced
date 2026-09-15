@@ -68,7 +68,6 @@
                         <Size x="634" y="1" />
                         <Anchors>
                             <Anchor point="TOPLEFT" />
-                            <Anchor point="BOTTOMRIGHT" />
                         </Anchors>
                         <Frames>
                             <Frame inherits="MapPinEnhancedOptionCategoryGeneralTemplate" parentKey="General">
@@ -103,6 +102,8 @@
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+            <OnSizeChanged method="UpdateLayout" />
         </Scripts>
     </Frame>
 </Ui>

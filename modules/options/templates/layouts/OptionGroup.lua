@@ -31,11 +31,14 @@ function MapPinEnhancedOptionGroupMixin:UpdateLayout()
     self:UpdateLabelLayout()
 
     local offsetY = self.topPadding + self.label:GetHeight() + self.labelBottomSpacing
+    ---@param child MapPinEnhancedFormElementTemplate | MapPinEnhancedOptionTwoColumnTemplate | Frame
     for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.label then
+        if child ~= self.label and child:IsShown() then
             child:ClearAllPoints()
             child:SetPoint("TOPLEFT", self, "TOPLEFT", self.contentInsetX, -offsetY)
             child:SetPoint("TOPRIGHT", self, "TOPRIGHT", -self.contentInsetX, -offsetY)
+            if child.UpdateLayout then child:UpdateLayout() end
+            if child.UpdateHeight then child:UpdateHeight() end
             offsetY = offsetY + child:GetHeight() + self.rowSpacing
         end
     end
@@ -46,7 +49,7 @@ function MapPinEnhancedOptionGroupMixin:UpdateHeight()
     local totalHeight = self.topPadding + labelHeight + self.labelBottomSpacing + self.bottomPadding
     local childCount = 0
     for _, child in ipairs({ self:GetChildren() }) do
-        if child ~= self.label then
+        if child ~= self.label and child:IsShown() then
             childCount = childCount + 1
             totalHeight = totalHeight + child:GetHeight()
             if childCount > 1 then
