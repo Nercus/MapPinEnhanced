@@ -78,12 +78,14 @@ function Providers:GetSuperTrackingMapIDs()
 end
 
 ---@param fallback? SuperTrackingWaypointResolver provider-specific resolver
+---@param targetMapID? number source-owned map, including destinations outside the current map
 ---@return number? x
 ---@return number? y
 ---@return number? mapID
 ---@return string? waypointDescription
-function Providers:GetSuperTrackingWaypoint(fallback)
+function Providers:GetSuperTrackingWaypoint(fallback, targetMapID)
     local mapIDs = self:GetSuperTrackingMapIDs()
+    if targetMapID and targetMapID > 0 then table.insert(mapIDs, 1, targetMapID) end
     for _, mapID in ipairs(mapIDs) do
         local x, y, waypointDescription = GetNextWaypointForMap(mapID)
         if type(x) == "number" and type(y) == "number" then

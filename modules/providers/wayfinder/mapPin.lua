@@ -5,6 +5,30 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "mapPin"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.MapPin
+---@type table<number, boolean>
+local requestedQuestMaps = {}
+---@type table<number, boolean>
+local pendingQuestTitles = {}
+
+---@param questID number
+---@param mapID number
+---@return number? x
+---@return number? y
+---@return string? title
+local function GetQuestOfferInfo(questID, mapID)
+    -- Quest offers are quest-line or task records, not accepted quest-log POIs.
+    local info = C_QuestLine.GetQuestLineInfo(questID, mapID)
+    if info and not info.inProgress then return info.x, info.y, info.questName end
+    if not requestedQuestMaps[mapID] then
+        requestedQuestMaps[mapID] = true
+        C_QuestLine.RequestQuestLinesForMap(mapID)
+    end
+    for _, task in ipairs(C_TaskQuest.GetQuestsOnMap(mapID) or {}) do
+        if task.questID == questID and task.isQuestStart and not task.inProgress then
+            return task.x, task.y, C_TaskQuest.GetQuestInfoByQuestID(questID)
+        end
+    end
+end
 
 ---@return string
 local function GetMapPinTargetID()
@@ -56,10 +80,15 @@ local function GetMapPinDisplayInfo(pinType, typeID, mapID)
             if node.nodeID == typeID then return node.name, node.atlasName, true end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        local title = C_QuestLog.GetTitleForQuestID(typeID)
+        local _, _, title = GetQuestOfferInfo(typeID, mapID)
+        title = title or C_QuestLog.GetTitleForQuestID(typeID)
+        if not title and not pendingQuestTitles[typeID] then
+            pendingQuestTitles[typeID] = true
+            C_QuestLog.RequestLoadQuestByID(typeID)
+        end
         local classification = C_QuestInfoSystem.GetQuestClassification(typeID)
         local atlas = questClassificationAtlas[classification] or "QuestLog-tab-icon-quest"
-        return title and string.format(L["Accept: %s"], title), atlas, true
+        return title, atlas, true
     elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
         for _, digSite in ipairs(C_ResearchInfo.GetDigSitesForMap(mapID) or {}) do
             if digSite.researchSiteID == typeID then return digSite.name, "ArchBlob", true end
@@ -92,9 +121,7 @@ local function GetMapPinPositionForMap(pinType, typeID, mapID)
             if node.nodeID == typeID then return node.position.x, node.position.y end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        for _, questInfo in ipairs(C_QuestLog.GetQuestsOnMap(mapID) or {}) do
-            if questInfo.questID == typeID then return questInfo.x, questInfo.y end
-        end
+        return GetQuestOfferInfo(typeID, mapID)
     elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
         for _, digSite in ipairs(C_ResearchInfo.GetDigSitesForMap(mapID) or {}) do
             if digSite.researchSiteID == typeID then return digSite.position.x, digSite.position.y end
@@ -114,9 +141,16 @@ local function RefreshMapPin()
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
     local targetID = GetMapPinTargetID()
     local hasPin = pinType ~= nil and typeID ~= nil
+    local questOffer = pinType == Enum.SuperTrackingMapPinType.QuestOffer and
+        C_QuestLine.GetQuestLineInfo(typeID)
+    local questMapID = questOffer and questOffer.startMapID or nil
+    if hasPin and pinType == Enum.SuperTrackingMapPinType.QuestOffer and
+        (not questMapID or questMapID == 0) then
+        questMapID = C_TaskQuest.GetQuestZoneID(typeID)
+    end
     local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(hasPin and function(candidateMapID)
         return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
-    end or nil)
+    end or nil, questMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Map Pin"], {
             hasCoordinates = x ~= nil and y ~= nil,
@@ -144,3 +178,14 @@ Providers:RegisterSuperTrackingProvider({
     refresh = RefreshMapPin,
     events = { "NEIGHBORHOOD_MAP_DATA_UPDATED" },
 })
+
+MapPinEnhanced:RegisterEvent("QUESTLINE_UPDATE", function(requestRequired)
+    if requestRequired then wipe(requestedQuestMaps) end
+    Providers:RefreshSuperTrackingProvider(SOURCE)
+end)
+
+MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", function(questID, success)
+    if not pendingQuestTitles[questID] then return end
+    pendingQuestTitles[questID] = nil
+    if success then Providers:RefreshSuperTrackingProvider(SOURCE) end
+end)

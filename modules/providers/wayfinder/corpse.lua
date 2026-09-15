@@ -13,7 +13,10 @@ end
 
 local function RefreshCorpse()
     local targetID = GetCorpseTargetID()
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint()
+    local x, y, mapID = Providers:GetSuperTrackingWaypoint(function(candidateMapID)
+        local position = C_DeathInfo.GetCorpseMapPosition(candidateMapID)
+        if position then return position:GetXY() end
+    end)
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Corpse"], {

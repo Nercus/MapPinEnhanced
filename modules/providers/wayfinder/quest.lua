@@ -32,16 +32,32 @@ local questClassificationAtlas = {
 ---@return number? x
 ---@return number? y
 local function GetQuestWaypointForMap(questID, mapID)
-    return C_QuestLog.GetNextWaypointForMap(questID, mapID)
+    local x, y = C_QuestLog.GetNextWaypointForMap(questID, mapID)
+    if x and y then return x, y end
+    -- Blizzard renders objective POIs independently of navigation waypoints.
+    for _, info in ipairs(C_QuestLog.GetQuestsOnMap(mapID) or {}) do
+        if info.questID == questID then return info.x, info.y end
+    end
+    for _, info in ipairs(C_TaskQuest.GetQuestsOnMap(mapID) or {}) do
+        if info.questID == questID then return info.x, info.y end
+    end
 end
 
 local function RefreshQuest()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
     local targetID = GetQuestTargetID()
+    local questMapID = questID and C_TaskQuest.GetQuestZoneID(questID)
+    if questID and (not questMapID or questMapID == 0) then questMapID = GetQuestUiMapID(questID) end
+    local questTitle = questID and (C_QuestLog.GetTitleForQuestID(questID) or
+        C_TaskQuest.GetQuestInfoByQuestID(questID))
+    if questID and not questTitle and not pendingQuestTitles[questID] then
+        pendingQuestTitles[questID] = true
+        C_QuestLog.RequestLoadQuestByID(questID)
+    end
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
         return GetQuestWaypointForMap(questID, candidateMapID)
-    end or nil)
+    end or nil, questMapID)
     if questID and (x == nil or y == nil or mapID == nil) then
         mapID, x, y = C_QuestLog.GetNextWaypoint(questID)
     end
@@ -51,11 +67,6 @@ local function RefreshQuest()
             questID = questID,
         })
         return
-    end
-    local questTitle = C_QuestLog.GetTitleForQuestID(questID)
-    if not questTitle and not pendingQuestTitles[questID] then
-        pendingQuestTitles[questID] = true
-        C_QuestLog.RequestLoadQuestByID(questID)
     end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
     questTitle = questTitle or superTrackedName or L["Quest"]
