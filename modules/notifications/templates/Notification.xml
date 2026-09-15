@@ -9,7 +9,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="Background" file="Interface/AddOns/MapPinEnhanced/assets/shared/HorizontalGradient.png" setAllPoints="true">
+                <Texture parentKey="Background" file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" setAllPoints="true">
                     <Color r="0" g="0" b="0" />
                 </Texture>
             </Layer>
@@ -27,9 +27,9 @@
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="0">
                 <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
-                    <Size x="46" y="46" />
+                    <Size x="36" y="36" />
                     <Anchors>
-                        <Anchor point="CENTER" relativePoint="TOP" x="0" y="5" />
+                        <Anchor point="CENTER" relativePoint="TOP" x="0" y="0" />
                     </Anchors>
                     <Gradient orientation="VERTICAL">
                         <MaxColor r="0.2" g="0.2" b="0.2" />
@@ -39,15 +39,15 @@
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="1">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png" parentKey="logo">
-                    <Size x="32" y="32" />
+                    <Size x="26" y="26" />
                     <Anchors>
-                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" />
+                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" y="-1" />
                     </Anchors>
                 </Texture>
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="2">
                 <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
-                    <Color r="0.9" g="0.9" b="0.9" />
+                    <Color r="1" g="1" b="1" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
                         <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
@@ -63,6 +63,7 @@
                 </FontString>
             </Layer>
         </Layers>
+
         <Animations>
             <AnimationGroup parentKey="fadeIn" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true">
                 <Alpha duration="0.12" order="1" fromAlpha="0" toAlpha="1" />

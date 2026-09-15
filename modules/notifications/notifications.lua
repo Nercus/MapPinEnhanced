@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Notifications
 ---@field notificationFrame MapPinEnhancedNotificationFrame
 ---@field isDisplaying boolean
----@field displayTimer FunctionContainer
+---@field displayTimer FunctionContainer?
 local Notifications = MapPinEnhanced:GetModule("Notifications")
 Notifications.queue = {}
 Notifications.isDisplaying = false
@@ -13,7 +13,7 @@ Notifications.displayTimer = nil
 
 local L = MapPinEnhanced.L
 
-local DISPLAY_DURATION_SECONDS = 2
+local DISPLAY_DURATION_SECONDS = 5
 
 ---@enum (key) NotificationTypes
 local NOTIFICATION_MESSAGES = {
@@ -49,10 +49,13 @@ function Notifications:UpdateQueue()
     self.isDisplaying = true
     notificationFrame:ShowMessage(message)
 
-    self.displayTimer = C_Timer.NewTimer(DISPLAY_DURATION_SECONDS, function()
+    local timer
+    timer = C_Timer.NewTimer(DISPLAY_DURATION_SECONDS, function()
+        if self.displayTimer ~= timer then return end
         self.displayTimer = nil
         notificationFrame:HideMessage()
     end)
+    self.displayTimer = timer
 end
 
 ---@param message NotificationTypes
@@ -64,6 +67,7 @@ function Notifications:ShowNotification(message, ...)
 end
 
 function Notifications:OnNotificationHidden()
+    if not self.isDisplaying then return end
     if self.displayTimer and not self.displayTimer:IsCancelled() then
         self.displayTimer:Cancel()
     end

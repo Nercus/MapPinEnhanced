@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-
 ---@class Notifications
 local Notifications = MapPinEnhanced:GetModule("Notifications")
 
@@ -16,6 +15,9 @@ function MapPinEnhancedNotificationFrameMixin:OnLoad()
 end
 
 function MapPinEnhancedNotificationFrameMixin:OnHide()
+    self.fadeIn:Stop()
+    self.fadeOut:Stop()
+    self.text:SetText("")
     Notifications:OnNotificationHidden()
 end
 
