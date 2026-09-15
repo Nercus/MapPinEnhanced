@@ -1,0 +1,45 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="SuperTrackedEntry.lua" />
+    <Button name="MapPinEnhancedSuperTrackedEntryTemplate" virtual="true" mixin="MapPinEnhancedSuperTrackedEntryMixin" hidden="true" registerForClicks="LeftButtonUp, RightButtonUp">
+        <Size x="305" y="35" />
+        <Frames>
+            <Button parentKey="removeButton" inherits="MapPinEnhancedIconButtonTemplate" mixin="MapPinEnhancedSuperTrackedEntryRemoveMixin">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="tooltip" value="Remove" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-5" />
+                </Anchors>
+                <Scripts>
+                    <OnClick method="OnClick" />
+                </Scripts>
+            </Button>
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false">
+                <Anchors>
+                    <Anchor point="LEFT" x="5" />
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontHighlight" justifyH="LEFT" wordwrap="false">
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.pinFrame" relativePoint="RIGHT" x="5" />
+                        <Anchor point="RIGHT" relativeKey="$parent.removeButton" relativePoint="LEFT" x="-5" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnClick method="OnClick" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Button>
+</Ui>

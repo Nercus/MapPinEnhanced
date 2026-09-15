@@ -198,7 +198,22 @@ Providers:RegisterSuperTrackingProvider({
     getTargetID = GetMapPinTargetID,
     refresh = RefreshMapPin,
     readText = ReadMapPinText,
-    events = { "NEIGHBORHOOD_MAP_DATA_UPDATED" },
+    captureTracking = function(data)
+        local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
+        local mapID = data.mapID
+        if pinType == nil or typeID == nil or not mapID then return nil end
+        return function()
+            if pinType == Enum.SuperTrackingMapPinType.HousingPlot then
+                if not GetHousingPlotInfo(typeID) then return false end
+            elseif GetMapPinPositionForMap(pinType, typeID, mapID) == nil then
+                return false
+            end
+            C_SuperTrack.SetSuperTrackedMapPin(pinType, typeID)
+            return true
+        end
+    end,
+    untrack = function() C_SuperTrack.ClearSuperTrackedMapPin() end,
+    events = { "AREA_POIS_UPDATED", "NEIGHBORHOOD_MAP_DATA_UPDATED", "QUEST_POI_UPDATE", "QUEST_LOG_UPDATE" },
 })
 
 MapPinEnhanced:RegisterEvent("QUESTLINE_UPDATE", function(requestRequired)

@@ -9,6 +9,12 @@
         <Size x="315" y="1" />
         <Frames>
             <Frame parentKey="header" frameStrata="HIGH" propagateMouseInput="Motion" inherits="MapPinEnhancedTrackerHeaderTemplate" />
+            <Button parentKey="superTrackedEntry" inherits="MapPinEnhancedSuperTrackedEntryTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" x="5" />
+                    <Anchor point="TOPRIGHT" relativeKey="$parent.header" relativePoint="BOTTOMRIGHT" x="-5" />
+                </Anchors>
+            </Button>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" x="5" y="0" />

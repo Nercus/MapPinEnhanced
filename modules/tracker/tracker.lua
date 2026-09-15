@@ -5,6 +5,7 @@ local MapPinEnhanced = select(2, ...)
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Providers = MapPinEnhanced:GetModule("Providers")
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
@@ -45,6 +46,8 @@ end)
 
 MapPinEnhanced:AddVisibilityRule("noActivePins", {
     isActive = function()
+        -- This persisted rule is used only by Tracker; its fixed row is content too.
+        if Providers:GetSuperTrackingEntry() then return false end
         for group in Groups:EnumerateGroups() do
             if not group:IsHidden() then
                 for _ in group:EnumeratePins() do return false end
@@ -52,7 +55,8 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
         end
         return true
     end,
-    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED" },
+    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED",
+        "SUPER_TRACKING_ENTRY_CHANGED" },
 })
 
 MapPinEnhanced:RegisterVisibilityTarget("tracker", {

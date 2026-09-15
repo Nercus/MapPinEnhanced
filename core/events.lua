@@ -191,6 +191,7 @@ local CALLBACK_EVENTS = {
     PIN_REMOVED = { event = "PIN_REMOVED", pattern = false },
     PIN_REACHED = { event = "PIN_REACHED", pattern = false },
     PIN_TRACKING_CHANGED = { event = "PIN_TRACKING_CHANGED", pattern = false },
+    SUPER_TRACKING_ENTRY_CHANGED = { event = "SUPER_TRACKING_ENTRY_CHANGED", pattern = false },
     GROUP_UPDATED = { event = "GROUP_UPDATED", pattern = false },
     GROUP_DELETED = { event = "GROUP_DELETED", pattern = false },
 }

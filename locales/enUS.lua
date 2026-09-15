@@ -19,6 +19,11 @@ L["%d icons"] = "%d icons"
 L["%d icons (loading...)"] = "%d icons (loading...)"
 L["Import"] = "Import"
 L["Save"] = "Save"
+L["Stop tracking"] = "Stop tracking"
+L["Track"] = "Track"
+L["Remove"] = "Remove"
+L["Convert to Pin"] = "Convert to Pin"
+L["Share as Pin"] = "Share as Pin"
 
 L["Click to edit"] = "Click to edit"
 

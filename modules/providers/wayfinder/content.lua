@@ -127,5 +127,17 @@ Providers:RegisterSuperTrackingProvider({
     getTargetID = GetContentTargetID,
     refresh = RefreshContent,
     readText = ReadContentText,
+    captureTracking = function()
+        local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
+        if trackableType == nil or trackableID == nil then return nil end
+        return function()
+            if not C_ContentTracking or not C_ContentTracking.IsTrackable(trackableType, trackableID) then
+                return false
+            end
+            C_SuperTrack.SetSuperTrackedContent(trackableType, trackableID)
+            return true
+        end
+    end,
+    untrack = function() C_SuperTrack.ClearSuperTrackedContent() end,
     events = { "CONTENT_TRACKING_UPDATE", "TRACKABLE_INFO_UPDATE", "TRACKING_TARGET_INFO_UPDATE" },
 })

@@ -13,11 +13,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
 ---@field header MapPinEnhancedTrackerHeaderTemplate
+---@field superTrackedEntry MapPinEnhancedSuperTrackedEntryTemplate
 MapPinEnhancedTrackerMixin = {}
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
@@ -203,12 +205,12 @@ local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
-    local searchHeight = 0
+    local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
     local numberOfEntries = self.dataProvider:GetSize(false)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
     local newHeight = visibleEntries * entryHeight
     local oldHeight = self:GetHeight()
-    newHeight = newHeight + headerHeight + searchHeight
+    newHeight = newHeight + headerHeight + fixedEntryHeight
 
     local currentPoint, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
     if not currentPoint or not relativeTo or not relativePoint or not xOfs or not yOfs then
@@ -308,10 +310,14 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         if not isTracked then return end
         self:ScrollToTrackedPin()
     end)
+    MapPinEnhanced:RegisterCallback("SUPER_TRACKING_ENTRY_CHANGED", function()
+        if self:IsShown() then self:UpdateSuperTrackedEntry() end
+    end)
 end
 
 function MapPinEnhancedTrackerMixin:OnShow()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
+    self:UpdateSuperTrackedEntry()
 end
 
 function MapPinEnhancedTrackerMixin:OnHide()
@@ -347,8 +353,18 @@ end
 
 function MapPinEnhancedTrackerMixin:UpdateViewLayout()
     self.scrollBox:ClearAllPoints()
-    self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
+    if self.superTrackedEntry:IsShown() then
+        self.scrollBox:SetPoint("TOPLEFT", self.superTrackedEntry, "BOTTOMLEFT", 0, 0)
+    else
+        self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
+    end
     self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
+end
+
+function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry()
+    self.superTrackedEntry:ApplyEntry(Providers:GetSuperTrackingEntry())
+    self:UpdateViewLayout()
+    self:UpdateHeight()
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()

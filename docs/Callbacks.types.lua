@@ -13,6 +13,7 @@
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin?))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "GROUP_DELETED", func: fun(eventname: string, groupID: UUID))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_TRACKING_CHANGED", func: fun(eventname: string, pinID: UUID, isTracked: boolean))
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "SUPER_TRACKING_ENTRY_CHANGED", func: fun(eventname: string))
 MapPinEnhanced = {}
 
 ---@class MapPinEnhanced
@@ -28,6 +29,7 @@ MapPinEnhanced = {}
 ---@field FireCallback fun(self: MapPinEnhanced, event: "GROUP_UPDATED", key: nil, group?: MapPinEnhancedGroupMixin)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "GROUP_DELETED", key: nil, groupID: UUID)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_TRACKING_CHANGED", key: nil, pinID: UUID, isTracked: boolean)
+---@field FireCallback fun(self: MapPinEnhanced, event: "SUPER_TRACKING_ENTRY_CHANGED")
 MapPinEnhanced = {}
 
 ---@class MapPinEnhanced

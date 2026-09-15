@@ -143,7 +143,17 @@ Providers:RegisterSuperTrackingProvider({
     getTargetID = GetQuestTargetID,
     refresh = RefreshQuest,
     readText = ReadQuestText,
-    events = { "QUEST_LOG_UPDATE", "QUEST_POI_UPDATE" },
+    captureTracking = function()
+        local questID = C_SuperTrack.GetSuperTrackedQuestID()
+        if not questID or questID == 0 then return nil end
+        return function()
+            if not C_QuestLog.IsOnQuest(questID) and not C_TaskQuest.IsActive(questID) then return false end
+            C_SuperTrack.SetSuperTrackedQuestID(questID)
+            return true
+        end
+    end,
+    untrack = function() C_SuperTrack.SetSuperTrackedQuestID(0) end,
+    events = { "QUEST_POI_UPDATE" },
 })
 MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_WATCH_UPDATE", OnQuestProgress)

@@ -53,5 +53,16 @@ Providers:RegisterSuperTrackingProvider({
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetVignetteTargetID,
     refresh = RefreshVignette,
+    captureTracking = function()
+        local guid = C_SuperTrack.GetSuperTrackedVignette()
+        if not guid then return nil end
+        return function()
+            if not C_VignetteInfo.GetVignetteInfo(guid) then return false end
+            C_SuperTrack.SetSuperTrackedVignette(guid)
+            return true
+        end
+    end,
+    -- Retail exposes no vignette-specific clear operation.
+    untrack = function() C_SuperTrack.ClearAllSuperTracked() end,
     events = { "VIGNETTES_UPDATED" },
 })

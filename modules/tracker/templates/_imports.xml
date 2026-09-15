@@ -3,5 +3,6 @@
     <Include file="GroupEntry.xml" />
     <Include file="PinEntry.xml" />
     <Include file="TrackerHeader.xml" />
+    <Include file="SuperTrackedEntry.xml" />
     <Include file="Tracker.xml" />
 </Ui>

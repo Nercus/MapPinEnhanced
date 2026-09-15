@@ -164,6 +164,7 @@ end
 local function onPinTrackingChanged(eventName, pinID, isTracked)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin.pinID == pinID and isTracked then
+        Providers:UpdateSuperTrackingEntrySelection(nil, nil, true)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
