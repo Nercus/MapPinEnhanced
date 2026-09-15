@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="CopyTextDialog.lua" />
+    <Frame name="MapPinEnhancedCopyTextDialogTemplate" inherits="MapPinEnhancedWindowTemplate"
+        mixin="MapPinEnhancedCopyTextDialogMixin" virtual="true" frameStrata="DIALOG">
+        <Size x="650" y="460" />
+        <Frames>
+            <ScrollFrame parentKey="output" inherits="MapPinEnhancedTextareaTemplate">
+                <Size x="600" y="380" />
+                <Anchors><Anchor point="TOPLEFT" x="25" y="-50" /></Anchors>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

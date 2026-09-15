@@ -9,5 +9,6 @@
 
 
     <Include file="frames/_imports.xml" />
+    <Include file="CopyTextDialog.xml" />
     <Include file="menu/_imports.xml" />
 </Ui>

@@ -74,6 +74,7 @@ local CONFIRM_DIALOG_NAME = DIALOG_PREFIX .. "CONFIRM"
 local RENAME_PIN_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_PIN"
 local RENAME_GROUP_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_GROUP"
 local ABOUT_DIALOG_NAME = DIALOG_PREFIX .. "ABOUT"
+local COPY_TEXT_DIALOG_NAME = DIALOG_PREFIX .. "COPY_TEXT"
 
 ---@param dialogName string
 ---@param definition MapPinEnhancedStaticDialogDefinition
@@ -289,6 +290,32 @@ RegisterStaticDialog(ABOUT_DIALOG_NAME, {
     button1 = L["Close"],
 })
 
+RegisterStaticDialog(COPY_TEXT_DIALOG_NAME, {
+    text = "",
+    button1 = L["Close"],
+    hasEditBox = true,
+    editBoxWidth = 360,
+    OnShow = function(self, data)
+        local editBox = GetStaticDialogEditBox(self)
+        if not editBox then return end
+        editBox:SetNumeric(false)
+        editBox:SetMaxLetters(0)
+        editBox:SetText(data and data.text or "")
+        editBox:SetFocus()
+        editBox:HighlightText()
+    end,
+    EditBoxOnEnterPressed = function(editBox)
+        editBox:HighlightText()
+    end,
+    EditBoxOnEscapePressed = function(editBox)
+        ClickStaticDialogButtonForEditBox(editBox, 1)
+    end,
+    OnHide = function(self)
+        local editBox = GetStaticDialogEditBox(self)
+        if editBox then editBox:ClearFocus() end
+    end,
+})
+
 ---@param title string?
 ---@param message string
 ---@param onConfirm function?
@@ -339,6 +366,25 @@ function MapPinEnhanced:ShowAboutDialog()
     }, "\n")
 
     return ShowStaticDialog(ABOUT_DIALOG_NAME, text, nil)
+end
+
+local copyTextWindow ---@type MapPinEnhancedCopyTextDialogTemplate?
+
+---@param title string
+---@param text string
+---@return MapPinEnhancedStaticDialogFrame|MapPinEnhancedCopyTextDialogTemplate|nil
+function MapPinEnhanced:ShowCopyTextDialog(title, text)
+    assert(type(title) == "string", "MapPinEnhanced:ShowCopyTextDialog requires a title")
+    assert(type(text) == "string", "MapPinEnhanced:ShowCopyTextDialog requires text")
+    if text:find("\n", 1, true) then
+        if not copyTextWindow then
+            copyTextWindow = CreateFrame("Frame", "MapPinEnhancedCopyTextDialog", UIParent,
+                "MapPinEnhancedCopyTextDialogTemplate")
+        end
+        copyTextWindow:Open(title, text)
+        return copyTextWindow
+    end
+    return ShowStaticDialog(COPY_TEXT_DIALOG_NAME, title, { text = text })
 end
 
 MapPinEnhanced:AddSlashCommand({ "version", "about" },
