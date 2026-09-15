@@ -52,6 +52,82 @@ function MapPinEnhanced:RegisterEvent(event, func)
     addonEventFrame:RegisterEvent(event)
 end
 
+---@param events WowEvent[]
+---@param callback fun(events: table<WowEvent, boolean>)
+---@param throttleSeconds number?
+---@return fun() unsubscribe
+function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds)
+    assert(type(events) == "table", "MapPinEnhanced:RegisterEventBucket requires an event list")
+    assert(type(callback) == "function", "MapPinEnhanced:RegisterEventBucket requires a callback")
+    assert(throttleSeconds == nil or type(throttleSeconds) == "number" and throttleSeconds > 0,
+        "MapPinEnhanced:RegisterEventBucket requires a positive throttleSeconds")
+
+    ---@type WowEvent[]
+    local ownedEvents = {}
+    ---@type table<WowEvent, boolean>
+    local seenEvents = {}
+    for _, event in ipairs(events) do
+        assert(type(event) == "string" and event ~= "",
+            "MapPinEnhanced:RegisterEventBucket events must be non-empty strings")
+        assert(not seenEvents[event], "MapPinEnhanced:RegisterEventBucket events must be unique")
+        seenEvents[event] = true
+        table.insert(ownedEvents, event)
+    end
+    assert(#ownedEvents > 0, "MapPinEnhanced:RegisterEventBucket requires at least one event")
+
+    local isSubscribed = true
+    local publicationNumber = 0
+    ---@type { event: WowEvent, callback: function }[]
+    local registrations = {}
+    ---@type table<WowEvent, boolean>
+    local pendingEvents = {}
+    ---@type FunctionContainer?
+    local publicationTimer
+
+    local function Publish(expectedPublicationNumber)
+        publicationTimer = nil
+        if not isSubscribed or publicationNumber ~= expectedPublicationNumber then return end
+        local publishedEvents = pendingEvents
+        pendingEvents = {}
+        callback(publishedEvents)
+    end
+
+    local function OnEvent(event)
+        if not isSubscribed then return end
+        pendingEvents[event] = true
+        if publicationTimer then return end
+
+        publicationNumber = publicationNumber + 1
+        local expectedPublicationNumber = publicationNumber
+        publicationTimer = C_Timer.NewTimer(throttleSeconds or 0, function()
+            Publish(expectedPublicationNumber)
+        end)
+    end
+
+    for _, event in ipairs(ownedEvents) do
+        local eventName = event
+        local eventCallback = function()
+            OnEvent(eventName)
+        end
+        table.insert(registrations, { event = eventName, callback = eventCallback })
+        MapPinEnhanced:RegisterEvent(eventName, eventCallback)
+    end
+
+    return function()
+        if not isSubscribed then return end
+        isSubscribed = false
+        publicationNumber = publicationNumber + 1
+        pendingEvents = {}
+        if publicationTimer then
+            publicationTimer:Cancel()
+            publicationTimer = nil
+        end
+        for _, registration in ipairs(registrations) do
+            MapPinEnhanced:UnregisterEventForFunction(registration.event, registration.callback)
+        end
+    end
+end
+
 ---Unregister an event for a given function
 ---@param event WowEvent the event to unregister for
 ---@param func function the function to unregister for
