@@ -307,6 +307,9 @@ L["Copy current navigation diagnostics."] = "Copy current navigation diagnostics
 
 
 L["Description"] = "Description"
+L["Edit Description"] = "Edit Description"
+L["Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."] =
+"Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."
 L["This pin is no longer in this group."] = "This pin is no longer in this group."
 L["Apply"] = "Apply"
 

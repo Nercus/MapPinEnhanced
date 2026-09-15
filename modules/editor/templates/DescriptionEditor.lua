@@ -7,6 +7,8 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedDescriptionEditorTemplate : MapPinEnhancedWindowTemplate
 ---@field input MapPinEnhancedTextareaTemplate
+---@field heading FontString
+---@field info FontString
 ---@field groupID UUID?
 ---@field pinID UUID?
 MapPinEnhancedDescriptionEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
@@ -14,6 +16,8 @@ MapPinEnhancedDescriptionEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixi
 function MapPinEnhancedDescriptionEditorMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self:SetTitle(L["Description"])
+    self.heading:SetText(L["Edit Description"])
+    self.info:SetText(L["Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."])
     self.input.editbox:SetMaxLetters(0)
     self.input.editbox:SetText("")
 end

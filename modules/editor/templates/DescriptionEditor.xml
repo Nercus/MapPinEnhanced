@@ -2,11 +2,23 @@
     <Script file="DescriptionEditor.lua" />
     <Frame name="MapPinEnhancedDescriptionEditorTemplate" inherits="MapPinEnhancedWindowTemplate"
         mixin="MapPinEnhancedDescriptionEditorMixin" virtual="true" frameStrata="DIALOG" hidden="true">
-        <Size x="650" y="460" />
+        <Size x="650" y="520" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
+                    <Size x="600" y="24" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-45" /></Anchors>
+                </FontString>
+                <FontString parentKey="info" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
+                    <Size x="600" y="40" />
+                    <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.heading" relativePoint="BOTTOMLEFT" y="-8" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
         <Frames>
             <ScrollFrame parentKey="input" inherits="MapPinEnhancedTextareaTemplate">
                 <Size x="600" y="320" />
-                <Anchors><Anchor point="TOPLEFT" x="25" y="-50" /></Anchors>
+                <Anchors><Anchor point="TOPLEFT" x="25" y="-130" /></Anchors>
             </ScrollFrame>
             <Button inherits="MapPinEnhancedButtonTemplate" text="Apply">
                 <Size x="100" y="28" />
