@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Notifications = MapPinEnhanced:GetModule("Notifications")
 local Providers = MapPinEnhanced:GetModule("Providers")
@@ -60,6 +61,7 @@ end
 
 local coordinateTolerance = 0.0001
 local function ClearTrackedPinUserWaypoint()
+    Providers:ClearStepSuperTracking()
     shouldSuperTrackUserWaypoint = false
     local currentUserWaypoint = C_Map.GetUserWaypoint()
 
@@ -75,8 +77,15 @@ end
 local function OnUserWaypointUpdated()
     if shouldSuperTrackUserWaypoint then
         shouldSuperTrackUserWaypoint = false
+        local expectedWaypoint = placedUserWaypoint
+        local expectedPinID = trackedPinID
         C_Timer.After(0, function()
-            if C_Map.HasUserWaypoint() then
+            if trackedPinID ~= expectedPinID or placedUserWaypoint ~= expectedWaypoint or
+                Providers:IsStepSuperTracking() then return end
+            local waypoint = C_Map.GetUserWaypoint()
+            if waypoint and expectedWaypoint and waypoint.uiMapID == expectedWaypoint.uiMapID and
+                math.abs(waypoint.position.x - expectedWaypoint.position.x) <= coordinateTolerance and
+                math.abs(waypoint.position.y - expectedWaypoint.position.y) <= coordinateTolerance then
                 C_SuperTrack.SetSuperTrackedUserWaypoint(true)
             end
         end)
@@ -110,14 +119,21 @@ local function UpdateTrackedPinTarget()
     local pin = Pins:GetPinByID(trackedPinID)
     if not pin or not pin:IsTracked() then return end
 
-    local changeNumber = Wayfinders:UpdateTarget(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber,
+    local changeNumber = Navigation:UpdateDestination(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber,
         TransformPinDataToWayfinderData(pin:GetPinData()))
-    if changeNumber and Wayfinders:IsTargetActive(TARGET_OWNER, trackedPinID, changeNumber) then
+    if changeNumber and Navigation:IsDestinationActive(TARGET_OWNER, trackedPinID, changeNumber) then
         trackedTargetChangeNumber = changeNumber
     end
 end
 
-local function onPinTitleUpdated() UpdateTrackedPinTarget() end
+local function onPinTitleUpdated()
+    if not trackedPinID or not trackedTargetChangeNumber then return end
+    local pin = Pins:GetPinByID(trackedPinID)
+    if not pin or not pin:IsTracked() then return end
+    local data = pin:GetPinData()
+    Navigation:UpdateDestinationText(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber,
+        data.title or "", data.description)
+end
 local function onPinColorUpdated() UpdateTrackedPinTarget() end
 local function onPinIconUpdated() UpdateTrackedPinTarget() end
 local function onPinLockUpdated() UpdateTrackedPinTarget() end
@@ -164,23 +180,26 @@ end
 local function onPinTrackingChanged(eventName, pinID, isTracked)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin.pinID == pinID and isTracked then
+        Providers:ClearStepSuperTracking()
+        -- Navigation can acquire a Step before the pin's deferred waypoint
+        -- selection. This domain command already supersedes the external row.
         Providers:UpdateSuperTrackingEntrySelection(nil, nil, true)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
         Providers:CancelSuperTrackingTargetRetries()
         trackedTargetChangeNumber = nil
-        local changeNumber = Wayfinders:SetTarget(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
+        local changeNumber = Navigation:SetDestination(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
             RemoveTrackedPin(pinID)
         end)
-        if Wayfinders:IsTargetActive(TARGET_OWNER, pinID, changeNumber) then
+        if Navigation:IsDestinationActive(TARGET_OWNER, pinID, changeNumber) then
             trackedTargetChangeNumber = changeNumber
             SetupPinCallbacks(pinID)
         end
     elseif pinID == trackedPinID and not isTracked then
         ClearPinCallbacks()
         ClearTrackedPinUserWaypoint()
-        Wayfinders:ClearTarget(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber)
+        Navigation:ClearDestination(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber)
         trackedPinID = nil
         trackedTargetChangeNumber = nil
     end

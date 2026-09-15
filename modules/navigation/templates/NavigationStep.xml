@@ -1,0 +1,49 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="NavigationStep.lua" />
+    <Frame name="MapPinEnhancedNavigationStepTemplate" virtual="true" hidden="true"
+        inherits="MapPinEnhancedWayfinderInstructionTemplate" mixin="MapPinEnhancedNavigationStepMixin"
+        enableMouse="true" frameStrata="MEDIUM">
+        <Size x="340" y="76" />
+        <Anchors><Anchor point="TOP" relativeTo="UIParent" y="-280" /></Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+                    <Size x="242" y="14" />
+                    <Anchors><Anchor point="TOPLEFT" x="64" y="-12" /></Anchors>
+                </FontString>
+                <FontString parentKey="text" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
+                    <Size x="242" y="0" />
+                    <Anchors><Anchor point="TOPLEFT" x="64" y="-32" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false">
+                <Size x="32" y="32" />
+                <Anchors><Anchor point="LEFT" x="16" /></Anchors>
+            </Frame>
+            <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
+                <Anchors><Anchor point="TOPLEFT" x="12" y="-18" /></Anchors>
+            </Button>
+            <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
+                <Anchors><Anchor point="TOPLEFT" x="12" y="-18" /></Anchors>
+            </Button>
+            <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="tooltip" value="Clear Tracking" />
+                </KeyValues>
+                <Anchors><Anchor point="TOPRIGHT" x="-8" y="-8" /></Anchors>
+                <Scripts><OnClick>self:GetParent():ClearTracking()</OnClick></Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnMouseDown method="OnMouseDown" />
+        </Scripts>
+    </Frame>
+</Ui>

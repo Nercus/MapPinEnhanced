@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="adapterManager.lua" />
+    <Include file="movement.lua" />
+    <Include file="transition.lua" />
+    <Include file="action.lua" />
+    <Include file="gossip.lua" />
+    <Include file="transport.lua" />
+    <Include file="flightTaxi.lua" />
+    <Include file="phaseSwitch.lua" />
+</Ui>

@@ -4,74 +4,25 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
-
----@alias FloatingStyle "basic"|"enhanced"
+local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData?
----@field frames table<FloatingStyle, MapPinEnhancedWayfinderFloatingEnhancedTemplate|MapPinEnhancedWayfinderFloatingBasicTemplate>?
----@field style FloatingStyle?
+---@field frame MapPinEnhancedWayfinderFloatingTemplate?
 ---@field runtimeEnabled boolean?
 ---@field blizzardHiddenByOption boolean?
----@field unsubscribeStyleOption fun()?
+---@field unsubscribeBeamOption fun()?
+---@field step WayfinderStepData?
 local MapPinEnhancedWayfinderFloating = {}
 
-local ENABLE_OPTION = "Wayfinder.Floating.Enable"
-local STYLE_OPTION = "Wayfinder.Floating.Style"
-local HIDE_BLIZZARD_OPTION = "Wayfinder.General.HideBlizzardFloatingDiamond"
-
-local savedStyleToStyle = {
-    modern = "enhanced",
-    simple = "basic",
-}
-
-local styles = {
-    basic = {
-        template = "MapPinEnhancedWayfinderFloatingBasicTemplate",
-        name = "MapPinEnhancedWayfinderFloatingBasic",
-    },
-    enhanced = {
-        template = "MapPinEnhancedWayfinderFloatingEnhancedTemplate",
-        name = "MapPinEnhancedWayfinderFloatingEnhanced",
-    },
-}
-
----@param savedStyle string
----@return FloatingStyle
-local function GetStyle(savedStyle)
-    local style = savedStyleToStyle[savedStyle]
-    if style then return style end
-
-    local defaultStyle = Options:GetDefaultValue(STYLE_OPTION)
-    style = savedStyleToStyle[defaultStyle]
-    assert(style, "Floating:GetStyle: default style is invalid")
-    return style
-end
-
----@return MapPinEnhancedWayfinderFloatingEnhancedTemplate|MapPinEnhancedWayfinderFloatingBasicTemplate
+---@return MapPinEnhancedWayfinderFloatingTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
-    local style = self.style or GetStyle(Options:GetOptionValue(STYLE_OPTION))
-    self.style = style
-    if self.frames and self.frames[style] then return self.frames[style] end
-
-    local styleConfig = styles[style]
-    assert(styleConfig, "Floating:GetFrame: invalid style " .. tostring(style))
-    ---@type MapPinEnhancedWayfinderFloatingEnhancedTemplate|MapPinEnhancedWayfinderFloatingBasicTemplate
-    local frame = CreateFrame("Frame", styleConfig.name, nil, styleConfig.template)
-    self.frames = self.frames or {}
-    self.frames[style] = frame
-    return frame
-end
-
----@param savedStyle string
-function MapPinEnhancedWayfinderFloating:SetStyle(savedStyle)
-    local style = GetStyle(savedStyle)
-    if self.style == style then return end
-
-    local previousFrame = self.style and self.frames and self.frames[self.style]
-    if previousFrame then previousFrame:Hide() end
-    self.style = style
-    if self.runtimeEnabled and self.data then self:Init(self.data) end
+    if not self.frame then
+        self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", nil,
+            "MapPinEnhancedWayfinderFloatingTemplate")
+        self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.Floating.ShowBeam") == true)
+    end
+    return self.frame
 end
 
 ---@param title string
@@ -95,9 +46,6 @@ function MapPinEnhancedWayfinderFloating:SetTargetType(targetType)
     local frame = self:GetFrame()
     local normalizedTargetType = Wayfinders:GetTargetTypeOrDefault(targetType)
     frame.pin:SetStyleMode(Wayfinders:GetTargetStyleMode(normalizedTargetType))
-    if frame.SetTargetType then
-        frame:SetTargetType(normalizedTargetType)
-    end
 end
 
 ---@param lock boolean
@@ -105,10 +53,29 @@ function MapPinEnhancedWayfinderFloating:SetLock(lock)
     self:GetFrame().pin:SetLock(lock)
 end
 
+---@param step WayfinderStepData?
+function MapPinEnhancedWayfinderFloating:SetStep(step)
+    self.step = step
+    local frame = self:GetFrame()
+    frame:SetDestinationText(self.data and self.data.title, self.data and self.data.description)
+    local showDirection = step == nil or step.showDirection
+    local customDirection = false
+    if showDirection and self.data and self.data.mapDistanceOnly then
+        customDirection = not Providers:SetStepSuperTracking(self.data)
+    else
+        Providers:ClearStepSuperTracking()
+    end
+    frame:SetCustomDirectionEnabled(customDirection)
+    frame.content:SetShown(showDirection)
+end
+
 function MapPinEnhancedWayfinderFloating:Reset()
+    Providers:ClearStepSuperTracking()
     self.data = nil
-    if self.style and self.frames and self.frames[self.style] then
-        self.frames[self.style]:Hide()
+    self.step = nil
+    if self.frame then
+        self.frame:SetDestinationText(nil, nil)
+        self.frame:Hide()
     end
 end
 
@@ -119,16 +86,20 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
         return
     end
 
+    if not wayfinderData.mapDistanceOnly then Providers:ClearStepSuperTracking() end
     self.data = wayfinderData
     local frame = self:GetFrame()
     self:SetTargetType(wayfinderData.targetType)
+    if wayfinderData.pinStyleMode then
+        frame.pin:SetStyleMode(wayfinderData.pinStyleMode)
+    end
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
     if wayfinderData.texture then
         frame:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
     else
         frame:SetColor(wayfinderData.color)
     end
-    frame:SetTitle(wayfinderData.title)
+    frame:SetDestinationText(wayfinderData.title, wayfinderData.description)
     frame.pin:SetLock(wayfinderData.lock)
     frame:Show()
 end
@@ -164,35 +135,34 @@ function MapPinEnhancedWayfinderFloating:Enable()
     self.runtimeEnabled = true
     self:RestoreBlizzardForFloating()
     OverrideSuperTrackedAlphaState(true)
-    self.unsubscribeStyleOption = Options:SubscribeToOptionChanges(STYLE_OPTION, function(value)
-        self:SetStyle(value)
+    self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
+        if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
     if not self.runtimeEnabled then return end
+    Providers:ClearStepSuperTracking()
     self.runtimeEnabled = nil
-    if self.style and self.frames and self.frames[self.style] then
-        self.frames[self.style]:Hide()
+    if self.frame then
+        self.frame:SetDestinationText(nil, nil)
+        self.frame:Hide()
     end
     OverrideSuperTrackedAlphaState(false)
-    if self.unsubscribeStyleOption then
-        self.unsubscribeStyleOption()
-        self.unsubscribeStyleOption = nil
+    if self.unsubscribeBeamOption then
+        self.unsubscribeBeamOption()
+        self.unsubscribeBeamOption = nil
     end
 end
 
 if not Wayfinders.wayfinders then Wayfinders.wayfinders = {} end
 Wayfinders.wayfinders["WAYFINDER_FLOATING"] = MapPinEnhancedWayfinderFloating
 
----@type boolean?
-local configuredEnabled
-Options:SubscribeToOptionChanges(ENABLE_OPTION, function(value)
-    Options:SetOptionEnabled(HIDE_BLIZZARD_OPTION, not value)
-    if value then
-        Wayfinders:EnableWayfinder("WAYFINDER_FLOATING")
-    elseif configuredEnabled == nil and Options:GetOptionValue(HIDE_BLIZZARD_OPTION) then
-        MapPinEnhancedWayfinderFloating:HideBlizzardForSession()
+---@param title string
+---@param description string?
+function MapPinEnhancedWayfinderFloating:SetDestinationText(title, description)
+    if self.data then
+        self.data.title, self.data.description = title, description
     end
-    configuredEnabled = value
-end)
+    self:GetFrame():SetDestinationText(title, description)
+end

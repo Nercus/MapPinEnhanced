@@ -9,6 +9,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field needle MapPinEnhancedArrowNeedle
 
 ---@class MapPinEnhancedArrowTextContainer : Frame
+---@field description MapPinEnhancedWayfinderDescriptionTemplate
 ---@field title FontString
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
 
@@ -23,12 +24,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field needleRotation number | nil
 ---@field newNeedleRotation number | nil
 ---@field rotatePin boolean | nil
+---@field directionVisible boolean?
 ---@field displayType 'close' | 'far' | nil
 MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local MIN_NEEDLE_SCALE = 0.7
 local MAX_NEEDLE_SCALE = 1
 local MIN_NEEDLE_ALPHA = 0.5
@@ -69,6 +72,11 @@ local function BuildArrowSettingsMenuEntries()
             end,
         },
     }
+end
+
+---@return AnyMenuEntry[]
+local function BuildNavigationMenuEntries()
+    return Wayfinders:BuildNavigationMenuEntries()
 end
 
 ---@param color PinColor
@@ -198,11 +206,15 @@ function MapPinEnhancedWayfinderArrowMixin:OnMouseDown(mouseButton)
     for _, entry in ipairs(BuildArrowSettingsMenuEntries()) do
         table.insert(menu, entry)
     end
+    for _, entry in ipairs(BuildNavigationMenuEntries()) do
+        table.insert(menu, entry)
+    end
 
     MapPinEnhanced:GenerateMenu(self, menu)
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnLoad()
+    self.textContainer.description.mouseOwner = self
     self.title = self.textContainer.title
     self.readout = self.textContainer.readout
 
@@ -211,14 +223,37 @@ function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     self.pin:SetFrameLevel(frameLevel + 1)
     self.textContainer:SetFrameLevel(frameLevel + 2)
 
-    MapPinEnhanced:RegisterDraggableFrame(self, "floatingArrow", nil)
+    local position = self:GetParent()
+    assert(position, "Arrow:OnLoad requires its position owner")
+    MapPinEnhanced:RegisterDraggableFrame(position, "floatingArrow", self, InCombatLockdown)
+    MapPinEnhanced:RestoreFrame(position)
+    -- The position owner remains shown because it contains a secure action.
+    -- Only this unprotected display fades; forward dragging outside combat.
+    self:HookScript("OnMouseDown", function(_, button)
+        if not InCombatLockdown() then position:GetScript("OnMouseDown")(position, button) end
+    end)
+    self:HookScript("OnMouseUp", function(_, button)
+        if not InCombatLockdown() then position:GetScript("OnMouseUp")(position, button) end
+    end)
     self:HookScript("OnMouseDown", function(_, mouseButton)
         self:OnMouseDown(mouseButton)
     end)
     self.pin:SetTracked(true)
 end
 
+---@param visible boolean
+function MapPinEnhancedWayfinderArrowMixin:SetDirectionVisible(visible)
+    if self.directionVisible == visible then return end
+    self.directionVisible = visible
+    if not visible or not self:IsShown() then
+        self:OnHide()
+        return
+    end
+    self:OnShow()
+end
+
 function MapPinEnhancedWayfinderArrowMixin:OnShow()
+    if self.directionVisible == false then return end
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)

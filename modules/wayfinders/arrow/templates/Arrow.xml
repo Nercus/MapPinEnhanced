@@ -3,10 +3,10 @@
 
 
     <Include file="Arrow.lua" />
-    <Frame name="MapPinEnhancedWayfinderArrowTemplate" parent="UIParent" mixin="MapPinEnhancedWayfinderArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM" enableMouse="true">
+    <Frame name="MapPinEnhancedWayfinderArrowDisplayTemplate" mixin="MapPinEnhancedWayfinderArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM" enableMouse="true">
         <Size x="140" y="140" />
         <Anchors>
-            <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
+            <Anchor point="CENTER" />
         </Anchors>
         <Frames>
             <Frame parentKey="needleContainer">
@@ -54,6 +54,9 @@
                     </Layer>
                 </Layers>
                 <Frames>
+                    <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate">
+                        <Anchors><Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" /></Anchors>
+                    </Frame>
                     <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
                         <Anchors>
                             <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" />
@@ -79,5 +82,19 @@
             <OnHide method="OnHide" />
             <OnLoad method="OnLoad" />
         </Scripts>
+    </Frame>
+    <Frame name="MapPinEnhancedWayfinderArrowTemplate" parent="UIParent" virtual="true" frameStrata="MEDIUM" enableMouse="false">
+        <Size x="140" y="140" />
+        <Anchors>
+            <Anchor point="BOTTOMRIGHT" x="-500" y="500" />
+        </Anchors>
+        <Frames>
+            <Frame parentKey="display" inherits="MapPinEnhancedWayfinderArrowDisplayTemplate" />
+            <Frame parentKey="instruction" inherits="MapPinEnhancedWayfinderArrowInstructionTemplate">
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="CENTER" y="35" />
+                </Anchors>
+            </Frame>
+        </Frames>
     </Frame>
 </Ui>

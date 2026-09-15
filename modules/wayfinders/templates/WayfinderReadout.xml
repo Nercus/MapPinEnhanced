@@ -7,30 +7,16 @@
         <Size x="1" y="1" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="primaryText" inherits="GameFontNormalSmall" hidden="true">
+                <FontString parentKey="text" inherits="GameFontNormalSmall" hidden="true">
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
-                    <Animations>
-                        <AnimationGroup parentKey="fadeSlideIn" inherits="MapPinEnhancedAnimationFadeSlideUpIn" />
-                        <AnimationGroup parentKey="fadeSlideOut" inherits="MapPinEnhancedAnimationFadeSlideUpOut" />
-                    </Animations>
-                </FontString>
-                <FontString parentKey="secondaryText" inherits="GameFontNormalSmall" hidden="true">
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
-                    <Animations>
-                        <AnimationGroup parentKey="fadeSlideIn" inherits="MapPinEnhancedAnimationFadeSlideUpIn" />
-                        <AnimationGroup parentKey="fadeSlideOut" inherits="MapPinEnhancedAnimationFadeSlideUpOut" />
-                    </Animations>
                 </FontString>
             </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnShow method="OnShow" />
-            <OnHide method="OnHide" />
+            <OnShow method="UpdateText" />
         </Scripts>
     </Frame>
 </Ui>

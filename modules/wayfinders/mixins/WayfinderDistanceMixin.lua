@@ -1,12 +1,12 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Options = MapPinEnhanced:GetModule("Options")
-local READOUT_MODE_OPTION = "Wayfinder.General.ReadoutMode"
+local SHOW_ETA_OPTION = "Wayfinder.General.ShowETA"
 
 ---@class MapPinEnhancedWayfinderDistanceMixin
 ---@field distanceCallback fun(distance: number?, timeToTarget: number?)?
 ---@field distanceReadout MapPinEnhancedWayfinderReadoutTemplate?
----@field unsubscribeReadoutMode fun()?
+---@field unsubscribeShowETA fun()?
 ---@field lastDistanceText string?
 ---@field lastEtaText string?
 ---@field lastHasETA boolean?
@@ -22,14 +22,14 @@ end
 ---@param readout MapPinEnhancedWayfinderReadoutTemplate
 ---@param onDistance fun(distance: number?, timeToTarget: number?)
 function MapPinEnhancedWayfinderDistanceMixin:StartDistanceUpdates(readout, onDistance)
-    assert(readout and readout.SetValues and readout.SetMode,
+    assert(readout and readout.SetValues and readout.SetShowETA,
         "WayfinderDistance:StartDistanceUpdates: a readout is required")
     assert(type(onDistance) == "function", "WayfinderDistance:StartDistanceUpdates: onDistance must be a function")
     self:StopDistanceUpdates()
     self.distanceReadout = readout
     self:ResetDistanceReadout()
-    self.unsubscribeReadoutMode = Options:SubscribeToOptionChanges(READOUT_MODE_OPTION, function(mode)
-        readout:SetMode(mode --[[@as WayfinderReadoutMode]])
+    self.unsubscribeShowETA = Options:SubscribeToOptionChanges(SHOW_ETA_OPTION, function(showETA)
+        readout:SetShowETA(showETA == true)
     end)
     self.distanceCallback = function(distance, timeToTarget)
         local formattedDistance = ""
@@ -53,9 +53,9 @@ function MapPinEnhancedWayfinderDistanceMixin:StartDistanceUpdates(readout, onDi
 end
 
 function MapPinEnhancedWayfinderDistanceMixin:StopDistanceUpdates()
-    if self.unsubscribeReadoutMode then
-        self.unsubscribeReadoutMode()
-        self.unsubscribeReadoutMode = nil
+    if self.unsubscribeShowETA then
+        self.unsubscribeShowETA()
+        self.unsubscribeShowETA = nil
     end
     if self.distanceCallback then
         MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)

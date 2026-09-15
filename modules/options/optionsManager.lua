@@ -212,5 +212,7 @@ function Options:ScrollToOption(key)
         error("Option with key " .. key .. " not found")
     end
     assert(frame.ScrollToOption, "Option frame must have a ScrollToOption method")
+    if self.frame then self.frame.scrollFrame.Child.Wayfinder:RevealOption(key) end
+    for _, option in pairs(self.options) do option.searchHighlight:Hide() end
     frame:ScrollToOption()
 end

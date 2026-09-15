@@ -29,7 +29,7 @@ local lastNotifiedEta = nil
 local elapsedSinceUpdate = 0
 local throttleInterval = MIN_UPDATE_INTERVAL
 
----@type {mapID: number, x: number, y: number} | nil
+---@type {mapID: number, x: number, y: number, allowNavigationDistance: boolean} | nil
 local target = nil
 ---@type fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)[]
 local onUpdateCallbacks = {}
@@ -287,7 +287,7 @@ local function OnUpdate(_, elapsed)
     elapsedSinceUpdate = elapsedSinceUpdate + elapsed
     if elapsedSinceUpdate < throttleInterval then return end
     elapsedSinceUpdate = 0
-    SampleTargetDistance(true)
+    SampleTargetDistance(target.allowNavigationDistance)
 end
 
 --- Register a callback to be called when the distance to the target is updated
@@ -337,13 +337,19 @@ end
 ---@param mapID number
 ---@param x number
 ---@param y number
-function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y)
+---@param allowNavigationDistance boolean? Defaults to true.
+function MapPinEnhanced:EnableContinuousDistanceCheck(mapID, x, y, allowNavigationDistance)
     elapsedSinceUpdate = 0
-    target = { mapID = mapID, x = x, y = y }
+    target = {
+        mapID = mapID,
+        x = x,
+        y = y,
+        allowNavigationDistance = allowNavigationDistance ~= false,
+    }
     ResetDistanceSampleState()
 
     -- The super-tracked destination may still be changing. Seed from the explicit
-    -- map target, then prefer Blizzard navigation on the next sample.
+    -- map target before optionally preferring Blizzard navigation on later samples.
     SampleTargetDistance(false)
     throttleInterval = MIN_UPDATE_INTERVAL
 

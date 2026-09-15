@@ -1,0 +1,53 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="FloatingContent.lua" />
+
+    <Frame name="MapPinEnhancedWayfinderFloatingContentTemplate" virtual="true" mixin="MapPinEnhancedWayfinderFloatingContentMixin" hidden="true">
+        <Size x="50" y="50" />
+        <Frames>
+            <Frame parentKey="needle" inherits="MapPinEnhancedWayfinderFloatingNeedleTemplate">
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="visual" hidden="true">
+                <Size x="50" y="50" />
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+                <Frames>
+                    <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" frameStrata="MEDIUM" enableMouse="false">
+                        <Size x="30" y="30" />
+                        <KeyValues>
+                            <KeyValue key="hideShadow" value="true" type="boolean" />
+                            <KeyValue key="hideHighlight" value="true" type="boolean" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="CENTER" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="beam" inherits="MapPinEnhancedWayfinderFloatingBeamTemplate">
+                        <Anchors>
+                            <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pin" y="-10" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="title" inherits="MapPinEnhancedWayfinderFloatingTitleTemplate">
+                        <Anchors>
+                            <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pin" y="-5" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
+                        <Anchors>
+                            <Anchor point="CENTER" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

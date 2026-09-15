@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@class SuperTrackingEntry
@@ -172,13 +172,14 @@ function Providers:ToggleSuperTrackingEntry(expectedChangeNumber)
     changingSelection = true
     self:CancelSuperTrackingTargetRetries()
     if selectedEntry.tracked then
-        local owner, targetID, destinationChangeNumber = Wayfinders:GetActiveTargetState()
+        local owner, targetID, destinationChangeNumber = Navigation:GetActiveDestinationState()
         selectedEntry.tracked = false
         -- Retain before synchronous events. Clear the source while its temporary
         -- Step is still owned, then release the Step without restoring that source.
         untrack()
+        self:ClearStepSuperTracking(false)
         if owner == selectedEntry.source and targetID == selectedEntry.targetID then
-            Wayfinders:ClearTarget(owner, targetID, destinationChangeNumber)
+            Navigation:ClearDestination(owner, targetID, destinationChangeNumber)
         end
     else
         entry = nil
@@ -188,4 +189,26 @@ function Providers:ToggleSuperTrackingEntry(expectedChangeNumber)
     PublishEntry()
     -- Any automatic selection caused by clearing wins over the retained row.
     self:RefreshSuperTrackingSelection()
+end
+
+-- Stop tracking through the original source, never through Step arrival.
+---@return boolean
+function Providers:CanClearNavigationTracking()
+    local owner, targetID = Navigation:GetActiveDestinationState()
+    local pin = MapPinEnhanced:GetModule("Pins"):GetTrackedPin()
+    if owner == "addonPins" then return pin ~= nil and pin.pinID == targetID end
+    return entry ~= nil and entry.tracked and entry.canToggle and
+        entry.source == owner and entry.targetID == targetID
+end
+
+---@param expectedChangeNumber integer
+function Providers:ClearNavigationTracking(expectedChangeNumber)
+    local step = MapPinEnhanced:GetModule("Wayfinders"):GetStepSnapshot()
+    if not step or step.changeNumber ~= expectedChangeNumber or not self:CanClearNavigationTracking() then return end
+    local owner = Navigation:GetActiveDestinationState()
+    if owner == "addonPins" then
+        MapPinEnhanced:GetModule("Pins"):UntrackTrackedPin()
+    elseif entry then
+        self:ToggleSuperTrackingEntry(entry.changeNumber)
+    end
 end

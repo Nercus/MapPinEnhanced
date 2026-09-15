@@ -1,0 +1,101 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="WayfinderInstruction.lua" />
+    <Button name="MapPinEnhancedWayfinderActionButtonTemplate" virtual="true" inherits="SecureActionButtonTemplate" hidden="true" enableMouse="true">
+        <Size x="40" y="40" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Color r="0.13" g="0.17" b="0.22" a="1" />
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="3" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+                    </Anchors>
+                    <TexCoords left="0.07" right="0.93" top="0.07" bottom="0.93" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" enableMouse="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                </Anchors>
+            </Cooldown>
+        </Frames>
+        <HighlightTexture setAllPoints="true" alphaMode="ADD">
+            <Color r="1" g="1" b="1" a="0.12" />
+        </HighlightTexture>
+        <Scripts>
+            <OnEnter>self:GetParent():OnActionEnter(self)</OnEnter>
+            <OnLeave>self:GetParent():OnActionLeave()</OnLeave>
+        </Scripts>
+    </Button>
+    <Button name="MapPinEnhancedWayfinderActionBlockerTemplate" virtual="true" hidden="true" enableMouse="true">
+        <Size x="40" y="40" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Color r="0.075" g="0.09" b="0.11" a="1" />
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" desaturated="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="3" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+                    </Anchors>
+                    <TexCoords left="0.07" right="0.93" top="0.07" bottom="0.93" />
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" enableMouse="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                </Anchors>
+            </Cooldown>
+        </Frames>
+        <Scripts>
+            <OnEnter>self:GetParent():OnActionEnter(self)</OnEnter>
+            <OnLeave>self:GetParent():OnActionLeave()</OnLeave>
+        </Scripts>
+    </Button>
+    <Frame name="MapPinEnhancedWayfinderInstructionTemplate" virtual="true" mixin="MapPinEnhancedWayfinderInstructionMixin" enableMouse="false">
+        <Size x="280" y="140" />
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+    <Frame name="MapPinEnhancedWayfinderArrowInstructionTemplate" inherits="MapPinEnhancedWayfinderInstructionTemplate" virtual="true">
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="text" inherits="GameFontHighlight" justifyH="CENTER" justifyV="TOP">
+                    <Size x="252" y="0" />
+                    <Anchors>
+                        <Anchor point="TOP" y="-58" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOP" y="-15" />
+                </Anchors>
+            </Button>
+            <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
+                <Anchors>
+                    <Anchor point="TOP" y="-15" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+</Ui>

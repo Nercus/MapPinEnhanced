@@ -65,7 +65,7 @@ local function ReadScenarioText(targetID, data)
         end
     end
     if matches ~= 1 then description = nil end
-    if not description then
+    if not description and not Providers:IsStepSuperTracking() then
         local _, _, _, waypoint = Providers:GetSuperTrackingWaypoint(GetScenarioWaypoint)
         description = Providers:PlainDescription(waypoint, title)
     end
@@ -112,3 +112,17 @@ Providers:RegisterSuperTrackingProvider({
     events = { "SCENARIO_UPDATE", "SCENARIO_CRITERIA_UPDATE", "SCENARIO_POI_UPDATE",
         "SCENARIO_COMPLETED", "ZONE_CHANGED_NEW_AREA" },
 })
+
+-- Stage identity is independent of Blizzard's temporary UserWaypoint selection.
+-- Replacing a stage is a destination change, not a text refresh for the old route.
+MapPinEnhanced:RegisterEvent("SCENARIO_UPDATE", function()
+    if Providers:IsChangingSuperTrackingEntry() then return end
+    local Navigation = MapPinEnhanced:GetModule("Navigation")
+    local scenario = C_ScenarioInfo.GetScenarioInfo()
+    local step = C_ScenarioInfo.GetScenarioStepInfo()
+    if not scenario or not step then return end
+    local owner, targetID = Navigation:GetActiveDestinationState()
+    if owner ~= SOURCE or not Providers:IsStepSuperTracking() or targetID == GetScenarioTargetID() then return end
+    Providers:ClearStepSuperTracking()
+    Providers:RefreshSuperTrackingProvider(SOURCE)
+end)

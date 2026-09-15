@@ -151,8 +151,12 @@ local function ReadMapPinText(targetID, data)
     if pinType ~= Enum.SuperTrackingMapPinType.AreaPOI then
         -- A temporary Step has no original-source supertracking text. Keep its
         -- last attributable detail while independently refreshing the name.
-        local _, sourceText = C_SuperTrack.GetSuperTrackedItemName()
-        description = Providers:PlainDescription(sourceText, title) or data.description
+        if Providers:IsStepSuperTracking() then
+            description = data.description
+        else
+            local _, sourceText = C_SuperTrack.GetSuperTrackedItemName()
+            description = Providers:PlainDescription(sourceText, title) or data.description
+        end
     end
     return title, description, true
 end

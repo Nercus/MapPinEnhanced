@@ -9,13 +9,16 @@ local MapPinEnhanced = select(2, ...)
 ---@field ScrollBar MinimalScrollBar
 ---@field SetPanExtent fun(self: ScrollFrameTemplate, panExtent: number)
 
+---@class MapPinEnhancedOptionsScrollChild : Frame
+---@field Wayfinder MapPinEnhancedOptionCategoryWayfinderTemplate
+
 ---@class MapPinEnhancedOptionsScrollFrame : ScrollFrameTemplate
----@field Child Frame
+---@field Child MapPinEnhancedOptionsScrollChild
 
 ---@class MapPinEnhancedOptionsFrame : Frame
----@field layoutReady boolean?
 ---@field header MapPinEnhancedOptionsFrameHeader
 ---@field scrollFrame MapPinEnhancedOptionsScrollFrame
+---@field layoutReady boolean?
 MapPinEnhancedOptionsFrameMixin = {}
 
 ---@class Options
@@ -53,7 +56,10 @@ function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
     self.header.search:Setup({
         options = entries,
         onChange = function(option)
-            if not option then return end
+            if not option then
+                self.scrollFrame.Child.Wayfinder:RevealOption(nil)
+                return
+            end
             Options:ScrollToOption(option.value)
         end,
     })
@@ -84,6 +90,7 @@ end
 function MapPinEnhancedOptionsFrameMixin:OnShow()
     Options:RestorePendingReloadOptions()
     self:SetupOptionSearch()
+    self.scrollFrame.Child.Wayfinder:RefreshDisplay()
 end
 
 function MapPinEnhancedOptionsFrameMixin:UpdateLayout()

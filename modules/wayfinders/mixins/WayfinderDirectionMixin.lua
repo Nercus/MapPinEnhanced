@@ -6,13 +6,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field targetWorldY number?
 ---@field targetInstance number?
 ---@field lastDirectionSample number?
+---@field sampledWorldAngle number?
 MapPinEnhancedWayfinderDirectionMixin = {}
 
 local HBD = MapPinEnhanced.HBD
 local mathSin = math.sin
 local mathCos = math.cos
 local mathAtan2 = math.atan2
-local SAMPLE_INTERVAL = 0.1
+local WORLD_VECTOR_SAMPLE_INTERVAL = 0.1
 
 function MapPinEnhancedWayfinderDirectionMixin:SetTargetLocation(mapID, x, y)
     self.targetMapID = mapID
@@ -27,14 +28,20 @@ function MapPinEnhancedWayfinderDirectionMixin:SampleTargetAngle(elapsed)
     if not self.targetWorldX or not self.targetWorldY or not self.targetInstance then return nil end
 
     local now = GetTime()
-    if elapsed and self.lastDirectionSample and self.lastDirectionSample + SAMPLE_INTERVAL > now then return nil end
-    self.lastDirectionSample = now
+    local refreshWorldVector = not elapsed or not self.lastDirectionSample or
+        self.lastDirectionSample + WORLD_VECTOR_SAMPLE_INTERVAL <= now
+    if refreshWorldVector then
+        self.lastDirectionSample = now
+        local playerWorldX, playerWorldY, playerInstance = HBD:GetPlayerWorldPosition()
+        if not playerWorldX or not playerWorldY or playerInstance ~= self.targetInstance then
+            self.sampledWorldAngle = nil
+            return nil
+        end
+        self.sampledWorldAngle = HBD:GetWorldVector(playerInstance, playerWorldX, playerWorldY,
+            self.targetWorldX, self.targetWorldY)
+    end
 
-    local playerWorldX, playerWorldY, playerInstance = HBD:GetPlayerWorldPosition()
-    if not playerWorldX or not playerWorldY or playerInstance ~= self.targetInstance then return nil end
-
-    local worldAngle = HBD:GetWorldVector(playerInstance, playerWorldX, playerWorldY,
-        self.targetWorldX, self.targetWorldY)
+    local worldAngle = self.sampledWorldAngle
     local facing = GetPlayerFacing()
     if not worldAngle or not facing then return nil end
 
@@ -44,4 +51,5 @@ end
 
 function MapPinEnhancedWayfinderDirectionMixin:ResetDirectionSampling()
     self.lastDirectionSample = nil
+    self.sampledWorldAngle = nil
 end

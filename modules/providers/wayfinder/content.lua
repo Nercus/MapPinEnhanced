@@ -79,7 +79,7 @@ local function ReadContentText(targetID, data)
         available = available or text ~= nil
         description = Providers:PlainDescription(text, title)
     end
-    if not description and targetID == GetContentTargetID() then
+    if not description and not Providers:IsStepSuperTracking() and targetID == GetContentTargetID() then
         local _, text = C_SuperTrack.GetSuperTrackedItemName()
         if not issecretvalue(text) then
             available = available or text ~= nil

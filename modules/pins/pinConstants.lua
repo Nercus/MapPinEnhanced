@@ -4,6 +4,8 @@ local MapPinEnhanced = select(2, ...)
 ---@class Pins
 ---@field STYLE_MODE_PIN PinStyleMode
 ---@field STYLE_MODE_OUTLINE PinStyleMode
+---@field PIN_ICONS table<string|number, PinIcon>
+---@field PIN_COLORS_BY_NAME table<PinColor, ColorMixin>
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 
