@@ -148,8 +148,8 @@ L["Invalid or corrupted serialized data."] = "Invalid or corrupted serialized da
 L["No valid pins were found to import."] = "No valid pins were found to import."
 L["Imported %d pins; skipped %d invalid entries."] = "Imported %d pins; skipped %d invalid entries."
 L["Import failed."] = "Import failed."
-L["Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."] =
-"Warning: slash commands do not preserve custom icons or colors. /mappin also omits pin titles."
+L["Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."] =
+"Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."
 
 ------------------------------ Providers ------------------------------
 L["%s added hidden group \"%s\"."] = "%s added hidden group \"%s\"."
@@ -255,3 +255,7 @@ L["Wayfinder.Arrow.Enable_DESCRIPTION"] =
 L["Wayfinder.Arrow.RotatePin_LABEL"] = "Rotate Center Pin"
 L["Wayfinder.Arrow.RotatePin_DESCRIPTION"] =
 "Rotate the pin in the middle of the arrow toward the next waypoint."
+
+L["Description"] = "Description"
+L["This pin is no longer in this group."] = "This pin is no longer in this group."
+L["Apply"] = "Apply"

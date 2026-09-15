@@ -182,6 +182,7 @@ end
 ---@enum (key) CallbackEvent
 local CALLBACK_EVENTS = {
     PIN_UPDATED_TRACKING = { event = "PIN_UPDATED_TRACKING_%w+", pattern = true },
+    PIN_UPDATED_DESCRIPTION = { event = "PIN_UPDATED_DESCRIPTION_%w+", pattern = true },
     PIN_UPDATED_TITLE = { event = "PIN_UPDATED_TITLE_%w+", pattern = true },
     PIN_UPDATED_ICON = { event = "PIN_UPDATED_ICON_%w+", pattern = true },
     PIN_UPDATED_COLOR = { event = "PIN_UPDATED_COLOR_%w+", pattern = true },

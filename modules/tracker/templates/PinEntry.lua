@@ -25,6 +25,7 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     end
     local function titleCallback(_, title)
         self:SetTitle(title)
+        if GameTooltip:IsOwned(self) then self:ShowTooltip() end
     end
     local function colorCallback(_, color)
         self.pinFrame:SetColor(color)
@@ -36,12 +37,16 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     self.unsubscribePinCallbacks = MapPinEnhanced:RegisterKeyedCallbacks(pin.pinID, {
         PIN_UPDATED_TRACKING = trackingCallback,
         PIN_UPDATED_TITLE = titleCallback,
+        PIN_UPDATED_DESCRIPTION = function()
+            if GameTooltip:IsOwned(self) then self:ShowTooltip() end
+        end,
         PIN_UPDATED_COLOR = colorCallback,
         PIN_UPDATED_ICON = iconCallback,
     })
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:Reset()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
     if self.unsubscribePinCallbacks then
         self.unsubscribePinCallbacks()
         self.unsubscribePinCallbacks = nil

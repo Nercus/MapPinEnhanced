@@ -53,6 +53,7 @@ end
 ---@param group MapPinEnhancedGroupMixin?
 ---@param focusName boolean?
 function MapPinEnhancedGroupEditorMixin:SelectGroup(group, focusName)
+    if self.selectedGroup ~= group then Editor:CloseDescriptionEditor() end
     self.selectedGroup = group
     self.groupEditorSidebar:Refresh()
     self.groupEditorContent:SetGroup(group, focusName)
@@ -78,6 +79,7 @@ function MapPinEnhancedGroupEditorMixin:OnUpdate()
     if self.refreshPending and not groupEditorContentHasFocus and not self.draggedPinNode then
         self.refreshPending = nil
         if self.selectedGroup and not Groups:GetGroupByID(self.selectedGroup:GetGroupID()) then
+            Editor:CloseDescriptionEditor()
             self.selectedGroup = nil
         end
         self.groupEditorSidebar:Refresh()
@@ -174,6 +176,7 @@ function MapPinEnhancedGroupEditorMixin:ShowFrame()
 end
 
 function MapPinEnhancedGroupEditorMixin:OnHide()
+    Editor:CloseDescriptionEditor()
     MapPinEnhancedWindowMixin.OnHide(self)
     self:CancelPinDrag()
 end

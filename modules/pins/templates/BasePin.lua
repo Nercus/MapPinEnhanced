@@ -19,7 +19,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field lock Texture -- the lock texture that is shown when the pin is locked
 ---@field pulseHighlight MapPinEnhancedBasePinPulseHighlight
 ---@field pulseTimer FunctionContainer | nil
----@field tooltipData PinTooltip | nil
 ---@field pin MapPinEnhancedPinMixin | nil
 ---@field pinID UUID | nil
 ---@field standardColor ColorMixin
@@ -348,12 +347,7 @@ function MapPinEnhancedBasePinMixin:SetColor(color)
     self:SetIconTexture(nil)
 end
 
----@param tooltipData PinTooltip
-function MapPinEnhancedBasePinMixin:UpdateTooltip(tooltipData)
-    -- pinData.tooltip is a function that sets the tooltip for the pin
-    if not tooltipData then return end
-    self.tooltipData = tooltipData
-end
+
 
 function MapPinEnhancedBasePinMixin:SetLock(lock)
     self.lock:SetShown(lock)

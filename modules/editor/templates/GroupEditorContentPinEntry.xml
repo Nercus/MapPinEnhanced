@@ -125,6 +125,16 @@
                     </EditBox>
                 </Frames>
             </Frame>
+            <Button parentKey="descriptionButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="32" y="32" />
+                <KeyValues>
+                    <KeyValue key="icon" value="edit" />
+                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Description" />
+                </KeyValues>
+                <Anchors><Anchor point="RIGHT" x="-76" y="-1" /></Anchors>
+                <Scripts><OnClick>self:GetParent():EditDescription()</OnClick></Scripts>
+            </Button>
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="32" y="32" />
                 <KeyValues>

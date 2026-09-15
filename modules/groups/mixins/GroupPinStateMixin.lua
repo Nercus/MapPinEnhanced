@@ -20,6 +20,8 @@ local function GetSaveablePinData(pinData, pinID)
     local data = CopyTable(pinData)
     data.pinID = pinID or data.pinID or MapPinEnhanced:GenerateUUID("pin")
     data.setTracked = nil
+    data.description = MapPinEnhanced:NormalizeText(data.description)
+    rawset(data, "tooltip", nil)
     return data
 end
 

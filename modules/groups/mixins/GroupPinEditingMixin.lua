@@ -92,7 +92,6 @@ function MapPinEnhancedGroupPinEditingMixin:SetPinTitle(pinID, title)
     end
     return UpdateArchived(self, pinID, function(data)
         data.title = title
-        if data.tooltip then data.tooltip.title = title end
     end)
 end
 
@@ -107,5 +106,22 @@ function MapPinEnhancedGroupPinEditingMixin:SetPinLock(pinID, locked)
     end
     return UpdateArchived(self, pinID, function(data)
         data.lock = locked
+    end)
+end
+
+---@param pinID UUID
+---@param description string?
+---@return boolean
+function MapPinEnhancedGroupPinEditingMixin:SetPinDescription(pinID, description)
+    description = MapPinEnhanced:NormalizeText(description)
+    local pin = self:GetPinByID(pinID)
+    if pin then
+        pin:SetDescription(description)
+        return true
+    end
+    local archived = self:GetArchivedPinByID(pinID)
+    if archived and archived.data.description == description then return true end
+    return UpdateArchived(self, pinID, function(data)
+        data.description = description
     end)
 end

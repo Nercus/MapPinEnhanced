@@ -92,25 +92,14 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, groupWillPersist)
     end
 
 
-    if not self.pinData.tooltip then
-        ---@type string?
-        local source
-        local group = self.group
-        if group then
-            source = group:GetSource()
-            if source == MapPinEnhanced.name then
-                source = nil
-            end
-        end
-        self.pinData.tooltip = { title = self.pinData.title, text = source }
-    end
+    self.pinData.description = MapPinEnhanced:NormalizeText(self.pinData.description)
+    rawset(self.pinData, "tooltip", nil)
 
     if self.pinData.texture then
         self:SetIcon(self.pinData.texture, self.pinData.usesAtlas)
     else
         self:SetColor(self.pinData.color)
     end
-    self:SetTooltip(self.pinData.tooltip)
     self:SetTitle(self.pinData.title)
     self:SetLock(self.pinData.lock)
     self:UpdateGroupIcon()
@@ -197,6 +186,7 @@ function MapPinEnhancedPinMixin:Reset()
         self:Untrack()
     end
 
+    if GameTooltip:IsOwned(self.worldmapPin) or GameTooltip:IsOwned(self.minimapPin) then GameTooltip:Hide() end
     self.worldmapPin:HidePulse()
     self.minimapPin:HidePulse()
     self.worldmapPin.groupBadge:SetIcon(nil)

@@ -1,0 +1,24 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="DescriptionEditor.lua" />
+    <Frame name="MapPinEnhancedDescriptionEditorTemplate" inherits="MapPinEnhancedWindowTemplate"
+        mixin="MapPinEnhancedDescriptionEditorMixin" virtual="true" frameStrata="DIALOG" hidden="true">
+        <Size x="650" y="460" />
+        <Frames>
+            <ScrollFrame parentKey="input" inherits="MapPinEnhancedTextareaTemplate">
+                <Size x="600" y="320" />
+                <Anchors><Anchor point="TOPLEFT" x="25" y="-50" /></Anchors>
+            </ScrollFrame>
+            <Button inherits="MapPinEnhancedButtonTemplate" text="Apply">
+                <Size x="100" y="28" />
+                <Anchors><Anchor point="BOTTOMRIGHT" x="-135" y="20" /></Anchors>
+                <Scripts><OnClick>self:GetParent():Apply()</OnClick></Scripts>
+            </Button>
+            <Button inherits="MapPinEnhancedButtonTemplate" text="Cancel">
+                <Size x="100" y="28" />
+                <Anchors><Anchor point="BOTTOMRIGHT" x="-25" y="20" /></Anchors>
+                <Scripts><OnClick>self:GetParent():Hide()</OnClick></Scripts>
+            </Button>
+        </Frames>
+        <Scripts><OnLoad method="OnLoad" /><OnHide method="OnHide" /></Scripts>
+    </Frame>
+</Ui>

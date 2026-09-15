@@ -91,6 +91,7 @@ local function TransformPinDataToWayfinderData(pinData)
         x = pinData.x,
         y = pinData.y,
         title = pinData.title,
+        description = pinData.description,
         texture = pinData.texture,
         usesAtlas = pinData.usesAtlas,
         color = pinData.color,
@@ -140,6 +141,7 @@ local function SetupPinCallbacks(pinID)
 
     unsubscribePinCallbacks = MapPinEnhanced:RegisterKeyedCallbacks(pinID, {
         PIN_UPDATED_TITLE = onPinTitleUpdated,
+        PIN_UPDATED_DESCRIPTION = onPinTitleUpdated,
         PIN_UPDATED_COLOR = onPinColorUpdated,
         PIN_UPDATED_ICON = onPinIconUpdated,
         PIN_UPDATED_LOCK = onPinLockUpdated,

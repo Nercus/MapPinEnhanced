@@ -350,3 +350,8 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:GetDropPlacement()
     cursorY = cursorY / self:GetEffectiveScale()
     return cursorY >= self:GetTop() - self:GetHeight() / 2 and "before" or "after"
 end
+
+function MapPinEnhancedGroupEditorContentPinEntryMixin:EditDescription()
+    if not self.pinNode then return end
+    Editor:EditDescription(self.pinNode.group:GetGroupID(), self.pinNode.pinID)
+end

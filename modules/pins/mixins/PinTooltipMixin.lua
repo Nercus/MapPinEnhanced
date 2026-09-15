@@ -6,12 +6,18 @@ MapPinEnhancedPinTooltipMixin = {}
 
 local L = MapPinEnhanced.L
 
----@param tooltipInfo? PinTooltip
-function MapPinEnhancedPinTooltipMixin:SetTooltip(tooltipInfo)
-    self.pinData.tooltip = tooltipInfo
-    self.worldmapPin:UpdateTooltip(tooltipInfo)
-    self.minimapPin:UpdateTooltip(tooltipInfo)
+---@param description string?
+function MapPinEnhancedPinTooltipMixin:SetDescription(description)
+    description = MapPinEnhanced:NormalizeText(description)
+    if self.pinData.description == description then return end
+    self.pinData.description = description
     self:PersistPin()
+    for _, frame in ipairs({ self.worldmapPin, self.minimapPin }) do
+        if GameTooltip:IsOwned(frame) then self:ShowTooltip(frame) end
+    end
+    if not self.groupIsAddingPin then
+        MapPinEnhanced:FireCallback("PIN_UPDATED_DESCRIPTION", self.pinID, description)
+    end
 end
 
 ---@param owner Frame
@@ -20,9 +26,8 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     local pinData = self.pinData
     if not pinData then return end
 
-    local tooltipInfo = pinData.tooltip or {}
     GameTooltip:SetOwner(owner, anchor or "ANCHOR_TOPLEFT", 20)
-    GameTooltip:AddLine(tooltipInfo.title or pinData.title or L["Map Pin"], 1, 0.82, 0)
+    GameTooltip:AddLine(pinData.title or L["Map Pin"], 1, 0.82, 0)
 
     local mapInfo = C_Map.GetMapInfo(pinData.mapID)
     local mapName = mapInfo and mapInfo.name or tostring(pinData.mapID)
@@ -32,9 +37,7 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     local reached = group and group:GetReachedPinCount() or 0
     local total = group and group:GetTotalPinCount() or 1
 
-    if tooltipInfo.text and tooltipInfo.text ~= "" then
-        GameTooltip:AddLine(tooltipInfo.text, 0.85, 0.85, 0.85, true)
-    end
+    MapPinEnhanced:AddDescriptionToTooltip(pinData.description)
     GameTooltip:AddLine(string.format("%s %s", mapName, coordinates), 1, 1, 1)
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65)

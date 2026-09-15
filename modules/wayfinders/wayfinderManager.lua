@@ -35,6 +35,7 @@ local AVAILABLE_WAYFINDERS = {
 ---@field mapID number UIMapID of the zone
 ---@field x number x coordinate between 0 and 1
 ---@field y number y coordinate between 0 and 1
+---@field description string? original destination plain text
 ---@field title string? title of the target
 ---@field texture string|number? an optional texture to use for the target; this overrides the color
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
@@ -69,6 +70,7 @@ local function CopyWayfinderData(targetData)
         x = targetData.x,
         y = targetData.y,
         title = targetData.title,
+        description = targetData.description,
         texture = targetData.texture,
         usesAtlas = targetData.usesAtlas,
         color = targetData.color,

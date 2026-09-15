@@ -30,10 +30,6 @@ end
 ---@param title string
 function MapPinEnhancedPinUtilsMixin:SetTitle(title)
     self.pinData.title = title
-    if self.pinData.tooltip then
-        self.pinData.tooltip.title = title
-        self:SetTooltip(self.pinData.tooltip)
-    end
     self:PersistPin()
     if not self.groupIsAddingPin then
         MapPinEnhanced:FireCallback("PIN_UPDATED_TITLE", self.pinID, title)
