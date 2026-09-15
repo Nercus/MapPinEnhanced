@@ -14,12 +14,14 @@ local L = MapPinEnhanced.L
 ---@field superTrackingType Enum.SuperTrackingType
 ---@field getTargetID fun(): string
 ---@field refresh fun()
+---@field readText? fun(targetID: string, data: WayfinderData): string?, string?, boolean?
 ---@field events WowEvent[]?
 
 ---@class SuperTrackingFallbackProvider
 ---@field source string
 ---@field getTargetID fun(): string
 ---@field refresh fun()
+---@field readText? fun(targetID: string, data: WayfinderData): string?, string?, boolean?
 ---@field events WowEvent[]?
 
 local TARGET_RETRY_DELAYS = { 0.1, 0.25, 0.5, 1, 2 }
@@ -32,6 +34,14 @@ local providersBySource = {}
 local fallbackProvider
 ---@type table<WowEvent, table<string, boolean>>
 local sourceEventProviders = {}
+
+---@param text string?
+---@param title string?
+---@return string?
+function Providers:PlainDescription(text, title)
+    text = MapPinEnhanced:ToPlainText(text)
+    return text ~= title and text or nil
+end
 
 ---@class WaitingSuperTrackingTarget
 ---@field targetID string
@@ -299,6 +309,13 @@ function Providers:SetSuperTrackingWayfinderData(source, targetID, targetData, r
     CancelTargetRetry(source)
     CancelOtherTargetRetries(source)
     self:ClearSuperTrackingReport(targetID)
+    local provider = providersBySource[source]
+    if provider.readText then
+        local title, description, available = provider.readText(targetID, targetData)
+        if available then targetData.title, targetData.description = title, description end
+    end
+    targetData.title = self:PlainDescription(targetData.title) or L["Target"]
+    targetData.description = self:PlainDescription(targetData.description, targetData.title)
     targetData.targetType = Wayfinders.TARGET_TYPE_BLIZZARD
     return Wayfinders:SetTarget(source, targetID, targetData, removeTarget)
 end

@@ -42,6 +42,7 @@ local function RefreshVignette()
         x = x,
         y = y,
         title = vignetteInfo.name,
+        description = select(2, C_SuperTrack.GetSuperTrackedItemName()),
         texture = vignetteInfo.atlasName,
         usesAtlas = true,
     })

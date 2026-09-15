@@ -71,10 +71,11 @@ end
 ---@return string? title
 ---@return string|number? texture
 ---@return boolean? usesAtlas
+---@return string? description
 local function GetMapPinDisplayInfo(pinType, typeID, mapID)
     if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
         local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID) or C_AreaPoiInfo.GetAreaPOIInfo(nil, typeID)
-        return info and info.name, info and info.atlasName, true
+        return info and info.name, info and info.atlasName, true, info and info.description
     elseif pinType == Enum.SuperTrackingMapPinType.TaxiNode then
         for _, node in ipairs(C_TaxiMap.GetTaxiNodesForMap(mapID) or {}) do
             if node.nodeID == typeID then return node.name, node.atlasName, true end
@@ -137,6 +138,25 @@ local function ClearMapPin(_, targetID, changeNumber)
     C_SuperTrack.ClearSuperTrackedMapPin()
 end
 
+---@param targetID string
+---@param data WayfinderData
+---@return string?, string?, boolean?
+local function ReadMapPinText(targetID, data)
+    local typeText, idText = targetID:match("^mapPin:(%d+):(%d+)$")
+    local pinType, typeID = tonumber(typeText), tonumber(idText)
+    if not pinType or not typeID then return end
+    local title, _, _, description = GetMapPinDisplayInfo(pinType, typeID, data.mapID)
+    title = Providers:PlainDescription(title)
+    if not title or issecretvalue(description) then return end
+    if pinType ~= Enum.SuperTrackingMapPinType.AreaPOI then
+        -- A temporary Step has no original-source supertracking text. Keep its
+        -- last attributable detail while independently refreshing the name.
+        local _, sourceText = C_SuperTrack.GetSuperTrackedItemName()
+        description = Providers:PlainDescription(sourceText, title) or data.description
+    end
+    return title, description, true
+end
+
 local function RefreshMapPin()
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
     local targetID = GetMapPinTargetID()
@@ -159,13 +179,14 @@ local function RefreshMapPin()
         })
         return
     end
-    local title, texture, usesAtlas = GetMapPinDisplayInfo(pinType, typeID, mapID)
-    local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
+    local title, texture, usesAtlas, description = GetMapPinDisplayInfo(pinType, typeID, mapID)
+    local superTrackedName, superTrackedDescription = C_SuperTrack.GetSuperTrackedItemName()
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
         title = title or superTrackedName or waypointDescription,
+        description = description or superTrackedDescription or waypointDescription,
         texture = texture,
         usesAtlas = usesAtlas,
     }, ClearMapPin)
@@ -176,6 +197,7 @@ Providers:RegisterSuperTrackingProvider({
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetMapPinTargetID,
     refresh = RefreshMapPin,
+    readText = ReadMapPinText,
     events = { "NEIGHBORHOOD_MAP_DATA_UPDATED" },
 })
 

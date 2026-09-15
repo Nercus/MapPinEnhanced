@@ -51,6 +51,44 @@ local function GetContentWaypointForMap(trackableType, trackableID, mapID)
     return mapInfo.x, mapInfo.y, mapInfo.waypointText
 end
 
+---@param targetID string
+---@param data WayfinderData
+---@return string?, string?, boolean?
+local function ReadContentText(targetID, data)
+    local typeText, idText = targetID:match("^content:(%d+):(%d+)$")
+    local trackableType, trackableID = tonumber(typeText), tonumber(idText)
+    if not trackableType or not trackableID or not C_ContentTracking then return end
+    local title = Providers:PlainDescription(C_ContentTracking.GetTitle(trackableType, trackableID))
+    if not title then return end
+    ---@type string?
+    local description
+    local available = false
+    if C_ContentTracking.GetCurrentTrackingTarget and C_ContentTracking.GetObjectiveText then
+        local targetType, objectiveID = C_ContentTracking.GetCurrentTrackingTarget(trackableType, trackableID)
+        if issecretvalue(targetType) or issecretvalue(objectiveID) then return end
+        if targetType ~= nil and objectiveID ~= nil then
+            local text = C_ContentTracking.GetObjectiveText(targetType, objectiveID, false)
+            if issecretvalue(text) then return end
+            available = text ~= nil
+            description = Providers:PlainDescription(text, title)
+        end
+    end
+    if not description and C_ContentTracking.GetWaypointText then
+        local text = C_ContentTracking.GetWaypointText(trackableType, trackableID)
+        if issecretvalue(text) then return end
+        available = available or text ~= nil
+        description = Providers:PlainDescription(text, title)
+    end
+    if not description and targetID == GetContentTargetID() then
+        local _, text = C_SuperTrack.GetSuperTrackedItemName()
+        if not issecretvalue(text) then
+            available = available or text ~= nil
+            description = Providers:PlainDescription(text, title)
+        end
+    end
+    return title, description, available
+end
+
 local function RefreshContent()
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
     local targetID = GetContentTargetID()
@@ -79,7 +117,7 @@ local function RefreshContent()
     if not title and C_ContentTracking then title = C_ContentTracking.GetTitle(trackableType, trackableID) end
     local texture, usesAtlas = GetContentIcon(trackableType, trackableID)
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
-        mapID = mapID, x = x, y = y, title = title, texture = texture, usesAtlas = usesAtlas,
+        mapID = mapID, x = x, y = y, title = title, description = description, texture = texture, usesAtlas = usesAtlas,
     }, ClearContent)
 end
 
@@ -88,5 +126,6 @@ Providers:RegisterSuperTrackingProvider({
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetContentTargetID,
     refresh = RefreshContent,
+    readText = ReadContentText,
     events = { "CONTENT_TRACKING_UPDATE", "TRACKABLE_INFO_UPDATE", "TRACKING_TARGET_INFO_UPDATE" },
 })

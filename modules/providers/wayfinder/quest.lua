@@ -28,6 +28,34 @@ local questClassificationAtlas = {
 }
 
 ---@param questID number
+---@param questTitle string
+---@return string? description
+---@return boolean available
+local function GetQuestDescription(questID, questTitle)
+    local ready = C_QuestLog.ReadyForTurnIn(questID)
+    if issecretvalue(ready) then return nil, false end
+    if ready then return string.format(L["Turn in: %s"], questTitle), true end
+    local objectives = C_QuestLog.GetQuestObjectives(questID)
+    if not objectives then return nil, false end
+    ---@type string?
+    local completedText
+    -- Objective text already includes localized progress. Advance in quest-log
+    -- order when an objective finishes instead of retaining its completed counter.
+    for _, objective in ipairs(objectives) do
+        if issecretvalue(objective.text) or issecretvalue(objective.finished) then return nil, false end
+        local text = Providers:PlainDescription(objective.text, questTitle)
+        if text then
+            if not objective.finished then return text, true end
+            completedText = completedText or text
+        end
+    end
+    if completedText then return completedText, true end
+    local waypointText = C_QuestLog.GetNextWaypointText(questID)
+    if issecretvalue(waypointText) then return nil, false end
+    return Providers:PlainDescription(waypointText, questTitle), true
+end
+
+---@param questID number
 ---@param mapID number
 ---@return number? x
 ---@return number? y
@@ -69,23 +97,34 @@ local function RefreshQuest()
         return
     end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
-    questTitle = questTitle or superTrackedName or L["Quest"]
-    local waypointText = C_QuestLog.GetNextWaypointText(questID)
-    local title = questTitle
-    if C_QuestLog.ReadyForTurnIn(questID) then
-        title = string.format(L["Turn in: %s"], questTitle or tostring(questID))
-    elseif waypointText and waypointText ~= "" and questTitle and questTitle ~= "" then
-        title = string.format(L["%s — %s"], waypointText, questTitle)
-    end
+    questTitle = Providers:PlainDescription(questTitle) or Providers:PlainDescription(superTrackedName) or L["Quest"]
     local classification = C_QuestInfoSystem.GetQuestClassification(questID)
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
-        title = title,
+        title = questTitle,
+        description = GetQuestDescription(questID, questTitle),
         texture = questClassificationAtlas[classification] or "Navigation-Tracked-Icon",
         usesAtlas = true,
     })
+end
+
+local function OnQuestProgress()
+    Providers:RefreshSuperTrackingProvider(SOURCE)
+end
+
+---@param targetID string
+---@param data WayfinderData
+---@return string?, string?, boolean?
+local function ReadQuestText(targetID, data)
+    local questID = tonumber(targetID:match("^quest:(%d+)$"))
+    if not questID then return end
+    local title = Providers:PlainDescription(C_QuestLog.GetTitleForQuestID(questID)) or
+        Providers:PlainDescription(C_TaskQuest.GetQuestInfoByQuestID(questID))
+    if not title then return end
+    local description, available = GetQuestDescription(questID, title)
+    return title, description, available
 end
 
 ---@param questID number
@@ -93,7 +132,7 @@ end
 local function OnQuestDataLoadResult(questID, success)
     if not pendingQuestTitles[questID] then return end
     pendingQuestTitles[questID] = nil
-    if success and questID == C_SuperTrack.GetSuperTrackedQuestID() then
+    if success then
         Providers:RefreshSuperTrackingProvider(SOURCE)
     end
 end
@@ -103,6 +142,9 @@ Providers:RegisterSuperTrackingProvider({
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetQuestTargetID,
     refresh = RefreshQuest,
+    readText = ReadQuestText,
     events = { "QUEST_LOG_UPDATE", "QUEST_POI_UPDATE" },
 })
+MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", OnQuestProgress)
+MapPinEnhanced:RegisterEvent("QUEST_WATCH_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", OnQuestDataLoadResult)

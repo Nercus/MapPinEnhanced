@@ -46,6 +46,7 @@ local function RefreshFallbackTarget()
         x = x,
         y = y,
         title = name or description or L["Target"],
+        description = description,
         texture = "Navigation-Tracked-Icon",
         usesAtlas = true,
     })
