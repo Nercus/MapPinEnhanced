@@ -91,3 +91,12 @@ function MapPinEnhanced:SetFrameScale(frame, scale)
     assert(type(scale) == "number", "Scale must be a number")
     LibWindow.SetScale(frame, scale)
 end
+
+---WorldFrame center in UIParent coordinate units.
+---@return number x
+---@return number y
+function MapPinEnhanced:GetCenterScreenPoint()
+    local centerX, centerY = WorldFrame:GetCenter()
+    local scale = UIParent:GetEffectiveScale() or 1
+    return centerX / scale, centerY / scale
+end

@@ -12,17 +12,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field slider MinimalSliderTemplate
 MapPinEnhancedSliderMixin = {}
 
----@param value number
----@param step number
----@return string
-local function roundValueToPrecision(value, step)
-    if not step or step == 1 then
-        return tostring(math.floor(value))
-    end
-    local precision = math.max(0, -math.floor(math.log10(step)))
-    return string.format("%." .. precision .. "f", value)
-end
-
 function MapPinEnhancedSliderMixin:OnSizeChanged()
     local height = self:GetHeight()
     self.slider:SetHeight(height)
@@ -70,7 +59,7 @@ end
 function MapPinEnhancedSliderMixin:OnValueChanged(value)
     if value then
         local slider = self.slider
-        self.valueText:SetText(roundValueToPrecision(value, slider:GetValueStep()))
+        self.valueText:SetText(MapPinEnhanced:FormatValueToPrecision(value, slider:GetValueStep()))
     end
     if self.suppressOnChange then
         return

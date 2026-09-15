@@ -408,6 +408,14 @@ function MapPinEnhanced:FormatETA(time)
     return string.format("%02d:%02d", minutes, seconds)
 end
 
+---@param left { x: number, y: number }
+---@param right { x: number, y: number }
+---@return number
+function MapPinEnhanced:GetPointDistance(left, right)
+    local dx, dy = left.x - right.x, left.y - right.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
 MapPinEnhanced:OnLoad(function()
     Options:SubscribeToOptionChanges("General.Distance.ShowUnit", function()
         if lastDistance ~= nil then

@@ -14,32 +14,6 @@ local L = MapPinEnhanced.L
 ---@field Text FontString?
 MapPinEnhancedMultiselectMixin = {}
 
----@param value MapPinEnhancedMultiselectValue?
----@return MapPinEnhancedMultiselectValue
-local function CopySet(value)
-    ---@type MapPinEnhancedMultiselectValue
-    local result = {}
-    if type(value) ~= "table" then return result end
-    for key, selected in pairs(value) do
-        if selected then result[key] = true end
-    end
-    return result
-end
-
----@param left MapPinEnhancedMultiselectValue?
----@param right MapPinEnhancedMultiselectValue?
----@return boolean
-local function SetsEqual(left, right)
-    left, right = CopySet(left), CopySet(right)
-    for key in pairs(left) do
-        if not right[key] then return false end
-    end
-    for key in pairs(right) do
-        if not left[key] then return false end
-    end
-    return true
-end
-
 function MapPinEnhancedMultiselectMixin:OnLoad()
     WowStyle2DropdownMixin.OnLoad(self)
 end
@@ -55,19 +29,19 @@ end
 
 ---@param value MapPinEnhancedMultiselectValue?
 function MapPinEnhancedMultiselectMixin:SetValue(value)
-    self.selected = CopySet(value)
+    self.selected = MapPinEnhanced:CopySet(value)
     self:RefreshSelectedLabel()
 end
 
 ---@return MapPinEnhancedMultiselectValue
 function MapPinEnhancedMultiselectMixin:GetValue()
-    return CopySet(self.selected)
+    return MapPinEnhanced:CopySet(self.selected)
 end
 
 ---@param value MapPinEnhancedMultiselectValue?
 ---@return boolean
 function MapPinEnhancedMultiselectMixin:IsValueEqual(value)
-    return SetsEqual(self.selected, value)
+    return MapPinEnhanced:SetsEqual(self.selected, value)
 end
 
 ---@param options MapPinEnhancedMultiselectOption[]
@@ -77,7 +51,7 @@ function MapPinEnhancedMultiselectMixin:Setup(options, onChange)
     assert(type(onChange) == "function", "Multiselect onChange must be a function")
 
     self.options = options
-    self.selected = CopySet(self.selected)
+    self.selected = MapPinEnhanced:CopySet(self.selected)
     ---@type AnyMenuEntry[]
     local entries = {}
     for _, option in ipairs(options) do

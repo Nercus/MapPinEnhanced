@@ -7,7 +7,6 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local HBD = MapPinEnhanced.HBD
 local L = MapPinEnhanced.L
 local abs = math.abs
-local sqrt = math.sqrt
 
 local EPSILON = 0.000001
 local FULL_TWO_OPT_LIMIT = 150
@@ -35,24 +34,6 @@ local LIMITED_TWO_OPT_IMPROVEMENTS = 64
 ---@field y number
 ---@field originalIndex integer
 
----@param left MapPinEnhancedRouteNode
----@param right MapPinEnhancedRouteNode
----@return number
-local function Distance(left, right)
-    local dx, dy = left.x - right.x, left.y - right.y
-    return sqrt(dx * dx + dy * dy)
-end
-
----@param path MapPinEnhancedRouteNode[]
----@param first integer
----@param last integer
-local function Reverse(path, first, last)
-    while first < last do
-        path[first], path[last] = path[last], path[first]
-        first, last = first + 1, last - 1
-    end
-end
-
 ---@param nodes MapPinEnhancedRouteNode[]
 ---@return MapPinEnhancedRouteNode[]
 local function BuildNearestNeighbourPath(nodes)
@@ -71,7 +52,7 @@ local function BuildNearestNeighbourPath(nodes)
         local bestDistance
         for index = 2, #nodes do
             if not used[index] then
-                local distance = Distance(previous, nodes[index])
+                local distance = MapPinEnhanced:GetPointDistance(previous, nodes[index])
                 if not bestDistance or distance < bestDistance - EPSILON or
                     (abs(distance - bestDistance) <= EPSILON and
                         nodes[index].originalIndex < nodes[assert(bestIndex)].originalIndex) then
@@ -98,12 +79,12 @@ local function ImproveWithTwoOpt(path, maxImprovements)
             local before, oldFirst = path[first - 1], path[first]
             for last = first + 1, #path do
                 local oldLast = path[last]
-                local delta = Distance(before, oldLast) - Distance(before, oldFirst)
+                local delta = MapPinEnhanced:GetPointDistance(before, oldLast) - MapPinEnhanced:GetPointDistance(before, oldFirst)
                 if last < #path then
-                    delta = delta + Distance(oldFirst, path[last + 1]) - Distance(oldLast, path[last + 1])
+                    delta = delta + MapPinEnhanced:GetPointDistance(oldFirst, path[last + 1]) - MapPinEnhanced:GetPointDistance(oldLast, path[last + 1])
                 end
                 if delta < -EPSILON then
-                    Reverse(path, first, last)
+                    MapPinEnhanced:ReverseRange(path, first, last)
                     improvements = improvements + 1
                     improved = true
                     break
