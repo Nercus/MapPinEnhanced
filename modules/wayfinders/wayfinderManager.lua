@@ -279,6 +279,20 @@ function Wayfinders:CanRemoveActiveTargetOnArrival()
     return activeTarget ~= nil and not activeTarget.data.lock and activeTarget.onArrival ~= nil
 end
 
+---@param sampledDistance number
+---@return number?
+function Wayfinders:GetActiveTargetArrivalDistance(sampledDistance)
+    local data = activeTarget and activeTarget.data
+    if not data then return nil end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    if not mapID or not x or not y then return nil end
+    local mapDistance = MapPinEnhanced.HBD:GetZoneDistance(mapID, x, y, data.mapID, data.x, data.y)
+    if type(mapDistance) ~= "number" or mapDistance ~= mapDistance or mapDistance < 0 then return nil end
+    -- Native navigation can still describe another waypoint during a transition.
+    -- Arrival requires proximity to the owned target, not just that native guide.
+    return math.max(sampledDistance, mapDistance)
+end
+
 function Wayfinders:RemoveActiveTargetOnArrival()
     if not self:CanRemoveActiveTargetOnArrival() then return end
 

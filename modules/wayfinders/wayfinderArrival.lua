@@ -100,12 +100,18 @@ function Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, mov
         return
     end
 
+    local arrivalDistance = self:GetActiveTargetArrivalDistance(distance)
+    if not arrivalDistance then
+        self:ResetArrivalDetection()
+        return
+    end
+
     ---@type PinArrivalMode
     local mode = Options:GetOptionValue("General.Tracking.ArrivalMode")
     if mode == Options.ARRIVAL_MODE_STATIC then
-        self:UpdateStaticArrival(distance, movementState)
+        self:UpdateStaticArrival(arrivalDistance, movementState)
     else
-        self:UpdateDynamicArrival(distance, closingSpeed, nextUpdateInterval, movementState)
+        self:UpdateDynamicArrival(arrivalDistance, closingSpeed, nextUpdateInterval, movementState)
     end
 end
 
