@@ -341,6 +341,10 @@ local function GetCurrentPathInstruction(progression, graph)
     local pathType = graph.pathTypes[pathReference]
     local fromPointIndex = graph.pathFromPointIndexes[pathReference]
     local toPointIndex = graph.pathToPointIndexes[pathReference]
+    -- Portal wording names the action while progression still guides to its entrance.
+    if pathType == "portal" or pathType == "localportal" then
+        return Navigation:GetPathInstruction(pathType, graph.pointMapIDs[toPointIndex])
+    end
     if progression.phase == "approach" and fromPointIndex and
         not Navigation:IsMovementPath(pathType) then
         return string.format(L["Navigation Approach Method"], Navigation:GetPathMethod(pathType))
@@ -348,8 +352,13 @@ local function GetCurrentPathInstruction(progression, graph)
     if Navigation:IsMovementPath(pathType) then
         local nextPathReference = progression.route.pathReferences[pathIndex + 1]
         if nextPathReference then
+            local nextPathType = graph.pathTypes[nextPathReference]
+            if nextPathType == "portal" or nextPathType == "localportal" then
+                local portalDestinationIndex = graph.pathToPointIndexes[nextPathReference]
+                return Navigation:GetPathInstruction(nextPathType, graph.pointMapIDs[portalDestinationIndex])
+            end
             return string.format(L["Navigation Continue To Method"],
-                Navigation:GetPathMethod(graph.pathTypes[nextPathReference]))
+                Navigation:GetPathMethod(nextPathType))
         end
         local mapInfo = toPointIndex and C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(graph.pointMapIDs[toPointIndex])
         if mapInfo and type(mapInfo.name) == "string" and mapInfo.name ~= "" then
