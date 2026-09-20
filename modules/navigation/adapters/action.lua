@@ -6,6 +6,7 @@ local L = MapPinEnhanced.L
 
 local ACTION_TYPES = { "toy", "spell", "item" }
 local ACTION_PENALTY_SECONDS = 10
+local EQUIPMENT_CHANGE_PENALTY_SECONDS = 30
 
 ---@param startTime any
 ---@param duration any
@@ -167,16 +168,22 @@ local function RegisterAction(pathType, icon, method, instruction)
         local actionReady, actionFailure = IsActionReady(action.type, action.id)
         if not actionReady then return nil, actionFailure or "action cooldown unavailable" end
         local castSeconds = GetActionCastSeconds(action)
+        -- Equipment travel also requires swapping gear and waiting for its
+        -- equip cooldown. Keep that conservative estimate out of cast duration.
+        local equipmentPenalty = action.type == "item" and C_Item.IsEquippableItem(action.id) and
+            not C_Item.IsEquippedItem(action.id) and EQUIPMENT_CHANGE_PENALTY_SECONDS or 0
+        local penaltySeconds = ACTION_PENALTY_SECONDS + equipmentPenalty
         return {
             expectedSeconds = castSeconds,
             uncertaintySeconds = 0,
             -- Prefer ordinary movement for short trips without delaying action execution.
-            comparisonSeconds = castSeconds + ACTION_PENALTY_SECONDS,
+            comparisonSeconds = castSeconds + penaltySeconds,
             explanation = {
                 kind = "cast",
                 pathType = pathType,
                 seconds = castSeconds,
-                penaltySeconds = ACTION_PENALTY_SECONDS,
+                penaltySeconds = penaltySeconds,
+                equipmentChangeSeconds = equipmentPenalty,
             },
         }
     end
