@@ -2,13 +2,13 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Transfer
----@field importWindow MapPinEnhancedWindowTemplate?
+---@field importWindow MapPinEnhancedImportWindowTemplate?
 ---@field exportWindow MapPinEnhancedExportWindowTemplate?
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 local L = MapPinEnhanced.L
 
----@return MapPinEnhancedWindowTemplate
+---@return MapPinEnhancedImportWindowTemplate
 function Transfer:GetImportWindow()
     if not self.importWindow then
         self.importWindow = CreateFrame("Frame", "MapPinEnhancedImportWindow", UIParent,
@@ -28,8 +28,16 @@ function Transfer:GetExportWindow()
     return self.exportWindow
 end
 
-function Transfer:ShowImportWindow()
-    self:GetImportWindow():Show()
+---@param dataString string?
+function Transfer:ShowImportWindow(dataString)
+    local window = self:GetImportWindow()
+    if dataString then
+        window.dataString = dataString
+        window.textarea:SetValue(dataString)
+        window:PreparseImport(dataString)
+        window:UpdateImportButtonDisabledState()
+    end
+    window:Show()
 end
 
 function Transfer:HideImportWindow()

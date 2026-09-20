@@ -106,4 +106,9 @@ function Chomp.SetBPS(bps, burst) end
 ---@return string
 function Chomp.GetVersion() end
 
+---@param name string
+---@param realm string?
+---@return string
+function Chomp.NameMergedRealm(name, realm) end
+
 return Chomp

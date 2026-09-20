@@ -60,6 +60,7 @@ local function CopyImportedPins(savedGroup)
             usedPinIDs[newPinID] = true
         end
 
+        importedPinData.setTracked = nil
         importedPinData.pinID = newPinID
         if oldPinID then
             pinIDMap[oldPinID] = newPinID
@@ -82,7 +83,7 @@ end
 ---@param groupName string
 ---@return boolean
 function MapPinEnhancedImportWindowMixin:ImportToNewGroup(parsedData, dataType, groupName)
-    ---@type string?
+    ---@type string|number?
     local icon
     ---@type SaveablePinData[]|pinData[]?
     local pins
@@ -148,8 +149,20 @@ end
 ---@param pinData any
 ---@return boolean
 local function IsValidPinData(pinData)
-    return type(pinData) == "table" and type(pinData.mapID) == "number" and
-        type(pinData.x) == "number" and type(pinData.y) == "number"
+    if type(pinData) ~= "table" or type(pinData.mapID) ~= "number" or
+        pinData.mapID <= 0 or pinData.mapID >= math.huge or pinData.mapID ~= math.floor(pinData.mapID) or
+        type(pinData.x) ~= "number" or not (pinData.x >= 0 and pinData.x <= 1) or
+        type(pinData.y) ~= "number" or not (pinData.y >= 0 and pinData.y <= 1) then return false end
+    for _, key in ipairs({ "title", "description", "color", "pinID" }) do
+        if pinData[key] ~= nil and type(pinData[key]) ~= "string" then return false end
+    end
+    for _, key in ipairs({ "usesAtlas", "lock" }) do
+        if pinData[key] ~= nil and type(pinData[key]) ~= "boolean" then return false end
+    end
+    ---@type any
+    local texture = pinData.texture
+    return texture == nil or type(texture) == "string" or
+        (type(texture) == "number" and texture > 0 and texture < math.huge)
 end
 
 ---@param formatName string
@@ -196,9 +209,8 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
 
     if MapPinEnhanced:IsSerializedData(dataString) then
         formatName = L["Serialized data"]
-        ---@type SerializedExport
-        local export = MapPinEnhanced:DeserializeData(dataString)
-        if type(export) ~= "table" or export.version ~= MapPinEnhanced.EXPORT_VERSION or
+        local ok, export = pcall(MapPinEnhanced.DeserializeData, MapPinEnhanced, dataString)
+        if not ok or type(export) ~= "table" or export.version ~= MapPinEnhanced.EXPORT_VERSION or
             type(export.group) ~= "table" then
             self.summary:SetTextColor(1, 0.2, 0.2)
             self.summary:SetText(L["Invalid or corrupted serialized data."])
@@ -223,8 +235,27 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
                 self.invalidPinCount = self.invalidPinCount + 1
             end
         end
-        savedGroup = CopyTable(savedGroup)
-        savedGroup.pins = pins
+        -- Accept only portable metadata. Never carry remote ownership or live
+        -- tracking flags into the group created by the import action.
+        ---@type table<UUID, number>
+        local pinOrder = {}
+        if type(savedGroup.pinOrder) == "table" then
+            for pinID, order in pairs(savedGroup.pinOrder) do
+                if type(pinID) == "string" and type(order) == "number" and
+                    order > -math.huge and order < math.huge then pinOrder[pinID] = order end
+            end
+        end
+        local icon = savedGroup.icon
+        if type(icon) ~= "string" and
+            not (type(icon) == "number" and icon > 0 and icon < math.huge) then icon = nil end
+        savedGroup = {
+            name = type(savedGroup.name) == "string" and savedGroup.name or nil,
+            icon = icon,
+            trackingMode = (savedGroup.trackingMode == Groups.TRACKING_MODE_ORDERED or
+                savedGroup.trackingMode == Groups.TRACKING_MODE_NEAREST) and savedGroup.trackingMode or nil,
+            pinOrder = pinOrder,
+            pins = pins,
+        }
         if Groups:IsValidGroupName(savedGroup.name) and not Groups:GetGroupByName(savedGroup.name) then
             self.groupName = savedGroup.name
         else

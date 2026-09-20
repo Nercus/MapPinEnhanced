@@ -15,20 +15,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field output string
 MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
----@alias ExportTarget MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
----@class SerializedExport
----@field version integer
----@field group SerializedExportGroup
-
----@class SerializedExportGroup
----@field name string?
----@field icon string|number?
----@field trackingMode GroupTrackingMode?
----@field pinOrder table<UUID, number>
----@field pins pinData[]
-
 local L = MapPinEnhanced.L
-local Groups = MapPinEnhanced:GetModule("Groups")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 local exportOptions = {
     { label = L["Serialized data"], value = "serialized" },
@@ -42,20 +30,6 @@ local prefixOptions = {
     { label = "/mph",                                                                                   value = "/mph" },
     { label = "/mappin " .. "|T" .. MapPinEnhanced.assetsPath .. "\\shared\\WoWLogo.png" .. ":14:14|t", value = "/mappin" },
 }
-
----@param pinData SaveablePinData | pinData
----@param keepPinID boolean?
----@return pinData
-local function CleanPinData(pinData, keepPinID)
-    ---@type SaveablePinData | pinData
-    local cleanPinData = CopyTable(pinData)
-    if not keepPinID then
-        cleanPinData.pinID = nil
-    end
-    cleanPinData.setTracked = nil
-    ---@cast cleanPinData pinData
-    return cleanPinData
-end
 
 local function AddPin(pins, pin)
     local pinData = pin.GetPinData and pin:GetPinData() or pin
@@ -76,61 +50,6 @@ local function GetPins(target)
     return pins
 end
 
----@param group MapPinEnhancedGroupMixin
----@return string?
-local function GetExportedGroupName(group)
-    if group:IsProtected() then return nil end
-    return group:GetName()
-end
-
----@return SerializedExport
-function MapPinEnhancedExportWindowMixin:GetSerializedTarget()
-    local target = self.exportTarget
-    assert(target, "MapPinEnhancedExportWindowMixin:GetSerializedTarget: exportTarget is nil")
-
-    if target.classification == "pin" then
-        local group = target.group
-        assert(group, "MapPinEnhancedExportWindowMixin:GetSerializedTarget: pin has no group")
-        return {
-            version = MapPinEnhanced.EXPORT_VERSION,
-            group = {
-                name = GetExportedGroupName(group),
-                icon = group:GetIcon(),
-                trackingMode = group:GetTrackingMode(),
-                pinOrder = {},
-                pins = { CleanPinData(target:GetPinData()) },
-            },
-        }
-    end
-
-    ---@type table<string, any>
-    local exportGroup = CopyTable(target:GetSaveableData())
-    exportGroup["source"] = nil
-    exportGroup["hidden"] = nil
-    exportGroup["groupType"] = nil
-    exportGroup["pinArchive"] = nil
-    exportGroup["groupID"] = nil
-    exportGroup["name"] = GetExportedGroupName(target)
-    exportGroup["trackingMode"] = target:GetTrackingMode()
-    exportGroup["pinOrder"] = exportGroup["pinOrder"] or {}
-    ---@cast exportGroup SerializedExportGroup
-
-    for pinID, archivedPin in target:EnumerateArchivedPins() do
-        exportGroup["pinOrder"][pinID] = archivedPin.order or GetTime()
-    end
-
-    ---@type pinData[]
-    local cleanedPins = {}
-    for _, pinData in ipairs(target:GetAllPinData()) do
-        table.insert(cleanedPins, CleanPinData(pinData, true))
-    end
-    exportGroup.pins = cleanedPins
-    return {
-        version = MapPinEnhanced.EXPORT_VERSION,
-        group = exportGroup,
-    }
-end
-
 ---@param pins pinData[]
 function MapPinEnhancedExportWindowMixin:UpdateSummary(pins)
     ---@type table<number, boolean>
@@ -147,7 +66,7 @@ function MapPinEnhancedExportWindowMixin:UpdateOutput()
     ---@type string
     local output
     if self.selectedExportType == "serialized" then
-        output = MapPinEnhanced:SerializeData(self:GetSerializedTarget())
+        output = MapPinEnhanced:SerializeData(Transfer:GetSerializedTarget(self.exportTarget))
     else
         local lines = {}
         for _, pinData in ipairs(pins) do

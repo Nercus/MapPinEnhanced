@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field actionButtons Frame | { restoreButton: MapPinEnhancedIconButtonTemplate, clearButton: MapPinEnhancedIconButtonTemplate, fadeIn: MapPinEnhancedAnimationVisibilityMixin, fadeOut: MapPinEnhancedAnimationVisibilityMixin }
 MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
+local Providers = MapPinEnhanced:GetModule("Providers")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@type { EditGroup: fun(self: table, group: MapPinEnhancedGroupMixin) }
@@ -268,6 +269,22 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddEditGroupMenuAction(menu)
     })
 end
 
+function MapPinEnhancedTrackerGroupEntryMixin:AddTransferMenuActions(menu)
+    local group = self.group
+    if group:GetTotalPinCount() > 0 then
+        table.insert(menu, {
+            type = "button",
+            label = MapPinEnhanced:Iconize("export", L["Share to Chat"]),
+            onClick = function() Providers:ShareGroupToChat(group) end,
+        })
+        table.insert(menu, {
+            type = "button",
+            label = MapPinEnhanced:Iconize("export", MapPinEnhanced.L["Export"]),
+            onClick = function() Transfer:ShowExportWindow(group) end,
+        })
+    end
+end
+
 function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
     local menu = {}
     local group = self.group
@@ -288,13 +305,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
         })
     end
 
-    if group:GetTotalPinCount() > 0 then
-        table.insert(menu, {
-            type = "button",
-            label = MapPinEnhanced:Iconize("export", MapPinEnhanced.L["Export"]),
-            onClick = function() Transfer:ShowExportWindow(group) end,
-        })
-    end
+    self:AddTransferMenuActions(menu)
 
     table.insert(menu, {
         type = "divider",
@@ -310,6 +321,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     local menu = {}
 
     if group:IsHidden() then
+        self:AddTransferMenuActions(menu)
         self:AddRenameMenuHeader(menu)
         self:AddEditGroupMenuAction(menu)
         table.insert(menu, {
@@ -349,13 +361,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         })
     end
 
-    if group:GetTotalPinCount() > 0 then
-        table.insert(menu, {
-            type = "button",
-            label = MapPinEnhanced:Iconize("export", MapPinEnhanced.L["Export"]),
-            onClick = function() Transfer:ShowExportWindow(group) end,
-        })
-    end
+    self:AddTransferMenuActions(menu)
 
 
     self:AddDeleteOrClearMenuAction(menu)
@@ -366,6 +372,10 @@ end
 function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
     assert(self.treeNode, "TreeNode is not set for MapPinEnhancedTrackerGroupEntryMixin")
     if button == "LeftButton" then
+        if IsShiftKeyDown() then
+            Providers:ShareGroupToChat(self.group)
+            return
+        end
         if self.group:IsHidden() then
             self.group:ShowGroup()
             return
