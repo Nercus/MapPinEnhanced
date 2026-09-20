@@ -24,8 +24,11 @@ function MapPinEnhancedNavigationStepMixin:SetStep(step)
     self:SetDestinationText(target and target.title)
     if target then
         self.pinFrame:SetStyleMode("outline")
-        if target.texture then self.pinFrame:SetIconTexture(target.texture, target.usesAtlas)
-        else self.pinFrame:SetColor(target.color) end
+        if target.texture then
+            self.pinFrame:SetIconTexture(target.texture, target.usesAtlas)
+        else
+            self.pinFrame:SetColor(target.color)
+        end
     end
     if not InCombatLockdown() then
         local action = step and step.showInstruction ~= false and step.desiredAction

@@ -60,15 +60,27 @@ function MapPinEnhancedSuperTrackedEntryMixin:ShowMenu()
     if not self.entry then return end
     local changeNumber = self.entry.changeNumber
     MapPinEnhanced:GenerateMenu(self, {
-        { type = "button", label = L["Remove"], onClick = function()
-            Providers:RemoveSuperTrackingEntry(changeNumber)
-        end },
-        { type = "button", label = L["Convert to Pin"], onClick = function()
-            Providers:ConvertSuperTrackingEntryToPin(changeNumber)
-        end },
-        { type = "button", label = L["Share as Pin"], onClick = function()
-            Providers:ShareSuperTrackingEntry(changeNumber)
-        end },
+        {
+            type = "button",
+            label = L["Remove"],
+            onClick = function()
+                Providers:RemoveSuperTrackingEntry(changeNumber)
+            end
+        },
+        {
+            type = "button",
+            label = L["Convert to Pin"],
+            onClick = function()
+                Providers:ConvertSuperTrackingEntryToPin(changeNumber)
+            end
+        },
+        {
+            type = "button",
+            label = L["Share as Pin"],
+            onClick = function()
+                Providers:ShareSuperTrackingEntry(changeNumber)
+            end
+        },
     })
 end
 

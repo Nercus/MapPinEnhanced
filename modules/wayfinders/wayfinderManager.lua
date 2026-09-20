@@ -224,9 +224,10 @@ local function ApplyActiveTarget(targetData, onArrival, arrivalIdentity)
     if sameArrival and previous then onArrival = previous.onArrival end
     activeTarget = data and { data = data, onArrival = onArrival, arrivalIdentity = arrivalIdentity } or nil
     local refreshTarget = not sameGeometry or not sameArrival
-    local refreshDisplay = refreshTarget or old and data and (old.title ~= data.title or old.description ~= data.description or
-        old.texture ~= data.texture or old.usesAtlas ~= data.usesAtlas or old.color ~= data.color or
-        old.targetType ~= data.targetType or old.pinStyleMode ~= data.pinStyleMode)
+    local refreshDisplay = refreshTarget or
+        old and data and (old.title ~= data.title or old.description ~= data.description or
+            old.texture ~= data.texture or old.usesAtlas ~= data.usesAtlas or old.color ~= data.color or
+            old.targetType ~= data.targetType or old.pinStyleMode ~= data.pinStyleMode)
     if refreshTarget then Wayfinders:ResetArrivalDetection() end
     if refreshDisplay and Wayfinders.activeWayfinder then Wayfinders.activeWayfinder:Init(data) end
     if not refreshTarget then return end

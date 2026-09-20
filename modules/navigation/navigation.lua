@@ -659,7 +659,9 @@ function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _ne
     if distance - progression.closestDistance < 50 then return end
     local now = GetTime()
     if progression.lastDeviationCalculationAt and
-        now - progression.lastDeviationCalculationAt < DEVIATION_RECALCULATION_COOLDOWN then return end
+        now - progression.lastDeviationCalculationAt < DEVIATION_RECALCULATION_COOLDOWN then
+        return
+    end
     progression.movingAwayStartedAt = nil
     progression.lastDeviationCalculationAt = now
     self:StartCalculation(false)
@@ -818,6 +820,7 @@ function Navigation:ApplyStepPresentation(target, onArrival, info)
     step.info = info
     Wayfinders:ApplyPresentation(step.target, onArrival, step.info)
 end
+
 local layerRoute ---@type NavigationRoute?
 local layerPathIndex ---@type integer?
 local layerPhase ---@type string?
@@ -852,8 +855,11 @@ function Navigation:ReleaseRouteLayers(isWorldMap)
         for index = #step.mapEntries, 1, -1 do
             local entry = step.mapEntries[index]
             if isWorldMap == nil or entry.isWorldMap == isWorldMap then
-                if entry.isWorldMap then HBDP:RemoveWorldMapIcon(MapPinEnhanced, entry.frame)
-                else HBDP:RemoveMinimapIcon(MapPinEnhanced, entry.frame) end
+                if entry.isWorldMap then
+                    HBDP:RemoveWorldMapIcon(MapPinEnhanced, entry.frame)
+                else
+                    HBDP:RemoveMinimapIcon(MapPinEnhanced, entry.frame)
+                end
                 entry.frame:Reset()
                 if pool then pool:Release(entry.frame) end
                 table.remove(step.mapEntries, index)
@@ -920,8 +926,11 @@ local function ReleaseRouteMapFrame(frame)
     if not step then return end
     for index, entry in ipairs(step.mapEntries) do
         if entry.frame == frame then
-            if entry.isWorldMap then HBDP:RemoveWorldMapIcon(MapPinEnhanced, frame)
-            else HBDP:RemoveMinimapIcon(MapPinEnhanced, frame) end
+            if entry.isWorldMap then
+                HBDP:RemoveWorldMapIcon(MapPinEnhanced, frame)
+            else
+                HBDP:RemoveMinimapIcon(MapPinEnhanced, frame)
+            end
             frame:Reset()
             Navigation:GetRouteMapFramePool():Release(frame)
             table.remove(step.mapEntries, index)

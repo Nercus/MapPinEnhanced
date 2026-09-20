@@ -81,7 +81,9 @@ local function OnUserWaypointUpdated()
         local expectedPinID = trackedPinID
         C_Timer.After(0, function()
             if trackedPinID ~= expectedPinID or placedUserWaypoint ~= expectedWaypoint or
-                Providers:IsStepSuperTracking() then return end
+                Providers:IsStepSuperTracking() then
+                return
+            end
             local waypoint = C_Map.GetUserWaypoint()
             if waypoint and expectedWaypoint and waypoint.uiMapID == expectedWaypoint.uiMapID and
                 math.abs(waypoint.position.x - expectedWaypoint.position.x) <= coordinateTolerance and

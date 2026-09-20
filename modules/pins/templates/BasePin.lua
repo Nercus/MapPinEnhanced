@@ -347,8 +347,6 @@ function MapPinEnhancedBasePinMixin:SetColor(color)
     self:SetIconTexture(nil)
 end
 
-
-
 function MapPinEnhancedBasePinMixin:SetLock(lock)
     self.lock:SetShown(lock)
 end

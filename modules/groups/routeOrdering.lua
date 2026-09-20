@@ -79,9 +79,11 @@ local function ImproveWithTwoOpt(path, maxImprovements)
             local before, oldFirst = path[first - 1], path[first]
             for last = first + 1, #path do
                 local oldLast = path[last]
-                local delta = MapPinEnhanced:GetPointDistance(before, oldLast) - MapPinEnhanced:GetPointDistance(before, oldFirst)
+                local delta = MapPinEnhanced:GetPointDistance(before, oldLast) -
+                    MapPinEnhanced:GetPointDistance(before, oldFirst)
                 if last < #path then
-                    delta = delta + MapPinEnhanced:GetPointDistance(oldFirst, path[last + 1]) - MapPinEnhanced:GetPointDistance(oldLast, path[last + 1])
+                    delta = delta + MapPinEnhanced:GetPointDistance(oldFirst, path[last + 1]) -
+                        MapPinEnhanced:GetPointDistance(oldLast, path[last + 1])
                 end
                 if delta < -EPSILON then
                     MapPinEnhanced:ReverseRange(path, first, last)

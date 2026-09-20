@@ -26,8 +26,12 @@ end
 ---@return table?
 local function GetPoint(graph, index)
     if not index then return nil end
-    return { id = graph.pointIDs[index], mapID = graph.pointMapIDs[index],
-        x = graph.pointXs[index], y = graph.pointYs[index] }
+    return {
+        id = graph.pointIDs[index],
+        mapID = graph.pointMapIDs[index],
+        x = graph.pointXs[index],
+        y = graph.pointYs[index]
+    }
 end
 
 local function ShowNavigationDump()
@@ -36,38 +40,67 @@ local function ShowNavigationDump()
         lines[#lines + 1] = label .. ": " .. FormatValue(value)
     end
     local version, build, buildDate, interfaceVersion = GetBuildInfo()
-    Add("Environment", { addon = C_AddOns.GetAddOnMetadata(MapPinEnhanced.name, "Version"),
-        version = version, build = build, buildDate = buildDate, interfaceVersion = interfaceVersion,
-        locale = GetLocale(), combat = InCombatLockdown(), faction = UnitFactionGroup("player") })
+    Add("Environment", {
+        addon = C_AddOns.GetAddOnMetadata(MapPinEnhanced.name, "Version"),
+        version = version,
+        build = build,
+        buildDate = buildDate,
+        interfaceVersion = interfaceVersion,
+        locale = GetLocale(),
+        combat = InCombatLockdown(),
+        faction = UnitFactionGroup("player")
+    })
     local playerX, playerY, playerMapID = MapPinEnhanced.HBD:GetPlayerZonePosition()
-    Add("Player", { mapID = playerMapID, x = playerX, y = playerY,
-        mapArtID = playerMapID and C_Map.GetMapArtID(playerMapID) })
+    Add("Player", {
+        mapID = playerMapID,
+        x = playerX,
+        y = playerY,
+        mapArtID = playerMapID and C_Map.GetMapArtID(playerMapID)
+    })
     local destination = Navigation.activeDestination
-    Add("Destination", destination and { owner = destination.owner, id = destination.destinationID,
-        changeNumber = destination.changeNumber, data = destination.data })
+    Add("Destination", destination and {
+        owner = destination.owner,
+        id = destination.destinationID,
+        changeNumber = destination.changeNumber,
+        data = destination.data
+    })
     Add("Navigation enabled", Navigation.routeNavigationEnabled)
     Add("Step", Wayfinders:GetStepSnapshot())
     Add("Action display", Wayfinders:GetActionDebugText())
     Add("Calculation active", Navigation.activeCalculation ~= nil)
     local job = Navigation.activeCalculation
     local completedRoute = Navigation.progression and Navigation.progression.route
-    Add("Calculation work", job and { elapsedSeconds = GetTimePreciseSec() - job.startedAt,
-        slices = job.calculationSlices, movementCandidates = job.movementCandidates, queuedPoints = #job.heap } or
-        completedRoute and { elapsedSeconds = completedRoute.calculationSeconds,
-            slices = completedRoute.calculationSlices, movementCandidates = completedRoute.movementCandidates })
+    Add("Calculation work", job and {
+            elapsedSeconds = GetTimePreciseSec() - job.startedAt,
+            slices = job.calculationSlices,
+            movementCandidates = job.movementCandidates,
+            queuedPoints = #job.heap
+        } or
+        completedRoute and {
+            elapsedSeconds = completedRoute.calculationSeconds,
+            slices = completedRoute.calculationSlices,
+            movementCandidates = completedRoute.movementCandidates
+        })
     Add("Last calculation failure", Navigation.lastCalculationFailure)
     Add("Last calculation exclusions", Navigation.lastCalculationExclusions)
     Add("Avoided paths", Navigation.avoidedPaths)
     Add("Movement now", Navigation:GetMovementCapabilities())
 
     local waypoint = C_Map.GetUserWaypoint()
-    Add("Blizzard user waypoint", waypoint and { mapID = waypoint.uiMapID,
-        x = waypoint.position.x, y = waypoint.position.y })
+    Add("Blizzard user waypoint", waypoint and {
+        mapID = waypoint.uiMapID,
+        x = waypoint.position.x,
+        y = waypoint.position.y
+    })
     Add("Blizzard tracking type", C_SuperTrack.GetHighestPrioritySuperTrackingType())
     if playerMapID then
         local x, y, description = C_SuperTrack.GetNextWaypointForMap(playerMapID)
-        Add("Blizzard next waypoint on player map", { mapID = playerMapID,
-            x = x, y = y, description = description })
+        Add("Blizzard next waypoint on player map", {
+            mapID = playerMapID,
+            x = x,
+            y = y,
+            description = description
+        })
     end
 
     local graph = Navigation:GetGraph()
@@ -75,22 +108,35 @@ local function ShowNavigationDump()
     local progression = Navigation.progression
     local route = progression and progression.route
     if progression then
-        Add("Progression", { pathIndex = progression.pathIndex, phase = progression.phase,
-            changeNumber = progression.changeNumber, status = progression.status,
-            attempted = progression.attempted, pathUnavailable = progression.pathUnavailable })
+        Add("Progression", {
+            pathIndex = progression.pathIndex,
+            phase = progression.phase,
+            changeNumber = progression.changeNumber,
+            status = progression.status,
+            attempted = progression.attempted,
+            pathUnavailable = progression.pathUnavailable
+        })
     end
     if route then
-        Add("Route", { signature = route.signature, comparisonSeconds = route.comparisonSeconds,
-            calculationID = route.calculationID, pathReferences = route.pathReferences,
-            originMapID = route.originMapID, originX = route.originX, originY = route.originY,
-            finalCost = route.finalCost, movement = route.preparedData.movement })
+        Add("Route", {
+            signature = route.signature,
+            comparisonSeconds = route.comparisonSeconds,
+            calculationID = route.calculationID,
+            pathReferences = route.pathReferences,
+            originMapID = route.originMapID,
+            originX = route.originX,
+            originY = route.originY,
+            finalCost = route.finalCost,
+            movement = route.preparedData.movement
+        })
     end
     if graph then
         ---@param reference integer
         ---@param cost NavigationCalculatedPathCost?
         local function AddPath(reference, cost)
             local freshCost, failure = Navigation:GetFreshPathCost(reference)
-            Add("Path " .. reference, { type = graph.pathTypes[reference],
+            Add("Path " .. reference, {
+                type = graph.pathTypes[reference],
                 from = GetPoint(graph, graph.pathFromPointIndexes[reference]),
                 to = GetPoint(graph, graph.pathToPointIndexes[reference]),
                 requirement = graph.pathRequirements[reference],
@@ -98,7 +144,10 @@ local function ShowNavigationDump()
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],
                 routeState = route and route.preparedData.requirementStateByPath[reference],
                 routeExclusion = route and route.preparedData.exclusionReasonByPath[reference],
-                routeCost = cost, freshCost = freshCost, freshFailure = failure })
+                routeCost = cost,
+                freshCost = freshCost,
+                freshFailure = failure
+            })
         end
         lines[#lines + 1] = "Ordered route paths:"
         if route then

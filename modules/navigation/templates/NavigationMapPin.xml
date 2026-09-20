@@ -1,8 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="NavigationMapPin.lua" />
-    <Frame name="MapPinEnhancedNavigationMapPinTemplate" virtual="true"
-        mixin="MapPinEnhancedNavigationMapPinMixin" hidden="true" enableMouse="false">
+    <Frame name="MapPinEnhancedNavigationMapPinTemplate" virtual="true" mixin="MapPinEnhancedNavigationMapPinMixin" hidden="true" enableMouse="false">
         <Size x="18" y="18" />
         <Layers>
             <Layer level="BACKGROUND">
@@ -14,7 +13,9 @@
                 </Line>
                 <Texture parentKey="icon" hidden="true">
                     <Size x="12" y="12" />
-                    <Anchors><Anchor point="CENTER" /></Anchors>
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
                 </Texture>
             </Layer>
         </Layers>

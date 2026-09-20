@@ -13,7 +13,9 @@ local ACTION_PENALTY_SECONDS = 10
 ---@return boolean?
 local function IsCooldownFinished(startTime, duration, modRate)
     if MapPinEnhanced:IsSecretValue(startTime) or MapPinEnhanced:IsSecretValue(duration) or
-        MapPinEnhanced:IsSecretValue(modRate) then return nil end
+        MapPinEnhanced:IsSecretValue(modRate) then
+        return nil
+    end
     if type(startTime) ~= "number" or type(duration) ~= "number" then return nil end
     if startTime <= 0 or duration <= 0 then return true end
     local rate = type(modRate) == "number" and modRate > 0 and modRate or 1

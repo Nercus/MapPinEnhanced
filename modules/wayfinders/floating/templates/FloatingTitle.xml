@@ -31,7 +31,9 @@
         </Layers>
         <Frames>
             <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate">
-                <Anchors><Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" /></Anchors>
+                <Anchors>
+                    <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="-2" />
+                </Anchors>
             </Frame>
         </Frames>
         <Scripts>

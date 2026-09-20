@@ -87,7 +87,6 @@ function Navigation:SetTransportationGroups(groups)
     self:RefreshPreparedData()
 end
 
-
 ---@return NavigationGraph?
 function Navigation:GetGraph()
     return navigationGraph
@@ -171,7 +170,7 @@ local function PrepareStaticPath(path)
         return nil, "invalid destination coordinates"
     end
     if path.fromPointID ~= nil and (type(path.fromMap) ~= "number" or
-        type(path.fromX) ~= "number" or type(path.fromY) ~= "number") then
+            type(path.fromX) ~= "number" or type(path.fromY) ~= "number") then
         return nil, "missing origin"
     end
     if path.fromPointID ~= nil and
@@ -219,7 +218,8 @@ function Navigation:BuildGraph()
             ---@type integer?
             local fromPointIndex
             if type(path.fromPointID) == "number" then
-                fromPointIndex = GetOrAddPoint(graph, pointIndexByID, path.fromPointID, path.fromMap, path.fromX, path.fromY)
+                fromPointIndex = GetOrAddPoint(graph, pointIndexByID, path.fromPointID, path.fromMap, path.fromX,
+                    path.fromY)
             end
             local adapterData, failure = PrepareStaticPath(path)
             if failure then
@@ -291,7 +291,9 @@ end
 ---@return number?
 local function GetQualifiedToyItemID(requirement)
     if requirement.operation ~= "all" or type(requirement.children) ~= "table" or
-        #requirement.children ~= 2 then return nil end
+        #requirement.children ~= 2 then
+        return nil
+    end
     ---@type number?
     local itemID
     local hasToyQualifier = false
@@ -377,7 +379,9 @@ local function EvaluateDirectCheck(key, value)
         return StateFromBoolean(completed)
     elseif key == "mapArtID" then
         if type(value) ~= "table" or type(value[1]) ~= "number" or type(value[2]) ~= "number" or
-            not C_Map or not C_Map.GetMapArtID then return UNKNOWN end
+            not C_Map or not C_Map.GetMapArtID then
+            return UNKNOWN
+        end
         return StateFromBoolean(C_Map.GetMapArtID(value[1]) == value[2])
     elseif key == "currentMap" then
         if not C_Map or not C_Map.GetBestMapForUnit then return UNKNOWN end
@@ -462,7 +466,9 @@ function Navigation:GetRequirementResource(requirement, resourceKey)
         return matchesResource and type(requirement.value) == "number" and requirement.value or nil
     end
     if requirement.operation ~= "all" and requirement.operation ~= "any" or
-        type(requirement.children) ~= "table" then return nil end
+        type(requirement.children) ~= "table" then
+        return nil
+    end
 
     ---@type number?
     local found

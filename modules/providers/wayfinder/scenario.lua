@@ -98,8 +98,13 @@ local function RefreshScenario()
         end
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
-        mapID = mapID, x = x, y = y, title = title, description = description,
-        texture = atlas, usesAtlas = true,
+        mapID = mapID,
+        x = x,
+        y = y,
+        title = title,
+        description = description,
+        texture = atlas,
+        usesAtlas = true,
     })
 end
 

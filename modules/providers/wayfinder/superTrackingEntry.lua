@@ -54,8 +54,13 @@ end
 function Providers:GetSuperTrackingEntry()
     if not entry then return nil end
     return {
-        title = entry.title, description = entry.description, texture = entry.texture, usesAtlas = entry.usesAtlas,
-        tracked = entry.tracked, canToggle = entry.canToggle, changeNumber = entry.changeNumber,
+        title = entry.title,
+        description = entry.description,
+        texture = entry.texture,
+        usesAtlas = entry.usesAtlas,
+        tracked = entry.tracked,
+        canToggle = entry.canToggle,
+        changeNumber = entry.changeNumber,
     }
 end
 
@@ -86,16 +91,28 @@ function Providers:ApplySuperTrackingEntry(provider, targetID, data)
     if entry and entry.tracked and entry.source == provider.source and entry.targetID == targetID and
         entry.title == data.title and entry.description == data.description and entry.texture == data.texture and
         entry.usesAtlas == data.usesAtlas and entry.pinData.mapID == data.mapID and
-        entry.pinData.x == data.x and entry.pinData.y == data.y then return end
+        entry.pinData.x == data.x and entry.pinData.y == data.y then
+        return
+    end
     local track = provider.captureTracking and provider.captureTracking(data)
     entry = {
-        source = provider.source, targetID = targetID,
-        title = data.title or MapPinEnhanced.L["Target"], description = data.description, texture = data.texture, usesAtlas = data.usesAtlas,
-        tracked = true, canToggle = track ~= nil and provider.untrack ~= nil,
-        track = track, untrack = provider.untrack, changeNumber = changeNumber,
+        source = provider.source,
+        targetID = targetID,
+        title = data.title or MapPinEnhanced.L["Target"],
+        description = data.description,
+        texture = data.texture,
+        usesAtlas = data.usesAtlas,
+        tracked = true,
+        canToggle = track ~= nil and provider.untrack ~= nil,
+        track = track,
+        untrack = provider.untrack,
+        changeNumber = changeNumber,
         pinData = {
-            mapID = data.mapID, x = data.x, y = data.y,
-            title = data.title or MapPinEnhanced.L["Target"], description = data.description,
+            mapID = data.mapID,
+            x = data.x,
+            y = data.y,
+            title = data.title or MapPinEnhanced.L["Target"],
+            description = data.description,
             texture = data.texture or "Navigation-Tracked-Icon",
             usesAtlas = data.texture == nil or data.usesAtlas,
         },

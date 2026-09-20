@@ -1,36 +1,53 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="DescriptionEditor.lua" />
-    <Frame name="MapPinEnhancedDescriptionEditorTemplate" inherits="MapPinEnhancedWindowTemplate"
-        mixin="MapPinEnhancedDescriptionEditorMixin" virtual="true" frameStrata="DIALOG" hidden="true">
+    <Frame name="MapPinEnhancedDescriptionEditorTemplate" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedDescriptionEditorMixin" virtual="true" frameStrata="DIALOG" hidden="true">
         <Size x="650" y="520" />
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
                     <Size x="600" y="24" />
-                    <Anchors><Anchor point="TOPLEFT" x="25" y="-45" /></Anchors>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="25" y="-45" />
+                    </Anchors>
                 </FontString>
                 <FontString parentKey="info" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
                     <Size x="600" y="40" />
-                    <Anchors><Anchor point="TOPLEFT" relativeKey="$parent.heading" relativePoint="BOTTOMLEFT" y="-8" /></Anchors>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.heading" relativePoint="BOTTOMLEFT" y="-8" />
+                    </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
             <ScrollFrame parentKey="input" inherits="MapPinEnhancedTextareaTemplate">
                 <Size x="600" y="320" />
-                <Anchors><Anchor point="TOPLEFT" x="25" y="-130" /></Anchors>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="25" y="-130" />
+                </Anchors>
             </ScrollFrame>
             <Button inherits="MapPinEnhancedButtonTemplate" text="Apply">
                 <Size x="100" y="28" />
-                <Anchors><Anchor point="BOTTOMRIGHT" x="-135" y="20" /></Anchors>
-                <Scripts><OnClick>self:GetParent():Apply()</OnClick></Scripts>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-135" y="20" />
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():Apply()</OnClick>
+                </Scripts>
             </Button>
             <Button inherits="MapPinEnhancedButtonTemplate" text="Cancel">
                 <Size x="100" y="28" />
-                <Anchors><Anchor point="BOTTOMRIGHT" x="-25" y="20" /></Anchors>
-                <Scripts><OnClick>self:GetParent():Hide()</OnClick></Scripts>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT" x="-25" y="20" />
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():Hide()</OnClick>
+                </Scripts>
             </Button>
         </Frames>
-        <Scripts><OnLoad method="OnLoad" /><OnHide method="OnHide" /></Scripts>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
     </Frame>
 </Ui>
