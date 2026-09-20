@@ -206,7 +206,7 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
     local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
-    local numberOfEntries = self.dataProvider:GetSize(false)
+    local numberOfEntries = self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
     local newHeight = visibleEntries * entryHeight
     local oldHeight = self:GetHeight()
