@@ -24,6 +24,8 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnable method="UpdateIconState" />
+            <OnDisable method="UpdateIconState" />
             <OnSizeChanged method="OnSizeChanged" />
             <OnMouseDown method="OnMouseDown" />
             <OnMouseUp method="OnMouseUp" />

@@ -39,6 +39,7 @@ function MapPinEnhancedButtonMixin:OnLoad()
     if self.icon then
         self.iconTexture:SetIconTexture(self.icon)
     end
+    self.iconTexture:SetIconEnabled(self:IsEnabled())
     self:UpdateFontSize()
 end
 
@@ -128,11 +129,9 @@ function MapPinEnhancedButtonMixin:SetValue(_, triggerCallback)
 end
 
 function MapPinEnhancedButtonMixin:OnEnable()
-    if not self.icon then return end
-    self.iconTexture:SetDesaturated(false)
+    self.iconTexture:SetIconEnabled(true)
 end
 
 function MapPinEnhancedButtonMixin:OnDisable()
-    if not self.icon then return end
-    self.iconTexture:SetDesaturated(true)
+    self.iconTexture:SetIconEnabled(false)
 end

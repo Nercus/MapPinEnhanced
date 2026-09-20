@@ -40,7 +40,12 @@ function MapPinEnhancedIconButtonMixin:OnLoad()
     if not self.customIcon then
         self:SetIconTexture()
     end
+    self:UpdateIconState()
     self:UpdateIconSize()
+end
+
+function MapPinEnhancedIconButtonMixin:UpdateIconState()
+    self.iconTexture:SetIconEnabled(self:IsEnabled())
 end
 
 function MapPinEnhancedIconButtonMixin:OnSizeChanged()

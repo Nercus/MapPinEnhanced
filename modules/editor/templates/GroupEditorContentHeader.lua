@@ -139,6 +139,9 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     local protected = group:IsProtected()
     self.iconButton.iconTexture:SetTexture(group:GetIcon())
     self.iconButton:SetEnabled(not protected)
+    self.iconButton.iconTexture:SetDesaturated(protected)
+    local iconBrightness = protected and 0.5 or 1
+    self.iconButton.iconTexture:SetVertexColor(iconBrightness, iconBrightness, iconBrightness)
     self.iconButton:SetScript("OnClick", function() self:ShowIconMenu() end)
 
     self.nameField.child:SetEnabled(not protected)

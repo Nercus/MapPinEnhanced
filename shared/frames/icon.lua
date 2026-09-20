@@ -3,6 +3,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedIconMixin : Texture
 ---@field icon MapPinEnhancedIcon
+---@field iconColor ColorMixin?
+---@field iconDisabled boolean?
 MapPinEnhancedIconMixin = {}
 
 local DEFAULT_INLINE_ICON_SIZE = 16
@@ -74,7 +76,19 @@ function MapPinEnhancedIconMixin:SetIconTexture(icon, color)
         error("MapPinEnhancedIconMixin: Invalid icon name: " .. tostring(self.icon))
     end
     self:SetTexture(texturePath)
-    self:SetVertexColor((color or DEFAULT_ICON_COLOR):GetRGB())
+    self.iconColor = color
+    self:SetIconEnabled(not self.iconDisabled)
+end
+
+---@param enabled boolean
+function MapPinEnhancedIconMixin:SetIconEnabled(enabled)
+    self.iconDisabled = not enabled
+    self:SetDesaturated(not enabled)
+    if enabled then
+        self:SetVertexColor((self.iconColor or DEFAULT_ICON_COLOR):GetRGB())
+    else
+        self:SetVertexColor(0.5, 0.5, 0.5)
+    end
 end
 
 function MapPinEnhancedIconMixin:OnLoad()
