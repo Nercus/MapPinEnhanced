@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Providers = MapPinEnhanced:GetModule("Providers")
 
 local CLOSE_DISTANCE = 150
 
@@ -19,6 +20,7 @@ local CLOSE_DISTANCE = 150
 ---@field clampedChanged boolean?
 ---@field customDirection boolean?
 ---@field customPositionAngle number?
+---@field lastNavigationTargetCheck number?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
@@ -65,6 +67,12 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetLocation(mapID, x, y)
     self:SetTargetLocation(mapID, x, y)
     self:PrepareForTarget()
+    self:RefreshNavigationTarget()
+end
+
+function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
+    self.lastNavigationTargetCheck = GetTime()
+    self:SetCustomDirectionEnabled(not Providers:IsNavigationTargetDirect(self.targetMapID, self.targetX, self.targetY))
 end
 
 ---@param enabled boolean
@@ -112,6 +120,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetUpNavigationFrame()
     if self.navFrame then return end
     self.navFrame = C_Navigation.GetFrame()
+    if self.customDirection then return end
     self:SetAlpha(self.navFrame and 1 or 0)
 
     if self.navFrame then
@@ -199,6 +208,7 @@ end
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     local angle = self:SampleTargetAngle(elapsed)
+    if self.customDirection then self:SetAlpha(angle ~= nil and 1 or 0) end
     if angle ~= nil then
         self.newNeedleRotation = angle
         if self.customDirection then self:PositionCustomTarget(angle) end
@@ -221,6 +231,9 @@ end
 
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed)
+    if not self.lastNavigationTargetCheck or GetTime() - self.lastNavigationTargetCheck >= 0.1 then
+        self:RefreshNavigationTarget()
+    end
     if self.customDirection then
         self.isClamped = true
         if not self.presentationInitialized then
@@ -262,6 +275,11 @@ function MapPinEnhancedWayfinderFloatingMixin:OnLoad()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
+    self.lastNavigationTargetCheck = nil
+    if event == "SUPER_TRACKING_CHANGED" or event == "SUPER_TRACKING_PATH_UPDATED" then
+        self:RefreshNavigationTarget()
+        return
+    end
     if self.customDirection then
         -- Native Step tracking can disappear while the sampled fallback is active.
         -- Retain its custom anchor; only cache the native frame for a later switch.
@@ -278,6 +296,8 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:RegisterEvent("NAVIGATION_FRAME_CREATED")
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
+    self:RegisterEvent("SUPER_TRACKING_CHANGED")
+    self:RegisterEvent("SUPER_TRACKING_PATH_UPDATED")
     SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_CREATED")
     SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
     SuperTrackedFrame:UnregisterEvent("SUPER_TRACKING_CHANGED")
@@ -298,6 +318,8 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
     self:SetScript("OnUpdate", nil)
     self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
     self:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
+    self:UnregisterEvent("SUPER_TRACKING_CHANGED")
+    self:UnregisterEvent("SUPER_TRACKING_PATH_UPDATED")
     self:StopDistanceUpdates()
     self:ResetDirectionSampling()
     self:ShutdownNavigationFrame()
@@ -322,6 +344,7 @@ function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.needle:SetRotation(0)
     self.customDirection = nil
     self.customPositionAngle = nil
+    self.lastNavigationTargetCheck = nil
 end
 
 ---@param title string?

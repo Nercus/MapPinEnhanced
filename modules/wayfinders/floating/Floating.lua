@@ -27,7 +27,16 @@ end
 
 ---@param title string
 function MapPinEnhancedWayfinderFloating:SetTitle(title)
-    self:GetFrame():SetTitle(title)
+    self:SetDestinationText(title, self.data and self.data.description)
+end
+
+function MapPinEnhancedWayfinderFloating:RefreshTitle()
+    local title = self.data and self.data.title
+    local step = self.step
+    if step and step.showInstruction ~= false and step.instruction and step.instruction ~= "" then
+        title = step.instruction
+    end
+    self:GetFrame():SetDestinationText(title, self.data and self.data.description)
 end
 
 ---@param color PinColor
@@ -57,15 +66,14 @@ end
 function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
     local frame = self:GetFrame()
-    frame:SetDestinationText(self.data and self.data.title, self.data and self.data.description)
+    self:RefreshTitle()
     local showDirection = step == nil or step.showDirection
-    local customDirection = false
     if showDirection and self.data and self.data.mapDistanceOnly then
-        customDirection = not Providers:SetStepSuperTracking(self.data)
+        Providers:SetStepSuperTracking(self.data)
     else
         Providers:ClearStepSuperTracking()
     end
-    frame:SetCustomDirectionEnabled(customDirection)
+    frame:RefreshNavigationTarget()
     frame.content:SetShown(showDirection)
 end
 
@@ -99,7 +107,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     else
         frame:SetColor(wayfinderData.color)
     end
-    frame:SetDestinationText(wayfinderData.title, wayfinderData.description)
+    self:RefreshTitle()
     frame.pin:SetLock(wayfinderData.lock)
     frame:Show()
 end
@@ -164,5 +172,5 @@ function MapPinEnhancedWayfinderFloating:SetDestinationText(title, description)
     if self.data then
         self.data.title, self.data.description = title, description
     end
-    self:GetFrame():SetDestinationText(title, description)
+    self:RefreshTitle()
 end

@@ -9,6 +9,49 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@type SuperTrackingWaypointResolver
 local GetNextWaypointForMap = C_SuperTrack.GetNextWaypointForMap
 
+---@param mapID number?
+---@param x number?
+---@param y number?
+---@return boolean
+function Providers:IsNavigationTargetDirect(mapID, x, y)
+    if not mapID or not x or not y then return false end
+    local playerMapID = C_Map.GetBestMapForUnit("player")
+    if not playerMapID then return false end
+    local targetIsLocal = mapID == playerMapID
+    local nextX, nextY = GetNextWaypointForMap(playerMapID)
+    if issecretvalue and (issecretvalue(nextX) or issecretvalue(nextY)) then return false end
+    if nextX == nil or nextY == nil then
+        local displayMapID = MapUtil and MapUtil.GetDisplayableMapForPlayer and
+            MapUtil.GetDisplayableMapForPlayer()
+        if displayMapID then targetIsLocal = targetIsLocal or mapID == displayMapID end
+        if displayMapID and displayMapID ~= playerMapID then
+            playerMapID = displayMapID
+            nextX, nextY = GetNextWaypointForMap(playerMapID)
+        end
+    end
+    if issecretvalue and (issecretvalue(nextX) or issecretvalue(nextY)) then return false end
+    if nextX == nil and nextY == nil then
+        -- This API supplies intermediate waypoints. A direct local target can
+        -- have a valid native frame without any intermediate waypoint at all.
+        if not targetIsLocal or not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then
+            return false
+        end
+        if C_SuperTrack.IsSuperTrackingUserWaypoint() then
+            local waypoint = C_Map.GetUserWaypoint()
+            if not waypoint then return false end
+            local distance = MapPinEnhanced.HBD:GetZoneDistance(waypoint.uiMapID,
+                waypoint.position.x, waypoint.position.y, mapID, x, y)
+            return type(distance) == "number" and distance <= 5
+        end
+        return C_SuperTrack.IsSuperTrackingAnything()
+    end
+    if type(nextX) ~= "number" or type(nextY) ~= "number" then return false end
+    -- Query the player's map, not the destination map: the latter can expose
+    -- the final waypoint while the native frame guides an earlier portal.
+    local distance = MapPinEnhanced.HBD:GetZoneDistance(playerMapID, nextX, nextY, mapID, x, y)
+    return type(distance) == "number" and distance <= 5
+end
+
 ---@param mapIDs number[]
 ---@param seenMapIDs table<number, boolean>
 ---@param mapID number?
