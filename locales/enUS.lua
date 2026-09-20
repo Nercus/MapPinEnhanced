@@ -54,7 +54,7 @@ L["The world map cannot be opened automatically during combat. It will open afte
 ------------------------------ Groups And Tracker ------------------------------
 L["Group"] = "Group"
 L["Hidden"] = "Hidden"
-L["Hidden Groups"] = "Hidden Groups"
+L["Show hidden group"] = "Show hidden group"
 L["No hidden groups"] = "No hidden groups"
 L["Pins (%d/%d)"] = "Pins (%d/%d)"
 L["New Group %d"] = "New Group %d"
@@ -317,9 +317,11 @@ L["Apply"] = "Apply"
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
 L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
 L["Wayfinder.General.ShowETA_LABEL"] = "Show estimated arrival time"
-L["Wayfinder.General.ShowETA_DESCRIPTION"] = "Show the movement time estimate to the current target alongside its distance, when available."
+L["Wayfinder.General.ShowETA_DESCRIPTION"] =
+"Show the movement time estimate to the current target alongside its distance, when available."
 L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Transportation"
-L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] = "Choose which transportation navigation can suggest. Scheduled transport includes boats, zeppelins and trams. Personal teleports include travel spells, items, toys and the Dalaran Hearthstone."
+L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] =
+"Choose which transportation navigation can suggest. Scheduled transport includes boats, zeppelins and trams. Personal teleports include travel spells, items, toys and the Dalaran Hearthstone."
 L["Navigation Transportation Portals"] = "Portals"
 L["Navigation Transportation Flight paths"] = "Flight paths"
 L["Navigation Transportation Scheduled transport"] = "Scheduled transport"
