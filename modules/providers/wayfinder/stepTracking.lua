@@ -148,6 +148,8 @@ function Providers:SetStepSuperTracking(data)
     stepWaypoint = waypoint
     changingTracking = true
     KeepStepWaypointOnArrival()
+    -- Rebuild native guidance even when both adjacent Steps use user waypoints.
+    C_SuperTrack.SetSuperTrackedUserWaypoint(false)
     C_Map.SetUserWaypoint(waypoint)
     C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     changingTracking = false

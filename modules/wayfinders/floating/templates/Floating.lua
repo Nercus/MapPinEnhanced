@@ -79,6 +79,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     if self.customDirection == enabled then return end
     self.customDirection = enabled
+    self.isClamped = nil
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self.customPositionAngle = nil
@@ -118,8 +119,11 @@ function MapPinEnhancedWayfinderFloatingMixin:SetEllipticalRadii(major, minor)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetUpNavigationFrame()
-    if self.navFrame then return end
-    self.navFrame = C_Navigation.GetFrame()
+    local navFrame = C_Navigation.GetFrame()
+    if self.navFrame == navFrame then return end
+    self.navFrame = navFrame
+    self.isClamped = nil
+    self.presentationInitialized = nil
     if self.customDirection then return end
     self:SetAlpha(self.navFrame and 1 or 0)
 
@@ -140,9 +144,7 @@ function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:EnsureNavigationFrameIsSetUp()
-    if not self.navFrame then
-        self:SetUpNavigationFrame()
-    end
+    self:SetUpNavigationFrame()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:UpdateClampedState()
