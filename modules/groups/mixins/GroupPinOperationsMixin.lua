@@ -277,6 +277,7 @@ function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     if not sourceData then return nil end
 
     sourceData.pinID = nil
+    sourceData.title = string.format(MapPinEnhanced.L["copy of %s"], sourceData.title)
     local pin, duplicatePinID, replacedWayBackPin, shouldTrack = AddBeforePersist(self, sourceData)
     ---@type UUID[]
     local pinIDs = {}

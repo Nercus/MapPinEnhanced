@@ -32,7 +32,8 @@ function MapPinEnhancedGroupEditorContentMixin:OnLoad()
     self.loadingOverlay.message:SetText(L["Loading"])
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()
-    self.scrollView:SetPadding(8)
+    ---@diagnostic disable-next-line: redundant-parameter
+    self.scrollView:SetPadding(8, 8, 0, 0, 0)
     self.scrollView:SetElementInitializer("MapPinEnhancedGroupEditorContentPinEntryTemplate", function(entry, pinNode)
         ---@cast entry MapPinEnhancedGroupEditorContentPinEntryTemplate
         ---@cast pinNode MapPinEnhancedEditorPinNodeData

@@ -13,7 +13,6 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 
 ---@class MapPinEnhancedGroupEditorSidebarTemplate : Frame
 ---@field editor MapPinEnhancedGroupEditorTemplate?
----@field title FontString
 ---@field search MapPinEnhancedInputTemplate
 ---@field createButton MapPinEnhancedIconButtonTemplate
 ---@field scrollBox Frame|ScrollBoxListMixin
@@ -48,7 +47,6 @@ function MapPinEnhancedGroupEditorSidebarMixin:CreateGroupList(scrollBox, scroll
 end
 
 function MapPinEnhancedGroupEditorSidebarMixin:OnLoad()
-    self.title:SetText(L["Groups"])
     local systemGroups = self.systemGroups
     systemGroups.title:SetText(L["System Groups"])
     self.search:SetInlineIcon("search")

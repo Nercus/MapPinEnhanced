@@ -9,24 +9,17 @@
                     <Size x="1" />
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="TOPRIGHT" y="12"/>
-                        <Anchor point="BOTTOMRIGHT" y="-12" />
+                        <Anchor point="TOPRIGHT" y="12" x="1"/>
+                        <Anchor point="BOTTOMRIGHT" y="-12" x="1"/>
                     </Anchors>
                 </Texture>
-            </Layer>
-            <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormalLarge" justifyH="LEFT">
-                    <Anchors>
-                        <Anchor point="TOP" x="0" y="-4" />
-                    </Anchors>
-                </FontString>
             </Layer>
         </Layers>
         <Frames>
             <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
                 <Size x="210" y="30" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="0" y="-30" />
+                    <Anchor point="TOPLEFT" x="0" y="-32" />
                 </Anchors>
             </EditBox>
             <Button parentKey="createButton" inherits="MapPinEnhancedIconButtonTemplate">

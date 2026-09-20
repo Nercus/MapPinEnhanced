@@ -120,6 +120,7 @@ L["Hide or show this group."] = "Hide or show this group."
 L["Drag to reorder this pin."] = "Drag to reorder this pin."
 L["Permanently delete this pin."] = "Permanently delete this pin."
 L["Create a copy of this pin."] = "Create a copy of this pin."
+L["copy of %s"] = "copy of %s"
 L["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."] =
 "Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."
 L["Route optimization was canceled because the group changed."] =

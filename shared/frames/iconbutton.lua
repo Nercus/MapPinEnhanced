@@ -13,8 +13,8 @@ MapPinEnhancedIconButtonMixin = {}
 ---@type table<MapPinEnhancedIconButtonSize, number>
 local ICON_SIZE_PERCENTAGES = {
     small = 0.35,
-    medium = 0.5,
-    large = 0.65,
+    medium = 0.45,
+    large = 0.5,
 }
 
 ---@param icon? MapPinEnhancedIcon

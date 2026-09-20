@@ -44,8 +44,8 @@
                     </Frame>
                     <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-1" x="64" />
-                            <Anchor point="BOTTOMRIGHT" x="-48"/>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="-1" x="32" />
+                            <Anchor point="BOTTOMRIGHT" x="-16"/>
                         </Anchors>
                     </Frame>
                     <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
@@ -57,7 +57,6 @@
                 </Frames>
             </Frame>
             <Frame parentKey="loadingOverlay" hidden="true" enableMouse="true" frameStrata="DIALOG">
-                <!-- TODO: add an animated overlay here to indicate what happens: shuffling cards maybe? -->
                 <Anchors>
                     <Anchor point="TOPLEFT" />
                     <Anchor point="BOTTOMRIGHT" />

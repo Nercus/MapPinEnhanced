@@ -3,7 +3,7 @@
     <Include file="GroupEditorContentHeader.lua" />
 
     <Frame name="MapPinEnhancedGroupEditorContentHeaderTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentHeaderMixin">
-        <Size x="1" y="64" />
+        <Size x="1" y="60" />
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" setAllPoints="true">
@@ -88,18 +88,18 @@
                 <Size x="32" y="32" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
-                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Delete this group and all of its pins. System groups are cleared instead." />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="RIGHT" x="-24" />
+                    <Anchor point="RIGHT" x="-24" y="-5" />
                 </Anchors>
             </Button>
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="32" y="32" />
                 <KeyValues>
                     <KeyValue key="icon" value="cross" />
-                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Hide or show this group." />
                 </KeyValues>
                 <Anchors>

@@ -56,7 +56,6 @@
                     </Anchors>
                 </Texture>
             </Layer>
-
         </Layers>
         <Frames>
             <Frame parentKey="actionButtons" hidden="true">

@@ -6,7 +6,7 @@
         <Size x="230" y="52" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.92" setAllPoints="true" />
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
@@ -26,11 +26,15 @@
         </Frames>
     </Frame>
 
-    <Frame name="MapPinEnhancedGroupEditorContentPinEntryTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentPinEntryMixin">
-        <Size x="830" y="52" />
+    <Frame name="MapPinEnhancedGroupEditorContentPinEntryTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentPinEntryMixin" enableMouse="true">
+        <Size x="842" y="52" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.22">
+                <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate">
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.5" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
                     <Anchors>
                         <Anchor point="TOPLEFT" x="22" y="0" />
                         <Anchor point="BOTTOMRIGHT" x="0" y="0" />
@@ -38,7 +42,7 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <Texture parentKey="dropLine" atlas="shop-header-menu-selected-line-middle" hidden="true">
+                <Texture parentKey="dropLine" file="Interface/AddOns/MapPinEnhanced/assets/shared/DividerHorizontal.png" hidden="true">
                     <Size x="760" y="4" />
                     <Color r="1" g="0.82" b="0" a="1" />
                 </Texture>
@@ -48,7 +52,7 @@
             <Button parentKey="dragHandle" registerForDrag="LeftButton">
                 <Size x="22" y="52" />
                 <Anchors>
-                    <Anchor point="LEFT" x="0" />
+                    <Anchor point="LEFT" x="-5" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
@@ -125,18 +129,9 @@
                     </EditBox>
                 </Frames>
             </Frame>
-            <Button parentKey="descriptionButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="32" y="32" />
-                <KeyValues>
-                    <KeyValue key="icon" value="edit" />
-                    <KeyValue key="iconSize" value="small" />
-                    <KeyValue key="tooltip" value="Description" />
-                </KeyValues>
-                <Anchors><Anchor point="RIGHT" x="-76" y="-1" /></Anchors>
-                <Scripts><OnClick>self:GetParent():EditDescription()</OnClick></Scripts>
-            </Button>
+
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="32" y="32" />
+                <Size x="28" y="28" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
                     <KeyValue key="iconSize" value="small" />
@@ -147,7 +142,7 @@
                 </Anchors>
             </Button>
             <Button parentKey="duplicateButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="32" y="32" />
+                <Size x="28" y="28" />
                 <KeyValues>
                     <KeyValue key="icon" value="duplicate" />
                     <KeyValue key="iconSize" value="small" />
@@ -157,6 +152,25 @@
                     <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2"/>
                 </Anchors>
             </Button>
+            <Button parentKey="descriptionButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="28" y="28" />
+                <KeyValues>
+                    <KeyValue key="icon" value="edit" />
+                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="tooltip" value="Description" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.duplicateButton" relativePoint="LEFT" x="-2"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():EditDescription()</OnClick>
+                </Scripts>
+            </Button>
         </Frames>
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnHide method="OnLeave" />
+        </Scripts>
     </Frame>
 </Ui>

@@ -4,6 +4,9 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
+local BACKGROUND_COLOR = CreateColor(1, 1, 1, 0.5)
+local BACKGROUND_HOVER_COLOR = CreateColor(1, 1, 1, 0.75)
+local BACKGROUND_END_COLOR = CreateColor(1, 1, 1, 0)
 
 ---@class MapPinEnhancedEditorAppliedAutocomplete : MapPinEnhancedAutocompleteTemplate
 ---@field appliedText string?
@@ -30,6 +33,7 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yel
 ---@field duplicateButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field dropLine Texture
+---@field background Texture
 MapPinEnhancedGroupEditorContentPinEntryMixin = {}
 
 ---@class MapPinEnhancedEditorMapEntry
@@ -89,7 +93,16 @@ local function FindExactMap(text)
     return match
 end
 
+function MapPinEnhancedGroupEditorContentPinEntryMixin:OnEnter()
+    self.background:SetGradient("HORIZONTAL", BACKGROUND_HOVER_COLOR, BACKGROUND_END_COLOR)
+end
+
+function MapPinEnhancedGroupEditorContentPinEntryMixin:OnLeave()
+    self.background:SetGradient("HORIZONTAL", BACKGROUND_COLOR, BACKGROUND_END_COLOR)
+end
+
 function MapPinEnhancedGroupEditorContentPinEntryMixin:Reset()
+    self:OnLeave()
     self.nameField.child:ClearTextApply()
     self.mapField.child.onChangeCallback = nil
     self.mapField.child.appliedText = nil
@@ -308,6 +321,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         end
     end)
     self.dragHandle:SetScript("OnEnter", function()
+        self:OnEnter()
         if editor.draggedPinNode then
             SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
         else
@@ -315,6 +329,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         end
     end)
     self.dragHandle:SetScript("OnLeave", function()
+        self:OnLeave()
         if editor.draggedPinNode then
             SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
         else
