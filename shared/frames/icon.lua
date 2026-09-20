@@ -27,6 +27,7 @@ local ICON_TEXTURES = {
     tick = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png",
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
     palette = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPalette.png",
+    share = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconShare.png",
 }
 
 ---Create text prefixed with a registered inline icon.

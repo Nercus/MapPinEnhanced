@@ -135,8 +135,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
-            -- TODO: Replace the placeholder pin with a share icon.
-            label = MapPinEnhanced:Iconize("pin", MapPinEnhanced.L["Share to Chat"]),
+            label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Share to Chat"]),
             onClick = function()
                 self:SharePin()
             end
