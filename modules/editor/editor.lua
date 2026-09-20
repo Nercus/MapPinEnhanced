@@ -128,8 +128,3 @@ MapPinEnhanced:AddSlashCommand("editor", function()
         Editor:ShowEditor()
     end
 end, L["Toggle the group editor."])
-
-
-C_Timer.After(1, function()
-    Editor:ShowEditor()
-end)
