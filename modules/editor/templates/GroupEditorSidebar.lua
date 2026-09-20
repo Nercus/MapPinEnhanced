@@ -108,7 +108,9 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
             if groupType then systemGroupsByType[groupType] = group end
         end
     end
-    table.sort(groups, function(group1, group2) return Groups:IsGroupBefore(group1, group2) end)
+    table.sort(groups, function(group1, group2)
+        return string.lower(group1:GetName()) < string.lower(group2:GetName())
+    end)
     self.dataProvider:Flush()
     for _, group in ipairs(groups) do
         self.dataProvider:Insert(group)
