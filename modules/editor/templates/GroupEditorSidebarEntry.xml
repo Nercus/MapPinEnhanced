@@ -60,7 +60,6 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad method="OnTooltipLoad" />
             <OnClick method="OnClick" />
             <OnMouseUp method="OnMouseUp" />
             <OnReceiveDrag method="OnReceiveDrag" />
