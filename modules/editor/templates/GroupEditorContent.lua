@@ -2,11 +2,13 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local Editor = MapPinEnhanced:GetModule("Editor")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 local PIN_INPUT_FIELDS = { "nameField", "mapField", "xField", "yField" }
 
 ---@class MapPinEnhancedGroupEditorContentEmptyState : Frame
 ---@field message FontString
 ---@field createButton Button
+---@field importButton MapPinEnhancedButtonTemplate
 
 ---@class MapPinEnhancedGroupEditorContentBody : Frame
 ---@field header MapPinEnhancedGroupEditorContentHeaderTemplate
@@ -30,6 +32,7 @@ MapPinEnhancedGroupEditorContentMixin = {}
 
 function MapPinEnhancedGroupEditorContentMixin:OnLoad()
     self.emptyState.message:SetText(L["Select a group to start editing."])
+    self.emptyState.importButton:SetScript("OnClick", function() Transfer:ShowImportWindow() end)
     self.loadingOverlay.message:SetText(L["Loading"])
     self.dataProvider = CreateDataProvider()
     self.scrollView = CreateScrollBoxListLinearView()

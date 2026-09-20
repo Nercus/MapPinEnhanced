@@ -17,7 +17,7 @@
         </Layers>
         <Frames>
             <EditBox parentKey="search" inherits="MapPinEnhancedInputTemplate">
-                <Size x="210" y="30" />
+                <Size x="181" y="30" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="0" y="-32" />
                 </Anchors>
@@ -30,6 +30,16 @@
                 </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" relativeKey="$parent.search" relativePoint="RIGHT" x="2" />
+                </Anchors>
+            </Button>
+            <Button parentKey="importButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="27" y="27" />
+                <KeyValues>
+                    <KeyValue key="icon" value="import" />
+                    <KeyValue key="tooltip" value="Import" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.createButton" relativePoint="RIGHT" x="2" />
                 </Anchors>
             </Button>
             <Frame parentKey="systemGroups" enableMouse="true">

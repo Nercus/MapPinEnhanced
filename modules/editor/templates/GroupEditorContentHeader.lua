@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
@@ -21,6 +22,7 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yel
 ---@field optimizeButton MapPinEnhancedButtonTemplate
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
+---@field exportButton MapPinEnhancedIconButtonTemplate
 MapPinEnhancedGroupEditorContentHeaderMixin = {}
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
@@ -29,6 +31,8 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.editor = nil
     self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
+    self.exportButton:SetScript("OnClick", nil)
+    self.exportButton:Disable()
     self.hideButton:SetScript("OnClick", nil)
     self.optimizeButton:SetScript("OnClick", nil)
     self.optimizeButton:Hide()
@@ -149,6 +153,9 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     end
     self.optimizeButton:SetScript("OnClick", function() self:OrderRouteByDistance() end)
     self:UpdateRouteOrderButton()
+
+    self.exportButton:SetEnabled(group:GetTotalPinCount() > 0)
+    self.exportButton:SetScript("OnClick", function() Transfer:ShowExportWindow(group) end)
 
     self.hideButton:SetEnabled(not protected)
     self.hideButton:SetScript("OnClick", function()

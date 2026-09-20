@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 local Editor = MapPinEnhanced:GetModule("Editor")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedEditorSystemGroups : Frame
 ---@field title FontString
@@ -15,6 +16,7 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 ---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field search MapPinEnhancedInputTemplate
 ---@field createButton MapPinEnhancedIconButtonTemplate
+---@field importButton MapPinEnhancedIconButtonTemplate
 ---@field scrollBox Frame|ScrollBoxListMixin
 ---@field scrollBar ScrollBarMixin
 ---@field systemGroups MapPinEnhancedEditorSystemGroups
@@ -52,6 +54,7 @@ function MapPinEnhancedGroupEditorSidebarMixin:OnLoad()
     self.search:SetInlineIcon("search")
     self.search:SetPlaceholderText(L["Search"])
     self.createButton:SetIconTexture("plus")
+    self.importButton:SetScript("OnClick", function() Transfer:ShowImportWindow() end)
 
     self.dataProvider, self.scrollView = self:CreateGroupList(self.scrollBox, self.scrollBar)
     systemGroups.entries = { systemGroups.ungroupedPinsEntry, systemGroups.wayBackEntry }

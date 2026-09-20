@@ -106,6 +106,17 @@
                     <Anchor point="RIGHT" relativeKey="$parent.deleteButton" relativePoint="LEFT" x="-2" />
                 </Anchors>
             </Button>
+            <Button parentKey="exportButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="32" y="32" />
+                <KeyValues>
+                    <KeyValue key="icon" value="export" />
+                    <KeyValue key="iconSize" value="medium" />
+                    <KeyValue key="tooltip" value="Export" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.hideButton" relativePoint="LEFT" x="-2" />
+                </Anchors>
+            </Button>
         </Frames>
     </Frame>
 </Ui>
