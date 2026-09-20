@@ -103,6 +103,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
             texture:SetSize(18, 6)
             texture:SetPoint("CENTER")
             texture:SetTexture(MORE_ICON_PATH)
+            texture:SetVertexColor(1, 0.82, 0)
             button.fontString:Hide()
             menu.minimumElementWidth = 36
             return 36, 36

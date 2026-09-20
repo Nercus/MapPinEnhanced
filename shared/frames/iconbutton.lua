@@ -18,13 +18,14 @@ local ICON_SIZE_PERCENTAGES = {
 }
 
 ---@param icon? MapPinEnhancedIcon
-function MapPinEnhancedIconButtonMixin:SetIconTexture(icon)
+---@param color? ColorMixin
+function MapPinEnhancedIconButtonMixin:SetIconTexture(icon, color)
     if icon then
         -- Allow setting the icon directly if provided
         self.icon = icon
     end
     assert(self.icon, "MapPinEnhancedIconButtonMixin: SetIconTexture called without icon set")
-    self.iconTexture:SetIconTexture(self.icon)
+    self.iconTexture:SetIconTexture(self.icon, color)
 end
 
 function MapPinEnhancedIconButtonMixin:UpdateIconSize()

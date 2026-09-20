@@ -6,6 +6,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedIconMixin = {}
 
 local DEFAULT_INLINE_ICON_SIZE = 16
+local DEFAULT_ICON_COLOR = CreateColor(1, 0.82, 0)
 
 ---@enum (key) MapPinEnhancedIcon
 local ICON_TEXTURES = {
@@ -13,7 +14,6 @@ local ICON_TEXTURES = {
     drag = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDrag_Yellow.png",
     duplicate = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconDuplicate_Yellow.png",
     edit = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEdit_Yellow.png",
-    editor = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconEditor_Yellow.png",
     export = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconExport_Yellow.png",
     import = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconImport_Yellow.png",
     lock = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconLock_Yellow.png",
@@ -21,31 +21,36 @@ local ICON_TEXTURES = {
     minus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMinus.png",
     more = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconMore_Yellow.png",
     pin = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPin_Yellow.png",
-    plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus.png",
+    plus = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPlus_Yellow.png",
     search = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSearch_Yellow.png",
     settings = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconSettings_Yellow.png",
     tick = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTick_Yellow.png",
     trash = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconTrash_Yellow.png",
+    palette = "Interface\\AddOns\\MapPinEnhanced\\assets\\icons\\IconPalette.png",
 }
 
 ---Create text prefixed with a registered inline icon.
 ---@param icon MapPinEnhancedIcon
 ---@param text? string
 ---@param size? integer
+---@param color? ColorMixin RGB tint; defaults to gold.
 ---@return string
-function MapPinEnhanced:Iconize(icon, text, size)
+function MapPinEnhanced:Iconize(icon, text, size, color)
     local texturePath = assert(ICON_TEXTURES[icon], "MapPinEnhanced:Iconize: Invalid icon name: " .. tostring(icon))
     assert(text == nil or type(text) == "string", "MapPinEnhanced:Iconize: text must be a string or nil")
     assert(size == nil or (type(size) == "number" and size > 0 and size % 1 == 0),
         "MapPinEnhanced:Iconize: size must be a positive integer or nil")
 
-    local iconText = string.format("|T%s:%d:%d|t", texturePath, size or DEFAULT_INLINE_ICON_SIZE,
-        size or DEFAULT_INLINE_ICON_SIZE)
+    local r, g, b = (color or DEFAULT_ICON_COLOR):GetRGBAsBytes()
+    -- Full texture coordinates keep the tint local to the icon, leaving label colors intact.
+    local iconText = string.format("|T%s:%d:%d:0:0:1:1:0:1:0:1:%d:%d:%d|t", texturePath,
+        size or DEFAULT_INLINE_ICON_SIZE, size or DEFAULT_INLINE_ICON_SIZE, r, g, b)
     return text and text ~= "" and string.format("%s %s", iconText, text) or iconText
 end
 
 ---@param icon? MapPinEnhancedIcon
-function MapPinEnhancedIconMixin:SetIconTexture(icon)
+---@param color? ColorMixin RGB tint; omitted colors reset to gold.
+function MapPinEnhancedIconMixin:SetIconTexture(icon, color)
     if icon then
         -- Allow setting the icon directly if provided
         self.icon = icon
@@ -56,6 +61,7 @@ function MapPinEnhancedIconMixin:SetIconTexture(icon)
         error("MapPinEnhancedIconMixin: Invalid icon name: " .. tostring(self.icon))
     end
     self:SetTexture(texturePath)
+    self:SetVertexColor((color or DEFAULT_ICON_COLOR):GetRGB())
 end
 
 function MapPinEnhancedIconMixin:OnLoad()

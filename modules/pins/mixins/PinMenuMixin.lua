@@ -60,8 +60,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             end,
             entry = {
                 type = "button",
-                -- TODO: Replace the placeholder pin with a color icon.
-                label = MapPinEnhanced:Iconize("pin", L["Change Color"]),
+                label = MapPinEnhanced:Iconize("palette", L["Change Color"]),
             }
         },
         {
@@ -104,6 +103,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         texture:SetSize(18, 6)
                         texture:SetPoint("CENTER")
                         texture:SetTexture(MORE_ICON_PATH)
+                        texture:SetVertexColor(1, 0.82, 0)
                         button.fontString:Hide()
                         menu.minimumElementWidth = PIN_ICON_MENU_ENTRY_SIZE
                         return PIN_ICON_MENU_ENTRY_SIZE, PIN_ICON_MENU_ENTRY_SIZE
