@@ -8,6 +8,7 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 ---@field group MapPinEnhancedGroupMixin?
 ---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field icon Texture
+---@field trackingModeIcon MapPinEnhancedIconMixin
 ---@field name FontString
 ---@field detail FontString
 ---@field dropGlow Texture
@@ -18,6 +19,7 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:Reset()
     self.editor = nil
     self:UnlockHighlight()
     self.dropGlow:Hide()
+    self.trackingModeIcon:SetTexture(nil)
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -26,6 +28,8 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:Init(group, editor)
     self.group = group
     self.editor = editor
     self.icon:SetTexture(group:GetIcon())
+    self.trackingModeIcon:SetIconTexture(group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and "list" or
+        "arrowleftright")
     self.name:SetText(group:GetName())
     local detail = string.format(L["%d |4pin:pins;"], group:GetTotalPinCount())
     if group:IsHidden() then detail = L["Hidden"] .. " · " .. detail end

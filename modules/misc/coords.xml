@@ -53,7 +53,7 @@
             <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true" propagateMouseInput="Motion">
                 <Size x="20" y="20" />
                 <KeyValues>
-                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="icon" value="close" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" relativePoint="LEFT" />

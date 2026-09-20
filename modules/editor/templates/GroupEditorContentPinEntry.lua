@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
-local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis.png"
 local BACKGROUND_COLOR = CreateColor(1, 1, 1, 0.5)
 local BACKGROUND_HOVER_COLOR = CreateColor(1, 1, 1, 0.75)
 local BACKGROUND_END_COLOR = CreateColor(1, 1, 1, 0)
@@ -215,7 +215,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
                     initializer = function(button, _, menu)
                         ---@type Texture
                         local texture = button:AttachTexture()
-                        texture:SetSize(18, 6)
+                        texture:SetSize(18, 18)
                         texture:SetPoint("CENTER")
                         texture:SetTexture(MORE_ICON_PATH)
                         texture:SetVertexColor(1, 0.82, 0)

@@ -32,15 +32,10 @@
                         <Anchor point="LEFT" x="8" />
                     </Anchors>
                 </Texture>
-                <FontString parentKey="iconSeparator" inherits="GameFontNormal" text="">
-                    <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
-                    </Anchors>
-                </FontString>
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Size x="220" y="18" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.iconSeparator" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -49,7 +44,7 @@
             <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="icon" value="close" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-5" />
@@ -58,7 +53,7 @@
             <Button parentKey="hiddenGroupsButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
-                    <KeyValue key="icon" value="tick" />
+                    <KeyValue key="icon" value="eyeslash" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" x="-1" y="0" relativeKey="$parent.closeButton" relativePoint="LEFT" />

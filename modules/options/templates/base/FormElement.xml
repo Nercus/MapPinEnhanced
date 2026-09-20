@@ -14,7 +14,10 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="searchHighlight" atlas="common-icon-forwardarrow" desaturated="true" hidden="true">
+                <Texture parentKey="searchHighlight" inherits="MapPinEnhancedIconTemplate" hidden="true">
+                    <KeyValues>
+                        <KeyValue key="icon" value="rightcaret" />
+                    </KeyValues>
                     <Size x="20" y="20" />
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>

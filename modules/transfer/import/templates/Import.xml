@@ -33,7 +33,7 @@
             <Button inherits="MapPinEnhancedButtonTemplate" parentKey="cancelButton" text="Cancel">
                 <Size x="100" y="34" />
                 <KeyValues>
-                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="icon" value="close" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-10" y="25" />

@@ -105,12 +105,12 @@ end
 
 function MapPinEnhancedCoordsDisplayMixin:LockPosition()
     self:SetMovable(false)
-    self.lockButton.iconTexture:SetDesaturated(false)
+    self.lockButton:SetIconTexture("lock")
 end
 
 function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
     self:SetMovable(true)
-    self.lockButton.iconTexture:SetDesaturated(true)
+    self.lockButton:SetIconTexture("unlock")
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()

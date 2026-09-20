@@ -173,7 +173,7 @@ function Wayfinders:BuildNavigationMenuEntries()
         { type = "title",  label = MapPinEnhanced.L["Wayfinder.Navigation_GROUPLABEL"] },
         {
             type = "button",
-            label = MapPinEnhanced.L["Recalculate Route"],
+            label = MapPinEnhanced:Iconize("arrowcircle", MapPinEnhanced.L["Recalculate Route"]),
             onClick = function()
                 Navigation:Recalculate(step.changeNumber)
             end

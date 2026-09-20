@@ -1,6 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis.png"
 
 ---@class Pins
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -100,7 +100,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                     initializer = function(button, _, menu)
                         ---@type Texture
                         local texture = button:AttachTexture()
-                        texture:SetSize(18, 6)
+                        texture:SetSize(18, 18)
                         texture:SetPoint("CENTER")
                         texture:SetTexture(MORE_ICON_PATH)
                         texture:SetVertexColor(1, 0.82, 0)

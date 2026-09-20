@@ -41,8 +41,8 @@ if savedWayfinderSelection ~= Options.WAYFINDER_SELECTION_ARROW and
 end
 
 Options.TRACKING_MODE_OPTIONS = {
-    { label = L["Track by Distance"], value = Options.TRACKING_MODE_NEAREST },
-    { label = L["Track by Order"],    value = Options.TRACKING_MODE_ORDERED },
+    { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Distance"]), value = Options.TRACKING_MODE_NEAREST },
+    { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Options.TRACKING_MODE_ORDERED },
 }
 
 Options.DEFAULTS = {
@@ -78,13 +78,13 @@ Options.DEFAULTS = {
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
     ["Wayfinder.Navigation.TransportationGroups"] = {
-        { label = L["Navigation Transportation Portals"], value = "portals" },
-        { label = L["Navigation Transportation Flight paths"], value = "flightPaths" },
+        { label = L["Navigation Transportation Portals"],             value = "portals" },
+        { label = L["Navigation Transportation Flight paths"],        value = "flightPaths" },
         { label = L["Navigation Transportation Scheduled transport"], value = "scheduledTransport" },
-        { label = L["Navigation Transportation NPC travel"], value = "npcTravel" },
-        { label = L["Navigation Transportation Phase changes"], value = "phaseChanges" },
-        { label = L["Navigation Transportation Personal teleports"], value = "personalTeleports" },
-        { label = L["Navigation Transportation Dungeon teleports"], value = "dungeonTeleports" },
+        { label = L["Navigation Transportation NPC travel"],          value = "npcTravel" },
+        { label = L["Navigation Transportation Phase changes"],       value = "phaseChanges" },
+        { label = L["Navigation Transportation Personal teleports"],  value = "personalTeleports" },
+        { label = L["Navigation Transportation Dungeon teleports"],   value = "dungeonTeleports" },
     },
     ["General.Tracking.DefaultMode"] = Options.TRACKING_MODE_OPTIONS,
     ["General.Tracking.ArrivalMode"] = {

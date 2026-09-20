@@ -29,10 +29,10 @@
                 <Anchors>
                     <Anchor point="RIGHT" relativePoint="RIGHT" x="-10" />
                 </Anchors>
-                <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" desaturated="true" setAllPoints="true">
+                <NormalTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconClose.png" desaturated="true" setAllPoints="true">
                     <Color r="1" g="0.82" b="0" />
                 </NormalTexture>
-                <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCross_Yellow.png" desaturated="true">
+                <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconClose.png" desaturated="true">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="1" y="-1" />
                         <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-1" y="1" />

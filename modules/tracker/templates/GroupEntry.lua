@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerGroupEntryTemplate : Button
 ---@field treeNode TreeNodeMixin
 ---@field group MapPinEnhancedGroupMixin
----@field expandIcon Texture
+---@field expandIcon MapPinEnhancedIconMixin
 ---@field title FontString
 ---@field icon Texture
 ---@field line Texture
@@ -48,9 +48,9 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateExpandIcon()
 
     self.expandIcon:Show()
     if self.treeNode:IsCollapsed() then
-        self.expandIcon:SetAtlas("common-icon-plus")
+        self.expandIcon:SetIconTexture("plus")
     else
-        self.expandIcon:SetAtlas("common-icon-minus")
+        self.expandIcon:SetIconTexture("minus")
     end
 end
 
@@ -237,8 +237,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddTrackingModeMenu(menu)
         local label = option.label
         table.insert(entries, {
             type = "radio",
-            -- TODO: Replace the placeholder pin with tracking-mode-specific icons.
-            label = MapPinEnhanced:Iconize("pin", label),
+            label = label,
             isSelected = function()
                 return group:GetTrackingMode() == mode
             end,
@@ -277,15 +276,14 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
 
     table.insert(menu, {
         type = "button",
-        -- TODO: Replace the placeholder pin with a restore/show icon.
-        label = MapPinEnhanced:Iconize("pin", L["Show Reached Pins Again"]),
+        label = MapPinEnhanced:Iconize("arrowcircle", L["Show Reached Pins Again"]),
         onClick = function() group:RestoreReachedPins() end,
     })
 
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
-            label = MapPinEnhanced:Iconize("minus", L["Hide Group"]),
+            label = MapPinEnhanced:Iconize("eyeslash", L["Hide Group"]),
             onClick = function() group:HideGroup() end,
         })
     end
@@ -316,7 +314,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         self:AddEditGroupMenuAction(menu)
         table.insert(menu, {
             type = "button",
-            label = MapPinEnhanced:Iconize("plus", L["Show Group"]),
+            label = MapPinEnhanced:Iconize("eye", L["Show Group"]),
             onClick = function() group:ShowGroup() end,
         })
         table.insert(menu, {
@@ -338,8 +336,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     if group:GetReachedPinCount() > 0 then
         table.insert(menu, {
             type = "button",
-            -- TODO: Replace the placeholder pin with a restore/show icon.
-            label = MapPinEnhanced:Iconize("pin", L["Show Reached Pins Again"]),
+            label = MapPinEnhanced:Iconize("arrowcircle", L["Show Reached Pins Again"]),
             onClick = function() group:RestoreReachedPins() end,
         })
     end
@@ -347,7 +344,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
-            label = MapPinEnhanced:Iconize("minus", L["Hide Group"]),
+            label = MapPinEnhanced:Iconize("eyeslash", L["Hide Group"]),
             onClick = function() group:HideGroup() end,
         })
     end

@@ -57,7 +57,7 @@
                 <Layers>
                     <Layer level="ARTWORK">
                         <Texture inherits="MapPinEnhancedIconTemplate">
-                            <Size x="16" y="24" />
+                            <Size x="20" y="20" />
                             <KeyValues>
                                 <KeyValue key="icon" value="drag" />
                             </KeyValues>
@@ -146,7 +146,7 @@
                 <Size x="28" y="28" />
                 <KeyValues>
                     <KeyValue key="icon" value="trash" />
-                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Permanently delete this pin." />
                 </KeyValues>
                 <Anchors>
@@ -157,7 +157,7 @@
                 <Size x="28" y="28" />
                 <KeyValues>
                     <KeyValue key="icon" value="duplicate" />
-                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Create a copy of this pin." />
                 </KeyValues>
                 <Anchors>
@@ -168,7 +168,7 @@
                 <Size x="28" y="28" />
                 <KeyValues>
                     <KeyValue key="icon" value="edit" />
-                    <KeyValue key="iconSize" value="small" />
+                    <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Description" />
                 </KeyValues>
                 <Anchors>

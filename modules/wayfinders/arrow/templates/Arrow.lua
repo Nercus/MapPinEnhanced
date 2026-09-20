@@ -60,8 +60,7 @@ local function BuildArrowSettingsMenuEntries()
         },
         {
             type = "checkbox",
-            -- TODO: Replace the placeholder pin with a rotate icon.
-            label = MapPinEnhanced:Iconize("pin", MapPinEnhanced.L["Wayfinder.Arrow.RotatePin_LABEL"]),
+            label = MapPinEnhanced:Iconize("arrowcircle", MapPinEnhanced.L["Wayfinder.Arrow.RotatePin_LABEL"]),
             isSelected = function()
                 return Options:GetOptionValue("Wayfinder.Arrow.RotatePin")
             end,

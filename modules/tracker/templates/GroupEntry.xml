@@ -9,7 +9,10 @@
         <Size x="300" y="35" />
         <Layers>
             <Layer level="ARTWORK" textureSubLevel="1">
-                <Texture parentKey="expandIcon" atlas="common-icon-plus">
+                <Texture parentKey="expandIcon" inherits="MapPinEnhancedIconTemplate">
+                    <KeyValues>
+                        <KeyValue key="icon" value="plus" />
+                    </KeyValues>
                     <Size x="12" y="12" />
                     <Anchors>
                         <Anchor point="LEFT" x="5" y="-3" />
@@ -67,7 +70,7 @@
                     <Button parentKey="restoreButton" inherits="MapPinEnhancedIconButtonTemplate" propagateMouseInput="Motion">
                         <Size x="20" y="20" />
                         <KeyValues>
-                            <KeyValue key="icon" value="pin" />
+                            <KeyValue key="icon" value="arrowcircle" />
                         </KeyValues>
                         <Anchors>
                             <Anchor point="LEFT" />
