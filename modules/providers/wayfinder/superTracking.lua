@@ -7,8 +7,6 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 
----@alias SuperTrackingDiagnosticValue string|number|boolean|nil
----@alias SuperTrackingDiagnostics table<string, SuperTrackingDiagnosticValue>
 ---@alias SuperTrackingRestore fun(): boolean
 
 ---@class SuperTrackingProvider
@@ -83,59 +81,6 @@ end
 MapPinEnhanced:OnLoad(function()
     MapPinEnhanced:DeleteVar("superTrackingWayfinder")
 end)
-
----@param value SuperTrackingDiagnosticValue
----@return string
-local function FormatDiagnosticValue(value)
-    return value == nil and "nil" or tostring(value)
-end
-
----@param fields SuperTrackingDiagnostics
----@return string
-local function FormatDiagnostics(fields)
-    ---@type string[]
-    local keys = {}
-    for key in pairs(fields) do
-        table.insert(keys, key)
-    end
-    table.sort(keys)
-
-    ---@type string[]
-    local values = {}
-    for _, key in ipairs(keys) do
-        table.insert(values, string.format("%s=%s", key, FormatDiagnosticValue(fields[key])))
-    end
-    return table.concat(values, ", ")
-end
-
----@type table<string, boolean>
-local reportedTargets = {}
-
----@param targetID string
----@param targetType string
----@param fields SuperTrackingDiagnostics
-function Providers:ReportUnresolvedSuperTrackingTarget(targetID, targetType, fields)
-    if reportedTargets[targetID] then return end
-    reportedTargets[targetID] = true
-    MapPinEnhanced:Print(string.format(
-        L["Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."],
-        targetType, FormatDiagnostics(fields)))
-end
-
----@param targetID string
----@param fields SuperTrackingDiagnostics
-function Providers:ReportUnsupportedSuperTrackingTarget(targetID, fields)
-    if reportedTargets[targetID] then return end
-    reportedTargets[targetID] = true
-    MapPinEnhanced:Print(string.format(
-        L["Unsupported super-tracking target (%s). Please provide this information to the addon author."],
-        FormatDiagnostics(fields)))
-end
-
----@param targetID string
-function Providers:ClearSuperTrackingReport(targetID)
-    reportedTargets[targetID] = nil
-end
 
 ---@param source string
 local function CancelTargetRetry(source)
@@ -267,9 +212,7 @@ end
 
 ---@param source string
 ---@param targetID string
----@param targetType string
----@param fields SuperTrackingDiagnostics
-function Providers:HandleUnresolvedSuperTrackingTarget(source, targetID, targetType, fields)
+function Providers:HandleUnresolvedSuperTrackingTarget(source, targetID)
     local provider = providersBySource[source]
     assert(provider, "Providers:HandleUnresolvedSuperTrackingTarget: source is not registered")
 
@@ -279,7 +222,6 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, targetID, targetT
     if activeOwner == source and activeTargetID ~= targetID then
         Navigation:ClearDestination(source, activeTargetID, activeChangeNumber)
     end
-    if reportedTargets[targetID] then return end
 
     local waitingTarget = waitingTargets[source]
     if waitingTarget and waitingTarget.targetID ~= targetID then
@@ -295,10 +237,10 @@ function Providers:HandleUnresolvedSuperTrackingTarget(source, targetID, targetT
 
     local retryDelay = TARGET_RETRY_DELAYS[waitingTarget.attempts + 1]
     if not retryDelay then
-        waitingTargets[source] = nil
+        -- Retain exhausted attempts until resolution or selection changes, so
+        -- repeated source events cannot restart the retry timers.
         self:ClearSuperTrackingEntry(source, targetID)
         Navigation:ClearDestination(source, targetID, waitingTarget.changeNumber)
-        self:ReportUnresolvedSuperTrackingTarget(targetID, targetType, fields)
         return
     end
 
@@ -360,7 +302,6 @@ end
 function Providers:SetSuperTrackingWayfinderData(source, targetID, targetData, removeDestination)
     CancelTargetRetry(source)
     CancelOtherTargetRetries(source)
-    self:ClearSuperTrackingReport(targetID)
     local provider = providersBySource[source]
     if provider.readText then
         local title, description, available = provider.readText(targetID, targetData)

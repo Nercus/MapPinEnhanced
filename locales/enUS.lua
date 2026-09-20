@@ -176,10 +176,6 @@ L["Content"] = "Content"
 L["Vignette"] = "Vignette"
 L["House"] = "House"
 L["%s's House"] = "%s's House"
-L["Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."] =
-"Tracked %s could not be resolved as a location (%s). Please provide this information to the addon author."
-L["Unsupported super-tracking target (%s). Please provide this information to the addon author."] =
-"Unsupported super-tracking target (%s). Please provide this information to the addon author."
 
 ------------------------------ Miscellaneous ------------------------------
 L["Back"] = "Back"

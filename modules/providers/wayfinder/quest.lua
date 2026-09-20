@@ -90,10 +90,7 @@ local function RefreshQuest()
         mapID, x, y = C_QuestLog.GetNextWaypoint(questID)
     end
     if questID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Quest"], {
-            hasCoordinates = x ~= nil and y ~= nil,
-            questID = questID,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()

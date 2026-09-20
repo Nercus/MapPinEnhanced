@@ -18,25 +18,11 @@ local function GetFallbackTargetID()
 end
 
 local function RefreshFallbackTarget()
-    local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    local pinType, pinTypeID = C_SuperTrack.GetSuperTrackedMapPin()
-    local contentType, contentID = C_SuperTrack.GetSuperTrackedContent()
-    local questID = C_SuperTrack.GetSuperTrackedQuestID()
-    local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
     local targetID = GetFallbackTargetID()
 
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     if x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Target"], {
-            contentID = contentID,
-            contentType = contentType,
-            hasCoordinates = x ~= nil and y ~= nil,
-            mapPinID = pinTypeID,
-            mapPinType = pinType,
-            questID = questID,
-            superTrackingType = superTrackingType,
-            vignetteGUID = vignetteGUID,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
 

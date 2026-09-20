@@ -78,12 +78,7 @@ local function RefreshScenario()
     local targetID = GetScenarioTargetID()
     local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(GetScenarioWaypoint)
     if x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Scenario"], {
-            scenarioID = scenario and scenario.scenarioID,
-            stage = scenario and scenario.currentStage,
-            stepID = step and step.stepID,
-            hasCoordinates = x ~= nil and y ~= nil,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
 

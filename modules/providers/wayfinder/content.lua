@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 
 local Providers = MapPinEnhanced:GetModule("Providers")
-local L = MapPinEnhanced.L
 local SOURCE = "content"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Content
 
@@ -105,11 +104,7 @@ local function RefreshContent()
         end
     end
     if trackableType == nil or trackableID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Content"], {
-            hasCoordinates = x ~= nil and y ~= nil,
-            trackableID = trackableID,
-            trackableType = trackableType,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     local title, description = C_SuperTrack.GetSuperTrackedItemName()

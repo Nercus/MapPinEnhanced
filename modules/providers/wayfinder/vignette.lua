@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 
 local Providers = MapPinEnhanced:GetModule("Providers")
-local L = MapPinEnhanced.L
 local SOURCE = "vignette"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Vignette
 
@@ -29,12 +28,7 @@ local function RefreshVignette()
         return GetVignettePositionForMap(vignetteGUID, candidateMapID)
     end or nil)
     if not vignetteGUID or not vignetteInfo or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Vignette"], {
-            hasCoordinates = x ~= nil and y ~= nil,
-            hasVignetteInfo = vignetteInfo ~= nil,
-            vignetteGUID = vignetteGUID,
-            vignetteID = vignetteInfo and vignetteInfo.vignetteID,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {

@@ -176,11 +176,7 @@ local function RefreshMapPin()
         return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
     end or nil, questMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Map Pin"], {
-            hasCoordinates = x ~= nil and y ~= nil,
-            pinType = pinType,
-            typeID = typeID,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     local title, texture, usesAtlas, description = GetMapPinDisplayInfo(pinType, typeID, mapID)

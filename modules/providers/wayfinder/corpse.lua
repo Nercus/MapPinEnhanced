@@ -19,11 +19,7 @@ local function RefreshCorpse()
     end)
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID, L["Corpse"], {
-            hasCoordinates = x ~= nil and y ~= nil,
-            isSuperTrackingCorpse = isTrackingCorpse,
-            mapID = mapID,
-        })
+        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
