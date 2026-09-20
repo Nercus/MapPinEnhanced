@@ -31,8 +31,8 @@ local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 local exportOptions = {
-    { label = L["Way commands"],    value = "way" },
     { label = L["Serialized data"], value = "serialized" },
+    { label = L["Way commands"],    value = "way" },
 }
 
 local prefixOptions = {
@@ -159,20 +159,7 @@ function MapPinEnhancedExportWindowMixin:UpdateOutput()
     self.textarea.editbox:HighlightText()
     self:UpdateSummary(pins)
 
-    local losesStyle = false
-    local losesTitle = false
-    for _, pinData in ipairs(pins) do
-        if pinData.texture or pinData.color then
-            losesStyle = true
-        end
-        if self.selectedPrefix == "/mappin" and pinData.title then
-            losesTitle = true
-        end
-        if losesStyle and losesTitle then
-            break
-        end
-    end
-    self.warning:SetShown(self.selectedExportType == "way" and (losesStyle or losesTitle))
+    self.warning:SetShown(self.selectedExportType == "way")
     self.prefixRadio:SetShown(self.selectedExportType == "way")
     self.prefixLabel:SetShown(self.selectedExportType == "way")
 end
@@ -203,7 +190,7 @@ function MapPinEnhancedExportWindowMixin:OnLoad()
     self.exportTypeRadio:Setup({
         options = exportOptions,
         orientation = "horizontal",
-        init = function() return "way" end,
+        init = function() return "serialized" end,
         onChange = function(value)
             self.selectedExportType = value
             self:UpdateOutput()
@@ -218,6 +205,6 @@ function MapPinEnhancedExportWindowMixin:OnLoad()
             self:UpdateOutput()
         end,
     })
-    self.selectedExportType = "way"
+    self.selectedExportType = "serialized"
     self.selectedPrefix = "/way"
 end

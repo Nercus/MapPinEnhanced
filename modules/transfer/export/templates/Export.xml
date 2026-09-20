@@ -3,7 +3,7 @@
 
     <Include file="Export.lua" />
     <Frame name="MapPinEnhancedExportWindowTemplate" inherits="MapPinEnhancedWindowTemplate" virtual="true" mixin="MapPinEnhancedExportWindowMixin">
-        <Size x="650" y="400" />
+        <Size x="650" y="450" />
         <KeyValues>
             <KeyValue key="windowTitle" value="Export" />
         </KeyValues>
@@ -11,24 +11,28 @@
             <Layer level="ARTWORK">
                 <FontString parentKey="description" inherits="GameFontHighlight" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="25" y="-48" />
-                    </Anchors>
-                </FontString>
-                <FontString parentKey="summary" inherits="GameFontHighlightSmall" justifyH="RIGHT">
-                    <Anchors>
-                        <Anchor point="TOPRIGHT" x="-25" y="-48" />
+                        <Anchor point="TOPLEFT" x="25" y="-64" />
+                        <Anchor point="TOPRIGHT" x="-25" y="-64" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="prefixLabel" inherits="GameFontHighlight" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="310" y="-75" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.description" relativePoint="BOTTOMLEFT" x="5" y="-40" />
                     </Anchors>
                 </FontString>
                 <FontString parentKey="warning" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" hidden="true">
-                    <Size x="600" y="35" />
+                    <Size x="1" y="32" />
                     <Color r="1" g="0.45" b="0.1" />
                     <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="25" y="25" />
+                        <Anchor point="BOTTOMLEFT" x="25" y="10" />
+                        <Anchor point="BOTTOMRIGHT" x="-25" y="10" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="summary" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="1" y="16" />
+                    <Anchors>
+                        <Anchor relativePoint="TOPLEFT" point="BOTTOMLEFT" y="10" relativeKey="$parent.warning"/>
+                        <Anchor relativePoint="TOPRIGHT" point="BOTTOMRIGHT" y="10" relativeKey="$parent.warning" />
                     </Anchors>
                 </FontString>
             </Layer>
@@ -39,7 +43,7 @@
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="15" y="-65" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.description" relativePoint="BOTTOMLEFT" x="0" y="-5" />
                 </Anchors>
             </Frame>
             <Frame inherits="MapPinEnhancedRadioGroupTemplate" parentKey="prefixRadio">
@@ -47,13 +51,14 @@
                     <KeyValue key="orientation" value="horizontal" />
                 </KeyValues>
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="410" y="-65" />
+                    <Anchor point="LEFT" relativeKey="$parent.prefixLabel" relativePoint="RIGHT" x="12" y="2" />
                 </Anchors>
             </Frame>
             <ScrollFrame inherits="MapPinEnhancedTextareaTemplate" parentKey="textarea">
-                <Size x="600" y="235" />
+                <Size x="580" y="205" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="25" y="-115" />
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="-10" relativeKey="$parent.prefixLabel" />
+                    <Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" x="0" y="10" relativeKey="$parent.summary" />
                 </Anchors>
             </ScrollFrame>
         </Frames>
