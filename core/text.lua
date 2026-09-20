@@ -12,6 +12,12 @@ function MapPinEnhanced:FormatValueToPrecision(value, step)
     return string.format("%." .. precision .. "f", value)
 end
 
+---@param value number?
+---@return string
+function MapPinEnhanced:FormatPercent(value)
+    return value and string.format("%.2f", value * 100) or ""
+end
+
 ---@param text string
 ---@param length integer Maximum byte length; incomplete UTF-8 characters are omitted.
 ---@return string

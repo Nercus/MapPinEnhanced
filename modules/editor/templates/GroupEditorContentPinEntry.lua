@@ -248,7 +248,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition()
     self.mapField.child.appliedText = GetMapDisplay(mapID)
     self.mapField.child.appliedMapID = mapID
     self.xField.child.appliedText, self.yField.child.appliedText =
-        Editor:FormatPercent(x), Editor:FormatPercent(y)
+        MapPinEnhanced:FormatPercent(x), MapPinEnhanced:FormatPercent(y)
     self.mapField.child:SetValue(mapID)
     return true
 end
@@ -276,7 +276,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     self.mapField.child.appliedText = GetMapDisplay(pinData.mapID)
     self.mapField.child.appliedMapID = pinData.mapID
     self.xField.child.appliedText, self.yField.child.appliedText =
-        Editor:FormatPercent(pinData.x), Editor:FormatPercent(pinData.y)
+        MapPinEnhanced:FormatPercent(pinData.x), MapPinEnhanced:FormatPercent(pinData.y)
     self.mapField.child:SetValue(pinData.mapID)
     self.xField.child:SetValue(self.xField.child.appliedText)
     self.yField.child:SetValue(self.yField.child.appliedText)

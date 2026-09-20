@@ -30,12 +30,6 @@ function Editor:ParsePercent(value)
     return numberValue
 end
 
----@param value number?
----@return string
-function Editor:FormatPercent(value)
-    return value and string.format("%.2f", value * 100) or ""
-end
-
 ---@param pinNode MapPinEnhancedEditorPinNodeData
 ---@return pinData
 function Editor:GetPinData(pinNode)
@@ -134,3 +128,8 @@ MapPinEnhanced:AddSlashCommand("editor", function()
         Editor:ShowEditor()
     end
 end, L["Toggle the group editor."])
+
+
+C_Timer.After(1, function()
+    Editor:ShowEditor()
+end)
