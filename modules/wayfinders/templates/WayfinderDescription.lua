@@ -38,7 +38,7 @@ end
 function MapPinEnhancedWayfinderDescriptionMixin:OnEnter()
     if not self.truncated or not self.description then return end
     GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
-    GameTooltip:SetText(self.title or "", 1, 0.82, 0)
+    GameTooltip:SetText(self.title or "", 1, 0.82, 0, 1, true)
     MapPinEnhanced:AddDescriptionToTooltip(self.description)
     GameTooltip:Show()
 end

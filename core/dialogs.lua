@@ -199,7 +199,7 @@ RegisterStaticDialog(RENAME_PIN_DIALOG_NAME, {
         if not editBox then return end
 
         editBox:SetNumeric(false)
-        editBox:SetMaxLetters(0)
+        editBox:SetMaxLetters(64)
         editBox:SetText(GetPinTitle(data and data.pin))
         editBox:SetFocus()
         editBox:HighlightText()
@@ -245,7 +245,7 @@ RegisterStaticDialog(RENAME_GROUP_DIALOG_NAME, {
         if not editBox then return end
 
         editBox:SetNumeric(false)
-        editBox:SetMaxLetters(0)
+        editBox:SetMaxLetters(32)
         editBox:SetText(data and data.group and data.group:GetName() or "")
         editBox:SetFocus()
         editBox:HighlightText()

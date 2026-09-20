@@ -18,7 +18,7 @@ function MapPinEnhancedDescriptionEditorMixin:OnLoad()
     self:SetTitle(L["Description"])
     self.heading:SetText(L["Edit Description"])
     self.info:SetText(L["Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."])
-    self.input.editbox:SetMaxLetters(0)
+    self.input.editbox:SetMaxLetters(2048)
     self.input.editbox:SetText("")
 end
 

@@ -90,7 +90,7 @@ function MapPinEnhancedSuperTrackedEntryMixin:OnEnter()
         return
     end
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:SetText(self.entry.title, 1, 0.82, 0)
+    GameTooltip:SetText(self.entry.title, 1, 0.82, 0, 1, true)
     MapPinEnhanced:AddDescriptionToTooltip(self.entry.description)
     if self.entry.canToggle then
         GameTooltip:AddLine(self.entry.tracked and L["Stop tracking"] or L["Track"], 1, 1, 1)

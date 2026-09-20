@@ -27,7 +27,7 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     if not pinData then return end
 
     GameTooltip:SetOwner(owner, anchor or "ANCHOR_TOPLEFT", 20)
-    GameTooltip:AddLine(pinData.title or L["Map Pin"], 1, 0.82, 0)
+    GameTooltip:AddLine(pinData.title or L["Map Pin"], 1, 0.82, 0, true)
 
     local mapInfo = C_Map.GetMapInfo(pinData.mapID)
     local mapName = mapInfo and mapInfo.name or tostring(pinData.mapID)
@@ -38,8 +38,8 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     local total = group and group:GetTotalPinCount() or 1
 
     MapPinEnhanced:AddDescriptionToTooltip(pinData.description)
-    GameTooltip:AddLine(string.format("%s %s", mapName, coordinates), 1, 1, 1)
+    GameTooltip:AddLine(string.format("%s %s", mapName, coordinates), 1, 1, 1, true)
     GameTooltip:AddLine(" ")
-    GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65)
+    GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65, true)
     GameTooltip:Show()
 end

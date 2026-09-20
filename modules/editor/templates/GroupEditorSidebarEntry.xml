@@ -47,16 +47,18 @@
                         <MaskedTexture childKey="icon" />
                     </MaskedTextures>
                 </MaskTexture>
-                <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
+                <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+                    <Size y="14" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="TOPRIGHT" x="4" y="-5" />
-                        <Anchor point="RIGHT" x="-8" />
+                        <Anchor point="TOPLEFT" x="44" y="-10" />
+                        <Anchor point="TOPRIGHT" x="-8" y="-10" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="detail" inherits="GameFontDisableSmall" justifyH="LEFT">
+                <FontString parentKey="detail" inherits="GameFontDisableSmall" justifyH="LEFT" wordwrap="false">
+                    <Size y="12" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.name" relativePoint="BOTTOMLEFT" x="16" y="-2" />
-                        <Anchor point="RIGHT" x="-8" />
+                        <Anchor point="TOPRIGHT" relativeKey="$parent.name" relativePoint="BOTTOMRIGHT" y="-2" />
                     </Anchors>
                 </FontString>
                 <Texture parentKey="trackingModeIcon" inherits="MapPinEnhancedIconTemplate">

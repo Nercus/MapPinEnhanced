@@ -104,7 +104,7 @@
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.iconButton" relativePoint="BOTTOMRIGHT" x="12" y="2"/>
                 </Anchors>
                 <Frames>
-                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate" letters="32">
                         <Size x="300" y="24" />
                     </EditBox>
                 </Frames>

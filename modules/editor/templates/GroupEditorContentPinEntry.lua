@@ -17,6 +17,7 @@ local BACKGROUND_END_COLOR = CreateColor(1, 1, 1, 0)
 
 ---@class MapPinEnhancedEditorPositionInput : MapPinEnhancedInputTemplate
 ---@field appliedText string?
+---@field validText string?
 
 ---@class MapPinEnhancedEditorPositionField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedEditorPositionInput
@@ -99,6 +100,22 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:OnInputTabPressed(input)
     self.editor.groupEditorContent:FocusNextPinInput(self, input)
 end
 
+---@param input MapPinEnhancedEditorPositionInput
+---@param userInput boolean
+function MapPinEnhancedGroupEditorContentPinEntryMixin:OnCoordinateTextChanged(input, userInput)
+    local text = input:GetText() or ""
+    -- Empty text and a decimal point are temporary drafts while replacing a value.
+    if userInput and text ~= "" and text ~= "." and not Editor:ParsePercent(text) then
+        local cursor = input:GetCursorPosition()
+        input:SetText(input.validText or input.appliedText or "")
+        input:SetCursorPosition(math.max(0, cursor - 1))
+    else
+        input.validText = text
+    end
+    input:UpdateClearButtonVisibility()
+    input:UpdatePlaceholderVisibility()
+end
+
 function MapPinEnhancedGroupEditorContentPinEntryMixin:OnEnter()
     self.background:SetGradient("HORIZONTAL", BACKGROUND_HOVER_COLOR, BACKGROUND_END_COLOR)
 end
@@ -119,6 +136,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Reset()
     self.mapField.child.resultsFrame:Hide()
     for _, editBox in ipairs({ self.xField.child, self.yField.child }) do
         editBox.appliedText = nil
+        editBox.validText = nil
         editBox:SetScript("OnEnterPressed", nil)
         editBox:SetScript("OnEditFocusLost", MapPinEnhancedInputMixin.OnEditFocusLost)
         editBox:SetScript("OnEscapePressed", MapPinEnhancedInputMixin.OnEscapePressed)
@@ -283,6 +301,9 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
 
     local function applyPosition(editBox)
         self:ApplyPosition()
+        for _, input in ipairs({ self.xField.child, self.yField.child }) do
+            input:SetValue(input.appliedText or "")
+        end
         editBox:ClearFocus()
     end
     local function restore(editBox)

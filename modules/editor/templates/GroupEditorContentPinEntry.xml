@@ -82,7 +82,7 @@
                     <Anchor point="LEFT" x="75" y="-2" />
                 </Anchors>
                 <Frames>
-                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate" letters="64">
                         <Size x="180" y="24" />
                         <Scripts>
                             <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
@@ -116,9 +116,10 @@
                     <Anchor point="LEFT" relativeKey="$parent.mapField" relativePoint="RIGHT" x="10" />
                 </Anchors>
                 <Frames>
-                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate" letters="10">
                         <Size x="100" y="24" />
                         <Scripts>
+                            <OnTextChanged>self:GetParent():GetParent():OnCoordinateTextChanged(self, userInput)</OnTextChanged>
                             <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
                         </Scripts>
                     </EditBox>
@@ -133,9 +134,10 @@
                     <Anchor point="LEFT" relativeKey="$parent.xField" relativePoint="RIGHT" x="10" />
                 </Anchors>
                 <Frames>
-                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
+                    <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate" letters="10">
                         <Size x="100" y="24" />
                         <Scripts>
+                            <OnTextChanged>self:GetParent():GetParent():OnCoordinateTextChanged(self, userInput)</OnTextChanged>
                             <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
                         </Scripts>
                     </EditBox>

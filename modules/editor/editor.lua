@@ -23,11 +23,10 @@ end
 ---@param value string|number|nil
 ---@return number?
 function Editor:ParsePercent(value)
+    if type(value) == "string" and not value:match("^%d*%.?%d*$") then return nil end
     local numberValue = tonumber(value)
-    if not numberValue then return nil end
-    if numberValue > 1 then numberValue = numberValue / 100 end
-    if numberValue < 0 or numberValue > 1 then return nil end
-    return numberValue
+    if not numberValue or not (numberValue >= 0 and numberValue <= 100) then return nil end
+    return numberValue / 100
 end
 
 ---@param pinNode MapPinEnhancedEditorPinNodeData
