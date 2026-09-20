@@ -35,10 +35,12 @@ local exportOptions = {
     { label = L["Way commands"],    value = "way" },
 }
 
+
+
 local prefixOptions = {
-    { label = "/way",    value = "/way" },
-    { label = "/mph",    value = "/mph" },
-    { label = "/mappin", value = "/mappin" },
+    { label = "/way",                                                                                   value = "/way" },
+    { label = "/mph",                                                                                   value = "/mph" },
+    { label = "/mappin " .. "|T" .. MapPinEnhanced.assetsPath .. "\\shared\\WoWLogo.png" .. ":14:14|t", value = "/mappin" },
 }
 
 ---@param pinData SaveablePinData | pinData
