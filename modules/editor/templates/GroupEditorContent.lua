@@ -63,16 +63,18 @@ end
 ---@param group MapPinEnhancedGroupMixin?
 ---@param focusName boolean?
 function MapPinEnhancedGroupEditorContentMixin:SetGroup(group, focusName)
+    local retainScrollPosition = group ~= nil and self.group == group
     self.group = group
     self.emptyState:SetShown(not group)
     self.content:SetShown(group ~= nil)
-    self.dataProvider:Flush()
+    -- Publish the complete list once so pooled rows never display a partially rebuilt list.
+    self.dataProvider = CreateDataProvider(group and Editor:GetSortedPins(group) or {})
+    self.content.scrollBox:SetDataProvider(self.dataProvider, retainScrollPosition)
     if not group then
         self.content.header:Reset()
         return
     end
     self.content.header:SetGroup(group, self.editor, focusName)
-    for _, pinNode in ipairs(Editor:GetSortedPins(group)) do self.dataProvider:Insert(pinNode) end
 end
 
 function MapPinEnhancedGroupEditorContentMixin:ClearDropTarget()

@@ -276,6 +276,11 @@ function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     end
     if not sourceData then return nil end
 
+    -- GetPinEntries is unordered; preserve the editor's order before inserting the copy.
+    table.sort(entries, function(a, b)
+        if a.order ~= b.order then return a.order > b.order end
+        return (a.data.title or "") < (b.data.title or "")
+    end)
     sourceData.pinID = nil
     sourceData.title = string.format(MapPinEnhanced.L["copy of %s"], sourceData.title)
     local pin, duplicatePinID, replacedWayBackPin, shouldTrack = AddBeforePersist(self, sourceData)
