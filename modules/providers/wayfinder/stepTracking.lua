@@ -110,7 +110,7 @@ function Providers:ClearStepSuperTracking(restore)
         restoredTrackingIdentity = GetTrackingIdentity()
     end
     changingTracking = false
-    if restoreReachedEvent and SuperTrackedFrame then
+    if restoreReachedEvent and SuperTrackedFrame and not Pins:GetTrackedPin() then
         SuperTrackedFrame:RegisterEvent("NAVIGATION_DESTINATION_REACHED")
     end
     restoreReachedEvent = false

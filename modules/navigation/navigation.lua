@@ -147,6 +147,13 @@ end
 ---@param destination NavigationDestination
 function Navigation:CompleteFinalDestination(destination)
     if not IsCurrentDestination(destination) or destination.data.lock then return end
+    local progression = self.progression
+    if progression and progression.route.pathReferences[progression.pathIndex] then return end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    if not mapID or not x or not y then return end
+    local data = destination.data
+    local distance = self:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
+    if not distance or distance > 50 then return end
     local removeDestination = destination.removeDestination
     destination.removeDestination = nil
     if removeDestination then

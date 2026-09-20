@@ -92,17 +92,14 @@ local function RefreshContent()
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
     local targetID = GetContentTargetID()
     local hasTrackable = trackableType ~= nil and trackableID ~= nil
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint(hasTrackable and function(candidateMapID)
-        return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
-    end or nil)
-    if hasTrackable and (x == nil or y == nil or mapID == nil) and
-        C_ContentTracking and C_ContentTracking.GetBestMapForTrackable then
-        local _, bestMapID = C_ContentTracking.GetBestMapForTrackable(trackableType, trackableID)
-        if bestMapID then
-            x, y = GetContentWaypointForMap(trackableType, trackableID, bestMapID)
-            mapID = x ~= nil and y ~= nil and bestMapID or nil
-        end
+    local bestMapID ---@type number?
+    if hasTrackable and C_ContentTracking and C_ContentTracking.GetBestMapForTrackable then
+        local _
+        _, bestMapID = C_ContentTracking.GetBestMapForTrackable(trackableType, trackableID)
     end
+    local x, y, mapID, _, traversalOnly = Providers:GetSuperTrackingWaypoint(hasTrackable and function(candidateMapID)
+        return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
+    end or nil, bestMapID)
     if trackableType == nil or trackableID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
@@ -113,7 +110,7 @@ local function RefreshContent()
     local texture, usesAtlas = GetContentIcon(trackableType, trackableID)
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID, x = x, y = y, title = title, description = description, texture = texture, usesAtlas = usesAtlas,
-    }, ClearContent)
+    }, not traversalOnly and mapID == bestMapID and ClearContent or nil)
 end
 
 Providers:RegisterSuperTrackingProvider({
