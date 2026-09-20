@@ -1,0 +1,109 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="TrackerHiddenGroups.lua" />
+    <Button name="MapPinEnhancedTrackerHiddenGroupEntryTemplate" virtual="true">
+        <Size x="1" y="26" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" file="Interface/Icons/inv_misc_map08">
+                    <Size x="22" y="22" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="4" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="22" y="22" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="4" />
+                    </Anchors>
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon" />
+                    </MaskedTextures>
+                </MaskTexture>
+
+                <FontString parentKey="label" inherits="GameFontHighlightSmall" justifyH="LEFT" wordwrap="false">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="30" />
+                        <Anchor point="BOTTOMRIGHT" x="-6" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="BACKGROUND">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallShadow.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallBorder.png">
+                    <Color r="1" g="0.82" b="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallShadowInner.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" setAllPoints="true" alpha="0.25" />
+    </Button>
+
+    <Frame name="MapPinEnhancedTrackerHiddenGroupsTemplate" mixin="MapPinEnhancedTrackerHiddenGroupsMixin" virtual="true" hidden="true" enableMouse="true" frameStrata="DIALOG">
+        <Size x="315" y="36" />
+        <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" x="-4"/>
+            <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="5" x="4"/>
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" scale="0.5">
+                    <Gradient orientation="VERTICAL">
+                        <MinColor r="0.5" g="0.5" b="0.5" a="0.7" />
+                        <MaxColor r="0.5" g="0.5" b="0.5" a="0.9" />
+                    </Gradient>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" y="6" x="-8"/>
+                        <Anchor point="BOTTOMRIGHT" y="6" x="8"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT">
+                    <Size x="0" y="20" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="12" y="-8" />
+                        <Anchor point="TOPRIGHT" x="-12" y="-8" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="scrollBox" inherits="WowScrollBoxList">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="8" y="-28" />
+                    <Anchor point="BOTTOMRIGHT" x="-24" y="8" />
+                </Anchors>
+            </Frame>
+            <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-8" y="-28" />
+                    <Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+                </Anchors>
+            </EventFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

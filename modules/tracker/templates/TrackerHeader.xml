@@ -10,7 +10,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.5" />
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.75" />
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
                 <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
@@ -41,6 +41,7 @@
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="hiddenGroupsMenu" inherits="MapPinEnhancedTrackerHiddenGroupsTemplate" />
             <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
                 <KeyValues>
@@ -71,6 +72,7 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnHide>self.hiddenGroupsMenu:Hide()</OnHide>
         </Scripts>
     </Frame>
 </Ui>

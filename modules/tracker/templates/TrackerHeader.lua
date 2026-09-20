@@ -4,10 +4,9 @@ local MapPinEnhanced = select(2, ...)
 
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local Transfer = MapPinEnhanced:GetModule("Transfer")
-local Groups = MapPinEnhanced:GetModule("Groups")
-local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedTrackerHeaderTemplate : Frame
+---@field hiddenGroupsMenu MapPinEnhancedTrackerHiddenGroupsTemplate
 ---@field hiddenGroupsButton MapPinEnhancedIconButtonTemplate
 ---@field closeButton MapPinEnhancedIconButtonTemplate
 ---@field importButton MapPinEnhancedIconButtonTemplate
@@ -17,54 +16,13 @@ local L = MapPinEnhanced.L
 ---@field icon MapPinEnhancedIconMixin
 MapPinEnhancedTrackerHeaderMixin = {}
 
-function MapPinEnhancedTrackerHeaderMixin:BuildHiddenGroupsMenu()
-    local menu = {
-        {
-            type = "title",
-            label = L["Show hidden group"],
-        }
-    }
-
-    ---@type MapPinEnhancedGroupMixin[]
-    local hiddenGroups = {}
-
-    ---@param group MapPinEnhancedGroupMixin
-    for group in Groups:EnumerateGroups() do
-        if group:IsHidden() and not group:IsProtected() and group:GetTotalPinCount() > 0 then
-            table.insert(hiddenGroups, group)
-        end
-    end
-
-    table.sort(hiddenGroups, function(group1, group2) return Groups:IsGroupBefore(group1, group2) end)
-
-    if #hiddenGroups == 0 then
-        return {
-            {
-                type = "title",
-                label = L["No hidden groups"],
-            },
-        }
-    end
-
-    for _, group in ipairs(hiddenGroups) do
-        table.insert(menu, {
-            type = "button",
-            label = MapPinEnhanced:Iconize("eye", string.format("%s (%d)", group:GetName(),
-                group:GetTotalPinCount())),
-            onClick = function() group:ShowGroup() end,
-        })
-    end
-
-    return menu
-end
-
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()
     self.importButton:SetScript("OnClick", function()
         Transfer:ShowImportWindow()
     end)
 
     self.hiddenGroupsButton:SetScript("OnClick", function()
-        MapPinEnhanced:GenerateMenu(self.hiddenGroupsButton, self:BuildHiddenGroupsMenu())
+        self.hiddenGroupsMenu:SetShown(not self.hiddenGroupsMenu:IsShown())
     end)
 
     self.closeButton:SetScript("OnClick", function()
