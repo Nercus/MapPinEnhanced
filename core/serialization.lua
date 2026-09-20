@@ -17,7 +17,7 @@ local SLASH_PREFIX_PATTERN_2 = "/[Mm][Aa][Pp][Pp][Ii][Nn]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local WAY_COMMAND_PATTERN = "/way %s %.2f %.2f %s"
-local MAPPIN_COMMAND_PATTERN = "/mappin %s %.6f %.6f"
+local MAPPIN_COMMAND_PATTERN = "/mappin %s %.2f %.2f"
 local PREFIX = "!MPH!"
 MapPinEnhanced.PREFIX = PREFIX
 
@@ -106,7 +106,7 @@ local function ParseNumberToken(token)
     return tonumber(token)
 end
 
----parse Blizzard's /mappin format: mapID x y, with normalized 0..1 coordinates
+---parse /mappin format: mapID x y, with percentage 0..100 coordinates
 ---@param mapPinString string
 ---@return string?, number?, number[]?, boolean
 local function ParseMapPinCommandToData(mapPinString)
@@ -129,11 +129,11 @@ local function ParseMapPinCommandToData(mapPinString)
     if not mapID or not x or not y then
         return nil, nil, nil, hasMapPinPrefix
     end
-    if mapID ~= math.floor(mapID) or x < 0 or x > 1 or y < 0 or y > 1 then
+    if mapID ~= math.floor(mapID) or x < 0 or x > 100 or y < 0 or y > 100 then
         return nil, nil, nil, hasMapPinPrefix
     end
 
-    return nil, mapID, { x * 100, y * 100 }, true
+    return nil, mapID, { x, y }, true
 end
 
 
@@ -247,12 +247,12 @@ end
 function MapPinEnhanced:SerializeWayLine(pinData, prefix)
     local mapID = pinData.mapID or ""
     local title = pinData.title or ""
-    if prefix == "/mappin" then
-        return trim(string.format(MAPPIN_COMMAND_PATTERN, mapID, pinData.x, pinData.y))
-    end
-
     local x = pinData.x * 100
     local y = pinData.y * 100
+    if prefix == "/mappin" then
+        return trim(string.format(MAPPIN_COMMAND_PATTERN, mapID, x, y))
+    end
+
     local wayLine = trim(string.format(WAY_COMMAND_PATTERN, "#" .. mapID, x, y, title))
     local command = wayLine:gsub("^/way", prefix or "/way", 1)
     return command
