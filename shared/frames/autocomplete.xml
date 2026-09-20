@@ -25,18 +25,17 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true">
+            <Frame parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true" clampedToScreen="true">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="2" />
-                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="2" />
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="-4" />
                 </Anchors>
-                <Size x="0" y="150" />
+                <Size x="320" y="96" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5">
+                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" scale="0.5">
                             <Anchors>
-                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-5" y="5" />
-                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="5" y="-5" />
+                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-9" y="6" />
+                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="9" y="-8" />
                             </Anchors>
                         </Texture>
                     </Layer>
@@ -44,8 +43,8 @@
                         <FontString parentKey="message" inherits="GameFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="BROWSE_NO_RESULTS">
                             <Size x="0" y="20" />
                             <Anchors>
-                                <Anchor point="TOPLEFT" x="10" />
-                                <Anchor point="BOTTOMRIGHT" x="-10" />
+                                <Anchor point="TOPLEFT" x="22" y="-10" />
+                                <Anchor point="BOTTOMRIGHT" x="-32" y="10" />
                             </Anchors>
                         </FontString>
                     </Layer>
@@ -54,14 +53,14 @@
                 <Frames>
                     <Frame parentKey="scrollBox" inherits="WowScrollBoxList" frameStrata="DIALOG" enableMouse="true">
                         <Anchors>
-                            <Anchor point="TOPLEFT" x="5" y="-3" />
-                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="2" />
+                            <Anchor point="TOPLEFT" x="12" y="-10" />
+                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-32" y="10" />
                         </Anchors>
                     </Frame>
                     <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeKey="$parent.scrollBox" relativePoint="TOPRIGHT" x="-10" y="-5" />
-                            <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="-10" y="0" />
+                            <Anchor point="TOPRIGHT" x="-12" y="-10" />
+                            <Anchor point="BOTTOMRIGHT" x="-12" y="10" />
                         </Anchors>
                     </EventFrame>
                 </Frames>
@@ -77,30 +76,28 @@
 
 
     <Button name="MapPinEnhancedAutocompleteEntryTemplate" mixin="MapPinEnhancedAutocompleteEntryMixin" virtual="true">
-        <Size x="1" y="30" />
+        <Size x="1" y="24" />
         <Layers>
+            <Layer level="BACKGROUND">
+                <Texture setAllPoints="true">
+                    <Color r="1" g="0.9" b="0.7" a="0.035" />
+                </Texture>
+            </Layer>
             <Layer level="OVERLAY">
-                <FontString inherits="GameFontNormalSmall" parentKey="label" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString inherits="GameFontHighlightSmall" parentKey="label" justifyH="LEFT" justifyV="MIDDLE" wordwrap="false">
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="15" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="TOPLEFT" x="10" />
+                        <Anchor point="BOTTOMRIGHT" x="-10" />
                     </Anchors>
                 </FontString>
             </Layer>
-            <Layer level="BACKGROUND">
-                <Texture atlas="Professions_Recipe_Active" parentKey="glow" hidden="true" setAllPoints="true">
-                    <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="1" b="1" a="0.7" />
-                        <MaxColor r="1" g="1" b="1" a="0" />
-                    </Gradient>
-
-                </Texture>
-            </Layer>
         </Layers>
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" alphaMode="BLEND" setAllPoints="true">
+            <Gradient orientation="HORIZONTAL">
+                <MinColor r="1" g="1" b="1" a="1" />
+                <MaxColor r="1" g="1" b="1" a="0.05" />
+            </Gradient>
+        </HighlightTexture>
         <ButtonText inherits="GameFontNormalSmall" />
-        <Scripts>
-            <OnEnter method="OnEnter" />
-            <OnLeave method="OnLeave" />
-        </Scripts>
     </Button>
 </Ui>

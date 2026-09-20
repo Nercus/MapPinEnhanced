@@ -5,4 +5,9 @@
         <TextureSliceMargins left="20" top="20" right="20" bottom="20" />
         <TextureSliceMode mode="Stretched" />
     </Texture>
+
+    <Texture virtual="true" name="MapPinEnhancedGenericFrameOpaqueTextureTemplate" file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameOpaque.png">
+        <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+        <TextureSliceMode mode="Stretched" />
+    </Texture>
 </Ui>

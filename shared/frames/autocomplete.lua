@@ -1,5 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local ENTRY_HEIGHT = 24
+local ENTRY_SPACING = 2
+local RESULTS_PADDING = 20
+local MIN_RESULTS_HEIGHT = 96
+local MAX_VISIBLE_RESULTS = 10
 
 ---@class MapPinEnhancedAutocompleteTemplate : MapPinEnhancedInputTemplate
 ---@field resultsFrame MapPinEnhancedAutocompleteResults
@@ -37,11 +42,18 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     self.selectedIndex = nil
 
     local scrollView = CreateScrollBoxListLinearView()
+    ---@diagnostic disable-next-line: redundant-parameter
+    scrollView:SetPadding(0, 0, 0, 0, ENTRY_SPACING)
     scrollView:SetElementInitializer("MapPinEnhancedAutocompleteEntryTemplate", function(entry, elementData)
         ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
         ---@cast elementData SearchResult
         local optionData = self.optionsValueMap[elementData.line]
         entry:Init(optionData)
+        if self.dataProvider:Find(self.selectedIndex) == elementData then
+            entry:LockHighlight()
+        else
+            entry:UnlockHighlight()
+        end
         entry:SetScript("OnClick", function()
             self:SetValue(optionData.value, true)
             self.resultsFrame:Hide()
@@ -58,11 +70,12 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     self.resultsFrame.scrollBox:SetInterpolateScroll(true);
     ScrollUtil.InitScrollBoxListWithScrollBar(self.resultsFrame.scrollBox, self.resultsFrame.scrollBar, scrollView)
 
-    self.resultsFrame.scrollBar:SetHideIfUnscrollable(true)
+    self.resultsFrame.scrollBar:SetHideIfUnscrollable(false)
 end
 
 function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
-    self.resultsFrame.scrollBox:ScrollToElementDataIndex(index)
+    self.resultsFrame.scrollBox:ScrollToElementDataIndex(index, ScrollBoxConstants.AlignNearest, 0,
+        ScrollBoxConstants.NoScrollInterpolation)
     self.resultsFrame.scrollBox:ForEachFrame(function(frame)
         ---@cast frame MapPinEnhancedAutocompleteEntryTemplate
         local orderIndex = frame:GetOrderIndex()
@@ -153,12 +166,10 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
     end
 end
 
-local MAX_HEIGHT = 300
-local ENTRY_HEIGHT = 30
-
 ---@param results SearchResult[]
 function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
     self.spinner:Hide()
+    self.resultsFrame:SetWidth(math.max(320, self:GetWidth()))
 
     if self.value and self.value.label == self:GetText() then
         self.resultsFrame:Hide()
@@ -167,7 +178,7 @@ function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
 
     if not results or #results == 0 then
         self.resultsFrame.message:Show()
-        self.resultsFrame:SetHeight(25)
+        self.resultsFrame:SetHeight(MIN_RESULTS_HEIGHT)
         self.resultsFrame:Show()
         self.dataProvider:Flush()
         return
@@ -180,11 +191,10 @@ function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
     self.resultsFrame.message:Hide()
 
     self.selectedIndex = 1
-    local totalHeight = #results * ENTRY_HEIGHT
-    if totalHeight > MAX_HEIGHT then
-        totalHeight = MAX_HEIGHT
-    end
-    self.resultsFrame:SetHeight(totalHeight + 5) -- +5 for padding
+    local visibleResults = math.min(#results, MAX_VISIBLE_RESULTS)
+    local contentHeight = visibleResults * ENTRY_HEIGHT + (visibleResults - 1) * ENTRY_SPACING
+    -- Match the XML insets and leave enough height for both scrollbar steppers.
+    self.resultsFrame:SetHeight(math.max(MIN_RESULTS_HEIGHT, contentHeight + RESULTS_PADDING))
 
     self:HighlightEntry(self.selectedIndex)
 end
@@ -302,7 +312,6 @@ end
 
 ---@class MapPinEnhancedAutocompleteEntryTemplate : Button, { GetOrderIndex: fun(): number }
 ---@field label FontString
----@field glow Texture
 MapPinEnhancedAutocompleteEntryMixin = {}
 
 
@@ -310,12 +319,4 @@ MapPinEnhancedAutocompleteEntryMixin = {}
 ---@param data AutocompleteOption
 function MapPinEnhancedAutocompleteEntryMixin:Init(data)
     self.label:SetText(data.label)
-end
-
-function MapPinEnhancedAutocompleteEntryMixin:OnEnter()
-    self.glow:Show()
-end
-
-function MapPinEnhancedAutocompleteEntryMixin:OnLeave()
-    self.glow:Hide()
 end
