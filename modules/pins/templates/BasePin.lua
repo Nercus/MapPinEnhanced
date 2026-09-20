@@ -28,6 +28,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field styleMode PinStyleMode
 ---@field iconMaskApplied boolean
 ---@field tracked boolean
+---@field locked boolean?
+---@field hovered boolean?
 MapPinEnhancedBasePinMixin = {}
 
 local assetsPath = MapPinEnhanced.assetsPath
@@ -41,6 +43,7 @@ local FOREGROUND_TRACKED = assetsPath .. "\\pins\\PinForegroundTracked.png"
 local FOREGROUND_UNTRACKED = assetsPath .. "\\pins\\PinForegroundUntracked.png"
 local OUTLINE_CONFIGURED_ICON = assetsPath .. "\\pins\\PinOutlineConfiguredIcon.png"
 local OUTLINE_UNTRACKED = assetsPath .. "\\pins\\PinOutlineUntracked.png"
+local PULSE_HIGHLIGHT = assetsPath .. "\\pins\\PinHighlight.png"
 local FALLBACK_NAVIGATION_ATLAS = "Navigation-Tracked-Icon"
 
 
@@ -72,7 +75,7 @@ local BASE_PIN_SIZE = 30
 local ICON_SIZE_RATIO = 16 / BASE_PIN_SIZE
 local OUTLINE_ICON_SIZE_RATIO = 19 / BASE_PIN_SIZE
 local ICON_MASK_SIZE_RATIO = 16 / BASE_PIN_SIZE
-local LOCK_SIZE_RATIO = 32 / BASE_PIN_SIZE
+local LOCK_SIZE_RATIO = 36 / BASE_PIN_SIZE
 function MapPinEnhancedBasePinMixin:UpdateRegionSizes()
     local pinSize = math.min(self:GetWidth(), self:GetHeight())
     if pinSize <= 0 then return end
@@ -188,6 +191,31 @@ function MapPinEnhancedBasePinMixin:ApplyStyle()
     local activeColor = self:GetActiveStyleColor()
     SetVertexColor(self.pulseHighlight, activeColor)
     SetVertexColor(self.highlight, activeColor)
+    self:ApplyHoverStyle()
+end
+
+function MapPinEnhancedBasePinMixin:ApplyHoverStyle()
+    self.highlight:SetShown(not self.locked and not self.hideHighlight)
+    if self.hovered then
+        SetVertexColor(self.lock, self:GetActiveStyleColor())
+    else
+        self.lock:SetVertexColor(0.7, 0.7, 0.7, 1)
+    end
+end
+
+---@param hovered boolean
+function MapPinEnhancedBasePinMixin:SetHovered(hovered)
+    self.hovered = hovered
+    if hovered then
+        self:LockHighlight()
+    else
+        self:UnlockHighlight()
+    end
+    self:ApplyHoverStyle()
+end
+
+function MapPinEnhancedBasePinMixin:OnPinHide()
+    self:SetHovered(false)
 end
 
 ---@param styleMode PinStyleMode
@@ -294,7 +322,7 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
 end
 
 function MapPinEnhancedBasePinMixin:ShowPulse()
-    self.pulseHighlight.pulse:Stop()
+    self:HidePulse()
     self.pulseHighlight:Show()
     self.pulseHighlight.pulse:Play()
 end
@@ -305,7 +333,8 @@ local loopDuration = 0.85
 function MapPinEnhancedBasePinMixin:ShowPulseLoops(repeats)
     self:ShowPulse()
     local seconds = repeats * loopDuration
-    self.pulseTimer = C_Timer.After(seconds, function()
+    self.pulseTimer = C_Timer.NewTimer(seconds, function()
+        self.pulseTimer = nil
         self:HidePulse()
     end)
 end
@@ -315,6 +344,10 @@ function MapPinEnhancedBasePinMixin:ShowPulseOnce()
 end
 
 function MapPinEnhancedBasePinMixin:HidePulse()
+    if self.pulseTimer then
+        self.pulseTimer:Cancel()
+        self.pulseTimer = nil
+    end
     self.pulseHighlight.pulse:Stop()
     self.pulseHighlight:Hide()
 end
@@ -324,8 +357,7 @@ function MapPinEnhancedBasePinMixin:SetTracked(skipAnimation)
     self.tracked = true
     self:ApplyStyle()
     if skipAnimation then
-        self.pulseHighlight.pulse:Stop()
-        self.pulseHighlight:Hide()
+        self:HidePulse()
     else
         self:ShowPulseOnce()
     end
@@ -348,7 +380,13 @@ function MapPinEnhancedBasePinMixin:SetColor(color)
 end
 
 function MapPinEnhancedBasePinMixin:SetLock(lock)
+    self.locked = lock
     self.lock:SetShown(lock)
+    self.pulseHighlight:SetTexture(lock and self.lock:GetTexture() or PULSE_HIGHLIGHT)
+    self.pulseHighlight:SetDesaturated(lock and true or false)
+    self.pulseHighlight:ClearAllPoints()
+    self.pulseHighlight:SetAllPoints(lock and self.lock or self)
+    self:ApplyHoverStyle()
 end
 
 function MapPinEnhancedBasePinMixin:OnLoad()
@@ -363,9 +401,5 @@ function MapPinEnhancedBasePinMixin:OnLoad()
 
     if self.hideShadow then
         self.shadow:Hide()
-    end
-
-    if self.hideHighlight then
-        self.highlight:Hide()
     end
 end

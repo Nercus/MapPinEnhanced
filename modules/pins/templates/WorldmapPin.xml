@@ -12,7 +12,7 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" inherit="append" />
-            <OnHide method="OnHide" />
+            <OnHide method="OnHide" inherit="append" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>

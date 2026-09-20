@@ -10,10 +10,12 @@ function MapPinEnhancedMinimapPinMixin:OnLoad()
 end
 
 function MapPinEnhancedMinimapPinMixin:OnEnter()
+    self:SetHovered(true)
     if not self.pin then return end
     self.pin:ShowTooltip(self)
 end
 
 function MapPinEnhancedMinimapPinMixin:OnLeave()
+    self:SetHovered(false)
     GameTooltip:Hide()
 end

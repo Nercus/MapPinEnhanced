@@ -17,6 +17,8 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local function trackingCallback(_, isTracked)
         if isTracked then
             self.pinFrame:SetTracked()
+            self.title:SetAlpha(1)
+            self.location:SetAlpha(1)
         else
             self.pinFrame:SetUntracked()
             self.title:SetAlpha(0.5)
@@ -42,6 +44,9 @@ function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
         end,
         PIN_UPDATED_COLOR = colorCallback,
         PIN_UPDATED_ICON = iconCallback,
+        PIN_UPDATED_LOCK = function(_, locked)
+            self.pinFrame:SetLock(locked)
+        end,
     })
 end
 
@@ -52,6 +57,9 @@ function MapPinEnhancedTrackerPinEntryMixin:Reset()
         self.unsubscribePinCallbacks = nil
     end
     self.pin = nil
+    self.pinFrame:SetLock(false)
+    self.pinFrame:SetUntracked()
+    self.pinFrame:SetHovered(false)
     self.title:SetAlpha(0.5)
     self.location:SetAlpha(0.5)
 end
@@ -68,8 +76,11 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
         self.location:SetAlpha(1)
     else
         self.pinFrame:SetUntracked()
+        self.title:SetAlpha(0.5)
+        self.location:SetAlpha(0.5)
     end
 
+    self.pinFrame:SetLock(pin:IsLocked())
     self.pinFrame:SetColor(pin.pinData.color)
     self:SetTitle(pin.pinData.title)
     self:SetLocationText(pin.pinData.x, pin.pinData.y, pin.pinData.mapID)
@@ -102,14 +113,14 @@ function MapPinEnhancedTrackerPinEntryMixin:ShowTooltip()
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnEnter()
-    self.pinFrame:LockHighlight()
+    self.pinFrame:SetHovered(true)
     self:ShowTooltip()
     self.title:SetAlpha(1)
     self.location:SetAlpha(1)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:OnLeave()
-    self.pinFrame:UnlockHighlight()
+    self.pinFrame:SetHovered(false)
     GameTooltip:Hide()
     if self.pin and not self.pin:IsTracked() then
         self.title:SetAlpha(0.5)

@@ -61,12 +61,14 @@ function MapPinEnhancedWorldmapPinMixin:SetHoverScale(hovered)
 end
 
 function MapPinEnhancedWorldmapPinMixin:OnEnter()
+    self:SetHovered(true)
     self:SetHoverScale(true)
     if not self.pin then return end
     self.pin:ShowTooltip(self)
 end
 
 function MapPinEnhancedWorldmapPinMixin:OnLeave()
+    self:SetHovered(false)
     self:SetHoverScale(false)
     GameTooltip:Hide()
 end
