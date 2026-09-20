@@ -10,10 +10,10 @@
                 <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5" />
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="1">
-                <Texture parentKey="thumb" atlas="AftLevelup-WhiteIconGlow" scale="1" alpha="0.5">
-                    <Size x="20" y="20" />
+                <Texture parentKey="thumb" file="Interface/AddOns/MapPinEnhanced/assets/shared/ToggleThumb.png">
+                    <Size x="16" y="16" />
                     <Anchors>
-                        <Anchor point="LEFT" x="2" />
+                        <Anchor point="LEFT" x="4" />
                     </Anchors>
                     <Color r="1" g="0.82" b="0" />
                 </Texture>
@@ -22,21 +22,21 @@
         <Animations>
             <AnimationGroup parentKey="checkAnimation" setToFinalAlpha="true">
                 <Alpha childKey="thumb" fromAlpha="0.5" toAlpha="1" duration="0.15" />
-                <Translation childKey="thumb" offsetX="27" duration="0.15" smoothing="IN_OUT" />
+                <Translation childKey="thumb" offsetX="30" duration="0.15" smoothing="IN_OUT" />
                 <Scripts>
                     <OnFinished>
                         self:GetParent().thumb:ClearAllPoints();
-                        self:GetParent().thumb:SetPoint("LEFT", 27, 0);
+                        self:GetParent().thumb:SetPoint("LEFT", 30, 0);
                     </OnFinished>
                 </Scripts>
             </AnimationGroup>
             <AnimationGroup parentKey="uncheckAnimation" setToFinalAlpha="true">
                 <Alpha childKey="thumb" fromAlpha="1" toAlpha="0.5" duration="0.15" />
-                <Translation childKey="thumb" offsetX="-27" duration="0.15" smoothing="IN_OUT" />
+                <Translation childKey="thumb" offsetX="-30" duration="0.15" smoothing="IN_OUT" />
                 <Scripts>
                     <OnFinished>
                         self:GetParent().thumb:ClearAllPoints();
-                        self:GetParent().thumb:SetPoint("LEFT", 2, 0);
+                        self:GetParent().thumb:SetPoint("LEFT", 4, 0);
                     </OnFinished>
                 </Scripts>
             </AnimationGroup>

@@ -8,8 +8,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field thumb Texture
 MapPinEnhancedToggleMixin = {}
 
-local CHECKED_OFFSET_X = 27
-local UNCHECKED_OFFSET_X = 2
+local CHECKED_OFFSET_X = 30
+local UNCHECKED_OFFSET_X = 4
 local CHECKED_ALPHA = 1
 local UNCHECKED_ALPHA = 0.5
 
