@@ -372,10 +372,6 @@ end
 function MapPinEnhancedTrackerGroupEntryMixin:OnMouseDown(button)
     assert(self.treeNode, "TreeNode is not set for MapPinEnhancedTrackerGroupEntryMixin")
     if button == "LeftButton" then
-        if IsShiftKeyDown() then
-            Providers:ShareGroupToChat(self.group)
-            return
-        end
         if self.group:IsHidden() then
             self.group:ShowGroup()
             return
