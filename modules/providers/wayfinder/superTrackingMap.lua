@@ -6,8 +6,21 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@alias SuperTrackingWaypointResolver fun(mapID: number): number?, number?, string?
 
----@type SuperTrackingWaypointResolver
-local GetNextWaypointForMap = C_SuperTrack.GetNextWaypointForMap
+---@param mapID number
+---@return number? x
+---@return number? y
+---@return string? description
+function Providers:GetNavigationWaypointForMap(mapID)
+    -- Retail moved traversal waypoints to C_Navigation. Resolve at call time
+    -- so neither a missing API nor delayed path construction is cached forever.
+    local resolver = C_Navigation.GetNextWaypointForMap or C_SuperTrack.GetNextWaypointForMap
+    if not resolver or not C_SuperTrack.IsSuperTrackingAnything() then return end
+    local x, y, description = resolver(mapID)
+    if MapPinEnhanced:IsSecretValue(x) or MapPinEnhanced:IsSecretValue(y) or
+        type(x) ~= "number" or type(y) ~= "number" then return end
+    if MapPinEnhanced:IsSecretValue(description) then description = nil end
+    return x, y, description
+end
 
 ---@param mapID number?
 ---@param x number?
@@ -18,7 +31,7 @@ function Providers:IsNavigationTargetDirect(mapID, x, y)
     local playerMapID = C_Map.GetBestMapForUnit("player")
     if not playerMapID then return false end
     local targetIsLocal = mapID == playerMapID
-    local nextX, nextY = GetNextWaypointForMap(playerMapID)
+    local nextX, nextY = self:GetNavigationWaypointForMap(playerMapID)
     if issecretvalue and (issecretvalue(nextX) or issecretvalue(nextY)) then return false end
     if nextX == nil or nextY == nil then
         local displayMapID = MapUtil and MapUtil.GetDisplayableMapForPlayer and
@@ -26,14 +39,14 @@ function Providers:IsNavigationTargetDirect(mapID, x, y)
         if displayMapID then targetIsLocal = targetIsLocal or mapID == displayMapID end
         if displayMapID and displayMapID ~= playerMapID then
             playerMapID = displayMapID
-            nextX, nextY = GetNextWaypointForMap(playerMapID)
+            nextX, nextY = self:GetNavigationWaypointForMap(playerMapID)
         end
     end
     if issecretvalue and (issecretvalue(nextX) or issecretvalue(nextY)) then return false end
     if nextX == nil and nextY == nil then
         -- This API supplies intermediate waypoints. A direct local target can
         -- have a valid native frame without any intermediate waypoint at all.
-        if not targetIsLocal or not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then
+        if not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then
             return false
         end
         if C_SuperTrack.IsSuperTrackingUserWaypoint() then
@@ -43,7 +56,7 @@ function Providers:IsNavigationTargetDirect(mapID, x, y)
                 waypoint.position.x, waypoint.position.y, mapID, x, y)
             return type(distance) == "number" and distance <= 5
         end
-        return C_SuperTrack.IsSuperTrackingAnything()
+        return targetIsLocal and C_SuperTrack.IsSuperTrackingAnything()
     end
     if type(nextX) ~= "number" or type(nextY) ~= "number" then return false end
     -- Query the player's map, not the destination map: the latter can expose
@@ -126,22 +139,25 @@ end
 ---@return number? y
 ---@return number? mapID
 ---@return string? waypointDescription
+---@return boolean? traversalOnly no source-owned destination was resolved
 function Providers:GetSuperTrackingWaypoint(fallback, targetMapID)
+    -- A temporary waypoint's traversal is not a new external destination.
+    if self:IsStepSuperTracking() then return end
     local mapIDs = self:GetSuperTrackingMapIDs()
     if targetMapID and targetMapID > 0 then table.insert(mapIDs, 1, targetMapID) end
-    for _, mapID in ipairs(mapIDs) do
-        local x, y, waypointDescription = GetNextWaypointForMap(mapID)
-        if type(x) == "number" and type(y) == "number" then
-            return x, y, mapID, waypointDescription
-        end
-    end
-
+    -- Resolve the selected source before considering its traversal entrance.
+    -- Otherwise arriving at a portal can remove a distant map pin/content target.
     if fallback then
         for _, mapID in ipairs(mapIDs) do
             local x, y, waypointDescription = fallback(mapID)
-            if type(x) == "number" and type(y) == "number" then
-                return x, y, mapID, waypointDescription
+            if not MapPinEnhanced:IsSecretValue(x) and not MapPinEnhanced:IsSecretValue(y) and
+                type(x) == "number" and type(y) == "number" then
+                return x, y, mapID, waypointDescription, false
             end
         end
+    end
+    for _, mapID in ipairs(mapIDs) do
+        local x, y, waypointDescription = self:GetNavigationWaypointForMap(mapID)
+        if x and y then return x, y, mapID, waypointDescription, true end
     end
 end

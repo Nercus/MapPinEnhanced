@@ -94,7 +94,7 @@ local function ShowNavigationDump()
     })
     Add("Blizzard tracking type", C_SuperTrack.GetHighestPrioritySuperTrackingType())
     if playerMapID then
-        local x, y, description = C_SuperTrack.GetNextWaypointForMap(playerMapID)
+        local x, y, description = MapPinEnhanced:GetModule("Providers"):GetNavigationWaypointForMap(playerMapID)
         Add("Blizzard next waypoint on player map", {
             mapID = playerMapID,
             x = x,
