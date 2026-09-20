@@ -84,6 +84,9 @@
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
                         <Size x="180" y="24" />
+                        <Scripts>
+                            <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
+                        </Scripts>
                     </EditBox>
                 </Frames>
             </Frame>
@@ -98,6 +101,9 @@
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedAutocompleteTemplate">
                         <Size x="175" y="24" />
+                        <Scripts>
+                            <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
+                        </Scripts>
                     </EditBox>
                 </Frames>
             </Frame>
@@ -112,6 +118,9 @@
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
                         <Size x="100" y="24" />
+                        <Scripts>
+                            <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
+                        </Scripts>
                     </EditBox>
                 </Frames>
             </Frame>
@@ -126,6 +135,9 @@
                 <Frames>
                     <EditBox parentKey="child" inherits="MapPinEnhancedInputTemplate">
                         <Size x="100" y="24" />
+                        <Scripts>
+                            <OnTabPressed>self:GetParent():GetParent():OnInputTabPressed(self)</OnTabPressed>
+                        </Scripts>
                     </EditBox>
                 </Frames>
             </Frame>

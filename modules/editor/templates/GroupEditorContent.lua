@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local Editor = MapPinEnhanced:GetModule("Editor")
+local PIN_INPUT_FIELDS = { "nameField", "mapField", "xField", "yField" }
 
 ---@class MapPinEnhancedGroupEditorContentEmptyState : Frame
 ---@field message FontString
@@ -75,6 +76,49 @@ function MapPinEnhancedGroupEditorContentMixin:SetGroup(group, focusName)
         return
     end
     self.content.header:SetGroup(group, self.editor, focusName)
+end
+
+---@param entry MapPinEnhancedGroupEditorContentPinEntryTemplate
+---@param input EditBox
+function MapPinEnhancedGroupEditorContentMixin:FocusNextPinInput(entry, input)
+    ---@type number?
+    local pinIndex = self.dataProvider:FindIndex(entry.pinNode)
+    if not pinIndex then return end
+    ---@type number?
+    local inputIndex
+    for index, field in ipairs(PIN_INPUT_FIELDS) do
+        if entry[field].child == input then
+            inputIndex = index
+            break
+        end
+    end
+    if not inputIndex then return end
+
+    local direction = IsShiftKeyDown() and -1 or 1
+    local inputCount = #PIN_INPUT_FIELDS
+    local nextIndex = ((pinIndex - 1) * inputCount + inputIndex - 1 + direction) %
+        (self.dataProvider:GetSize() * inputCount)
+    local nextPinIndex = math.floor(nextIndex / inputCount) + 1
+    local nextField = PIN_INPUT_FIELDS[nextIndex % inputCount + 1]
+    ---@type MapPinEnhancedEditorPinNodeData
+    local nextNode = self.dataProvider:Find(nextPinIndex)
+
+    -- Apply the current edit before scrolling can release its pooled row.
+    input:ClearFocus()
+    if input == entry.mapField.child then
+        local mapInput = entry.mapField.child
+        if mapInput.cancelFilterFunction then mapInput.cancelFilterFunction() end
+        mapInput.resultsFrame:Hide()
+        mapInput.spinner:Hide()
+    end
+    local scrollBox = self.content.scrollBox
+    scrollBox:ScrollToElementDataIndex(nextPinIndex, ScrollBoxConstants.AlignNearest, 0,
+        ScrollBoxConstants.NoScrollInterpolation)
+    ---@type MapPinEnhancedGroupEditorContentPinEntryTemplate?
+    local nextEntry = scrollBox:FindFrame(nextNode)
+    if nextEntry then
+        nextEntry[nextField].child:SetFocus()
+    end
 end
 
 function MapPinEnhancedGroupEditorContentMixin:ClearDropTarget()

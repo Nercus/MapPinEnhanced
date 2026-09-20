@@ -93,6 +93,12 @@ local function FindExactMap(text)
     return match
 end
 
+---@param input EditBox
+function MapPinEnhancedGroupEditorContentPinEntryMixin:OnInputTabPressed(input)
+    if not self.editor or not self.pinNode then return end
+    self.editor.groupEditorContent:FocusNextPinInput(self, input)
+end
+
 function MapPinEnhancedGroupEditorContentPinEntryMixin:OnEnter()
     self.background:SetGradient("HORIZONTAL", BACKGROUND_HOVER_COLOR, BACKGROUND_END_COLOR)
 end
@@ -291,7 +297,10 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     end
     for _, editBox in ipairs({ self.xField.child, self.yField.child }) do
         editBox:SetScript("OnEnterPressed", applyPosition)
-        editBox:SetScript("OnEditFocusLost", applyPosition)
+        editBox:SetScript("OnEditFocusLost", function(input)
+            MapPinEnhancedInputMixin.OnEditFocusLost(input)
+            applyPosition(input)
+        end)
         editBox:SetScript("OnEscapePressed", restore)
     end
     self.mapField.child:SetScript("OnEditFocusLost", function(editBox)
