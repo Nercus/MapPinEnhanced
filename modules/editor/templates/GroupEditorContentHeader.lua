@@ -1,9 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 local L = MapPinEnhanced.L
-local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yellow.png"
+local HIDDEN_GROUP_ICON_COLOR = CreateColor(0.65, 0.65, 0.65)
+local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis.png"
 
 ---@class MapPinEnhancedEditorInputField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedInputTemplate
@@ -11,7 +12,8 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconMore_Yel
 ---@class MapPinEnhancedEditorRadioGroupField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedRadioGroupTemplate
 
----@class MapPinEnhancedEditorGroupIconButton : MapPinEnhancedIconButtonTemplate
+---@class MapPinEnhancedEditorGroupIconButton : Button, MapPinEnhancedTooltipMixin
+---@field iconTexture Texture
 
 ---@class MapPinEnhancedGroupEditorContentHeaderTemplate : Frame
 ---@field group MapPinEnhancedGroupMixin?
@@ -34,8 +36,20 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.exportButton:SetScript("OnClick", nil)
     self.exportButton:Disable()
     self.hideButton:SetScript("OnClick", nil)
+    self.hideButton:UnlockHighlight()
+    self.hideButton:SetAlpha(1)
     self.optimizeButton:SetScript("OnClick", nil)
     self.optimizeButton:Hide()
+end
+
+function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateGroupVisibilityButton()
+    local hidden = self.group and self.group:IsHidden()
+    self.hideButton:SetIconTexture(hidden and "eyeslash" or "eye", hidden and HIDDEN_GROUP_ICON_COLOR or nil)
+    if hidden then
+        self.hideButton:UnlockHighlight()
+    else
+        self.hideButton:LockHighlight()
+    end
 end
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateRouteOrderButton()
@@ -104,7 +118,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
         initializer = function(button, _, menu)
             ---@type Texture
             local texture = button:AttachTexture()
-            texture:SetSize(18, 6)
+            texture:SetSize(18, 18)
             texture:SetPoint("CENTER")
             texture:SetTexture(MORE_ICON_PATH)
             texture:SetVertexColor(1, 0.82, 0)
@@ -157,10 +171,12 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     self.exportButton:SetEnabled(group:GetTotalPinCount() > 0)
     self.exportButton:SetScript("OnClick", function() Transfer:ShowExportWindow(group) end)
 
+    self:UpdateGroupVisibilityButton()
     self.hideButton:SetEnabled(not protected)
     self.hideButton:SetScript("OnClick", function()
         if protected then return end
         if group:IsHidden() then group:ShowGroup() else group:HideGroup() end
+        self:UpdateGroupVisibilityButton()
         editor.groupEditorSidebar:Refresh()
     end)
 

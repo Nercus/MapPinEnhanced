@@ -17,19 +17,44 @@
             </Layer>
         </Layers>
         <Frames>
-            <Button parentKey="iconButton" inherits="MapPinEnhancedIconButtonTemplate">
+            <Button parentKey="iconButton" mixin="MapPinEnhancedTooltipMixin">
                 <Size x="45" y="45" />
                 <KeyValues>
-                    <KeyValue key="customIcon" value="true" type="boolean" />
-                    <KeyValue key="iconSize" value="large" />
                     <KeyValue key="tooltip" value="Choose an icon for this group." />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" x="16" y="0" />
                 </Anchors>
+                <HighlightTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="ADD">
+                    <Size x="36" y="36" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Color r="1" g="0.82" b="0" a="0.3" />
+                </HighlightTexture>
+                <PushedTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="BLEND">
+                    <Size x="36" y="36" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Color r="0" g="0" b="0" a="0.35" />
+                </PushedTexture>
+                <DisabledTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="BLEND">
+                    <Size x="36" y="36" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Color r="0" g="0" b="0" a="0.5" />
+                </DisabledTexture>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <MaskTexture atlas="talents-node-apex-active-large-mask" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                        <Texture parentKey="iconTexture">
+                            <Size x="36" y="36" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                        <MaskTexture file="Interface/Common/CommonMaskCircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
                                 <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
@@ -39,7 +64,20 @@
                             </MaskedTextures>
                         </MaskTexture>
                     </Layer>
+                    <Layer level="OVERLAY">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/Ring.png">
+                            <Color r="1" g="0.82" b="0" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" x="-4" y="4" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" x="4" y="-4" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
                 </Layers>
+                <Scripts>
+                    <OnLoad method="OnTooltipLoad" />
+                    <OnHide method="OnTooltipLeave" />
+                </Scripts>
             </Button>
             <Frame parentKey="nameField" inherits="MapPinEnhancedFormFieldTemplate">
                 <Size x="300" y="24" />
@@ -72,17 +110,7 @@
                     </Frame>
                 </Frames>
             </Frame>
-            <Button parentKey="optimizeButton" inherits="MapPinEnhancedButtonTemplate" text="Optimize">
-                <Size x="70" y="20" />
-                <KeyValues>
-                    <KeyValue key="icon" value="settings" />
-                    <KeyValue key="fontSize" value="small" />
-                    <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeKey="$parent.trackingModeField" relativePoint="BOTTOMRIGHT" x="8" y="1" />
-                </Anchors>
-            </Button>
+
 
             <Button parentKey="deleteButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="32" y="32" />
@@ -98,7 +126,7 @@
             <Button parentKey="hideButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="32" y="32" />
                 <KeyValues>
-                    <KeyValue key="icon" value="cross" />
+                    <KeyValue key="icon" value="eye" />
                     <KeyValue key="iconSize" value="medium" />
                     <KeyValue key="tooltip" value="Hide or show this group." />
                 </KeyValues>
@@ -115,6 +143,17 @@
                 </KeyValues>
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.hideButton" relativePoint="LEFT" x="-2" />
+                </Anchors>
+            </Button>
+            <Button parentKey="optimizeButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="32" y="32" />
+                <KeyValues>
+                    <KeyValue key="icon" value="route" />
+                    <KeyValue key="fontSize" value="medium" />
+                    <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.exportButton" relativePoint="LEFT" x="-2" />
                 </Anchors>
             </Button>
         </Frames>
