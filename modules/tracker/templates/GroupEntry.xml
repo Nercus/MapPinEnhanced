@@ -8,6 +8,7 @@
         </KeyValues>
         <Size x="300" y="35" />
         <Layers>
+
             <Layer level="ARTWORK" textureSubLevel="1">
                 <Texture parentKey="expandIcon" inherits="MapPinEnhancedIconTemplate">
                     <KeyValues>
@@ -19,15 +20,15 @@
                     </Anchors>
                 </Texture>
                 <Texture parentKey="icon" file="Interface/Icons/inv_misc_map08">
-                    <Size x="16" y="16" />
+                    <Size x="22" y="22" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="2" />
                     </Anchors>
                 </Texture>
-                <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="16" y="16" />
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="22" y="22" />
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.expandIcon" x="2" />
                     </Anchors>
                     <MaskedTextures>
                         <MaskedTexture childKey="icon" />
@@ -35,7 +36,7 @@
                 </MaskTexture>
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="5" />
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="2" />
                     </Anchors>
                 </FontString>
                 <Texture parentKey="line" atlas="SquareMask" desaturated="true" horizTile="true">
@@ -50,12 +51,28 @@
                     </Anchors>
                 </Texture>
             </Layer>
-            <Layer level="ARTWORK" textureSubLevel="2">
-                <Texture atlas="auctionhouse-itemicon-border-color" parentKey="border">
-                    <Color r="1" g="0.82" b="0" a="1" />
+            <Layer level="BACKGROUND">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallShadow.png">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-3" y="3" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="3" y="-3" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallBorder.png">
+                    <Color r="1" g="0.82" b="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupSmallShadowInner.png">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
                     </Anchors>
                 </Texture>
             </Layer>

@@ -14,17 +14,34 @@
                     </Gradient>
                 </Texture>
             </Layer>
-            <Layer level="ARTWORK">
-                <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
-                    <Size x="28" y="28" />
+            <Layer level="BACKGROUND">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupShadow.png" parentKey="iconShadow">
+                    <Size x="36" y="36" />
                     <Anchors>
-                        <Anchor point="LEFT" x="8" />
+                        <Anchor point="LEFT" x="4" />
                     </Anchors>
                 </Texture>
-                <MaskTexture file="interface/common/commonmaskcircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="28" y="28" />
+            </Layer>
+            <Layer level="BORDER">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupBorder.png" parentKey="iconBorder">
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="LEFT" x="8" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.iconShadow" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconShadow" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon" file="Interface/Icons/INV_Misc_QuestionMark">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.iconBorder" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconBorder" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Size x="36" y="36" />
+                    <Anchors>
+                        <Anchor point="LEFT" x="4" />
                     </Anchors>
                     <MaskedTextures>
                         <MaskedTexture childKey="icon" />
@@ -32,7 +49,7 @@
                 </MaskTexture>
                 <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="TOPRIGHT" x="8" y="-1" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" relativePoint="TOPRIGHT" x="4" y="-5" />
                         <Anchor point="RIGHT" x="-8" />
                     </Anchors>
                 </FontString>
@@ -50,11 +67,10 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/Ring.png">
-                    <Color r="1" g="0.82" b="0" a="1" />
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupShadowInner.png">
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" x="-4" y="4" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" x="4" y="-4" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.iconBorder" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconBorder" />
                     </Anchors>
                 </Texture>
             </Layer>

@@ -25,36 +25,53 @@
                 <Anchors>
                     <Anchor point="LEFT" x="16" y="0" />
                 </Anchors>
-                <HighlightTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="ADD">
-                    <Size x="36" y="36" />
+                <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupMask.png" alphaMode="ADD">
+                    <Size x="44" y="44" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                     <Color r="1" g="0.82" b="0" a="0.3" />
                 </HighlightTexture>
-                <PushedTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="BLEND">
-                    <Size x="36" y="36" />
+                <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupMask.png" alphaMode="BLEND">
+                    <Size x="44" y="44" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                     <Color r="0" g="0" b="0" a="0.35" />
                 </PushedTexture>
-                <DisabledTexture file="Interface/Common/CommonMaskCircle.blp" alphaMode="BLEND">
-                    <Size x="36" y="36" />
+                <DisabledTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupMask.png" alphaMode="BLEND">
+                    <Size x="44" y="44" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                     <Color r="0" g="0" b="0" a="0.5" />
                 </DisabledTexture>
                 <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupShadow.png">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                    <Layer level="BORDER">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupBorder.png">
+                            <Color r="1" g="0.82" b="0" />
+                            <Anchors>
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
                     <Layer level="ARTWORK">
                         <Texture parentKey="iconTexture">
-                            <Size x="36" y="36" />
+                            <Size x="44" y="44" />
                             <Anchors>
                                 <Anchor point="CENTER" />
                             </Anchors>
                         </Texture>
-                        <MaskTexture file="Interface/Common/CommonMaskCircle.blp" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                        <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                             <Anchors>
                                 <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
                                 <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
@@ -65,11 +82,10 @@
                         </MaskTexture>
                     </Layer>
                     <Layer level="OVERLAY">
-                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/Ring.png">
-                            <Color r="1" g="0.82" b="0" />
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/group/GroupShadowInner.png">
                             <Anchors>
-                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" x="-4" y="4" />
-                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" x="4" y="-4" />
+                                <Anchor point="TOPLEFT" relativeKey="$parent.iconTexture" />
+                                <Anchor point="BOTTOMRIGHT" relativeKey="$parent.iconTexture" />
                             </Anchors>
                         </Texture>
                     </Layer>
