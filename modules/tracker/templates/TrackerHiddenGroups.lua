@@ -18,6 +18,8 @@ local L = MapPinEnhanced.L
 ---@field scrollBar MinimalScrollBar
 ---@field onOutsideClick function
 ---@field unsubscribe fun()?
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 MapPinEnhancedTrackerHiddenGroupsMixin = {}
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
@@ -31,7 +33,7 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
         entry:SetScript("OnClick", function()
             -- Resolve durable identity again: domain objects may have been released while open.
             local group = Groups:GetGroupByID(data.groupID)
-            self:Hide()
+            self:Close()
             if group and group:IsHidden() and not group:IsProtected() then
                 group:ShowGroup()
             end
@@ -49,8 +51,22 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
         local header = self:GetParent()
         ---@cast header MapPinEnhancedTrackerHeaderTemplate
         if not self:IsMouseOver() and not header.hiddenGroupsButton:IsMouseOver() then
-            self:Hide()
+            self:Close()
         end
+    end
+end
+
+function MapPinEnhancedTrackerHiddenGroupsMixin:Toggle()
+    if not self:IsShown() or self.fadeOut:IsPlaying() then
+        self.fadeIn:PlayReplacing(self.fadeOut)
+    else
+        self:Close()
+    end
+end
+
+function MapPinEnhancedTrackerHiddenGroupsMixin:Close()
+    if self:IsShown() then
+        self.fadeOut:PlayReplacing(self.fadeIn)
     end
 end
 
@@ -87,6 +103,9 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnShow()
 end
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:OnHide()
+    self.fadeIn:Stop()
+    self.fadeOut:Stop()
+    self:SetAlpha(0)
     MapPinEnhanced:UnregisterEventForFunction("GLOBAL_MOUSE_DOWN", self.onOutsideClick)
     if self.unsubscribe then
         self.unsubscribe()

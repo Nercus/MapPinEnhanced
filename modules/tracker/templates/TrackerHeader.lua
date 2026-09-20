@@ -22,7 +22,7 @@ function MapPinEnhancedTrackerHeaderMixin:OnLoad()
     end)
 
     self.hiddenGroupsButton:SetScript("OnClick", function()
-        self.hiddenGroupsMenu:SetShown(not self.hiddenGroupsMenu:IsShown())
+        self.hiddenGroupsMenu:Toggle()
     end)
 
     self.closeButton:SetScript("OnClick", function()

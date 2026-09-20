@@ -59,6 +59,18 @@
 
     <Frame name="MapPinEnhancedTrackerHiddenGroupsTemplate" mixin="MapPinEnhancedTrackerHiddenGroupsMixin" virtual="true" hidden="true" enableMouse="true" frameStrata="DIALOG">
         <Size x="315" y="36" />
+        <Animations>
+            <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeIn">
+                <KeyValues>
+                    <KeyValue key="showOnPlay" value="true" type="boolean" />
+                </KeyValues>
+            </AnimationGroup>
+            <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeOut">
+                <KeyValues>
+                    <KeyValue key="hideOnFinished" value="true" type="boolean" />
+                </KeyValues>
+            </AnimationGroup>
+        </Animations>
         <Anchors>
             <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" x="-4"/>
             <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="5" x="4"/>
