@@ -80,6 +80,28 @@ local function IsCurrentDestination(destination)
 end
 
 ---@param route NavigationRoute
+---@return boolean
+local function HasRouteOrigin(route)
+    return route.originMapID ~= nil and route.originX ~= nil and route.originY ~= nil
+end
+
+---@return boolean started
+local function RefreshMissingRouteOrigin()
+    local progression = Navigation.progression
+    if not progression or HasRouteOrigin(progression.route) or progression.attempted or
+        progression.phase == "in-transit" or Navigation.activeCalculation or not Navigation.routeNavigationEnabled then
+        return false
+    end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    if not mapID or not x or not y then return false end
+    -- An escape action may be valid before player coordinates load. Once they
+    -- arrive, compare it against portal approaches before retaining that choice.
+    Navigation:RefreshPreparedData()
+    Navigation:StartCalculation(true)
+    return true
+end
+
+---@param route NavigationRoute
 ---@return integer
 local function GetRouteStepCount(route)
     return #route.pathReferences + 1
@@ -179,11 +201,31 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 end
                 return
             end
+            local prepared = self:GetPreparedData()
+            if prepared and route.preparedData ~= prepared then
+                for _, reference in ipairs(route.pathReferences) do
+                    if prepared.requirementStateByPath[reference] ~= "satisfied" then
+                        self:StartCalculation(currentRouteUnusable)
+                        return
+                    end
+                end
+            end
+            if not HasRouteOrigin(route) then
+                local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+                if mapID and x and y then
+                    self:RefreshPreparedData()
+                    self:StartCalculation(currentRouteUnusable)
+                    return
+                end
+            end
             if previousProgression and self:IsCurrentProgression(previousProgression) and not currentRouteUnusable then
                 local currentRemainingCost = self:GetRemainingRouteCost(previousProgression)
-                if not currentRemainingCost then return end
-                local requiredSavings = math.max(15, currentRemainingCost * 0.1)
-                if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
+                -- Savings protect a usable route from churn. An unavailable
+                -- remaining action must not retain the old route at any price.
+                if currentRemainingCost then
+                    local requiredSavings = math.max(15, currentRemainingCost * 0.1)
+                    if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
+                end
             end
             self:DeactivatePathAdapter()
             local graph = self:GetGraph()
@@ -322,7 +364,8 @@ function Navigation:Recalculate(changeNumber)
     if changeNumber ~= presentationChangeNumber or not self.activeDestination or not self.routeNavigationEnabled then
         return false
     end
-    self:StartCalculation(false)
+    self:RefreshPreparedData()
+    self:StartCalculation(self.progression ~= nil and self:GetRemainingRouteCost(self.progression) == nil)
     return true
 end
 
@@ -603,6 +646,7 @@ end
 ---@param _nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _nextUpdateInterval, movementState)
+    if RefreshMissingRouteOrigin() then return end
     local progression = self.progression
     if not progression or progression.phase ~= "approach" or not self:IsCurrentProgression(progression) then return end
     progression.closestDistance = math.min(progression.closestDistance or distance, distance)
@@ -708,6 +752,19 @@ function Navigation:SetUpEligibilityRefresh()
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function()
         self:RefreshPreparedData()
         self:RecheckFailedPaths("action")
+        local progression = self.progression
+        local graph = self:GetGraph()
+        local prepared = self:GetPreparedData()
+        local reference = progression and progression.route.pathReferences[progression.pathIndex]
+        if progression and not progression.pathUnavailable and not progression.attempted and
+            progression.phase ~= "in-transit" and
+            reference and graph and prepared and prepared.requirementStateByPath[reference] == "unsatisfied" and
+            self:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
+            local identity = self:CaptureStepIdentity(progression)
+            if identity then self:HandlePathAdapterReport(identity, "failed", "action requirements no longer satisfied") end
+            return
+        end
+        if RefreshMissingRouteOrigin() then return end
         if self.activeDestination and not self.progression and not self.activeCalculation then
             self:StartCalculation(true)
         end
@@ -1028,6 +1085,20 @@ function Navigation:BuildRouteLayer(isWorldMap)
         local pathReference = route.pathReferences[pathIndex]
         local fromPointIndex = graph.pathFromPointIndexes[pathReference]
         local toPointIndex = graph.pathToPointIndexes[pathReference]
+        if pathIndex > progression.pathIndex and fromPointIndex then
+            local previousReference = route.pathReferences[pathIndex - 1]
+            local previousPointIndex = graph.pathToPointIndexes[previousReference]
+            if previousPointIndex ~= fromPointIndex then
+                local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
+                    isWorldMap, graph.pointMapIDs[previousPointIndex], graph.pointXs[previousPointIndex],
+                    graph.pointYs[previousPointIndex], graph.pointMapIDs[fromPointIndex],
+                    graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex])
+                if startFrame and endFrame then
+                    startFrame:SetRouteLine(endFrame, false)
+                    endFrame:SetRoutePoint(graph.pathTypes[pathReference])
+                end
+            end
+        end
         if fromPointIndex and toPointIndex then
             local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
                 isWorldMap, graph.pointMapIDs[fromPointIndex],

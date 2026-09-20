@@ -85,19 +85,11 @@ function Navigation:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
     return distance
 end
 
----@param preparedData NavigationPreparedData
----@param mapID1 number
----@param x1 number
----@param y1 number
----@param mapID2 number
----@param x2 number
----@param y2 number
+---@param movement NavigationMovementCapabilities
 ---@param travelMode "automatic"|"ground"|"flight"?
----@return NavigationCalculatedPathCost?
-function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2, y2, travelMode)
-    local distance = self:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
-    if not distance then return nil end
-    local movement = preparedData.movement
+---@return string mode
+---@return number speed
+local function GetMovementSpeed(movement, travelMode)
     local requestedMode = travelMode or "ground"
     local mode = "ground"
     local speed = movement.groundSpeed
@@ -111,6 +103,22 @@ function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2
         mode = "steady-flight"
         speed = movement.steadyFlightSpeed
     end
+    return mode, speed
+end
+
+---@param preparedData NavigationPreparedData
+---@param mapID1 number
+---@param x1 number
+---@param y1 number
+---@param mapID2 number
+---@param x2 number
+---@param y2 number
+---@param travelMode "automatic"|"ground"|"flight"?
+---@return NavigationCalculatedPathCost?
+function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2, y2, travelMode)
+    local distance = self:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
+    if not distance then return nil end
+    local mode, speed = GetMovementSpeed(preparedData.movement, travelMode)
     if speed <= 0 then return nil end
     local expectedSeconds = distance / speed
     return {
@@ -159,8 +167,30 @@ function Navigation:GetRemainingRouteCost(progression)
 
     for index = remainingPathIndex, #progression.route.pathCosts do
         local remainingPathCost = progression.route.pathCosts[index]
+        if index > progression.pathIndex or not progression.attempted and progression.phase ~= "in-transit" then
+            remainingPathCost = self:GetFreshPathCost(progression.route.pathReferences[index])
+        end
         if not remainingPathCost then return nil end
         total = total + remainingPathCost.comparisonSeconds
+    end
+
+    -- The current approach was sampled above. Later entrances still require
+    -- movement from the preceding Path's exit, even without an authored walk.
+    for index = progression.pathIndex + 1, #progression.route.pathReferences do
+        local previousReference = progression.route.pathReferences[index - 1]
+        local nextReference = progression.route.pathReferences[index]
+        local exitIndex = graph.pathToPointIndexes[previousReference]
+        local entranceIndex = graph.pathFromPointIndexes[nextReference]
+        if entranceIndex then
+            local connection = self:GetPlayerTravelCost(preparedData,
+                graph.pointMapIDs[exitIndex], graph.pointXs[exitIndex], graph.pointYs[exitIndex],
+                graph.pointMapIDs[entranceIndex], graph.pointXs[entranceIndex], graph.pointYs[entranceIndex],
+                "automatic")
+            if not connection then return nil end
+            ---@cast connection NavigationCalculatedPathCost
+            ---@cast total number
+            total = total + connection.comparisonSeconds
+        end
     end
 
     local finalPathReference = progression.route.pathReferences[#progression.route.pathReferences]
@@ -168,13 +198,13 @@ function Navigation:GetRemainingRouteCost(progression)
     if not finalPointIndex then return total end
     local finalCost = self:GetPlayerTravelCost(preparedData,
         graph.pointMapIDs[finalPointIndex], graph.pointXs[finalPointIndex], graph.pointYs[finalPointIndex],
-        destination.data.mapID, destination.data.x, destination.data.y, "ground")
+        destination.data.mapID, destination.data.x, destination.data.y, "automatic")
     if not finalCost then return nil end
     return total + finalCost.comparisonSeconds
 end
 
 -- Incremental route calculation
-local MAX_EXPANSIONS_PER_SLICE = 250
+local MAX_OPERATIONS_PER_SLICE = 2500
 local MAX_MILLISECONDS_PER_SLICE = 2
 
 ---@class NavigationRoute
@@ -190,6 +220,14 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field originX number?
 ---@field originY number?
 ---@field signature string
+---@field calculationSeconds number
+---@field calculationSlices integer
+---@field movementCandidates integer
+
+---@class NavigationWorldPoint
+---@field x number
+---@field y number
+---@field instanceID number
 
 ---@class NavigationCalculationJob
 ---@field calculationID integer
@@ -211,6 +249,14 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field originX number?
 ---@field originY number?
 ---@field cancelled boolean
+---@field movementEntry NavigationHeapEntry?
+---@field nextMovementPointIndex integer?
+---@field worldPoints table<integer, NavigationWorldPoint>
+---@field entrancesByInstance table<number, integer[]>
+---@field movementSpeed number
+---@field startedAt number
+---@field calculationSlices integer
+---@field movementCandidates integer
 ---@field onFinish fun(route: NavigationRoute?, failure: string?)
 
 local calculationNumber = 0
@@ -360,6 +406,9 @@ local function BuildRoute(job, destinationEntry)
         originX = job.originX,
         originY = job.originY,
         signature = destinationEntry.signature,
+        calculationSeconds = GetTimePreciseSec() - job.startedAt,
+        calculationSlices = job.calculationSlices,
+        movementCandidates = job.movementCandidates,
     }
 end
 
@@ -417,28 +466,63 @@ local function ExpandPoint(job, entry)
             end
         end
     end
+    -- Authored data describes transitions, not every walk between entrances.
+    -- Only actual Path arrivals need these offers: initial player approaches
+    -- already cover entrances, and chaining straight movement cannot improve it.
+    if job.previousPathReferences[entry.pointIndex] then
+        job.movementEntry = entry
+        job.nextMovementPointIndex = 1
+    end
+end
+
+---@param job NavigationCalculationJob
+local function OfferNextMovementPoint(job)
+    local entry = job.movementEntry
+    local candidateIndex = job.nextMovementPointIndex
+    if not entry or not candidateIndex then return end
+    local origin = job.worldPoints[entry.pointIndex]
+    local entrances = origin and job.entrancesByInstance[origin.instanceID]
+    local pointIndex = entrances and entrances[candidateIndex]
+    if not origin or not pointIndex or job.movementSpeed <= 0 then
+        job.movementEntry = nil
+        job.nextMovementPointIndex = nil
+        return
+    end
+    job.nextMovementPointIndex = candidateIndex + 1
+    job.movementCandidates = job.movementCandidates + 1
+    if pointIndex == entry.pointIndex then return end
+    local bestCostBucket = job.bestCostBuckets[pointIndex]
+    if bestCostBucket and entry.costBucket > bestCostBucket then return end
+    local seconds = MapPinEnhanced:GetPointDistance(origin, job.worldPoints[pointIndex]) / job.movementSpeed
+    OfferPoint(job, pointIndex, entry.cost + seconds,
+        entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature)
 end
 
 ---@param job NavigationCalculationJob
 local function AdvanceJob(job)
     if job.cancelled then return end
+    job.calculationSlices = job.calculationSlices + 1
     local startedAt = debugprofilestop()
-    local expansions = 0
-    while expansions < MAX_EXPANSIONS_PER_SLICE and debugprofilestop() - startedAt < MAX_MILLISECONDS_PER_SLICE do
+    local operations = 0
+    while operations < MAX_OPERATIONS_PER_SLICE and debugprofilestop() - startedAt < MAX_MILLISECONDS_PER_SLICE do
         if job.cancelled then return end
-        local entry = HeapPop(job.heap)
-        if not entry then
-            job.onFinish(nil, "no route")
-            return
+        if job.movementEntry then
+            -- Finish this point's movement offers before choosing the next heap
+            -- entry; yield between candidates to preserve the frame-time budget.
+            OfferNextMovementPoint(job)
+        else
+            local entry = HeapPop(job.heap)
+            if not entry then
+                job.onFinish(nil, "no route")
+                return
+            end
+            if entry.pointIndex == 0 then
+                job.onFinish(BuildRoute(job, entry))
+                return
+            end
+            if IsCurrentEntry(job, entry) then ExpandPoint(job, entry) end
         end
-        if entry.pointIndex == 0 then
-            job.onFinish(BuildRoute(job, entry))
-            return
-        end
-        if IsCurrentEntry(job, entry) then
-            ExpandPoint(job, entry)
-            expansions = expansions + 1
-        end
+        operations = operations + 1
     end
     C_Timer.After(0, function()
         AdvanceJob(job)
@@ -467,13 +551,13 @@ local function SeedJob(job)
             })
         end
 
-        for pointIndex = 1, #graph.pointIDs do
-            local approachCost = Navigation:GetPlayerTravelCost(job.preparedData,
-                playerMapID, playerX, playerY, graph.pointMapIDs[pointIndex],
-                graph.pointXs[pointIndex], graph.pointYs[pointIndex], "automatic")
-            if approachCost then
-                OfferPoint(job, pointIndex, approachCost.comparisonSeconds,
-                    approachCost.uncertaintySeconds, 0, nil, nil, "")
+        local worldX, worldY, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(playerX, playerY, playerMapID)
+        local entrances = instanceID and job.entrancesByInstance[instanceID]
+        if worldX and worldY and entrances and job.movementSpeed > 0 then
+            local origin = { x = worldX, y = worldY }
+            for _, pointIndex in ipairs(entrances) do
+                local seconds = MapPinEnhanced:GetPointDistance(origin, job.worldPoints[pointIndex]) / job.movementSpeed
+                OfferPoint(job, pointIndex, seconds, 0, 0, nil, nil, "")
             end
         end
     end
@@ -493,6 +577,38 @@ local function SeedJob(job)
     end
 end
 
+---@param job NavigationCalculationJob
+---@param graph NavigationGraph
+local function PrepareMovementPoints(job, graph)
+    -- HBD applies the same instance overrides and coordinate conversion used by
+    -- GetComparableDistance. Freeze them once per job, not once per candidate.
+    for pointIndex = 1, #graph.pointIDs do
+        local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
+            graph.pointXs[pointIndex], graph.pointYs[pointIndex], graph.pointMapIDs[pointIndex])
+        if x and y and instanceID then
+            job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID }
+        end
+    end
+    local seen = {} ---@type table<integer, boolean>
+    for reference = 1, graph.pathCount do
+        local pointIndex = graph.pathFromPointIndexes[reference]
+        local point = pointIndex and job.worldPoints[pointIndex]
+        if pointIndex and point and not seen[pointIndex] and not job.avoidedPaths[reference] and
+            job.preparedData.requirementStateByPath[reference] == "satisfied" then
+            seen[pointIndex] = true
+            local entrances = job.entrancesByInstance[point.instanceID]
+            if not entrances then
+                entrances = {}
+                job.entrancesByInstance[point.instanceID] = entrances
+            end
+            entrances[#entrances + 1] = pointIndex
+        end
+    end
+    for _, entrances in pairs(job.entrancesByInstance) do
+        table.sort(entrances)
+    end
+end
+
 ---@param destinationID string
 ---@param destinationChangeNumber integer
 ---@param destinationData WayfinderData
@@ -509,6 +625,8 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
     local excludedPaths = {} ---@type table<integer, boolean>
     for pathReference in pairs(avoidedPaths) do excludedPaths[pathReference] = true end
     calculationNumber = calculationNumber + 1
+    local startedAt = GetTimePreciseSec()
+    local _, movementSpeed = GetMovementSpeed(preparedData.movement, "automatic")
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     ---@type NavigationCalculationJob
     local job = {
@@ -531,8 +649,15 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         originX = playerX,
         originY = playerY,
         cancelled = false,
+        worldPoints = {},
+        entrancesByInstance = {},
+        movementSpeed = movementSpeed,
+        startedAt = startedAt,
+        calculationSlices = 0,
+        movementCandidates = 0,
         onFinish = onFinish,
     }
+    PrepareMovementPoints(job, graph)
     SeedJob(job)
     C_Timer.After(0, function()
         AdvanceJob(job)
