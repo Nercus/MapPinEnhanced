@@ -8,6 +8,8 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@type UiMapPoint?
 local stepWaypoint
 ---@type UiMapPoint?
+local stepTarget
+---@type UiMapPoint?
 local previousWaypoint
 ---@type fun()?
 local restoreTracking
@@ -15,6 +17,64 @@ local restoreTracking
 local restoredTrackingIdentity
 local changingTracking = false
 local restoreReachedEvent = false
+
+---@param mapID number
+---@return number?
+local function GetParentMapID(mapID)
+    local info = C_Map.GetMapInfo(mapID)
+    return info and info.parentMapID ~= 0 and info.parentMapID or nil
+end
+
+---@param mapID number
+---@param x number
+---@param y number
+---@param candidateMapID number
+---@return UiMapPoint?
+local function ProjectStepWaypoint(mapID, x, y, candidateMapID)
+    if not C_Map.CanSetUserWaypointOnMap(candidateMapID) then return end
+    local hbd = MapPinEnhanced.HBD
+    local projectedX, projectedY = hbd:TranslateZoneCoordinates(x, y, mapID, candidateMapID)
+    if not projectedX or not projectedY or
+        not (projectedX >= 0 and projectedX <= 1 and projectedY >= 0 and projectedY <= 1) then return end
+    -- A shared map hierarchy alone does not establish compatible world geometry.
+    local distance = hbd:GetZoneDistance(mapID, x, y, candidateMapID, projectedX, projectedY)
+    if not distance or distance > 5 then return end
+    return UiMapPoint.CreateFromCoordinates(candidateMapID, projectedX, projectedY, 0)
+end
+
+---@param mapID number
+---@param x number
+---@param y number
+---@return UiMapPoint?
+local function CreateStepWaypoint(mapID, x, y)
+    local playerMapID = C_Map.GetBestMapForUnit("player")
+    if playerMapID and playerMapID ~= mapID then
+        local waypoint = ProjectStepWaypoint(mapID, x, y, playerMapID)
+        if waypoint then return waypoint end
+
+        ---@type table<number, boolean>
+        local targetParents = {}
+        local parentMapID = mapID
+        while parentMapID and not targetParents[parentMapID] do
+            targetParents[parentMapID] = true
+            parentMapID = GetParentMapID(parentMapID)
+        end
+        ---@type table<number, boolean>
+        local visited = { [playerMapID] = true }
+        parentMapID = GetParentMapID(playerMapID)
+        while parentMapID and not visited[parentMapID] do
+            visited[parentMapID] = true
+            if targetParents[parentMapID] then
+                waypoint = ProjectStepWaypoint(mapID, x, y, parentMapID)
+                if waypoint then return waypoint end
+            end
+            parentMapID = GetParentMapID(parentMapID)
+        end
+    end
+    if C_Map.CanSetUserWaypointOnMap(mapID) then
+        return UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
+    end
+end
 
 ---@param left UiMapPoint?
 ---@param right UiMapPoint?
@@ -89,6 +149,7 @@ function Providers:ClearStepSuperTracking(restore)
     local applyTracking = restoreTracking
     restoredTrackingIdentity = nil
     stepWaypoint = nil
+    stepTarget = nil
     previousWaypoint = nil
     restoreTracking = nil
     changingTracking = true
@@ -126,16 +187,17 @@ function Providers:ShouldIgnoreStepTrackingChange(sourceChanged)
     return false
 end
 
----@param data WayfinderData
+---@param data {mapID: number?, x: number?, y: number?}
 ---@return boolean usesNavigationFrame
 function Providers:SetStepSuperTracking(data)
     local mapID, x, y = data.mapID, data.x, data.y
-    if not mapID or not x or not y or not C_Map.CanSetUserWaypointOnMap(mapID) then
+    local waypoint = mapID and x and y and CreateStepWaypoint(mapID, x, y)
+    if not waypoint then
         self:ClearStepSuperTracking()
         return false
     end
-    local waypoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     if stepWaypoint and not self:IsStepSuperTracking() then self:ClearStepSuperTracking(false) end
+    stepTarget = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     if stepWaypoint and WaypointsMatch(stepWaypoint, waypoint) then return true end
     if not stepWaypoint then
         local currentWaypoint = C_Map.GetUserWaypoint()
@@ -159,4 +221,16 @@ function Providers:SetStepSuperTracking(data)
 end
 
 MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", KeepStepWaypointOnArrival)
+-- Reproject the owned location when the player crosses maps during one Step.
+-- Clearing tracking releases this copy; zone events never reclaim another selection.
+local function RefreshStepWaypointMap()
+    if changingTracking or not stepTarget or not Providers:IsStepSuperTracking() then return end
+    Providers:SetStepSuperTracking({ mapID = stepTarget.uiMapID,
+        x = stepTarget.position.x, y = stepTarget.position.y })
+end
+
+MapPinEnhanced:RegisterEvent("ZONE_CHANGED", RefreshStepWaypointMap)
+MapPinEnhanced:RegisterEvent("ZONE_CHANGED_INDOORS", RefreshStepWaypointMap)
+MapPinEnhanced:RegisterEvent("ZONE_CHANGED_NEW_AREA", RefreshStepWaypointMap)
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RefreshStepWaypointMap)
 MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function() Providers:ClearStepSuperTracking() end)
