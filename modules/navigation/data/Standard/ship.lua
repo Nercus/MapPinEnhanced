@@ -19,62 +19,6 @@ local SHIP = {
     },
 
     -- Zone: Boralus (map 1161)
-    -- Boralus (map 1161 67.95,26.69) -> Zuldazar (map 862 40.68,70.86) via ship
-    {
-        fromPointID = 800076,
-        fromMap = 1161,
-        fromX = 0.6795,
-        fromY = 0.2669,
-        toPointID = 900010,
-        toMap = 862,
-        toX = 0.4068,
-        toY = 0.7086,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Alliance",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51308,
-                },
-            },
-        },
-    },
-    -- Boralus (map 1161 67.95,26.69) -> Nazmir (map 863 61.95,39.92) via ship
-    {
-        fromPointID = 800076,
-        fromMap = 1161,
-        fromX = 0.6795,
-        fromY = 0.2669,
-        toPointID = 900048,
-        toMap = 863,
-        toX = 0.6195,
-        toY = 0.3992,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Alliance",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51571,
-                },
-            },
-        },
-    },
     -- Boralus (map 1161 77.62,26.15) -> Stormwind City (map 84 22.43,55.93) via ship
     {
         fromPointID = 800088,
@@ -151,34 +95,6 @@ local SHIP = {
     },
 
     -- Zone: Dazar'alor (map 1165)
-    -- Dazar'alor (map 1165 41.83,87.61) -> Mechagon Island (map 1462 75.73,21.32) via ship
-    {
-        fromPointID = 900086,
-        fromMap = 1165,
-        fromX = 0.4183,
-        fromY = 0.8761,
-        toPointID = 800104,
-        toMap = 1462,
-        toX = 0.7573,
-        toY = 0.2132,
-        type = "ship",
-        travelDuration = 20,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 55651,
-                },
-            },
-        },
-    },
     -- Dazar'alor (map 1165 52.83,95.78) -> Zuldazar (map 862 53.68,61.56) via ship
     {
         fromPointID = 900093,
@@ -250,36 +166,6 @@ local SHIP = {
         toX = 0.2346,
         toY = 0.5775,
         type = "ship",
-    },
-
-    -- Zone: Drustvar (map 896)
-    -- Drustvar (map 896 20.60,43.34) -> Zuldazar (map 862 58.40,62.50) via ship
-    {
-        fromPointID = 800022,
-        fromMap = 896,
-        fromX = 0.206,
-        fromY = 0.4334,
-        toPointID = 900023,
-        toMap = 862,
-        toX = 0.584,
-        toY = 0.625,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51340,
-                },
-            },
-        },
     },
 
     -- Zone: Dustwallow Marsh (map 70)
@@ -371,36 +257,6 @@ local SHIP = {
         },
     },
 
-    -- Zone: Mechagon Island (map 1462)
-    -- Mechagon Island (map 1462 75.49,22.66) -> Dazar'alor (map 1165 41.75,87.43) via ship
-    {
-        fromPointID = 800103,
-        fromMap = 1462,
-        fromX = 0.7549,
-        fromY = 0.2266,
-        toPointID = 900085,
-        toMap = 1165,
-        toX = 0.4175,
-        toY = 0.8743,
-        type = "ship",
-        travelDuration = 20,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 55651,
-                },
-            },
-        },
-    },
-
     -- Zone: Northern Barrens (map 10)
     -- Northern Barrens (map 10 70.16,73.27) -> The Cape of Stranglethorn (map 210 39.02,67.01) via ship
     {
@@ -427,64 +283,6 @@ local SHIP = {
         toX = 0.4912,
         toY = 0.014,
         type = "ship",
-    },
-
-    -- Zone: Stormsong Valley (map 942)
-    -- Stormsong Valley (map 942 51.43,33.75) -> Zuldazar (map 862 58.40,62.50) via ship
-    {
-        fromPointID = 800048,
-        fromMap = 942,
-        fromX = 0.5143,
-        fromY = 0.3375,
-        toPointID = 900023,
-        toMap = 862,
-        toX = 0.584,
-        toY = 0.625,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51696,
-                },
-            },
-        },
-    },
-    -- Stormsong Valley (map 942 51.95,24.46) -> Zuldazar (map 862 58.40,62.50) via ship
-    {
-        fromPointID = 800049,
-        fromMap = 942,
-        fromX = 0.5195,
-        fromY = 0.2446,
-        toPointID = 900023,
-        toMap = 862,
-        toX = 0.584,
-        toY = 0.625,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51532,
-                },
-            },
-        },
     },
 
     -- Zone: Stormwind City (map 84)
@@ -606,66 +404,6 @@ local SHIP = {
                     operation = "check",
                     kind = "faction",
                     value = "Alliance",
-                },
-            },
-        },
-    },
-
-    -- Zone: Tiragarde Sound (map 895)
-    -- Tiragarde Sound (map 895 87.85,51.18) -> Zuldazar (map 862 58.40,62.50) via ship
-    {
-        fromPointID = 800017,
-        fromMap = 895,
-        fromX = 0.8785,
-        fromY = 0.5118,
-        toPointID = 900023,
-        toMap = 862,
-        toX = 0.584,
-        toY = 0.625,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51421,
-                },
-            },
-        },
-    },
-
-    -- Zone: Vol'dun (map 864)
-    -- Vol'dun (map 864 36.69,34.28) -> Boralus (map 1161 70.22,27.06) via ship
-    {
-        fromPointID = 900057,
-        fromMap = 864,
-        fromX = 0.3669,
-        fromY = 0.3428,
-        toPointID = 800083,
-        toMap = 1161,
-        toX = 0.7022,
-        toY = 0.2706,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Alliance",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51229,
                 },
             },
         },
@@ -810,62 +548,6 @@ local SHIP = {
                     operation = "check",
                     kind = "phase",
                     value = "BFA",
-                },
-            },
-        },
-    },
-    -- Zuldazar (map 862 58.46,62.99) -> Drustvar (map 896 20.61,43.69) via ship
-    {
-        fromPointID = 900024,
-        fromMap = 862,
-        fromX = 0.5846,
-        fromY = 0.6299,
-        toPointID = 800023,
-        toMap = 896,
-        toX = 0.2061,
-        toY = 0.4369,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51801,
-                },
-            },
-        },
-    },
-    -- Zuldazar (map 862 58.46,62.99) -> Stormsong Valley (map 942 51.98,24.49) via ship
-    {
-        fromPointID = 900024,
-        fromMap = 862,
-        fromX = 0.5846,
-        fromY = 0.6299,
-        toPointID = 800050,
-        toMap = 942,
-        toX = 0.5198,
-        toY = 0.2449,
-        type = "ship",
-        travelDuration = 30,
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51802,
                 },
             },
         },
