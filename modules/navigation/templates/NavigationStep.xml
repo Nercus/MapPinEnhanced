@@ -2,48 +2,69 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="NavigationStep.lua" />
     <Frame name="MapPinEnhancedNavigationStepTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedWayfinderInstructionTemplate" mixin="MapPinEnhancedNavigationStepMixin" enableMouse="true" frameStrata="MEDIUM">
-        <Size x="340" y="76" />
+        <Size x="318" y="62" />
         <Anchors>
             <Anchor point="TOP" relativeTo="UIParent" y="-280" />
         </Anchors>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
+            <Layer level="BACKGROUND" textureSubLevel="1">
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.75" scale="0.5"/>
+            </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
+                    <Size x="1" y="1" />
+                    <Color r="1" g="0.82" b="0" />
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="5" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="-5" y="2" />
+                    </Anchors>
+                </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
-                    <Size x="242" y="14" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="64" y="-12" />
-                    </Anchors>
-                </FontString>
-                <FontString parentKey="text" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
+                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                     <Size x="242" y="0" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" x="64" y="-32" />
+                        <Anchor point="TOPLEFT" x="64" y="-8" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP">
+                    <Color r="0.65" g="0.65" b="0.65" />
+                    <Size x="242" y="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.title" relativePoint="BOTTOMLEFT" y="-3" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="distance" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="242" y="12" />
+                    <Color r="0.65" g="0.65" b="0.65" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.text" relativePoint="BOTTOMLEFT" y="-3" />
                     </Anchors>
                 </FontString>
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false">
-                <Size x="32" y="32" />
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" frameStrata="MEDIUM">
+                <Size x="42" y="42" />
+                <KeyValues>
+                    <KeyValue key="hideHighlight" value="true" type="boolean" />
+                </KeyValues>
                 <Anchors>
                     <Anchor point="LEFT" x="16" />
                 </Anchors>
             </Frame>
             <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-18" />
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
                 </Anchors>
             </Button>
             <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-18" />
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
                 </Anchors>
             </Button>
             <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="20" y="20" />
+                <Size x="22" y="22" />
                 <KeyValues>
                     <KeyValue key="icon" value="close" />
                     <KeyValue key="tooltip" value="Clear Tracking" />
