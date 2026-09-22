@@ -2,14 +2,14 @@
 local MapPinEnhanced = select(2, ...)
 
 local Navigation = MapPinEnhanced:GetModule("Navigation")
-local Pins = MapPinEnhanced:GetModule("Pins")
+local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedNavigationMapPinTemplate : Frame
 ---@field line Line
 ---@field step NavigationStep?
 ---@field antOffset number?
 ---@field circle Texture
----@field icon Texture
+---@field number FontString
 ---@field lineEnd MapPinEnhancedNavigationMapPinTemplate?
 ---@field lineStart MapPinEnhancedNavigationMapPinTemplate?
 ---@field routePathType string?
@@ -55,26 +55,18 @@ function MapPinEnhancedNavigationMapPinMixin:SetRoutePoint(pathType)
         self:SetLineEndpoint()
         return
     end
-    local iconKey = Navigation:GetPathIcon(pathType)
-    local iconConfig = Pins.PIN_ICONS[iconKey]
-    self.circle:SetVertexColor(iconConfig.color:GetRGBA())
+    local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+    self.circle:SetVertexColor(color:GetRGBA())
     self.circle:Show()
-    self.icon:ClearAllPoints()
-    local offset = iconConfig.offset or { x = 0, y = 0 }
-    self.icon:SetPoint("CENTER", offset.x, offset.y)
-    self.icon:SetScale(iconConfig.scale or 1)
-    if iconConfig.usesAtlas then
-        self.icon:SetAtlas(iconConfig.path, false)
-    else
-        self.icon:SetTexture(iconConfig.path)
-    end
-    self.icon:SetVertexColor(1, 1, 1, 1)
-    self.icon:Show()
+    self.number:SetText(self.step and self.step.index or "")
+    self.number:Show()
+    self:EnableMouse(true)
 end
 
 function MapPinEnhancedNavigationMapPinMixin:SetLineEndpoint()
+    self:OnLeave()
     self.circle:Hide()
-    self.icon:Hide()
+    self.number:Hide()
     self:EnableMouse(false)
 end
 
@@ -107,6 +99,7 @@ function MapPinEnhancedNavigationMapPinMixin:OnShow()
 end
 
 function MapPinEnhancedNavigationMapPinMixin:OnHide()
+    self:OnLeave()
     self:SetScript("OnUpdate", nil)
     self.line:Hide()
     if self.lineStart then self.lineStart:RefreshLine() end
@@ -118,16 +111,41 @@ function MapPinEnhancedNavigationMapPinMixin:Reset()
     self:ClearRouteLine()
     self.circle:SetVertexColor(1, 1, 1, 1)
     self.circle:Hide()
-    self.icon:ClearAllPoints()
-    self.icon:SetPoint("CENTER")
-    self.icon:SetScale(1)
-    self.icon:SetTexture(nil)
-    self.icon:SetVertexColor(1, 1, 1, 1)
-    self.icon:Hide()
+    self.number:SetText("")
+    self.number:Hide()
+    self:OnLeave()
     self:EnableMouse(false)
     self.routePathType = nil
     self.step = nil
     self:SetScript("OnUpdate", nil)
     self.isMapEdge = nil
     self:Hide()
+end
+
+function MapPinEnhancedNavigationMapPinMixin:OnEnter()
+    local step = self.step
+    local progression = Navigation.progression
+    local graph = Navigation:GetGraph()
+    local reference = step and progression and progression.route.pathReferences[step.index]
+    if not step or not graph or not reference or self.isMapEdge then return end
+    local pathType = graph.pathTypes[reference]
+    local pointIndex = graph.pathToPointIndexes[reference]
+    local mapID = graph.pointMapIDs[pointIndex]
+    local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:AddLine(string.format(L["Navigation Step Number"], step.index,
+        Navigation:GetPathMethod(pathType)), color:GetRGB())
+    local info = step.info
+    GameTooltip:AddLine(info and info.instruction or Navigation:GetPathInstruction(pathType, mapID), 1, 1, 1, true)
+    local mapInfo = C_Map.GetMapInfo(mapID)
+    GameTooltip:AddLine(string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID),
+        graph.pointXs[pointIndex] * 100, graph.pointYs[pointIndex] * 100), 0.7, 0.7, 0.7, true)
+    if info and info.status and info.status ~= "" then
+        GameTooltip:AddLine(info.status, 1, 0.82, 0, true)
+    end
+    GameTooltip:Show()
+end
+
+function MapPinEnhancedNavigationMapPinMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
