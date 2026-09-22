@@ -226,14 +226,8 @@ function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     assert(position, "Arrow:OnLoad requires its position owner")
     MapPinEnhanced:RegisterDraggableFrame(position, "floatingArrow", self, InCombatLockdown)
     MapPinEnhanced:RestoreFrame(position)
-    -- The position owner remains shown because it contains a secure action.
-    -- Only this unprotected display fades; forward dragging outside combat.
-    self:HookScript("OnMouseDown", function(_, button)
-        if not InCombatLockdown() then position:GetScript("OnMouseDown")(position, button) end
-    end)
-    self:HookScript("OnMouseUp", function(_, button)
-        if not InCombatLockdown() then position:GetScript("OnMouseUp")(position, button) end
-    end)
+    MapPinEnhanced:UnregisterDraggableFrame(position)
+    -- The secure position owner stays shown; only the visible display accepts dragging.
     self:HookScript("OnMouseDown", function(_, mouseButton)
         self:OnMouseDown(mouseButton)
     end)
@@ -253,6 +247,7 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:OnShow()
     if self.directionVisible == false then return end
+    MapPinEnhanced:RegisterDraggableFrame(self:GetParent(), "floatingArrow", self, InCombatLockdown)
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
         self:OnDistanceUpdate(distance, timeToTarget)
@@ -275,6 +270,7 @@ function MapPinEnhancedWayfinderArrowMixin:Reset()
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnHide()
+    MapPinEnhanced:UnregisterDraggableFrame(self:GetParent())
     self:SetScript("OnUpdate", nil)
     self:StopDistanceUpdates()
     self:Reset()

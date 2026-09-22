@@ -2,6 +2,32 @@
 local MapPinEnhanced = select(2, ...)
 local LibWindow = LibStub("LibWindow-1.1")
 
+---@class MapPinEnhancedDragRegistration
+---@field active boolean
+---@field moving boolean?
+---@field dragArea ScriptRegion
+---@field isLocked fun(): boolean
+
+---@type table<Frame, MapPinEnhancedDragRegistration>
+local draggableFrames = {}
+
+local function StopDragging(frame, registration)
+    if not registration.moving then return end
+    registration.moving = false
+    frame:StopMovingOrSizing()
+    LibWindow.SavePosition(frame)
+    ResetCursor()
+end
+
+---@param frame Frame
+function MapPinEnhanced:UnregisterDraggableFrame(frame)
+    local registration = draggableFrames[frame]
+    if not registration then return end
+    registration.active = false
+    StopDragging(frame, registration)
+    if registration.dragArea:IsMouseOver() then ResetCursor() end
+end
+
 ---@param frame Frame
 ---@param frameName string
 ---@param dragArea ScriptRegion?
@@ -9,15 +35,18 @@ local LibWindow = LibStub("LibWindow-1.1")
 function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLocked)
     assert(type(frameName) == "string", "Frame name must be a string")
     assert(type(frame) == "table", "Frame must be a valid Frame object")
-    local onMouseDownScript, onMouseUpScript = frame:GetScript("OnMouseDown"), frame:GetScript("OnMouseUp")
-    local onMouseDownActive = onMouseDownScript ~= nil
-    local onMouseUpActive = onMouseUpScript ~= nil
-    if onMouseDownActive or onMouseUpActive then
-        error("Cannot save position for frames with active OnMouseDown or OnMouseUp scripts.")
+    dragArea = dragArea or frame
+    local registration = draggableFrames[frame]
+    if registration then
+        assert(registration.dragArea == dragArea,
+            "RegisterDraggableFrame requires the original drag area when registering again")
+        registration.isLocked = isLocked or function() return false end
+        registration.active = true
+        return
     end
-    if not dragArea then
-        dragArea = frame
-    else
+    registration = { active = true, dragArea = dragArea, isLocked = isLocked or function() return false end }
+    draggableFrames[frame] = registration
+    if dragArea ~= frame then
         dragArea:EnableMouse(true)
         dragArea:SetPropagateMouseClicks(true)
     end
@@ -34,40 +63,31 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
     LibWindow.RegisterConfig(frame, framesTable[frameName])
 
     frame:SetMovable(true)
+    -- Hooks are installed once; registration gates them without replacing callers' scripts.
     dragArea:HookScript("OnEnter", function()
-        if isLocked and isLocked() then
-            return
-        end
-        if dragArea and dragArea:IsMouseOver() then
-            SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
-        end
+        if not registration.active or registration.isLocked() then return end
+        SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
     end)
-
     dragArea:HookScript("OnLeave", function()
-        ResetCursor()
+        if registration.active then ResetCursor() end
     end)
-
-    frame:SetScript("OnMouseDown", function(frame, button)
-        if button ~= "LeftButton" then return end
-        if dragArea and not dragArea:IsMouseOver() then
-            return
-        end
-        if isLocked and isLocked() then
-            return
-        end
+    dragArea:HookScript("OnMouseDown", function(_, button)
+        if button ~= "LeftButton" or not registration.active or registration.isLocked() then return end
+        if not dragArea:IsVisible() or not dragArea:IsMouseOver() then return end
+        registration.moving = true
         frame:StartMoving()
         SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
     end)
-
-    frame:SetScript("OnMouseUp", function(frame, button)
-        if button ~= "LeftButton" then return end
-        frame:StopMovingOrSizing()
-        if dragArea and dragArea:IsMouseOver() then
+    dragArea:HookScript("OnMouseUp", function(_, button)
+        if button ~= "LeftButton" or not registration.moving then return end
+        StopDragging(frame, registration)
+        if registration.active and dragArea:IsMouseOver() and not registration.isLocked() then
             SetCursorByMode(Enum.Cursormode.GrabbingHandCursor)
-        else
-            ResetCursor()
         end
-        LibWindow.SavePosition(frame)
+    end)
+    dragArea:HookScript("OnHide", function()
+        StopDragging(frame, registration)
+        if registration.active then ResetCursor() end
     end)
 end
 
