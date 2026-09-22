@@ -172,9 +172,10 @@ local function RefreshMapPin()
         (not questMapID or questMapID == 0) then
         questMapID = C_TaskQuest.GetQuestZoneID(typeID)
     end
-    local x, y, mapID, waypointDescription, traversalOnly = Providers:GetSuperTrackingWaypoint(hasPin and function(candidateMapID)
-        return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
-    end or nil, questMapID)
+    local x, y, mapID, waypointDescription, traversalOnly = Providers:GetSuperTrackingWaypoint(
+        hasPin and function(candidateMapID)
+            return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
+        end or nil, questMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return

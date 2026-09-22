@@ -35,7 +35,9 @@ local function ProjectStepWaypoint(mapID, x, y, candidateMapID)
     local hbd = MapPinEnhanced.HBD
     local projectedX, projectedY = hbd:TranslateZoneCoordinates(x, y, mapID, candidateMapID)
     if not projectedX or not projectedY or
-        not (projectedX >= 0 and projectedX <= 1 and projectedY >= 0 and projectedY <= 1) then return end
+        not (projectedX >= 0 and projectedX <= 1 and projectedY >= 0 and projectedY <= 1) then
+        return
+    end
     -- A shared map hierarchy alone does not establish compatible world geometry.
     local distance = hbd:GetZoneDistance(mapID, x, y, candidateMapID, projectedX, projectedY)
     if not distance or distance > 5 then return end
@@ -225,8 +227,11 @@ MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", KeepStepWaypointOnArriv
 -- Clearing tracking releases this copy; zone events never reclaim another selection.
 local function RefreshStepWaypointMap()
     if changingTracking or not stepTarget or not Providers:IsStepSuperTracking() then return end
-    Providers:SetStepSuperTracking({ mapID = stepTarget.uiMapID,
-        x = stepTarget.position.x, y = stepTarget.position.y })
+    Providers:SetStepSuperTracking({
+        mapID = stepTarget.uiMapID,
+        x = stepTarget.position.x,
+        y = stepTarget.position.y
+    })
 end
 
 MapPinEnhanced:RegisterEvent("ZONE_CHANGED", RefreshStepWaypointMap)

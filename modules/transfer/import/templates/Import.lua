@@ -152,7 +152,9 @@ local function IsValidPinData(pinData)
     if type(pinData) ~= "table" or type(pinData.mapID) ~= "number" or
         pinData.mapID <= 0 or pinData.mapID >= math.huge or pinData.mapID ~= math.floor(pinData.mapID) or
         type(pinData.x) ~= "number" or not (pinData.x >= 0 and pinData.x <= 1) or
-        type(pinData.y) ~= "number" or not (pinData.y >= 0 and pinData.y <= 1) then return false end
+        type(pinData.y) ~= "number" or not (pinData.y >= 0 and pinData.y <= 1) then
+        return false
+    end
     for _, key in ipairs({ "title", "description", "color", "pinID" }) do
         if pinData[key] ~= nil and type(pinData[key]) ~= "string" then return false end
     end
@@ -242,12 +244,16 @@ function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
         if type(savedGroup.pinOrder) == "table" then
             for pinID, order in pairs(savedGroup.pinOrder) do
                 if type(pinID) == "string" and type(order) == "number" and
-                    order > -math.huge and order < math.huge then pinOrder[pinID] = order end
+                    order > -math.huge and order < math.huge then
+                    pinOrder[pinID] = order
+                end
             end
         end
         local icon = savedGroup.icon
         if type(icon) ~= "string" and
-            not (type(icon) == "number" and icon > 0 and icon < math.huge) then icon = nil end
+            not (type(icon) == "number" and icon > 0 and icon < math.huge) then
+            icon = nil
+        end
         savedGroup = {
             name = type(savedGroup.name) == "string" and savedGroup.name or nil,
             icon = icon,

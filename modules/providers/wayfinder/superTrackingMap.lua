@@ -17,7 +17,9 @@ function Providers:GetNavigationWaypointForMap(mapID)
     if not resolver or not C_SuperTrack.IsSuperTrackingAnything() then return end
     local x, y, description = resolver(mapID)
     if MapPinEnhanced:IsSecretValue(x) or MapPinEnhanced:IsSecretValue(y) or
-        type(x) ~= "number" or type(y) ~= "number" then return end
+        type(x) ~= "number" or type(y) ~= "number" then
+        return
+    end
     if MapPinEnhanced:IsSecretValue(description) then description = nil end
     return x, y, description
 end

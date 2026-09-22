@@ -82,4 +82,3 @@ function Transfer:GetSerializedTarget(target)
         group = exportGroup,
     }
 end
-

@@ -26,7 +26,9 @@ local gossipOpen = false
 local function SelectTravelOption()
     local context, report = activeContext, activeReport
     if not gossipOpen or not context or not report or context.phase == "in-transit" or
-        selectedOptionID or InCombatLockdown() then return end
+        selectedOptionID or InCombatLockdown() then
+        return
+    end
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
