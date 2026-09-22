@@ -5,6 +5,14 @@ local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 -- Route costs
+---@class NavigationMountInfo
+---@field fly boolean
+---@field ground boolean
+
+---@class Navigation
+---@field mountData table<number, NavigationMountInfo>
+---@field defaultMountInfo NavigationMountInfo
+
 ---@class NavigationMovementCapabilities
 ---@field groundSpeed number
 ---@field steadyFlightSpeed number
@@ -87,23 +95,21 @@ end
 
 ---@param movement NavigationMovementCapabilities
 ---@param travelMode "automatic"|"ground"|"flight"?
+---@param fromMapID number
+---@param toMapID number
 ---@return string mode
 ---@return number speed
-local function GetMovementSpeed(movement, travelMode)
-    local requestedMode = travelMode or "ground"
-    local mode = "ground"
-    local speed = movement.groundSpeed
-    local flightMode = requestedMode == "flight" and
-        (movement.canSkyriding and "skyriding" or movement.canFly and "steady" or nil) or
-        requestedMode == "automatic" and movement.activeFlightMode or nil
-    if flightMode == "skyriding" then
-        mode = "skyriding"
-        speed = movement.skyridingSpeed
-    elseif flightMode == "steady" then
-        mode = "steady-flight"
-        speed = movement.steadyFlightSpeed
+local function GetMovementSpeed(movement, travelMode, fromMapID, toMapID)
+    local fromMountInfo = Navigation.mountData[fromMapID] or Navigation.defaultMountInfo
+    local toMountInfo = Navigation.mountData[toMapID] or Navigation.defaultMountInfo
+    -- Future portal exits have their own restrictions; the player's current
+    -- area's flight mode cannot describe movement throughout the route.
+    if travelMode ~= nil and travelMode ~= "ground" and fromMountInfo.fly and toMountInfo.fly then
+        if movement.canSkyriding then return "skyriding", movement.skyridingSpeed end
+        if movement.canFly then return "steady-flight", movement.steadyFlightSpeed end
     end
-    return mode, speed
+    if fromMountInfo.ground and toMountInfo.ground then return "ground", movement.groundSpeed end
+    return "walking", MOVEMENT_SPEEDS.walking
 end
 
 ---@param preparedData NavigationPreparedData
@@ -118,7 +124,7 @@ end
 function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2, y2, travelMode)
     local distance = self:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
     if not distance then return nil end
-    local mode, speed = GetMovementSpeed(preparedData.movement, travelMode)
+    local mode, speed = GetMovementSpeed(preparedData.movement, travelMode, mapID1, mapID2)
     if speed <= 0 then return nil end
     local expectedSeconds = distance / speed
     return {
@@ -225,6 +231,7 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field movementCandidates integer
 
 ---@class NavigationWorldPoint
+---@field mapID number
 ---@field x number
 ---@field y number
 ---@field instanceID number
@@ -253,7 +260,6 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field nextMovementPointIndex integer?
 ---@field worldPoints table<integer, NavigationWorldPoint>
 ---@field entrancesByInstance table<number, integer[]>
----@field movementSpeed number
 ---@field startedAt number
 ---@field calculationSlices integer
 ---@field movementCandidates integer
@@ -467,8 +473,8 @@ local function ExpandPoint(job, entry)
         end
     end
     -- Authored data describes transitions, not every walk between entrances.
-    -- Only actual Path arrivals need these offers: initial player approaches
-    -- already cover entrances, and chaining straight movement cannot improve it.
+    -- Offer connections from actual Path arrivals. Initial player approaches
+    -- already cover entrances; arbitrary movement waypoints are not added.
     if job.previousPathReferences[entry.pointIndex] then
         job.movementEntry = entry
         job.nextMovementPointIndex = 1
@@ -483,7 +489,7 @@ local function OfferNextMovementPoint(job)
     local origin = job.worldPoints[entry.pointIndex]
     local entrances = origin and job.entrancesByInstance[origin.instanceID]
     local pointIndex = entrances and entrances[candidateIndex]
-    if not origin or not pointIndex or job.movementSpeed <= 0 then
+    if not origin or not pointIndex then
         job.movementEntry = nil
         job.nextMovementPointIndex = nil
         return
@@ -493,7 +499,9 @@ local function OfferNextMovementPoint(job)
     if pointIndex == entry.pointIndex then return end
     local bestCostBucket = job.bestCostBuckets[pointIndex]
     if bestCostBucket and entry.costBucket > bestCostBucket then return end
-    local seconds = MapPinEnhanced:GetPointDistance(origin, job.worldPoints[pointIndex]) / job.movementSpeed
+    local target = job.worldPoints[pointIndex]
+    local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, target.mapID)
+    local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
     OfferPoint(job, pointIndex, entry.cost + seconds,
         entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature)
 end
@@ -553,10 +561,12 @@ local function SeedJob(job)
 
         local worldX, worldY, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(playerX, playerY, playerMapID)
         local entrances = instanceID and job.entrancesByInstance[instanceID]
-        if worldX and worldY and entrances and job.movementSpeed > 0 then
+        if worldX and worldY and entrances then
             local origin = { x = worldX, y = worldY }
             for _, pointIndex in ipairs(entrances) do
-                local seconds = MapPinEnhanced:GetPointDistance(origin, job.worldPoints[pointIndex]) / job.movementSpeed
+                local target = job.worldPoints[pointIndex]
+                local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", playerMapID, target.mapID)
+                local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
                 OfferPoint(job, pointIndex, seconds, 0, 0, nil, nil, "")
             end
         end
@@ -586,7 +596,7 @@ local function PrepareMovementPoints(job, graph)
         local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
             graph.pointXs[pointIndex], graph.pointYs[pointIndex], graph.pointMapIDs[pointIndex])
         if x and y and instanceID then
-            job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID }
+            job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID, mapID = graph.pointMapIDs[pointIndex] }
         end
     end
     local seen = {} ---@type table<integer, boolean>
@@ -626,7 +636,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
     for pathReference in pairs(avoidedPaths) do excludedPaths[pathReference] = true end
     calculationNumber = calculationNumber + 1
     local startedAt = GetTimePreciseSec()
-    local _, movementSpeed = GetMovementSpeed(preparedData.movement, "automatic")
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     ---@type NavigationCalculationJob
     local job = {
@@ -651,7 +660,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         cancelled = false,
         worldPoints = {},
         entrancesByInstance = {},
-        movementSpeed = movementSpeed,
         startedAt = startedAt,
         calculationSlices = 0,
         movementCandidates = 0,
