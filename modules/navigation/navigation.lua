@@ -504,7 +504,6 @@ function Navigation:PublishStep(progression)
     local targetPointIndex = toPointIndex
     ---@type WayfinderTargetArrival?
     local onArrival
-    local lock = false
 
     if not self:IsMovementPath(pathType) and progression.phase == "approach" and fromPointIndex then
         targetPointIndex = fromPointIndex
@@ -519,7 +518,6 @@ function Navigation:PublishStep(progression)
         end
     else
         targetPointIndex = fromPointIndex or toPointIndex
-        lock = true
     end
 
     local destination = self.activeDestination
@@ -535,12 +533,15 @@ function Navigation:PublishStep(progression)
     -- BasePin resolves this PIN_ICONS key and owns its atlas geometry and style.
     targetData.usesAtlas = false
     targetData.pinStyleMode = Pins.STYLE_MODE_OUTLINE
-    targetData.lock = lock
+    -- Waiting Steps have no arrival callback; a destination lock is not Step state.
+    targetData.lock = false
     targetData.mapDistanceOnly = true
     self:ApplyStepPresentation(targetData, onArrival, {
         changeNumber = presentationChangeNumber,
         arrivalIdentity = arrivalIdentity,
-        showDirection = desiredAction == nil and progression.phase == "approach",
+        -- Entrance proximity readies an interaction; its marker stays until use.
+        showDirection = desiredAction == nil and
+            (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
