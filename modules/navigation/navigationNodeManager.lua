@@ -35,7 +35,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 ---@class NavigationRequirementNot
 ---@field operation "not"
----@field child NavigationRequirement
+---@field children NavigationRequirement[]
 
 ---@alias NavigationRequirement NavigationRequirementCheck|NavigationRequirementGroup|NavigationRequirementNot
 
@@ -435,7 +435,9 @@ function Navigation:EvaluateRequirement(requirement)
         if sawUnknown then return UNKNOWN, unknownFailure or "requirement unavailable" end
         return operation == "all" and SATISFIED or UNSATISFIED
     elseif operation == "not" then
-        local state, failure = self:EvaluateRequirement(requirement.child)
+        local children = requirement.children
+        if type(children) ~= "table" or #children ~= 1 then return UNKNOWN, "invalid negation requirement" end
+        local state, failure = self:EvaluateRequirement(children[1])
         if state == UNKNOWN then return UNKNOWN, failure or "requirement unavailable" end
         return state == SATISFIED and UNSATISFIED or SATISFIED
     elseif operation ~= "check" or type(requirement.kind) ~= "string" then
@@ -475,7 +477,7 @@ function Navigation:GetRequirementResource(requirement, resourceKey)
     for _, child in ipairs(requirement.children) do
         local childValue = self:GetRequirementResource(child, resourceKey)
         if childValue then
-            if found then return nil end
+            if found and found ~= childValue then return nil end
             found = childValue
         end
     end
