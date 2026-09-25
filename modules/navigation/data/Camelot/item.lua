@@ -7,7 +7,7 @@ local ITEM = {
     -- Zone: Azshara (map 1447)
     -- current position -> Azshara (map 1447 79.20,73.60) via item
     {
-        toPointID = 100068,
+        toPointID = 100070,
         toMap = 1447,
         toX = 0.792,
         toY = 0.736,
@@ -30,7 +30,7 @@ local ITEM = {
     -- Zone: Deadwind Pass (map 1430)
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
-        toPointID = 200065,
+        toPointID = 200066,
         toMap = 1430,
         toX = 0.4724,
         toY = 0.754,
@@ -51,7 +51,7 @@ local ITEM = {
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
-        toPointID = 200065,
+        toPointID = 200066,
         toMap = 1430,
         toX = 0.4724,
         toY = 0.754,
@@ -72,7 +72,7 @@ local ITEM = {
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
-        toPointID = 200065,
+        toPointID = 200066,
         toMap = 1430,
         toX = 0.4724,
         toY = 0.754,
@@ -93,7 +93,7 @@ local ITEM = {
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
-        toPointID = 200065,
+        toPointID = 200066,
         toMap = 1430,
         toX = 0.4724,
         toY = 0.754,

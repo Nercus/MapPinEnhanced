@@ -7,7 +7,7 @@ local PORTAL = {
     -- Zone: Darnassus (map 1457)
     -- Darnassus (map 1457 30.06,41.44) -> Teldrassil (map 1438 55.91,89.64) via portal
     {
-        fromPointID = 100100,
+        fromPointID = 100102,
         fromMap = 1457,
         fromX = 0.3006,
         fromY = 0.4144,
@@ -36,7 +36,7 @@ local PORTAL = {
         fromMap = 1438,
         fromX = 0.5591,
         fromY = 0.8964,
-        toPointID = 100100,
+        toPointID = 100102,
         toMap = 1457,
         toX = 0.3006,
         toY = 0.4144,

@@ -48,7 +48,7 @@ local FLIGHTTAXI = {
         fromMap = 1416,
         fromX = 0.586873,
         fromY = 0.803604,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -122,7 +122,7 @@ local FLIGHTTAXI = {
         fromMap = 1416,
         fromX = 0.586873,
         fromY = 0.803604,
-        toPointID = 200050,
+        toPointID = 200051,
         toMap = 1425,
         toX = 0.817013,
         toY = 0.818932,
@@ -270,7 +270,7 @@ local FLIGHTTAXI = {
         fromMap = 1416,
         fromX = 0.790515,
         fromY = 0.30465,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -455,7 +455,7 @@ local FLIGHTTAXI = {
         fromMap = 1416,
         fromX = 0.995033,
         fromY = 0.651568,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -494,7 +494,7 @@ local FLIGHTTAXI = {
         fromMap = 1459,
         fromX = 0.431363,
         fromY = 0.180958,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -531,7 +531,7 @@ local FLIGHTTAXI = {
         fromMap = 1459,
         fromX = 0.495797,
         fromY = 0.85694,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -644,7 +644,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.457901,
         fromY = 0.461332,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -681,7 +681,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.457901,
         fromY = 0.461332,
-        toPointID = 200092,
+        toPointID = 200094,
         toMap = 1437,
         toX = 0.095204,
         toY = 0.596587,
@@ -718,7 +718,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.457901,
         fromY = 0.461332,
-        toPointID = 200073,
+        toPointID = 200074,
         toMap = 1432,
         toX = 0.33943,
         toY = 0.507947,
@@ -755,7 +755,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.730618,
         fromY = 0.326232,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -829,7 +829,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.730618,
         fromY = 0.326232,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -866,7 +866,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.730618,
         fromY = 0.326232,
-        toPointID = 200107,
+        toPointID = 200110,
         toMap = 2548,
         toX = 0.596143,
         toY = 0.450641,
@@ -903,7 +903,7 @@ local FLIGHTTAXI = {
         fromMap = 1417,
         fromX = 0.730618,
         fromY = 0.326232,
-        toPointID = 200050,
+        toPointID = 200051,
         toMap = 1425,
         toX = 0.817013,
         toY = 0.818932,
@@ -938,11 +938,11 @@ local FLIGHTTAXI = {
     -- Zone: Ashenvale (map 1440)
     -- Splintertree Post, Ashenvale (map 1440 73.26,61.67) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100037,
+        fromPointID = 100039,
         fromMap = 1440,
         fromX = 0.732581,
         fromY = 0.616722,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -975,7 +975,7 @@ local FLIGHTTAXI = {
     },
     -- Splintertree Post, Ashenvale (map 1440 73.26,61.67) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100037,
+        fromPointID = 100039,
         fromMap = 1440,
         fromX = 0.732581,
         fromY = 0.616722,
@@ -1012,11 +1012,11 @@ local FLIGHTTAXI = {
     },
     -- Splintertree Post, Ashenvale (map 1440 73.26,61.67) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
-        fromPointID = 100037,
+        fromPointID = 100039,
         fromMap = 1440,
         fromX = 0.732581,
         fromY = 0.616722,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -1049,11 +1049,11 @@ local FLIGHTTAXI = {
     },
     -- Splintertree Post, Ashenvale (map 1440 73.26,61.67) -> Zoram'gar Outpost, Ashenvale (map 1448 11.21,98.05) via flighttaxi
     {
-        fromPointID = 100037,
+        fromPointID = 100039,
         fromMap = 1440,
         fromX = 0.732581,
         fromY = 0.616722,
-        toPointID = 100069,
+        toPointID = 100071,
         toMap = 1448,
         toX = 0.112121,
         toY = 0.98051,
@@ -1088,11 +1088,11 @@ local FLIGHTTAXI = {
     -- Zone: Azshara (map 1447)
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -1125,11 +1125,11 @@ local FLIGHTTAXI = {
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Astranaar, Ashenvale (map 1442 72.39,2.74) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
-        toPointID = 100046,
+        toPointID = 100048,
         toMap = 1442,
         toX = 0.723906,
         toY = 0.027432,
@@ -1162,11 +1162,11 @@ local FLIGHTTAXI = {
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -1199,11 +1199,11 @@ local FLIGHTTAXI = {
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
-        toPointID = 100093,
+        toPointID = 100095,
         toMap = 1452,
         toX = 0.623348,
         toY = 0.366358,
@@ -1236,11 +1236,11 @@ local FLIGHTTAXI = {
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Talonbranch Glade, Felwood (map 2482 29.56,4.25) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
-        toPointID = 100103,
+        toPointID = 100105,
         toMap = 2482,
         toX = 0.295634,
         toY = 0.042464,
@@ -1273,7 +1273,7 @@ local FLIGHTTAXI = {
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Ratchet, The Barrens (map 1411 34.24,76.68) via flighttaxi
     {
-        fromPointID = 100066,
+        fromPointID = 100068,
         fromMap = 1447,
         fromX = 0.119025,
         fromY = 0.774766,
@@ -1310,11 +1310,11 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -1347,11 +1347,11 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -1384,7 +1384,7 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
@@ -1421,11 +1421,11 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
-        toPointID = 100071,
+        toPointID = 100073,
         toMap = 1448,
         toX = 0.344154,
         toY = 0.538678,
@@ -1458,11 +1458,11 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
-        toPointID = 100092,
+        toPointID = 100094,
         toMap = 1452,
         toX = 0.604853,
         toY = 0.363438,
@@ -1495,11 +1495,11 @@ local FLIGHTTAXI = {
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Splintertree Post, Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
-        fromPointID = 100067,
+        fromPointID = 100069,
         fromMap = 1447,
         fromX = 0.219549,
         fromY = 0.496901,
-        toPointID = 100037,
+        toPointID = 100039,
         toMap = 1440,
         toX = 0.732581,
         toY = 0.616722,
@@ -1534,11 +1534,11 @@ local FLIGHTTAXI = {
     -- Zone: Burning Steppes (map 1428)
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200060,
+        fromPointID = 200061,
         fromMap = 1428,
         fromX = 0.843818,
         fromY = 0.683045,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -1571,11 +1571,11 @@ local FLIGHTTAXI = {
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
-        fromPointID = 200060,
+        fromPointID = 200061,
         fromMap = 1428,
         fromX = 0.843818,
         fromY = 0.683045,
-        toPointID = 200108,
+        toPointID = 200111,
         toMap = 2548,
         toX = 0.605939,
         toY = 0.815701,
@@ -1608,11 +1608,11 @@ local FLIGHTTAXI = {
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) via flighttaxi
     {
-        fromPointID = 200060,
+        fromPointID = 200061,
         fromMap = 1428,
         fromX = 0.843818,
         fromY = 0.683045,
-        toPointID = 200089,
+        toPointID = 200090,
         toMap = 1435,
         toX = 0.528751,
         toY = 0.975313,
@@ -1645,11 +1645,11 @@ local FLIGHTTAXI = {
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
-        fromPointID = 200060,
+        fromPointID = 200061,
         fromMap = 1428,
         fromX = 0.843818,
         fromY = 0.683045,
-        toPointID = 200077,
+        toPointID = 200078,
         toMap = 1433,
         toX = 0.253428,
         toY = 0.589882,
@@ -1682,11 +1682,11 @@ local FLIGHTTAXI = {
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Thorium Point, Searing Gorge (map 1427 37.89,30.43) via flighttaxi
     {
-        fromPointID = 200060,
+        fromPointID = 200061,
         fromMap = 1428,
         fromX = 0.843818,
         fromY = 0.683045,
-        toPointID = 200055,
+        toPointID = 200056,
         toMap = 1427,
         toX = 0.37887,
         toY = 0.304262,
@@ -1721,11 +1721,11 @@ local FLIGHTTAXI = {
     -- Zone: Deadwind Pass (map 1430)
     -- Darkshire, Duskwood (map 1430 17.13,38.93) -> Booty Bay, Stranglethorn (map 1434 27.53,77.67) via flighttaxi
     {
-        fromPointID = 200063,
+        fromPointID = 200064,
         fromMap = 1430,
         fromX = 0.171327,
         fromY = 0.389276,
-        toPointID = 200081,
+        toPointID = 200082,
         toMap = 1434,
         toX = 0.275288,
         toY = 0.776721,
@@ -1758,11 +1758,11 @@ local FLIGHTTAXI = {
     },
     -- Darkshire, Duskwood (map 1430 17.13,38.93) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200063,
+        fromPointID = 200064,
         fromMap = 1430,
         fromX = 0.171327,
         fromY = 0.389276,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -1795,11 +1795,11 @@ local FLIGHTTAXI = {
     },
     -- Darkshire, Duskwood (map 1430 17.13,38.93) -> Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) via flighttaxi
     {
-        fromPointID = 200063,
+        fromPointID = 200064,
         fromMap = 1430,
         fromX = 0.171327,
         fromY = 0.389276,
-        toPointID = 200089,
+        toPointID = 200090,
         toMap = 1435,
         toX = 0.528751,
         toY = 0.975313,
@@ -1832,11 +1832,11 @@ local FLIGHTTAXI = {
     },
     -- Darkshire, Duskwood (map 1430 17.13,38.93) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
-        fromPointID = 200063,
+        fromPointID = 200064,
         fromMap = 1430,
         fromX = 0.171327,
         fromY = 0.389276,
-        toPointID = 200090,
+        toPointID = 200091,
         toMap = 1436,
         toX = 0.56571,
         toY = 0.526667,
@@ -1869,11 +1869,11 @@ local FLIGHTTAXI = {
     },
     -- Darkshire, Duskwood (map 1430 17.13,38.93) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
-        fromPointID = 200063,
+        fromPointID = 200064,
         fromMap = 1430,
         fromX = 0.171327,
         fromY = 0.389276,
-        toPointID = 200077,
+        toPointID = 200078,
         toMap = 1433,
         toX = 0.253428,
         toY = 0.589882,
@@ -1908,11 +1908,11 @@ local FLIGHTTAXI = {
     -- Zone: Desolace (map 1443)
     -- Shadowprey Village, Desolace (map 1443 21.56,74.04) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100049,
+        fromPointID = 100051,
         fromMap = 1443,
         fromX = 0.215631,
         fromY = 0.740422,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -1945,11 +1945,11 @@ local FLIGHTTAXI = {
     },
     -- Shadowprey Village, Desolace (map 1443 21.56,74.04) -> Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) via flighttaxi
     {
-        fromPointID = 100049,
+        fromPointID = 100051,
         fromMap = 1443,
         fromX = 0.215631,
         fromY = 0.740422,
-        toPointID = 100045,
+        toPointID = 100047,
         toMap = 1442,
         toX = 0.451641,
         toY = 0.598878,
@@ -1982,11 +1982,11 @@ local FLIGHTTAXI = {
     },
     -- Shadowprey Village, Desolace (map 1443 21.56,74.04) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
-        fromPointID = 100049,
+        fromPointID = 100051,
         fromMap = 1443,
         fromX = 0.215631,
         fromY = 0.740422,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -2019,11 +2019,11 @@ local FLIGHTTAXI = {
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100052,
+        fromPointID = 100054,
         fromMap = 1443,
         fromX = 0.646713,
         fromY = 0.104354,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -2056,11 +2056,11 @@ local FLIGHTTAXI = {
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
-        fromPointID = 100052,
+        fromPointID = 100054,
         fromMap = 1443,
         fromX = 0.646713,
         fromY = 0.104354,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -2093,11 +2093,11 @@ local FLIGHTTAXI = {
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
-        fromPointID = 100052,
+        fromPointID = 100054,
         fromMap = 1443,
         fromX = 0.646713,
         fromY = 0.104354,
-        toPointID = 100044,
+        toPointID = 100046,
         toMap = 1442,
         toX = 0.365356,
         toY = 0.072334,
@@ -2130,11 +2130,11 @@ local FLIGHTTAXI = {
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
-        fromPointID = 100052,
+        fromPointID = 100054,
         fromMap = 1443,
         fromX = 0.646713,
         fromY = 0.104354,
-        toPointID = 100053,
+        toPointID = 100055,
         toMap = 1444,
         toX = 0.302592,
         toY = 0.433194,
@@ -2173,7 +2173,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -2210,7 +2210,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -2247,7 +2247,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100045,
+        toPointID = 100047,
         toMap = 1442,
         toX = 0.451641,
         toY = 0.598878,
@@ -2284,7 +2284,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100041,
+        toPointID = 100043,
         toMap = 1441,
         toX = 0.45022,
         toY = 0.491265,
@@ -2321,7 +2321,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -2358,7 +2358,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -2395,7 +2395,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -2432,7 +2432,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100071,
+        toPointID = 100073,
         toMap = 1448,
         toX = 0.344154,
         toY = 0.538678,
@@ -2469,7 +2469,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100058,
+        toPointID = 100060,
         toMap = 1445,
         toX = 0.355653,
         toY = 0.318302,
@@ -2506,7 +2506,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100069,
+        toPointID = 100071,
         toMap = 1448,
         toX = 0.112121,
         toY = 0.98051,
@@ -2543,7 +2543,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100037,
+        toPointID = 100039,
         toMap = 1440,
         toX = 0.732581,
         toY = 0.616722,
@@ -2580,7 +2580,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.119826,
         fromY = 0.638336,
-        toPointID = 100056,
+        toPointID = 100058,
         toMap = 1445,
         toX = 0.17289,
         toY = 0.099239,
@@ -2691,7 +2691,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.342413,
         fromY = 0.766787,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -2728,7 +2728,7 @@ local FLIGHTTAXI = {
         fromMap = 1411,
         fromX = 0.342413,
         fromY = 0.766787,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -2763,11 +2763,11 @@ local FLIGHTTAXI = {
     -- Zone: Dustwallow Marsh (map 1445)
     -- Camp Taurajo, The Barrens (map 1445 17.29,9.92) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100056,
+        fromPointID = 100058,
         fromMap = 1445,
         fromX = 0.17289,
         fromY = 0.099239,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -2800,7 +2800,7 @@ local FLIGHTTAXI = {
     },
     -- Camp Taurajo, The Barrens (map 1445 17.29,9.92) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100056,
+        fromPointID = 100058,
         fromMap = 1445,
         fromX = 0.17289,
         fromY = 0.099239,
@@ -2837,11 +2837,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Taurajo, The Barrens (map 1445 17.29,9.92) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
-        fromPointID = 100056,
+        fromPointID = 100058,
         fromMap = 1445,
         fromX = 0.17289,
         fromY = 0.099239,
-        toPointID = 100041,
+        toPointID = 100043,
         toMap = 1441,
         toX = 0.45022,
         toY = 0.491265,
@@ -2874,11 +2874,11 @@ local FLIGHTTAXI = {
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100058,
+        fromPointID = 100060,
         fromMap = 1445,
         fromX = 0.355653,
         fromY = 0.318302,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -2911,11 +2911,11 @@ local FLIGHTTAXI = {
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100058,
+        fromPointID = 100060,
         fromMap = 1445,
         fromX = 0.355653,
         fromY = 0.318302,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -2948,7 +2948,7 @@ local FLIGHTTAXI = {
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100058,
+        fromPointID = 100060,
         fromMap = 1445,
         fromX = 0.355653,
         fromY = 0.318302,
@@ -2985,11 +2985,11 @@ local FLIGHTTAXI = {
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100058,
+        fromPointID = 100060,
         fromMap = 1445,
         fromX = 0.355653,
         fromY = 0.318302,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -3022,11 +3022,11 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -3059,11 +3059,11 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Thalanaar, Feralas (map 1441 7.79,17.90) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
-        toPointID = 100039,
+        toPointID = 100041,
         toMap = 1441,
         toX = 0.077854,
         toY = 0.17905,
@@ -3096,11 +3096,11 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
-        toPointID = 100052,
+        toPointID = 100054,
         toMap = 1443,
         toX = 0.646713,
         toY = 0.104354,
@@ -3133,11 +3133,11 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
-        toPointID = 100063,
+        toPointID = 100065,
         toMap = 1446,
         toX = 0.509542,
         toY = 0.293254,
@@ -3170,11 +3170,11 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -3207,7 +3207,7 @@ local FLIGHTTAXI = {
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Ratchet, The Barrens (map 1411 34.24,76.68) via flighttaxi
     {
-        fromPointID = 100059,
+        fromPointID = 100061,
         fromMap = 1445,
         fromX = 0.674587,
         fromY = 0.512011,
@@ -3250,7 +3250,7 @@ local FLIGHTTAXI = {
         fromMap = 1423,
         fromX = 0.704459,
         fromY = 0.475904,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -3287,7 +3287,7 @@ local FLIGHTTAXI = {
         fromMap = 1423,
         fromX = 0.704459,
         fromY = 0.475904,
-        toPointID = 200050,
+        toPointID = 200051,
         toMap = 1425,
         toX = 0.817013,
         toY = 0.818932,
@@ -3398,7 +3398,7 @@ local FLIGHTTAXI = {
         fromMap = 1423,
         fromX = 0.71699,
         fromY = 0.49555,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -3433,7 +3433,7 @@ local FLIGHTTAXI = {
     -- Zone: Felwood (map 1448)
     -- Zoram'gar Outpost, Ashenvale (map 1448 11.21,98.05) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100069,
+        fromPointID = 100071,
         fromMap = 1448,
         fromX = 0.112121,
         fromY = 0.98051,
@@ -3470,11 +3470,11 @@ local FLIGHTTAXI = {
     },
     -- Zoram'gar Outpost, Ashenvale (map 1448 11.21,98.05) -> Splintertree Post, Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
-        fromPointID = 100069,
+        fromPointID = 100071,
         fromMap = 1448,
         fromX = 0.112121,
         fromY = 0.98051,
-        toPointID = 100037,
+        toPointID = 100039,
         toMap = 1440,
         toX = 0.732581,
         toY = 0.616722,
@@ -3507,7 +3507,7 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Rut'theran Village, Teldrassil (map 1438 58.40,93.93) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
@@ -3544,11 +3544,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Astranaar, Ashenvale (map 1442 72.39,2.74) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100046,
+        toPointID = 100048,
         toMap = 1442,
         toX = 0.723906,
         toY = 0.027432,
@@ -3581,11 +3581,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -3618,11 +3618,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100044,
+        toPointID = 100046,
         toMap = 1442,
         toX = 0.365356,
         toY = 0.072334,
@@ -3655,11 +3655,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100052,
+        toPointID = 100054,
         toMap = 1443,
         toX = 0.646713,
         toY = 0.104354,
@@ -3692,11 +3692,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100053,
+        toPointID = 100055,
         toMap = 1444,
         toX = 0.302592,
         toY = 0.433194,
@@ -3729,11 +3729,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100086,
+        toPointID = 100088,
         toMap = 1450,
         toX = 0.479116,
         toY = 0.671101,
@@ -3766,11 +3766,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -3803,11 +3803,11 @@ local FLIGHTTAXI = {
     },
     -- Auberdine, Darkshore (map 1448 18.85,20.66) -> Talonbranch Glade, Felwood (map 2482 29.56,4.25) via flighttaxi
     {
-        fromPointID = 100070,
+        fromPointID = 100072,
         fromMap = 1448,
         fromX = 0.188519,
         fromY = 0.206596,
-        toPointID = 100103,
+        toPointID = 100105,
         toMap = 2482,
         toX = 0.295634,
         toY = 0.042464,
@@ -3840,11 +3840,11 @@ local FLIGHTTAXI = {
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100071,
+        fromPointID = 100073,
         fromMap = 1448,
         fromX = 0.344154,
         fromY = 0.538678,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -3877,7 +3877,7 @@ local FLIGHTTAXI = {
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100071,
+        fromPointID = 100073,
         fromMap = 1448,
         fromX = 0.344154,
         fromY = 0.538678,
@@ -3914,11 +3914,11 @@ local FLIGHTTAXI = {
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
-        fromPointID = 100071,
+        fromPointID = 100073,
         fromMap = 1448,
         fromX = 0.344154,
         fromY = 0.538678,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -3951,11 +3951,11 @@ local FLIGHTTAXI = {
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
-        fromPointID = 100071,
+        fromPointID = 100073,
         fromMap = 1448,
         fromX = 0.344154,
         fromY = 0.538678,
-        toPointID = 100092,
+        toPointID = 100094,
         toMap = 1452,
         toX = 0.604853,
         toY = 0.363438,
@@ -3988,11 +3988,11 @@ local FLIGHTTAXI = {
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Moonglade (map 1450 32.15,66.33) via flighttaxi
     {
-        fromPointID = 100071,
+        fromPointID = 100073,
         fromMap = 1448,
         fromX = 0.344154,
         fromY = 0.538678,
-        toPointID = 100079,
+        toPointID = 100081,
         toMap = 1450,
         toX = 0.3215,
         toY = 0.663346,
@@ -4027,11 +4027,11 @@ local FLIGHTTAXI = {
     -- Zone: Feralas (map 1444)
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100053,
+        fromPointID = 100055,
         fromMap = 1444,
         fromX = 0.302592,
         fromY = 0.433194,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -4064,11 +4064,11 @@ local FLIGHTTAXI = {
     },
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Thalanaar, Feralas (map 1441 7.79,17.90) via flighttaxi
     {
-        fromPointID = 100053,
+        fromPointID = 100055,
         fromMap = 1444,
         fromX = 0.302592,
         fromY = 0.433194,
-        toPointID = 100039,
+        toPointID = 100041,
         toMap = 1441,
         toX = 0.077854,
         toY = 0.17905,
@@ -4101,11 +4101,11 @@ local FLIGHTTAXI = {
     },
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
-        fromPointID = 100053,
+        fromPointID = 100055,
         fromMap = 1444,
         fromX = 0.302592,
         fromY = 0.433194,
-        toPointID = 100052,
+        toPointID = 100054,
         toMap = 1443,
         toX = 0.646713,
         toY = 0.104354,
@@ -4138,11 +4138,11 @@ local FLIGHTTAXI = {
     },
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
-        fromPointID = 100053,
+        fromPointID = 100055,
         fromMap = 1444,
         fromX = 0.302592,
         fromY = 0.433194,
-        toPointID = 100089,
+        toPointID = 100091,
         toMap = 1451,
         toX = 0.506833,
         toY = 0.3459,
@@ -4175,11 +4175,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -4212,7 +4212,7 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
@@ -4249,11 +4249,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
-        toPointID = 100041,
+        toPointID = 100043,
         toMap = 1441,
         toX = 0.45022,
         toY = 0.491265,
@@ -4286,11 +4286,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
-        toPointID = 100049,
+        toPointID = 100051,
         toMap = 1443,
         toX = 0.215631,
         toY = 0.740422,
@@ -4323,11 +4323,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -4360,11 +4360,11 @@ local FLIGHTTAXI = {
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
-        fromPointID = 100055,
+        fromPointID = 100057,
         fromMap = 1444,
         fromX = 0.754296,
         fromY = 0.443135,
-        toPointID = 100088,
+        toPointID = 100090,
         toMap = 1451,
         toX = 0.488256,
         toY = 0.367235,
@@ -4514,7 +4514,7 @@ local FLIGHTTAXI = {
         fromMap = 1424,
         fromX = 0.494421,
         fromY = 0.521006,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -4551,7 +4551,7 @@ local FLIGHTTAXI = {
         fromMap = 1424,
         fromX = 0.494421,
         fromY = 0.521006,
-        toPointID = 200092,
+        toPointID = 200094,
         toMap = 1437,
         toX = 0.095204,
         toY = 0.596587,
@@ -4586,7 +4586,7 @@ local FLIGHTTAXI = {
     -- Zone: Ironforge (map 1455)
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Southshore, Hillsbrad (map 1424 49.44,52.10) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4623,7 +4623,7 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Refuge Pointe, Arathi (map 1417 45.79,46.13) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4660,11 +4660,11 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -4697,7 +4697,7 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Aerie Peak, The Hinterlands (map 1416 99.50,65.16) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4734,7 +4734,7 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Dun Baldar, Alterac Valley (map 1459 43.14,18.10) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4771,7 +4771,7 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Chillwind Camp, Western Plaguelands (map 1416 79.05,30.46) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4808,7 +4808,7 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Light's Hope Chapel, Eastern Plaguelands (map 1423 71.70,49.55) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
@@ -4845,11 +4845,11 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Thorium Point, Searing Gorge (map 1427 37.89,30.43) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
-        toPointID = 200055,
+        toPointID = 200056,
         toMap = 1427,
         toX = 0.37887,
         toY = 0.304262,
@@ -4882,11 +4882,11 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
-        toPointID = 200092,
+        toPointID = 200094,
         toMap = 1437,
         toX = 0.095204,
         toY = 0.596587,
@@ -4919,11 +4919,11 @@ local FLIGHTTAXI = {
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
-        fromPointID = 200101,
+        fromPointID = 200104,
         fromMap = 1455,
         fromX = 0.55886,
         fromY = 0.478651,
-        toPointID = 200073,
+        toPointID = 200074,
         toMap = 1432,
         toX = 0.33943,
         toY = 0.507947,
@@ -4958,7 +4958,7 @@ local FLIGHTTAXI = {
     -- Zone: Loch Modan (map 1432)
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Refuge Pointe, Arathi (map 1417 45.79,46.13) via flighttaxi
     {
-        fromPointID = 200073,
+        fromPointID = 200074,
         fromMap = 1432,
         fromX = 0.33943,
         fromY = 0.507947,
@@ -4995,11 +4995,11 @@ local FLIGHTTAXI = {
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
-        fromPointID = 200073,
+        fromPointID = 200074,
         fromMap = 1432,
         fromX = 0.33943,
         fromY = 0.507947,
-        toPointID = 200108,
+        toPointID = 200111,
         toMap = 2548,
         toX = 0.605939,
         toY = 0.815701,
@@ -5032,11 +5032,11 @@ local FLIGHTTAXI = {
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
-        fromPointID = 200073,
+        fromPointID = 200074,
         fromMap = 1432,
         fromX = 0.33943,
         fromY = 0.507947,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -5069,11 +5069,11 @@ local FLIGHTTAXI = {
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
-        fromPointID = 200073,
+        fromPointID = 200074,
         fromMap = 1432,
         fromX = 0.33943,
         fromY = 0.507947,
-        toPointID = 200092,
+        toPointID = 200094,
         toMap = 1437,
         toX = 0.095204,
         toY = 0.596587,
@@ -5108,11 +5108,11 @@ local FLIGHTTAXI = {
     -- Zone: Moonglade (map 1450)
     -- Moonglade (map 1450 32.15,66.33) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
-        fromPointID = 100079,
+        fromPointID = 100081,
         fromMap = 1450,
         fromX = 0.3215,
         fromY = 0.663346,
-        toPointID = 100071,
+        toPointID = 100073,
         toMap = 1448,
         toX = 0.344154,
         toY = 0.538678,
@@ -5145,11 +5145,11 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 32.15,66.33) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
-        fromPointID = 100079,
+        fromPointID = 100081,
         fromMap = 1450,
         fromX = 0.3215,
         fromY = 0.663346,
-        toPointID = 100092,
+        toPointID = 100094,
         toMap = 1452,
         toX = 0.604853,
         toY = 0.363438,
@@ -5182,7 +5182,7 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 44.19,45.33) -> Teldrassil (map 1438 58.33,93.86) via flighttaxi
     {
-        fromPointID = 100082,
+        fromPointID = 100084,
         fromMap = 1450,
         fromX = 0.4419,
         fromY = 0.4533,
@@ -5211,11 +5211,11 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 44.27,45.77) -> Thunder Bluff (map 1456 46.70,49.92) via flighttaxi
     {
-        fromPointID = 100083,
+        fromPointID = 100085,
         fromMap = 1450,
         fromX = 0.4427,
         fromY = 0.4577,
-        toPointID = 100099,
+        toPointID = 100101,
         toMap = 1456,
         toX = 0.467,
         toY = 0.4992,
@@ -5239,7 +5239,7 @@ local FLIGHTTAXI = {
     },
     -- Nighthaven, Moonglade (map 1450 44.28,45.34) -> Rut'theran Village, Teldrassil (map 1438 58.40,93.93) via flighttaxi
     {
-        fromPointID = 100084,
+        fromPointID = 100086,
         fromMap = 1450,
         fromX = 0.442839,
         fromY = 0.453406,
@@ -5276,11 +5276,11 @@ local FLIGHTTAXI = {
     },
     -- Nighthaven, Moonglade (map 1450 44.31,45.72) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100085,
+        fromPointID = 100087,
         fromMap = 1450,
         fromX = 0.443112,
         fromY = 0.457231,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -5313,11 +5313,11 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 47.91,67.11) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100086,
+        fromPointID = 100088,
         fromMap = 1450,
         fromX = 0.479116,
         fromY = 0.671101,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -5350,11 +5350,11 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 47.91,67.11) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
-        fromPointID = 100086,
+        fromPointID = 100088,
         fromMap = 1450,
         fromX = 0.479116,
         fromY = 0.671101,
-        toPointID = 100093,
+        toPointID = 100095,
         toMap = 1452,
         toX = 0.623348,
         toY = 0.366358,
@@ -5387,11 +5387,11 @@ local FLIGHTTAXI = {
     },
     -- Moonglade (map 1450 47.91,67.11) -> Talonbranch Glade, Felwood (map 2482 29.56,4.25) via flighttaxi
     {
-        fromPointID = 100086,
+        fromPointID = 100088,
         fromMap = 1450,
         fromX = 0.479116,
         fromY = 0.671101,
-        toPointID = 100103,
+        toPointID = 100105,
         toMap = 2482,
         toX = 0.295634,
         toY = 0.042464,
@@ -5426,11 +5426,11 @@ local FLIGHTTAXI = {
     -- Zone: Mount Hyjal (map 2482)
     -- Talonbranch Glade, Felwood (map 2482 29.56,4.25) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100103,
+        fromPointID = 100105,
         fromMap = 2482,
         fromX = 0.295634,
         fromY = 0.042464,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -5463,11 +5463,11 @@ local FLIGHTTAXI = {
     },
     -- Talonbranch Glade, Felwood (map 2482 29.56,4.25) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
-        fromPointID = 100103,
+        fromPointID = 100105,
         fromMap = 2482,
         fromX = 0.295634,
         fromY = 0.042464,
-        toPointID = 100086,
+        toPointID = 100088,
         toMap = 1450,
         toX = 0.479116,
         toY = 0.671101,
@@ -5500,11 +5500,11 @@ local FLIGHTTAXI = {
     },
     -- Talonbranch Glade, Felwood (map 2482 29.56,4.25) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
-        fromPointID = 100103,
+        fromPointID = 100105,
         fromMap = 2482,
         fromX = 0.295634,
         fromY = 0.042464,
-        toPointID = 100093,
+        toPointID = 100095,
         toMap = 1452,
         toX = 0.623348,
         toY = 0.366358,
@@ -5537,11 +5537,11 @@ local FLIGHTTAXI = {
     },
     -- Talonbranch Glade, Felwood (map 2482 29.56,4.25) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
-        fromPointID = 100103,
+        fromPointID = 100105,
         fromMap = 2482,
         fromX = 0.295634,
         fromY = 0.042464,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -5574,11 +5574,11 @@ local FLIGHTTAXI = {
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
-        fromPointID = 100104,
+        fromPointID = 100106,
         fromMap = 2482,
         fromX = 0.550959,
         fromY = 0.825482,
-        toPointID = 100093,
+        toPointID = 100095,
         toMap = 1452,
         toX = 0.623348,
         toY = 0.366358,
@@ -5611,11 +5611,11 @@ local FLIGHTTAXI = {
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
-        fromPointID = 100104,
+        fromPointID = 100106,
         fromMap = 2482,
         fromX = 0.550959,
         fromY = 0.825482,
-        toPointID = 100092,
+        toPointID = 100094,
         toMap = 1452,
         toX = 0.604853,
         toY = 0.363438,
@@ -5648,11 +5648,11 @@ local FLIGHTTAXI = {
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Summit of Eternity, Mount Hyjal (map 2482 68.64,44.11) via flighttaxi
     {
-        fromPointID = 100104,
+        fromPointID = 100106,
         fromMap = 2482,
         fromX = 0.550959,
         fromY = 0.825482,
-        toPointID = 100105,
+        toPointID = 100107,
         toMap = 2482,
         toX = 0.686392,
         toY = 0.441106,
@@ -5680,11 +5680,11 @@ local FLIGHTTAXI = {
     },
     -- Summit of Eternity, Mount Hyjal (map 2482 68.64,44.11) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
-        fromPointID = 100105,
+        fromPointID = 100107,
         fromMap = 2482,
         fromX = 0.686392,
         fromY = 0.441106,
-        toPointID = 100104,
+        toPointID = 100106,
         toMap = 2482,
         toX = 0.550959,
         toY = 0.825482,
@@ -5714,11 +5714,11 @@ local FLIGHTTAXI = {
     -- Zone: Orgrimmar (map 1454)
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -5751,7 +5751,7 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
@@ -5788,11 +5788,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -5825,11 +5825,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -5862,11 +5862,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100071,
+        toPointID = 100073,
         toMap = 1448,
         toX = 0.344154,
         toY = 0.538678,
@@ -5899,11 +5899,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100092,
+        toPointID = 100094,
         toMap = 1452,
         toX = 0.604853,
         toY = 0.363438,
@@ -5936,11 +5936,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100058,
+        toPointID = 100060,
         toMap = 1445,
         toX = 0.355653,
         toY = 0.318302,
@@ -5973,11 +5973,11 @@ local FLIGHTTAXI = {
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Splintertree Post, Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
-        fromPointID = 100095,
+        fromPointID = 100097,
         fromMap = 1454,
         fromX = 0.452807,
         fromY = 0.637456,
-        toPointID = 100037,
+        toPointID = 100039,
         toMap = 1440,
         toX = 0.732581,
         toY = 0.616722,
@@ -6012,11 +6012,11 @@ local FLIGHTTAXI = {
     -- Zone: Redridge Mountains (map 1433)
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Darkshire, Duskwood (map 1430 17.13,38.93) via flighttaxi
     {
-        fromPointID = 200077,
+        fromPointID = 200078,
         fromMap = 1433,
         fromX = 0.253428,
         fromY = 0.589882,
-        toPointID = 200063,
+        toPointID = 200064,
         toMap = 1430,
         toX = 0.171327,
         toY = 0.389276,
@@ -6049,11 +6049,11 @@ local FLIGHTTAXI = {
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200077,
+        fromPointID = 200078,
         fromMap = 1433,
         fromX = 0.253428,
         fromY = 0.589882,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -6086,11 +6086,11 @@ local FLIGHTTAXI = {
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
-        fromPointID = 200077,
+        fromPointID = 200078,
         fromMap = 1433,
         fromX = 0.253428,
         fromY = 0.589882,
-        toPointID = 200108,
+        toPointID = 200111,
         toMap = 2548,
         toX = 0.605939,
         toY = 0.815701,
@@ -6123,11 +6123,11 @@ local FLIGHTTAXI = {
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
-        fromPointID = 200077,
+        fromPointID = 200078,
         fromMap = 1433,
         fromX = 0.253428,
         fromY = 0.589882,
-        toPointID = 200090,
+        toPointID = 200091,
         toMap = 1436,
         toX = 0.56571,
         toY = 0.526667,
@@ -6160,11 +6160,11 @@ local FLIGHTTAXI = {
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
-        fromPointID = 200077,
+        fromPointID = 200078,
         fromMap = 1433,
         fromX = 0.253428,
         fromY = 0.589882,
-        toPointID = 200060,
+        toPointID = 200061,
         toMap = 1428,
         toX = 0.843818,
         toY = 0.683045,
@@ -6199,7 +6199,7 @@ local FLIGHTTAXI = {
     -- Zone: Riverglades (map 2548)
     -- Rog'mar, Riverglades (map 2548 59.61,45.06) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
-        fromPointID = 200107,
+        fromPointID = 200110,
         fromMap = 2548,
         fromX = 0.596143,
         fromY = 0.450641,
@@ -6236,11 +6236,11 @@ local FLIGHTTAXI = {
     },
     -- Rog'mar, Riverglades (map 2548 59.61,45.06) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200107,
+        fromPointID = 200110,
         fromMap = 2548,
         fromX = 0.596143,
         fromY = 0.450641,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -6273,11 +6273,11 @@ local FLIGHTTAXI = {
     },
     -- Rog'mar, Riverglades (map 2548 59.61,45.06) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
-        fromPointID = 200107,
+        fromPointID = 200110,
         fromMap = 2548,
         fromX = 0.596143,
         fromY = 0.450641,
-        toPointID = 200088,
+        toPointID = 200089,
         toMap = 1435,
         toX = 0.460527,
         toY = 0.546792,
@@ -6310,11 +6310,11 @@ local FLIGHTTAXI = {
     },
     -- Rog'mar, Riverglades (map 2548 59.61,45.06) -> Flame Crest, Burning Steppes (map 1427 83.57,94.39) via flighttaxi
     {
-        fromPointID = 200107,
+        fromPointID = 200110,
         fromMap = 2548,
         fromX = 0.596143,
         fromY = 0.450641,
-        toPointID = 200058,
+        toPointID = 200059,
         toMap = 1427,
         toX = 0.835686,
         toY = 0.943886,
@@ -6347,11 +6347,11 @@ local FLIGHTTAXI = {
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
-        fromPointID = 200108,
+        fromPointID = 200111,
         fromMap = 2548,
         fromX = 0.605939,
         fromY = 0.815701,
-        toPointID = 200077,
+        toPointID = 200078,
         toMap = 1433,
         toX = 0.253428,
         toY = 0.589882,
@@ -6384,11 +6384,11 @@ local FLIGHTTAXI = {
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
-        fromPointID = 200108,
+        fromPointID = 200111,
         fromMap = 2548,
         fromX = 0.605939,
         fromY = 0.815701,
-        toPointID = 200060,
+        toPointID = 200061,
         toMap = 1428,
         toX = 0.843818,
         toY = 0.683045,
@@ -6421,11 +6421,11 @@ local FLIGHTTAXI = {
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
-        fromPointID = 200108,
+        fromPointID = 200111,
         fromMap = 2548,
         fromX = 0.605939,
         fromY = 0.815701,
-        toPointID = 200073,
+        toPointID = 200074,
         toMap = 1432,
         toX = 0.33943,
         toY = 0.507947,
@@ -6460,11 +6460,11 @@ local FLIGHTTAXI = {
     -- Zone: Searing Gorge (map 1427)
     -- Thorium Point, Searing Gorge (map 1427 34.83,30.58) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200054,
+        fromPointID = 200055,
         fromMap = 1427,
         fromX = 0.348295,
         fromY = 0.305836,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -6497,11 +6497,11 @@ local FLIGHTTAXI = {
     },
     -- Thorium Point, Searing Gorge (map 1427 34.83,30.58) -> Flame Crest, Burning Steppes (map 1427 83.57,94.39) via flighttaxi
     {
-        fromPointID = 200054,
+        fromPointID = 200055,
         fromMap = 1427,
         fromX = 0.348295,
         fromY = 0.305836,
-        toPointID = 200058,
+        toPointID = 200059,
         toMap = 1427,
         toX = 0.835686,
         toY = 0.943886,
@@ -6534,11 +6534,11 @@ local FLIGHTTAXI = {
     },
     -- Thorium Point, Searing Gorge (map 1427 37.89,30.43) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
-        fromPointID = 200055,
+        fromPointID = 200056,
         fromMap = 1427,
         fromX = 0.37887,
         fromY = 0.304262,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -6571,11 +6571,11 @@ local FLIGHTTAXI = {
     },
     -- Thorium Point, Searing Gorge (map 1427 37.89,30.43) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
-        fromPointID = 200055,
+        fromPointID = 200056,
         fromMap = 1427,
         fromX = 0.37887,
         fromY = 0.304262,
-        toPointID = 200060,
+        toPointID = 200061,
         toMap = 1428,
         toX = 0.843818,
         toY = 0.683045,
@@ -6608,11 +6608,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Undercity, Tirisfal (map 1458 63.09,48.32) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -6645,7 +6645,7 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
@@ -6682,11 +6682,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Booty Bay, Stranglethorn (map 1434 26.82,77.00) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200080,
+        toPointID = 200081,
         toMap = 1434,
         toX = 0.268163,
         toY = 0.769961,
@@ -6719,11 +6719,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Grom'gol, Stranglethorn (map 1434 32.51,29.28) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200084,
+        toPointID = 200085,
         toMap = 1434,
         toX = 0.3251,
         toY = 0.292755,
@@ -6756,11 +6756,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Rog'mar, Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200107,
+        toPointID = 200110,
         toMap = 2548,
         toX = 0.596143,
         toY = 0.450641,
@@ -6793,11 +6793,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200088,
+        toPointID = 200089,
         toMap = 1435,
         toX = 0.460527,
         toY = 0.546792,
@@ -6830,11 +6830,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Flame Crest, Burning Steppes (map 1427 83.57,94.39) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200058,
+        toPointID = 200059,
         toMap = 1427,
         toX = 0.835686,
         toY = 0.943886,
@@ -6867,11 +6867,11 @@ local FLIGHTTAXI = {
     },
     -- Kargath, Badlands (map 1427 83.23,35.90) -> Thorium Point, Searing Gorge (map 1427 34.83,30.58) via flighttaxi
     {
-        fromPointID = 200057,
+        fromPointID = 200058,
         fromMap = 1427,
         fromX = 0.832329,
         fromY = 0.358985,
-        toPointID = 200054,
+        toPointID = 200055,
         toMap = 1427,
         toX = 0.348295,
         toY = 0.305836,
@@ -6904,11 +6904,11 @@ local FLIGHTTAXI = {
     },
     -- Flame Crest, Burning Steppes (map 1427 83.57,94.39) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200058,
+        fromPointID = 200059,
         fromMap = 1427,
         fromX = 0.835686,
         fromY = 0.943886,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -6941,11 +6941,11 @@ local FLIGHTTAXI = {
     },
     -- Flame Crest, Burning Steppes (map 1427 83.57,94.39) -> Rog'mar, Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
-        fromPointID = 200058,
+        fromPointID = 200059,
         fromMap = 1427,
         fromX = 0.835686,
         fromY = 0.943886,
-        toPointID = 200107,
+        toPointID = 200110,
         toMap = 2548,
         toX = 0.596143,
         toY = 0.450641,
@@ -6978,11 +6978,11 @@ local FLIGHTTAXI = {
     },
     -- Flame Crest, Burning Steppes (map 1427 83.57,94.39) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
-        fromPointID = 200058,
+        fromPointID = 200059,
         fromMap = 1427,
         fromX = 0.835686,
         fromY = 0.943886,
-        toPointID = 200088,
+        toPointID = 200089,
         toMap = 1435,
         toX = 0.460527,
         toY = 0.546792,
@@ -7015,11 +7015,11 @@ local FLIGHTTAXI = {
     },
     -- Flame Crest, Burning Steppes (map 1427 83.57,94.39) -> Thorium Point, Searing Gorge (map 1427 34.83,30.58) via flighttaxi
     {
-        fromPointID = 200058,
+        fromPointID = 200059,
         fromMap = 1427,
         fromX = 0.835686,
         fromY = 0.943886,
-        toPointID = 200054,
+        toPointID = 200055,
         toMap = 1427,
         toX = 0.348295,
         toY = 0.305836,
@@ -7054,11 +7054,11 @@ local FLIGHTTAXI = {
     -- Zone: Silithus (map 1451)
     -- Cenarion Hold, Silithus (map 1451 48.83,36.72) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100088,
+        fromPointID = 100090,
         fromMap = 1451,
         fromX = 0.488256,
         fromY = 0.367235,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -7091,11 +7091,11 @@ local FLIGHTTAXI = {
     },
     -- Cenarion Hold, Silithus (map 1451 48.83,36.72) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
-        fromPointID = 100088,
+        fromPointID = 100090,
         fromMap = 1451,
         fromX = 0.488256,
         fromY = 0.367235,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -7128,11 +7128,11 @@ local FLIGHTTAXI = {
     },
     -- Cenarion Hold, Silithus (map 1451 48.83,36.72) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
-        fromPointID = 100088,
+        fromPointID = 100090,
         fromMap = 1451,
         fromX = 0.488256,
         fromY = 0.367235,
-        toPointID = 100077,
+        toPointID = 100079,
         toMap = 1449,
         toX = 0.452982,
         toY = 0.059657,
@@ -7165,11 +7165,11 @@ local FLIGHTTAXI = {
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
-        fromPointID = 100089,
+        fromPointID = 100091,
         fromMap = 1451,
         fromX = 0.506833,
         fromY = 0.3459,
-        toPointID = 100063,
+        toPointID = 100065,
         toMap = 1446,
         toX = 0.509542,
         toY = 0.293254,
@@ -7202,11 +7202,11 @@ local FLIGHTTAXI = {
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
-        fromPointID = 100089,
+        fromPointID = 100091,
         fromMap = 1451,
         fromX = 0.506833,
         fromY = 0.3459,
-        toPointID = 100053,
+        toPointID = 100055,
         toMap = 1444,
         toX = 0.302592,
         toY = 0.433194,
@@ -7239,11 +7239,11 @@ local FLIGHTTAXI = {
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
-        fromPointID = 100089,
+        fromPointID = 100091,
         fromMap = 1451,
         fromX = 0.506833,
         fromY = 0.3459,
-        toPointID = 100077,
+        toPointID = 100079,
         toMap = 1449,
         toX = 0.452982,
         toY = 0.059657,
@@ -7282,7 +7282,7 @@ local FLIGHTTAXI = {
         fromMap = 1421,
         fromX = 0.455574,
         fromY = 0.424217,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -7354,11 +7354,11 @@ local FLIGHTTAXI = {
     -- Zone: Stonetalon Mountains (map 1442)
     -- Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100044,
+        fromPointID = 100046,
         fromMap = 1442,
         fromX = 0.365356,
         fromY = 0.072334,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -7391,11 +7391,11 @@ local FLIGHTTAXI = {
     },
     -- Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) -> Astranaar, Ashenvale (map 1442 72.39,2.74) via flighttaxi
     {
-        fromPointID = 100044,
+        fromPointID = 100046,
         fromMap = 1442,
         fromX = 0.365356,
         fromY = 0.072334,
-        toPointID = 100046,
+        toPointID = 100048,
         toMap = 1442,
         toX = 0.723906,
         toY = 0.027432,
@@ -7428,11 +7428,11 @@ local FLIGHTTAXI = {
     },
     -- Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
-        fromPointID = 100044,
+        fromPointID = 100046,
         fromMap = 1442,
         fromX = 0.365356,
         fromY = 0.072334,
-        toPointID = 100052,
+        toPointID = 100054,
         toMap = 1443,
         toX = 0.646713,
         toY = 0.104354,
@@ -7465,11 +7465,11 @@ local FLIGHTTAXI = {
     },
     -- Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100045,
+        fromPointID = 100047,
         fromMap = 1442,
         fromX = 0.451641,
         fromY = 0.598878,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -7502,7 +7502,7 @@ local FLIGHTTAXI = {
     },
     -- Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100045,
+        fromPointID = 100047,
         fromMap = 1442,
         fromX = 0.451641,
         fromY = 0.598878,
@@ -7539,11 +7539,11 @@ local FLIGHTTAXI = {
     },
     -- Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
-        fromPointID = 100045,
+        fromPointID = 100047,
         fromMap = 1442,
         fromX = 0.451641,
         fromY = 0.598878,
-        toPointID = 100049,
+        toPointID = 100051,
         toMap = 1443,
         toX = 0.215631,
         toY = 0.740422,
@@ -7576,11 +7576,11 @@ local FLIGHTTAXI = {
     },
     -- Astranaar, Ashenvale (map 1442 72.39,2.74) -> Auberdine, Darkshore (map 1448 18.85,20.66) via flighttaxi
     {
-        fromPointID = 100046,
+        fromPointID = 100048,
         fromMap = 1442,
         fromX = 0.723906,
         fromY = 0.027432,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -7613,11 +7613,11 @@ local FLIGHTTAXI = {
     },
     -- Astranaar, Ashenvale (map 1442 72.39,2.74) -> Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
-        fromPointID = 100046,
+        fromPointID = 100048,
         fromMap = 1442,
         fromX = 0.723906,
         fromY = 0.027432,
-        toPointID = 100044,
+        toPointID = 100046,
         toMap = 1442,
         toX = 0.365356,
         toY = 0.072334,
@@ -7650,11 +7650,11 @@ local FLIGHTTAXI = {
     },
     -- Astranaar, Ashenvale (map 1442 72.39,2.74) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
-        fromPointID = 100046,
+        fromPointID = 100048,
         fromMap = 1442,
         fromX = 0.723906,
         fromY = 0.027432,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -7689,11 +7689,11 @@ local FLIGHTTAXI = {
     -- Zone: Stormwind City (map 1453)
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Darkshire, Duskwood (map 1430 17.13,38.93) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200063,
+        toPointID = 200064,
         toMap = 1430,
         toX = 0.171327,
         toY = 0.389276,
@@ -7726,11 +7726,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Booty Bay, Stranglethorn (map 1434 27.53,77.67) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200081,
+        toPointID = 200082,
         toMap = 1434,
         toX = 0.275288,
         toY = 0.776721,
@@ -7763,11 +7763,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200089,
+        toPointID = 200090,
         toMap = 1435,
         toX = 0.528751,
         toY = 0.975313,
@@ -7800,11 +7800,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200090,
+        toPointID = 200091,
         toMap = 1436,
         toX = 0.56571,
         toY = 0.526667,
@@ -7837,11 +7837,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200077,
+        toPointID = 200078,
         toMap = 1433,
         toX = 0.253428,
         toY = 0.589882,
@@ -7874,11 +7874,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -7911,11 +7911,11 @@ local FLIGHTTAXI = {
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
-        fromPointID = 200098,
+        fromPointID = 200101,
         fromMap = 1453,
         fromX = 0.709765,
         fromY = 0.729259,
-        toPointID = 200060,
+        toPointID = 200061,
         toMap = 1428,
         toX = 0.843818,
         toY = 0.683045,
@@ -7950,11 +7950,11 @@ local FLIGHTTAXI = {
     -- Zone: Stranglethorn Vale (map 1434)
     -- Booty Bay, Stranglethorn (map 1434 26.82,77.00) -> Grom'gol, Stranglethorn (map 1434 32.51,29.28) via flighttaxi
     {
-        fromPointID = 200080,
+        fromPointID = 200081,
         fromMap = 1434,
         fromX = 0.268163,
         fromY = 0.769961,
-        toPointID = 200084,
+        toPointID = 200085,
         toMap = 1434,
         toX = 0.3251,
         toY = 0.292755,
@@ -7987,11 +7987,11 @@ local FLIGHTTAXI = {
     },
     -- Booty Bay, Stranglethorn (map 1434 26.82,77.00) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200080,
+        fromPointID = 200081,
         fromMap = 1434,
         fromX = 0.268163,
         fromY = 0.769961,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -8024,11 +8024,11 @@ local FLIGHTTAXI = {
     },
     -- Booty Bay, Stranglethorn (map 1434 26.82,77.00) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
-        fromPointID = 200080,
+        fromPointID = 200081,
         fromMap = 1434,
         fromX = 0.268163,
         fromY = 0.769961,
-        toPointID = 200088,
+        toPointID = 200089,
         toMap = 1435,
         toX = 0.460527,
         toY = 0.546792,
@@ -8061,11 +8061,11 @@ local FLIGHTTAXI = {
     },
     -- Booty Bay, Stranglethorn (map 1434 27.53,77.67) -> Darkshire, Duskwood (map 1430 17.13,38.93) via flighttaxi
     {
-        fromPointID = 200081,
+        fromPointID = 200082,
         fromMap = 1434,
         fromX = 0.275288,
         fromY = 0.776721,
-        toPointID = 200063,
+        toPointID = 200064,
         toMap = 1430,
         toX = 0.171327,
         toY = 0.389276,
@@ -8098,11 +8098,11 @@ local FLIGHTTAXI = {
     },
     -- Booty Bay, Stranglethorn (map 1434 27.53,77.67) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200081,
+        fromPointID = 200082,
         fromMap = 1434,
         fromX = 0.275288,
         fromY = 0.776721,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -8135,11 +8135,11 @@ local FLIGHTTAXI = {
     },
     -- Booty Bay, Stranglethorn (map 1434 27.53,77.67) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
-        fromPointID = 200081,
+        fromPointID = 200082,
         fromMap = 1434,
         fromX = 0.275288,
         fromY = 0.776721,
-        toPointID = 200090,
+        toPointID = 200091,
         toMap = 1436,
         toX = 0.56571,
         toY = 0.526667,
@@ -8172,11 +8172,11 @@ local FLIGHTTAXI = {
     },
     -- Grom'gol, Stranglethorn (map 1434 32.51,29.28) -> Booty Bay, Stranglethorn (map 1434 26.82,77.00) via flighttaxi
     {
-        fromPointID = 200084,
+        fromPointID = 200085,
         fromMap = 1434,
         fromX = 0.3251,
         fromY = 0.292755,
-        toPointID = 200080,
+        toPointID = 200081,
         toMap = 1434,
         toX = 0.268163,
         toY = 0.769961,
@@ -8209,11 +8209,11 @@ local FLIGHTTAXI = {
     },
     -- Grom'gol, Stranglethorn (map 1434 32.51,29.28) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200084,
+        fromPointID = 200085,
         fromMap = 1434,
         fromX = 0.3251,
         fromY = 0.292755,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -8246,11 +8246,11 @@ local FLIGHTTAXI = {
     },
     -- Grom'gol, Stranglethorn (map 1434 32.51,29.28) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
-        fromPointID = 200084,
+        fromPointID = 200085,
         fromMap = 1434,
         fromX = 0.3251,
         fromY = 0.292755,
-        toPointID = 200088,
+        toPointID = 200089,
         toMap = 1435,
         toX = 0.460527,
         toY = 0.546792,
@@ -8285,11 +8285,11 @@ local FLIGHTTAXI = {
     -- Zone: Swamp of Sorrows (map 1435)
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Booty Bay, Stranglethorn (map 1434 26.82,77.00) via flighttaxi
     {
-        fromPointID = 200088,
+        fromPointID = 200089,
         fromMap = 1435,
         fromX = 0.460527,
         fromY = 0.546792,
-        toPointID = 200080,
+        toPointID = 200081,
         toMap = 1434,
         toX = 0.268163,
         toY = 0.769961,
@@ -8322,11 +8322,11 @@ local FLIGHTTAXI = {
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Grom'gol, Stranglethorn (map 1434 32.51,29.28) via flighttaxi
     {
-        fromPointID = 200088,
+        fromPointID = 200089,
         fromMap = 1435,
         fromX = 0.460527,
         fromY = 0.546792,
-        toPointID = 200084,
+        toPointID = 200085,
         toMap = 1434,
         toX = 0.3251,
         toY = 0.292755,
@@ -8359,11 +8359,11 @@ local FLIGHTTAXI = {
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200088,
+        fromPointID = 200089,
         fromMap = 1435,
         fromX = 0.460527,
         fromY = 0.546792,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -8396,11 +8396,11 @@ local FLIGHTTAXI = {
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Rog'mar, Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
-        fromPointID = 200088,
+        fromPointID = 200089,
         fromMap = 1435,
         fromX = 0.460527,
         fromY = 0.546792,
-        toPointID = 200107,
+        toPointID = 200110,
         toMap = 2548,
         toX = 0.596143,
         toY = 0.450641,
@@ -8433,11 +8433,11 @@ local FLIGHTTAXI = {
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Flame Crest, Burning Steppes (map 1427 83.57,94.39) via flighttaxi
     {
-        fromPointID = 200088,
+        fromPointID = 200089,
         fromMap = 1435,
         fromX = 0.460527,
         fromY = 0.546792,
-        toPointID = 200058,
+        toPointID = 200059,
         toMap = 1427,
         toX = 0.835686,
         toY = 0.943886,
@@ -8470,11 +8470,11 @@ local FLIGHTTAXI = {
     },
     -- Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) -> Darkshire, Duskwood (map 1430 17.13,38.93) via flighttaxi
     {
-        fromPointID = 200089,
+        fromPointID = 200090,
         fromMap = 1435,
         fromX = 0.528751,
         fromY = 0.975313,
-        toPointID = 200063,
+        toPointID = 200064,
         toMap = 1430,
         toX = 0.171327,
         toY = 0.389276,
@@ -8507,11 +8507,11 @@ local FLIGHTTAXI = {
     },
     -- Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200089,
+        fromPointID = 200090,
         fromMap = 1435,
         fromX = 0.528751,
         fromY = 0.975313,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -8544,11 +8544,11 @@ local FLIGHTTAXI = {
     },
     -- Nethergarde Keep, Blasted Lands (map 1435 52.88,97.53) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
-        fromPointID = 200089,
+        fromPointID = 200090,
         fromMap = 1435,
         fromX = 0.528751,
         fromY = 0.975313,
-        toPointID = 200060,
+        toPointID = 200061,
         toMap = 1428,
         toX = 0.843818,
         toY = 0.683045,
@@ -8583,11 +8583,11 @@ local FLIGHTTAXI = {
     -- Zone: Tanaris (map 1446)
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Thalanaar, Feralas (map 1441 7.79,17.90) via flighttaxi
     {
-        fromPointID = 100063,
+        fromPointID = 100065,
         fromMap = 1446,
         fromX = 0.509542,
         fromY = 0.293254,
-        toPointID = 100039,
+        toPointID = 100041,
         toMap = 1441,
         toX = 0.077854,
         toY = 0.17905,
@@ -8620,11 +8620,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
-        fromPointID = 100063,
+        fromPointID = 100065,
         fromMap = 1446,
         fromX = 0.509542,
         fromY = 0.293254,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -8657,11 +8657,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
-        fromPointID = 100063,
+        fromPointID = 100065,
         fromMap = 1446,
         fromX = 0.509542,
         fromY = 0.293254,
-        toPointID = 100089,
+        toPointID = 100091,
         toMap = 1451,
         toX = 0.506833,
         toY = 0.3459,
@@ -8694,11 +8694,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
-        fromPointID = 100063,
+        fromPointID = 100065,
         fromMap = 1446,
         fromX = 0.509542,
         fromY = 0.293254,
-        toPointID = 100077,
+        toPointID = 100079,
         toMap = 1449,
         toX = 0.452982,
         toY = 0.059657,
@@ -8731,11 +8731,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -8768,11 +8768,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -8805,7 +8805,7 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
@@ -8842,11 +8842,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100041,
+        toPointID = 100043,
         toMap = 1441,
         toX = 0.45022,
         toY = 0.491265,
@@ -8879,11 +8879,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -8916,11 +8916,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100058,
+        toPointID = 100060,
         toMap = 1445,
         toX = 0.355653,
         toY = 0.318302,
@@ -8953,11 +8953,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100088,
+        toPointID = 100090,
         toMap = 1451,
         toX = 0.488256,
         toY = 0.367235,
@@ -8990,11 +8990,11 @@ local FLIGHTTAXI = {
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
-        fromPointID = 100064,
+        fromPointID = 100066,
         fromMap = 1446,
         fromX = 0.516175,
         fromY = 0.255194,
-        toPointID = 100077,
+        toPointID = 100079,
         toMap = 1449,
         toX = 0.452982,
         toY = 0.059657,
@@ -9033,7 +9033,7 @@ local FLIGHTTAXI = {
         fromMap = 1438,
         fromX = 0.584,
         fromY = 0.939274,
-        toPointID = 100070,
+        toPointID = 100072,
         toMap = 1448,
         toX = 0.188519,
         toY = 0.206596,
@@ -9068,11 +9068,11 @@ local FLIGHTTAXI = {
     -- Zone: The Hinterlands (map 1425)
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Undercity, Tirisfal (map 1458 63.09,48.32) via flighttaxi
     {
-        fromPointID = 200050,
+        fromPointID = 200051,
         fromMap = 1425,
         fromX = 0.817013,
         fromY = 0.818932,
-        toPointID = 200104,
+        toPointID = 200107,
         toMap = 1458,
         toX = 0.630851,
         toY = 0.483242,
@@ -9105,7 +9105,7 @@ local FLIGHTTAXI = {
     },
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Tarren Mill, Hillsbrad (map 1416 58.69,80.36) via flighttaxi
     {
-        fromPointID = 200050,
+        fromPointID = 200051,
         fromMap = 1425,
         fromX = 0.817013,
         fromY = 0.818932,
@@ -9142,7 +9142,7 @@ local FLIGHTTAXI = {
     },
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
-        fromPointID = 200050,
+        fromPointID = 200051,
         fromMap = 1425,
         fromX = 0.817013,
         fromY = 0.818932,
@@ -9179,7 +9179,7 @@ local FLIGHTTAXI = {
     },
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Light's Hope Chapel, Eastern Plaguelands (map 1423 70.45,47.59) via flighttaxi
     {
-        fromPointID = 200050,
+        fromPointID = 200051,
         fromMap = 1425,
         fromX = 0.817013,
         fromY = 0.818932,
@@ -9218,11 +9218,11 @@ local FLIGHTTAXI = {
     -- Zone: Thousand Needles (map 1441)
     -- Thalanaar, Feralas (map 1441 7.79,17.90) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
-        fromPointID = 100039,
+        fromPointID = 100041,
         fromMap = 1441,
         fromX = 0.077854,
         fromY = 0.17905,
-        toPointID = 100059,
+        toPointID = 100061,
         toMap = 1445,
         toX = 0.674587,
         toY = 0.512011,
@@ -9255,11 +9255,11 @@ local FLIGHTTAXI = {
     },
     -- Thalanaar, Feralas (map 1441 7.79,17.90) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
-        fromPointID = 100039,
+        fromPointID = 100041,
         fromMap = 1441,
         fromX = 0.077854,
         fromY = 0.17905,
-        toPointID = 100063,
+        toPointID = 100065,
         toMap = 1446,
         toX = 0.509542,
         toY = 0.293254,
@@ -9292,11 +9292,11 @@ local FLIGHTTAXI = {
     },
     -- Thalanaar, Feralas (map 1441 7.79,17.90) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
-        fromPointID = 100039,
+        fromPointID = 100041,
         fromMap = 1441,
         fromX = 0.077854,
         fromY = 0.17905,
-        toPointID = 100053,
+        toPointID = 100055,
         toMap = 1444,
         toX = 0.302592,
         toY = 0.433194,
@@ -9329,11 +9329,11 @@ local FLIGHTTAXI = {
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
-        fromPointID = 100041,
+        fromPointID = 100043,
         fromMap = 1441,
         fromX = 0.45022,
         fromY = 0.491265,
-        toPointID = 100098,
+        toPointID = 100100,
         toMap = 1456,
         toX = 0.466545,
         toY = 0.498984,
@@ -9366,7 +9366,7 @@ local FLIGHTTAXI = {
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100041,
+        fromPointID = 100043,
         fromMap = 1441,
         fromX = 0.45022,
         fromY = 0.491265,
@@ -9403,11 +9403,11 @@ local FLIGHTTAXI = {
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100041,
+        fromPointID = 100043,
         fromMap = 1441,
         fromX = 0.45022,
         fromY = 0.491265,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -9440,11 +9440,11 @@ local FLIGHTTAXI = {
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
-        fromPointID = 100041,
+        fromPointID = 100043,
         fromMap = 1441,
         fromX = 0.45022,
         fromY = 0.491265,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -9477,11 +9477,11 @@ local FLIGHTTAXI = {
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Camp Taurajo, The Barrens (map 1445 17.29,9.92) via flighttaxi
     {
-        fromPointID = 100041,
+        fromPointID = 100043,
         fromMap = 1441,
         fromX = 0.45022,
         fromY = 0.491265,
-        toPointID = 100056,
+        toPointID = 100058,
         toMap = 1445,
         toX = 0.17289,
         toY = 0.099239,
@@ -9516,11 +9516,11 @@ local FLIGHTTAXI = {
     -- Zone: Thunder Bluff (map 1456)
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -9553,7 +9553,7 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Crossroads, The Barrens (map 1411 11.98,63.83) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
@@ -9590,11 +9590,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100045,
+        toPointID = 100047,
         toMap = 1442,
         toX = 0.451641,
         toY = 0.598878,
@@ -9627,11 +9627,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100041,
+        toPointID = 100043,
         toMap = 1441,
         toX = 0.45022,
         toY = 0.491265,
@@ -9664,11 +9664,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100049,
+        toPointID = 100051,
         toMap = 1443,
         toX = 0.215631,
         toY = 0.740422,
@@ -9701,11 +9701,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -9738,11 +9738,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100055,
+        toPointID = 100057,
         toMap = 1444,
         toX = 0.754296,
         toY = 0.443135,
@@ -9775,11 +9775,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -9812,11 +9812,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100058,
+        toPointID = 100060,
         toMap = 1445,
         toX = 0.355653,
         toY = 0.318302,
@@ -9849,11 +9849,11 @@ local FLIGHTTAXI = {
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Camp Taurajo, The Barrens (map 1445 17.29,9.92) via flighttaxi
     {
-        fromPointID = 100098,
+        fromPointID = 100100,
         fromMap = 1456,
         fromX = 0.466545,
         fromY = 0.498984,
-        toPointID = 100056,
+        toPointID = 100058,
         toMap = 1445,
         toX = 0.17289,
         toY = 0.099239,
@@ -9888,11 +9888,11 @@ local FLIGHTTAXI = {
     -- Zone: Un'Goro Crater (map 1449)
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
-        fromPointID = 100077,
+        fromPointID = 100079,
         fromMap = 1449,
         fromX = 0.452982,
         fromY = 0.059657,
-        toPointID = 100063,
+        toPointID = 100065,
         toMap = 1446,
         toX = 0.509542,
         toY = 0.293254,
@@ -9925,11 +9925,11 @@ local FLIGHTTAXI = {
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
-        fromPointID = 100077,
+        fromPointID = 100079,
         fromMap = 1449,
         fromX = 0.452982,
         fromY = 0.059657,
-        toPointID = 100064,
+        toPointID = 100066,
         toMap = 1446,
         toX = 0.516175,
         toY = 0.255194,
@@ -9962,11 +9962,11 @@ local FLIGHTTAXI = {
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
-        fromPointID = 100077,
+        fromPointID = 100079,
         fromMap = 1449,
         fromX = 0.452982,
         fromY = 0.059657,
-        toPointID = 100088,
+        toPointID = 100090,
         toMap = 1451,
         toX = 0.488256,
         toY = 0.367235,
@@ -9999,11 +9999,11 @@ local FLIGHTTAXI = {
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
-        fromPointID = 100077,
+        fromPointID = 100079,
         fromMap = 1449,
         fromX = 0.452982,
         fromY = 0.059657,
-        toPointID = 100089,
+        toPointID = 100091,
         toMap = 1451,
         toX = 0.506833,
         toY = 0.3459,
@@ -10038,7 +10038,7 @@ local FLIGHTTAXI = {
     -- Zone: Undercity (map 1458)
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> The Sepulcher, Silverpine Forest (map 1421 45.56,42.42) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
@@ -10075,7 +10075,7 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Tarren Mill, Hillsbrad (map 1416 58.69,80.36) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
@@ -10112,7 +10112,7 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
@@ -10149,11 +10149,11 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Kargath, Badlands (map 1427 83.23,35.90) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
-        toPointID = 200057,
+        toPointID = 200058,
         toMap = 1427,
         toX = 0.832329,
         toY = 0.358985,
@@ -10186,7 +10186,7 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Frostwolf Keep, Alterac Valley (map 1459 49.58,85.69) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
@@ -10223,7 +10223,7 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Light's Hope Chapel, Eastern Plaguelands (map 1423 70.45,47.59) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
@@ -10260,11 +10260,11 @@ local FLIGHTTAXI = {
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Revantusk Village, The Hinterlands (map 1425 81.70,81.89) via flighttaxi
     {
-        fromPointID = 200104,
+        fromPointID = 200107,
         fromMap = 1458,
         fromX = 0.630851,
         fromY = 0.483242,
-        toPointID = 200050,
+        toPointID = 200051,
         toMap = 1425,
         toX = 0.817013,
         toY = 0.818932,
@@ -10398,11 +10398,11 @@ local FLIGHTTAXI = {
     -- Zone: Westfall (map 1436)
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Darkshire, Duskwood (map 1430 17.13,38.93) via flighttaxi
     {
-        fromPointID = 200090,
+        fromPointID = 200091,
         fromMap = 1436,
         fromX = 0.56571,
         fromY = 0.526667,
-        toPointID = 200063,
+        toPointID = 200064,
         toMap = 1430,
         toX = 0.171327,
         toY = 0.389276,
@@ -10435,11 +10435,11 @@ local FLIGHTTAXI = {
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Booty Bay, Stranglethorn (map 1434 27.53,77.67) via flighttaxi
     {
-        fromPointID = 200090,
+        fromPointID = 200091,
         fromMap = 1436,
         fromX = 0.56571,
         fromY = 0.526667,
-        toPointID = 200081,
+        toPointID = 200082,
         toMap = 1434,
         toX = 0.275288,
         toY = 0.776721,
@@ -10472,11 +10472,11 @@ local FLIGHTTAXI = {
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
-        fromPointID = 200090,
+        fromPointID = 200091,
         fromMap = 1436,
         fromX = 0.56571,
         fromY = 0.526667,
-        toPointID = 200098,
+        toPointID = 200101,
         toMap = 1453,
         toX = 0.709765,
         toY = 0.729259,
@@ -10509,11 +10509,11 @@ local FLIGHTTAXI = {
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
-        fromPointID = 200090,
+        fromPointID = 200091,
         fromMap = 1436,
         fromX = 0.56571,
         fromY = 0.526667,
-        toPointID = 200077,
+        toPointID = 200078,
         toMap = 1433,
         toX = 0.253428,
         toY = 0.589882,
@@ -10548,7 +10548,7 @@ local FLIGHTTAXI = {
     -- Zone: Wetlands (map 1437)
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Southshore, Hillsbrad (map 1424 49.44,52.10) via flighttaxi
     {
-        fromPointID = 200092,
+        fromPointID = 200094,
         fromMap = 1437,
         fromX = 0.095204,
         fromY = 0.596587,
@@ -10585,7 +10585,7 @@ local FLIGHTTAXI = {
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Refuge Pointe, Arathi (map 1417 45.79,46.13) via flighttaxi
     {
-        fromPointID = 200092,
+        fromPointID = 200094,
         fromMap = 1437,
         fromX = 0.095204,
         fromY = 0.596587,
@@ -10622,11 +10622,11 @@ local FLIGHTTAXI = {
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
-        fromPointID = 200092,
+        fromPointID = 200094,
         fromMap = 1437,
         fromX = 0.095204,
         fromY = 0.596587,
-        toPointID = 200101,
+        toPointID = 200104,
         toMap = 1455,
         toX = 0.55886,
         toY = 0.478651,
@@ -10659,11 +10659,11 @@ local FLIGHTTAXI = {
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
-        fromPointID = 200092,
+        fromPointID = 200094,
         fromMap = 1437,
         fromX = 0.095204,
         fromY = 0.596587,
-        toPointID = 200073,
+        toPointID = 200074,
         toMap = 1432,
         toX = 0.33943,
         toY = 0.507947,
@@ -10698,11 +10698,11 @@ local FLIGHTTAXI = {
     -- Zone: Winterspring (map 1452)
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
-        fromPointID = 100092,
+        fromPointID = 100094,
         fromMap = 1452,
         fromX = 0.604853,
         fromY = 0.363438,
-        toPointID = 100095,
+        toPointID = 100097,
         toMap = 1454,
         toX = 0.452807,
         toY = 0.637456,
@@ -10735,11 +10735,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
-        fromPointID = 100092,
+        fromPointID = 100094,
         fromMap = 1452,
         fromX = 0.604853,
         fromY = 0.363438,
-        toPointID = 100104,
+        toPointID = 100106,
         toMap = 2482,
         toX = 0.550959,
         toY = 0.825482,
@@ -10772,11 +10772,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
-        fromPointID = 100092,
+        fromPointID = 100094,
         fromMap = 1452,
         fromX = 0.604853,
         fromY = 0.363438,
-        toPointID = 100067,
+        toPointID = 100069,
         toMap = 1447,
         toX = 0.219549,
         toY = 0.496901,
@@ -10809,11 +10809,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
-        fromPointID = 100092,
+        fromPointID = 100094,
         fromMap = 1452,
         fromX = 0.604853,
         fromY = 0.363438,
-        toPointID = 100071,
+        toPointID = 100073,
         toMap = 1448,
         toX = 0.344154,
         toY = 0.538678,
@@ -10846,11 +10846,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Moonglade (map 1450 32.15,66.33) via flighttaxi
     {
-        fromPointID = 100092,
+        fromPointID = 100094,
         fromMap = 1452,
         fromX = 0.604853,
         fromY = 0.363438,
-        toPointID = 100079,
+        toPointID = 100081,
         toMap = 1450,
         toX = 0.3215,
         toY = 0.663346,
@@ -10883,11 +10883,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
-        fromPointID = 100093,
+        fromPointID = 100095,
         fromMap = 1452,
         fromX = 0.623348,
         fromY = 0.366358,
-        toPointID = 100104,
+        toPointID = 100106,
         toMap = 2482,
         toX = 0.550959,
         toY = 0.825482,
@@ -10920,11 +10920,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
-        fromPointID = 100093,
+        fromPointID = 100095,
         fromMap = 1452,
         fromX = 0.623348,
         fromY = 0.366358,
-        toPointID = 100086,
+        toPointID = 100088,
         toMap = 1450,
         toX = 0.479116,
         toY = 0.671101,
@@ -10957,11 +10957,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
-        fromPointID = 100093,
+        fromPointID = 100095,
         fromMap = 1452,
         fromX = 0.623348,
         fromY = 0.366358,
-        toPointID = 100066,
+        toPointID = 100068,
         toMap = 1447,
         toX = 0.119025,
         toY = 0.774766,
@@ -10994,11 +10994,11 @@ local FLIGHTTAXI = {
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Talonbranch Glade, Felwood (map 2482 29.56,4.25) via flighttaxi
     {
-        fromPointID = 100093,
+        fromPointID = 100095,
         fromMap = 1452,
         fromX = 0.623348,
         fromY = 0.366358,
-        toPointID = 100103,
+        toPointID = 100105,
         toMap = 2482,
         toX = 0.295634,
         toY = 0.042464,

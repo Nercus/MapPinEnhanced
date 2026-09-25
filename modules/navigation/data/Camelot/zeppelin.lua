@@ -11,7 +11,7 @@ local ZEPPELIN = {
         fromMap = 1411,
         fromX = 0.5057,
         fromY = 0.1266,
-        toPointID = 200082,
+        toPointID = 200083,
         toMap = 1434,
         toX = 0.3135,
         toY = 0.3012,
@@ -53,7 +53,7 @@ local ZEPPELIN = {
     -- Zone: Stranglethorn Vale (map 1434)
     -- Stranglethorn Vale (map 1434 31.35,30.12) -> Durotar (map 1411 50.57,12.66) via zeppelin
     {
-        fromPointID = 200082,
+        fromPointID = 200083,
         fromMap = 1434,
         fromX = 0.3135,
         fromY = 0.3012,
@@ -75,7 +75,7 @@ local ZEPPELIN = {
     },
     -- Stranglethorn Vale (map 1434 31.53,29.15) -> Tirisfal Glades (map 1420 61.88,59.10) via zeppelin
     {
-        fromPointID = 200083,
+        fromPointID = 200084,
         fromMap = 1434,
         fromX = 0.3153,
         fromY = 0.2915,
@@ -125,7 +125,7 @@ local ZEPPELIN = {
         fromMap = 1420,
         fromX = 0.6188,
         fromY = 0.591,
-        toPointID = 200083,
+        toPointID = 200084,
         toMap = 1434,
         toX = 0.3153,
         toY = 0.2915,

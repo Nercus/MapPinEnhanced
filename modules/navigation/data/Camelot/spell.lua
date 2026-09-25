@@ -7,7 +7,7 @@ local SPELL = {
     -- Zone: Darnassus (map 1457)
     -- current position -> Darnassus (map 1457 40.13,81.83) via spell
     {
-        toPointID = 100101,
+        toPointID = 100103,
         toMap = 1457,
         toX = 0.4013,
         toY = 0.8183,
@@ -38,7 +38,7 @@ local SPELL = {
     -- Zone: Ironforge (map 1455)
     -- current position -> Ironforge (map 1455 25.52,8.41) via spell
     {
-        toPointID = 200100,
+        toPointID = 200103,
         toMap = 1455,
         toX = 0.2552,
         toY = 0.0841,
@@ -69,7 +69,7 @@ local SPELL = {
     -- Zone: Moonglade (map 1450)
     -- current position -> Moonglade (map 1450 56.26,32.46) via spell
     {
-        toPointID = 100087,
+        toPointID = 100089,
         toMap = 1450,
         toX = 0.5626,
         toY = 0.3246,
@@ -95,7 +95,7 @@ local SPELL = {
     -- Zone: Orgrimmar (map 1454)
     -- current position -> Orgrimmar (map 1454 38.57,85.95) via spell
     {
-        toPointID = 100094,
+        toPointID = 100096,
         toMap = 1454,
         toX = 0.3857,
         toY = 0.8595,
@@ -126,7 +126,7 @@ local SPELL = {
     -- Zone: Stormwind City (map 1453)
     -- current position -> Stormwind City (map 1453 38.01,80.84) via spell
     {
-        toPointID = 200095,
+        toPointID = 200098,
         toMap = 1453,
         toX = 0.3801,
         toY = 0.8084,
@@ -157,7 +157,7 @@ local SPELL = {
     -- Zone: Thunder Bluff (map 1456)
     -- current position -> Thunder Bluff (map 1456 22.35,16.52) via spell
     {
-        toPointID = 100097,
+        toPointID = 100099,
         toMap = 1456,
         toX = 0.2235,
         toY = 0.1652,
@@ -188,7 +188,7 @@ local SPELL = {
     -- Zone: Undercity (map 1458)
     -- current position -> Undercity (map 1458 84.65,16.32) via spell
     {
-        toPointID = 200106,
+        toPointID = 200109,
         toMap = 1458,
         toX = 0.8465,
         toY = 0.1632,
