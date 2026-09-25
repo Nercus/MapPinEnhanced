@@ -35,7 +35,7 @@ local function RegisterTransport(pathType, icon, method)
         }
     end
 
-    Navigation:RegisterPathAdapter(pathType, function()
+    Navigation:RegisterPathHandler(pathType, function()
         return icon, method, L["Navigation Take Transport"]
     end, nil, CostCalculator)
 end

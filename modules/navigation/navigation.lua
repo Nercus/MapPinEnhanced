@@ -128,7 +128,7 @@ end
 function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction, fallbackPhase)
     local destination = self.activeDestination
     if not destination then return end
-    self:DeactivatePathAdapter()
+    self:DeactivatePathHandler()
     self:ReleaseRouteLayers()
     local phase = fallbackPhase or "direct"
     presentationChangeNumber = presentationChangeNumber + 1
@@ -234,7 +234,7 @@ function Navigation:StartCalculation(currentRouteUnusable)
                     if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
                 end
             end
-            self:DeactivatePathAdapter()
+            self:DeactivatePathHandler()
             local graph = self:GetGraph()
             self.progression = {
                 route = route,
@@ -273,7 +273,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         return active.changeNumber
     end
     self:CancelRouteCalculation(self.activeCalculation)
-    self:DeactivatePathAdapter()
+    self:DeactivatePathHandler()
     self.destinationChangeNumber = self.destinationChangeNumber + 1
     self.activeDestination = {
         owner = owner,
@@ -319,7 +319,7 @@ function Navigation:UpdateDestinationText(owner, destinationID, changeNumber, ti
             step.target.title, step.target.description = title, description
         end
     end
-    -- Only replace the display copy: jobs, progression, adapters, and consumed
+    -- Only replace the display copy: jobs, progression, handlers, and consumed
     -- arrival callbacks remain owned by their existing lifecycle.
     Wayfinders:UpdateDestinationText(title, description)
 end
@@ -352,7 +352,7 @@ end
 function Navigation:ClearDestination(owner, destinationID, changeNumber)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return false end
     self:CancelRouteCalculation(self.activeCalculation)
-    self:DeactivatePathAdapter()
+    self:DeactivatePathHandler()
     self.activeCalculation = nil
     self.activeDestination = nil
     self.progression = nil
@@ -477,7 +477,7 @@ function Navigation:PublishStep(progression)
     if not pathReference then
         local destination = self.activeDestination
         if not destination then return end
-        self:DeactivatePathAdapter()
+        self:DeactivatePathHandler()
         ---@type string?
         local mode = progression.route.finalCost.explanation and progression.route.finalCost.explanation.mode
         local isFlying = mode == "steady-flight" or mode == "skyriding"
@@ -551,14 +551,14 @@ function Navigation:PublishStep(progression)
     })
     local identity = self:CaptureStepIdentity(progression)
     if identity then
-        self:ActivatePathAdapter({
+        self:ActivatePathHandler({
             pathType = pathType,
             pathReference = pathReference,
             phase = progression.phase,
             requirement = graph.pathRequirements[pathReference],
-            data = graph.pathAdapterData[pathReference],
+            data = graph.pathHandlerData[pathReference],
         }, function(result, detail)
-            self:HandlePathAdapterReport(identity, result, detail)
+            self:HandlePathHandlerReport(identity, result, detail)
         end)
     end
 end
@@ -566,7 +566,7 @@ end
 ---@param progression NavigationProgression
 function Navigation:CompleteCurrentPath(progression)
     if not self:IsCurrentProgression(progression) then return end
-    self:DeactivatePathAdapter()
+    self:DeactivatePathHandler()
     progression.pathIndex = progression.pathIndex + 1
     progression.changeNumber = progression.changeNumber + 1
     progression.status = nil
@@ -675,12 +675,12 @@ function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _ne
     self:StartCalculation(false)
 end
 
--- Adapter results and eligibility events
+-- Handler results and eligibility events
 
 ---@param identity NavigationStepIdentity
 ---@param result "check-completion"|"attempted"|"completed"|"failed"
 ---@param detail string?
-function Navigation:HandlePathAdapterReport(identity, result, detail)
+function Navigation:HandlePathHandlerReport(identity, result, detail)
     if not self:IsStepIdentityCurrent(identity) then return end
     local progression = self.progression
     if not progression then return end
@@ -771,7 +771,7 @@ function Navigation:SetUpEligibilityRefresh()
             reference and graph and prepared and prepared.requirementStateByPath[reference] == "unsatisfied" and
             self:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
             local identity = self:CaptureStepIdentity(progression)
-            if identity then self:HandlePathAdapterReport(identity, "failed", "action requirements no longer satisfied") end
+            if identity then self:HandlePathHandlerReport(identity, "failed", "action requirements no longer satisfied") end
             return
         end
         if RefreshMissingRouteOrigin() then return end
@@ -1176,7 +1176,7 @@ WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Navigation:BuildGraph()
-    Navigation:SetUpPathAdapters()
+    Navigation:SetUpPathHandlers()
     Navigation:SetUpEligibilityRefresh()
     MapPinEnhanced:RegisterContinuousDistanceSampleCallback(function(...)
         Navigation:OnDistanceSample(...)
@@ -1217,7 +1217,7 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.TransportationGroups", fu
     -- and its failure records, but stop presenting or executing excluded Steps.
     Navigation:CancelRouteCalculation(Navigation.activeCalculation)
     Navigation.activeCalculation = nil
-    Navigation:DeactivatePathAdapter()
+    Navigation:DeactivatePathHandler()
     Navigation.progression = nil
     Navigation:ReleaseRouteLayers()
     Navigation:StartCalculation(true)

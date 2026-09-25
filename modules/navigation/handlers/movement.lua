@@ -27,7 +27,7 @@ local function RegisterMovement(pathType, mode, icon, method, instruction)
             graph.pointMapIDs[toPointIndex], graph.pointXs[toPointIndex], graph.pointYs[toPointIndex], mode)
     end
 
-    Navigation:RegisterPathAdapter(pathType, Presentation, nil, CostCalculator)
+    Navigation:RegisterPathHandler(pathType, Presentation, nil, CostCalculator)
 end
 
 RegisterMovement("walk", "ground", "poi-traveldirections-arrow",

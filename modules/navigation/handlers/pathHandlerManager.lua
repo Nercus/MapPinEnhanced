@@ -49,21 +49,21 @@ local PROGRESS_EVENTS = {
 ---@param costCalculator NavigationPathCostCalculator?
 ---@param activator NavigationPathActivator?
 ---@param deactivator NavigationPathDeactivator?
-function Navigation:RegisterPathAdapter(pathType, presentation, dataprovider, costCalculator, activator, deactivator)
-    assert(type(pathType) == "string" and pathType ~= "", "Navigation:RegisterPathAdapter requires a Path type")
-    assert(type(presentation) == "function", "Navigation:RegisterPathAdapter requires a presentation function")
+function Navigation:RegisterPathHandler(pathType, presentation, dataprovider, costCalculator, activator, deactivator)
+    assert(type(pathType) == "string" and pathType ~= "", "Navigation:RegisterPathHandler requires a Path type")
+    assert(type(presentation) == "function", "Navigation:RegisterPathHandler requires a presentation function")
     assert(dataprovider == nil or type(dataprovider) == "function",
-        "Navigation:RegisterPathAdapter dataprovider must be a function or nil")
+        "Navigation:RegisterPathHandler dataprovider must be a function or nil")
     assert(costCalculator == nil or type(costCalculator) == "function",
-        "Navigation:RegisterPathAdapter cost calculator must be a function or nil")
+        "Navigation:RegisterPathHandler cost calculator must be a function or nil")
     assert(activator == nil or type(activator) == "function",
-        "Navigation:RegisterPathAdapter activator must be a function or nil")
+        "Navigation:RegisterPathHandler activator must be a function or nil")
     assert(deactivator == nil or type(deactivator) == "function",
-        "Navigation:RegisterPathAdapter deactivator must be a function or nil")
+        "Navigation:RegisterPathHandler deactivator must be a function or nil")
     assert(activator ~= nil or deactivator == nil,
-        "Navigation:RegisterPathAdapter deactivator requires an activator")
+        "Navigation:RegisterPathHandler deactivator requires an activator")
     assert(not presentations[pathType],
-        "Navigation:RegisterPathAdapter path type is already registered: " .. pathType)
+        "Navigation:RegisterPathHandler path type is already registered: " .. pathType)
     presentations[pathType] = presentation
     dataproviders[pathType] = dataprovider
     costCalculators[pathType] = costCalculator
@@ -90,10 +90,10 @@ local function GetPresentation(pathType, destinationMapID)
     local presentation = presentations[pathType]
     assert(presentation, "Navigation path type is not registered: " .. tostring(pathType))
     local icon, method, instruction = presentation(destinationMapID)
-    assert(Pins.PIN_ICONS[icon], "Navigation adapter PIN_ICONS entry is missing: " .. tostring(icon))
-    assert(type(method) == "string" and method ~= "", "Navigation adapter method is missing: " .. pathType)
+    assert(Pins.PIN_ICONS[icon], "Navigation handler PIN_ICONS entry is missing: " .. tostring(icon))
+    assert(type(method) == "string" and method ~= "", "Navigation handler method is missing: " .. pathType)
     assert(type(instruction) == "string" and instruction ~= "",
-        "Navigation adapter instruction is missing: " .. pathType)
+        "Navigation handler instruction is missing: " .. pathType)
     return icon, method, instruction
 end
 
@@ -161,14 +161,14 @@ function Navigation:GetPathCost(graph, preparedData, pathReference)
     }
 end
 
-function Navigation:SetUpPathAdapters()
+function Navigation:SetUpPathHandlers()
     if unsubscribeProgressEvents then return end
     unsubscribeProgressEvents = MapPinEnhanced:RegisterEventBucket(PROGRESS_EVENTS, function()
         if activeReport then activeReport("check-completion") end
     end)
 end
 
-function Navigation:DeactivatePathAdapter()
+function Navigation:DeactivatePathHandler()
     local pathType = activePathType
     activePathType = nil
     activePathReference = nil
@@ -179,16 +179,16 @@ end
 
 ---@param context NavigationActivePathContext
 ---@param report NavigationPathReport
-function Navigation:ActivatePathAdapter(context, report)
+function Navigation:ActivatePathHandler(context, report)
     assert(presentations[context.pathType],
-        "Navigation:ActivatePathAdapter path type is not registered: " .. context.pathType)
+        "Navigation:ActivatePathHandler path type is not registered: " .. context.pathType)
     local activator = activators[context.pathType]
     if activePathType == context.pathType and activePathReference == context.pathReference then
         activeReport = report
         if activator then activator(context, report) end
         return
     end
-    self:DeactivatePathAdapter()
+    self:DeactivatePathHandler()
     activePathType = context.pathType
     activePathReference = context.pathReference
     activeReport = report

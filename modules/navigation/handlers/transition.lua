@@ -52,7 +52,7 @@ local function PortalCostCalculator(graph, _preparedData, pathReference)
     }
 end
 
-Navigation:RegisterPathAdapter("portal", PortalPresentation, nil, PortalCostCalculator)
-Navigation:RegisterPathAdapter("localportal", LocalPortalPresentation, nil, PortalCostCalculator)
-Navigation:RegisterPathAdapter("border", BorderPresentation)
-Navigation:RegisterPathAdapter("floor", FloorPresentation)
+Navigation:RegisterPathHandler("portal", PortalPresentation, nil, PortalCostCalculator)
+Navigation:RegisterPathHandler("localportal", LocalPortalPresentation, nil, PortalCostCalculator)
+Navigation:RegisterPathHandler("border", BorderPresentation)
+Navigation:RegisterPathHandler("floor", FloorPresentation)

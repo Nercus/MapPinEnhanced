@@ -67,4 +67,4 @@ MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
     selectedOptionID = nil
 end)
 
-Navigation:RegisterPathAdapter("gossip", GossipPresentation, GossipDataprovider, nil, Activate, Deactivate)
+Navigation:RegisterPathHandler("gossip", GossipPresentation, GossipDataprovider, nil, Activate, Deactivate)

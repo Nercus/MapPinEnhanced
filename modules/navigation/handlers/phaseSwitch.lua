@@ -86,5 +86,5 @@ MapPinEnhanced:RegisterEventBucket({
     "ZONE_CHANGED_NEW_AREA",
 }, CheckPhaseChange, 0.25)
 
-Navigation:RegisterPathAdapter("phaseswitch", Presentation, Dataprovider, CostCalculator,
+Navigation:RegisterPathHandler("phaseswitch", Presentation, Dataprovider, CostCalculator,
     Activator, Deactivator)

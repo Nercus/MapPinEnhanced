@@ -107,7 +107,7 @@ end
 ---@field pathTypes string[]
 ---@field pathDurations table<integer, number>
 ---@field pathRequirements table<integer, table>
----@field pathAdapterData table<integer, any>
+---@field pathHandlerData table<integer, any>
 ---@field currentPlayerPathReferences integer[]
 ---@field outgoingPathReferences integer[]
 ---@field firstOutgoingPathByPointIndex integer[]
@@ -159,7 +159,7 @@ local function GetOrAddPoint(graph, pointIndexByID, pointID, mapID, x, y)
 end
 
 ---@param path NavigationStaticPath
----@return any adapterData
+---@return any handlerData
 ---@return string? failure
 local function PrepareStaticPath(path)
     if type(path.toPointID) ~= "number" or type(path.toMap) ~= "number" or
@@ -194,7 +194,7 @@ function Navigation:BuildGraph()
         pathTypes = {},
         pathDurations = {},
         pathRequirements = {},
-        pathAdapterData = {},
+        pathHandlerData = {},
         currentPlayerPathReferences = {},
         outgoingPathReferences = {},
         firstOutgoingPathByPointIndex = {},
@@ -221,7 +221,7 @@ function Navigation:BuildGraph()
                 fromPointIndex = GetOrAddPoint(graph, pointIndexByID, path.fromPointID, path.fromMap, path.fromX,
                     path.fromY)
             end
-            local adapterData, failure = PrepareStaticPath(path)
+            local handlerData, failure = PrepareStaticPath(path)
             if failure then
                 graph.excludedPaths[pathReference] = failure
             else
@@ -235,7 +235,7 @@ function Navigation:BuildGraph()
                 graph.pathTypes[pathReference] = path.type
                 graph.pathDurations[pathReference] = path.travelDuration
                 graph.pathRequirements[pathReference] = path.requirement
-                graph.pathAdapterData[pathReference] = adapterData
+                graph.pathHandlerData[pathReference] = handlerData
                 if fromPointIndex then
                     graph.outgoingPathCountByPointIndex[fromPointIndex] =
                         (graph.outgoingPathCountByPointIndex[fromPointIndex] or 0) + 1

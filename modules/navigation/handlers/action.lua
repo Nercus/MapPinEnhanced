@@ -188,7 +188,7 @@ local function RegisterAction(pathType, icon, method, instruction)
         }
     end
 
-    Navigation:RegisterPathAdapter(pathType, Presentation, nil, CostCalculator, ActionActivator, ActionDeactivator)
+    Navigation:RegisterPathHandler(pathType, Presentation, nil, CostCalculator, ActionActivator, ActionDeactivator)
 end
 
 RegisterAction("spell", "MagePortalAlliance", L["Navigation Method Spell"], L["Navigation Use Spell"])

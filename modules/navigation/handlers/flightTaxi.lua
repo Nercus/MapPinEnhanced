@@ -110,7 +110,7 @@ end
 ---@return NavigationCalculatedPathCost?
 ---@return string? failure
 local function CostCalculator(graph, _preparedData, pathReference)
-    local data = graph.pathAdapterData[pathReference] ---@type NavigationFlightTaxiData
+    local data = graph.pathHandlerData[pathReference] ---@type NavigationFlightTaxiData
     local fromNode = FindTaxiNode(data.fromMap, data.fromX, data.fromY, data.fromTaxiNodeID)
     local toNode = FindTaxiNode(data.toMap, data.toX, data.toY, data.toTaxiNodeID)
     if fromNode and fromNode.known == false then return nil, "origin taxi node is undiscovered" end
@@ -169,5 +169,5 @@ end
 MapPinEnhanced:RegisterEvent("TAXIMAP_OPENED", RefreshTaxiNodeKnowledge)
 MapPinEnhanced:RegisterEvent("TAXI_NODE_STATUS_CHANGED", RefreshTaxiNodeKnowledge)
 
-Navigation:RegisterPathAdapter("flighttaxi", Presentation, Dataprovider, CostCalculator,
+Navigation:RegisterPathHandler("flighttaxi", Presentation, Dataprovider, CostCalculator,
     Activator, Deactivator)
