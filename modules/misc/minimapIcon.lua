@@ -4,7 +4,8 @@ local MapPinEnhanced = select(2, ...)
 local LibDBIcon = MapPinEnhanced.LDBIcon
 
 local init = false
-local logoPath = "Interface\\Addons\\MapPinEnhanced\\assets\\logo_transparent.png"
+local logoPath = MapPinEnhanced.assetsPath .. "\\logo_transparent.png"
+local minimapHighlightPath = MapPinEnhanced.assetsPath .. "\\shared\\MinimapHighlight.png"
 local function InitMinimapIcon()
     if init then return end
     local MapPinEnhancedBroker = LibStub("LibDataBroker-1.1"):NewDataObject(MapPinEnhanced.name, {
@@ -24,7 +25,7 @@ local function InitMinimapIcon()
     LibDBIcon:RemoveButtonBorder(MapPinEnhanced.name)
     LibDBIcon:RemoveButtonBackground(MapPinEnhanced.name)
     LibDBIcon:SetButtonIcon(MapPinEnhanced.name, logoPath, 42, "CENTER", 0, 0)
-    LibDBIcon:SetButtonHighlightTexture(MapPinEnhanced.name, "shop-toast-siderays")
+    LibDBIcon:SetButtonHighlightTexture(MapPinEnhanced.name, minimapHighlightPath)
     LibDBIcon:AddButtonToCompartment(MapPinEnhanced.name, logoPath)
     init = true
 end
