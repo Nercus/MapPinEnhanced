@@ -52,7 +52,34 @@ local function PortalCostCalculator(graph, _preparedData, pathReference)
     }
 end
 
+---@param graph NavigationGraph
+---@param preparedData NavigationPreparedData
+---@param pathReference integer
+---@return NavigationCalculatedPathCost?
+---@return string? failure
+local function BorderCostCalculator(graph, preparedData, pathReference)
+    local duration = graph.pathDurations[pathReference]
+    if duration ~= nil then
+        if type(duration) ~= "number" or duration <= 0 or duration ~= duration or duration == math.huge then
+            return nil, "invalid border duration"
+        end
+        return {
+            expectedSeconds = duration,
+            uncertaintySeconds = 0,
+            comparisonSeconds = duration,
+            explanation = { kind = "fixed", seconds = duration },
+        }
+    end
+    local fromPointIndex = graph.pathFromPointIndexes[pathReference]
+    if not fromPointIndex then return nil, "border crossing requires an origin" end
+    local toPointIndex = graph.pathToPointIndexes[pathReference]
+    -- Authored crossings establish ground connectivity even across map IDs.
+    return Navigation:GetPlayerTravelCost(preparedData,
+        graph.pointMapIDs[fromPointIndex], graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex],
+        graph.pointMapIDs[toPointIndex], graph.pointXs[toPointIndex], graph.pointYs[toPointIndex], "border")
+end
+
 Navigation:RegisterPathHandler("portal", PortalPresentation, nil, PortalCostCalculator)
 Navigation:RegisterPathHandler("localportal", LocalPortalPresentation, nil, PortalCostCalculator)
-Navigation:RegisterPathHandler("border", BorderPresentation)
+Navigation:RegisterPathHandler("border", BorderPresentation, nil, BorderCostCalculator)
 Navigation:RegisterPathHandler("floor", FloorPresentation)

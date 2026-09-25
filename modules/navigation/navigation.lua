@@ -644,8 +644,10 @@ function Navigation:CanGuideDirectly()
     end
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMapID or not playerX or not playerY then return false end
-    return self:GetComparableDistance(playerMapID, playerX, playerY, destination.data.mapID,
-        destination.data.x, destination.data.y) ~= nil
+    local preparedData = self:GetPreparedData()
+    if not preparedData then return false end
+    return self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY, destination.data.mapID,
+        destination.data.x, destination.data.y, "automatic") ~= nil
 end
 
 ---@param distance number

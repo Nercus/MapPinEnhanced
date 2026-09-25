@@ -29,6 +29,7 @@ L["Click to edit"] = "Click to edit"
 
 ------------------------------ Pins ------------------------------
 L["Map Pin"] = "Map Pin"
+L["Add Pin"] = "Add Pin"
 L["Target"] = "Target"
 L["Change Color"] = "Change Color"
 L["Change Icon"] = "Change Icon"

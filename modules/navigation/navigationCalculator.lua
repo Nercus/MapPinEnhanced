@@ -94,20 +94,23 @@ function Navigation:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
 end
 
 ---@param movement NavigationMovementCapabilities
----@param travelMode "automatic"|"ground"|"flight"?
+---@param travelMode "automatic"|"ground"|"flight"|"border"?
 ---@param fromMapID number
 ---@param toMapID number
----@return string mode
----@return number speed
+---@return string? mode
+---@return number? speed
 local function GetMovementSpeed(movement, travelMode, fromMapID, toMapID)
     local fromMountInfo = Navigation.mountData[fromMapID] or Navigation.defaultMountInfo
     local toMountInfo = Navigation.mountData[toMapID] or Navigation.defaultMountInfo
     -- Future portal exits have their own restrictions; the player's current
     -- area's flight mode cannot describe movement throughout the route.
-    if travelMode ~= nil and travelMode ~= "ground" and fromMountInfo.fly and toMountInfo.fly then
+    if (travelMode == "automatic" or travelMode == "flight") and fromMountInfo.fly and toMountInfo.fly then
         if movement.canSkyriding then return "skyriding", movement.skyridingSpeed end
         if movement.canFly then return "steady-flight", movement.steadyFlightSpeed end
     end
+    -- Ground travel cannot infer a pass through terrain between maps. The
+    -- graph's authored border Paths own those crossings instead.
+    if fromMapID ~= toMapID and travelMode ~= "border" then return nil, nil end
     if fromMountInfo.ground and toMountInfo.ground then return "ground", movement.groundSpeed end
     return "walking", MOVEMENT_SPEEDS.walking
 end
@@ -119,13 +122,13 @@ end
 ---@param mapID2 number
 ---@param x2 number
 ---@param y2 number
----@param travelMode "automatic"|"ground"|"flight"?
+---@param travelMode "automatic"|"ground"|"flight"|"border"?
 ---@return NavigationCalculatedPathCost?
 function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2, y2, travelMode)
     local distance = self:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
     if not distance then return nil end
     local mode, speed = GetMovementSpeed(preparedData.movement, travelMode, mapID1, mapID2)
-    if speed <= 0 then return nil end
+    if not speed or speed <= 0 then return nil end
     local expectedSeconds = distance / speed
     return {
         expectedSeconds = expectedSeconds,
@@ -501,6 +504,7 @@ local function OfferNextMovementPoint(job)
     if bestCostBucket and entry.costBucket > bestCostBucket then return end
     local target = job.worldPoints[pointIndex]
     local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, target.mapID)
+    if not speed or speed <= 0 then return end
     local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
     OfferPoint(job, pointIndex, entry.cost + seconds,
         entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature)
@@ -566,8 +570,10 @@ local function SeedJob(job)
             for _, pointIndex in ipairs(entrances) do
                 local target = job.worldPoints[pointIndex]
                 local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", playerMapID, target.mapID)
-                local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
-                OfferPoint(job, pointIndex, seconds, 0, 0, nil, nil, "")
+                if speed and speed > 0 then
+                    local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
+                    OfferPoint(job, pointIndex, seconds, 0, 0, nil, nil, "")
+                end
             end
         end
     end

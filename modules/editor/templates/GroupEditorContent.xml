@@ -2,6 +2,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="GroupEditorContent.lua" />
 
+    <Frame name="MapPinEnhancedGroupEditorAddPinRowTemplate" virtual="true">
+        <Size x="842" y="52" />
+        <Frames>
+            <Button parentKey="button" inherits="MapPinEnhancedButtonTemplate" text="Add Pin">
+                <Size x="140" y="32" />
+                <KeyValues>
+                    <KeyValue key="icon" value="plus" />
+                    <KeyValue key="tooltip" value="Add a new pin at your current location." />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+
     <Frame name="MapPinEnhancedGroupEditorContentTemplate" virtual="true" mixin="MapPinEnhancedGroupEditorContentMixin">
         <Frames>
             <Frame parentKey="emptyState">
