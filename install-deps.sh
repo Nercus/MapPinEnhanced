@@ -19,6 +19,9 @@ git clone https://repos.wowace.com/wow/herebedragons ./libs/HereBeDragons
 # LibDataBroker
 git clone https://github.com/tekkub/libdatabroker-1-1 ./libs/LibDataBroker-1.1
 
+# ChatThrottleLib
+svn checkout https://repos.curseforge.com/wow/chatthrottlelib/trunk ./libs/ChatThrottleLib
+
 # Chomp
 git clone https://github.com/wow-rp-addons/Chomp.git ./libs/Chomp
 
