@@ -16,6 +16,7 @@ local FLOOR = {
         toX = 0.5516,
         toY = 0.1639,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2167)
@@ -30,6 +31,7 @@ local FLOOR = {
         toX = 0.4558,
         toY = 0.6861,
         type = "floor",
+        travelDuration = 5,
     },
     -- Aberrus, the Shadowed Crucible (map 2167 55.16,16.39) -> Aberrus, the Shadowed Crucible (map 2166 32.81,18.47) via floor
     {
@@ -42,6 +44,7 @@ local FLOOR = {
         toX = 0.3281,
         toY = 0.1847,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2168)
@@ -56,6 +59,7 @@ local FLOOR = {
         toX = 0.4871,
         toY = 0.7317,
         type = "floor",
+        travelDuration = 5,
     },
     -- Aberrus, the Shadowed Crucible (map 2168 55.52,89.13) -> Aberrus, the Shadowed Crucible (map 2169 50.74,90.64) via floor
     {
@@ -68,6 +72,7 @@ local FLOOR = {
         toX = 0.5074,
         toY = 0.9064,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2169)
@@ -82,6 +87,7 @@ local FLOOR = {
         toX = 0.5552,
         toY = 0.8913,
         type = "floor",
+        travelDuration = 5,
     },
     -- Aberrus, the Shadowed Crucible (map 2169 50.98,13.52) -> Aberrus, the Shadowed Crucible (map 2170 48.95,10.04) via floor
     {
@@ -94,6 +100,7 @@ local FLOOR = {
         toX = 0.4895,
         toY = 0.1004,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2170)
@@ -108,6 +115,7 @@ local FLOOR = {
         toX = 0.5098,
         toY = 0.1352,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2171)
@@ -122,6 +130,7 @@ local FLOOR = {
         toX = 0.5703,
         toY = 0.6135,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Aberrus, the Shadowed Crucible (map 2172)
@@ -136,6 +145,7 @@ local FLOOR = {
         toX = 0.3354,
         toY = 0.4455,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Abundant Grotto (map 2522)
@@ -150,6 +160,7 @@ local FLOOR = {
         toX = 0.6617,
         toY = 0.6169,
         type = "floor",
+        travelDuration = 5,
     },
     -- Floaret Grotto (map 2522 43.60,66.14) -> Floaret Grotto (map 2523 37.73,57.44) via floor
     {
@@ -162,6 +173,7 @@ local FLOOR = {
         toX = 0.3773,
         toY = 0.5744,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Abundant Grotto (map 2523)
@@ -176,6 +188,7 @@ local FLOOR = {
         toX = 0.436,
         toY = 0.6614,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ahn'Qiraj (map 319)
@@ -190,6 +203,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.73,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ahn'Qiraj (map 319 34.60,45.00) -> Ahn'Qiraj (map 321 66.40,46.30) via floor
     {
@@ -202,6 +216,7 @@ local FLOOR = {
         toX = 0.664,
         toY = 0.463,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ahn'Qiraj (map 320)
@@ -216,6 +231,7 @@ local FLOOR = {
         toX = 0.475,
         toY = 0.293,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ahn'Qiraj (map 321)
@@ -230,6 +246,7 @@ local FLOOR = {
         toX = 0.492,
         toY = 0.633,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ahn'Qiraj (map 321 50.50,73.00) -> Ahn'Qiraj (map 319 33.00,52.40) via floor
     {
@@ -242,6 +259,7 @@ local FLOOR = {
         toX = 0.33,
         toY = 0.524,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ahn'Qiraj (map 321 66.40,46.30) -> Ahn'Qiraj (map 319 34.60,45.00) via floor
     {
@@ -254,6 +272,7 @@ local FLOOR = {
         toX = 0.346,
         toY = 0.45,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Algeth'ar Academy (map 2097)
@@ -268,6 +287,7 @@ local FLOOR = {
         toX = 0.5702,
         toY = 0.7226,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Algeth'ar Academy (map 2098)
@@ -282,6 +302,7 @@ local FLOOR = {
         toX = 0.4281,
         toY = 0.0749,
         type = "floor",
+        travelDuration = 5,
     },
     -- Algeth'ar Academy (map 2098 54.09,84.28) -> Algeth'ar Academy (map 2099 60.02,28.46) via floor
     {
@@ -294,6 +315,7 @@ local FLOOR = {
         toX = 0.6002,
         toY = 0.2846,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Algeth'ar Academy (map 2099)
@@ -308,6 +330,7 @@ local FLOOR = {
         toX = 0.5409,
         toY = 0.8428,
         type = "floor",
+        travelDuration = 5,
     },
     -- Algeth'ar Academy (map 2099 57.02,72.26) -> Algeth'ar Academy (map 2097 16.11,24.29) via floor
     {
@@ -320,6 +343,7 @@ local FLOOR = {
         toX = 0.1611,
         toY = 0.2429,
         type = "floor",
+        travelDuration = 5,
     },
     -- Algeth'ar Academy (map 2099 60.02,28.46) -> Algeth'ar Academy (map 2098 54.09,84.28) via floor
     {
@@ -332,6 +356,7 @@ local FLOOR = {
         toX = 0.5409,
         toY = 0.8428,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Altar of Domination (map 1823)
@@ -346,6 +371,7 @@ local FLOOR = {
         toX = 0.2301,
         toY = 0.684,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Altar of Fangs (map 2588)
@@ -360,6 +386,7 @@ local FLOOR = {
         toX = 0.4369,
         toY = 0.1227,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Altar of Fangs (map 2589)
@@ -374,6 +401,7 @@ local FLOOR = {
         toX = 0.4907,
         toY = 0.9003,
         type = "floor",
+        travelDuration = 5,
     },
     -- Altar of Fangs (map 2589 67.72,62.84) -> Altar of Fangs (map 2590 62.94,62.59) via floor
     {
@@ -386,6 +414,7 @@ local FLOOR = {
         toX = 0.6294,
         toY = 0.6259,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Altar of Fangs (map 2590)
@@ -400,6 +429,7 @@ local FLOOR = {
         toX = 0.6772,
         toY = 0.6284,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2232)
@@ -414,6 +444,7 @@ local FLOOR = {
         toX = 0.4106,
         toY = 0.2912,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2232 41.06,29.12) -> Amirdrassil, The Dream's Hope (map 2232 29.22,21.52) via floor
     {
@@ -426,6 +457,7 @@ local FLOOR = {
         toX = 0.2922,
         toY = 0.2152,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2232 42.97,20.16) -> Amirdrassil, The Dream's Hope (map 2244 77.88,89.13) via floor
     {
@@ -438,6 +470,7 @@ local FLOOR = {
         toX = 0.7788,
         toY = 0.8913,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2232 50.86,13.16) -> Amirdrassil, The Dream's Hope (map 2233 49.90,96.13) via floor
     {
@@ -450,6 +483,7 @@ local FLOOR = {
         toX = 0.499,
         toY = 0.9613,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2232 58.39,20.16) -> Amirdrassil, The Dream's Hope (map 2240 17.38,95.59) via floor
     {
@@ -462,6 +496,7 @@ local FLOOR = {
         toX = 0.1738,
         toY = 0.9559,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2232 60.07,29.30) -> Amirdrassil, The Dream's Hope (map 2240 67.48,22.42) via floor
     {
@@ -474,6 +509,7 @@ local FLOOR = {
         toX = 0.6748,
         toY = 0.2242,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2233)
@@ -488,6 +524,7 @@ local FLOOR = {
         toX = 0.367,
         toY = 0.8783,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2233 49.90,96.13) -> Amirdrassil, The Dream's Hope (map 2232 50.86,13.16) via floor
     {
@@ -500,6 +537,7 @@ local FLOOR = {
         toX = 0.5086,
         toY = 0.1316,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2234)
@@ -514,6 +552,7 @@ local FLOOR = {
         toX = 0.4668,
         toY = 0.33,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2234 38.06,88.32) -> Amirdrassil, The Dream's Hope (map 2237 28.62,38.92) via floor
     {
@@ -526,6 +565,7 @@ local FLOOR = {
         toX = 0.2862,
         toY = 0.3892,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2234 47.27,43.47) -> Amirdrassil, The Dream's Hope (map 2235 34.12,32.46) via floor
     {
@@ -538,6 +578,7 @@ local FLOOR = {
         toX = 0.3412,
         toY = 0.3246,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2234 61.46,64.47) -> Amirdrassil, The Dream's Hope (map 2238 67.12,89.67) via floor
     {
@@ -550,6 +591,7 @@ local FLOOR = {
         toX = 0.6712,
         toY = 0.8967,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2234 62.10,64.81) -> Amirdrassil, The Dream's Hope (map 2236 29.70,50.93) via floor
     {
@@ -562,6 +604,7 @@ local FLOOR = {
         toX = 0.297,
         toY = 0.5093,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2238)
@@ -576,6 +619,7 @@ local FLOOR = {
         toX = 0.6146,
         toY = 0.6447,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2238 67.12,89.67) -> Amirdrassil, The Dream's Hope (map 2236 29.70,50.93) via floor
     {
@@ -588,6 +632,7 @@ local FLOOR = {
         toX = 0.297,
         toY = 0.5093,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2240)
@@ -602,6 +647,7 @@ local FLOOR = {
         toX = 0.5839,
         toY = 0.2016,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2240 67.48,22.42) -> Amirdrassil, The Dream's Hope (map 2232 60.07,29.30) via floor
     {
@@ -614,6 +660,7 @@ local FLOOR = {
         toX = 0.6007,
         toY = 0.293,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Amirdrassil (map 2244)
@@ -628,6 +675,7 @@ local FLOOR = {
         toX = 0.4297,
         toY = 0.2016,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Archival Assault (map 2452)
@@ -642,6 +690,7 @@ local FLOOR = {
         toX = 0.456,
         toY = 0.5342,
         type = "floor",
+        travelDuration = 5,
     },
     -- Archival Assault (map 2452 61.50,21.23) -> Archival Assault (map 2453 54.09,31.03) via floor
     {
@@ -654,6 +703,7 @@ local FLOOR = {
         toX = 0.5409,
         toY = 0.3103,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Archival Assault (map 2453)
@@ -668,6 +718,7 @@ local FLOOR = {
         toX = 0.615,
         toY = 0.2123,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Archival Assault (map 2454)
@@ -682,6 +733,7 @@ local FLOOR = {
         toX = 0.5238,
         toY = 0.5972,
         type = "floor",
+        travelDuration = 5,
     },
     -- Archival Assault (map 2454 49.34,54.84) -> Archival Assault (map 2455 41.94,50.37) via floor
     {
@@ -694,6 +746,7 @@ local FLOOR = {
         toX = 0.4194,
         toY = 0.5037,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Archival Assault (map 2455)
@@ -708,6 +761,7 @@ local FLOOR = {
         toX = 0.4934,
         toY = 0.5484,
         type = "floor",
+        travelDuration = 5,
     },
     -- Archival Assault (map 2455 45.00,50.19) -> Archival Assault (map 2476 51.84,51.84) via floor
     {
@@ -720,6 +774,7 @@ local FLOOR = {
         toX = 0.5184,
         toY = 0.5184,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Archival Assault (map 2476)
@@ -734,6 +789,7 @@ local FLOOR = {
         toX = 0.45,
         toY = 0.5019,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Auchenai Crypts (map 256)
@@ -748,6 +804,7 @@ local FLOOR = {
         toX = 0.2277,
         toY = 0.1222,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Auchenai Crypts (map 257)
@@ -762,6 +819,7 @@ local FLOOR = {
         toX = 0.4467,
         toY = 0.1768,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Augurs' Terrace (map 2434)
@@ -776,6 +834,7 @@ local FLOOR = {
         toX = 0.4656,
         toY = 0.8221,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Azj-Kahet - Lower (map 2256)
@@ -820,6 +879,7 @@ local FLOOR = {
         toX = 0.706,
         toY = 0.316,
         type = "floor",
+        travelDuration = 5,
     },
     -- Azjol-Nerub (map 158 50.30,60.40) -> Azjol-Nerub (map 157 22.00,50.70) via floor
     {
@@ -832,6 +892,7 @@ local FLOOR = {
         toX = 0.22,
         toY = 0.507,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Azjol-Nerub (map 159)
@@ -846,6 +907,7 @@ local FLOOR = {
         toX = 0.41,
         toY = 0.373,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Azuremyst Isle (map 97)
@@ -860,6 +922,7 @@ local FLOOR = {
         toX = 0.5876,
         toY = 0.8537,
         type = "floor",
+        travelDuration = 5,
     },
     -- Azuremyst Isle (map 97 45.34,19.54) -> Azuremyst Isle (map 99 21.11,91.45) via floor
     {
@@ -872,6 +935,7 @@ local FLOOR = {
         toX = 0.2111,
         toY = 0.9145,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Badlands (map 15)
@@ -886,6 +950,7 @@ local FLOOR = {
         toX = 0.756,
         toY = 0.365,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ban'ethil Barrow Den (map 60)
@@ -900,6 +965,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.568,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 24.60,86.00) -> Teldrassil (map 60 52.60,15.50) via floor
     {
@@ -912,6 +978,7 @@ local FLOOR = {
         toX = 0.526,
         toY = 0.155,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 24.60,86.00) -> Teldrassil (map 60 54.20,36.50) via floor
     {
@@ -924,6 +991,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.365,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 24.60,86.00) -> Teldrassil (map 61 29.90,76.40) via floor
     {
@@ -936,6 +1004,7 @@ local FLOOR = {
         toX = 0.299,
         toY = 0.764,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 25.90,34.20) -> Teldrassil (map 60 38.80,56.80) via floor
     {
@@ -948,6 +1017,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.568,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 25.90,34.20) -> Teldrassil (map 60 52.60,15.50) via floor
     {
@@ -960,6 +1030,7 @@ local FLOOR = {
         toX = 0.526,
         toY = 0.155,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 38.80,56.80) -> Teldrassil (map 60 24.60,86.00) via floor
     {
@@ -972,6 +1043,7 @@ local FLOOR = {
         toX = 0.246,
         toY = 0.86,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 38.80,56.80) -> Teldrassil (map 60 25.90,34.20) via floor
     {
@@ -984,6 +1056,7 @@ local FLOOR = {
         toX = 0.259,
         toY = 0.342,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 38.80,56.80) -> Teldrassil (map 60 54.20,36.50) via floor
     {
@@ -996,6 +1069,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.365,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 52.60,15.50) -> Teldrassil (map 57 45.60,50.60) via floor
     {
@@ -1008,6 +1082,7 @@ local FLOOR = {
         toX = 0.456,
         toY = 0.506,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 52.60,15.50) -> Teldrassil (map 60 24.60,86.00) via floor
     {
@@ -1020,6 +1095,7 @@ local FLOOR = {
         toX = 0.246,
         toY = 0.86,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 52.60,15.50) -> Teldrassil (map 60 25.90,34.20) via floor
     {
@@ -1032,6 +1108,7 @@ local FLOOR = {
         toX = 0.259,
         toY = 0.342,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 52.60,15.50) -> Teldrassil (map 60 54.20,36.50) via floor
     {
@@ -1044,6 +1121,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.365,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 54.20,36.50) -> Teldrassil (map 60 24.60,86.00) via floor
     {
@@ -1056,6 +1134,7 @@ local FLOOR = {
         toX = 0.246,
         toY = 0.86,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 54.20,36.50) -> Teldrassil (map 60 38.80,56.80) via floor
     {
@@ -1068,6 +1147,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.568,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 54.20,36.50) -> Teldrassil (map 60 52.60,15.50) via floor
     {
@@ -1080,6 +1160,7 @@ local FLOOR = {
         toX = 0.526,
         toY = 0.155,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 60 54.20,36.50) -> Teldrassil (map 61 46.70,39.70) via floor
     {
@@ -1092,6 +1173,7 @@ local FLOOR = {
         toX = 0.467,
         toY = 0.397,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ban'ethil Barrow Den (map 61)
@@ -1106,6 +1188,7 @@ local FLOOR = {
         toX = 0.246,
         toY = 0.86,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 61 46.70,39.70) -> Teldrassil (map 60 54.20,36.50) via floor
     {
@@ -1118,6 +1201,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.365,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Barrows of Reverie (map 2254)
@@ -1132,6 +1216,7 @@ local FLOOR = {
         toX = 0.6347,
         toY = 0.7171,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Bastion (map 1533)
@@ -1146,6 +1231,7 @@ local FLOOR = {
         toX = 0.2568,
         toY = 0.8878,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -1173,6 +1259,7 @@ local FLOOR = {
         toX = 0.4804,
         toY = 0.9071,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1352)
@@ -1187,6 +1274,7 @@ local FLOOR = {
         toX = 0.4214,
         toY = 0.8665,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1353)
@@ -1201,6 +1289,7 @@ local FLOOR = {
         toX = 0.4744,
         toY = 0.1553,
         type = "floor",
+        travelDuration = 5,
     },
     -- Battle of Dazar'alor (map 1353 42.14,86.65) -> Battle of Dazar'alor (map 1352 49.09,11.84) via floor
     {
@@ -1213,6 +1302,7 @@ local FLOOR = {
         toX = 0.4909,
         toY = 0.1184,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1354)
@@ -1227,6 +1317,7 @@ local FLOOR = {
         toX = 0.3337,
         toY = 0.087,
         type = "floor",
+        travelDuration = 5,
     },
     -- Battle of Dazar'alor (map 1354 64.19,80.61) -> Battle of Dazar'alor (map 1356 64.82,70.72) via floor
     {
@@ -1239,6 +1330,7 @@ local FLOOR = {
         toX = 0.6482,
         toY = 0.7072,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1356)
@@ -1253,6 +1345,7 @@ local FLOOR = {
         toX = 0.4744,
         toY = 0.4253,
         type = "floor",
+        travelDuration = 5,
     },
     -- Battle of Dazar'alor (map 1356 64.82,70.72) -> Battle of Dazar'alor (map 1354 64.19,80.61) via floor
     {
@@ -1265,6 +1358,7 @@ local FLOOR = {
         toX = 0.6419,
         toY = 0.8061,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1357)
@@ -1279,6 +1373,7 @@ local FLOOR = {
         toX = 0.4893,
         toY = 0.7517,
         type = "floor",
+        travelDuration = 5,
     },
     -- Battle of Dazar'alor (map 1357 47.44,42.53) -> Battle of Dazar'alor (map 1356 36.14,58.85) via floor
     {
@@ -1291,6 +1386,7 @@ local FLOOR = {
         toX = 0.3614,
         toY = 0.5885,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Battle of Dazar'alor (map 1358)
@@ -1305,6 +1401,7 @@ local FLOOR = {
         toX = 0.4738,
         toY = 0.1642,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 339)
@@ -1319,6 +1416,7 @@ local FLOOR = {
         toX = 0.2958,
         toY = 0.1961,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 339 63.09,45.70) -> Black Temple (map 341 24.31,50.07) via floor
     {
@@ -1331,6 +1429,7 @@ local FLOOR = {
         toX = 0.2431,
         toY = 0.5007,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 340)
@@ -1345,6 +1444,7 @@ local FLOOR = {
         toX = 0.2802,
         toY = 0.7429,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 341)
@@ -1359,6 +1459,7 @@ local FLOOR = {
         toX = 0.6309,
         toY = 0.457,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 341 26.28,21.71) -> Black Temple (map 344 8.40,59.62) via floor
     {
@@ -1371,6 +1472,7 @@ local FLOOR = {
         toX = 0.084,
         toY = 0.5962,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 341 58.48,91.11) -> Black Temple (map 343 66.89,68.26) via floor
     {
@@ -1383,6 +1485,7 @@ local FLOOR = {
         toX = 0.6689,
         toY = 0.6826,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 341 61.32,34.65) -> Black Temple (map 342 64.35,39.46) via floor
     {
@@ -1395,6 +1498,7 @@ local FLOOR = {
         toX = 0.6435,
         toY = 0.3946,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 342)
@@ -1409,6 +1513,7 @@ local FLOOR = {
         toX = 0.6132,
         toY = 0.3465,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 343)
@@ -1423,6 +1528,7 @@ local FLOOR = {
         toX = 0.5848,
         toY = 0.9111,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 344)
@@ -1437,6 +1543,7 @@ local FLOOR = {
         toX = 0.2628,
         toY = 0.2171,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 344 67.17,51.10) -> Black Temple (map 345 69.01,16.15) via floor
     {
@@ -1449,6 +1556,7 @@ local FLOOR = {
         toX = 0.6901,
         toY = 0.1615,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 345)
@@ -1463,6 +1571,7 @@ local FLOOR = {
         toX = 0.5269,
         toY = 0.2084,
         type = "floor",
+        travelDuration = 5,
     },
     -- Black Temple (map 345 69.01,16.15) -> Black Temple (map 344 67.17,51.10) via floor
     {
@@ -1475,6 +1584,7 @@ local FLOOR = {
         toX = 0.6717,
         toY = 0.511,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Black Temple (map 346)
@@ -1489,6 +1599,7 @@ local FLOOR = {
         toX = 0.4672,
         toY = 0.35,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackfathom Deeps (map 221)
@@ -1503,6 +1614,7 @@ local FLOOR = {
         toX = 0.3921,
         toY = 0.3165,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackfathom Deeps (map 222)
@@ -1517,6 +1629,7 @@ local FLOOR = {
         toX = 0.6151,
         toY = 0.7188,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackfathom Deeps (map 222 47.24,79.12) -> Blackfathom Deeps (map 223 43.60,61.06) via floor
     {
@@ -1529,6 +1642,7 @@ local FLOOR = {
         toX = 0.436,
         toY = 0.6106,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackfathom Deeps (map 223)
@@ -1543,6 +1657,7 @@ local FLOOR = {
         toX = 0.4724,
         toY = 0.7912,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Caverns (map 283)
@@ -1557,6 +1672,7 @@ local FLOOR = {
         toX = 0.2937,
         toY = 0.1313,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Caverns (map 283 52.05,20.12) -> Blackrock Caverns (map 284 29.97,17.32) via floor
     {
@@ -1569,6 +1685,7 @@ local FLOOR = {
         toX = 0.2997,
         toY = 0.1732,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Caverns (map 284)
@@ -1583,6 +1700,7 @@ local FLOOR = {
         toX = 0.4993,
         toY = 0.1298,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Depths (map 242)
@@ -1597,6 +1715,7 @@ local FLOOR = {
         toX = 0.418,
         toY = 0.924,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 41.60,39.10) -> Blackrock Depths (map 243 41.40,68.10) via floor
     {
@@ -1609,6 +1728,7 @@ local FLOOR = {
         toX = 0.414,
         toY = 0.681,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 42.50,46.30) -> Blackrock Depths (map 243 42.30,73.60) via floor
     {
@@ -1621,6 +1741,7 @@ local FLOOR = {
         toX = 0.423,
         toY = 0.736,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 45.00,64.30) -> Blackrock Depths (map 243 44.50,91.10) via floor
     {
@@ -1633,6 +1754,7 @@ local FLOOR = {
         toX = 0.445,
         toY = 0.911,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 45.40,63.10) -> Blackrock Depths (map 243 44.60,90.00) via floor
     {
@@ -1645,6 +1767,7 @@ local FLOOR = {
         toX = 0.446,
         toY = 0.9,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 46.60,52.50) -> Blackrock Depths (map 243 47.50,81.10) via floor
     {
@@ -1657,6 +1780,7 @@ local FLOOR = {
         toX = 0.475,
         toY = 0.811,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 53.00,31.80) -> Blackrock Depths (map 243 53.00,61.50) via floor
     {
@@ -1669,6 +1793,7 @@ local FLOOR = {
         toX = 0.53,
         toY = 0.615,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 54.00,27.00) -> Blackrock Depths (map 243 53.20,55.60) via floor
     {
@@ -1681,6 +1806,7 @@ local FLOOR = {
         toX = 0.532,
         toY = 0.556,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 54.80,62.90) -> Blackrock Depths (map 243 55.20,89.90) via floor
     {
@@ -1693,6 +1819,7 @@ local FLOOR = {
         toX = 0.552,
         toY = 0.899,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 55.00,35.60) -> Blackrock Depths (map 243 54.20,65.60) via floor
     {
@@ -1705,6 +1832,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.656,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 56.90,51.30) -> Blackrock Depths (map 243 56.40,77.50) via floor
     {
@@ -1717,6 +1845,7 @@ local FLOOR = {
         toX = 0.564,
         toY = 0.775,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 57.30,57.10) -> Blackrock Depths (map 243 56.90,85.70) via floor
     {
@@ -1729,6 +1858,7 @@ local FLOOR = {
         toX = 0.569,
         toY = 0.857,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 58.70,34.40) -> Blackrock Depths (map 243 58.90,64.70) via floor
     {
@@ -1741,6 +1871,7 @@ local FLOOR = {
         toX = 0.589,
         toY = 0.647,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 59.80,30.90) -> Blackrock Depths (map 243 59.90,60.10) via floor
     {
@@ -1753,6 +1884,7 @@ local FLOOR = {
         toX = 0.599,
         toY = 0.601,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 242 67.00,26.30) -> Blackrock Depths (map 243 64.90,57.10) via floor
     {
@@ -1765,6 +1897,7 @@ local FLOOR = {
         toX = 0.649,
         toY = 0.571,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Depths (map 243)
@@ -1779,6 +1912,7 @@ local FLOOR = {
         toX = 0.416,
         toY = 0.391,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 41.80,92.40) -> Blackrock Depths (map 242 40.70,67.10) via floor
     {
@@ -1791,6 +1925,7 @@ local FLOOR = {
         toX = 0.407,
         toY = 0.671,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 42.30,73.60) -> Blackrock Depths (map 242 42.50,46.30) via floor
     {
@@ -1803,6 +1938,7 @@ local FLOOR = {
         toX = 0.425,
         toY = 0.463,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 44.50,91.10) -> Blackrock Depths (map 242 45.00,64.30) via floor
     {
@@ -1815,6 +1951,7 @@ local FLOOR = {
         toX = 0.45,
         toY = 0.643,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 44.60,90.00) -> Blackrock Depths (map 242 45.40,63.10) via floor
     {
@@ -1827,6 +1964,7 @@ local FLOOR = {
         toX = 0.454,
         toY = 0.631,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 47.50,81.10) -> Blackrock Depths (map 242 46.60,52.50) via floor
     {
@@ -1839,6 +1977,7 @@ local FLOOR = {
         toX = 0.466,
         toY = 0.525,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 53.00,61.50) -> Blackrock Depths (map 242 53.00,31.80) via floor
     {
@@ -1851,6 +1990,7 @@ local FLOOR = {
         toX = 0.53,
         toY = 0.318,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 53.20,55.60) -> Blackrock Depths (map 242 54.00,27.00) via floor
     {
@@ -1863,6 +2003,7 @@ local FLOOR = {
         toX = 0.54,
         toY = 0.27,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 54.20,65.60) -> Blackrock Depths (map 242 55.00,35.60) via floor
     {
@@ -1875,6 +2016,7 @@ local FLOOR = {
         toX = 0.55,
         toY = 0.356,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 55.20,89.90) -> Blackrock Depths (map 242 54.80,62.90) via floor
     {
@@ -1887,6 +2029,7 @@ local FLOOR = {
         toX = 0.548,
         toY = 0.629,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 56.40,77.50) -> Blackrock Depths (map 242 56.90,51.30) via floor
     {
@@ -1899,6 +2042,7 @@ local FLOOR = {
         toX = 0.569,
         toY = 0.513,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 56.90,85.70) -> Blackrock Depths (map 242 57.30,57.10) via floor
     {
@@ -1911,6 +2055,7 @@ local FLOOR = {
         toX = 0.573,
         toY = 0.571,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 58.90,64.70) -> Blackrock Depths (map 242 58.70,34.40) via floor
     {
@@ -1923,6 +2068,7 @@ local FLOOR = {
         toX = 0.587,
         toY = 0.344,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 59.90,60.10) -> Blackrock Depths (map 242 59.80,30.90) via floor
     {
@@ -1935,6 +2081,7 @@ local FLOOR = {
         toX = 0.598,
         toY = 0.309,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Depths (map 243 64.90,57.10) -> Blackrock Depths (map 242 67.00,26.30) via floor
     {
@@ -1947,6 +2094,7 @@ local FLOOR = {
         toX = 0.67,
         toY = 0.263,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Mountain (map 33)
@@ -1961,6 +2109,7 @@ local FLOOR = {
         toX = 0.582,
         toY = 0.885,
         type = "floor",
+        travelDuration = 5,
     },
     -- Burning Steppes (map 33 49.50,88.66) -> Burning Steppes (map 36 21.00,38.00) via floor
     {
@@ -1973,6 +2122,7 @@ local FLOOR = {
         toX = 0.21,
         toY = 0.38,
         type = "floor",
+        travelDuration = 5,
     },
     -- Burning Steppes (map 33 66.80,60.70) -> Burning Steppes (map 34 41.70,79.60) via floor
     {
@@ -1985,6 +2135,7 @@ local FLOOR = {
         toX = 0.417,
         toY = 0.796,
         type = "floor",
+        travelDuration = 5,
     },
     -- Burning Steppes (map 33 72.00,43.20) -> Burning Steppes (map 34 60.50,27.80) via floor
     {
@@ -1997,6 +2148,7 @@ local FLOOR = {
         toX = 0.605,
         toY = 0.278,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Mountain (map 34)
@@ -2011,6 +2163,7 @@ local FLOOR = {
         toX = 0.668,
         toY = 0.607,
         type = "floor",
+        travelDuration = 5,
     },
     -- Burning Steppes (map 34 60.50,27.80) -> Burning Steppes (map 33 72.00,43.20) via floor
     {
@@ -2023,6 +2176,7 @@ local FLOOR = {
         toX = 0.72,
         toY = 0.432,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Mountain (map 35)
@@ -2037,6 +2191,7 @@ local FLOOR = {
         toX = 0.468,
         toY = 0.508,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 250)
@@ -2051,6 +2206,7 @@ local FLOOR = {
         toX = 0.584,
         toY = 0.477,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 250 59.40,63.90) -> Blackrock Spire (map 251 59.50,59.30) via floor
     {
@@ -2063,6 +2219,7 @@ local FLOOR = {
         toX = 0.595,
         toY = 0.593,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 250 59.80,70.20) -> Blackrock Spire (map 251 64.80,70.90) via floor
     {
@@ -2075,6 +2232,7 @@ local FLOOR = {
         toX = 0.648,
         toY = 0.709,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 250 66.10,51.10) -> Blackrock Spire (map 252 66.00,49.20) via floor
     {
@@ -2087,6 +2245,7 @@ local FLOOR = {
         toX = 0.66,
         toY = 0.492,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 251)
@@ -2101,6 +2260,7 @@ local FLOOR = {
         toX = 0.499,
         toY = 0.741,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 251 53.20,52.80) -> Blackrock Spire (map 252 57.00,51.20) via floor
     {
@@ -2113,6 +2273,7 @@ local FLOOR = {
         toX = 0.57,
         toY = 0.512,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 251 59.50,59.30) -> Blackrock Spire (map 250 59.40,63.90) via floor
     {
@@ -2125,6 +2286,7 @@ local FLOOR = {
         toX = 0.594,
         toY = 0.639,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 251 64.80,70.90) -> Blackrock Spire (map 250 59.80,70.20) via floor
     {
@@ -2137,6 +2299,7 @@ local FLOOR = {
         toX = 0.598,
         toY = 0.702,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 252)
@@ -2151,6 +2314,7 @@ local FLOOR = {
         toX = 0.451,
         toY = 0.595,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 252 49.90,74.10) -> Blackrock Spire (map 251 51.10,74.20) via floor
     {
@@ -2163,6 +2327,7 @@ local FLOOR = {
         toX = 0.511,
         toY = 0.742,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 252 55.10,37.60) -> Blackrock Spire (map 253 47.20,42.70) via floor
     {
@@ -2175,6 +2340,7 @@ local FLOOR = {
         toX = 0.472,
         toY = 0.427,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 252 57.00,51.20) -> Blackrock Spire (map 251 53.20,52.80) via floor
     {
@@ -2187,6 +2353,7 @@ local FLOOR = {
         toX = 0.532,
         toY = 0.528,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 252 58.40,47.70) -> Blackrock Spire (map 250 56.70,48.30) via floor
     {
@@ -2199,6 +2366,7 @@ local FLOOR = {
         toX = 0.567,
         toY = 0.483,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 252 66.00,49.20) -> Blackrock Spire (map 250 66.10,51.10) via floor
     {
@@ -2211,6 +2379,7 @@ local FLOOR = {
         toX = 0.661,
         toY = 0.511,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 253)
@@ -2225,6 +2394,7 @@ local FLOOR = {
         toX = 0.371,
         toY = 0.321,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 253 45.10,59.50) -> Blackrock Spire (map 252 46.50,65.80) via floor
     {
@@ -2237,6 +2407,7 @@ local FLOOR = {
         toX = 0.465,
         toY = 0.658,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 253 47.20,42.70) -> Blackrock Spire (map 252 55.10,37.60) via floor
     {
@@ -2249,6 +2420,7 @@ local FLOOR = {
         toX = 0.551,
         toY = 0.376,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 254)
@@ -2263,6 +2435,7 @@ local FLOOR = {
         toX = 0.304,
         toY = 0.187,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackrock Spire (map 254 37.10,32.10) -> Blackrock Spire (map 253 37.20,34.20) via floor
     {
@@ -2275,6 +2448,7 @@ local FLOOR = {
         toX = 0.372,
         toY = 0.342,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackrock Spire (map 255)
@@ -2289,6 +2463,7 @@ local FLOOR = {
         toX = 0.333,
         toY = 0.133,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Descent (map 285)
@@ -2303,6 +2478,7 @@ local FLOOR = {
         toX = 0.474,
         toY = 0.898,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Descent (map 286)
@@ -2317,6 +2493,7 @@ local FLOOR = {
         toX = 0.469,
         toY = 0.421,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Lair (map 287)
@@ -2331,6 +2508,7 @@ local FLOOR = {
         toX = 0.44,
         toY = 0.229,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackwing Lair (map 287 45.40,27.70) -> Blackwing Lair (map 288 49.70,36.00) via floor
     {
@@ -2343,6 +2521,7 @@ local FLOOR = {
         toX = 0.497,
         toY = 0.36,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Lair (map 288)
@@ -2357,6 +2536,7 @@ local FLOOR = {
         toX = 0.376,
         toY = 0.112,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackwing Lair (map 288 49.40,80.30) -> Blackwing Lair (map 289 57.00,87.20) via floor
     {
@@ -2369,6 +2549,7 @@ local FLOOR = {
         toX = 0.57,
         toY = 0.872,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackwing Lair (map 288 49.70,36.00) -> Blackwing Lair (map 287 45.40,27.70) via floor
     {
@@ -2381,6 +2562,7 @@ local FLOOR = {
         toX = 0.454,
         toY = 0.277,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Lair (map 289)
@@ -2395,6 +2577,7 @@ local FLOOR = {
         toX = 0.22,
         toY = 0.609,
         type = "floor",
+        travelDuration = 5,
     },
     -- Blackwing Lair (map 289 57.00,87.20) -> Blackwing Lair (map 288 49.40,80.30) via floor
     {
@@ -2407,6 +2590,7 @@ local FLOOR = {
         toX = 0.494,
         toY = 0.803,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blackwing Lair (map 290)
@@ -2421,6 +2605,7 @@ local FLOOR = {
         toX = 0.31,
         toY = 0.375,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Blooming Foundry (map 2027)
@@ -2435,6 +2620,7 @@ local FLOOR = {
         toX = 0.6367,
         toY = 0.737,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Brackenhide Hollow (map 2096)
@@ -2449,6 +2635,7 @@ local FLOOR = {
         toX = 0.2516,
         toY = 0.5477,
         type = "floor",
+        travelDuration = 5,
     },
     -- Brackenhide Hollow (map 2096 74.24,58.14) -> Brackenhide Hollow (map 2106 25.16,54.77) via floor
     {
@@ -2461,6 +2648,7 @@ local FLOOR = {
         toX = 0.2516,
         toY = 0.5477,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Brackenhide Hollow (map 2106)
@@ -2475,6 +2663,7 @@ local FLOOR = {
         toX = 0.7173,
         toY = 0.4943,
         type = "floor",
+        travelDuration = 5,
     },
     -- Brackenhide Hollow (map 2106 25.16,54.77) -> Brackenhide Hollow (map 2096 74.24,58.14) via floor
     {
@@ -2487,6 +2676,7 @@ local FLOOR = {
         toX = 0.7424,
         toY = 0.5814,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Burning Blade Coven (map 2)
@@ -2501,6 +2691,7 @@ local FLOOR = {
         toX = 0.454,
         toY = 0.5621,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Burning Steppes (map 36)
@@ -2515,6 +2706,7 @@ local FLOOR = {
         toX = 0.495,
         toY = 0.8866,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Castle Nathria (map 1735)
@@ -2529,6 +2721,7 @@ local FLOOR = {
         toX = 0.4668,
         toY = 0.5334,
         type = "floor",
+        travelDuration = 5,
     },
     -- Castle Nathria (map 1735 51.82,53.44) -> Castle Nathria (map 1750 31.37,16.93) via floor
     {
@@ -2541,6 +2734,7 @@ local FLOOR = {
         toX = 0.3137,
         toY = 0.1693,
         type = "floor",
+        travelDuration = 5,
     },
     -- Castle Nathria (map 1735 58.87,90.57) -> Castle Nathria (map 1745 20.13,38.63) via floor
     {
@@ -2553,6 +2747,7 @@ local FLOOR = {
         toX = 0.2013,
         toY = 0.3863,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Castle Nathria (map 1744)
@@ -2567,6 +2762,7 @@ local FLOOR = {
         toX = 0.3173,
         toY = 0.4143,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Castle Nathria (map 1745)
@@ -2581,6 +2777,7 @@ local FLOOR = {
         toX = 0.5887,
         toY = 0.9057,
         type = "floor",
+        travelDuration = 5,
     },
     -- Castle Nathria (map 1745 52.53,91.10) -> Castle Nathria (map 1746 15.23,38.09) via floor
     {
@@ -2593,6 +2790,7 @@ local FLOOR = {
         toX = 0.1523,
         toY = 0.3809,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Castle Nathria (map 1746)
@@ -2607,6 +2805,7 @@ local FLOOR = {
         toX = 0.5253,
         toY = 0.911,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Castle Nathria (map 1750)
@@ -2621,6 +2820,7 @@ local FLOOR = {
         toX = 0.5182,
         toY = 0.5344,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Catalyst Wards (map 2066)
@@ -2635,6 +2835,7 @@ local FLOOR = {
         toX = 0.4957,
         toY = 0.778,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Cavern of Contemplation (map 2006)
@@ -2649,6 +2850,7 @@ local FLOOR = {
         toX = 0.6015,
         toY = 0.3197,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Cavern of Lost Spirits (map 555)
@@ -2663,6 +2865,7 @@ local FLOOR = {
         toX = 0.433,
         toY = 0.408,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Caverns of Time (map 74)
@@ -2677,6 +2880,7 @@ local FLOOR = {
         toX = 0.618,
         toY = 0.524,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 74 53.30,29.40) -> Tanaris (map 71 64.90,50.00) via floor
     {
@@ -2689,6 +2893,7 @@ local FLOOR = {
         toX = 0.649,
         toY = 0.5,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Caverns of Time (map 75)
@@ -2703,6 +2908,7 @@ local FLOOR = {
         toX = 0.368,
         toY = 0.75,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: City of Echoes (map 2357)
@@ -2717,6 +2923,7 @@ local FLOOR = {
         toX = 0.7154,
         toY = 0.2385,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: City of Echoes (map 2358)
@@ -2731,6 +2938,7 @@ local FLOOR = {
         toX = 0.1069,
         toY = 0.6266,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: City of Threads (map 2343)
@@ -2745,6 +2953,7 @@ local FLOOR = {
         toX = 0.4978,
         toY = 0.1363,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: City of Threads (map 2344)
@@ -2759,6 +2968,7 @@ local FLOOR = {
         toX = 0.6211,
         toY = 0.658,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Coldridge Pass (map 28)
@@ -2773,6 +2983,7 @@ local FLOOR = {
         toX = 0.411,
         toY = 0.7,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dun Morogh (map 28 60.60,11.00) -> Dun Morogh (map 27 42.70,64.10) via floor
     {
@@ -2785,6 +2996,7 @@ local FLOOR = {
         toX = 0.427,
         toY = 0.641,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Coldridge Valley (map 427)
@@ -2799,6 +3011,7 @@ local FLOOR = {
         toX = 0.144,
         toY = 0.501,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Collegiate Calamity (map 2577)
@@ -2813,6 +3026,7 @@ local FLOOR = {
         toX = 0.5043,
         toY = 0.2614,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Collegiate Calamity (map 2578)
@@ -2827,6 +3041,7 @@ local FLOOR = {
         toX = 0.3548,
         toY = 0.3268,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Court of Stars (map 761)
@@ -2841,6 +3056,7 @@ local FLOOR = {
         toX = 0.3842,
         toY = 0.4067,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Court of Stars (map 762)
@@ -2855,6 +3071,7 @@ local FLOOR = {
         toX = 0.6336,
         toY = 0.6591,
         type = "floor",
+        travelDuration = 5,
     },
     -- Court of Stars (map 762 47.80,39.54) -> Court of Stars (map 763 54.76,53.74) via floor
     {
@@ -2867,6 +3084,7 @@ local FLOOR = {
         toX = 0.5476,
         toY = 0.5374,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Court of Stars (map 763)
@@ -2881,6 +3099,7 @@ local FLOOR = {
         toX = 0.478,
         toY = 0.3954,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crossroads of Fate (map 2194)
@@ -2895,6 +3114,7 @@ local FLOOR = {
         toX = 0.7908,
         toY = 0.5638,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2194 56.48,55.77) -> Dawn of the Infinite (map 2195 59.35,77.91) via floor
     {
@@ -2907,6 +3127,7 @@ local FLOOR = {
         toX = 0.5935,
         toY = 0.7791,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crypt of the Denied (map 2639)
@@ -2921,6 +3142,7 @@ local FLOOR = {
         toX = 0.4548,
         toY = 0.7578,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crypt of the Disgraced (map 2644)
@@ -2935,6 +3157,7 @@ local FLOOR = {
         toX = 0.7471,
         toY = 0.627,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crypt of the Lost Mason (map 2643)
@@ -2949,6 +3172,7 @@ local FLOOR = {
         toX = 0.4946,
         toY = 0.3854,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crypt of the Lost Warrior (map 2641)
@@ -2963,6 +3187,7 @@ local FLOOR = {
         toX = 0.5295,
         toY = 0.3223,
         type = "floor",
+        travelDuration = 5,
     },
     -- Crypt of the Lost Warrior (map 2641 89.42,82.69) -> The Coiled Isle (map 2512 57.09,33.45) via floor
     {
@@ -2975,6 +3200,7 @@ local FLOOR = {
         toX = 0.5709,
         toY = 0.3345,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Crypts of the Eternal (map 2031)
@@ -2989,6 +3215,7 @@ local FLOOR = {
         toX = 0.659,
         toY = 0.2094,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dagger in the Dark (map 488)
@@ -3003,6 +3230,7 @@ local FLOOR = {
         toX = 0.259,
         toY = 0.138,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dagger in the Dark (map 488 50.30,39.50) -> Dagger in the Dark (map 489 61.30,82.90) via floor
     {
@@ -3015,6 +3243,7 @@ local FLOOR = {
         toX = 0.613,
         toY = 0.829,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dagger in the Dark (map 488 57.90,13.20) -> Dagger in the Dark (map 489 77.00,37.90) via floor
     {
@@ -3027,6 +3256,7 @@ local FLOOR = {
         toX = 0.77,
         toY = 0.379,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dagger in the Dark (map 489)
@@ -3041,6 +3271,7 @@ local FLOOR = {
         toX = 0.311,
         toY = 0.011,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dagger in the Dark (map 489 61.30,82.90) -> Dagger in the Dark (map 488 50.30,39.50) via floor
     {
@@ -3053,6 +3284,7 @@ local FLOOR = {
         toX = 0.503,
         toY = 0.395,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dagger in the Dark (map 489 77.00,37.90) -> Dagger in the Dark (map 488 57.90,13.20) via floor
     {
@@ -3065,6 +3297,7 @@ local FLOOR = {
         toX = 0.579,
         toY = 0.132,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dalaran (map 125)
@@ -3079,6 +3312,7 @@ local FLOOR = {
         toX = 0.344,
         toY = 0.434,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 125 38.80,45.10) -> Dalaran (map 126 34.30,43.30) via floor
     {
@@ -3091,6 +3325,7 @@ local FLOOR = {
         toX = 0.343,
         toY = 0.433,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 125 38.80,45.10) -> Dalaran (map 126 34.40,43.40) via floor
     {
@@ -3103,6 +3338,7 @@ local FLOOR = {
         toX = 0.344,
         toY = 0.434,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 125 38.80,45.10) -> Dalaran (map 126 64.30,48.60) via floor
     {
@@ -3115,6 +3351,7 @@ local FLOOR = {
         toX = 0.643,
         toY = 0.486,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 125 38.80,45.10) -> Dalaran (map 126 64.40,48.60) via floor
     {
@@ -3127,6 +3364,7 @@ local FLOOR = {
         toX = 0.644,
         toY = 0.486,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 125 48.10,32.70) -> Dalaran (map 126 44.30,25.20) via floor
     {
@@ -3167,6 +3405,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.451,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 126 34.40,43.40) -> Dalaran (map 125 35.00,45.30) via floor
     {
@@ -3179,6 +3418,7 @@ local FLOOR = {
         toX = 0.35,
         toY = 0.453,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 126 34.40,43.40) -> Dalaran (map 125 38.80,45.10) via floor
     {
@@ -3191,6 +3431,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.451,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 126 64.30,48.60) -> Dalaran (map 125 38.80,45.10) via floor
     {
@@ -3203,6 +3444,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.451,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran (map 126 64.30,48.60) -> Dalaran (map 125 60.20,47.70) via floor
     {
@@ -3228,6 +3470,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.451,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dalaran (map 2305)
@@ -3242,6 +3485,7 @@ local FLOOR = {
         toX = 0.1511,
         toY = 0.6911,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dalaran TWW (map 2305 41.21,59.40) -> Dalaran TWW (map 2306 29.10,54.75) via floor
     {
@@ -3254,6 +3498,7 @@ local FLOOR = {
         toX = 0.291,
         toY = 0.5475,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dalaran (map 2306)
@@ -3268,6 +3513,7 @@ local FLOOR = {
         toX = 0.4121,
         toY = 0.594,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dalaran (map 2307)
@@ -3282,6 +3528,7 @@ local FLOOR = {
         toX = 0.3891,
         toY = 0.374,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dalaran (map 626)
@@ -3296,6 +3543,7 @@ local FLOOR = {
         toX = 0.5283,
         toY = 0.7029,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3330,6 +3578,7 @@ local FLOOR = {
         toX = 0.1918,
         toY = 0.5714,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3352,6 +3601,7 @@ local FLOOR = {
         toX = 0.8705,
         toY = 0.7665,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3384,6 +3634,7 @@ local FLOOR = {
         toX = 0.7626,
         toY = 0.6847,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3408,6 +3659,7 @@ local FLOOR = {
         toX = 0.3433,
         toY = 0.456,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3430,6 +3682,7 @@ local FLOOR = {
         toX = 0.5985,
         toY = 0.4789,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -3454,6 +3707,7 @@ local FLOOR = {
         toX = 0.7298,
         toY = 0.58,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: De Other Side (map 1678)
@@ -3468,6 +3722,7 @@ local FLOOR = {
         toX = 0.5059,
         toY = 0.8822,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: De Other Side (map 1679)
@@ -3482,6 +3737,7 @@ local FLOOR = {
         toX = 0.2779,
         toY = 0.5818,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: De Other Side (map 1680)
@@ -3496,6 +3752,7 @@ local FLOOR = {
         toX = 0.8219,
         toY = 0.4824,
         type = "floor",
+        travelDuration = 5,
     },
     -- De Other Side (map 1680 50.59,88.22) -> De Other Side (map 1678 49.19,24.75) via floor
     {
@@ -3508,6 +3765,7 @@ local FLOOR = {
         toX = 0.4919,
         toY = 0.2475,
         type = "floor",
+        travelDuration = 5,
     },
     -- De Other Side (map 1680 72.98,58.00) -> De Other Side (map 1677 9.49,58.64) via floor
     {
@@ -3520,6 +3778,7 @@ local FLOOR = {
         toX = 0.0949,
         toY = 0.5864,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Deathknell (map 465)
@@ -3534,6 +3793,7 @@ local FLOOR = {
         toX = 0.873,
         toY = 0.52,
         type = "floor",
+        travelDuration = 5,
     },
     -- Deathknell (map 465 44.56,82.68) -> Tirisfal Glades (map 18 30.33,72.86) via floor
     {
@@ -3546,6 +3806,7 @@ local FLOOR = {
         toX = 0.3033,
         toY = 0.7286,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Deepholm (map 207)
@@ -3560,6 +3821,7 @@ local FLOOR = {
         toX = 0.3742,
         toY = 0.2393,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Deeprun Tram (map 499)
@@ -3574,6 +3836,7 @@ local FLOOR = {
         toX = 0.723,
         toY = 0.162,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Deeprun Tram (map 500)
@@ -3588,6 +3851,7 @@ local FLOOR = {
         toX = 0.5224,
         toY = 0.469,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Den of Nalorakk (map 2513)
@@ -3602,6 +3866,7 @@ local FLOOR = {
         toX = 0.4931,
         toY = 0.2027,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Den of Nalorakk (map 2514)
@@ -3616,6 +3881,7 @@ local FLOOR = {
         toX = 0.5084,
         toY = 0.3471,
         type = "floor",
+        travelDuration = 5,
     },
     -- Den of Nalorakk (map 2514 39.98,24.10) -> Den of Nalorakk (map 2564 50.84,34.71) via floor
     {
@@ -3628,6 +3894,7 @@ local FLOOR = {
         toX = 0.5084,
         toY = 0.3471,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Den of Nalorakk (map 2564)
@@ -3642,6 +3909,7 @@ local FLOOR = {
         toX = 0.5218,
         toY = 0.8813,
         type = "floor",
+        travelDuration = 5,
     },
     -- Den of Nalorakk (map 2564 50.84,34.71) -> Den of Nalorakk (map 2514 19.54,55.31) via floor
     {
@@ -3654,6 +3922,7 @@ local FLOOR = {
         toX = 0.1954,
         toY = 0.5531,
         type = "floor",
+        travelDuration = 5,
     },
     -- Den of Nalorakk (map 2564 50.84,34.71) -> Den of Nalorakk (map 2514 39.98,24.10) via floor
     {
@@ -3666,6 +3935,7 @@ local FLOOR = {
         toX = 0.3998,
         toY = 0.241,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Desolace (map 66)
@@ -3680,6 +3950,7 @@ local FLOOR = {
         toX = 0.2285,
         toY = 0.4346,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dire Maul (map 236)
@@ -3694,6 +3965,7 @@ local FLOOR = {
         toX = 0.4412,
         toY = 0.1338,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dire Maul (map 236 29.47,42.67) -> Dire Maul (map 238 75.94,39.95) via floor
     {
@@ -3706,6 +3978,7 @@ local FLOOR = {
         toX = 0.7594,
         toY = 0.3995,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dire Maul (map 236 31.69,72.04) -> Dire Maul (map 237 48.30,74.24) via floor
     {
@@ -3718,6 +3991,7 @@ local FLOOR = {
         toX = 0.483,
         toY = 0.7424,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dire Maul (map 236 39.22,34.98) -> Dire Maul (map 237 56.27,24.42) via floor
     {
@@ -3730,6 +4004,7 @@ local FLOOR = {
         toX = 0.5627,
         toY = 0.2442,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dire Maul (map 237)
@@ -3744,6 +4019,7 @@ local FLOOR = {
         toX = 0.2079,
         toY = 0.1909,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dire Maul (map 237 48.30,74.24) -> Dire Maul (map 236 31.69,72.04) via floor
     {
@@ -3756,6 +4032,7 @@ local FLOOR = {
         toX = 0.3169,
         toY = 0.7204,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dire Maul (map 237 56.27,24.42) -> Dire Maul (map 236 39.22,34.98) via floor
     {
@@ -3768,6 +4045,7 @@ local FLOOR = {
         toX = 0.3922,
         toY = 0.3498,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dire Maul (map 238)
@@ -3782,6 +4060,7 @@ local FLOOR = {
         toX = 0.2947,
         toY = 0.4267,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dire Maul (map 239)
@@ -3796,6 +4075,7 @@ local FLOOR = {
         toX = 0.6127,
         toY = 0.8267,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dire Maul (map 240)
@@ -3810,6 +4090,7 @@ local FLOOR = {
         toX = 0.4643,
         toY = 0.6358,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dragonskull Island (map 2150)
@@ -3824,6 +4105,7 @@ local FLOOR = {
         toX = 0.7446,
         toY = 0.3607,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dragonskull Island (map 2150 32.01,92.66) -> The Forbidden Reach (map 2151 76.67,37.79) via floor
     {
@@ -3836,6 +4118,7 @@ local FLOOR = {
         toX = 0.7667,
         toY = 0.3779,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Drak'Tharon Keep (map 160)
@@ -3850,6 +4133,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.715,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Drak'Tharon Keep (map 161)
@@ -3864,6 +4148,7 @@ local FLOOR = {
         toX = 0.644,
         toY = 0.716,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dun Morogh (map 27)
@@ -3878,6 +4163,7 @@ local FLOOR = {
         toX = 0.38,
         toY = 0.911,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dun Morogh (map 27 42.70,64.10) -> Dun Morogh (map 28 60.60,11.00) via floor
     {
@@ -3890,6 +4176,7 @@ local FLOOR = {
         toX = 0.606,
         toY = 0.11,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dun Morogh (map 27 48.90,52.60) -> Dun Morogh (map 29 60.40,77.00) via floor
     {
@@ -3902,6 +4189,7 @@ local FLOOR = {
         toX = 0.604,
         toY = 0.77,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dun Morogh (map 27 77.80,55.10) -> Dun Morogh (map 31 39.60,84.20) via floor
     {
@@ -3914,6 +4202,7 @@ local FLOOR = {
         toX = 0.396,
         toY = 0.842,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Durotar (map 1)
@@ -3928,6 +4217,7 @@ local FLOOR = {
         toX = 0.5287,
         toY = 0.2189,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 1 45.40,56.21) -> Durotar (map 2 72.48,89.43) via floor
     {
@@ -3940,6 +4230,7 @@ local FLOOR = {
         toX = 0.7248,
         toY = 0.8943,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 1 52.83,28.69) -> Durotar (map 6 49.95,91.36) via floor
     {
@@ -3952,6 +4243,7 @@ local FLOOR = {
         toX = 0.4995,
         toY = 0.9136,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 1 54.99,9.67) -> Durotar (map 5 84.13,53.61) via floor
     {
@@ -3964,6 +4256,7 @@ local FLOOR = {
         toX = 0.8413,
         toY = 0.5361,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 1 58.94,58.31) -> Durotar (map 3 34.55,52.42) via floor
     {
@@ -3976,6 +4269,7 @@ local FLOOR = {
         toX = 0.3455,
         toY = 0.5242,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 1 59.65,57.68) -> Durotar (map 4 58.23,21.18) via floor
     {
@@ -3988,6 +4282,7 @@ local FLOOR = {
         toX = 0.5823,
         toY = 0.2118,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Dustwind Cave (map 6)
@@ -4002,6 +4297,7 @@ local FLOOR = {
         toX = 0.5283,
         toY = 0.2869,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Eastern Plaguelands (map 23)
@@ -4016,6 +4312,7 @@ local FLOOR = {
         toX = 0.406,
         toY = 0.9163,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Echo Isles (map 463)
@@ -4030,6 +4327,7 @@ local FLOOR = {
         toX = 0.5416,
         toY = 0.8012,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Elor'shan (map 686)
@@ -4044,6 +4342,7 @@ local FLOOR = {
         toX = 0.6595,
         toY = 0.4206,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Elwynn Forest (map 37)
@@ -4058,6 +4357,7 @@ local FLOOR = {
         toX = 0.352,
         toY = 0.684,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elwynn Forest (map 37 38.90,82.30) -> Elwynn Forest (map 38 39.90,88.00) via floor
     {
@@ -4070,6 +4370,7 @@ local FLOOR = {
         toX = 0.399,
         toY = 0.88,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elwynn Forest (map 37 61.70,53.70) -> Elwynn Forest (map 40 48.90,90.10) via floor
     {
@@ -4082,6 +4383,7 @@ local FLOOR = {
         toX = 0.489,
         toY = 0.901,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Elysian Hold (map 1707)
@@ -4096,6 +4398,7 @@ local FLOOR = {
         toX = 0.5312,
         toY = 0.4576,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elysian Hold (map 1707 53.12,45.76) -> Elysian Hold (map 1707 50.86,49.18) via floor
     {
@@ -4108,6 +4411,7 @@ local FLOOR = {
         toX = 0.5086,
         toY = 0.4918,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elysian Hold (map 1707 53.12,45.76) -> Elysian Hold (map 1708 55.68,42.09) via floor
     {
@@ -4120,6 +4424,7 @@ local FLOOR = {
         toX = 0.5568,
         toY = 0.4209,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Elysian Hold (map 1708)
@@ -4134,6 +4439,7 @@ local FLOOR = {
         toX = 0.5312,
         toY = 0.4576,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Emberstone Mine (map 180)
@@ -4148,6 +4454,7 @@ local FLOOR = {
         toX = 0.7644,
         toY = 0.3119,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Emerald Dream (map 2200)
@@ -4162,6 +4469,7 @@ local FLOOR = {
         toX = 0.7146,
         toY = 0.8804,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Emerald Dream (map 2200 63.47,71.71) -> Barrows of Reverie (map 2254 67.41,21.23) via floor
     {
@@ -4174,6 +4482,7 @@ local FLOOR = {
         toX = 0.6741,
         toY = 0.2123,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Etheric Vault (map 1649)
@@ -4188,6 +4497,7 @@ local FLOOR = {
         toX = 0.2445,
         toY = 0.3155,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Eversong Woods (map 2395)
@@ -4202,6 +4512,7 @@ local FLOOR = {
         toX = 0.886,
         toY = 0.3475,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Extractor's Sanatorium (map 1822)
@@ -4216,6 +4527,7 @@ local FLOOR = {
         toX = 0.2787,
         toY = 0.2052,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Fargodeep Mine (map 38)
@@ -4230,6 +4542,7 @@ local FLOOR = {
         toX = 0.389,
         toY = 0.823,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elwynn Forest (map 38 55.40,36.30) -> Elwynn Forest (map 39 56.30,26.00) via floor
     {
@@ -4242,6 +4555,7 @@ local FLOOR = {
         toX = 0.563,
         toY = 0.26,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Fargodeep Mine (map 39)
@@ -4256,6 +4570,7 @@ local FLOOR = {
         toX = 0.385,
         toY = 0.815,
         type = "floor",
+        travelDuration = 5,
     },
     -- Elwynn Forest (map 39 56.30,26.00) -> Elwynn Forest (map 38 55.40,36.30) via floor
     {
@@ -4268,6 +4583,7 @@ local FLOOR = {
         toX = 0.554,
         toY = 0.363,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Fel Rock (map 59)
@@ -4282,6 +4598,7 @@ local FLOOR = {
         toX = 0.545,
         toY = 0.463,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Firelands (map 368)
@@ -4296,6 +4613,7 @@ local FLOOR = {
         toX = 0.523,
         toY = 0.819,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Firelands (map 369)
@@ -4310,6 +4628,7 @@ local FLOOR = {
         toX = 0.497,
         toY = 0.01,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Forgotten Depths (map 2620)
@@ -4324,6 +4643,7 @@ local FLOOR = {
         toX = 0.2723,
         toY = 0.5612,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Forgotten Depths (map 2621)
@@ -4338,6 +4658,7 @@ local FLOOR = {
         toX = 0.3243,
         toY = 0.3745,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Frostmane Hold (map 470)
@@ -4352,6 +4673,7 @@ local FLOOR = {
         toX = 0.333,
         toY = 0.664,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Frostmane Hovel (map 428)
@@ -4366,6 +4688,7 @@ local FLOOR = {
         toX = 0.513,
         toY = 0.825,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Froststone Vault (map 2154)
@@ -4380,6 +4703,7 @@ local FLOOR = {
         toX = 0.6068,
         toY = 0.3791,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gate of the Setting Sun (map 437)
@@ -4394,6 +4718,7 @@ local FLOOR = {
         toX = 0.5,
         toY = 0.508,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gate of the Setting Sun (map 438)
@@ -4408,6 +4733,7 @@ local FLOOR = {
         toX = 0.463,
         toY = 0.331,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gilneas (map 179)
@@ -4422,6 +4748,7 @@ local FLOOR = {
         toX = 0.6689,
         toY = 0.5826,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gilneas (map 179 76.44,31.19) -> Gilneas (map 180 28.91,67.78) via floor
     {
@@ -4434,6 +4761,7 @@ local FLOOR = {
         toX = 0.2891,
         toY = 0.6778,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gnomeregan (map 226)
@@ -4448,6 +4776,7 @@ local FLOOR = {
         toX = 0.6173,
         toY = 0.6155,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gnomeregan (map 226 47.05,86.94) -> Gnomeregan (map 227 75.38,74.06) via floor
     {
@@ -4460,6 +4789,7 @@ local FLOOR = {
         toX = 0.7538,
         toY = 0.7406,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gnomeregan (map 226 57.67,50.98) -> Gnomeregan (map 227 81.36,46.02) via floor
     {
@@ -4472,6 +4802,7 @@ local FLOOR = {
         toX = 0.8136,
         toY = 0.4602,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gnomeregan (map 227)
@@ -4486,6 +4817,7 @@ local FLOOR = {
         toX = 0.386,
         toY = 0.5033,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gnomeregan (map 227 61.73,61.55) -> Gnomeregan (map 226 34.33,61.78) via floor
     {
@@ -4498,6 +4830,7 @@ local FLOOR = {
         toX = 0.3433,
         toY = 0.6178,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gnomeregan (map 227 75.38,74.06) -> Gnomeregan (map 226 47.05,86.94) via floor
     {
@@ -4510,6 +4843,7 @@ local FLOOR = {
         toX = 0.4705,
         toY = 0.8694,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gnomeregan (map 228)
@@ -4524,6 +4858,7 @@ local FLOOR = {
         toX = 0.3521,
         toY = 0.8808,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gnomeregan (map 228 48.26,71.95) -> Gnomeregan (map 229 71.25,77.54) via floor
     {
@@ -4536,6 +4871,7 @@ local FLOOR = {
         toX = 0.7125,
         toY = 0.7754,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gnomeregan (map 229)
@@ -4550,6 +4886,7 @@ local FLOOR = {
         toX = 0.4826,
         toY = 0.7195,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gol Thovas (map 1171)
@@ -4564,6 +4901,7 @@ local FLOOR = {
         toX = 0.6288,
         toY = 0.2737,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tiragarde Sound (map 1171 50.95,47.91) -> Tiragarde Sound (map 1172 36.75,55.63) via floor
     {
@@ -4576,6 +4914,7 @@ local FLOOR = {
         toX = 0.3675,
         toY = 0.5563,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gol Thovas (map 1172)
@@ -4590,6 +4929,7 @@ local FLOOR = {
         toX = 0.5095,
         toY = 0.4791,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gol'Bolar Quarry (map 31)
@@ -4604,6 +4944,7 @@ local FLOOR = {
         toX = 0.778,
         toY = 0.551,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gravid Repose (map 2029)
@@ -4618,6 +4959,7 @@ local FLOOR = {
         toX = 0.5057,
         toY = 0.3208,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Greymane Manor (map 181)
@@ -4632,6 +4974,7 @@ local FLOOR = {
         toX = 0.567,
         toY = 0.475,
         type = "floor",
+        travelDuration = 5,
     },
     -- Gilneas (map 181 66.89,58.26) -> Gilneas (map 179 29.03,51.66) via floor
     {
@@ -4644,6 +4987,7 @@ local FLOOR = {
         toX = 0.2903,
         toY = 0.5166,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Greymane Manor (map 182)
@@ -4658,6 +5002,7 @@ local FLOOR = {
         toX = 0.61,
         toY = 0.475,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gromit Hollow (map 2007)
@@ -4672,6 +5017,7 @@ local FLOOR = {
         toX = 0.3015,
         toY = 0.5513,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gulf of Memory (map 2505)
@@ -4686,6 +5032,7 @@ local FLOOR = {
         toX = 0.5122,
         toY = 0.6015,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Gulf of Memory (map 2575)
@@ -4700,6 +5047,7 @@ local FLOOR = {
         toX = 0.444,
         toY = 0.7765,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Guo-Lai Halls (map 395)
@@ -4714,6 +5062,7 @@ local FLOOR = {
         toX = 0.222,
         toY = 0.263,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Hall of the Guardian (map 734)
@@ -4728,6 +5077,7 @@ local FLOOR = {
         toX = 0.5832,
         toY = 0.6516,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -4752,6 +5102,7 @@ local FLOOR = {
         toX = 0.5964,
         toY = 0.6014,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -4776,6 +5127,7 @@ local FLOOR = {
         toX = 0.5793,
         toY = 0.7908,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls Of Infusion (map 2083)
@@ -4790,6 +5142,7 @@ local FLOOR = {
         toX = 0.6341,
         toY = 0.7961,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls Of Valor (map 2230)
@@ -4804,6 +5157,7 @@ local FLOOR = {
         toX = 0.5135,
         toY = 0.0634,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls Of Valor (map 2231)
@@ -4818,6 +5172,7 @@ local FLOOR = {
         toX = 0.4772,
         toY = 0.7174,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Atonement (map 1663)
@@ -4832,6 +5187,7 @@ local FLOOR = {
         toX = 0.8398,
         toY = 0.5022,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Atonement (map 1664)
@@ -4846,6 +5202,7 @@ local FLOOR = {
         toX = 0.7143,
         toY = 0.4921,
         type = "floor",
+        travelDuration = 5,
     },
     -- Halls of Atonement (map 1664 83.98,50.22) -> Halls of Atonement (map 1663 23.06,53.91) via floor
     {
@@ -4858,6 +5215,7 @@ local FLOOR = {
         toX = 0.2306,
         toY = 0.5391,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Atonement (map 1665)
@@ -4872,6 +5230,7 @@ local FLOOR = {
         toX = 0.1918,
         toY = 0.3784,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Lightning (map 138)
@@ -4886,6 +5245,7 @@ local FLOOR = {
         toX = 0.57,
         toY = 0.213,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Lightning (map 139)
@@ -4900,6 +5260,7 @@ local FLOOR = {
         toX = 0.89,
         toY = 0.538,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Origination (map 1540)
@@ -4914,6 +5275,7 @@ local FLOOR = {
         toX = 0.2468,
         toY = 0.4939,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Origination (map 1541)
@@ -4928,6 +5290,7 @@ local FLOOR = {
         toX = 0.8982,
         toY = 0.4978,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Origination (map 297)
@@ -4942,6 +5305,7 @@ local FLOOR = {
         toX = 0.459,
         toY = 0.476,
         type = "floor",
+        travelDuration = 5,
     },
     -- Halls of Origination (map 297 67.50,52.60) -> Halls of Origination (map 298 66.70,48.50) via floor
     {
@@ -4954,6 +5318,7 @@ local FLOOR = {
         toX = 0.667,
         toY = 0.485,
         type = "floor",
+        travelDuration = 5,
     },
     -- Halls of Origination (map 297 89.70,49.80) -> Halls of Origination (map 298 24.90,49.40) via floor
     {
@@ -4966,6 +5331,7 @@ local FLOOR = {
         toX = 0.249,
         toY = 0.494,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Origination (map 298)
@@ -4980,6 +5346,7 @@ local FLOOR = {
         toX = 0.897,
         toY = 0.498,
         type = "floor",
+        travelDuration = 5,
     },
     -- Halls of Origination (map 298 66.70,48.50) -> Halls of Origination (map 297 67.50,52.60) via floor
     {
@@ -4992,6 +5359,7 @@ local FLOOR = {
         toX = 0.675,
         toY = 0.526,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Halls of Origination (map 299)
@@ -5006,6 +5374,7 @@ local FLOOR = {
         toX = 0.665,
         toY = 0.483,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Harandar (map 2413)
@@ -5020,6 +5389,7 @@ local FLOOR = {
         toX = 0.3191,
         toY = 0.8585,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Heart of Fear (map 474)
@@ -5034,6 +5404,7 @@ local FLOOR = {
         toX = 0.663,
         toY = 0.272,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Heart of Fear (map 475)
@@ -5048,6 +5419,7 @@ local FLOOR = {
         toX = 0.321,
         toY = 0.163,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Heart of the Forest (map 1701)
@@ -5062,6 +5434,7 @@ local FLOOR = {
         toX = 0.4581,
         toY = 0.7175,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Heart of the Forest (map 1702)
@@ -5076,6 +5449,7 @@ local FLOOR = {
         toX = 0.4523,
         toY = 0.4701,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Highmountain (map 650)
@@ -5090,6 +5464,7 @@ local FLOOR = {
         toX = 0.4272,
         toY = 0.0998,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -5119,6 +5494,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.28,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Highmountain (map 870)
@@ -5133,6 +5509,7 @@ local FLOOR = {
         toX = 0.3373,
         toY = 0.3675,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Hour of Twilight (map 399)
@@ -5147,6 +5524,7 @@ local FLOOR = {
         toX = 0.493,
         toY = 0.83,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Hour of Twilight (map 400)
@@ -5161,6 +5539,7 @@ local FLOOR = {
         toX = 0.493,
         toY = 0.817,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Howlingwind Cavern (map 380)
@@ -5175,6 +5554,7 @@ local FLOOR = {
         toX = 0.591,
         toY = 0.525,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 186)
@@ -5189,6 +5569,7 @@ local FLOOR = {
         toX = 0.456,
         toY = 0.8481,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 187)
@@ -5203,6 +5584,7 @@ local FLOOR = {
         toX = 0.3907,
         toY = 0.8575,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 187 45.62,73.77) -> Icecrown Citadel (map 188 51.33,83.92) via floor
     {
@@ -5215,6 +5597,7 @@ local FLOOR = {
         toX = 0.5133,
         toY = 0.8392,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 188)
@@ -5229,6 +5612,7 @@ local FLOOR = {
         toX = 0.4562,
         toY = 0.7377,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 188 51.85,19.20) -> Icecrown Citadel (map 190 51.85,83.82) via floor
     {
@@ -5241,6 +5625,7 @@ local FLOOR = {
         toX = 0.5185,
         toY = 0.8382,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 189)
@@ -5255,6 +5640,7 @@ local FLOOR = {
         toX = 0.7671,
         toY = 0.919,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 189 50.50,33.31) -> Icecrown Citadel (map 190 85.91,53.55) via floor
     {
@@ -5267,6 +5653,7 @@ local FLOOR = {
         toX = 0.8591,
         toY = 0.5355,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 190)
@@ -5281,6 +5668,7 @@ local FLOOR = {
         toX = 0.2319,
         toY = 0.3052,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 190 51.85,83.82) -> Icecrown Citadel (map 188 51.85,19.20) via floor
     {
@@ -5293,6 +5681,7 @@ local FLOOR = {
         toX = 0.5185,
         toY = 0.192,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 190 52.35,53.69) -> Icecrown Citadel (map 192 49.85,39.13) via floor
     {
@@ -5305,6 +5694,7 @@ local FLOOR = {
         toX = 0.4985,
         toY = 0.3913,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 190 60.68,17.31) -> Icecrown Citadel (map 191 78.82,31.45) via floor
     {
@@ -5317,6 +5707,7 @@ local FLOOR = {
         toX = 0.7882,
         toY = 0.3145,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 190 76.71,91.90) -> Icecrown Citadel (map 189 36.48,89.98) via floor
     {
@@ -5329,6 +5720,7 @@ local FLOOR = {
         toX = 0.3648,
         toY = 0.8998,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 190 85.91,53.55) -> Icecrown Citadel (map 189 50.50,33.31) via floor
     {
@@ -5341,6 +5733,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.3331,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 191)
@@ -5355,6 +5748,7 @@ local FLOOR = {
         toX = 0.4344,
         toY = 0.1666,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 191 50.65,69.26) -> Icecrown Citadel (map 190 51.82,32.29) via floor
     {
@@ -5367,6 +5761,7 @@ local FLOOR = {
         toX = 0.5182,
         toY = 0.3229,
         type = "floor",
+        travelDuration = 5,
     },
     -- Icecrown Citadel (map 191 78.82,31.45) -> Icecrown Citadel (map 190 60.68,17.31) via floor
     {
@@ -5379,6 +5774,7 @@ local FLOOR = {
         toX = 0.6068,
         toY = 0.1731,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Icecrown Citadel (map 192)
@@ -5393,6 +5789,7 @@ local FLOOR = {
         toX = 0.5235,
         toY = 0.5369,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Immemorial Battlefield (map 2197)
@@ -5407,6 +5804,7 @@ local FLOOR = {
         toX = 0.3759,
         toY = 0.8644,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Infested Tomb (map 2640)
@@ -5421,6 +5819,7 @@ local FLOOR = {
         toX = 0.4478,
         toY = 0.3006,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Infinite Conflux (map 2195)
@@ -5435,6 +5834,7 @@ local FLOOR = {
         toX = 0.5995,
         toY = 0.208,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2195 59.35,77.91) -> Dawn of the Infinite (map 2194 56.48,55.77) via floor
     {
@@ -5447,6 +5847,7 @@ local FLOOR = {
         toX = 0.5648,
         toY = 0.5577,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Isle of Quel'Danas (map 2424)
@@ -5461,6 +5862,7 @@ local FLOOR = {
         toX = 0.6422,
         toY = 0.8772,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Isle of Thunder (map 504)
@@ -5475,6 +5877,7 @@ local FLOOR = {
         toX = 0.317,
         toY = 0.817,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder (map 504 49.30,25.50) -> Isle of Thunder (map 505 38.80,27.10) via floor
     {
@@ -5487,6 +5890,7 @@ local FLOOR = {
         toX = 0.388,
         toY = 0.271,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder (map 504 54.60,29.10) -> Isle of Thunder (map 505 73.10,51.30) via floor
     {
@@ -5499,6 +5903,7 @@ local FLOOR = {
         toX = 0.731,
         toY = 0.513,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder (map 504 62.40,40.30) -> Isle of Thunder (map 506 66.10,77.90) via floor
     {
@@ -5511,6 +5916,7 @@ local FLOOR = {
         toX = 0.661,
         toY = 0.779,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Isle of Thunder (map 516)
@@ -5525,6 +5931,7 @@ local FLOOR = {
         toX = 0.315,
         toY = 0.82,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 516 49.27,25.52) -> Isle of Thunder Scenario (map 517 37.45,26.92) via floor
     {
@@ -5537,6 +5944,7 @@ local FLOOR = {
         toX = 0.3745,
         toY = 0.2692,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 516 54.60,29.10) -> Isle of Thunder Scenario (map 517 73.10,51.30) via floor
     {
@@ -5549,6 +5957,7 @@ local FLOOR = {
         toX = 0.731,
         toY = 0.513,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 516 62.40,40.30) -> Isle of Thunder Scenario (map 517 66.10,77.90) via floor
     {
@@ -5561,6 +5970,7 @@ local FLOOR = {
         toX = 0.661,
         toY = 0.779,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Jangolode Mine (map 54)
@@ -5575,6 +5985,7 @@ local FLOOR = {
         toX = 0.445,
         toY = 0.247,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Jasperlode Mine (map 40)
@@ -5589,6 +6000,7 @@ local FLOOR = {
         toX = 0.617,
         toY = 0.537,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kaja'mine (map 195)
@@ -5603,6 +6015,7 @@ local FLOOR = {
         toX = 0.709,
         toY = 0.765,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kaja'mine (map 196)
@@ -5617,6 +6030,7 @@ local FLOOR = {
         toX = 0.743,
         toY = 0.833,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kaja'mine (map 197)
@@ -5631,6 +6045,7 @@ local FLOOR = {
         toX = 0.656,
         toY = 0.867,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kaja'mite Cavern (map 175)
@@ -5645,6 +6060,7 @@ local FLOOR = {
         toX = 0.312,
         toY = 0.786,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 350)
@@ -5659,6 +6075,7 @@ local FLOOR = {
         toX = 0.472,
         toY = 0.291,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 350 38.30,78.60) -> Karazhan (map 351 29.10,80.80) via floor
     {
@@ -5671,6 +6088,7 @@ local FLOOR = {
         toX = 0.291,
         toY = 0.808,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 350 53.10,64.10) -> Karazhan (map 352 52.50,91.30) via floor
     {
@@ -5683,6 +6101,7 @@ local FLOOR = {
         toX = 0.525,
         toY = 0.913,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 351)
@@ -5697,6 +6116,7 @@ local FLOOR = {
         toX = 0.383,
         toY = 0.786,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 351 38.60,14.10) -> Karazhan (map 352 39.80,81.70) via floor
     {
@@ -5709,6 +6129,7 @@ local FLOOR = {
         toX = 0.398,
         toY = 0.817,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 352)
@@ -5723,6 +6144,7 @@ local FLOOR = {
         toX = 0.386,
         toY = 0.141,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 352 52.50,91.30) -> Karazhan (map 350 53.10,64.10) via floor
     {
@@ -5735,6 +6157,7 @@ local FLOOR = {
         toX = 0.531,
         toY = 0.641,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 352 67.00,42.40) -> Karazhan (map 353 67.90,42.90) via floor
     {
@@ -5747,6 +6170,7 @@ local FLOOR = {
         toX = 0.679,
         toY = 0.429,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 353)
@@ -5761,6 +6185,7 @@ local FLOOR = {
         toX = 0.454,
         toY = 0.837,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 353 47.20,29.10) -> Karazhan (map 350 37.60,12.80) via floor
     {
@@ -5773,6 +6198,7 @@ local FLOOR = {
         toX = 0.376,
         toY = 0.128,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 353 67.90,42.90) -> Karazhan (map 352 67.00,42.40) via floor
     {
@@ -5785,6 +6211,7 @@ local FLOOR = {
         toX = 0.67,
         toY = 0.424,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 354)
@@ -5799,6 +6226,7 @@ local FLOOR = {
         toX = 0.235,
         toY = 0.492,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 354 67.90,26.50) -> Karazhan (map 355 41.40,13.30) via floor
     {
@@ -5811,6 +6239,7 @@ local FLOOR = {
         toX = 0.414,
         toY = 0.133,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 355)
@@ -5825,6 +6254,7 @@ local FLOOR = {
         toX = 0.679,
         toY = 0.265,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 355 64.90,69.20) -> Karazhan (map 356 73.20,65.30) via floor
     {
@@ -5837,6 +6267,7 @@ local FLOOR = {
         toX = 0.732,
         toY = 0.653,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 356)
@@ -5851,6 +6282,7 @@ local FLOOR = {
         toX = 0.649,
         toY = 0.692,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 357)
@@ -5865,6 +6297,7 @@ local FLOOR = {
         toX = 0.615,
         toY = 0.192,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 358)
@@ -5879,6 +6312,7 @@ local FLOOR = {
         toX = 0.309,
         toY = 0.599,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 358 61.50,19.20) -> Karazhan (map 357 51.80,58.30) via floor
     {
@@ -5891,6 +6325,7 @@ local FLOOR = {
         toX = 0.518,
         toY = 0.583,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 359)
@@ -5905,6 +6340,7 @@ local FLOOR = {
         toX = 0.31,
         toY = 0.663,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 359 37.10,23.10) -> Karazhan (map 360 64.00,26.80) via floor
     {
@@ -5917,6 +6353,7 @@ local FLOOR = {
         toX = 0.64,
         toY = 0.268,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 359 58.80,56.00) -> Karazhan (map 361 47.00,56.00) via floor
     {
@@ -5929,6 +6366,7 @@ local FLOOR = {
         toX = 0.47,
         toY = 0.56,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 360)
@@ -5943,6 +6381,7 @@ local FLOOR = {
         toX = 0.371,
         toY = 0.231,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 361)
@@ -5957,6 +6396,7 @@ local FLOOR = {
         toX = 0.538,
         toY = 0.785,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 361 39.60,18.80) -> Karazhan (map 363 20.60,81.30) via floor
     {
@@ -5969,6 +6409,7 @@ local FLOOR = {
         toX = 0.206,
         toY = 0.813,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 361 47.00,56.00) -> Karazhan (map 359 58.80,56.00) via floor
     {
@@ -5981,6 +6422,7 @@ local FLOOR = {
         toX = 0.588,
         toY = 0.56,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 362)
@@ -5995,6 +6437,7 @@ local FLOOR = {
         toX = 0.259,
         toY = 0.613,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 363)
@@ -6009,6 +6452,7 @@ local FLOOR = {
         toX = 0.396,
         toY = 0.188,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 363 83.20,57.10) -> Karazhan (map 364 82.30,69.80) via floor
     {
@@ -6021,6 +6465,7 @@ local FLOOR = {
         toX = 0.823,
         toY = 0.698,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 364)
@@ -6035,6 +6480,7 @@ local FLOOR = {
         toX = 0.832,
         toY = 0.571,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 364 83.20,75.50) -> Karazhan (map 365 71.90,70.50) via floor
     {
@@ -6047,6 +6493,7 @@ local FLOOR = {
         toX = 0.719,
         toY = 0.705,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 365)
@@ -6061,6 +6508,7 @@ local FLOOR = {
         toX = 0.509,
         toY = 0.911,
         type = "floor",
+        travelDuration = 5,
     },
     -- Karazhan (map 365 71.90,70.50) -> Karazhan (map 364 83.20,75.50) via floor
     {
@@ -6073,6 +6521,7 @@ local FLOOR = {
         toX = 0.832,
         toY = 0.755,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Karazhan (map 366)
@@ -6087,6 +6536,7 @@ local FLOOR = {
         toX = 0.662,
         toY = 0.793,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kel'balor (map 687)
@@ -6101,6 +6551,7 @@ local FLOOR = {
         toX = 0.5936,
         toY = 0.4303,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kezan (map 194)
@@ -6115,6 +6566,7 @@ local FLOOR = {
         toX = 0.64,
         toY = 0.196,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kezan (map 194 70.90,76.50) -> Kezan (map 195 41.00,75.50) via floor
     {
@@ -6127,6 +6579,7 @@ local FLOOR = {
         toX = 0.41,
         toY = 0.755,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kezan (map 194 74.30,83.30) -> Kezan (map 196 32.90,31.00) via floor
     {
@@ -6139,6 +6592,7 @@ local FLOOR = {
         toX = 0.329,
         toY = 0.31,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kin's Rest (map 2645)
@@ -6153,6 +6607,7 @@ local FLOOR = {
         toX = 0.4468,
         toY = 0.3445,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Knucklethump Hole (map 382)
@@ -6167,6 +6622,7 @@ local FLOOR = {
         toX = 0.503,
         toY = 0.617,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Korthia (map 1961)
@@ -6181,6 +6637,7 @@ local FLOOR = {
         toX = 0.6579,
         toY = 0.3502,
         type = "floor",
+        travelDuration = 5,
     },
     -- Korthia (map 1961 40.04,25.94) -> The Maw (map 1543 51.53,90.46) via floor
     {
@@ -6193,6 +6650,7 @@ local FLOOR = {
         toX = 0.5153,
         toY = 0.9046,
         type = "floor",
+        travelDuration = 5,
     },
     -- Korthia (map 1961 58.48,13.67) -> The Maw (map 1543 65.61,80.80) via floor
     {
@@ -6205,6 +6663,7 @@ local FLOOR = {
         toX = 0.6561,
         toY = 0.808,
         type = "floor",
+        travelDuration = 5,
     },
     -- Korthia (map 1961 60.15,31.97) -> Caverns of Contemplation (map 2006 42.59,88.16) via floor
     {
@@ -6217,6 +6676,7 @@ local FLOOR = {
         toX = 0.4259,
         toY = 0.8816,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Krasarang Wilds (map 418)
@@ -6231,6 +6691,7 @@ local FLOOR = {
         toX = 0.3337,
         toY = 0.2227,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Krokuun (map 830)
@@ -6245,6 +6706,7 @@ local FLOOR = {
         toX = 0.6691,
         toY = 0.8627,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Kun-Lai Summit (map 379)
@@ -6259,6 +6721,7 @@ local FLOOR = {
         toX = 0.522,
         toY = 0.116,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 50.30,61.70) -> Kun-Lai Summit (map 382 74.90,91.50) via floor
     {
@@ -6271,6 +6734,7 @@ local FLOOR = {
         toX = 0.749,
         toY = 0.915,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 50.64,49.84) -> Kun-Lai Summit (map 385 59.39,86.63) via floor
     {
@@ -6283,6 +6747,7 @@ local FLOOR = {
         toX = 0.5939,
         toY = 0.8663,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 52.90,71.30) -> Kun-Lai Summit (map 383 56.50,15.90) via floor
     {
@@ -6295,6 +6760,7 @@ local FLOOR = {
         toX = 0.565,
         toY = 0.159,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 53.00,46.50) -> Kun-Lai Summit (map 385 88.30,54.80) via floor
     {
@@ -6307,6 +6773,7 @@ local FLOOR = {
         toX = 0.883,
         toY = 0.548,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 59.10,52.50) -> Kun-Lai Summit (map 380 66.90,82.30) via floor
     {
@@ -6319,6 +6786,7 @@ local FLOOR = {
         toX = 0.669,
         toY = 0.823,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 72.96,73.39) -> Kun-Lai Summit (map 381 16.69,34.49) via floor
     {
@@ -6331,6 +6799,7 @@ local FLOOR = {
         toX = 0.1669,
         toY = 0.3449,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 379 73.20,94.60) -> The Veiled Stair (map 434 25.10,12.50) via floor
     {
@@ -6343,6 +6812,7 @@ local FLOOR = {
         toX = 0.251,
         toY = 0.125,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Lair of Predaxas (map 2526)
@@ -6357,6 +6827,7 @@ local FLOOR = {
         toX = 0.4814,
         toY = 0.7863,
         type = "floor",
+        travelDuration = 5,
     },
     -- Lair of Predaxas (map 2526 68.68,67.48) -> Lair of Predaxas (map 2527 73.53,43.29) via floor
     {
@@ -6369,6 +6840,7 @@ local FLOOR = {
         toX = 0.7353,
         toY = 0.4329,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Lair of Predaxas (map 2527)
@@ -6383,6 +6855,7 @@ local FLOOR = {
         toX = 0.6868,
         toY = 0.6748,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Light's Hope Chapel (map 24)
@@ -6397,6 +6870,7 @@ local FLOOR = {
         toX = 0.7537,
         toY = 0.5273,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Lightning Vein Mine (map 505)
@@ -6411,6 +6885,7 @@ local FLOOR = {
         toX = 0.492,
         toY = 0.322,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder (map 505 38.80,27.10) -> Isle of Thunder (map 504 49.30,25.50) via floor
     {
@@ -6423,6 +6898,7 @@ local FLOOR = {
         toX = 0.493,
         toY = 0.255,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder (map 505 73.10,51.30) -> Isle of Thunder (map 504 54.60,29.10) via floor
     {
@@ -6435,6 +6911,7 @@ local FLOOR = {
         toX = 0.546,
         toY = 0.291,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Lightning Vein Mine (map 517)
@@ -6449,6 +6926,7 @@ local FLOOR = {
         toX = 0.492,
         toY = 0.33,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 517 37.45,26.92) -> Isle of Thunder Scenario (map 516 49.27,25.52) via floor
     {
@@ -6461,6 +6939,7 @@ local FLOOR = {
         toX = 0.4927,
         toY = 0.2552,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 517 66.10,77.90) -> Isle of Thunder Scenario (map 516 62.40,40.30) via floor
     {
@@ -6473,6 +6952,7 @@ local FLOOR = {
         toX = 0.624,
         toY = 0.403,
         type = "floor",
+        travelDuration = 5,
     },
     -- Isle of Thunder Scenario (map 517 73.10,51.30) -> Isle of Thunder Scenario (map 516 54.60,29.10) via floor
     {
@@ -6485,6 +6965,7 @@ local FLOOR = {
         toX = 0.546,
         toY = 0.291,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Loaknit Den (map 2580)
@@ -6499,6 +6980,7 @@ local FLOOR = {
         toX = 0.316,
         toY = 0.2611,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Locrian Esper (map 2028)
@@ -6513,6 +6995,7 @@ local FLOOR = {
         toX = 0.5572,
         toY = 0.5346,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Locus of Eternity (map 2192)
@@ -6527,6 +7010,7 @@ local FLOOR = {
         toX = 0.7692,
         toY = 0.623,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2192 75.13,64.74) -> Dawn of the Infinite (map 2193 21.81,36.30) via floor
     {
@@ -6539,6 +7023,7 @@ local FLOOR = {
         toX = 0.2181,
         toY = 0.363,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2515)
@@ -6553,6 +7038,7 @@ local FLOOR = {
         toX = 0.7752,
         toY = 0.6697,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2516)
@@ -6567,6 +7053,7 @@ local FLOOR = {
         toX = 0.5624,
         toY = 0.3838,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2517)
@@ -6581,6 +7068,7 @@ local FLOOR = {
         toX = 0.4481,
         toY = 0.6843,
         type = "floor",
+        travelDuration = 5,
     },
     -- Magisters Terrace M (map 2517 70.47,52.98) -> Magisters Terrace M (map 2518 45.96,19.19) via floor
     {
@@ -6593,6 +7081,7 @@ local FLOOR = {
         toX = 0.4596,
         toY = 0.1919,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2518)
@@ -6607,6 +7096,7 @@ local FLOOR = {
         toX = 0.4429,
         toY = 0.3863,
         type = "floor",
+        travelDuration = 5,
     },
     -- Magisters Terrace M (map 2518 45.96,19.19) -> Magisters Terrace M (map 2517 70.47,52.98) via floor
     {
@@ -6619,6 +7109,7 @@ local FLOOR = {
         toX = 0.7047,
         toY = 0.5298,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2519)
@@ -6633,6 +7124,7 @@ local FLOOR = {
         toX = 0.3066,
         toY = 0.339,
         type = "floor",
+        travelDuration = 5,
     },
     -- Magisters Terrace M (map 2519 51.94,49.21) -> Magisters Terrace M (map 2520 62.22,22.78) via floor
     {
@@ -6645,6 +7137,7 @@ local FLOOR = {
         toX = 0.6222,
         toY = 0.2278,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magister's Terrace (map 2520)
@@ -6659,6 +7152,7 @@ local FLOOR = {
         toX = 0.5194,
         toY = 0.4921,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magisters' Terrace (map 2511)
@@ -6673,6 +7167,7 @@ local FLOOR = {
         toX = 0.3257,
         toY = 0.4483,
         type = "floor",
+        travelDuration = 5,
     },
     -- Magisters Terrace M (map 2511 56.24,38.38) -> Magisters Terrace M (map 2516 22.60,78.98) via floor
     {
@@ -6685,6 +7180,7 @@ local FLOOR = {
         toX = 0.226,
         toY = 0.7898,
         type = "floor",
+        travelDuration = 5,
     },
     -- Magisters Terrace M (map 2511 77.52,66.97) -> Magisters Terrace M (map 2515 51.46,55.67) via floor
     {
@@ -6697,6 +7193,7 @@ local FLOOR = {
         toX = 0.5146,
         toY = 0.5567,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magisters' Terrace (map 348)
@@ -6711,6 +7208,7 @@ local FLOOR = {
         toX = 0.8288,
         toY = 0.4483,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Magisters' Terrace (map 349)
@@ -6725,6 +7223,7 @@ local FLOOR = {
         toX = 0.8315,
         toY = 0.5544,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Maldraxxus (map 1536)
@@ -6739,6 +7238,7 @@ local FLOOR = {
         toX = 0.6264,
         toY = 0.6918,
         type = "floor",
+        travelDuration = 5,
     },
     -- Maldraxxus (map 1536 50.39,68.04) -> Seat of the Primus (map 1698 49.68,13.66) via floor
     {
@@ -6751,6 +7251,7 @@ local FLOOR = {
         toX = 0.4968,
         toY = 0.1366,
         type = "floor",
+        travelDuration = 5,
     },
     -- Maldraxxus (map 1536 54.08,12.25) -> Sightless Hold (map 1650 42.06,82.99) via floor
     {
@@ -6763,6 +7264,7 @@ local FLOOR = {
         toX = 0.4206,
         toY = 0.8299,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2460)
@@ -6777,6 +7279,7 @@ local FLOOR = {
         toX = 0.6234,
         toY = 0.538,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2460 23.48,24.64) -> Manaforge Omega (map 2461 75.37,79.63) via floor
     {
@@ -6789,6 +7292,7 @@ local FLOOR = {
         toX = 0.7537,
         toY = 0.7963,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2460 23.48,77.91) -> Manaforge Omega (map 2462 34.24,20.62) via floor
     {
@@ -6801,6 +7305,7 @@ local FLOOR = {
         toX = 0.3424,
         toY = 0.2062,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2461)
@@ -6815,6 +7320,7 @@ local FLOOR = {
         toX = 0.2348,
         toY = 0.2464,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2462)
@@ -6829,6 +7335,7 @@ local FLOOR = {
         toX = 0.2348,
         toY = 0.7791,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2463)
@@ -6843,6 +7350,7 @@ local FLOOR = {
         toX = 0.4488,
         toY = 0.6535,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2463 62.34,53.80) -> Manaforge Omega (map 2460 15.23,51.18) via floor
     {
@@ -6855,6 +7363,7 @@ local FLOOR = {
         toX = 0.1523,
         toY = 0.5118,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2464)
@@ -6869,6 +7378,7 @@ local FLOOR = {
         toX = 0.6628,
         toY = 0.5775,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2464 44.88,65.35) -> Manaforge Omega (map 2463 30.89,68.69) via floor
     {
@@ -6881,6 +7391,7 @@ local FLOOR = {
         toX = 0.3089,
         toY = 0.6869,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2465)
@@ -6895,6 +7406,7 @@ local FLOOR = {
         toX = 0.2898,
         toY = 0.0904,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2465 66.28,57.75) -> Manaforge Omega (map 2464 24.57,48.85) via floor
     {
@@ -6907,6 +7419,7 @@ local FLOOR = {
         toX = 0.2457,
         toY = 0.4885,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2466)
@@ -6921,6 +7434,7 @@ local FLOOR = {
         toX = 0.5732,
         toY = 0.2152,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2466 83.14,56.03) -> Manaforge Omega (map 2467 4.95,48.42) via floor
     {
@@ -6933,6 +7447,7 @@ local FLOOR = {
         toX = 0.0495,
         toY = 0.4842,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2467)
@@ -6947,6 +7462,7 @@ local FLOOR = {
         toX = 0.8314,
         toY = 0.5603,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2467 75.61,49.14) -> Manaforge Omega (map 2471 65.57,69.05) via floor
     {
@@ -6959,6 +7475,7 @@ local FLOOR = {
         toX = 0.6557,
         toY = 0.6905,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2468)
@@ -6973,6 +7490,7 @@ local FLOOR = {
         toX = 0.3615,
         toY = 0.5201,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2469)
@@ -6987,6 +7505,7 @@ local FLOOR = {
         toX = 0.8577,
         toY = 0.4537,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2470)
@@ -7001,6 +7520,7 @@ local FLOOR = {
         toX = 0.7214,
         toY = 0.4878,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Manaforge Omega (map 2471)
@@ -7015,6 +7535,7 @@ local FLOOR = {
         toX = 0.6126,
         toY = 0.5585,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2471 60.78,49.32) -> Manaforge Omega (map 2470 55.88,68.76) via floor
     {
@@ -7027,6 +7548,7 @@ local FLOOR = {
         toX = 0.5588,
         toY = 0.6876,
         type = "floor",
+        travelDuration = 5,
     },
     -- Manaforge Omega (map 2471 85.77,45.37) -> Manaforge Omega (map 2469 37.11,51.36) via floor
     {
@@ -7039,6 +7561,7 @@ local FLOOR = {
         toX = 0.3711,
         toY = 0.5136,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Maraudon (map 280)
@@ -7053,6 +7576,7 @@ local FLOOR = {
         toX = 0.2899,
         toY = 0.0484,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Maraudon (map 281)
@@ -7067,6 +7591,7 @@ local FLOOR = {
         toX = 0.1553,
         toY = 0.5675,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Maraudon (map 67)
@@ -7081,6 +7606,7 @@ local FLOOR = {
         toX = 0.2909,
         toY = 0.6255,
         type = "floor",
+        travelDuration = 5,
     },
     -- Desolace (map 67 27.07,35.72) -> Desolace (map 68 46.12,77.70) via floor
     {
@@ -7093,6 +7619,7 @@ local FLOOR = {
         toX = 0.4612,
         toY = 0.777,
         type = "floor",
+        travelDuration = 5,
     },
     -- Desolace (map 67 28.36,42.60) -> Desolace (map 68 48.27,88.67) via floor
     {
@@ -7105,6 +7632,7 @@ local FLOOR = {
         toX = 0.4827,
         toY = 0.8867,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Maraudon (map 68)
@@ -7119,6 +7647,7 @@ local FLOOR = {
         toX = 0.2707,
         toY = 0.3572,
         type = "floor",
+        travelDuration = 5,
     },
     -- Desolace (map 68 48.27,88.67) -> Desolace (map 67 28.36,42.60) via floor
     {
@@ -7131,6 +7660,7 @@ local FLOOR = {
         toX = 0.2836,
         toY = 0.426,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: March on Quel'Danas (map 2533)
@@ -7145,6 +7675,7 @@ local FLOOR = {
         toX = 0.5062,
         toY = 0.9458,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: March on Quel'Danas (map 2534)
@@ -7159,6 +7690,7 @@ local FLOOR = {
         toX = 0.5062,
         toY = 0.1202,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mardum, the Shattered Abyss (map 720)
@@ -7173,6 +7705,7 @@ local FLOOR = {
         toX = 0.6539,
         toY = 0.5364,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -7197,6 +7730,7 @@ local FLOOR = {
         toX = 0.6866,
         toY = 0.6724,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -7221,6 +7755,7 @@ local FLOOR = {
         toX = 0.2046,
         toY = 0.1796,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mechagon City (map 1574)
@@ -7235,6 +7770,7 @@ local FLOOR = {
         toX = 0.6237,
         toY = 0.7895,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mechagon (map 1490)
@@ -7249,6 +7785,7 @@ local FLOOR = {
         toX = 0.8063,
         toY = 0.1693,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mechagon (map 1491)
@@ -7263,6 +7800,7 @@ local FLOOR = {
         toX = 0.5509,
         toY = 0.8049,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mechagon (map 1491 80.63,16.93) -> Mechagon (map 1490 52.08,63.70) via floor
     {
@@ -7275,6 +7813,7 @@ local FLOOR = {
         toX = 0.5208,
         toY = 0.637,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mechagon (map 1494)
@@ -7289,6 +7828,7 @@ local FLOOR = {
         toX = 0.6098,
         toY = 0.7762,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mechagon (map 1494 55.09,80.49) -> Mechagon (map 1491 33.86,59.33) via floor
     {
@@ -7301,6 +7841,7 @@ local FLOOR = {
         toX = 0.3386,
         toY = 0.5933,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mechagon (map 1497)
@@ -7315,6 +7856,7 @@ local FLOOR = {
         toX = 0.2037,
         toY = 0.1829,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Millennia's Threshold (map 2191)
@@ -7329,6 +7871,7 @@ local FLOOR = {
         toX = 0.6497,
         toY = 0.8052,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2191 76.92,62.30) -> Dawn of the Infinite (map 2192 33.17,50.04) via floor
     {
@@ -7341,6 +7884,7 @@ local FLOOR = {
         toX = 0.3317,
         toY = 0.5004,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Palace (map 1544)
@@ -7355,6 +7899,7 @@ local FLOOR = {
         toX = 0.5527,
         toY = 0.1889,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Palace (map 1545)
@@ -7369,6 +7914,7 @@ local FLOOR = {
         toX = 0.4858,
         toY = 0.662,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Palace (map 453)
@@ -7383,6 +7929,7 @@ local FLOOR = {
         toX = 0.558,
         toY = 0.189,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Palace (map 454)
@@ -7397,6 +7944,7 @@ local FLOOR = {
         toX = 0.49,
         toY = 0.67,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mogu'shan Palace (map 454 71.50,76.20) -> Mogu'shan Palace (map 455 58.80,24.30) via floor
     {
@@ -7409,6 +7957,7 @@ local FLOOR = {
         toX = 0.588,
         toY = 0.243,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Palace (map 455)
@@ -7423,6 +7972,7 @@ local FLOOR = {
         toX = 0.715,
         toY = 0.762,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Vaults (map 1548)
@@ -7437,6 +7987,7 @@ local FLOOR = {
         toX = 0.6622,
         toY = 0.1055,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Vaults (map 1549)
@@ -7451,6 +8002,7 @@ local FLOOR = {
         toX = 0.2685,
         toY = 0.518,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Vaults (map 471)
@@ -7465,6 +8017,7 @@ local FLOOR = {
         toX = 0.778,
         toY = 0.811,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Vaults (map 472)
@@ -7479,6 +8032,7 @@ local FLOOR = {
         toX = 0.657,
         toY = 0.106,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mogu'shan Vaults (map 472 77.80,81.10) -> Mogu'shan Vaults (map 471 32.20,13.50) via floor
     {
@@ -7491,6 +8045,7 @@ local FLOOR = {
         toX = 0.322,
         toY = 0.135,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mogu'shan Vaults (map 473)
@@ -7505,6 +8060,7 @@ local FLOOR = {
         toX = 0.287,
         toY = 0.521,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Mulgore (map 7)
@@ -7519,6 +8075,7 @@ local FLOOR = {
         toX = 0.7475,
         toY = 0.5562,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mulgore (map 7 59.19,36.39) -> Mulgore (map 9 29.55,13.58) via floor
     {
@@ -7531,6 +8088,7 @@ local FLOOR = {
         toX = 0.2955,
         toY = 0.1358,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mulgore (map 7 59.19,44.16) -> Mulgore (map 9 28.50,65.33) via floor
     {
@@ -7543,6 +8101,7 @@ local FLOOR = {
         toX = 0.285,
         toY = 0.6533,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mulgore (map 7 60.74,47.59) -> Mulgore (map 9 40.15,89.72) via floor
     {
@@ -7555,6 +8114,7 @@ local FLOOR = {
         toX = 0.4015,
         toY = 0.8972,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Murder Row (map 2433)
@@ -7569,6 +8129,7 @@ local FLOOR = {
         toX = 0.7752,
         toY = 0.6697,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naigtal (map 2600)
@@ -7583,6 +8144,7 @@ local FLOOR = {
         toX = 0.7003,
         toY = 0.2276,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nath'raxas Spire (map 833)
@@ -7597,6 +8159,7 @@ local FLOOR = {
         toX = 0.5022,
         toY = 0.1712,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 162)
@@ -7611,6 +8174,7 @@ local FLOOR = {
         toX = 0.516,
         toY = 0.471,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 163)
@@ -7625,6 +8189,7 @@ local FLOOR = {
         toX = 0.55,
         toY = 0.471,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 164)
@@ -7639,6 +8204,7 @@ local FLOOR = {
         toX = 0.517,
         toY = 0.522,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 165)
@@ -7653,6 +8219,7 @@ local FLOOR = {
         toX = 0.552,
         toY = 0.525,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 166)
@@ -7667,6 +8234,7 @@ local FLOOR = {
         toX = 0.686,
         toY = 0.777,
         type = "floor",
+        travelDuration = 5,
     },
     -- Naxxramas (map 166 51.70,52.20) -> Naxxramas (map 164 66.90,21.90) via floor
     {
@@ -7679,6 +8247,7 @@ local FLOOR = {
         toX = 0.669,
         toY = 0.219,
         type = "floor",
+        travelDuration = 5,
     },
     -- Naxxramas (map 166 53.50,50.10) -> Naxxramas (map 167 73.60,72.80) via floor
     {
@@ -7691,6 +8260,7 @@ local FLOOR = {
         toX = 0.736,
         toY = 0.728,
         type = "floor",
+        travelDuration = 5,
     },
     -- Naxxramas (map 166 55.00,47.10) -> Naxxramas (map 163 30.70,77.90) via floor
     {
@@ -7703,6 +8273,7 @@ local FLOOR = {
         toX = 0.307,
         toY = 0.779,
         type = "floor",
+        travelDuration = 5,
     },
     -- Naxxramas (map 166 55.20,52.50) -> Naxxramas (map 165 32.90,22.40) via floor
     {
@@ -7715,6 +8286,7 @@ local FLOOR = {
         toX = 0.329,
         toY = 0.224,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Naxxramas (map 167)
@@ -7729,6 +8301,7 @@ local FLOOR = {
         toX = 0.513,
         toY = 0.497,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Neltharus (map 2080)
@@ -7743,6 +8316,7 @@ local FLOOR = {
         toX = 0.3331,
         toY = 0.3752,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Neltharus (map 2081)
@@ -7757,6 +8331,7 @@ local FLOOR = {
         toX = 0.2716,
         toY = 0.5269,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2291)
@@ -7771,6 +8346,7 @@ local FLOOR = {
         toX = 0.2731,
         toY = 0.4896,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2291 44.05,27.62) -> Nerub'ar Palace (map 2292 50.62,43.11) via floor
     {
@@ -7783,6 +8359,7 @@ local FLOOR = {
         toX = 0.5062,
         toY = 0.4311,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2292)
@@ -7797,6 +8374,7 @@ local FLOOR = {
         toX = 0.6356,
         toY = 0.1861,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2292 50.62,43.11) -> Nerub'ar Palace (map 2291 44.05,27.62) via floor
     {
@@ -7809,6 +8387,7 @@ local FLOOR = {
         toX = 0.4405,
         toY = 0.2762,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2293)
@@ -7823,6 +8402,7 @@ local FLOOR = {
         toX = 0.3905,
         toY = 0.7241,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2294)
@@ -7837,6 +8417,7 @@ local FLOOR = {
         toX = 0.7154,
         toY = 0.1847,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2294 63.56,18.61) -> Nerub'ar Palace (map 2292 25.54,80.66) via floor
     {
@@ -7849,6 +8430,7 @@ local FLOOR = {
         toX = 0.2554,
         toY = 0.8066,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2295)
@@ -7863,6 +8445,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.4753,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2295 50.02,41.43) -> Nerub'ar Palace (map 2296 50.50,47.53) via floor
     {
@@ -7875,6 +8458,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.4753,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2295 71.54,18.47) -> Nerub'ar Palace (map 2294 39.09,55.82) via floor
     {
@@ -7887,6 +8471,7 @@ local FLOOR = {
         toX = 0.3909,
         toY = 0.5582,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nerub-ar Palace (map 2296)
@@ -7901,6 +8486,7 @@ local FLOOR = {
         toX = 0.4525,
         toY = 0.6804,
         type = "floor",
+        travelDuration = 5,
     },
     -- Nerub'ar Palace (map 2296 50.50,47.53) -> Nerub'ar Palace (map 2295 50.02,41.43) via floor
     {
@@ -7913,6 +8499,7 @@ local FLOOR = {
         toX = 0.5002,
         toY = 0.4143,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: New Tinkertown (map 30)
@@ -7927,6 +8514,7 @@ local FLOOR = {
         toX = 0.326,
         toY = 0.37,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: New Tinkertown (map 469)
@@ -7941,6 +8529,7 @@ local FLOOR = {
         toX = 0.795,
         toY = 0.842,
         type = "floor",
+        travelDuration = 5,
     },
     -- New Tinkertown (map 469 33.30,66.40) -> New Tinkertown (map 470 94.60,58.10) via floor
     {
@@ -7953,6 +8542,7 @@ local FLOOR = {
         toX = 0.946,
         toY = 0.581,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Nexus of Actualization (map 2030)
@@ -7967,6 +8557,7 @@ local FLOOR = {
         toX = 0.581,
         toY = 0.4433,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Night Web's Hollow (map 466)
@@ -7981,6 +8572,7 @@ local FLOOR = {
         toX = 0.297,
         toY = 0.307,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Niuzao Temple (map 389)
@@ -7995,6 +8587,7 @@ local FLOOR = {
         toX = 0.3302,
         toY = 0.6124,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Northern Barrens (map 10)
@@ -8009,6 +8602,7 @@ local FLOOR = {
         toX = 0.2261,
         toY = 0.8796,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha, the Waking City (map 2379)
@@ -8023,6 +8617,7 @@ local FLOOR = {
         toX = 0.5255,
         toY = 0.7871,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha, the Waking City (map 2381)
@@ -8037,6 +8632,7 @@ local FLOOR = {
         toX = 0.7813,
         toY = 0.8853,
         type = "floor",
+        travelDuration = 5,
     },
     -- Lorewalking Ny'alotha (map 2381 49.36,54.60) -> Lorewalking Ny'alotha (map 2384 57.72,23.29) via floor
     {
@@ -8049,6 +8645,7 @@ local FLOOR = {
         toX = 0.5772,
         toY = 0.2329,
         type = "floor",
+        travelDuration = 5,
     },
     -- Lorewalking Ny'alotha (map 2381 52.55,78.71) -> Lorewalking Ny'alotha (map 2379 51.02,12.68) via floor
     {
@@ -8061,6 +8658,7 @@ local FLOOR = {
         toX = 0.5102,
         toY = 0.1268,
         type = "floor",
+        travelDuration = 5,
     },
     -- Lorewalking Ny'alotha (map 2381 60.16,53.47) -> Lorewalking Ny'alotha (map 2383 32.57,46.17) via floor
     {
@@ -8073,6 +8671,7 @@ local FLOOR = {
         toX = 0.3257,
         toY = 0.4617,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha, the Waking City (map 2382)
@@ -8087,6 +8686,7 @@ local FLOOR = {
         toX = 0.4539,
         toY = 0.4348,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha, the Waking City (map 2383)
@@ -8101,6 +8701,7 @@ local FLOOR = {
         toX = 0.6016,
         toY = 0.5347,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha, the Waking City (map 2384)
@@ -8115,6 +8716,7 @@ local FLOOR = {
         toX = 0.4936,
         toY = 0.546,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1580)
@@ -8129,6 +8731,7 @@ local FLOOR = {
         toX = 0.5107,
         toY = 0.8236,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1581)
@@ -8143,6 +8746,7 @@ local FLOOR = {
         toX = 0.522,
         toY = 0.7944,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1582)
@@ -8157,6 +8761,7 @@ local FLOOR = {
         toX = 0.7533,
         toY = 0.85,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1582 48.74,53.15) -> Ny'alotha, the Waking City (map 1594 59.57,31.65) via floor
     {
@@ -8169,6 +8774,7 @@ local FLOOR = {
         toX = 0.5957,
         toY = 0.3165,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1582 52.20,79.44) -> Ny'alotha, the Waking City (map 1581 51.10,15.40) via floor
     {
@@ -8181,6 +8787,7 @@ local FLOOR = {
         toX = 0.511,
         toY = 0.154,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1582 52.51,16.89) -> Ny'alotha, the Waking City (map 1597 48.90,81.33) via floor
     {
@@ -8193,6 +8800,7 @@ local FLOOR = {
         toX = 0.489,
         toY = 0.8133,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1582 58.63,53.78) -> Ny'alotha, the Waking City (map 1592 12.64,51.73) via floor
     {
@@ -8205,6 +8813,7 @@ local FLOOR = {
         toX = 0.1264,
         toY = 0.5173,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1590)
@@ -8219,6 +8828,7 @@ local FLOOR = {
         toX = 0.3744,
         toY = 0.3243,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1590 75.33,85.00) -> Ny'alotha, the Waking City (map 1582 44.51,42.24) via floor
     {
@@ -8231,6 +8841,7 @@ local FLOOR = {
         toX = 0.4451,
         toY = 0.4224,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1591)
@@ -8245,6 +8856,7 @@ local FLOOR = {
         toX = 0.3477,
         toY = 0.3283,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1592)
@@ -8259,6 +8871,7 @@ local FLOOR = {
         toX = 0.5863,
         toY = 0.5378,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1592 74.96,43.73) -> Ny'alotha, the Waking City (map 1593 74.33,45.77) via floor
     {
@@ -8271,6 +8884,7 @@ local FLOOR = {
         toX = 0.7433,
         toY = 0.4577,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1593)
@@ -8285,6 +8899,7 @@ local FLOOR = {
         toX = 0.7496,
         toY = 0.4373,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1594)
@@ -8299,6 +8914,7 @@ local FLOOR = {
         toX = 0.7872,
         toY = 0.4867,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1594 59.57,31.65) -> Ny'alotha, the Waking City (map 1582 48.74,53.15) via floor
     {
@@ -8311,6 +8927,7 @@ local FLOOR = {
         toX = 0.4874,
         toY = 0.5315,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1595)
@@ -8325,6 +8942,7 @@ local FLOOR = {
         toX = 0.4921,
         toY = 0.8467,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ny'alotha, the Waking City (map 1595 78.72,48.67) -> Ny'alotha, the Waking City (map 1594 56.12,20.82) via floor
     {
@@ -8337,6 +8955,7 @@ local FLOOR = {
         toX = 0.5612,
         toY = 0.2082,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1596)
@@ -8351,6 +8970,7 @@ local FLOOR = {
         toX = 0.657,
         toY = 0.668,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ny'alotha (map 1597)
@@ -8365,6 +8985,7 @@ local FLOOR = {
         toX = 0.5251,
         toY = 0.1689,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Operation: Floodgate (map 2387)
@@ -8379,6 +9000,7 @@ local FLOOR = {
         toX = 0.4213,
         toY = 0.1632,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Operation: Floodgate (map 2388)
@@ -8393,6 +9015,7 @@ local FLOOR = {
         toX = 0.5105,
         toY = 0.8027,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Orgrimmar (map 85)
@@ -8407,6 +9030,7 @@ local FLOOR = {
         toX = 0.2427,
         toY = 0.7365,
         type = "floor",
+        travelDuration = 5,
     },
     -- Orgrimmar (map 85 55.98,51.39) -> Orgrimmar (map 86 77.67,15.09) via floor
     {
@@ -8419,6 +9043,7 @@ local FLOOR = {
         toX = 0.7767,
         toY = 0.1509,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Orgrimmar (map 86)
@@ -8433,6 +9058,7 @@ local FLOOR = {
         toX = 0.4218,
         toY = 0.6125,
         type = "floor",
+        travelDuration = 5,
     },
     -- Orgrimmar (map 86 77.67,15.09) -> Orgrimmar (map 85 55.98,51.39) via floor
     {
@@ -8445,6 +9071,7 @@ local FLOOR = {
         toX = 0.5598,
         toY = 0.5139,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Oribos (map 1670)
@@ -8459,6 +9086,7 @@ local FLOOR = {
         toX = 0.5783,
         toY = 0.2761,
         type = "floor",
+        travelDuration = 5,
     },
     -- Oribos (map 1670 70.50,59.94) -> Oribos (map 1672 55.63,71.15) via floor
     {
@@ -8471,6 +9099,7 @@ local FLOOR = {
         toX = 0.5563,
         toY = 0.7115,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Oribos (map 1672)
@@ -8485,6 +9114,7 @@ local FLOOR = {
         toX = 0.705,
         toY = 0.5994,
         type = "floor",
+        travelDuration = 5,
     },
     -- Oribos (map 1672 57.83,27.61) -> Oribos (map 1670 69.00,41.44) via floor
     {
@@ -8497,6 +9127,7 @@ local FLOOR = {
         toX = 0.69,
         toY = 0.4144,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Palemane Rock (map 8)
@@ -8511,6 +9142,7 @@ local FLOOR = {
         toX = 0.35,
         toY = 0.6135,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Path of Wisdom (map 1713)
@@ -8525,6 +9157,7 @@ local FLOOR = {
         toX = 0.4403,
         toY = 0.247,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Pit of Anguish (map 1820)
@@ -8539,6 +9172,7 @@ local FLOOR = {
         toX = 0.5207,
         toY = 0.5446,
         type = "floor",
+        travelDuration = 5,
     },
     -- Pit of Anguish (map 1820 51.81,27.65) -> Pit of Anguish (map 1821 52.09,26.31) via floor
     {
@@ -8551,6 +9185,7 @@ local FLOOR = {
         toX = 0.5209,
         toY = 0.2631,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Pit of Anguish (map 1821)
@@ -8565,6 +9200,7 @@ local FLOOR = {
         toX = 0.5181,
         toY = 0.2765,
         type = "floor",
+        travelDuration = 5,
     },
     -- Pit of Anguish (map 1821 60.47,54.08) -> Pit of Anguish (map 1820 60.66,51.99) via floor
     {
@@ -8577,6 +9213,7 @@ local FLOOR = {
         toX = 0.6066,
         toY = 0.5199,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Plaguefall (map 1674)
@@ -8591,6 +9228,7 @@ local FLOOR = {
         toX = 0.5517,
         toY = 0.4455,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Plaguefall (map 1697)
@@ -8605,6 +9243,7 @@ local FLOOR = {
         toX = 0.554,
         toY = 0.8142,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Pranksters' Hollow (map 381)
@@ -8619,6 +9258,7 @@ local FLOOR = {
         toX = 0.7296,
         toY = 0.7339,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Priory of the Sacred Flame (map 2308)
@@ -8633,6 +9273,7 @@ local FLOOR = {
         toX = 0.8924,
         toY = 0.4735,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Priory of the Sacred Flame (map 2309)
@@ -8647,6 +9288,7 @@ local FLOOR = {
         toX = 0.3018,
         toY = 0.5549,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Profaned Mausoleum (map 2638)
@@ -8661,6 +9303,7 @@ local FLOOR = {
         toX = 0.5492,
         toY = 0.4813,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Revantusk Sedge (map 2584)
@@ -8675,6 +9318,7 @@ local FLOOR = {
         toX = 0.2202,
         toY = 0.6342,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruby Life Pools (map 2094)
@@ -8689,6 +9333,7 @@ local FLOOR = {
         toX = 0.6457,
         toY = 0.4307,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruby Life Pools (map 2095)
@@ -8703,6 +9348,7 @@ local FLOOR = {
         toX = 0.5137,
         toY = 0.5757,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruins of Korune (map 386)
@@ -8717,6 +9363,7 @@ local FLOOR = {
         toX = 0.343,
         toY = 0.761,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 386 52.20,11.60) -> Kun-Lai Summit (map 379 33.10,26.60) via floor
     {
@@ -8729,6 +9376,7 @@ local FLOOR = {
         toX = 0.331,
         toY = 0.266,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruins of Korune (map 387)
@@ -8743,6 +9391,7 @@ local FLOOR = {
         toX = 0.309,
         toY = 0.759,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruins of Ogudei (map 419)
@@ -8757,6 +9406,7 @@ local FLOOR = {
         toX = 0.803,
         toY = 0.1771,
         type = "floor",
+        travelDuration = 5,
     },
     -- Krasarang Wilds (map 419 66.47,49.74) -> Krasarang Wilds (map 421 64.21,37.28) via floor
     {
@@ -8769,6 +9419,7 @@ local FLOOR = {
         toX = 0.6421,
         toY = 0.3728,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruins of Ogudei (map 420)
@@ -8783,6 +9434,7 @@ local FLOOR = {
         toX = 0.8985,
         toY = 0.4842,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruins of Ogudei (map 421)
@@ -8797,6 +9449,7 @@ local FLOOR = {
         toX = 0.6647,
         toY = 0.4974,
         type = "floor",
+        travelDuration = 5,
     },
     -- Krasarang Wilds (map 421 89.85,48.42) -> Krasarang Wilds (map 420 77.14,41.93) via floor
     {
@@ -8809,6 +9462,7 @@ local FLOOR = {
         toX = 0.7714,
         toY = 0.4193,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ruuk'Jar's Clutch (map 2637)
@@ -8823,6 +9477,7 @@ local FLOOR = {
         toX = 0.3932,
         toY = 0.3992,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Chronology (map 2190)
@@ -8837,6 +9492,7 @@ local FLOOR = {
         toX = 0.4488,
         toY = 0.5011,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Domination (map 1998)
@@ -8851,6 +9507,7 @@ local FLOOR = {
         toX = 0.2419,
         toY = 0.8612,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Domination (map 1999)
@@ -8865,6 +9522,7 @@ local FLOOR = {
         toX = 0.5447,
         toY = 0.5901,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sanctum of Domination (map 1999 37.48,12.19) -> Sanctum of Domination (map 2000 21.21,47.60) via floor
     {
@@ -8877,6 +9535,7 @@ local FLOOR = {
         toX = 0.2121,
         toY = 0.476,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sanctum of Domination (map 1999 46.58,12.60) -> Sanctum of Domination (map 2000 30.42,47.74) via floor
     {
@@ -8889,6 +9548,7 @@ local FLOOR = {
         toX = 0.3042,
         toY = 0.4774,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Domination (map 2000)
@@ -8903,6 +9563,7 @@ local FLOOR = {
         toX = 0.3748,
         toY = 0.1219,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sanctum of Domination (map 2000 30.42,47.74) -> Sanctum of Domination (map 1999 46.58,12.60) via floor
     {
@@ -8915,6 +9576,7 @@ local FLOOR = {
         toX = 0.4658,
         toY = 0.126,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sanctum of Domination (map 2000 54.83,36.26) -> Sanctum of Domination (map 2001 63.12,52.01) via floor
     {
@@ -8927,6 +9589,7 @@ local FLOOR = {
         toX = 0.6312,
         toY = 0.5201,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Domination (map 2001)
@@ -8941,6 +9604,7 @@ local FLOOR = {
         toX = 0.4352,
         toY = 0.4248,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sanctum of Domination (map 2001 63.12,52.01) -> Sanctum of Domination (map 2000 54.83,36.26) via floor
     {
@@ -8953,6 +9617,7 @@ local FLOOR = {
         toX = 0.5483,
         toY = 0.3626,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanctum of Domination (map 2002)
@@ -8967,6 +9632,7 @@ local FLOOR = {
         toX = 0.339,
         toY = 0.5201,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanguine Depths (map 1675)
@@ -8981,6 +9647,7 @@ local FLOOR = {
         toX = 0.5086,
         toY = 0.7779,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sanguine Depths (map 1676)
@@ -8995,6 +9662,7 @@ local FLOOR = {
         toX = 0.406,
         toY = 0.8949,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scarlet Halls (map 431)
@@ -9009,6 +9677,7 @@ local FLOOR = {
         toX = 0.478,
         toY = 0.911,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scarlet Halls (map 432)
@@ -9023,6 +9692,7 @@ local FLOOR = {
         toX = 0.555,
         toY = 0.138,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scarlet Monastery Entrance (map 19)
@@ -9037,6 +9707,7 @@ local FLOOR = {
         toX = 0.823,
         toY = 0.326,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tirisfal Glades (map 19 17.30,82.90) -> Tirisfal Glades (map 18 82.60,33.50) via floor
     {
@@ -9049,6 +9720,7 @@ local FLOOR = {
         toX = 0.826,
         toY = 0.335,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scarlet Monastery (map 302)
@@ -9063,6 +9735,7 @@ local FLOOR = {
         toX = 0.491,
         toY = 0.112,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scarlet Monastery (map 303)
@@ -9077,6 +9750,7 @@ local FLOOR = {
         toX = 0.484,
         toY = 0.885,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scholomance (map 476)
@@ -9091,6 +9765,7 @@ local FLOOR = {
         toX = 0.76,
         toY = 0.265,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scholomance (map 477)
@@ -9105,6 +9780,7 @@ local FLOOR = {
         toX = 0.497,
         toY = 0.192,
         type = "floor",
+        travelDuration = 5,
     },
     -- Scholomance (map 477 76.00,26.50) -> Scholomance (map 476 81.80,23.90) via floor
     {
@@ -9117,6 +9793,7 @@ local FLOOR = {
         toX = 0.818,
         toY = 0.239,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scholomance (map 478)
@@ -9131,6 +9808,7 @@ local FLOOR = {
         toX = 0.575,
         toY = 0.922,
         type = "floor",
+        travelDuration = 5,
     },
     -- Scholomance (map 478 49.80,24.00) -> Scholomance (map 479 49.60,28.20) via floor
     {
@@ -9143,6 +9821,7 @@ local FLOOR = {
         toX = 0.496,
         toY = 0.282,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Scholomance (map 479)
@@ -9157,6 +9836,7 @@ local FLOOR = {
         toX = 0.498,
         toY = 0.24,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Seat of the Primus (map 1698)
@@ -9171,6 +9851,7 @@ local FLOOR = {
         toX = 0.5039,
         toY = 0.6804,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2047)
@@ -9185,6 +9866,7 @@ local FLOOR = {
         toX = 0.1465,
         toY = 0.3443,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sepulcher of the First Ones (map 2047 90.72,49.67) -> Sepulcher of the First Ones (map 2048 66.96,21.00) via floor
     {
@@ -9197,6 +9879,7 @@ local FLOOR = {
         toX = 0.6696,
         toY = 0.21,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sepulcher of the First Ones (map 2047 92.52,51.98) -> Sepulcher of the First Ones (map 2050 10.94,52.02) via floor
     {
@@ -9209,6 +9892,7 @@ local FLOOR = {
         toX = 0.1094,
         toY = 0.5202,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2048)
@@ -9223,6 +9907,7 @@ local FLOOR = {
         toX = 0.9072,
         toY = 0.4967,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sepulcher of the First Ones (map 2048 67.00,20.97) -> Sepulcher of the First Ones (map 2049 24.27,82.35) via floor
     {
@@ -9235,6 +9920,7 @@ local FLOOR = {
         toX = 0.2427,
         toY = 0.8235,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2049)
@@ -9249,6 +9935,7 @@ local FLOOR = {
         toX = 0.67,
         toY = 0.2097,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2050)
@@ -9263,6 +9950,7 @@ local FLOOR = {
         toX = 0.9252,
         toY = 0.5198,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sepulcher of the First Ones (map 2050 87.49,52.36) -> Sepulcher of the First Ones (map 2052 63.12,52.01) via floor
     {
@@ -9275,6 +9963,7 @@ local FLOOR = {
         toX = 0.6312,
         toY = 0.5201,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2051)
@@ -9289,6 +9978,7 @@ local FLOOR = {
         toX = 0.339,
         toY = 0.5201,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2052)
@@ -9303,6 +9993,7 @@ local FLOOR = {
         toX = 0.4352,
         toY = 0.4248,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sepulcher of the First Ones (map 2052 63.12,52.01) -> Sepulcher of the First Ones (map 2050 87.49,52.36) via floor
     {
@@ -9315,6 +10006,7 @@ local FLOOR = {
         toX = 0.8749,
         toY = 0.5236,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sepulcher of the First Ones (map 2061)
@@ -9329,6 +10021,7 @@ local FLOOR = {
         toX = 0.9061,
         toY = 0.5486,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sethekk Halls (map 258)
@@ -9343,6 +10036,7 @@ local FLOOR = {
         toX = 0.5333,
         toY = 0.9435,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sethekk Halls (map 259)
@@ -9357,6 +10051,7 @@ local FLOOR = {
         toX = 0.5157,
         toY = 0.2755,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sethekk Halls (map 259 53.33,94.35) -> Sethekk Halls (map 258 48.71,95.13) via floor
     {
@@ -9369,6 +10064,7 @@ local FLOOR = {
         toX = 0.4871,
         toY = 0.9513,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shado-Pan Monastery (map 443)
@@ -9383,6 +10079,7 @@ local FLOOR = {
         toX = 0.123,
         toY = 0.192,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 443 30.70,35.00) -> Shado-Pan Monastery (map 446 17.00,72.60) via floor
     {
@@ -9395,6 +10092,7 @@ local FLOOR = {
         toX = 0.17,
         toY = 0.726,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 443 36.50,81.80) -> Shado-Pan Monastery (map 445 76.90,81.40) via floor
     {
@@ -9407,6 +10105,7 @@ local FLOOR = {
         toX = 0.769,
         toY = 0.814,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 443 44.70,40.10) -> Shado-Pan Monastery (map 446 51.30,83.90) via floor
     {
@@ -9419,6 +10118,7 @@ local FLOOR = {
         toX = 0.513,
         toY = 0.839,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 443 56.00,88.00) -> Shado-Pan Monastery (map 444 21.00,85.60) via floor
     {
@@ -9431,6 +10131,7 @@ local FLOOR = {
         toX = 0.21,
         toY = 0.856,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shado-Pan Monastery (map 444)
@@ -9445,6 +10146,7 @@ local FLOOR = {
         toX = 0.56,
         toY = 0.88,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shado-Pan Monastery (map 445)
@@ -9459,6 +10161,7 @@ local FLOOR = {
         toX = 0.221,
         toY = 0.691,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 445 76.90,81.40) -> Shado-Pan Monastery (map 443 36.50,81.80) via floor
     {
@@ -9471,6 +10174,7 @@ local FLOOR = {
         toX = 0.365,
         toY = 0.818,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shado-Pan Monastery (map 446)
@@ -9485,6 +10189,7 @@ local FLOOR = {
         toX = 0.307,
         toY = 0.35,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shado-Pan Monastery (map 446 51.30,83.90) -> Shado-Pan Monastery (map 443 44.70,40.10) via floor
     {
@@ -9497,6 +10202,7 @@ local FLOOR = {
         toX = 0.447,
         toY = 0.401,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 310)
@@ -9511,6 +10217,7 @@ local FLOOR = {
         toX = 0.2749,
         toY = 0.8784,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 310 34.01,70.58) -> Shadowfang Keep (map 316 23.69,75.12) via floor
     {
@@ -9523,6 +10230,7 @@ local FLOOR = {
         toX = 0.2369,
         toY = 0.7512,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 310 38.18,39.14) -> Shadowfang Keep (map 311 60.03,13.01) via floor
     {
@@ -9535,6 +10243,7 @@ local FLOOR = {
         toX = 0.6003,
         toY = 0.1301,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 311)
@@ -9549,6 +10258,7 @@ local FLOOR = {
         toX = 0.1478,
         toY = 0.8835,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 311 60.03,13.01) -> Shadowfang Keep (map 310 38.18,39.14) via floor
     {
@@ -9561,6 +10271,7 @@ local FLOOR = {
         toX = 0.3818,
         toY = 0.3914,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 312)
@@ -9575,6 +10286,7 @@ local FLOOR = {
         toX = 0.4893,
         toY = 0.7789,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 312 60.72,31.88) -> Shadowfang Keep (map 316 47.37,19.47) via floor
     {
@@ -9587,6 +10299,7 @@ local FLOOR = {
         toX = 0.4737,
         toY = 0.1947,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 313)
@@ -9601,6 +10314,7 @@ local FLOOR = {
         toX = 0.4894,
         toY = 0.7732,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 313 48.93,77.89) -> Shadowfang Keep (map 312 45.86,92.67) via floor
     {
@@ -9613,6 +10327,7 @@ local FLOOR = {
         toX = 0.4586,
         toY = 0.9267,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 314)
@@ -9627,6 +10342,7 @@ local FLOOR = {
         toX = 0.4875,
         toY = 0.9071,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 314 48.94,77.32) -> Shadowfang Keep (map 313 34.60,55.37) via floor
     {
@@ -9639,6 +10355,7 @@ local FLOOR = {
         toX = 0.346,
         toY = 0.5537,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 314 56.86,44.93) -> Shadowfang Keep (map 313 54.68,54.74) via floor
     {
@@ -9651,6 +10368,7 @@ local FLOOR = {
         toX = 0.5468,
         toY = 0.5474,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 315)
@@ -9665,6 +10383,7 @@ local FLOOR = {
         toX = 0.3462,
         toY = 0.5788,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowfang Keep (map 316)
@@ -9679,6 +10398,7 @@ local FLOOR = {
         toX = 0.3401,
         toY = 0.7058,
         type = "floor",
+        travelDuration = 5,
     },
     -- Shadowfang Keep (map 316 45.49,25.23) -> Shadowfang Keep (map 312 44.44,61.70) via floor
     {
@@ -9691,6 +10411,7 @@ local FLOOR = {
         toX = 0.4444,
         toY = 0.617,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowglen (map 460)
@@ -9705,6 +10426,7 @@ local FLOOR = {
         toX = 0.454,
         toY = 0.903,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Shadowthread Cave (map 58)
@@ -9719,6 +10441,7 @@ local FLOOR = {
         toX = 0.393,
         toY = 0.304,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sidestreet Sluice (map 2420)
@@ -9733,6 +10456,7 @@ local FLOOR = {
         toX = 0.4685,
         toY = 0.2085,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2420 44.22,41.58) -> Sidestreet Sluice (map 2423 50.95,45.55) via floor
     {
@@ -9745,6 +10469,7 @@ local FLOOR = {
         toX = 0.5095,
         toY = 0.4555,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2420 71.62,18.47) -> Sidestreet Sluice (map 2421 71.72,30.62) via floor
     {
@@ -9757,6 +10482,7 @@ local FLOOR = {
         toX = 0.7172,
         toY = 0.3062,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sidestreet Sluice (map 2421)
@@ -9771,6 +10497,7 @@ local FLOOR = {
         toX = 0.2791,
         toY = 0.7005,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2421 46.85,20.85) -> Sidestreet Sluice (map 2420 34.07,21.28) via floor
     {
@@ -9783,6 +10510,7 @@ local FLOOR = {
         toX = 0.3407,
         toY = 0.2128,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2421 71.05,18.06) -> Sidestreet Sluice (map 2422 70.95,28.86) via floor
     {
@@ -9795,6 +10523,7 @@ local FLOOR = {
         toX = 0.7095,
         toY = 0.2886,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2421 71.72,30.62) -> Sidestreet Sluice (map 2420 71.62,18.47) via floor
     {
@@ -9807,6 +10536,7 @@ local FLOOR = {
         toX = 0.7162,
         toY = 0.1847,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sidestreet Sluice (map 2422)
@@ -9821,6 +10551,7 @@ local FLOOR = {
         toX = 0.389,
         toY = 0.7051,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sidestreet Sluice (map 2422 70.95,28.86) -> Sidestreet Sluice (map 2421 71.05,18.06) via floor
     {
@@ -9833,6 +10564,7 @@ local FLOOR = {
         toX = 0.7105,
         toY = 0.1806,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sidestreet Sluice (map 2423)
@@ -9847,6 +10579,7 @@ local FLOOR = {
         toX = 0.4422,
         toY = 0.4158,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Niuzao Temple (map 457)
@@ -9861,6 +10594,7 @@ local FLOOR = {
         toX = 0.216,
         toY = 0.536,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Niuzao Temple (map 458)
@@ -9875,6 +10609,7 @@ local FLOOR = {
         toX = 0.571,
         toY = 0.807,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Niuzao Temple (map 459)
@@ -9889,6 +10624,7 @@ local FLOOR = {
         toX = 0.503,
         toY = 0.739,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Niuzao Temple (map 459 57.10,80.70) -> Siege of Niuzao Temple (map 458 53.20,81.90) via floor
     {
@@ -9901,6 +10637,7 @@ local FLOOR = {
         toX = 0.532,
         toY = 0.819,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 557)
@@ -9915,6 +10652,7 @@ local FLOOR = {
         toX = 0.117,
         toY = 0.719,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 557 28.50,9.70) -> Siege of Orgrimmar (map 558 11.70,71.80) via floor
     {
@@ -9927,6 +10665,7 @@ local FLOOR = {
         toX = 0.117,
         toY = 0.718,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 557 44.70,69.20) -> Siege of Orgrimmar (map 559 64.60,12.70) via floor
     {
@@ -9939,6 +10678,7 @@ local FLOOR = {
         toX = 0.646,
         toY = 0.127,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 558)
@@ -9953,6 +10693,7 @@ local FLOOR = {
         toX = 0.285,
         toY = 0.097,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 558 11.70,71.90) -> Siege of Orgrimmar (map 557 26.40,9.80) via floor
     {
@@ -9965,6 +10706,7 @@ local FLOOR = {
         toX = 0.264,
         toY = 0.098,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 559)
@@ -9979,6 +10721,7 @@ local FLOOR = {
         toX = 0.447,
         toY = 0.692,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 560)
@@ -9993,6 +10736,7 @@ local FLOOR = {
         toX = 0.517,
         toY = 0.769,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 561)
@@ -10007,6 +10751,7 @@ local FLOOR = {
         toX = 0.348,
         toY = 0.216,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 561 56.30,29.10) -> Siege of Orgrimmar (map 562 80.70,16.30) via floor
     {
@@ -10019,6 +10764,7 @@ local FLOOR = {
         toX = 0.807,
         toY = 0.163,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 562)
@@ -10033,6 +10779,7 @@ local FLOOR = {
         toX = 0.311,
         toY = 0.203,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 562 80.70,16.30) -> Siege of Orgrimmar (map 561 56.30,29.10) via floor
     {
@@ -10045,6 +10792,7 @@ local FLOOR = {
         toX = 0.563,
         toY = 0.291,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 563)
@@ -10059,6 +10807,7 @@ local FLOOR = {
         toX = 0.679,
         toY = 0.501,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 564)
@@ -10073,6 +10822,7 @@ local FLOOR = {
         toX = 0.64,
         toY = 0.178,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 564 87.70,76.40) -> Siege of Orgrimmar (map 567 32.00,14.80) via floor
     {
@@ -10085,6 +10835,7 @@ local FLOOR = {
         toX = 0.32,
         toY = 0.148,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 564 89.40,62.30) -> Siege of Orgrimmar (map 566 23.70,82.30) via floor
     {
@@ -10097,6 +10848,7 @@ local FLOOR = {
         toX = 0.237,
         toY = 0.823,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 565)
@@ -10111,6 +10863,7 @@ local FLOOR = {
         toX = 0.786,
         toY = 0.736,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 566)
@@ -10125,6 +10878,7 @@ local FLOOR = {
         toX = 0.894,
         toY = 0.623,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 567)
@@ -10139,6 +10893,7 @@ local FLOOR = {
         toX = 0.877,
         toY = 0.764,
         type = "floor",
+        travelDuration = 5,
     },
     -- Siege of Orgrimmar (map 567 65.20,91.50) -> Siege of Orgrimmar (map 568 53.70,13.50) via floor
     {
@@ -10151,6 +10906,7 @@ local FLOOR = {
         toX = 0.537,
         toY = 0.135,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Siege of Orgrimmar (map 568)
@@ -10165,6 +10921,7 @@ local FLOOR = {
         toX = 0.652,
         toY = 0.915,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sightless Hold (map 1650)
@@ -10179,6 +10936,7 @@ local FLOOR = {
         toX = 0.5408,
         toY = 0.1225,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Silithus (map 81)
@@ -10193,6 +10951,7 @@ local FLOOR = {
         toX = 0.151,
         toY = 0.7,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Skull Rock (map 5)
@@ -10207,6 +10966,7 @@ local FLOOR = {
         toX = 0.5499,
         toY = 0.0967,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sor'theril Barrow Den (map 2253)
@@ -10221,6 +10981,7 @@ local FLOOR = {
         toX = 0.5109,
         toY = 0.4275,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spires Of Ascension (map 1692)
@@ -10235,6 +10996,7 @@ local FLOOR = {
         toX = 0.3615,
         toY = 0.6295,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spires Of Ascension (map 1693)
@@ -10249,6 +11011,7 @@ local FLOOR = {
         toX = 0.7202,
         toY = 0.1819,
         type = "floor",
+        travelDuration = 5,
     },
     -- Spires of Ascension (map 1693 69.27,41.25) -> Spires of Ascension (map 1694 37.59,80.06) via floor
     {
@@ -10261,6 +11024,7 @@ local FLOOR = {
         toX = 0.3759,
         toY = 0.8006,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spires Of Ascension (map 1694)
@@ -10275,6 +11039,7 @@ local FLOOR = {
         toX = 0.6927,
         toY = 0.4125,
         type = "floor",
+        travelDuration = 5,
     },
     -- Spires of Ascension (map 1694 50.74,45.09) -> Spires of Ascension (map 1695 42.97,69.58) via floor
     {
@@ -10287,6 +11052,7 @@ local FLOOR = {
         toX = 0.4297,
         toY = 0.6958,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spires Of Ascension (map 1695)
@@ -10301,6 +11067,7 @@ local FLOOR = {
         toX = 0.5074,
         toY = 0.4509,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spitescale Cavern (map 464)
@@ -10315,6 +11082,7 @@ local FLOOR = {
         toX = 0.5911,
         toY = 0.2233,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Spoke of Endless Winter (map 2193)
@@ -10329,6 +11097,7 @@ local FLOOR = {
         toX = 0.7513,
         toY = 0.6474,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2193 79.08,56.38) -> Dawn of the Infinite (map 2194 32.09,13.27) via floor
     {
@@ -10341,6 +11110,7 @@ local FLOOR = {
         toX = 0.3209,
         toY = 0.1327,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stillpine Hold (map 99)
@@ -10355,6 +11125,7 @@ local FLOOR = {
         toX = 0.4534,
         toY = 0.1954,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormheim (map 634)
@@ -10369,6 +11140,7 @@ local FLOOR = {
         toX = 0.2643,
         toY = 0.51,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormheim (map 865)
@@ -10383,6 +11155,7 @@ local FLOOR = {
         toX = 0.4402,
         toY = 0.3465,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormheim (map 866)
@@ -10397,6 +11170,7 @@ local FLOOR = {
         toX = 0.4073,
         toY = 0.4358,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormstout Brewery (map 439)
@@ -10411,6 +11185,7 @@ local FLOOR = {
         toX = 0.328,
         toY = 0.592,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormstout Brewery (map 440)
@@ -10425,6 +11200,7 @@ local FLOOR = {
         toX = 0.281,
         toY = 0.611,
         type = "floor",
+        travelDuration = 5,
     },
     -- Stormstout Brewery (map 440 81.50,58.50) -> Stormstout Brewery (map 441 33.80,77.90) via floor
     {
@@ -10437,6 +11213,7 @@ local FLOOR = {
         toX = 0.338,
         toY = 0.779,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormstout Brewery (map 441)
@@ -10451,6 +11228,7 @@ local FLOOR = {
         toX = 0.815,
         toY = 0.585,
         type = "floor",
+        travelDuration = 5,
     },
     -- Stormstout Brewery (map 441 75.50,33.50) -> Stormstout Brewery (map 442 57.60,31.10) via floor
     {
@@ -10463,6 +11241,7 @@ local FLOOR = {
         toX = 0.576,
         toY = 0.311,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Stormstout Brewery (map 442)
@@ -10477,6 +11256,7 @@ local FLOOR = {
         toX = 0.755,
         toY = 0.335,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sunkiller Sanctum (map 2528)
@@ -10491,6 +11271,7 @@ local FLOOR = {
         toX = 0.3795,
         toY = 0.4609,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sunkiller Sanctum (map 2528 43.69,18.54) -> Sunkiller Sanctum (map 2571 43.93,18.29) via floor
     {
@@ -10503,6 +11284,7 @@ local FLOOR = {
         toX = 0.4393,
         toY = 0.1829,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sunkiller Sanctum (map 2571)
@@ -10517,6 +11299,7 @@ local FLOOR = {
         toX = 0.395,
         toY = 0.4706,
         type = "floor",
+        travelDuration = 5,
     },
     -- Sunkiller Sanctum (map 2571 43.93,18.29) -> Sunkiller Sanctum (map 2528 43.69,18.54) via floor
     {
@@ -10529,6 +11312,7 @@ local FLOOR = {
         toX = 0.4369,
         toY = 0.1854,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sunwell Plateau (map 335)
@@ -10543,6 +11327,7 @@ local FLOOR = {
         toX = 0.527,
         toY = 0.141,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Sunwell Plateau (map 336)
@@ -10557,6 +11342,7 @@ local FLOOR = {
         toX = 0.672,
         toY = 0.273,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Suramar (map 680)
@@ -10571,6 +11357,7 @@ local FLOOR = {
         toX = 0.3935,
         toY = 0.826,
         type = "floor",
+        travelDuration = 5,
     },
     -- Suramar (map 680 59.36,43.03) -> Suramar (map 687 54.39,86.69) via floor
     {
@@ -10583,6 +11370,7 @@ local FLOOR = {
         toX = 0.5439,
         toY = 0.8669,
         type = "floor",
+        travelDuration = 5,
     },
     -- Suramar (map 680 65.95,42.06) -> Suramar (map 686 56.43,86.96) via floor
     {
@@ -10595,6 +11383,7 @@ local FLOOR = {
         toX = 0.5643,
         toY = 0.8696,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tanaris (map 71)
@@ -10609,6 +11398,7 @@ local FLOOR = {
         toX = 0.475,
         toY = 0.336,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 71 34.80,41.60) -> Tanaris (map 72 50.40,25.10) via floor
     {
@@ -10621,6 +11411,7 @@ local FLOOR = {
         toX = 0.504,
         toY = 0.251,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 71 35.30,42.60) -> Tanaris (map 72 55.90,36.40) via floor
     {
@@ -10633,6 +11424,7 @@ local FLOOR = {
         toX = 0.559,
         toY = 0.364,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 71 54.50,69.80) -> Tanaris (map 73 42.20,39.40) via floor
     {
@@ -10645,6 +11437,7 @@ local FLOOR = {
         toX = 0.422,
         toY = 0.394,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 71 55.50,68.20) -> Tanaris (map 73 51.50,24.30) via floor
     {
@@ -10657,6 +11450,7 @@ local FLOOR = {
         toX = 0.515,
         toY = 0.243,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 71 64.90,50.00) -> Tanaris (map 74 53.30,29.40) via floor
     {
@@ -10669,6 +11463,7 @@ local FLOOR = {
         toX = 0.533,
         toY = 0.294,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1989)
@@ -10683,6 +11478,7 @@ local FLOOR = {
         toX = 0.2288,
         toY = 0.7999,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1989 40.11,43.01) -> Tazavesh, the Veiled Market (map 1991 78.12,63.74) via floor
     {
@@ -10695,6 +11491,7 @@ local FLOOR = {
         toX = 0.7812,
         toY = 0.6374,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1989 41.46,28.01) -> Tazavesh, the Veiled Market (map 1992 62.29,85.27) via floor
     {
@@ -10707,6 +11504,7 @@ local FLOOR = {
         toX = 0.6229,
         toY = 0.8527,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1989 43.66,63.09) -> Tazavesh, the Veiled Market (map 1990 36.61,18.28) via floor
     {
@@ -10719,6 +11517,7 @@ local FLOOR = {
         toX = 0.3661,
         toY = 0.1828,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1990)
@@ -10733,6 +11532,7 @@ local FLOOR = {
         toX = 0.4366,
         toY = 0.6309,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1991)
@@ -10747,6 +11547,7 @@ local FLOOR = {
         toX = 0.4011,
         toY = 0.4301,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1992)
@@ -10761,6 +11562,7 @@ local FLOOR = {
         toX = 0.4146,
         toY = 0.2801,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1993)
@@ -10775,6 +11577,7 @@ local FLOOR = {
         toX = 0.4295,
         toY = 0.6166,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1995)
@@ -10789,6 +11592,7 @@ local FLOOR = {
         toX = 0.3143,
         toY = 0.5411,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1995 62.86,52.15) -> Tazavesh, the Veiled Market (map 1997 19.07,26.04) via floor
     {
@@ -10801,6 +11605,7 @@ local FLOOR = {
         toX = 0.1907,
         toY = 0.2604,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1996)
@@ -10815,6 +11620,7 @@ local FLOOR = {
         toX = 0.8111,
         toY = 0.5308,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1996 75.50,37.73) -> Tazavesh, the Veiled Market (map 1997 62.48,53.78) via floor
     {
@@ -10827,6 +11633,7 @@ local FLOOR = {
         toX = 0.6248,
         toY = 0.5378,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 1997)
@@ -10841,6 +11648,7 @@ local FLOOR = {
         toX = 0.6286,
         toY = 0.5215,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tazavesh, the Veiled Market (map 1997 62.48,53.78) -> Tazavesh, the Veiled Market (map 1996 75.50,37.73) via floor
     {
@@ -10853,6 +11661,7 @@ local FLOOR = {
         toX = 0.755,
         toY = 0.3773,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Teldrassil (map 57)
@@ -10867,6 +11676,7 @@ local FLOOR = {
         toX = 0.526,
         toY = 0.155,
         type = "floor",
+        travelDuration = 5,
     },
     -- Teldrassil (map 57 54.50,46.30) -> Teldrassil (map 59 77.60,81.70) via floor
     {
@@ -10879,6 +11689,7 @@ local FLOOR = {
         toX = 0.776,
         toY = 0.817,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Temple of the Jade Serpent (map 429)
@@ -10893,6 +11704,7 @@ local FLOOR = {
         toX = 0.466,
         toY = 0.425,
         type = "floor",
+        travelDuration = 5,
     },
     -- Temple of the Jade Serpent (map 429 27.40,62.70) -> Temple of the Jade Serpent (map 430 39.00,22.00) via floor
     {
@@ -10905,6 +11717,7 @@ local FLOOR = {
         toX = 0.39,
         toY = 0.22,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Temple of the Jade Serpent (map 430)
@@ -10919,6 +11732,7 @@ local FLOOR = {
         toX = 0.274,
         toY = 0.627,
         type = "floor",
+        travelDuration = 5,
     },
     -- Temple of the Jade Serpent (map 430 46.60,42.50) -> Temple of the Jade Serpent (map 429 27.00,68.70) via floor
     {
@@ -10931,6 +11745,7 @@ local FLOOR = {
         toX = 0.27,
         toY = 0.687,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Ancient Passage (map 434)
@@ -10945,6 +11760,7 @@ local FLOOR = {
         toX = 0.732,
         toY = 0.946,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Veiled Stair (map 434 63.10,86.40) -> The Veiled Stair (map 433 50.60,40.40) via floor
     {
@@ -10957,6 +11773,7 @@ local FLOOR = {
         toX = 0.506,
         toY = 0.404,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Veiled Stair (map 434 77.60,36.70) -> The Veiled Stair (map 433 57.30,13.60) via floor
     {
@@ -10969,6 +11786,7 @@ local FLOOR = {
         toX = 0.573,
         toY = 0.136,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Arcatraz (map 269)
@@ -10983,6 +11801,7 @@ local FLOOR = {
         toX = 0.8926,
         toY = 0.4376,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Arcatraz (map 270)
@@ -10997,6 +11816,7 @@ local FLOOR = {
         toX = 0.2697,
         toY = 0.8852,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Arcatraz (map 270 89.26,43.76) -> The Arcatraz (map 269 65.11,35.34) via floor
     {
@@ -11009,6 +11829,7 @@ local FLOOR = {
         toX = 0.6511,
         toY = 0.3534,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Arcatraz (map 271)
@@ -11023,6 +11844,7 @@ local FLOOR = {
         toX = 0.3651,
         toY = 0.5712,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Arcway Vaults (map 681)
@@ -11037,6 +11859,7 @@ local FLOOR = {
         toX = 0.5463,
         toY = 0.4635,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Span (map 2024)
@@ -11051,6 +11874,7 @@ local FLOOR = {
         toX = 0.3506,
         toY = 0.902,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Azure Span (map 2024 34.96,30.01) -> The Azure Span (map 2132 53.14,82.77) via floor
     {
@@ -11063,6 +11887,7 @@ local FLOOR = {
         toX = 0.5314,
         toY = 0.8277,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Span (map 2132)
@@ -11077,6 +11902,7 @@ local FLOOR = {
         toX = 0.3403,
         toY = 0.3081,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Azure Span (map 2132 53.14,82.77) -> The Azure Span (map 2024 34.96,30.01) via floor
     {
@@ -11089,6 +11915,7 @@ local FLOOR = {
         toX = 0.3496,
         toY = 0.3001,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Vault (map 2073)
@@ -11103,6 +11930,7 @@ local FLOOR = {
         toX = 0.391,
         toY = 0.2002,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Vault (map 2074)
@@ -11117,6 +11945,7 @@ local FLOOR = {
         toX = 0.4546,
         toY = 0.419,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Azure Vault (map 2074 58.32,65.87) -> The Azure Vault (map 2075 27.10,55.38) via floor
     {
@@ -11129,6 +11958,7 @@ local FLOOR = {
         toX = 0.271,
         toY = 0.5538,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Vault (map 2075)
@@ -11143,6 +11973,7 @@ local FLOOR = {
         toX = 0.5832,
         toY = 0.6587,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Azure Vault (map 2075 84.25,34.93) -> The Azure Vault (map 2076 81.93,32.17) via floor
     {
@@ -11155,6 +11986,7 @@ local FLOOR = {
         toX = 0.8193,
         toY = 0.3217,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Vault (map 2076)
@@ -11169,6 +12001,7 @@ local FLOOR = {
         toX = 0.5756,
         toY = 0.6051,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Azure Vault (map 2076 81.93,32.17) -> The Azure Vault (map 2075 84.25,34.93) via floor
     {
@@ -11181,6 +12014,7 @@ local FLOOR = {
         toX = 0.8425,
         toY = 0.3493,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Azure Vault (map 2077)
@@ -11195,6 +12029,7 @@ local FLOOR = {
         toX = 0.3651,
         toY = 0.4308,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Bastion of Twilight (map 294)
@@ -11209,6 +12044,7 @@ local FLOOR = {
         toX = 0.551,
         toY = 0.055,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Bastion of Twilight (map 295)
@@ -11223,6 +12059,7 @@ local FLOOR = {
         toX = 0.537,
         toY = 0.852,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Bastion of Twilight (map 295 69.80,74.80) -> The Bastion of Twilight (map 296 54.80,65.50) via floor
     {
@@ -11235,6 +12072,7 @@ local FLOOR = {
         toX = 0.548,
         toY = 0.655,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Coiled Isle (map 2512)
@@ -11249,6 +12087,7 @@ local FLOOR = {
         toX = 0.7859,
         toY = 0.4139,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 44.78,30.06) -> Infested Tomb (map 2640 76.66,41.25) via floor
     {
@@ -11261,6 +12100,7 @@ local FLOOR = {
         toX = 0.7666,
         toY = 0.4125,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 45.37,64.93) -> Vaults of Atal'Utek (map 2509 51.29,82.10) via floor
     {
@@ -11273,6 +12113,7 @@ local FLOOR = {
         toX = 0.5129,
         toY = 0.821,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 45.48,75.78) -> Crypt of the Denied (map 2639 69.16,18.00) via floor
     {
@@ -11285,6 +12126,7 @@ local FLOOR = {
         toX = 0.6916,
         toY = 0.18,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 49.46,38.54) -> Crypt of the Lost Mason (map 2643 45.44,11.99) via floor
     {
@@ -11297,6 +12139,7 @@ local FLOOR = {
         toX = 0.4544,
         toY = 0.1199,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 52.42,43.00) -> Tomb of the Lost Priest (map 2642 52.20,79.92) via floor
     {
@@ -11309,6 +12152,7 @@ local FLOOR = {
         toX = 0.522,
         toY = 0.7992,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 52.95,32.23) -> Crypt of the Lost Warrior (map 2641 7.64,59.34) via floor
     {
@@ -11321,6 +12165,7 @@ local FLOOR = {
         toX = 0.0764,
         toY = 0.5934,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 57.09,33.45) -> Crypt of the Lost Warrior (map 2641 89.42,82.69) via floor
     {
@@ -11333,6 +12178,7 @@ local FLOOR = {
         toX = 0.8942,
         toY = 0.8269,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 74.71,62.70) -> Crypt of the Disgraced (map 2644 66.44,17.99) via floor
     {
@@ -11345,6 +12191,7 @@ local FLOOR = {
         toX = 0.6644,
         toY = 0.1799,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Culling of Stratholme (map 130)
@@ -11359,6 +12206,7 @@ local FLOOR = {
         toX = 0.5063,
         toY = 0.9288,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Culling of Stratholme (map 131)
@@ -11373,6 +12221,7 @@ local FLOOR = {
         toX = 0.4747,
         toY = 0.3224,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Deadmines (map 291)
@@ -11387,6 +12236,7 @@ local FLOOR = {
         toX = 0.1697,
         toY = 0.8845,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Deadmines (map 292)
@@ -11401,6 +12251,7 @@ local FLOOR = {
         toX = 0.6548,
         toY = 0.6002,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Deadmines (map 55)
@@ -11415,6 +12266,7 @@ local FLOOR = {
         toX = 0.425,
         toY = 0.718,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Deeper (map 383)
@@ -11429,6 +12281,7 @@ local FLOOR = {
         toX = 0.529,
         toY = 0.713,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Dreamgrove (map 747)
@@ -11443,6 +12296,7 @@ local FLOOR = {
         toX = 0.4548,
         toY = 0.3451,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -11472,6 +12326,7 @@ local FLOOR = {
         toX = 0.5026,
         toY = 0.2278,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Dreamrift (map 2532)
@@ -11486,6 +12341,7 @@ local FLOOR = {
         toX = 0.505,
         toY = 0.806,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eastern Boughs (map 2236)
@@ -11500,6 +12356,7 @@ local FLOOR = {
         toX = 0.621,
         toY = 0.6481,
         type = "floor",
+        travelDuration = 5,
     },
     -- Amirdrassil, The Dream's Hope (map 2236 29.70,50.93) -> Amirdrassil, The Dream's Hope (map 2238 67.12,89.67) via floor
     {
@@ -11512,6 +12369,7 @@ local FLOOR = {
         toX = 0.6712,
         toY = 0.8967,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1512)
@@ -11526,6 +12384,7 @@ local FLOOR = {
         toX = 0.6628,
         toY = 0.6994,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1513)
@@ -11540,6 +12399,7 @@ local FLOOR = {
         toX = 0.5681,
         toY = 0.1435,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1513 47.49,68.79) -> The Eternal Palace (map 1516 42.47,52.30) via floor
     {
@@ -11552,6 +12412,7 @@ local FLOOR = {
         toX = 0.4247,
         toY = 0.523,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1513 66.28,69.94) -> The Eternal Palace (map 1512 15.06,48.35) via floor
     {
@@ -11564,6 +12425,7 @@ local FLOOR = {
         toX = 0.1506,
         toY = 0.4835,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1514)
@@ -11578,6 +12440,7 @@ local FLOOR = {
         toX = 0.4491,
         toY = 0.9017,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1516)
@@ -11592,6 +12455,7 @@ local FLOOR = {
         toX = 0.4749,
         toY = 0.6879,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1516 49.78,71.88) -> The Eternal Palace (map 1517 85.22,36.73) via floor
     {
@@ -11604,6 +12468,7 @@ local FLOOR = {
         toX = 0.8522,
         toY = 0.3673,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1517)
@@ -11618,6 +12483,7 @@ local FLOOR = {
         toX = 0.6786,
         toY = 0.4907,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1517 85.22,36.73) -> The Eternal Palace (map 1516 49.78,71.88) via floor
     {
@@ -11630,6 +12496,7 @@ local FLOOR = {
         toX = 0.4978,
         toY = 0.7188,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1518)
@@ -11644,6 +12511,7 @@ local FLOOR = {
         toX = 0.8938,
         toY = 0.5115,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1518 67.86,49.07) -> The Eternal Palace (map 1517 10.47,62.12) via floor
     {
@@ -11656,6 +12524,7 @@ local FLOOR = {
         toX = 0.1047,
         toY = 0.6212,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1519)
@@ -11670,6 +12539,7 @@ local FLOOR = {
         toX = 0.6714,
         toY = 0.5251,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Eternal Palace (map 1519 89.38,51.15) -> The Eternal Palace (map 1518 15.78,48.21) via floor
     {
@@ -11682,6 +12552,7 @@ local FLOOR = {
         toX = 0.1578,
         toY = 0.4821,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Eternal Palace (map 1520)
@@ -11696,6 +12567,7 @@ local FLOOR = {
         toX = 0.1133,
         toY = 0.462,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Forbidden Reach (map 2151)
@@ -11710,6 +12582,7 @@ local FLOOR = {
         toX = 0.8314,
         toY = 0.8098,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Forbidden Reach (map 2151 51.84,60.19) -> The War Creche (map 2102 67.49,4.60) via floor
     {
@@ -11722,6 +12595,7 @@ local FLOOR = {
         toX = 0.6749,
         toY = 0.046,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Forbidden Reach (map 2151 60.68,37.91) -> Froststone Vault (map 2154 26.80,83.77) via floor
     {
@@ -11734,6 +12608,7 @@ local FLOOR = {
         toX = 0.268,
         toY = 0.8377,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Forbidden Reach (map 2151 74.31,54.78) -> The Siege Creche (map 2100 22.03,77.49) via floor
     {
@@ -11746,6 +12621,7 @@ local FLOOR = {
         toX = 0.2203,
         toY = 0.7749,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Forbidden Reach (map 2151 74.46,36.07) -> Dragonskull Island (map 2150 11.14,68.72) via floor
     {
@@ -11758,6 +12634,7 @@ local FLOOR = {
         toX = 0.1114,
         toY = 0.6872,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Forbidden Reach (map 2151 76.67,37.79) -> Dragonskull Island (map 2150 32.01,92.66) via floor
     {
@@ -11770,6 +12647,7 @@ local FLOOR = {
         toX = 0.3201,
         toY = 0.9266,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Gaping Chasm (map 73)
@@ -11784,6 +12662,7 @@ local FLOOR = {
         toX = 0.545,
         toY = 0.698,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 73 51.50,24.30) -> Tanaris (map 71 55.50,68.20) via floor
     {
@@ -11796,6 +12675,7 @@ local FLOOR = {
         toX = 0.555,
         toY = 0.682,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Grizzled Den (map 29)
@@ -11810,6 +12690,7 @@ local FLOOR = {
         toX = 0.489,
         toY = 0.526,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Illicit Rain (map 2435)
@@ -11824,6 +12705,7 @@ local FLOOR = {
         toX = 0.3018,
         toY = 0.5326,
         type = "floor",
+        travelDuration = 5,
     },
     -- Murder Row (map 2435 77.52,66.97) -> Murder Row (map 2433 45.18,15.29) via floor
     {
@@ -11836,6 +12718,7 @@ local FLOOR = {
         toX = 0.4518,
         toY = 0.1529,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Lost Isles (map 174)
@@ -11850,6 +12733,7 @@ local FLOOR = {
         toX = 0.481,
         toY = 0.9,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Lost Isles (map 174 70.00,48.00) -> The Lost Isles (map 176 50.00,10.80) via floor
     {
@@ -11862,6 +12746,7 @@ local FLOOR = {
         toX = 0.5,
         toY = 0.108,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Lycaneum (map 2649)
@@ -11876,6 +12761,7 @@ local FLOOR = {
         toX = 0.6401,
         toY = 0.2912,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Maw (map 1543)
@@ -11890,6 +12776,7 @@ local FLOOR = {
         toX = 0.8973,
         toY = 0.3452,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Maw (map 1543 27.87,20.52) -> Extractor's Sanatorium (map 1822 19.94,73.08) via floor
     {
@@ -11902,6 +12789,7 @@ local FLOOR = {
         toX = 0.1994,
         toY = 0.7308,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Maw (map 1543 51.53,90.46) -> Korthia (map 1961 40.04,25.94) via floor
     {
@@ -11914,6 +12802,7 @@ local FLOOR = {
         toX = 0.4004,
         toY = 0.2594,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Maw (map 1543 65.61,80.80) -> Korthia (map 1961 58.48,13.67) via floor
     {
@@ -11926,6 +12815,7 @@ local FLOOR = {
         toX = 0.5848,
         toY = 0.1367,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Mechanar (map 267)
@@ -11940,6 +12830,7 @@ local FLOOR = {
         toX = 0.4177,
         toY = 0.3154,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Mechanar (map 268)
@@ -11954,6 +12845,7 @@ local FLOOR = {
         toX = 0.4173,
         toY = 0.2282,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Necrotic Wake (map 1666)
@@ -11968,6 +12860,7 @@ local FLOOR = {
         toX = 0.511,
         toY = 0.8375,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Necrotic Wake (map 1667)
@@ -11982,6 +12875,7 @@ local FLOOR = {
         toX = 0.5074,
         toY = 0.5531,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Necrotic Wake (map 1667 51.10,83.75) -> The Necrotic Wake (map 1666 25.27,40.35) via floor
     {
@@ -11994,6 +12888,7 @@ local FLOOR = {
         toX = 0.2527,
         toY = 0.4035,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Necrotic Wake (map 1668)
@@ -12008,6 +12903,7 @@ local FLOOR = {
         toX = 0.5074,
         toY = 0.5631,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Nighthold (map 2220)
@@ -12022,6 +12918,7 @@ local FLOOR = {
         toX = 0.5499,
         toY = 0.6381,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Nighthold (map 2221)
@@ -12036,6 +12933,7 @@ local FLOOR = {
         toX = 0.5013,
         toY = 0.5505,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Northern Boughs (map 2235)
@@ -12050,6 +12948,7 @@ local FLOOR = {
         toX = 0.4727,
         toY = 0.4347,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Noxious Lair (map 72)
@@ -12064,6 +12963,7 @@ local FLOOR = {
         toX = 0.345,
         toY = 0.424,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 72 50.40,25.10) -> Tanaris (map 71 34.80,41.60) via floor
     {
@@ -12076,6 +12976,7 @@ local FLOOR = {
         toX = 0.348,
         toY = 0.416,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tanaris (map 72 55.90,36.40) -> Tanaris (map 71 35.30,42.60) via floor
     {
@@ -12088,6 +12989,7 @@ local FLOOR = {
         toX = 0.353,
         toY = 0.426,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2315)
@@ -12102,6 +13004,7 @@ local FLOOR = {
         toX = 0.7107,
         toY = 0.5065,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2315 18.58,47.35) -> The Rookery (map 2318 57.80,26.79) via floor
     {
@@ -12114,6 +13017,7 @@ local FLOOR = {
         toX = 0.578,
         toY = 0.2679,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2316)
@@ -12128,6 +13032,7 @@ local FLOOR = {
         toX = 0.5098,
         toY = 0.2672,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2316 71.07,50.65) -> The Rookery (map 2315 10.43,47.44) via floor
     {
@@ -12140,6 +13045,7 @@ local FLOOR = {
         toX = 0.1043,
         toY = 0.4744,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2317)
@@ -12154,6 +13060,7 @@ local FLOOR = {
         toX = 0.4452,
         toY = 0.2464,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2317 50.98,26.72) -> The Rookery (map 2316 40.58,51.18) via floor
     {
@@ -12166,6 +13073,7 @@ local FLOOR = {
         toX = 0.4058,
         toY = 0.5118,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2318)
@@ -12180,6 +13088,7 @@ local FLOOR = {
         toX = 0.4978,
         toY = 0.6241,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2318 47.03,58.54) -> The Rookery (map 2319 49.78,90.21) via floor
     {
@@ -12192,6 +13101,7 @@ local FLOOR = {
         toX = 0.4978,
         toY = 0.9021,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2318 55.40,13.70) -> The Rookery (map 2319 61.86,45.19) via floor
     {
@@ -12204,6 +13114,7 @@ local FLOOR = {
         toX = 0.6186,
         toY = 0.4519,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2318 57.80,26.79) -> The Rookery (map 2315 18.58,47.35) via floor
     {
@@ -12216,6 +13127,7 @@ local FLOOR = {
         toX = 0.1858,
         toY = 0.4735,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2319)
@@ -12230,6 +13142,7 @@ local FLOOR = {
         toX = 0.4632,
         toY = 0.3612,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2319 49.78,90.21) -> The Rookery (map 2318 47.03,58.54) via floor
     {
@@ -12242,6 +13155,7 @@ local FLOOR = {
         toX = 0.4703,
         toY = 0.5854,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Rookery (map 2319 61.86,45.19) -> The Rookery (map 2318 55.40,13.70) via floor
     {
@@ -12254,6 +13168,7 @@ local FLOOR = {
         toX = 0.554,
         toY = 0.137,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Rookery (map 2320)
@@ -12268,6 +13183,7 @@ local FLOOR = {
         toX = 0.3926,
         toY = 0.3067,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Siege Creche (map 2100)
@@ -12282,6 +13198,7 @@ local FLOOR = {
         toX = 0.7431,
         toY = 0.5478,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Southern Boughs (map 2237)
@@ -12296,6 +13213,7 @@ local FLOOR = {
         toX = 0.3806,
         toY = 0.8832,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Steamvault (map 263)
@@ -12310,6 +13228,7 @@ local FLOOR = {
         toX = 0.3559,
         toY = 0.7257,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Steamvault (map 263 48.01,77.81) -> The Steamvault (map 264 46.24,79.55) via floor
     {
@@ -12322,6 +13241,7 @@ local FLOOR = {
         toX = 0.4624,
         toY = 0.7955,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Steamvault (map 263 49.85,29.26) -> The Steamvault (map 264 51.23,28.93) via floor
     {
@@ -12334,6 +13254,7 @@ local FLOOR = {
         toX = 0.5123,
         toY = 0.2893,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Steamvault (map 263 51.38,27.47) -> The Steamvault (map 264 51.48,29.20) via floor
     {
@@ -12346,6 +13267,7 @@ local FLOOR = {
         toX = 0.5148,
         toY = 0.292,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Steamvault (map 264)
@@ -12360,6 +13282,7 @@ local FLOOR = {
         toX = 0.4801,
         toY = 0.7781,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Steamvault (map 264 51.23,28.93) -> The Steamvault (map 263 49.85,29.26) via floor
     {
@@ -12372,6 +13295,7 @@ local FLOOR = {
         toX = 0.4985,
         toY = 0.2926,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Support Creche (map 2101)
@@ -12386,6 +13310,7 @@ local FLOOR = {
         toX = 0.368,
         toY = 0.325,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Swollen Vault (map 506)
@@ -12400,6 +13325,7 @@ local FLOOR = {
         toX = 0.624,
         toY = 0.403,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Underbelly (map 2613)
@@ -12414,6 +13340,7 @@ local FLOOR = {
         toX = 0.4723,
         toY = 0.0728,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Veiled Stair (map 433)
@@ -12428,6 +13355,7 @@ local FLOOR = {
         toX = 0.631,
         toY = 0.864,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Veiled Stair (map 433 57.30,13.60) -> The Veiled Stair (map 434 77.60,36.70) via floor
     {
@@ -12440,6 +13368,7 @@ local FLOOR = {
         toX = 0.776,
         toY = 0.367,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venomous Abyss (map 2606)
@@ -12454,6 +13383,7 @@ local FLOOR = {
         toX = 0.4998,
         toY = 0.9066,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venomous Abyss (map 2607)
@@ -12468,6 +13398,7 @@ local FLOOR = {
         toX = 0.7908,
         toY = 0.3354,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Venomous Abyss (map 2607 49.92,46.83) -> The Venomous Abyss (map 2610 49.55,93.08) via floor
     {
@@ -12480,6 +13411,7 @@ local FLOOR = {
         toX = 0.4955,
         toY = 0.9308,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Venomous Abyss (map 2607 49.98,90.66) -> The Venomous Abyss (map 2606 50.00,14.50) via floor
     {
@@ -12492,6 +13424,7 @@ local FLOOR = {
         toX = 0.5,
         toY = 0.145,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Venomous Abyss (map 2607 57.63,63.76) -> The Venomous Abyss (map 2608 27.19,32.64) via floor
     {
@@ -12504,6 +13437,7 @@ local FLOOR = {
         toX = 0.2719,
         toY = 0.3264,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venomous Abyss (map 2608)
@@ -12518,6 +13452,7 @@ local FLOOR = {
         toX = 0.5763,
         toY = 0.6376,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venomous Abyss (map 2609)
@@ -12532,6 +13467,7 @@ local FLOOR = {
         toX = 0.4232,
         toY = 0.6359,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venomous Abyss (map 2610)
@@ -12546,6 +13482,7 @@ local FLOOR = {
         toX = 0.4992,
         toY = 0.4683,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Venture Co. Mine (map 9)
@@ -12560,6 +13497,7 @@ local FLOOR = {
         toX = 0.5919,
         toY = 0.4416,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mulgore (map 9 29.55,13.58) -> Mulgore (map 7 59.19,36.39) via floor
     {
@@ -12572,6 +13510,7 @@ local FLOOR = {
         toX = 0.5919,
         toY = 0.3639,
         type = "floor",
+        travelDuration = 5,
     },
     -- Mulgore (map 9 40.15,89.72) -> Mulgore (map 7 60.74,47.59) via floor
     {
@@ -12584,6 +13523,7 @@ local FLOOR = {
         toX = 0.6074,
         toY = 0.4759,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Voidspire (map 2529)
@@ -12598,6 +13538,7 @@ local FLOOR = {
         toX = 0.4715,
         toY = 0.51,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The Voidspire (map 2530)
@@ -12612,6 +13553,7 @@ local FLOOR = {
         toX = 0.6676,
         toY = 0.2941,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: The War Creche (map 2102)
@@ -12626,6 +13568,7 @@ local FLOOR = {
         toX = 0.5184,
         toY = 0.6019,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Theater of Pain (map 1683)
@@ -12640,6 +13583,7 @@ local FLOOR = {
         toX = 0.3197,
         toY = 0.3433,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Theater of Pain (map 1684)
@@ -12654,6 +13598,7 @@ local FLOOR = {
         toX = 0.8147,
         toY = 0.6958,
         type = "floor",
+        travelDuration = 5,
     },
     -- Theater of Pain (map 1684 31.97,34.33) -> Theater of Pain (map 1683 50.74,47.35) via floor
     {
@@ -12666,6 +13611,7 @@ local FLOOR = {
         toX = 0.5074,
         toY = 0.4735,
         type = "floor",
+        travelDuration = 5,
     },
     -- Theater of Pain (map 1684 32.21,16.39) -> Theater of Pain (map 1685 71.07,90.39) via floor
     {
@@ -12678,6 +13624,7 @@ local FLOOR = {
         toX = 0.7107,
         toY = 0.9039,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Theater of Pain (map 1685)
@@ -12692,6 +13639,7 @@ local FLOOR = {
         toX = 0.3221,
         toY = 0.1639,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Theater of Pain (map 1686)
@@ -12706,6 +13654,7 @@ local FLOOR = {
         toX = 0.2492,
         toY = 0.2374,
         type = "floor",
+        travelDuration = 5,
     },
     -- Theater of Pain (map 1686 81.47,69.58) -> Theater of Pain (map 1684 22.05,28.87) via floor
     {
@@ -12718,6 +13667,7 @@ local FLOOR = {
         toX = 0.2205,
         toY = 0.2887,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Theater of Pain (map 1687)
@@ -12732,6 +13682,7 @@ local FLOOR = {
         toX = 0.2539,
         toY = 0.2224,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Third Chamber of Kalliope (map 1714)
@@ -12746,6 +13697,7 @@ local FLOOR = {
         toX = 0.4352,
         toY = 0.386,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -12775,6 +13727,7 @@ local FLOOR = {
         toX = 0.148,
         toY = 0.789,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 509)
@@ -12789,6 +13742,7 @@ local FLOOR = {
         toX = 0.834,
         toY = 0.796,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of Thunder (map 509 72.90,20.01) -> Throne of Thunder (map 510 20.70,82.15) via floor
     {
@@ -12801,6 +13755,7 @@ local FLOOR = {
         toX = 0.207,
         toY = 0.8215,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 510)
@@ -12815,6 +13770,7 @@ local FLOOR = {
         toX = 0.729,
         toY = 0.2001,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of Thunder (map 510 73.10,53.20) -> Throne of Thunder (map 511 21.90,21.10) via floor
     {
@@ -12827,6 +13783,7 @@ local FLOOR = {
         toX = 0.219,
         toY = 0.211,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 511)
@@ -12841,6 +13798,7 @@ local FLOOR = {
         toX = 0.731,
         toY = 0.532,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of Thunder (map 511 34.00,59.00) -> Throne of Thunder (map 512 80.20,7.80) via floor
     {
@@ -12853,6 +13811,7 @@ local FLOOR = {
         toX = 0.802,
         toY = 0.078,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 512)
@@ -12867,6 +13826,7 @@ local FLOOR = {
         toX = 0.2044,
         toY = 0.6475,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of Thunder (map 512 80.20,7.80) -> Throne of Thunder (map 511 34.00,59.00) via floor
     {
@@ -12879,6 +13839,7 @@ local FLOOR = {
         toX = 0.34,
         toY = 0.59,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 513)
@@ -12893,6 +13854,7 @@ local FLOOR = {
         toX = 0.4664,
         toY = 0.2287,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of Thunder (map 513 88.13,74.91) -> Throne of Thunder (map 514 45.97,10.54) via floor
     {
@@ -12905,6 +13867,7 @@ local FLOOR = {
         toX = 0.4597,
         toY = 0.1054,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of Thunder (map 514)
@@ -12919,6 +13882,7 @@ local FLOOR = {
         toX = 0.8813,
         toY = 0.7491,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of the Tides (map 322)
@@ -12933,6 +13897,7 @@ local FLOOR = {
         toX = 0.51,
         toY = 0.53,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of the Tides (map 322 50.00,39.70) -> Throne of the Tides (map 323 50.00,90.10) via floor
     {
@@ -12945,6 +13910,7 @@ local FLOOR = {
         toX = 0.5,
         toY = 0.901,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Throne of the Tides (map 323)
@@ -12959,6 +13925,7 @@ local FLOOR = {
         toX = 0.5,
         toY = 0.397,
         type = "floor",
+        travelDuration = 5,
     },
     -- Throne of the Tides (map 323 51.00,53.00) -> Throne of the Tides (map 322 48.90,82.10) via floor
     {
@@ -12971,6 +13938,7 @@ local FLOOR = {
         toX = 0.489,
         toY = 0.821,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tides' Hollow (map 98)
@@ -12985,6 +13953,7 @@ local FLOOR = {
         toX = 0.2701,
         toY = 0.7661,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Timeless Isle (map 554)
@@ -12999,6 +13968,7 @@ local FLOOR = {
         toX = 0.444,
         toY = 0.81,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tiragarde Keep (map 3)
@@ -13013,6 +13983,7 @@ local FLOOR = {
         toX = 0.5894,
         toY = 0.5831,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 3 42.89,29.82) -> Durotar (map 4 33.16,37.87) via floor
     {
@@ -13025,6 +13996,7 @@ local FLOOR = {
         toX = 0.3316,
         toY = 0.3787,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 3 56.68,19.13) -> Durotar (map 4 64.23,26.68) via floor
     {
@@ -13037,6 +14009,7 @@ local FLOOR = {
         toX = 0.6423,
         toY = 0.2668,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tiragarde Keep (map 4)
@@ -13051,6 +14024,7 @@ local FLOOR = {
         toX = 0.4289,
         toY = 0.2982,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 4 58.23,21.18) -> Durotar (map 1 59.65,57.68) via floor
     {
@@ -13063,6 +14037,7 @@ local FLOOR = {
         toX = 0.5965,
         toY = 0.5768,
         type = "floor",
+        travelDuration = 5,
     },
     -- Durotar (map 4 64.23,26.68) -> Durotar (map 3 56.68,19.13) via floor
     {
@@ -13075,6 +14050,7 @@ local FLOOR = {
         toX = 0.5668,
         toY = 0.1913,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tiragarde Sound (map 895)
@@ -13089,6 +14065,7 @@ local FLOOR = {
         toX = 0.4428,
         toY = 0.8813,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tiragarde Sound (map 895 78.77,53.26) -> Tiragarde Sound (map 1184 39.98,34.23) via floor
     {
@@ -13101,6 +14078,7 @@ local FLOOR = {
         toX = 0.3998,
         toY = 0.3423,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tirisfal Glades (map 18)
@@ -13115,6 +14093,7 @@ local FLOOR = {
         toX = 0.4456,
         toY = 0.8268,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tirisfal Glades (map 18 82.30,32.60) -> Tirisfal Glades (map 19 14.50,73.10) via floor
     {
@@ -13127,6 +14106,7 @@ local FLOOR = {
         toX = 0.145,
         toY = 0.731,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tirisfal Glades (map 18 82.60,33.50) -> Tirisfal Glades (map 19 17.30,82.90) via floor
     {
@@ -13139,6 +14119,7 @@ local FLOOR = {
         toX = 0.173,
         toY = 0.829,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tomb of Conquerors (map 385)
@@ -13153,6 +14134,7 @@ local FLOOR = {
         toX = 0.5064,
         toY = 0.4984,
         type = "floor",
+        travelDuration = 5,
     },
     -- Kun-Lai Summit (map 385 88.30,54.80) -> Kun-Lai Summit (map 379 53.00,46.50) via floor
     {
@@ -13165,6 +14147,7 @@ local FLOOR = {
         toX = 0.53,
         toY = 0.465,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Tomb of the Lost Priest (map 2642)
@@ -13179,6 +14162,7 @@ local FLOOR = {
         toX = 0.5242,
         toY = 0.43,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Townlong Steppes (map 388)
@@ -13193,6 +14177,7 @@ local FLOOR = {
         toX = 0.2015,
         toY = 0.6846,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Trial of the Crusader (map 172)
@@ -13207,6 +14192,7 @@ local FLOOR = {
         toX = 0.525,
         toY = 0.735,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Trueshot Lodge (map 739)
@@ -13221,6 +14207,7 @@ local FLOOR = {
         toX = 0.3613,
         toY = 0.4471,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -13250,6 +14237,7 @@ local FLOOR = {
         toX = 0.7499,
         toY = 0.4151,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Twilight Crypts (map 2504)
@@ -13264,6 +14252,7 @@ local FLOOR = {
         toX = 0.4916,
         toY = 0.8938,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Twilight Depths (map 208)
@@ -13278,6 +14267,7 @@ local FLOOR = {
         toX = 0.626,
         toY = 0.7856,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Twilight's Run (map 82)
@@ -13292,6 +14282,7 @@ local FLOOR = {
         toX = 0.704,
         toY = 0.159,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Twisting Approach (map 2196)
@@ -13306,6 +14297,7 @@ local FLOOR = {
         toX = 0.6712,
         toY = 0.8967,
         type = "floor",
+        travelDuration = 5,
     },
     -- Dawn of the Infinite (map 2196 59.95,20.80) -> Dawn of the Infinite (map 2195 50.86,21.59) via floor
     {
@@ -13318,6 +14310,7 @@ local FLOOR = {
         toX = 0.5086,
         toY = 0.2159,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Uldaman (map 16)
@@ -13332,6 +14325,7 @@ local FLOOR = {
         toX = 0.416,
         toY = 0.116,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Uldaman (map 230)
@@ -13346,6 +14340,7 @@ local FLOOR = {
         toX = 0.6477,
         toY = 0.4335,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Uldaman (map 231)
@@ -13360,6 +14355,7 @@ local FLOOR = {
         toX = 0.4608,
         toY = 0.0957,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Uldaman: Legacy of Tyr (map 2071)
@@ -13374,6 +14370,7 @@ local FLOOR = {
         toX = 0.4541,
         toY = 0.8122,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Uldaman: Legacy of Tyr (map 2072)
@@ -13388,6 +14385,7 @@ local FLOOR = {
         toX = 0.287,
         toY = 0.1435,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ulduar (map 148)
@@ -13402,6 +14400,7 @@ local FLOOR = {
         toX = 0.4821,
         toY = 0.7734,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ulduar (map 148 37.24,1.35) -> Ulduar (map 149 54.09,78.14) via floor
     {
@@ -13414,6 +14413,7 @@ local FLOOR = {
         toX = 0.5409,
         toY = 0.7814,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ulduar (map 149)
@@ -13428,6 +14428,7 @@ local FLOOR = {
         toX = 0.3536,
         toY = 0.5221,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ulduar (map 149 48.21,77.34) -> Ulduar (map 148 36.72,0.61) via floor
     {
@@ -13440,6 +14441,7 @@ local FLOOR = {
         toX = 0.3672,
         toY = 0.0061,
         type = "floor",
+        travelDuration = 5,
     },
     -- Ulduar (map 149 54.09,78.14) -> Ulduar (map 148 37.24,1.35) via floor
     {
@@ -13452,6 +14454,7 @@ local FLOOR = {
         toX = 0.3724,
         toY = 0.0135,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Ulduar (map 150)
@@ -13466,6 +14469,7 @@ local FLOOR = {
         toX = 0.3033,
         toY = 0.7484,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2406)
@@ -13480,6 +14484,7 @@ local FLOOR = {
         toX = 0.4405,
         toY = 0.2762,
         type = "floor",
+        travelDuration = 5,
     },
     -- Liberation of Undermine (map 2406 66.92,44.80) -> Liberation of Undermine (map 2407 16.55,53.52) via floor
     {
@@ -13492,6 +14497,7 @@ local FLOOR = {
         toX = 0.1655,
         toY = 0.5352,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2407)
@@ -13506,6 +14512,7 @@ local FLOOR = {
         toX = 0.6692,
         toY = 0.448,
         type = "floor",
+        travelDuration = 5,
     },
     -- Liberation of Undermine (map 2407 87.57,54.59) -> Liberation of Undermine (map 2408 10.45,48.60) via floor
     {
@@ -13518,6 +14525,7 @@ local FLOOR = {
         toX = 0.1045,
         toY = 0.486,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2408)
@@ -13532,6 +14540,7 @@ local FLOOR = {
         toX = 0.8757,
         toY = 0.5459,
         type = "floor",
+        travelDuration = 5,
     },
     -- Liberation of Undermine (map 2408 86.49,40.89) -> Liberation of Undermine (map 2411 50.86,13.70) via floor
     {
@@ -13544,6 +14553,7 @@ local FLOOR = {
         toX = 0.5086,
         toY = 0.137,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2409)
@@ -13558,6 +14568,7 @@ local FLOOR = {
         toX = 0.5077,
         toY = 0.8761,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2411)
@@ -13572,6 +14583,7 @@ local FLOOR = {
         toX = 0.5313,
         toY = 0.0628,
         type = "floor",
+        travelDuration = 5,
     },
     -- Liberation of Undermine (map 2411 50.86,13.70) -> Liberation of Undermine (map 2408 86.49,40.89) via floor
     {
@@ -13584,6 +14596,7 @@ local FLOOR = {
         toX = 0.8649,
         toY = 0.4089,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Undermine (map 2428)
@@ -13598,6 +14611,7 @@ local FLOOR = {
         toX = 0.5062,
         toY = 0.4311,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Utgarde Keep (map 133)
@@ -13612,6 +14626,7 @@ local FLOOR = {
         toX = 0.348,
         toY = 0.645,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Utgarde Keep (map 134)
@@ -13626,6 +14641,7 @@ local FLOOR = {
         toX = 0.485,
         toY = 0.847,
         type = "floor",
+        travelDuration = 5,
     },
     -- Utgarde Keep (map 134 53.50,25.30) -> Utgarde Keep (map 135 33.10,40.70) via floor
     {
@@ -13638,6 +14654,7 @@ local FLOOR = {
         toX = 0.331,
         toY = 0.407,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Utgarde Keep (map 135)
@@ -13652,6 +14669,7 @@ local FLOOR = {
         toX = 0.535,
         toY = 0.253,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Utgarde Pinnacle (map 136)
@@ -13666,6 +14684,7 @@ local FLOOR = {
         toX = 0.423,
         toY = 0.766,
         type = "floor",
+        travelDuration = 5,
     },
     -- Utgarde Pinnacle (map 136 45.90,82.60) -> Utgarde Pinnacle (map 137 54.20,79.10) via floor
     {
@@ -13678,6 +14697,7 @@ local FLOOR = {
         toX = 0.542,
         toY = 0.791,
         type = "floor",
+        travelDuration = 5,
     },
     -- Utgarde Pinnacle (map 136 54.70,18.00) -> Utgarde Pinnacle (map 137 59.60,34.10) via floor
     {
@@ -13690,6 +14710,7 @@ local FLOOR = {
         toX = 0.596,
         toY = 0.341,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Utgarde Pinnacle (map 137)
@@ -13704,6 +14725,7 @@ local FLOOR = {
         toX = 0.311,
         toY = 0.75,
         type = "floor",
+        travelDuration = 5,
     },
     -- Utgarde Pinnacle (map 137 54.20,79.10) -> Utgarde Pinnacle (map 136 45.90,82.60) via floor
     {
@@ -13716,6 +14738,7 @@ local FLOOR = {
         toX = 0.459,
         toY = 0.826,
         type = "floor",
+        travelDuration = 5,
     },
     -- Utgarde Pinnacle (map 137 59.60,34.10) -> Utgarde Pinnacle (map 136 54.70,18.00) via floor
     {
@@ -13728,6 +14751,7 @@ local FLOOR = {
         toX = 0.547,
         toY = 0.18,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Val'sharah (map 641)
@@ -13742,6 +14766,7 @@ local FLOOR = {
         toX = 0.4482,
         toY = 0.3276,
         type = "floor",
+        travelDuration = 5,
         requirement = {
             operation = "all",
             children = {
@@ -13771,6 +14796,7 @@ local FLOOR = {
         toX = 0.54,
         toY = 0.882,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vale of Eternal Blossoms (map 520)
@@ -13785,6 +14811,7 @@ local FLOOR = {
         toX = 0.744,
         toY = 0.14,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vale of Eternal Blossoms (map 521)
@@ -13799,6 +14826,7 @@ local FLOOR = {
         toX = 0.436,
         toY = 0.706,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Valley of Trials (map 461)
@@ -13813,6 +14841,7 @@ local FLOOR = {
         toX = 0.4535,
         toY = 0.5632,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of Eyir (map 640)
@@ -13827,6 +14856,7 @@ local FLOOR = {
         toX = 0.6282,
         toY = 0.6811,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of Restless Bones (map 2636)
@@ -13841,6 +14871,7 @@ local FLOOR = {
         toX = 0.3947,
         toY = 0.4822,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2119)
@@ -13855,6 +14886,7 @@ local FLOOR = {
         toX = 0.8613,
         toY = 0.3361,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2119 56.97,12.52) -> Vault of the Incarnates (map 2122 73.94,94.58) via floor
     {
@@ -13867,6 +14899,7 @@ local FLOOR = {
         toX = 0.7394,
         toY = 0.9458,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2119 59.87,13.44) -> Vault of the Incarnates (map 2122 82.66,90.64) via floor
     {
@@ -13879,6 +14912,7 @@ local FLOOR = {
         toX = 0.8266,
         toY = 0.9064,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2120)
@@ -13893,6 +14927,7 @@ local FLOOR = {
         toX = 0.3089,
         toY = 0.5595,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2120 86.13,33.61) -> Vault of the Incarnates (map 2119 54.34,13.61) via floor
     {
@@ -13905,6 +14940,7 @@ local FLOOR = {
         toX = 0.5434,
         toY = 0.1361,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2121)
@@ -13919,6 +14955,7 @@ local FLOOR = {
         toX = 0.7752,
         toY = 0.5316,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2122)
@@ -13933,6 +14970,7 @@ local FLOOR = {
         toX = 0.0,
         toY = 0.0,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 31.25,20.80) -> Vault of the Incarnates (map 2123 58.15,24.64) via floor
     {
@@ -13945,6 +14983,7 @@ local FLOOR = {
         toX = 0.5815,
         toY = 0.2464,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 49.90,35.58) -> Vault of the Incarnates (map 2124 24.20,51.65) via floor
     {
@@ -13957,6 +14996,7 @@ local FLOOR = {
         toX = 0.242,
         toY = 0.5165,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 56.48,53.69) -> Vault of the Incarnates (map 2124 36.04,85.19) via floor
     {
@@ -13969,6 +15009,7 @@ local FLOOR = {
         toX = 0.3604,
         toY = 0.8519,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 70.69,53.37) -> Vault of the Incarnates (map 2124 64.25,84.65) via floor
     {
@@ -13981,6 +15022,7 @@ local FLOOR = {
         toX = 0.6425,
         toY = 0.8465,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 73.94,94.58) -> Vault of the Incarnates (map 2119 56.97,12.52) via floor
     {
@@ -13993,6 +15035,7 @@ local FLOOR = {
         toX = 0.5697,
         toY = 0.1252,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 74.18,47.60) -> Vault of the Incarnates (map 2126 73.34,91.82) via floor
     {
@@ -14005,6 +15048,7 @@ local FLOOR = {
         toX = 0.7334,
         toY = 0.9182,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2122 82.66,90.64) -> Vault of the Incarnates (map 2119 59.87,13.44) via floor
     {
@@ -14017,6 +15061,7 @@ local FLOOR = {
         toX = 0.5987,
         toY = 0.1344,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2123)
@@ -14031,6 +15076,7 @@ local FLOOR = {
         toX = 0.3125,
         toY = 0.208,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2124)
@@ -14045,6 +15091,7 @@ local FLOOR = {
         toX = 0.499,
         toY = 0.3558,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2124 36.04,85.19) -> Vault of the Incarnates (map 2122 56.48,53.69) via floor
     {
@@ -14057,6 +15104,7 @@ local FLOOR = {
         toX = 0.5648,
         toY = 0.5369,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vault of the Incarnates (map 2124 64.25,84.65) -> Vault of the Incarnates (map 2122 70.69,53.37) via floor
     {
@@ -14069,6 +15117,7 @@ local FLOOR = {
         toX = 0.7069,
         toY = 0.5337,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2125)
@@ -14083,6 +15132,7 @@ local FLOOR = {
         toX = 0.0,
         toY = 0.0,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vault of the Incarnates (map 2126)
@@ -14097,6 +15147,7 @@ local FLOOR = {
         toX = 0.7418,
         toY = 0.476,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vaults of Atal'Utek (map 2509)
@@ -14111,6 +15162,7 @@ local FLOOR = {
         toX = 0.8412,
         toY = 0.4115,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vaults of Atal'Utek (map 2509 39.47,48.22) -> Vault of Restless Bones (map 2636 78.95,42.07) via floor
     {
@@ -14123,6 +15175,7 @@ local FLOOR = {
         toX = 0.7895,
         toY = 0.4207,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vaults of Atal'Utek (map 2509 47.23,7.28) -> Atal'Utek Underbelly (map 2613 52.43,87.13) via floor
     {
@@ -14135,6 +15188,7 @@ local FLOOR = {
         toX = 0.5243,
         toY = 0.8713,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vaults of Atal'Utek (map 2509 51.29,82.10) -> The Coiled Isle (map 2512 45.37,64.93) via floor
     {
@@ -14147,6 +15201,7 @@ local FLOOR = {
         toX = 0.4537,
         toY = 0.6493,
         type = "floor",
+        travelDuration = 5,
     },
     -- Vaults of Atal'Utek (map 2509 54.92,48.13) -> Profaned Mausoleum (map 2638 18.30,59.99) via floor
     {
@@ -14159,6 +15214,7 @@ local FLOOR = {
         toX = 0.183,
         toY = 0.5999,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Vilaldoun (map 2646)
@@ -14173,6 +15229,7 @@ local FLOOR = {
         toX = 0.281,
         toY = 0.5066,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Void Acropolis (map 2617)
@@ -14187,6 +15244,7 @@ local FLOOR = {
         toX = 0.7515,
         toY = 0.7139,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Void Acropolis (map 2618)
@@ -14201,6 +15259,7 @@ local FLOOR = {
         toX = 0.8636,
         toY = 0.7506,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidburrow (map 2581)
@@ -14215,6 +15274,7 @@ local FLOOR = {
         toX = 0.2955,
         toY = 0.1835,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidburrow (map 2581 54.54,21.62) -> Voidburrow (map 2582 42.98,16.41) via floor
     {
@@ -14227,6 +15287,7 @@ local FLOOR = {
         toX = 0.4298,
         toY = 0.1641,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidburrow (map 2582)
@@ -14241,6 +15302,7 @@ local FLOOR = {
         toX = 0.3087,
         toY = 0.2957,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidburrow (map 2582 42.39,23.20) -> Voidstorm (map 2405 39.06,53.36) via floor
     {
@@ -14253,6 +15315,7 @@ local FLOOR = {
         toX = 0.3906,
         toY = 0.5336,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidburrow (map 2582 42.98,16.41) -> Voidburrow (map 2581 54.54,21.62) via floor
     {
@@ -14265,6 +15328,7 @@ local FLOOR = {
         toX = 0.5454,
         toY = 0.2162,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidscar Arena (map 2572)
@@ -14279,6 +15343,7 @@ local FLOOR = {
         toX = 0.3902,
         toY = 0.3038,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidscar Arena (map 2572 48.83,29.41) -> Voidscar Arena (map 2573 47.99,97.05) via floor
     {
@@ -14291,6 +15356,7 @@ local FLOOR = {
         toX = 0.4799,
         toY = 0.9705,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidscar Arena (map 2572 55.76,41.79) -> Voidscar Arena (map 2574 59.23,30.56) via floor
     {
@@ -14303,6 +15369,7 @@ local FLOOR = {
         toX = 0.5923,
         toY = 0.3056,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidscar Arena (map 2573)
@@ -14317,6 +15384,7 @@ local FLOOR = {
         toX = 0.4883,
         toY = 0.2941,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidscar Arena (map 2574)
@@ -14331,6 +15399,7 @@ local FLOOR = {
         toX = 0.413,
         toY = 0.4197,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidscar Arena (map 2574 59.23,30.56) -> Voidscar Arena (map 2572 55.76,41.79) via floor
     {
@@ -14343,6 +15412,7 @@ local FLOOR = {
         toX = 0.5576,
         toY = 0.4179,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Voidstorm (map 2405)
@@ -14357,6 +15427,7 @@ local FLOOR = {
         toX = 0.4239,
         toY = 0.232,
         type = "floor",
+        travelDuration = 5,
     },
     -- Voidstorm (map 2405 48.14,78.63) -> Lair of Predaxas (map 2526 60.00,17.51) via floor
     {
@@ -14369,6 +15440,7 @@ local FLOOR = {
         toX = 0.6,
         toY = 0.1751,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Volcanoth's Lair (map 176)
@@ -14383,6 +15455,7 @@ local FLOOR = {
         toX = 0.7,
         toY = 0.48,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Wailing Caverns (map 11)
@@ -14397,6 +15470,7 @@ local FLOOR = {
         toX = 0.3897,
         toY = 0.6942,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Wartha'nan Crypts (map 2579)
@@ -14411,6 +15485,7 @@ local FLOOR = {
         toX = 0.5676,
         toY = 0.6579,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Westfall (map 52)
@@ -14425,6 +15500,7 @@ local FLOOR = {
         toX = 0.693,
         toY = 0.237,
         type = "floor",
+        travelDuration = 5,
     },
     -- Westfall (map 52 44.50,24.70) -> Westfall (map 54 41.10,94.10) via floor
     {
@@ -14437,6 +15513,7 @@ local FLOOR = {
         toX = 0.411,
         toY = 0.941,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2492)
@@ -14451,6 +15528,7 @@ local FLOOR = {
         toX = 0.3627,
         toY = 0.3325,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2492 58.51,20.98) -> Windrunner Spire (map 2494 84.70,42.14) via floor
     {
@@ -14463,6 +15541,7 @@ local FLOOR = {
         toX = 0.847,
         toY = 0.4214,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2492 59.47,86.62) -> Windrunner Spire (map 2496 36.99,71.74) via floor
     {
@@ -14475,6 +15554,7 @@ local FLOOR = {
         toX = 0.3699,
         toY = 0.7174,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2492 59.47,86.62) -> Windrunner Spire (map 2497 46.08,87.41) via floor
     {
@@ -14487,6 +15567,7 @@ local FLOOR = {
         toX = 0.4608,
         toY = 0.8741,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2493)
@@ -14501,6 +15582,7 @@ local FLOOR = {
         toX = 0.5851,
         toY = 0.2098,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2493 48.47,82.39) -> Windrunner Spire (map 2494 42.49,85.72) via floor
     {
@@ -14513,6 +15595,7 @@ local FLOOR = {
         toX = 0.4249,
         toY = 0.8572,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2493 50.05,86.26) -> Windrunner Spire (map 2498 73.34,22.13) via floor
     {
@@ -14525,6 +15608,7 @@ local FLOOR = {
         toX = 0.7334,
         toY = 0.2213,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2494)
@@ -14539,6 +15623,7 @@ local FLOOR = {
         toX = 0.4847,
         toY = 0.8239,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2494 84.70,42.14) -> Windrunner Spire (map 2492 58.51,20.98) via floor
     {
@@ -14551,6 +15636,7 @@ local FLOOR = {
         toX = 0.5851,
         toY = 0.2098,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2496)
@@ -14565,6 +15651,7 @@ local FLOOR = {
         toX = 0.5947,
         toY = 0.8662,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2496 49.19,24.03) -> Windrunner Spire (map 2497 51.94,24.46) via floor
     {
@@ -14577,6 +15664,7 @@ local FLOOR = {
         toX = 0.5194,
         toY = 0.2446,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2496 51.10,17.93) -> Windrunner Spire (map 2498 73.82,81.31) via floor
     {
@@ -14589,6 +15677,7 @@ local FLOOR = {
         toX = 0.7382,
         toY = 0.8131,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2497)
@@ -14603,6 +15692,7 @@ local FLOOR = {
         toX = 0.5947,
         toY = 0.8662,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2497 51.94,24.46) -> Windrunner Spire (map 2496 49.19,24.03) via floor
     {
@@ -14615,6 +15705,7 @@ local FLOOR = {
         toX = 0.4919,
         toY = 0.2403,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2498)
@@ -14629,6 +15720,7 @@ local FLOOR = {
         toX = 0.6581,
         toY = 0.3594,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2498 73.34,22.13) -> Windrunner Spire (map 2493 50.05,86.26) via floor
     {
@@ -14641,6 +15733,7 @@ local FLOOR = {
         toX = 0.5005,
         toY = 0.8626,
         type = "floor",
+        travelDuration = 5,
     },
     -- Windrunner Spire (map 2498 73.82,81.31) -> Windrunner Spire (map 2496 51.10,17.93) via floor
     {
@@ -14653,6 +15746,7 @@ local FLOOR = {
         toX = 0.511,
         toY = 0.1793,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Windrunner Spire (map 2499)
@@ -14667,6 +15761,7 @@ local FLOOR = {
         toX = 0.7298,
         toY = 0.5685,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Winterchill Mine (map 1184)
@@ -14681,6 +15776,7 @@ local FLOOR = {
         toX = 0.7877,
         toY = 0.5326,
         type = "floor",
+        travelDuration = 5,
     },
     -- Tiragarde Sound (map 1184 47.06,61.74) -> Tiragarde Sound (map 1185 55.34,30.26) via floor
     {
@@ -14693,6 +15789,7 @@ local FLOOR = {
         toX = 0.5534,
         toY = 0.3026,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Winterchill Mine (map 1185)
@@ -14707,6 +15804,7 @@ local FLOOR = {
         toX = 0.4706,
         toY = 0.6174,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Wit'Kalar Crypt (map 2583)
@@ -14721,6 +15819,7 @@ local FLOOR = {
         toX = 0.3974,
         toY = 0.2318,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Zaralek Cavern (map 2133)
@@ -14735,6 +15834,7 @@ local FLOOR = {
         toX = 0.1143,
         toY = 0.5025,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Zaralek Cavern (map 2184)
@@ -14749,6 +15849,7 @@ local FLOOR = {
         toX = 0.6036,
         toY = 0.3723,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Zereth Mortis (map 1970)
@@ -14763,6 +15864,7 @@ local FLOOR = {
         toX = 0.2306,
         toY = 0.1202,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zereth Mortis (map 1970 50.57,32.08) -> Gravid Repose (map 2029 69.62,9.03) via floor
     {
@@ -14775,6 +15877,7 @@ local FLOOR = {
         toX = 0.6962,
         toY = 0.0903,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zereth Mortis (map 1970 55.72,53.46) -> Locrian Esper (map 2028 13.87,34.86) via floor
     {
@@ -14787,6 +15890,7 @@ local FLOOR = {
         toX = 0.1387,
         toY = 0.3486,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zereth Mortis (map 1970 58.10,44.33) -> Nexus of Actualization (map 2030 31.16,61.21) via floor
     {
@@ -14799,6 +15903,7 @@ local FLOOR = {
         toX = 0.3116,
         toY = 0.6121,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zereth Mortis (map 1970 63.67,73.70) -> Blooming Foundry (map 2027 28.07,11.88) via floor
     {
@@ -14811,6 +15916,7 @@ local FLOOR = {
         toX = 0.2807,
         toY = 0.1188,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zereth Mortis (map 1970 65.90,20.94) -> Crypts of the Eternal (map 2031 31.18,86.86) via floor
     {
@@ -14823,6 +15929,7 @@ local FLOOR = {
         toX = 0.3118,
         toY = 0.8686,
         type = "floor",
+        travelDuration = 5,
     },
 
     -- Zone: Zul'Aman (map 2437)
@@ -14837,6 +15944,7 @@ local FLOOR = {
         toX = 0.8389,
         toY = 0.3915,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zul Aman M (map 2437 31.60,26.11) -> Loaknit Den (map 2580 74.50,68.45) via floor
     {
@@ -14849,6 +15957,7 @@ local FLOOR = {
         toX = 0.745,
         toY = 0.6845,
         type = "floor",
+        travelDuration = 5,
     },
     -- Zul Aman M (map 2437 39.74,23.18) -> Wit'Kalar Crypt (map 2583 73.70,78.49) via floor
     {
@@ -14861,6 +15970,7 @@ local FLOOR = {
         toX = 0.737,
         toY = 0.7849,
         type = "floor",
+        travelDuration = 5,
     },
 }
 
