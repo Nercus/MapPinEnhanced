@@ -382,6 +382,68 @@ local function ResetDeviationState(progression)
     progression.movingAwayStartedAt = nil
 end
 
+---@param text string
+---@param limit integer
+---@return string
+local function CompactChatLabel(text, limit)
+    text = (MapPinEnhanced:ToPlainText(text) or ""):gsub("|", ""):gsub("%s+", " ")
+    if #text <= limit then return text end
+    return MapPinEnhanced:GetUTF8Prefix(text, limit - 3) .. "..."
+end
+
+local CHAT_PATH_INSTRUCTIONS = {
+    walk = "Navigation Chat Walk To",
+    fly = "Navigation Chat Fly To",
+    border = "Navigation Chat Travel To",
+    floor = "Navigation Chat Change Floor To",
+    gossip = "Navigation Chat Talk To NPC",
+    phaseswitch = "Navigation Chat Change Phase To",
+}
+
+---@param pathType string
+---@param location string
+---@return string
+local function GetChatInstruction(pathType, location)
+    local key = CHAT_PATH_INSTRUCTIONS[pathType]
+    if key then return string.format(L[key], location) end
+    return string.format(L["Navigation Chat Use To"],
+        CompactChatLabel(Navigation:GetPathMethod(pathType), 24), location)
+end
+
+---@param changeNumber integer
+---@return string[]? steps
+---@return {mapID: number, x: number, y: number, header: string}? destination
+function Navigation:GetRouteChatSteps(changeNumber)
+    local progression = self.progression
+    local destination = self.activeDestination
+    local graph = self:GetGraph()
+    if changeNumber ~= presentationChangeNumber or not progression or not destination or not graph then return nil end
+
+    ---@type string[]
+    local steps = {}
+    for index = progression.pathIndex, #progression.route.pathReferences do
+        local reference = progression.route.pathReferences[index]
+        local mapID = graph.pointMapIDs[graph.pathToPointIndexes[reference]]
+        local info = C_Map.GetMapInfo(mapID)
+        steps[#steps + 1] = GetChatInstruction(graph.pathTypes[reference],
+            CompactChatLabel(info and info.name or tostring(mapID), 80))
+    end
+    local data = destination.data
+    local info = C_Map.GetMapInfo(data.mapID)
+    ---@type string?
+    local mode = progression.route.finalCost.explanation and progression.route.finalCost.explanation.mode
+    local isFlying = mode == "steady-flight" or mode == "skyriding"
+    steps[#steps + 1] = GetChatInstruction(isFlying and "fly" or "walk",
+        CompactChatLabel(info and info.name or tostring(data.mapID), 80))
+    return steps, {
+        mapID = data.mapID,
+        x = data.x,
+        y = data.y,
+        header = string.format(L["Navigation Route To"], CompactChatLabel(GetDestinationTitle(destination), 64),
+            CompactChatLabel(info and info.name or tostring(data.mapID), 80)),
+    }
+end
+
 ---@param progression NavigationProgression
 ---@param graph NavigationGraph
 ---@return string

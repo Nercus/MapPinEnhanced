@@ -1,0 +1,53 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="RouteChatDialog.lua" />
+    <Frame name="MapPinEnhancedRouteChatDialogTemplate" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedRouteChatDialogMixin" virtual="true" frameStrata="DIALOG">
+        <Size x="460" y="280" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="destination" inherits="GameFontHighlight" justifyH="LEFT">
+                    <Size x="400" y="42" />
+                    <Anchors><Anchor point="TOPLEFT" x="30" y="-42" /></Anchors>
+                </FontString>
+                <FontString parentKey="prompt" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="400" y="18" />
+                    <Anchors><Anchor point="TOPLEFT" x="30" y="-89" /></Anchors>
+                </FontString>
+                <FontString parentKey="recipientLabel" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="400" y="18" />
+                    <Anchors><Anchor point="TOPLEFT" x="30" y="-157" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <DropdownButton parentKey="channel" inherits="MapPinEnhancedDropdownTemplate">
+                <Size x="400" y="28" />
+                <Anchors><Anchor point="TOPLEFT" x="30" y="-115" /></Anchors>
+            </DropdownButton>
+            <EditBox parentKey="recipient" inherits="MapPinEnhancedInputTemplate" autoFocus="false" maxLetters="64">
+                <Size x="400" y="28" />
+                <Anchors><Anchor point="TOPLEFT" x="30" y="-182" /></Anchors>
+                <KeyValues><KeyValue key="placeholder" value="Navigation Chat Player Name" /></KeyValues>
+                <Scripts>
+                    <OnTextChanged>self:GetParent():UpdateControls()</OnTextChanged>
+                    <OnEnterPressed>self:ClearFocus()</OnEnterPressed>
+                    <OnEscapePressed>self:GetParent():Hide()</OnEscapePressed>
+                </Scripts>
+            </EditBox>
+            <Button parentKey="cancel" inherits="MapPinEnhancedButtonTemplate" text="Cancel">
+                <Size x="128" y="28" />
+                <Anchors><Anchor point="BOTTOMRIGHT" x="-30" y="20" /></Anchors>
+                <Scripts><OnClick>self:GetParent():Hide()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="send" inherits="MapPinEnhancedButtonTemplate" text="Send">
+                <Size x="128" y="28" />
+                <Anchors><Anchor point="RIGHT" relativeKey="$parent.cancel" relativePoint="LEFT" x="-8" /></Anchors>
+                <Scripts><OnClick>self:GetParent():Send()</OnClick></Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

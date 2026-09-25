@@ -168,7 +168,7 @@ function Wayfinders:BuildNavigationMenuEntries()
     local step = self:GetStepSnapshot()
     if not step then return {} end
     local Navigation = MapPinEnhanced:GetModule("Navigation")
-    return {
+    local entries = {
         { type = "divider" },
         { type = "title",  label = MapPinEnhanced.L["Wayfinder.Navigation_GROUPLABEL"] },
         {
@@ -179,6 +179,16 @@ function Wayfinders:BuildNavigationMenuEntries()
             end
         },
     }
+    if Navigation:GetRouteChatSteps(step.changeNumber) then
+        entries[#entries + 1] = {
+            type = "button",
+            label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Export Route to Chat"]),
+            onClick = function()
+                MapPinEnhanced:GetModule("Providers"):ShareRouteToChat(step.changeNumber)
+            end,
+        }
+    end
+    return entries
 end
 
 ---@param styleMode string?

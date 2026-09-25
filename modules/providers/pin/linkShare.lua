@@ -10,11 +10,19 @@ local MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Locat
 ---@param x number
 ---@param y number
 ---@param mapID number
+---@return string
+function Providers:GetMapPinChatLink(x, y, mapID)
+    return MAP_PIN_PATTERN:format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
+end
+
+---@param x number
+---@param y number
+---@param mapID number
 ---@param title string?
 function Providers:LinkToChat(x, y, mapID, title)
     if not x or not y or not mapID then return end
     ---@type string
-    local waypointLink = (MAP_PIN_PATTERN):format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
+    local waypointLink = self:GetMapPinChatLink(x, y, mapID)
     if title and title ~= "" then
         waypointLink = string.format("%s (%s)", waypointLink, title)
     end
