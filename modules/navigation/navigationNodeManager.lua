@@ -328,7 +328,10 @@ end
 ---@param value any
 ---@return NavigationRequirementState
 local function EvaluateDirectCheck(key, value)
-    if key == "faction" then
+    if key == "taxiNodeKnown" then
+        if type(value) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(Navigation:IsTaxiNodeKnown(value))
+    elseif key == "faction" then
         return StateFromBoolean(ValueMatches(UnitFactionGroup("player"), value))
     elseif key == "class" then
         local class = select(2, UnitClass("player"))

@@ -812,6 +812,8 @@ local ELIGIBILITY_EVENTS = {
     "QUEST_TURNED_IN",
     "SKILL_LINES_CHANGED",
     "SPELLS_CHANGED",
+    "TAXIMAP_OPENED",
+    "TAXI_NODE_STATUS_CHANGED",
     "TOYS_UPDATED",
     "TRAIT_CONFIG_UPDATED",
     "UNIT_AURA",
@@ -826,6 +828,7 @@ function Navigation:SetUpEligibilityRefresh()
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function()
         self:RefreshPreparedData()
         self:RecheckFailedPaths("action")
+        self:RecheckFailedPaths("taxi")
         local progression = self.progression
         local graph = self:GetGraph()
         local prepared = self:GetPreparedData()
