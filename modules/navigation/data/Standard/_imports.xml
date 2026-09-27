@@ -7,6 +7,7 @@
     <Script file="fly.lua" />
     <Script file="gossip.lua" />
     <Script file="item.lua" />
+    <Script file="phaseswitch.lua" />
     <Script file="portal.lua" />
     <Script file="ship.lua" />
     <Script file="spell.lua" />
