@@ -331,6 +331,9 @@ local function EvaluateDirectCheck(key, value)
     if key == "taxiNodeKnown" then
         if type(value) ~= "number" then return UNKNOWN end
         return StateFromBoolean(Navigation:IsTaxiNodeKnown(value))
+    elseif key == "event" then
+        if type(value) ~= "string" then return UNKNOWN end
+        return StateFromBoolean(Navigation:IsCalendarEventActive(value))
     elseif key == "faction" then
         return StateFromBoolean(ValueMatches(UnitFactionGroup("player"), value))
     elseif key == "class" then

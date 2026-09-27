@@ -823,28 +823,32 @@ local ELIGIBILITY_EVENTS = {
     "ZONE_CHANGED_NEW_AREA",
 }
 
+function Navigation:RefreshEligibility()
+    self:RefreshPreparedData()
+    self:RecheckFailedPaths("action")
+    self:RecheckFailedPaths("taxi")
+    local progression = self.progression
+    local graph = self:GetGraph()
+    local prepared = self:GetPreparedData()
+    local reference = progression and progression.route.pathReferences[progression.pathIndex]
+    if progression and not progression.pathUnavailable and not progression.attempted and
+        progression.phase ~= "in-transit" and
+        reference and graph and prepared and prepared.requirementStateByPath[reference] == "unsatisfied" and
+        self:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
+        local identity = self:CaptureStepIdentity(progression)
+        if identity then self:HandlePathHandlerReport(identity, "failed", "action requirements no longer satisfied") end
+        return
+    end
+    if RefreshMissingRouteOrigin() then return end
+    if self.activeDestination and not self.progression and not self.activeCalculation then
+        self:StartCalculation(true)
+    end
+end
+
 function Navigation:SetUpEligibilityRefresh()
     if self.unsubscribeEligibilityRefresh then return end
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function()
-        self:RefreshPreparedData()
-        self:RecheckFailedPaths("action")
-        self:RecheckFailedPaths("taxi")
-        local progression = self.progression
-        local graph = self:GetGraph()
-        local prepared = self:GetPreparedData()
-        local reference = progression and progression.route.pathReferences[progression.pathIndex]
-        if progression and not progression.pathUnavailable and not progression.attempted and
-            progression.phase ~= "in-transit" and
-            reference and graph and prepared and prepared.requirementStateByPath[reference] == "unsatisfied" and
-            self:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
-            local identity = self:CaptureStepIdentity(progression)
-            if identity then self:HandlePathHandlerReport(identity, "failed", "action requirements no longer satisfied") end
-            return
-        end
-        if RefreshMissingRouteOrigin() then return end
-        if self.activeDestination and not self.progression and not self.activeCalculation then
-            self:StartCalculation(true)
-        end
+        self:RefreshEligibility()
     end, 0.5)
 end
 
@@ -1242,6 +1246,7 @@ hooksecurefunc(WorldMapFrame, "OnMapChanged", RefreshWorldMapRouteLayer)
 WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    Navigation:SetUpCalendarRequirements()
     Navigation:BuildGraph()
     Navigation:SetUpPathHandlers()
     Navigation:SetUpEligibilityRefresh()

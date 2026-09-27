@@ -8,4 +8,5 @@
     <Include file="transport.lua" />
     <Include file="flightTaxi.lua" />
     <Include file="phaseSwitch.lua" />
+    <Include file="calendar.lua" />
 </Ui>
