@@ -2,7 +2,11 @@
 local MapPinEnhanced = select(2, ...)
 
 local Navigation = MapPinEnhanced:GetModule("Navigation")
+local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
+
+local HOVER_SCALE = 1.4
+local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / 0.15
 
 ---@class MapPinEnhancedNavigationMapPinTemplate : Frame
 ---@field line Line
@@ -14,6 +18,7 @@ local L = MapPinEnhanced.L
 ---@field lineStart MapPinEnhancedNavigationMapPinTemplate?
 ---@field routePathType string?
 ---@field isMapEdge boolean?
+---@field hoverScaleTarget number?
 MapPinEnhancedNavigationMapPinMixin = {}
 
 ---@param endFrame MapPinEnhancedNavigationMapPinTemplate
@@ -44,7 +49,7 @@ function MapPinEnhancedNavigationMapPinMixin:ClearRouteLine()
     self.lineEnd = nil
     self.line:Hide()
     self.line:ClearAllPoints()
-    self:SetScript("OnUpdate", nil)
+    self:RefreshUpdateScript()
     self.antOffset = nil
 end
 
@@ -65,6 +70,7 @@ end
 
 function MapPinEnhancedNavigationMapPinMixin:SetLineEndpoint()
     self:OnLeave()
+    self:ResetHoverScale()
     self.circle:Hide()
     self.number:Hide()
     self:EnableMouse(false)
@@ -73,16 +79,46 @@ end
 function MapPinEnhancedNavigationMapPinMixin:RefreshLine()
     local shown = self.lineEnd ~= nil and self:IsShown() and self.lineEnd:IsShown()
     self.line:SetShown(shown)
-    self:SetScript("OnUpdate", shown and self.OnUpdate or nil)
+    self:RefreshUpdateScript()
     if shown then self:OnUpdate(0) end
 end
 
+-- Line scrolling and hover scaling share the frame's single update handler.
+function MapPinEnhancedNavigationMapPinMixin:RefreshUpdateScript()
+    local animate = self:IsShown() and (self.line:IsShown() or self.hoverScaleTarget ~= nil)
+    self:SetScript("OnUpdate", animate and self.OnUpdate or nil)
+end
+
+---@param hovered boolean
+function MapPinEnhancedNavigationMapPinMixin:SetHoverScale(hovered)
+    local target = hovered and Options:GetOptionValue("Pins.Miscellaneous.ScaleOnHover") and HOVER_SCALE or 1
+    self.hoverScaleTarget = self:GetScale() ~= target and target or nil
+    self:RefreshUpdateScript()
+end
+
+function MapPinEnhancedNavigationMapPinMixin:ResetHoverScale()
+    self.hoverScaleTarget = nil
+    self:SetScale(1)
+    self:RefreshUpdateScript()
+end
+
 -- UV scrolling keeps dash spacing constant as the map zooms or endpoints move.
--- Only visible connected pins animate; reset/hide detach the update script.
+-- Only visible lines scroll; reset/hide also stop pending hover scaling.
 ---@param elapsed number
 function MapPinEnhancedNavigationMapPinMixin:OnUpdate(elapsed)
+    local target = self.hoverScaleTarget
+    if target then
+        local scale = self:GetScale()
+        local step = HOVER_SCALE_SPEED * elapsed
+        scale = scale < target and math.min(scale + step, target) or math.max(scale - step, target)
+        self:SetScale(scale)
+        if scale == target then
+            self.hoverScaleTarget = nil
+            self:RefreshUpdateScript()
+        end
+    end
     local endpoint = self.lineEnd
-    if not endpoint then return end
+    if not endpoint or not self.line:IsShown() then return end
     local x, y = self:GetCenter()
     local endX, endY = endpoint:GetCenter()
     if not x or not y or not endX or not endY then return end
@@ -100,6 +136,7 @@ end
 
 function MapPinEnhancedNavigationMapPinMixin:OnHide()
     self:OnLeave()
+    self:ResetHoverScale()
     self:SetScript("OnUpdate", nil)
     self.line:Hide()
     if self.lineStart then self.lineStart:RefreshLine() end
@@ -114,6 +151,7 @@ function MapPinEnhancedNavigationMapPinMixin:Reset()
     self.number:SetText("")
     self.number:Hide()
     self:OnLeave()
+    self:ResetHoverScale()
     self:EnableMouse(false)
     self.routePathType = nil
     self.step = nil
@@ -123,9 +161,10 @@ function MapPinEnhancedNavigationMapPinMixin:Reset()
 end
 
 function MapPinEnhancedNavigationMapPinMixin:OnEnter()
+    self:SetHoverScale(true)
     local step = self.step
     local progression = Navigation.progression
-    local graph = Navigation:GetGraph()
+    local graph = progression and progression.route.graph
     local reference = step and progression and progression.route.pathReferences[step.index]
     if not step or not graph or not reference or self.isMapEdge then return end
     local pathType = graph.pathTypes[reference]
@@ -147,5 +186,6 @@ function MapPinEnhancedNavigationMapPinMixin:OnEnter()
 end
 
 function MapPinEnhancedNavigationMapPinMixin:OnLeave()
+    self:SetHoverScale(false)
     if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
