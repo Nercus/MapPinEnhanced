@@ -213,9 +213,39 @@ local SHIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -545,9 +575,39 @@ local SHIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },

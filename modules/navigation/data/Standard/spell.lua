@@ -184,8 +184,11 @@ local SPELL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Darnassus",
+                            kind = "mapArtID",
+                            value = {
+                                62,
+                                67,
+                            },
                         },
                     },
                 },
@@ -222,8 +225,11 @@ local SPELL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
                 {
                     operation = "check",
@@ -1203,9 +1209,45 @@ local SPELL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "Old Vale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -1242,9 +1284,45 @@ local SPELL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "Old Vale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -1280,9 +1358,45 @@ local SPELL = {
                     value = "Alliance",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Vale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -1314,9 +1428,45 @@ local SPELL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Vale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",

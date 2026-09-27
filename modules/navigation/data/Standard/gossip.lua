@@ -286,14 +286,47 @@ local GOSSIP = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Silithus",
+                    kind = "mapArtID",
+                    value = {
+                        81,
+                        86,
+                    },
                 },
             },
         },
@@ -442,9 +475,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -479,9 +567,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -516,9 +659,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -553,9 +751,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -590,9 +843,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -627,9 +935,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -666,9 +1029,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -703,9 +1121,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -740,9 +1213,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -777,9 +1305,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -814,9 +1397,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -851,9 +1489,64 @@ local GOSSIP = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",

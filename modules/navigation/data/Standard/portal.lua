@@ -687,15 +687,54 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Arathi",
+                            kind = "mapArtID",
+                            value = {
+                                14,
+                                15,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Arathi Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 116,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 11,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -729,15 +768,54 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Arathi",
+                            kind = "mapArtID",
+                            value = {
+                                14,
+                                15,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Arathi Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 116,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 11,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -1485,8 +1563,11 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Darnassus",
+                            kind = "mapArtID",
+                            value = {
+                                62,
+                                67,
+                            },
                         },
                     },
                 },
@@ -1514,8 +1595,11 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -2504,8 +2588,11 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Blasted Lands",
+                            kind = "mapArtID",
+                            value = {
+                                17,
+                                18,
+                            },
                         },
                     },
                 },
@@ -2541,8 +2628,11 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Blasted Lands",
+                            kind = "mapArtID",
+                            value = {
+                                17,
+                                18,
+                            },
                         },
                     },
                 },
@@ -2615,8 +2705,11 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Blasted Lands",
+                    kind = "mapArtID",
+                    value = {
+                        17,
+                        18,
+                    },
                 },
             },
         },
@@ -2650,8 +2743,11 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Blasted Lands",
+                            kind = "mapArtID",
+                            value = {
+                                17,
+                                18,
+                            },
                         },
                     },
                 },
@@ -2829,9 +2925,45 @@ local PORTAL = {
                     value = "Alliance",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Arathi Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 116,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 11,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -2861,9 +2993,45 @@ local PORTAL = {
                     value = "Alliance",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Darkshore Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 117,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 118,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -2902,15 +3070,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -2960,9 +3161,39 @@ local PORTAL = {
                     operation = "any",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "BFA",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Horde",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 50769,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Alliance",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 46728,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
                             operation = "check",
@@ -3315,15 +3546,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -4311,15 +4575,54 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Darnassus",
+                            kind = "mapArtID",
+                            value = {
+                                62,
+                                67,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Darkshore Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 117,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 118,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -4353,15 +4656,54 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Darnassus",
+                            kind = "mapArtID",
+                            value = {
+                                62,
+                                67,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Darkshore Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 117,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 118,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -4411,8 +4753,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -4445,8 +4790,11 @@ local PORTAL = {
                             children = {
                                 {
                                     operation = "check",
-                                    kind = "phase",
-                                    value = "Old Darnassus",
+                                    kind = "mapArtID",
+                                    value = {
+                                        62,
+                                        67,
+                                    },
                                 },
                             },
                         },
@@ -4486,8 +4834,11 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -4513,8 +4864,11 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -4566,9 +4920,39 @@ local PORTAL = {
                     operation = "any",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "BFA",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Horde",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 50769,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Alliance",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 46728,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
                             operation = "check",
@@ -4600,9 +4984,39 @@ local PORTAL = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "any",
@@ -4612,8 +5026,11 @@ local PORTAL = {
                             children = {
                                 {
                                     operation = "check",
-                                    kind = "phase",
-                                    value = "Old Silithus",
+                                    kind = "mapArtID",
+                                    value = {
+                                        81,
+                                        86,
+                                    },
                                 },
                             },
                         },
@@ -4650,9 +5067,39 @@ local PORTAL = {
                     operation = "any",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "BFA",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Horde",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 50769,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Alliance",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 46728,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
                             operation = "check",
@@ -4687,9 +5134,39 @@ local PORTAL = {
                     operation = "any",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "BFA",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Horde",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 50769,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "faction",
+                                            value = "Alliance",
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questActiveOrComplete",
+                                            value = 46728,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
                             operation = "check",
@@ -4762,9 +5239,45 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Arathi Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 116,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 11,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -4794,9 +5307,45 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Warfront Darkshore Control",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 117,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "contributionStateMin",
+                                    value = {
+                                        collectorID = 118,
+                                        state = 3,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
                 {
                     operation = "check",
@@ -9150,8 +9699,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -11812,8 +12361,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -12422,9 +12971,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -12446,9 +13031,45 @@ local PORTAL = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "OldVale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -13338,21 +13959,136 @@ local PORTAL = {
                             operation = "not",
                             children = {
                                 {
-                                    operation = "check",
-                                    kind = "phase",
-                                    value = "Old Undercity",
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "any",
+                                                    children = {
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 51443,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 60361,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 46727,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 58983,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
                                 },
                             },
                         },
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "UndercityCharred",
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "UndercityOoze",
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "any",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "questCompleted",
+                                                    value = 65655,
+                                                },
+                                                {
+                                                    operation = "check",
+                                                    kind = "questCompleted",
+                                                    value = 65656,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -13384,9 +14120,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -13475,8 +14246,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "UldumInvasionCenter",
+                    kind = "mapOverlayTexture",
+                    value = {
+                        mapID = 1527,
+                        textureID = 3165092,
+                    },
                 },
             },
         },
@@ -13497,8 +14271,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "ValeInvasionRight",
+                    kind = "mapOverlayTexture",
+                    value = {
+                        mapID = 1530,
+                        textureID = 3155841,
+                    },
                 },
             },
         },
@@ -13703,8 +14480,8 @@ local PORTAL = {
                             children = {
                                 {
                                     operation = "check",
-                                    kind = "phase",
-                                    value = "OldUldum",
+                                    kind = "questCompleted",
+                                    value = 50659,
                                 },
                             },
                         },
@@ -13918,9 +14695,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -13945,9 +14757,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -13972,9 +14809,64 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityOoze",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 51443,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 60361,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 46727,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 58983,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -14431,9 +15323,39 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16450,9 +17372,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -16474,9 +17432,45 @@ local PORTAL = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "OldVale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16512,15 +17506,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16554,15 +17581,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16586,15 +17646,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16618,15 +17711,48 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "Old Silithus",
+                            kind = "mapArtID",
+                            value = {
+                                81,
+                                86,
+                            },
                         },
                     },
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "BFA",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Horde",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 50769,
+                                },
+                            },
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "faction",
+                                    value = "Alliance",
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questActiveOrComplete",
+                                    value = 46728,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -16654,21 +17780,136 @@ local PORTAL = {
                             operation = "not",
                             children = {
                                 {
-                                    operation = "check",
-                                    kind = "phase",
-                                    value = "Old Undercity",
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "any",
+                                                    children = {
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 51443,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 60361,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 46727,
+                                                        },
+                                                        {
+                                                            operation = "check",
+                                                            kind = "questCompleted",
+                                                            value = 58983,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
                                 },
                             },
                         },
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "UndercityCharred",
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65655,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 65656,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
+                                },
+                            },
                         },
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "UndercityOoze",
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "any",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "questCompleted",
+                                                    value = 65655,
+                                                },
+                                                {
+                                                    operation = "check",
+                                                    kind = "questCompleted",
+                                                    value = 65656,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 52758,
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -16700,9 +17941,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -16727,9 +18003,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -20283,8 +21584,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -20310,8 +21614,11 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -20332,8 +21639,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "Old Darnassus",
+                    kind = "mapArtID",
+                    value = {
+                        62,
+                        67,
+                    },
                 },
             },
         },
@@ -22821,8 +24131,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -23014,8 +24324,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -23171,9 +24481,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -23198,9 +24543,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -23225,9 +24605,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -23252,9 +24667,44 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -23281,9 +24731,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -23308,9 +24783,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -23335,9 +24835,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -23362,9 +24887,34 @@ local PORTAL = {
                     value = "Horde",
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "UndercityCharred",
+                    operation = "all",
+                    children = {
+                        {
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65655,
+                                },
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 65656,
+                                },
+                            },
+                        },
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 52758,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -24878,8 +26428,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -24902,8 +26452,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "UldumInvasionCenter",
+                    kind = "mapOverlayTexture",
+                    value = {
+                        mapID = 1527,
+                        textureID = 3165092,
+                    },
                 },
             },
         },
@@ -24939,8 +26492,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -24966,8 +26519,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -24993,8 +26546,8 @@ local PORTAL = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -25138,9 +26691,44 @@ local PORTAL = {
                     value = 10,
                 },
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "Old Undercity",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "not",
+                            children = {
+                                {
+                                    operation = "any",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 51443,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 60361,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 46727,
+                                        },
+                                        {
+                                            operation = "check",
+                                            kind = "questCompleted",
+                                            value = 58983,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 52758,
+                        },
+                    },
                 },
             },
         },
@@ -25957,8 +27545,11 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "phase",
-                    value = "ValeInvasionRight",
+                    kind = "mapOverlayTexture",
+                    value = {
+                        mapID = 1530,
+                        textureID = 3155841,
+                    },
                 },
             },
         },
@@ -25986,9 +27577,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -26013,9 +27640,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -26052,9 +27715,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -26096,9 +27795,45 @@ local PORTAL = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -26160,9 +27895,45 @@ local PORTAL = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "OldVale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
@@ -26194,9 +27965,45 @@ local PORTAL = {
             operation = "all",
             children = {
                 {
-                    operation = "check",
-                    kind = "phase",
-                    value = "OldVale",
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 59024,
+                        },
+                        {
+                            operation = "all",
+                            children = {
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 390,
+                                                poiID = 6573,
+                                            },
+                                        },
+                                    },
+                                },
+                                {
+                                    operation = "not",
+                                    children = {
+                                        {
+                                            operation = "check",
+                                            kind = "mapPOIPresent",
+                                            value = {
+                                                mapID = 1530,
+                                                poiID = 6574,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },

@@ -324,6 +324,13 @@ local function ValueMatches(value, expected)
     return false
 end
 
+---@param value any
+---@return boolean
+local function IsReadableRequirementTable(value)
+    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "table" and
+        not MapPinEnhanced:IsSecretTable(value)
+end
+
 ---@param key string
 ---@param value any
 ---@return NavigationRequirementState
@@ -334,8 +341,41 @@ local function EvaluateDirectCheck(key, value)
     elseif key == "event" then
         if type(value) ~= "string" then return UNKNOWN end
         return StateFromBoolean(Navigation:IsCalendarEventActive(value))
+    elseif key == "mapPOIPresent" then
+        if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.poiID) ~= "number" or
+            not C_AreaPoiInfo or not C_AreaPoiInfo.GetAreaPOIForMap then return UNKNOWN end
+        local poiIDs = C_AreaPoiInfo.GetAreaPOIForMap(value.mapID)
+        if not IsReadableRequirementTable(poiIDs) then return UNKNOWN end
+        local sawUnknown = false
+        for _, poiID in ipairs(poiIDs) do
+            if MapPinEnhanced:IsSecretValue(poiID) or type(poiID) ~= "number" then
+                sawUnknown = true
+            elseif poiID == value.poiID then
+                return SATISFIED
+            end
+        end
+        return sawUnknown and UNKNOWN or UNSATISFIED
+    elseif key == "mapOverlayTexture" then
+        if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.textureID) ~= "number" or
+            not C_MapExplorationInfo or not C_MapExplorationInfo.GetExploredMapTextures then return UNKNOWN end
+        local textures = C_MapExplorationInfo.GetExploredMapTextures(value.mapID)
+        if not IsReadableRequirementTable(textures) or not IsReadableRequirementTable(textures[1]) or
+            not IsReadableRequirementTable(textures[1].fileDataIDs) then return UNKNOWN end
+        -- The source invasion selector observes the first overlay's first texture.
+        local textureID = textures[1].fileDataIDs[1]
+        if MapPinEnhanced:IsSecretValue(textureID) or type(textureID) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(textureID == value.textureID)
+    elseif key == "contributionStateMin" then
+        if type(value) ~= "table" or type(value.collectorID) ~= "number" or type(value.state) ~= "number" or
+            not C_ContributionCollector or not C_ContributionCollector.GetState then return UNKNOWN end
+        local state = C_ContributionCollector.GetState(value.collectorID)
+        if MapPinEnhanced:IsSecretValue(state) or type(state) ~= "number" or
+            state == Enum.ContributionState.None then return UNKNOWN end
+        return StateFromBoolean(state >= value.state)
     elseif key == "faction" then
-        return StateFromBoolean(ValueMatches(UnitFactionGroup("player"), value))
+        local faction = UnitFactionGroup("player")
+        if MapPinEnhanced:IsSecretValue(faction) or type(faction) ~= "string" then return UNKNOWN end
+        return StateFromBoolean(ValueMatches(faction, value))
     elseif key == "class" then
         local class = select(2, UnitClass("player"))
         return StateFromBoolean(ValueMatches(class, value))
@@ -388,11 +428,13 @@ local function EvaluateDirectCheck(key, value)
             not C_Map or not C_Map.GetMapArtID then
             return UNKNOWN
         end
-        return StateFromBoolean(C_Map.GetMapArtID(value[1]) == value[2])
+        local artID = C_Map.GetMapArtID(value[1])
+        if MapPinEnhanced:IsSecretValue(artID) or type(artID) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(artID == value[2])
     elseif key == "currentMap" then
         if not C_Map or not C_Map.GetBestMapForUnit then return UNKNOWN end
         local mapID = C_Map.GetBestMapForUnit("player")
-        if not mapID then return UNKNOWN end
+        if MapPinEnhanced:IsSecretValue(mapID) or type(mapID) ~= "number" then return UNKNOWN end
         return StateFromBoolean(ValueMatches(mapID, value))
     elseif key == "buff" then
         if type(value) ~= "number" or not AuraUtil or not AuraUtil.FindAuraBySpellID then return UNKNOWN end

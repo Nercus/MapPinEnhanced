@@ -2222,9 +2222,45 @@ local BORDER = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
@@ -3616,8 +3652,8 @@ local BORDER = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -4601,8 +4637,8 @@ local BORDER = {
                     children = {
                         {
                             operation = "check",
-                            kind = "phase",
-                            value = "OldUldum",
+                            kind = "questCompleted",
+                            value = 50659,
                         },
                     },
                 },
@@ -4721,9 +4757,45 @@ local BORDER = {
                     operation = "not",
                     children = {
                         {
-                            operation = "check",
-                            kind = "phase",
-                            value = "OldVale",
+                            operation = "any",
+                            children = {
+                                {
+                                    operation = "check",
+                                    kind = "questCompleted",
+                                    value = 59024,
+                                },
+                                {
+                                    operation = "all",
+                                    children = {
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 390,
+                                                        poiID = 6573,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            operation = "not",
+                                            children = {
+                                                {
+                                                    operation = "check",
+                                                    kind = "mapPOIPresent",
+                                                    value = {
+                                                        mapID = 1530,
+                                                        poiID = 6574,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 },
