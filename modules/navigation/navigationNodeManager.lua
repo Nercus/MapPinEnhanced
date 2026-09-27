@@ -275,7 +275,7 @@ local UNKNOWN = "unknown"
 ---@param result boolean?
 ---@return NavigationRequirementState
 local function StateFromBoolean(result)
-    if result == nil then return UNKNOWN end
+    if MapPinEnhanced:IsSecretValue(result) or type(result) ~= "boolean" then return UNKNOWN end
     return result and SATISFIED or UNSATISFIED
 end
 
@@ -436,8 +436,15 @@ local function EvaluateDirectCheck(key, value)
     elseif key == "toy" or key == "toyKnown" then
         return EvaluateToyOwnership(value)
     elseif key == "achievement" then
-        if type(value) ~= "number" then return UNKNOWN end
-        if not GetAchievementInfo then return UNKNOWN end
+        if type(value) == "table" then
+            if not IsReadableRequirementTable(value) or type(value.id) ~= "number" or
+                type(value.criteria) ~= "number" or value.id <= 0 or value.id % 1 ~= 0 or
+                value.criteria <= 0 or value.criteria % 1 ~= 0 or not GetAchievementCriteriaInfo then return UNKNOWN end
+            -- Authored criteria are indexes, as in the source's achieved(id, index).
+            local completed = select(3, GetAchievementCriteriaInfo(value.id, value.criteria))
+            return StateFromBoolean(completed)
+        end
+        if type(value) ~= "number" or value <= 0 or value % 1 ~= 0 or not GetAchievementInfo then return UNKNOWN end
         local completed = select(4, GetAchievementInfo(value))
         return StateFromBoolean(completed)
     elseif key == "mapArtID" then
@@ -454,11 +461,23 @@ local function EvaluateDirectCheck(key, value)
         if MapPinEnhanced:IsSecretValue(mapID) or type(mapID) ~= "number" then return UNKNOWN end
         return StateFromBoolean(ValueMatches(mapID, value))
     elseif key == "buff" then
-        if type(value) ~= "number" or not AuraUtil or not AuraUtil.FindAuraBySpellID then return UNKNOWN end
-        return StateFromBoolean(AuraUtil.FindAuraBySpellID(value, "player") ~= nil)
+        if type(value) ~= "number" or value <= 0 or value % 1 ~= 0 or
+            not C_UnitAuras or not C_UnitAuras.GetPlayerAuraBySpellID or
+            not C_Secrets or not C_Secrets.ShouldSpellAuraBeSecret then return UNKNOWN end
+        -- Restricted lookups can return nil too; that is not proof of absence.
+        local restricted = C_Secrets.ShouldSpellAuraBeSecret(value)
+        if MapPinEnhanced:IsSecretValue(restricted) or restricted ~= false then return UNKNOWN end
+        local aura = C_UnitAuras.GetPlayerAuraBySpellID(value)
+        if MapPinEnhanced:IsSecretValue(aura) then return UNKNOWN end
+        if aura == nil then return UNSATISFIED end
+        if not IsReadableRequirementTable(aura) then return UNKNOWN end
+        return SATISFIED
     elseif key == "covenant" then
-        if not C_Covenants or not C_Covenants.GetActiveCovenantID then return UNKNOWN end
-        return StateFromBoolean(ValueMatches(C_Covenants.GetActiveCovenantID(), value))
+        if type(value) ~= "number" or value < 1 or value > 4 or value % 1 ~= 0 or
+            not C_Covenants or not C_Covenants.GetActiveCovenantID then return UNKNOWN end
+        local covenantID = C_Covenants.GetActiveCovenantID()
+        if MapPinEnhanced:IsSecretValue(covenantID) or type(covenantID) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(covenantID == value)
     elseif key == "chromieTime" then
         if type(value) ~= "number" then return UNKNOWN end
         if not C_ChromieTime or not C_ChromieTime.GetChromieTimeExpansionOption then return UNKNOWN end

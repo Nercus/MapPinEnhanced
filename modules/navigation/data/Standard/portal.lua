@@ -896,7 +896,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -928,7 +928,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -960,7 +960,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1004,7 +1004,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1036,7 +1036,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1068,7 +1068,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1100,7 +1100,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1132,7 +1132,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1176,7 +1176,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -1216,7 +1216,7 @@ local PORTAL = {
                                 {
                                     operation = "check",
                                     kind = "covenant",
-                                    value = "Kyrian",
+                                    value = 1,
                                 },
                                 {
                                     operation = "check",
@@ -2076,7 +2076,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -2104,7 +2104,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -2132,7 +2132,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -7234,7 +7234,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -7267,7 +7267,7 @@ local PORTAL = {
                                 {
                                     operation = "check",
                                     kind = "covenant",
-                                    value = "Kyrian",
+                                    value = 1,
                                 },
                                 {
                                     operation = "check",
@@ -7304,7 +7304,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -7331,7 +7331,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -7363,7 +7363,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -7391,7 +7391,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -8670,7 +8670,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8702,7 +8702,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8734,7 +8734,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8766,7 +8766,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8798,7 +8798,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8830,7 +8830,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8862,7 +8862,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8894,7 +8894,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8926,7 +8926,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8958,7 +8958,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -8990,7 +8990,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -9978,7 +9978,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -10005,7 +10005,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -12497,7 +12497,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -12573,7 +12573,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -12605,7 +12605,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -12661,7 +12661,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16022,7 +16022,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -16161,7 +16161,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16193,7 +16193,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
             },
         },
@@ -16259,7 +16259,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16315,7 +16315,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16369,7 +16369,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16423,7 +16423,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16455,7 +16455,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -16639,7 +16639,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16671,7 +16671,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16703,7 +16703,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16735,7 +16735,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16767,7 +16767,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -16799,7 +16799,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -18473,7 +18473,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18517,7 +18517,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18549,7 +18549,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18581,7 +18581,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18610,7 +18610,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18642,7 +18642,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18699,7 +18699,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -18731,7 +18731,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -22766,7 +22766,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "NightFae",
+                    value = 3,
                 },
                 {
                     operation = "check",
@@ -22874,7 +22874,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Venthyr",
+                    value = 2,
                 },
                 {
                     operation = "check",
@@ -22906,7 +22906,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -22987,7 +22987,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
@@ -23019,7 +23019,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Kyrian",
+                    value = 1,
                 },
                 {
                     operation = "check",
@@ -23073,7 +23073,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "covenant",
-                    value = "Necrolord",
+                    value = 4,
                 },
                 {
                     operation = "check",
