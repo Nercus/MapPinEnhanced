@@ -17,6 +17,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field phase "approach"|"ready"|"in-transit"
 ---@field requirement NavigationRequirement?
 ---@field data any
+---@field taxiJourney NavigationTaxiJourney?
 
 ---@alias NavigationPathReport fun(result: "check-completion"|"attempted"|"completed"|"failed", detail: string?)
 

@@ -164,7 +164,7 @@ end
 ---@param currentRouteUnusable boolean?
 function Navigation:StartCalculation(currentRouteUnusable)
     local destination = self.activeDestination
-    if not destination or not self.routeNavigationEnabled then return end
+    if not destination or not self.routeNavigationEnabled or self:IsTaxiBookingPending() then return end
     self:CancelRouteCalculation(self.activeCalculation)
     self.lastCalculationFailure = nil
     self.lastCalculationExclusions = nil
@@ -209,9 +209,18 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 return
             end
             local prepared = self:GetPreparedData()
+            if route.preparedData.taxiObservation ~= self:GetTaxiObservation() then
+                self:StartCalculation(currentRouteUnusable)
+                return
+            end
             if prepared and route.preparedData ~= prepared then
                 for _, reference in ipairs(route.pathReferences) do
-                    if prepared.requirementStateByPath[reference] ~= "satisfied" then
+                    if reference > 0 and prepared.requirementStateByPath[reference] ~= "satisfied" then
+                        self:StartCalculation(currentRouteUnusable)
+                        return
+                    end
+                    local journey = route.taxiJourneys[reference]
+                    if journey and not self:IsTaxiJourneyEligible(journey, prepared) then
                         self:StartCalculation(currentRouteUnusable)
                         return
                     end
@@ -235,7 +244,7 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 end
             end
             self:DeactivatePathHandler()
-            local graph = self:GetGraph()
+            local graph = route.graph
             self.progression = {
                 route = route,
                 pathIndex = 1,
@@ -416,7 +425,7 @@ end
 function Navigation:GetRouteChatSteps(changeNumber)
     local progression = self.progression
     local destination = self.activeDestination
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     if changeNumber ~= presentationChangeNumber or not progression or not destination or not graph then return nil end
 
     ---@type string[]
@@ -425,8 +434,9 @@ function Navigation:GetRouteChatSteps(changeNumber)
         local reference = progression.route.pathReferences[index]
         local mapID = graph.pointMapIDs[graph.pathToPointIndexes[reference]]
         local info = C_Map.GetMapInfo(mapID)
+        local journey = progression.route.taxiJourneys[reference]
         steps[#steps + 1] = GetChatInstruction(graph.pathTypes[reference],
-            CompactChatLabel(info and info.name or tostring(mapID), 80))
+            CompactChatLabel(journey and journey.destinationName or info and info.name or tostring(mapID), 80))
     end
     local data = destination.data
     local info = C_Map.GetMapInfo(data.mapID)
@@ -476,6 +486,10 @@ local function GetCurrentPathInstruction(progression, graph)
         if mapInfo and type(mapInfo.name) == "string" and mapInfo.name ~= "" then
             return string.format(L["Navigation Approach"], mapInfo.name)
         end
+    end
+    local journey = progression.route.taxiJourneys[pathReference]
+    if journey and journey.destinationName then
+        return string.format(L["Navigation Take Flight To"], journey.destinationName)
     end
     return Navigation:GetPathInstruction(pathType, graph.pointMapIDs[toPointIndex])
 end
@@ -530,7 +544,7 @@ end
 ---@param progression NavigationProgression
 function Navigation:PublishStep(progression)
     if not self:IsCurrentProgression(progression) then return end
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     if not graph then return end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
     presentationChangeNumber = presentationChangeNumber + 1
@@ -574,11 +588,11 @@ function Navigation:PublishStep(progression)
             self:ApplyProgressionPhase(progression, "ready")
         end
     elseif self:IsMovementPath(pathType) or
-        progression.phase == "in-transit" and pathType ~= "phaseswitch" then
+        progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" then
         onArrival = function()
             self:CompleteCurrentPath(progression)
         end
-    else
+    elseif progression.phase ~= "in-transit" or pathType ~= "flighttaxi" then
         targetPointIndex = fromPointIndex or toPointIndex
     end
 
@@ -619,6 +633,7 @@ function Navigation:PublishStep(progression)
             phase = progression.phase,
             requirement = graph.pathRequirements[pathReference],
             data = graph.pathHandlerData[pathReference],
+            taxiJourney = progression.route.taxiJourneys[pathReference],
         }, function(result, detail)
             self:HandlePathHandlerReport(identity, result, detail)
         end)
@@ -635,7 +650,7 @@ function Navigation:CompleteCurrentPath(progression)
     progression.attempted = nil
     progression.pathUnavailable = nil
     ResetDeviationState(progression)
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local nextReference = progression.route.pathReferences[progression.pathIndex]
     if not graph then return end
     progression.phase = nextReference and graph.pathFromPointIndexes[nextReference] and "approach" or
@@ -658,7 +673,7 @@ end
 ---@param identity NavigationStepIdentity?
 function Navigation:CheckCurrentPathCompletion(identity)
     local progression = self.progression
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     if not progression or not graph or not self:IsCurrentProgression(progression) then return end
     if identity and not self:IsStepIdentityCurrent(identity) then return end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
@@ -672,7 +687,7 @@ function Navigation:CheckCurrentPathCompletion(identity)
         if destinationDistance == nil then self:StartCalculation(false) end
         return
     end
-    if graph.pathTypes[pathReference] == "phaseswitch" then return end
+    if graph.pathTypes[pathReference] == "phaseswitch" or graph.pathTypes[pathReference] == "flighttaxi" then return end
     if destinationDistance and destinationDistance <= 100 then
         local pathType = graph.pathTypes[pathReference]
         local requiresObservedAttempt = self:GetPathAction(pathType,
@@ -756,7 +771,7 @@ function Navigation:HandlePathHandlerReport(identity, result, detail)
     elseif result == "completed" then
         self:CompleteCurrentPath(progression)
     elseif result == "failed" then
-        local graph = self:GetGraph()
+        local graph = self.progression and self.progression.route.graph or self:GetGraph()
         local pathReference = progression.route.pathReferences[progression.pathIndex]
         local pathType = graph and pathReference and graph.pathTypes[pathReference]
         local kind = pathType == "flighttaxi" and "taxi" or
@@ -839,7 +854,7 @@ function Navigation:RefreshEligibility()
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
     local progression = self.progression
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local prepared = self:GetPreparedData()
     local reference = progression and progression.route.pathReferences[progression.pathIndex]
     if progression and not progression.pathUnavailable and not progression.attempted and
@@ -849,6 +864,20 @@ function Navigation:RefreshEligibility()
         local identity = self:CaptureStepIdentity(progression)
         if identity then self:HandlePathHandlerReport(identity, "failed", "action requirements no longer satisfied") end
         return
+    end
+    if progression and not progression.attempted and progression.phase ~= "in-transit" and
+        progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation() then
+        self:StartCalculation(true)
+        return
+    end
+    if progression and prepared and not progression.attempted and progression.phase ~= "in-transit" then
+        for index = progression.pathIndex, #progression.route.pathReferences do
+            local journey = progression.route.taxiJourneys[progression.route.pathReferences[index]]
+            if journey and not self:IsTaxiJourneyEligible(journey, prepared) then
+                self:StartCalculation(true)
+                return
+            end
+        end
     end
     if RefreshMissingRouteOrigin() then return end
     if self.activeDestination and not self.progression and not self.activeCalculation then
@@ -1149,7 +1178,7 @@ end
 ---@param isWorldMap boolean
 function Navigation:BuildRouteLayer(isWorldMap)
     local progression = self.progression
-    local graph = self:GetGraph()
+    local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local destination = self.activeDestination
     if not progression or not graph or not destination then return end
     local route = progression.route
@@ -1199,13 +1228,22 @@ function Navigation:BuildRouteLayer(isWorldMap)
             end
         end
         if fromPointIndex and toPointIndex then
-            local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
-                isWorldMap, graph.pointMapIDs[fromPointIndex],
-                graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex], graph.pointMapIDs[toPointIndex],
-                graph.pointXs[toPointIndex], graph.pointYs[toPointIndex])
-            if startFrame and endFrame then
-                startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
-                endFrame:SetRoutePoint(graph.pathTypes[pathReference])
+            local journey = route.taxiJourneys[pathReference]
+            local segments = journey and #journey.legs or 1
+            for legIndex = 1, segments do
+                local from, to = fromPointIndex, toPointIndex
+                if journey then
+                    local sourceReference = journey.legs[legIndex].sourceReferences[1]
+                    from = graph.pathFromPointIndexes[sourceReference]
+                    to = graph.pathToPointIndexes[sourceReference]
+                end
+                local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
+                    isWorldMap, graph.pointMapIDs[from], graph.pointXs[from], graph.pointYs[from],
+                    graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
+                if startFrame and endFrame then
+                    startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
+                    if legIndex == segments then endFrame:SetRoutePoint(graph.pathTypes[pathReference]) end
+                end
             end
         end
     end

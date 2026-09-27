@@ -73,7 +73,7 @@ end
 ---@field expectedSeconds number
 ---@field uncertaintySeconds number
 ---@field comparisonSeconds number
----@field explanation table
+---@field explanation table<string, any>
 
 ---@param mapID1 number
 ---@param x1 number
@@ -142,7 +142,7 @@ end
 ---@param progression NavigationProgression
 ---@return number?
 function Navigation:GetRemainingRouteCost(progression)
-    local graph = self:GetGraph()
+    local graph = progression.route.graph
     local destination = self.activeDestination
     local preparedData = self:GetPreparedData()
     if not graph or not destination or not preparedData or not self:IsCurrentProgression(progression) then return nil end
@@ -178,7 +178,16 @@ function Navigation:GetRemainingRouteCost(progression)
     for index = remainingPathIndex, #progression.route.pathCosts do
         local remainingPathCost = progression.route.pathCosts[index]
         if index > progression.pathIndex or not progression.attempted and progression.phase ~= "in-transit" then
-            remainingPathCost = self:GetFreshPathCost(progression.route.pathReferences[index])
+            local reference = progression.route.pathReferences[index]
+            if reference < 0 then
+                local journey = progression.route.taxiJourneys[reference]
+                local observation = self:GetTaxiObservation()
+                if not observation or observation ~= progression.route.preparedData.taxiObservation or
+                    not observation.itineraries[journey.destination] or
+                    not self:IsTaxiJourneyEligible(journey, preparedData) then return nil end
+            else
+                remainingPathCost = self:GetFreshPathCost(reference)
+            end
         end
         if not remainingPathCost then return nil end
         total = total + remainingPathCost.comparisonSeconds
@@ -221,6 +230,8 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field destinationID string
 ---@field destinationChangeNumber integer
 ---@field calculationID integer
+---@field graph NavigationGraph
+---@field taxiJourneys table<integer, NavigationTaxiJourney>
 ---@field pathReferences integer[]
 ---@field pathCosts NavigationCalculatedPathCost[]
 ---@field finalCost NavigationCalculatedPathCost
@@ -241,6 +252,9 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field instanceID number
 
 ---@class NavigationCalculationJob
+---@field graph NavigationGraph
+---@field taxiJourneys table<integer, NavigationTaxiJourney>
+---@field taxiOutgoing table<integer, integer[]>
 ---@field calculationID integer
 ---@field destinationID string
 ---@field destinationChangeNumber integer
@@ -402,8 +416,13 @@ local function BuildRoute(job, destinationEntry)
         local pathCost = job.pathCostByReference[pathReference]
         ---@cast pathCost NavigationCalculatedPathCost
         table.insert(pathCosts, pathCost)
+        if pathReference > 0 and job.graph.pathTypes[pathReference] == "flighttaxi" then
+            job.taxiJourneys[pathReference] = Navigation:GetInferredTaxiJourney(job.graph, pathReference, pathCost)
+        end
     end
     return {
+        graph = job.graph,
+        taxiJourneys = job.taxiJourneys,
         destinationID = job.destinationID,
         destinationChangeNumber = job.destinationChangeNumber,
         calculationID = job.calculationID,
@@ -425,7 +444,7 @@ end
 ---@param job NavigationCalculationJob
 ---@param entry NavigationHeapEntry
 local function OfferDestination(job, entry)
-    local graph = Navigation:GetGraph()
+    local graph = job.graph
     if not graph or entry.pathCount == 0 then return end
     local destination = job.destinationData
     local finalCost = Navigation:GetPlayerTravelCost(job.preparedData,
@@ -447,7 +466,7 @@ end
 ---@param job NavigationCalculationJob
 ---@param entry NavigationHeapEntry
 local function ExpandPoint(job, entry)
-    local graph = Navigation:GetGraph()
+    local graph = job.graph
     if not graph then return end
     OfferDestination(job, entry)
     local firstOffset = graph.firstOutgoingPathByPointIndex[entry.pointIndex]
@@ -475,6 +494,13 @@ local function ExpandPoint(job, entry)
                     AddPathToSignature(entry.signature, pathReference))
             end
         end
+    end
+    for _, reference in ipairs(job.taxiOutgoing[entry.pointIndex] or {}) do
+        local journey = job.taxiJourneys[reference]
+        local cost = journey.cost
+        OfferPoint(job, journey.toPointIndex, entry.cost + cost.comparisonSeconds,
+            entry.uncertainty + cost.uncertaintySeconds, entry.pathCount + 1,
+            entry.pointIndex, reference, entry.signature .. journey.identity .. ",")
     end
     -- Authored data describes transitions, not every walk between entrances.
     -- Offer connections from actual Path arrivals. Initial player approaches
@@ -544,7 +570,7 @@ end
 
 ---@param job NavigationCalculationJob
 local function SeedJob(job)
-    local graph = Navigation:GetGraph()
+    local graph = job.graph
     if not graph then return end
     local playerX, playerY, playerMapID = job.originX, job.originY, job.originMapID
 
@@ -626,6 +652,58 @@ local function PrepareMovementPoints(job, graph)
     end
 end
 
+-- Negative operation references are calculation-local taxi journeys, never
+-- authored path IDs. The overlay shares immutable point/source arrays while
+-- providing endpoint/type views to existing presentation consumers.
+---@param job NavigationCalculationJob
+---@param source NavigationGraph
+local function PrepareTaxiCandidates(job, source)
+    local graph = setmetatable({}, { __index = source }) ---@type NavigationGraph
+    graph.pathTypes = setmetatable({}, { __index = source.pathTypes })
+    graph.pathFromPointIndexes = setmetatable({}, { __index = source.pathFromPointIndexes })
+    graph.pathToPointIndexes = setmetatable({}, { __index = source.pathToPointIndexes })
+    graph.pathHandlerData = setmetatable({}, { __index = source.pathHandlerData })
+    job.graph = graph
+    local observation = job.preparedData.taxiObservation
+    if not observation then return end
+    local destinations = {} ---@type number[]
+    for destination in pairs(observation.itineraries) do destinations[#destinations + 1] = destination end
+    table.sort(destinations)
+    for index, destination in ipairs(destinations) do
+        local journey, failure = Navigation:PriceTaxiJourney(source, job.preparedData,
+            observation.itineraries[destination])
+        local reference = -index
+        local avoided = false
+        if journey then
+            for _, leg in ipairs(journey.legs) do
+                for _, sourceReference in ipairs(leg.sourceReferences) do
+                    if job.avoidedPaths[sourceReference] then avoided = true end
+                end
+            end
+        end
+        if journey and not avoided then
+            journey.destinationName = observation.names[destination]
+            job.taxiJourneys[reference] = journey
+            job.pathCostByReference[reference] = journey.cost
+            local outgoing = job.taxiOutgoing[journey.fromPointIndex] or {}
+            job.taxiOutgoing[journey.fromPointIndex] = outgoing
+            outgoing[#outgoing + 1] = reference
+            graph.pathTypes[reference] = "flighttaxi"
+            graph.pathFromPointIndexes[reference] = journey.fromPointIndex
+            graph.pathToPointIndexes[reference] = journey.toPointIndex
+            local from, to = journey.fromPointIndex, journey.toPointIndex
+            graph.pathHandlerData[reference] = {
+                fromMap = graph.pointMapIDs[from], fromX = graph.pointXs[from], fromY = graph.pointYs[from],
+                toMap = graph.pointMapIDs[to], toX = graph.pointXs[to], toY = graph.pointYs[to],
+                fromTaxiNodeID = journey.origin, toTaxiNodeID = journey.destination,
+                taxiPathIDs = {},
+            }
+        else
+            job.unavailablePathCosts[reference] = failure or "taxi connection avoided"
+        end
+    end
+end
+
 ---@param destinationID string
 ---@param destinationChangeNumber integer
 ---@param destinationData WayfinderData
@@ -646,6 +724,9 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     ---@type NavigationCalculationJob
     local job = {
+        graph = graph,
+        taxiJourneys = {},
+        taxiOutgoing = {},
         calculationID = calculationNumber,
         destinationID = destinationID,
         destinationChangeNumber = destinationChangeNumber,
@@ -672,6 +753,7 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         movementCandidates = 0,
         onFinish = onFinish,
     }
+    PrepareTaxiCandidates(job, graph)
     PrepareMovementPoints(job, graph)
     SeedJob(job)
     C_Timer.After(0, function()

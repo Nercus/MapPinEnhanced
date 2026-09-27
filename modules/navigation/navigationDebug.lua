@@ -103,7 +103,8 @@ local function ShowNavigationDump()
         })
     end
 
-    local graph = Navigation:GetGraph()
+    local graph = Navigation.progression and Navigation.progression.route.graph or Navigation:GetGraph()
+    Add("Taxi observation", Navigation:GetTaxiObservation())
     local prepared = Navigation:GetPreparedData()
     local progression = Navigation.progression
     local route = progression and progression.route
@@ -123,6 +124,8 @@ local function ShowNavigationDump()
             comparisonSeconds = route.comparisonSeconds,
             calculationID = route.calculationID,
             pathReferences = route.pathReferences,
+            taxiJourneys = route.taxiJourneys,
+            taxiObservation = route.preparedData.taxiObservation,
             originMapID = route.originMapID,
             originX = route.originX,
             originY = route.originY,

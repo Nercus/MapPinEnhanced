@@ -7,5 +7,6 @@
     <Include file="gossip.lua" />
     <Include file="transport.lua" />
     <Include file="flightTaxi.lua" />
+    <Include file="flightTaxiMap.lua" />
     <Include file="calendar.lua" />
 </Ui>

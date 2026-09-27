@@ -17,6 +17,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field travelDuration number?
 ---@field fromTaxiNodeID number?
 ---@field toTaxiNodeID number?
+---@field taxiPathIDs integer[]?
 ---@field requirement NavigationRequirement?
 ---@field gossip NavigationStaticGossip?
 
@@ -119,6 +120,9 @@ end
 ---@field requirementStateByPath table<integer, NavigationRequirementState>
 ---@field exclusionReasonByPath table<integer, string>
 ---@field movement NavigationMovementCapabilities
+---@field taxiObservation NavigationTaxiObservation?
+---@field taxiCosts table<integer, NavigationCalculatedPathCost>
+---@field taxiFailures table<integer, string>
 
 ---@param pathType string
 ---@param paths NavigationStaticPath[]
@@ -260,6 +264,7 @@ function Navigation:BuildGraph()
         end
     end
 
+    self:IndexTaxiConnections(graph)
     navigationGraph = graph
     registeredPathData = {}
     self:RefreshPreparedData()
@@ -576,6 +581,9 @@ function Navigation:RefreshPreparedData()
         requirementStateByPath = {},
         exclusionReasonByPath = {},
         movement = Navigation:GetMovementCapabilities(),
+        taxiObservation = self:GetTaxiObservation(),
+        taxiCosts = {},
+        taxiFailures = {},
     }
     for pathReference = 1, graph.pathCount do
         local staticFailure = graph.excludedPaths[pathReference]
@@ -593,6 +601,7 @@ function Navigation:RefreshPreparedData()
             end
         end
     end
+    self:PrepareTaxiCosts(graph, preparedData)
     preparedNavigationData = preparedData
 end
 
@@ -602,6 +611,7 @@ end
 ---@return NavigationCalculatedPathCost?
 ---@return string? failure
 function Navigation:GetFreshPathCost(pathReference)
+    if pathReference < 0 then return nil, "taxi journey requires current interaction" end
     local graph = navigationGraph
     if not graph then return nil, "navigation data is not ready" end
     if IsTransportationDisabled(graph.pathTypes[pathReference]) then
@@ -610,9 +620,16 @@ function Navigation:GetFreshPathCost(pathReference)
     if graph.excludedPaths[pathReference] then return nil, graph.excludedPaths[pathReference] end
     local state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference])
     if state ~= SATISFIED then return nil, failure or state end
-    return self:GetPathCost(graph, {
+    local fresh = {
         requirementStateByPath = { [pathReference] = state },
         exclusionReasonByPath = {},
         movement = self:GetMovementCapabilities(),
-    }, pathReference)
+        taxiObservation = self:GetTaxiObservation(),
+        taxiCosts = {},
+        taxiFailures = {},
+    }
+    if graph.pathTypes[pathReference] == "flighttaxi" then
+        self:PrepareTaxiCosts(graph, fresh, pathReference)
+    end
+    return self:GetPathCost(graph, fresh, pathReference)
 end
