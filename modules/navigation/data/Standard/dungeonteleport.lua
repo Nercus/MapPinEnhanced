@@ -23,8 +23,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424142,
-        cooldown = 28800,
     },
 
     -- Zone: Ardenweald (map 1565)
@@ -50,8 +48,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354464,
-        cooldown = 28800,
     },
     -- current position -> Ardenweald (map 1565 68.66,66.71) via dungeonteleport
     {
@@ -75,8 +71,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354468,
-        cooldown = 28800,
     },
 
     -- Zone: Azj-Kahet (map 2255)
@@ -98,8 +92,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445416,
-        cooldown = 28800,
     },
     -- current position -> Ara-Kara, City of Echoes (map 2255 49.00,81.00) via dungeonteleport
     {
@@ -119,8 +111,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445417,
-        cooldown = 28800,
     },
 
     -- Zone: Badlands (map 15)
@@ -142,8 +132,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393222,
-        cooldown = 28800,
     },
 
     -- Zone: Bastion (map 1533)
@@ -169,8 +157,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354462,
-        cooldown = 28800,
     },
     -- current position -> Bastion (map 1533 58.60,28.52) via dungeonteleport
     {
@@ -194,8 +180,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354466,
-        cooldown = 28800,
     },
 
     -- Zone: Blackrock Mountain (map 33)
@@ -217,8 +201,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159902,
-        cooldown = 28800,
     },
 
     -- Zone: Deadwind Pass (map 42)
@@ -244,8 +226,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 373262,
-        cooldown = 28800,
     },
 
     -- Zone: Dornogal (map 2339)
@@ -267,8 +247,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445443,
-        cooldown = 28800,
     },
 
     -- Zone: Drustvar (map 896)
@@ -290,8 +268,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424167,
-        cooldown = 28800,
     },
 
     -- Zone: Emerald Dream (map 2200)
@@ -313,8 +289,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 432258,
-        cooldown = 28800,
     },
 
     -- Zone: Eredath (map 882)
@@ -336,8 +310,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254551,
-        cooldown = 28800,
     },
 
     -- Zone: Eversong Woods (map 2395)
@@ -359,8 +331,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254400,
-        cooldown = 28800,
     },
 
     -- Zone: Frostfire Ridge (map 525)
@@ -382,8 +352,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159895,
-        cooldown = 28800,
     },
 
     -- Zone: Gorgrond (map 543)
@@ -409,8 +377,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159896,
-        cooldown = 28800,
     },
     -- current position -> Gorgrond (map 543 55.01,31.30) via dungeonteleport
     {
@@ -434,8 +400,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159900,
-        cooldown = 28800,
     },
     -- current position -> The Everbloom (map 543 59.00,45.00) via dungeonteleport
     {
@@ -455,8 +419,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159901,
-        cooldown = 28800,
     },
 
     -- Zone: Hallowfall (map 2215)
@@ -478,8 +440,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445414,
-        cooldown = 28800,
     },
     -- current position -> Priory of the Sacred Flame (map 2215 41.20,49.60) via dungeonteleport
     {
@@ -499,8 +459,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445444,
-        cooldown = 28800,
     },
 
     -- Zone: Highmountain (map 650)
@@ -522,8 +480,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 410078,
-        cooldown = 28800,
     },
 
     -- Zone: Icecrown (map 118)
@@ -545,8 +501,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254555,
-        cooldown = 28800,
     },
 
     -- Zone: Isle of Dorn (map 2248)
@@ -568,8 +522,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445269,
-        cooldown = 28800,
     },
     -- current position -> Cinderbrew Meadery (map 2248 76.00,45.00) via dungeonteleport
     {
@@ -589,8 +541,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445440,
-        cooldown = 28800,
     },
     -- current position -> Cinderbrew Meadery (map 2248 76.00,45.00) via dungeonteleport
     {
@@ -610,8 +560,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 467546,
-        cooldown = 28800,
     },
 
     -- Zone: Isle of Quel'Danas (map 2424)
@@ -633,8 +581,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254572,
-        cooldown = 28800,
     },
 
     -- Zone: Kun-Lai Summit (map 379)
@@ -656,8 +602,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131206,
-        cooldown = 28800,
     },
 
     -- Zone: Maldraxxus (map 1536)
@@ -683,8 +627,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354463,
-        cooldown = 28800,
     },
     -- current position -> Maldraxxus (map 1536 53.09,52.87) via dungeonteleport
     {
@@ -708,8 +650,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354467,
-        cooldown = 28800,
     },
 
     -- Zone: Mechagon Island (map 1462)
@@ -735,8 +675,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 373274,
-        cooldown = 28800,
     },
 
     -- Zone: Nazmir (map 863)
@@ -758,8 +696,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 410074,
-        cooldown = 28800,
     },
 
     -- Zone: Ohn'ahran Plains (map 2023)
@@ -781,8 +717,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393262,
-        cooldown = 28800,
     },
 
     -- Zone: Revendreth (map 1525)
@@ -808,8 +742,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354465,
-        cooldown = 28800,
     },
     -- current position -> Revendreth (map 1525 51.07,30.22) via dungeonteleport
     {
@@ -833,8 +765,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 354469,
-        cooldown = 28800,
     },
     -- current position -> Revendreth (map 1525 46.37,41.50) via dungeonteleport
     {
@@ -858,8 +788,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 373190,
-        cooldown = 28800,
     },
 
     -- Zone: Shadowmoon Valley (map 539)
@@ -881,8 +809,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159899,
-        cooldown = 28800,
     },
 
     -- Zone: Silvermoon City (map 2393)
@@ -904,8 +830,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1286809,
-        cooldown = 28800,
     },
 
     -- Zone: Spires of Arak (map 542)
@@ -927,8 +851,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254557,
-        cooldown = 28800,
     },
     -- current position -> Skyreach (map 542 35.00,33.00) via dungeonteleport
     {
@@ -948,8 +870,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159898,
-        cooldown = 28800,
     },
 
     -- Zone: Stormheim (map 634)
@@ -971,8 +891,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393764,
-        cooldown = 28800,
     },
 
     -- Zone: Suramar (map 680)
@@ -994,8 +912,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393766,
-        cooldown = 28800,
     },
 
     -- Zone: Talador (map 535)
@@ -1017,8 +933,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 159897,
-        cooldown = 28800,
     },
 
     -- Zone: Tazavesh, the Veiled Market (map 2016)
@@ -1044,8 +958,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 367416,
-        cooldown = 28800,
     },
 
     -- Zone: Tazavesh (map 2472)
@@ -1067,8 +979,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1237215,
-        cooldown = 28800,
     },
     -- current position -> Manaforge Omega (map 2472 41.00,21.00) via dungeonteleport
     {
@@ -1088,8 +998,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1239155,
-        cooldown = 28800,
     },
 
     -- Zone: Thaldraszus (map 2025)
@@ -1111,8 +1019,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393273,
-        cooldown = 28800,
     },
     -- current position -> Halls of Infusion (map 2025 59.00,60.00) via dungeonteleport
     {
@@ -1132,8 +1038,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393283,
-        cooldown = 28800,
     },
     -- current position -> Dawn of the Infinites (map 2025 61.00,84.00) via dungeonteleport
     {
@@ -1153,8 +1057,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424197,
-        cooldown = 28800,
     },
     -- current position -> Vault of the Incarnates (map 2025 73.00,55.00) via dungeonteleport
     {
@@ -1174,8 +1076,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 432254,
-        cooldown = 28800,
     },
 
     -- Zone: The Azure Span (map 2024)
@@ -1197,8 +1097,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393267,
-        cooldown = 28800,
     },
     -- current position -> The Azure Vault (map 2024 38.00,64.00) via dungeonteleport
     {
@@ -1218,8 +1116,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393279,
-        cooldown = 28800,
     },
 
     -- Zone: The Jade Forest (map 371)
@@ -1241,8 +1137,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131204,
-        cooldown = 28800,
     },
 
     -- Zone: The Maw (map 1543)
@@ -1268,8 +1162,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 373191,
-        cooldown = 28800,
     },
 
     -- Zone: The Ringing Deeps (map 2214)
@@ -1291,8 +1183,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1216786,
-        cooldown = 28800,
     },
     -- current position -> Darkflame Cleft (map 2214 56.00,21.00) via dungeonteleport
     {
@@ -1312,8 +1202,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445441,
-        cooldown = 28800,
     },
 
     -- Zone: The Waking Shores (map 2022)
@@ -1335,8 +1223,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393256,
-        cooldown = 28800,
     },
     -- current position -> Neltharus (map 2022 25.00,56.00) via dungeonteleport
     {
@@ -1356,8 +1242,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 393276,
-        cooldown = 28800,
     },
 
     -- Zone: Tiragarde Sound (map 895)
@@ -1384,8 +1268,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445418,
-        cooldown = 28800,
     },
     -- current position -> Siege of Boralus (map 895 88.00,51.00) via dungeonteleport
     {
@@ -1410,8 +1292,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 464256,
-        cooldown = 28800,
     },
     -- current position -> Freehold (map 895 85.00,79.00) via dungeonteleport
     {
@@ -1431,8 +1311,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 410071,
-        cooldown = 28800,
     },
 
     -- Zone: Tirisfal Glades (map 18)
@@ -1454,8 +1332,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131229,
-        cooldown = 28800,
     },
     -- current position -> Scarlet Halls (map 18 82.00,33.00) via dungeonteleport
     {
@@ -1475,8 +1351,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131231,
-        cooldown = 28800,
     },
 
     -- Zone: Townlong Steppes (map 388)
@@ -1498,8 +1372,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131228,
-        cooldown = 28800,
     },
 
     -- Zone: Twilight Highlands (map 241)
@@ -1521,8 +1393,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 445424,
-        cooldown = 28800,
     },
 
     -- Zone: Uldum (map 249)
@@ -1544,8 +1414,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 410080,
-        cooldown = 28800,
     },
 
     -- Zone: Undermine (map 2346)
@@ -1567,8 +1435,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1226482,
-        cooldown = 28800,
     },
 
     -- Zone: Val'sharah (map 641)
@@ -1590,8 +1456,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424153,
-        cooldown = 28800,
     },
     -- current position -> Darkheart Thicket (map 641 59.00,31.00) via dungeonteleport
     {
@@ -1611,8 +1475,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424163,
-        cooldown = 28800,
     },
 
     -- Zone: Vale of Eternal Blossoms (map 390)
@@ -1634,8 +1496,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131222,
-        cooldown = 28800,
     },
     -- current position -> Gate of the Setting Sun (map 390 16.00,74.00) via dungeonteleport
     {
@@ -1655,8 +1515,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131225,
-        cooldown = 28800,
     },
 
     -- Zone: Valley of the Four Winds (map 376)
@@ -1678,8 +1536,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131205,
-        cooldown = 28800,
     },
 
     -- Zone: Vol'dun (map 864)
@@ -1701,8 +1557,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1286828,
-        cooldown = 28800,
     },
 
     -- Zone: Western Plaguelands (map 22)
@@ -1724,8 +1578,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 131232,
-        cooldown = 28800,
     },
 
     -- Zone: Zaralek Cavern (map 2133)
@@ -1747,8 +1599,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 432257,
-        cooldown = 28800,
     },
 
     -- Zone: Zereth Mortis (map 1970)
@@ -1774,8 +1624,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 373192,
-        cooldown = 28800,
     },
 
     -- Zone: Zul'Aman (map 2437)
@@ -1797,8 +1645,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1254559,
-        cooldown = 28800,
     },
     -- current position -> Den of Nalorakk (map 2437 29.87,84.49) via dungeonteleport
     {
@@ -1818,8 +1664,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1286807,
-        cooldown = 28800,
     },
 
     -- Zone: Zuldazar (map 862)
@@ -1846,8 +1690,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 467553,
-        cooldown = 28800,
     },
     -- current position -> The MOTHERLODE!! (map 862 56.00,60.00) via dungeonteleport
     {
@@ -1872,8 +1714,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 467555,
-        cooldown = 28800,
     },
     -- current position -> Kings' Rest (map 862 38.00,39.00) via dungeonteleport
     {
@@ -1893,8 +1733,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 1286831,
-        cooldown = 28800,
     },
     -- current position -> Atal'Dazar (map 862 44.00,39.00) via dungeonteleport
     {
@@ -1914,8 +1752,6 @@ local DUNGEONTELEPORT = {
                 },
             },
         },
-        spellID = 424187,
-        cooldown = 28800,
     },
 }
 

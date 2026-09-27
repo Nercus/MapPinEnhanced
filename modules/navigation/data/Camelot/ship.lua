@@ -62,7 +62,6 @@ local SHIP = {
                 },
             },
         },
-        toRegion = "ruttheran",
     },
 
     -- Zone: Dustwallow Marsh (map 1445)
@@ -153,7 +152,6 @@ local SHIP = {
                 },
             },
         },
-        fromRegion = "ruttheran",
     },
 
     -- Zone: The Barrens (map 1413)

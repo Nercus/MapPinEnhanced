@@ -77,7 +77,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 50977,
     },
 
     -- Zone: Boralus (map 1161)
@@ -108,7 +107,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 281403,
     },
 
     -- Zone: Dalaran (map 125)
@@ -134,7 +132,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 53140,
     },
 
     -- Zone: Dalaran (map 627)
@@ -160,7 +157,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 224869,
     },
 
     -- Zone: Darkshore (map 62)
@@ -204,7 +200,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3565,
     },
 
     -- Zone: Darnassus (map 89)
@@ -243,7 +238,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3565,
     },
 
     -- Zone: Dazar'alor (map 1163)
@@ -274,7 +268,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 281404,
     },
 
     -- Zone: Dornogal (map 2339)
@@ -300,7 +293,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 446540,
     },
 
     -- Zone: Dustwallow Marsh (map 70)
@@ -331,7 +323,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 49359,
     },
 
     -- Zone: Eastern Plaguelands (map 23)
@@ -387,7 +378,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 50977,
     },
 
     -- Zone: Emerald Dreamway (map 715)
@@ -423,7 +413,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 193753,
     },
 
     -- Zone: Hall of the Guardian (map 734)
@@ -449,7 +438,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 193759,
     },
 
     -- Zone: Highmountain (map 650)
@@ -475,7 +463,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 205379,
     },
 
     -- Zone: Hillsbrad Foothills (map 25)
@@ -501,7 +488,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 120145,
     },
 
     -- Zone: Ironforge (map 87)
@@ -532,7 +518,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3562,
     },
 
     -- Zone: Kun-Lai Summit (map 379)
@@ -568,7 +553,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 126892,
     },
 
     -- Zone: Moonglade (map 80)
@@ -594,7 +578,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 18960,
     },
 
     -- Zone: Nazmir (map 863)
@@ -620,7 +603,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 272269,
     },
 
     -- Zone: Orgrimmar (map 85)
@@ -651,7 +633,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3567,
     },
 
     -- Zone: Oribos (map 1670)
@@ -677,7 +658,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 344587,
     },
 
     -- Zone: Shattrath City (map 111)
@@ -708,7 +688,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 33690,
     },
     -- current position -> Shattrath City (map 111 53.00,49.20) via spell
     {
@@ -737,7 +716,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 35715,
     },
 
     -- Zone: Silvermoon City (map 110)
@@ -768,7 +746,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 32272,
     },
 
     -- Zone: Silvermoon City (map 2393)
@@ -794,7 +771,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 1259190,
     },
 
     -- Zone: Stormshield (map 622)
@@ -825,7 +801,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 176248,
     },
 
     -- Zone: Stormwind City (map 84)
@@ -856,7 +831,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3561,
     },
 
     -- Zone: Swamp of Sorrows (map 51)
@@ -887,7 +861,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 49358,
     },
 
     -- Zone: The Exodar (map 103)
@@ -918,7 +891,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 32271,
     },
 
     -- Zone: The Wandering Isle (map 709)
@@ -959,7 +931,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 126892,
     },
 
     -- Zone: Thunder Bluff (map 88)
@@ -990,7 +961,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3566,
     },
 
     -- Zone: Tiragarde Sound (map 895)
@@ -1016,7 +986,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 257701,
     },
 
     -- Zone: Tol Barad Peninsula (map 245)
@@ -1047,7 +1016,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 88342,
     },
     -- current position -> Tol Barad Peninsula (map 245 55.80,80.10) via spell
     {
@@ -1076,7 +1044,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 88344,
     },
 
     -- Zone: Uldum (map 1527)
@@ -1102,7 +1069,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 88775,
     },
 
     -- Zone: Uldum (map 249)
@@ -1128,7 +1094,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 88775,
     },
 
     -- Zone: Undercity (map 90)
@@ -1159,7 +1124,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3563,
     },
 
     -- Zone: Valdrakken (map 2112)
@@ -1186,7 +1150,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 395277,
     },
 
     -- Zone: Vale of Eternal Blossoms (map 1530)
@@ -1263,7 +1226,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 132621,
     },
     -- current position -> Vale of Eternal Blossoms New (map 1530 62.68,19.30) via spell
     {
@@ -1338,7 +1300,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 132627,
     },
 
     -- Zone: Vale of Eternal Blossoms (map 390)
@@ -1410,7 +1371,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 132621,
     },
     -- current position -> Vale of Eternal Blossoms (map 390 62.21,21.54) via spell
     {
@@ -1480,7 +1440,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 132627,
     },
 
     -- Zone: Warspear (map 624)
@@ -1511,7 +1470,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 176242,
     },
 }
 

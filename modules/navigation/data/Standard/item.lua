@@ -23,8 +23,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 37863,
-        cooldown = 3600,
     },
 
     -- Zone: Dalaran (map 125)
@@ -46,8 +44,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 40585,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -67,8 +63,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 40586,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -88,8 +82,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 44934,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -109,8 +101,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 44935,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -130,8 +120,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 45688,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -151,8 +139,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 45689,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -172,8 +158,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 45690,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -193,8 +177,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 45691,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -214,8 +196,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 48954,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -235,8 +215,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 48955,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -256,8 +234,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 48956,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -277,8 +253,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 48957,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -298,8 +272,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 51557,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -319,8 +291,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 51558,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -340,8 +310,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 51559,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -361,8 +329,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 51560,
-        cooldown = 1800,
     },
     -- current position -> Dalaran (map 125 55.92,46.78) via item
     {
@@ -382,8 +348,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 52251,
-        cooldown = 3600,
     },
 
     -- Zone: Deadwind Pass (map 42)
@@ -405,8 +369,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 22631,
-        cooldown = 60,
     },
 
     -- Zone: Deepholm (map 207)
@@ -428,8 +390,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 58587,
-        cooldown = 1800,
     },
 
     -- Zone: Frostfire Ridge (map 525)
@@ -456,8 +416,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 128353,
-        cooldown = 14400,
     },
 
     -- Zone: Icecrown (map 118)
@@ -479,8 +437,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 46874,
-        cooldown = 1800,
     },
 
     -- Zone: Orgrimmar (map 85)
@@ -502,8 +458,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63207,
-        cooldown = 14400,
     },
     -- current position -> Orgrimmar (map 85 57.10,89.81) via item
     {
@@ -523,8 +477,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63353,
-        cooldown = 28800,
     },
     -- current position -> Orgrimmar (map 85 57.10,89.81) via item
     {
@@ -544,8 +496,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 65274,
-        cooldown = 7200,
     },
 
     -- Zone: Shadowmoon Valley (map 104)
@@ -567,8 +517,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 32757,
-        cooldown = 900,
     },
 
     -- Zone: Shadowmoon Valley (map 539)
@@ -595,8 +543,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 128353,
-        cooldown = 14400,
     },
 
     -- Zone: Stormwind City (map 84)
@@ -618,8 +564,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63206,
-        cooldown = 14400,
     },
     -- current position -> Stormwind City (map 84 46.35,90.23) via item
     {
@@ -639,8 +583,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63352,
-        cooldown = 28800,
     },
     -- current position -> Stormwind City (map 84 46.35,90.23) via item
     {
@@ -660,8 +602,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 65360,
-        cooldown = 7200,
     },
 
     -- Zone: The Cape of Stranglethorn (map 210)
@@ -683,8 +623,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 50287,
-        cooldown = 86400,
     },
 
     -- Zone: Timeless Isle (map 554)
@@ -706,8 +644,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 104110,
-        cooldown = 0,
     },
     -- current position -> Timeless Isle (map 554 23.28,70.83) via item
     {
@@ -727,8 +663,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 104113,
-        cooldown = 0,
     },
 
     -- Zone: Tol Barad Peninsula (map 245)
@@ -750,8 +684,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63378,
-        cooldown = 14400,
     },
     -- current position -> Tol Barad Peninsula (map 245 55.80,80.10) via item
     {
@@ -771,8 +703,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 63379,
-        cooldown = 14400,
     },
 }
 

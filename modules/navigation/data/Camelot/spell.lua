@@ -32,7 +32,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3565,
     },
 
     -- Zone: Ironforge (map 1455)
@@ -63,7 +62,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3562,
     },
 
     -- Zone: Moonglade (map 1450)
@@ -89,7 +87,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 18960,
     },
 
     -- Zone: Orgrimmar (map 1454)
@@ -120,7 +117,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3567,
     },
 
     -- Zone: Stormwind City (map 1453)
@@ -151,7 +147,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3561,
     },
 
     -- Zone: Thunder Bluff (map 1456)
@@ -182,7 +177,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3566,
     },
 
     -- Zone: Undercity (map 1458)
@@ -213,7 +207,6 @@ local SPELL = {
                 },
             },
         },
-        spellID = 3563,
     },
 }
 

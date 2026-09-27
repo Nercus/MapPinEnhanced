@@ -23,8 +23,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 227925,
-        cooldown = 120,
     },
 
     -- Zone: Deadwind Pass (map 1430)
@@ -46,8 +44,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 22589,
-        cooldown = 60,
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
@@ -67,8 +63,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 22630,
-        cooldown = 60,
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
@@ -88,8 +82,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 22631,
-        cooldown = 60,
     },
     -- current position -> Deadwind Pass (map 1430 47.24,75.40) via item
     {
@@ -109,8 +101,6 @@ local ITEM = {
                 },
             },
         },
-        itemID = 22632,
-        cooldown = 60,
     },
 }
 

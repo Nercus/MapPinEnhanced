@@ -432,7 +432,6 @@ local BORDER = {
     toX = 0.654,
     toY = 0.0702,
     type = "border",
-    toRegion = "timbermawhold",
   },
   -- Felwood (map 1448 65.40,7.02) -> Felwood (map 1448 65.11,8.03) via border
   {
@@ -445,7 +444,6 @@ local BORDER = {
     toX = 0.6511,
     toY = 0.0803,
     type = "border",
-    fromRegion = "timbermawhold",
   },
   -- Felwood (map 1448 67.94,5.15) -> Winterspring (map 1452 27.91,34.45) via border
   {
@@ -458,7 +456,6 @@ local BORDER = {
     toX = 0.2791,
     toY = 0.3445,
     type = "border",
-    fromRegion = "timbermawhold",
   },
 
   -- Zone: Feralas (map 1444)
@@ -589,7 +586,6 @@ local BORDER = {
     toX = 0.3573,
     toY = 0.7246,
     type = "border",
-    fromRegion = "timbermawhold",
   },
   -- Moonglade (map 1450 35.73,72.46) -> Moonglade (map 1450 35.45,74.24) via border
   {
@@ -602,7 +598,6 @@ local BORDER = {
     toX = 0.3545,
     toY = 0.7424,
     type = "border",
-    toRegion = "timbermawhold",
   },
 
   -- Zone: Mulgore (map 1412)
@@ -1149,7 +1144,6 @@ local BORDER = {
     toX = 0.6794,
     toY = 0.0515,
     type = "border",
-    toRegion = "timbermawhold",
   },
 }
 

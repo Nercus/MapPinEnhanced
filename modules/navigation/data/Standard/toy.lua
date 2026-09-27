@@ -28,8 +28,6 @@ local TOY = {
                 },
             },
         },
-        itemID = 253629,
-        cooldown = 90,
     },
 
     -- Zone: Stormsong Valley (map 942)
@@ -56,8 +54,6 @@ local TOY = {
                 },
             },
         },
-        itemID = 202046,
-        cooldown = 60,
     },
 }
 

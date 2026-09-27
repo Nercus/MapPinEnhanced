@@ -26,7 +26,6 @@ local PORTAL = {
                 },
             },
         },
-        toRegion = "ruttheran",
     },
 
     -- Zone: Teldrassil (map 1438)
@@ -51,7 +50,6 @@ local PORTAL = {
                 },
             },
         },
-        fromRegion = "ruttheran",
     },
 }
 
