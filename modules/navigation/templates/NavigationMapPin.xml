@@ -2,10 +2,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="NavigationMapPin.lua" />
     <Frame name="MapPinEnhancedNavigationMapPinTemplate" virtual="true" mixin="MapPinEnhancedNavigationMapPinMixin" hidden="true" enableMouse="false">
-        <Size x="20" y="20" />
+        <Size x="23" y="23" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="circle" file="Interface/AddOns/MapPinEnhanced/assets/navigation/StepPin.png" hidden="true" setAllPoints="true" />
+                <Texture parentKey="circle" file="Interface/AddOns/MapPinEnhanced/assets/navigation/StepPin.png" hidden="true" setAllPoints="true" snapToPixelGrid="true" texelSnappingBias="0" />
             </Layer>
             <Layer level="BACKGROUND">
                 <Line parentKey="line" thickness="2" hidden="true">
