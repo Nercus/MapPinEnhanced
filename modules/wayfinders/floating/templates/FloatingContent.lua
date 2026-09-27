@@ -1,10 +1,22 @@
 ---@alias FloatingPresentation "close"|"far"|"clamped"
 
+---@class MapPinEnhancedWayfinderFloatingChevron : Texture
+---@field pulse AnimationGroup
+
+---@class MapPinEnhancedWayfinderFloatingChevrons : Frame
+---@field top MapPinEnhancedWayfinderFloatingChevron
+---@field middle MapPinEnhancedWayfinderFloatingChevron
+---@field bottom MapPinEnhancedWayfinderFloatingChevron
+
 ---@class MapPinEnhancedWayfinderFloatingContentVisual : Frame
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field beam MapPinEnhancedWayfinderFloatingBeamTemplate
 ---@field title MapPinEnhancedWayfinderFloatingTitleTemplate
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
+---@field closePinAnchor Frame
+---@field chevrons MapPinEnhancedWayfinderFloatingChevrons
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 ---@class MapPinEnhancedWayfinderFloatingContentTemplate : Frame
 ---@field visual MapPinEnhancedWayfinderFloatingContentVisual
@@ -14,7 +26,9 @@
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field needle MapPinEnhancedWayfinderFloatingNeedleTemplate
 ---@field currentPresentation FloatingPresentation?
+---@field pendingPresentation FloatingPresentation?
 ---@field showBeam boolean?
+---@field chevronTextures MapPinEnhancedWayfinderFloatingChevron[]
 MapPinEnhancedWayfinderFloatingContentMixin = {}
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
@@ -22,6 +36,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
     self.beam = self.visual.beam
     self.title = self.visual.title
     self.readout = self.visual.readout
+    self.chevronTextures = { self.visual.chevrons.top, self.visual.chevrons.middle, self.visual.chevrons.bottom }
     local frameLevel = self:GetFrameLevel()
     self.visual:SetFrameLevel(frameLevel)
     self.needle:SetFrameLevel(frameLevel)
@@ -29,6 +44,11 @@ function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
     self.pin:SetFrameLevel(frameLevel + 2)
     self.title:SetFrameLevel(frameLevel + 3)
     self.readout:SetFrameLevel(frameLevel + 3)
+    for _, group in ipairs({ self.visual.fadeIn, self.visual.fadeOut }) do
+        for _, animation in ipairs({ group:GetAnimations() }) do
+            animation:SetDuration(0.25)
+        end
+    end
     self:Reset()
     self:Show()
 end
@@ -38,6 +58,27 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetColor(color)
     self.beam:SetColor(color)
     self.title:SetColor(color)
     self.needle:SetColor(color)
+    local r, g, b = color:GetRGB()
+
+
+    local lightR, lightG, lightB = math.min(r * 1.5, 1), math.min(g * 1.5, 1), math.min(b * 1.5, 1)
+    self.readout.text:SetTextColor(lightR, lightG, lightB)
+    for _, chevron in ipairs(self.chevronTextures) do
+        chevron:SetVertexColor(lightR, lightG, lightB)
+    end
+end
+
+---@param active boolean
+function MapPinEnhancedWayfinderFloatingContentMixin:SetChevronsActive(active)
+    self.visual.chevrons:SetShown(active)
+    for _, chevron in ipairs(self.chevronTextures) do
+        if active then
+            if not chevron.pulse:IsPlaying() then chevron.pulse:Play() end
+        else
+            chevron.pulse:Stop()
+            chevron:SetAlpha(0.05)
+        end
+    end
 end
 
 ---@param title string?
@@ -46,8 +87,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetTitle(title)
 end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:UpdateBeam()
-    self.beam:SetActive(self.showBeam == true and self.currentPresentation ~= nil and
-        self.currentPresentation ~= "clamped" and self:IsVisible())
+    self.beam:SetActive(self.showBeam == true and self.currentPresentation == "far" and self:IsVisible())
 end
 
 ---@param showBeam boolean
@@ -58,25 +98,65 @@ end
 
 ---@param presentation FloatingPresentation
 function MapPinEnhancedWayfinderFloatingContentMixin:SetPresentation(presentation)
+    if self.pendingPresentation and presentation ~= "clamped" then
+        self.pendingPresentation = presentation
+        return
+    end
+    self.pendingPresentation = nil
+    if self.currentPresentation == presentation then return end
+    if self.currentPresentation and self.currentPresentation ~= "clamped" and
+        presentation ~= "clamped" and self:IsVisible() then
+        self.pendingPresentation = presentation
+        self.visual.fadeOut:PlayReplacing(self.visual.fadeIn)
+        return
+    end
+    self:StopPresentationAnimation()
+    self:ApplyPresentation(presentation)
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:StopPresentationAnimation()
+    self.visual.fadeOut:Stop()
+    self.visual.fadeIn:Stop()
+    self.visual:SetAlpha(1)
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:FinishPresentation()
+    local presentation = self.pendingPresentation
+    self.pendingPresentation = nil
+    if not presentation or not self:IsVisible() then return end
+    self:ApplyPresentation(presentation)
+    self.visual.fadeIn:Play()
+end
+
+---@param presentation FloatingPresentation
+function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentation)
     self.currentPresentation = presentation
     local clamped = presentation == "clamped"
     local close = presentation == "close"
     self.visual:Show()
     self.pin:Show()
+    self.pin:ClearAllPoints()
+    self.pin:SetPoint("CENTER", close and self.visual.closePinAnchor or self.visual, "CENTER")
     self.title:SetVisible(close)
+    self:SetChevronsActive(close and self:IsVisible())
     self.readout:SetShown(not clamped)
     self.readout:ClearAllPoints()
-    self.readout:SetPoint("TOP", close and self.title or self.pin, "BOTTOM", 0, -5)
+    self.readout:SetPoint(close and "BOTTOM" or "TOP", self.pin, close and "TOP" or "BOTTOM", 0,
+        close and 5 or -8)
     self.needle:SetActive(clamped and self:IsVisible())
     self:UpdateBeam()
 end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnShow()
-    if self.currentPresentation then self:SetPresentation(self.currentPresentation) end
+    if self.currentPresentation then self:ApplyPresentation(self.currentPresentation) end
 end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnHide()
     -- Direction can hide independently of the target frame during an action Step.
+    self:StopPresentationAnimation()
+    self:SetChevronsActive(false)
+    self.currentPresentation = self.pendingPresentation or self.currentPresentation
+    self.pendingPresentation = nil
     self.beam:SetActive(false)
     self.needle:SetActive(false)
     self.title:SetVisible(false)
@@ -87,6 +167,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:PrepareForTarget()
 end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:Reset()
+    self.pendingPresentation = nil
     self.currentPresentation = nil
     self:OnHide()
     self.readout:Hide()

@@ -15,7 +15,21 @@
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeZoomIn" />
+                    <AnimationGroup parentKey="fadeOut" inherits="MapPinEnhancedAnimationFadeZoomOut">
+                        <Scripts>
+                            <OnFinished>self:GetParent():GetParent():FinishPresentation()</OnFinished>
+                        </Scripts>
+                    </AnimationGroup>
+                </Animations>
                 <Frames>
+                    <Frame parentKey="closePinAnchor">
+                        <Size x="1" y="1" />
+                        <Anchors>
+                            <Anchor point="CENTER" y="60" />
+                        </Anchors>
+                    </Frame>
                     <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" frameStrata="MEDIUM" enableMouse="false">
                         <Size x="25" y="25" />
                         <KeyValues>
@@ -28,18 +42,65 @@
                     </Frame>
                     <Frame parentKey="beam" inherits="MapPinEnhancedWayfinderFloatingBeamTemplate">
                         <Anchors>
-                            <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pin" y="-10" />
+                            <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pin" y="-12" />
                         </Anchors>
                     </Frame>
                     <Frame parentKey="title" inherits="MapPinEnhancedWayfinderFloatingTitleTemplate">
                         <Anchors>
-                            <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.pin" y="-5" />
+                            <Anchor point="BOTTOM" relativePoint="BOTTOM" relativeKey="$parent.pin" y="3" />
                         </Anchors>
                     </Frame>
                     <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
+                        <Size x="1" y="14" />
                         <Anchors>
-                            <Anchor point="CENTER" />
+                            <Anchor point="BOTTOM" relativePoint="TOP" relativeKey="$parent.pin" y="-2" />
                         </Anchors>
+                    </Frame>
+                    <Frame parentKey="chevrons" hidden="true">
+                        <Size x="34" y="35" />
+                        <Anchors>
+                            <Anchor point="TOP" relativePoint="BOTTOM" relativeKey="$parent.title" y="3" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture parentKey="top" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                    <Size x="34" y="19" />
+                                    <Anchors>
+                                        <Anchor point="TOP" />
+                                    </Anchors>
+                                    <Animations>
+                                        <AnimationGroup parentKey="pulse" looping="REPEAT">
+                                            <Alpha fromAlpha="0.05" toAlpha="1" duration="0.6" startDelay="0" order="1" smoothing="IN_OUT" />
+                                            <Alpha fromAlpha="1" toAlpha="0.05" duration="0.6" startDelay="0.15" endDelay="0.3" order="2" smoothing="IN_OUT" />
+                                        </AnimationGroup>
+                                    </Animations>
+                                </Texture>
+                                <Texture parentKey="middle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                    <Size x="34" y="19" />
+                                    <Anchors>
+                                        <Anchor point="TOP" y="-10" />
+                                    </Anchors>
+                                    <Animations>
+                                        <AnimationGroup parentKey="pulse" looping="REPEAT">
+                                            <Alpha fromAlpha="0.05" toAlpha="1" duration="0.6" startDelay="0.15" order="1" smoothing="IN_OUT" />
+                                            <Alpha fromAlpha="1" toAlpha="0.05" duration="0.6" startDelay="0.15" endDelay="0.15" order="2" smoothing="IN_OUT" />
+                                        </AnimationGroup>
+                                    </Animations>
+                                </Texture>
+                                <Texture parentKey="bottom" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                    <Size x="34" y="19" />
+                                    <Anchors>
+                                        <Anchor point="TOP" y="-20" />
+                                    </Anchors>
+                                    <Animations>
+                                        <AnimationGroup parentKey="pulse" looping="REPEAT">
+                                            <Alpha fromAlpha="0.05" toAlpha="1" duration="0.6" startDelay="0.3" order="1" smoothing="IN_OUT" />
+                                            <Alpha fromAlpha="1" toAlpha="0.05" duration="0.6" startDelay="0.15" endDelay="0" order="2" smoothing="IN_OUT" />
+                                        </AnimationGroup>
+                                    </Animations>
+                                </Texture>
+                            </Layer>
+                        </Layers>
                     </Frame>
                 </Frames>
             </Frame>

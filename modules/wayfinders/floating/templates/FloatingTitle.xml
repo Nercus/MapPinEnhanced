@@ -22,7 +22,7 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="CENTER" wordwrap="false">
+                <FontString parentKey="title" inherits="GameFontNormalTiny" justifyH="CENTER" wordwrap="false">
                     <Anchors>
                         <Anchor point="TOP" y="-5" />
                     </Anchors>

@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Providers = MapPinEnhanced:GetModule("Providers")
 
-local CLOSE_DISTANCE = 150
+local CLOSE_DISTANCE = 100
 
 ---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin
 ---@field content MapPinEnhancedWayfinderFloatingContentTemplate

@@ -14,7 +14,7 @@ end
 ---@param active boolean
 function MapPinEnhancedWayfinderFloatingNeedleMixin:SetActive(active)
     if not active then
-        self.texture:SetRotation(0)
+        self:SetRotation(0)
     end
     self:SetShown(active)
 end
