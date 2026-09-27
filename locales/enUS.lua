@@ -314,11 +314,6 @@ L["System groups are managed by Map Pin Enhanced for special features. Their cor
 "System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."
 
 
-L["Wayfinder.Arrow_GROUPLABEL"] = "Arrow"
-L["Wayfinder.Arrow.RotatePin_LABEL"] = "Rotate Center Pin"
-L["Wayfinder.Arrow.RotatePin_DESCRIPTION"] =
-"Rotate the pin in the middle of the arrow toward the next waypoint."
-
 --@debug@
 L["Navigation Debug Dump"] = "Navigation Debug Dump"
 L["Copy current navigation diagnostics."] = "Copy current navigation diagnostics."

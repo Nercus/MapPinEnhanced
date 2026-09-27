@@ -7,6 +7,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field description string?
 ---@field truncated boolean?
 ---@field mouseOwner Frame?
+---@field maxWidth number?
 MapPinEnhancedWayfinderDescriptionMixin = {}
 
 ---@param title string?
@@ -23,12 +24,13 @@ function MapPinEnhancedWayfinderDescriptionMixin:Apply(title, description)
         self:Hide()
         return
     end
+    local maxWidth = self.maxWidth or 450
     local flattened = description:gsub("\n", " ")
-    local _, truncated = MapPinEnhanced:BoundDescription(self.text, flattened, 450, 1)
+    local _, truncated = MapPinEnhanced:BoundDescription(self.text, flattened, maxWidth, 1)
     self.truncated = truncated
     self.text:SetWordWrap(false)
     self.text:SetNonSpaceWrap(false)
-    self.text:SetWidth(math.min(450, math.ceil(self.text:GetUnboundedStringWidth())))
+    self.text:SetWidth(math.min(maxWidth, math.ceil(self.text:GetUnboundedStringWidth())))
     self:SetSize(math.max(1, self.text:GetWidth()), self.text:GetHeight())
     self:EnableMouse(truncated)
     self:SetMouseClickEnabled(truncated and self.mouseOwner ~= nil)

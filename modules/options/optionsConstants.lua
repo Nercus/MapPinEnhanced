@@ -70,7 +70,6 @@ Options.DEFAULTS = {
         dungeonTeleports = false,
     },
     ["Wayfinder.Floating.ShowBeam"] = true,
-    ["Wayfinder.Arrow.RotatePin"] = false,
 }
 
 

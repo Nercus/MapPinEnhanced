@@ -8,7 +8,6 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedWayfinderOptionsDisplay : MapPinEnhancedOptionGroupTemplate
 ---@field beam MapPinEnhancedFormElementTemplate
----@field rotatePin MapPinEnhancedFormElementTemplate
 ---@field hideBlizzard MapPinEnhancedFormElementTemplate
 ---@field searchNote MapPinEnhancedWayfinderOptionsNote
 
@@ -26,7 +25,6 @@ local NAVIGATION_KEY = "Wayfinder.Navigation.Enable"
 ---@type table<string, WayfinderSelection>
 local PRESENTATION_BY_OPTION = {
     ["Wayfinder.Floating.ShowBeam"] = "floating",
-    ["Wayfinder.Arrow.RotatePin"] = "arrow",
     ["Wayfinder.General.HideBlizzardFloatingDiamond"] = "arrow",
 }
 
@@ -35,7 +33,6 @@ function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshDisplay()
     local display = self.display
     display.beam:SetShown(selection == "floating" or self.searchPresentation == "floating")
     local showArrow = selection == "arrow" or self.searchPresentation == "arrow"
-    display.rotatePin:SetShown(showArrow)
     display.hideBlizzard:SetShown(showArrow)
     local note = display.searchNote
     note:SetShown(self.searchPresentation ~= nil and self.searchPresentation ~= selection)

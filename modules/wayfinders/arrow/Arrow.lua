@@ -4,13 +4,15 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
+local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedWayfinderArrow : MapPinEnhancedWayfinder
 ---@field frame MapPinEnhancedWayfinderArrowTemplate
+---@field step WayfinderStepData?
 ---@field title string?
 ---@field description string?
 ---@field positionFrame MapPinEnhancedWayfinderArrowPositionTemplate?
----@field unsubscribeRotatePinOption fun() | nil
 local MapPinEnhancedWayfinderArrow = {}
 
 ---@class MapPinEnhancedWayfinderArrowPositionTemplate : Frame
@@ -26,6 +28,8 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
         self.frame = position.display
         position.instruction:SetFrameLevel(self.frame:GetFrameLevel() + 3)
         position.instruction:UpdateFrameLevels()
+        position.instruction.text:SetNonSpaceWrap(true)
+        position.instruction.onTextChanged = function() self:UpdateText() end
     end
     return self.frame
 end
@@ -33,7 +37,7 @@ end
 ---@param title string
 function MapPinEnhancedWayfinderArrow:SetTitle(title)
     self.title = title
-    self:GetFrame():SetTitle(title)
+    self:UpdateText()
 end
 
 ---@param color PinColor
@@ -60,32 +64,53 @@ end
 ---@param step WayfinderStepData?
 function MapPinEnhancedWayfinderArrow:SetStep(step)
     local frame = self:GetFrame()
+    self.step = step
+    frame.step = step
     if self.positionFrame then self.positionFrame.instruction:SetStep(step) end
     local showDirection = step == nil or step.showDirection and step.desiredAction == nil
     frame.needleContainer:SetShown(showDirection)
-    frame.pin:SetShown(showDirection)
-    frame.textContainer:SetShown(showDirection)
-    self:UpdateText(step)
+    frame.pin:SetShown(not (step and step.showInstruction ~= false and step.desiredAction))
+    frame.textContainer:Show()
+    frame.clearButton:SetEnabled(step ~= nil and Providers:CanClearNavigationTracking())
+    self:UpdateText()
     frame:SetDirectionVisible(showDirection)
 end
 
----@param step WayfinderStepData?
-function MapPinEnhancedWayfinderArrow:UpdateText(step)
+function MapPinEnhancedWayfinderArrow:UpdateText()
     local frame = self:GetFrame()
-    frame:SetTitle(step and step.showInstruction ~= false and "" or self.title)
-    frame.textContainer.description:Apply(self.title,
-        not (step and step.showInstruction ~= false) and self.description or nil)
+    local step = self.step
+    local showInstruction = step and step.showInstruction ~= false
     local instruction = self.positionFrame and self.positionFrame.instruction
-    local readoutAnchor = step and step.showInstruction ~= false and instruction and instruction.text or
-        (self.description and frame.textContainer.description or frame.title)
-    frame.readout:ClearAllPoints()
-    frame.readout:SetPoint("TOP", readoutAnchor, "BOTTOM", 0, -2)
-end
-
----@param rotatePin boolean
-function MapPinEnhancedWayfinderArrow:SetRotatePin(rotatePin)
-    if not self.frame then return end
-    self.frame:SetRotatePin(rotatePin)
+    local destination = Navigation.activeDestination
+    local data = showInstruction and destination and destination.data
+    local title = self.title
+    if data then
+        local mapInfo = C_Map.GetMapInfo(data.mapID)
+        title = string.format(MapPinEnhanced.L["Navigation Route To"], data.title or MapPinEnhanced.L["Map Pin"],
+            mapInfo and mapInfo.name or tostring(data.mapID))
+    end
+    frame.title:SetFontObject(showInstruction and GameFontHighlightSmall or GameFontNormal)
+    frame:SetTitle(title)
+    frame.title:SetTextColor(showInstruction and 0.65 or 1, showInstruction and 0.65 or 0.82,
+        showInstruction and 0.65 or 0)
+    frame.title:ClearAllPoints()
+    local instructionHeight = 0
+    if showInstruction and instruction then
+        frame.title:SetPoint("TOPLEFT", instruction.text, "BOTTOMLEFT", 0, -3)
+        instructionHeight = instruction.text:GetStringHeight()
+    else
+        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -8)
+    end
+    frame.textContainer.description:Apply(self.title, not showInstruction and self.description or nil)
+    local descriptionHeight = not showInstruction and self.description and
+        frame.textContainer.description:GetHeight() + 3 or 0
+    local height = math.max(62, instructionHeight + frame.title:GetStringHeight() + descriptionHeight + 32)
+    frame.textContainer:SetHeight(height)
+    frame:SetHeight(height)
+    if not showInstruction and descriptionHeight == 0 then
+        local textHeight = frame.title:GetStringHeight() + 3 + frame.readout:GetHeight()
+        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -(height - textHeight) / 2)
+    end
 end
 
 ---@param wayfinderData WayfinderData | nil
@@ -110,7 +135,6 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     end
     self.description = wayfinderData.description
     self:SetTitle(wayfinderData.title)
-    frame.textContainer.description:Apply(self.title, self.description)
     self:SetLock(wayfinderData.lock)
     if frame:IsShown() then
         frame.fadeIn:SetParentShownInstantly(true, frame.fadeOut)
@@ -121,19 +145,14 @@ end
 
 function MapPinEnhancedWayfinderArrow:Enable()
     self:GetFrame()
-    self.unsubscribeRotatePinOption = Options:SubscribeToOptionChanges("Wayfinder.Arrow.RotatePin", function(value)
-        self:SetRotatePin(value)
-    end)
 end
 
 function MapPinEnhancedWayfinderArrow:Disable()
+    self.step = nil
+    if self.frame then self.frame.step = nil end
     if self.positionFrame then self.positionFrame.instruction:SetStep(nil) end
     if self.frame then
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
-    end
-    if self.unsubscribeRotatePinOption then
-        self.unsubscribeRotatePinOption()
-        self.unsubscribeRotatePinOption = nil
     end
 end
 
@@ -147,5 +166,5 @@ Wayfinders.wayfinders["WAYFINDER_ARROW"] = MapPinEnhancedWayfinderArrow
 ---@param description string?
 function MapPinEnhancedWayfinderArrow:SetDestinationText(title, description)
     self.title, self.description = title, description
-    self:UpdateText(Wayfinders:GetStepSnapshot())
+    self:UpdateText()
 end
