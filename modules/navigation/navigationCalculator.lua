@@ -108,6 +108,7 @@ local function GetMovementSpeed(movement, travelMode, fromMapID, toMapID)
         if movement.canSkyriding then return "skyriding", movement.skyridingSpeed end
         if movement.canFly then return "steady-flight", movement.steadyFlightSpeed end
     end
+    if travelMode == "flight" then return nil, nil end
     -- Ground travel cannot infer a pass through terrain between maps. The
     -- graph's authored border Paths own those crossings instead.
     if fromMapID ~= toMapID and travelMode ~= "border" then return nil, nil end

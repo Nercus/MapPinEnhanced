@@ -79,7 +79,26 @@ local function BorderCostCalculator(graph, preparedData, pathReference)
         graph.pointMapIDs[toPointIndex], graph.pointXs[toPointIndex], graph.pointYs[toPointIndex], "border")
 end
 
+---@param graph NavigationGraph
+---@param _preparedData NavigationPreparedData
+---@param pathReference integer
+---@return NavigationCalculatedPathCost?
+---@return string? failure
+local function FloorCostCalculator(graph, _preparedData, pathReference)
+    local duration = graph.pathDurations[pathReference]
+    if type(duration) ~= "number" or duration < 0 or duration ~= duration or duration == math.huge then
+        return nil, "invalid floor duration"
+    end
+    local seconds = math.max(duration, 1)
+    return {
+        expectedSeconds = seconds,
+        uncertaintySeconds = 0,
+        comparisonSeconds = seconds,
+        explanation = { kind = "floor", seconds = seconds },
+    }
+end
+
 Navigation:RegisterPathHandler("portal", PortalPresentation, nil, PortalCostCalculator)
 Navigation:RegisterPathHandler("localportal", LocalPortalPresentation, nil, PortalCostCalculator)
 Navigation:RegisterPathHandler("border", BorderPresentation, nil, BorderCostCalculator)
-Navigation:RegisterPathHandler("floor", FloorPresentation)
+Navigation:RegisterPathHandler("floor", FloorPresentation, nil, FloorCostCalculator)
