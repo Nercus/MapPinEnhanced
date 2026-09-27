@@ -69,14 +69,9 @@ local SHIP = {
                     value = "Alliance",
                 },
                 {
-                    operation = "not",
-                    children = {
-                        {
-                            operation = "check",
-                            kind = "flag",
-                            value = "legionBoatLock",
-                        },
-                    },
+                    operation = "check",
+                    kind = "legionUnlocked",
+                    value = false,
                 },
             },
         },
@@ -337,14 +332,9 @@ local SHIP = {
                     value = "Alliance",
                 },
                 {
-                    operation = "not",
-                    children = {
-                        {
-                            operation = "check",
-                            kind = "flag",
-                            value = "legionBoatLock",
-                        },
-                    },
+                    operation = "check",
+                    kind = "legionUnlocked",
+                    value = false,
                 },
             },
         },

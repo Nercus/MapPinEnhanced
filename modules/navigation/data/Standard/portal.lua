@@ -4006,8 +4006,8 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -4033,8 +4033,8 @@ local PORTAL = {
                 },
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -4396,8 +4396,8 @@ local PORTAL = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -6736,14 +6736,9 @@ local PORTAL = {
                     },
                 },
                 {
-                    operation = "not",
-                    children = {
-                        {
-                            operation = "check",
-                            kind = "flag",
-                            value = "legionOn",
-                        },
-                    },
+                    operation = "check",
+                    kind = "legionUnlocked",
+                    value = false,
                 },
                 {
                     operation = "check",

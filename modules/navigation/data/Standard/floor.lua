@@ -3584,8 +3584,8 @@ local FLOOR = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -3640,8 +3640,8 @@ local FLOOR = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -3665,8 +3665,8 @@ local FLOOR = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -3688,8 +3688,8 @@ local FLOOR = {
             children = {
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -5475,8 +5475,8 @@ local FLOOR = {
                 },
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -12307,8 +12307,8 @@ local FLOOR = {
                 },
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -14218,8 +14218,8 @@ local FLOOR = {
                 },
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },
@@ -14777,8 +14777,8 @@ local FLOOR = {
                 },
                 {
                     operation = "check",
-                    kind = "flag",
-                    value = "legionOn",
+                    kind = "legionUnlocked",
+                    value = true,
                 },
             },
         },

@@ -372,6 +372,23 @@ local function EvaluateDirectCheck(key, value)
         if MapPinEnhanced:IsSecretValue(state) or type(state) ~= "number" or
             state == Enum.ContributionState.None then return UNKNOWN end
         return StateFromBoolean(state >= value.state)
+    elseif key == "garrison" then
+        if type(value) ~= "table" or type(value.type) ~= "number" or type(value.level) ~= "number" or
+            not C_Garrison or not C_Garrison.GetGarrisonInfo then return UNKNOWN end
+        local level = C_Garrison.GetGarrisonInfo(value.type)
+        if MapPinEnhanced:IsSecretValue(level) or type(level) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(level == value.level)
+    elseif key == "legionUnlocked" then
+        if type(value) ~= "boolean" then return UNKNOWN end
+        local level = UnitLevel("player")
+        local levelKnown = not MapPinEnhanced:IsSecretValue(level) and type(level) == "number" and level > 0
+        if levelKnown and level >= 50 then return StateFromBoolean(value) end
+        local completed = C_QuestLog and C_QuestLog.IsQuestFlaggedCompleted and
+            C_QuestLog.IsQuestFlaggedCompleted(44663)
+        if MapPinEnhanced:IsSecretValue(completed) then return UNKNOWN end
+        if completed == true then return StateFromBoolean(value) end
+        if completed == false and levelKnown then return StateFromBoolean(not value) end
+        return UNKNOWN
     elseif key == "faction" then
         local faction = UnitFactionGroup("player")
         if MapPinEnhanced:IsSecretValue(faction) or type(faction) ~= "string" then return UNKNOWN end
