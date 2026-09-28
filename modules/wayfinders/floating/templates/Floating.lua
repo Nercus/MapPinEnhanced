@@ -19,7 +19,6 @@ local CLOSE_DISTANCE = 100
 ---@field isClamped boolean?
 ---@field clampedChanged boolean?
 ---@field customDirection boolean?
----@field customPositionAngle number?
 ---@field lastNavigationTargetCheck number?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
@@ -31,9 +30,7 @@ local mathSqrt = math.sqrt
 local mathSin = math.sin
 local mathCos = math.cos
 local mathAtan2 = math.atan2
-local mathAbs = math.abs
 local DeltaLerp = DeltaLerp
-local POSITION_ANGLE_EPSILON = 0.001
 
 ---@param color PinColor
 function MapPinEnhancedWayfinderFloatingMixin:SetColor(color)
@@ -61,7 +58,6 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
     self.needleRotation = nil
     self.newNeedleRotation = nil
     self.needle:SetRotation(0)
-    self.customPositionAngle = nil
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetLocation(mapID, x, y)
@@ -82,10 +78,9 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self.isClamped = nil
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
-    self.customPositionAngle = nil
     self:ClearAllPoints()
     if enabled then
-        self:SetPoint("CENTER", WorldFrame, "CENTER", 0, self.minorAxis or 0)
+        self:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200)
         self:SetAlpha(1)
     elseif self.navFrame then
         self:SetAlpha(1)
@@ -93,19 +88,6 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     else
         self:ShutdownNavigationFrame()
     end
-end
-
----@param angle number
-function MapPinEnhancedWayfinderFloatingMixin:PositionCustomTarget(angle)
-    if self.customPositionAngle then
-        local angleDifference = mathAtan2(mathSin(angle - self.customPositionAngle),
-            mathCos(angle - self.customPositionAngle))
-        if mathAbs(angleDifference) < POSITION_ANGLE_EPSILON then return end
-    end
-    self.customPositionAngle = angle
-    self:ClearAllPoints()
-    self:SetPoint("CENTER", WorldFrame, "CENTER",
-        -mathSin(angle) * (self.majorAxis or 0), mathCos(angle) * (self.minorAxis or 0))
 end
 
 ---@param major number
@@ -185,6 +167,7 @@ end
 
 ---@return FloatingPresentation
 function MapPinEnhancedWayfinderFloatingMixin:GetPresentation()
+    if self.customDirection then return "fallback" end
     if self.isClamped then return "clamped" end
     return self.displayType or "far"
 end
@@ -213,7 +196,6 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     if self.customDirection then self:SetAlpha(angle ~= nil and 1 or 0) end
     if angle ~= nil then
         self.newNeedleRotation = angle
-        if self.customDirection then self:PositionCustomTarget(angle) end
     end
 end
 
@@ -345,7 +327,6 @@ function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.newNeedleRotation = nil
     self.needle:SetRotation(0)
     self.customDirection = nil
-    self.customPositionAngle = nil
     self.lastNavigationTargetCheck = nil
 end
 

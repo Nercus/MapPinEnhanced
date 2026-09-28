@@ -7,6 +7,9 @@
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="texture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingClampedArrow.png" desaturated="true" setAllPoints="true" />
+                <Texture parentKey="fallbackTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinder.png" desaturated="true" setAllPoints="true" hidden="true">
+                    <TexCoords left="0" right="0.0625" top="0" bottom="0.125" />
+                </Texture>
             </Layer>
         </Layers>
         <Scripts>

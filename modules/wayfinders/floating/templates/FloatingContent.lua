@@ -1,4 +1,4 @@
----@alias FloatingPresentation "close"|"far"|"clamped"
+---@alias FloatingPresentation "close"|"far"|"clamped"|"fallback"
 
 ---@class MapPinEnhancedWayfinderFloatingChevron : Texture
 ---@field pulse AnimationGroup
@@ -14,6 +14,7 @@
 ---@field title MapPinEnhancedWayfinderFloatingTitleTemplate
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field closePinAnchor Frame
+---@field fallbackTitleAnchor Frame
 ---@field chevrons MapPinEnhancedWayfinderFloatingChevrons
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
@@ -98,14 +99,15 @@ end
 
 ---@param presentation FloatingPresentation
 function MapPinEnhancedWayfinderFloatingContentMixin:SetPresentation(presentation)
-    if self.pendingPresentation and presentation ~= "clamped" then
+    local distancePresentation = presentation == "close" or presentation == "far"
+    if self.pendingPresentation and distancePresentation then
         self.pendingPresentation = presentation
         return
     end
     self.pendingPresentation = nil
     if self.currentPresentation == presentation then return end
-    if self.currentPresentation and self.currentPresentation ~= "clamped" and
-        presentation ~= "clamped" and self:IsVisible() then
+    if (self.currentPresentation == "close" or self.currentPresentation == "far") and
+        distancePresentation and self:IsVisible() then
         self.pendingPresentation = presentation
         self.visual.fadeOut:PlayReplacing(self.visual.fadeIn)
         return
@@ -133,17 +135,29 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     self.currentPresentation = presentation
     local clamped = presentation == "clamped"
     local close = presentation == "close"
+    local fallback = presentation == "fallback"
     self.visual:Show()
-    self.pin:Show()
+    self.pin:SetShown(not fallback)
     self.pin:ClearAllPoints()
     self.pin:SetPoint("CENTER", close and self.visual.closePinAnchor or self.visual, "CENTER")
-    self.title:SetVisible(close)
+    self.title:ClearAllPoints()
+    if fallback then
+        self.title:SetPoint("TOP", self.visual.fallbackTitleAnchor, "TOP")
+    else
+        self.title:SetPoint("BOTTOM", self.pin, "BOTTOM", 0, 3)
+    end
+    self.title:SetVisible(close or fallback)
     self:SetChevronsActive(close and self:IsVisible())
     self.readout:SetShown(not clamped)
     self.readout:ClearAllPoints()
-    self.readout:SetPoint(close and "BOTTOM" or "TOP", self.pin, close and "TOP" or "BOTTOM", 0,
-        close and 5 or -8)
-    self.needle:SetActive(clamped and self:IsVisible())
+    if fallback then
+        self.readout:SetPoint("TOP", self.title, "BOTTOM", 0, -5)
+    else
+        self.readout:SetPoint(close and "BOTTOM" or "TOP", self.pin, close and "TOP" or "BOTTOM", 0,
+            close and 5 or -8)
+    end
+    self.needle:SetFallback(fallback)
+    self.needle:SetActive((clamped or fallback) and self:IsVisible())
     self:UpdateBeam()
 end
 
