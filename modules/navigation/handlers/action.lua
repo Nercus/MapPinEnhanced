@@ -207,4 +207,4 @@ MapPinEnhanced:RegisterEventBucket({
     "BAG_UPDATE_COOLDOWN",
 }, function()
     Navigation:RecheckFailedPaths("action")
-end, 0.5)
+end, 1)

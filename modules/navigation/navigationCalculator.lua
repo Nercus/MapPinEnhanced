@@ -116,7 +116,7 @@ local function GetMovementSpeed(movement, travelMode, fromMapID, toMapID)
     return "walking", MOVEMENT_SPEEDS.walking
 end
 
----@param preparedData NavigationPreparedData
+---@param preparedData {movement: NavigationMovementCapabilities}
 ---@param mapID1 number
 ---@param x1 number
 ---@param y1 number
@@ -144,7 +144,7 @@ end
 function Navigation:GetRemainingRouteCost(progression)
     local graph = progression.route.graph
     local destination = self.activeDestination
-    local preparedData = self:GetPreparedData()
+    local preparedData = self:EnsurePreparedData()
     if not graph or not destination or not preparedData or not self:IsCurrentProgression(progression) then return nil end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
     if not pathReference then
@@ -712,7 +712,7 @@ end
 ---@return NavigationCalculationJob?
 function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish)
     local graph = self:GetGraph()
-    local preparedData = self:GetPreparedData()
+    local preparedData = self:EnsurePreparedData()
     if not graph or not preparedData then
         onFinish(nil, "navigation data is not ready")
         return nil

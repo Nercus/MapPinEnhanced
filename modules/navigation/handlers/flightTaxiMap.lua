@@ -107,8 +107,8 @@ end
 
 local function RefreshRoutes()
     Navigation:ClearTaxiNodeKnowledge()
-    Navigation:RefreshPreparedData()
     Navigation:RecheckFailedPaths("taxi")
+    if Navigation.routeNavigationEnabled and Navigation.activeDestination then Navigation:EnsurePreparedData() end
     local progression = Navigation.progression
     local flying = UnitOnTaxi("player")
     if not MapPinEnhanced:IsSecretValue(flying) and flying then return end

@@ -55,12 +55,16 @@ end
 ---@param events WowEvent[]
 ---@param callback fun(events: table<WowEvent, boolean>)
 ---@param throttleSeconds number?
+---@param acceptEvent? fun(event: WowEvent, ...): boolean
 ---@return fun() unsubscribe
-function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds)
+function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds, acceptEvent)
     assert(type(events) == "table", "MapPinEnhanced:RegisterEventBucket requires an event list")
     assert(type(callback) == "function", "MapPinEnhanced:RegisterEventBucket requires a callback")
     assert(throttleSeconds == nil or type(throttleSeconds) == "number" and throttleSeconds > 0,
         "MapPinEnhanced:RegisterEventBucket requires a positive throttleSeconds")
+
+    assert(acceptEvent == nil or type(acceptEvent) == "function",
+        "MapPinEnhanced:RegisterEventBucket requires an optional event predicate")
 
     ---@type WowEvent[]
     local ownedEvents = {}
@@ -92,8 +96,8 @@ function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds)
         callback(publishedEvents)
     end
 
-    local function OnEvent(event)
-        if not isSubscribed then return end
+    local function OnEvent(event, ...)
+        if not isSubscribed or acceptEvent and not acceptEvent(event, ...) then return end
         pendingEvents[event] = true
         if publicationTimer then return end
 
@@ -106,8 +110,8 @@ function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds)
 
     for _, event in ipairs(ownedEvents) do
         local eventName = event
-        local eventCallback = function()
-            OnEvent(eventName)
+        local eventCallback = function(...)
+            OnEvent(eventName, ...)
         end
         table.insert(registrations, { event = eventName, callback = eventCallback })
         MapPinEnhanced:RegisterEvent(eventName, eventCallback)

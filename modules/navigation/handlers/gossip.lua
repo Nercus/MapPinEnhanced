@@ -95,8 +95,12 @@ local function PhaseDataprovider(path)
     end
     local gossip, failure = GossipDataprovider(path)
     if not gossip then return nil, failure end
-    return { npcID = gossip.npcID, gossipOptionID = gossip.gossipOptionID,
-        fromMap = path.fromMap, toMap = path.toMap }
+    return {
+        npcID = gossip.npcID,
+        gossipOptionID = gossip.gossipOptionID,
+        fromMap = path.fromMap,
+        toMap = path.toMap
+    }
 end
 
 ---@return NavigationCalculatedPathCost
@@ -125,7 +129,7 @@ MapPinEnhanced:RegisterEventBucket({
     "ZONE_CHANGED",
     "ZONE_CHANGED_INDOORS",
     "ZONE_CHANGED_NEW_AREA",
-}, CheckPhaseChange, 0.25)
+}, CheckPhaseChange, 1)
 
 Navigation:RegisterPathHandler("phaseswitch", PhasePresentation, PhaseDataprovider, PhaseCostCalculator,
     Activate, Deactivate)

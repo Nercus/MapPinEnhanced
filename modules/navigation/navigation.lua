@@ -174,13 +174,14 @@ function Navigation:StartCalculation(currentRouteUnusable)
     self.activeCalculation = self:StartRouteCalculation(destination.destinationID, destination.changeNumber,
         destination.data, self.avoidedPaths, function(route, failure)
             if not IsCurrentDestination(expectedDestination) then return end
+            local prepared = self:EnsurePreparedData()
             local finishedCalculation = self.activeCalculation
             self.activeCalculation = nil
             if not route then
                 -- Login data or failure recovery may change eligibility while
                 -- this job uses its frozen snapshot. Retry if no usable Route remains.
                 if (not previousProgression or currentRouteUnusable) and finishedCalculation and
-                    finishedCalculation.preparedData ~= self:GetPreparedData() then
+                    finishedCalculation.preparedData ~= prepared then
                     self:StartCalculation(true)
                     return
                 end
@@ -206,7 +207,6 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 end
                 return
             end
-            local prepared = self:GetPreparedData()
             if route.preparedData.taxiObservation ~= self:GetTaxiObservation() then
                 self:StartCalculation(currentRouteUnusable)
                 return
@@ -720,8 +720,7 @@ function Navigation:CanGuideDirectly()
     end
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMapID or not playerX or not playerY then return false end
-    local preparedData = self:GetPreparedData()
-    if not preparedData then return false end
+    local preparedData = { movement = self:GetMovementCapabilities() }
     return self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY, destination.data.mapID,
         destination.data.x, destination.data.y, "automatic") ~= nil
 end
@@ -806,7 +805,7 @@ function Navigation:RecheckFailedPaths(kind)
     if not recovered then return end
     -- Future jobs need the same fresh eligibility that proved recovery. Active
     -- jobs and usable Routes retain their original input and presentation.
-    self:RefreshPreparedData()
+    self:InvalidatePreparedData()
     if self.activeDestination and self.routeNavigationEnabled and not self.progression and not self.activeCalculation then
         self:StartCalculation(true)
     end
@@ -848,10 +847,13 @@ local ELIGIBILITY_EVENTS = {
     "ZONE_CHANGED_NEW_AREA",
 }
 
-function Navigation:RefreshEligibility()
-    self:RefreshPreparedData()
+---@param events? table<WowEvent, boolean>
+function Navigation:RefreshEligibility(events)
+    if not events then self:InvalidatePreparedData() end
+    if not self.routeNavigationEnabled or not self.activeDestination then return end
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
+    self:EnsurePreparedData()
     local progression = self.progression
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local prepared = self:GetPreparedData()
@@ -886,9 +888,14 @@ end
 
 function Navigation:SetupEligibilityRefresh()
     if self.unsubscribeEligibilityRefresh then return end
-    self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function()
-        self:RefreshEligibility()
-    end, 0.5)
+    self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function(events)
+        self:RefreshEligibility(events)
+    end, 1, function(event, unit)
+        if event == "UNIT_AURA" and (MapPinEnhanced:IsSecretValue(unit) or unit ~= "player") then return false end
+        -- Mark inputs stale at intake, before a new job can beat the bucket timer.
+        self:InvalidatePreparedData()
+        return true
+    end)
 end
 
 -- Route map layers

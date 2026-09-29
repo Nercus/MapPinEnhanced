@@ -326,13 +326,33 @@ function Navigation:GetInferredTaxiJourney(graph, reference, cost)
             taxiPathIDs = data.taxiPathIDs, cost = cost } } }
 end
 
+-- Shared cost tables are immutable. A knowledge invalidation replaces the next
+-- snapshot; fresh single-Path checks never replace this session-owned cache.
+local taxiKnowledgeChangeNumber = 0
+local preparedTaxiChangeNumber = -1
+local preparedTaxiGraph ---@type NavigationGraph?
+local preparedTaxiCosts ---@type table<integer, NavigationCalculatedPathCost>?
+local preparedTaxiFailures ---@type table<integer, string>?
+
 ---@param graph NavigationGraph
----@param prepared NavigationPreparedData
+---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
+function Navigation:GetPreparedTaxiCosts(graph)
+    if preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber then
+        local costs, failures = self:PrepareTaxiCosts(graph)
+        preparedTaxiGraph = graph
+        preparedTaxiChangeNumber = taxiKnowledgeChangeNumber
+        preparedTaxiCosts, preparedTaxiFailures = costs, failures
+    end
+    return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
+        assert(preparedTaxiFailures, "Navigation:GetPreparedTaxiCosts: missing failures")
+end
+
+---@param graph NavigationGraph
 ---@param onlyReference integer?
-function Navigation:PrepareTaxiCosts(graph, prepared, onlyReference)
+---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
+function Navigation:PrepareTaxiCosts(graph, onlyReference)
     local costs = {} ---@type table<integer, NavigationCalculatedPathCost>
     local failures = {} ---@type table<integer, string>
-    prepared.taxiCosts, prepared.taxiFailures = costs, failures
     for reference = onlyReference or 1, onlyReference or graph.pathCount do
         if graph.pathTypes[reference] == "flighttaxi" then
             local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
@@ -352,6 +372,7 @@ function Navigation:PrepareTaxiCosts(graph, prepared, onlyReference)
             end
         end
     end
+    return costs, failures
 end
 
 ---@param _graph NavigationGraph
@@ -378,11 +399,13 @@ function Navigation:RecordLearnedTaxiNodes(nodeIDs)
     for _, nodeID in ipairs(nodeIDs) do
         learnedTaxiNodes[nodeID] = true
     end
-    taxiNodesByMap = {}
+    self:ClearTaxiNodeKnowledge()
 end
 
 function Navigation:ClearTaxiNodeKnowledge()
     taxiNodesByMap = {}
+    taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
+    self:InvalidatePreparedData()
 end
 
 Navigation:RegisterPathHandler("flighttaxi", Presentation, Dataprovider, CostCalculator,

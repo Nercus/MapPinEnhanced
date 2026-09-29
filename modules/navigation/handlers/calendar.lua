@@ -106,7 +106,11 @@ end
 MapPinEnhanced:RegisterEvent("CALENDAR_UPDATE_EVENT_LIST", function()
     calendarReady = true
 end)
-MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE" }, RefreshHolidayStates, 0.5)
+MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE" }, RefreshHolidayStates, 1,
+    function()
+        Navigation:InvalidatePreparedData()
+        return true
+    end)
 
 function Navigation:SetupCalendarRequirements()
     if refreshTicker then return end
