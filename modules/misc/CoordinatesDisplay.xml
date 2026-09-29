@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
-    <Include file="Coords.lua" />
+    <Include file="CoordinatesDisplay.lua" />
 
-    <Frame name="MapPinEnhancedCoordsDisplayTemplate" mixin="MapPinEnhancedCoordsDisplayMixin" movable="true" virtual="true" hidden="true" parent="UIParent" inherits="MapPinEnhancedFadingFrameTemplate">
+    <Frame name="MapPinEnhancedCoordinatesDisplayTemplate" mixin="MapPinEnhancedCoordinatesDisplayMixin" movable="true" virtual="true" hidden="true" parent="UIParent" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">

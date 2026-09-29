@@ -4,22 +4,22 @@ local MapPinEnhanced = select(2, ...)
 -- FIXME: small ui scales cause the numbers to be cut off, fix that
 -- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
 
----@class MapPinEnhancedCoordsDisplayButton : MapPinEnhancedIconButtonTemplate
+---@class MapPinEnhancedCoordinatesDisplayButton : MapPinEnhancedIconButtonTemplate
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 
----@class MapPinEnhancedCoordsDisplayTemplate : Frame, MapPinEnhancedFadingFrameTemplate
+---@class MapPinEnhancedCoordinatesDisplayTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field coordsXInt FontString
 ---@field coordsXDec FontString
 ---@field coordsYInt FontString
 ---@field coordsYDec FontString
 ---@field timeSinceLastUpdate number
----@field closeButton MapPinEnhancedCoordsDisplayButton
----@field lockButton MapPinEnhancedCoordsDisplayButton
+---@field closeButton MapPinEnhancedCoordinatesDisplayButton
+---@field lockButton MapPinEnhancedCoordinatesDisplayButton
 ---@field dragHandle Frame
 ---@field buttonVisibilityTimer FunctionContainer
-MapPinEnhancedCoordsDisplayMixin = {}
+MapPinEnhancedCoordinatesDisplayMixin = {}
 
 local L = MapPinEnhanced.L
 
@@ -33,7 +33,7 @@ local modf = math.modf
 local format = string.format
 local DeltaLerp = DeltaLerp
 
-function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
+function MapPinEnhancedCoordinatesDisplayMixin:LinkPlayerPosition()
     local playerMap = C_Map.GetBestMapForUnit("player")
     if not playerMap then
         MapPinEnhanced:Print(L["Unable to determine your current map location."])
@@ -48,14 +48,14 @@ function MapPinEnhancedCoordsDisplayMixin:LinkPlayerPosition()
     Providers:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
 end
 
-function MapPinEnhancedCoordsDisplayMixin:SetUndefinedPosition()
+function MapPinEnhancedCoordinatesDisplayMixin:SetUndefinedPosition()
     self.coordsXInt:SetText("--")
     self.coordsXDec:SetText(".--")
     self.coordsYInt:SetText("--")
     self.coordsYDec:SetText(".--")
 end
 
-function MapPinEnhancedCoordsDisplayMixin:SetCoordsText(x, y)
+function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     local xHundredths = floor(x * 10000)
     local yHundredths = floor(y * 10000)
 
@@ -79,7 +79,7 @@ end
 
 local UPDATE_RATE = 0.1
 ---@param elapsed number
-function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
+function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
     self.lastUpdate = (self.lastUpdate or 0) + elapsed
     if self.lastUpdate < UPDATE_RATE then
         return
@@ -100,21 +100,22 @@ function MapPinEnhancedCoordsDisplayMixin:OnUpdate(elapsed)
         self:SetUndefinedPosition()
         return
     end
-    self:SetCoordsText(x, y)
+    self:SetCoordinatesText(x, y)
 end
 
-function MapPinEnhancedCoordsDisplayMixin:LockPosition()
+function MapPinEnhancedCoordinatesDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton:SetIconTexture("lock")
 end
 
-function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
+function MapPinEnhancedCoordinatesDisplayMixin:UnlockPosition()
     self:SetMovable(true)
     self.lockButton:SetIconTexture("unlock")
 end
 
-function MapPinEnhancedCoordsDisplayMixin:OnLoad()
+function MapPinEnhancedCoordinatesDisplayMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
+    -- Keep the saved-position key so existing frame placement survives this rename.
     MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", self.dragHandle, function()
         return not self:IsMovable()
     end)
@@ -137,7 +138,7 @@ function MapPinEnhancedCoordsDisplayMixin:OnLoad()
 end
 
 local HOVER_TIME = 0.5
-function MapPinEnhancedCoordsDisplayMixin:OnEnter()
+function MapPinEnhancedCoordinatesDisplayMixin:OnEnter()
     self.buttonVisibilityTimer = C_Timer.NewTimer(HOVER_TIME, function()
         if not self:IsMouseOver() then return end
         self.closeButton.fadeIn:PlayShowing(self.closeButton.fadeOut)
@@ -145,7 +146,7 @@ function MapPinEnhancedCoordsDisplayMixin:OnEnter()
     end)
 end
 
-function MapPinEnhancedCoordsDisplayMixin:OnLeave()
+function MapPinEnhancedCoordinatesDisplayMixin:OnLeave()
     if self.buttonVisibilityTimer then
         self.buttonVisibilityTimer:Cancel()
         self.buttonVisibilityTimer = nil
@@ -154,35 +155,35 @@ function MapPinEnhancedCoordsDisplayMixin:OnLeave()
     self.lockButton.fadeOut:PlayHiding(self.lockButton.fadeIn)
 end
 
-function MapPinEnhancedCoordsDisplayMixin:ShowFrame()
+function MapPinEnhancedCoordinatesDisplayMixin:ShowFrame()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     MapPinEnhanced:RestoreFrame(self)
     self:Show()
 end
 
-function MapPinEnhancedCoordsDisplayMixin:HideFrame()
+function MapPinEnhancedCoordinatesDisplayMixin:HideFrame()
     self:SetScript("OnUpdate", nil)
     self:Hide()
 end
 
-local coordsDisplayFrame = nil
+local coordinatesDisplayFrame = nil
 
-local function InitCoordsDisplayFrame()
-    if coordsDisplayFrame then return end
-    coordsDisplayFrame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedCoordsDisplayTemplate")
+local function InitCoordinatesDisplayFrame()
+    if coordinatesDisplayFrame then return end
+    coordinatesDisplayFrame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedCoordinatesDisplayTemplate")
 end
 
-local function ShowCoordsDisplay()
-    InitCoordsDisplayFrame()
-    if coordsDisplayFrame then
-        coordsDisplayFrame:ShowFrame()
+local function ShowCoordinatesDisplay()
+    InitCoordinatesDisplayFrame()
+    if coordinatesDisplayFrame then
+        coordinatesDisplayFrame:ShowFrame()
     end
 end
 
 
-local function HideCoordsDisplay()
-    if coordsDisplayFrame and coordsDisplayFrame:IsShown() then
-        coordsDisplayFrame:HideFrame()
+local function HideCoordinatesDisplay()
+    if coordinatesDisplayFrame and coordinatesDisplayFrame:IsShown() then
+        coordinatesDisplayFrame:HideFrame()
     end
 end
 
@@ -212,36 +213,36 @@ MapPinEnhanced:RegisterVisibilityTarget("coordinates", {
     isManuallyEnabled = function()
         return Options:GetOptionValue("Miscellaneous.Coords.Enable") == true
     end,
-    show = ShowCoordsDisplay,
-    hide = HideCoordsDisplay,
+    show = ShowCoordinatesDisplay,
+    hide = HideCoordinatesDisplay,
 })
 
-local function LockCoordsDisplay()
-    if coordsDisplayFrame then
-        coordsDisplayFrame:LockPosition()
+local function LockCoordinatesDisplay()
+    if coordinatesDisplayFrame then
+        coordinatesDisplayFrame:LockPosition()
     end
 end
 
-local function UnlockCoordsDisplay()
-    if coordsDisplayFrame then
-        coordsDisplayFrame:UnlockPosition()
+local function UnlockCoordinatesDisplay()
+    if coordinatesDisplayFrame then
+        coordinatesDisplayFrame:UnlockPosition()
     end
 end
 
 
 Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
-    if not coordsDisplayFrame then return end
+    if not coordinatesDisplayFrame then return end
     if value then
-        LockCoordsDisplay()
+        LockCoordinatesDisplay()
     else
-        UnlockCoordsDisplay()
+        UnlockCoordinatesDisplay()
     end
 end)
 
-local function ToggleCoordsDisplay()
+local function ToggleCoordinatesDisplay()
     Options:SetOptionValue("Miscellaneous.Coords.Enable",
         not Options:GetOptionValue("Miscellaneous.Coords.Enable"))
 end
 
-MapPinEnhanced:AddSlashCommand("coords", ToggleCoordsDisplay,
+MapPinEnhanced:AddSlashCommand("coords", ToggleCoordinatesDisplay,
     MapPinEnhanced.L["Toggle display of your current coordinates on the screen."])
