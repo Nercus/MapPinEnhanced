@@ -16,7 +16,7 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@field step WayfinderStepData?
 local MapPinEnhancedWayfinderFloating = {}
 
-function MapPinEnhancedWayfinderFloating:SetUp()
+function MapPinEnhancedWayfinderFloating:Setup()
     if self.panel then return end
     local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
     ---@cast panel MapPinEnhancedFloatingPanelTemplate
@@ -28,6 +28,7 @@ end
 function MapPinEnhancedWayfinderFloating:GetActionDebugText()
     return self.panel and self.panel:GetActionDebugText() or "Floating instruction not created"
 end
+
 --@end-debug@
 
 ---@return MapPinEnhancedWayfinderFloatingTemplate

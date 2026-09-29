@@ -41,7 +41,7 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
     return self.frame
 end
 
-function MapPinEnhancedWayfinderArrow:SetUp()
+function MapPinEnhancedWayfinderArrow:Setup()
     self:GetFrame()
 end
 
@@ -50,6 +50,7 @@ end
 function MapPinEnhancedWayfinderArrow:GetActionDebugText()
     return self.positionFrame and self.positionFrame.instruction:GetActionDebugText() or "Arrow not created"
 end
+
 --@end-debug@
 
 ---@param title string
@@ -97,7 +98,8 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     local title = self.title
     if showInstruction and step and step.destinationMapID then
         local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
-        title = string.format(MapPinEnhanced.L["Navigation Route To"], step.destinationTitle or MapPinEnhanced.L["Map Pin"],
+        title = string.format(MapPinEnhanced.L["Navigation Route To"],
+            step.destinationTitle or MapPinEnhanced.L["Map Pin"],
             mapInfo and mapInfo.name or tostring(step.destinationMapID))
     end
     frame.title:SetFontObject(showInstruction and GameFontHighlightSmall or GameFontNormal)
