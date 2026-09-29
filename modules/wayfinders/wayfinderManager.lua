@@ -95,7 +95,8 @@ local function GetWayfinder(wayfinderType)
     local wayfinder = Wayfinders.wayfinders and Wayfinders.wayfinders[wayfinderType]
     assert(wayfinder, "Wayfinders: wayfinder type is not registered: " .. tostring(wayfinderType))
     assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and wayfinder.SetTargetType and
-        wayfinder.SetStep and wayfinder.SetUp, "Wayfinders: registered wayfinder does not implement the required interface")
+        wayfinder.SetStep and wayfinder.SetUp,
+        "Wayfinders: registered wayfinder does not implement the required interface")
     return wayfinder
 end
 
@@ -165,7 +166,7 @@ function Wayfinders:BuildNavigationMenuEntries()
     if Navigation:GetRouteChatSteps(step.changeNumber) then
         entries[#entries + 1] = {
             type = "button",
-            label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Export Route to Chat"]),
+            label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Share to Chat"]),
             onClick = function()
                 MapPinEnhanced:GetModule("Providers"):ShareRouteToChat(step.changeNumber)
             end,

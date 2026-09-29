@@ -23,13 +23,13 @@ end
 
 function MapPinEnhancedRouteChatDialogMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
-    self:SetTitle(L["Export Route to Chat"])
+    self:SetTitle(L["Share to Chat"])
     self.prompt:SetText(L["Navigation Chat Choose Channel"])
     self.recipientLabel:SetText(L["Navigation Chat Whisper To"])
     self.channel.options = {
-        { label = L["Party"], value = "PARTY" },
-        { label = L["Raid"], value = "RAID" },
-        { label = L["Say"], value = "SAY" },
+        { label = L["Party"],   value = "PARTY" },
+        { label = L["Raid"],    value = "RAID" },
+        { label = L["Say"],     value = "SAY" },
         { label = L["Whisper"], value = "WHISPER" },
     }
     self.channel:SetupMenu(function(_, root)
