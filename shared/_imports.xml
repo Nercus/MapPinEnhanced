@@ -5,12 +5,8 @@
     <Include file="theme.xml" />
     <Include file="textures.xml" />
     <Include file="animations.xml" />
-    <Include file="FadingFrame.xml" />
-    <Include file="Window.xml" />
 
-
-
+    <Include file="utils/_imports.xml" />
     <Include file="frames/_imports.xml" />
-    <Include file="CopyTextDialog.xml" />
     <Include file="menu/_imports.xml" />
 </Ui>
