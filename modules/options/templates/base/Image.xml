@@ -5,9 +5,8 @@
     <Frame name="MapPinEnhancedImageTemplate" mixin="MapPinEnhancedImageMixin" virtual="true">
         <Size x="400" y="300" />
         <Layers>
-            <Layer level="BORDER" textureSubLevel="1">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/dialog/DialogBorderGraySquare.png" scale="0.75">
-                    <Color r="0.9" g="0.9" b="0.9" />
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-5" y="5" />
                         <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
@@ -16,13 +15,27 @@
                     <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
-            <Layer level="BACKGROUND" textureSubLevel="2">
+            <Layer level="ARTWORK">
                 <Texture parentKey="image">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="BOTTOMRIGHT" />
                     </Anchors>
                 </Texture>
+
+
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMode mode="Stretched" />
+
+                    <MaskedTextures>
+                        <MaskedTexture childKey="image" />
+                    </MaskedTextures>
+                </MaskTexture>
             </Layer>
         </Layers>
         <Scripts>

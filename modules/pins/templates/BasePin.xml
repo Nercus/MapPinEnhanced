@@ -50,7 +50,6 @@
                         <Anchor point="CENTER" />
                     </Anchors>
                 </MaskTexture>
-
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" texelSnappingBias="0" snapToPixelGrid="false" file="Interface/AddOns/MapPinEnhanced/assets/pins/PinHighlight.png" setAllPoints="true" />
