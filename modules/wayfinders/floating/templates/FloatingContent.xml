@@ -36,7 +36,7 @@
                             <Anchor point="CENTER" y="60" />
                         </Anchors>
                     </Frame>
-                    <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" frameStrata="MEDIUM" enableMouse="false">
+                    <Frame parentKey="pin" inherits="MapPinEnhancedBasePinTemplate" frameStrata="LOW" enableMouse="false">
                         <Size x="25" y="25" />
                         <KeyValues>
                             <KeyValue key="hideShadow" value="true" type="boolean" />
