@@ -108,8 +108,9 @@ end
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     local isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
     MapPinEnhanced:SetSlashTrigger("/mph", 1)
+    MapPinEnhanced:SetSlashTrigger("/mpe", 2)
     if not isTomTomLoaded then
-        MapPinEnhanced:SetSlashTrigger("/way", 2)
+        MapPinEnhanced:SetSlashTrigger("/way", 3)
     end
     MapPinEnhanced.isTomTomLoaded = isTomTomLoaded
 end)
