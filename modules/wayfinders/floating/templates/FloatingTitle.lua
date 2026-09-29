@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedWayfinderFloatingTitleTemplate : Frame
+---@class MapPinEnhancedWayfinderFloatingTitleTemplate : MapPinEnhancedFadingFrameTemplate
 ---@field background Texture
 ---@field title FontString
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
@@ -12,6 +12,8 @@ local MAX_TITLE_WIDTH = 450
 local TITLE_ELLIPSIS = "..."
 
 function MapPinEnhancedWayfinderFloatingTitleMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
+    self.description.onHidden = function() self:UpdateLayout() end
     self.title:SetMaxLines(1)
     self.title:SetWordWrap(false)
     self:SetTitle("")
@@ -43,7 +45,12 @@ end
 function MapPinEnhancedWayfinderFloatingTitleMixin:SetDestinationText(title, description)
     self:SetTitle(title)
     self.description:Apply(title, description)
-    local width = math.max(self.title:GetWidth(), description and self.description:GetWidth() or 0, 40)
-    local height = self.title:GetHeight() + (description and self.description:GetHeight() + 2 or 0)
+    self:UpdateLayout()
+end
+
+function MapPinEnhancedWayfinderFloatingTitleMixin:UpdateLayout()
+    local shown = self.description:IsShown()
+    local width = math.max(self.title:GetWidth(), shown and self.description:GetWidth() or 0, 40)
+    local height = self.title:GetHeight() + (shown and self.description:GetHeight() + 2 or 0)
     self:SetSize(width + 30, height + 10)
 end

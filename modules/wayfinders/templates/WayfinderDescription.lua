@@ -1,13 +1,14 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class MapPinEnhancedWayfinderDescriptionTemplate : Frame
+---@class MapPinEnhancedWayfinderDescriptionTemplate : MapPinEnhancedFadingFrameTemplate
 ---@field text FontString
 ---@field title string?
 ---@field description string?
 ---@field truncated boolean?
 ---@field mouseOwner Frame?
 ---@field maxWidth number?
+---@field onHidden fun()?
 MapPinEnhancedWayfinderDescriptionMixin = {}
 
 ---@param title string?
@@ -17,11 +18,10 @@ function MapPinEnhancedWayfinderDescriptionMixin:Apply(title, description)
     self:OnLeave()
     self.title, self.description = title, description
     if not description then
-        self.text:SetText("")
         self.truncated = false
-        self:SetSize(1, 1)
         self:EnableMouse(false)
         self:Hide()
+        if not self:IsShown() then self:ClearText() end
         return
     end
     local maxWidth = self.maxWidth or 450
@@ -53,6 +53,16 @@ end
 function MapPinEnhancedWayfinderDescriptionMixin:OnHide()
     self:OnLeave()
     self:EnableMouse(false)
+    if not self.description then
+        self:ClearText()
+        if self.onHidden then self.onHidden() end
+    end
+end
+
+-- Keep outgoing text and its layout space until the visibility fade finishes.
+function MapPinEnhancedWayfinderDescriptionMixin:ClearText()
+    self.text:SetText("")
+    self:SetSize(1, 1)
 end
 
 function MapPinEnhancedWayfinderDescriptionMixin:OnShow()
@@ -61,6 +71,7 @@ function MapPinEnhancedWayfinderDescriptionMixin:OnShow()
 end
 
 function MapPinEnhancedWayfinderDescriptionMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     local font, size, flags = self.text:GetFont()
     self.text:SetFont(font, math.max(8, size - 1), flags)
 end

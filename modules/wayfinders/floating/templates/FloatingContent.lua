@@ -149,7 +149,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     end
     self.title:SetVisible(close or fallback)
     self:SetChevronsActive(close and self:IsVisible())
-    self.readout:SetShown(not clamped)
+    self.readout:SetDisplayVisible(not clamped)
     self.readout:ClearAllPoints()
     if fallback then
         self.readout:SetPoint("TOP", self.title, "BOTTOM", 0, -5)
@@ -185,7 +185,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:Reset()
     self.pendingPresentation = nil
     self.currentPresentation = nil
     self:OnHide()
-    self.readout:Hide()
+    self.readout:SetDisplayVisible(false)
     self.visual:Hide()
     self.pin:HidePulse()
 end

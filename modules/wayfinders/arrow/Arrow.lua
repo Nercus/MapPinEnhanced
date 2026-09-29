@@ -26,6 +26,7 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
         ---@cast position MapPinEnhancedWayfinderArrowPositionTemplate
         self.positionFrame = position
         self.frame = position.display
+        self.frame.textContainer.description.onHidden = function() self:UpdateText() end
         position.instruction:SetFrameLevel(self.frame:GetFrameLevel() + 3)
         position.instruction:UpdateFrameLevels()
         position.instruction.text:SetNonSpaceWrap(true)
@@ -102,7 +103,7 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
         frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -8)
     end
     frame.textContainer.description:Apply(self.title, not showInstruction and self.description or nil)
-    local descriptionHeight = not showInstruction and self.description and
+    local descriptionHeight = frame.textContainer.description:IsShown() and
         frame.textContainer.description:GetHeight() + 3 or 0
     local height = math.max(62, instructionHeight + frame.title:GetStringHeight() + descriptionHeight + 32)
     frame.textContainer:SetHeight(height)
@@ -117,8 +118,8 @@ end
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
     if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
-        frame.textContainer.description:Apply(nil, nil)
         self.description = nil
+        frame.textContainer.description:Apply(nil, nil)
         frame:ResetDistanceReadout()
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
         return

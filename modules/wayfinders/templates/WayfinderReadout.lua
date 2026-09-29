@@ -2,12 +2,13 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedWayfinderReadoutTemplate : Frame
+---@class MapPinEnhancedWayfinderReadoutTemplate : MapPinEnhancedFadingFrameTemplate
 ---@field text FontString
 ---@field distanceText string?
 ---@field etaText string?
 ---@field hasETA boolean?
 ---@field showETA boolean?
+---@field displayVisible boolean?
 MapPinEnhancedWayfinderReadoutMixin = {}
 
 function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
@@ -15,8 +16,19 @@ function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
     if text ~= "" and self.showETA and self.hasETA then
         text = string.format(L["%s - %s"], text, self.etaText or "")
     end
-    self.text:SetText(text)
-    self.text:SetShown(text ~= "")
+    if text ~= "" or not self:IsVisible() then self.text:SetText(text) end
+    self:SetShown(self.displayVisible == true and text ~= "")
+end
+
+-- Floating's clamped presentation can suppress a readout while samples continue.
+---@param visible boolean
+function MapPinEnhancedWayfinderReadoutMixin:SetDisplayVisible(visible)
+    self.displayVisible = visible
+    self:UpdateText()
+end
+
+function MapPinEnhancedWayfinderReadoutMixin:OnHide()
+    if not self.distanceText or self.distanceText == "" then self.text:SetText("") end
 end
 
 ---@param showETA boolean
@@ -36,10 +48,13 @@ function MapPinEnhancedWayfinderReadoutMixin:SetValues(distanceText, etaText, ha
 end
 
 function MapPinEnhancedWayfinderReadoutMixin:PrepareForTarget()
+    self:HideImmediately()
     self:SetValues(nil, nil, false)
 end
 
 function MapPinEnhancedWayfinderReadoutMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
+    self.displayVisible = true
     self.showETA = true
     self:PrepareForTarget()
 end
