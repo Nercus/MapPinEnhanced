@@ -6,9 +6,6 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 local ADD_PIN_ROW = {}
 local PIN_INPUT_FIELDS = { "nameField", "mapField", "xField", "yField" }
 
----@class MapPinEnhancedGroupEditorAddPinRow : Frame
----@field button MapPinEnhancedButtonTemplate
-
 ---@class MapPinEnhancedGroupEditorContentEmptyState : Frame
 ---@field message FontString
 ---@field createButton Button
@@ -46,10 +43,7 @@ function MapPinEnhancedGroupEditorContentMixin:OnLoad()
         if data == ADD_PIN_ROW then
             factory("MapPinEnhancedGroupEditorAddPinRowTemplate", function(entry)
                 ---@cast entry MapPinEnhancedGroupEditorAddPinRow
-                local group = self.group
-                entry.button:SetEnabled(group ~= nil and
-                    (not group:IsProtected() or group.groupType == "ungrouped"))
-                entry.button:SetScript("OnClick", function() self:AddPin() end)
+                entry:Init(self)
             end)
         else
             factory("MapPinEnhancedGroupEditorContentPinEntryTemplate", function(entry)
@@ -61,8 +55,7 @@ function MapPinEnhancedGroupEditorContentMixin:OnLoad()
     self.scrollView:SetElementResetter(function(entry, data)
         if data == ADD_PIN_ROW then
             ---@cast entry MapPinEnhancedGroupEditorAddPinRow
-            entry.button:SetScript("OnClick", nil)
-            entry.button:Disable()
+            entry:Reset()
         else
             ---@cast entry MapPinEnhancedGroupEditorContentPinEntryTemplate
             entry:Reset()

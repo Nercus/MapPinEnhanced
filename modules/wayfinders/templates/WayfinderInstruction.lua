@@ -3,14 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedWayfinderActionVisual : Frame
----@field icon Texture
----@field cooldown Cooldown
-
----@class MapPinEnhancedWayfinderActionButton : Button
----@field icon Texture
----@field cooldown Cooldown
-
 ---@class MapPinEnhancedWayfinderInstructionTemplate : Frame
 ---@field text FontString
 ---@field showStepCount boolean?
@@ -58,9 +50,8 @@ end
 
 function MapPinEnhancedWayfinderInstructionMixin:OnLoad()
     self:UpdateFrameLevels()
-    self.actionButton:RegisterForClicks("LeftButtonUp", "LeftButtonDown")
-    self.actionButton:SetPropagateMouseClicks(false)
-    self.actionBlocker:SetPropagateMouseClicks(false)
+    self.actionButton:Setup()
+    self.actionBlocker:Setup()
 end
 
 function MapPinEnhancedWayfinderInstructionMixin:UpdateFrameLevels()

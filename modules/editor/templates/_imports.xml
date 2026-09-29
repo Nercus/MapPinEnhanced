@@ -5,7 +5,9 @@
     <Include file="GroupEditorSidebar.xml" />
     <Include file="GroupEditorContentHeader.xml" />
     <Include file="DescriptionEditor.xml" />
+    <Include file="EditorPinDragGhost.xml" />
     <Include file="GroupEditorContentPinEntry.xml" />
+    <Include file="GroupEditorAddPinRow.xml" />
     <Include file="GroupEditorContent.xml" />
     <Include file="GroupEditor.xml" />
 </Ui>

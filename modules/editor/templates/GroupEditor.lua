@@ -13,10 +13,6 @@ local L = MapPinEnhanced.L
 ---@field archiveState "reached"|"hidden"|nil
 ---@field order number
 
----@class MapPinEnhancedEditorPinDragGhost : Frame
----@field pinFrame MapPinEnhancedBasePinTemplate
----@field title FontString
-
 ---@class MapPinEnhancedGroupEditorTemplate : MapPinEnhancedWindowTemplate
 ---@field groupEditorSidebar MapPinEnhancedGroupEditorSidebarTemplate
 ---@field groupEditorContent MapPinEnhancedGroupEditorContentTemplate
@@ -86,7 +82,7 @@ function MapPinEnhancedGroupEditorMixin:OnUpdate()
         self.groupEditorContent:SetGroup(self.selectedGroup)
     end
     if self.draggedPinNode then
-        self:UpdatePinDragGhostPosition()
+        self.pinDragGhost:UpdatePosition()
         self.groupEditorContent:UpdateDrag()
         self.groupEditorSidebar:UpdateDropTarget()
     end
@@ -110,28 +106,8 @@ function MapPinEnhancedGroupEditorMixin:StartPinDrag(pinNode, sourceFrame)
     self.draggedPinNode = pinNode
     self.dragSourceFrame = sourceFrame
     sourceFrame:SetAlpha(0.45)
-    if Editor:GetPinData(pinNode).texture then
-        self.pinDragGhost.pinFrame:SetIconTexture(
-            Editor:GetPinData(pinNode).texture,
-            Editor:GetPinData(pinNode).usesAtlas
-        )
-    else
-        self.pinDragGhost.pinFrame:SetColor(Editor:GetPinData(pinNode).color)
-    end
-    self.pinDragGhost.pinFrame:SetTracked(true)
-    self.pinDragGhost.pinFrame:SetLock(Editor:GetPinData(pinNode).lock)
-    self.pinDragGhost.title:SetText(Editor:GetPinData(pinNode).title or L["Map Pin"])
-    self:UpdatePinDragGhostPosition()
-    self.pinDragGhost:Show()
+    self.pinDragGhost:Init(Editor:GetPinData(pinNode))
     SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
-end
-
-function MapPinEnhancedGroupEditorMixin:UpdatePinDragGhostPosition()
-    local cursorX, cursorY = GetCursorPosition()
-    cursorX = cursorX / UIParent:GetEffectiveScale()
-    cursorY = cursorY / UIParent:GetEffectiveScale()
-    self.pinDragGhost:ClearAllPoints()
-    self.pinDragGhost:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", cursorX + 16, cursorY - 16)
 end
 
 function MapPinEnhancedGroupEditorMixin:StopPinDrag()

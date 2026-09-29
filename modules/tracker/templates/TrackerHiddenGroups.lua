@@ -3,15 +3,6 @@ local MapPinEnhanced = select(2, ...)
 local Groups = MapPinEnhanced:GetModule("Groups")
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedTrackerHiddenGroupEntryTemplate : Button
----@field label FontString
----@field icon Texture
-
----@class TrackerHiddenGroupData
----@field groupID UUID
----@field label string
----@field icon string|number
-
 ---@class MapPinEnhancedTrackerHiddenGroupsTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field title FontString
 ---@field scrollBox WowScrollBoxList
@@ -27,22 +18,11 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
     view:SetElementInitializer("MapPinEnhancedTrackerHiddenGroupEntryTemplate", function(entry, data)
         ---@cast entry MapPinEnhancedTrackerHiddenGroupEntryTemplate
         ---@cast data TrackerHiddenGroupData
-        entry.label:SetText(data.label)
-        entry.icon:SetTexture(data.icon)
-        entry:SetScript("OnClick", function()
-            -- Resolve durable identity again: domain objects may have been released while open.
-            local group = Groups:GetGroupByID(data.groupID)
-            self:Close()
-            if group and group:IsHidden() and not group:IsProtected() then
-                group:ShowGroup()
-            end
-        end)
+        entry:Init(data, self)
     end)
     view:SetElementResetter(function(entry)
         ---@cast entry MapPinEnhancedTrackerHiddenGroupEntryTemplate
-        entry:SetScript("OnClick", nil)
-        entry.label:SetText("")
-        entry.icon:SetTexture(nil)
+        entry:Reset()
     end)
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, view)
     self.scrollBar:SetHideIfUnscrollable(true)
