@@ -136,7 +136,7 @@ local function ApplyActiveStep()
         frame:SetStep(step)
         local menu = step and Wayfinders:BuildNavigationMenuEntries()
         frame.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
-        frame:ApplyVisibility(step and step.showInstruction ~= false or false)
+        frame:ApplyVisibility(step and step.showInstruction ~= false and step.stepCount ~= 1 or false)
     end
     if Wayfinders.activeWayfinder then
         Wayfinders.activeWayfinder:SetStep(activeStep)
