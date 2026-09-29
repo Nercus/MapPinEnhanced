@@ -63,7 +63,10 @@ function MapPinEnhancedNavigationMapPinMixin:SetRoutePoint(pathType)
     local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
     self.circle:SetVertexColor(color:GetRGBA())
     self.circle:Show()
-    self.number:SetText(self.step and self.step.index or "")
+    local index = self.step and self.step.index
+    local font, size, flags = GameFontNormal:GetFont()
+    self.number:SetFont(font, index and index >= 10 and size * 0.8 or size, flags)
+    self.number:SetText(index or "")
     self.number:Show()
     self:EnableMouse(true)
 end
