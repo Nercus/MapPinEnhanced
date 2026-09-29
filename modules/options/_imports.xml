@@ -3,5 +3,5 @@
     <Include file="optionsConstants.lua" />
     <Include file="optionsManager.lua" />
     <Include file="templates/_imports.xml" />
-    <Include file="optionsFrame.xml" />
+    <Include file="OptionsFrame.xml" />
 </Ui>

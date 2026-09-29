@@ -1,19 +1,19 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Script file="tooltip.lua" />
-    <Include file="icon.xml" />
-    <Include file="button.xml" />
-    <Include file="iconbutton.xml" />
-    <Include file="checkbox.xml" />
-    <Include file="radiogroup.xml" />
-    <Include file="slider.xml" />
-    <Include file="input.xml" />
-    <Include file="statusbar.xml" />
-    <Include file="colorpicker.xml" />
-    <Include file="textarea.xml" />
-    <Include file="autocomplete.xml" />
-    <Include file="dropdown.xml" />
-    <Include file="multiselect.xml" />
-    <Include file="toggle.xml" />
-    <Include file="formfield.xml" />
+    <Script file="TooltipMixin.lua" />
+    <Include file="Icon.xml" />
+    <Include file="Button.xml" />
+    <Include file="IconButton.xml" />
+    <Include file="Checkbox.xml" />
+    <Include file="Radiogroup.xml" />
+    <Include file="Slider.xml" />
+    <Include file="Input.xml" />
+    <Include file="StatusBar.xml" />
+    <Include file="Colorpicker.xml" />
+    <Include file="TextArea.xml" />
+    <Include file="Autocomplete.xml" />
+    <Include file="Dropdown.xml" />
+    <Include file="Multiselect.xml" />
+    <Include file="Toggle.xml" />
+    <Include file="FormField.xml" />
 </Ui>

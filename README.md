@@ -13,7 +13,7 @@
 </div>
 
 <div align="center">
-  <img width="70%" src=".github/media/banner.png" />
+  <img width="70%" src=".github/media/Banner.png" />
 </div>
 <p align="center" style="font-style: italic">
   Map Pin Enhanced enhances the ingame waypoint system.

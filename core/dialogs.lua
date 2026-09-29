@@ -347,7 +347,7 @@ function MapPinEnhanced:ShowRenameGroupDialog(group)
     return ShowStaticDialog(RENAME_GROUP_DIALOG_NAME, L["Rename Group"], { group = group })
 end
 
-local MPHLogoSequence = "|T" .. MapPinEnhanced.assetsPath .. "\\logo_transparent.png" .. ":64:64|t"
+local MPHLogoSequence = "|T" .. MapPinEnhanced.assetsPath .. "\\LogoTransparent.png" .. ":64:64|t"
 local HeartIcon = " |A:" .. "delves-scenario-heart-icon" .. ":16:16|a"
 
 ---@return MapPinEnhancedStaticDialogFrame?

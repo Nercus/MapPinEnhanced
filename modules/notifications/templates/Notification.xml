@@ -38,7 +38,7 @@
                 </Texture>
             </Layer>
             <Layer level="OVERLAY" textureSubLevel="1">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/logo_transparent.png" parentKey="logo">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/LogoTransparent.png" parentKey="logo">
                     <Size x="26" y="26" />
                     <Anchors>
                         <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" y="-1" />

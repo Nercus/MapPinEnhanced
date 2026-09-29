@@ -6,7 +6,7 @@
     <Include file="textures.xml" />
     <Include file="animations.xml" />
     <Include file="FadingFrame.xml" />
-    <Include file="window.xml" />
+    <Include file="Window.xml" />
 
 
 

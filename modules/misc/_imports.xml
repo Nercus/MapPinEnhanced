@@ -2,6 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="minimapIcon.lua" />
     <Include file="wayBack.lua" />
-    <Include file="coords.xml" />
-    <Include file="iconPicker.xml" />
+    <Include file="Coords.xml" />
+    <Include file="IconPicker.xml" />
 </Ui>

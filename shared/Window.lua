@@ -29,7 +29,7 @@ function MapPinEnhancedWindowMixin:OnLoad()
     local frameName = self:GetName()
     assert(frameName, "MapPinEnhancedWindowMixin:OnLoad: window must have a global name")
 
-    self.PortraitContainer.portrait:SetTexture(MapPinEnhanced.assetsPath .. "\\logo.png")
+    self.PortraitContainer.portrait:SetTexture(MapPinEnhanced.assetsPath .. "\\Logo.png")
     self.PortraitContainer.portrait:SetTexCoord(0, 1, 0, 1)
 
     MapPinEnhanced:RegisterDraggableFrame(self, frameName, self.TitleContainer, function()

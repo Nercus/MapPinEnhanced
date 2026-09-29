@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 local LibDBIcon = MapPinEnhanced.LDBIcon
 
 local init = false
-local logoPath = MapPinEnhanced.assetsPath .. "\\logo_transparent.png"
+local logoPath = MapPinEnhanced.assetsPath .. "\\LogoTransparent.png"
 local minimapHighlightPath = MapPinEnhanced.assetsPath .. "\\shared\\MinimapHighlight.png"
 local function InitMinimapIcon()
     if init then return end

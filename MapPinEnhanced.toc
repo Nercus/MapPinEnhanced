@@ -14,7 +14,7 @@
 ## Notes-ptBR: @localization(locale="ptBR", key="Enhances your WoW navigation with customizable pins and seamless tracking!")@
 ## Author: Nerc, Eminos
 ## Version: @project-version@
-## IconTexture: Interface\Addons\MapPinEnhanced\assets\logo.png
+## IconTexture: Interface\Addons\MapPinEnhanced\assets\Logo.png
 
 ## X-Website: https://github.com/Nercus/MapPinEnhanced
 ## X-License: Code: GPL-3.0-only; assets: All Rights Reserved
