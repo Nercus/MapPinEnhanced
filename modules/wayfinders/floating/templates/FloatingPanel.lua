@@ -40,7 +40,7 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     self:SetDestinationText()
     self:UpdateDistanceSubscription()
     if target then
-        self.pinFrame:SetStyleMode("outline")
+        self.pinFrame:SetStyleMode(target.pinStyleMode or Wayfinders:GetTargetStyleMode(target.targetType))
         if target.texture then
             self.pinFrame:SetIconTexture(target.texture, target.usesAtlas)
         else
