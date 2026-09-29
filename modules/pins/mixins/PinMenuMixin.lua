@@ -128,13 +128,6 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
-            label = MapPinEnhanced:Iconize("tick", L["Mark Reached"]),
-            onClick = function()
-                self.group:MarkPinReached(self.pinID)
-            end
-        },
-        {
-            type = "button",
             label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Share to Chat"]),
             onClick = function()
                 self:SharePin()
@@ -149,6 +142,13 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "divider",
+        },
+        {
+            type = "button",
+            label = MapPinEnhanced:Iconize("tick", L["Mark Reached"]),
+            onClick = function()
+                self.group:MarkPinReached(self.pinID)
+            end
         },
         {
             type = "button",
