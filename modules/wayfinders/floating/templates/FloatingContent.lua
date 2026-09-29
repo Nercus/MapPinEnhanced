@@ -19,7 +19,7 @@
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
----@class MapPinEnhancedWayfinderFloatingContentTemplate : Frame
+---@class MapPinEnhancedWayfinderFloatingContentTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field visual MapPinEnhancedWayfinderFloatingContentVisual
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field beam MapPinEnhancedWayfinderFloatingBeamTemplate
@@ -33,6 +33,7 @@
 MapPinEnhancedWayfinderFloatingContentMixin = {}
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     self.pin = self.visual.pin
     self.beam = self.visual.beam
     self.title = self.visual.title

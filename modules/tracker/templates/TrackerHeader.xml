@@ -72,7 +72,8 @@
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
-            <OnHide>self.hiddenGroupsMenu:Hide()</OnHide>
+            <!-- HideFrame fades the menu with the tracker; clear its shown bit afterward. -->
+            <OnHide>self.hiddenGroupsMenu:HideImmediately()</OnHide>
         </Scripts>
     </Frame>
 </Ui>

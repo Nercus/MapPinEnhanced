@@ -65,6 +65,8 @@ end
 ---@param step WayfinderStepData?
 function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
+    -- Reset has released tracking; retain the last artwork until its fade ends.
+    if not self.data then return end
     local frame = self:GetFrame()
     self:RefreshTitle()
     local showDirection = step == nil or step.showDirection
@@ -80,13 +82,13 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
 end
 
 function MapPinEnhancedWayfinderFloating:Reset()
+    if self.frame then
+        self.frame:Hide()
+        self.frame:StopTracking()
+    end
     Providers:ClearStepSuperTracking()
     self.data = nil
     self.step = nil
-    if self.frame then
-        self.frame:SetDestinationText(nil, nil)
-        self.frame:Hide()
-    end
 end
 
 ---@param wayfinderData WayfinderData?
@@ -111,7 +113,9 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     end
     self:RefreshTitle()
     frame.pin:SetLock(wayfinderData.lock)
+    local wasFadingOut = frame.visibilityFadeOut:IsPlaying()
     frame:Show()
+    if wasFadingOut then frame:OnShow() end
 end
 
 ---@param enable boolean
@@ -152,12 +156,8 @@ end
 
 function MapPinEnhancedWayfinderFloating:Disable()
     if not self.runtimeEnabled then return end
-    Providers:ClearStepSuperTracking()
     self.runtimeEnabled = nil
-    if self.frame then
-        self.frame:SetDestinationText(nil, nil)
-        self.frame:Hide()
-    end
+    self:Reset()
     OverrideSuperTrackedAlphaState(false)
     if self.unsubscribeBeamOption then
         self.unsubscribeBeamOption()

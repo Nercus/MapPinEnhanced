@@ -3,7 +3,7 @@
 
     <Include file="coords.lua" />
 
-    <Frame name="MapPinEnhancedCoordsDisplayTemplate" mixin="MapPinEnhancedCoordsDisplayMixin" movable="true" virtual="true" hidden="true" parent="UIParent">
+    <Frame name="MapPinEnhancedCoordsDisplayTemplate" mixin="MapPinEnhancedCoordsDisplayMixin" movable="true" virtual="true" hidden="true" parent="UIParent" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="140" y="20" />
         <Layers>
             <Layer level="BACKGROUND">

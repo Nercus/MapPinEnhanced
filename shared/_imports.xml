@@ -5,6 +5,7 @@
     <Include file="theme.xml" />
     <Include file="textures.xml" />
     <Include file="animations.xml" />
+    <Include file="FadingFrame.xml" />
     <Include file="window.xml" />
 
 

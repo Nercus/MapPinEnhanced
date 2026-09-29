@@ -1,14 +1,14 @@
----@class MapPinEnhancedWayfinderFloatingBeamTemplate : Frame
+---@class MapPinEnhancedWayfinderFloatingBeamTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field line Texture
 ---@field blip MapPinEnhancedWayfinderFloatingBeamBlip
 ---@field active boolean?
----@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 MapPinEnhancedWayfinderFloatingBeamMixin = {}
 
 ---@class MapPinEnhancedWayfinderFloatingBeamBlip : Texture
 ---@field animation AnimationGroup
 
 function MapPinEnhancedWayfinderFloatingBeamMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     self:SetActive(false)
 end
 
@@ -25,12 +25,12 @@ function MapPinEnhancedWayfinderFloatingBeamMixin:SetActive(active)
     self.active = active
     self:SetShown(active)
     if active then
-        self.fadeIn:Play()
         self.blip.animation:Play()
-    else
-        self.fadeIn:Stop()
-        self:SetAlpha(0)
-        self.blip.animation:Stop()
-        self.blip:SetAlpha(0)
     end
+end
+
+function MapPinEnhancedWayfinderFloatingBeamMixin:OnHide()
+    self.active = nil
+    self.blip.animation:Stop()
+    self.blip:SetAlpha(0)
 end

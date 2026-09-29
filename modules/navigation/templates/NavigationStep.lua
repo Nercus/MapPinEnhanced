@@ -4,7 +4,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedNavigationStepTemplate : MapPinEnhancedWayfinderInstructionTemplate
+---@class MapPinEnhancedNavigationStepTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field clearButton Button
 ---@field title FontString
@@ -13,6 +13,7 @@ local L = MapPinEnhanced.L
 MapPinEnhancedNavigationStepMixin = {}
 
 function MapPinEnhancedNavigationStepMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self, true)
     MapPinEnhancedWayfinderInstructionMixin.OnLoad(self)
     -- The secure driver hides the protected action ancestry on combat entry.
     -- Wayfinders reapplies only the latest Step when combat ends.
@@ -56,7 +57,7 @@ end
 
 ---@param shown boolean
 function MapPinEnhancedNavigationStepMixin:ApplyVisibility(shown)
-    if not InCombatLockdown() then self:SetShown(shown) end
+    if not InCombatLockdown() then self:SetShownWithFade(shown) end
 end
 
 function MapPinEnhancedNavigationStepMixin:ClearTracking()

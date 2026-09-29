@@ -25,7 +25,7 @@ end
 ---@param groupID UUID
 ---@param pinID UUID
 function MapPinEnhancedDescriptionEditorMixin:Open(groupID, pinID)
-    self:Hide()
+    self:HideImmediately()
     local group = Groups:GetGroupByID(groupID)
     local pin = group and group:GetPinByID(pinID)
     local archived = group and group:GetArchivedPinByID(pinID)

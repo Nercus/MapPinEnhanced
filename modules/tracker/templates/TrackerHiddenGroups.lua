@@ -12,17 +12,16 @@ local L = MapPinEnhanced.L
 ---@field label string
 ---@field icon string|number
 
----@class MapPinEnhancedTrackerHiddenGroupsTemplate : Frame
+---@class MapPinEnhancedTrackerHiddenGroupsTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field title FontString
 ---@field scrollBox WowScrollBoxList
 ---@field scrollBar MinimalScrollBar
 ---@field onOutsideClick function
 ---@field unsubscribe fun()?
----@field fadeIn MapPinEnhancedAnimationVisibilityMixin
----@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 MapPinEnhancedTrackerHiddenGroupsMixin = {}
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     local view = CreateScrollBoxListLinearView()
     view:SetElementExtent(26)
     view:SetElementInitializer("MapPinEnhancedTrackerHiddenGroupEntryTemplate", function(entry, data)
@@ -57,8 +56,8 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnLoad()
 end
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:Toggle()
-    if not self:IsShown() or self.fadeOut:IsPlaying() then
-        self.fadeIn:PlayReplacing(self.fadeOut)
+    if not self:IsShown() or self.visibilityFadeOut:IsPlaying() then
+        self:Show()
     else
         self:Close()
     end
@@ -66,7 +65,7 @@ end
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:Close()
     if self:IsShown() then
-        self.fadeOut:PlayReplacing(self.fadeIn)
+        self:Hide()
     end
 end
 
@@ -103,9 +102,6 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:OnShow()
 end
 
 function MapPinEnhancedTrackerHiddenGroupsMixin:OnHide()
-    self.fadeIn:Stop()
-    self.fadeOut:Stop()
-    self:SetAlpha(0)
     MapPinEnhanced:UnregisterEventForFunction("GLOBAL_MOUSE_DOWN", self.onOutsideClick)
     if self.unsubscribe then
         self.unsubscribe()

@@ -9,7 +9,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 
----@class MapPinEnhancedCoordsDisplayTemplate : Frame
+---@class MapPinEnhancedCoordsDisplayTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field coordsXInt FontString
 ---@field coordsXDec FontString
 ---@field coordsYInt FontString
@@ -114,6 +114,7 @@ function MapPinEnhancedCoordsDisplayMixin:UnlockPosition()
 end
 
 function MapPinEnhancedCoordsDisplayMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", self.dragHandle, function()
         return not self:IsMovable()
     end)

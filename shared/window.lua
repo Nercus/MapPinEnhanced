@@ -9,7 +9,7 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedWindowPortraitContainer : Frame
 ---@field portrait Texture
 
----@class MapPinEnhancedWindowTemplate : Frame
+---@class MapPinEnhancedWindowTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field TitleContainer MapPinEnhancedWindowTitleContainer
 ---@field PortraitContainer MapPinEnhancedWindowPortraitContainer
 ---@field CloseButton Button
@@ -25,6 +25,7 @@ function MapPinEnhancedWindowMixin:SetTitle(title)
 end
 
 function MapPinEnhancedWindowMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     local frameName = self:GetName()
     assert(frameName, "MapPinEnhancedWindowMixin:OnLoad: window must have a global name")
 

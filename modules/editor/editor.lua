@@ -117,7 +117,7 @@ end
 
 function Editor:IsShown()
     local frame = self:GetGroupEditorFrame()
-    return frame and frame:IsShown() or false
+    return frame and frame:IsShown() and not frame.visibilityFadeOut:IsPlaying() or false
 end
 
 MapPinEnhanced:AddSlashCommand("editor", function()

@@ -7,7 +7,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
----@class MapPinEnhancedTrackerTemplate : Frame
+---@class MapPinEnhancedTrackerTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field scrollBox MapPinEnhancedTrackerScrollBox
 ---@field scrollBar MapPinEnhancedTrackerScrollBar
 ---@field scrollView ScrollBoxListTreeListViewMixin
@@ -270,6 +270,7 @@ local function TrackerElementResetter(frame, node)
 end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     end)
@@ -378,5 +379,6 @@ function MapPinEnhancedTrackerMixin:ShowFrame()
 end
 
 function MapPinEnhancedTrackerMixin:HideFrame()
+    self.header.hiddenGroupsMenu:Close()
     self:Hide()
 end

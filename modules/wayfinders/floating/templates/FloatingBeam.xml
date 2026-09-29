@@ -2,11 +2,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="FloatingBeam.lua" />
 
-    <Frame name="MapPinEnhancedWayfinderFloatingBeamTemplate" virtual="true" mixin="MapPinEnhancedWayfinderFloatingBeamMixin" hidden="true">
+    <Frame name="MapPinEnhancedWayfinderFloatingBeamTemplate" virtual="true" mixin="MapPinEnhancedWayfinderFloatingBeamMixin" hidden="true" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="20" y="287" />
-        <Animations>
-            <AnimationGroup parentKey="fadeIn" inherits="MapPinEnhancedAnimationFadeIn" />
-        </Animations>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture parentKey="line" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarLine.png" setAllPoints="true">
@@ -35,6 +32,7 @@
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
         </Scripts>
     </Frame>
 </Ui>

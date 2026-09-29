@@ -4,7 +4,8 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 
 local CLOSE_DISTANCE = 100
 
----@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin
+---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin, MapPinEnhancedFadingFrameTemplate
+---@field navigationOpacity Frame | { content: MapPinEnhancedWayfinderFloatingContentTemplate }
 ---@field content MapPinEnhancedWayfinderFloatingContentTemplate
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field needle MapPinEnhancedWayfinderFloatingNeedleTemplate
@@ -81,9 +82,9 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self:ClearAllPoints()
     if enabled then
         self:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200)
-        self:SetAlpha(1)
+        self.navigationOpacity:SetAlpha(1)
     elseif self.navFrame then
-        self:SetAlpha(1)
+        self.navigationOpacity:SetAlpha(1)
         self:SetPoint("CENTER", self.navFrame, "CENTER")
     else
         self:ShutdownNavigationFrame()
@@ -107,7 +108,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetUpNavigationFrame()
     self.isClamped = nil
     self.presentationInitialized = nil
     if self.customDirection then return end
-    self:SetAlpha(self.navFrame and 1 or 0)
+    self.navigationOpacity:SetAlpha(self.navFrame and 1 or 0)
 
     if self.navFrame then
         self:ClearAllPoints()
@@ -117,7 +118,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
     self:ClearAllPoints()
-    self:SetAlpha(0)
+    self.navigationOpacity:SetAlpha(0)
     self.navFrame = nil
     self.isClamped = nil
     self.clampedChanged = nil
@@ -193,7 +194,7 @@ end
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     local angle = self:SampleTargetAngle(elapsed)
-    if self.customDirection then self:SetAlpha(angle ~= nil and 1 or 0) end
+    if self.customDirection then self.navigationOpacity:SetAlpha(angle ~= nil and 1 or 0) end
     if angle ~= nil then
         self.newNeedleRotation = angle
     end
@@ -248,6 +249,9 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnLoad()
+    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
+    -- Navigation availability must not overwrite the root visibility fade.
+    self.content = self.navigationOpacity.content
     self.pin = self.content.pin
     self.needle = self.content.needle
     self.titleContainer = self.content.title
@@ -298,7 +302,9 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     end)
 end
 
-function MapPinEnhancedWayfinderFloatingMixin:OnHide()
+-- Release Blizzard ownership when hiding starts; only the last rendered marker
+-- remains for the fade. A later OnHide must not undo a new wayfinder's takeover.
+function MapPinEnhancedWayfinderFloatingMixin:StopTracking()
     self:SetScript("OnUpdate", nil)
     self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
     self:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
@@ -306,8 +312,6 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
     self:UnregisterEvent("SUPER_TRACKING_PATH_UPDATED")
     self:StopDistanceUpdates()
     self:ResetDirectionSampling()
-    self:ShutdownNavigationFrame()
-
     if self.needsBlizzardReset then
         SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_CREATED")
         SuperTrackedFrame:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
@@ -316,6 +320,12 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
         SuperTrackedFrame:Show()
     end
     self.needsBlizzardReset = nil
+end
+
+function MapPinEnhancedWayfinderFloatingMixin:OnHide()
+    self:StopTracking()
+    self:ShutdownNavigationFrame()
+    self:SetDestinationText(nil, nil)
     self:Reset()
 end
 
