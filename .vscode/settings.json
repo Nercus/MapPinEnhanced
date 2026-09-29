@@ -118,7 +118,8 @@
         "titleBar.inactiveForeground": "#15202b99",
         "commandCenter.foreground": "#15202b",
         "statusBar.debuggingBackground": "#ebcb8b",
-        "statusBar.debuggingForeground": "#15202b"
+        "statusBar.debuggingForeground": "#15202b",
+        "statusBar.inactiveBackground": "#ebcb8b"
     },
     "wowAPI.luals.defineKnownGlobals": false,
     "Lua.workspace.library": [
