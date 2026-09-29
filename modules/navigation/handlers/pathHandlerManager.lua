@@ -162,7 +162,7 @@ function Navigation:GetPathCost(graph, preparedData, pathReference)
     }
 end
 
-function Navigation:SetUpPathHandlers()
+function Navigation:SetupPathHandlers()
     if unsubscribeProgressEvents then return end
     unsubscribeProgressEvents = MapPinEnhanced:RegisterEventBucket(PROGRESS_EVENTS, function()
         if activeReport then activeReport("check-completion") end

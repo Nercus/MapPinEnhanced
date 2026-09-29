@@ -105,7 +105,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetEllipticalRadii(major, minor)
     self.axesMultiplied = major * minor
 end
 
-function MapPinEnhancedWayfinderFloatingMixin:SetUpNavigationFrame()
+function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
     local navFrame = C_Navigation.GetFrame()
     if self.navFrame == navFrame then return end
     self.navFrame = navFrame
@@ -130,8 +130,8 @@ function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
     self.content:Reset()
 end
 
-function MapPinEnhancedWayfinderFloatingMixin:EnsureNavigationFrameIsSetUp()
-    self:SetUpNavigationFrame()
+function MapPinEnhancedWayfinderFloatingMixin:EnsureNavigationFrameIsSetup()
+    self:SetupNavigationFrame()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:UpdateClampedState()
@@ -233,7 +233,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed)
         self:AnimateNeedleRotation(elapsed)
         return
     end
-    self:EnsureNavigationFrameIsSetUp()
+    self:EnsureNavigationFrameIsSetup()
     if not self.navFrame then return end
 
     self:UpdateClampedState()
@@ -279,7 +279,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
         return
     end
     if event == "NAVIGATION_FRAME_CREATED" then
-        self:SetUpNavigationFrame()
+        self:SetupNavigationFrame()
     elseif event == "NAVIGATION_FRAME_DESTROYED" then
         self:ShutdownNavigationFrame()
     end
@@ -297,7 +297,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     SuperTrackedFrame:Hide()
     self.needsBlizzardReset = true
 
-    self:SetUpNavigationFrame()
+    self:SetupNavigationFrame()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)

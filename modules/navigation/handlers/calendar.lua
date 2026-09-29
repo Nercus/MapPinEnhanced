@@ -40,7 +40,9 @@ local function IsHolidayActive(holidayID)
     if not calendarReady or not C_Calendar or not C_Calendar.GetMonthInfo or
         not C_Calendar.GetNumDayEvents or not C_Calendar.GetDayEvent or
         not C_DateAndTime or not C_DateAndTime.GetCurrentCalendarTime or
-        not C_DateAndTime.CompareCalendarTime then return nil end
+        not C_DateAndTime.CompareCalendarTime then
+        return nil
+    end
     -- Calendar filters can hide an active holiday. Do not change the player's
     -- settings or interpret a filtered-out entry as proof that it is inactive.
     local filter = holidayID == 479 and "calendarShowDarkmoon" or "calendarShowHolidays"
@@ -48,7 +50,9 @@ local function IsHolidayActive(holidayID)
     local now = C_DateAndTime.GetCurrentCalendarTime()
     local month = C_Calendar.GetMonthInfo(0)
     if not IsCalendarTime(now) or not IsReadableTable(month) or
-        not IsReadableNumber(month.year) or not IsReadableNumber(month.month) then return nil end
+        not IsReadableNumber(month.year) or not IsReadableNumber(month.month) then
+        return nil
+    end
     -- Offsets are relative to the displayed calendar month, not today's month.
     local offset = (now.year - month.year) * 12 + now.month - month.month
     local count = C_Calendar.GetNumDayEvents(offset, now.monthDay)
@@ -104,7 +108,7 @@ MapPinEnhanced:RegisterEvent("CALENDAR_UPDATE_EVENT_LIST", function()
 end)
 MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE" }, RefreshHolidayStates, 0.5)
 
-function Navigation:SetUpCalendarRequirements()
+function Navigation:SetupCalendarRequirements()
     if refreshTicker then return end
     -- These observations belong to the addon session, not a displayed frame or
     -- active route. Only changed holiday states refresh the routing snapshot.

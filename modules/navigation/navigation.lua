@@ -884,7 +884,7 @@ function Navigation:RefreshEligibility()
     end
 end
 
-function Navigation:SetUpEligibilityRefresh()
+function Navigation:SetupEligibilityRefresh()
     if self.unsubscribeEligibilityRefresh then return end
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function()
         self:RefreshEligibility()
@@ -1297,10 +1297,10 @@ hooksecurefunc(WorldMapFrame, "OnMapChanged", RefreshWorldMapRouteLayer)
 WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Navigation:SetUpCalendarRequirements()
+    Navigation:SetupCalendarRequirements()
     Navigation:BuildGraph()
-    Navigation:SetUpPathHandlers()
-    Navigation:SetUpEligibilityRefresh()
+    Navigation:SetupPathHandlers()
+    Navigation:SetupEligibilityRefresh()
     MapPinEnhanced:RegisterContinuousDistanceSampleCallback(function(...)
         Navigation:OnDistanceSample(...)
     end)

@@ -5,14 +5,14 @@ local MapPinEnhanced = select(2, ...)
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinder MapPinEnhancedWayfinder? the selected wayfinder presentation
 ---@field setupAfterCombat fun()?
----@field displaysSetUp boolean?
+---@field displaysSetup boolean?
 ---@field TARGET_TYPE_PIN WayfinderTargetType
 ---@field TARGET_TYPE_BLIZZARD WayfinderTargetType
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinder
----@field SetUp fun(self: MapPinEnhancedWayfinder) creates protected controls outside combat
+---@field Setup fun(self: MapPinEnhancedWayfinder) creates protected controls outside combat
 ---@field GetActionDebugText fun(self: MapPinEnhancedWayfinder): string debug builds only
 ---@field Init fun(self: MapPinEnhancedWayfinder, targetData: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
@@ -92,7 +92,7 @@ local function GetWayfinder(wayfinderType)
     local wayfinder = Wayfinders.wayfinders and Wayfinders.wayfinders[wayfinderType]
     assert(wayfinder, "Wayfinders: wayfinder type is not registered: " .. tostring(wayfinderType))
     assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and
-        wayfinder.SetStep and wayfinder.SetUp,
+        wayfinder.SetStep and wayfinder.Setup,
         "Wayfinders: registered wayfinder does not implement the required interface")
     return wayfinder
 end
@@ -291,7 +291,7 @@ function Wayfinders:SelectWayfinder(selection)
     local wayfinderType = WAYFINDER_TYPES_BY_SELECTION[selection]
     assert(wayfinderType, "Wayfinders:SelectWayfinder: invalid selection " .. tostring(selection))
     selectedWayfinder = selection
-    if not self.displaysSetUp then
+    if not self.displaysSetup then
         if InCombatLockdown() then
             -- Initial setup needs protected controls. Retain the latest selection
             -- and copied presentation until the controls can be created safely.
@@ -308,9 +308,9 @@ function Wayfinders:SelectWayfinder(selection)
         end
         -- Each type owns its protected frames; prepare both before combat switching.
         for _, registeredType in pairs(AVAILABLE_WAYFINDERS) do
-            GetWayfinder(registeredType):SetUp()
+            GetWayfinder(registeredType):Setup()
         end
-        self.displaysSetUp = true
+        self.displaysSetup = true
     end
     local wayfinder = GetWayfinder(wayfinderType)
     if self.activeWayfinder ~= wayfinder then
