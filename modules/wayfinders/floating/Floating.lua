@@ -65,13 +65,6 @@ function MapPinEnhancedWayfinderFloating:SetTexture(texture, usesAtlas)
     self:GetFrame():SetTexture(texture, usesAtlas)
 end
 
----@param targetType WayfinderTargetType
-function MapPinEnhancedWayfinderFloating:SetTargetType(targetType)
-    local frame = self:GetFrame()
-    local normalizedTargetType = Wayfinders:GetTargetTypeOrDefault(targetType)
-    frame.pin:SetStyleMode(Wayfinders:GetTargetStyleMode(normalizedTargetType))
-end
-
 ---@param lock boolean
 function MapPinEnhancedWayfinderFloating:SetLock(lock)
     self:GetFrame().pin:SetLock(lock)
@@ -118,15 +111,16 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     if not wayfinderData.mapDistanceOnly then Providers:ClearStepSuperTracking() end
     self.data = wayfinderData
     local frame = self:GetFrame()
-    self:SetTargetType(wayfinderData.targetType)
-    if wayfinderData.pinStyleMode then
-        frame.pin:SetStyleMode(wayfinderData.pinStyleMode)
-    end
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    ---@type boolean?
+    local hasIcon = false
     if wayfinderData.texture then
-        frame:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
+        hasIcon = frame:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
     else
         frame:SetColor(wayfinderData.color)
+    end
+    if not hasIcon and wayfinderData.targetType == Wayfinders.TARGET_TYPE_BLIZZARD then
+        frame:SetTexture("Navigation-Tracked-Icon", true)
     end
     self:RefreshTitle()
     frame.pin:SetLock(wayfinderData.lock)

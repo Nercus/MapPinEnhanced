@@ -2,8 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class Pins
----@field STYLE_MODE_PIN PinStyleMode
----@field STYLE_MODE_OUTLINE PinStyleMode
 ---@field PIN_ICONS table<string|number, PinIcon>
 ---@field PIN_COLORS_BY_NAME table<PinColor, ColorMixin>
 local Pins = MapPinEnhanced:GetModule("Pins")
@@ -24,10 +22,6 @@ Pins.PIN_COLORS_BY_NAME = {
 
 ---@type PinColor
 Pins.DEFAULT_COLOR = "Yellow"
-
----@alias PinStyleMode "pin" | "outline"
-Pins.STYLE_MODE_PIN = "pin"
-Pins.STYLE_MODE_OUTLINE = "outline"
 
 ---@class PinIcon
 ---@field path string the path to the icon, if usesAtlas is true, this is the atlas name

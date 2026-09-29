@@ -64,10 +64,14 @@ function MapPinEnhancedWayfinderArrowMixin:SetColor(color)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
+---@param texture string|number?
+---@param usesAtlas boolean?
+---@return boolean? hasIcon
 function MapPinEnhancedWayfinderArrowMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
-    self.pin:SetIconTexture(texture, usesAtlas)
+    local hasIcon = self.pin:SetIconTexture(texture, usesAtlas)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
+    return hasIcon
 end
 
 function MapPinEnhancedWayfinderArrowMixin:SetTitle(title)

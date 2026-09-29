@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 local Options = MapPinEnhanced:GetModule("Options")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 
 ---@alias NavigationDestinationRemoval fun(owner: string, destinationID: string, changeNumber: integer)
@@ -68,7 +67,6 @@ local function CopyWayfinderData(data)
         color = data.color,
         lock = data.lock,
         targetType = data.targetType,
-        pinStyleMode = data.pinStyleMode,
         mapDistanceOnly = data.mapDistanceOnly,
     }
 end
@@ -275,7 +273,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         old.mapID == destinationData.mapID and old.x == destinationData.x and old.y == destinationData.y and
         old.texture == destinationData.texture and old.usesAtlas == destinationData.usesAtlas and
         old.color == destinationData.color and old.lock == destinationData.lock and
-        old.targetType == destinationData.targetType and old.pinStyleMode == destinationData.pinStyleMode and
+        old.targetType == destinationData.targetType and
         old.mapDistanceOnly == destinationData.mapDistanceOnly then
         self:UpdateDestinationText(owner, destinationID, active.changeNumber,
             destinationData.title or "", destinationData.description)
@@ -610,7 +608,6 @@ function Navigation:PublishStep(progression)
     targetData.texture = travelIcon
     -- BasePin resolves this PIN_ICONS key and owns its atlas geometry and style.
     targetData.usesAtlas = false
-    targetData.pinStyleMode = Pins.STYLE_MODE_OUTLINE
     -- Waiting Steps have no arrival callback; a destination lock is not Step state.
     targetData.lock = false
     targetData.mapDistanceOnly = true

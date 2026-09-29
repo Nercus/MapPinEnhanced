@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedSuperTrackedEntryTemplate : Button
@@ -28,8 +27,9 @@ function MapPinEnhancedSuperTrackedEntryMixin:ApplyEntry(entry)
         self.pinFrame:SetIconTexture(nil)
         return
     end
-    self.pinFrame:SetStyleMode(Pins.STYLE_MODE_OUTLINE)
-    self.pinFrame:SetIconTexture(entry.texture, entry.usesAtlas)
+    if not self.pinFrame:SetIconTexture(entry.texture, entry.usesAtlas) then
+        self.pinFrame:SetIconTexture("Navigation-Tracked-Icon", true)
+    end
     if entry.tracked then
         self.pinFrame:SetTracked(true)
     else

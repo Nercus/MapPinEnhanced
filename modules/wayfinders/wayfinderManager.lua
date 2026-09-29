@@ -9,7 +9,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field TARGET_TYPE_PIN WayfinderTargetType
 ---@field TARGET_TYPE_BLIZZARD WayfinderTargetType
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinder
@@ -22,7 +21,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field SetTitle fun(self: MapPinEnhancedWayfinder, title: string) sets the wayfinder title, if the wayfinder supports it
 ---@field SetColor fun(self: MapPinEnhancedWayfinder, color: string) sets the wayfinder color, if the wayfinder supports it
 ---@field SetTexture fun(self: MapPinEnhancedWayfinder, texture: string|number, usesAtlas: boolean) sets the wayfinder texture, if the wayfinder supports it
----@field SetTargetType fun(self: MapPinEnhancedWayfinder, targetType: WayfinderTargetType) sets the target style type
 ---@field SetLock fun(self: MapPinEnhancedWayfinder, lock: boolean) sets the wayfinder lock, if the wayfinder supports it
 ---@field SetStep fun(self: MapPinEnhancedWayfinder, step: WayfinderStepData?)
 
@@ -52,8 +50,7 @@ local WAYFINDER_TYPES_BY_SELECTION = {
 ---@field usesAtlas boolean? if true, the texture is an atlas, otherwise it is a file path
 ---@field color string? the target color; ignored when texture is set
 ---@field lock boolean? if true, the target will not be removed automatically when reached
----@field targetType WayfinderTargetType? the presentation kind; missing or unknown values safely use the pin presentation
----@field pinStyleMode PinStyleMode? an optional presentation-only override for the target's BasePin
+---@field targetType WayfinderTargetType? the target source kind; missing or unknown values use the addon pin kind
 ---@field mapDistanceOnly boolean? if true, distance sampling ignores Blizzard's separately super-tracked destination
 
 ---@alias WayfinderTargetArrival fun()
@@ -94,7 +91,7 @@ local selectedWayfinder
 local function GetWayfinder(wayfinderType)
     local wayfinder = Wayfinders.wayfinders and Wayfinders.wayfinders[wayfinderType]
     assert(wayfinder, "Wayfinders: wayfinder type is not registered: " .. tostring(wayfinderType))
-    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and wayfinder.SetTargetType and
+    assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and
         wayfinder.SetStep and wayfinder.SetUp,
         "Wayfinders: registered wayfinder does not implement the required interface")
     return wayfinder
@@ -175,15 +172,6 @@ function Wayfinders:BuildNavigationMenuEntries()
     return entries
 end
 
----@param styleMode string?
----@return PinStyleMode?
-local function GetPinStyleModeOrNil(styleMode)
-    if styleMode == Pins.STYLE_MODE_PIN or styleMode == Pins.STYLE_MODE_OUTLINE then
-        return styleMode
-    end
-    return nil
-end
-
 ---@param targetData WayfinderData
 ---@return WayfinderData
 local function CopyWayfinderData(targetData)
@@ -198,7 +186,6 @@ local function CopyWayfinderData(targetData)
         color = targetData.color,
         lock = targetData.lock,
         targetType = Wayfinders:GetTargetTypeOrDefault(targetData.targetType),
-        pinStyleMode = GetPinStyleModeOrNil(targetData.pinStyleMode),
         mapDistanceOnly = targetData.mapDistanceOnly,
     }
 end
@@ -221,7 +208,7 @@ local function ApplyActiveTarget(targetData, onArrival, arrivalIdentity)
     local refreshDisplay = refreshTarget or
         old and data and (old.title ~= data.title or old.description ~= data.description or
             old.texture ~= data.texture or old.usesAtlas ~= data.usesAtlas or old.color ~= data.color or
-            old.targetType ~= data.targetType or old.pinStyleMode ~= data.pinStyleMode)
+            old.targetType ~= data.targetType)
     if refreshTarget then Wayfinders:ResetArrivalDetection() end
     if refreshDisplay and Wayfinders.activeWayfinder then Wayfinders.activeWayfinder:Init(data) end
     if not refreshTarget then return end
@@ -252,15 +239,6 @@ function Wayfinders:GetTargetTypeOrDefault(targetType)
         return self.TARGET_TYPE_BLIZZARD
     end
     return self.TARGET_TYPE_PIN
-end
-
----@param targetType string?
----@return PinStyleMode
-function Wayfinders:GetTargetStyleMode(targetType)
-    if self:GetTargetTypeOrDefault(targetType) == self.TARGET_TYPE_BLIZZARD then
-        return Pins.STYLE_MODE_OUTLINE
-    end
-    return Pins.STYLE_MODE_PIN
 end
 
 function Wayfinders:ClearPresentation()

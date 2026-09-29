@@ -40,11 +40,15 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     self:SetDestinationText()
     self:UpdateDistanceSubscription()
     if target then
-        self.pinFrame:SetStyleMode(target.pinStyleMode or Wayfinders:GetTargetStyleMode(target.targetType))
+        ---@type boolean?
+        local hasIcon = false
         if target.texture then
-            self.pinFrame:SetIconTexture(target.texture, target.usesAtlas)
+            hasIcon = self.pinFrame:SetIconTexture(target.texture, target.usesAtlas)
         else
             self.pinFrame:SetColor(target.color)
+        end
+        if not hasIcon and target.targetType == Wayfinders.TARGET_TYPE_BLIZZARD then
+            self.pinFrame:SetIconTexture("Navigation-Tracked-Icon", true)
         end
     end
     if not InCombatLockdown() then

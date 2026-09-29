@@ -39,10 +39,14 @@ function MapPinEnhancedWayfinderFloatingMixin:SetColor(color)
     self.content:SetColor(self.pin:GetActiveStyleColor())
 end
 
+---@param texture string|number?
+---@param usesAtlas boolean?
+---@return boolean? hasIcon
 function MapPinEnhancedWayfinderFloatingMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
-    self.pin:SetIconTexture(texture, usesAtlas)
+    local hasIcon = self.pin:SetIconTexture(texture, usesAtlas)
     self.content:SetColor(self.pin:GetActiveStyleColor())
+    return hasIcon
 end
 
 ---@param title string?

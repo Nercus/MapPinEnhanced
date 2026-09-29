@@ -69,11 +69,6 @@ function MapPinEnhancedWayfinderArrow:SetTexture(texture, usesAtlas)
     self:GetFrame():SetTexture(texture, usesAtlas)
 end
 
----@param targetType WayfinderTargetType
-function MapPinEnhancedWayfinderArrow:SetTargetType(targetType)
-    self:GetFrame().pin:SetStyleMode(Wayfinders:GetTargetStyleMode(targetType))
-end
-
 ---@param lock boolean
 function MapPinEnhancedWayfinderArrow:SetLock(lock)
     self:GetFrame().pin:SetLock(lock)
@@ -139,15 +134,16 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
         return
     end
-    self:SetTargetType(wayfinderData.targetType)
-    if wayfinderData.pinStyleMode then
-        frame.pin:SetStyleMode(wayfinderData.pinStyleMode)
-    end
     frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    ---@type boolean?
+    local hasIcon = false
     if wayfinderData.texture then
-        self:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
+        hasIcon = frame:SetTexture(wayfinderData.texture, wayfinderData.usesAtlas)
     else
-        self:SetColor(wayfinderData.color)
+        frame:SetColor(wayfinderData.color)
+    end
+    if not hasIcon and wayfinderData.targetType == Wayfinders.TARGET_TYPE_BLIZZARD then
+        frame:SetTexture("Navigation-Tracked-Icon", true)
     end
     self.description = wayfinderData.description
     self:SetTitle(wayfinderData.title)
