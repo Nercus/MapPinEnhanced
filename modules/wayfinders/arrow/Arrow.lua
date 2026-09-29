@@ -26,6 +26,13 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
         self.positionFrame = position
         self.frame = position.display
         self.frame.textContainer.description.onHidden = function() self:UpdateText() end
+        self.frame.readout.onTextChanged = function()
+            -- Preserve the pin, needle and edge space around the full readout line.
+            local readoutWidth = math.max(166, math.ceil(self.frame.readout.text:GetUnboundedStringWidth()))
+            self.frame.readout:SetWidth(readoutWidth)
+            self.frame.textContainer:SetWidth(readoutWidth + 152)
+            self.frame:SetWidth(readoutWidth + 152)
+        end
         position.instruction:SetFrameLevel(self.frame:GetFrameLevel() + 3)
         position.instruction:UpdateFrameLevels()
         position.instruction.text:SetNonSpaceWrap(true)

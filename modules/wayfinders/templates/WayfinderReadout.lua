@@ -9,6 +9,7 @@ local L = MapPinEnhanced.L
 ---@field hasETA boolean?
 ---@field showETA boolean?
 ---@field displayVisible boolean?
+---@field onTextChanged fun()?
 MapPinEnhancedWayfinderReadoutMixin = {}
 
 function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
@@ -16,7 +17,10 @@ function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
     if text ~= "" and self.showETA and self.hasETA then
         text = string.format(L["%s - %s"], text, self.etaText or "")
     end
-    if text ~= "" or not self:IsVisible() then self.text:SetText(text) end
+    if text ~= "" or not self:IsVisible() then
+        self.text:SetText(text)
+        if self.onTextChanged then self.onTextChanged() end
+    end
     self:SetShown(self.displayVisible == true and text ~= "")
 end
 
