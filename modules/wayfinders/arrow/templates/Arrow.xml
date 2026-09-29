@@ -3,6 +3,34 @@
 
 
     <Include file="Arrow.lua" />
+    <Frame name="MapPinEnhancedWayfinderArrowInstructionTemplate" inherits="MapPinEnhancedWayfinderInstructionTemplate" virtual="true">
+        <Size x="318" y="62" />
+        <KeyValues>
+            <KeyValue key="showStepCount" value="true" type="boolean" />
+        </KeyValues>
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                    <Size x="166" y="0" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="64" y="-8" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                </Anchors>
+            </Button>
+            <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
     <Frame name="MapPinEnhancedWayfinderArrowDisplayTemplate" mixin="MapPinEnhancedWayfinderArrowMixin" hidden="true" virtual="true" frameStrata="MEDIUM" enableMouse="true">
         <Size x="318" y="62" />
         <Anchors>

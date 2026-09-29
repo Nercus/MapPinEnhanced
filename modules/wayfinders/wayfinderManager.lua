@@ -5,7 +5,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field wayfinders table<string, MapPinEnhancedWayfinder> a table of registered wayfinders, with values injected in each wayfinder file
 ---@field activeWayfinder MapPinEnhancedWayfinder? the selected wayfinder presentation
 ---@field setupAfterCombat fun()?
----@field instructionFrame MapPinEnhancedNavigationStepTemplate? dedicated navigation panel
+---@field displaysSetUp boolean?
 ---@field TARGET_TYPE_PIN WayfinderTargetType
 ---@field TARGET_TYPE_BLIZZARD WayfinderTargetType
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
@@ -13,6 +13,8 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinder
+---@field SetUp fun(self: MapPinEnhancedWayfinder) creates protected controls outside combat
+---@field GetActionDebugText fun(self: MapPinEnhancedWayfinder): string debug builds only
 ---@field Init fun(self: MapPinEnhancedWayfinder, targetData: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
@@ -77,6 +79,8 @@ local activeTarget
 ---@field stepIndex integer?
 ---@field stepCount integer?
 ---@field instruction string
+---@field destinationTitle string? original destination title
+---@field destinationMapID number? original destination map
 ---@field status string?
 ---@field desiredAction WayfinderDesiredAction?
 
@@ -91,17 +95,8 @@ local function GetWayfinder(wayfinderType)
     local wayfinder = Wayfinders.wayfinders and Wayfinders.wayfinders[wayfinderType]
     assert(wayfinder, "Wayfinders: wayfinder type is not registered: " .. tostring(wayfinderType))
     assert(wayfinder.Enable and wayfinder.Disable and wayfinder.Init and wayfinder.SetTargetType and
-        wayfinder.SetStep, "Wayfinders: registered wayfinder does not implement the required interface")
+        wayfinder.SetStep and wayfinder.SetUp, "Wayfinders: registered wayfinder does not implement the required interface")
     return wayfinder
-end
-
----@return MapPinEnhancedNavigationStepTemplate
-function Wayfinders:GetInstructionFrame()
-    if self.instructionFrame then return self.instructionFrame end
-    local frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedNavigationStepTemplate")
-    ---@cast frame MapPinEnhancedNavigationStepTemplate
-    self.instructionFrame = frame
-    return frame
 end
 
 ---@param action WayfinderDesiredAction?
@@ -123,21 +118,14 @@ local function CopyStep(step)
         stepIndex = step.stepIndex,
         stepCount = step.stepCount,
         instruction = step.instruction,
+        destinationTitle = step.destinationTitle,
+        destinationMapID = step.destinationMapID,
         status = step.status,
         desiredAction = CopyDesiredAction(step.desiredAction),
     }
 end
 
 local function ApplyActiveStep()
-    local floating = selectedWayfinder == Options.WAYFINDER_SELECTION_FLOATING
-    local frame = Wayfinders.instructionFrame
-    if frame then
-        local step = floating and activeStep or nil
-        frame:SetStep(step)
-        local menu = step and Wayfinders:BuildNavigationMenuEntries()
-        frame.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
-        frame:ApplyVisibility(step and step.showInstruction ~= false and step.stepCount ~= 1 or false)
-    end
     if Wayfinders.activeWayfinder then
         Wayfinders.activeWayfinder:SetStep(activeStep)
     end
@@ -153,12 +141,7 @@ end
 --@debug@
 ---@return string
 function Wayfinders:GetActionDebugText()
-    if selectedWayfinder == Options.WAYFINDER_SELECTION_ARROW then
-        local arrow = GetWayfinder(AVAILABLE_WAYFINDERS.WAYFINDER_ARROW)
-        ---@cast arrow MapPinEnhancedWayfinderArrow
-        return arrow.positionFrame and arrow.positionFrame.instruction:GetActionDebugText() or "Arrow not created"
-    end
-    return self.instructionFrame and self.instructionFrame:GetActionDebugText() or "Floating instruction not created"
+    return self.activeWayfinder and self.activeWayfinder:GetActionDebugText() or "Wayfinder not selected"
 end
 
 --@end-debug@
@@ -329,7 +312,7 @@ function Wayfinders:SelectWayfinder(selection)
     local wayfinderType = WAYFINDER_TYPES_BY_SELECTION[selection]
     assert(wayfinderType, "Wayfinders:SelectWayfinder: invalid selection " .. tostring(selection))
     selectedWayfinder = selection
-    if not self.instructionFrame then
+    if not self.displaysSetUp then
         if InCombatLockdown() then
             -- Initial setup needs protected controls. Retain the latest selection
             -- and copied presentation until the controls can be created safely.
@@ -344,10 +327,11 @@ function Wayfinders:SelectWayfinder(selection)
             self.setupAfterCombat()
             self.setupAfterCombat = nil
         end
-        self:GetInstructionFrame()
-        local arrow = GetWayfinder(AVAILABLE_WAYFINDERS.WAYFINDER_ARROW)
-        ---@cast arrow MapPinEnhancedWayfinderArrow
-        arrow:GetFrame()
+        -- Each type owns its protected frames; prepare both before combat switching.
+        for _, registeredType in pairs(AVAILABLE_WAYFINDERS) do
+            GetWayfinder(registeredType):SetUp()
+        end
+        self.displaysSetUp = true
     end
     local wayfinder = GetWayfinder(wayfinderType)
     if self.activeWayfinder ~= wayfinder then
@@ -377,6 +361,6 @@ function Wayfinders:UpdateDestinationText(title, description)
     if not activeTarget then return end
     activeTarget.data.title = title
     activeTarget.data.description = description
-    if self.instructionFrame then self.instructionFrame:SetDestinationText(title) end
+    if activeStep then activeStep.destinationTitle = title end
     if self.activeWayfinder then self.activeWayfinder:SetDestinationText(title, description) end
 end

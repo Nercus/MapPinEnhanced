@@ -9,11 +9,26 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData?
 ---@field frame MapPinEnhancedWayfinderFloatingTemplate?
+---@field panel MapPinEnhancedFloatingPanelTemplate?
 ---@field runtimeEnabled boolean?
 ---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeBeamOption fun()?
 ---@field step WayfinderStepData?
 local MapPinEnhancedWayfinderFloating = {}
+
+function MapPinEnhancedWayfinderFloating:SetUp()
+    if self.panel then return end
+    local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
+    ---@cast panel MapPinEnhancedFloatingPanelTemplate
+    self.panel = panel
+end
+
+--@debug@
+---@return string
+function MapPinEnhancedWayfinderFloating:GetActionDebugText()
+    return self.panel and self.panel:GetActionDebugText() or "Floating instruction not created"
+end
+--@end-debug@
 
 ---@return MapPinEnhancedWayfinderFloatingTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
@@ -65,6 +80,7 @@ end
 ---@param step WayfinderStepData?
 function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
+    if self.panel then self.panel:Apply(step, self.data) end
     -- Reset has released tracking; retain the last artwork until its fade ends.
     if not self.data then return end
     local frame = self:GetFrame()
@@ -82,6 +98,7 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
 end
 
 function MapPinEnhancedWayfinderFloating:Reset()
+    if self.panel then self.panel:Apply(nil, nil) end
     if self.frame then
         self.frame:Hide()
         self.frame:StopTracking()
@@ -175,4 +192,5 @@ function MapPinEnhancedWayfinderFloating:SetDestinationText(title, description)
         self.data.title, self.data.description = title, description
     end
     self:RefreshTitle()
+    if self.panel then self.panel:SetDestinationText(title) end
 end

@@ -1,22 +1,23 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Navigation = MapPinEnhanced:GetModule("Navigation")
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedNavigationStepTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
+---@class MapPinEnhancedFloatingPanelTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field clearButton Button
 ---@field title FontString
 ---@field distance FontString
 ---@field distanceCallback fun(distance: number)?
-MapPinEnhancedNavigationStepMixin = {}
+---@field target WayfinderData?
+MapPinEnhancedFloatingPanelMixin = {}
 
-function MapPinEnhancedNavigationStepMixin:OnLoad()
+function MapPinEnhancedFloatingPanelMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self, true)
     MapPinEnhancedWayfinderInstructionMixin.OnLoad(self)
     -- The secure driver hides the protected action ancestry on combat entry.
-    -- Wayfinders reapplies only the latest Step when combat ends.
+    -- Floating reapplies only the latest Step when combat ends.
     RegisterStateDriver(self, "visibility", "[combat] hide;")
     MapPinEnhanced:RegisterDraggableFrame(self, "navigationStepFrame", nil, InCombatLockdown)
     -- Registration owns saving; restore only saved coordinates so first use
@@ -28,10 +29,9 @@ function MapPinEnhancedNavigationStepMixin:OnLoad()
 end
 
 ---@param step WayfinderStepData?
-function MapPinEnhancedNavigationStepMixin:SetStep(step)
+function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     MapPinEnhancedWayfinderInstructionMixin.SetStep(self, step)
-    local ownedStep = step and Navigation.routeSteps[step.stepIndex or 1]
-    local target = ownedStep and ownedStep.target
+    local target = self.target
     local instruction = step and step.instruction or ""
     if step and step.stepIndex and step.stepCount then
         instruction = string.format(L["Navigation Instruction Count"], instruction, step.stepIndex, step.stepCount)
@@ -55,37 +55,46 @@ function MapPinEnhancedNavigationStepMixin:SetStep(step)
     end
 end
 
+---@param step WayfinderStepData?
+---@param target WayfinderData?
+function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
+    self.target = target
+    self:SetStep(step)
+    local menu = step and Wayfinders:BuildNavigationMenuEntries()
+    self.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
+    self:ApplyVisibility(step ~= nil and step.showInstruction ~= false and step.stepCount ~= 1)
+end
+
 ---@param shown boolean
-function MapPinEnhancedNavigationStepMixin:ApplyVisibility(shown)
+function MapPinEnhancedFloatingPanelMixin:ApplyVisibility(shown)
     if not InCombatLockdown() then self:SetShownWithFade(shown) end
 end
 
-function MapPinEnhancedNavigationStepMixin:ClearTracking()
+function MapPinEnhancedFloatingPanelMixin:ClearTracking()
     if self.step then Providers:ClearNavigationTracking(self.step.changeNumber) end
 end
 
 ---@param title string?
-function MapPinEnhancedNavigationStepMixin:SetDestinationText(title)
-    local destination = Navigation.activeDestination
-    local data = self.step and destination and destination.data
-    if data then
-        local mapInfo = C_Map.GetMapInfo(data.mapID)
-        self.text:SetText(string.format(L["Navigation Route To"], title or data.title or L["Map Pin"],
-            mapInfo and mapInfo.name or tostring(data.mapID)))
+function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
+    local step = self.step
+    if step and step.destinationMapID then
+        local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
+        self.text:SetText(string.format(L["Navigation Route To"], title or step.destinationTitle or L["Map Pin"],
+            mapInfo and mapInfo.name or tostring(step.destinationMapID)))
     else
         self.text:SetText("")
     end
     self:UpdateLayout()
 end
 
-function MapPinEnhancedNavigationStepMixin:UpdateLayout()
+function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     if InCombatLockdown() then return end
     self:SetHeight(math.max(62, self.title:GetStringHeight() + self.text:GetStringHeight() + 32))
 end
 
 -- The panel shares the active Wayfinder target's sampler and owns only its
 -- visible subscription. Re-registering replays the latest sample after a Step change.
-function MapPinEnhancedNavigationStepMixin:UpdateDistanceSubscription()
+function MapPinEnhancedFloatingPanelMixin:UpdateDistanceSubscription()
     if self.distanceCallback then
         MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
         self.distanceCallback = nil
@@ -98,12 +107,12 @@ function MapPinEnhancedNavigationStepMixin:UpdateDistanceSubscription()
     MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
 end
 
-function MapPinEnhancedNavigationStepMixin:OnShow()
+function MapPinEnhancedFloatingPanelMixin:OnShow()
     MapPinEnhancedWayfinderInstructionMixin.OnShow(self)
     self:UpdateDistanceSubscription()
 end
 
-function MapPinEnhancedNavigationStepMixin:OnHide()
+function MapPinEnhancedFloatingPanelMixin:OnHide()
     MapPinEnhancedWayfinderInstructionMixin.OnHide(self)
     if self.distanceCallback then
         MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)

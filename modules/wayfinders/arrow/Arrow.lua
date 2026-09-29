@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
-local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedWayfinderArrow : MapPinEnhancedWayfinder
@@ -34,6 +33,17 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
     end
     return self.frame
 end
+
+function MapPinEnhancedWayfinderArrow:SetUp()
+    self:GetFrame()
+end
+
+--@debug@
+---@return string
+function MapPinEnhancedWayfinderArrow:GetActionDebugText()
+    return self.positionFrame and self.positionFrame.instruction:GetActionDebugText() or "Arrow not created"
+end
+--@end-debug@
 
 ---@param title string
 function MapPinEnhancedWayfinderArrow:SetTitle(title)
@@ -82,13 +92,11 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     local step = self.step
     local showInstruction = step and step.showInstruction ~= false
     local instruction = self.positionFrame and self.positionFrame.instruction
-    local destination = Navigation.activeDestination
-    local data = showInstruction and destination and destination.data
     local title = self.title
-    if data then
-        local mapInfo = C_Map.GetMapInfo(data.mapID)
-        title = string.format(MapPinEnhanced.L["Navigation Route To"], data.title or MapPinEnhanced.L["Map Pin"],
-            mapInfo and mapInfo.name or tostring(data.mapID))
+    if showInstruction and step and step.destinationMapID then
+        local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
+        title = string.format(MapPinEnhanced.L["Navigation Route To"], step.destinationTitle or MapPinEnhanced.L["Map Pin"],
+            mapInfo and mapInfo.name or tostring(step.destinationMapID))
     end
     frame.title:SetFontObject(showInstruction and GameFontHighlightSmall or GameFontNormal)
     frame:SetTitle(title)

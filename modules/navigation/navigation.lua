@@ -324,6 +324,7 @@ function Navigation:UpdateDestinationText(owner, destinationID, changeNumber, ti
     destination.data.title = title
     destination.data.description = description
     for _, step in pairs(self.routeSteps) do
+        if step.info then step.info.destinationTitle = title end
         if step.target then
             step.target.title, step.target.description = title, description
         end
@@ -933,6 +934,9 @@ end
 ---@param onArrival WayfinderTargetArrival?
 ---@param info WayfinderStepData
 function Navigation:ApplyStepPresentation(target, onArrival, info)
+    local destination = self.activeDestination
+    info.destinationTitle = destination and destination.data.title
+    info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()
     local step = self:GetRouteStep(info.stepIndex or 1)
     step.target = CopyWayfinderData(target)
