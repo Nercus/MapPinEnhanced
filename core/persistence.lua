@@ -2,9 +2,9 @@
 ---@field defaults table<string, any> a list of default values for the addon
 local MapPinEnhanced = select(2, ...)
 
----Retrieves the default value for a given set of keys.
+---Retrieves the default value for a given set of keys, or nil when none is registered.
 ---@param ... string The keys to traverse to get the default value
----@return boolean | number | string | table
+---@return boolean | number | string | table | nil
 function MapPinEnhanced:GetDefault(...)
     if not self.defaults then
         self.defaults = {}
@@ -14,13 +14,10 @@ function MapPinEnhanced:GetDefault(...)
     local currentTable = self.defaults
     for index, key in ipairs(arg) do
         if index == #arg then -- last key
-            if currentTable[key] == nil then
-                assert(false, "Key does not exist in defaults table: " .. table.concat(arg, ".", 1, #arg - 1))
-            end
             return currentTable[key]
         end
         if currentTable[key] == nil then
-            assert(false, "Key does not exist in defaults table: " .. table.concat(arg, ".", 1, #arg - 1))
+            return nil
         end
         currentTable = currentTable[key] --[[@as table]]
     end
