@@ -78,6 +78,22 @@ local function GetActiveProvider()
     return providersByType[superTrackingType] or fallbackProvider
 end
 
+---@param mapID number
+---@param x number
+---@param y number
+---@return boolean
+function Providers:IsSuperTrackingDestination(mapID, x, y)
+    local provider = GetActiveProvider()
+    if not provider or not C_SuperTrack.IsSuperTrackingAnything() then return false end
+    local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
+    if owner ~= provider.source or targetID ~= provider.getTargetID() then return false end
+    local data = Navigation:GetDestinationData(owner, targetID, changeNumber)
+    if not data then return false end
+    if data.mapID == mapID and data.x == x and data.y == y then return true end
+    local distance = MapPinEnhanced.HBD:GetZoneDistance(data.mapID, data.x, data.y, mapID, x, y)
+    return type(distance) == "number" and distance <= 5
+end
+
 MapPinEnhanced:OnLoad(function()
     MapPinEnhanced:DeleteVar("superTrackingWayfinder")
 end)

@@ -73,7 +73,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
     self.lastNavigationTargetCheck = GetTime()
-    self:SetCustomDirectionEnabled(not Providers:IsNavigationTargetDirect(self.targetMapID, self.targetX, self.targetY))
+    self:SetCustomDirectionEnabled(not Providers:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
 end
 
 ---@param enabled boolean

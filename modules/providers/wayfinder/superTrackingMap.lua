@@ -28,8 +28,12 @@ end
 ---@param x number?
 ---@param y number?
 ---@return boolean
-function Providers:IsNavigationTargetDirect(mapID, x, y)
+function Providers:CanFollowNavigationTarget(mapID, x, y)
     if not mapID or not x or not y then return false end
+    if not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then return false end
+    -- Blizzard owns traversal for its selected destination. Its native guide may
+    -- point to an entrance on another map rather than the destination itself.
+    if self:IsSuperTrackingDestination(mapID, x, y) then return true end
     local playerMapID = C_Map.GetBestMapForUnit("player")
     if not playerMapID then return false end
     local targetIsLocal = mapID == playerMapID
@@ -48,9 +52,6 @@ function Providers:IsNavigationTargetDirect(mapID, x, y)
     if nextX == nil and nextY == nil then
         -- This API supplies intermediate waypoints. A direct local target can
         -- have a valid native frame without any intermediate waypoint at all.
-        if not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then
-            return false
-        end
         if C_SuperTrack.IsSuperTrackingUserWaypoint() then
             local waypoint = C_Map.GetUserWaypoint()
             if not waypoint then return false end
