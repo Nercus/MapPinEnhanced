@@ -413,6 +413,15 @@ function Navigation:Recalculate(changeNumber)
     return true
 end
 
+function Navigation:RefreshHearthstoneRoute()
+    self:CancelRouteCalculation(self.activeCalculation)
+    self.activeCalculation = nil
+    self:DeactivatePathHandler()
+    self.progression = nil
+    self:ReleaseRouteLayers()
+    if self.activeDestination and self.routeNavigationEnabled then self:StartCalculation(true) end
+end
+
 ---@param progression NavigationProgression
 local function ResetDeviationState(progression)
     progression.closestDistance = nil
@@ -803,7 +812,7 @@ function Navigation:HandlePathHandlerReport(identity, result, detail)
         local pathType = graph and pathReference and graph.pathTypes[pathReference]
         local kind = pathType == "flighttaxi" and "taxi" or
             (pathType == "spell" or pathType == "item" or pathType == "toy" or
-                pathType == "dhearth" or pathType == "unboundteleport") and "action" or nil
+                pathType == "dhearth" or pathType == "hearthstone" or pathType == "unboundteleport") and "action" or nil
         local pathCost ---@type NavigationCalculatedPathCost?
         local failure ---@type string?
         if pathReference and kind then pathCost, failure = self:GetFreshPathCost(pathReference) end
@@ -1336,6 +1345,9 @@ WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Navigation:SetupCalendarRequirements()
     Navigation:BuildGraph()
+    MapPinEnhanced:CallRestricted(function()
+        Navigation:SetupHearthstoneDestination()
+    end)
     Navigation:SetupPathHandlers()
     Navigation:SetupEligibilityRefresh()
     MapPinEnhanced:RegisterContinuousDistanceSampleCallback(function(...)

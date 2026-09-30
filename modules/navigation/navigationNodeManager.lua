@@ -48,6 +48,7 @@ local registeredPathData = {} ---@type NavigationPathData[]
 local navigationGraph ---@type NavigationGraph?
 local preparedNavigationData ---@type NavigationPreparedData?
 local preparedDataDirty = true
+local hearthstonePathReferences = {} ---@type integer[]
 
 -- Ordinary movement stays available for approaching and leaving transport stops.
 local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
@@ -65,6 +66,7 @@ local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
     item = "personalTeleports",
     toy = "personalTeleports",
     dhearth = "personalTeleports",
+    hearthstone = "personalTeleports",
     unboundteleport = "personalTeleports",
     dungeonteleport = "dungeonTeleports",
 }
@@ -249,6 +251,29 @@ function Navigation:BuildGraph()
         end
     end
 
+    -- Reserve one stable runtime endpoint after the generated graph. Its
+    -- coordinates are replaced on binding without rebuilding authored Paths.
+    local hearthstonePointIndex = #graph.pointIDs + 1
+    graph.pointIDs[hearthstonePointIndex] = -1
+    graph.pointMapIDs[hearthstonePointIndex] = 0
+    graph.pointXs[hearthstonePointIndex] = 0
+    graph.pointYs[hearthstonePointIndex] = 0
+    local items = {} ---@type number[]
+    for itemID in pairs(self.hearthstoneItems) do table.insert(items, itemID) end
+    table.sort(items)
+    for _, itemID in ipairs(items) do
+        local reference = graph.pathCount + 1
+        graph.pathCount = reference
+        graph.pathToPointIndexes[reference] = hearthstonePointIndex
+        graph.pathTypes[reference] = "hearthstone"
+        graph.pathRequirements[reference] = {
+            operation = "check", kind = itemID == 6948 and "item" or "toy", value = itemID,
+        }
+        graph.excludedPaths[reference] = "hearthstone destination unknown"
+        table.insert(graph.currentPlayerPathReferences, reference)
+        table.insert(hearthstonePathReferences, reference)
+    end
+
     local nextOffset = 1
     local nextPathOffsetByPointIndex = {} ---@type integer[]
     for pointIndex = 1, #graph.pointIDs do
@@ -270,6 +295,31 @@ function Navigation:BuildGraph()
     preparedNavigationData = nil
     registeredPathData = {}
     self:RefreshPreparedData()
+end
+
+---@param destination NavigationHearthstoneDestination?
+function Navigation:UpdateHearthstonePath(destination)
+    local graph = navigationGraph
+    local reference = hearthstonePathReferences[1]
+    if not graph or not reference then return end
+    local point = graph.pathToPointIndexes[reference]
+    -- Existing Routes and jobs own immutable geometry. Share the static arrays,
+    -- copying only the arrays whose hearth endpoint changes.
+    local replacement = CopyTable(graph, true) ---@type NavigationGraph
+    replacement.pointMapIDs = CopyTable(graph.pointMapIDs)
+    replacement.pointXs = CopyTable(graph.pointXs)
+    replacement.pointYs = CopyTable(graph.pointYs)
+    replacement.excludedPaths = CopyTable(graph.excludedPaths)
+    replacement.pointMapIDs[point] = destination and destination.mapID or 0
+    replacement.pointXs[point] = destination and destination.x or 0
+    replacement.pointYs[point] = destination and destination.y or 0
+    for _, hearthReference in ipairs(hearthstonePathReferences) do
+        replacement.excludedPaths[hearthReference] = not destination and "hearthstone destination unknown" or nil
+        self.avoidedPaths[hearthReference] = nil
+    end
+    navigationGraph = replacement
+    self:RefreshPreparedData()
+    self:RefreshHearthstoneRoute()
 end
 
 -- Character requirement preparation

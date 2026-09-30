@@ -4,6 +4,7 @@
     <Include file="movement.lua" />
     <Include file="transition.lua" />
     <Include file="action.lua" />
+    <Include file="hearthstone.lua" />
     <Include file="gossip.lua" />
     <Include file="transport.lua" />
     <Include file="flightTaxi.lua" />
