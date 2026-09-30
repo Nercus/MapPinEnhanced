@@ -12,6 +12,7 @@ local L = MapPinEnhanced.L
 ---@field destinationID string
 ---@field changeNumber integer
 ---@field data WayfinderData
+---@field routingData WayfinderData
 ---@field removeDestination NavigationDestinationRemoval?
 
 ---@class NavigationProgression
@@ -69,6 +70,30 @@ local function CopyWayfinderData(data)
         targetType = data.targetType,
         mapDistanceOnly = data.mapDistanceOnly,
     }
+end
+
+---@param data WayfinderData
+---@return WayfinderData
+local function CopyRoutingData(data)
+    local copy = CopyWayfinderData(data)
+    local hbd = MapPinEnhanced.HBD
+    if not hbd or not C_Map.GetMapInfoAtPosition or type(copy.mapID) ~= "number" or
+        type(copy.x) ~= "number" or type(copy.y) ~= "number" then
+        return copy
+    end
+    local mapInfo = C_Map.GetMapInfo(copy.mapID)
+    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Continent do
+        local child = C_Map.GetMapInfoAtPosition(copy.mapID, copy.x, copy.y)
+        if not child or child.mapID == copy.mapID or child.mapType <= mapInfo.mapType then break end
+        local x, y = hbd:TranslateZoneCoordinates(copy.x, copy.y, copy.mapID, child.mapID)
+        if type(x) ~= "number" or type(y) ~= "number" or
+            not (x >= 0 and x <= 1 and y >= 0 and y <= 1) then
+            break
+        end
+        copy.mapID, copy.x, copy.y = child.mapID, x, y
+        mapInfo = child
+    end
+    return copy
 end
 
 ---@param destination NavigationDestination
@@ -130,7 +155,7 @@ function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction,
     self:ReleaseRouteLayers()
     local phase = fallbackPhase or "direct"
     presentationChangeNumber = presentationChangeNumber + 1
-    self:ApplyStepPresentation(destination.data, removeOnArrival and function()
+    self:ApplyStepPresentation(destination.routingData, removeOnArrival and function()
         self:CompleteFinalDestination(destination)
     end or nil, {
         changeNumber = presentationChangeNumber,
@@ -149,7 +174,7 @@ function Navigation:CompleteFinalDestination(destination)
     if progression and progression.route.pathReferences[progression.pathIndex] then return end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if not mapID or not x or not y then return end
-    local data = destination.data
+    local data = destination.routingData
     local distance = self:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
     if not distance or distance > 50 then return end
     local removeDestination = destination.removeDestination
@@ -163,6 +188,7 @@ end
 function Navigation:StartCalculation(currentRouteUnusable)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled or self:IsTaxiBookingPending() then return end
+    destination.routingData = CopyRoutingData(destination.data)
     self:CancelRouteCalculation(self.activeCalculation)
     self.lastCalculationFailure = nil
     self.lastCalculationExclusions = nil
@@ -172,7 +198,7 @@ function Navigation:StartCalculation(currentRouteUnusable)
     end
     local expectedDestination = destination
     self.activeCalculation = self:StartRouteCalculation(destination.destinationID, destination.changeNumber,
-        destination.data, self.avoidedPaths, function(route, failure)
+        destination.routingData, self.avoidedPaths, function(route, failure)
             if not IsCurrentDestination(expectedDestination) then return end
             local prepared = self:EnsurePreparedData()
             local finishedCalculation = self.activeCalculation
@@ -287,6 +313,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         destinationID = destinationID,
         changeNumber = self.destinationChangeNumber,
         data = CopyWayfinderData(destinationData),
+        routingData = CopyRoutingData(destinationData),
         removeDestination = removeDestination,
     }
     self.avoidedPaths = {}
@@ -321,6 +348,8 @@ function Navigation:UpdateDestinationText(owner, destinationID, changeNumber, ti
     if not destination or destination.data.title == title and destination.data.description == description then return end
     destination.data.title = title
     destination.data.description = description
+    destination.routingData.title = title
+    destination.routingData.description = description
     for _, step in pairs(self.routeSteps) do
         if step.info then step.info.destinationTitle = title end
         if step.target then
@@ -558,7 +587,7 @@ function Navigation:PublishStep(progression)
         local mode = progression.route.finalCost.explanation and progression.route.finalCost.explanation.mode
         local isFlying = mode == "steady-flight" or mode == "skyriding"
         local instructionKey = isFlying and "Navigation Fly To Destination" or "Navigation Travel To Destination"
-        self:ApplyStepPresentation(destination.data, function()
+        self:ApplyStepPresentation(destination.routingData, function()
             self:CompleteFinalDestination(destination)
         end, {
             changeNumber = presentationChangeNumber,
@@ -714,15 +743,15 @@ end
 function Navigation:CanGuideDirectly()
     local destination = self.activeDestination
     if not destination then return false end
-    if type(destination.data.mapID) ~= "number" or type(destination.data.x) ~= "number" or
-        type(destination.data.y) ~= "number" then
+    if type(destination.routingData.mapID) ~= "number" or type(destination.routingData.x) ~= "number" or
+        type(destination.routingData.y) ~= "number" then
         return false
     end
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMapID or not playerX or not playerY then return false end
     local preparedData = { movement = self:GetMovementCapabilities() }
-    return self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY, destination.data.mapID,
-        destination.data.x, destination.data.y, "automatic") ~= nil
+    return self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY, destination.routingData.mapID,
+        destination.routingData.x, destination.routingData.y, "automatic") ~= nil
 end
 
 ---@param distance number
@@ -1269,7 +1298,8 @@ function Navigation:BuildRouteLayer(isWorldMap)
     end
     if not finalStartMapID or not finalStartX or not finalStartY then return end
     local finalStartFrame, finalEndFrame = AcquireRouteMapEndpoints(self:GetRouteStep(stepCount), isWorldMap,
-        finalStartMapID, finalStartX, finalStartY, destination.data.mapID, destination.data.x, destination.data.y)
+        finalStartMapID, finalStartX, finalStartY, destination.routingData.mapID, destination.routingData.x,
+        destination.routingData.y)
     if finalStartFrame and finalEndFrame then
         finalStartFrame:SetRouteLine(finalEndFrame, progression.pathIndex == stepCount)
         -- The destination's owner supplies its pin. Route layers retain only
@@ -1277,7 +1307,7 @@ function Navigation:BuildRouteLayer(isWorldMap)
         finalEndFrame:SetLineEndpoint()
         if progression.pathIndex == stepCount then
             FollowPlayerApproach(isWorldMap, finalStartFrame, finalEndFrame,
-                destination.data.mapID, destination.data.x, destination.data.y)
+                destination.routingData.mapID, destination.routingData.x, destination.routingData.y)
         end
     end
 end

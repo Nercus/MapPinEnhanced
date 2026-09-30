@@ -151,7 +151,7 @@ function Navigation:GetRemainingRouteCost(progression)
         local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
         if not playerMapID or not playerX or not playerY then return nil end
         local finalCost = self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY,
-            destination.data.mapID, destination.data.x, destination.data.y, "automatic")
+            destination.routingData.mapID, destination.routingData.x, destination.routingData.y, "automatic")
         return finalCost and finalCost.comparisonSeconds or nil
     end
     local pathType = graph.pathTypes[pathReference]
@@ -217,7 +217,7 @@ function Navigation:GetRemainingRouteCost(progression)
     if not finalPointIndex then return total end
     local finalCost = self:GetPlayerTravelCost(preparedData,
         graph.pointMapIDs[finalPointIndex], graph.pointXs[finalPointIndex], graph.pointYs[finalPointIndex],
-        destination.data.mapID, destination.data.x, destination.data.y, "automatic")
+        destination.routingData.mapID, destination.routingData.x, destination.routingData.y, "automatic")
     if not finalCost then return nil end
     return total + finalCost.comparisonSeconds
 end

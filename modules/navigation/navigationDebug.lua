@@ -62,7 +62,8 @@ local function ShowNavigationDump()
         owner = destination.owner,
         id = destination.destinationID,
         changeNumber = destination.changeNumber,
-        data = destination.data
+        data = destination.data,
+        routingData = destination.routingData
     })
     Add("Navigation enabled", Navigation.routeNavigationEnabled)
     Add("Step", Wayfinders:GetStepSnapshot())
