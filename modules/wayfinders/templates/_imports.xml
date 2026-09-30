@@ -5,4 +5,6 @@
     <Include file="WayfinderActionButton.xml" />
     <Include file="WayfinderActionBlocker.xml" />
     <Include file="WayfinderInstruction.xml" />
+    <Include file="WayfinderProgressPin.xml" />
+    <Include file="WayfinderProgress.xml" />
 </Ui>

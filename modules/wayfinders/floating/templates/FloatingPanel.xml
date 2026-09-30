@@ -44,6 +44,7 @@
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="progress" inherits="MapPinEnhancedWayfinderProgressTemplate" />
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" frameStrata="LOW">
                 <Size x="42" y="42" />
                 <KeyValues>

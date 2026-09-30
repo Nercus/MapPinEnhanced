@@ -2,9 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Frame name="MapPinEnhancedWayfinderArrowInstructionTemplate" inherits="MapPinEnhancedWayfinderInstructionTemplate" virtual="true">
         <Size x="318" y="62" />
-        <KeyValues>
-            <KeyValue key="showStepCount" value="true" type="boolean" />
-        </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
                 <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">

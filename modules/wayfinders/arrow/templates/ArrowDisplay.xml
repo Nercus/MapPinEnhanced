@@ -8,6 +8,7 @@
             <Anchor point="TOP" />
         </Anchors>
         <Frames>
+            <Frame parentKey="progress" inherits="MapPinEnhancedWayfinderProgressTemplate" />
             <Frame parentKey="textContainer">
                 <Size x="318" y="62" />
                 <Anchors>

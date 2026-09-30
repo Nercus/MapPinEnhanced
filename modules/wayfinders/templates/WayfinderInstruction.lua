@@ -5,7 +5,6 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedWayfinderInstructionTemplate : Frame
 ---@field text FontString
----@field showStepCount boolean?
 ---@field onTextChanged fun()?
 ---@field onMenu fun(owner: Frame)?
 ---@field actionButton MapPinEnhancedWayfinderActionButton
@@ -114,9 +113,6 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
         self.actionBlocker:Hide()
     end
     local text = visible and step and step.instruction or ""
-    if visible and self.showStepCount and step and step.stepIndex and step.stepCount then
-        text = string.format(L["Navigation Instruction Count"], text, step.stepIndex, step.stepCount)
-    end
     if visible and status ~= "" then text = text .. "\n" .. status end
     self.text:SetText(text)
     if self.onTextChanged then self.onTextChanged() end

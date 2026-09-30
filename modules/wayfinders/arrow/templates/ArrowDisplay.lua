@@ -26,6 +26,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field directionVisible boolean?
 ---@field step WayfinderStepData?
 ---@field clearButton Button
+---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field displayType 'close' | 'far' | nil
 MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)

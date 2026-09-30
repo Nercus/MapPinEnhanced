@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedFloatingPanelTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field clearButton Button
+---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field title FontString
 ---@field distance FontString
 ---@field distanceCallback fun(distance: number)?
@@ -33,9 +34,6 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     MapPinEnhancedWayfinderInstructionMixin.SetStep(self, step)
     local target = self.target
     local instruction = step and step.instruction or ""
-    if step and step.stepIndex and step.stepCount then
-        instruction = string.format(L["Navigation Instruction Count"], instruction, step.stepIndex, step.stepCount)
-    end
     self.title:SetText(instruction)
     self:SetDestinationText()
     self:UpdateDistanceSubscription()
@@ -93,7 +91,9 @@ end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     if InCombatLockdown() then return end
-    self:SetHeight(math.max(62, self.title:GetStringHeight() + self.text:GetStringHeight() + 32))
+    local inset = self.progress:Apply(self.step, self:GetWidth())
+    self.pinFrame:SetPoint("LEFT", self, "LEFT", 16, inset / 2)
+    self:SetHeight(math.max(62, self.title:GetStringHeight() + self.text:GetStringHeight() + 32) + inset)
 end
 
 -- The panel shares the active Wayfinder target's sampler and owns only its

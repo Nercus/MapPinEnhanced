@@ -32,6 +32,7 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
             self.frame.readout:SetWidth(readoutWidth)
             self.frame.textContainer:SetWidth(readoutWidth + 152)
             self.frame:SetWidth(readoutWidth + 152)
+            self:UpdateText()
         end
         position.instruction:SetFrameLevel(self.frame:GetFrameLevel() + 3)
         position.instruction:UpdateFrameLevels()
@@ -117,12 +118,15 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     frame.textContainer.description:Apply(self.title, not showInstruction and self.description or nil)
     local descriptionHeight = frame.textContainer.description:IsShown() and
         frame.textContainer.description:GetHeight() + 3 or 0
-    local height = math.max(62, instructionHeight + frame.title:GetStringHeight() + descriptionHeight + 32)
+    local inset = frame.progress:Apply(step, frame:GetWidth())
+    local height = math.max(62, instructionHeight + frame.title:GetStringHeight() + descriptionHeight + 32) + inset
+    frame.pin:SetPoint("LEFT", frame.textContainer, "LEFT", 16, inset / 2)
+    frame.needleContainer:SetPoint("RIGHT", frame.textContainer, "RIGHT", -32, inset / 2)
     frame.textContainer:SetHeight(height)
     frame:SetHeight(height)
     if not showInstruction and descriptionHeight == 0 then
         local textHeight = frame.title:GetStringHeight() + 3 + frame.readout:GetHeight()
-        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -(height - textHeight) / 2)
+        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -(height - inset - textHeight) / 2)
     end
 end
 
