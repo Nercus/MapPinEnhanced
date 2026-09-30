@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 ---@class Navigation
 local Navigation = MapPinEnhanced:GetModule("Navigation")
+local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class NavigationTaxiObservation
 ---@field origin number?
@@ -21,6 +22,7 @@ local bookedDestination ---@type number?
 local bookingPending = false
 local closingObservation ---@type NavigationTaxiObservation?
 local rideTimer ---@type FunctionContainer?
+local automaticDestination ---@type NavigationDestination?
 
 local function IsID(value)
     return not MapPinEnhanced:IsSecretValue(value) and type(value) == "number" and
@@ -120,6 +122,14 @@ local function Observe()
     if not rideStarted then bookingPending = false end
     closingObservation = nil
     local previousOrigin = interactionOpen and observation and observation.origin
+    if not interactionOpen then
+        local shiftDown = IsShiftKeyDown()
+        automaticDestination = nil
+        if Navigation.routeNavigationEnabled and not MapPinEnhanced:IsSecretValue(shiftDown) and
+            shiftDown == false then
+            automaticDestination = Navigation.activeDestination
+        end
+    end
     interactionOpen = true
     local fresh = ReadObservation()
     if fresh.origin then Navigation:RecordLearnedTaxiNodes(fresh.learnedNodeIDs) end
@@ -129,8 +139,41 @@ local function Observe()
 end
 
 local function Invalidate()
+    automaticDestination = nil
     observation = nil
     Navigation:ClearTaxiNodeKnowledge()
+end
+
+local function TakeRequiredFlight()
+    if not automaticDestination then return end
+    if automaticDestination ~= Navigation.activeDestination or not Navigation.routeNavigationEnabled or
+        not interactionOpen or InCombatLockdown() then
+        automaticDestination = nil
+        return
+    end
+    local progression = Navigation.progression
+    local journey = activeJourney
+    -- The ride ticker waits for publication of the route calculated from this
+    -- open map. An older route must never select a slot from a new observation.
+    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or not observation or
+        not progression or progression.route.preparedData.taxiObservation ~= observation or
+        not journey or not journey.observed or journey.origin ~= observation.origin or
+        progression.route.taxiJourneys[progression.route.pathReferences[progression.pathIndex]] ~= journey then
+        return
+    end
+    if not observation.itineraries[journey.destination] or observation.failures[journey.destination] then return end
+    local destinationSlot ---@type number?
+    for slot, nodeID in pairs(observation.destinationsBySlot) do
+        if nodeID == journey.destination then
+            if destinationSlot then return end
+            destinationSlot = slot
+        end
+    end
+    if not destinationSlot then return end
+    -- Consume this opening before booking, which can synchronously close the
+    -- map. A rejected booking stays manual until the next interaction.
+    automaticDestination = nil
+    TakeTaxiNode(destinationSlot)
 end
 
 function Navigation:IsTaxiBookingPending()
@@ -162,6 +205,7 @@ function Navigation:ActivateTaxiJourney(context, report)
             -- A rejected booking leaves the interaction open. Do not leave
             -- calculation publication suspended after that ordinary failure.
             if interactionOpen then bookingPending = false end
+            TakeRequiredFlight()
             return
         end
         local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
@@ -194,9 +238,10 @@ function Navigation:DeactivateTaxiJourney()
     rideStarted = false
 end
 
--- Observe the user's booking without selecting a destination or changing UI.
+-- Manual and automatic bookings share the same ride evidence and close race.
 if TakeTaxiNode then
     hooksecurefunc("TakeTaxiNode", function(slot)
+        automaticDestination = nil
         local evidence = observation or closingObservation
         if activeData and evidence and IsID(slot) then
             bookedDestination = evidence.destinationsBySlot[slot]
@@ -206,6 +251,9 @@ if TakeTaxiNode then
         end
     end)
 end
+Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
+    if value ~= true then automaticDestination = nil end
+end)
 MapPinEnhanced:RegisterEvent("TAXIMAP_OPENED", Observe)
 MapPinEnhanced:RegisterEvent("TAXIMAP_CLOSED", function()
     interactionOpen = false
