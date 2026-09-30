@@ -67,6 +67,14 @@ local activeTarget
 ---@field type "spell"|"item"|"toy"
 ---@field id number
 
+---@class WayfinderProgressEntry
+---@field r number
+---@field g number
+---@field b number
+---@field title string
+---@field instruction string
+---@field location string
+
 ---@class WayfinderStepData
 ---@field changeNumber integer
 ---@field arrivalIdentity string
@@ -75,6 +83,7 @@ local activeTarget
 ---@field phase string
 ---@field stepIndex integer?
 ---@field stepCount integer?
+---@field progressEntries WayfinderProgressEntry[]?
 ---@field instruction string
 ---@field destinationTitle string? original destination title
 ---@field destinationMapID number? original destination map
@@ -115,6 +124,7 @@ local function CopyStep(step)
         phase = step.phase,
         stepIndex = step.stepIndex,
         stepCount = step.stepCount,
+        progressEntries = step.progressEntries and CopyTable(step.progressEntries) or nil,
         instruction = step.instruction,
         destinationTitle = step.destinationTitle,
         destinationMapID = step.destinationMapID,

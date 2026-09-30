@@ -91,9 +91,17 @@ end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     if InCombatLockdown() then return end
-    local inset = self.progress:Apply(self.step, self:GetWidth())
-    self.pinFrame:SetPoint("LEFT", self, "LEFT", 16, inset / 2)
-    self:SetHeight(math.max(62, self.title:GetStringHeight() + self.text:GetStringHeight() + 32) + inset)
+    self.progress:Apply(self.step, self:GetWidth())
+    local textHeight = self.title:GetStringHeight() + self.text:GetStringHeight() + self.distance:GetHeight() + 6
+    -- Match the 16-unit side inset; the progress strip is only an overlay.
+    local height = math.max(textHeight, self.pinFrame:GetHeight(), self.actionButton:GetHeight()) + 32
+    self:SetHeight(height)
+    self.title:SetPoint("TOPLEFT", self, "TOPLEFT", 64, -(height - textHeight) / 2)
+    self.pinFrame:SetPoint("LEFT", self, "LEFT", 16, 0)
+    self.actionButton:SetPoint("TOPLEFT", self, "TOPLEFT", 12,
+        -(height - self.actionButton:GetHeight()) / 2)
+    self.actionBlocker:SetPoint("TOPLEFT", self, "TOPLEFT", 12,
+        -(height - self.actionBlocker:GetHeight()) / 2)
 end
 
 -- The panel shares the active Wayfinder target's sampler and owns only its

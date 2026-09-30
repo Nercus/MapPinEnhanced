@@ -118,15 +118,29 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     frame.textContainer.description:Apply(self.title, not showInstruction and self.description or nil)
     local descriptionHeight = frame.textContainer.description:IsShown() and
         frame.textContainer.description:GetHeight() + 3 or 0
-    local inset = frame.progress:Apply(step, frame:GetWidth())
-    local height = math.max(62, instructionHeight + frame.title:GetStringHeight() + descriptionHeight + 32) + inset
-    frame.pin:SetPoint("LEFT", frame.textContainer, "LEFT", 16, inset / 2)
-    frame.needleContainer:SetPoint("RIGHT", frame.textContainer, "RIGHT", -32, inset / 2)
+    frame.progress:Apply(step, frame:GetWidth())
+    local textHeight = frame.title:GetStringHeight() + 3 + frame.readout:GetHeight() + descriptionHeight
+    if instructionHeight > 0 then textHeight = textHeight + instructionHeight + 3 end
+    -- Match the 16-unit side inset; the progress strip is only an overlay.
+    local artworkHeight = math.max(frame.pin:GetHeight(),
+        frame.needleContainer:IsShown() and frame.needleContainer:GetHeight() or 0)
+    local height = math.max(textHeight, artworkHeight) + 32
+    frame.pin:SetPoint("LEFT", frame.textContainer, "LEFT", 16, 0)
+    frame.needleContainer:SetPoint("RIGHT", frame.textContainer, "RIGHT", -32, 0)
     frame.textContainer:SetHeight(height)
     frame:SetHeight(height)
-    if not showInstruction and descriptionHeight == 0 then
-        local textHeight = frame.title:GetStringHeight() + 3 + frame.readout:GetHeight()
-        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -(height - inset - textHeight) / 2)
+    -- Center the complete text stack and artwork in the full panel.
+    local textTop = -(height - textHeight) / 2
+    if showInstruction and instruction then
+        instruction.text:SetPoint("TOPLEFT", instruction, "TOPLEFT", 64, textTop)
+    else
+        frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, textTop)
+    end
+    if instruction and not InCombatLockdown() then
+        instruction.actionButton:SetPoint("TOPLEFT", instruction, "TOPLEFT", 12,
+            -(height - instruction.actionButton:GetHeight()) / 2)
+        instruction.actionBlocker:SetPoint("TOPLEFT", instruction, "TOPLEFT", 12,
+            -(height - instruction.actionBlocker:GetHeight()) / 2)
     end
 end
 

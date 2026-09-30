@@ -580,6 +580,41 @@ function Navigation:IsStepIdentityCurrent(identity)
 end
 
 ---@param progression NavigationProgression
+---@param graph NavigationGraph
+---@return WayfinderProgressEntry[]
+local function CopyRouteProgress(progression, graph)
+    local entries = {} ---@type WayfinderProgressEntry[]
+    local destination = Navigation.activeDestination
+    if not destination then return entries end
+    local route = progression.route
+    for index = 1, GetRouteStepCount(route) do
+        local reference = route.pathReferences[index]
+        local point = reference and graph.pathToPointIndexes[reference]
+        local mode = route.finalCost.explanation and route.finalCost.explanation.mode
+        local pathType = reference and graph.pathTypes[reference] or
+            ((mode == "steady-flight" or mode == "skyriding") and "fly" or "walk")
+        local mapID = point and graph.pointMapIDs[point] or destination.routingData.mapID
+        local x = point and graph.pointXs[point] or destination.routingData.x
+        local y = point and graph.pointYs[point] or destination.routingData.y
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+        local r, g, b = color:GetRGB()
+        local journey = reference and route.taxiJourneys[reference]
+        entries[index] = {
+            r = r, g = g, b = b,
+            title = string.format(L["Navigation Step Number"], index, Navigation:GetPathMethod(pathType)),
+            instruction = journey and journey.destinationName and
+                string.format(L["Navigation Take Flight To"], journey.destinationName) or
+                (reference and Navigation:GetPathInstruction(pathType, mapID) or
+                    string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
+                        "Navigation Travel To Destination"], GetDestinationTitle(destination))),
+            location = string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID), x * 100, y * 100),
+        }
+    end
+    return entries
+end
+
+---@param progression NavigationProgression
 function Navigation:PublishStep(progression)
     if not self:IsCurrentProgression(progression) then return end
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
@@ -606,6 +641,7 @@ function Navigation:PublishStep(progression)
             phase = "approach",
             stepIndex = progression.pathIndex,
             stepCount = GetRouteStepCount(progression.route),
+            progressEntries = CopyRouteProgress(progression, graph),
             instruction = string.format(L[instructionKey], GetDestinationTitle(destination)),
             status = progression.status,
         })
@@ -658,6 +694,7 @@ function Navigation:PublishStep(progression)
         phase = progression.phase,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
+        progressEntries = CopyRouteProgress(progression, graph),
         instruction = GetCurrentPathInstruction(progression, graph),
         status = progression.status,
         desiredAction = desiredAction,

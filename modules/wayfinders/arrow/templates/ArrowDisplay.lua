@@ -183,6 +183,7 @@ function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     self.needleContainer:SetFrameLevel(frameLevel + 1)
     self.pin:SetFrameLevel(frameLevel + 1)
     self.textContainer:SetFrameLevel(frameLevel)
+    self.progress:SetFrameLevel(frameLevel + 2)
 
     local position = self:GetParent()
     assert(position, "Arrow:OnLoad requires its position owner")

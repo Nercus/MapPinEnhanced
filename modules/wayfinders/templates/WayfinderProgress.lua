@@ -1,27 +1,25 @@
----@class MapPinEnhancedWayfinderProgressPin : Frame
----@field pin Texture
----@field highlight Texture
----@field number FontString
-
 ---@class MapPinEnhancedWayfinderProgressTemplate : Frame
 ---@field pool FramePool<MapPinEnhancedWayfinderProgressPin>
 ---@field stepIndex integer?
 ---@field stepCount integer?
 ---@field columns integer?
+---@field entries WayfinderProgressEntry[]?
 MapPinEnhancedWayfinderProgressMixin = {}
 
-local PIN_SIZE = 20
-local SPACING = 8
-local PADDING = 8
+local PIN_SIZE = 12
+local SPACING = 10
+local HORIZONTAL_PADDING = 12
+local VERTICAL_PADDING = 6
 
 ---@param pool FramePool<MapPinEnhancedWayfinderProgressPin>
 ---@param pin MapPinEnhancedWayfinderProgressPin
 local function ResetPin(pool, pin)
     pin:Hide()
     pin:ClearAllPoints()
-    pin.number:SetText("")
-    pin.highlight:Hide()
-    pin.pin:SetVertexColor(0.65, 0.65, 0.65)
+    pin:OnHide()
+    pin:SetActive(false)
+    pin.entry = nil
+    pin.pin:SetVertexColor(1, 1, 1)
 end
 
 function MapPinEnhancedWayfinderProgressMixin:OnLoad()
@@ -30,28 +28,29 @@ end
 
 ---@param step WayfinderStepData?
 ---@param width number
----@return number inset Space inside the panel occupied by the overlapping strip.
 function MapPinEnhancedWayfinderProgressMixin:Apply(step, width)
     local index, count = step and step.stepIndex, step and step.stepCount
-    if not index or not count or count <= 1 or index < 1 or index > count then
+    if not step or not step.progressEntries or not index or not count or count <= 1 or index < 1 or index > count then
         self.stepIndex, self.stepCount, self.columns = nil, nil, nil
+        self.entries = nil
         self:Hide()
         self.pool:ReleaseAll()
-        return 0
+        return
     end
-    local columns = math.min(count, math.max(1, math.floor((width - 2 * PADDING + SPACING) /
+    local columns = math.min(count, math.max(1, math.floor((width - 2 * HORIZONTAL_PADDING + SPACING) /
         (PIN_SIZE + SPACING))))
-    local changed = self.stepIndex ~= index or self.stepCount ~= count or self.columns ~= columns
+    local changed = self.stepIndex ~= index or self.stepCount ~= count or self.columns ~= columns or
+        self.entries ~= step.progressEntries
+    self.entries = step.progressEntries
     self.stepIndex, self.stepCount, self.columns = index, count, columns
     local rows = math.ceil(count / columns)
-    self:SetSize(columns * (PIN_SIZE + SPACING) - SPACING + 2 * PADDING,
-        rows * (PIN_SIZE + SPACING) - SPACING + 2 * PADDING)
+    self:SetSize(columns * (PIN_SIZE + SPACING) - SPACING + 2 * HORIZONTAL_PADDING,
+        rows * (PIN_SIZE + SPACING) - SPACING + 2 * VERTICAL_PADDING)
     if not self:IsShown() then
         self:Show()
     elseif changed then
         self:Refresh()
     end
-    return self:GetHeight() / 2
 end
 
 function MapPinEnhancedWayfinderProgressMixin:Refresh()
@@ -65,19 +64,16 @@ function MapPinEnhancedWayfinderProgressMixin:Refresh()
         local column = (number - 1) % columns
         local rowCount = math.min(columns, count - row * columns)
         pin:SetPoint("TOP", self, "TOP", (column - (rowCount - 1) / 2) * (PIN_SIZE + SPACING),
-            -PADDING - row * (PIN_SIZE + SPACING))
-        pin.number:SetText(tostring(number))
-        if number < index then
-            pin.pin:SetVertexColor(1, 0.82, 0)
-        else
-            pin.pin:SetVertexColor(0.65, 0.65, 0.65)
-        end
-        pin.highlight:SetShown(number == index)
+            -VERTICAL_PADDING - row * (PIN_SIZE + SPACING))
+        local entry = self.entries and self.entries[number]
+        pin.entry = entry
+        if entry then pin.pin:SetVertexColor(entry.r, entry.g, entry.b) end
+        pin:SetActive(number == index)
         pin:Show()
     end
 end
 
 function MapPinEnhancedWayfinderProgressMixin:OnHide()
-    -- Each display retains only copied counts; hidden frames return to its pool.
+    -- Each display retains only copied presentation data; hidden frames return to its pool.
     self.pool:ReleaseAll()
 end
