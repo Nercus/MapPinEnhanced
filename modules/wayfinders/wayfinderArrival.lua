@@ -108,7 +108,7 @@ function Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, mov
 
     ---@type PinArrivalMode
     local mode = Options:GetOptionValue("General.Tracking.ArrivalMode")
-    if mode == Options.ARRIVAL_MODE_STATIC then
+    if self:IsIntermediateStep() or mode == Options.ARRIVAL_MODE_STATIC then
         self:UpdateStaticArrival(arrivalDistance, movementState)
     else
         self:UpdateDynamicArrival(arrivalDistance, closingSpeed, nextUpdateInterval, movementState)

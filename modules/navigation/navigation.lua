@@ -51,6 +51,15 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 local DEVIATION_RECALCULATION_COOLDOWN = 15
 local presentationChangeNumber = 0
 
+---@param pathType string
+---@param fromMapID number?
+---@param toMapID number
+---@return boolean
+local function RequiresDestinationMap(pathType, fromMapID, toMapID)
+    return pathType == "floor" or
+        (pathType == "portal" or pathType == "localportal" or pathType == "gossip") and fromMapID ~= toMapID
+end
+
 Navigation.destinationChangeNumber = Navigation.destinationChangeNumber or 0
 Navigation.avoidedPaths = Navigation.avoidedPaths or {}
 
@@ -109,16 +118,24 @@ local function HasRouteOrigin(route)
 end
 
 ---@return boolean started
-local function RefreshMissingRouteOrigin()
+local function RefreshRouteOrigin()
     local progression = Navigation.progression
-    if not progression or HasRouteOrigin(progression.route) or progression.attempted or
+    if not progression or progression.attempted or
         progression.phase == "in-transit" or Navigation.activeCalculation or not Navigation.routeNavigationEnabled then
         return false
     end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if not mapID or not x or not y then return false end
-    -- An escape action may be valid before player coordinates load. Once they
-    -- arrive, compare it against portal approaches before retaining that choice.
+    local route = progression.route
+    if HasRouteOrigin(route) then
+        local reference = route.pathReferences[progression.pathIndex]
+        if progression.pathIndex ~= 1 or mapID == route.originMapID or not reference or
+            route.graph.pathFromPointIndexes[reference] then
+            return false
+        end
+    end
+    -- Loading can temporarily report a parent map. An unstarted escape action
+    -- must compete again once the actual zone and its nearby exits are known.
     Navigation:RefreshPreparedData()
     Navigation:StartCalculation(true)
     return true
@@ -250,13 +267,11 @@ function Navigation:StartCalculation(currentRouteUnusable)
                     end
                 end
             end
-            if not HasRouteOrigin(route) then
-                local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
-                if mapID and x and y then
-                    self:RefreshPreparedData()
-                    self:StartCalculation(currentRouteUnusable)
-                    return
-                end
+            local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+            if mapID and x and y and (not HasRouteOrigin(route) or mapID ~= route.originMapID) then
+                self:RefreshPreparedData()
+                self:StartCalculation(currentRouteUnusable)
+                return
             end
             if previousProgression and self:IsCurrentProgression(previousProgression) and not currentRouteUnusable then
                 local currentRemainingCost = self:GetRemainingRouteCost(previousProgression)
@@ -666,7 +681,7 @@ function Navigation:PublishStep(progression)
         onArrival = function()
             self:CompleteCurrentPath(progression)
         end
-    elseif progression.phase ~= "in-transit" or pathType ~= "flighttaxi" then
+    elseif pathType ~= "floor" and (progression.phase ~= "in-transit" or pathType ~= "flighttaxi") then
         targetPointIndex = fromPointIndex or toPointIndex
     end
 
@@ -692,6 +707,9 @@ function Navigation:PublishStep(progression)
         showDirection = desiredAction == nil and
             (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
+        arrivalMapID = progression.phase == "in-transit" and
+            RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
+                graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[toPointIndex] or nil,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
         progressEntries = CopyRouteProgress(progression, graph),
@@ -717,6 +735,9 @@ end
 ---@param progression NavigationProgression
 function Navigation:CompleteCurrentPath(progression)
     if not self:IsCurrentProgression(progression) then return end
+    -- A pending job priced the old Step and must not replace completed progress.
+    self:CancelRouteCalculation(self.activeCalculation)
+    self.activeCalculation = nil
     self:DeactivatePathHandler()
     progression.pathIndex = progression.pathIndex + 1
     progression.changeNumber = progression.changeNumber + 1
@@ -737,6 +758,9 @@ end
 ---@param status string?
 function Navigation:ApplyProgressionPhase(progression, phase, status)
     if not self:IsCurrentProgression(progression) then return end
+    -- Arrival or a started action supersedes a calculation from its approach.
+    self:CancelRouteCalculation(self.activeCalculation)
+    self.activeCalculation = nil
     progression.phase = phase
     progression.status = status
     progression.changeNumber = progression.changeNumber + 1
@@ -753,6 +777,8 @@ function Navigation:CheckCurrentPathCompletion(identity)
     local pathReference = progression.route.pathReferences[progression.pathIndex]
     if not pathReference then return end
     local toPointIndex = graph.pathToPointIndexes[pathReference]
+    local fromPointIndex = graph.pathFromPointIndexes[pathReference]
+    local pathType = graph.pathTypes[pathReference]
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMapID or not playerX or not playerY then return end
     local destinationDistance = self:GetComparableDistance(playerMapID, playerX, playerY,
@@ -762,8 +788,16 @@ function Navigation:CheckCurrentPathCompletion(identity)
         return
     end
     if graph.pathTypes[pathReference] == "phaseswitch" or graph.pathTypes[pathReference] == "flighttaxi" then return end
-    if destinationDistance and destinationDistance <= 100 then
-        local pathType = graph.pathTypes[pathReference]
+    if destinationDistance and destinationDistance <= 100 and
+        (not RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
+            graph.pointMapIDs[toPointIndex]) or playerMapID == graph.pointMapIDs[toPointIndex]) then
+        if pathType == "floor" and fromPointIndex and
+            graph.pointMapIDs[fromPointIndex] ~= graph.pointMapIDs[toPointIndex] then
+            -- Floors can overlap in world XY. Destination-map exit proximity
+            -- proves the crossing without a second pin-arrival pass.
+            self:CompleteCurrentPath(progression)
+            return
+        end
         local requiresObservedAttempt = self:GetPathAction(pathType,
             graph.pathRequirements[pathReference]) ~= nil
         if not requiresObservedAttempt or progression.attempted then
@@ -774,13 +808,13 @@ function Navigation:CheckCurrentPathCompletion(identity)
         return
     end
 
-    local fromPointIndex = graph.pathFromPointIndexes[pathReference]
     if not fromPointIndex then return end
     local originDistance = self:GetComparableDistance(playerMapID, playerX, playerY,
         graph.pointMapIDs[fromPointIndex], graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex])
-    if not originDistance and progression.phase ~= "approach" then
+    if not originDistance and progression.phase ~= "approach" and not self.activeCalculation then
         self:StartCalculation(false)
-    elseif progression.phase == "approach" and not originDistance and not destinationDistance then
+    elseif progression.phase == "approach" and not originDistance and not destinationDistance and
+        not self.activeCalculation then
         self:StartCalculation(false)
     end
 end
@@ -806,9 +840,17 @@ end
 ---@param _nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _nextUpdateInterval, movementState)
-    if RefreshMissingRouteOrigin() then return end
+    if RefreshRouteOrigin() then return end
     local progression = self.progression
-    if not progression or progression.phase ~= "approach" or not self:IsCurrentProgression(progression) then return end
+    if not progression or not self:IsCurrentProgression(progression) then return end
+    local reference = progression.route.pathReferences[progression.pathIndex]
+    if reference and not self:IsMovementPath(progression.route.graph.pathTypes[reference]) then
+        local changeNumber = progression.changeNumber
+        -- Arrival at a stop or a floor exit need not produce a zone event.
+        self:CheckCurrentPathCompletion()
+        if progression.changeNumber ~= changeNumber then return end
+    end
+    if progression.phase ~= "approach" then return end
     progression.closestDistance = math.min(progression.closestDistance or distance, distance)
     if movementState ~= "movingAway" then
         progression.movingAwayStartedAt = nil
@@ -955,7 +997,7 @@ function Navigation:RefreshEligibility(events)
             end
         end
     end
-    if RefreshMissingRouteOrigin() then return end
+    if RefreshRouteOrigin() then return end
     if self.activeDestination and not self.progression and not self.activeCalculation then
         self:StartCalculation(true)
     end

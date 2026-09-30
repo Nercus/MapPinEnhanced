@@ -78,6 +78,7 @@ local activeTarget
 ---@class WayfinderStepData
 ---@field changeNumber integer
 ---@field arrivalIdentity string
+---@field arrivalMapID number? required player map for arrival confirmation
 ---@field showDirection boolean
 ---@field showInstruction boolean? false hides navigation instructions when routing is disabled
 ---@field phase string
@@ -119,6 +120,7 @@ local function CopyStep(step)
     return {
         changeNumber = step.changeNumber,
         arrivalIdentity = step.arrivalIdentity,
+        arrivalMapID = step.arrivalMapID,
         showDirection = step.showDirection,
         showInstruction = step.showInstruction,
         phase = step.phase,
@@ -144,6 +146,12 @@ MapPinEnhanced:RegisterEvent("PLAYER_REGEN_ENABLED", ApplyActiveStep)
 ---@return WayfinderStepData?
 function Wayfinders:GetStepSnapshot()
     return activeStep and CopyStep(activeStep) or nil
+end
+
+---@return boolean
+function Wayfinders:IsIntermediateStep()
+    return activeStep ~= nil and activeStep.stepIndex ~= nil and activeStep.stepCount ~= nil and
+        activeStep.stepIndex < activeStep.stepCount
 end
 
 --@debug@
@@ -269,6 +277,7 @@ function Wayfinders:GetActiveTargetArrivalDistance(sampledDistance)
     if not data then return nil end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if not mapID or not x or not y then return nil end
+    if activeStep and activeStep.arrivalMapID and mapID ~= activeStep.arrivalMapID then return nil end
     local mapDistance = MapPinEnhanced.HBD:GetZoneDistance(mapID, x, y, data.mapID, data.x, data.y)
     if type(mapDistance) ~= "number" or mapDistance ~= mapDistance or mapDistance < 0 then return nil end
     -- Native navigation can still describe another waypoint during a transition.
