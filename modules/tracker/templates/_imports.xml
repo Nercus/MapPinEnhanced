@@ -7,4 +7,5 @@
     <Include file="TrackerHeader.xml" />
     <Include file="SuperTrackedEntry.xml" />
     <Include file="Tracker.xml" />
+    <Include file="TrackerPosition.xml" />
 </Ui>

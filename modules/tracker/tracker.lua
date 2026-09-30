@@ -9,7 +9,9 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
-        self.trackerFrame = CreateFrame("Frame", "MapPinEnhancedTracker", UIParent, "MapPinEnhancedTrackerTemplate")
+        local position = CreateFrame("Frame", "MapPinEnhancedTrackerPosition", UIParent,
+            "MapPinEnhancedTrackerPositionTemplate") --[[@as MapPinEnhancedTrackerPositionTemplate]]
+        self.trackerFrame = position.display
     end
     return self.trackerFrame
 end

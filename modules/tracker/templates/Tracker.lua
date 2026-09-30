@@ -12,6 +12,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollBar MapPinEnhancedTrackerScrollBar
 ---@field scrollView ScrollBoxListTreeListViewMixin
 ---@field dataProvider TreeDataProviderMixin
+---@field position MapPinEnhancedTrackerPositionTemplate
+---@field desiredHeight number?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
 ---@field superTrackedEntry MapPinEnhancedSuperTrackedEntryTemplate
 MapPinEnhancedTrackerMixin = {}
@@ -190,6 +192,7 @@ function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
         end, TreeDataProviderConstants.IncludeCollapsed)
         if groupNode then
             groupNode:SetCollapsed(false)
+            self:UpdateHeight()
         end
     end
 
@@ -209,31 +212,20 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local numberOfEntries = self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed)
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
     local newHeight = visibleEntries * entryHeight
-    local oldHeight = self:GetHeight()
-    newHeight = newHeight + headerHeight + fixedEntryHeight
-
-    local currentPoint, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
-    if not currentPoint or not relativeTo or not relativePoint or not xOfs or not yOfs then
-        self:SetHeight(newHeight)
-        return
-    end
-
-    self:SetHeight(newHeight)
-
-    local heightDelta = newHeight - oldHeight
-    local yOffset = 0
-
-    if string.find(currentPoint:upper(), "TOP") then
-        yOffset = 0
-    elseif string.find(currentPoint:upper(), "BOTTOM") then
-        yOffset = heightDelta
-    else
-        yOffset = heightDelta / 2
-    end
-
-    self:ClearAllPoints()
-    self:SetPoint(currentPoint, relativeTo, relativePoint, xOfs, yOfs - yOffset)
+    self.desiredHeight = newHeight + headerHeight + fixedEntryHeight
+    self:UpdateViewportHeight()
     self:UpdateTrackerHeader()
+end
+
+function MapPinEnhancedTrackerMixin:UpdateViewportHeight()
+    if not self.desiredHeight or not self.position.restored then return end
+    local top = self:GetTop()
+    if not top then return end
+
+    -- Both edges must use this frame's units, including its inherited saved scale.
+    local screenBottom = (UIParent:GetBottom() or 0) * UIParent:GetEffectiveScale() / self:GetEffectiveScale()
+    local height = math.min(self.desiredHeight, math.max(1, top - screenBottom))
+    if self:GetHeight() ~= height then self:SetHeight(height) end
 end
 
 ---@param factory fun(template: EntryTemplateString, initFunc: fun(frame: any))
@@ -271,7 +263,8 @@ end
 
 function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
-    MapPinEnhanced:RegisterDraggableFrame(self, "tracker", self.header, function()
+    self.position = self:GetParent() --[[@as MapPinEnhancedTrackerPositionTemplate]]
+    MapPinEnhanced:RegisterDraggableFrame(self.position, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     end)
     self.scrollBar:SetHideIfUnscrollable(false)
@@ -326,6 +319,8 @@ function MapPinEnhancedTrackerMixin:OnHide()
 end
 
 function MapPinEnhancedTrackerMixin:OnUpdate()
+    -- Position can change during a drag or a screen/scale change; resizing never moves it.
+    self:UpdateViewportHeight()
     if self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
         self.scrollBar.fadeIn:PlayShowing(self.scrollBar.fadeOut)
     else
@@ -369,11 +364,10 @@ function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry()
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
-    MapPinEnhanced:RestoreFrame(self)
-    self:UpdateViewLayout()
     self:UpdateList()
-    self:UpdateHeight()
-    self:UpdateTrackerHeader()
+    self:UpdateSuperTrackedEntry()
+    self.position:RestoreTrackerPosition(self.desiredHeight or self.header:GetHeight())
+    self:UpdateViewportHeight()
     self:Show()
     self:ScrollToTrackedPin()
 end
