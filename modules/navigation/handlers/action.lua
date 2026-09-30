@@ -70,7 +70,7 @@ end
 ---@param requirement NavigationRequirement?
 ---@return WayfinderDesiredAction?
 function Navigation:GetPathAction(pathType, requirement)
-    if pathType == "dhearth" or pathType == "hearthstone" or pathType == "unboundteleport" then
+    if pathType == "hearthstone" or pathType == "unboundteleport" then
         for _, candidateType in ipairs(ACTION_TYPES) do
             local candidateID = Navigation:GetRequirementResource(requirement, candidateType)
             if candidateID then return { type = candidateType, id = candidateID } end
@@ -165,9 +165,9 @@ local function RegisterAction(pathType, icon, method, instruction)
         local requirement = graph.pathRequirements[pathReference]
         local action = Navigation:GetPathAction(pathType, requirement)
         if not action then return nil, "action unavailable" end
-        if pathType == "hearthstone" and action.type == "toy" then
+        if action.type == "toy" then
             local usable = C_ToyBox and C_ToyBox.IsToyUsable and C_ToyBox.IsToyUsable(action.id)
-            if MapPinEnhanced:IsSecretValue(usable) or usable ~= true then return nil, "hearthstone toy unavailable" end
+            if MapPinEnhanced:IsSecretValue(usable) or usable ~= true then return nil, "toy unavailable" end
         end
         local actionReady, actionFailure = IsActionReady(action.type, action.id)
         if not actionReady then return nil, actionFailure or "action cooldown unavailable" end
@@ -199,8 +199,6 @@ RegisterAction("spell", "MagePortalAlliance", L["Navigation Method Spell"], L["N
 RegisterAction("dungeonteleport", "PortalRed", L["Navigation Method Teleport"], L["Navigation Use Teleport"])
 RegisterAction("item", "Object", L["Navigation Method Item"], L["Navigation Use Item"])
 RegisterAction("toy", "Gear", L["Navigation Method Toy"], L["Navigation Use Toy"])
-RegisterAction("dhearth", "Innkeeper", L["Navigation Method Dalaran Hearthstone"],
-    L["Navigation Use Dalaran Hearthstone"])
 RegisterAction("hearthstone", "Innkeeper", L["Navigation Method Hearthstone"], L["Navigation Use Hearthstone"])
 RegisterAction("unboundteleport", "PortalRed", L["Navigation Method Teleport"], L["Navigation Use Teleport"])
 

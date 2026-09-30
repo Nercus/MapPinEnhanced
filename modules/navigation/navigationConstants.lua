@@ -26,7 +26,6 @@ Navigation.PATH_COLORS = {
     dungeonteleport = CreateColor(1, 0.35, 0.35),
     item = CreateColor(0.25, 0.85, 0.75),
     toy = CreateColor(0.95, 0.5, 0.75),
-    dhearth = CreateColor(0.5, 0.55, 1),
     hearthstone = CreateColor(0.5, 0.55, 1),
     unboundteleport = CreateColor(1, 0.35, 0.35),
 }

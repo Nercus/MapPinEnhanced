@@ -129,6 +129,7 @@ end
 MapPinEnhanced:DeleteVar("options", "Wayfinder.General.ReadoutMode")
 
 local groupKey = "Wayfinder.Navigation.TransportationGroups"
+-- Retain removed method names here only to preserve legacy saved preferences.
 local oldGroupMembers = {
     portals = { "portal" },
     flightPaths = { "flighttaxi" },

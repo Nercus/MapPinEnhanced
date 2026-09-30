@@ -65,7 +65,6 @@ local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
     spell = "personalTeleports",
     item = "personalTeleports",
     toy = "personalTeleports",
-    dhearth = "personalTeleports",
     hearthstone = "personalTeleports",
     unboundteleport = "personalTeleports",
     dungeonteleport = "dungeonTeleports",

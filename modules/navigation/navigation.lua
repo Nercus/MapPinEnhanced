@@ -812,7 +812,7 @@ function Navigation:HandlePathHandlerReport(identity, result, detail)
         local pathType = graph and pathReference and graph.pathTypes[pathReference]
         local kind = pathType == "flighttaxi" and "taxi" or
             (pathType == "spell" or pathType == "item" or pathType == "toy" or
-                pathType == "dhearth" or pathType == "hearthstone" or pathType == "unboundteleport") and "action" or nil
+                pathType == "hearthstone" or pathType == "unboundteleport") and "action" or nil
         local pathCost ---@type NavigationCalculatedPathCost?
         local failure ---@type string?
         if pathReference and kind then pathCost, failure = self:GetFreshPathCost(pathReference) end
