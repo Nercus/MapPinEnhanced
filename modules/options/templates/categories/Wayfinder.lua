@@ -57,6 +57,7 @@ end
 
 function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshNavigation()
     local enabled = Options:GetOptionValue(NAVIGATION_KEY) == true
+    Options:SetOptionEnabled("Wayfinder.Navigation.AutomaticTravelSelection", enabled)
     Options:SetOptionEnabled("Wayfinder.Navigation.WorldMap", enabled)
     Options:SetOptionEnabled("Wayfinder.Navigation.Minimap", enabled)
     Options:SetOptionEnabled("Wayfinder.Navigation.TransportationGroups", enabled)

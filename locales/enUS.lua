@@ -237,6 +237,9 @@ L["Wayfinder.Navigation_GROUPLABEL"] = "Navigation"
 L["Wayfinder.Navigation.Enable_LABEL"] = "Enable Route Navigation"
 L["Wayfinder.Navigation.Enable_DESCRIPTION"] =
 "Calculate travel routes using available movement, portals, transports, spells, items, and toys."
+L["Wayfinder.Navigation.AutomaticTravelSelection_LABEL"] = "Automatic Travel Selection"
+L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] =
+"Automatically select NPC dialogue options and flight destinations required by your current route. Hold Shift when opening the flight map to select a flight manually."
 L["Wayfinder.Navigation.WorldMap_LABEL"] = "Show Route on World Map"
 L["Wayfinder.Navigation.WorldMap_DESCRIPTION"] = "Show the calculated route on the World Map."
 L["Wayfinder.Navigation.Minimap_LABEL"] = "Show Route on Minimap"

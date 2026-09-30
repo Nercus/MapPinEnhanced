@@ -58,6 +58,7 @@ Options.DEFAULTS = {
     ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_ARROW,
     ["Wayfinder.General.ShowETA"] = true,
     ["Wayfinder.Navigation.Enable"] = true,
+    ["Wayfinder.Navigation.AutomaticTravelSelection"] = false,
     ["Wayfinder.Navigation.WorldMap"] = true,
     ["Wayfinder.Navigation.Minimap"] = true,
     ["Wayfinder.Navigation.TransportationGroups"] = {

@@ -1,6 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
+local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
 local function GossipPresentation()
@@ -28,6 +29,7 @@ local gossipOpen = false
 
 local function SelectTravelOption()
     local context, report = activeContext, activeReport
+    if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then return end
     if not gossipOpen or not context or not report or context.phase == "in-transit" or
         selectedOptionID or InCombatLockdown() then
         return

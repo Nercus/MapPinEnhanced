@@ -125,7 +125,8 @@ local function Observe()
     if not interactionOpen then
         local shiftDown = IsShiftKeyDown()
         automaticDestination = nil
-        if Navigation.routeNavigationEnabled and not MapPinEnhanced:IsSecretValue(shiftDown) and
+        if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") == true and
+            Navigation.routeNavigationEnabled and not MapPinEnhanced:IsSecretValue(shiftDown) and
             shiftDown == false then
             automaticDestination = Navigation.activeDestination
         end
@@ -147,6 +148,7 @@ end
 local function TakeRequiredFlight()
     if not automaticDestination then return end
     if automaticDestination ~= Navigation.activeDestination or not Navigation.routeNavigationEnabled or
+        Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true or
         not interactionOpen or InCombatLockdown() then
         automaticDestination = nil
         return
@@ -252,6 +254,9 @@ if TakeTaxiNode then
     end)
 end
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
+    if value ~= true then automaticDestination = nil end
+end)
+Options:SubscribeToOptionChanges("Wayfinder.Navigation.AutomaticTravelSelection", function(value)
     if value ~= true then automaticDestination = nil end
 end)
 MapPinEnhanced:RegisterEvent("TAXIMAP_OPENED", Observe)

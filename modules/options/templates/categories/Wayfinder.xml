@@ -68,6 +68,11 @@
                             <KeyValue key="key" value="Wayfinder.Navigation.Minimap" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.Navigation.AutomaticTravelSelection" />
+                        </KeyValues>
+                    </Frame>
                     <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.Navigation.TransportationGroups" />
