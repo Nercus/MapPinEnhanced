@@ -326,6 +326,8 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     end
     self.mapField.child:SetScript("OnEditFocusLost", function(editBox)
         MapPinEnhancedAutocompleteMixin.OnEditFocusLost(editBox)
+        -- A result click applies its own map; do not restore the draft before OnClick.
+        if editBox.resultsFrame:IsShown() then return end
         applyPosition(editBox)
     end)
     self.mapField.child:SetScript("OnEscapePressed", restore)

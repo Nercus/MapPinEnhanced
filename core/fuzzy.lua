@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 
+-- Based on:
 -- https://github.com/swarn/fzy-lua
 -- The MIT License (MIT)
 
@@ -42,7 +43,7 @@ local MATCH_MAX_LENGTH = 1024
 
 -- Check if `needle` is a subsequence of the `haystack`.
 --
--- Usually called before `score` or `positions`.
+-- Called before scoring so non-matches need no score buffers.
 --
 -- Args:
 --   needle (string)
@@ -113,15 +114,21 @@ end
 
 ---@param needle string
 ---@param haystack string
----@param D table<number, table<number, number>>
----@param M table<number, table<number, number>>
 ---@param case_sensitive boolean|nil
-local function compute(needle, haystack, D, M, case_sensitive)
+---@param checkpoint fun()?
+---@return number
+local function score(needle, haystack, case_sensitive, checkpoint)
+    local n = string.len(needle)
+    local m = string.len(haystack)
+    if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
+        return SCORE_MIN
+    elseif n == m then
+        return SCORE_MAX
+    end
+
     -- Note that the match bonuses must be computed before the arguments are
     -- converted to lowercase, since there are bonuses for camelCase.
     local match_bonus = precompute_bonus(haystack)
-    local n = string.len(needle)
-    local m = string.len(haystack)
 
     if not case_sensitive then
         needle = string.lower(needle)
@@ -136,127 +143,62 @@ local function compute(needle, haystack, D, M, case_sensitive)
         haystack_chars[i] = haystack:sub(i, i)
     end
 
+    -- Only the previous row's diagonal is needed; retain it before overwriting.
+    -- Consumers use scores, so no position matrix or traceback is necessary.
+    ---@type number[], number[]
+    local D, M = {}, {}
     for i = 1, n do
-        D[i] = {}
-        M[i] = {}
+        local diagonalD, diagonalM = SCORE_MIN, SCORE_MIN
 
         local prev_score = SCORE_MIN
         local gap_score = i == n and SCORE_GAP_TRAILING or SCORE_GAP_INNER
         local needle_char = needle:sub(i, i)
 
         for j = 1, m do
+            local previousD, previousM = D[j], M[j]
             if needle_char == haystack_chars[j] then
                 ---@type number
                 local score = SCORE_MIN
                 if i == 1 then
                     score = ((j - 1) * SCORE_GAP_LEADING) + match_bonus[j] --[[@as number]]
                 elseif j > 1 then
-                    local a = M[i - 1][j - 1] + match_bonus[j] --[[@as number]]
-                    local b = D[i - 1][j - 1] + SCORE_MATCH_CONSECUTIVE
+                    local a = diagonalM + match_bonus[j] --[[@as number]]
+                    local b = diagonalD + SCORE_MATCH_CONSECUTIVE
                     score = math.max(a, b)
                 end
-                D[i][j] = score
+                D[j] = score
                 prev_score = math.max(score, prev_score + gap_score)
-                M[i][j] = prev_score
             else
-                D[i][j] = SCORE_MIN
+                D[j] = SCORE_MIN
                 prev_score = prev_score + gap_score
-                M[i][j] = prev_score
             end
+            M[j] = prev_score
+            diagonalD, diagonalM = previousD, previousM
         end
+        if checkpoint then checkpoint() end
     end
+    return M[m]
 end
 
--- Compute the locations where fzy matches a string.
---
--- Determine where each character of the `needle` is matched to the `haystack`
--- in the optimal match.
---
--- Args:
---   needle (string): must be a subequence of `haystack`, or the result is
---     undefined.
---   haystack (string)
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   {int,...}: indices, where `indices[n]` is the location of the `n`th
---     character of `needle` in `haystack`.
---   number: the same matching score returned by `score`
----@param needle string
----@param haystack string
----@param case_sensitive boolean|nil
----@return table
----@return number
-local function positions(needle, haystack, case_sensitive)
-    local n = string.len(needle)
-    local m = string.len(haystack)
-
-    if n == 0 or m == 0 or m > MATCH_MAX_LENGTH or n > m then
-        return {}, SCORE_MIN
-    elseif n == m then
-        ---@type table<number, number>
-        local consecutive = {}
-        for i = 1, n do
-            consecutive[i] = i
-        end
-        return consecutive, SCORE_MAX
-    end
-
-    local D = {}
-    local M = {}
-    compute(needle, haystack, D, M, case_sensitive)
-
-    ---@type table<number, number>
-    local p = {}
-    local match_required = false
-    local j = m
-    for i = n, 1, -1 do
-        while j >= 1 do
-            if D[i][j] ~= SCORE_MIN and (match_required and match_required[i][j] == M[i][j]) then
-                match_required = (i ~= 1) and (j ~= 1) and (
-                    M[i][j] == D[i - 1][j - 1] + SCORE_MATCH_CONSECUTIVE)
-                p[i] = j
-                j = j - 1
-                break
-            else
-                j = j - 1
-            end
-        end
-    end
-
-    return p, M[n][m]
-end
-
--- Apply `has_match` and `positions` to an array of haystacks.
---
--- Args:
---   needle (string)
---   haystack ({string, ...})
---   case_sensitive (bool, optional): defaults to false
---
--- Returns:
---   {{idx, positions, score}, ...}: an array with one entry per matching line
---     in `haystacks`, each entry giving the index of the line in `haystacks`
---     as well as the equivalent to the return value of `positions` for that
---     line.
 ---@class SearchResult
 ---@field i number Index of the line in the haystacks
 ---@field line string The line in the haystacks
----@field p table<number, number> Positions of the matches in the line
 ---@field s number Score of the match
 
 
 ---@param needle string
 ---@param haystacks string[]
 ---@param case_sensitive boolean|nil
+---@param checkpoint fun()? elapsed-budget checkpoint when called inside a batch
 ---@return SearchResult[]
-function MapPinEnhanced:Filter(needle, haystacks, case_sensitive)
+function MapPinEnhanced:Filter(needle, haystacks, case_sensitive, checkpoint)
     local result = {}
     for i, line in ipairs(haystacks) do
         if has_match(needle, line, case_sensitive) then
-            local p, s = positions(needle, line, case_sensitive)
-            table.insert(result, { i = i, p = p, s = s, line = line })
+            local s = score(needle, line, case_sensitive, checkpoint)
+            table.insert(result, { i = i, s = s, line = line })
         end
+        if checkpoint then checkpoint() end
     end
     ---@param a SearchResult
     ---@param b SearchResult

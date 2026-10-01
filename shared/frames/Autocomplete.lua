@@ -5,6 +5,33 @@ local ENTRY_SPACING = 2
 local RESULTS_PADDING = 20
 local MIN_RESULTS_HEIGHT = 96
 local MAX_VISIBLE_RESULTS = 10
+local SYNC_OPTION_LIMIT = 100
+
+---@class AutocompleteIndex
+---@field searchOptions string[]
+---@field bySearch table<string, AutocompleteOption>
+---@field byValue table<string|number|boolean, AutocompleteOption>
+
+-- Option arrays are immutable catalogues. Replacing the array creates a new index;
+-- weak keys let short-lived catalogues go without retaining any row or callback.
+---@type table<AutocompleteOption[], AutocompleteIndex>
+local optionIndexes = setmetatable({}, { __mode = "k" })
+
+---@param options AutocompleteOption[]
+---@return AutocompleteIndex
+local function GetOptionIndex(options)
+    if optionIndexes[options] then return optionIndexes[options] end
+    ---@type AutocompleteIndex
+    local index = { searchOptions = {}, bySearch = {}, byValue = {} }
+    for _, option in ipairs(options) do
+        table.insert(index.searchOptions, option.searchString)
+        -- Preserve last matching search string and first matching value.
+        index.bySearch[option.searchString] = option
+        if index.byValue[option.value] == nil then index.byValue[option.value] = option end
+    end
+    optionIndexes[options] = index
+    return index
+end
 
 ---@class MapPinEnhancedAutocompleteTemplate : MapPinEnhancedInputTemplate
 ---@field resultsFrame MapPinEnhancedAutocompleteResults
@@ -14,10 +41,11 @@ local MAX_VISIBLE_RESULTS = 10
 ---@field selectedIndex number | nil
 ---@field filterFunction function
 ---@field cancelFilterFunction function?
+---@field cancelFilterBatch function?
+---@field searchChangeNumber number
 ---@field cancelOnChangeCallback function?
----@field optionsValueMap table<string, AutocompleteOption>
----@field searchOptions string[]
----@field searchText string
+---@field optionIndex AutocompleteIndex
+---@field searchText string?
 ---@field value AutocompleteOption
 MapPinEnhancedAutocompleteMixin = {}
 
@@ -40,6 +68,7 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     MapPinEnhancedInputMixin.OnLoad(self)
 
     self.dataProvider = CreateDataProvider()
+    self.searchChangeNumber = 0
     self.selectedIndex = nil
 
     local scrollView = CreateScrollBoxListLinearView()
@@ -48,7 +77,7 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     scrollView:SetElementInitializer("MapPinEnhancedAutocompleteEntryTemplate", function(entry, elementData)
         ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
         ---@cast elementData SearchResult
-        local optionData = self.optionsValueMap[elementData.line]
+        local optionData = self.optionIndex.bySearch[elementData.line]
         entry:Init(optionData)
         if self.dataProvider:Find(self.selectedIndex) == elementData then
             entry:LockHighlight()
@@ -57,8 +86,6 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
         end
         entry:SetScript("OnClick", function()
             self:SetValue(optionData.value, true)
-            self.resultsFrame:Hide()
-            self.spinner:Hide()
         end)
     end)
     scrollView:SetElementResetter(function(entry)
@@ -75,19 +102,26 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     self.resultsFrame.scrollBar:SetHideIfUnscrollable(false)
 end
 
-function MapPinEnhancedAutocompleteMixin:OnHide()
+function MapPinEnhancedAutocompleteMixin:CancelSearch()
+    self.searchChangeNumber = self.searchChangeNumber + 1
     if self.cancelFilterFunction then self.cancelFilterFunction() end
-    if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
+    if self.cancelFilterBatch then self.cancelFilterBatch() end
+    self.cancelFilterBatch = nil
     self.spinner:Hide()
     self.resultsFrame:Hide()
-    self.searchText = nil
+    self.searchText, self.selectedIndex = nil, nil
+end
+
+function MapPinEnhancedAutocompleteMixin:OnHide()
+    self:CancelSearch()
+    if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
+    self.dataProvider:Flush()
 end
 
 function MapPinEnhancedAutocompleteMixin:Reset()
     self:OnHide()
     self.onChangeCallback, self.cancelOnChangeCallback = nil, nil
     self.value, self.selectedIndex = nil, nil
-    self.dataProvider:Flush()
 end
 
 function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
@@ -107,6 +141,7 @@ end
 ---@param value number | string | boolean | nil this could be the searchstring or the value of the option
 ---@param triggerCallback boolean|nil
 function MapPinEnhancedAutocompleteMixin:SetValue(value, triggerCallback)
+    self:CancelSearch()
     if value == nil then
         self.value = nil
         self:SetText("")
@@ -116,15 +151,8 @@ function MapPinEnhancedAutocompleteMixin:SetValue(value, triggerCallback)
         end
         return
     end
-    local option = self.optionsValueMap[value]
-    if not option then
-        for _, opt in ipairs(self.options) do
-            if opt.value == value then
-                option = opt
-                break
-            end
-        end
-    end
+    local option = self.optionIndex.bySearch[value] or self.optionIndex.byValue[value]
+    assert(option, "MapPinEnhancedAutocompleteMixin:SetValue: unknown option value")
     self.value = option
     self:SetText(option.label)
     self:UpdatePlaceholderVisibility()
@@ -164,6 +192,11 @@ function MapPinEnhancedAutocompleteMixin:DecrementSelectedIndex()
 end
 
 function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
+    if key == "ESCAPE" then
+        self:CancelSearch()
+        return
+    end
+    if not self.resultsFrame:IsShown() then return end
     if key == "DOWN" then
         self:IncrementSelectedIndex()
     elseif key == "UP" then
@@ -171,15 +204,11 @@ function MapPinEnhancedAutocompleteMixin:OnKeyDown(key)
     elseif key == "ENTER" then
         ---@type SearchResult | nil
         local preselectedText = self.dataProvider:Find(self.selectedIndex)
-        local preselectedEntry = preselectedText and self.optionsValueMap[preselectedText.line]
+        local preselectedEntry = preselectedText and self.optionIndex.bySearch[preselectedText.line]
 
         if preselectedEntry then
             self:SetValue(preselectedEntry.value, true)
-            self.resultsFrame:Hide()
-            self.spinner:Hide()
         end
-    elseif key == "ESCAPE" then
-        self.resultsFrame:Hide()
     end
 end
 
@@ -217,12 +246,25 @@ function MapPinEnhancedAutocompleteMixin:UpdateResults(results)
 end
 
 function MapPinEnhancedAutocompleteMixin:UpdateOptions()
-    if not self.searchText or self.searchText == "" then
-        self.resultsFrame:Hide()
+    local text, options = self.searchText, self.optionIndex.searchOptions
+    if not text or text == "" then return end
+    if #options <= SYNC_OPTION_LIMIT then
+        self:UpdateResults(MapPinEnhanced:Filter(text, options, false))
         return
     end
-    local results = MapPinEnhanced:Filter(self.searchText, self.searchOptions, false)
-    self:UpdateResults(results)
+    local changeNumber = self.searchChangeNumber
+    ---@type SearchResult[]
+    local results
+    self.cancelFilterBatch = MapPinEnhanced:BatchExecution({ function()
+        results = MapPinEnhanced:Filter(text, options, false, MapPinEnhanced:CreateBatchCheckpoint(2))
+    end }, nil, function()
+        if self.searchChangeNumber ~= changeNumber then return end
+        self.cancelFilterBatch = nil
+        self:UpdateResults(results)
+    end, nil, function(message)
+        if self.searchChangeNumber == changeNumber then self:CancelSearch() end
+        geterrorhandler()(message)
+    end)
 end
 
 function MapPinEnhancedAutocompleteMixin:OnTextChanged()
@@ -230,12 +272,6 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
 
     local text = self:GetText()
     if not text or text == "" then
-        if self.cancelFilterFunction then
-            self.cancelFilterFunction()
-        end
-        self.spinner:Hide()
-        self.searchText = ""
-        self.resultsFrame:Hide()
         self:SetValue(nil, true)
         return
     end
@@ -244,6 +280,7 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
         return
     end
 
+    self:CancelSearch()
     if self.value and self.value.label == text then
         -- If the value is already set to the current text, no need to update
         return
@@ -257,49 +294,35 @@ function MapPinEnhancedAutocompleteMixin:OnEditFocusLost()
     MapPinEnhancedInputMixin.OnEditFocusLost(self)
     -- if over search results, do not hide
     if self.resultsFrame:IsShown() and self.resultsFrame:IsMouseOver() then return end
-    self.resultsFrame:Hide()
+    self:CancelSearch()
 end
 
 function MapPinEnhancedAutocompleteMixin:OnGlobalMouseDown()
-    if not self:IsVisible() or not self.resultsFrame:IsShown() then return end
+    if not self:IsVisible() then return end
     local foci = GetMouseFoci()
-    local inside = false
     for _, focus in ipairs(foci) do
-        if focus == self or focus == self.resultsFrame then
-            inside = true
-            break
+        -- Result buttons and the scrollbar must keep their data until OnClick.
+        while focus do
+            if focus == self or focus == self.resultsFrame then return end
+            focus = focus:GetParent()
         end
     end
-    if not inside then
-        self.resultsFrame:Hide()
-    end
+    self:CancelSearch()
 end
 
----@param options AutocompleteOption[]
+---@param options AutocompleteOption[] immutable; replace the array to change its entries
 function MapPinEnhancedAutocompleteMixin:SetOptions(options)
     assert(type(options) == "table", "Options must be a table.")
-    if self.cancelFilterFunction then
-        self.cancelFilterFunction()
-    end
+    self:CancelSearch()
     if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
-    self.spinner:Hide()
-    self.resultsFrame:Hide()
     self.dataProvider:Flush()
-    self.searchText, self.selectedIndex, self.value = nil, nil, nil
+    self.value = nil
     self.options = options
-    self.searchOptions = {}
-    self.optionsValueMap = {}
-
-    for _, option in ipairs(options) do
-        self.optionsValueMap[option.searchString] = option
-        table.insert(self.searchOptions, option.searchString)
-    end
+    self.optionIndex = GetOptionIndex(options)
 
     self.filterFunction, self.cancelFilterFunction = MapPinEnhanced:DebounceChange(function()
         self:UpdateOptions()
-    end, 0.2, function()
-        self.spinner:Hide()
-    end)
+    end, 0.2)
 end
 
 ---@class MapPinEnhancedAutocompleteData
