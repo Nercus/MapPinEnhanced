@@ -17,8 +17,6 @@ local CELL_SPACING = 4
 local ROW_HEIGHT = CELL_SIZE + CELL_SPACING
 local SEARCH_DEBOUNCE_SECONDS = 0.15
 local DOUBLE_CLICK_SECONDS = 0.35
-local PRECACHE_CHUNK_SIZE = 200
-local PRECACHE_REFRESH_INTERVAL = 20
 ---@type MapPinEnhancedIconPickerWindowTemplate?
 local iconPickerWindow
 
@@ -128,33 +126,26 @@ end
 ---@field icons MapPinEnhancedIconPickerEntry[]
 ---@field filteredIcons MapPinEnhancedIconPickerEntry[]
 ---@field lastQuery string?
----@field isPrecacheStarted boolean
----@field isPrecacheComplete boolean
+---@field precacheState "notStarted"|"building"|"ready"
+---@field precacheCursor number?
+---@field cancelPrecache fun()?
 MapPinEnhancedIconPickerWindowMixin = {}
 
 function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
-    if self.isPrecacheStarted then return end
-    self.isPrecacheStarted = true
+    if self.precacheState == "ready" or self.cancelPrecache or not self:IsVisible() then return end
     local iconFileNames = MapPinEnhanced.ICON_FILE_NAMES
     assert(type(iconFileNames) == "table",
         "MapPinEnhancedIconPickerWindowMixin:StartPrecache: icon file names are unavailable")
-    ---@type number[]
-    local iconFileIDs = {}
-    for fileID in pairs(iconFileNames) do
-        if type(fileID) == "number" then
-            iconFileIDs[#iconFileIDs + 1] = fileID
-        end
-    end
-
-    ---@type fun()[]
-    local tasks = {}
-    for startIndex = 1, #iconFileIDs, PRECACHE_CHUNK_SIZE do
-        local firstIndex = startIndex
-        local lastIndex = math.min(startIndex + PRECACHE_CHUNK_SIZE - 1, #iconFileIDs)
-        tasks[#tasks + 1] = function()
-            for index = firstIndex, lastIndex do
-                local fileID = iconFileIDs[index]
-                local name = iconFileNames[fileID]
+    self.precacheState = "building"
+    self.loadingSpinner:Show()
+    self.cancelPrecache = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+        -- The library catalogue is immutable for the session. Keep the last
+        -- consumed key before yielding so hide/reopen can resume without copies.
+        while true do
+            local fileID, name = next(iconFileNames, self.precacheCursor)
+            if fileID == nil then break end
+            if type(fileID) == "number" then
                 self.icons[#self.icons + 1] = {
                     path = fileID,
                     name = name,
@@ -162,18 +153,21 @@ function MapPinEnhancedIconPickerWindowMixin:StartPrecache()
                     pathSearch = tostring(fileID),
                 }
             end
+            self.precacheCursor = fileID
+            checkpoint()
         end
-    end
-
-    MapPinEnhanced:BatchExecution(tasks, function(progress)
-        if self:IsShown() and progress % PRECACHE_REFRESH_INTERVAL == 0 then
-            self:Refresh()
-        end
-    end, function()
-        self.isPrecacheComplete = true
+    end }, nil, function()
+        self.cancelPrecache = nil
+        self.precacheCursor = nil
+        self.precacheState = "ready"
         self.lastQuery = nil
+        self.cancelSearch()
         self:Refresh()
-    end, 1)
+    end, 1, function(message)
+        self.cancelPrecache = nil
+        self.loadingSpinner:Hide()
+        geterrorhandler()(message)
+    end)
 end
 
 function MapPinEnhancedIconPickerWindowMixin:OnLoad()
@@ -183,8 +177,7 @@ function MapPinEnhancedIconPickerWindowMixin:OnLoad()
     self.search:SetPlaceholderText(L["Search"])
     self.icons = {}
     self.filteredIcons = self.icons
-    self.isPrecacheStarted = false
-    self.isPrecacheComplete = false
+    self.precacheState = "notStarted"
 
     self.dataProvider = CreateIndexRangeDataProvider(0)
     self.scrollView = CreateScrollBoxListLinearView()
@@ -224,16 +217,33 @@ function MapPinEnhancedIconPickerWindowMixin:OnLoad()
     self.confirmButton:SetScript("OnClick", function() self:Confirm() end)
 end
 
+function MapPinEnhancedIconPickerWindowMixin:OnShow()
+    MapPinEnhancedWindowMixin.OnShow(self)
+    self:StartPrecache()
+    self:Refresh()
+end
+
 function MapPinEnhancedIconPickerWindowMixin:OnHide()
     MapPinEnhancedWindowMixin.OnHide(self)
     self.cancelSearch()
+    if self.cancelPrecache then
+        self.cancelPrecache()
+        self.cancelPrecache = nil
+    end
     self.callback = nil
 end
 
 function MapPinEnhancedIconPickerWindowMixin:Refresh()
+    if not self:IsVisible() then return end
+    if self.precacheState ~= "ready" then
+        self.loadingSpinner:Show()
+        self.resultCount:SetText(string.format(L["%d icons (loading...)"], #self.icons))
+        return
+    end
+
     local query = string.lower(strtrim(self.search:GetText() or ""))
     local source = self.icons
-    if self.isPrecacheComplete and self.lastQuery and self.lastQuery ~= "" and
+    if self.lastQuery and self.lastQuery ~= "" and
         #query >= #self.lastQuery and string.sub(query, 1, #self.lastQuery) == self.lastQuery then
         source = self.filteredIcons
     end
@@ -252,12 +262,8 @@ function MapPinEnhancedIconPickerWindowMixin:Refresh()
     self.lastQuery = query
     self.dataProvider:SetSize(math.ceil(#filtered / COLUMN_COUNT))
     self.scrollBox:ReinitializeFrames()
-    self.loadingSpinner:SetShown(not self.isPrecacheComplete)
-    if self.isPrecacheComplete then
-        self.resultCount:SetText(string.format(L["%d icons"], #filtered))
-    else
-        self.resultCount:SetText(string.format(L["%d icons (loading...)"], #filtered))
-    end
+    self.loadingSpinner:Hide()
+    self.resultCount:SetText(string.format(L["%d icons"], #filtered))
 end
 
 ---@param icon MapPinEnhancedIconPickerEntry
@@ -291,6 +297,7 @@ end
 ---@param callback fun(path: string|number)
 function MapPinEnhancedIconPickerWindowMixin:Open(currentIcon, callback)
     assert(type(callback) == "function", "Icon picker callback must be a function")
+    self.cancelSearch()
     self.callback = callback
     self.search:SetText("")
     self.selected = currentIcon and {
@@ -306,9 +313,6 @@ function MapPinEnhancedIconPickerWindowMixin:Open(currentIcon, callback)
     self:Refresh()
     self:Show()
     self:Raise()
-    if not self.isPrecacheStarted then
-        C_Timer.After(0, function() self:StartPrecache() end)
-    end
 end
 
 ---@param currentIcon string|number?
@@ -316,9 +320,3 @@ end
 function MapPinEnhanced:ShowIconPicker(currentIcon, callback)
     assert(iconPickerWindow, "Icon picker window is not loaded"):Open(currentIcon, callback)
 end
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    C_Timer.After(0, function()
-        if iconPickerWindow then iconPickerWindow:StartPrecache() end
-    end)
-end)
