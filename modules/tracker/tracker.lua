@@ -29,7 +29,7 @@ end
 function Tracker:UpdateList()
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
-        frame:UpdateList()
+        frame:RequestListUpdate()
     end
 end
 

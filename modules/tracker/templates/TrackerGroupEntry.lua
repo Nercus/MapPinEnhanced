@@ -2,7 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedTrackerGroupEntryTemplate : Button
----@field treeNode TreeNodeMixin
+---@field treeNode MapPinEnhancedTrackerGroupNode
 ---@field group MapPinEnhancedGroupMixin
 ---@field expandIcon MapPinEnhancedIconMixin
 ---@field title FontString
@@ -33,12 +33,12 @@ end
 
 
 function MapPinEnhancedTrackerGroupEntryMixin:IsFullyReached()
-    return self.group and not self.group:IsHidden() and self.group:GetTotalPinCount() > 0 and
-        self.group:GetPinCount() == 0
+    return self.group and not self.group:IsHidden() and self.treeNode.totalPins > 0 and
+        self.treeNode.activePins == 0
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:CanExpandGroup()
-    return self.group and not self.group:IsHidden() and self.group:GetPinCount() > 0
+    return self.group and not self.group:IsHidden() and self.treeNode.activePins > 0
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateExpandIcon()
@@ -61,9 +61,9 @@ end
 
 function MapPinEnhancedTrackerGroupEntryMixin:UpdateActionButtons()
     local group = self.group
-    local canRestorePins = group ~= nil and not group:IsHidden() and group:GetReachedPinCount() > 0
+    local canRestorePins = group ~= nil and not group:IsHidden() and self.treeNode.reachedPins > 0
     local isUngrouped = group ~= nil and group.groupType == "ungrouped"
-    local canDeleteOrClear = group ~= nil and (not isUngrouped or group:GetTotalPinCount() > 0)
+    local canDeleteOrClear = group ~= nil and (not isUngrouped or self.treeNode.totalPins > 0)
     SetActionButtonEnabled(self.actionButtons.restoreButton, canRestorePins)
     SetActionButtonEnabled(self.actionButtons.clearButton, canDeleteOrClear)
 
@@ -119,7 +119,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:SetupDeleteOrClearButton()
     end)
 end
 
----@param treeNode TreeNodeMixin
+---@param treeNode MapPinEnhancedTrackerGroupNode
 function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
     self:Reset()
     ---@class MapPinEnhancedGroupMixin
@@ -149,14 +149,14 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitle()
 
     self:UpdateActionButtons()
     local title = group:GetName()
-    local totalPins = group:GetTotalPinCount()
+    local totalPins = self.treeNode.totalPins
     if group:IsHidden() then
         self.title:SetText(string.upper(string.format("%s (%d)", title, totalPins)))
         self:UpdateTitleWidth()
         return
     end
 
-    local reachedPins = group:GetReachedPinCount()
+    local reachedPins = self.treeNode.reachedPins
     self.title:SetText(string.upper(string.format("%s (%d/%d)", title, reachedPins, totalPins)))
     self:UpdateTitleWidth()
 end
@@ -285,7 +285,7 @@ end
 
 function MapPinEnhancedTrackerGroupEntryMixin:AddTransferMenuActions(menu)
     local group = self.group
-    if group:GetTotalPinCount() > 0 then
+    if self.treeNode.totalPins > 0 then
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("export", L["Share to Chat"]),
@@ -359,7 +359,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
     self:AddEditGroupMenuAction(menu)
     self:AddTrackingModeMenu(menu)
 
-    if group:GetReachedPinCount() > 0 then
+    if self.treeNode.reachedPins > 0 then
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("arrowcircle", L["Show Reached Pins Again"]),

@@ -229,6 +229,13 @@ function MapPinEnhancedGroupMixin:GetTotalPinCount()
     return self:GetPinCount() + self:GetArchiveCount()
 end
 
+---@return number active
+---@return number reached
+---@return number total
+function MapPinEnhancedGroupMixin:GetPinCounts()
+    return self.pinState:GetCounts()
+end
+
 ---@param pinID UUID
 ---@return number
 function MapPinEnhancedGroupMixin:GetPinOrder(pinID)

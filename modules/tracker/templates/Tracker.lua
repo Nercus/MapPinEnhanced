@@ -11,7 +11,13 @@ local MapPinEnhanced = select(2, ...)
 ---@field scrollBox MapPinEnhancedTrackerScrollBox
 ---@field scrollBar MapPinEnhancedTrackerScrollBar
 ---@field scrollView ScrollBoxListTreeListViewMixin
----@field dataProvider TreeDataProviderMixin
+---@field dataProvider TreeDataProviderMixin?
+---@field collapsedGroups table<UUID, boolean>
+---@field refreshPending boolean?
+---@field scrollPending boolean?
+---@field changeNumber number
+---@field reachedPins number
+---@field totalPins number
 ---@field position MapPinEnhancedTrackerPositionTemplate
 ---@field desiredHeight number?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
@@ -82,125 +88,112 @@ local function PinSortComparator(pinNode1, pinNode2)
     return false
 end
 
----@param group MapPinEnhancedGroupMixin
-function MapPinEnhancedTrackerMixin:RefreshGroupEntry(group)
-    self.scrollBox:ForEachFrame(function(frame)
-        ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
-        if frame.group and frame.group:GetGroupID() == group:GetGroupID() then
-            frame:UpdateTitle()
-        end
-    end)
+---@class MapPinEnhancedTrackerGroupNode : TreeNodeMixin
+---@field groupID UUID
+---@field activePins number
+---@field reachedPins number
+---@field totalPins number
+
+function MapPinEnhancedTrackerMixin:SaveCollapsedGroups()
+    if not self.dataProvider then return end
+    wipe(self.collapsedGroups)
+    for _, node in ipairs(self.dataProvider:GetChildrenNodes()) do
+        ---@cast node MapPinEnhancedTrackerGroupNode
+        -- Capture identity on construction: the domain group may already be released.
+        self.collapsedGroups[node.groupID] = node:IsCollapsed() or false
+    end
 end
 
-function MapPinEnhancedTrackerMixin:UpdatePinList()
-    ---@param group MapPinEnhancedGroupMixin
+---@param scrollToTrackedPin boolean?
+---@return TreeDataProviderMixin, number, number
+function MapPinEnhancedTrackerMixin:UpdatePinList(scrollToTrackedPin)
+    local dataProvider = CreateTreeDataProvider()
+    local reachedPins, totalPins = 0, 0
+    local trackedPin = scrollToTrackedPin and Pins:GetTrackedPin() or nil
     for group in Groups:EnumerateGroups() do
-        local totalPins = group:GetTotalPinCount()
-        if not group:IsHidden() and totalPins > 0 then
-            local groupElement = self.dataProvider:Insert(group) --[[@as TreeNodeMixin]]
-            for _, pin in group:EnumeratePins() do
-                groupElement:Insert(pin)
+        if not group:IsHidden() then
+            local active, reached, total = group:GetPinCounts()
+            if total > 0 then
+                local node = dataProvider:Insert(group) --[[@as MapPinEnhancedTrackerGroupNode]]
+                node.groupID = group:GetGroupID()
+                node.activePins, node.reachedPins, node.totalPins = active, reached, total
+                for _, pin in group:EnumeratePins() do
+                    node:Insert(pin)
+                end
+                -- Insert sorts when a comparator exists. Install it only after all children.
+                node:SetSortComparator(PinSortComparator, false, false)
+                local collapsed = self.collapsedGroups[node.groupID] or false
+                if trackedPin and trackedPin.group == group then collapsed = false end
+                node:SetCollapsed(collapsed, false, TreeDataProviderConstants.SkipInvalidation)
+                reachedPins, totalPins = reachedPins + reached, totalPins + total
             end
-            groupElement:SetSortComparator(PinSortComparator, false, false)
         end
     end
-    self.dataProvider:SetSortComparator(GroupSortComparator, false, false)
+    dataProvider:SetSortComparator(GroupSortComparator, false, false)
+    return dataProvider, reachedPins, totalPins
 end
 
-function MapPinEnhancedTrackerMixin:UpdateList()
-    self.dataProvider:Flush()
-    self:UpdatePinList()
+---@param scrollToTrackedPin boolean?
+function MapPinEnhancedTrackerMixin:UpdateList(scrollToTrackedPin)
+    self:SaveCollapsedGroups()
+    local changeNumber = self.changeNumber
+    local dataProvider, reachedPins, totalPins = self:UpdatePinList(scrollToTrackedPin)
+    if changeNumber ~= self.changeNumber then return end
+
+    self.dataProvider = dataProvider
+    self.reachedPins, self.totalPins = reachedPins, totalPins
+    -- Only the complete tree reaches ScrollBox; replacement releases rows via their resetters.
+    self.scrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition)
+    self:UpdateHeight()
+    self:UpdateTrackerHeader()
+end
+
+---@param scrollToTrackedPin boolean?
+function MapPinEnhancedTrackerMixin:RequestListUpdate(scrollToTrackedPin)
+    if not self:IsShown() or self.visibilityHiding then return end
+    self.refreshPending = true
+    self.scrollPending = self.scrollPending or scrollToTrackedPin
 end
 
 function MapPinEnhancedTrackerMixin:UpdateListAndScrollToTrackedPin()
-    if not self:IsShown() then return end
-
-    self:UpdateList()
-    self:UpdateHeight()
-    self:UpdateTrackerHeader()
-    self:ScrollToTrackedPin()
-end
-
----@param group MapPinEnhancedGroupMixin
----@param pin MapPinEnhancedPinMixin
-function MapPinEnhancedTrackerMixin:AddPinToGroup(group, pin)
-    if not self:IsShown() then return end
-    if group:IsHidden() then return end
-
-    ---@type TreeNodeMixin?
-    local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
-        ---@type MapPinEnhancedGroupMixin
-        local nodeData = node:GetData()
-        return nodeData.classification == "group" and nodeData:GetGroupID() == group:GetGroupID()
-    end, TreeDataProviderConstants.IncludeCollapsed)
-    if not groupNode then
-        groupNode = self.dataProvider:Insert(group)
-        groupNode:SetSortComparator(PinSortComparator, false, false)
-    end
-    groupNode:Insert(pin)
-    groupNode:Sort()
-    groupNode:Invalidate()
-    self.dataProvider:Sort()
-    self.dataProvider:Invalidate()
-    self:RefreshGroupEntry(group)
-    self:UpdateTrackerHeader()
-end
-
----@param group MapPinEnhancedGroupMixin
----@param pinID UUID
-function MapPinEnhancedTrackerMixin:RemovePinFromGroup(group, pinID)
-    if not self:IsShown() then return end
-
-    ---@type TreeNodeMixin?
-    local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
-        ---@type MapPinEnhancedGroupMixin
-        local nodeData = node:GetData()
-        return nodeData.classification == "group" and nodeData:GetGroupID() == group:GetGroupID()
-    end, TreeDataProviderConstants.IncludeCollapsed)
-    if not groupNode then return end
-
-    ---@type TreeNodeMixin?
-    local pinNode = self.dataProvider:FindElementDataByPredicate(function(node)
-        ---@type MapPinEnhancedPinMixin
-        local nodeData = node:GetData()
-        return nodeData.classification == "pin" and nodeData.pinID == pinID
-    end, TreeDataProviderConstants.IncludeCollapsed)
-    if not pinNode then return end
-
-    groupNode:Remove(pinNode)
-
-    if group:GetTotalPinCount() == 0 then
-        self.dataProvider:Remove(groupNode)
-    else
-        self:UpdateList()
-    end
+    self:RequestListUpdate(true)
 end
 
 function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
-    if not self:IsShown() then return end
+    if not self:IsShown() or not self.dataProvider then return end
 
     local trackedPin = Pins:GetTrackedPin()
     if not trackedPin then return end
 
     local trackedGroup = trackedPin.group
     if trackedGroup then
-        ---@type TreeNode?
-        local groupNode = self.dataProvider:FindElementDataByPredicate(function(node)
-            ---@type MapPinEnhancedGroupMixin
-            local nodeData = node:GetData()
-            return nodeData.classification == "group" and nodeData:GetGroupID() == trackedGroup:GetGroupID()
-        end, TreeDataProviderConstants.IncludeCollapsed)
-        if groupNode then
+        ---@type MapPinEnhancedTrackerGroupNode?
+        local groupNode
+        for _, node in ipairs(self.dataProvider:GetChildrenNodes()) do
+            ---@cast node MapPinEnhancedTrackerGroupNode
+            if node.groupID == trackedGroup:GetGroupID() then
+                groupNode = node
+                break
+            end
+        end
+        if groupNode and groupNode:IsCollapsed() then
             groupNode:SetCollapsed(false)
             self:UpdateHeight()
+            self.scrollBox:ForEachFrame(function(frame)
+                if frame.treeNode == groupNode then frame:UpdateExpandIcon() end
+            end)
         end
     end
 
-    self.scrollBox:ScrollToElementDataByPredicate(function(node)
+    -- The target group is already expanded. Query the visible index directly;
+    -- ScrollToElementDataByPredicate would invalidate the tree again even then.
+    ---@type number?
+    local index = self.scrollBox:FindElementDataIndexByPredicate(function(node)
         ---@type MapPinEnhancedPinMixin
         local nodeData = node:GetData()
         return nodeData.classification == "pin" and nodeData.pinID == trackedPin.pinID
-    end, TreeDataProviderConstants.IncludeCollapsed)
+    end)
+    if index then self.scrollBox:ScrollToElementDataIndex(index) end
 end
 
 -- Maximum number of entries to display
@@ -209,12 +202,11 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
     local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
-    local numberOfEntries = self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed)
+    local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or 0
     local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
     local newHeight = visibleEntries * entryHeight
     self.desiredHeight = newHeight + headerHeight + fixedEntryHeight
     self:UpdateViewportHeight()
-    self:UpdateTrackerHeader()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateViewportHeight()
@@ -237,6 +229,7 @@ local function TrackerElementFactory(factory, node)
     if data.classification == "group" then
         factory("MapPinEnhancedTrackerGroupEntryTemplate", function(frame)
             ---@cast frame MapPinEnhancedTrackerGroupEntryTemplate
+            ---@cast node MapPinEnhancedTrackerGroupNode
             frame:Init(node)
         end)
     elseif data.classification == "pin" then
@@ -268,41 +261,30 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
     end)
     self.scrollBar:SetHideIfUnscrollable(false)
-    self.dataProvider = CreateTreeDataProvider()
+    self.collapsedGroups = {}
+    self.changeNumber = 0
+    self.reachedPins, self.totalPins = 0, 0
     self.scrollView = CreateScrollBoxListTreeListView()
 
     self.scrollView:SetElementFactory(TrackerElementFactory)
     self.scrollView:SetElementResetter(TrackerElementResetter)
-    self.scrollView:SetDataProvider(self.dataProvider)
 
     self.scrollBar:SetInterpolateScroll(true);
     self.scrollBox:SetInterpolateScroll(true);
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
 
-    self.dataProvider:RegisterCallback(DataProviderMixin.Event.OnSizeChanged, self.UpdateHeight, self);
-
-    MapPinEnhanced:RegisterCallback("PIN_ADDED", function(_, group, pin)
-        ---@cast group MapPinEnhancedGroupMixin
-        ---@cast pin MapPinEnhancedPinMixin
-        self:AddPinToGroup(group, pin)
-        self:ScrollToTrackedPin()
+    MapPinEnhanced:RegisterCallback("PIN_ADDED", function()
+        self:UpdateListAndScrollToTrackedPin()
     end)
-
-    MapPinEnhanced:RegisterCallback("PIN_REMOVED", function(_, group, pinID)
-        ---@cast group MapPinEnhancedGroupMixin
-        ---@cast pinID UUID
-        self:RemovePinFromGroup(group, pinID)
-        self:ScrollToTrackedPin()
+    MapPinEnhanced:RegisterCallback("PIN_REMOVED", function()
+        self:UpdateListAndScrollToTrackedPin()
     end)
-
     MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()
         self:UpdateListAndScrollToTrackedPin()
     end)
-
     MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", function(_, _, isTracked)
-        if not isTracked then return end
-        self:ScrollToTrackedPin()
+        if isTracked and self:IsShown() and not self.visibilityHiding then self.scrollPending = true end
     end)
     MapPinEnhanced:RegisterCallback("SUPER_TRACKING_ENTRY_CHANGED", function()
         if self:IsShown() then self:UpdateSuperTrackedEntry() end
@@ -311,14 +293,30 @@ end
 
 function MapPinEnhancedTrackerMixin:OnShow()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
-    self:UpdateSuperTrackedEntry()
+    self.refreshPending, self.scrollPending = nil, nil
+    self:UpdateSuperTrackedEntry(true)
+    self:UpdateList(true)
+    self.position:RestoreTrackerPosition(self.desiredHeight or self.header:GetHeight())
+    self:UpdateViewportHeight()
+    self:ScrollToTrackedPin()
 end
 
 function MapPinEnhancedTrackerMixin:OnHide()
+    self.changeNumber = self.changeNumber + 1
+    self.refreshPending, self.scrollPending = nil, nil
+    self:SaveCollapsedGroups()
+    self.scrollBox:RemoveDataProvider()
+    self.dataProvider = nil
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
 end
 
 function MapPinEnhancedTrackerMixin:OnUpdate()
+    if self.visibilityHiding then return end
+    local refresh, scroll = self.refreshPending, self.scrollPending
+    -- Consume before building so a callback during publication remains pending next frame.
+    self.refreshPending, self.scrollPending = nil, nil
+    if refresh then self:UpdateList(scroll) end
+    if scroll then self:ScrollToTrackedPin() end
     -- Position can change during a drag or a screen/scale change; resizing never moves it.
     self:UpdateViewportHeight()
     if self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
@@ -329,20 +327,7 @@ function MapPinEnhancedTrackerMixin:OnUpdate()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
-    local reachedPins = 0
-    local totalPins = 0
-
-    ---@param node TreeNodeMixin
-    for _, node in self.dataProvider:EnumerateEntireRange() do
-        ---@type MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
-        local data = node:GetData()
-        if data.classification == "group" then
-            reachedPins = reachedPins + data:GetReachedPinCount()
-            totalPins = totalPins + data:GetTotalPinCount()
-        end
-    end
-
-    self.header:SetTitle(string.format(L["Pins (%d/%d)"], reachedPins, totalPins))
+    self.header:SetTitle(string.format(L["Pins (%d/%d)"], self.reachedPins, self.totalPins))
     self.header:SetIcon("pin")
     self.header.hiddenGroupsButton:SetIconTexture("eyeslash")
 end
@@ -357,22 +342,23 @@ function MapPinEnhancedTrackerMixin:UpdateViewLayout()
     self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
 end
 
-function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry()
+---@param skipHeight boolean?
+function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry(skipHeight)
     self.superTrackedEntry:ApplyEntry(Providers:GetSuperTrackingEntry())
     self:UpdateViewLayout()
-    self:UpdateHeight()
+    if not skipHeight then self:UpdateHeight() end
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
-    self:UpdateList()
-    self:UpdateSuperTrackedEntry()
-    self.position:RestoreTrackerPosition(self.desiredHeight or self.header:GetHeight())
-    self:UpdateViewportHeight()
+    local wasShown = self:IsShown()
     self:Show()
-    self:ScrollToTrackedPin()
+    -- Reversing a fade does not fire OnShow; it still needs the latest tree.
+    if wasShown then self:OnShow() end
 end
 
 function MapPinEnhancedTrackerMixin:HideFrame()
+    self.changeNumber = self.changeNumber + 1
+    self.refreshPending, self.scrollPending = nil, nil
     self.header.hiddenGroupsMenu:Close()
     self:Hide()
 end

@@ -43,6 +43,18 @@ function MapPinEnhancedGroupPinStateReadMixin:GetArchiveCount(state)
     return count
 end
 
+---@return number active
+---@return number reached
+---@return number total
+function MapPinEnhancedGroupPinStateReadMixin:GetCounts()
+    local reached, total = 0, self.count
+    for _, archivedPin in pairs(self.archive) do
+        total = total + 1
+        if archivedPin.state == "reached" then reached = reached + 1 end
+    end
+    return self.count, reached, total
+end
+
 ---@return MapPinEnhancedGroupPinEntry[]
 function MapPinEnhancedGroupPinStateReadMixin:GetEntries()
     ---@type MapPinEnhancedGroupPinEntry[]
