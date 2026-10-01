@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@param value table<string, boolean>?
 ---@return table<string, boolean>
-function MapPinEnhanced:CopySet(value)
+function MapPinEnhanced:CopyTable(value)
     ---@type table<string, boolean>
     local result = {}
     if type(value) ~= "table" then return result end
@@ -16,8 +16,8 @@ end
 ---@param left table<string, boolean>?
 ---@param right table<string, boolean>?
 ---@return boolean
-function MapPinEnhanced:SetsEqual(left, right)
-    left, right = self:CopySet(left), self:CopySet(right)
+function MapPinEnhanced:TablesEqual(left, right)
+    left, right = self:CopyTable(left), self:CopyTable(right)
     for key in pairs(left) do
         if not right[key] then return false end
     end
