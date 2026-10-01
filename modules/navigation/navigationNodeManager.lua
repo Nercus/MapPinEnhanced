@@ -48,6 +48,9 @@ local registeredPathData = {} ---@type NavigationPathData[]
 local navigationGraph ---@type NavigationGraph?
 local preparedNavigationData ---@type NavigationPreparedData?
 local preparedDataDirty = true
+local preparationChangeNumber = 0
+local cancelPreparation ---@type fun()?
+local preparationFailure ---@type string?
 local hearthstonePathReferences = {} ---@type integer[]
 
 -- Ordinary movement stays available for approaching and leaving transport stops.
@@ -679,6 +682,22 @@ end
 -- must never be refilled while a Route or calculation still references them.
 function Navigation:InvalidatePreparedData()
     preparedDataDirty = true
+    preparationChangeNumber = preparationChangeNumber + 1
+    preparationFailure = nil
+    self:CancelPreparedData()
+    local job = self.activeCalculation
+    if job then
+        local restart = job.restart
+        self:CancelRouteCalculation(job)
+        -- Intake rejects stale work immediately. The existing bucket, or an
+        -- explicit preparation request, resumes it once fresh data is complete.
+        self.pendingCalculationRestart = restart
+    end
+end
+
+function Navigation:CancelPreparedData()
+    if cancelPreparation then cancelPreparation() end
+    cancelPreparation = nil
 end
 
 function Navigation:RefreshPreparedData()
@@ -688,65 +707,109 @@ function Navigation:RefreshPreparedData()
     end
 end
 
+-- Synchronous readers only schedule preparation. The private candidate is
+-- published atomically; cancelled workers never resume into a newer generation.
 ---@return NavigationPreparedData?
+---@return string? failure
 function Navigation:EnsurePreparedData()
-    local graph = navigationGraph
-    if not graph then return nil end
+    if not navigationGraph then return nil, "navigation data is not ready" end
     if not preparedDataDirty then return preparedNavigationData end
-    -- The memo belongs only to this pass; published snapshots retain no observations.
-    local observations = {} ---@type NavigationRequirementObservations
-    local previous = preparedNavigationData
-    local states = previous and previous.requirementStateByPath or {}
-    local reasons = previous and previous.exclusionReasonByPath or {}
-    for pathReference = 1, graph.pathCount do
-        local staticFailure = graph.excludedPaths[pathReference]
-        local state, reason ---@type NavigationRequirementState, string?
-        if IsTransportationDisabled(graph.pathTypes[pathReference]) then
-            state, reason = UNSATISFIED, "transportation group disabled"
-        elseif staticFailure then
-            state, reason = UNKNOWN, staticFailure
-        else
-            local failure
-            state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference], observations)
-            if state ~= SATISFIED then reason = failure or state end
-        end
-        if states[pathReference] ~= state then
-            if previous and states == previous.requirementStateByPath then
-                states = CopyTable(states)
+    if self.routeNavigationEnabled and self.activeDestination and not cancelPreparation and not preparationFailure then
+        local graph, changeNumber = navigationGraph, preparationChangeNumber
+        cancelPreparation = MapPinEnhanced:BatchExecution({ function()
+            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+            -- The memo belongs only to this pass; published snapshots retain no observations.
+            local observations = {} ---@type NavigationRequirementObservations
+            local previous = preparedNavigationData
+            ---@generic T
+            ---@param values table<integer, T>
+            ---@return table<integer, T>
+            local function CopyValues(values)
+                local copy = {} ---@type table<integer, any>
+                for key, value in pairs(values) do
+                    copy[key] = value
+                    checkpoint()
+                end
+                return copy
             end
-            states[pathReference] = state
-        end
-        if reasons[pathReference] ~= reason then
-            if previous and reasons == previous.exclusionReasonByPath then
-                reasons = CopyTable(reasons)
+            local states = previous and previous.requirementStateByPath or {}
+            local reasons = previous and previous.exclusionReasonByPath or {}
+            for pathReference = 1, graph.pathCount do
+                checkpoint()
+                local staticFailure = graph.excludedPaths[pathReference]
+                local state, reason ---@type NavigationRequirementState, string?
+                if IsTransportationDisabled(graph.pathTypes[pathReference]) then
+                    state, reason = UNSATISFIED, "transportation group disabled"
+                elseif staticFailure then
+                    state, reason = UNKNOWN, staticFailure
+                else
+                    local failure
+                    state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference], observations)
+                    if state ~= SATISFIED then reason = failure or state end
+                end
+                if states[pathReference] ~= state then
+                    if previous and states == previous.requirementStateByPath then
+                        states = CopyValues(states)
+                    end
+                    states[pathReference] = state
+                end
+                if reasons[pathReference] ~= reason then
+                    if previous and reasons == previous.exclusionReasonByPath then
+                        reasons = CopyValues(reasons)
+                    end
+                    reasons[pathReference] = reason
+                end
             end
-            reasons[pathReference] = reason
-        end
+            local movement = self:GetMovementCapabilities()
+            if previous and movement.groundSpeed == previous.movement.groundSpeed and
+                movement.steadyFlightSpeed == previous.movement.steadyFlightSpeed and
+                movement.skyridingSpeed == previous.movement.skyridingSpeed and
+                movement.canFly == previous.movement.canFly and movement.canSkyriding == previous.movement.canSkyriding and
+                movement.activeFlightMode == previous.movement.activeFlightMode then
+                movement = previous.movement
+            end
+            local costs, failures = self:GetPreparedTaxiCosts(graph, checkpoint)
+            local observation = self:GetTaxiObservation()
+            if graph ~= navigationGraph or changeNumber ~= preparationChangeNumber then return end
+            if not previous or states ~= previous.requirementStateByPath or reasons ~= previous.exclusionReasonByPath or
+                movement ~= previous.movement or costs ~= previous.taxiCosts or failures ~= previous.taxiFailures or
+                observation ~= previous.taxiObservation then
+                preparedNavigationData = {
+                    requirementStateByPath = states,
+                    exclusionReasonByPath = reasons,
+                    movement = movement,
+                    taxiObservation = observation,
+                    taxiCosts = costs,
+                    taxiFailures = failures,
+                }
+            end
+            preparedDataDirty = false
+        end }, nil, function()
+            cancelPreparation = nil
+            self:RefreshEligibility({})
+        end, 1, function(message)
+            cancelPreparation = nil
+            preparationFailure = message
+            local restart = self.pendingCalculationRestart
+            if restart then restart() end
+            geterrorhandler()(message)
+        end)
     end
-    local movement = self:GetMovementCapabilities()
-    if previous and movement.groundSpeed == previous.movement.groundSpeed and
-        movement.steadyFlightSpeed == previous.movement.steadyFlightSpeed and
-        movement.skyridingSpeed == previous.movement.skyridingSpeed and
-        movement.canFly == previous.movement.canFly and movement.canSkyriding == previous.movement.canSkyriding and
-        movement.activeFlightMode == previous.movement.activeFlightMode then
-        movement = previous.movement
+    return nil, preparationFailure
+end
+
+---@async
+---@param checkpoint fun()
+---@return NavigationPreparedData?
+---@return string? failure
+function Navigation:AwaitPreparedData(checkpoint)
+    local prepared, failure = self:EnsurePreparedData()
+    while not prepared and cancelPreparation do
+        coroutine.yield()
+        checkpoint()
+        prepared, failure = self:EnsurePreparedData()
     end
-    local costs, failures = self:GetPreparedTaxiCosts(graph)
-    local observation = self:GetTaxiObservation()
-    if not previous or states ~= previous.requirementStateByPath or reasons ~= previous.exclusionReasonByPath or
-        movement ~= previous.movement or costs ~= previous.taxiCosts or failures ~= previous.taxiFailures or
-        observation ~= previous.taxiObservation then
-        preparedNavigationData = {
-            requirementStateByPath = states,
-            exclusionReasonByPath = reasons,
-            movement = movement,
-            taxiObservation = observation,
-            taxiCosts = costs,
-            taxiFailures = failures,
-        }
-    end
-    preparedDataDirty = false
-    return preparedNavigationData
+    return prepared, failure
 end
 
 -- Failure recovery reads a new requirement observation without mutating any

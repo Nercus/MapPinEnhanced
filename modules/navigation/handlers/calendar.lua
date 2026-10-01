@@ -99,6 +99,10 @@ local function RefreshHolidayStates()
     if holidayStatesChanged and Navigation:GetGraph() then
         holidayStatesChanged = false
         Navigation:RefreshEligibility()
+    else
+        -- Intake may have cancelled preparation even when the observed holidays
+        -- stayed equal. Resume demand without inventing another input change.
+        Navigation:EnsurePreparedData()
     end
 end
 

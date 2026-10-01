@@ -154,7 +154,8 @@ local function TakeRequiredFlight()
     local journey = activeJourney
     -- The ride ticker waits for publication of the route calculated from this
     -- open map. An older route must never select a slot from a new observation.
-    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or not observation or
+    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or Navigation.pendingCalculationRestart or
+        not observation or
         not progression or progression.route.preparedData.taxiObservation ~= observation or
         not journey or not journey.observed or journey.origin ~= observation.origin or
         progression.route.taxiJourneys[progression.route.pathReferences[progression.pathIndex]] ~= journey then

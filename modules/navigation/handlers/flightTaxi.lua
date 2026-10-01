@@ -246,9 +246,10 @@ end
 ---@param graph NavigationGraph
 ---@param prepared NavigationPreparedData
 ---@param nodes number[]
+---@param checkpoint fun()
 ---@return NavigationTaxiJourney? journey
 ---@return string? failure
-function Navigation:PriceTaxiJourney(graph, prepared, nodes)
+function Navigation:PriceTaxiJourney(graph, prepared, nodes, checkpoint)
     local origin, destination = nodes[1], nodes[#nodes]
     local fromPoint, toPoint = pointsByNode[origin], pointsByNode[destination]
     if not fromPoint or not toPoint then return nil, "taxi destination or origin has no graph point" end
@@ -256,6 +257,7 @@ function Navigation:PriceTaxiJourney(graph, prepared, nodes)
     local seconds = 0 ---@type number
     local uncertainty = 0 ---@type number
     for index = 1, #nodes - 1 do
+        checkpoint()
         local from, to = nodes[index], nodes[index + 1]
         local references = connections[from] and connections[from][to]
         if not references then return nil, "unmapped taxi leg " .. from .. ":" .. to end
@@ -264,6 +266,7 @@ function Navigation:PriceTaxiJourney(graph, prepared, nodes)
         local cost ---@type NavigationCalculatedPathCost?
         local seen = {} ---@type table<integer, boolean>
         for _, reference in ipairs(references) do
+            checkpoint()
             local candidate = prepared.taxiCosts[reference]
             if candidate and prepared.requirementStateByPath[reference] == "satisfied" then
                 local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
@@ -335,12 +338,14 @@ local preparedTaxiCosts ---@type table<integer, NavigationCalculatedPathCost>?
 local preparedTaxiFailures ---@type table<integer, string>?
 
 ---@param graph NavigationGraph
+---@param checkpoint fun()
 ---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
-function Navigation:GetPreparedTaxiCosts(graph)
+function Navigation:GetPreparedTaxiCosts(graph, checkpoint)
     if preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber then
-        local costs, failures = self:PrepareTaxiCosts(graph)
+        local changeNumber = taxiKnowledgeChangeNumber
+        local costs, failures = self:PrepareTaxiCosts(graph, nil, checkpoint)
         preparedTaxiGraph = graph
-        preparedTaxiChangeNumber = taxiKnowledgeChangeNumber
+        preparedTaxiChangeNumber = changeNumber
         preparedTaxiCosts, preparedTaxiFailures = costs, failures
     end
     return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
@@ -349,11 +354,13 @@ end
 
 ---@param graph NavigationGraph
 ---@param onlyReference integer?
+---@param checkpoint? fun()
 ---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
-function Navigation:PrepareTaxiCosts(graph, onlyReference)
+function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
     local costs = {} ---@type table<integer, NavigationCalculatedPathCost>
     local failures = {} ---@type table<integer, string>
     for reference = onlyReference or 1, onlyReference or graph.pathCount do
+        if checkpoint then checkpoint() end
         if graph.pathTypes[reference] == "flighttaxi" then
             local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
             local from = FindTaxiNode(data.fromMap, data.fromX, data.fromY, data.fromTaxiNodeID)

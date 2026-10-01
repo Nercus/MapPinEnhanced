@@ -40,6 +40,7 @@ local L = MapPinEnhanced.L
 ---@field avoidedPaths table<integer, NavigationPathFailure>
 ---@field activeDestination NavigationDestination?
 ---@field activeCalculation NavigationCalculationJob?
+---@field pendingCalculationRestart fun()?
 ---@field progression NavigationProgression?
 ---@field unsubscribeEligibilityRefresh fun()?
 ---@field lastCalculationFailure string?
@@ -121,7 +122,8 @@ end
 local function RefreshRouteOrigin()
     local progression = Navigation.progression
     if not progression or progression.attempted or
-        progression.phase == "in-transit" or Navigation.activeCalculation or not Navigation.routeNavigationEnabled then
+        progression.phase == "in-transit" or Navigation.activeCalculation or Navigation.pendingCalculationRestart or
+        not Navigation.routeNavigationEnabled then
         return false
     end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
@@ -215,11 +217,18 @@ function Navigation:StartCalculation(currentRouteUnusable)
     end
     local expectedDestination = destination
     self.activeCalculation = self:StartRouteCalculation(destination.destinationID, destination.changeNumber,
-        destination.routingData, self.avoidedPaths, function(route, failure)
+        destination.routingData, self.avoidedPaths,
+        ---@async
+        function(route, failure, checkpoint)
             if not IsCurrentDestination(expectedDestination) then return end
-            local prepared = self:EnsurePreparedData()
+            local prepared = self:AwaitPreparedData(checkpoint)
             local finishedCalculation = self.activeCalculation
-            self.activeCalculation = nil
+            local currentRemainingCost ---@type number?
+            if previousProgression and self:IsCurrentProgression(previousProgression) and
+                not currentRouteUnusable and prepared then
+                currentRemainingCost = self:GetRemainingRouteCost(previousProgression, prepared, checkpoint)
+                currentRouteUnusable = currentRemainingCost == nil
+            end
             if not route then
                 -- Login data or failure recovery may change eligibility while
                 -- this job uses its frozen snapshot. Retry if no usable Route remains.
@@ -233,6 +242,7 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 if finishedCalculation then
                     for _, reason in pairs(finishedCalculation.unavailablePathCosts) do
                         reasonCounts[reason] = (reasonCounts[reason] or 0) + 1
+                        checkpoint()
                     end
                 end
                 local exclusions = {}
@@ -256,6 +266,7 @@ function Navigation:StartCalculation(currentRouteUnusable)
             end
             if prepared and route.preparedData ~= prepared then
                 for _, reference in ipairs(route.pathReferences) do
+                    checkpoint()
                     if reference > 0 and prepared.requirementStateByPath[reference] ~= "satisfied" then
                         self:StartCalculation(currentRouteUnusable)
                         return
@@ -273,14 +284,14 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 self:StartCalculation(currentRouteUnusable)
                 return
             end
-            if previousProgression and self:IsCurrentProgression(previousProgression) and not currentRouteUnusable then
-                local currentRemainingCost = self:GetRemainingRouteCost(previousProgression)
-                -- Savings protect a usable route from churn. An unavailable
-                -- remaining action must not retain the old route at any price.
-                if currentRemainingCost then
-                    local requiredSavings = math.max(15, currentRemainingCost * 0.1)
-                    if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
-                end
+            -- Preserve the replacement threshold after the sliced remaining-cost check.
+            if currentRemainingCost then
+                local requiredSavings = math.max(15, currentRemainingCost * 0.1)
+                if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
+            end
+            if finishedCalculation then
+                route.calculationSeconds = GetTimePreciseSec() - finishedCalculation.startedAt
+                route.calculationSlices = finishedCalculation.calculationSlices
             end
             self:DeactivatePathHandler()
             local graph = route.graph
@@ -293,6 +304,8 @@ function Navigation:StartCalculation(currentRouteUnusable)
                 changeNumber = 1,
             }
             self:PublishStep(self.progression)
+        end, function()
+            if IsCurrentDestination(expectedDestination) then self:StartCalculation(currentRouteUnusable) end
         end)
 end
 
@@ -407,6 +420,7 @@ function Navigation:ClearDestination(owner, destinationID, changeNumber)
     self:DeactivatePathHandler()
     self.activeCalculation = nil
     self.activeDestination = nil
+    self:CancelPreparedData()
     self.progression = nil
     self.avoidedPaths = {}
     self.destinationChangeNumber = self.destinationChangeNumber + 1
@@ -424,7 +438,7 @@ function Navigation:Recalculate(changeNumber)
         return false
     end
     self:RefreshPreparedData()
-    self:StartCalculation(self.progression ~= nil and self:GetRemainingRouteCost(self.progression) == nil)
+    self:StartCalculation()
     return true
 end
 
@@ -805,10 +819,11 @@ function Navigation:CheckCurrentPathCompletion(identity)
     if not fromPointIndex then return end
     local originDistance = self:GetComparableDistance(playerMapID, playerX, playerY,
         graph.pointMapIDs[fromPointIndex], graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex])
-    if not originDistance and progression.phase ~= "approach" and not self.activeCalculation then
+    if not originDistance and progression.phase ~= "approach" and
+        not self.activeCalculation and not self.pendingCalculationRestart then
         self:StartCalculation(false)
     elseif progression.phase == "approach" and not originDistance and not destinationDistance and
-        not self.activeCalculation then
+        not self.activeCalculation and not self.pendingCalculationRestart then
         self:StartCalculation(false)
     end
 end
@@ -898,6 +913,7 @@ function Navigation:HandlePathHandlerReport(identity, result, detail)
         else
             progression.status = detail or L["Navigation Action Failed"]
         end
+        self:CancelRouteCalculation(self.activeCalculation)
         progression.changeNumber = progression.changeNumber + 1
         self:PublishStep(progression)
         if progression.pathUnavailable then self:StartCalculation(true) end
@@ -914,10 +930,11 @@ function Navigation:RecheckFailedPaths(kind)
         end
     end
     if not recovered then return end
-    -- Future jobs need the same fresh eligibility that proved recovery. Active
-    -- jobs and usable Routes retain their original input and presentation.
+    -- Recovery invalidates pending work; usable Routes keep their presentation.
+    -- An already queued restart waits for the complete preparation snapshot.
     self:InvalidatePreparedData()
-    if self.activeDestination and self.routeNavigationEnabled and not self.progression and not self.activeCalculation then
+    if self.activeDestination and self.routeNavigationEnabled and not self.progression and
+        not self.activeCalculation and not self.pendingCalculationRestart then
         self:StartCalculation(true)
     end
 end
@@ -964,10 +981,10 @@ function Navigation:RefreshEligibility(events)
     if not self.routeNavigationEnabled or not self.activeDestination then return end
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
-    self:EnsurePreparedData()
+    local prepared = self:EnsurePreparedData()
+    if not prepared then return end
     local progression = self.progression
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
-    local prepared = self:GetPreparedData()
     local reference = progression and progression.route.pathReferences[progression.pathIndex]
     if progression and not progression.pathUnavailable and not progression.attempted and
         progression.phase ~= "in-transit" and
@@ -992,7 +1009,10 @@ function Navigation:RefreshEligibility(events)
         end
     end
     if RefreshRouteOrigin() then return end
-    if self.activeDestination and not self.progression and not self.activeCalculation then
+    local restart = self.pendingCalculationRestart
+    if restart then
+        restart()
+    elseif self.activeDestination and not self.progression and not self.activeCalculation then
         self:StartCalculation(true)
     end
 end
@@ -1404,6 +1424,7 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
     if Navigation.routeNavigationEnabled then
         Navigation:StartCalculation()
     elseif Navigation.activeDestination then
+        Navigation:CancelPreparedData()
         Navigation:CancelRouteCalculation(Navigation.activeCalculation)
         Navigation.activeCalculation = nil
         Navigation.progression = nil
