@@ -1,14 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
 local L = MapPinEnhanced.L
-
----@class Transfer
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Groups = MapPinEnhanced:GetModule("Groups")
-
-
-
 
 ---@class MapPinEnhancedImportWindowTemplate : MapPinEnhancedWindowTemplate
 ---@field importButton MapPinEnhancedButtonTemplate
@@ -17,306 +11,178 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field description FontString
 ---@field summary FontString
 ---@field dataString string?
----@field parsedData SerializedExportGroup|pinData[]?
----@field parsedDataType "group"|"pins"?
+---@field parsedData SerializedExportGroup?
 ---@field groupName string?
 ---@field validPinCount number
 ---@field invalidPinCount number
+---@field previewChangeNumber number
+---@field cancelPreview fun()?
 MapPinEnhancedImportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
----@param usedPinIDs table<UUID, boolean>
----@return UUID
-local function GenerateUnusedPinID(usedPinIDs)
-    local pinID = MapPinEnhanced:GenerateUUID("pin")
-    while Groups:IsPinIDInUse(pinID) or usedPinIDs[pinID] do
-        pinID = MapPinEnhanced:GenerateUUID("pin")
-    end
-    usedPinIDs[pinID] = true
-    return pinID
-end
-
+---The preview owns these copies. Remap at confirmation, without yielding, so
+---IDs cannot become occupied between checking them and handing them to Groups.
 ---@param savedGroup SerializedExportGroup
----@return SaveablePinData[]
 ---@return table<UUID, number>
-local function CopyImportedPins(savedGroup)
-    ---@type SaveablePinData[]
-    local pins = {}
+local function RemapImportedPins(savedGroup)
     ---@type table<UUID, number>
     local pinOrder = {}
-    ---@type table<UUID, UUID>
-    local pinIDMap = {}
     ---@type table<UUID, boolean>
     local usedPinIDs = {}
-
-    for _, pinData in ipairs(savedGroup.pins or {}) do
-        local importedPinData = CopyTable(pinData)
-        ---@cast importedPinData SaveablePinData
-        local oldPinID = importedPinData.pinID
-        local newPinID = oldPinID
-
-        if not newPinID or Groups:IsPinIDInUse(newPinID) or usedPinIDs[newPinID] then
-            newPinID = GenerateUnusedPinID(usedPinIDs)
-        else
-            usedPinIDs[newPinID] = true
+    for _, data in ipairs(savedGroup.pins) do
+        local oldPinID = data.pinID
+        local pinID = oldPinID
+        while not pinID or Groups:IsPinIDInUse(pinID) or usedPinIDs[pinID] do
+            pinID = MapPinEnhanced:GenerateUUID("pin")
         end
-
-        importedPinData.setTracked = nil
-        importedPinData.pinID = newPinID
-        if oldPinID then
-            pinIDMap[oldPinID] = newPinID
-        end
-        table.insert(pins, importedPinData)
+        usedPinIDs[pinID] = true
+        data.pinID = pinID
+        pinOrder[pinID] = oldPinID and savedGroup.pinOrder[oldPinID] or nil
     end
-
-    for oldPinID, order in pairs(savedGroup.pinOrder or {}) do
-        local newPinID = pinIDMap[oldPinID]
-        if newPinID then
-            pinOrder[newPinID] = order
-        end
-    end
-
-    return pins, pinOrder
-end
-
----@param parsedData SerializedExportGroup | pinData[]
----@param dataType "group" | "pins"
----@param groupName string
----@return boolean
-function MapPinEnhancedImportWindowMixin:ImportToNewGroup(parsedData, dataType, groupName)
-    ---@type string|number?
-    local icon
-    ---@type SaveablePinData[]|pinData[]?
-    local pins
-    ---@type table<UUID, number>?
-    local pinOrder
-    ---@type GroupTrackingMode?
-    local trackingMode
-    if dataType == "group" then
-        ---@type SerializedExportGroup
-        local savedGroup = parsedData
-        icon = savedGroup.icon
-        trackingMode = savedGroup.trackingMode
-        pins, pinOrder = CopyImportedPins(savedGroup)
-    elseif dataType == "pins" then
-        ---@cast parsedData pinData[]
-        pins = parsedData
-    end
-
-    local group = Groups:RegisterGroup({
-        name = groupName,
-        source = MapPinEnhanced.name,
-        icon = icon,
-        order = GetTime(),
-        trackingMode = trackingMode,
-    })
-    if not group then return false end
-
-    group:AddMultiplePins(pins or {}, false, pinOrder)
-    return true
+    return pinOrder
 end
 
 function MapPinEnhancedImportWindowMixin:UpdateImportButtonDisabledState()
-    local hasValidPins = (self.validPinCount or 0) > 0
-    local hasValidGroupName = self.groupName and Groups:IsValidGroupName(self.groupName)
-    self.importButton:SetEnabled(hasValidPins and hasValidGroupName)
+    self.importButton:SetEnabled(self.parsedData ~= nil and self.validPinCount > 0 and
+        self.groupName ~= nil and Groups:IsValidGroupName(self.groupName))
 end
 
----@param parsedData SerializedExportGroup | pinData[]
----@param dataType "group" | "pins"
----@return boolean
-function MapPinEnhancedImportWindowMixin:Import(parsedData, dataType)
+function MapPinEnhancedImportWindowMixin:StartImport()
+    local data = self.parsedData
+    if not data or self.validPinCount == 0 then
+        MapPinEnhanced:Notify(L["No valid pins were found to import."], "ERROR")
+        return false
+    end
     if not self.groupName or not Groups:IsValidGroupName(self.groupName) then return false end
     if Groups:GetGroupByName(self.groupName) then
         self.groupName = Groups:GetAvailableImportGroupName()
     end
-    return self:ImportToNewGroup(parsedData, dataType, self.groupName)
-end
-
-function MapPinEnhancedImportWindowMixin:StartImport()
-    if not self.parsedData or not self.parsedDataType or self.validPinCount == 0 then
-        MapPinEnhanced:Notify(L["No valid pins were found to import."], "ERROR")
-        return false
-    end
-    if not self:Import(self.parsedData, self.parsedDataType) then
+    data.pinOrder = RemapImportedPins(data)
+    local group = Groups:RegisterGroup({
+        name = self.groupName,
+        source = MapPinEnhanced.name,
+        icon = data.icon,
+        order = GetTime(),
+        trackingMode = data.trackingMode,
+    })
+    if not group or not group:AddMultiplePins(data.pins, false, data.pinOrder) then
         MapPinEnhanced:Notify(L["Import failed."], "ERROR")
         return false
     end
-    MapPinEnhanced:Notify(string.format(L["Imported %d pins; skipped %d invalid entries."],
+    -- Groups owns activation, capacity failures and partial-completion reporting.
+    -- Release the preview: these tables now belong to its existing bulk worker.
+    self.parsedData = nil
+    self.dataString = nil
+    self.textarea:SetValue("")
+    self:UpdateImportButtonDisabledState()
+    MapPinEnhanced:Notify(string.format(L["Importing %d pins; skipped %d invalid entries."],
         self.validPinCount, self.invalidPinCount))
     return true
 end
 
----@param pinData any
----@return boolean
-local function IsValidPinData(pinData)
-    if type(pinData) ~= "table" or type(pinData.mapID) ~= "number" or
-        pinData.mapID <= 0 or pinData.mapID >= math.huge or pinData.mapID ~= math.floor(pinData.mapID) or
-        type(pinData.x) ~= "number" or not (pinData.x >= 0 and pinData.x <= 1) or
-        type(pinData.y) ~= "number" or not (pinData.y >= 0 and pinData.y <= 1) then
-        return false
-    end
-    for _, key in ipairs({ "title", "description", "color", "pinID" }) do
-        if pinData[key] ~= nil and type(pinData[key]) ~= "string" then return false end
-    end
-    for _, key in ipairs({ "usesAtlas", "lock" }) do
-        if pinData[key] ~= nil and type(pinData[key]) ~= "boolean" then return false end
-    end
-    ---@type any
-    local texture = pinData.texture
-    return texture == nil or type(texture) == "string" or
-        (type(texture) == "number" and texture > 0 and texture < math.huge)
+function MapPinEnhancedImportWindowMixin:CancelPreview()
+    self.previewChangeNumber = (self.previewChangeNumber or 0) + 1
+    if self.cancelPreview then self.cancelPreview() end
+    self.cancelPreview = nil
 end
 
----@param formatName string
----@param pins pinData[]
----@param invalidCount number
-function MapPinEnhancedImportWindowMixin:UpdateSummary(formatName, pins, invalidCount)
-    ---@type table<number, boolean>
-    local maps = {}
-    for _, pinData in ipairs(pins) do maps[pinData.mapID] = true end
-    local mapCount = 0
-    for _mapID in pairs(maps) do mapCount = mapCount + 1 end
-
-    local summary = string.format(L["%s: %d pins across %d maps"], formatName, #pins, mapCount)
-    if invalidCount > 0 then
-        summary = summary .. " | " .. string.format(L["%d invalid entries will be skipped"], invalidCount)
-        self.summary:SetTextColor(1, 0.45, 0.1)
-    else
-        self.summary:SetTextColor(0.4, 1, 0.4)
-    end
-    self.summary:SetText(summary)
-end
-
----@param dataString string?
-function MapPinEnhancedImportWindowMixin:PreparseImport(dataString)
+---@param input string|table?
+---@param onReady? fun(name: string)
+---@return fun() cancel
+function MapPinEnhancedImportWindowMixin:PreparseImport(input, onReady)
+    self:CancelPreview()
+    local changeNumber = self.previewChangeNumber
     self.parsedData = nil
-    self.parsedDataType = nil
-    self.validPinCount = 0
-    self.invalidPinCount = 0
-
-    if not dataString or dataString == "" then
+    self.validPinCount, self.invalidPinCount = 0, 0
+    self:UpdateImportButtonDisabledState()
+    local function Cancel()
+        if self.previewChangeNumber == changeNumber then
+            self:CancelPreview()
+            self.summary:SetText("")
+        end
+    end
+    if not input or input == "" or not self:IsVisible() or self.visibilityHiding then
         self.summary:SetText("")
-        return
+        return Cancel
     end
-
-    ---@cast dataString string
-    ---@type pinData[]
-    local pins = {}
-    ---@type "group" | "pins"
-    local dataType = "pins"
-    ---@type string
-    local formatName = L["Way commands"]
-    ---@type SerializedExportGroup | pinData[] | nil
-    local parsedData
-
-    if MapPinEnhanced:IsSerializedData(dataString) then
-        formatName = L["Serialized data"]
-        local ok, export = pcall(MapPinEnhanced.DeserializeData, MapPinEnhanced, dataString)
-        if not ok or type(export) ~= "table" or export.version ~= MapPinEnhanced.EXPORT_VERSION or
-            type(export.group) ~= "table" then
+    self.summary:SetTextColor(1, 1, 1)
+    self.summary:SetText(L["Loading"])
+    ---@type SerializedExportGroup?
+    local group
+    local invalidCount, mapCount, formatName = 0, 0, ""
+    ---@type string?
+    local errorMessage
+    self.cancelPreview = MapPinEnhanced:BatchExecution({ function()
+        group, invalidCount, mapCount, formatName, errorMessage =
+            Transfer:ParseImport(input, MapPinEnhanced:CreateBatchCheckpoint(2))
+    end }, nil, function()
+        if self.previewChangeNumber ~= changeNumber then return end
+        self.cancelPreview = nil
+        if not self:IsVisible() or self.visibilityHiding then return end
+        if not group then
             self.summary:SetTextColor(1, 0.2, 0.2)
-            self.summary:SetText(L["Invalid or corrupted serialized data."])
+            self.summary:SetText(errorMessage)
             return
         end
-
-        ---@type SerializedExportGroup
-        local savedGroup = export.group
-
-        ---@type pinData[]
-        local sourcePins = savedGroup.pins
-        if type(sourcePins) ~= "table" then
-            self.summary:SetTextColor(1, 0.2, 0.2)
-            self.summary:SetText(L["Invalid or corrupted serialized data."])
-            return
-        end
-        dataType = "group"
-        for _, pinData in ipairs(sourcePins) do
-            if IsValidPinData(pinData) then
-                table.insert(pins, pinData)
-            else
-                self.invalidPinCount = self.invalidPinCount + 1
-            end
-        end
-        -- Accept only portable metadata. Never carry remote ownership or live
-        -- tracking flags into the group created by the import action.
-        ---@type table<UUID, number>
-        local pinOrder = {}
-        if type(savedGroup.pinOrder) == "table" then
-            for pinID, order in pairs(savedGroup.pinOrder) do
-                if type(pinID) == "string" and type(order) == "number" and
-                    order > -math.huge and order < math.huge then
-                    pinOrder[pinID] = order
-                end
-            end
-        end
-        local icon = savedGroup.icon
-        if type(icon) ~= "string" and
-            not (type(icon) == "number" and icon > 0 and icon < math.huge) then
-            icon = nil
-        end
-        savedGroup = {
-            name = type(savedGroup.name) == "string" and savedGroup.name or nil,
-            icon = icon,
-            trackingMode = (savedGroup.trackingMode == Groups.TRACKING_MODE_ORDERED or
-                savedGroup.trackingMode == Groups.TRACKING_MODE_NEAREST) and savedGroup.trackingMode or nil,
-            pinOrder = pinOrder,
-            pins = pins,
-        }
-        if Groups:IsValidGroupName(savedGroup.name) and not Groups:GetGroupByName(savedGroup.name) then
-            self.groupName = savedGroup.name
+        self.parsedData = group
+        self.validPinCount, self.invalidPinCount = #group.pins, invalidCount
+        self.groupName = Groups:IsValidGroupName(group.name) and not Groups:GetGroupByName(group.name)
+            and group.name or Groups:GetAvailableImportGroupName()
+        local summary = string.format(L["%s: %d pins across %d maps"], formatName, #group.pins, mapCount)
+        if invalidCount > 0 then
+            summary = summary .. " | " .. string.format(L["%d invalid entries will be skipped"], invalidCount)
+            self.summary:SetTextColor(1, 0.45, 0.1)
         else
-            self.groupName = Groups:GetAvailableImportGroupName()
+            self.summary:SetTextColor(0.4, 1, 0.4)
         end
-        parsedData = savedGroup
-    else
-        for line in dataString:gmatch("[^\n]+") do
-            local normalizedLine = line:match("^%s*(.-)%s*$") or ""
-            if normalizedLine ~= "" then
-                local linePins = MapPinEnhanced:DeserializeWayLine(normalizedLine)
-                if #linePins == 0 then
-                    self.invalidPinCount = self.invalidPinCount + 1
-                else
-                    table.insert(pins, linePins[1])
-                end
-            end
+        self.summary:SetText(summary)
+        self:UpdateImportButtonDisabledState()
+        if #group.pins > 0 and onReady then onReady(self.groupName) end
+    end, 1, function(message)
+        if self.previewChangeNumber == changeNumber then
+            self.cancelPreview = nil
+            self.summary:SetTextColor(1, 0.2, 0.2)
+            self.summary:SetText(L["Import failed."])
         end
-        parsedData = pins
-    end
-
-    self.parsedData = parsedData
-    self.parsedDataType = dataType
-    self.validPinCount = #pins
-    self:UpdateSummary(formatName, pins, self.invalidPinCount)
+        geterrorhandler()(message)
+    end)
+    return Cancel
 end
 
-function MapPinEnhancedImportWindowMixin:SetupTextArea()
-    self.textarea:Setup({
-        onChange = function(text)
-            self.dataString = text
-            self:PreparseImport(text)
-            self:UpdateImportButtonDisabledState()
-        end,
-        placeholder = L["Click to paste export string or slash commands here"],
-    })
+function MapPinEnhancedImportWindowMixin:OnShow()
+    MapPinEnhancedWindowMixin.OnShow(self)
+    if not self.parsedData then self:PreparseImport(self.dataString) end
+end
+
+function MapPinEnhancedImportWindowMixin:OnHide()
+    MapPinEnhancedWindowMixin.OnHide(self)
+    self:CancelPreview()
+    if self:IsShown() and not self.visibilityHiding and self.parsedData then return end
+    self.summary:SetText("")
+    self.parsedData = nil
+    self.validPinCount, self.invalidPinCount = 0, 0
+    self:UpdateImportButtonDisabledState()
 end
 
 function MapPinEnhancedImportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
-
-    self.validPinCount = 0
-    self.invalidPinCount = 0
+    self.validPinCount, self.invalidPinCount = 0, 0
     self.importButton:SetScript("OnClick", function()
         if self:StartImport() then Transfer:HideImportWindow() end
     end)
-    self.cancelButton:SetScript("OnClick", function()
-        Transfer:HideImportWindow()
+    self.cancelButton:SetScript("OnClick", function() Transfer:HideImportWindow() end)
+    self.description:SetText(string.format(L[
+        "You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"],
+        MapPinEnhanced.PREFIX))
+    self.textarea:Setup({
+        onChange = function() end,
+        placeholder = L["Click to paste export string or slash commands here"],
+    })
+    -- Invalidate immediately on input. A delayed textarea callback could publish
+    -- an old preview or leave its Import button usable while the text changes.
+    self.textarea.editbox:SetScript("OnTextChanged", function(editbox, userInput)
+        if not userInput then return end
+        self.dataString = editbox:GetText()
+        self:PreparseImport(self.dataString)
     end)
-
-    local descriptionText = L
-        ["You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"]
-    self.description:SetText(string.format(descriptionText, MapPinEnhanced.PREFIX))
-    self:SetupTextArea()
     self:UpdateImportButtonDisabledState()
-
-    self.groupName = Groups:GetAvailableImportGroupName()
 end

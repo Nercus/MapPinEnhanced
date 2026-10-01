@@ -146,6 +146,7 @@ L["%d invalid entries will be skipped"] = "%d invalid entries will be skipped"
 L["Invalid or corrupted serialized data."] = "Invalid or corrupted serialized data."
 L["No valid pins were found to import."] = "No valid pins were found to import."
 L["Imported %d pins; skipped %d invalid entries."] = "Imported %d pins; skipped %d invalid entries."
+L["Importing %d pins; skipped %d invalid entries."] = "Importing %d pins; skipped %d invalid entries."
 L["Import failed."] = "Import failed."
 L["Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."] =
 "Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."

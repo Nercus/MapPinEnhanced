@@ -12,11 +12,16 @@ local TOKEN_PATTERN = "%[MPH:1:([^:%s%[%]|]+):([%x%-]+):([^%[%]|\r\n]+)%]"
 local LINK_PATTERN = "|Hmappinenhanced:1:([^:%s%[%]|]+):([%x%-]+)|h%[MPH: ([^%[%]|\r\n]+)%]|h"
 local SHARE_LIFETIME = 1800
 local REQUEST_TIMEOUT = 60
+local MAX_RECENT_REQUESTS = 128
 
 ---@type table<string, {data: SerializedExport, expires: number}>
 local offers = {}
 ---@type {sender: string, token: string, requestID: string, timer: FunctionContainer}?
 local pending
+---@type fun()?
+local cancelPreview
+---@type table<string, number>
+local recentRequests = {}
 
 local function MakeToken(sender, token, name)
     return string.format("[MPH:1:%s:%s:%s]", sender, token, name)
@@ -82,6 +87,8 @@ end
 local function ClearPending()
     if pending then pending.timer:Cancel() end
     pending = nil
+    if cancelPreview then cancelPreview() end
+    cancelPreview = nil
 end
 
 local function RequestGroup(sender, token)
@@ -106,9 +113,27 @@ MapPinEnhanced:OnTextAddonMessage("GROUP_REQUEST", function(text, sender, kind)
     if not IsWhisper(kind) then return end
     local token, requestID = text:match("^([%x%-]+):([%x%-]+)$")
     if not token or not requestID or #token > 64 or #requestID > 64 then return end
+    sender = Chomp.NameMergedRealm(sender)
+    local now = GetTime()
+    ---@type string
+    local key = sender .. ":" .. token .. ":" .. requestID
+    if recentRequests[key] and recentRequests[key] > now then return end
+    local count, oldestKey, oldestExpiry = 0, nil, math.huge
+    for requestKey, expires in pairs(recentRequests) do
+        if expires <= now then
+            recentRequests[requestKey] = nil
+        else
+            count = count + 1
+            if expires < oldestExpiry then oldestKey, oldestExpiry = requestKey, expires end
+        end
+    end
+    if count >= MAX_RECENT_REQUESTS and oldestKey then recentRequests[oldestKey] = nil end
+    -- Deduplicate the complete request identity, never another receiver's token.
+    -- This bounded session history needs no timer or encoded-response cache.
+    recentRequests[key] = now + REQUEST_TIMEOUT
     ---@type {data: SerializedExport, expires: number}?
     local offer = offers[token]
-    if offer and offer.expires <= GetTime() then
+    if offer and offer.expires <= now then
         offers[token] = nil
         offer = nil
     end
@@ -129,8 +154,12 @@ MapPinEnhanced:OnDataAddonMessage("GROUP_RESPONSE", function(data, sender, kind)
         MapPinEnhanced:Notify(L["This shared group is no longer available. Ask the sender for a new link."], "ERROR")
         return
     end
-    Transfer:ShowImportWindow(MapPinEnhanced:SerializeData(data.export))
-    Notifications:ShowNotification("GROUP_RECEIVED", data.export.group.name)
+    cancelPreview = Transfer:ShowDecodedImportWindow(data.export, function(name)
+        cancelPreview = nil
+        Notifications:ShowNotification("GROUP_RECEIVED", name)
+    end)
+end, function(sender, kind)
+    return IsWhisper(kind) and pending ~= nil and sender == pending.sender
 end)
 
 -- Render incoming plain tokens using the same compact link as the editbox.

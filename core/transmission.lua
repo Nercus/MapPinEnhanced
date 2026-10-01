@@ -10,7 +10,7 @@ local ALLOWED_EVENTS = {
     GROUP_RESPONSE = true,
 }
 
----@type table<string, fun(data: table, sender: string, kind: string)[]>
+---@type table<string, {callback: fun(data: table, sender: string, kind: string), admit: fun(sender: string, kind: string): boolean}[]>
 local dataCallbacks = {}
 ---@type table<string, fun(text: string, sender: string, kind: string)[]>
 local textCallbacks = {}
@@ -55,10 +55,11 @@ end
 
 ---@param event ADDON_MESSAGE_EVENT
 ---@param callback fun(data: table, sender: string, kind: string)
-function MapPinEnhanced:OnDataAddonMessage(event, callback)
+---@param admit? fun(sender: string, kind: string): boolean checked before decoding
+function MapPinEnhanced:OnDataAddonMessage(event, callback, admit)
     assert(ALLOWED_EVENTS[event], "MapPinEnhanced:OnDataAddonMessage: invalid event")
     dataCallbacks[event] = dataCallbacks[event] or {}
-    table.insert(dataCallbacks[event], callback)
+    table.insert(dataCallbacks[event], { callback = callback, admit = admit or function() return true end })
 end
 
 ---@param encoded string
@@ -77,9 +78,16 @@ Chomp.RegisterAddonPrefix(DATA_PREFIX, function(_, message, kind, sender)
     local event, encoded = strsplit(":", message, 2)
     local callbacks = event and dataCallbacks[event]
     if not callbacks or not encoded then return end
+    sender = Chomp.NameMergedRealm(sender)
+    ---@type (fun(data: table, sender: string, kind: string))[]
+    local admitted = {}
+    for _, entry in ipairs(callbacks) do
+        if entry.admit(sender, kind) then admitted[#admitted + 1] = entry.callback end
+    end
+    if #admitted == 0 then return end
     local ok, data = pcall(DecodeData, encoded)
     if not ok or type(data) ~= "table" then return end
-    for _, callback in ipairs(callbacks) do callback(data, sender, kind) end
+    for _, callback in ipairs(admitted) do callback(data, sender, kind) end
 end, {
     permitUnlogged = true,
     permitLogged = true,

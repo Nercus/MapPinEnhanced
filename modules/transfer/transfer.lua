@@ -31,13 +31,26 @@ end
 ---@param dataString string?
 function Transfer:ShowImportWindow(dataString)
     local window = self:GetImportWindow()
+    window:Show()
     if dataString then
         window.dataString = dataString
         window.textarea:SetValue(dataString)
         window:PreparseImport(dataString)
-        window:UpdateImportButtonDisabledState()
+    elseif not window.parsedData and not window.cancelPreview then
+        window:PreparseImport(window.dataString)
     end
+end
+
+---Received data uses exactly the same validator as pasted serialized text.
+---@param data table
+---@param onReady fun(name: string) called only after a valid preview is published
+---@return fun() cancel
+function Transfer:ShowDecodedImportWindow(data, onReady)
+    local window = self:GetImportWindow()
     window:Show()
+    window.dataString = nil
+    window.textarea:SetValue("")
+    return window:PreparseImport(data, onReady)
 end
 
 function Transfer:HideImportWindow()
@@ -49,7 +62,7 @@ end
 ---@param target MapPinEnhancedPinMixin|MapPinEnhancedGroupMixin
 function Transfer:ShowExportWindow(target)
     if not target then return end
-    if target.classification == "group" and #target:GetAllPinData() == 0 then return end
+    if target.classification == "group" and target:GetTotalPinCount() == 0 then return end
     local window = self:GetExportWindow()
     ---@cast window MapPinEnhancedExportWindowTemplate
     window:SetExportTarget(target)

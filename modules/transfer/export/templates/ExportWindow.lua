@@ -9,7 +9,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field summary FontString
 ---@field prefixLabel FontString
 ---@field warning FontString
----@field exportTarget ExportTarget?
+---@field exportData SerializedExport?
 ---@field selectedExportType "way"|"serialized"
 ---@field selectedPrefix "/way"|"/mph"|"/mappin"
 ---@field output string
@@ -31,25 +31,6 @@ local prefixOptions = {
     { label = "/mappin " .. "|T" .. MapPinEnhanced.assetsPath .. "\\shared\\WoWLogo.png" .. ":14:14|t", value = "/mappin" },
 }
 
-local function AddPin(pins, pin)
-    local pinData = pin.GetPinData and pin:GetPinData() or pin
-    if pinData and pinData.mapID and pinData.x and pinData.y then
-        table.insert(pins, pinData)
-    end
-end
-
----@param target ExportTarget
----@return pinData[]
-local function GetPins(target)
-    local pins = {}
-    if target.classification == "pin" then
-        AddPin(pins, target)
-    elseif target.classification == "group" then
-        for _, pinData in ipairs(target:GetAllPinData()) do AddPin(pins, pinData) end
-    end
-    return pins
-end
-
 ---@param pins pinData[]
 function MapPinEnhancedExportWindowMixin:UpdateSummary(pins)
     ---@type table<number, boolean>
@@ -61,12 +42,12 @@ function MapPinEnhancedExportWindowMixin:UpdateSummary(pins)
 end
 
 function MapPinEnhancedExportWindowMixin:UpdateOutput()
-    if not self.exportTarget then return end
-    local pins = GetPins(self.exportTarget)
+    if not self.exportData then return end
+    local pins = self.exportData.group.pins
     ---@type string
     local output
     if self.selectedExportType == "serialized" then
-        output = MapPinEnhanced:SerializeData(Transfer:GetSerializedTarget(self.exportTarget))
+        output = MapPinEnhanced:SerializeData(self.exportData)
     else
         local lines = {}
         for _, pinData in ipairs(pins) do
@@ -88,8 +69,16 @@ end
 ---@param target ExportTarget
 function MapPinEnhancedExportWindowMixin:SetExportTarget(target)
     assert(target, "MapPinEnhancedExportWindowMixin:SetExportTarget: target is nil")
-    self.exportTarget = target
+    self.exportData = Transfer:GetSerializedTarget(target)
     if self.textarea then self:UpdateOutput() end
+end
+
+function MapPinEnhancedExportWindowMixin:OnHide()
+    MapPinEnhancedWindowMixin.OnHide(self)
+    if self:IsShown() and not self.visibilityHiding then return end
+    self.exportData = nil
+    self.output = ""
+    self.textarea:SetValue("")
 end
 
 function MapPinEnhancedExportWindowMixin:OnLoad()
