@@ -24,11 +24,6 @@ local closingObservation ---@type NavigationTaxiObservation?
 local rideTimer ---@type FunctionContainer?
 local automaticDestination ---@type NavigationDestination?
 
-local function IsID(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "number" and
-        value > 0 and value < math.huge and value == math.floor(value)
-end
-
 ---@return NavigationTaxiObservation?
 function Navigation:GetTaxiObservation()
     return observation
@@ -45,13 +40,14 @@ local function ReadObservation()
         return result
     end
     local mapID = GetTaxiMapID()
-    if not IsID(mapID) then return result end
+    if not MapPinEnhanced:IsReadablePositiveInteger(mapID) then return result end
     local nodes = C_TaxiMap.GetAllTaxiNodes(mapID)
     if MapPinEnhanced:IsSecretValue(nodes) or type(nodes) ~= "table" then return result end
     local slots = {} ---@type table<number, number>
     for _, node in ipairs(nodes) do
         if not MapPinEnhanced:IsSecretValue(node) and type(node) == "table" and
-            IsID(node.slotIndex) and IsID(node.nodeID) and not MapPinEnhanced:IsSecretValue(node.state) then
+            MapPinEnhanced:IsReadablePositiveInteger(node.slotIndex) and
+            MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) and not MapPinEnhanced:IsSecretValue(node.state) then
             slots[node.slotIndex] = node.nodeID
             if not MapPinEnhanced:IsSecretValue(node.isMapLayerTransition) and not node.isMapLayerTransition and
                 (node.state == Enum.FlightPathState.Current or node.state == Enum.FlightPathState.Reachable) then
@@ -72,21 +68,22 @@ local function ReadObservation()
     if not result.origin then return result end
     for _, node in ipairs(nodes) do
         if not MapPinEnhanced:IsSecretValue(node) and type(node) == "table" and
-            IsID(node.nodeID) and IsID(node.slotIndex) and not MapPinEnhanced:IsSecretValue(node.state) then
+            MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) and
+            MapPinEnhanced:IsReadablePositiveInteger(node.slotIndex) and not MapPinEnhanced:IsSecretValue(node.state) then
             local id = node.nodeID
             if node.state == Enum.FlightPathState.Reachable then
                 result.failures[id] = "incomplete taxi preview"
                 if not MapPinEnhanced:IsSecretValue(node.isMapLayerTransition) and not node.isMapLayerTransition then
                     result.destinationsBySlot[node.slotIndex] = id
                     local count = GetNumRoutes(node.slotIndex)
-                    if IsID(count) and count <= 1000 then
+                    if MapPinEnhanced:IsReadablePositiveInteger(count) and count <= 1000 then
                         local itinerary = { result.origin }
                         local complete = true
                         for index = 1, count do
                             local fromSlot = getNodeSlot(node.slotIndex, index, true)
                             local toSlot = getNodeSlot(node.slotIndex, index, false)
-                            local from = IsID(fromSlot) and slots[fromSlot]
-                            local to = IsID(toSlot) and slots[toSlot]
+                            local from = MapPinEnhanced:IsReadablePositiveInteger(fromSlot) and slots[fromSlot]
+                            local to = MapPinEnhanced:IsReadablePositiveInteger(toSlot) and slots[toSlot]
                             if not from or not to or from ~= itinerary[#itinerary] or from == to then
                                 complete = false
                                 break
@@ -245,7 +242,7 @@ if TakeTaxiNode then
     hooksecurefunc("TakeTaxiNode", function(slot)
         automaticDestination = nil
         local evidence = observation or closingObservation
-        if activeData and evidence and IsID(slot) then
+        if activeData and evidence and MapPinEnhanced:IsReadablePositiveInteger(slot) then
             bookedDestination = evidence.destinationsBySlot[slot]
             bookingPending = bookedDestination ~= nil
             Navigation:CancelRouteCalculation(Navigation.activeCalculation)

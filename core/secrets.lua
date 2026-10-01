@@ -22,6 +22,24 @@ function MapPinEnhanced:IsSecretTable(value)
     return false
 end
 
+---@param value any
+---@return boolean
+function MapPinEnhanced:IsReadableTable(value)
+    return not self:IsSecretValue(value) and type(value) == "table" and not self:IsSecretTable(value)
+end
+
+---@param value any
+---@return boolean
+function MapPinEnhanced:IsReadableNumber(value)
+    return not self:IsSecretValue(value) and type(value) == "number"
+end
+
+---@param value any
+---@return boolean
+function MapPinEnhanced:IsReadablePositiveInteger(value)
+    return self:IsReadableNumber(value) and value > 0 and value < math.huge and value == math.floor(value)
+end
+
 local cachedCharacterKey ---@type string?
 
 ---@return string?

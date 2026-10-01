@@ -443,15 +443,6 @@ local function ResetDeviationState(progression)
     progression.movingAwayStartedAt = nil
 end
 
----@param text string
----@param limit integer
----@return string
-local function CompactChatLabel(text, limit)
-    text = (MapPinEnhanced:ToPlainText(text) or ""):gsub("|", ""):gsub("%s+", " ")
-    if #text <= limit then return text end
-    return MapPinEnhanced:GetUTF8Prefix(text, limit - 3) .. "..."
-end
-
 local CHAT_PATH_INSTRUCTIONS = {
     walk = "Navigation Chat Walk To",
     fly = "Navigation Chat Fly To",
@@ -468,7 +459,7 @@ local function GetChatInstruction(pathType, location)
     local key = CHAT_PATH_INSTRUCTIONS[pathType]
     if key then return string.format(L[key], location) end
     return string.format(L["Navigation Chat Use To"],
-        CompactChatLabel(Navigation:GetPathMethod(pathType), 24), location)
+        MapPinEnhanced:CompactChatLabel(Navigation:GetPathMethod(pathType), 24), location)
 end
 
 ---@param changeNumber integer
@@ -488,7 +479,8 @@ function Navigation:GetRouteChatSteps(changeNumber)
         local info = C_Map.GetMapInfo(mapID)
         local journey = progression.route.taxiJourneys[reference]
         steps[#steps + 1] = GetChatInstruction(graph.pathTypes[reference],
-            CompactChatLabel(journey and journey.destinationName or info and info.name or tostring(mapID), 80))
+            MapPinEnhanced:CompactChatLabel(journey and journey.destinationName or info and info.name or tostring(mapID),
+                80))
     end
     local data = destination.data
     local info = C_Map.GetMapInfo(data.mapID)
@@ -496,14 +488,14 @@ function Navigation:GetRouteChatSteps(changeNumber)
     local mode = progression.route.finalCost.explanation and progression.route.finalCost.explanation.mode
     local isFlying = mode == "steady-flight" or mode == "skyriding"
     steps[#steps + 1] = GetChatInstruction(isFlying and "fly" or "walk",
-        CompactChatLabel(info and info.name or tostring(data.mapID), 80))
+        MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80))
     return steps, {
         mapID = data.mapID,
         x = data.x,
         y = data.y,
         header = string.format(MapPinEnhanced.displayName .. L[" route To"],
-            CompactChatLabel(GetDestinationTitle(destination), 64),
-            CompactChatLabel(info and info.name or tostring(data.mapID), 80)),
+            MapPinEnhanced:CompactChatLabel(GetDestinationTitle(destination), 64),
+            MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80)),
     }
 end
 
@@ -616,13 +608,15 @@ local function CopyRouteProgress(progression, graph)
         local r, g, b = color:GetRGB()
         local journey = reference and route.taxiJourneys[reference]
         entries[index] = {
-            r = r, g = g, b = b,
+            r = r,
+            g = g,
+            b = b,
             title = string.format(L["Navigation Step Number"], index, Navigation:GetPathMethod(pathType)),
             instruction = journey and journey.destinationName and
                 string.format(L["Navigation Take Flight To"], journey.destinationName) or
                 (reference and Navigation:GetPathInstruction(pathType, mapID) or
                     string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
-                        "Navigation Travel To Destination"], GetDestinationTitle(destination))),
+                    "Navigation Travel To Destination"], GetDestinationTitle(destination))),
             location = string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID), x * 100, y * 100),
         }
     end
@@ -1184,38 +1178,6 @@ local function ReleaseRouteMapFrame(frame)
     end
 end
 
--- Keep one real endpoint on this map. For another continent, Azeroth supplies
--- the direction that separate world instances cannot express directly.
----@param mapID number
----@param x number
----@param y number
----@param visibleMapID number
----@param anchorX number
----@param anchorY number
----@return number? x
----@return number? y
-local function GetRouteMapEdge(mapID, x, y, visibleMapID, anchorX, anchorY)
-    local HBD = MapPinEnhanced.HBD
-    local projectedX, projectedY = HBD:TranslateZoneCoordinates(x, y, mapID, visibleMapID, true)
-    if not projectedX or not projectedY then
-        local azerothX, azerothY = HBD:TranslateZoneCoordinates(x, y, mapID, 947, true)
-        if not azerothX or not azerothY then return end
-        projectedX, projectedY = HBD:TranslateZoneCoordinates(azerothX, azerothY, 947, visibleMapID, true)
-    end
-    if not projectedX or not projectedY then return end
-    if projectedX >= 0 and projectedX <= 1 and projectedY >= 0 and projectedY <= 1 then return end
-    local dx, dy = projectedX - anchorX, projectedY - anchorY
-    local fraction = 1
-    if dx > 0 then fraction = math.min(fraction, (1 - anchorX) / dx) end
-    if dx < 0 then fraction = math.min(fraction, -anchorX / dx) end
-    if dy > 0 then fraction = math.min(fraction, (1 - anchorY) / dy) end
-    if dy < 0 then fraction = math.min(fraction, -anchorY / dy) end
-    -- Stay just inside the boundary through HBD's coordinate round trip.
-    local inset = 0.0000001
-    return math.max(inset, math.min(1 - inset, anchorX + dx * fraction)),
-        math.max(inset, math.min(1 - inset, anchorY + dy * fraction))
-end
-
 ---@param isWorldMap boolean
 ---@param fromMapID number
 ---@param fromX number
@@ -1232,12 +1194,12 @@ local function ProjectRouteMapEndpoints(isWorldMap, fromMapID, fromX, fromY, toM
         local startX, startY = HBD:TranslateZoneCoordinates(fromX, fromY, fromMapID, visibleMapID)
         local endX, endY = HBD:TranslateZoneCoordinates(toX, toY, toMapID, visibleMapID)
         if startX and startY and not endX then
-            local edgeX, edgeY = GetRouteMapEdge(toMapID, toX, toY, visibleMapID, startX, startY)
+            local edgeX, edgeY = MapPinEnhanced:ProjectPointToMapEdge(toMapID, toX, toY, visibleMapID, startX, startY)
             if edgeX and edgeY then
                 toMapID, toX, toY, toEdge = visibleMapID, edgeX, edgeY, true
             end
         elseif endX and endY and not startX then
-            local edgeX, edgeY = GetRouteMapEdge(fromMapID, fromX, fromY, visibleMapID, endX, endY)
+            local edgeX, edgeY = MapPinEnhanced:ProjectPointToMapEdge(fromMapID, fromX, fromY, visibleMapID, endX, endY)
             if edgeX and edgeY then
                 fromMapID, fromX, fromY, fromEdge = visibleMapID, edgeX, edgeY, true
             end

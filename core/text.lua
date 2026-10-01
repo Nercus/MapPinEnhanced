@@ -54,3 +54,12 @@ function MapPinEnhanced:ToPlainText(text)
     text = self:NormalizeText(text)
     return text
 end
+
+---@param text string
+---@param limit integer Maximum byte length, including ellipsis; at least 3.
+---@return string
+function MapPinEnhanced:CompactChatLabel(text, limit)
+    text = (self:ToPlainText(text) or ""):gsub("|", ""):gsub("%s+", " ")
+    if #text <= limit then return text end
+    return self:GetUTF8Prefix(text, limit - 3) .. "..."
+end

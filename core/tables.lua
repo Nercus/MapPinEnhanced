@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@param value table<string, boolean>?
 ---@return table<string, boolean>
-function MapPinEnhanced:CopyTable(value)
+function MapPinEnhanced:NormalizeSelection(value)
     ---@type table<string, boolean>
     local result = {}
     if type(value) ~= "table" then return result end
@@ -17,7 +17,7 @@ end
 ---@param right table<string, boolean>?
 ---@return boolean
 function MapPinEnhanced:TablesEqual(left, right)
-    left, right = self:CopyTable(left), self:CopyTable(right)
+    left, right = self:NormalizeSelection(left), self:NormalizeSelection(right)
     for key in pairs(left) do
         if not right[key] then return false end
     end

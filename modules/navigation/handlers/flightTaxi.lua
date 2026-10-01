@@ -56,11 +56,6 @@ local connections = {} ---@type table<number, table<number, integer[]>>
 local sourcePairs = {} ---@type table<integer, string>
 local pointsByNode = {} ---@type table<number, integer>
 
-local function IsID(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "number" and
-        value > 0 and value < math.huge and value == math.floor(value)
-end
-
 local function Presentation()
     return "FlightMaster", L["Navigation Method Flight Taxi"], L["Navigation Take Transport"]
 end
@@ -76,8 +71,9 @@ local function Dataprovider(path)
     if type(path.toTaxiNodeID) == "number" then taxiMapByNodeID[path.toTaxiNodeID] = path.toMap end
     local ids = {} ---@type integer[]
     for _, id in ipairs(path.taxiPathIDs or {}) do
-        assert(IsID(id), "Navigation flight taxi requires positive integer source IDs")
-        assert(IsID(path.fromTaxiNodeID) and IsID(path.toTaxiNodeID),
+        assert(MapPinEnhanced:IsReadablePositiveInteger(id), "Navigation flight taxi requires positive integer source IDs")
+        assert(MapPinEnhanced:IsReadablePositiveInteger(path.fromTaxiNodeID) and
+            MapPinEnhanced:IsReadablePositiveInteger(path.toTaxiNodeID),
             "Navigation flight taxi source IDs require node endpoints")
         local pair = path.fromTaxiNodeID .. ":" .. path.toTaxiNodeID
         assert(not sourcePairs[id] or sourcePairs[id] == pair,
@@ -127,7 +123,7 @@ local function GetTaxiNodes(mapID)
                 x, y = position:GetXY()
                 if MapPinEnhanced:IsSecretValue(x) or MapPinEnhanced:IsSecretValue(y) then x, y = nil, nil end
             end
-            if IsID(node.nodeID) then
+            if MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) then
                 local known = learnedTaxiNodes[node.nodeID] ---@type boolean?
                 if mapReportsDiscovery then
                     known = nil

@@ -380,13 +380,6 @@ local function ValueMatches(value, expected)
     return false
 end
 
----@param value any
----@return boolean
-local function IsReadableRequirementTable(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "table" and
-        not MapPinEnhanced:IsSecretTable(value)
-end
-
 ---@param key string
 ---@param value any
 ---@return NavigationRequirementState
@@ -401,7 +394,7 @@ local function EvaluateDirectCheck(key, value)
         if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.poiID) ~= "number" or
             not C_AreaPoiInfo or not C_AreaPoiInfo.GetAreaPOIForMap then return UNKNOWN end
         local poiIDs = C_AreaPoiInfo.GetAreaPOIForMap(value.mapID)
-        if not IsReadableRequirementTable(poiIDs) then return UNKNOWN end
+        if not MapPinEnhanced:IsReadableTable(poiIDs) then return UNKNOWN end
         local sawUnknown = false
         for _, poiID in ipairs(poiIDs) do
             if MapPinEnhanced:IsSecretValue(poiID) or type(poiID) ~= "number" then
@@ -415,8 +408,8 @@ local function EvaluateDirectCheck(key, value)
         if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.textureID) ~= "number" or
             not C_MapExplorationInfo or not C_MapExplorationInfo.GetExploredMapTextures then return UNKNOWN end
         local textures = C_MapExplorationInfo.GetExploredMapTextures(value.mapID)
-        if not IsReadableRequirementTable(textures) or not IsReadableRequirementTable(textures[1]) or
-            not IsReadableRequirementTable(textures[1].fileDataIDs) then return UNKNOWN end
+        if not MapPinEnhanced:IsReadableTable(textures) or not MapPinEnhanced:IsReadableTable(textures[1]) or
+            not MapPinEnhanced:IsReadableTable(textures[1].fileDataIDs) then return UNKNOWN end
         -- The source invasion selector observes the first overlay's first texture.
         local textureID = textures[1].fileDataIDs[1]
         if MapPinEnhanced:IsSecretValue(textureID) or type(textureID) ~= "number" then return UNKNOWN end
@@ -493,7 +486,7 @@ local function EvaluateDirectCheck(key, value)
         return EvaluateToyOwnership(value)
     elseif key == "achievement" then
         if type(value) == "table" then
-            if not IsReadableRequirementTable(value) or type(value.id) ~= "number" or
+            if not MapPinEnhanced:IsReadableTable(value) or type(value.id) ~= "number" or
                 type(value.criteria) ~= "number" or value.id <= 0 or value.id % 1 ~= 0 or
                 value.criteria <= 0 or value.criteria % 1 ~= 0 or not GetAchievementCriteriaInfo then return UNKNOWN end
             -- Authored criteria are indexes, as in the source's achieved(id, index).
@@ -528,7 +521,7 @@ local function EvaluateDirectCheck(key, value)
         local aura = C_UnitAuras.GetPlayerAuraBySpellID(value)
         if MapPinEnhanced:IsSecretValue(aura) then return UNKNOWN end
         if aura == nil then return UNSATISFIED end
-        if not IsReadableRequirementTable(aura) then return UNKNOWN end
+        if not MapPinEnhanced:IsReadableTable(aura) then return UNKNOWN end
         return SATISFIED
     elseif key == "covenant" then
         if type(value) ~= "number" or value < 1 or value > 4 or value % 1 ~= 0 or

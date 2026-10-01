@@ -13,23 +13,10 @@ local refreshTicker ---@type FunctionContainer?
 
 ---@param value any
 ---@return boolean
-local function IsReadableTable(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "table" and
-        not MapPinEnhanced:IsSecretTable(value)
-end
-
----@param value any
----@return boolean
-local function IsReadableNumber(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "number"
-end
-
----@param value any
----@return boolean
 local function IsCalendarTime(value)
-    if not IsReadableTable(value) then return false end
+    if not MapPinEnhanced:IsReadableTable(value) then return false end
     for _, key in ipairs({ "year", "month", "monthDay", "weekday", "hour", "minute" }) do
-        if not IsReadableNumber(value[key]) then return false end
+        if not MapPinEnhanced:IsReadableNumber(value[key]) then return false end
     end
     return true
 end
@@ -49,19 +36,19 @@ local function IsHolidayActive(holidayID)
     if not GetCVarBool(filter) then return nil end
     local now = C_DateAndTime.GetCurrentCalendarTime()
     local month = C_Calendar.GetMonthInfo(0)
-    if not IsCalendarTime(now) or not IsReadableTable(month) or
-        not IsReadableNumber(month.year) or not IsReadableNumber(month.month) then
+    if not IsCalendarTime(now) or not MapPinEnhanced:IsReadableTable(month) or
+        not MapPinEnhanced:IsReadableNumber(month.year) or not MapPinEnhanced:IsReadableNumber(month.month) then
         return nil
     end
     -- Offsets are relative to the displayed calendar month, not today's month.
     local offset = (now.year - month.year) * 12 + now.month - month.month
     local count = C_Calendar.GetNumDayEvents(offset, now.monthDay)
-    if not IsReadableNumber(count) or count < 0 then return nil end
+    if not MapPinEnhanced:IsReadableNumber(count) or count < 0 then return nil end
     local sawUnknown = false
     for index = 1, count do
         local event = C_Calendar.GetDayEvent(offset, now.monthDay, index)
-        if not IsReadableTable(event) or MapPinEnhanced:IsSecretValue(event.calendarType) or
-            type(event.calendarType) ~= "string" or not IsReadableNumber(event.eventID) then
+        if not MapPinEnhanced:IsReadableTable(event) or MapPinEnhanced:IsSecretValue(event.calendarType) or
+            type(event.calendarType) ~= "string" or not MapPinEnhanced:IsReadableNumber(event.eventID) then
             sawUnknown = true
         elseif event.calendarType == "HOLIDAY" and event.eventID == holidayID then
             if not IsCalendarTime(event.startTime) or not IsCalendarTime(event.endTime) then
@@ -72,8 +59,8 @@ local function IsHolidayActive(holidayID)
                 local duration = C_DateAndTime.CompareCalendarTime(event.startTime, event.endTime)
                 local started = C_DateAndTime.CompareCalendarTime(event.startTime, now)
                 local remaining = C_DateAndTime.CompareCalendarTime(now, event.endTime)
-                if not IsReadableNumber(duration) or not IsReadableNumber(started) or
-                    not IsReadableNumber(remaining) or duration <= 0 then
+                if not MapPinEnhanced:IsReadableNumber(duration) or not MapPinEnhanced:IsReadableNumber(started) or
+                    not MapPinEnhanced:IsReadableNumber(remaining) or duration <= 0 then
                     sawUnknown = true
                 elseif started >= 0 and remaining > 0 then
                     return true

@@ -125,7 +125,7 @@ function MapPinEnhanced:GetVar(...)
             end
             return nil
         end
-        dbTable = dbTable[key]
+        dbTable = dbTable[key] --[[@as table]]
     end
     error("Error receiving value from saved variables")
 end

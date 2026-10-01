@@ -29,16 +29,11 @@ MapPinEnhanced:SetDefault("hearthstoneDestinations", {})
 
 ---@param value any
 ---@return boolean
-local function IsCoordinate(value)
-    return not MapPinEnhanced:IsSecretValue(value) and type(value) == "number" and value >= 0 and value <= 1
-end
-
----@param value any
----@return boolean
 local function IsDestination(value)
     return type(value) == "table" and not MapPinEnhanced:IsSecretTable(value) and
         not MapPinEnhanced:IsSecretValue(value.mapID) and type(value.mapID) == "number" and
-        value.mapID > 0 and value.mapID % 1 == 0 and IsCoordinate(value.x) and IsCoordinate(value.y)
+        value.mapID > 0 and value.mapID % 1 == 0 and
+        MapPinEnhanced:IsCoordinate(value.x) and MapPinEnhanced:IsCoordinate(value.y)
 end
 
 ---@return NavigationHearthstoneDestination?

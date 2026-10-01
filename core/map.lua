@@ -142,6 +142,13 @@ local function GetSmoothedClosingSpeed(currentSpeed, hasCurrentSpeed, rawClosing
     return currentSpeed + alpha * (closingSpeed - currentSpeed), true
 end
 
+---Whether a nonsecret value is a normalized map coordinate in [0, 1].
+---@param value any
+---@return boolean
+function MapPinEnhanced:IsCoordinate(value)
+    return self:IsReadableNumber(value) and value >= 0 and value <= 1
+end
+
 ---Wrapper for the current map the player is on
 ---@return number? mapID
 function MapPinEnhanced:GetPlayerMap()
@@ -412,6 +419,39 @@ function MapPinEnhanced:FormatETA(time)
     local minutes = math.floor(time / 60)
     local seconds = math.floor(time % 60)
     return string.format("%02d:%02d", minutes, seconds)
+end
+
+-- Keep one real endpoint on this map. For another continent, Azeroth supplies
+-- the direction that separate world instances cannot express directly.
+-- The anchor must be on the visible map; unavailable or already-visible points return nil.
+---@param mapID number
+---@param x number
+---@param y number
+---@param visibleMapID number
+---@param anchorX number
+---@param anchorY number
+---@return number? x
+---@return number? y
+function MapPinEnhanced:ProjectPointToMapEdge(mapID, x, y, visibleMapID, anchorX, anchorY)
+    local HBD = self.HBD
+    local projectedX, projectedY = HBD:TranslateZoneCoordinates(x, y, mapID, visibleMapID, true)
+    if not projectedX or not projectedY then
+        local azerothX, azerothY = HBD:TranslateZoneCoordinates(x, y, mapID, 947, true)
+        if not azerothX or not azerothY then return end
+        projectedX, projectedY = HBD:TranslateZoneCoordinates(azerothX, azerothY, 947, visibleMapID, true)
+    end
+    if not projectedX or not projectedY then return end
+    if projectedX >= 0 and projectedX <= 1 and projectedY >= 0 and projectedY <= 1 then return end
+    local dx, dy = projectedX - anchorX, projectedY - anchorY
+    local fraction = 1
+    if dx > 0 then fraction = math.min(fraction, (1 - anchorX) / dx) end
+    if dx < 0 then fraction = math.min(fraction, -anchorX / dx) end
+    if dy > 0 then fraction = math.min(fraction, (1 - anchorY) / dy) end
+    if dy < 0 then fraction = math.min(fraction, -anchorY / dy) end
+    -- Stay just inside the boundary through HBD's coordinate round trip.
+    local inset = 0.0000001
+    return math.max(inset, math.min(1 - inset, anchorX + dx * fraction)),
+        math.max(inset, math.min(1 - inset, anchorY + dy * fraction))
 end
 
 ---@param left { x: number, y: number }

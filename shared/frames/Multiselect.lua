@@ -29,13 +29,13 @@ end
 
 ---@param value MapPinEnhancedMultiselectValue?
 function MapPinEnhancedMultiselectMixin:SetValue(value)
-    self.selected = MapPinEnhanced:CopyTable(value)
+    self.selected = MapPinEnhanced:NormalizeSelection(value)
     self:RefreshSelectedLabel()
 end
 
 ---@return MapPinEnhancedMultiselectValue
 function MapPinEnhancedMultiselectMixin:GetValue()
-    return MapPinEnhanced:CopyTable(self.selected)
+    return MapPinEnhanced:NormalizeSelection(self.selected)
 end
 
 ---@param value MapPinEnhancedMultiselectValue?
@@ -51,7 +51,7 @@ function MapPinEnhancedMultiselectMixin:Setup(options, onChange)
     assert(type(onChange) == "function", "Multiselect onChange must be a function")
 
     self.options = options
-    self.selected = MapPinEnhanced:CopyTable(self.selected)
+    self.selected = MapPinEnhanced:NormalizeSelection(self.selected)
     ---@type AnyMenuEntry[]
     local entries = {}
     for _, option in ipairs(options) do
