@@ -9,6 +9,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@param pin MapPinEnhancedPinMixin
 ---@param persist boolean
 local function Track(pin, persist)
+    if pin.group and (pin.group.isDeleting or pin.group.pinsUpdating) then return end
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin ~= pin then
         if not persist and trackedPin.group == pin.group then

@@ -49,6 +49,7 @@ end
 ---@param group MapPinEnhancedGroupMixin?
 ---@param focusName boolean?
 function MapPinEnhancedGroupEditorMixin:SelectGroup(group, focusName)
+    if group and group.isDeleting then return end
     if self.selectedGroup ~= group then Editor:CloseDescriptionEditor() end
     self.selectedGroup = group
     self.groupEditorSidebar:Refresh()
@@ -98,7 +99,18 @@ function MapPinEnhancedGroupEditorMixin:OnLoad()
     local function refresh() self:RequestRefresh() end
     MapPinEnhanced:RegisterCallback("PIN_ADDED", refresh)
     MapPinEnhanced:RegisterCallback("PIN_REMOVED", refresh)
-    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", refresh)
+    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(_, group)
+        if group and group.pinsUpdating then
+            self:CancelPinDrag()
+            if self.selectedGroup == group then
+                Editor:CloseDescriptionEditor()
+                self.groupEditorContent:SetGroup(group)
+                if group.isDeleting then self.selectedGroup = nil end
+            end
+            self.groupEditorSidebar:Refresh()
+        end
+        self:RequestRefresh()
+    end)
     MapPinEnhanced:RegisterCallback("GROUP_DELETED", refresh)
 end
 

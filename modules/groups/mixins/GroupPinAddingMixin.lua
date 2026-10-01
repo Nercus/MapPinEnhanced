@@ -35,13 +35,13 @@ end
 ---@param overridePinID UUID?
 ---@return MapPinEnhancedPinMixin?, UUID?
 function MapPinEnhancedGroupPinAddingMixin:AddPin(pinData, overridePinID)
-    self:CancelBatch()
+    if not self:CancelBatch() then return nil end
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
 
     local pin, pinID, replacedWayBackPin, shouldTrack = self:AddBeforePersist(pinData, overridePinID)
     if not pinID then return nil, nil end
     self:PruneOldestReachedPins()
-    self:PersistPinChanges(true)
+    self:PersistPinChanges(true, true)
     if shouldTrack and pin then pin:TrackWithoutPersisting() end
     if pin then
         MapPinEnhanced:FireCallback("PIN_ADDED", nil, self, pin)
@@ -57,10 +57,11 @@ end
 ---@param pinsData pinData[]|SaveablePinData[]
 ---@param preserveGroupOrder boolean?
 ---@param pinOrders table<UUID, number>?
+---@return boolean accepted
 function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGroupOrder, pinOrders)
-    self:CancelBatch()
+    if not self:CancelBatch() then return false end
     assert(type(pinsData) == "table", "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData must be a table")
-    if #pinsData == 0 then return end
+    if #pinsData == 0 then return true end
 
     local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
     local completed, finished = 0, false
@@ -78,8 +79,9 @@ function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGro
         cancelExecution = nil
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return end
+        self.pinsUpdating = nil
         self:PruneOldestReachedPins()
-        self:PersistPinChanges(not preserveGroupOrder)
+        self:PersistPinChanges(not preserveGroupOrder, status == "complete")
         if trackedPin and trackedPin.group == self and self:GetPinByID(trackedPin.pinID) == trackedPin then
             trackedPin:TrackWithoutPersisting()
         end
@@ -108,28 +110,15 @@ function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGro
         return not finished and self:IsSameGroup(groupID, lifetimeChangeNumber)
     end
 
-    if #pinsData < 50 then
+    self:BeginPinChanges()
+    if finished then return false end
+    cancelExecution = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint()
         for _, pinData in ipairs(pinsData) do
-            local success, added = pcall(addPin, pinData)
-            if not success then
-                onError(tostring(added))
-                return
-            end
-            if not added then
-                finish("stopped")
-                return
-            end
+            if not addPin(pinData) then return false end
+            checkpoint()
         end
-        finish("complete")
-        return
-    end
-
-    ---@type (fun(): boolean?)[]
-    local tasks = {}
-    for _, pinData in ipairs(pinsData) do
-        local data = pinData
-        tasks[#tasks + 1] = function() return addPin(data) end
-    end
-    local batchSize = math.min(math.max(math.ceil(#pinsData / 60), 10), 100)
-    cancelExecution = MapPinEnhanced:BatchExecution(tasks, nil, finish, batchSize, onError)
+        self.pinState:CheckPinState(checkpoint)
+    end }, nil, finish, 1, onError)
+    return true
 end

@@ -48,7 +48,7 @@ end
 ---@param pinID UUID
 ---@return boolean
 function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
-    self:CancelBatch()
+    if not self:CancelBatch() then return false end
     assert(pinID, "MapPinEnhancedGroupMixin:RemovePin: pinID is nil")
 
     local pin = self:GetPinByID(pinID)
@@ -62,7 +62,7 @@ function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
     ResetLimitWarningIfBelowTarget(self)
     self:PersistPinChanges(true)
     if removedPin then
-        self.pinState:ReleaseDetachedPin(pinID)
+        self.pinState:ReleaseDetachedPin(removedPin)
         MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pinID)
     else
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -81,7 +81,7 @@ end
 ---@param pinID UUID
 ---@return boolean
 function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
-    self:CancelBatch()
+    if not self:CancelBatch() then return false end
     assert(pinID, "MapPinEnhancedGroupMixin:MarkPinReached: pinID is nil")
 
     local archivedPin = self:GetArchivedPinByID(pinID)
@@ -109,61 +109,12 @@ function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
     return true
 end
 
----@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:RestoreReachedPins()
-    self:CancelBatch()
-    if self.hidden then return false end
-    local restored, total, message = self.pinState:RestoreArchived(ARCHIVE_STATE_REACHED)
-    if restored < total then Groups:ReportStoppedPinOperation(restored, total) end
-    if restored > 0 then
-        self:PersistPinChanges(true)
-        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-    end
-    if message then geterrorhandler()(message) end
-    return restored > 0
-end
-
----@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:HideGroup()
-    self:CancelBatch()
-    if self.protected or self.hidden then return false end
-    local hadTrackedPin = self.pinState:ArchiveAll(ARCHIVE_STATE_HIDDEN)
-    self.hidden = true
-    self:PersistPinChanges(true)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-    if hadTrackedPin then Groups:TrackNextPinAfterGroup(self) end
-    return true
-end
-
----@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:ShowGroup()
-    self:CancelBatch()
-    if not self.hidden then return false end
-    self.hidden = false
-    local restored, total, message = self.pinState:RestoreArchived()
-    if restored < total then Groups:ReportStoppedPinOperation(restored, total) end
-    self:PersistPinChanges(true)
-    if message then geterrorhandler()(message) end
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-    return true
-end
-
----@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:ClearGroup()
-    self:CancelBatch()
-    if not self.protected then return false end
-    self.pinState:Reset()
-    self.limitWarningShown = false
-    self:PersistPinChanges(true)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-    return true
-end
-
 ---@param pinIDs UUID[]
+---@return boolean accepted
 function MapPinEnhancedGroupPinOperationsMixin:RemoveMultiplePins(pinIDs)
-    self:CancelBatch()
+    if not self:CancelBatch() then return false end
     assert(type(pinIDs) == "table", "MapPinEnhancedGroupMixin:RemoveMultiplePins: pinIDs must be a table")
-    if #pinIDs == 0 then return end
+    if #pinIDs == 0 then return true end
 
     local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
     local completed, finished = 0, false
@@ -179,8 +130,9 @@ function MapPinEnhancedGroupPinOperationsMixin:RemoveMultiplePins(pinIDs)
         cancelExecution = nil
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return end
+        self.pinsUpdating = nil
         ResetLimitWarningIfBelowTarget(self)
-        self:PersistPinChanges(true)
+        self:PersistPinChanges(true, status == "complete")
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         if status ~= "complete" then Groups:ReportStoppedPinOperation(completed, #pinIDs) end
     end
@@ -199,40 +151,27 @@ function MapPinEnhancedGroupPinOperationsMixin:RemoveMultiplePins(pinIDs)
         if finished or not self:IsSameGroup(groupID, lifetimeChangeNumber) then return false end
         local pin = self.pinState:Remove(pinID)
         completed = completed + 1
-        if pin then self.pinState:ReleaseDetachedPin(pinID) end
+        if pin then self.pinState:ReleaseDetachedPin(pin) end
         return not finished and self:IsSameGroup(groupID, lifetimeChangeNumber)
     end
 
-    if #pinIDs < 50 then
+    self:BeginPinChanges()
+    if finished then return false end
+    cancelExecution = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint()
         for _, pinID in ipairs(pinIDs) do
-            local success, removed = pcall(removePin, pinID)
-            if not success then
-                onError(tostring(removed))
-                return
-            end
-            if not removed then
-                finish("stopped")
-                return
-            end
+            if not removePin(pinID) then return false end
+            checkpoint()
         end
-        finish("complete")
-        return
-    end
-
-    ---@type (fun(): boolean?)[]
-    local tasks = {}
-    for _, pinID in ipairs(pinIDs) do
-        local id = pinID
-        tasks[#tasks + 1] = function() return removePin(id) end
-    end
-    local batchSize = math.min(math.max(math.ceil(#pinIDs / 60), 10), 100)
-    cancelExecution = MapPinEnhanced:BatchExecution(tasks, nil, finish, batchSize, onError)
+        self.pinState:CheckPinState(checkpoint)
+    end }, nil, finish, 1, onError)
+    return true
 end
 
 ---@param pinID UUID
 ---@return UUID?
 function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
-    self:CancelBatch()
+    if not self:CancelBatch() then return nil end
     local entries = self:GetPinEntries()
     ---@type SaveablePinData?
     local sourceData
@@ -273,9 +212,9 @@ end
 ---@param targetGroup MapPinEnhancedGroupMixin
 ---@return boolean
 function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup)
-    self:CancelBatch()
+    if not self:CancelBatch() then return false end
     if self == targetGroup then return false end
-    targetGroup:CancelBatch()
+    if not targetGroup:CancelBatch() then return false end
     local entries = self:GetPinEntries()
     ---@type MapPinEnhancedGroupPinEntry?
     local sourceEntry
@@ -293,7 +232,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
     ResetLimitWarningIfBelowTarget(self)
     self:PersistPinChanges(true)
     if sourcePin then
-        self.pinState:ReleaseDetachedPin(pinID)
+        self.pinState:ReleaseDetachedPin(sourcePin)
         MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pinID)
     end
 

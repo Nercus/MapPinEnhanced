@@ -10,6 +10,8 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field archive table<UUID, ArchivedPinData>
 ---@field count number
 ---@field changeNumber number
+---@field maximumOrder number?
+---@field orderCacheValid boolean?
 MapPinEnhancedGroupPinStateMixin = CreateFromMixins(MapPinEnhancedGroupPinStateReadMixin)
 
 ---@param pinData pinData|SaveablePinData
@@ -31,24 +33,30 @@ function MapPinEnhancedGroupPinStateMixin:Init(group)
     self.pins = {}
     self.orders = {}
     self.archive = {}
+    self.maximumOrder = nil
+    self.orderCacheValid = true
     self.count = 0
     self.changeNumber = 0
 end
 
-function MapPinEnhancedGroupPinStateMixin:Reset()
-    local pins = self.pins
-    self.pins = {}
-    self.orders = {}
-    self.archive = {}
-    self.count = 0
-    self.changeNumber = self.changeNumber + 1
-    for pinID, pin in pairs(pins) do
-        pin.suppressPersistence = true
-        Pins:ReleasePin(pinID)
+---@param checkpoint fun()?
+function MapPinEnhancedGroupPinStateMixin:Reset(checkpoint)
+    for pinID, pin in pairs(self.pins) do
+        self:Remove(pinID)
+        self:ReleaseDetachedPin(pin)
+        if checkpoint then checkpoint() end
     end
+    for pinID in pairs(self.archive) do
+        self:Remove(pinID)
+        if checkpoint then checkpoint() end
+    end
+    self.maximumOrder = nil
+    self.orderCacheValid = true
+    self.changeNumber = self.changeNumber + 1
 end
 
-function MapPinEnhancedGroupPinStateMixin:CheckPinState()
+---@param checkpoint fun()?
+function MapPinEnhancedGroupPinStateMixin:CheckPinState(checkpoint)
     local count = 0
     for pinID in pairs(self.pins) do
         assert(not self.archive[pinID],
@@ -56,10 +64,12 @@ function MapPinEnhancedGroupPinStateMixin:CheckPinState()
         assert(type(self.orders[pinID]) == "number",
             "MapPinEnhancedGroupPinStateMixin: active pin has no numeric order")
         count = count + 1
+        if checkpoint then checkpoint() end
     end
     for pinID in pairs(self.orders) do
         assert(self.pins[pinID],
             "MapPinEnhancedGroupPinStateMixin: active order has no active pin")
+        if checkpoint then checkpoint() end
     end
     for pinID, archivedPin in pairs(self.archive) do
         assert(not self.pins[pinID],
@@ -72,6 +82,7 @@ function MapPinEnhancedGroupPinStateMixin:CheckPinState()
             "MapPinEnhancedGroupPinStateMixin: archived pin has an invalid state")
         assert(archivedPin.data.pinID == pinID,
             "MapPinEnhancedGroupPinStateMixin: archived pin ID does not match its key")
+        if checkpoint then checkpoint() end
     end
     assert(count == self.count,
         "MapPinEnhancedGroupPinStateMixin: active pin count does not match membership")
@@ -79,19 +90,19 @@ end
 
 ---@return number
 function MapPinEnhancedGroupPinStateMixin:GetNextOrder()
-    ---@type number?
-    local maxOrder
-    for _, order in pairs(self.orders) do
-        if not maxOrder or order > maxOrder then
-            maxOrder = order
+    if not self.orderCacheValid then
+        ---@type number?
+        local maximumOrder
+        for _, order in pairs(self.orders) do
+            maximumOrder = maximumOrder and math.max(maximumOrder, order) or order
         end
-    end
-    for _, archivedPin in pairs(self.archive) do
-        if not maxOrder or archivedPin.order > maxOrder then
-            maxOrder = archivedPin.order
+        for _, archivedPin in pairs(self.archive) do
+            maximumOrder = maximumOrder and math.max(maximumOrder, archivedPin.order) or archivedPin.order
         end
+        self.maximumOrder = maximumOrder
+        self.orderCacheValid = true
     end
-    return maxOrder and maxOrder + 1 or GetTime()
+    return self.maximumOrder and self.maximumOrder + 1 or GetTime()
 end
 
 ---@param pinData pinData|SaveablePinData
@@ -114,9 +125,10 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
         createData = copiedData
     end
     local groupID, lifetimeChangeNumber = self.group:GetGroupID(), self.group.lifetimeChangeNumber
+    local cancelBatch = self.group.cancelBatch
     local pin = Pins:CreatePin(createData, overridePinID, self.group, true)
     if not pin then return nil, false end
-    if self.group.isDeleting or self.group:GetGroupID() ~= groupID or
+    if self.group.cancelBatch ~= cancelBatch or self.group.isDeleting or self.group:GetGroupID() ~= groupID or
         self.group.lifetimeChangeNumber ~= lifetimeChangeNumber then
         pin.suppressPersistence = true
         Pins:ReleasePin(pin.pinID)
@@ -125,8 +137,12 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
     local pinID = pin.pinID
     assert(not self.pins[pinID] and not self.archive[pinID],
         "MapPinEnhancedGroupPinStateMixin:AddActive: generated pin ID is already retained by the group")
+    assert(Pins:GetPinByID(pinID) == pin,
+        "MapPinEnhancedGroupPinStateMixin:AddActive: pin is not indexed by Pins")
     self.pins[pinID] = pin
-    self.orders[pinID] = type(order) == "number" and order or self:GetNextOrder()
+    local nextOrder = self:GetNextOrder()
+    self.orders[pinID] = type(order) == "number" and order or nextOrder
+    self.maximumOrder = math.max(self.maximumOrder or self.orders[pinID], self.orders[pinID])
     self.count = self.count + 1
     self.changeNumber = self.changeNumber + 1
     return pin, shouldTrack
@@ -144,11 +160,13 @@ function MapPinEnhancedGroupPinStateMixin:AddArchived(pinData, state, order, ove
     local pinID = data.pinID
     assert(not self.pins[pinID] and not self.archive[pinID],
         "MapPinEnhancedGroupPinStateMixin:AddArchived: pin ID is already retained by the group")
+    local nextOrder = self:GetNextOrder()
     self.archive[pinID] = {
         state = state,
         data = data,
-        order = type(order) == "number" and order or self:GetNextOrder(),
+        order = type(order) == "number" and order or nextOrder,
     }
+    self.maximumOrder = math.max(self.maximumOrder or self.archive[pinID].order, self.archive[pinID].order)
     self.changeNumber = self.changeNumber + 1
     return pinID
 end
@@ -156,6 +174,7 @@ end
 ---@param pinID UUID
 ---@return MapPinEnhancedPinMixin?, ArchivedPinData?, number?
 function MapPinEnhancedGroupPinStateMixin:Remove(pinID)
+    if self:GetOrder(pinID) == self.maximumOrder then self.orderCacheValid = false end
     local pin = self.pins[pinID]
     if pin then
         local order = self.orders[pinID]
@@ -174,13 +193,12 @@ function MapPinEnhancedGroupPinStateMixin:Remove(pinID)
     end
 end
 
----@param pinID UUID
-function MapPinEnhancedGroupPinStateMixin:ReleaseDetachedPin(pinID)
-    assert(not self.pins[pinID],
+---@param pin MapPinEnhancedPinMixin
+function MapPinEnhancedGroupPinStateMixin:ReleaseDetachedPin(pin)
+    assert(not self.pins[pin.pinID],
         "MapPinEnhancedGroupPinStateMixin:ReleaseDetachedPin: pin is still active")
-    local pin = Pins:GetPinByID(pinID)
-    if pin then pin.suppressPersistence = true end
-    Pins:ReleasePin(pinID)
+    pin.suppressPersistence = true
+    Pins:ReleasePin(pin)
 end
 
 ---@param pinID UUID
@@ -201,44 +219,8 @@ function MapPinEnhancedGroupPinStateMixin:ArchiveActive(pinID, state)
     self.archive[pinID] = { state = state, data = data, order = order }
     self.changeNumber = self.changeNumber + 1
     pin.suppressPersistence = true
-    Pins:ReleasePin(pinID)
+    Pins:ReleasePin(pin)
     return true, data, wasTracked, order
-end
-
----@param state "reached"|"hidden"
----@return boolean
-function MapPinEnhancedGroupPinStateMixin:ArchiveAll(state)
-    assert(state == "reached" or state == "hidden",
-        "MapPinEnhancedGroupPinStateMixin:ArchiveAll: invalid archive state")
-    local hadTrackedPin = false
-    ---@type UUID[]
-    local pinIDs = {}
-    for pinID in pairs(self.pins) do
-        pinIDs[#pinIDs + 1] = pinID
-    end
-    for _, pinID in ipairs(pinIDs) do
-        local pin = self.pins[pinID]
-        hadTrackedPin = hadTrackedPin or pin:IsTracked()
-        local data = GetSaveablePinData(pin:GetSaveableData(), pinID)
-        self.archive[pinID] = {
-            state = state,
-            data = data,
-            order = self.orders[pinID] or GetTime(),
-        }
-    end
-    for _, archivedPin in pairs(self.archive) do
-        archivedPin.state = state
-    end
-    self.pins = {}
-    self.orders = {}
-    self.count = 0
-    self.changeNumber = self.changeNumber + 1
-    for _, pinID in ipairs(pinIDs) do
-        local pin = Pins:GetPinByID(pinID)
-        if pin then pin.suppressPersistence = true end
-        Pins:ReleasePin(pinID)
-    end
-    return hadTrackedPin
 end
 
 ---@param pinID UUID
@@ -248,9 +230,10 @@ function MapPinEnhancedGroupPinStateMixin:RestoreArchivedPin(pinID)
     if not archivedPin then return false end
     -- Setup may fail or normalize its input. Keep the original archive until it succeeds.
     local groupID, lifetimeChangeNumber = self.group:GetGroupID(), self.group.lifetimeChangeNumber
+    local cancelBatch = self.group.cancelBatch
     local pin = Pins:CreatePin(CopyTable(archivedPin.data), pinID, self.group, true)
     if not pin then return false end
-    if self.group.isDeleting or self.group:GetGroupID() ~= groupID or
+    if self.group.cancelBatch ~= cancelBatch or self.group.isDeleting or self.group:GetGroupID() ~= groupID or
         self.group.lifetimeChangeNumber ~= lifetimeChangeNumber then
         pin.suppressPersistence = true
         Pins:ReleasePin(pin.pinID)
@@ -264,32 +247,11 @@ function MapPinEnhancedGroupPinStateMixin:RestoreArchivedPin(pinID)
     return true
 end
 
----@param state "reached"|"hidden"?
----@return number restored
----@return number total
----@return string? message
-function MapPinEnhancedGroupPinStateMixin:RestoreArchived(state)
-    ---@type UUID[]
-    local pinIDs = {}
-    for pinID, archivedPin in pairs(self.archive) do
-        if not state or archivedPin.state == state then
-            pinIDs[#pinIDs + 1] = pinID
-        end
-    end
-    local restored = 0
-    for _, pinID in ipairs(pinIDs) do
-        local success, result = pcall(self.RestoreArchivedPin, self, pinID)
-        if not success then return restored, #pinIDs, tostring(result) end
-        if not result then return restored, #pinIDs end
-        restored = restored + 1
-    end
-    return restored, #pinIDs
-end
-
 ---@param pinID UUID
 ---@param order number
 ---@return boolean
 function MapPinEnhancedGroupPinStateMixin:SetOrder(pinID, order)
+    self.orderCacheValid = false
     local archivedPin = self.archive[pinID]
     if archivedPin then
         archivedPin.order = order
@@ -314,6 +276,8 @@ function MapPinEnhancedGroupPinStateMixin:Reorder(pinIDs)
     end
 
     local count = #pinIDs
+    self.maximumOrder = count > 0 and count or nil
+    self.orderCacheValid = true
     for index, pinID in ipairs(pinIDs) do
         local order = count - index + 1
         local archivedPin = self.archive[pinID]
@@ -359,6 +323,9 @@ function MapPinEnhancedGroupPinStateMixin:PruneOldestReached(keepCount)
     for index = 1, removeCount do
         self.archive[reachedPins[index].pinID] = nil
     end
-    if removeCount > 0 then self.changeNumber = self.changeNumber + 1 end
+    if removeCount > 0 then
+        self.orderCacheValid = false
+        self.changeNumber = self.changeNumber + 1
+    end
     return removeCount
 end

@@ -96,7 +96,9 @@ end
 
 function MapPinEnhancedTrackerMixin:SaveCollapsedGroups()
     if not self.dataProvider then return end
-    wipe(self.collapsedGroups)
+    for groupID in pairs(self.collapsedGroups) do
+        if not Groups:GetGroupByID(groupID) then self.collapsedGroups[groupID] = nil end
+    end
     for _, node in ipairs(self.dataProvider:GetChildrenNodes()) do
         ---@cast node MapPinEnhancedTrackerGroupNode
         -- Capture identity on construction: the domain group may already be released.
@@ -111,7 +113,7 @@ function MapPinEnhancedTrackerMixin:UpdatePinList(scrollToTrackedPin)
     local reachedPins, totalPins = 0, 0
     local trackedPin = scrollToTrackedPin and Pins:GetTrackedPin() or nil
     for group in Groups:EnumerateGroups() do
-        if not group:IsHidden() then
+        if not group.pinsUpdating and not group:IsHidden() then
             local active, reached, total = group:GetPinCounts()
             if total > 0 then
                 local node = dataProvider:Insert(group) --[[@as MapPinEnhancedTrackerGroupNode]]
@@ -280,8 +282,12 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     MapPinEnhanced:RegisterCallback("PIN_REMOVED", function()
         self:UpdateListAndScrollToTrackedPin()
     end)
-    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function()
-        self:UpdateListAndScrollToTrackedPin()
+    MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(_, group)
+        if group and group.pinsUpdating and self.dataProvider then
+            self:UpdateList()
+        else
+            self:UpdateListAndScrollToTrackedPin()
+        end
     end)
     MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", function(_, _, isTracked)
         if isTracked and self:IsShown() and not self.visibilityHiding then self.scrollPending = true end

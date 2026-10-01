@@ -53,7 +53,7 @@ function MapPinEnhancedTrackerHiddenGroupsMixin:Refresh()
     ---@type MapPinEnhancedGroupMixin[]
     local groups = {}
     for group in Groups:EnumerateGroups() do
-        if group:IsHidden() and not group:IsProtected() and group:GetTotalPinCount() > 0 then
+        if not group.pinsUpdating and group:IsHidden() and not group:IsProtected() and group:GetTotalPinCount() > 0 then
             table.insert(groups, group)
         end
     end

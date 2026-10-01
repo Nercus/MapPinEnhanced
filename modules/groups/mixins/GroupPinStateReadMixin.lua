@@ -80,13 +80,24 @@ function MapPinEnhancedGroupPinStateReadMixin:GetEntries()
 end
 
 ---@return SaveablePinData[], table<UUID, number>, table<UUID, ArchivedPinData>
-function MapPinEnhancedGroupPinStateReadMixin:Serialize()
+---@param checkpoint fun()?
+function MapPinEnhancedGroupPinStateReadMixin:Serialize(checkpoint)
     ---@type SaveablePinData[]
     local pins = {}
-    for _, pin in pairs(self.pins) do
+    ---@type table<UUID, number>
+    local orders = {}
+    ---@type table<UUID, ArchivedPinData>
+    local archive = {}
+    for pinID, pin in pairs(self.pins) do
         pins[#pins + 1] = CopyTable(pin:GetSaveableData())
+        orders[pinID] = self.orders[pinID]
+        if checkpoint then checkpoint() end
     end
-    return pins, CopyTable(self.orders), CopyTable(self.archive)
+    for pinID, archivedPin in pairs(self.archive) do
+        archive[pinID] = CopyTable(archivedPin)
+        if checkpoint then checkpoint() end
+    end
+    return pins, orders, archive
 end
 
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID): UUID, MapPinEnhancedPinMixin

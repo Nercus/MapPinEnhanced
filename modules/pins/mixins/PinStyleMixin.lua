@@ -9,6 +9,7 @@ MapPinEnhancedPinStyleMixin = {}
 
 ---@param color PinColor?
 function MapPinEnhancedPinStyleMixin:SetColor(color)
+    if not self:CanApplyChanges() then return end
     self.worldmapPin:SetColor(color)
     self.minimapPin:SetColor(color)
 
@@ -41,6 +42,7 @@ end
 ---@param icon string|number? the icon to set; atlas names must be strings
 ---@param usesAtlas boolean? if true, the path is an atlas, otherwise it is a file path
 function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)
+    if not self:CanApplyChanges() then return end
     if not icon then
         self:SetColor(Pins.DEFAULT_COLOR)
         return

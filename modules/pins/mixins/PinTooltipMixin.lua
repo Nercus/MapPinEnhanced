@@ -8,6 +8,7 @@ local L = MapPinEnhanced.L
 
 ---@param description string?
 function MapPinEnhancedPinTooltipMixin:SetDescription(description)
+    if not self:CanApplyChanges() then return end
     description = MapPinEnhanced:NormalizeText(description)
     if self.pinData.description == description then return end
     self.pinData.description = description

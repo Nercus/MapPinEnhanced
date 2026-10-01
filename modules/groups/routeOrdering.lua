@@ -222,7 +222,10 @@ function Groups:OrderGroupByDistance(group, onComplete, onError)
     assert(type(onError) == "function" or onError == nil,
         "Groups:OrderGroupByDistance: onError must be a function or nil")
 
-    group:CancelBatch()
+    if not group:CancelBatch() then
+        if onError then onError(L["Route optimization was canceled because the group changed."]) end
+        return
+    end
     local routeInput = CopyRouteInputs(group)
     local clusters, unavailable = BuildClusters(routeInput.entries)
     ---@type UUID[]

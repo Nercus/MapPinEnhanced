@@ -29,6 +29,7 @@ end
 
 ---@param title string
 function MapPinEnhancedPinUtilsMixin:SetTitle(title)
+    if not self:CanApplyChanges() then return end
     self.pinData.title = title
     self:PersistPin()
     if not self.groupIsAddingPin then

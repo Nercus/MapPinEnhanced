@@ -88,7 +88,7 @@ function Groups:GetAllGroups()
     local groupsPool = Groups:GetObjectPool()
     ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
-        table.insert(groups, group)
+        if not group.isDeleting then table.insert(groups, group) end
     end
     return groups
 end
@@ -136,6 +136,14 @@ function Groups:RegisterGroup(groupInfo)
         end
     end
 
+    ---@param pendingGroup MapPinEnhancedGroupMixin
+    for pendingGroup in self:GetObjectPool():EnumerateActive() do
+        if pendingGroup.isDeleting and (pendingGroup:GetGroupID() == groupID or
+            self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupInfo.name)) then
+            return nil, "the group is being deleted"
+        end
+    end
+
     local existingGroup = self:GetGroupByID(groupID)
     if existingGroup then
         if existingGroup:GetSource() == groupInfo.source then return existingGroup end
@@ -171,14 +179,17 @@ function Groups:DeleteGroup(group)
     assert(group, "Groups:DeleteGroup: group is nil")
     if group:IsProtected() then return false end
 
+    if group.isDeleting then return false end
     local groupID = group:GetGroupID()
     group.isDeleting = true
-    group:CancelBatch()
+    group:CancelBatch(true)
     self:CancelGroupPersist(groupID)
     MapPinEnhanced:DeleteVar("groups", groupID)
-    self:UnregisterGroup(group)
-    MapPinEnhanced:FireCallback("GROUP_DELETED", nil, groupID)
-    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil)
+    group:ReleasePins(false, function()
+        self:UnregisterGroup(group)
+        MapPinEnhanced:FireCallback("GROUP_DELETED", nil, groupID)
+        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil)
+    end)
     return true
 end
 
@@ -189,7 +200,7 @@ function Groups:GetGroupByName(name)
     local groupsPool = Groups:GetObjectPool()
     ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
-        if self:GetNameKey(group:GetName()) == nameKey then
+        if not group.isDeleting and self:GetNameKey(group:GetName()) == nameKey then
             return group
         end
     end
@@ -202,7 +213,7 @@ function Groups:GetGroupByID(groupID)
     local groupsPool = Groups:GetObjectPool()
     ---@param group MapPinEnhancedGroupMixin
     for group in groupsPool:EnumerateActive() do
-        if group:GetGroupID() == groupID then
+        if not group.isDeleting and group:GetGroupID() == groupID then
             return group
         end
     end
@@ -234,9 +245,18 @@ end
 function Groups:IsPinIDInUse(pinID)
     if not pinID then return false end
 
-    for group in self:EnumerateGroups() do
-        if group:GetPinByID(pinID) or group:GetArchivedPinByID(pinID) then
-            return true
+    ---@param group MapPinEnhancedGroupMixin
+    for group in self:GetObjectPool():EnumerateActive() do
+        if group.pinState:GetOrder(pinID) ~= nil then return true end
+        -- Intake/conversion owns IDs even before their first archive copy exists.
+        local input = group.restoreData
+        if input then
+            if type(input.pinArchive) == "table" and input.pinArchive[pinID] then return true end
+            if type(input.pins) == "table" then
+                for _, pin in ipairs(input.pins) do
+                    if type(pin) == "table" and pin.pinID == pinID then return true end
+                end
+            end
         end
     end
 
@@ -250,7 +270,7 @@ function Groups:GetNextTrackableGroup(excludedGroup)
     local bestGroup
 
     for group in self:EnumerateGroups() do
-        if group ~= excludedGroup and not group:IsHidden() and group:GetPinCount() > 0 then
+        if group ~= excludedGroup and not group.pinsUpdating and not group:IsHidden() and group:GetPinCount() > 0 then
             if not bestGroup or self:IsGroupBefore(group, bestGroup) then
                 bestGroup = group
             end
@@ -281,39 +301,6 @@ function Groups:TrackNextPinAfterGroup(group, cursorOrder)
     return crossGroupPin
 end
 
----@param name string
----@return MapPinEnhancedGroupMixin?
-function Groups:CreateGroupFromUngrouped(name)
-    assert(name, "Groups:CreateGroupFromUngrouped: name is nil")
-    assert(type(name) == "string", "Groups:CreateGroupFromUngrouped: name must be a string")
-    if not self:IsValidGroupName(name) then return nil end
-
-    local cleanName = self:CleanGroupName(name)
-    if self:GetGroupByName(cleanName) then
-        return nil
-    end
-
-    local ungroupedGroup = self:GetUngroupedGroup()
-    if not ungroupedGroup then return nil end
-    if ungroupedGroup:GetTotalPinCount() == 0 then return nil end
-
-    ungroupedGroup:CancelBatch()
-    local ungroupedData = ungroupedGroup:GetSaveableData()
-    local targetGroup = self:RegisterGroup({
-        name = cleanName,
-        source = MapPinEnhanced.name,
-        icon = ungroupedGroup:GetIcon(),
-        order = GetTime(),
-        trackingMode = self:GetDefaultTrackingMode(),
-    })
-    if not targetGroup then return nil end
-
-    ungroupedGroup:ClearGroup()
-    targetGroup:RestorePinState(ungroupedData)
-
-    return targetGroup
-end
-
 ---@param completed integer
 ---@param total integer
 function Groups:ReportStoppedPinOperation(completed, total)
@@ -321,44 +308,20 @@ function Groups:ReportStoppedPinOperation(completed, total)
         MapPinEnhanced.L["Pin operation stopped after %d of %d pins. Completed changes were kept."], completed, total))
 end
 
-Groups.debouncedPersist = {}
-
----@param groupID UUID?
-function Groups:CancelGroupPersist(groupID)
-    if not groupID then return end
-    local pending = self.debouncedPersist[groupID]
-    if not pending then return end
-    pending.cancel()
-    self.debouncedPersist[groupID] = nil
-end
-
----@param group MapPinEnhancedGroupMixin
-function Groups:PersistGroup(group)
-    assert(group, "Groups:PersistGroup: group is nil")
-    if group.isDeleting then return end
-    local groupID = group:GetGroupID()
-    assert(groupID, "Groups:PersistGroup: groupID is nil")
-
-    if not self.debouncedPersist[groupID] then
-        local lifetimeChangeNumber = group.lifetimeChangeNumber
-        local schedule, cancel = MapPinEnhanced:DebounceChange(function()
-            self.debouncedPersist[groupID] = nil
-            if group.isDeleting or group:GetGroupID() ~= groupID or
-                group.lifetimeChangeNumber ~= lifetimeChangeNumber or self:GetGroupByID(groupID) ~= group then return end
-            local data = group:GetSaveableData()
-            MapPinEnhanced:SetVar("groups", groupID, data)
-        end, 0.5)
-        self.debouncedPersist[groupID] = { schedule = schedule, cancel = cancel }
-    end
-
-    self.debouncedPersist[groupID].schedule()
-end
-
 ---@return fun(): MapPinEnhancedGroupMixin
 ---@return any
 function Groups:EnumerateGroups()
     local groupsPool = Groups:GetObjectPool()
-    return groupsPool:EnumerateActive()
+    local iterator, state = groupsPool:EnumerateActive()
+    ---@cast iterator fun(state: any, key: MapPinEnhancedGroupMixin?): MapPinEnhancedGroupMixin?
+    ---@type MapPinEnhancedGroupMixin?
+    local key
+    return function()
+        repeat
+            key = iterator(state, key)
+        until not key or not key.isDeleting
+        return key
+    end
 end
 
 ---@return string

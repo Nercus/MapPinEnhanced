@@ -5,9 +5,30 @@ local MapPinEnhanced = select(2, ...)
 ---@field trackedPin MapPinEnhancedPinMixin the currently tracked pin, used to update wayfinders when the tracked pin changes
 local Pins = MapPinEnhanced:GetModule("Pins")
 
+---@type table<UUID, MapPinEnhancedPinMixin>
+local activePins = {}
+
+---@param pin MapPinEnhancedPinMixin
+---@param pinID UUID
+function Pins:OverridePinID(pin, pinID)
+    assert(type(pinID) == "string", "Pins:OverridePinID: pinID must be a string")
+    assert(not activePins[pin.pinID] or not pin.group or pin.pinID == pinID,
+        "Pins:OverridePinID: cannot change an active group pin ID")
+    assert(not activePins[pinID] or activePins[pinID] == pin,
+        "Pins:OverridePinID: duplicate active pin ID")
+    if activePins[pin.pinID] == pin then activePins[pin.pinID] = nil end
+    pin.pinID = pinID
+    activePins[pinID] = pin
+end
+
+---@param pin MapPinEnhancedPinMixin
+function Pins:RemoveActivePin(pin)
+    if activePins[pin.pinID] == pin then activePins[pin.pinID] = nil end
+end
+
 local function CreatePin()
-    local pinID = MapPinEnhanced:GenerateUUID("pin")
-    return CreateAndInitFromMixin(MapPinEnhancedPinMixin, pinID)
+    -- Acquire frames only in the protected setup below, after identity is assigned.
+    return CreateFromMixins(MapPinEnhancedPinMixin)
 end
 
 local function ResetPin(_, pin, isNew)
@@ -50,19 +71,12 @@ function Pins:CreatePin(initPinData, overridePinID, group, groupWillPersist)
 end
 
 function Pins:GetPinByID(pinID)
-    if not pinID then return nil end
-    ---@param pin MapPinEnhancedPinMixin
-    for pin in pinsPool:EnumerateActive() do
-        if pin.pinID == pinID then
-            return pin
-        end
-    end
+    return pinID and activePins[pinID] or nil
 end
 
----@param pinID UUID
-function Pins:ReleasePin(pinID)
-    if not pinID then return end
-    local pin = self:GetPinByID(pinID)
+---@param pinOrID MapPinEnhancedPinMixin|UUID
+function Pins:ReleasePin(pinOrID)
+    local pin = type(pinOrID) == "table" and pinOrID or self:GetPinByID(pinOrID)
     if not pin then return end
     pinsPool:Release(pin)
 end

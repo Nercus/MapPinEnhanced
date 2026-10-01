@@ -16,6 +16,12 @@ function Groups:RestoreGroup(groupData)
     if type(groupData.source) ~= "string" or groupData.source == "" then return nil end
     if self:GetSystemGroupType(groupData.groupID) and groupData.source ~= MapPinEnhanced.name then return nil end
 
+    ---@param pendingGroup MapPinEnhancedGroupMixin
+    for pendingGroup in self:GetObjectPool():EnumerateActive() do
+        if pendingGroup.isDeleting and (pendingGroup:GetGroupID() == groupData.groupID or
+            self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupData.name)) then return nil end
+    end
+
     local group = self:GetGroupByID(groupData.groupID)
     if group and group:GetSource() ~= groupData.source then return nil end
 
@@ -24,11 +30,72 @@ function Groups:RestoreGroup(groupData)
 
     group = group or self:GetObjectPool():Acquire()
     if not group then return nil end
-    group:CancelBatch()
+    if not group:CancelBatch() then return nil end
     group:ApplyGroupInfo(groupData)
     group:RestorePinState(groupData)
 
     return group
+end
+
+---@param name string
+---@return MapPinEnhancedGroupMixin?
+function Groups:CreateGroupFromUngrouped(name)
+    assert(name, "Groups:CreateGroupFromUngrouped: name is nil")
+    assert(type(name) == "string", "Groups:CreateGroupFromUngrouped: name must be a string")
+    if not self:IsValidGroupName(name) then return nil end
+
+    local cleanName = self:CleanGroupName(name)
+    if self:GetGroupByName(cleanName) then
+        return nil
+    end
+
+    local ungroupedGroup = self:GetUngroupedGroup()
+    if not ungroupedGroup then return nil end
+    if ungroupedGroup:GetTotalPinCount() == 0 then return nil end
+
+    if not ungroupedGroup:CancelBatch() then return nil end
+    local ungroupedData = ungroupedGroup:GetSaveableData()
+    local targetGroup = self:RegisterGroup({
+        name = cleanName,
+        source = MapPinEnhanced.name,
+        icon = ungroupedGroup:GetIcon(),
+        order = GetTime(),
+        trackingMode = self:GetDefaultTrackingMode(),
+    })
+    if not targetGroup then return nil end
+
+    local targetID, targetLifetime = targetGroup:GetGroupID(), targetGroup.lifetimeChangeNumber
+    -- Save the ownership transfer together before resource cleanup can yield. Both
+    -- snapshots are detached plain data; reload must never restore these IDs twice.
+    local targetData = targetGroup:GetSaveableData()
+    targetData.pins, targetData.pinOrder, targetData.pinArchive =
+        ungroupedData.pins, ungroupedData.pinOrder, ungroupedData.pinArchive
+    ---@type SaveableGroupData
+    local sourceData = {
+        groupID = ungroupedData.groupID,
+        name = ungroupedData.name,
+        source = ungroupedData.source,
+        icon = ungroupedData.icon,
+        order = ungroupedData.order,
+        hidden = ungroupedData.hidden,
+        groupType = ungroupedData.groupType,
+        trackingMode = ungroupedData.trackingMode,
+        pins = {},
+        pinOrder = {},
+        pinArchive = {},
+    }
+    self:CancelGroupPersist(targetID)
+    self:CancelGroupPersist(ungroupedGroup:GetGroupID())
+    MapPinEnhanced:SetVar("groups", targetID, targetData)
+    MapPinEnhanced:SetVar("groups", ungroupedGroup:GetGroupID(), sourceData)
+    targetGroup.restoreData = ungroupedData
+    ungroupedGroup:ReleasePins(false, function()
+        if not targetGroup:IsSameGroup(targetID, targetLifetime) then return end
+        targetGroup.restoreData = nil
+        targetGroup:RestorePinState(ungroupedData)
+    end)
+
+    return targetGroup
 end
 
 function Groups:RestoreAllGroups()

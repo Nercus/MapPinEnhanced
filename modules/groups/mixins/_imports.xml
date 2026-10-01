@@ -6,6 +6,7 @@
     <Script file="GroupPinAddingMixin.lua" />
     <Script file="GroupPinOperationsMixin.lua" />
     <Script file="GroupPinRestorationMixin.lua" />
+    <Script file="GroupVisibilityMixin.lua" />
     <Script file="GroupPinEditingMixin.lua" />
     <Script file="GroupMixin.lua" />
 </Ui>

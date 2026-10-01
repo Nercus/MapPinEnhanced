@@ -3,6 +3,7 @@
     <Include file="groupConstants.lua" />
     <Include file="mixins/_imports.xml" />
     <Include file="groupManager.lua" />
+    <Include file="groupPersistence.lua" />
     <Include file="groupRestoration.lua" />
     <Include file="routeOrdering.lua" />
 </Ui>

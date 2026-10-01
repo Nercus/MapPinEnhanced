@@ -73,7 +73,7 @@ function MapPinEnhancedPinMixin:Init(pinID)
 end
 
 function MapPinEnhancedPinMixin:OverridePinID(pinID)
-    self.pinID = pinID
+    Pins:OverridePinID(self, pinID)
 end
 
 ---@param pinData pinData
@@ -126,10 +126,18 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, groupWillPersist)
     end
 end
 
+---Setup owns its unpublished pin; map/UI input cannot edit pending group resources.
+---@return boolean
+function MapPinEnhancedPinMixin:CanApplyChanges()
+    return self.initialized and self.pinData ~= nil and (self.groupIsAddingPin or not self.group or
+        (not self.group.isDeleting and not self.group.pinsUpdating)) and true or false
+end
+
 ---@param mapID number
 ---@param x number
 ---@param y number
 function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
+    if not self:CanApplyChanges() then return end
     assert(mapID, "MapPinEnhancedPinMixin:SetPinPosition: mapID is nil")
     assert(type(mapID) == "number", "MapPinEnhancedPinMixin:SetPinPosition: mapID must be a number")
     assert(x, "MapPinEnhancedPinMixin:SetPinPosition: x is nil")
@@ -180,6 +188,7 @@ function MapPinEnhancedPinMixin:GetSaveableData()
 end
 
 function MapPinEnhancedPinMixin:Reset()
+    Pins:RemoveActivePin(self)
     if not self.initialized then return end
     self.initialized = false
     if self.isTracked then
@@ -215,7 +224,7 @@ end
 
 ---@param group MapPinEnhancedGroupMixin?
 MapPinEnhanced:RegisterCallback("GROUP_UPDATED", function(_, group)
-    if not group then return end
+    if not group or group.pinsUpdating then return end
     for _, pin in group:EnumeratePins() do
         pin:UpdateGroupIcon()
     end

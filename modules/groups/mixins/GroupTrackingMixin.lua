@@ -84,6 +84,7 @@ end
 ---@param mode GroupTrackingMode
 ---@return boolean
 function MapPinEnhancedGroupTrackingMixin:SetTrackingMode(mode)
+    if not self:CancelBatch() then return false end
     assert(Groups:IsValidTrackingMode(mode), "MapPinEnhancedGroupMixin:SetTrackingMode: invalid tracking mode")
     if self:IsProtected() then return false end
 
@@ -186,7 +187,7 @@ end
 ---@param cursorOrder number?
 ---@return MapPinEnhancedPinMixin?
 function MapPinEnhancedGroupTrackingMixin:GetNextTrackablePin(cursorOrder)
-    if self:IsHidden() then return nil end
+    if self:IsHidden() or self.pinsUpdating or self.isDeleting then return nil end
 
     if self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED then
         return self:GetOrderedTrackablePin(cursorOrder)

@@ -1,83 +1,23 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-
 local Groups = MapPinEnhanced:GetModule("Groups")
-
-local ARCHIVE_STATE_REACHED = "reached"
-local ARCHIVE_STATE_HIDDEN = "hidden"
 
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinRestorationMixin = {}
 
----@param pinData SaveablePinData
----@return SaveablePinData, UUID?
-local function CleanRestoredPinData(pinData)
-    if type(pinData.pinID) == "string" then return pinData, pinData.pinID end
-    ---@type SaveablePinData
-    local normalized = CopyTable(pinData)
-    normalized.pinID = nil
-    return normalized, nil
-end
-
----@param groupData SaveableGroupData
-function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
-    self:CancelBatch()
-    self.pinState:Reset()
-
-    local pinArchive = type(groupData.pinArchive) == "table" and groupData.pinArchive or {}
-    for pinID, archivedPin in pairs(pinArchive) do
-        if type(pinID) == "string" and type(archivedPin) == "table" and
-            type(archivedPin.data) == "table" and
-            (archivedPin.state == ARCHIVE_STATE_REACHED or archivedPin.state == ARCHIVE_STATE_HIDDEN) then
-            local state = self.hidden and ARCHIVE_STATE_HIDDEN or archivedPin.state
-            self.pinState:AddArchived(archivedPin.data, state,
-                type(archivedPin.order) == "number" and archivedPin.order or nil, pinID)
-        end
-    end
-
-    local pins = type(groupData.pins) == "table" and groupData.pins or {}
-    local pinOrders = type(groupData.pinOrder) == "table" and groupData.pinOrder or nil
-    ---@type table<UUID, boolean>
-    local retainedIDs = {}
-    for _, entry in ipairs(self:GetPinEntries()) do retainedIDs[entry.pinID] = true end
-
-    ---@type UUID[]
-    local activePins = {}
+---Saved input is retained by this operation until intake finishes. Only deletion
+---may discard it; other commands are rejected while intake is copying archives.
+---@param groupData SaveableGroupData?
+---@param state "reached"|"hidden"?
+---@return boolean accepted
+function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, state)
+    if not self:CancelBatch() then return false end
+    local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
+    local completed, total, finished = 0, 0, false
+    local intakeComplete = not groupData
+    local wasHidden = self.hidden
     ---@type UUID?
     local trackedPinID
-    if not self.hidden then
-        for pinID, archivedPin in pairs(self.pinState.archive) do
-            if archivedPin.state == ARCHIVE_STATE_HIDDEN then activePins[#activePins + 1] = pinID end
-        end
-    end
-    for _, rawPinData in ipairs(pins) do
-        if type(rawPinData) == "table" then
-            ---@cast rawPinData SaveablePinData
-            local pinData, pinID = CleanRestoredPinData(rawPinData)
-            if pinID and retainedIDs[pinID] then
-                ---@type SaveablePinData
-                pinData = CopyTable(pinData)
-                pinData.pinID = nil
-                pinID = nil
-            end
-            local restoredID = self.pinState:AddArchived(pinData, ARCHIVE_STATE_HIDDEN,
-                pinID and pinOrders and pinOrders[pinID] or nil, pinID)
-            retainedIDs[restoredID] = true
-            if not self.hidden then
-                activePins[#activePins + 1] = restoredID
-                if pinData.setTracked then trackedPinID = restoredID end
-            end
-        end
-    end
-
-    if self.hidden or #activePins == 0 then
-        self:PersistPinChanges()
-        MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-        return
-    end
-
-    local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
-    local completed, finished = 0, false
     ---@type fun()?
     local cancelExecution
     ---@type fun()
@@ -90,51 +30,95 @@ function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
         cancelExecution = nil
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return end
-        self:PruneOldestReachedPins()
-        self:PersistPinChanges()
+        self.pinsUpdating, self.batchLocked = nil, nil
+        -- An intake error must not overwrite the original saved input with a prefix.
+        if not intakeComplete then
+            self.restoreData = groupData
+            Groups:PersistGroup(self)
+        else
+            self.restoreData = nil
+            self:PruneOldestReachedPins()
+            self:PersistPinChanges(not groupData, status == "complete")
+        end
         local trackedPin = trackedPinID and self:GetPinByID(trackedPinID)
         if trackedPin then trackedPin:TrackWithoutPersisting() end
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
-        if status ~= "complete" then Groups:ReportStoppedPinOperation(completed, #activePins) end
-    end
-
-    local function onError(message)
-        finish("stopped")
-        geterrorhandler()(message)
+        if status ~= "complete" then Groups:ReportStoppedPinOperation(completed, total) end
     end
 
     cancelBatch = function() finish("stopped") end
     self.cancelBatch = cancelBatch
-
-    local function restorePin(pinID)
-        if finished or not self:IsSameGroup(groupID, lifetimeChangeNumber) then return false end
-        if not self.pinState:RestoreArchivedPin(pinID) then return false end
-        completed = completed + 1
-        return not finished and self:IsSameGroup(groupID, lifetimeChangeNumber)
-    end
-
-    if #activePins < 50 then
-        for _, pinID in ipairs(activePins) do
-            local success, restored = pcall(restorePin, pinID)
-            if not success then
-                onError(tostring(restored))
-                return
+    self.batchLocked = groupData ~= nil
+    self.restoreData = groupData
+    self:BeginPinChanges()
+    if finished then return false end
+    cancelExecution = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint()
+        if groupData then
+            self.pinState:Reset(checkpoint)
+            if finished then return false end
+            local archive = type(groupData.pinArchive) == "table" and groupData.pinArchive or {}
+            for pinID, archivedPin in pairs(archive) do
+                if finished then return false end
+                if type(pinID) == "string" and type(archivedPin) == "table" and
+                    type(archivedPin.data) == "table" and
+                    (archivedPin.state == "reached" or archivedPin.state == "hidden") then
+                    self.pinState:AddArchived(archivedPin.data, wasHidden and "hidden" or archivedPin.state,
+                        type(archivedPin.order) == "number" and archivedPin.order or nil, pinID)
+                end
+                checkpoint()
             end
-            if not restored then
-                finish("stopped")
-                return
+            local pins = type(groupData.pins) == "table" and groupData.pins or {}
+            local orders = type(groupData.pinOrder) == "table" and groupData.pinOrder or {}
+            for _, rawData in ipairs(pins) do
+                if finished then return false end
+                if type(rawData) == "table" then
+                    local data = CopyTable(rawData)
+                    local pinID = type(data.pinID) == "string" and data.pinID or nil
+                    if pinID and self.pinState.archive[pinID] then pinID = nil end
+                    data.pinID = pinID
+                    local restoredID = self.pinState:AddArchived(data, "hidden", pinID and orders[pinID], pinID)
+                    if data.setTracked then trackedPinID = restoredID end
+                end
+                checkpoint()
+            end
+            intakeComplete = true
+            self.restoreData = nil
+            self.batchLocked = nil
+        end
+        -- A hidden saved group stays archived; ShowGroup activates its archives.
+        if not groupData or not wasHidden then
+            self.hidden = false
+            for _, archivedPin in pairs(self.pinState.archive) do
+                if not state or archivedPin.state == state then total = total + 1 end
+                checkpoint()
+            end
+            for pinID, archivedPin in pairs(self.pinState.archive) do
+                if not state or archivedPin.state == state then
+                    if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return false end
+                    if not self.pinState:RestoreArchivedPin(pinID) then return false end
+                    completed = completed + 1
+                end
+                checkpoint()
             end
         end
-        finish("complete")
-        return
-    end
+        self.pinState:CheckPinState(checkpoint)
+    end }, nil, finish, 1, function(message)
+        finish("stopped")
+        geterrorhandler()(message)
+    end)
+    return true
+end
 
-    ---@type (fun(): boolean?)[]
-    local tasks = {}
-    for _, pinID in ipairs(activePins) do
-        local id = pinID
-        tasks[#tasks + 1] = function() return restorePin(id) end
-    end
-    local batchSize = math.min(math.max(math.ceil(#activePins / 60), 10), 100)
-    cancelExecution = MapPinEnhanced:BatchExecution(tasks, nil, finish, batchSize, onError)
+---@param groupData SaveableGroupData
+---@return boolean accepted
+function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
+    -- Visible saved groups retry hidden archives, but preserve reached history.
+    return self:RestoreArchivedPins(groupData, "hidden")
+end
+
+---@return boolean accepted
+function MapPinEnhancedGroupPinRestorationMixin:RestoreReachedPins()
+    if self.hidden or self:GetReachedPinCount() == 0 then return false end
+    return self:RestoreArchivedPins(nil, "reached")
 end

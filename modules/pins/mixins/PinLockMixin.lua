@@ -9,6 +9,7 @@ MapPinEnhancedPinLockMixin = {}
 
 
 function MapPinEnhancedPinLockMixin:SetLock(lock)
+    if not self:CanApplyChanges() then return end
     self.pinData.lock = lock
     self:PersistPin()
 

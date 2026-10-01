@@ -100,10 +100,10 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
     local systemGroupsByType = {}
     local search = self:GetSearch()
     for group in Groups:EnumerateGroups() do
-        if Editor:ShouldShowGroup(group) and
+        if not group.pinsUpdating and Editor:ShouldShowGroup(group) and
             (search == "" or MapPinEnhanced:FuzzyMatch(search, group:GetName())) then
             table.insert(groups, group)
-        elseif Editor:ShouldShowSystemGroup(group) then
+        elseif not group.pinsUpdating and Editor:ShouldShowSystemGroup(group) then
             local groupType = group.groupType
             if groupType then systemGroupsByType[groupType] = group end
         end

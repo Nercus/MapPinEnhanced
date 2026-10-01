@@ -140,3 +140,18 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
     end)
     return Cancel
 end
+
+---Call after each indivisible operation inside a BatchExecution task, including cleanup.
+---@param milliseconds number?
+---@return fun() checkpoint
+function MapPinEnhanced:CreateBatchCheckpoint(milliseconds)
+    local deadline = debugprofilestop() + (milliseconds or 2)
+    ---@async
+    local function checkpoint()
+        if debugprofilestop() >= deadline then
+            coroutine.yield()
+            deadline = debugprofilestop() + (milliseconds or 2)
+        end
+    end
+    return checkpoint
+end
