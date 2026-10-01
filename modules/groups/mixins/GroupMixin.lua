@@ -27,17 +27,21 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field protected boolean
 ---@field trackingMode GroupTrackingMode
 ---@field trackingCursorOrder number? runtime-only order cursor used for ordered tracking
+---@field cancelBatch fun()?
+---@field lifetimeChangeNumber number
 ---@field isDeleting boolean
 ---@field limitWarningShown boolean
 MapPinEnhancedGroupMixin = CreateFromMixins(
     { classification = "group" },
     MapPinEnhancedGroupTrackingMixin,
+    MapPinEnhancedGroupPinAddingMixin,
     MapPinEnhancedGroupPinOperationsMixin,
     MapPinEnhancedGroupPinRestorationMixin,
     MapPinEnhancedGroupPinEditingMixin
 )
 
 function MapPinEnhancedGroupMixin:Init()
+    self.lifetimeChangeNumber = 0
     self.groupID = nil
     self.pinState = CreateAndInitFromMixin(MapPinEnhancedGroupPinStateMixin, self)
     self.order = GetTime()
@@ -49,7 +53,24 @@ function MapPinEnhancedGroupMixin:Init()
     self.limitWarningShown = false
 end
 
+function MapPinEnhancedGroupMixin:CancelBatch()
+    local cancelBatch = self.cancelBatch
+    self.cancelBatch = nil
+    if cancelBatch then cancelBatch() end
+end
+
+---@param groupID UUID
+---@param lifetimeChangeNumber number
+---@return boolean
+function MapPinEnhancedGroupMixin:IsSameGroup(groupID, lifetimeChangeNumber)
+    return not self.isDeleting and self.groupID == groupID and
+        self.lifetimeChangeNumber == lifetimeChangeNumber and Groups:GetGroupByID(groupID) == self
+end
+
 function MapPinEnhancedGroupMixin:Reset()
+    self.lifetimeChangeNumber = self.lifetimeChangeNumber + 1
+    self:CancelBatch()
+    Groups:CancelGroupPersist(self:GetGroupID())
     self.pinState:Reset()
     self.groupID = nil
     self.name = nil

@@ -82,6 +82,15 @@ function MapPinEnhancedTrackerGroupEntryMixin:UpdateTitleWidth()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:Reset()
+    for _, button in ipairs({ self.actionButtons.restoreButton, self.actionButtons.clearButton }) do
+        if GameTooltip:IsOwned(button) then GameTooltip:Hide() end
+        button:SetScript("OnClick", nil)
+        button:SetScript("OnEnter", nil)
+        button:SetScript("OnLeave", nil)
+    end
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
+    self.group, self.treeNode = nil, nil
+    self.icon:SetTexture(nil)
     self.expandIcon:Hide()
     self.title:SetText("")
     self.title:SetWidth(0)
@@ -112,6 +121,7 @@ end
 
 ---@param treeNode TreeNodeMixin
 function MapPinEnhancedTrackerGroupEntryMixin:Init(treeNode)
+    self:Reset()
     ---@class MapPinEnhancedGroupMixin
     local group = treeNode:GetData()
     self.group = group
@@ -161,17 +171,21 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnLeave()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
+    local groupID = self.group:GetGroupID()
     MapPinEnhanced:ShowConfirmDialog(L["Delete Group"],
         string.format(L["Delete group \"%s\" and all of its pins?"], self.group:GetName()), function()
-            Groups:DeleteGroup(self.group)
+            local group = Groups:GetGroupByID(groupID)
+            if group then Groups:DeleteGroup(group) end
         end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
+    local groupID = self.group:GetGroupID()
     MapPinEnhanced:ShowConfirmDialog(L["Clear Group"],
         string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
         function()
-            self.group:ClearGroup()
+            local group = Groups:GetGroupByID(groupID)
+            if group then group:ClearGroup() end
         end)
 end
 

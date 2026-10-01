@@ -70,9 +70,10 @@ end
 ---Batch the execution of a list of functions with a delay between each execution
 ---@param funcList (fun(): boolean?)[] functions may return false to stop the batch early
 ---@param onUpdate fun(progress: integer, maxProgress: integer)?
----@param onFinish fun()?
+---@param onFinish fun(status: "complete"|"stopped")?
 ---@param batchSize integer? number of functions to execute per batch, defaults to 1
 ---@param onError fun(message: string)?
+---@return fun() cancel
 function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, onError)
     assert(type(funcList) == "table", "Function list not provided")
     assert(type(onUpdate) == "function" or onUpdate == nil, "OnUpdate not a function")
@@ -86,42 +87,56 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
     if frameRate == 0 then frameRate = 1 end
     local delay = 1 / frameRate
 
+    local finished = false
+    ---@type FunctionContainer?
+    local ticker
+    ---@type thread?
+    local workerThread
+
+    -- Clear captures as well as the timer: callers may retain the cancel function.
+    local function Cancel()
+        if finished then return end
+        finished = true
+        if ticker then ticker:Cancel() end
+        ticker, workerThread = nil, nil
+        funcList = {}
+        onUpdate, onFinish, onError = nil, nil, nil
+    end
+
     ---@async
     local function Worker()
         local maxProgress = #funcList
         local i = 1
         while i <= maxProgress do
-            -- Execute a BATCH of functions
             local batchEnd = math.min(i + batchSize - 1, maxProgress)
             for j = i, batchEnd do
+                if finished then return end
                 local shouldContinue = funcList[j]()
+                if finished then return end
                 if onUpdate then onUpdate(j, maxProgress) end
-                if shouldContinue == false then return end
+                if finished then return end
+                if shouldContinue == false then return "stopped" end
             end
             i = batchEnd + 1
-
-            -- Yield after each batch (except the last)
-            if i <= maxProgress then
-                coroutine.yield()
-            end
+            if i <= maxProgress then coroutine.yield() end
         end
+        return "complete"
     end
 
-    local workerThread = coroutine.create(Worker)
-    local ticker
-    ticker = C_Timer.NewTicker(delay,
-        function()
-            local success, message = coroutine.resume(workerThread)
-            if not success then
-                ticker:Cancel()
-                if onError then onError(tostring(message)) end
-                return
-            end
-            if coroutine.status(workerThread) == "dead" then
-                ticker:Cancel()
-                if onFinish then onFinish() end
-                return
-            end
+    workerThread = coroutine.create(Worker)
+    ticker = C_Timer.NewTicker(delay, function()
+        if finished then return end
+        local success, message = coroutine.resume(workerThread)
+        if finished then return end
+        if not success then
+            local failed = onError or geterrorhandler()
+            Cancel()
+            failed(tostring(message))
+        elseif coroutine.status(workerThread) == "dead" then
+            local complete = onFinish
+            Cancel()
+            if complete then complete(message) end
         end
-    )
+    end)
+    return Cancel
 end

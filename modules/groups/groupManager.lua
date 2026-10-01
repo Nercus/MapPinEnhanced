@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
 ---@field groupsPool ObjectPool<MapPinEnhancedGroupMixin>
----@field debouncedPersist table<string, function> a table to store debounced persist functions by groupID
+---@field debouncedPersist table<string, { schedule: fun(), cancel: fun() }> pending saves by groupID
 ---@field SYSTEM_GROUP_IDS table<string, string>
 local Groups = MapPinEnhanced:GetModule("Groups")
 
@@ -148,6 +148,7 @@ function Groups:RegisterGroup(groupInfo)
 
     local groupsPool = Groups:GetObjectPool()
     local group = groupsPool:Acquire()
+    if not group then return nil, "the group limit was reached" end
     groupInfo.groupID = groupID
     group:ApplyGroupInfo(groupInfo)
     self:PersistGroup(group)
@@ -172,7 +173,8 @@ function Groups:DeleteGroup(group)
 
     local groupID = group:GetGroupID()
     group.isDeleting = true
-    self.debouncedPersist[groupID] = nil
+    group:CancelBatch()
+    self:CancelGroupPersist(groupID)
     MapPinEnhanced:DeleteVar("groups", groupID)
     self:UnregisterGroup(group)
     MapPinEnhanced:FireCallback("GROUP_DELETED", nil, groupID)
@@ -295,6 +297,7 @@ function Groups:CreateGroupFromUngrouped(name)
     if not ungroupedGroup then return nil end
     if ungroupedGroup:GetTotalPinCount() == 0 then return nil end
 
+    ungroupedGroup:CancelBatch()
     local ungroupedData = ungroupedGroup:GetSaveableData()
     local targetGroup = self:RegisterGroup({
         name = cleanName,
@@ -311,7 +314,24 @@ function Groups:CreateGroupFromUngrouped(name)
     return targetGroup
 end
 
+---@param completed integer
+---@param total integer
+function Groups:ReportStoppedPinOperation(completed, total)
+    MapPinEnhanced:Print(string.format(
+        MapPinEnhanced.L["Pin operation stopped after %d of %d pins. Completed changes were kept."], completed, total))
+end
+
 Groups.debouncedPersist = {}
+
+---@param groupID UUID?
+function Groups:CancelGroupPersist(groupID)
+    if not groupID then return end
+    local pending = self.debouncedPersist[groupID]
+    if not pending then return end
+    pending.cancel()
+    self.debouncedPersist[groupID] = nil
+end
+
 ---@param group MapPinEnhancedGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")
@@ -320,15 +340,18 @@ function Groups:PersistGroup(group)
     assert(groupID, "Groups:PersistGroup: groupID is nil")
 
     if not self.debouncedPersist[groupID] then
-        self.debouncedPersist[groupID] = MapPinEnhanced:DebounceChange(function()
+        local lifetimeChangeNumber = group.lifetimeChangeNumber
+        local schedule, cancel = MapPinEnhanced:DebounceChange(function()
+            self.debouncedPersist[groupID] = nil
+            if group.isDeleting or group:GetGroupID() ~= groupID or
+                group.lifetimeChangeNumber ~= lifetimeChangeNumber or self:GetGroupByID(groupID) ~= group then return end
             local data = group:GetSaveableData()
-            assert(data, "Groups:PersistGroup: data is nil")
-            if not data or not data.groupID then return end
-            MapPinEnhanced:SetVar("groups", data.groupID, data)
+            MapPinEnhanced:SetVar("groups", groupID, data)
         end, 0.5)
+        self.debouncedPersist[groupID] = { schedule = schedule, cancel = cancel }
     end
 
-    self.debouncedPersist[groupID]()
+    self.debouncedPersist[groupID].schedule()
 end
 
 ---@return fun(): MapPinEnhancedGroupMixin

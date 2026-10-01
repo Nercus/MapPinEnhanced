@@ -31,13 +31,21 @@ end
 ---@param overridePinID UUID?
 ---@param group MapPinEnhancedGroupMixin?
 ---@param groupWillPersist boolean? true while the group is still adding the pin
----@return MapPinEnhancedPinMixin
+---@return MapPinEnhancedPinMixin?
 function Pins:CreatePin(initPinData, overridePinID, group, groupWillPersist)
     local pin = pinsPool:Acquire()
-    pin:OverridePinID(overridePinID or MapPinEnhanced:GenerateUUID("pin"))
-    pin.group = group
-    pin.pinData = initPinData
-    pin:SetPinData(initPinData, groupWillPersist)
+    if not pin then return nil end
+    local success, message = pcall(function()
+        pin:OverridePinID(overridePinID or MapPinEnhanced:GenerateUUID("pin"))
+        pin.group = group
+        pin:SetPinData(initPinData, groupWillPersist)
+    end)
+    if not success or not pin.initialized then
+        if pin.initialized then pin.suppressPersistence = true end
+        pinsPool:Release(pin)
+        if not success then error(message, 0) end
+        return nil
+    end
     return pin
 end
 

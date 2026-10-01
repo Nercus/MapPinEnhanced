@@ -127,7 +127,7 @@ end
 function MapPinEnhancedGroupEditorContentPinEntryMixin:Reset()
     self:OnLeave()
     self.nameField.child:ClearTextApply()
-    self.mapField.child.onChangeCallback = nil
+    self.mapField.child:Reset()
     self.mapField.child.appliedText = nil
     self.mapField.child.appliedMapID = nil
     self.mapField.child:SetScript("OnEditFocusLost", MapPinEnhancedAutocompleteMixin.OnEditFocusLost)
@@ -274,6 +274,7 @@ end
 ---@param pinNode MapPinEnhancedEditorPinNodeData
 ---@param editor MapPinEnhancedGroupEditorTemplate
 function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
+    self:Reset()
     self.pinNode, self.editor = pinNode, editor
     local pinData = Editor:GetPinData(pinNode)
     self:RefreshPreview()
@@ -285,7 +286,6 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     end)
 
     EnsureMapCache()
-    self.mapField.child.onChangeCallback = nil
     self.mapField.child:Setup({
         options = mapOptions,
         init = function() return pinData.mapID end,

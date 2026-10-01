@@ -23,6 +23,8 @@ function Groups:RestoreGroup(groupData)
     if nameOwner and nameOwner ~= group then return nil end
 
     group = group or self:GetObjectPool():Acquire()
+    if not group then return nil end
+    group:CancelBatch()
     group:ApplyGroupInfo(groupData)
     group:RestorePinState(groupData)
 

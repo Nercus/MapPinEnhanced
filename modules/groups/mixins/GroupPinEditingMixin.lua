@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinEditingMixin = {}
@@ -9,6 +10,7 @@ MapPinEnhancedGroupPinEditingMixin = {}
 ---@param pinIDs UUID[]
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:ReorderPins(pinIDs)
+    self:CancelBatch()
     assert(type(pinIDs) == "table", "MapPinEnhancedGroupMixin:ReorderPins: pinIDs must be a table")
     if not self.pinState:Reorder(pinIDs) then return false end
     self:PersistPinChanges()
@@ -31,6 +33,7 @@ end
 ---@param color PinColor?
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinColor(pinID, color)
+    self:CancelBatch()
     local pin = self:GetPinByID(pinID)
     if pin then
         pin:SetColor(color)
@@ -46,6 +49,7 @@ end
 ---@param usesAtlas boolean?
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinIcon(pinID, icon, usesAtlas)
+    self:CancelBatch()
     local pin = self:GetPinByID(pinID)
     if pin then
         pin:SetIcon(icon, usesAtlas)
@@ -66,6 +70,7 @@ end
 ---@param y number
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinPosition(pinID, mapID, x, y)
+    self:CancelBatch()
     assert(type(mapID) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: mapID must be a number")
     assert(type(x) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: x must be a number")
     assert(type(y) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: y must be a number")
@@ -84,6 +89,7 @@ end
 ---@param title string
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinTitle(pinID, title)
+    self:CancelBatch()
     assert(type(title) == "string", "MapPinEnhancedGroupMixin:SetPinTitle: title must be a string")
     local pin = self:GetPinByID(pinID)
     if pin then
@@ -99,6 +105,7 @@ end
 ---@param locked boolean?
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinLock(pinID, locked)
+    self:CancelBatch()
     local pin = self:GetPinByID(pinID)
     if pin then
         pin:SetLock(locked)
@@ -113,6 +120,7 @@ end
 ---@param description string?
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinDescription(pinID, description)
+    self:CancelBatch()
     description = MapPinEnhanced:NormalizeText(description)
     local pin = self:GetPinByID(pinID)
     if pin then

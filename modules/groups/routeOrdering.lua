@@ -222,30 +222,52 @@ function Groups:OrderGroupByDistance(group, onComplete, onError)
     assert(type(onError) == "function" or onError == nil,
         "Groups:OrderGroupByDistance: onError must be a function or nil")
 
+    group:CancelBatch()
     local routeInput = CopyRouteInputs(group)
     local clusters, unavailable = BuildClusters(routeInput.entries)
     ---@type UUID[]
     local orderedPinIDs = {}
+    local lifetimeChangeNumber = group.lifetimeChangeNumber
+    local finished = false
+    ---@type fun()?
+    local cancelExecution
+    ---@type fun()
+    local cancelBatch
+
+    local function finish(status, message)
+        if finished then return end
+        finished = true
+        if cancelExecution then cancelExecution() end
+        cancelExecution = nil
+        if group.cancelBatch == cancelBatch then group.cancelBatch = nil end
+        if status ~= "complete" or not group:IsSameGroup(routeInput.groupID, lifetimeChangeNumber) or
+            not GroupStillMatchesRouteInput(self, routeInput) then
+            if onError then onError(message or L["Route optimization was canceled because the group changed."]) end
+            return
+        end
+        for _, entry in ipairs(unavailable) do
+            orderedPinIDs[#orderedPinIDs + 1] = entry.pinID
+        end
+        ApplyRouteOrder(group, orderedPinIDs)
+        onComplete()
+    end
+
+    cancelBatch = function() finish("stopped") end
+    group.cancelBatch = cancelBatch
+
     ---@type (fun(): boolean?)[]
     local tasks = {}
     for _, cluster in ipairs(clusters) do
         local currentCluster = cluster
         tasks[#tasks + 1] = function()
+            if finished or not group:IsSameGroup(routeInput.groupID, lifetimeChangeNumber) then return false end
             for _, node in ipairs(OrderNearbyPins(currentCluster)) do
                 orderedPinIDs[#orderedPinIDs + 1] = node.pinID
             end
         end
     end
-
-    MapPinEnhanced:BatchExecution(tasks, nil, function()
-        for _, entry in ipairs(unavailable) do
-            orderedPinIDs[#orderedPinIDs + 1] = entry.pinID
-        end
-        if not GroupStillMatchesRouteInput(self, routeInput) then
-            if onError then onError(L["Route optimization was canceled because the group changed."]) end
-            return
-        end
-        ApplyRouteOrder(group, orderedPinIDs)
-        onComplete()
-    end, 1, onError)
+    cancelExecution = MapPinEnhanced:BatchExecution(tasks, nil, finish, 1, function(message)
+        finish("stopped", message)
+        geterrorhandler()(message)
+    end)
 end

@@ -97,7 +97,7 @@ end
 ---@param pinData pinData|SaveablePinData
 ---@param overridePinID UUID?
 ---@param order number?
----@return MapPinEnhancedPinMixin, boolean shouldTrack
+---@return MapPinEnhancedPinMixin?, boolean shouldTrack
 function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, order)
     if overridePinID then
         assert(not self.pins[overridePinID] and not self.archive[overridePinID],
@@ -113,7 +113,15 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
         copiedData.setTracked = nil
         createData = copiedData
     end
+    local groupID, lifetimeChangeNumber = self.group:GetGroupID(), self.group.lifetimeChangeNumber
     local pin = Pins:CreatePin(createData, overridePinID, self.group, true)
+    if not pin then return nil, false end
+    if self.group.isDeleting or self.group:GetGroupID() ~= groupID or
+        self.group.lifetimeChangeNumber ~= lifetimeChangeNumber then
+        pin.suppressPersistence = true
+        Pins:ReleasePin(pin.pinID)
+        return nil, false
+    end
     local pinID = pin.pinID
     assert(not self.pins[pinID] and not self.archive[pinID],
         "MapPinEnhancedGroupPinStateMixin:AddActive: generated pin ID is already retained by the group")
@@ -233,8 +241,33 @@ function MapPinEnhancedGroupPinStateMixin:ArchiveAll(state)
     return hadTrackedPin
 end
 
+---@param pinID UUID
+---@return boolean
+function MapPinEnhancedGroupPinStateMixin:RestoreArchivedPin(pinID)
+    local archivedPin = self.archive[pinID]
+    if not archivedPin then return false end
+    -- Setup may fail or normalize its input. Keep the original archive until it succeeds.
+    local groupID, lifetimeChangeNumber = self.group:GetGroupID(), self.group.lifetimeChangeNumber
+    local pin = Pins:CreatePin(CopyTable(archivedPin.data), pinID, self.group, true)
+    if not pin then return false end
+    if self.group.isDeleting or self.group:GetGroupID() ~= groupID or
+        self.group.lifetimeChangeNumber ~= lifetimeChangeNumber then
+        pin.suppressPersistence = true
+        Pins:ReleasePin(pin.pinID)
+        return false
+    end
+    self.archive[pinID] = nil
+    self.pins[pinID] = pin
+    self.orders[pinID] = archivedPin.order
+    self.count = self.count + 1
+    self.changeNumber = self.changeNumber + 1
+    return true
+end
+
 ---@param state "reached"|"hidden"?
----@return number
+---@return number restored
+---@return number total
+---@return string? message
 function MapPinEnhancedGroupPinStateMixin:RestoreArchived(state)
     ---@type UUID[]
     local pinIDs = {}
@@ -243,12 +276,14 @@ function MapPinEnhancedGroupPinStateMixin:RestoreArchived(state)
             pinIDs[#pinIDs + 1] = pinID
         end
     end
+    local restored = 0
     for _, pinID in ipairs(pinIDs) do
-        local archivedPin = self.archive[pinID]
-        self.archive[pinID] = nil
-        self:AddActive(archivedPin.data, pinID, archivedPin.order)
+        local success, result = pcall(self.RestoreArchivedPin, self, pinID)
+        if not success then return restored, #pinIDs, tostring(result) end
+        if not result then return restored, #pinIDs end
+        restored = restored + 1
     end
-    return #pinIDs
+    return restored, #pinIDs
 end
 
 ---@param pinID UUID

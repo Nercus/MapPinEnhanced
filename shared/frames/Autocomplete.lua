@@ -14,6 +14,7 @@ local MAX_VISIBLE_RESULTS = 10
 ---@field selectedIndex number | nil
 ---@field filterFunction function
 ---@field cancelFilterFunction function?
+---@field cancelOnChangeCallback function?
 ---@field optionsValueMap table<string, AutocompleteOption>
 ---@field searchOptions string[]
 ---@field searchText string
@@ -63,6 +64,7 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     scrollView:SetElementResetter(function(entry)
         ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
         entry:UnlockHighlight()
+        entry:SetScript("OnClick", nil)
     end)
 
     scrollView:SetDataProvider(self.dataProvider)
@@ -71,6 +73,21 @@ function MapPinEnhancedAutocompleteMixin:OnLoad()
     ScrollUtil.InitScrollBoxListWithScrollBar(self.resultsFrame.scrollBox, self.resultsFrame.scrollBar, scrollView)
 
     self.resultsFrame.scrollBar:SetHideIfUnscrollable(false)
+end
+
+function MapPinEnhancedAutocompleteMixin:OnHide()
+    if self.cancelFilterFunction then self.cancelFilterFunction() end
+    if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
+    self.spinner:Hide()
+    self.resultsFrame:Hide()
+    self.searchText = nil
+end
+
+function MapPinEnhancedAutocompleteMixin:Reset()
+    self:OnHide()
+    self.onChangeCallback, self.cancelOnChangeCallback = nil, nil
+    self.value, self.selectedIndex = nil, nil
+    self.dataProvider:Flush()
 end
 
 function MapPinEnhancedAutocompleteMixin:HighlightEntry(index)
@@ -264,7 +281,11 @@ function MapPinEnhancedAutocompleteMixin:SetOptions(options)
     if self.cancelFilterFunction then
         self.cancelFilterFunction()
     end
+    if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
     self.spinner:Hide()
+    self.resultsFrame:Hide()
+    self.dataProvider:Flush()
+    self.searchText, self.selectedIndex, self.value = nil, nil, nil
     self.options = options
     self.searchOptions = {}
     self.optionsValueMap = {}
@@ -289,7 +310,8 @@ end
 ---@param callback fun(value: any)
 function MapPinEnhancedAutocompleteMixin:SetCallback(callback)
     assert(type(callback) == "function", "Callback must be a function.")
-    self.onChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
+    if self.cancelOnChangeCallback then self.cancelOnChangeCallback() end
+    self.onChangeCallback, self.cancelOnChangeCallback = MapPinEnhanced:DebounceChange(callback, 0.1)
 end
 
 ---@param formData MapPinEnhancedAutocompleteData
@@ -298,11 +320,12 @@ function MapPinEnhancedAutocompleteMixin:Setup(formData)
     assert(type(formData.options) == "table", "Options must be a table.")
     assert(type(formData.onChange) == "function", "onChange callback must be a function.")
 
+    self:Reset()
     self:SetOptions(formData.options)
     if formData.init then
         local initialValue = formData.init()
         if initialValue then
-            self:SetValue(initialValue, true)
+            self:SetValue(initialValue)
         end
     end
 

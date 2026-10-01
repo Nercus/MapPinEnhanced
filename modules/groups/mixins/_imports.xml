@@ -3,6 +3,7 @@
     <Script file="GroupTrackingMixin.lua" />
     <Script file="GroupPinStateReadMixin.lua" />
     <Script file="GroupPinStateMixin.lua" />
+    <Script file="GroupPinAddingMixin.lua" />
     <Script file="GroupPinOperationsMixin.lua" />
     <Script file="GroupPinRestorationMixin.lua" />
     <Script file="GroupPinEditingMixin.lua" />

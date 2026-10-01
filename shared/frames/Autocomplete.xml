@@ -70,6 +70,7 @@
             <OnLoad method="OnLoad" />
             <OnTextChanged method="OnTextChanged" />
             <OnKeyDown method="OnKeyDown" />
+            <OnHide method="OnHide" />
             <OnEditFocusLost method="OnEditFocusLost" />
         </Scripts>
     </EditBox>

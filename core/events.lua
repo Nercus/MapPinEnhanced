@@ -207,8 +207,24 @@ local CALLBACK_EVENTS = {
 local callbackTarget = {}
 ---@class CallbackHandlerRegistryWithEvents : CallbackHandlerRegistry
 ---@field events table<string, table<CallbackTarget, function[]>>
+---@field recurse number
+---@field insertQueue table?
 local callbackRegistry = CallbackHandler:New(callbackTarget, "RegisterCallback", "UnregisterCallback",
     "UnregisterAllCallbacks");
+
+-- CallbackHandler must finish dispatch and queued registrations before keys disappear.
+---@type table<string, boolean>
+local unusedCallbacks = {}
+local function ClearUnusedCallbacks()
+    if callbackRegistry.recurse > 0 or callbackRegistry.insertQueue then return end
+    for eventName in pairs(unusedCallbacks) do
+        local callbacks = rawget(callbackRegistry.events, eventName)
+        if callbacks and not next(callbacks) then
+            callbackRegistry.events[eventName] = nil
+        end
+        unusedCallbacks[eventName] = nil
+    end
+end
 
 local function IsValidCallbackEvent(event)
     if CALLBACK_EVENTS[event] then
@@ -257,6 +273,8 @@ function MapPinEnhanced:UnregisterCallback(callbackEvent, func, key)
 
     local eventName = GetCallbackEventName(callbackEvent, key)
     callbackTarget.UnregisterCallback(tostring(func), eventName)
+    unusedCallbacks[eventName] = true
+    ClearUnusedCallbacks()
 end
 
 ---@param key string
@@ -310,6 +328,7 @@ function MapPinEnhanced:FireCallback(callbackEvent, key, ...)
     assert(IsValidCallbackEvent(callbackEvent), "Callback event is not valid")
     local eventName = GetCallbackEventName(callbackEvent, key)
     callbackRegistry:Fire(eventName, ...)
+    ClearUnusedCallbacks()
 end
 
 ---Call a function with restricted access, ensuring it runs outside of combat.

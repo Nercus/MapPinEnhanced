@@ -358,3 +358,6 @@ L["Requesting shared group..."] = "Requesting shared group..."
 L["Shared group \"%s\" received."] = "Shared group \"%s\" received."
 L["This shared group is no longer available. Ask the sender for a new link."] =
 "This shared group is no longer available. Ask the sender for a new link."
+
+L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
+    "Pin operation stopped after %d of %d pins. Completed changes were kept."
