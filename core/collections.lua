@@ -26,14 +26,3 @@ function MapPinEnhanced:SetsEqual(left, right)
     end
     return true
 end
-
----@generic T
----@param path T[]
----@param first integer
----@param last integer
-function MapPinEnhanced:ReverseRange(path, first, last)
-    while first < last do
-        path[first], path[last] = path[last], path[first]
-        first, last = first + 1, last - 1
-    end
-end

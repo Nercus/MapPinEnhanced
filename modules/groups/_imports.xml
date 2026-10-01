@@ -5,5 +5,4 @@
     <Include file="groupManager.lua" />
     <Include file="groupPersistence.lua" />
     <Include file="groupRestoration.lua" />
-    <Include file="routeOrdering.lua" />
 </Ui>

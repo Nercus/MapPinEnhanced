@@ -161,17 +161,6 @@
                     <Anchor point="RIGHT" relativeKey="$parent.hideButton" relativePoint="LEFT" x="-2" />
                 </Anchors>
             </Button>
-            <Button parentKey="optimizeButton" inherits="MapPinEnhancedIconButtonTemplate">
-                <Size x="32" y="32" />
-                <KeyValues>
-                    <KeyValue key="icon" value="route" />
-                    <KeyValue key="fontSize" value="medium" />
-                    <KeyValue key="tooltip" value="Reorder nearby pins together to reduce travel time and backtracking." />
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.exportButton" relativePoint="LEFT" x="-2" />
-                </Anchors>
-            </Button>
         </Frames>
     </Frame>
 </Ui>

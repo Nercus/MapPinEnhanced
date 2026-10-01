@@ -21,7 +21,6 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis
 ---@field iconButton MapPinEnhancedEditorGroupIconButton
 ---@field nameField MapPinEnhancedEditorInputField
 ---@field trackingModeField MapPinEnhancedEditorRadioGroupField
----@field optimizeButton MapPinEnhancedButtonTemplate
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field exportButton MapPinEnhancedIconButtonTemplate
@@ -38,8 +37,6 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.hideButton:SetScript("OnClick", nil)
     self.hideButton:UnlockHighlight()
     self.hideButton:SetAlpha(1)
-    self.optimizeButton:SetScript("OnClick", nil)
-    self.optimizeButton:Hide()
 end
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateGroupVisibilityButton()
@@ -50,32 +47,6 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateGroupVisibilityButton
     else
         self.hideButton:LockHighlight()
     end
-end
-
-function MapPinEnhancedGroupEditorContentHeaderMixin:UpdateRouteOrderButton()
-    local group = self.group
-    self.optimizeButton:SetShown(group ~= nil and not group:IsProtected() and
-        group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and group:GetTotalPinCount() > 1)
-end
-
-function MapPinEnhancedGroupEditorContentHeaderMixin:OrderRouteByDistance()
-    local group, editor = assert(self.group), assert(self.editor)
-    MapPinEnhanced:ShowConfirmDialog(L["Optimize Route"],
-        L
-        ["Optimization reorders the pins so nearby destinations are visited together. This can reduce travel time and backtracking when you follow the group in order. The new order replaces your current pin order and cannot be undone."],
-        function()
-            if self.group ~= group then return end
-            editor.groupEditorContent:SetLoading(true)
-            Groups:OrderGroupByDistance(group, function()
-                if self.group == group then
-                    editor.groupEditorContent:SetGroup(group)
-                end
-                editor.groupEditorContent:SetLoading(false)
-            end, function(message)
-                editor.groupEditorContent:SetLoading(false)
-                MapPinEnhanced:Print(message)
-            end)
-        end)
 end
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
@@ -161,15 +132,12 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
         onChange = function(value)
             if not protected then
                 group:SetTrackingMode(value)
-                self:UpdateRouteOrderButton()
             end
         end,
     })
     for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
         self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
     end
-    self.optimizeButton:SetScript("OnClick", function() self:OrderRouteByDistance() end)
-    self:UpdateRouteOrderButton()
 
     self.exportButton:SetEnabled(group:GetTotalPinCount() > 0)
     self.exportButton:SetScript("OnClick", function() Transfer:ShowExportWindow(group) end)
