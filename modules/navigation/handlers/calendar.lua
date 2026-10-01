@@ -8,6 +8,8 @@ local HOLIDAY_IDS = {
     ["LOVE IS IN THE AIR"] = 423,
 }
 local calendarReady = false
+local observationsDirty = true
+local holidayStatesChanged = false
 local lastHolidayStates = {} ---@type table<number, boolean>
 local refreshTicker ---@type FunctionContainer?
 
@@ -72,29 +74,41 @@ local function IsHolidayActive(holidayID)
     return false
 end
 
+-- Dirty intake prevents a calculation before bucket publication from borrowing
+-- observations from the previous filters. Preserve changes for that publisher.
+local function ObserveHolidayStates()
+    for _, holidayID in pairs(HOLIDAY_IDS) do
+        local active = IsHolidayActive(holidayID)
+        if active ~= lastHolidayStates[holidayID] then holidayStatesChanged = true end
+        lastHolidayStates[holidayID] = active
+    end
+    observationsDirty = false
+end
+
 ---@param name string
 ---@return boolean? active
 function Navigation:IsCalendarEventActive(name)
     local holidayID = HOLIDAY_IDS[string.upper(name)]
     if not holidayID then return nil end
-    return IsHolidayActive(holidayID)
+    if observationsDirty then ObserveHolidayStates() end
+    return lastHolidayStates[holidayID]
 end
 
 local function RefreshHolidayStates()
-    local changed = false
-    for _, holidayID in pairs(HOLIDAY_IDS) do
-        local active = IsHolidayActive(holidayID)
-        if active ~= lastHolidayStates[holidayID] then changed = true end
-        lastHolidayStates[holidayID] = active
+    ObserveHolidayStates()
+    if holidayStatesChanged and Navigation:GetGraph() then
+        holidayStatesChanged = false
+        Navigation:RefreshEligibility()
     end
-    if changed and Navigation:GetGraph() then Navigation:RefreshEligibility() end
 end
 
 MapPinEnhanced:RegisterEvent("CALENDAR_UPDATE_EVENT_LIST", function()
     calendarReady = true
+    observationsDirty = true
 end)
 MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE" }, RefreshHolidayStates, 1,
     function()
+        observationsDirty = true
         Navigation:InvalidatePreparedData()
         return true
     end)

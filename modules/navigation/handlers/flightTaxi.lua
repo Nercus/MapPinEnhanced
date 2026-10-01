@@ -33,6 +33,7 @@ local learnedTaxiNodes = {} ---@type table<number, boolean>
 ---@field name string?
 
 local taxiNodesByMap = {} ---@type table<number, NavigationTaxiNodeState[]|false>
+local taxiNodesByIDByMap = {} ---@type table<number, table<number, NavigationTaxiNodeState>>
 local taxiMapByNodeID = {} ---@type table<number, number>
 ---@class NavigationTaxiLeg
 ---@field fromTaxiNodeID number
@@ -109,6 +110,7 @@ local function GetTaxiNodes(mapID)
     end
 
     local taxiNodes = {} ---@type NavigationTaxiNodeState[]
+    local nodesByID = {} ---@type table<number, NavigationTaxiNodeState>
     local observedNodes = C_TaxiMap.GetTaxiNodesForMap(mapID)
     if MapPinEnhanced:IsSecretValue(observedNodes) or type(observedNodes) ~= "table" then
         taxiNodesByMap[mapID] = false
@@ -132,16 +134,20 @@ local function GetTaxiNodes(mapID)
                         known = not node.isUndiscovered
                     end
                 end
-                table.insert(taxiNodes, {
+                local record = {
                     nodeID = node.nodeID,
                     x = x,
                     y = y,
                     known = known,
                     name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or nil,
-                })
+                }
+                table.insert(taxiNodes, record)
+                -- Preserve the first matching record, as the former array lookup did.
+                if not nodesByID[node.nodeID] then nodesByID[node.nodeID] = record end
             end
         end
     end
+    taxiNodesByIDByMap[mapID] = nodesByID
     taxiNodesByMap[mapID] = taxiNodes
     return taxiNodes
 end
@@ -151,10 +157,8 @@ end
 local function GetTaxiNodeByID(nodeID)
     local mapID = taxiMapByNodeID[nodeID]
     if not mapID then return nil end
-    for _, node in ipairs(GetTaxiNodes(mapID) or {}) do
-        if node.nodeID == nodeID then return node end
-    end
-    return nil
+    if not GetTaxiNodes(mapID) then return nil end
+    return taxiNodesByIDByMap[mapID][nodeID]
 end
 
 ---@param nodeID number
@@ -400,6 +404,7 @@ end
 
 function Navigation:ClearTaxiNodeKnowledge()
     taxiNodesByMap = {}
+    taxiNodesByIDByMap = {}
     taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
     self:InvalidatePreparedData()
 end

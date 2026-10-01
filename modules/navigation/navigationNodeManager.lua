@@ -538,16 +538,72 @@ local function EvaluateDirectCheck(key, value)
     return UNKNOWN
 end
 
+-- Typed, length-prefixed keys include every parameter of structured checks,
+-- such as achievement criteria, map/texture pairs and garrison type/level.
+---@param value any
+---@return string?
+local function GetObservationScalarKey(value)
+    if MapPinEnhanced:IsSecretValue(value) then return nil end
+    local kind = type(value)
+    if kind == "string" then return "s" .. #value .. ":" .. value end
+    if kind == "number" and MapPinEnhanced:IsReadableNumber(value) then return "n" .. string.format("%.17g", value) end
+    if kind == "boolean" then return value and "true" or "false" end
+    if value == nil then return "nil" end
+    return nil
+end
+
+---@param value any
+---@return string?
+local function GetObservationKey(value)
+    local scalar = GetObservationScalarKey(value)
+    if scalar then return scalar end
+    if not MapPinEnhanced:IsReadableTable(value) then return nil end
+    local fields = {} ---@type string[]
+    ---@cast value table<any, any>
+    for key, item in pairs(value) do
+        local fieldKey, fieldValue = GetObservationScalarKey(key), GetObservationScalarKey(item)
+        -- Nested/malformed values bypass reuse and retain the evaluator's result.
+        if not fieldKey or not fieldValue then return nil end
+        fields[#fields + 1] = #fieldKey .. ":" .. fieldKey .. #fieldValue .. ":" .. fieldValue
+    end
+    table.sort(fields)
+    return "table:" .. table.concat(fields)
+end
+
+---@alias NavigationRequirementObservations table<string, table<string, NavigationRequirementState>>
+
+---@param kind string
+---@param value any
+---@param observations NavigationRequirementObservations?
+---@return NavigationRequirementState
+local function ObserveRequirement(kind, value, observations)
+    if MapPinEnhanced:IsSecretValue(value) then return UNKNOWN end
+    if kind == "spellKnown" then kind = "spell" end
+    if kind == "toyKnown" then kind = "toy" end
+    if kind == "event" and type(value) == "string" then value = string.upper(value) end
+    local key = observations and GetObservationKey(value)
+    local states = observations and observations[kind]
+    if key and states and states[key] then return states[key] end
+    local state = EvaluateDirectCheck(kind, value)
+    if key and observations then
+        states = states or {}
+        states[key] = state
+        observations[kind] = states
+    end
+    return state
+end
+
 ---@param requirement NavigationRequirement?
+---@param observations NavigationRequirementObservations?
 ---@return NavigationRequirementState state
 ---@return string? failure
-function Navigation:EvaluateRequirement(requirement)
+function Navigation:EvaluateRequirement(requirement, observations)
     if requirement == nil then return SATISFIED end
     if type(requirement) ~= "table" then return UNKNOWN, "invalid requirement" end
 
     local toyItemID = GetQualifiedToyItemID(requirement)
     if toyItemID then
-        local state = EvaluateToyOwnership(toyItemID)
+        local state = ObserveRequirement("toy", toyItemID, observations)
         if state == UNKNOWN then return state, "toy ownership unavailable" end
         return state
     end
@@ -559,7 +615,7 @@ function Navigation:EvaluateRequirement(requirement)
         local sawUnknown = false
         local unknownFailure ---@type string?
         for _, child in ipairs(children) do
-            local state, failure = self:EvaluateRequirement(child)
+            local state, failure = self:EvaluateRequirement(child, observations)
             if operation == "all" and state == UNSATISFIED then return UNSATISFIED end
             if operation == "any" and state == SATISFIED then return SATISFIED end
             if state == UNKNOWN then
@@ -572,14 +628,14 @@ function Navigation:EvaluateRequirement(requirement)
     elseif operation == "not" then
         local children = requirement.children
         if type(children) ~= "table" or #children ~= 1 then return UNKNOWN, "invalid negation requirement" end
-        local state, failure = self:EvaluateRequirement(children[1])
+        local state, failure = self:EvaluateRequirement(children[1], observations)
         if state == UNKNOWN then return UNKNOWN, failure or "requirement unavailable" end
         return state == SATISFIED and UNSATISFIED or SATISFIED
     elseif operation ~= "check" or type(requirement.kind) ~= "string" then
         return UNKNOWN, "invalid requirement shape"
     end
 
-    local state = EvaluateDirectCheck(requirement.kind, requirement.value)
+    local state = ObserveRequirement(requirement.kind, requirement.value, observations)
     if state == UNKNOWN then
         return state, "unsupported or unavailable requirement: " .. requirement.kind
     end
@@ -637,6 +693,8 @@ function Navigation:EnsurePreparedData()
     local graph = navigationGraph
     if not graph then return nil end
     if not preparedDataDirty then return preparedNavigationData end
+    -- The memo belongs only to this pass; published snapshots retain no observations.
+    local observations = {} ---@type NavigationRequirementObservations
     local previous = preparedNavigationData
     local states = previous and previous.requirementStateByPath or {}
     local reasons = previous and previous.exclusionReasonByPath or {}
@@ -649,7 +707,7 @@ function Navigation:EnsurePreparedData()
             state, reason = UNKNOWN, staticFailure
         else
             local failure
-            state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference])
+            state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference], observations)
             if state ~= SATISFIED then reason = failure or state end
         end
         if states[pathReference] ~= state then
