@@ -507,9 +507,10 @@ function Navigation:GetRouteChatSteps(changeNumber)
         mapID = data.mapID,
         x = data.x,
         y = data.y,
-        header = string.format(MapPinEnhanced.displayName .. L[" route To"],
+        header = string.format(L["Navigation Chat Header"],
             MapPinEnhanced:CompactChatLabel(GetDestinationTitle(destination), 64),
-            MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80)),
+            MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80),
+            MapPinEnhanced.displayName),
     }
 end
 
