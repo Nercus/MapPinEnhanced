@@ -52,6 +52,7 @@ local preparationChangeNumber = 0
 local cancelPreparation ---@type fun()?
 local preparationFailure ---@type string?
 local hearthstonePathReferences = {} ---@type integer[]
+local hasBuffRequirements = false
 
 -- Ordinary movement stays available for approaching and leaving transport stops.
 local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
@@ -189,6 +190,19 @@ local function PrepareStaticPath(path)
     return Navigation:GetPathData(path)
 end
 
+---@param requirement NavigationRequirement?
+---@return boolean
+local function HasBuffRequirement(requirement)
+    if type(requirement) ~= "table" then return false end
+    if requirement.operation == "check" then return requirement.kind == "buff" end
+    if type(requirement.children) == "table" then
+        for _, child in ipairs(requirement.children) do
+            if HasBuffRequirement(child) then return true end
+        end
+    end
+    return false
+end
+
 function Navigation:BuildGraph()
     -- Authored IDs are resolved once; runtime routing uses dense point indexes.
     local pointIndexByID = {} ---@type table<number, integer>
@@ -293,6 +307,13 @@ function Navigation:BuildGraph()
     end
 
     self:IndexTaxiConnections(graph)
+    hasBuffRequirements = false
+    for _, requirement in pairs(graph.pathRequirements) do
+        if HasBuffRequirement(requirement) then
+            hasBuffRequirements = true
+            break
+        end
+    end
     navigationGraph = graph
     preparedNavigationData = nil
     registeredPathData = {}
@@ -707,6 +728,26 @@ function Navigation:RefreshPreparedData()
     end
 end
 
+---@param first NavigationMovementCapabilities
+---@param second NavigationMovementCapabilities
+---@return boolean
+local function SameMovementCapabilities(first, second)
+    return first.groundSpeed == second.groundSpeed and
+        first.steadyFlightSpeed == second.steadyFlightSpeed and
+        first.skyridingSpeed == second.skyridingSpeed and
+        first.canFly == second.canFly and first.canSkyriding == second.canSkyriding and
+        first.activeFlightMode == second.activeFlightMode
+end
+
+---Aura traffic cannot change requirements when the graph contains no buff checks.
+---Movement availability can still change. While dirty, a suspended worker may
+---have observed different movement than the last published snapshot.
+---@return boolean
+function Navigation:NeedsAuraRefresh()
+    if hasBuffRequirements or preparedDataDirty or not preparedNavigationData then return true end
+    return not SameMovementCapabilities(self:GetMovementCapabilities(), preparedNavigationData.movement)
+end
+
 -- Synchronous readers only schedule preparation. The private candidate is
 -- published atomically; cancelled workers never resume into a newer generation.
 ---@return NavigationPreparedData?
@@ -761,11 +802,7 @@ function Navigation:EnsurePreparedData()
                 end
             end
             local movement = self:GetMovementCapabilities()
-            if previous and movement.groundSpeed == previous.movement.groundSpeed and
-                movement.steadyFlightSpeed == previous.movement.steadyFlightSpeed and
-                movement.skyridingSpeed == previous.movement.skyridingSpeed and
-                movement.canFly == previous.movement.canFly and movement.canSkyriding == previous.movement.canSkyriding and
-                movement.activeFlightMode == previous.movement.activeFlightMode then
+            if previous and SameMovementCapabilities(movement, previous.movement) then
                 movement = previous.movement
             end
             local costs, failures = self:GetPreparedTaxiCosts(graph, checkpoint)

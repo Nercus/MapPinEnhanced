@@ -1022,7 +1022,10 @@ function Navigation:SetupEligibilityRefresh()
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function(events)
         self:RefreshEligibility(events)
     end, 1, function(event, unit)
-        if event == "UNIT_AURA" and (MapPinEnhanced:IsSecretValue(unit) or unit ~= "player") then return false end
+        if event == "UNIT_AURA" then
+            if MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" then return false end
+            if not self:NeedsAuraRefresh() then return false end
+        end
         -- Mark inputs stale at intake, before a new job can beat the bucket timer.
         self:InvalidatePreparedData()
         return true
