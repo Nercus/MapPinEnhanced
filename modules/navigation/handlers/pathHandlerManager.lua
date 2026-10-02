@@ -91,7 +91,7 @@ local function GetPresentation(pathType, destinationMapID)
     local presentation = presentations[pathType]
     assert(presentation, "Navigation path type is not registered: " .. tostring(pathType))
     local icon, method, instruction = presentation(destinationMapID)
-    assert(Pins.PIN_ICONS[icon], "Navigation handler PIN_ICONS entry is missing: " .. tostring(icon))
+    assert(Pins.PIN_ICONS[Pins:ResolveIcon(icon)], "Navigation handler PIN_ICONS entry is missing: " .. tostring(icon))
     assert(type(method) == "string" and method ~= "", "Navigation handler method is missing: " .. pathType)
     assert(type(instruction) == "string" and instruction ~= "",
         "Navigation handler instruction is missing: " .. pathType)

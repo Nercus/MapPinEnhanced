@@ -703,7 +703,7 @@ function Navigation:PublishStep(progression)
     targetData.x = graph.pointXs[targetPointIndex]
     targetData.y = graph.pointYs[targetPointIndex]
     targetData.texture = travelIcon
-    -- BasePin resolves this PIN_ICONS key and owns its atlas geometry and style.
+    -- BasePin resolves this PIN_ICONS key and owns its custom artwork and style.
     targetData.usesAtlas = false
     -- Waiting Steps have no arrival callback; a destination lock is not Step state.
     targetData.lock = false

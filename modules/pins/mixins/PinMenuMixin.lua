@@ -74,12 +74,12 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         template = "MapPinEnhancedMenuRadioCellTemplate",
                         data = {
                             owner = self,
-                            icon = iconData,
+                            icon = { path = Pins.PIN_ICONS[iconData].icon, usesAtlas = false },
                             isSelected = function()
-                                return self.pinData.texture == iconData.path
+                                return Pins:ResolveIcon(self.pinData.texture) == iconData
                             end,
                             onClick = function()
-                                self:SetIcon(iconData.path, iconData.usesAtlas)
+                                self:SetIcon(iconData, true)
                             end,
                         },
                         initializer = function(_, _, menu)

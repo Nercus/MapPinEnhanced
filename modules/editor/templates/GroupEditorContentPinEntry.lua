@@ -210,9 +210,11 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
                         template = "MapPinEnhancedMenuRadioCellTemplate",
                         data = {
                             owner = self.pinNode,
-                            icon = icon,
-                            isSelected = function() return Editor:GetPinData(self.pinNode).texture == icon.path end,
-                            onClick = function() self:SetIcon(icon) end,
+                            icon = { path = Pins.PIN_ICONS[icon].icon, usesAtlas = false },
+                            isSelected = function()
+                                return Pins:ResolveIcon(Editor:GetPinData(self.pinNode).texture) == icon
+                            end,
+                            onClick = function() self:SetIcon({ path = icon, usesAtlas = true }) end,
                         },
                         initializer = function(_, _, dropdown)
                             dropdown.minimumElementWidth = 36

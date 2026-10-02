@@ -43,5 +43,5 @@ end
 RegisterTransport("boat", "FlightMasterFerry", L["Navigation Method Boat"])
 RegisterTransport("ship", "DemonShip", L["Navigation Method Ship"])
 RegisterTransport("zeppelin", "Vehicle-Air-Unoccupied", L["Navigation Method Zeppelin"])
-RegisterTransport("tram", "Vehicle-Carriage", L["Navigation Method Tram"])
+RegisterTransport("tram", "Vehicle-SilvershardMines-MineCart", L["Navigation Method Tram"])
 RegisterTransport("transport", "Vehicle-Ground-Unoccupied", L["Navigation Method Transport"])

@@ -23,7 +23,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field pinID UUID | nil
 ---@field standardColor ColorMixin
 ---@field iconConfig PinIcon | nil
----@field iconUsesAtlas boolean | nil
 ---@field renderMode BasePinRenderMode
 ---@field iconMaskApplied boolean
 ---@field tracked boolean
@@ -106,7 +105,6 @@ function MapPinEnhancedBasePinMixin:ClearIconTexture()
     self.icon:SetTexture(nil)
     self.icon:Hide()
     self.iconConfig = nil
-    self.iconUsesAtlas = nil
 end
 
 ---@param enabled boolean
@@ -218,31 +216,26 @@ end
 
 ---@param icon string|number
 ---@param usesAtlas boolean?
----@param pinConfig PinIcon?
 ---@return boolean
-local function IsValidIcon(icon, usesAtlas, pinConfig)
+local function IsValidIcon(icon, usesAtlas)
     if not usesAtlas then return true end
     if type(icon) ~= "string" then return false end
-    if pinConfig then return true end
     if not C_Texture or not C_Texture.GetAtlasInfo then return true end
     return C_Texture.GetAtlasInfo(icon) ~= nil
 end
 
 ---@param icon string|number? texture path or atlas name
 ---@param usesAtlas boolean? if true, the icon parameter is an atlas name, otherwise it is a texture path
----@param offset {x: number, y: number}? optional offset for the icon, if not set, it will be 0,0
----@param scale number? optional scale for the icon, if not set, it will be 1
 ---@return boolean hasIcon
-function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scale)
+function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas)
     ---@type PinIcon | nil
-    local pinConfig = PIN_ICONS[icon]
+    local pinConfig = PIN_ICONS[Pins:ResolveIcon(icon)]
     if pinConfig then
-        usesAtlas = pinConfig.usesAtlas
-        offset = pinConfig.offset
-        scale = pinConfig.scale
+        icon = pinConfig.icon
+        usesAtlas = false
     end
 
-    if icon and not IsValidIcon(icon, usesAtlas, pinConfig) then
+    if icon and not IsValidIcon(icon, usesAtlas) then
         icon = nil
         pinConfig = nil
     end
@@ -256,7 +249,7 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
 
     self:ResetIconGeometry()
     if usesAtlas then
-        self.icon:SetAtlas(icon, pinConfig ~= nil)
+        self.icon:SetAtlas(icon, false)
     else
         self.icon:SetTexture(icon)
         if not self.icon:GetTexture() then
@@ -265,27 +258,14 @@ function MapPinEnhancedBasePinMixin:SetIconTexture(icon, usesAtlas, offset, scal
         end
     end
 
-    self.icon:ClearAllPoints()
-    if offset then
-        self.icon:SetPoint("CENTER", offset.x, offset.y)
-    else
-        self.icon:SetPoint("CENTER", 0, 0)
-    end
-    if scale then
-        self.icon:SetScale(scale)
-    else
-        self.icon:SetScale(1)
-    end
-
     self.icon:Show()
     self.iconConfig = pinConfig
-    self.iconUsesAtlas = usesAtlas == true
     if pinConfig then
         self.renderMode = STYLE_OUTLINE_ICON
     else
         self.renderMode = STYLE_PIN_ICON
     end
-    self:SetIconMaskEnabled(not self.iconUsesAtlas)
+    self:SetIconMaskEnabled(not pinConfig and not usesAtlas)
     self:ApplyStyle()
     return true
 end
