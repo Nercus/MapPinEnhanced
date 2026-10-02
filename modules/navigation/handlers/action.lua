@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 local ACTION_TYPES = { "toy", "spell", "item" }
 local ACTION_PENALTY_SECONDS = 10
 local EQUIPMENT_CHANGE_PENALTY_SECONDS = 30
+local MINIMUM_ACTION_COOLDOWN_SECONDS = 1.5
 
 ---@param startTime any
 ---@param duration any
@@ -18,7 +19,8 @@ local function IsCooldownFinished(startTime, duration, modRate)
         return nil
     end
     if type(startTime) ~= "number" or type(duration) ~= "number" then return nil end
-    if startTime <= 0 or duration <= 0 then return true end
+    -- Brief global cooldowns must not make repeated action clicks invalidate the route.
+    if startTime <= 0 or duration < MINIMUM_ACTION_COOLDOWN_SECONDS then return true end
     local rate = type(modRate) == "number" and modRate > 0 and modRate or 1
     return startTime + duration / rate <= GetTime()
 end
