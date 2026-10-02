@@ -1,6 +1,5 @@
 ---@class MapPinEnhancedWayfinderActionVisual : Button
 ---@field icon Texture
----@field cooldown Cooldown
 MapPinEnhancedWayfinderActionBlockerMixin = {}
 
 function MapPinEnhancedWayfinderActionBlockerMixin:Setup()

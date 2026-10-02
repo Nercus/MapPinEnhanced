@@ -6,8 +6,13 @@
         <Size x="40" y="40" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true">
-                    <Color r="0.13" g="0.17" b="0.22" a="1" />
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
+                    </Anchors>
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
@@ -16,21 +21,40 @@
                         <Anchor point="TOPLEFT" x="3" y="-3" />
                         <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
                     </Anchors>
-                    <TexCoords left="0.07" right="0.93" top="0.07" bottom="0.93" />
+                </Texture>
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="3" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+                    </Anchors>
+                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMode mode="Stretched" />
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png">
+                    <Color r="1" g="1" b="1" a="0.12" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="3" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+                    </Anchors>
+                    <TextureSliceMode mode="Stretched" />
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
                 </Texture>
             </Layer>
         </Layers>
-        <Frames>
-            <Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" enableMouse="false">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
-                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
-                </Anchors>
-            </Cooldown>
-        </Frames>
-        <HighlightTexture setAllPoints="true" alphaMode="ADD">
-            <Color r="1" g="1" b="1" a="0.12" />
-        </HighlightTexture>
+        <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" alphaMode="ADD">
+            <Color r="1" g="0.82" b="0" a="0.12" />
+            <Anchors>
+                <Anchor point="TOPLEFT" x="3" y="-3" />
+                <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+            </Anchors>
+            <TextureSliceMode mode="Stretched" />
+            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+        </PushedTexture>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

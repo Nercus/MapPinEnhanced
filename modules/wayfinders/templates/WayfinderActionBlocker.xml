@@ -20,14 +20,6 @@
                 </Texture>
             </Layer>
         </Layers>
-        <Frames>
-            <Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" enableMouse="false">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
-                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
-                </Anchors>
-            </Cooldown>
-        </Frames>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

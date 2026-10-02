@@ -1,9 +1,9 @@
 ---@class MapPinEnhancedWayfinderActionButton : Button
 ---@field icon Texture
----@field cooldown Cooldown
 MapPinEnhancedWayfinderActionButtonMixin = {}
 
 function MapPinEnhancedWayfinderActionButtonMixin:Setup()
+    self:GetPushedTexture():SetDrawLayer("OVERLAY")
     self:RegisterForClicks("LeftButtonUp", "LeftButtonDown")
     self:SetPropagateMouseClicks(false)
 end

@@ -9,7 +9,6 @@ local L = MapPinEnhanced.L
 ---@field onMenu fun(owner: Frame)?
 ---@field actionButton MapPinEnhancedWayfinderActionButton
 ---@field actionBlocker MapPinEnhancedWayfinderActionVisual
----@field refreshCooldown fun()?
 ---@field reconcileAfterCombat fun()?
 ---@field step WayfinderStepData?
 ---@field preparedAction WayfinderDesiredAction?
@@ -24,27 +23,6 @@ local function GetActionIcon(action)
         return C_Spell.GetSpellTexture(action.id) or FALLBACK_ACTION_ICON
     end
     return C_Item.GetItemIconByID(action.id) or FALLBACK_ACTION_ICON
-end
-
----@param cooldown Cooldown
----@param action WayfinderDesiredAction?
-local function SetActionCooldown(cooldown, action)
-    cooldown:Clear()
-    if not action then return end
-    if action.type == "spell" and C_Spell and C_Spell.GetSpellCooldown then
-        local info = C_Spell.GetSpellCooldown(action.id)
-        if info and not MapPinEnhanced:IsSecretTable(info) and type(info.startTime) == "number" and
-            type(info.duration) == "number" then
-            cooldown:SetCooldown(info.startTime, info.duration, info.modRate)
-        end
-        return
-    end
-    if C_Item and C_Item.GetItemCooldown then
-        local startTime, duration, enable = C_Item.GetItemCooldown(action.id)
-        if type(startTime) == "number" and type(duration) == "number" and enable ~= 0 then
-            cooldown:SetCooldown(startTime, duration)
-        end
-    end
 end
 
 function MapPinEnhancedWayfinderInstructionMixin:OnLoad()
@@ -73,8 +51,6 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
     GameTooltip:Hide()
     self.actionButton.icon:SetTexture(actionIcon)
     self.actionBlocker.icon:SetTexture(actionIcon)
-    SetActionCooldown(self.actionButton.cooldown, action)
-    SetActionCooldown(self.actionBlocker.cooldown, action)
 
     if InCombatLockdown() then
         -- Protected attributes still describe preparedAction. Cover any obsolete
@@ -116,7 +92,6 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
     if visible and status ~= "" then text = text .. "\n" .. status end
     self.text:SetText(text)
     if self.onTextChanged then self.onTextChanged() end
-    self:UpdateCooldownEvents()
 end
 
 --@debug@
@@ -153,35 +128,12 @@ function MapPinEnhancedWayfinderInstructionMixin:OnActionLeave()
     GameTooltip:Hide()
 end
 
-function MapPinEnhancedWayfinderInstructionMixin:UpdateCooldownEvents()
-    local action = self.step and self.step.showInstruction ~= false and self.step.desiredAction
-    if self:IsVisible() and action then
-        if self.refreshCooldown then return end
-        self.refreshCooldown = function()
-            local current = self.step and self.step.desiredAction
-            SetActionCooldown(self.actionButton.cooldown, current)
-            SetActionCooldown(self.actionBlocker.cooldown, current)
-        end
-        MapPinEnhanced:RegisterEvent("SPELL_UPDATE_COOLDOWN", self.refreshCooldown)
-        MapPinEnhanced:RegisterEvent("BAG_UPDATE_COOLDOWN", self.refreshCooldown)
-    elseif self.refreshCooldown then
-        MapPinEnhanced:UnregisterEventForFunction("SPELL_UPDATE_COOLDOWN", self.refreshCooldown)
-        MapPinEnhanced:UnregisterEventForFunction("BAG_UPDATE_COOLDOWN", self.refreshCooldown)
-        self.refreshCooldown = nil
-        self.actionButton.cooldown:Clear()
-        self.actionBlocker.cooldown:Clear()
-    end
-end
-
 function MapPinEnhancedWayfinderInstructionMixin:OnShow()
     -- Combat may have covered several different Steps.
     -- Prepare only the latest action before this surface becomes interactive.
     if not InCombatLockdown() then self:SetStep(self.step) end
-    self:UpdateCooldownEvents()
-    if self.refreshCooldown then self.refreshCooldown() end
 end
 
 function MapPinEnhancedWayfinderInstructionMixin:OnHide()
     GameTooltip:Hide()
-    self:UpdateCooldownEvents()
 end
