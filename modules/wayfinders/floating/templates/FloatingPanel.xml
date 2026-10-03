@@ -62,6 +62,20 @@
                     <OnClick>self:GetParent():ClearTracking()</OnClick>
                 </Scripts>
             </Button>
+            <Button parentKey="reportButton" inherits="MapPinEnhancedIconButtonTemplate">
+                <Size x="22" y="22" />
+                <KeyValues>
+                    <!-- TODO: Replace the export icon with a proper report icon. -->
+                    <KeyValue key="icon" value="export" />
+                    <KeyValue key="tooltip" value="Report" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.clearButton" relativePoint="BOTTOM" y="-2" />
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():ReportNavigation()</OnClick>
+                </Scripts>
+            </Button>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />

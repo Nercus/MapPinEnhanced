@@ -1,0 +1,81 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="NavigationReport.lua" />
+    <EditBox name="MapPinEnhancedNavigationReportLinkTemplate" inherits="MapPinEnhancedInputTemplate" virtual="true">
+        <Size x="545" y="26" />
+        <Scripts>
+            <OnTextChanged>
+                if self:GetText() ~= self.url then self:SetText(self.url) end
+            </OnTextChanged>
+            <OnEditFocusGained>
+                self:HighlightText()
+                self.clearButton:Hide()
+            </OnEditFocusGained>
+            <OnChar>self.clearButton:Hide()</OnChar>
+            <OnMouseUp>self:HighlightText()</OnMouseUp>
+            <OnEnterPressed>self:ClearFocus()</OnEnterPressed>
+        </Scripts>
+    </EditBox>
+    <Frame name="MapPinEnhancedNavigationReportTemplate" inherits="MapPinEnhancedCopyTextDialogTemplate" mixin="MapPinEnhancedNavigationReportMixin" virtual="true">
+        <Size x="700" y="620" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
+                    <Size x="650" y="24" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-45" /></Anchors>
+                </FontString>
+                <FontString parentKey="instructions" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                    <Size x="650" y="36" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-76" /></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormal" text="GitHub" justifyH="LEFT">
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-124" /></Anchors>
+                </FontString>
+                <FontString inherits="GameFontNormal" text="CurseForge" justifyH="LEFT">
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-160" /></Anchors>
+                </FontString>
+                <FontString parentKey="descriptionLabel" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="650" y="20" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-198" /></Anchors>
+                </FontString>
+                <FontString parentKey="reportLabel" inherits="GameFontNormal" justifyH="LEFT">
+                    <Size x="650" y="20" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-330" /></Anchors>
+                </FontString>
+                <FontString parentKey="copyHint" inherits="GameFontHighlightSmall" justifyH="LEFT" wordwrap="true">
+                    <Size x="650" y="26" />
+                    <Anchors><Anchor point="BOTTOMLEFT" x="25" y="12" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <EditBox parentKey="github" inherits="MapPinEnhancedNavigationReportLinkTemplate">
+                <KeyValues><KeyValue key="url" value="https://github.com/Nercus/MapPinEnhanced/issues" /></KeyValues>
+                <Anchors><Anchor point="TOPLEFT" x="130" y="-118" /></Anchors>
+            </EditBox>
+            <EditBox parentKey="curseforge" inherits="MapPinEnhancedNavigationReportLinkTemplate">
+                <KeyValues><KeyValue key="url" value="https://legacy.curseforge.com/wow/addons/mappinenhanced/issues" /></KeyValues>
+                <Anchors><Anchor point="TOPLEFT" x="130" y="-154" /></Anchors>
+            </EditBox>
+            <ScrollFrame parentKey="description" inherits="MapPinEnhancedTextareaTemplate">
+                <Size x="640" y="85" />
+                <Anchors><Anchor point="TOPLEFT" x="30" y="-232" /></Anchors>
+                <ScrollChild>
+                    <EditBox parentKey="editbox">
+                        <Scripts>
+                            <OnTextChanged>self:GetParent():GetParent():UpdateReport()</OnTextChanged>
+                        </Scripts>
+                    </EditBox>
+                </ScrollChild>
+            </ScrollFrame>
+            <ScrollFrame parentKey="output">
+                <Size x="640" y="210" />
+                <Anchors><Anchor point="TOPLEFT" x="30" y="-364" /></Anchors>
+            </ScrollFrame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

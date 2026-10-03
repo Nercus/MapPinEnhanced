@@ -30,6 +30,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field directionVisible boolean?
 ---@field step WayfinderStepData?
 ---@field clearButton Button
+---@field reportButton MapPinEnhancedIconButtonTemplate
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field displayType 'close' | 'far' | nil
 ---@field fullTitle string?
@@ -278,4 +279,8 @@ function MapPinEnhancedWayfinderArrowMixin:ClearTracking()
     if self.step then
         MapPinEnhanced:GetModule("Providers"):ClearNavigationTracking(self.step.changeNumber)
     end
+end
+
+function MapPinEnhancedWayfinderArrowMixin:ReportNavigation()
+    MapPinEnhanced:GetModule("Navigation"):ShowDebugDump()
 end

@@ -58,7 +58,8 @@ end
 ---@param command SlashCommand the command or command aliases to add
 ---@param func function the function to call when the command is used
 ---@param help string the help message to display when the command is used
-function MapPinEnhanced:AddSlashCommand(command, func, help)
+---@param showInHelp boolean? whether to list the command in help (defaults to true)
+function MapPinEnhanced:AddSlashCommand(command, func, help, showInHelp)
     assert(type(command) == "string" or type(command) == "table", "Command not provided")
     assert(type(func) == "function", "Function not provided")
     assert(type(help) == "string", "Help not provided")
@@ -77,7 +78,7 @@ function MapPinEnhanced:AddSlashCommand(command, func, help)
         assert(type(alias) == "string", "Command alias must be a string")
         commandList[alias] = func
     end
-    commandHelpStrings[mainCommand] = help
+    commandHelpStrings[mainCommand] = showInHelp ~= false and help or nil
 
     self:AddDebugCustomDebugAction({
         type = "button",

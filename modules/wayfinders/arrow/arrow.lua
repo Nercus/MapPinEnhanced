@@ -39,13 +39,10 @@ function MapPinEnhancedWayfinderArrow:Setup()
     self:GetFrame()
 end
 
---@debug@
 ---@return string
 function MapPinEnhancedWayfinderArrow:GetActionDebugText()
     return self.positionFrame and self.positionFrame.instruction:GetActionDebugText() or "Arrow not created"
 end
-
---@end-debug@
 
 ---@param title string
 function MapPinEnhancedWayfinderArrow:SetTitle(title)

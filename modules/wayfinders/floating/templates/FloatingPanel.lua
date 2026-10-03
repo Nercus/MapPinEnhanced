@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedFloatingPanelTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field clearButton Button
+---@field reportButton MapPinEnhancedIconButtonTemplate
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field title FontString
 ---@field distance FontString
@@ -193,4 +194,8 @@ function MapPinEnhancedFloatingPanelMixin:OnHide()
         self.distanceCallback = nil
     end
     self.distance:SetText("")
+end
+
+function MapPinEnhancedFloatingPanelMixin:ReportNavigation()
+    MapPinEnhanced:GetModule("Navigation"):ShowDebugDump()
 end

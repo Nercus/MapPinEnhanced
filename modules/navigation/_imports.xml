@@ -6,7 +6,5 @@
     <Include file="data/_imports.xml" />
     <Include file="templates/_imports.xml" />
     <Include file="navigation.lua" />
-    <!--@debug@-->
     <Include file="navigationDebug.lua" />
-    <!--@end-debug@-->
 </Ui>

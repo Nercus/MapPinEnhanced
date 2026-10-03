@@ -13,7 +13,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedWayfinder
 ---@field Setup fun(self: MapPinEnhancedWayfinder) creates protected controls outside combat
----@field GetActionDebugText fun(self: MapPinEnhancedWayfinder): string debug builds only
+---@field GetActionDebugText fun(self: MapPinEnhancedWayfinder): string
 ---@field Init fun(self: MapPinEnhancedWayfinder, targetData: WayfinderData | nil) sets the wayfinder pin for the wayfinder
 ---@field Enable fun(self: MapPinEnhancedWayfinder) enables the wayfinder
 ---@field Disable fun(self: MapPinEnhancedWayfinder) disables the wayfinder
@@ -166,13 +166,10 @@ function Wayfinders:IsIntermediateStep()
         activeStep.stepIndex < activeStep.stepCount
 end
 
---@debug@
 ---@return string
 function Wayfinders:GetActionDebugText()
     return self.activeWayfinder and self.activeWayfinder:GetActionDebugText() or "Wayfinder not selected"
 end
-
---@end-debug@
 
 ---@return AnyMenuEntry[]
 function Wayfinders:BuildNavigationMenuEntries()

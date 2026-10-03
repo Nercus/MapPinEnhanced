@@ -96,7 +96,6 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
     if self.onTextChanged then self.onTextChanged() end
 end
 
---@debug@
 ---@return string
 function MapPinEnhancedWayfinderInstructionMixin:GetActionDebugText()
     local action, prepared = self.step and self.step.desiredAction, self.preparedAction
@@ -110,8 +109,6 @@ function MapPinEnhancedWayfinderInstructionMixin:GetActionDebugText()
         tostring(button:IsShown()), tostring(button:IsVisible()), tostring(button:GetAlpha()), tostring(x), tostring(y),
         tostring(self.actionBlocker:IsVisible()), tostring(button:GetAttribute("type")))
 end
-
---@end-debug@
 
 ---@param owner Frame
 function MapPinEnhancedWayfinderInstructionMixin:OnActionEnter(owner)

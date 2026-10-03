@@ -27,13 +27,10 @@ function MapPinEnhancedWayfinderFloating:Setup()
     self.objectivePanel = objectivePanel
 end
 
---@debug@
 ---@return string
 function MapPinEnhancedWayfinderFloating:GetActionDebugText()
     return self.panel and self.panel:GetActionDebugText() or "Floating instruction not created"
 end
-
---@end-debug@
 
 ---@return MapPinEnhancedWayfinderFloatingTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()

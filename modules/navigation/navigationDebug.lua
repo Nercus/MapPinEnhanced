@@ -1,8 +1,9 @@
---@debug@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+---@class Navigation
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+local reportWindow ---@type MapPinEnhancedNavigationReportTemplate?
 
 -- Only selected plain data enters the dump. Format immediately so the copy
 -- window cannot retain live route state or change while the player moves.
@@ -34,7 +35,7 @@ local function GetPoint(graph, index)
     }
 end
 
-local function ShowNavigationDump()
+function Navigation:ShowDebugDump()
     local lines = { "Map Pin Enhanced navigation dump" }
     local function Add(label, value)
         lines[#lines + 1] = label .. ": " .. FormatValue(value)
@@ -171,8 +172,13 @@ local function ShowNavigationDump()
             end
         end
     end
-    MapPinEnhanced:ShowCopyTextDialog(MapPinEnhanced.L["Navigation Debug Dump"], table.concat(lines, "\n"))
+    if not reportWindow then
+        reportWindow = CreateFrame("Frame", "MapPinEnhancedNavigationReport", UIParent,
+            "MapPinEnhancedNavigationReportTemplate") --[[@as MapPinEnhancedNavigationReportTemplate]]
+    end
+    reportWindow:OpenReport(table.concat(lines, "\n"))
 end
 
-MapPinEnhanced:AddSlashCommand("navdebug", ShowNavigationDump, MapPinEnhanced.L["Navigation Debug Dump"])
---@end-debug@
+MapPinEnhanced:AddSlashCommand("navdebug", function()
+    Navigation:ShowDebugDump()
+end, MapPinEnhanced.L["Navigation Debug Dump"], false)

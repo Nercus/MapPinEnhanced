@@ -311,10 +311,19 @@ L["System groups are managed by Map Pin Enhanced for special features. Their cor
 "System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."
 
 
---@debug@
+L["Report"] = "Report"
+L["Report a navigation problem"] = "Report a navigation problem"
+L["Help improve navigation"] = "Help improve navigation"
+L["Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."] =
+"Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."
+L["What went wrong?"] = "What went wrong?"
+L["What happened, what did you expect, and how can we reproduce it?"] =
+"What happened, what did you expect, and how can we reproduce it?"
+L["Your report (description and debug data)"] = "Your report (description and debug data)"
+L["Click the report or a URL to select it, then press Ctrl+C to copy."] =
+"Click the report or a URL to select it, then press Ctrl+C to copy."
 L["Navigation Debug Dump"] = "Navigation Debug Dump"
 L["Copy current navigation diagnostics."] = "Copy current navigation diagnostics."
---@end-debug@
 
 
 L["Description"] = "Description"
