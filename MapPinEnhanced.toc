@@ -16,6 +16,18 @@
 ## Version: @project-version@
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\Logo.png
 
+## Category: Map
+## Category-deDE: Karte
+## Category-esES: Mapa
+## Category-esMX: Mapa
+## Category-frFR: Carte
+## Category-itIT: Mappa
+## Category-koKR: 지도
+## Category-ptBR: Mapa
+## Category-ruRU: Карта
+## Category-zhCN: 地图
+## Category-zhTW: 地圖
+
 ## X-Website: https://github.com/Nercus/MapPinEnhanced
 ## X-License: Code: GPL-3.0-only; Nercus-owned media: All Rights Reserved; third-party media: respective owners' terms
 ## X-Curse-Project-ID: 441677
