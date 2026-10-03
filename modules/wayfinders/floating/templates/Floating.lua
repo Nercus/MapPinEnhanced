@@ -2,7 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 local Providers = MapPinEnhanced:GetModule("Providers")
 
-local CLOSE_DISTANCE = 100
+local MIN_CLOSE_DISTANCE = 50
+local MAX_CLOSE_DISTANCE = 200
 
 ---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin, MapPinEnhancedFadingFrameTemplate
 ---@field navigationOpacity Frame | { content: MapPinEnhancedWayfinderFloatingContentTemplate }
@@ -191,8 +192,18 @@ end
 
 ---@param distance number?
 ---@param timeToTarget number?
-function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget)
-    self:SetDisplayType(distance and distance < CLOSE_DISTANCE and "close" or "far")
+---@param closingSpeed number
+---@param nextUpdateInterval number
+---@param movementState DistanceMovementState
+function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval,
+                                                             movementState)
+    local closeDistance = MIN_CLOSE_DISTANCE
+    if movementState == "approaching" then
+        -- Like dynamic arrival, allow for travel before the next distance sample.
+        closeDistance = math.min(MAX_CLOSE_DISTANCE,
+            MIN_CLOSE_DISTANCE + math.max(0, closingSpeed) * nextUpdateInterval)
+    end
+    self:SetDisplayType(distance and distance < closeDistance and "close" or "far")
 end
 
 ---@param elapsed number
@@ -301,8 +312,8 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
-    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
-        self:OnDistanceUpdate(distance, timeToTarget)
+    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
+        self:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
     end)
 end
 

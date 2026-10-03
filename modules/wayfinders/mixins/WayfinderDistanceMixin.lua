@@ -4,7 +4,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 local SHOW_ETA_OPTION = "Wayfinder.General.ShowETA"
 
 ---@class MapPinEnhancedWayfinderDistanceMixin
----@field distanceCallback fun(distance: number?, timeToTarget: number?)?
+---@field distanceCallback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)?
 ---@field distanceReadout MapPinEnhancedWayfinderReadoutTemplate?
 ---@field unsubscribeShowETA fun()?
 ---@field lastDistanceText string?
@@ -20,7 +20,7 @@ function MapPinEnhancedWayfinderDistanceMixin:ResetDistanceReadout()
 end
 
 ---@param readout MapPinEnhancedWayfinderReadoutTemplate
----@param onDistance fun(distance: number?, timeToTarget: number?)
+---@param onDistance fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)
 function MapPinEnhancedWayfinderDistanceMixin:StartDistanceUpdates(readout, onDistance)
     assert(readout and readout.SetValues and readout.SetShowETA,
         "WayfinderDistance:StartDistanceUpdates: a readout is required")
@@ -31,7 +31,7 @@ function MapPinEnhancedWayfinderDistanceMixin:StartDistanceUpdates(readout, onDi
     self.unsubscribeShowETA = Options:SubscribeToOptionChanges(SHOW_ETA_OPTION, function(showETA)
         readout:SetShowETA(showETA == true)
     end)
-    self.distanceCallback = function(distance, timeToTarget)
+    self.distanceCallback = function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
         local formattedDistance = ""
         local formattedETA = ""
         local hasETA = type(timeToTarget) == "number" and timeToTarget >= 0
@@ -47,7 +47,7 @@ function MapPinEnhancedWayfinderDistanceMixin:StartDistanceUpdates(readout, onDi
             self.lastHasETA = hasETA
             readout:SetValues(formattedDistance, formattedETA, hasETA)
         end
-        onDistance(distance, timeToTarget)
+        onDistance(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
     end
     MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
 end
