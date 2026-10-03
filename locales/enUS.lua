@@ -346,6 +346,9 @@ L["Settings for Arrow; Floating is still selected."] = "Settings for Arrow; Floa
 
 L["Clear Tracking"] = "Clear tracking"
 L["In objective area"] = "In objective area"
+L["Why do I see this navigation element?"] = "Why do I see this navigation element?"
+L["Wayfinder.Floating.Fallback_DESCRIPTION"] =
+"Blizzard's UI cannot provide a usable world position for this target in this area. This arrow is only used temporarily and will be reverted back when usable game information is available."
 
 L["Group sharing timed out. The sender must be online and the link must still be available."] =
 "Group sharing timed out. The sender must be online and the link must still be available."
@@ -356,4 +359,4 @@ L["This shared group is no longer available. Ask the sender for a new link."] =
 "This shared group is no longer available. Ask the sender for a new link."
 
 L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
-    "Pin operation stopped after %d of %d pins. Completed changes were kept."
+"Pin operation stopped after %d of %d pins. Completed changes were kept."

@@ -27,7 +27,7 @@
                     <Frame parentKey="fallbackTitleAnchor">
                         <Size x="1" y="1" />
                         <Anchors>
-                            <Anchor point="TOP" relativePoint="CENTER" y="-38" />
+                            <Anchor point="TOP" relativePoint="CENTER" y="-16" />
                         </Anchors>
                     </Frame>
                     <Frame parentKey="closePinAnchor">

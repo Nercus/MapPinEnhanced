@@ -30,6 +30,39 @@
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="normalTextAnchor">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="15" y="-10" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="fallbackTextAnchor">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="8" y="-5" />
+                </Anchors>
+            </Frame>
+            <Frame parentKey="info" enableMouse="true" propagateMouseInput="Clicks" hidden="true">
+                <Size x="18" y="18" />
+                <Anchors>
+                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString text="i" inherits="GameFontNormalTiny" justifyH="LEFT" justifyV="TOP" wordwrap="true" spacing="3">
+                            <Color r="1" g="0.82" b="0.00" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnEnter>self:GetParent():ShowInfoTooltip()</OnEnter>
+                    <OnLeave>self:GetParent():HideInfoTooltip()</OnLeave>
+                    <OnHide>self:GetParent():HideInfoTooltip()</OnHide>
+                </Scripts>
+            </Frame>
             <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate" propagateMouseInput="Clicks">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.title" y="-3" />

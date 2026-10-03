@@ -1,6 +1,7 @@
 ---@class MapPinEnhancedWayfinderFloatingNeedleTemplate : Frame
 ---@field texture Texture
 ---@field fallbackTexture Texture
+---@field fallbackBackground Texture
 MapPinEnhancedWayfinderFloatingNeedleMixin = {}
 
 function MapPinEnhancedWayfinderFloatingNeedleMixin:OnLoad()
@@ -17,6 +18,7 @@ end
 function MapPinEnhancedWayfinderFloatingNeedleMixin:SetFallback(fallback)
     self.texture:SetShown(not fallback)
     self.fallbackTexture:SetShown(fallback)
+    self.fallbackBackground:SetShown(fallback)
 end
 
 ---@param active boolean
