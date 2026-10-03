@@ -22,11 +22,56 @@
                         <Anchor point="CENTER" />
                     </Anchors>
                     <TexCoords left="0" right="0.0625" top="0" bottom="0.125" />
+                    <Animations>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                            <KeyValues>
+                                <KeyValue key="showOnPlay" value="true" />
+                            </KeyValues>
+                        </AnimationGroup>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
+                            <KeyValues>
+                                <KeyValue key="hideOnFinished" value="true" />
+                            </KeyValues>
+                            <Scripts>
+                                <OnFinished inherit="append">self:GetParent():GetParent():FinishFallbackTransition()</OnFinished>
+                            </Scripts>
+                        </AnimationGroup>
+                    </Animations>
+                </Texture>
+                <Texture parentKey="fallbackCloseTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinderClose.png" desaturated="true" hidden="true" alpha="0">
+                    <Size x="24" y="24" />
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                    <Animations>
+                        <AnimationGroup parentKey="jump" looping="REPEAT">
+                            <Translation offsetY="8" duration="0.3" order="1" smoothing="IN_OUT" />
+                            <Translation offsetY="-8" duration="0.3" order="2" smoothing="IN_OUT" />
+                        </AnimationGroup>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                            <KeyValues>
+                                <KeyValue key="showOnPlay" value="true" />
+                            </KeyValues>
+                        </AnimationGroup>
+                        <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
+                            <KeyValues>
+                                <KeyValue key="hideOnFinished" value="true" />
+                            </KeyValues>
+                            <Scripts>
+                                <OnFinished inherit="append">
+                                    self:GetParent().jump:Stop()
+                                    self:GetParent():GetParent():FinishFallbackTransition()
+                                </OnFinished>
+                            </Scripts>
+                        </AnimationGroup>
+                    </Animations>
                 </Texture>
             </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
         </Scripts>
     </Frame>
 </Ui>

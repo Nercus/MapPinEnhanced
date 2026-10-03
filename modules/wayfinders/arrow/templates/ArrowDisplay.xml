@@ -100,6 +100,37 @@
                                     <KeyValues>
                                         <KeyValue key="hideOnFinished" value="true" />
                                     </KeyValues>
+                                    <Scripts>
+                                        <OnFinished inherit="append">self:GetParent():GetParent():GetParent():FinishNeedleTransition()</OnFinished>
+                                    </Scripts>
+                                </AnimationGroup>
+                            </Animations>
+                        </Texture>
+                        <Texture parentKey="closeNeedle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinderClose.png" desaturated="true" hidden="true" alpha="0">
+                            <Size x="40" y="40" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                            <Animations>
+                                <AnimationGroup parentKey="jump" looping="REPEAT">
+                                    <Translation offsetY="8" duration="0.3" order="1" smoothing="IN_OUT" />
+                                    <Translation offsetY="-8" duration="0.3" order="2" smoothing="IN_OUT" />
+                                </AnimationGroup>
+                                <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
+                                    <KeyValues>
+                                        <KeyValue key="showOnPlay" value="true" />
+                                    </KeyValues>
+                                </AnimationGroup>
+                                <AnimationGroup inherits="MapPinEnhancedAnimationFadeOut" parentKey="fadeOut">
+                                    <KeyValues>
+                                        <KeyValue key="hideOnFinished" value="true" />
+                                    </KeyValues>
+                                    <Scripts>
+                                        <OnFinished inherit="append">
+                                            self:GetParent().jump:Stop()
+                                            self:GetParent():GetParent():GetParent():FinishNeedleTransition()
+                                        </OnFinished>
+                                    </Scripts>
                                 </AnimationGroup>
                             </Animations>
                         </Texture>

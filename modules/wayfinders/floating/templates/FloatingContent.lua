@@ -1,4 +1,4 @@
----@alias FloatingPresentation "close"|"far"|"clamped"|"fallback"
+---@alias FloatingPresentation "close"|"far"|"clamped"|"fallback"|"fallback-close"
 
 ---@class MapPinEnhancedWayfinderFloatingChevron : Texture
 ---@field pulse AnimationGroup
@@ -136,7 +136,8 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     self.currentPresentation = presentation
     local clamped = presentation == "clamped"
     local close = presentation == "close"
-    local fallback = presentation == "fallback"
+    local fallbackClose = presentation == "fallback-close"
+    local fallback = presentation == "fallback" or fallbackClose
     self.title:SetFallback(fallback)
     self.visual:Show()
     self.pin:SetShown(not fallback)
@@ -157,7 +158,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     else
         self.readout:SetPoint("TOP", self.pin, "BOTTOM", 0, -3)
     end
-    self.needle:SetFallback(fallback)
+    self.needle:SetFallback(fallback, fallbackClose)
     self.needle:SetActive((clamped or fallback) and self:IsVisible())
     self:UpdateBeam()
 end

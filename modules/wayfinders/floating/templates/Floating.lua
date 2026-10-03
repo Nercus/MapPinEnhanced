@@ -173,7 +173,7 @@ end
 
 ---@return FloatingPresentation
 function MapPinEnhancedWayfinderFloatingMixin:GetPresentation()
-    if self.customDirection then return "fallback" end
+    if self.customDirection then return self.displayType == "close" and "fallback-close" or "fallback" end
     if self.isClamped then return "clamped" end
     return self.displayType or "far"
 end
@@ -186,7 +186,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
-    if not self.presentationInitialized or self.isClamped then return end
+    if not self.presentationInitialized or self.isClamped and not self.customDirection then return end
     self:RefreshPresentation()
 end
 

@@ -1,7 +1,17 @@
+---@class MapPinEnhancedFloatingFallbackTexture : Texture
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
+---@class MapPinEnhancedFloatingFallbackCloseTexture : MapPinEnhancedFloatingFallbackTexture
+---@field jump AnimationGroup
+
 ---@class MapPinEnhancedWayfinderFloatingNeedleTemplate : Frame
 ---@field texture Texture
----@field fallbackTexture Texture
+---@field fallbackTexture MapPinEnhancedFloatingFallbackTexture
+---@field fallbackCloseTexture MapPinEnhancedFloatingFallbackCloseTexture
 ---@field fallbackBackground Texture
+---@field fallback boolean?
+---@field fallbackClose boolean?
 MapPinEnhancedWayfinderFloatingNeedleMixin = {}
 
 function MapPinEnhancedWayfinderFloatingNeedleMixin:OnLoad()
@@ -12,13 +22,56 @@ end
 function MapPinEnhancedWayfinderFloatingNeedleMixin:SetColor(color)
     self.texture:SetVertexColor(color:GetRGBA())
     self.fallbackTexture:SetVertexColor(color:GetRGBA())
+    self.fallbackCloseTexture:SetVertexColor(color:GetRGBA())
 end
 
 ---@param fallback boolean
-function MapPinEnhancedWayfinderFloatingNeedleMixin:SetFallback(fallback)
+---@param close boolean?
+function MapPinEnhancedWayfinderFloatingNeedleMixin:SetFallback(fallback, close)
+    self.fallback = fallback
+    self.fallbackClose = fallback and close == true
     self.texture:SetShown(not fallback)
-    self.fallbackTexture:SetShown(fallback)
     self.fallbackBackground:SetShown(fallback)
+    local instantly = not fallback or not self:IsVisible()
+    local farTexture = self.fallbackTexture
+    local closeTexture = self.fallbackCloseTexture
+    if instantly then
+        farTexture.fadeIn:SetParentShownInstantly(fallback and not close, farTexture.fadeOut)
+        closeTexture.fadeIn:SetParentShownInstantly(self.fallbackClose, closeTexture.fadeOut)
+        closeTexture.jump:Stop()
+        return
+    end
+    -- Keep only the latest requested state while the visible texture fades out.
+    if farTexture.fadeOut:IsPlaying() or closeTexture.fadeOut:IsPlaying() then return end
+    local outgoing = self.fallbackClose and farTexture or closeTexture
+    if outgoing:IsShown() then
+        outgoing.fadeOut:PlayReplacing(outgoing.fadeIn)
+    else
+        self:FinishFallbackTransition()
+    end
+end
+
+function MapPinEnhancedWayfinderFloatingNeedleMixin:FinishFallbackTransition()
+    if not self.fallback or not self:IsVisible() then return end
+    if self.fallbackClose then
+        local closeTexture = self.fallbackCloseTexture
+        closeTexture.fadeIn:PlayShowing(closeTexture.fadeOut)
+        if not closeTexture.jump:IsPlaying() then closeTexture.jump:Play() end
+    else
+        self.fallbackTexture.fadeIn:PlayShowing(self.fallbackTexture.fadeOut)
+    end
+end
+
+function MapPinEnhancedWayfinderFloatingNeedleMixin:OnShow()
+    self:SetFallback(self.fallback == true, self.fallbackClose)
+end
+
+function MapPinEnhancedWayfinderFloatingNeedleMixin:OnHide()
+    -- Keep the requested presentation for re-show, but release all animation work.
+    self.fallbackCloseTexture.jump:Stop()
+    self.fallbackCloseTexture.fadeIn:SetParentShownInstantly(false, self.fallbackCloseTexture.fadeOut)
+    self.fallbackTexture.fadeIn:SetParentShownInstantly(false, self.fallbackTexture.fadeOut)
+    self:SetRotation(0)
 end
 
 ---@param active boolean

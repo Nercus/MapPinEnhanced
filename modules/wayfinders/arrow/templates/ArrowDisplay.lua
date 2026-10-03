@@ -5,8 +5,12 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
+---@class MapPinEnhancedArrowCloseNeedle : MapPinEnhancedArrowNeedle
+---@field jump AnimationGroup
+
 ---@class MapPinEnhancedArrowNeedleContainer : Frame
 ---@field needle MapPinEnhancedArrowNeedle
+---@field closeNeedle MapPinEnhancedArrowCloseNeedle
 
 ---@class MapPinEnhancedArrowTextContainer : Frame
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
@@ -67,6 +71,7 @@ end
 function MapPinEnhancedWayfinderArrowMixin:SetColor(color)
     self.pin:SetColor(color)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
+    self.needleContainer.closeNeedle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
 end
 
 ---@param texture string|number?
@@ -76,6 +81,7 @@ function MapPinEnhancedWayfinderArrowMixin:SetTexture(texture, usesAtlas)
     if not texture then return end
     local hasIcon = self.pin:SetIconTexture(texture, usesAtlas)
     self.needleContainer.needle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
+    self.needleContainer.closeNeedle:SetVertexColor(self.pin:GetActiveStyleColor():GetRGBA())
     return hasIcon
 end
 
@@ -92,12 +98,28 @@ end
 function MapPinEnhancedWayfinderArrowMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
-    if displayType == "close" then
-        self.needleContainer.needle.fadeOut:PlayHiding(self.needleContainer.needle.fadeIn)
-        self.pin:ShowPulse()
+    local needle = self.needleContainer.needle
+    local closeNeedle = self.needleContainer.closeNeedle
+    -- Finish the outgoing fade even if distance changes again; completion uses the latest state.
+    if needle.fadeOut:IsPlaying() or closeNeedle.fadeOut:IsPlaying() then return end
+    local outgoing = displayType == "close" and needle or closeNeedle
+    if outgoing:IsShown() then
+        outgoing.fadeOut:PlayReplacing(outgoing.fadeIn)
     else
-        self.needleContainer.needle.fadeIn:PlayShowing(self.needleContainer.needle.fadeOut)
-        self.pin:HidePulse()
+        self:FinishNeedleTransition()
+    end
+end
+
+function MapPinEnhancedWayfinderArrowMixin:FinishNeedleTransition()
+    if not self:IsVisible() or self.directionVisible == false then return end
+    local needle = self.needleContainer.needle
+    local closeNeedle = self.needleContainer.closeNeedle
+    if self.displayType == "close" then
+        closeNeedle.fadeIn:PlayShowing(closeNeedle.fadeOut)
+        closeNeedle.jump:Play()
+    else
+        self:SetNeedleRotation(-(self.needleRotation or 0))
+        needle.fadeIn:PlayShowing(needle.fadeOut)
     end
 end
 
@@ -145,6 +167,7 @@ function MapPinEnhancedWayfinderArrowMixin:OnUpdate(elapsed)
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnDistanceUpdate(distance, timeToTarget)
+    if self.directionVisible == false then return end
     if distance and distance < 10 then
         self:SetDisplayType("close")
     else
@@ -220,8 +243,11 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:Reset()
     self.displayType = "far"
-    self.needleContainer.needle.fadeIn:SetParentShownInstantly(true, self.needleContainer.needle.fadeOut)
-    self.pin:HidePulse()
+    local needle = self.needleContainer.needle
+    local closeNeedle = self.needleContainer.closeNeedle
+    closeNeedle.jump:Stop()
+    closeNeedle.fadeIn:SetParentShownInstantly(false, closeNeedle.fadeOut)
+    needle.fadeIn:SetParentShownInstantly(true, needle.fadeOut)
     self:ResetDirectionSampling()
     self.needleRotation = nil
     self.newNeedleRotation = nil
