@@ -154,7 +154,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     if fallback then
         self.readout:SetPoint("TOP", self.title, "BOTTOM", 0, -5)
     elseif close then
-        self.readout:SetPoint("BOTTOM", self.title, "TOP", 0, 5)
+        self.readout:SetPoint("BOTTOM", self.title, "TOP", 0, 0)
     else
         self.readout:SetPoint("TOP", self.pin, "BOTTOM", 0, -3)
     end
