@@ -2,11 +2,31 @@
 local MapPinEnhanced = select(2, ...)
 
 local Providers = MapPinEnhanced:GetModule("Providers")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
+
+---@param eventQuestID number?
+---@param inside boolean?
+local function RefreshQuestArea(eventQuestID, inside)
+    local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
+    if owner ~= SOURCE or not targetID then return end
+    local questID = tonumber(targetID:match("^quest:(%d+)$"))
+    if not questID or issecretvalue(eventQuestID) or
+        eventQuestID and eventQuestID ~= questID then return end
+    -- The original quest remains the owner while Floating super-tracks a travel
+    -- Step. Native super-tracking selection cannot identify it during that time.
+    if not issecretvalue(inside) and inside == nil and C_Minimap and C_Minimap.IsInsideQuestBlob then
+        inside = C_Minimap.IsInsideQuestBlob(questID)
+    end
+    local ready = C_QuestLog.ReadyForTurnIn and C_QuestLog.ReadyForTurnIn(questID)
+    local active = not issecretvalue(inside) and inside == true and
+        not issecretvalue(ready) and ready == false
+    Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active)
+end
 
 ---@return string
 local function GetQuestTargetID()
@@ -93,6 +113,7 @@ local function RefreshQuest()
     end
     if questID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
+        RefreshQuestArea()
         return
     end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
@@ -107,10 +128,12 @@ local function RefreshQuest()
         texture = questClassificationAtlas[classification] or "Navigation-Tracked-Icon",
         usesAtlas = true,
     })
+    RefreshQuestArea()
 end
 
 local function OnQuestProgress()
     Providers:RefreshSuperTrackingProvider(SOURCE)
+    RefreshQuestArea()
 end
 
 ---@param targetID string
@@ -132,7 +155,7 @@ local function OnQuestDataLoadResult(questID, success)
     if not pendingQuestTitles[questID] then return end
     pendingQuestTitles[questID] = nil
     if success then
-        Providers:RefreshSuperTrackingProvider(SOURCE)
+        OnQuestProgress()
     end
 end
 
@@ -152,8 +175,10 @@ Providers:RegisterSuperTrackingProvider({
         end
     end,
     untrack = function() C_SuperTrack.SetSuperTrackedQuestID(0) end,
-    events = { "QUEST_POI_UPDATE" },
 })
+MapPinEnhanced:RegisterEvent("PLAYER_INSIDE_QUEST_BLOB_STATE_CHANGED", RefreshQuestArea)
+MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", OnQuestProgress)
+MapPinEnhanced:RegisterEvent("QUEST_POI_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_WATCH_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", OnQuestDataLoadResult)

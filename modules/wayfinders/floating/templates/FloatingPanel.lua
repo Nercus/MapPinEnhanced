@@ -10,6 +10,7 @@ local L = MapPinEnhanced.L
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field title FontString
 ---@field distance FontString
+---@field description MapPinEnhancedWayfinderDescriptionTemplate
 ---@field distanceCallback fun(distance: number)?
 ---@field target WayfinderData?
 ---@field destinationText string?
@@ -19,6 +20,7 @@ MapPinEnhancedFloatingPanelMixin = {}
 function MapPinEnhancedFloatingPanelMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self, true)
     MapPinEnhancedWayfinderInstructionMixin.OnLoad(self)
+    self.description.mouseOwner = self
     -- The secure driver hides the protected action ancestry on combat entry.
     -- Floating reapplies only the latest Step when combat ends.
     RegisterStateDriver(self, "visibility", "[combat] hide;")
@@ -64,7 +66,8 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     self:SetStep(step)
     local menu = step and Wayfinders:BuildNavigationMenuEntries()
     self.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
-    self:ApplyVisibility(step ~= nil and step.showInstruction ~= false and step.stepCount ~= 1)
+    self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
+        step.showInstruction ~= false and step.stepCount ~= 1))
 end
 
 ---@param shown boolean
@@ -91,11 +94,21 @@ end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     if InCombatLockdown() then return end
-    local titleTruncated = Wayfinders:ApplyWrappedText(self.title, self.fullText, 210, 4)
+    local inside = self.step and self.step.insideObjectiveArea
+    local target = self.target
+    local title = inside and target and target.title or self.fullText
+    local titleTruncated = Wayfinders:ApplyWrappedText(self.title, title, 210, 4)
     local destinationTruncated = Wayfinders:ApplyWrappedText(self.text, self.destinationText, 210, 4)
-    self.textTruncated = titleTruncated or destinationTruncated
+    self.text:SetShown(not inside)
+    self.description:Apply(target and target.title, inside and target and target.description or nil)
+    self.textTruncated = titleTruncated or not inside and destinationTruncated
     self.progress:Apply(self.step, self:GetWidth())
-    local textHeight = self.title:GetHeight() + self.text:GetHeight() + self.distance:GetHeight() + 6
+    local descriptionHeight = self.description:IsShown() and self.description:GetHeight() + 3 or 0
+    self.distance:ClearAllPoints()
+    self.distance:SetPoint("TOPLEFT", inside and (descriptionHeight > 0 and self.description or self.title) or self.text,
+        "BOTTOMLEFT", 0, -3)
+    local textHeight = self.title:GetHeight() + self.distance:GetHeight() + 3 +
+        (inside and descriptionHeight or self.text:GetHeight() + 3)
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local height = math.max(textHeight, self.pinFrame:GetHeight(), self.actionButton:GetHeight()) + 32
     self:SetHeight(height)
@@ -108,7 +121,12 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnEnter()
-    if self.textTruncated then Wayfinders:ShowTextTooltip(self, self.fullText, self.destinationText) end
+    if not self.textTruncated then return end
+    if self.step and self.step.insideObjectiveArea and self.target then
+        Wayfinders:ShowTextTooltip(self, self.target.title, self.target.description)
+    else
+        Wayfinders:ShowTextTooltip(self, self.fullText, self.destinationText)
+    end
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnLeave()
@@ -123,6 +141,11 @@ function MapPinEnhancedFloatingPanelMixin:UpdateDistanceSubscription()
         self.distanceCallback = nil
     end
     self.distance:SetText("")
+    if self.step and self.step.insideObjectiveArea then
+        Wayfinders:ApplyWrappedText(self.distance, L["In objective area"], 210, 2)
+        self:UpdateLayout()
+        return
+    end
     if not self:IsShown() or not self.step or self.step.showInstruction == false then return end
     self.distanceCallback = function(distance)
         Wayfinders:ApplyWrappedText(self.distance, MapPinEnhanced:FormatDistance(distance), 210, 2)

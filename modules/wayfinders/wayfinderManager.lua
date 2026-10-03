@@ -82,6 +82,8 @@ local activeTarget
 ---@field showDirection boolean
 ---@field showInstruction boolean? false hides navigation instructions when routing is disabled
 ---@field phase string
+---@field isFinalDestination boolean?
+---@field insideObjectiveArea boolean?
 ---@field stepIndex integer?
 ---@field stepCount integer?
 ---@field progressEntries WayfinderProgressEntry[]?
@@ -124,6 +126,8 @@ local function CopyStep(step)
         showDirection = step.showDirection,
         showInstruction = step.showInstruction,
         phase = step.phase,
+        isFinalDestination = step.isFinalDestination,
+        insideObjectiveArea = step.insideObjectiveArea,
         stepIndex = step.stepIndex,
         stepCount = step.stepCount,
         progressEntries = step.progressEntries and CopyTable(step.progressEntries) or nil,
@@ -139,6 +143,14 @@ local function ApplyActiveStep()
     if Wayfinders.activeWayfinder then
         Wayfinders.activeWayfinder:SetStep(activeStep)
     end
+end
+
+---@param inside boolean
+function Wayfinders:UpdateDestinationAreaState(inside)
+    if not activeStep or not activeStep.isFinalDestination then return end
+    if (activeStep.insideObjectiveArea == true) == inside then return end
+    activeStep.insideObjectiveArea = inside
+    ApplyActiveStep()
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_REGEN_ENABLED", ApplyActiveStep)

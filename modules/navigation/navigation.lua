@@ -14,6 +14,7 @@ local L = MapPinEnhanced.L
 ---@field data WayfinderData
 ---@field routingData WayfinderData
 ---@field removeDestination NavigationDestinationRemoval?
+---@field insideObjectiveArea boolean?
 
 ---@class NavigationProgression
 ---@field route NavigationRoute
@@ -182,6 +183,7 @@ function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction,
         showDirection = not self.routeNavigationEnabled or phase ~= "no-direction" and self:CanGuideDirectly(),
         showInstruction = self.routeNavigationEnabled == true,
         phase = phase,
+        isFinalDestination = true,
         instruction = fallbackInstruction or destination.data.title or "",
     })
 end
@@ -399,6 +401,25 @@ function Navigation:IsDestinationActive(owner, destinationID, changeNumber)
     if destinationID and destination.destinationID ~= destinationID then return false end
     if changeNumber and destination.changeNumber ~= changeNumber then return false end
     return true
+end
+
+---@param owner string
+---@param destinationID string
+---@param changeNumber integer
+---@param inside boolean
+function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside)
+    if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
+    local destination = self.activeDestination
+    if not destination or (destination.insideObjectiveArea == true) == inside then return end
+    destination.insideObjectiveArea = inside
+    for _, step in pairs(self.routeSteps) do
+        if step.info then
+            step.info.insideObjectiveArea = step.info.isFinalDestination == true and inside
+        end
+    end
+    -- Membership only changes presentation. Preserve jobs, route layers, Step
+    -- identity and any arrival callback already consumed by distance sampling.
+    Wayfinders:UpdateDestinationAreaState(inside)
 end
 
 ---@return string? owner
@@ -663,6 +684,7 @@ function Navigation:PublishStep(progression)
             showDirection = true,
             showInstruction = not isFlying,
             phase = "approach",
+            isFinalDestination = true,
             stepIndex = progression.pathIndex,
             stepCount = GetRouteStepCount(progression.route),
             progressEntries = CopyRouteProgress(progression, graph),
@@ -1075,6 +1097,8 @@ end
 ---@param info WayfinderStepData
 function Navigation:ApplyStepPresentation(target, onArrival, info)
     local destination = self.activeDestination
+    info.insideObjectiveArea = info.isFinalDestination == true and
+        destination ~= nil and destination.insideObjectiveArea == true
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()

@@ -44,6 +44,14 @@
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate">
+                <KeyValues>
+                    <KeyValue key="maxWidth" value="210" type="number" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.title" relativePoint="BOTTOMLEFT" y="-3" />
+                </Anchors>
+            </Frame>
             <Frame parentKey="progress" inherits="MapPinEnhancedWayfinderProgressTemplate" />
             <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" frameStrata="LOW">
                 <Size x="42" y="42" />

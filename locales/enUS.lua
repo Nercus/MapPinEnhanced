@@ -345,6 +345,7 @@ L["Settings for Floating; Arrow is still selected."] = "Settings for Floating; A
 L["Settings for Arrow; Floating is still selected."] = "Settings for Arrow; Floating is still selected."
 
 L["Clear Tracking"] = "Clear tracking"
+L["In objective area"] = "In objective area"
 
 L["Group sharing timed out. The sender must be online and the link must still be available."] =
 "Group sharing timed out. The sender must be online and the link must still be available."

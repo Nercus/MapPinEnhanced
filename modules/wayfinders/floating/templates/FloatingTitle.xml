@@ -30,7 +30,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate">
+            <Frame parentKey="description" inherits="MapPinEnhancedWayfinderDescriptionTemplate" propagateMouseInput="Clicks">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.title" y="-3" />
                 </Anchors>

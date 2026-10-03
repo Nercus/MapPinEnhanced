@@ -36,7 +36,6 @@ function MapPinEnhancedWayfinderDescriptionMixin:Apply(title, description)
     self:SetSize(math.max(1, self.text:GetWidth()), self.text:GetHeight())
     self:EnableMouse(truncated)
     self:SetMouseClickEnabled(truncated and self.mouseOwner ~= nil)
-    self:SetPropagateMouseClicks(self.mouseOwner == nil)
     self:Show()
 end
 

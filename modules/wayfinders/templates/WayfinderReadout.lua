@@ -11,17 +11,19 @@ local L = MapPinEnhanced.L
 ---@field displayVisible boolean?
 ---@field onTextChanged fun()?
 ---@field maxWidth number?
+---@field statusText string?
 MapPinEnhancedWayfinderReadoutMixin = {}
 
 function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
-    local text = self.distanceText or ""
-    if text ~= "" and self.showETA and self.hasETA then
+    local text = self.statusText or self.distanceText or ""
+    local showETA = not self.statusText and self.showETA and self.hasETA
+    if text ~= "" and showETA then
         text = string.format(L["%s - %s"], text, self.etaText or "")
     end
     if text ~= "" or not self:IsVisible() then
         self.text:SetText(text)
         local width = self.maxWidth or 325
-        if text ~= "" and self.showETA and self.hasETA and self.text:GetUnboundedStringWidth() > width then
+        if text ~= "" and showETA and self.text:GetUnboundedStringWidth() > width then
             self.text:SetText(self.distanceText .. "\n" .. (self.etaText or ""))
         end
         self.text:SetWidth(width)
@@ -32,6 +34,12 @@ function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
         if self.onTextChanged then self.onTextChanged() end
     end
     self:SetShown(self.displayVisible == true and text ~= "")
+end
+
+---@param text string?
+function MapPinEnhancedWayfinderReadoutMixin:SetStatusText(text)
+    self.statusText = text
+    self:UpdateText()
 end
 
 -- Floating's clamped presentation can suppress a readout while samples continue.
@@ -63,6 +71,7 @@ function MapPinEnhancedWayfinderReadoutMixin:SetValues(distanceText, etaText, ha
 end
 
 function MapPinEnhancedWayfinderReadoutMixin:PrepareForTarget()
+    self.statusText = nil
     self:HideImmediately()
     self:SetValues(nil, nil, false)
 end
