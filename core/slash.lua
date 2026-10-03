@@ -29,7 +29,7 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
         local command = args[1]
         local secondArg = args[2]
         if commandList[command] then
-            pcall(commandList[command], unpack(args))
+            commandList[command](unpack(args))
         elseif secondArg == nil then
             self:PrintHelp()
         else

@@ -284,30 +284,21 @@ function MapPinEnhanced:RegisterKeyedCallbacks(key, callbacks)
     assert(type(key) == "string", "MapPinEnhanced:RegisterKeyedCallbacks requires a string key")
     assert(type(callbacks) == "table", "MapPinEnhanced:RegisterKeyedCallbacks requires a callback table")
 
-    ---@type { callbackEvent: CallbackEvent, func: function }[]
+    ---@type { eventName: string, func: function }[]
     local registrations = {}
     for callbackEvent, func in pairs(callbacks) do
+        -- Validate the complete set before changing the registry.
+        assert(type(callbackEvent) == "string" and IsValidCallbackEvent(callbackEvent),
+            "MapPinEnhanced:RegisterKeyedCallbacks: invalid callback event")
+        assert(type(func) == "function", "MapPinEnhanced:RegisterKeyedCallbacks: callback must be a function")
         table.insert(registrations, {
-            callbackEvent = callbackEvent,
+            eventName = GetCallbackEventName(callbackEvent, key),
             func = func,
         })
     end
 
-    local registeredCount = 0
     for _, registration in ipairs(registrations) do
-        local succeeded, failure = pcall(function()
-            ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
-            self:RegisterCallback(registration.callbackEvent, registration.func, key)
-        end)
-        if not succeeded then
-            for index = registeredCount, 1, -1 do
-                local registered = registrations[index]
-                ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
-                self:UnregisterCallback(registered.callbackEvent, registered.func, key)
-            end
-            error(failure, 0)
-        end
-        registeredCount = registeredCount + 1
+        callbackTarget.RegisterCallback(tostring(registration.func), registration.eventName, registration.func)
     end
 
     local isSubscribed = true
@@ -315,9 +306,10 @@ function MapPinEnhanced:RegisterKeyedCallbacks(key, callbacks)
         if not isSubscribed then return end
         isSubscribed = false
         for _, registration in ipairs(registrations) do
-            ---@diagnostic disable-next-line: param-type-mismatch -- i think the luals extension is off here
-            self:UnregisterCallback(registration.callbackEvent, registration.func, key)
+            callbackTarget.UnregisterCallback(tostring(registration.func), registration.eventName)
+            unusedCallbacks[registration.eventName] = true
         end
+        ClearUnusedCallbacks()
     end
 end
 
