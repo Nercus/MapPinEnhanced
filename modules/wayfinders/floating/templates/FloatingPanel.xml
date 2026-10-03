@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="FloatingPanel.lua" />
-    <Frame name="MapPinEnhancedFloatingPanelTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate" mixin="MapPinEnhancedFloatingPanelMixin" enableMouse="true" frameStrata="LOW">
+    <Frame name="MapPinEnhancedFloatingPanelDisplayTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate" mixin="MapPinEnhancedFloatingPanelMixin" enableMouse="true" frameStrata="LOW">
         <Size x="318" y="62" />
         <Anchors>
             <Anchor point="TOP" relativeTo="UIParent" y="-280" />
@@ -62,16 +62,6 @@
                     <Anchor point="LEFT" x="16" />
                 </Anchors>
             </Frame>
-            <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-11" />
-                </Anchors>
-            </Button>
-            <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-11" />
-                </Anchors>
-            </Button>
             <Button parentKey="clearButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="22" y="22" />
                 <KeyValues>
@@ -92,5 +82,21 @@
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>
+    </Frame>
+    <!-- Only the travel variant owns protected action controls. Both variants
+         inherit the same appearance, text layout and saved-position behavior. -->
+    <Frame name="MapPinEnhancedFloatingPanelTemplate" virtual="true" inherits="MapPinEnhancedFloatingPanelDisplayTemplate">
+        <Frames>
+            <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                </Anchors>
+            </Button>
+            <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                </Anchors>
+            </Button>
+        </Frames>
     </Frame>
 </Ui>
