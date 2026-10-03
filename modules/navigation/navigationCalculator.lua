@@ -185,7 +185,9 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint)
                 local observation = self:GetTaxiObservation()
                 if not observation or observation ~= progression.route.preparedData.taxiObservation or
                     not observation.itineraries[journey.destination] or
-                    not self:IsTaxiJourneyEligible(journey, preparedData) then return nil end
+                    not self:IsTaxiJourneyEligible(journey, preparedData) then
+                    return nil
+                end
             else
                 remainingPathCost = self:GetFreshPathCost(reference)
             end
@@ -254,6 +256,10 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field y number
 ---@field instanceID number
 
+---@class NavigationReverseSearch
+---@field incomingPathsByPoint table<integer, integer[]>
+---@field exitsByInstance table<number, integer[]>
+
 ---@class NavigationCalculationJob
 ---@field baseGraph NavigationGraph
 ---@field graph NavigationGraph
@@ -278,6 +284,7 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field originX number?
 ---@field originY number?
 ---@field cancelled boolean
+---@field reverseSearch NavigationReverseSearch?
 ---@field movementEntry NavigationHeapEntry?
 ---@field nextMovementPointIndex integer?
 ---@field worldPoints table<integer, NavigationWorldPoint>
@@ -300,6 +307,7 @@ local calculationNumber = 0
 ---@field pathCount integer
 ---@field previousPointIndex integer?
 ---@field finalCost NavigationCalculatedPathCost?
+---@field firstPathReference integer?
 ---@field signature string
 
 local function GetCostBucket(cost)
@@ -367,8 +375,9 @@ end
 ---@param previousPointIndex integer?
 ---@param previousPathReference integer?
 ---@param signature string
+---@param finalCost NavigationCalculatedPathCost?
 local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
-                          previousPointIndex, previousPathReference, signature)
+                          previousPointIndex, previousPathReference, signature, finalCost)
     local costBucket = GetCostBucket(cost)
     local bestCostBucket = job.bestCostBuckets[pointIndex]
     local isBetter = bestCostBucket == nil or costBucket < bestCostBucket or costBucket == bestCostBucket and
@@ -389,6 +398,7 @@ local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
         uncertainty = uncertainty,
         pathCount = pathCount,
         signature = signature,
+        finalCost = finalCost,
     })
 end
 
@@ -420,11 +430,14 @@ end
 ---@return NavigationRoute
 local function BuildRoute(job, destinationEntry)
     ---@type integer[]
-    local reverseReferences = {}
+    local searchReferences = {}
+    if destinationEntry.firstPathReference then
+        searchReferences[1] = destinationEntry.firstPathReference
+    end
     local pointIndex = destinationEntry.previousPointIndex
     while pointIndex do
         local pathReference = job.previousPathReferences[pointIndex]
-        if pathReference then table.insert(reverseReferences, pathReference) end
+        if pathReference then table.insert(searchReferences, pathReference) end
         pointIndex = job.previousPointIndexes[pointIndex]
         job.checkpoint()
     end
@@ -433,8 +446,10 @@ local function BuildRoute(job, destinationEntry)
     local pathCosts = {}
     local graph = CreateGraphOverlay(job.baseGraph)
     local journeys = {} ---@type table<integer, NavigationTaxiJourney>
-    for index = #reverseReferences, 1, -1 do
-        local pathReference = reverseReferences[index]
+    -- Forward search links point toward the player; fallback links already
+    -- follow execution order from its escape action toward the destination.
+    for index = 1, #searchReferences do
+        local pathReference = searchReferences[job.reverseSearch and index or #searchReferences - index + 1]
         table.insert(pathReferences, pathReference)
         local pathCost = job.pathCostByReference[pathReference]
         ---@cast pathCost NavigationCalculatedPathCost
@@ -544,13 +559,70 @@ local function ExpandPoint(job, entry)
 end
 
 ---@param job NavigationCalculationJob
+---@param entry NavigationHeapEntry
+---@param reverse NavigationReverseSearch
+local function ExpandReversePoint(job, entry, reverse)
+    local graph = job.graph
+    -- Incoming links are searched backward but always priced and executed in
+    -- their authored direction. This cannot invent a return trip for a portal.
+    for _, reference in ipairs(reverse.incomingPathsByPoint[entry.pointIndex] or {}) do
+        job.checkpoint()
+        if not job.unavailablePathCosts[reference] then
+            local cost = job.pathCostByReference[reference]
+            if not cost then
+                local failure
+                cost, failure = Navigation:GetPathCost(graph, job.preparedData, reference)
+                if cost then
+                    job.pathCostByReference[reference] = cost
+                else
+                    job.unavailablePathCosts[reference] = failure or "path cost unavailable"
+                end
+            end
+            if cost then
+                local fromPointIndex = graph.pathFromPointIndexes[reference]
+                local journey = job.taxiJourneys[reference]
+                local signature = journey and journey.identity .. "," .. entry.signature or
+                    AddPathToSignature("", reference) .. entry.signature
+                local totalCost = entry.cost + cost.comparisonSeconds
+                local uncertainty = entry.uncertainty + cost.uncertaintySeconds
+                if fromPointIndex then
+                    OfferPoint(job, fromPointIndex, totalCost, uncertainty, entry.pathCount + 1,
+                        entry.pointIndex, reference, signature, entry.finalCost)
+                elseif Navigation:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
+                    -- Only a usable current-player action may close this
+                    -- fallback. No player map coordinates or approach are needed.
+                    HeapPush(job.heap, {
+                        pointIndex = 0,
+                        cost = totalCost,
+                        costBucket = GetCostBucket(totalCost),
+                        uncertainty = uncertainty,
+                        pathCount = entry.pathCount + 1,
+                        previousPointIndex = entry.pointIndex,
+                        firstPathReference = reference,
+                        finalCost = entry.finalCost,
+                        signature = signature,
+                    })
+                end
+            end
+        end
+    end
+    -- An entrance can follow movement from a preceding exit. Do not chain
+    -- arbitrary movement waypoints or add a second approach from the player.
+    if job.previousPathReferences[entry.pointIndex] then
+        job.movementEntry = entry
+        job.nextMovementPointIndex = 1
+    end
+end
+
+---@param job NavigationCalculationJob
 local function OfferNextMovementPoint(job)
     local entry = job.movementEntry
     local candidateIndex = job.nextMovementPointIndex
     if not entry or not candidateIndex then return end
     local origin = job.worldPoints[entry.pointIndex]
-    local entrances = origin and job.entrancesByInstance[origin.instanceID]
-    local pointIndex = entrances and entrances[candidateIndex]
+    local candidatesByInstance = job.reverseSearch and job.reverseSearch.exitsByInstance or job.entrancesByInstance
+    local candidates = origin and candidatesByInstance[origin.instanceID]
+    local pointIndex = candidates and candidates[candidateIndex]
     if not origin or not pointIndex then
         job.movementEntry = nil
         job.nextMovementPointIndex = nil
@@ -562,15 +634,18 @@ local function OfferNextMovementPoint(job)
     local bestCostBucket = job.bestCostBuckets[pointIndex]
     if bestCostBucket and entry.costBucket > bestCostBucket then return end
     local target = job.worldPoints[pointIndex]
-    local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, target.mapID)
+    local fromMapID = job.reverseSearch and target.mapID or origin.mapID
+    local toMapID = job.reverseSearch and origin.mapID or target.mapID
+    local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", fromMapID, toMapID)
     if not speed or speed <= 0 then return end
     local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
     OfferPoint(job, pointIndex, entry.cost + seconds,
-        entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature)
+        entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature, entry.finalCost)
 end
 
 ---@async
 ---@param job NavigationCalculationJob
+---@return NavigationHeapEntry?
 local function AdvanceJob(job)
     while true do
         job.checkpoint()
@@ -578,15 +653,15 @@ local function AdvanceJob(job)
             OfferNextMovementPoint(job)
         else
             local entry = HeapPop(job.heap)
-            if not entry then
-                job.onFinish(nil, "no route", job.checkpoint)
-                return
+            if not entry then return nil end
+            if entry.pointIndex == 0 then return entry end
+            if IsCurrentEntry(job, entry) then
+                if job.reverseSearch then
+                    ExpandReversePoint(job, entry, job.reverseSearch)
+                else
+                    ExpandPoint(job, entry)
+                end
             end
-            if entry.pointIndex == 0 then
-                job.onFinish(BuildRoute(job, entry), nil, job.checkpoint)
-                return
-            end
-            if IsCurrentEntry(job, entry) then ExpandPoint(job, entry) end
         end
     end
 end
@@ -680,6 +755,57 @@ local function PrepareMovementPoints(job, graph)
     end
 end
 
+---@param job NavigationCalculationJob
+local function SeedReverseFallback(job)
+    -- Called only after the forward heap is exhausted. Keep its immutable
+    -- inputs and cost observations, but no visited-point state may leak across.
+    job.bestCostBuckets = {}
+    job.bestUncertainties = {}
+    job.bestPathCounts = {}
+    job.bestSignatures = {}
+    job.previousPointIndexes = {}
+    job.previousPathReferences = {}
+    local reverse = { incomingPathsByPoint = {}, exitsByInstance = {} } ---@type NavigationReverseSearch
+    job.reverseSearch = reverse
+    local graph = job.graph
+    local function AddIncomingPath(reference)
+        local pointIndex = graph.pathToPointIndexes[reference]
+        local incoming = reverse.incomingPathsByPoint[pointIndex] or {}
+        reverse.incomingPathsByPoint[pointIndex] = incoming
+        incoming[#incoming + 1] = reference
+    end
+    for reference = 1, graph.pathCount do
+        job.checkpoint()
+        if not job.avoidedPaths[reference] and job.preparedData.requirementStateByPath[reference] == "satisfied" then
+            AddIncomingPath(reference)
+        end
+    end
+    -- These journeys were already priced and checked against avoided legs.
+    for reference in pairs(job.taxiJourneys) do
+        AddIncomingPath(reference)
+        job.checkpoint()
+    end
+    local destination = job.destinationData
+    for pointIndex = 1, #graph.pointIDs do
+        job.checkpoint()
+        if reverse.incomingPathsByPoint[pointIndex] then
+            local point = job.worldPoints[pointIndex]
+            if point then
+                local exits = reverse.exitsByInstance[point.instanceID] or {}
+                reverse.exitsByInstance[point.instanceID] = exits
+                exits[#exits + 1] = pointIndex
+            end
+            local finalCost = Navigation:GetPlayerTravelCost(job.preparedData,
+                graph.pointMapIDs[pointIndex], graph.pointXs[pointIndex], graph.pointYs[pointIndex],
+                destination.mapID, destination.x, destination.y, "automatic")
+            if finalCost then
+                OfferPoint(job, pointIndex, finalCost.comparisonSeconds, finalCost.uncertaintySeconds,
+                    0, nil, nil, "", finalCost)
+            end
+        end
+    end
+end
+
 -- Negative operation references are calculation-local taxi journeys, never
 -- authored path IDs. The overlay shares immutable point/source arrays while
 -- providing endpoint/type views to existing presentation consumers.
@@ -722,9 +848,14 @@ local function PrepareTaxiCandidates(job, source)
             graph.pathToPointIndexes[reference] = journey.toPointIndex
             local from, to = journey.fromPointIndex, journey.toPointIndex
             graph.pathHandlerData[reference] = {
-                fromMap = graph.pointMapIDs[from], fromX = graph.pointXs[from], fromY = graph.pointYs[from],
-                toMap = graph.pointMapIDs[to], toX = graph.pointXs[to], toY = graph.pointYs[to],
-                fromTaxiNodeID = journey.origin, toTaxiNodeID = journey.destination,
+                fromMap = graph.pointMapIDs[from],
+                fromX = graph.pointXs[from],
+                fromY = graph.pointYs[from],
+                toMap = graph.pointMapIDs[to],
+                toX = graph.pointXs[to],
+                toY = graph.pointYs[to],
+                fromTaxiNodeID = journey.origin,
+                toTaxiNodeID = journey.destination,
                 taxiPathIDs = {},
             }
         else
@@ -740,7 +871,8 @@ end
 ---@param onFinish async fun(route: NavigationRoute?, failure: string?, checkpoint: fun())
 ---@param onRestart fun()
 ---@return NavigationCalculationJob?
-function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish, onRestart)
+function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish,
+                                          onRestart)
     local graph = self:GetGraph()
     calculationNumber = calculationNumber + 1
     local startedAt = GetTimePreciseSec()
@@ -812,7 +944,16 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
             PrepareTaxiCandidates(job, graph)
             PrepareMovementPoints(job, graph)
             SeedJob(job)
-            AdvanceJob(job)
+            local result = AdvanceJob(job)
+            if not result then
+                SeedReverseFallback(job)
+                result = AdvanceJob(job)
+            end
+            if result then
+                job.onFinish(BuildRoute(job, result), nil, job.checkpoint)
+            else
+                job.onFinish(nil, "no route", job.checkpoint)
+            end
         end,
     }, nil, function()
         self:CancelRouteCalculation(job)
