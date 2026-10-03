@@ -52,6 +52,7 @@ function MapPinEnhanced:ToPlainText(text)
     text = self:NormalizeText(text)
     if not text then return nil end
     text = text:gsub("|H.-|h(.-)|h", "%1"):gsub("|c%x%x%x%x%x%x%x%x", "")
+        :gsub("|cn[%w_]+:", "")
         :gsub("|r", ""):gsub("|T.-|t", ""):gsub("|A.-|a", ""):gsub("||", "|")
     text = self:NormalizeText(text)
     return text
