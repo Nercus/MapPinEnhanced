@@ -21,6 +21,7 @@
                         <Anchor point="TOPLEFT" x="3" y="-3" />
                         <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
                     </Anchors>
+                    <TexCoords left="0.07" right="0.93" top="0.07" bottom="0.93" />
                 </Texture>
                 <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Anchors>
