@@ -106,6 +106,13 @@ function Navigation:GetPathIcon(pathType)
 end
 
 ---@param pathType string
+---@return ColorMixin
+function Navigation:GetPathColor(pathType)
+    local icon = self:GetPathIcon(pathType)
+    return Pins.PIN_ICONS[Pins:ResolveIcon(icon)].color
+end
+
+---@param pathType string
 ---@return string
 function Navigation:GetPathMethod(pathType)
     local presentation = presentations[pathType]

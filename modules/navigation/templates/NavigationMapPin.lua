@@ -60,7 +60,7 @@ function MapPinEnhancedNavigationMapPinMixin:SetRoutePoint(pathType)
         self:SetLineEndpoint()
         return
     end
-    local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+    local color = Navigation:GetPathColor(pathType)
     self.circle:SetVertexColor(color:GetRGBA())
     self.circle:Show()
     local index = self.step and self.step.index
@@ -173,7 +173,7 @@ function MapPinEnhancedNavigationMapPinMixin:OnEnter()
     local pathType = graph.pathTypes[reference]
     local pointIndex = graph.pathToPointIndexes[reference]
     local mapID = graph.pointMapIDs[pointIndex]
-    local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+    local color = Navigation:GetPathColor(pathType)
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     GameTooltip:AddLine(string.format(L["Navigation Step Number"], step.index,
         Navigation:GetPathMethod(pathType)), color:GetRGB())

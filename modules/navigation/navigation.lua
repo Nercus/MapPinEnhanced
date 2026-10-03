@@ -640,7 +640,7 @@ local function CopyRouteProgress(progression, graph)
         local x = point and graph.pointXs[point] or destination.routingData.x
         local y = point and graph.pointYs[point] or destination.routingData.y
         local mapInfo = C_Map.GetMapInfo(mapID)
-        local color = Navigation.PATH_COLORS[pathType] or Navigation.DEFAULT_PATH_COLOR
+        local color = Navigation:GetPathColor(pathType)
         local r, g, b = color:GetRGB()
         local journey = reference and route.taxiJourneys[reference]
         entries[index] = {
