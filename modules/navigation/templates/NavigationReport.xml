@@ -16,7 +16,7 @@
             <OnEnterPressed>self:ClearFocus()</OnEnterPressed>
         </Scripts>
     </EditBox>
-    <Frame name="MapPinEnhancedNavigationReportTemplate" inherits="MapPinEnhancedCopyTextDialogTemplate" mixin="MapPinEnhancedNavigationReportMixin" virtual="true">
+    <Frame name="MapPinEnhancedNavigationReportTemplate" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedNavigationReportMixin" virtual="true" frameStrata="DIALOG">
         <Size x="700" y="620" />
         <Layers>
             <Layer level="ARTWORK">
@@ -60,15 +60,8 @@
             <ScrollFrame parentKey="description" inherits="MapPinEnhancedTextareaTemplate">
                 <Size x="640" y="85" />
                 <Anchors><Anchor point="TOPLEFT" x="30" y="-232" /></Anchors>
-                <ScrollChild>
-                    <EditBox parentKey="editbox">
-                        <Scripts>
-                            <OnTextChanged>self:GetParent():GetParent():UpdateReport()</OnTextChanged>
-                        </Scripts>
-                    </EditBox>
-                </ScrollChild>
             </ScrollFrame>
-            <ScrollFrame parentKey="output">
+            <ScrollFrame parentKey="output" inherits="MapPinEnhancedTextareaTemplate">
                 <Size x="640" y="210" />
                 <Anchors><Anchor point="TOPLEFT" x="30" y="-364" /></Anchors>
             </ScrollFrame>

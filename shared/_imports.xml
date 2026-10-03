@@ -8,5 +8,6 @@
 
     <Include file="utils/_imports.xml" />
     <Include file="frames/_imports.xml" />
+    <Include file="utils/CopyTextDialog.xml" />
     <Include file="menu/_imports.xml" />
 </Ui>

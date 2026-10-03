@@ -35,6 +35,7 @@ function MapPinEnhancedNavigationReportMixin:OpenReport(debugText)
     self.github:SetText(self.github.url)
     self.curseforge:SetText(self.curseforge.url)
     MapPinEnhancedCopyTextDialogMixin.Open(self, L["Report a navigation problem"], debugText)
+    self.description.editbox:SetScript("OnTextChanged", function() self:UpdateReport() end)
     self.description:SetVerticalScroll(0)
     self.output.editbox:ClearFocus()
     self.description.editbox:SetFocus()
@@ -51,6 +52,7 @@ end
 
 function MapPinEnhancedNavigationReportMixin:OnHide()
     self.debugText = nil
+    self.description.editbox:SetScript("OnTextChanged", nil)
     self.description.editbox:ClearFocus()
     self.description.editbox:SetText("")
     self.github:ClearFocus()
