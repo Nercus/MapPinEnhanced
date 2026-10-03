@@ -50,6 +50,18 @@ function Providers:UpdateSuperTrackingEntryText(source, targetID, title, descrip
     PublishEntry()
 end
 
+---@param source string
+---@param targetID string
+---@param texture string|number
+---@param usesAtlas boolean
+function Providers:UpdateSuperTrackingEntryIcon(source, targetID, texture, usesAtlas)
+    if not entry or not entry.tracked or entry.source ~= source or entry.targetID ~= targetID then return end
+    if entry.texture == texture and entry.usesAtlas == usesAtlas then return end
+    entry.texture, entry.usesAtlas = texture, usesAtlas
+    entry.pinData.texture, entry.pinData.usesAtlas = texture, usesAtlas
+    PublishEntry()
+end
+
 ---@return SuperTrackingEntry?
 function Providers:GetSuperTrackingEntry()
     if not entry then return nil end

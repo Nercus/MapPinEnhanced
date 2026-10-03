@@ -392,6 +392,26 @@ function Navigation:UpdateDestinationText(owner, destinationID, changeNumber, ti
 end
 
 ---@param owner string
+---@param destinationID string
+---@param changeNumber integer
+---@param texture string|number
+---@param usesAtlas boolean
+function Navigation:UpdateDestinationIcon(owner, destinationID, changeNumber, texture, usesAtlas)
+    if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
+    local destination = self.activeDestination
+    if not destination or destination.data.texture == texture and destination.data.usesAtlas == usesAtlas then return end
+    destination.data.texture, destination.data.usesAtlas = texture, usesAtlas
+    destination.routingData.texture, destination.routingData.usesAtlas = texture, usesAtlas
+    for _, step in pairs(self.routeSteps) do
+        if step.target and step.info and step.info.isFinalDestination then
+            step.target.texture, step.target.usesAtlas = texture, usesAtlas
+        end
+    end
+    -- Objective artwork changes do not invalidate routes or rearm arrival.
+    Wayfinders:UpdateDestinationIcon(texture, usesAtlas)
+end
+
+---@param owner string
 ---@param destinationID string?
 ---@param changeNumber integer?
 ---@return boolean

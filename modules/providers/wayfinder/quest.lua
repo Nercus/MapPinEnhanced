@@ -9,14 +9,60 @@ local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
 
+---@type table<Enum.QuestClassification, string>
+local questTurnInAtlas = {
+    [Enum.QuestClassification.Recurring] = "quest-recurring-turnin",
+    [Enum.QuestClassification.Meta] = "quest-wrapper-turnin",
+    [Enum.QuestClassification.Calling] = "Quest-DailyCampaign-TurnIn",
+    [Enum.QuestClassification.Campaign] = "Quest-Campaign-TurnIn",
+    [Enum.QuestClassification.Legendary] = "quest-legendary-turnin",
+    [Enum.QuestClassification.Important] = "quest-important-turnin",
+}
+
+---@param questID number
+---@return string?
+local function GetQuestAtlas(questID)
+    local isWorldQuest = C_QuestLog.IsWorldQuest(questID)
+    if issecretvalue(isWorldQuest) or type(isWorldQuest) ~= "boolean" then return nil end
+    if isWorldQuest then
+        local tagInfo = C_QuestLog.GetQuestTagInfo(questID)
+        if not MapPinEnhanced:IsReadableTable(tagInfo) or not QuestUtil or
+            not QuestUtil.GetWorldQuestAtlasInfo then return nil end
+        ---@cast tagInfo QuestTagInfo
+        if issecretvalue(tagInfo.worldQuestType) or issecretvalue(tagInfo.isElite) or
+            issecretvalue(tagInfo.quality) or issecretvalue(tagInfo.tradeskillLineID) then return nil end
+        -- World quests retain Blizzard's objective-type icon while in progress.
+        local atlas = QuestUtil.GetWorldQuestAtlasInfo(questID, tagInfo, false)
+        if not issecretvalue(atlas) and type(atlas) == "string" and atlas ~= "" then return atlas end
+        return nil
+    end
+    local ready = C_QuestLog.ReadyForTurnIn(questID)
+    if issecretvalue(ready) or type(ready) ~= "boolean" then return nil end
+    if ready then
+        local classification = C_QuestInfoSystem.GetQuestClassification(questID)
+        if issecretvalue(classification) then return nil end
+        return questTurnInAtlas[classification] or "UI-QuestPoi-QuestBangTurnIn"
+    end
+    local isTask = C_QuestLog.IsQuestTask(questID)
+    if issecretvalue(isTask) or type(isTask) ~= "boolean" then return nil end
+    if isTask then return "Bonus-Objective-Star" end
+    return "Quest-In-Progress-Icon-yellow"
+end
+
 ---@param eventQuestID number?
 ---@param inside boolean?
-local function RefreshQuestArea(eventQuestID, inside)
+local function RefreshQuestState(eventQuestID, inside)
+    if Providers:IsChangingSuperTrackingEntry() then return end
     local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
     if owner ~= SOURCE or not targetID then return end
     local questID = tonumber(targetID:match("^quest:(%d+)$"))
     if not questID or issecretvalue(eventQuestID) or
         eventQuestID and eventQuestID ~= questID then return end
+    local atlas = GetQuestAtlas(questID)
+    if atlas then
+        Navigation:UpdateDestinationIcon(owner, targetID, changeNumber, atlas, true)
+        Providers:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
+    end
     -- The original quest remains the owner while Floating super-tracks a travel
     -- Step. Native super-tracking selection cannot identify it during that time.
     if not issecretvalue(inside) and inside == nil and C_Minimap and C_Minimap.IsInsideQuestBlob then
@@ -34,18 +80,6 @@ local function GetQuestTargetID()
     if questID == 0 then questID = nil end
     return string.format("quest:%s", tostring(questID))
 end
-
----@type table<Enum.QuestClassification, string>
-local questClassificationAtlas = {
-    [Enum.QuestClassification.Normal] = "Navigation-Tracked-Icon",
-    [Enum.QuestClassification.Questline] = "Navigation-Tracked-Icon",
-    [Enum.QuestClassification.Recurring] = "UI-QuestPoiRecurring-QuestBang",
-    [Enum.QuestClassification.Meta] = "quest-wrapper-available",
-    [Enum.QuestClassification.Calling] = "Quest-DailyCampaign-Available",
-    [Enum.QuestClassification.Campaign] = "Quest-Campaign-Available",
-    [Enum.QuestClassification.Legendary] = "UI-QuestPoiLegendary-QuestBang",
-    [Enum.QuestClassification.Important] = "importantavailablequesticon",
-}
 
 ---@param questID number
 ---@param questTitle string
@@ -96,6 +130,8 @@ end
 local function RefreshQuest()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
+    -- Apply artwork before SetDestination compares data and decides to reroute.
+    if questID then RefreshQuestState(questID) end
     local targetID = GetQuestTargetID()
     local questMapID = questID and C_TaskQuest.GetQuestZoneID(questID)
     if questID and (not questMapID or questMapID == 0) then questMapID = GetQuestUiMapID(questID) end
@@ -113,27 +149,28 @@ local function RefreshQuest()
     end
     if questID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
-        RefreshQuestArea()
+        RefreshQuestState()
         return
     end
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
     questTitle = Providers:PlainDescription(questTitle) or Providers:PlainDescription(superTrackedName) or L["Quest"]
-    local classification = C_QuestInfoSystem.GetQuestClassification(questID)
+    local _, _, changeNumber = Navigation:GetActiveDestinationState()
+    local previous = Navigation:GetDestinationData(SOURCE, targetID, changeNumber)
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
         title = questTitle,
         description = GetQuestDescription(questID, questTitle),
-        texture = questClassificationAtlas[classification] or "Navigation-Tracked-Icon",
+        texture = GetQuestAtlas(questID) or previous and previous.texture or "Navigation-Tracked-Icon",
         usesAtlas = true,
     })
-    RefreshQuestArea()
+    RefreshQuestState()
 end
 
 local function OnQuestProgress()
+    RefreshQuestState()
     Providers:RefreshSuperTrackingProvider(SOURCE)
-    RefreshQuestArea()
 end
 
 ---@param targetID string
@@ -176,7 +213,7 @@ Providers:RegisterSuperTrackingProvider({
     end,
     untrack = function() C_SuperTrack.SetSuperTrackedQuestID(0) end,
 })
-MapPinEnhanced:RegisterEvent("PLAYER_INSIDE_QUEST_BLOB_STATE_CHANGED", RefreshQuestArea)
+MapPinEnhanced:RegisterEvent("PLAYER_INSIDE_QUEST_BLOB_STATE_CHANGED", RefreshQuestState)
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_POI_UPDATE", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_LOG_UPDATE", OnQuestProgress)

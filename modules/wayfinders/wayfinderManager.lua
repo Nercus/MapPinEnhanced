@@ -145,6 +145,18 @@ local function ApplyActiveStep()
     end
 end
 
+---@param texture string|number
+---@param usesAtlas boolean
+function Wayfinders:UpdateDestinationIcon(texture, usesAtlas)
+    if not activeTarget or not activeStep or not activeStep.isFinalDestination then return end
+    local data = activeTarget.data
+    data.texture, data.usesAtlas = texture, usesAtlas
+    if self.activeWayfinder then
+        self.activeWayfinder:SetTexture(texture, usesAtlas)
+    end
+    ApplyActiveStep()
+end
+
 ---@param inside boolean
 function Wayfinders:UpdateDestinationAreaState(inside)
     if not activeStep or not activeStep.isFinalDestination then return end
