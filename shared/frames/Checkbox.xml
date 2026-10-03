@@ -18,13 +18,13 @@
     <CheckButton name="MapPinEnhancedCheckboxWithLabelTemplate" mixin="MapPinEnhancedCheckboxMixin" virtual="true" propagateMouseInput="Motion">
         <Size x="25" y="25" />
         <NormalTexture parentKey="NormalTexture" inherits="MapPinEnhancedGenericFrameTextureTemplate">
-            <Size x="25" y="25" />
+            <Size x="50" y="50" />
             <Anchors>
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>
         </NormalTexture>
         <HighlightTexture parentKey="HighlightTexture" inherits="MapPinEnhancedGenericFrameTextureTemplate" alphaMode="ADD" alpha="0.2">
-            <Size x="25" y="25" />
+            <Size x="50" y="50" />
             <Anchors>
                 <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
             </Anchors>

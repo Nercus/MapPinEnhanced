@@ -7,7 +7,7 @@
         <Size x="50" y="25" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5" />
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" />
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="1">
                 <Texture parentKey="thumb" file="Interface/AddOns/MapPinEnhanced/assets/shared/ToggleThumb.png">

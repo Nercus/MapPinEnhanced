@@ -2,26 +2,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Script file="TrackerHeader.lua" />
-    <Frame name="MapPinEnhancedTrackerHeaderTemplate" mixin="MapPinEnhancedTrackerHeaderMixin" virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Both">
+    <Frame name="MapPinEnhancedTrackerHeaderTemplate" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" mixin="MapPinEnhancedTrackerHeaderMixin" virtual="true" enableMouse="true" frameStrata="HIGH" propagateMouseInput="Both">
         <Size x="1" y="30" />
         <Anchors>
             <Anchor point="TOPLEFT" x="0" y="0" />
             <Anchor point="TOPRIGHT" x="0" y="0" />
         </Anchors>
         <Layers>
-            <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.75" />
-            </Layer>
-            <Layer level="BACKGROUND" textureSubLevel="2">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
-                    <Size x="1" y="1" />
-                    <Color r="1" g="0.82" b="0" a="1" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="5" y="2" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="2" />
-                    </Anchors>
-                </Texture>
-            </Layer>
             <Layer level="OVERLAY">
                 <Texture inherits="MapPinEnhancedIconTemplate" parentKey="icon">
                     <Size x="14" y="14" />

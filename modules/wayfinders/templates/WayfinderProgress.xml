@@ -8,7 +8,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" scale="0.5">
+                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-2" />
                         <Anchor point="BOTTOMRIGHT" x="2" />
@@ -16,7 +16,7 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
-                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" scale="0.5">
+                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="BOTTOMRIGHT" y="3" />
@@ -24,14 +24,7 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="3">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
-                    <Size x="1" y="1" />
-                    <Color r="1" g="0.82" b="0" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="5" y="2" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="2" />
-                    </Anchors>
-                </Texture>
+                <Texture inherits="MapPinEnhancedBottomLineTextureTemplate" />
             </Layer>
         </Layers>
         <Scripts>

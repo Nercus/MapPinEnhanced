@@ -1,25 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="FloatingPanel.lua" />
-    <Frame name="MapPinEnhancedFloatingPanelDisplayTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate" mixin="MapPinEnhancedFloatingPanelMixin" enableMouse="true" frameStrata="LOW">
+    <Frame name="MapPinEnhancedFloatingPanelDisplayTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate, MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate" mixin="MapPinEnhancedFloatingPanelMixin" enableMouse="true" frameStrata="LOW">
         <Size x="318" y="62" />
         <Anchors>
             <Anchor point="TOP" relativeTo="UIParent" y="-280" />
         </Anchors>
         <Layers>
-            <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0.75" scale="0.5"/>
-            </Layer>
-            <Layer level="BACKGROUND" textureSubLevel="2">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
-                    <Size x="1" y="1" />
-                    <Color r="1" g="0.82" b="0" />
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="5" y="2" />
-                        <Anchor point="BOTTOMRIGHT" x="-5" y="2" />
-                    </Anchors>
-                </Texture>
-            </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                     <Size x="242" y="0" />

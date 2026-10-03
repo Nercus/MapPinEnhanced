@@ -10,7 +10,7 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" scale="0.5">
+                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate">
                     <Gradient orientation="VERTICAL">
                         <MinColor r="0.5" g="0.5" b="0.5" a="0.7" />
                         <MaxColor r="0.5" g="0.5" b="0.5" a="0.9" />
