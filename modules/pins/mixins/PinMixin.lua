@@ -4,8 +4,8 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedPinMixin
 ---@field classification 'pin'
 ---@field initialized boolean
----@field worldmapPin MapPinEnhancedWorldmapPinTemplate
----@field minimapPin MapPinEnhancedMinimapPinTemplate
+---@field worldmapPin MapPinEnhancedWorldmapPinTemplate?
+---@field minimapPin MapPinEnhancedMinimapPinTemplate?
 ---@field pinData pinData
 ---@field isTracked boolean? -- whether this pin is currently tracked
 ---@field pinID UUID
@@ -54,7 +54,6 @@ function Pins:GetFramePool()
 end
 
 function MapPinEnhancedPinMixin:Init(pinID)
-    self.initialized = true
     self.pinID = pinID
 
     local framePool = Pins:GetFramePool()
@@ -70,6 +69,7 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.minimapPin:SetScript("OnMouseDown", function(_, button)
         self:OnMouseDown(_, button)
     end)
+    self.initialized = true
 end
 
 function MapPinEnhancedPinMixin:OverridePinID(pinID)
@@ -189,26 +189,32 @@ end
 
 function MapPinEnhancedPinMixin:Reset()
     Pins:RemoveActivePin(self)
-    if not self.initialized then return end
     self.initialized = false
     if self.isTracked then
         self:Untrack()
     end
 
-    if GameTooltip:IsOwned(self.worldmapPin) or GameTooltip:IsOwned(self.minimapPin) then GameTooltip:Hide() end
-    self.worldmapPin:HidePulse()
-    self.minimapPin:HidePulse()
-    self.worldmapPin.groupBadge:SetIcon(nil)
-    self.minimapPin.groupBadge:SetIcon(nil)
-
-    HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
-    HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
-
-    local framePool = Pins:GetFramePool()
-    self.worldmapPin.pin = nil
-    self.minimapPin.pin = nil
-    framePool:Release(self.worldmapPin)
-    framePool:Release(self.minimapPin)
+    -- Setup can fail between acquisitions; release only frames this pin owns.
+    if self.worldmapPin then
+        if GameTooltip:IsOwned(self.worldmapPin) then GameTooltip:Hide() end
+        self.worldmapPin:HidePulse()
+        self.worldmapPin.groupBadge:SetIcon(nil)
+        HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
+        self.worldmapPin:SetScript("OnMouseDown", nil)
+        self.worldmapPin.pin = nil
+        Pins:GetFramePool():Release(self.worldmapPin)
+        self.worldmapPin = nil
+    end
+    if self.minimapPin then
+        if GameTooltip:IsOwned(self.minimapPin) then GameTooltip:Hide() end
+        self.minimapPin:HidePulse()
+        self.minimapPin.groupBadge:SetIcon(nil)
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
+        self.minimapPin:SetScript("OnMouseDown", nil)
+        self.minimapPin.pin = nil
+        Pins:GetFramePool():Release(self.minimapPin)
+        self.minimapPin = nil
+    end
 
     if self.pinData and self.pinData.mapID and self.pinData.x and self.pinData.y then
         MapPinEnhanced:DisableContinuousDistanceCheck(self.pinData.mapID, self.pinData.x, self.pinData.y)
@@ -216,8 +222,6 @@ function MapPinEnhancedPinMixin:Reset()
 
     self.group = nil
     self.pinData = nil
-    self.worldmapPin = nil
-    self.minimapPin = nil
     self.groupIsAddingPin = nil
     self.suppressPersistence = nil
 end
