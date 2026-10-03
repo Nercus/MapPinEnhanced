@@ -238,11 +238,3 @@ Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
         UnlockCoordinatesDisplay()
     end
 end)
-
-local function ToggleCoordinatesDisplay()
-    Options:SetOptionValue("Miscellaneous.Coords.Enable",
-        not Options:GetOptionValue("Miscellaneous.Coords.Enable"))
-end
-
-MapPinEnhanced:AddSlashCommand("coords", ToggleCoordinatesDisplay,
-    MapPinEnhanced.L["Toggle display of your current coordinates on the screen."])

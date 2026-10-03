@@ -26,6 +26,11 @@ L["Convert to Pin"] = "Convert to Pin"
 L["Share as Pin"] = "Share as Pin"
 
 L["Click to edit"] = "Click to edit"
+L["<x> <y> [title]"] = "<x> <y> [title]"
+L["Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"] =
+"Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"
+L["You can also use /mpe instead of /mph."] = "You can also use /mpe instead of /mph."
+L["You can also use /mpe or /way instead of /mph."] = "You can also use /mpe or /way instead of /mph."
 
 ------------------------------ Pins ------------------------------
 L["Map Pin"] = "Map Pin"
@@ -174,8 +179,6 @@ L["%s's House"] = "%s's House"
 ------------------------------ Miscellaneous ------------------------------
 L["Back"] = "Back"
 L["Create a Pin at Your Current Location"] = "Create a Pin at Your Current Location"
-L["Toggle display of your current coordinates on the screen."] =
-"Toggle display of your current coordinates on the screen."
 L["Unable to determine your current map location."] = "Unable to determine your current map location."
 L["Unable to determine your current position on the map."] = "Unable to determine your current position on the map."
 L["%s's Position"] = "%s's Position"

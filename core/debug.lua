@@ -110,7 +110,7 @@ local function setDevMode()
     loadDevAddons(not devModeEnabled)
     C_UI.Reload()
 end
-MapPinEnhanced:AddSlashCommand("dev", setDevMode, "Toggle dev mode")
+MapPinEnhanced:AddSlashCommand("dev", setDevMode, "Toggle dev mode", false)
 
 ---@enum DevModeKeysToKeep
 local keysToKeep = {

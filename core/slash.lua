@@ -38,18 +38,34 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
     end
 end
 
-local normalColor = CreateColor(1, 0.82, 0)
-local helpPattern = "|A:communities-icon-notification:8:8:2:-2|a %s - %s"
+local bulletColor = CreateColor(1, 0.82, 0)
+local helpColor = CreateColor(1, 0.82, 0)
+local r, g, b = bulletColor:GetRGBAsBytes()
+local helpPattern = string.format("|T%s\\shared\\SlashHelpBulletPoint.png:8:8:2:-2:1:1:0:1:0:1:%d:%d:%d|t |cffffffff%%s|r - %%s",
+    MapPinEnhanced.assetsPath, r, g, b)
 
 ---Print the help message for the addon
 function MapPinEnhanced:PrintHelp()
     local addonVersion = C_AddOns.GetAddOnMetadata(self.name, "Version")
-    local titleString = string.format("%s %s", self.name, addonVersion)
-    self:PrintUnformatted(self:WrapTextInColor(titleString, normalColor))
-    for command, help in pairs(commandHelpStrings) do
-        local helpString = helpPattern:format(command, self:WrapTextInColor(help, normalColor))
+    local titleString = string.format("|T%s\\shared\\SlashHelpLogo.png:16:36:0:-2|t %s %s",
+        self.assetsPath, self.name, addonVersion)
+    self:PrintUnformatted(self:WrapTextInColor(titleString, helpColor))
+    local commands = {} ---@type string[]
+    for command in pairs(commandHelpStrings) do
+        commands[#commands + 1] = command
+    end
+    table.sort(commands)
+    for _, command in ipairs(commands) do
+        local help = commandHelpStrings[command]
+        local helpString = helpPattern:format("/mph " .. command, self:WrapTextInColor(help, helpColor))
         self:PrintUnformatted(helpString)
     end
+    self:PrintUnformatted(helpPattern:format("/mph " .. self.L["<x> <y> [title]"],
+        self:WrapTextInColor(self.L["Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"],
+            helpColor)))
+    local aliases = self.isTomTomLoaded and self.L["You can also use /mpe instead of /mph."] or
+        self.L["You can also use /mpe or /way instead of /mph."]
+    self:PrintUnformatted(self:WrapTextInColor(aliases, helpColor))
 end
 
 ---@alias SlashCommand string|string[]
@@ -103,7 +119,7 @@ function MapPinEnhanced:EnableHelpCommand()
     self:AddSlashCommand(helpString:lower(), function()
         self:PrintHelp()
         ---@diagnostic disable-next-line: undefined-global
-    end, helpString)
+    end, helpString, false)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
