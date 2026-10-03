@@ -1,29 +1,34 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 ---@class MapPinEnhancedWayfinderFloatingTitleTemplate : MapPinEnhancedFadingFrameTemplate
 ---@field background Texture
 ---@field title FontString
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
 ---@field border Texture
+---@field fullTitle string?
+---@field titleTruncated boolean?
 MapPinEnhancedWayfinderFloatingTitleMixin = {}
 
-local MAX_TITLE_WIDTH = 450
-local TITLE_ELLIPSIS = "..."
+local MAX_TITLE_WIDTH = 325
 
 function MapPinEnhancedWayfinderFloatingTitleMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     self.description.onHidden = function() self:UpdateLayout() end
-    self.title:SetMaxLines(1)
-    self.title:SetWordWrap(false)
+    self:SetMouseClickEnabled(false)
     self:SetTitle("")
     self:SetVisible(false)
 end
 
 ---@param title string?
 function MapPinEnhancedWayfinderFloatingTitleMixin:SetTitle(title)
-    MapPinEnhanced:SetTruncatedText(self.title, title or "", MAX_TITLE_WIDTH, TITLE_ELLIPSIS)
-    self:SetSize(self.title:GetWidth() + 30, self.title:GetHeight() + 10)
+    self:OnLeave()
+    self.fullTitle = title
+    self.titleTruncated = Wayfinders:ApplyWrappedText(self.title, title, MAX_TITLE_WIDTH, 4)
+    self:EnableMouse(self.titleTruncated)
+    self:SetMouseClickEnabled(false)
+    self:UpdateLayout()
 end
 
 ---@param color ColorMixin
@@ -37,6 +42,9 @@ end
 
 ---@param shown boolean
 function MapPinEnhancedWayfinderFloatingTitleMixin:SetVisible(shown)
+    if not shown then self:OnLeave() end
+    self:EnableMouse(shown and self.titleTruncated == true)
+    self:SetMouseClickEnabled(false)
     self:SetShown(shown)
 end
 
@@ -51,6 +59,14 @@ end
 function MapPinEnhancedWayfinderFloatingTitleMixin:UpdateLayout()
     local shown = self.description:IsShown()
     local width = math.max(self.title:GetWidth(), shown and self.description:GetWidth() or 0, 40)
-    local height = self.title:GetHeight() + (shown and self.description:GetHeight() + 2 or 0)
-    self:SetSize(width + 30, height + 10)
+    local height = self.title:GetHeight() + (shown and self.description:GetHeight() + 3 or 0)
+    self:SetSize(width + 30, height + 20)
+end
+
+function MapPinEnhancedWayfinderFloatingTitleMixin:OnEnter()
+    if self.titleTruncated then Wayfinders:ShowTextTooltip(self, self.fullTitle, self.description.description) end
+end
+
+function MapPinEnhancedWayfinderFloatingTitleMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end

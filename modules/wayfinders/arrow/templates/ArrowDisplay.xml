@@ -39,6 +39,9 @@
                 </Layers>
                 <Frames>
                     <Frame parentKey="readout" inherits="MapPinEnhancedWayfinderReadoutTemplate">
+                        <KeyValues>
+                            <KeyValue key="maxWidth" value="166" type="number" />
+                        </KeyValues>
                         <Size x="166" y="12" />
                         <Anchors>
                             <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.title" y="-3" />
@@ -49,7 +52,7 @@
                                     <Size x="0" y="12" />
                                     <Color r="0.65" g="0.65" b="0.65" />
                                     <Anchors>
-                                        <Anchor point="LEFT" />
+                                    <Anchor point="TOPLEFT" />
                                     </Anchors>
                                 </FontString>
                             </Layer>
@@ -60,7 +63,7 @@
                             <KeyValue key="maxWidth" value="166" type="number" />
                         </KeyValues>
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.readout" y="-3" />
+                            <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeKey="$parent.title" y="-3" />
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
@@ -143,6 +146,8 @@
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
             <OnLoad method="OnLoad" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
 </Ui>

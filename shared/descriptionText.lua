@@ -38,7 +38,8 @@ end
 local tooltipMeasure
 
 ---@param description string?
-function MapPinEnhanced:AddDescriptionToTooltip(description)
+---@param maxLines number? defaults to four measured lines
+function MapPinEnhanced:AddDescriptionToTooltip(description, maxLines)
     if not description then return end
     if not tooltipMeasure then
         tooltipMeasure = UIParent:CreateFontString(nil, "ARTWORK", "GameTooltipText")
@@ -51,7 +52,8 @@ function MapPinEnhanced:AddDescriptionToTooltip(description)
     tooltipMeasure:SetWordWrap(false)
     ---@type string
     local remaining = description
-    for line = 1, 4 do
+    maxLines = math.min(maxLines or 4, #description + 1)
+    for line = 1, maxLines do
         local newline = remaining:find("\n", 1, true)
         local paragraph = newline and remaining:sub(1, newline - 1) or remaining
         local low, high, accepted = 0, #paragraph, 0
@@ -59,7 +61,7 @@ function MapPinEnhanced:AddDescriptionToTooltip(description)
             local middle = math.floor((low + high) / 2)
             local candidate = self:GetUTF8Prefix(paragraph, middle)
             local more = #candidate < #remaining
-            tooltipMeasure:SetText(self:EscapeMarkup(candidate .. (line == 4 and more and "..." or "")))
+            tooltipMeasure:SetText(self:EscapeMarkup(candidate .. (line == maxLines and more and "..." or "")))
             if tooltipMeasure:GetUnboundedStringWidth() <= 300 then
                 accepted = #candidate
                 low = middle + 1
@@ -68,7 +70,7 @@ function MapPinEnhanced:AddDescriptionToTooltip(description)
             end
         end
         local text = paragraph:sub(1, accepted)
-        if accepted < #paragraph and line < 4 then
+        if accepted < #paragraph and line < maxLines then
             local wordBoundary = tonumber(text:match("^.*()%s+"))
             if wordBoundary and wordBoundary > 1 then
                 accepted = wordBoundary - 1
@@ -78,7 +80,7 @@ function MapPinEnhanced:AddDescriptionToTooltip(description)
         local consumed = accepted
         if accepted == #paragraph and newline then consumed = consumed + 1 end
         local more = consumed < #remaining
-        if line == 4 and more then text = text .. "..." end
+        if line == maxLines and more then text = text .. "..." end
         GameTooltip:AddLine(self:EscapeMarkup(text ~= "" and text or " "), 0.85, 0.85, 0.85, false)
         if not more then break end
         remaining = remaining:sub(consumed + 1)

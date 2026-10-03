@@ -48,11 +48,14 @@ end
 
 function MapPinEnhancedWayfinderFloating:RefreshTitle()
     local title = self.data and self.data.title
+    local description = self.data and self.data.description
     local step = self.step
-    if step and step.showInstruction ~= false and step.instruction and step.instruction ~= "" then
+    if step and step.showInstruction ~= false and Wayfinders:IsIntermediateStep() then
+        description = title
         title = step.instruction
+        if step.status and step.status ~= "" then title = title .. "\n" .. step.status end
     end
-    self:GetFrame():SetDestinationText(title, self.data and self.data.description)
+    self:GetFrame():SetDestinationText(title, description)
 end
 
 ---@param color PinColor
@@ -187,5 +190,6 @@ function MapPinEnhancedWayfinderFloating:SetDestinationText(title, description)
         self.data.title, self.data.description = title, description
     end
     self:RefreshTitle()
+    if self.frame then self.frame.readout:UpdateText() end
     if self.panel then self.panel:SetDestinationText(title) end
 end

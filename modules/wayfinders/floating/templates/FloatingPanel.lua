@@ -12,6 +12,8 @@ local L = MapPinEnhanced.L
 ---@field distance FontString
 ---@field distanceCallback fun(distance: number)?
 ---@field target WayfinderData?
+---@field destinationText string?
+---@field textTruncated boolean?
 MapPinEnhancedFloatingPanelMixin = {}
 
 function MapPinEnhancedFloatingPanelMixin:OnLoad()
@@ -33,8 +35,6 @@ end
 function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     MapPinEnhancedWayfinderInstructionMixin.SetStep(self, step)
     local target = self.target
-    local instruction = step and step.instruction or ""
-    self.title:SetText(instruction)
     self:SetDestinationText()
     self:UpdateDistanceSubscription()
     if target then
@@ -81,18 +81,21 @@ function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
     local step = self.step
     if step and step.destinationMapID then
         local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
-        self.text:SetText(string.format(L["Navigation Route To"], title or step.destinationTitle or L["Map Pin"],
-            mapInfo and mapInfo.name or tostring(step.destinationMapID)))
+        self.destinationText = string.format(L["Navigation Route To"], title or step.destinationTitle or L["Map Pin"],
+            mapInfo and mapInfo.name or tostring(step.destinationMapID))
     else
-        self.text:SetText("")
+        self.destinationText = ""
     end
     self:UpdateLayout()
 end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     if InCombatLockdown() then return end
+    local titleTruncated = Wayfinders:ApplyWrappedText(self.title, self.fullText, 210, 4)
+    local destinationTruncated = Wayfinders:ApplyWrappedText(self.text, self.destinationText, 210, 4)
+    self.textTruncated = titleTruncated or destinationTruncated
     self.progress:Apply(self.step, self:GetWidth())
-    local textHeight = self.title:GetStringHeight() + self.text:GetStringHeight() + self.distance:GetHeight() + 6
+    local textHeight = self.title:GetHeight() + self.text:GetHeight() + self.distance:GetHeight() + 6
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local height = math.max(textHeight, self.pinFrame:GetHeight(), self.actionButton:GetHeight()) + 32
     self:SetHeight(height)
@@ -102,6 +105,14 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
         -(height - self.actionButton:GetHeight()) / 2)
     self.actionBlocker:SetPoint("TOPLEFT", self, "TOPLEFT", 12,
         -(height - self.actionBlocker:GetHeight()) / 2)
+end
+
+function MapPinEnhancedFloatingPanelMixin:OnEnter()
+    if self.textTruncated then Wayfinders:ShowTextTooltip(self, self.fullText, self.destinationText) end
+end
+
+function MapPinEnhancedFloatingPanelMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
 
 -- The panel shares the active Wayfinder target's sampler and owns only its
@@ -114,7 +125,8 @@ function MapPinEnhancedFloatingPanelMixin:UpdateDistanceSubscription()
     self.distance:SetText("")
     if not self:IsShown() or not self.step or self.step.showInstruction == false then return end
     self.distanceCallback = function(distance)
-        self.distance:SetText(MapPinEnhanced:FormatDistance(distance))
+        Wayfinders:ApplyWrappedText(self.distance, MapPinEnhanced:FormatDistance(distance), 210, 2)
+        self:UpdateLayout()
     end
     MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
 end

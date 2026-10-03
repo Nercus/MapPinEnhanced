@@ -12,6 +12,7 @@ local L = MapPinEnhanced.L
 ---@field reconcileAfterCombat fun()?
 ---@field step WayfinderStepData?
 ---@field preparedAction WayfinderDesiredAction?
+---@field fullText string?
 MapPinEnhancedWayfinderInstructionMixin = {}
 
 local FALLBACK_ACTION_ICON = "Interface/Icons/INV_Misc_QuestionMark"
@@ -90,6 +91,7 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
     end
     local text = visible and step and step.instruction or ""
     if visible and status ~= "" then text = text .. "\n" .. status end
+    self.fullText = text
     self.text:SetText(text)
     if self.onTextChanged then self.onTextChanged() end
 end

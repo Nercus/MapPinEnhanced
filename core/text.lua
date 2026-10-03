@@ -34,7 +34,9 @@ end
 ---@return string?
 function MapPinEnhanced:NormalizeText(text)
     if issecretvalue(text) or type(text) ~= "string" then return nil end
-    text = strtrim(text:gsub("\r\n", "\n"):gsub("\r", "\n"))
+    -- Assign first so gsub's replacement count cannot become strtrim's character set.
+    text = text:gsub("\r\n", "\n"):gsub("\r", "\n")
+    text = strtrim(text)
     return text ~= "" and text or nil
 end
 

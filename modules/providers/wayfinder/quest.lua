@@ -34,22 +34,24 @@ local questClassificationAtlas = {
 local function GetQuestDescription(questID, questTitle)
     local ready = C_QuestLog.ReadyForTurnIn(questID)
     if issecretvalue(ready) then return nil, false end
-    if ready then return string.format(L["Turn in: %s"], questTitle), true end
+    if ready then
+        local index = C_QuestLog.GetLogIndexForQuestID(questID)
+        local text = index and GetQuestLogCompletionText(index)
+        if issecretvalue(text) then return nil, false end
+        return Providers:PlainDescription(text, questTitle) or string.format(L["Turn in: %s"], questTitle), true
+    end
     local objectives = C_QuestLog.GetQuestObjectives(questID)
     if not objectives then return nil, false end
-    ---@type string?
-    local completedText
-    -- Objective text already includes localized progress. Advance in quest-log
-    -- order when an objective finishes instead of retaining its completed counter.
+    ---@type string[]
+    local lines = {}
+    -- Blizzard owns localized counters. Keep unfinished objectives in quest-log
+    -- order and preserve their line breaks through the existing description path.
     for _, objective in ipairs(objectives) do
         if issecretvalue(objective.text) or issecretvalue(objective.finished) then return nil, false end
         local text = Providers:PlainDescription(objective.text, questTitle)
-        if text then
-            if not objective.finished then return text, true end
-            completedText = completedText or text
-        end
+        if text and not objective.finished then lines[#lines + 1] = text end
     end
-    if completedText then return completedText, true end
+    if #lines > 0 then return table.concat(lines, "\n"), true end
     local waypointText = C_QuestLog.GetNextWaypointText(questID)
     if issecretvalue(waypointText) then return nil, false end
     return Providers:PlainDescription(waypointText, questTitle), true

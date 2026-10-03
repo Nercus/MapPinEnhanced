@@ -362,3 +362,11 @@ function Wayfinders:UpdateDestinationText(title, description)
     if activeStep then activeStep.destinationTitle = title end
     if self.activeWayfinder then self.activeWayfinder:SetDestinationText(title, description) end
 end
+
+local function RefreshTextLayout()
+    if not activeTarget or not Wayfinders.activeWayfinder then return end
+    Wayfinders.activeWayfinder:SetDestinationText(activeTarget.data.title or "", activeTarget.data.description)
+end
+
+MapPinEnhanced:RegisterEvent("UI_SCALE_CHANGED", RefreshTextLayout)
+MapPinEnhanced:RegisterEvent("DISPLAY_SIZE_CHANGED", RefreshTextLayout)

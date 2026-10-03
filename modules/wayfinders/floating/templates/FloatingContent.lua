@@ -153,9 +153,10 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     self.readout:ClearAllPoints()
     if fallback then
         self.readout:SetPoint("TOP", self.title, "BOTTOM", 0, -5)
+    elseif close then
+        self.readout:SetPoint("BOTTOM", self.title, "TOP", 0, 5)
     else
-        self.readout:SetPoint(close and "BOTTOM" or "TOP", self.pin, close and "TOP" or "BOTTOM", 0,
-            close and 5 or -3)
+        self.readout:SetPoint("TOP", self.pin, "BOTTOM", 0, -3)
     end
     self.needle:SetFallback(fallback)
     self.needle:SetActive((clamped or fallback) and self:IsVisible())

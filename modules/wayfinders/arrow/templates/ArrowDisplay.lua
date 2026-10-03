@@ -28,6 +28,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field clearButton Button
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field displayType 'close' | 'far' | nil
+---@field fullTitle string?
+---@field fullDescription string?
+---@field instructionText string?
+---@field textTruncated boolean?
 MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
@@ -226,10 +230,22 @@ function MapPinEnhancedWayfinderArrowMixin:Reset()
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnHide()
+    self:OnLeave()
     MapPinEnhanced:UnregisterDraggableFrame(self:GetParent())
     self:SetScript("OnUpdate", nil)
     self:StopDistanceUpdates()
     self:Reset()
+end
+
+function MapPinEnhancedWayfinderArrowMixin:OnEnter()
+    if self.textTruncated then
+        local title = self.instructionText and self.instructionText .. "\n" .. (self.fullTitle or "") or self.fullTitle
+        Wayfinders:ShowTextTooltip(self, title, self.fullDescription)
+    end
+end
+
+function MapPinEnhancedWayfinderArrowMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
 
 function MapPinEnhancedWayfinderArrowMixin:ClearTracking()

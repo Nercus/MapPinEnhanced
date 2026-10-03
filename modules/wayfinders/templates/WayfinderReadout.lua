@@ -10,6 +10,7 @@ local L = MapPinEnhanced.L
 ---@field showETA boolean?
 ---@field displayVisible boolean?
 ---@field onTextChanged fun()?
+---@field maxWidth number?
 MapPinEnhancedWayfinderReadoutMixin = {}
 
 function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
@@ -19,6 +20,15 @@ function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
     end
     if text ~= "" or not self:IsVisible() then
         self.text:SetText(text)
+        local width = self.maxWidth or 325
+        if text ~= "" and self.showETA and self.hasETA and self.text:GetUnboundedStringWidth() > width then
+            self.text:SetText(self.distanceText .. "\n" .. (self.etaText or ""))
+        end
+        self.text:SetWidth(width)
+        self.text:SetHeight(0)
+        self.text:SetWordWrap(true)
+        self.text:SetNonSpaceWrap(true)
+        self:SetSize(width, math.max(1, self.text:GetStringHeight()))
         if self.onTextChanged then self.onTextChanged() end
     end
     self:SetShown(self.displayVisible == true and text ~= "")
@@ -33,6 +43,7 @@ end
 
 function MapPinEnhancedWayfinderReadoutMixin:OnHide()
     if not self.distanceText or self.distanceText == "" then self.text:SetText("") end
+    if self.onTextChanged then self.onTextChanged() end
 end
 
 ---@param showETA boolean

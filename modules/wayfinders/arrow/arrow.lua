@@ -26,14 +26,7 @@ function MapPinEnhancedWayfinderArrow:GetFrame()
         self.positionFrame = position
         self.frame = position.display
         self.frame.textContainer.description.onHidden = function() self:UpdateText() end
-        self.frame.readout.onTextChanged = function()
-            -- Preserve the pin, needle and edge space around the full readout line.
-            local readoutWidth = math.max(166, math.ceil(self.frame.readout.text:GetUnboundedStringWidth()))
-            self.frame.readout:SetWidth(readoutWidth)
-            self.frame.textContainer:SetWidth(readoutWidth + 152)
-            self.frame:SetWidth(readoutWidth + 152)
-            self:UpdateText()
-        end
+        self.frame.readout.onTextChanged = function() self:UpdateText() end
         position.instruction:SetFrameLevel(self.frame:GetFrameLevel() + 3)
         position.instruction:UpdateFrameLevels()
         position.instruction.text:SetNonSpaceWrap(true)
@@ -94,7 +87,10 @@ end
 function MapPinEnhancedWayfinderArrow:UpdateText()
     local frame = self:GetFrame()
     local step = self.step
-    local showInstruction = step and step.showInstruction ~= false
+    local intermediate = Wayfinders:IsIntermediateStep()
+    local showInstruction = step and step.showInstruction ~= false and
+        (intermediate or step.phase == "calculating" or step.phase == "no-direction" or
+            step.desiredAction ~= nil or step.status and step.status ~= "")
     local instruction = self.positionFrame and self.positionFrame.instruction
     local title = self.title
     if showInstruction and step and step.destinationMapID then
@@ -104,27 +100,38 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
             mapInfo and mapInfo.name or tostring(step.destinationMapID))
     end
     frame.title:SetFontObject(showInstruction and GameFontHighlightSmall or GameFontNormal)
-    frame:SetTitle(title)
+    frame.fullTitle = title
+    frame.fullDescription = not intermediate and self.description or nil
+    frame.textTruncated = Wayfinders:ApplyWrappedText(frame.title, title, 166, 4)
     frame.title:SetTextColor(showInstruction and 0.65 or 1, showInstruction and 0.65 or 0.82,
         showInstruction and 0.65 or 0)
     frame.title:ClearAllPoints()
     local instructionHeight = 0
     if showInstruction and instruction then
+        frame.instructionText = instruction.fullText
+        local truncated = Wayfinders:ApplyWrappedText(instruction.text, instruction.fullText, 166, 4)
+        frame.textTruncated = frame.textTruncated or truncated
         frame.title:SetPoint("TOPLEFT", instruction.text, "BOTTOMLEFT", 0, -3)
-        instructionHeight = instruction.text:GetStringHeight()
+        instructionHeight = instruction.text:GetHeight()
     else
+        frame.instructionText = nil
+        if instruction then instruction.text:SetText("") end
         frame.title:SetPoint("TOPLEFT", frame.textContainer, "TOPLEFT", 64, -8)
     end
-    frame.textContainer.description:Apply(self.title, not showInstruction and self.description or nil)
+    frame.textContainer.description:Apply(self.title, frame.fullDescription)
     local descriptionHeight = frame.textContainer.description:IsShown() and
         frame.textContainer.description:GetHeight() + 3 or 0
+    frame.readout:ClearAllPoints()
+    frame.readout:SetPoint("TOPLEFT", descriptionHeight > 0 and frame.textContainer.description or frame.title,
+        "BOTTOMLEFT", 0, -3)
     frame.progress:Apply(step, frame:GetWidth())
-    local textHeight = frame.title:GetStringHeight() + 3 + frame.readout:GetHeight() + descriptionHeight
+    local textHeight = frame.title:GetHeight() + descriptionHeight +
+        (frame.readout:IsShown() and frame.readout:GetHeight() + 3 or 0)
     if instructionHeight > 0 then textHeight = textHeight + instructionHeight + 3 end
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local artworkHeight = math.max(frame.pin:GetHeight(),
         frame.needleContainer:IsShown() and frame.needleContainer:GetHeight() or 0)
-    local height = math.max(textHeight, artworkHeight) + 32
+    local height = math.max(62, math.max(textHeight, artworkHeight) + 32)
     frame.pin:SetPoint("LEFT", frame.textContainer, "LEFT", 16, 0)
     frame.needleContainer:SetPoint("RIGHT", frame.textContainer, "RIGHT", -32, 0)
     frame.textContainer:SetHeight(height)
@@ -147,6 +154,7 @@ end
 ---@param wayfinderData WayfinderData | nil
 function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
+    frame:OnLeave()
     if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
         self.description = nil
         frame.textContainer.description:Apply(nil, nil)
@@ -198,5 +206,7 @@ Wayfinders.wayfinders["WAYFINDER_ARROW"] = MapPinEnhancedWayfinderArrow
 ---@param description string?
 function MapPinEnhancedWayfinderArrow:SetDestinationText(title, description)
     self.title, self.description = title, description
+    self:GetFrame():OnLeave()
+    self:GetFrame().readout:UpdateText()
     self:UpdateText()
 end
