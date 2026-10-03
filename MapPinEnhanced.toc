@@ -17,7 +17,7 @@
 ## IconTexture: Interface\Addons\MapPinEnhanced\assets\Logo.png
 
 ## X-Website: https://github.com/Nercus/MapPinEnhanced
-## X-License: Code: GPL-3.0-only; assets: All Rights Reserved
+## X-License: Code: GPL-3.0-only; Nercus-owned media: All Rights Reserved; third-party media: respective owners' terms
 ## X-Curse-Project-ID: 441677
 ## X-Wago-ID: RqGZqqKd
 

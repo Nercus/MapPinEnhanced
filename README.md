@@ -25,10 +25,16 @@ This project uses separate terms for its source code and media assets.
 
 - **Code:** Licensed under the GNU General Public License, version 3.0
   (GPL-3.0-only).
-- **Media Assets:** Copyright © 2026 Nercus. All rights
-  reserved. The assets are not licensed under the GPL and may not be reused,
-  copied, modified, or redistributed without prior written permission, except
-  as permitted by law.
+- **Original Media Assets:** Copyright © 2026 Nercus. All rights reserved.
+  These assets are not licensed under the GPL and may not be used, copied,
+  modified, or redistributed without prior written permission, except as
+  permitted by law. This applies only to original material owned by Nercus in
+  the restricted files listed in [ASSETS-LICENSE](ASSETS-LICENSE). All pin icons
+  in `assets/pins/icons/` are excluded.
+- **Blizzard and Other Third-Party Media:** Excluded from the above claim and
+  subject to their respective rights holders' terms, even without a separate
+  notice. This project claims no ownership of and grants no license or
+  permission for Blizzard textures, icons, artwork, or other Blizzard material.
 
 See [LICENSE](LICENSE) and [ASSETS-LICENSE](ASSETS-LICENSE) for the exact scope
 and terms. Bundled third-party libraries remain under their own licenses.

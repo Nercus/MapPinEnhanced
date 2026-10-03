@@ -641,8 +641,11 @@ of this License. But first, please read
 
 ## 2. Media Assets
 
-The media assets in `assets/` and `.github/media/` are not licensed under the
-GPL. They are all rights reserved under the terms in `ASSETS-LICENSE`.
+Original material owned by Nercus in the restricted media files listed in
+`ASSETS-LICENSE` is not licensed under the GPL. It is all rights reserved under
+the terms in that notice. Blizzard Entertainment and other third-party material is
+excluded from that claim and remains subject to its respective rights holders'
+terms. This project grants no license or permission for Blizzard material.
 
 ## 3. Third-Party Components
 

@@ -2,23 +2,148 @@ Map Pin Enhanced Media Assets License
 
 Copyright © 2026 Nercus. All rights reserved.
 
-This notice applies to all media assets in the following directories:
-
-- assets/
-- .github/media/
+The all-rights-reserved terms below apply only to original material owned by
+Nercus in the files listed under "Restricted media files" below. The third-party
+exclusions below take precedence over that list.
 
 These assets include, without limitation, images, icons, textures, logos,
 screenshots, and other visual or audio media. They are not licensed under the
 GNU General Public License or any Creative Commons license.
 
-No permission is granted to copy, modify, adapt, distribute, sublicense, sell,
-or otherwise reuse these assets, separately or as part of another project,
+No permission is granted to use, copy, modify, adapt, distribute, sublicense,
+sell, or otherwise reuse these assets, separately or as part of another project,
 without prior written permission from the copyright holder, except where such
 use is permitted by applicable law.
 
-The inclusion of these assets in a distributed copy of Map Pin Enhanced does
-not grant any additional rights in the assets.
+The inclusion of these assets in a distributed copy of Map Pin Enhanced does not
+grant any additional rights in the assets.
 
-This notice does not apply to third-party material that carries its own
-copyright or license notice; that material remains governed by its respective
-terms.
+Blizzard Entertainment textures, icons, artwork, and other Blizzard material are
+excluded from these terms, whether included in this repository, depicted in
+screenshots, or referenced from the game client. They remain the property of
+Blizzard Entertainment or their respective rights holders. Nercus claims no
+ownership of that material and grants no license or permission for it. Its use
+remains subject to the applicable rights holders' terms.
+
+Other third-party material is likewise excluded and remains governed by its
+respective copyright and license terms, whether or not a separate notice
+accompanies it. For media containing both original and third-party material, the
+all-rights-reserved claim applies only to the original portions owned by Nercus.
+
+The addon source code remains licensed under GPL-3.0-only as stated in LICENSE.
+
+Explicitly excluded media
+
+- assets/pins/icons/ (all files; no pin icons are covered by the restricted
+  list)
+- assets/shared/WoWLogo.png (Blizzard artwork)
+
+Restricted media files
+
+Paths are relative to the repository root. Each file is listed separately so the
+scope can be reviewed and corrected without changing directory-wide rules. For
+screenshots and other mixed media, only original portions owned by Nercus are
+covered; Blizzard and other third-party portions remain excluded.
+
+.github/media/
+
+- .github/media/Banner.png
+- .github/media/ImportExport.png
+- .github/media/LogoCurseForge.png
+- .github/media/Options.png
+- .github/media/PinTracker.png
+- .github/media/SetEditor.png
+
+assets/
+
+- assets/Logo.png
+- assets/LogoTransparent.png
+
+assets/group/
+
+- assets/group/GroupBorder.png
+- assets/group/GroupMask.png
+- assets/group/GroupShadow.png
+- assets/group/GroupShadowInner.png
+- assets/group/GroupSmallBorder.png
+- assets/group/GroupSmallMask.png
+- assets/group/GroupSmallShadow.png
+- assets/group/GroupSmallShadowInner.png
+
+assets/icons/
+
+- assets/icons/IconArrowCircle.png
+- assets/icons/IconArrowDown.png
+- assets/icons/IconArrowLeft.png
+- assets/icons/IconArrowLeftRight.png
+- assets/icons/IconArrowRight.png
+- assets/icons/IconArrowUp.png
+- assets/icons/IconCheckMark.png
+- assets/icons/IconClose.png
+- assets/icons/IconDelete.png
+- assets/icons/IconDrag.png
+- assets/icons/IconDuplicate.png
+- assets/icons/IconEdit.png
+- assets/icons/IconEllipsis.png
+- assets/icons/IconExport.png
+- assets/icons/IconEye.png
+- assets/icons/IconEyeSlash.png
+- assets/icons/IconImport.png
+- assets/icons/IconList.png
+- assets/icons/IconLock.png
+- assets/icons/IconMap.png
+- assets/icons/IconMinus.png
+- assets/icons/IconPalette.png
+- assets/icons/IconPinLogo.png
+- assets/icons/IconPlus.png
+- assets/icons/IconRightCaret.png
+- assets/icons/IconRoute.png
+- assets/icons/IconSearch.png
+- assets/icons/IconSettings.png
+- assets/icons/IconShare.png
+- assets/icons/IconUnlock.png
+
+assets/navigation/
+
+- assets/navigation/AntLine.png
+- assets/navigation/StepBlip.png
+- assets/navigation/StepBlipGlow.png
+- assets/navigation/StepPin.png
+
+assets/pins/
+
+- assets/pins/PinBackground.png
+- assets/pins/PinForegroundIcon.png
+- assets/pins/PinForegroundTracked.png
+- assets/pins/PinForegroundUntracked.png
+- assets/pins/PinHighlight.png
+- assets/pins/PinLockOutline.png
+- assets/pins/PinMask.png
+- assets/pins/PinOutlineConfiguredIcon.png
+- assets/pins/PinOutlineUntracked.png
+- assets/pins/PinShadow.png
+
+assets/shared/
+
+- assets/shared/CircularFade.png
+- assets/shared/ColorpickerBody.png
+- assets/shared/DividerHorizontal.png
+- assets/shared/DividerVertical.png
+- assets/shared/GenericFrameMask.png
+- assets/shared/GradientHorizontal.png
+- assets/shared/MinimapHighlight.png
+- assets/shared/RepeatableCheckers.png
+- assets/shared/RepeatableStripes.png
+- assets/shared/ToggleThumb.png
+
+assets/wayfinders/arrow/
+
+- assets/wayfinders/arrow/ArrowWayfinder.png
+- assets/wayfinders/arrow/ArrowWayfinderClose.png
+
+assets/wayfinders/floating/
+
+- assets/wayfinders/floating/FloatingClampedArrow.png
+- assets/wayfinders/floating/FloatingFarBottomChevron.png
+- assets/wayfinders/floating/FloatingFarLine.png
+- assets/wayfinders/floating/FloatingFarLineBlip.png
