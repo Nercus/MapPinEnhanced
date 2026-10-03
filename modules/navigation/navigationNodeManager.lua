@@ -514,7 +514,9 @@ local function EvaluateDirectCheck(key, value)
                 type(value.criteria) ~= "number" or value.id <= 0 or value.id % 1 ~= 0 or
                 value.criteria <= 0 or value.criteria % 1 ~= 0 or not GetAchievementCriteriaInfo then return UNKNOWN end
             -- Authored criteria are indexes, as in the source's achieved(id, index).
-            local _, _, completed = GetAchievementCriteriaInfo(value.id, value.criteria)
+            -- Unavailable criteria can throw; keep that observation unknown without aborting preparation.
+            local success, _, _, completed = pcall(GetAchievementCriteriaInfo, value.id, value.criteria)
+            if not success then return UNKNOWN end
             return StateFromBoolean(completed)
         end
         if type(value) ~= "number" or value <= 0 or value % 1 ~= 0 or not GetAchievementInfo then return UNKNOWN end
