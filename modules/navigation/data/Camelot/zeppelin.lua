@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
+-- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local ZEPPELIN = {
 
     -- Zone: Durotar (map 1411)
@@ -26,6 +27,7 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 114,
     },
     -- Durotar (map 1411 50.82,13.81) -> Tirisfal Glades (map 1420 60.70,58.76) via zeppelin
     {
@@ -48,6 +50,7 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 170,
     },
 
     -- Zone: Stranglethorn Vale (map 1434)
@@ -72,6 +75,7 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 141,
     },
     -- Stranglethorn Vale (map 1434 31.53,29.15) -> Tirisfal Glades (map 1420 61.88,59.10) via zeppelin
     {
@@ -94,6 +98,7 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 151,
     },
 
     -- Zone: Tirisfal Glades (map 1420)
@@ -118,6 +123,7 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 140,
     },
     -- Tirisfal Glades (map 1420 61.88,59.10) -> Stranglethorn Vale (map 1434 31.53,29.15) via zeppelin
     {
@@ -140,6 +146,81 @@ local ZEPPELIN = {
                 },
             },
         },
+        travelDuration = 135,
+    },
+
+    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
+    -- Alterac Mountains (map 1416 12.83,51.17) -> Zephras Isle (map 2521 65.84,83.81) via zeppelin
+    {
+        fromPointID = 1300010,
+        fromMap = 1416,
+        fromX = 0.1283,
+        fromY = 0.5117,
+        toPointID = 1300011,
+        toMap = 2521,
+        toX = 0.6584,
+        toY = 0.8381,
+        type = "zeppelin",
+        travelDuration = 151,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
+    },
+    -- Zephras Isle (map 2521 65.84,83.81) -> Alterac Mountains (map 1416 12.83,51.17) via zeppelin
+    {
+        fromPointID = 1300011,
+        fromMap = 2521,
+        fromX = 0.6584,
+        fromY = 0.8381,
+        toPointID = 1300010,
+        toMap = 1416,
+        toX = 0.1283,
+        toY = 0.5117,
+        type = "zeppelin",
+        travelDuration = 170,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
+    },
+    -- Mulgore (map 1412 34.33,26.05) -> Zephras Isle (map 2521 57.75,81.00) via zeppelin
+    {
+        fromPointID = 1300012,
+        fromMap = 1412,
+        fromX = 0.3433,
+        fromY = 0.2605,
+        toPointID = 1300013,
+        toMap = 2521,
+        toX = 0.5775,
+        toY = 0.81,
+        type = "zeppelin",
+        travelDuration = 135,
+    },
+    -- Zephras Isle (map 2521 57.75,81.00) -> Mulgore (map 1412 34.33,26.05) via zeppelin
+    {
+        fromPointID = 1300013,
+        fromMap = 2521,
+        fromX = 0.5775,
+        fromY = 0.81,
+        toPointID = 1300012,
+        toMap = 1412,
+        toX = 0.3433,
+        toY = 0.2605,
+        type = "zeppelin",
+        travelDuration = 174,
     },
 }
 

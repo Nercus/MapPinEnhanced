@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
+-- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local SHIP = {
 
     -- Zone: Darkshore (map 1439)
@@ -16,6 +17,17 @@ local SHIP = {
         toX = 0.2253,
         toY = 0.562,
         type = "ship",
+        travelDuration = 112,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
     -- Darkshore (map 1439 32.42,43.77) -> Hillsbrad Foothills (map 1424 50.57,69.67) via ship
     {
@@ -40,6 +52,17 @@ local SHIP = {
         toX = 0.0464,
         toY = 0.5717,
         type = "ship",
+        travelDuration = 119,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
     -- Darkshore (map 1439 33.19,40.13) -> Teldrassil (map 1438 54.86,96.79) via ship
     {
@@ -62,6 +85,7 @@ local SHIP = {
                 },
             },
         },
+        travelDuration = 137,
     },
 
     -- Zone: Dustwallow Marsh (map 1445)
@@ -86,6 +110,7 @@ local SHIP = {
                 },
             },
         },
+        travelDuration = 145,
     },
 
     -- Zone: Hillsbrad Foothills (map 1424)
@@ -100,6 +125,17 @@ local SHIP = {
         toX = 0.3242,
         toY = 0.4377,
         type = "ship",
+        travelDuration = 125,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
 
     -- Zone: Stormwind City (map 1453)
@@ -114,6 +150,17 @@ local SHIP = {
         toX = 0.3074,
         toY = 0.4103,
         type = "ship",
+        travelDuration = 102,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
 
     -- Zone: Stranglethorn Vale (map 1434)
@@ -128,6 +175,7 @@ local SHIP = {
         toX = 0.6366,
         toY = 0.3865,
         type = "ship",
+        travelDuration = 161,
     },
 
     -- Zone: Teldrassil (map 1438)
@@ -152,6 +200,7 @@ local SHIP = {
                 },
             },
         },
+        travelDuration = 134,
     },
 
     -- Zone: The Barrens (map 1413)
@@ -166,6 +215,7 @@ local SHIP = {
         toX = 0.2592,
         toY = 0.7315,
         type = "ship",
+        travelDuration = 153,
     },
 
     -- Zone: Wetlands (map 1437)
@@ -180,6 +230,17 @@ local SHIP = {
         toX = 0.5057,
         toY = 0.6967,
         type = "ship",
+        travelDuration = 171,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
     -- Wetlands (map 1437 4.64,57.17) -> Darkshore (map 1439 32.42,43.77) via ship
     {
@@ -192,6 +253,17 @@ local SHIP = {
         toX = 0.3242,
         toY = 0.4377,
         type = "ship",
+        travelDuration = 132,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
     },
     -- Wetlands (map 1437 5.08,63.40) -> Dustwallow Marsh (map 1445 71.54,56.34) via ship
     {
@@ -214,6 +286,61 @@ local SHIP = {
                 },
             },
         },
+        travelDuration = 141,
+    },
+
+    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
+    -- Feralas (map 1444 31.01,39.51) -> Feralas (map 1444 43.13,42.76) via ship
+    {
+        fromPointID = 1300006,
+        fromMap = 1444,
+        fromX = 0.3101,
+        fromY = 0.3951,
+        toPointID = 1300007,
+        toMap = 1444,
+        toX = 0.4313,
+        toY = 0.4276,
+        type = "ship",
+        travelDuration = 60,
+    },
+    -- Feralas (map 1444 43.13,42.76) -> Feralas (map 1444 31.01,39.51) via ship
+    {
+        fromPointID = 1300007,
+        fromMap = 1444,
+        fromX = 0.4313,
+        fromY = 0.4276,
+        toPointID = 1300006,
+        toMap = 1444,
+        toX = 0.3101,
+        toY = 0.3951,
+        type = "ship",
+        travelDuration = 166,
+    },
+    -- Tanaris (map 1446 68.58,22.99) -> Riverglades (map 2548 80.60,54.61) via ship
+    {
+        fromPointID = 1300008,
+        fromMap = 1446,
+        fromX = 0.6858,
+        fromY = 0.2299,
+        toPointID = 1300009,
+        toMap = 2548,
+        toX = 0.806,
+        toY = 0.5461,
+        type = "ship",
+        travelDuration = 112,
+    },
+    -- Riverglades (map 2548 80.60,54.61) -> Tanaris (map 1446 68.58,22.99) via ship
+    {
+        fromPointID = 1300009,
+        fromMap = 2548,
+        fromX = 0.806,
+        fromY = 0.5461,
+        toPointID = 1300008,
+        toMap = 1446,
+        toX = 0.6858,
+        toY = 0.2299,
+        type = "ship",
+        travelDuration = 113,
     },
 }
 
