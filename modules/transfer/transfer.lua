@@ -4,9 +4,30 @@ local MapPinEnhanced = select(2, ...)
 ---@class Transfer
 ---@field importWindow MapPinEnhancedImportWindowTemplate?
 ---@field exportWindow MapPinEnhancedExportWindowTemplate?
+---@field receiveProgress MapPinEnhancedStatusbarTemplate?
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 local L = MapPinEnhanced.L
+
+---@param received number
+---@param total number
+function Transfer:ShowReceiveProgress(received, total)
+    if not self.receiveProgress then
+        self.receiveProgress = CreateFrame("StatusBar", nil, UIParent, "MapPinEnhancedReceiveProgressTemplate")
+        self.receiveProgress:SetName(L["Receiving shared group..."])
+        self.receiveProgress:SetProgressFormatter(function(value, maximum)
+            return string.format("%d%%", math.floor(value / maximum * 100))
+        end)
+    end
+    self.receiveProgress:SetMinMaxValues(0, total)
+    self.receiveProgress:SetValue(received)
+    self.receiveProgress:OnValueChanged(self.receiveProgress:GetValue())
+    self.receiveProgress:Show()
+end
+
+function Transfer:HideReceiveProgress()
+    if self.receiveProgress then self.receiveProgress:Hide() end
+end
 
 ---@return MapPinEnhancedImportWindowTemplate
 function Transfer:GetImportWindow()

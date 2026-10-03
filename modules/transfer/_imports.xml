@@ -3,5 +3,6 @@
     <Script file="serialization.lua" />
     <Include file="import/_imports.xml" />
     <Include file="export/_imports.xml" />
+    <Include file="templates/ReceiveProgress.xml" />
     <Include file="transfer.lua" />
 </Ui>

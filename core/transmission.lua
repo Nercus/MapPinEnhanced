@@ -14,6 +14,14 @@ local ALLOWED_EVENTS = {
 local dataCallbacks = {}
 ---@type table<string, fun(text: string, sender: string, kind: string)[]>
 local textCallbacks = {}
+---@type (fun(sender: string, kind: string, sessionID: number, fragmentID: number, fragmentCount: number))[]
+local fragmentCallbacks = {}
+
+---Reports transport fragments only; message identity still requires full decoding.
+---@param callback fun(sender: string, kind: string, sessionID: number, fragmentID: number, fragmentCount: number)
+function MapPinEnhanced:OnDataAddonMessageFragment(callback)
+    table.insert(fragmentCallbacks, callback)
+end
 
 ---@param event ADDON_MESSAGE_EVENT
 ---@param text string
@@ -89,6 +97,13 @@ Chomp.RegisterAddonPrefix(DATA_PREFIX, function(_, message, kind, sender)
     if not ok or type(data) ~= "table" then return end
     for _, callback in ipairs(admitted) do callback(data, sender, kind) end
 end, {
+    rawCallback = function(_, _, kind, sender, _, _, _, _, _, _, _, _, sessionID, fragmentID, fragmentCount)
+        if fragmentCount < 1 or fragmentID < 1 or fragmentID > fragmentCount then return end
+        sender = Chomp.NameMergedRealm(sender)
+        for _, callback in ipairs(fragmentCallbacks) do
+            callback(sender, kind, sessionID, fragmentID, fragmentCount)
+        end
+    end,
     permitUnlogged = true,
     permitLogged = true,
     permitBattleNet = true,

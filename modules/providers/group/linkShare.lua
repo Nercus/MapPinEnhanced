@@ -16,7 +16,7 @@ local MAX_RECENT_REQUESTS = 128
 
 ---@type table<string, {data: SerializedExport, expires: number}>
 local offers = {}
----@type {sender: string, token: string, requestID: string, timer: FunctionContainer}?
+---@type {sender: string, token: string, requestID: string, timer: FunctionContainer, sessionID: number?, fragments: table<number, boolean>, received: number}?
 local pending
 ---@type fun()?
 local cancelPreview
@@ -89,6 +89,7 @@ local function ClearPending()
     pending = nil
     if cancelPreview then cancelPreview() end
     cancelPreview = nil
+    Transfer:HideReceiveProgress()
 end
 
 local function RequestGroup(sender, token)
@@ -99,15 +100,36 @@ local function RequestGroup(sender, token)
         sender = sender,
         token = token,
         requestID = requestID,
+        fragments = {},
+        received = 0,
         timer = C_Timer.NewTimer(REQUEST_TIMEOUT, function()
-            pending = nil
+            ClearPending()
             MapPinEnhanced:Notify(
                 L["Group sharing timed out. The sender must be online and the link must still be available."], "ERROR")
         end),
     }
+    Transfer:ShowReceiveProgress(0, 1)
     MapPinEnhanced:Notify(L["Requesting shared group..."])
     MapPinEnhanced:SendTextAddonMessage("GROUP_REQUEST", token .. ":" .. requestID, "WHISPER", sender)
 end
+
+MapPinEnhanced:OnDataAddonMessageFragment(function(sender, kind, sessionID, fragmentID, fragmentCount)
+    if not pending or not IsWhisper(kind) or sender ~= pending.sender then return end
+    -- Keep one transport session at a time, counting each fragment once even
+    -- when delivery is repeated or out of order. Acceptance still checks the token.
+    if pending.sessionID and pending.sessionID ~= sessionID then return end
+    pending.sessionID = sessionID
+    if not pending.fragments[fragmentID] then
+        pending.fragments[fragmentID] = true
+        pending.received = pending.received + 1
+    end
+    Transfer:ShowReceiveProgress(pending.received, fragmentCount)
+    if pending.received == fragmentCount then
+        pending.sessionID = nil
+        pending.fragments = {}
+        pending.received = 0
+    end
+end)
 
 MapPinEnhanced:OnTextAddonMessage("GROUP_REQUEST", function(text, sender, kind)
     if not IsWhisper(kind) then return end
