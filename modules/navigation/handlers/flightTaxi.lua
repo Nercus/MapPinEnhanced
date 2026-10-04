@@ -33,7 +33,6 @@ end
 ---@field toTaxiNodeID number?
 ---@field taxiPathIDs integer[]
 ---@field travelDurationEstimated boolean?
----@field flightShape number[]?
 
 ---@class NavigationTaxiNodeState
 ---@field nodeID number
@@ -98,7 +97,6 @@ local function Dataprovider(path)
     end
     return {
         taxiPathIDs = ids,
-        flightShape = Navigation.flightShapes and Navigation.flightShapes[tostring(path.fromTaxiNodeID) .. ":" .. tostring(path.toTaxiNodeID)],
         travelDurationEstimated = path.travelDurationEstimated,
         fromMap = path.fromMap,
         fromX = path.fromX,
@@ -169,9 +167,19 @@ end
 ---@return NavigationTaxiNodeState?
 local function GetTaxiNodeByID(nodeID)
     local mapID = taxiMapByNodeID[nodeID]
-    if not mapID then return nil end
-    if not GetTaxiNodes(mapID) then return nil end
-    return taxiNodesByIDByMap[mapID][nodeID]
+    if mapID and GetTaxiNodes(mapID) then
+        local node = taxiNodesByIDByMap[mapID][nodeID]
+        if node then return node end
+    end
+    -- Older clients use saved flight-master observations for discovery. A city
+    -- map omitting the node must not discard that positive character knowledge.
+    if not mapReportsDiscovery then
+        local learnedTaxiNodes = GetLearnedTaxiNodes()
+        if learnedTaxiNodes and learnedTaxiNodes[nodeID] == true then
+            return { nodeID = nodeID, known = true }
+        end
+    end
+    return nil
 end
 
 ---@param nodeID number
@@ -381,18 +389,21 @@ function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
         if checkpoint then checkpoint() end
         if graph.pathTypes[reference] == "flighttaxi" then
             local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
-            local from = FindTaxiNode(data.fromMap, data.fromX, data.fromY, data.fromTaxiNodeID)
+            local origin = data.fromTaxiNodeID
+            if not origin then
+                local from = FindTaxiNode(data.fromMap, data.fromX, data.fromY)
+                origin = from and from.nodeID
+            end
             local to = FindTaxiNode(data.toMap, data.toX, data.toY, data.toTaxiNodeID)
-            if not from or from.known ~= true then
-                failures[reference] = from and from.known == false and
-                    "origin taxi node is undiscovered" or "origin taxi knowledge is unknown"
+            if not origin then
+                failures[reference] = "origin taxi node ID is unavailable"
             elseif not to or to.known ~= true then
                 failures[reference] = to and to.known == false and
                     "destination taxi node is undiscovered" or "destination taxi knowledge is unknown"
             else
                 costs[reference] = PriceLeg(graph, reference)
                 costs[reference].explanation.observed = false
-                costs[reference].explanation.nodes = { from.nodeID, to.nodeID }
+                costs[reference].explanation.nodes = { origin, to.nodeID }
                 costs[reference].explanation.destinationName = to.name
             end
         end
@@ -407,7 +418,7 @@ end
 ---@return string?
 local function CostCalculator(_graph, prepared, reference)
     local cost = prepared.taxiCosts[reference]
-    -- Discovery gates both inferred paths and observed journey legs. Only the
+    -- Destination discovery gates inferred paths and observed journey legs. Only the
     -- static candidate is suppressed when a current-master itinerary replaces it.
     if cost and prepared.taxiObservation and
         prepared.taxiObservation.origin == cost.explanation.nodes[1] then
