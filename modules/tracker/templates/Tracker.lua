@@ -8,6 +8,9 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 ---@class MapPinEnhancedTrackerTemplate : Frame, MapPinEnhancedFadingFrameTemplate
+---@field contentBackground Texture
+---@field minimized boolean?
+---@field minimizedScroll number?
 ---@field scrollBox MapPinEnhancedTrackerScrollBox
 ---@field scrollBar MapPinEnhancedTrackerScrollBar
 ---@field scrollView ScrollBoxListTreeListViewMixin
@@ -29,6 +32,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
+local Options = MapPinEnhanced:GetModule("Options")
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
@@ -137,6 +141,18 @@ end
 
 ---@param scrollToTrackedPin boolean?
 function MapPinEnhancedTrackerMixin:UpdateList(scrollToTrackedPin)
+    if self.minimized then
+        self.reachedPins, self.totalPins = 0, 0
+        for group in Groups:EnumerateGroups() do
+            if not group.pinsUpdating and not group:IsHidden() then
+                local _, reached, total = group:GetPinCounts()
+                self.reachedPins, self.totalPins = self.reachedPins + reached, self.totalPins + total
+            end
+        end
+        self:UpdateTrackerHeader()
+        self:UpdateHeight()
+        return
+    end
     self:SaveCollapsedGroups()
     local changeNumber = self.changeNumber
     local dataProvider, reachedPins, totalPins = self:UpdatePinList(scrollToTrackedPin)
@@ -198,14 +214,14 @@ function MapPinEnhancedTrackerMixin:ScrollToTrackedPin()
     if index then self.scrollBox:ScrollToElementDataIndex(index) end
 end
 
--- Maximum number of entries to display
-local MAX_ENTRIES = 7
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
     local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
+    self.contentBackground:SetShown(not self.minimized or fixedEntryHeight > 0)
     local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or 0
-    local visibleEntries = math.min(numberOfEntries, MAX_ENTRIES)
+    local visibleEntries = self.minimized and 0 or math.min(numberOfEntries,
+        Options:GetOptionValue("Miscellaneous.Tracker.MaximumRows"))
     local newHeight = visibleEntries * entryHeight
     self.desiredHeight = newHeight + headerHeight + fixedEntryHeight
     self:UpdateViewportHeight()
@@ -275,6 +291,18 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollBox:SetInterpolateScroll(true);
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.MaximumRows", function() self:UpdateHeight() end)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.BackgroundOpacity", function(value)
+        self.contentBackground:SetAlpha(value / 100)
+    end)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.Scale", function() self.position:ApplyTrackerScale() end)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.ShowBlizzardEntry", function()
+        if self:IsShown() then self:UpdateSuperTrackedEntry() end
+    end)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.CloseAction", function(value)
+        if not value then MapPinEnhanced:SetVar("trackerMinimized", false) end
+        self:ApplyMinimizedState()
+    end)
 
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function()
         self:UpdateListAndScrollToTrackedPin()
@@ -300,11 +328,15 @@ end
 function MapPinEnhancedTrackerMixin:OnShow()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
     self.refreshPending, self.scrollPending = nil, nil
+    local restoreScroll = self.minimizedScroll ~= nil
     self:UpdateSuperTrackedEntry(true)
-    self:UpdateList(true)
+    self:ApplyMinimizedState(true)
+    self:UpdateList(not self.minimizedScroll)
+    self:RestoreListScroll()
     self.position:RestoreTrackerPosition(self.desiredHeight or self.header:GetHeight())
+    self.position:ApplyTrackerScale()
     self:UpdateViewportHeight()
-    self:ScrollToTrackedPin()
+    if not restoreScroll then self:ScrollToTrackedPin() end
 end
 
 function MapPinEnhancedTrackerMixin:OnHide()
@@ -325,7 +357,7 @@ function MapPinEnhancedTrackerMixin:OnUpdate()
     if scroll then self:ScrollToTrackedPin() end
     -- Position can change during a drag or a screen/scale change; resizing never moves it.
     self:UpdateViewportHeight()
-    if self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
+    if not self.minimized and self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
         self.scrollBar.fadeIn:PlayShowing(self.scrollBar.fadeOut)
     else
         self.scrollBar.fadeOut:PlayHiding(self.scrollBar.fadeIn)
@@ -333,7 +365,7 @@ function MapPinEnhancedTrackerMixin:OnUpdate()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
-    self.header:SetTitle(string.format(L["Pins (%d/%d)"], self.reachedPins, self.totalPins))
+    self.header:SetTitle(string.format(L["Your pins (%d/%d)"], self.reachedPins, self.totalPins))
     self.header:SetIcon("pin")
     self.header.hiddenGroupsButton:SetIconTexture("eyeslash")
 end
@@ -350,7 +382,12 @@ end
 
 ---@param skipHeight boolean?
 function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry(skipHeight)
-    self.superTrackedEntry:ApplyEntry(Providers:GetSuperTrackingEntry())
+    ---@type SuperTrackingEntry?
+    local entry
+    if Options:GetOptionValue("Miscellaneous.Tracker.ShowBlizzardEntry") then
+        entry = Providers:GetSuperTrackingEntry()
+    end
+    self.superTrackedEntry:ApplyEntry(entry)
     self:UpdateViewLayout()
     if not skipHeight then self:UpdateHeight() end
 end
@@ -367,4 +404,33 @@ function MapPinEnhancedTrackerMixin:HideFrame()
     self.refreshPending, self.scrollPending = nil, nil
     self.header.hiddenGroupsMenu:Close()
     self:Hide()
+end
+
+---@param skipRefresh boolean?
+function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
+    local minimizeMode = Options:GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
+    self.minimized = minimizeMode and MapPinEnhanced:GetVar("trackerMinimized") == true
+    self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "plus" or "minus") or "close")
+    self.header.closeButton:SetTooltip(L[minimizeMode and (self.minimized and "Expand" or "Minimize") or "Close"])
+    if GameTooltip:IsOwned(self.header.closeButton) then self.header.closeButton:OnTooltipEnter() end
+    self.scrollBox:SetShown(not self.minimized)
+    if self.minimized then
+        if self.dataProvider then self.minimizedScroll = self.scrollBox:GetScrollPercentage() end
+        self:SaveCollapsedGroups()
+        self.scrollBox:RemoveDataProvider()
+        self.dataProvider = nil
+        self.refreshPending, self.scrollPending = nil, nil
+        self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
+        self.header.hiddenGroupsMenu:Close()
+    elseif self:IsShown() and not skipRefresh then
+        self:UpdateList()
+        self:RestoreListScroll()
+    end
+    self:UpdateHeight()
+end
+
+function MapPinEnhancedTrackerMixin:RestoreListScroll()
+    if self.minimized or not self.minimizedScroll then return end
+    self.scrollBox:SetScrollPercentage(self.minimizedScroll)
+    self.minimizedScroll = nil
 end

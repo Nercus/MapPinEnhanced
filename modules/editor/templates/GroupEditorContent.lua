@@ -78,6 +78,7 @@ function MapPinEnhancedGroupEditorContentMixin:AddPin()
         return
     end
     local _, pinID = group:AddPin({ mapID = mapID, x = x, y = y })
+    if pinID then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
     if not pinID then return end
     ---@type UUID[]
     local pinIDs = {}

@@ -62,8 +62,9 @@ end
 ---@param pinsData pinData[]|SaveablePinData[]
 ---@param preserveGroupOrder boolean?
 ---@param pinOrders table<UUID, number>?
+---@param onAdded fun(count: number)? called once with the accepted count after the worker stops
 ---@return boolean accepted
-function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGroupOrder, pinOrders)
+function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGroupOrder, pinOrders, onAdded)
     if not self:CancelBatch() then return false end
     assert(type(pinsData) == "table", "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData must be a table")
     if #pinsData == 0 then return true end
@@ -92,6 +93,7 @@ function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGro
         end
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         if status ~= "complete" then Groups:ReportStoppedPinOperation(completed, #pinsData) end
+        if onAdded then onAdded(completed) end
     end
 
     local function onError(message)

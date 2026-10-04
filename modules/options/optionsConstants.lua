@@ -52,6 +52,39 @@ Options.SCALE_PRESETS = {
     { label = L["Huge (150%)"], value = 1.5 },
 }
 
+-- Move retired Tiny selections to the smallest available preset before controls load.
+for _, key in ipairs({ "Pins.Appearance.MinimapScale", "Pins.Appearance.WorldMapScale", "Miscellaneous.Tracker.Scale" }) do
+    if MapPinEnhanced:GetVar("options", key) == 0.75 then
+        MapPinEnhanced:SetVar("options", key, 0.9)
+    end
+end
+
+-- The option becomes authoritative after importing the old frame scale once.
+local trackerScaleKey = "Miscellaneous.Tracker.Scale"
+local savedScale = MapPinEnhanced:GetVar("options", trackerScaleKey)
+local validScale = false
+for _, preset in ipairs(Options.SCALE_PRESETS) do
+    if savedScale == preset.value then validScale = true end
+end
+if not validScale then
+    local oldScale = MapPinEnhanced:GetVar("frames", "tracker", "scale")
+    if not MapPinEnhanced:IsReadableNumber(oldScale) or oldScale ~= oldScale then oldScale = 1 end
+    local nearest = Options.SCALE_PRESETS[1].value
+    for _, preset in ipairs(Options.SCALE_PRESETS) do
+        if math.abs(preset.value - oldScale) < math.abs(nearest - oldScale) - 0.000001 then
+            nearest = preset.value
+        end
+    end
+    MapPinEnhanced:SetVar("options", trackerScaleKey, nearest)
+end
+
+-- Retain the saved Close/Minimize choice when replacing the radio group with a checkbox.
+local trackerCloseActionKey = "Miscellaneous.Tracker.CloseAction"
+local savedCloseAction = MapPinEnhanced:GetVar("options", trackerCloseActionKey)
+if type(savedCloseAction) ~= "boolean" then
+    MapPinEnhanced:SetVar("options", trackerCloseActionKey, savedCloseAction == "minimize")
+end
+
 Options.DEFAULTS = {
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
@@ -64,6 +97,12 @@ Options.DEFAULTS = {
     ["Pins.Miscellaneous.EnableLockedPins"] = true,
     ["Pins.Tracking.ArrivalNotification"] = "locked",
     ["Pins.Tracking.AutoUntrack"] = false,
+    ["Miscellaneous.Tracker.AutoShow"] = true,
+    ["Miscellaneous.Tracker.ShowBlizzardEntry"] = true,
+    ["Miscellaneous.Tracker.CloseAction"] = false,
+    ["Miscellaneous.Tracker.MaximumRows"] = 7,
+    ["Miscellaneous.Tracker.BackgroundOpacity"] = 0,
+    ["Miscellaneous.Tracker.Scale"] = 1,
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
@@ -73,7 +112,7 @@ Options.DEFAULTS = {
     ["Miscellaneous.Coords.Enable"] = true,
     ["Miscellaneous.Coords.Lock"] = false,
     ["Miscellaneous.Coords.Visibility"] = { noCoordinates = true },
-    ["Miscellaneous.Tracker.Visibility"] = {},
+    ["Miscellaneous.Tracker.Visibility"] = { noActivePins = true },
     ["Wayfinder.General.HideBlizzardFloatingDiamond"] = false,
     ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_ARROW,
     ["Wayfinder.General.ShowETA"] = true,
@@ -106,6 +145,7 @@ end
 Options.OPTIONS_CONFIG = {
     ["Pins.Appearance.MinimapScale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.WorldMapScale"] = Options.SCALE_PRESETS,
+    ["Miscellaneous.Tracker.Scale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.DefaultColor"] = {
         { label = L["Red"], value = "Red" },
         { label = L["Orange"], value = "Orange" },

@@ -24,9 +24,6 @@
             </Frame>
         </Frames>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
-            </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontHighlight" justifyH="LEFT" wordwrap="false">
                     <Anchors>

@@ -5,7 +5,6 @@ local MapPinEnhanced = select(2, ...)
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
@@ -56,8 +55,7 @@ end)
 
 MapPinEnhanced:AddVisibilityRule("noActivePins", {
     isActive = function()
-        -- This persisted rule is used only by Tracker; its fixed row is content too.
-        if Providers:GetSuperTrackingEntry() then return false end
+        -- Blizzard tracking alone must not reopen a tracker hidden for having no addon pins.
         for group in Groups:EnumerateGroups() do
             if not group:IsHidden() then
                 for _ in group:EnumeratePins() do return false end
@@ -65,8 +63,7 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
         end
         return true
     end,
-    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED",
-        "SUPER_TRACKING_ENTRY_CHANGED" },
+    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED" },
 })
 
 MapPinEnhanced:RegisterVisibilityTarget("tracker", {
@@ -84,3 +81,23 @@ MapPinEnhanced:RegisterVisibilityTarget("tracker", {
 MapPinEnhanced:AddSlashCommand("tracker", function()
     Tracker:ToggleTracker()
 end, L["Toggle the tracker visibility."])
+
+function Tracker:SetMinimized(minimized)
+    MapPinEnhanced:SetVar("trackerMinimized", minimized == true)
+    if self.trackerFrame then self.trackerFrame:ApplyMinimizedState() end
+end
+
+-- Explicit user creation/import calls this only after at least one accepted addition.
+function Tracker:OnUserPinsAdded()
+    if not MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.AutoShow") then return end
+    self:SetMinimized(false)
+    self:ShowTracker()
+end
+
+function Tracker:ApplyCloseAction()
+    if MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.CloseAction") == true then
+        self:SetMinimized(not MapPinEnhanced:GetVar("trackerMinimized"))
+    else
+        self:HideTracker()
+    end
+end

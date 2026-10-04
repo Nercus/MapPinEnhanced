@@ -44,6 +44,42 @@
                     <KeyValue key="key" value="Miscellaneous.Tracker" />
                 </KeyValues>
                 <Frames>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.AutoShow" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.ShowBlizzardEntry" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.CloseAction" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionSliderTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.MaximumRows" />
+                            <KeyValue key="minValue" value="3" type="number" />
+                            <KeyValue key="maxValue" value="12" type="number" />
+                            <KeyValue key="stepValue" value="1" type="number" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionSliderTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.BackgroundOpacity" />
+                            <KeyValue key="minValue" value="0" type="number" />
+                            <KeyValue key="maxValue" value="100" type="number" />
+                            <KeyValue key="stepValue" value="1" type="number" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Tracker.Scale" />
+                        </KeyValues>
+                    </Frame>
                     <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                         <KeyValues>
                             <KeyValue key="key" value="Miscellaneous.Tracker.Visibility" />

@@ -64,7 +64,9 @@ function MapPinEnhancedImportWindowMixin:StartImport()
         order = GetTime(),
         trackingMode = data.trackingMode,
     })
-    if not group or not group:AddMultiplePins(data.pins, false, data.pinOrder) then
+    if not group or not group:AddMultiplePins(data.pins, false, data.pinOrder, function(count)
+        if count > 0 then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
+    end) then
         MapPinEnhanced:Notify(L["Import failed."], "ERROR")
         return false
     end

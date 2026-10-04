@@ -14,6 +14,9 @@
 ---@field showInCompartment boolean?
 
 ---@class MapPinEnhancedDB
+---@field options table<string, number|string|boolean|table>?
+---@field trackerVisible boolean?
+---@field trackerMinimized boolean?
 ---@field minimapButton MapPinEnhancedMinimapSettings? LibDBIcon visibility, position and compartment preferences.
 ---@field learnedTaxiNodes table<string, table<number, boolean>>? Character-scoped positive flight-master discoveries on older clients.
 ---@field groups table<UUID, SaveableGroupData>?

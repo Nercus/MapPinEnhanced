@@ -18,6 +18,7 @@ MapPinEnhanced:AddSlashCommand(L["Back"]:lower(), function()
         y = y,
         setTracked = false,
     })
+    if pinID then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
     if not pinID then
         MapPinEnhanced:Print(L["My Way Back is unavailable on the map you are on right now."])
     end

@@ -112,7 +112,7 @@ local function OnUserWaypoint(uiMapPoint)
     end
     local uncategorizedGroup = Groups:GetUngroupedGroup()
     if not uncategorizedGroup then return end
-    uncategorizedGroup:AddPin({
+    local _, pinID = uncategorizedGroup:AddPin({
         mapID = uiMapPoint.uiMapID,
         x = mouseFocusInfo and mouseFocusInfo.x or uiMapPoint.position.x,
         y = mouseFocusInfo and mouseFocusInfo.y or uiMapPoint.position.y,
@@ -121,6 +121,11 @@ local function OnUserWaypoint(uiMapPoint)
         usesAtlas = mouseFocusInfo and mouseFocusInfo.isAtlas or false,
         setTracked = not isSuperTrackingCorpse
     })
+    -- Only Blizzard's explicit map/slash/link entry points carry user-add intent.
+    -- Other addons may call the waypoint API for background updates.
+    local userCreated = stack:find("WaypointLocationDataProvider.lua:", 1, true) or
+        stack:find("ItemRefHandlers.lua:", 1, true)
+    if pinID and userCreated then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
 end
 
 

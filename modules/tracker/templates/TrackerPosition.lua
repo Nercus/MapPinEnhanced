@@ -39,3 +39,18 @@ function MapPinEnhancedTrackerPositionMixin:RestoreTrackerPosition(contentHeight
     end
     self.restored = true
 end
+
+function MapPinEnhancedTrackerPositionMixin:ApplyTrackerScale()
+    if not self.restored then return end
+    local scale = MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.Scale") --[[@as number]]
+    local oldScale = self:GetScale()
+    if scale == oldScale then return end
+    local left, top = self:GetLeft(), self:GetTop()
+    MapPinEnhanced:SetFrameScale(self, scale)
+    if left and top then
+        self:ClearAllPoints()
+        self:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", left * oldScale / scale, top * oldScale / scale)
+        MapPinEnhanced:SaveFramePosition(self)
+    end
+    self.display:UpdateViewportHeight()
+end

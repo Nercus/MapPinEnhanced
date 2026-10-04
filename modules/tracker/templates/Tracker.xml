@@ -39,6 +39,16 @@
                 </Animations>
             </EventFrame>
         </Frames>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="contentBackground" inherits="MapPinEnhancedGenericFrameTextureTemplate" alpha="0">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.header" relativePoint="BOTTOMLEFT" y="5" />
+                        <Anchor point="BOTTOMRIGHT" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
 
         <Scripts>
             <OnLoad method="OnLoad" />

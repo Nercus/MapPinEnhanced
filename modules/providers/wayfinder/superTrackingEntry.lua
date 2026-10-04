@@ -165,6 +165,7 @@ function Providers:ConvertSuperTrackingEntryToPin(expectedChangeNumber)
     local data = CopyTable(selectedEntry.pinData)
     data.setTracked = false
     local pin = group:AddPin(data)
+    if pin then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
     if not pin then return end
     local wasTracked = selectedEntry.tracked
     self:RemoveSuperTrackingEntry(expectedChangeNumber)

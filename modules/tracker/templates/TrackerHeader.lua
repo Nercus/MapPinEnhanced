@@ -26,7 +26,7 @@ function MapPinEnhancedTrackerHeaderMixin:OnLoad()
     end)
 
     self.closeButton:SetScript("OnClick", function()
-        Tracker:HideTracker()
+        Tracker:ApplyCloseAction()
     end)
 end
 

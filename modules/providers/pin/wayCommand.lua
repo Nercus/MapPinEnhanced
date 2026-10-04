@@ -22,12 +22,13 @@ function Providers:ImportSlashCommand(msg, groupName)
         if not group then
             return
         end
-        group:AddPin({
+        local _, pinID = group:AddPin({
             mapID = mapID,
             x = coords[1] / 100,
             y = coords[2] / 100,
             title = title,
             setTracked = true,
         })
+        if pinID then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
     end
 end
