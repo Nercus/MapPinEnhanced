@@ -46,6 +46,8 @@ Options.TRACKING_MODE_OPTIONS = {
 }
 
 Options.DEFAULTS = {
+    ["General.Minimap.ShowButton"] = true,
+    ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
     ["General.Tracking.DefaultMode"] = Options.TRACKING_MODE_NEAREST --[[@as GroupTrackingMode]],
     ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
@@ -73,6 +75,13 @@ Options.DEFAULTS = {
     ["Wayfinder.Floating.ShowBeam"] = true,
 }
 
+
+-- Preserve a button hidden before visibility became an option. The new preference wins thereafter.
+local minimapVisibilityKey = "General.Minimap.ShowButton"
+if type(MapPinEnhanced:GetVar("options", minimapVisibilityKey)) ~= "boolean" then
+    MapPinEnhanced:SetVar("options", minimapVisibilityKey,
+        MapPinEnhanced:GetVar("minimapButton", "hide") ~= true)
+end
 
 -- config for radiogroups, dropdowns
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>

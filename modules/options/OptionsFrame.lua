@@ -27,8 +27,8 @@ local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
 
-function MapPinEnhancedOptionsFrameMixin:ToggleOptionsFrame()
-    Settings.OpenToCategory(self.categoryID)
+function Options:OpenOptions()
+    Settings.OpenToCategory(self.frame.categoryID)
 end
 
 function MapPinEnhancedOptionsFrameMixin:SetTitle()
@@ -83,7 +83,7 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     self:UpdateLayout()
 
     MapPinEnhanced:AddSlashCommand("options", function()
-        self:ToggleOptionsFrame()
+        Options:OpenOptions()
     end, L["Open the options frame"])
 end
 

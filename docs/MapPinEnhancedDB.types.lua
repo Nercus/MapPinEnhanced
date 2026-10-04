@@ -7,7 +7,14 @@
 ---@field scale number?
 ---@field fixedPosition boolean? Tracker position has been converted to its fixed-size owner.
 
+---@class MapPinEnhancedMinimapSettings
+---@field hide boolean?
+---@field minimapPos number?
+---@field lock boolean?
+---@field showInCompartment boolean?
+
 ---@class MapPinEnhancedDB
+---@field minimapButton MapPinEnhancedMinimapSettings? LibDBIcon visibility, position and compartment preferences.
 ---@field learnedTaxiNodes table<string, table<number, boolean>>? Character-scoped positive flight-master discoveries on older clients.
 ---@field groups table<UUID, SaveableGroupData>?
 ---@field frames table<string, MapPinEnhancedSavedFramePosition>?

@@ -26,6 +26,14 @@ function Tracker:HideTracker()
     MapPinEnhanced:UpdateVisibilityTarget("tracker")
 end
 
+function Tracker:ToggleTracker()
+    if MapPinEnhanced:GetVar("trackerVisible") then
+        self:HideTracker()
+    else
+        self:ShowTracker()
+    end
+end
+
 function Tracker:UpdateList()
     local frame = self:GetTrackerFrame()
     if frame:IsShown() then
@@ -74,9 +82,5 @@ MapPinEnhanced:RegisterVisibilityTarget("tracker", {
 
 
 MapPinEnhanced:AddSlashCommand("tracker", function()
-    if MapPinEnhanced:GetVar("trackerVisible") then
-        Tracker:HideTracker()
-    else
-        Tracker:ShowTracker()
-    end
+    Tracker:ToggleTracker()
 end, L["Toggle the tracker visibility."])

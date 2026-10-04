@@ -8,6 +8,23 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate">
                 <KeyValues>
+                    <KeyValue key="key" value="General.Minimap" />
+                </KeyValues>
+                <Frames>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="General.Minimap.ShowButton" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="General.Minimap.CustomButton" />
+                        </KeyValues>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+                <KeyValues>
                     <KeyValue key="key" value="General.Distance" />
                 </KeyValues>
                 <Frames>

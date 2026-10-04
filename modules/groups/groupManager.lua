@@ -221,6 +221,17 @@ function Groups:GetGroupByID(groupID)
     return nil
 end
 
+---@return boolean accepted
+function Groups:MarkAllPinsReached()
+    local accepted = true
+    for group in self:EnumerateGroups() do
+        if not group:IsHidden() and not group:MarkAllPinsReached() then
+            accepted = false
+        end
+    end
+    return accepted
+end
+
 function Groups:GetUngroupedGroup()
     return self:GetGroupByID(self.SYSTEM_GROUP_IDS.UNGROUPED)
 end
