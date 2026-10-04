@@ -101,6 +101,7 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
         self.reconcileAfterCombat = nil
     end
     self.pendingApply = nil
+    local returningFromCombat = self.combatPanel and self.combatPanel:IsShown()
     if self.combatPanel and self.combatPanel:IsShown() then
         -- Hiding stops any active drag before we restore the protected view.
         self.combatPanel:HideImmediately()
@@ -118,13 +119,22 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     self.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
     self:PrepareCombatDisplay()
     self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
-        step.showInstruction ~= false and step.stepCount ~= 1))
+        step.showInstruction ~= false and step.stepCount ~= 1), returningFromCombat)
 end
 
 ---@param shown boolean
-function MapPinEnhancedFloatingPanelMixin:ApplyVisibility(shown)
+---@param immediate boolean?
+function MapPinEnhancedFloatingPanelMixin:ApplyVisibility(shown, immediate)
     self.panelShown = shown
-    if not InCombatLockdown() or not self:IsProtected() then self:SetShownWithFade(shown) end
+    if InCombatLockdown() and self:IsProtected() then return end
+    if immediate then
+        -- The combat copy was already visible. Fading its replacement from zero
+        -- would leave the panel invisible at the handoff.
+        self:ResetVisibilityFade()
+        self:SetShown(shown)
+    else
+        self:SetShownWithFade(shown)
+    end
 end
 
 function MapPinEnhancedFloatingPanelMixin:PrepareCombatDisplay()
