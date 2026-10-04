@@ -5,6 +5,7 @@ local L = MapPinEnhanced.L
 
 local DEFAULT_TRANSPORT_SECONDS = 240
 local DEFAULT_TRAM_SECONDS = 300
+local DEFAULT_BOAT_SECONDS = 150
 local FALLBACK_UNCERTAINTY_FACTOR = 0.5
 
 ---@class NavigationTransportDock
@@ -86,6 +87,8 @@ end
 ---@param icon string
 ---@param method string
 local function RegisterTransport(pathType, icon, method)
+    local defaultSeconds = pathType == "tram" and DEFAULT_TRAM_SECONDS or
+        (pathType == "boat" or pathType == "ship") and DEFAULT_BOAT_SECONDS or DEFAULT_TRANSPORT_SECONDS
     ---@param graph NavigationGraph
     ---@param _preparedData NavigationPreparedData
     ---@param pathReference integer
@@ -116,8 +119,7 @@ local function RegisterTransport(pathType, icon, method)
         local authoredDuration = graph.pathDurations[pathReference]
         local usesFallback = type(authoredDuration) ~= "number" or
             authoredDuration <= 0 or authoredDuration == math.huge
-        local expectedSeconds = usesFallback and
-            (pathType == "tram" and DEFAULT_TRAM_SECONDS or DEFAULT_TRANSPORT_SECONDS) or authoredDuration
+        local expectedSeconds = usesFallback and defaultSeconds or authoredDuration
         local uncertaintySeconds = usesFallback and expectedSeconds * FALLBACK_UNCERTAINTY_FACTOR or 0
         return {
             expectedSeconds = expectedSeconds,
