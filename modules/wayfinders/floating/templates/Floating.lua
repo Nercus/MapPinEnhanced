@@ -13,6 +13,7 @@ local MAX_CLOSE_DISTANCE = 200
 ---@field titleContainer MapPinEnhancedWayfinderFloatingTitleTemplate
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field displayType 'close' | 'far'?
+---@field isFallbackClose boolean?
 ---@field presentationInitialized boolean?
 ---@field needleRotation number?
 ---@field newNeedleRotation number?
@@ -59,6 +60,7 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
     self:ResetDistanceReadout()
     self:ResetDirectionSampling()
     self.displayType = "far"
+    self.isFallbackClose = nil
     self.presentationInitialized = nil
     self.content:PrepareForTarget()
     self.needleRotation = nil
@@ -173,7 +175,7 @@ end
 
 ---@return FloatingPresentation
 function MapPinEnhancedWayfinderFloatingMixin:GetPresentation()
-    if self.customDirection then return self.displayType == "close" and "fallback-close" or "fallback" end
+    if self.customDirection then return self.isFallbackClose and "fallback-close" or "fallback" end
     if self.isClamped then return "clamped" end
     return self.displayType or "far"
 end
@@ -197,6 +199,10 @@ end
 ---@param movementState DistanceMovementState
 function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval,
                                                              movementState)
+    -- The bearing fallback matches Arrow; native marker layout anticipates approach speed.
+    local isFallbackClose = distance ~= nil and distance < 10
+    local fallbackChanged = self.isFallbackClose ~= isFallbackClose
+    self.isFallbackClose = isFallbackClose
     local closeDistance = MIN_CLOSE_DISTANCE
     if movementState == "approaching" then
         -- Like dynamic arrival, allow for travel before the next distance sample.
@@ -204,6 +210,9 @@ function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToT
             MIN_CLOSE_DISTANCE + math.max(0, closingSpeed) * nextUpdateInterval)
     end
     self:SetDisplayType(distance and distance < closeDistance and "close" or "far")
+    if fallbackChanged and self.customDirection and self.presentationInitialized then
+        self:RefreshPresentation()
+    end
 end
 
 ---@param elapsed number
@@ -346,6 +355,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.displayType = "far"
+    self.isFallbackClose = nil
     self.presentationInitialized = nil
     self.content:Reset()
     self.needleRotation = nil
