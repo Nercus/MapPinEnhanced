@@ -10,6 +10,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field back Button
 ---@field forward Button
 ---@field slider MinimalSliderTemplate
+---@field fadeOutDelay FunctionContainer?
 MapPinEnhancedSliderMixin = {}
 
 function MapPinEnhancedSliderMixin:OnSizeChanged()
@@ -40,20 +41,31 @@ function MapPinEnhancedSliderMixin:OnShow()
 end
 
 function MapPinEnhancedSliderMixin:OnThumbDragStart()
-    self.valueText.fadeIn:PlayShowing(self.valueText.fadeOut)
+    self:CancelValueFade()
+    self.valueText.fadeIn:SetParentShownInstantly(true, self.valueText.fadeOut)
 end
 
----@type FunctionContainer
-local fadeOutDelay
-function MapPinEnhancedSliderMixin:OnThumbDragStop()
-    if fadeOutDelay and not fadeOutDelay:IsCancelled() then
-        fadeOutDelay:Cancel()
+function MapPinEnhancedSliderMixin:CancelValueFade()
+    if self.fadeOutDelay then
+        self.fadeOutDelay:Cancel()
+        self.fadeOutDelay = nil
     end
-    fadeOutDelay = C_Timer.NewTimer(0.5, function()
+end
+
+function MapPinEnhancedSliderMixin:OnThumbDragStop()
+    self:CancelValueFade()
+    if not self:IsShown() then return end
+    self.fadeOutDelay = C_Timer.NewTimer(0.5, function()
+        self.fadeOutDelay = nil
         if self.valueText:IsShown() then
             self.valueText.fadeOut:PlayHiding(self.valueText.fadeIn)
         end
     end)
+end
+
+function MapPinEnhancedSliderMixin:OnHide()
+    self:CancelValueFade()
+    self.valueText.fadeOut:SetParentShownInstantly(false, self.valueText.fadeIn)
 end
 
 function MapPinEnhancedSliderMixin:OnValueChanged(value)

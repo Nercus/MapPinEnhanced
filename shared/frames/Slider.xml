@@ -75,6 +75,7 @@
             <OnLoad method="OnLoad" />
             <OnSizeChanged method="OnSizeChanged" />
             <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
         </Scripts>
     </Frame>
 </Ui>
