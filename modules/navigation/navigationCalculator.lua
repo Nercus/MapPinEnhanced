@@ -229,7 +229,7 @@ end
 
 -- Incremental route calculation
 local MAX_OPERATIONS_PER_SLICE = 2500
-local MAX_MILLISECONDS_PER_SLICE = 2
+local MAX_MILLISECONDS_PER_SLICE = 0.5
 
 ---@class NavigationRoute
 ---@field destinationID string

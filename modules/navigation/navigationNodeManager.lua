@@ -758,7 +758,7 @@ function Navigation:EnsurePreparedData()
     if self.routeNavigationEnabled and self.activeDestination and not cancelPreparation and not preparationFailure then
         local graph, changeNumber = navigationGraph, preparationChangeNumber
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
-            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(0.5)
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
             local previous = preparedNavigationData
