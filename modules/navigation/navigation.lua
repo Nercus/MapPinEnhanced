@@ -1110,10 +1110,10 @@ end
 function Navigation:SetupEligibilityRefresh()
     if self.unsubscribeEligibilityRefresh then return end
     -- flightTaxiMap refreshes taxi events immediately. Bucketing them here would
-    -- cancel its fresh calculation and postpone the restart by one second.
+    -- cancel its fresh calculation and delay the restart again.
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function(events)
         self:RefreshEligibility(events)
-    end, 1, function(event, unit)
+    end, 0.1, function(event, unit)
         if event == "UNIT_AURA" then
             if MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" then return false end
             if not self:NeedsAuraRefresh() then return false end

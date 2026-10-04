@@ -229,7 +229,7 @@ end
 
 -- Incremental route calculation
 local MAX_OPERATIONS_PER_SLICE = 2500
-local MAX_MILLISECONDS_PER_SLICE = 0.5
+local MAX_MILLISECONDS_PER_SLICE = 2
 
 ---@class NavigationRoute
 ---@field destinationID string
@@ -276,6 +276,7 @@ local MAX_MILLISECONDS_PER_SLICE = 0.5
 ---@field bestUncertainties table<integer, number>
 ---@field bestPathCounts table<integer, integer>
 ---@field bestSignatures table<integer, string>
+---@field destinationCostBucket integer?
 ---@field previousPointIndexes table<integer, integer>
 ---@field previousPathReferences table<integer, integer>
 ---@field pathCostByReference table<integer, NavigationCalculatedPathCost>
@@ -286,9 +287,11 @@ local MAX_MILLISECONDS_PER_SLICE = 0.5
 ---@field cancelled boolean
 ---@field reverseSearch NavigationReverseSearch?
 ---@field movementEntry NavigationHeapEntry?
+---@field movementPointIndexes integer[]?
 ---@field nextMovementPointIndex integer?
 ---@field worldPoints table<integer, NavigationWorldPoint>
 ---@field entrancesByInstance table<number, integer[]>
+---@field entrancesByInstanceX table<number, integer[]>
 ---@field startedAt number
 ---@field calculationSlices integer
 ---@field movementCandidates integer
@@ -379,6 +382,9 @@ end
 local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
                           previousPointIndex, previousPathReference, signature, finalCost)
     local costBucket = GetCostBucket(cost)
+    -- All remaining travel costs are nonnegative. Keep equal buckets for the
+    -- existing uncertainty/Path-count/signature ties, but discard costlier prefixes.
+    if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
     local bestCostBucket = job.bestCostBuckets[pointIndex]
     local isBetter = bestCostBucket == nil or costBucket < bestCostBucket or costBucket == bestCostBucket and
         (uncertainty < job.bestUncertainties[pointIndex] or uncertainty == job.bestUncertainties[pointIndex] and
@@ -496,16 +502,66 @@ local function OfferDestination(job, entry)
         graph.pointMapIDs[entry.pointIndex], graph.pointXs[entry.pointIndex], graph.pointYs[entry.pointIndex],
         destination.mapID, destination.x, destination.y, "automatic")
     if not finalCost then return end
+    local costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds)
+    if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
+    job.destinationCostBucket = costBucket
     HeapPush(job.heap, {
         pointIndex = 0,
         cost = entry.cost + finalCost.comparisonSeconds,
-        costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds),
+        costBucket = costBucket,
         uncertainty = entry.uncertainty + finalCost.uncertaintySeconds,
         pathCount = entry.pathCount,
         previousPointIndex = entry.pointIndex,
         finalCost = finalCost,
         signature = entry.signature,
     })
+end
+
+---@param job NavigationCalculationJob
+---@param origin NavigationWorldPoint
+---@param cost number
+---@return integer[]?
+local function GetForwardMovementCandidates(job, origin, cost)
+    local candidates = job.entrancesByInstance[origin.instanceID]
+    if not candidates or not job.destinationCostBucket then return candidates end
+    local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, origin.mapID)
+    if not speed or speed <= 0 then return nil end
+    -- No endpoint can permit faster movement than the origin itself. A complete
+    -- route bounds the search radius, including the entire equal-cost bucket.
+    local radius = (job.destinationCostBucket + 0.5 - cost) * speed
+    local sorted = job.entrancesByInstanceX[origin.instanceID]
+    if not sorted then
+        sorted = {}
+        for index, pointIndex in ipairs(candidates) do
+            sorted[index] = pointIndex
+            job.checkpoint()
+        end
+        table.sort(sorted, function(left, right)
+            return job.worldPoints[left].x < job.worldPoints[right].x
+        end)
+        job.entrancesByInstanceX[origin.instanceID] = sorted
+        job.checkpoint()
+    end
+    local low, high = 1, #sorted + 1
+    while low < high do
+        local middle = math.floor((low + high) / 2)
+        if job.worldPoints[sorted[middle]].x < origin.x - radius then
+            low = middle + 1
+        else
+            high = middle
+        end
+    end
+    local nearby = {} ---@type integer[]
+    for index = low, #sorted do
+        job.checkpoint()
+        local pointIndex = sorted[index]
+        local point = job.worldPoints[pointIndex]
+        if point.x > origin.x + radius then break end
+        if math.abs(point.y - origin.y) <= radius then nearby[#nearby + 1] = pointIndex end
+    end
+    -- Preserve the original dense-point offer order, including equal-cost ties.
+    table.sort(nearby)
+    return nearby
 end
 
 ---@param job NavigationCalculationJob
@@ -553,6 +609,8 @@ local function ExpandPoint(job, entry)
     -- Offer connections from actual Path arrivals. Initial player approaches
     -- already cover entrances; arbitrary movement waypoints are not added.
     if job.previousPathReferences[entry.pointIndex] then
+        local origin = job.worldPoints[entry.pointIndex]
+        job.movementPointIndexes = origin and GetForwardMovementCandidates(job, origin, entry.cost)
         job.movementEntry = entry
         job.nextMovementPointIndex = 1
     end
@@ -620,11 +678,12 @@ local function OfferNextMovementPoint(job)
     local candidateIndex = job.nextMovementPointIndex
     if not entry or not candidateIndex then return end
     local origin = job.worldPoints[entry.pointIndex]
-    local candidatesByInstance = job.reverseSearch and job.reverseSearch.exitsByInstance or job.entrancesByInstance
-    local candidates = origin and candidatesByInstance[origin.instanceID]
+    local candidates = job.reverseSearch and origin and job.reverseSearch.exitsByInstance[origin.instanceID] or
+        job.movementPointIndexes
     local pointIndex = candidates and candidates[candidateIndex]
     if not origin or not pointIndex then
         job.movementEntry = nil
+        job.movementPointIndexes = nil
         job.nextMovementPointIndex = nil
         return
     end
@@ -638,6 +697,13 @@ local function OfferNextMovementPoint(job)
     local toMapID = job.reverseSearch and origin.mapID or target.mapID
     local _, speed = GetMovementSpeed(job.preparedData.movement, "automatic", fromMapID, toMapID)
     if not speed or speed <= 0 then return end
+    if job.destinationCostBucket then
+        -- The half-second margin includes every cost in the winning bucket.
+        -- Reject distant entrances before computing distance or building heap entries.
+        local remainingDistance = (job.destinationCostBucket + 0.5 - entry.cost) * speed
+        if math.abs(origin.x - target.x) > remainingDistance or
+            math.abs(origin.y - target.y) > remainingDistance then return end
+    end
     local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
     OfferPoint(job, pointIndex, entry.cost + seconds,
         entry.uncertainty, entry.pathCount, entry.pointIndex, nil, entry.signature, entry.finalCost)
@@ -677,10 +743,11 @@ local function SeedJob(job)
         local directCost = Navigation:GetPlayerTravelCost(job.preparedData,
             playerMapID, playerX, playerY, destination.mapID, destination.x, destination.y, "automatic")
         if directCost then
+            job.destinationCostBucket = GetCostBucket(directCost.comparisonSeconds)
             HeapPush(job.heap, {
                 pointIndex = 0,
                 cost = directCost.comparisonSeconds,
-                costBucket = GetCostBucket(directCost.comparisonSeconds),
+                costBucket = job.destinationCostBucket,
                 uncertainty = directCost.uncertaintySeconds,
                 pathCount = 0,
                 finalCost = directCost,
@@ -689,9 +756,10 @@ local function SeedJob(job)
         end
 
         local worldX, worldY, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(playerX, playerY, playerMapID)
-        local entrances = instanceID and job.entrancesByInstance[instanceID]
+        local origin = worldX and worldY and instanceID and
+            { x = worldX, y = worldY, instanceID = instanceID, mapID = playerMapID }
+        local entrances = origin and GetForwardMovementCandidates(job, origin, 0)
         if worldX and worldY and entrances then
-            local origin = { x = worldX, y = worldY }
             for _, pointIndex in ipairs(entrances) do
                 job.checkpoint()
                 local target = job.worldPoints[pointIndex]
@@ -902,6 +970,7 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         cancelled = false,
         worldPoints = {},
         entrancesByInstance = {},
+        entrancesByInstanceX = {},
         startedAt = startedAt,
         calculationSlices = 0,
         movementCandidates = 0,

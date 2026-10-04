@@ -56,6 +56,7 @@ local cancelPreparation ---@type fun()?
 local preparationFailure ---@type string?
 local hearthstonePathReferences = {} ---@type integer[]
 local hasBuffRequirements = false
+local observedMovementCapabilities ---@type NavigationMovementCapabilities?
 
 -- Ordinary movement stays available for approaching and leaving transport stops.
 local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
@@ -771,12 +772,15 @@ local function SameMovementCapabilities(first, second)
 end
 
 ---Aura traffic cannot change requirements when the graph contains no buff checks.
----Movement availability can still change. While dirty, a suspended worker may
----have observed different movement than the last published snapshot.
+---Compare with the latest observation, including an unfinished preparation pass.
+---Dirty data alone must not let repeated movement auras keep cancelling that pass.
 ---@return boolean
 function Navigation:NeedsAuraRefresh()
-    if hasBuffRequirements or preparedDataDirty or not preparedNavigationData then return true end
-    return not SameMovementCapabilities(self:GetMovementCapabilities(), preparedNavigationData.movement)
+    if hasBuffRequirements then return true end
+    local movement = self:GetMovementCapabilities()
+    local previous = observedMovementCapabilities
+    observedMovementCapabilities = movement
+    return previous ~= nil and not SameMovementCapabilities(movement, previous)
 end
 
 -- Synchronous readers only schedule preparation. The private candidate is
@@ -789,7 +793,7 @@ function Navigation:EnsurePreparedData()
     if self.routeNavigationEnabled and self.activeDestination and not cancelPreparation and not preparationFailure then
         local graph, changeNumber = navigationGraph, preparationChangeNumber
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
-            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(0.5)
+            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
             local previous = preparedNavigationData
@@ -833,6 +837,7 @@ function Navigation:EnsurePreparedData()
                 end
             end
             local movement = self:GetMovementCapabilities()
+            observedMovementCapabilities = movement
             if previous and SameMovementCapabilities(movement, previous.movement) then
                 movement = previous.movement
             end
