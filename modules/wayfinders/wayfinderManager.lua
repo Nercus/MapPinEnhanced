@@ -287,8 +287,9 @@ function Wayfinders:ClearPresentation()
 end
 
 ---@return boolean
-function Wayfinders:CanRemoveActiveTargetOnArrival()
-    return activeTarget ~= nil and not activeTarget.data.lock and activeTarget.onArrival ~= nil
+function Wayfinders:CanDetectActiveTargetArrival()
+    return activeTarget ~= nil and activeTarget.onArrival ~= nil and
+        (not activeTarget.data.lock or activeTarget.data.targetType == self.TARGET_TYPE_PIN)
 end
 
 ---@param sampledDistance number
@@ -306,8 +307,8 @@ function Wayfinders:GetActiveTargetArrivalDistance(sampledDistance)
     return math.max(sampledDistance, mapDistance)
 end
 
-function Wayfinders:RemoveActiveTargetOnArrival()
-    if not self:CanRemoveActiveTargetOnArrival() then return end
+function Wayfinders:CompleteActiveTargetArrival()
+    if not self:CanDetectActiveTargetArrival() then return end
 
     local target = activeTarget
     if not target then return end

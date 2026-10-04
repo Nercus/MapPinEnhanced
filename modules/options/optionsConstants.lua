@@ -45,9 +45,24 @@ Options.TRACKING_MODE_OPTIONS = {
     { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Options.TRACKING_MODE_ORDERED },
 }
 
+Options.SCALE_PRESETS = {
+    { label = L["Small (90%)"], value = 0.9 },
+    { label = L["Default (100%)"], value = 1 },
+    { label = L["Large (125%)"], value = 1.25 },
+    { label = L["Huge (150%)"], value = 1.5 },
+}
+
 Options.DEFAULTS = {
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
+    ["Pins.Appearance.AlwaysPingTracked"] = false,
+    ["Pins.Appearance.MinimapScale"] = 1,
+    ["Pins.Appearance.WorldMapScale"] = 1,
+    ["Pins.Appearance.DefaultColor"] = "Yellow",
+    ["Pins.Appearance.FadeUntracked"] = false,
+    ["Pins.Appearance.ShowMinimapPins"] = true,
+    ["Pins.Miscellaneous.EnableLockedPins"] = true,
+    ["Pins.Tracking.ArrivalNotification"] = "locked",
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
@@ -88,6 +103,24 @@ end
 -- config for radiogroups, dropdowns
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
+    ["Pins.Appearance.MinimapScale"] = Options.SCALE_PRESETS,
+    ["Pins.Appearance.WorldMapScale"] = Options.SCALE_PRESETS,
+    ["Pins.Appearance.DefaultColor"] = {
+        { label = L["Red"], value = "Red" },
+        { label = L["Orange"], value = "Orange" },
+        { label = L["Pale"], value = "Pale" },
+        { label = L["Yellow"], value = "Yellow" },
+        { label = L["Green"], value = "Green" },
+        { label = L["LightBlue"], value = "LightBlue" },
+        { label = L["DarkBlue"], value = "DarkBlue" },
+        { label = L["Purple"], value = "Purple" },
+        { label = L["Pink"], value = "Pink" },
+    },
+    ["Pins.Tracking.ArrivalNotification"] = {
+        { label = L["Only locked pins"], value = "locked" },
+        { label = L["All pins"], value = "all" },
+        { label = L["Disabled"], value = "disabled" },
+    },
     ["Wayfinder.Navigation.TransportationGroups"] = {
         { label = L["Navigation Transportation Portals"],             value = "portals" },
         { label = L["Navigation Transportation Flight paths"],        value = "flightPaths" },
@@ -182,3 +215,14 @@ for group, members in pairs(oldGroupMembers) do
 end
 MapPinEnhanced:SetVar("options", groupKey, groups)
 MapPinEnhanced:DeleteVar("options", "Wayfinder.Navigation.TransportationMethods")
+
+-- Options loads before Pins. Fill the swatches from its palette once that owner
+-- is ready, retaining the selected color and the normal dropdown change callback.
+MapPinEnhanced:OnLoad(function()
+    local Pins = MapPinEnhanced:GetModule("Pins")
+    local key = "Pins.Appearance.DefaultColor"
+    for _, option in ipairs(Options.OPTIONS_CONFIG[key]) do
+        option.label = Pins:GetColorMenuLabel(option.value)
+    end
+    Options.options[key]:Setup(Options:GetOptionValue(key))
+end)

@@ -106,3 +106,7 @@ local function OnSuperTrackingChanged()
 end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
+
+MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Pins.Appearance.ShowMinimapPins", function()
+    for _, pin in pairs(activePins) do pin:UpdateMinimapVisibility() end
+end)

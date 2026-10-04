@@ -49,7 +49,7 @@ function Wayfinders:ResetArrivalDetection()
 end
 
 function Wayfinders:CompleteArrival()
-    self:RemoveActiveTargetOnArrival()
+    self:CompleteActiveTargetArrival()
 end
 
 ---@param distance number
@@ -95,7 +95,7 @@ end
 ---@param nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, movementState)
-    if not self:CanRemoveActiveTargetOnArrival() then
+    if not self:CanDetectActiveTargetArrival() then
         self:ResetArrivalDetection()
         return
     end

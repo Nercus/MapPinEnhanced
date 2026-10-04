@@ -18,10 +18,17 @@ local PIN_ICON_MENU_ICONS = Pins.PIN_ICON_MENU_ICONS
 local PIN_ICON_MENU_COLUMNS = 4
 local PIN_ICON_MENU_ENTRY_SIZE = 36
 
+---@param colorName PinColor
+---@return string
+function Pins:GetColorMenuLabel(colorName)
+    local color = assert(PIN_COLORS_BY_NAME[colorName], "Pins:GetColorMenuLabel: unknown color " .. tostring(colorName))
+    return string.format(MENU_COLOR_BUTTON_PATTERN, MapPinEnhanced.basePath, color:GetRGBAsBytes())
+end
+
 ---@return AnyMenuEntry[]
 function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
     local title = self.pinData.title or L["Map Pin"]
-    return {
+    local entries = {
         {
             type = "template",
             template = "MapPinEnhancedMenuTitleActionTemplate",
@@ -40,9 +47,8 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             type = "submenu",
             entries = function()
                 local colorMenu = {}
-                for colorName, colorData in pairs(PIN_COLORS_BY_NAME) do
-                    local label = string.format(MENU_COLOR_BUTTON_PATTERN, MapPinEnhanced.basePath,
-                        colorData:GetRGBAsBytes())
+                for colorName in pairs(PIN_COLORS_BY_NAME) do
+                    local label = Pins:GetColorMenuLabel(colorName)
                     table.insert(colorMenu, {
                         type = "radio",
                         label = label,
@@ -158,6 +164,15 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             end
         }
     }
+    if self:IsLocked() or MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") then
+        table.insert(entries, #entries - 2, {
+            type = "button",
+            label = MapPinEnhanced:Iconize(self:IsLocked() and "unlock" or "lock",
+                self:IsLocked() and L["Unlock Pin"] or L["Lock Pin"]),
+            onClick = function() self:ToggleLock() end,
+        })
+    end
+    return entries
 end
 
 ---@param parent MapPinEnhancedWorldmapPinTemplate |MapPinEnhancedTrackerPinEntryTemplate

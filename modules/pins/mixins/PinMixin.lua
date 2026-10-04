@@ -31,6 +31,7 @@ local DEFAULT_PIN_NAME = L["Map Pin"]
 ---@field framePool FramePoolCollection<MapPinEnhancedWorldmapPinTemplate | MapPinEnhancedMinimapPinTemplate>
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Options = MapPinEnhanced:GetModule("Options")
 
 function MapPinEnhancedPinMixin:UpdateGroupIcon()
     local group = self.group
@@ -116,9 +117,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, groupWillPersist)
     local worldMapSuccess = HBDP:AddWorldMapIconMap(MapPinEnhanced, self.worldmapPin, self.pinData.mapID, self.pinData.x,
         self.pinData.y, 3,
         "PIN_FRAME_LEVEL_WAYPOINT_LOCATION")
-    local minimapSuccess = HBDP:AddMinimapIconMap(MapPinEnhanced, self.minimapPin, self.pinData.mapID, self.pinData.x,
-        self.pinData.y, false,
-        false)
+    local minimapSuccess = self:UpdateMinimapVisibility()
 
     if not worldMapSuccess or not minimapSuccess then
         self:Reset()
@@ -202,6 +201,9 @@ function MapPinEnhancedPinMixin:Reset()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
         self.worldmapPin:SetScript("OnMouseDown", nil)
         self.worldmapPin.pin = nil
+        self.worldmapPin:SetUntracked()
+        self.worldmapPin:SetHovered(false)
+        self.worldmapPin:SetAlpha(1)
         Pins:GetFramePool():Release(self.worldmapPin)
         self.worldmapPin = nil
     end
@@ -212,6 +214,9 @@ function MapPinEnhancedPinMixin:Reset()
         HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
         self.minimapPin:SetScript("OnMouseDown", nil)
         self.minimapPin.pin = nil
+        self.minimapPin:SetUntracked()
+        self.minimapPin:SetHovered(false)
+        self.minimapPin:SetAlpha(1)
         Pins:GetFramePool():Release(self.minimapPin)
         self.minimapPin = nil
     end
@@ -238,4 +243,15 @@ function MapPinEnhancedPinMixin:PersistPin()
     if self.groupIsAddingPin or self.suppressPersistence then return end
     if not self.group then return end
     Groups:PersistGroup(self.group)
+end
+
+---@return boolean?
+function MapPinEnhancedPinMixin:UpdateMinimapVisibility()
+    if not self.initialized or not self.pinData then return true end
+    if not Options:GetOptionValue("Pins.Appearance.ShowMinimapPins") then
+        HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
+        return true
+    end
+    local data = self.pinData
+    return HBDP:AddMinimapIconMap(MapPinEnhanced, self.minimapPin, data.mapID, data.x, data.y, false, false)
 end

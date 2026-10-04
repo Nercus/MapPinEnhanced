@@ -13,6 +13,7 @@
         <Scripts>
             <OnLoad method="OnLoad" inherit="append" />
             <OnHide method="OnHide" inherit="append" />
+            <OnShow method="OnShow" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>

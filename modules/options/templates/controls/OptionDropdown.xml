@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="OptionDropdown.lua" />
+    <Frame name="MapPinEnhancedOptionDropdownTemplate" virtual="true" inherits="MapPinEnhancedFormElementTemplate" mixin="MapPinEnhancedOptionDropdownMixin">
+        <Size x="1" y="1" />
+        <Frames>
+            <DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate">
+                <Size x="180" y="25" />
+            </DropdownButton>
+        </Frames>
+    </Frame>
+</Ui>

@@ -14,7 +14,16 @@ local HOVER_SCALE_DURATION = 0.15
 local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / HOVER_SCALE_DURATION
 
 function MapPinEnhancedWorldmapPinMixin:OnLoad()
+    Options:SubscribeToOptionChanges("Pins.Appearance.AlwaysPingTracked", function()
+        self:RefreshTrackingPulse()
+    end)
     self.pulseHighlight:SetIgnoreParentScale(true)
+    Options:SubscribeToOptionChanges("Pins.Appearance.WorldMapScale", function(value)
+        self:SetSize(25 * value, 25 * value)
+    end)
+    Options:SubscribeToOptionChanges("Pins.Appearance.FadeUntracked", function()
+        self:ApplyHoverStyle()
+    end)
     Options:SubscribeToOptionChanges("Pins.Miscellaneous.ScaleOnHover", function(value)
         self.hoverScaleEnabled = value
         if value then return end
@@ -28,8 +37,13 @@ function MapPinEnhancedWorldmapPinMixin:ResetHoverScale()
     self:SetScale(1)
 end
 
+function MapPinEnhancedWorldmapPinMixin:OnShow()
+    if Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then self:RefreshTrackingPulse() end
+end
+
 function MapPinEnhancedWorldmapPinMixin:OnHide()
     self:ResetHoverScale()
+    self:HidePulse()
 end
 
 ---@param elapsed number
@@ -71,4 +85,40 @@ function MapPinEnhancedWorldmapPinMixin:OnLeave()
     self:SetHovered(false)
     self:SetHoverScale(false)
     GameTooltip:Hide()
+end
+
+function MapPinEnhancedWorldmapPinMixin:ApplyHoverStyle()
+    MapPinEnhancedBasePinMixin.ApplyHoverStyle(self)
+    self:SetAlpha(Options:GetOptionValue("Pins.Appearance.FadeUntracked") and
+        not self.tracked and not self.hovered and 0.4 or 1)
+end
+
+function MapPinEnhancedWorldmapPinMixin:RefreshTrackingPulse()
+    self:HidePulse()
+    if self.tracked and self:IsVisible() and Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then
+        local fadeIn, scale, fadeOut = self.pulseHighlight.pulse:GetAnimations()
+        fadeIn:SetDuration(0.5)
+        scale:SetDuration(1.5)
+        fadeOut:SetDuration(0.5)
+        MapPinEnhancedBasePinMixin.ShowPulse(self)
+    end
+end
+
+-- Explicit Show on Map pulses keep their original timing and then resume the preference.
+function MapPinEnhancedWorldmapPinMixin:ShowPulseLoops(repeats)
+    self:HidePulse()
+    local fadeIn, scale, fadeOut = self.pulseHighlight.pulse:GetAnimations()
+    fadeIn:SetDuration(0.2)
+    scale:SetDuration(0.5)
+    fadeOut:SetDuration(0.2)
+    MapPinEnhancedBasePinMixin.ShowPulse(self)
+    self.pulseTimer = C_Timer.NewTimer(repeats * 0.85, function()
+        self.pulseTimer = nil
+        self:RefreshTrackingPulse()
+    end)
+end
+
+function MapPinEnhancedWorldmapPinMixin:SetTracked(skipAnimation)
+    MapPinEnhancedBasePinMixin.SetTracked(self, skipAnimation)
+    if Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then self:RefreshTrackingPulse() end
 end

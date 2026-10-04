@@ -38,6 +38,11 @@ function MapPinEnhancedGroupPinAddingMixin:AddPin(pinData, overridePinID)
     if not self:CancelBatch() then return nil end
     assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
 
+    -- Only new additions materialize the preference. Restore/import use their retained data.
+    if not overridePinID and not pinData.texture and not pinData.color then
+        pinData = CopyTable(pinData)
+        pinData.color = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Appearance.DefaultColor") --[[@as PinColor]]
+    end
     local pin, pinID, replacedWayBackPin, shouldTrack = self:AddBeforePersist(pinData, overridePinID)
     if not pinID then return nil, nil end
     self:PruneOldestReachedPins()

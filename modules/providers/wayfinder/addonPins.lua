@@ -5,8 +5,11 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Notifications = MapPinEnhanced:GetModule("Notifications")
+---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
+local Options = MapPinEnhanced:GetModule("Options")
 local TARGET_OWNER = "addonPins"
+local arrivalDetected = false
 
 ---@type UiMapPoint?
 local placedUserWaypoint = nil
@@ -170,10 +173,20 @@ end
 ---@param pinID UUID
 local function RemoveTrackedPin(pinID)
     local pin = Pins:GetPinByID(pinID)
-    local group = pin and pin.group
-    if group then
-        group:MarkPinReached(pinID)
+    if not pin or not pin:IsTracked() or trackedPinID ~= pinID then return end
+    local locked = pin:IsLocked()
+    if not arrivalDetected then
+        arrivalDetected = true
+        local mode = Options:GetOptionValue("Pins.Tracking.ArrivalNotification") --[[@as string]]
+        if mode == "all" or mode == "locked" and locked then
+            local data = pin:GetPinData()
+            local location = string.format("%.2f, %.2f", data.x * 100, data.y * 100)
+            Notifications:ShowNotification(locked and "PIN_LOCKED_NAMED" or "PIN_NAMED_REACHED",
+                data.title or MapPinEnhanced.L["Map Pin"], location)
+        end
     end
+    -- Detection is independent of removal permission; a locked destination stays owned.
+    if not locked and pin.group then pin.group:MarkPinReached(pinID) end
 end
 
 ---@param eventName "PIN_TRACKING_CHANGED"
@@ -187,6 +200,7 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         -- selection. This domain command already supersedes the external row.
         Providers:UpdateSuperTrackingEntrySelection(nil, nil, true)
         local wayfinderData = TransformPinDataToWayfinderData(trackedPin:GetPinData())
+        if trackedPinID ~= pinID then arrivalDetected = false end
         trackedPinID = pinID
         SetTrackedPinUserWaypoint(wayfinderData)
         Providers:CancelSuperTrackingTargetRetries()
@@ -203,6 +217,7 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         ClearTrackedPinUserWaypoint()
         Navigation:ClearDestination(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber)
         trackedPinID = nil
+        arrivalDetected = false
         trackedTargetChangeNumber = nil
     end
 end
@@ -215,3 +230,8 @@ MapPinEnhanced:OnLoad(function()
 end)
 
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypointUpdated)
+
+function Providers:CancelAddonPinSelection()
+    shouldSuperTrackUserWaypoint = false
+    placedUserWaypoint = nil
+end
