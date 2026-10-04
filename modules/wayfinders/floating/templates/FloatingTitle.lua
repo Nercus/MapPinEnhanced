@@ -78,9 +78,8 @@ end
 function MapPinEnhancedWayfinderFloatingTitleMixin:SetDestinationText(title, description)
     self.fullDescription = description
     self:SetTitle(title)
-    if self.fallback then description = nil end
-    self.description:Apply(title, description)
-    if self.fallback then self.description:HideImmediately() end
+    self.description:Apply(title, nil)
+    self.description:HideImmediately()
     self:UpdateLayout()
 end
 
