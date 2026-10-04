@@ -12,7 +12,15 @@ local TAXI_POSITION_TOLERANCE = 0.005
 -- Only mainline's 11.0+ discovery contract can establish knowledge from maps.
 local _, _, _, interfaceVersion = GetBuildInfo()
 local mapReportsDiscovery = type(interfaceVersion) == "number" and interfaceVersion >= 110000
-local learnedTaxiNodes = {} ---@type table<number, boolean>
+
+---@return table<number, boolean>?
+local function GetLearnedTaxiNodes()
+    local characterKey = MapPinEnhanced:GetCharacterKey()
+    if not characterKey then return nil end
+    local saved = MapPinEnhanced:GetVar("learnedTaxiNodes")
+    local nodes = type(saved) == "table" and saved[characterKey] or nil
+    return type(nodes) == "table" and nodes or nil
+end
 
 ---@class NavigationFlightTaxiData
 ---@field fromMap number
@@ -116,6 +124,7 @@ local function GetTaxiNodes(mapID)
         taxiNodesByMap[mapID] = false
         return nil
     end
+    local learnedTaxiNodes = not mapReportsDiscovery and GetLearnedTaxiNodes() or nil
     for _, node in ipairs(observedNodes) do
         if not MapPinEnhanced:IsSecretValue(node) and type(node) == "table" then
             local position = node.position
@@ -126,7 +135,7 @@ local function GetTaxiNodes(mapID)
                 if MapPinEnhanced:IsSecretValue(x) or MapPinEnhanced:IsSecretValue(y) then x, y = nil, nil end
             end
             if MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) then
-                local known = learnedTaxiNodes[node.nodeID] ---@type boolean?
+                local known = learnedTaxiNodes and learnedTaxiNodes[node.nodeID] == true or nil ---@type boolean?
                 if mapReportsDiscovery then
                     known = nil
                     if not MapPinEnhanced:IsSecretValue(node.isUndiscovered) and
@@ -164,7 +173,10 @@ end
 ---@param nodeID number
 ---@return boolean? known
 function Navigation:IsTaxiNodeKnown(nodeID)
-    if not mapReportsDiscovery then return learnedTaxiNodes[nodeID] end
+    if not mapReportsDiscovery then
+        local learnedTaxiNodes = GetLearnedTaxiNodes()
+        return learnedTaxiNodes and learnedTaxiNodes[nodeID] == true or nil
+    end
     local node = GetTaxiNodeByID(nodeID)
     if node then return node.known end
     return nil
@@ -401,11 +413,21 @@ end
 ---@param nodeIDs number[]
 function Navigation:RecordLearnedTaxiNodes(nodeIDs)
     if mapReportsDiscovery then return end
-    -- Learned identity survives flight-map closure; reachability and itineraries
-    -- do not. This local table starts empty for every character login/reload.
+    local characterKey = MapPinEnhanced:GetCharacterKey()
+    if not characterKey then return end
+    local saved = MapPinEnhanced:GetVar("learnedTaxiNodes")
+    if type(saved) ~= "table" then saved = {} end
+    ---@cast saved table<string, table<number, boolean>>
+    local learnedTaxiNodes = GetLearnedTaxiNodes() or {}
+    -- Persist positive character knowledge only. Missing/unreachable nodes at
+    -- another master must not erase it; reachability and itineraries stay live.
     for _, nodeID in ipairs(nodeIDs) do
-        learnedTaxiNodes[nodeID] = true
+        if MapPinEnhanced:IsReadablePositiveInteger(nodeID) then
+            learnedTaxiNodes[nodeID] = true
+        end
     end
+    saved[characterKey] = learnedTaxiNodes
+    MapPinEnhanced:SetVar("learnedTaxiNodes", saved)
     self:ClearTaxiNodeKnowledge()
 end
 
