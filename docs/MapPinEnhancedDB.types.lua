@@ -14,6 +14,8 @@
 ---@field showInCompartment boolean?
 
 ---@class MapPinEnhancedDB
+---@field legacyOptionsMigrated boolean? Legacy preferences were copied; source fields remain for recovery.
+---@field legacyGroupsMigrated boolean? Legacy pins/sets were copied once; source fields remain for recovery.
 ---@field options table<string, number|string|boolean|table>?
 ---@field trackerVisible boolean?
 ---@field trackerMinimized boolean?

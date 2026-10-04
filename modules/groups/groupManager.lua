@@ -358,6 +358,7 @@ function Groups:CreateDefaultGroups()
 end
 
 MapPinEnhanced:OnLoad(function()
+    Groups:MigrateLegacyData()
     Groups:RestoreAllGroups()
     Groups:CreateDefaultGroups()
 end)

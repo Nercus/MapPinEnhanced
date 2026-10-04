@@ -443,3 +443,8 @@ L["Minimize"] = "Minimize"
 L["Expand"] = "Expand"
 L["Lock Pin"] = "Lock Pin"
 L["Unlock Pin"] = "Unlock Pin"
+
+------------------------------ Legacy migration ------------------------------
+L["Legacy migration could not update groups. Original saved data was kept."] = "Legacy migration could not update groups. Original saved data was kept."
+L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] = "Migrated %d legacy pins and %d saved sets. Original saved data was kept."
+L["%d legacy entries could not be migrated. Original saved data was kept."] = "%d legacy entries could not be migrated. Original saved data was kept."
