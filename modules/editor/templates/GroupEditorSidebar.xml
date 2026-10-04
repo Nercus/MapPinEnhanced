@@ -81,15 +81,27 @@
                                 <Anchor point="BOTTOMLEFT" relativeKey="$parent.divider" relativePoint="TOPLEFT" x="8" y="2" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="info" inherits="GameFontHighlightSmall" text="i" justifyH="CENTER" justifyV="MIDDLE">
-                            <Size x="12" y="12" />
-                            <Anchors>
-                                <Anchor point="LEFT" relativeKey="$parent.title" relativePoint="RIGHT" x="5" />
-                            </Anchors>
-                        </FontString>
                     </Layer>
                 </Layers>
                 <Frames>
+                    <Frame parentKey="info" enableMouse="true" propagateMouseInput="Clicks">
+                        <Size x="12" y="12" />
+                        <Anchors>
+                            <Anchor point="LEFT" relativeKey="$parent.title" relativePoint="RIGHT" x="5" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture inherits="MapPinEnhancedIconTemplate" setAllPoints="true">
+                                    <KeyValues>
+                                        <KeyValue key="icon" value="info" />
+                                    </KeyValues>
+                                </Texture>
+                            </Layer>
+                        </Layers>
+                        <Scripts>
+                            <OnHide>if GameTooltip:IsOwned(self) then GameTooltip:Hide() end</OnHide>
+                        </Scripts>
+                    </Frame>
                     <Button parentKey="wayBackEntry" inherits="MapPinEnhancedGroupEditorSidebarEntryTemplate">
                         <Anchors>
                             <Anchor point="BOTTOMLEFT" />

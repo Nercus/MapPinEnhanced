@@ -49,12 +49,15 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString text="i" inherits="GameFontNormalTiny" justifyH="LEFT" justifyV="TOP" wordwrap="true" spacing="3">
-                            <Color r="1" g="0.82" b="0.00" />
+                        <Texture inherits="MapPinEnhancedIconTemplate">
+                            <Size x="12" y="12" />
+                            <KeyValues>
+                                <KeyValue key="icon" value="info" />
+                            </KeyValues>
                             <Anchors>
                                 <Anchor point="CENTER" />
                             </Anchors>
-                        </FontString>
+                        </Texture>
                     </Layer>
                 </Layers>
                 <Scripts>

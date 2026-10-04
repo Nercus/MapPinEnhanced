@@ -72,8 +72,7 @@
             <Button parentKey="reportButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="22" y="22" />
                 <KeyValues>
-                    <!-- TODO: Replace the export icon with a proper report icon. -->
-                    <KeyValue key="icon" value="export" />
+                    <KeyValue key="icon" value="report" />
                     <KeyValue key="tooltip" value="Report" />
                 </KeyValues>
                 <Anchors>

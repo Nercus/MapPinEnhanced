@@ -7,7 +7,7 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@class MapPinEnhancedEditorSystemGroups : Frame
 ---@field title FontString
----@field info FontString
+---@field info Frame
 ---@field ungroupedPinsEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
 ---@field wayBackEntry MapPinEnhancedGroupEditorSidebarEntryTemplate
 ---@field entries MapPinEnhancedGroupEditorSidebarEntryTemplate[]

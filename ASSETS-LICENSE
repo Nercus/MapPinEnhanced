@@ -89,6 +89,7 @@ assets/icons/
 - assets/icons/IconEye.png
 - assets/icons/IconEyeSlash.png
 - assets/icons/IconImport.png
+- assets/icons/IconInfo.png
 - assets/icons/IconList.png
 - assets/icons/IconLock.png
 - assets/icons/IconMap.png
@@ -96,6 +97,7 @@ assets/icons/
 - assets/icons/IconPalette.png
 - assets/icons/IconPinLogo.png
 - assets/icons/IconPlus.png
+- assets/icons/IconReport.png
 - assets/icons/IconRightCaret.png
 - assets/icons/IconRoute.png
 - assets/icons/IconSearch.png
@@ -134,6 +136,7 @@ assets/shared/
 - assets/shared/MinimapHighlight.png
 - assets/shared/RepeatableCheckers.png
 - assets/shared/RepeatableStripes.png
+- assets/shared/Spinner.png
 - assets/shared/ToggleThumb.png
 
 assets/wayfinders/arrow/
