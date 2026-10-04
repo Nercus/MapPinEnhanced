@@ -58,7 +58,7 @@ local presentationChangeNumber = 0
 ---@param toMapID number
 ---@return boolean
 local function RequiresDestinationMap(pathType, fromMapID, toMapID)
-    return pathType == "floor" or
+    return pathType == "floor" or pathType == "border" or
         (pathType == "portal" or pathType == "localportal" or pathType == "gossip") and fromMapID ~= toMapID
 end
 
@@ -761,7 +761,7 @@ function Navigation:PublishStep(progression)
             if not self:IsCurrentProgression(progression) then return end
             self:ApplyProgressionPhase(progression, "ready")
         end
-    elseif pathType == "floor" or self:IsMovementPath(pathType) or
+    elseif pathType == "floor" or pathType == "border" or self:IsMovementPath(pathType) or
         progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" then
         onArrival = function()
             self:CompleteCurrentPath(progression)
@@ -792,7 +792,7 @@ function Navigation:PublishStep(progression)
         showDirection = desiredAction == nil and
             (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
-        arrivalMapID = (pathType == "floor" or progression.phase == "in-transit") and
+        arrivalMapID = (pathType == "floor" or pathType == "border" or progression.phase == "in-transit") and
             RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
                 graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[targetPointIndex] or nil,
         stepIndex = progression.pathIndex,
@@ -873,9 +873,9 @@ function Navigation:CheckCurrentPathCompletion(identity)
         return
     end
     if graph.pathTypes[pathReference] == "phaseswitch" or graph.pathTypes[pathReference] == "flighttaxi" then return end
-    -- Floor endpoints advance through their own arrival callbacks in order.
+    -- Floor and border endpoints advance through their arrival callbacks in order.
     -- Exit vicinity must not skip the entrance or hide exit guidance.
-    if pathType == "floor" and destinationDistance then return end
+    if (pathType == "floor" or pathType == "border") and destinationDistance then return end
     if destinationDistance and destinationDistance <= 100 and
         (not RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
             graph.pointMapIDs[toPointIndex]) or playerMapID == graph.pointMapIDs[toPointIndex]) then
@@ -928,7 +928,7 @@ function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _ne
     local reference = progression.route.pathReferences[progression.pathIndex]
     if reference and not self:IsMovementPath(progression.route.graph.pathTypes[reference]) then
         local changeNumber = progression.changeNumber
-        -- Arrival at a stop or a floor exit need not produce a zone event.
+        -- Arrival at a stop, floor exit or border exit need not produce a zone event.
         self:CheckCurrentPathCompletion()
         if progression.changeNumber ~= changeNumber then return end
     end
@@ -1375,7 +1375,8 @@ function Navigation:BuildRouteLayer(isWorldMap)
     currentY = currentY or route.originY
     local firstPathReference = route.pathReferences[progression.pathIndex]
     local targetsPathEnd = firstPathReference and (self:IsMovementPath(graph.pathTypes[firstPathReference]) or
-        graph.pathTypes[firstPathReference] == "floor" and progression.phase ~= "approach" or
+        (graph.pathTypes[firstPathReference] == "floor" or graph.pathTypes[firstPathReference] == "border") and
+        progression.phase ~= "approach" or
         progression.phase == "in-transit" and graph.pathTypes[firstPathReference] ~= "phaseswitch")
     if firstPathReference then
         local firstFromPointIndex = graph.pathFromPointIndexes[firstPathReference]
@@ -1429,10 +1430,11 @@ function Navigation:BuildRouteLayer(isWorldMap)
                     graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
                 if startFrame and endFrame then
                     startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
-                    -- The active floor shows only its current endpoint; keep
+                    -- The active floor or border shows only its current endpoint; keep
                     -- the exit as a line anchor until entrance arrival.
                     if legIndex == segments and
-                        (pathIndex ~= progression.pathIndex or graph.pathTypes[pathReference] ~= "floor") then
+                        (pathIndex ~= progression.pathIndex or
+                            graph.pathTypes[pathReference] ~= "floor" and graph.pathTypes[pathReference] ~= "border") then
                         endFrame:SetRoutePoint(graph.pathTypes[pathReference])
                     end
                 end
