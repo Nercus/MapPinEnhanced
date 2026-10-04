@@ -3,7 +3,9 @@
     <Texture name="MapPinEnhancedWayfinderLoadingTemplate" virtual="true" hidden="true" file="Interface\AddOns\MapPinEnhanced\assets\shared\Spinner.png">
         <Size x="32" y="32" />
         <Animations>
-            <AnimationGroup parentKey="spin" inherits="MapPinEnhancedAnimationSpin" />
+            <AnimationGroup parentKey="spin" looping="REPEAT">
+                <Rotation degrees="-360" duration="0.5" smoothing="IN_OUT" />
+            </AnimationGroup>
         </Animations>
         <Scripts>
             <OnShow>self.spin:Play()</OnShow>
