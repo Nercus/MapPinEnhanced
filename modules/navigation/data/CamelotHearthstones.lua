@@ -45,3 +45,6 @@ Navigation.hearthstoneItems = {
     [263933] = 1270814, -- Preyseeker's Hearthstone
     [265100] = 1273401, -- Corewarden's Hearthstone
 }
+
+-- Astral Recall shares the learned home bind with hearthstone items.
+Navigation.hearthstoneSpells = { 556 }

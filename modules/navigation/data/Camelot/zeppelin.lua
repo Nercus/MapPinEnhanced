@@ -17,6 +17,7 @@ local ZEPPELIN = {
         toX = 0.3135,
         toY = 0.3012,
         type = "zeppelin",
+        transportSchedule = { routeID = 285, fromDock = 4, toDock = 3 },
         requirement = {
             operation = "all",
             children = {
@@ -40,6 +41,7 @@ local ZEPPELIN = {
         toX = 0.607,
         toY = 0.5876,
         type = "zeppelin",
+        transportSchedule = { routeID = 302, fromDock = 13, toDock = 14 },
         requirement = {
             operation = "all",
             children = {
@@ -65,6 +67,7 @@ local ZEPPELIN = {
         toX = 0.5057,
         toY = 0.1266,
         type = "zeppelin",
+        transportSchedule = { routeID = 285, fromDock = 3, toDock = 4 },
         requirement = {
             operation = "all",
             children = {
@@ -88,6 +91,7 @@ local ZEPPELIN = {
         toX = 0.6188,
         toY = 0.591,
         type = "zeppelin",
+        transportSchedule = { routeID = 301, fromDock = 11, toDock = 12 },
         requirement = {
             operation = "all",
             children = {
@@ -113,6 +117,7 @@ local ZEPPELIN = {
         toX = 0.5082,
         toY = 0.1381,
         type = "zeppelin",
+        transportSchedule = { routeID = 302, fromDock = 14, toDock = 13 },
         requirement = {
             operation = "all",
             children = {
@@ -136,6 +141,7 @@ local ZEPPELIN = {
         toX = 0.3153,
         toY = 0.2915,
         type = "zeppelin",
+        transportSchedule = { routeID = 301, fromDock = 12, toDock = 11 },
         requirement = {
             operation = "all",
             children = {
@@ -161,6 +167,7 @@ local ZEPPELIN = {
         toX = 0.6584,
         toY = 0.8381,
         type = "zeppelin",
+        transportSchedule = { routeID = 11398, fromDock = 20, toDock = 21 },
         travelDuration = 151,
         requirement = {
             operation = "all",
@@ -184,6 +191,7 @@ local ZEPPELIN = {
         toX = 0.1283,
         toY = 0.5117,
         type = "zeppelin",
+        transportSchedule = { routeID = 11398, fromDock = 21, toDock = 20 },
         travelDuration = 170,
         requirement = {
             operation = "all",
@@ -207,6 +215,7 @@ local ZEPPELIN = {
         toX = 0.5775,
         toY = 0.81,
         type = "zeppelin",
+        transportSchedule = { routeID = 11457, fromDock = 22, toDock = 23 },
         travelDuration = 135,
     },
     -- Zephras Isle (map 2521 57.75,81.00) -> Mulgore (map 1412 34.33,26.05) via zeppelin
@@ -220,6 +229,7 @@ local ZEPPELIN = {
         toX = 0.3433,
         toY = 0.2605,
         type = "zeppelin",
+        transportSchedule = { routeID = 11457, fromDock = 23, toDock = 22 },
         travelDuration = 174,
     },
 }

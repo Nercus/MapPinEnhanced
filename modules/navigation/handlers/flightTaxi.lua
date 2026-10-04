@@ -32,6 +32,8 @@ end
 ---@field fromTaxiNodeID number?
 ---@field toTaxiNodeID number?
 ---@field taxiPathIDs integer[]
+---@field travelDurationEstimated boolean?
+---@field flightShape number[]?
 
 ---@class NavigationTaxiNodeState
 ---@field nodeID number
@@ -96,6 +98,8 @@ local function Dataprovider(path)
     end
     return {
         taxiPathIDs = ids,
+        flightShape = Navigation.flightShapes and Navigation.flightShapes[tostring(path.fromTaxiNodeID) .. ":" .. tostring(path.toTaxiNodeID)],
+        travelDurationEstimated = path.travelDurationEstimated,
         fromMap = path.fromMap,
         fromX = path.fromX,
         fromY = path.fromY,
@@ -235,9 +239,10 @@ end
 local function PriceLeg(graph, reference)
     local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
     local duration = graph.pathDurations[reference]
-    local estimated = type(duration) ~= "number" or duration <= 0 or duration == math.huge
+    local hasDuration = type(duration) == "number" and duration > 0 and duration < math.huge
+    local estimated = not hasDuration or data.travelDurationEstimated == true
     local seconds = duration or 0
-    if estimated then
+    if not hasDuration then
         local distance = Navigation:GetComparableDistance(data.fromMap, data.fromX, data.fromY,
             data.toMap, data.toX, data.toY)
         seconds = distance and math.max(1, distance / TAXI_ESTIMATED_SPEED) or TAXI_FALLBACK_SECONDS
@@ -248,7 +253,8 @@ local function PriceLeg(graph, reference)
     return {
         expectedSeconds = seconds, uncertaintySeconds = uncertainty,
         comparisonSeconds = seconds + uncertainty,
-        explanation = { kind = "flight-taxi", timingScope = estimated and "endpoint-estimate" or "authored-pair",
+        explanation = { kind = "flight-taxi", timingScope = not hasDuration and "endpoint-estimate" or
+            estimated and "path-geometry-estimate" or "authored-pair",
             estimated = estimated, sourceVerified = #data.taxiPathIDs > 0,
             taxiPathIDs = data.taxiPathIDs, fromTaxiNodeID = data.fromTaxiNodeID,
             toTaxiNodeID = data.toTaxiNodeID },

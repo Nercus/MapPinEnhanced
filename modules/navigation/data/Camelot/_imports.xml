@@ -1,8 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="transportData.lua" />
+    <Script file="flightShapes.lua" />
     <Script file="border.lua" />
     <Script file="flighttaxi.lua" />
     <Script file="item.lua" />
+    <Script file="lift.lua" />
     <Script file="portal.lua" />
     <Script file="ship.lua" />
     <Script file="spell.lua" />

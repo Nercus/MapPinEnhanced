@@ -15,11 +15,14 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field toY number
 ---@field type string
 ---@field travelDuration number?
+---@field travelDurationEstimated boolean? TaxiPathNode geometry estimate, not a measured timing
 ---@field fromTaxiNodeID number?
 ---@field toTaxiNodeID number?
 ---@field taxiPathIDs integer[]?
 ---@field requirement NavigationRequirement?
 ---@field gossip NavigationStaticGossip?
+---@field transportSchedule NavigationTransportLink?
+---@field transportAccessSeconds number?
 
 ---@class NavigationStaticGossip
 ---@field npcID number
@@ -290,6 +293,17 @@ function Navigation:BuildGraph()
         table.insert(hearthstonePathReferences, reference)
     end
 
+    for _, spellID in ipairs(self.hearthstoneSpells or {}) do
+        local reference = graph.pathCount + 1
+        graph.pathCount = reference
+        graph.pathToPointIndexes[reference] = hearthstonePointIndex
+        graph.pathTypes[reference] = "hearthstone"
+        graph.pathRequirements[reference] = { operation = "check", kind = "spellKnown", value = spellID }
+        graph.excludedPaths[reference] = "hearthstone destination unknown"
+        table.insert(graph.currentPlayerPathReferences, reference)
+        table.insert(hearthstonePathReferences, reference)
+    end
+
     local nextOffset = 1
     local nextPathOffsetByPointIndex = {} ---@type integer[]
     for pointIndex = 1, #graph.pointIDs do
@@ -503,9 +517,10 @@ local function EvaluateDirectCheck(key, value)
         return UNKNOWN
     elseif key == "item" then
         if type(value) ~= "number" then return UNKNOWN end
-        if C_Item and C_Item.GetItemCount then return StateFromBoolean(C_Item.GetItemCount(value) > 0) end
-        if GetItemCount then return StateFromBoolean(GetItemCount(value) > 0) end
-        return UNKNOWN
+        local count = C_Item and C_Item.GetItemCount and C_Item.GetItemCount(value) or
+            GetItemCount and GetItemCount(value)
+        if MapPinEnhanced:IsSecretValue(count) or type(count) ~= "number" then return UNKNOWN end
+        return StateFromBoolean(count > 0)
     elseif key == "toy" or key == "toyKnown" then
         return EvaluateToyOwnership(value)
     elseif key == "achievement" then

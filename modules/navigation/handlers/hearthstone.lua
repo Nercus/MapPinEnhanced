@@ -175,6 +175,7 @@ function Navigation:SetupHearthstoneDestination()
     if not characterKey then return end
     setup = true
     for _, spellID in pairs(self.hearthstoneItems) do hearthstoneSpells[spellID] = true end
+    for _, spellID in ipairs(self.hearthstoneSpells or {}) do hearthstoneSpells[spellID] = true end
     local saved = MapPinEnhanced:GetVar("hearthstoneDestinations")
     local value = type(saved) == "table" and saved[characterKey] or nil
     if IsDestination(value) then

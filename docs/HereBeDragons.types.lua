@@ -18,3 +18,13 @@ HereBeDragons = {}
 ---@return number y Y coordinate in the World Coordinate system
 ---@return number instance InstanceID of the continent these coordinates belong to
 function HereBeDragons:GetWorldCoordinatesFromZone(x, y, zone) end
+
+--- Project world west/north coordinates onto a UI map in the matching instance.
+---@param x number
+---@param y number
+---@param instance number
+---@param zone number
+---@param allowOutOfBounds boolean?
+---@return number? x
+---@return number? y
+function HereBeDragons:GetZoneCoordinatesFromWorldInstance(x, y, instance, zone, allowOutOfBounds) end

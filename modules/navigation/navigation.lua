@@ -1300,6 +1300,41 @@ local function AcquireRouteMapEndpoints(step, isWorldMap, fromMapID, fromX, from
     return startFrame, endFrame
 end
 
+-- Flight shapes are display-only: booking, costs and arrival still use exact
+-- taxi node identities. HBD's world axes are west/north; DB2 stores north/west.
+---@param step NavigationStep
+---@param isWorldMap boolean
+---@param shape number[]?
+---@param isCurrent boolean
+---@return boolean
+local function DrawFlightShape(step, isWorldMap, shape, isCurrent)
+    if not shape or #shape < 6 then return false end
+    local drawn = false
+    -- Bound pooled map frames even when a source polyline has many points.
+    local stride = 3 * math.max(1, math.ceil((#shape / 3 - 1) / 32))
+    for index = 1, #shape - 3, stride do
+        local nextIndex = math.min(index + stride, #shape - 2)
+        local world = shape[index]
+        local mapID = world == 0 and 1415 or world == 1 and 1414 or nil
+        if mapID and world == shape[nextIndex] then
+            local fromX, fromY ---@type number?, number?
+            fromX, fromY = MapPinEnhanced.HBD:GetZoneCoordinatesFromWorldInstance(
+                shape[index + 2], shape[index + 1], world, mapID)
+            local toX, toY ---@type number?, number?
+            toX, toY = MapPinEnhanced.HBD:GetZoneCoordinatesFromWorldInstance(
+                shape[nextIndex + 2], shape[nextIndex + 1], world, mapID)
+            if fromX and fromY and toX and toY then
+                local first, last = AcquireRouteMapEndpoints(step, isWorldMap, mapID, fromX, fromY, mapID, toX, toY)
+                if first and last then
+                    first:SetRouteLine(last, isCurrent)
+                    drawn = true
+                end
+            end
+        end
+    end
+    return drawn
+end
+
 ---@param isWorldMap boolean
 ---@param startFrame MapPinEnhancedNavigationMapPinTemplate
 ---@param endFrame MapPinEnhancedNavigationMapPinTemplate
@@ -1393,11 +1428,16 @@ function Navigation:BuildRouteLayer(isWorldMap)
                     from = graph.pathFromPointIndexes[sourceReference]
                     to = graph.pathToPointIndexes[sourceReference]
                 end
+                local sourceReference = journey and journey.legs[legIndex].sourceReferences[1] or pathReference
+                local data ---@type NavigationFlightTaxiData?
+                if graph.pathTypes[sourceReference] == "flighttaxi" then data = graph.pathHandlerData[sourceReference] end
+                local shaped = DrawFlightShape(self:GetRouteStep(pathIndex), isWorldMap,
+                    data and data.flightShape, pathIndex == progression.pathIndex)
                 local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
                     isWorldMap, graph.pointMapIDs[from], graph.pointXs[from], graph.pointYs[from],
                     graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
                 if startFrame and endFrame then
-                    startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
+                    if not shaped then startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex) end
                     if legIndex == segments then endFrame:SetRoutePoint(graph.pathTypes[pathReference]) end
                 end
             end

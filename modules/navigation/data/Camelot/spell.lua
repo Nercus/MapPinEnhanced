@@ -15,6 +15,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",
@@ -45,6 +46,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",
@@ -100,6 +102,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",
@@ -130,6 +133,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",
@@ -160,6 +164,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",
@@ -190,6 +195,7 @@ local SPELL = {
         requirement = {
             operation = "all",
             children = {
+                { operation = "check", kind = "item", value = 17031 },
                 {
                     operation = "check",
                     kind = "faction",

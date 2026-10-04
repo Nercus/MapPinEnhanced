@@ -878,18 +878,7 @@ local BORDER = {
     toY = 0.6047,
     type = "border",
   },
-  -- The Barrens (map 1413 44.55,86.57) -> Thousand Needles (map 1441 32.25,22.17) via border
-  {
-    fromPointID = 100011,
-    fromMap = 1413,
-    fromX = 0.4455,
-    fromY = 0.8657,
-    toPointID = 100042,
-    toMap = 1441,
-    toX = 0.3225,
-    toY = 0.2217,
-    type = "border",
-  },
+
   -- The Barrens (map 1413 48.16,4.32) -> Ashenvale (map 1440 68.62,86.48) via border
   {
     fromPointID = 100017,
@@ -942,18 +931,7 @@ local BORDER = {
   },
 
   -- Zone: Thousand Needles (map 1441)
-  -- Thousand Needles (map 1441 32.25,22.17) -> The Barrens (map 1413 44.55,86.57) via border
-  {
-    fromPointID = 100042,
-    fromMap = 1441,
-    fromX = 0.3225,
-    fromY = 0.2217,
-    toPointID = 100011,
-    toMap = 1413,
-    toX = 0.4455,
-    toY = 0.8657,
-    type = "border",
-  },
+
   -- Thousand Needles (map 1441 74.19,93.34) -> Tanaris (map 1446 50.75,24.13) via border
   {
     fromPointID = 100044,
@@ -1244,54 +1222,10 @@ local BORDER = {
         toY = 0.2281,
         type = "border",
     },
-    -- Mulgore (map 1412 37.33,38.62) -> Thunder Bluff (map 1456 32.09,67.20) via border
-    {
-        fromPointID = 1300022,
-        fromMap = 1412,
-        fromX = 0.3733,
-        fromY = 0.3862,
-        toPointID = 1300023,
-        toMap = 1456,
-        toX = 0.3209,
-        toY = 0.672,
-        type = "border",
-    },
-    -- Thunder Bluff (map 1456 32.09,67.20) -> Mulgore (map 1412 37.33,38.62) via border
-    {
-        fromPointID = 1300023,
-        fromMap = 1456,
-        fromX = 0.3209,
-        fromY = 0.672,
-        toPointID = 1300022,
-        toMap = 1412,
-        toX = 0.3733,
-        toY = 0.3862,
-        type = "border",
-    },
-    -- Mulgore (map 1412 40.69,31.41) -> Thunder Bluff (map 1456 51.90,24.70) via border
-    {
-        fromPointID = 1300024,
-        fromMap = 1412,
-        fromX = 0.4069,
-        fromY = 0.3141,
-        toPointID = 1300025,
-        toMap = 1456,
-        toX = 0.519,
-        toY = 0.247,
-        type = "border",
-    },
-    -- Thunder Bluff (map 1456 51.90,24.70) -> Mulgore (map 1412 40.69,31.41) via border
-    {
-        fromPointID = 1300025,
-        fromMap = 1456,
-        fromX = 0.519,
-        fromY = 0.247,
-        toPointID = 1300024,
-        toMap = 1412,
-        toX = 0.4069,
-        toY = 0.3141,
-        type = "border",
-    },
+
+
+
+
     -- The Barrens (map 1413 63.12,59.35) -> Dustwallow Marsh (map 1445 53.30,10.40) via border
     {
         fromPointID = 1300026,
