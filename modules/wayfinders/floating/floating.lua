@@ -22,6 +22,9 @@ function MapPinEnhancedWayfinderFloating:Setup()
     local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
     ---@cast panel MapPinEnhancedFloatingPanelTemplate
     self.panel = panel
+    local combatPanel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelCombatTemplate")
+    ---@cast combatPanel MapPinEnhancedFloatingPanelTemplate
+    panel.combatPanel = combatPanel
     local objectivePanel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelDisplayTemplate")
     ---@cast objectivePanel MapPinEnhancedFloatingPanelTemplate
     self.objectivePanel = objectivePanel

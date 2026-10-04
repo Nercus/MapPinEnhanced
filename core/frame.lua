@@ -14,8 +14,12 @@ local draggableFrames = {}
 local function StopDragging(frame, registration)
     if not registration.moving then return end
     registration.moving = false
-    frame:StopMovingOrSizing()
-    LibWindow.SavePosition(frame)
+    -- Native hiding already stops movement. A combat-hidden secure frame cannot
+    -- stop or reanchor through Lua; its owner restores the position after combat.
+    if frame:IsVisible() or not (frame:IsProtected() and InCombatLockdown()) then
+        frame:StopMovingOrSizing()
+        LibWindow.SavePosition(frame)
+    end
     ResetCursor()
 end
 

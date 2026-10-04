@@ -90,7 +90,27 @@
             <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
-    <!-- Only the travel variant owns protected action controls. Both variants
+    <Frame name="MapPinEnhancedFloatingPanelCombatTemplate" virtual="true" inherits="MapPinEnhancedFloatingPanelDisplayTemplate">
+        <Frames>
+            <Button parentKey="actionPreview" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconClose.png" desaturated="true">
+                            <Size x="24" y="24" />
+                            <Color r="1" g="0.15" b="0.15" a="1" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Button>
+        </Frames>
+    </Frame>
+    <!-- Only the travel variant owns protected action controls. All variants
          inherit the same appearance, text layout and saved-position behavior. -->
     <Frame name="MapPinEnhancedFloatingPanelTemplate" virtual="true" inherits="MapPinEnhancedFloatingPanelDisplayTemplate">
         <Frames>

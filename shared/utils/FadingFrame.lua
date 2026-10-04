@@ -63,8 +63,7 @@ function MapPinEnhancedFadingFrameMixin:SetShownWithFade(shown)
 end
 
 function MapPinEnhancedFadingFrameMixin:FinishVisibilityHide()
-    -- FloatingPanel's secure driver owns combat hiding. Never issue a delayed
-    -- protected Hide if combat began while the fade was playing.
+    -- Never issue a delayed protected Hide if combat began while the fade was playing.
     if not self.visibilityHiding or (self:IsProtected() and InCombatLockdown()) then return end
     self.hideWithoutFade(self)
 end
