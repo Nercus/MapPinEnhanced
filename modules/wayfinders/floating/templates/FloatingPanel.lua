@@ -6,6 +6,7 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedFloatingPanelTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
 ---@field pinFrame MapPinEnhancedBasePinTemplate
+---@field loading Texture
 ---@field clearButton Button
 ---@field reportButton MapPinEnhancedIconButtonTemplate
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
@@ -50,6 +51,8 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
         self.fullText = step and step.instruction or ""
     end
     local target = self.target
+    local calculating = step and step.phase == "calculating"
+    self.loading:SetShown(calculating == true)
     self:SetDestinationText()
     if target then
         ---@type boolean?
@@ -65,7 +68,7 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     end
     if not InCombatLockdown() or not self:IsProtected() then
         local action = step and step.showInstruction ~= false and step.desiredAction
-        self.pinFrame:SetShown(target ~= nil and not action)
+        self.pinFrame:SetShown(target ~= nil and not action and not calculating)
         self.clearButton:SetEnabled(Providers:CanClearNavigationTracking())
         self:UpdateLayout()
     end

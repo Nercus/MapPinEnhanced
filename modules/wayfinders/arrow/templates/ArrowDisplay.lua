@@ -13,6 +13,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field closeNeedle MapPinEnhancedArrowCloseNeedle
 
 ---@class MapPinEnhancedArrowTextContainer : Frame
+---@field loading Texture
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
 ---@field title FontString
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
@@ -21,6 +22,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field needleContainer MapPinEnhancedArrowNeedleContainer
 ---@field textContainer MapPinEnhancedArrowTextContainer
 ---@field pin MapPinEnhancedBasePinTemplate
+---@field loading Texture
 ---@field title FontString
 ---@field readout MapPinEnhancedWayfinderReadoutTemplate
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
@@ -202,6 +204,7 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:OnLoad()
     self.textContainer.description.mouseOwner = self
+    self.loading = self.textContainer.loading
     self.title = self.textContainer.title
     self.title:SetNonSpaceWrap(true)
     self.readout = self.textContainer.readout

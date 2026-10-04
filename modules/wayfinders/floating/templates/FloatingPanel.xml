@@ -7,6 +7,13 @@
             <Anchor point="TOP" relativeTo="UIParent" y="-280" />
         </Anchors>
         <Layers>
+            <Layer level="OVERLAY">
+                <Texture parentKey="loading" inherits="MapPinEnhancedWayfinderLoadingTemplate">
+                    <Anchors>
+                        <Anchor point="LEFT" x="21" />
+                    </Anchors>
+                </Texture>
+            </Layer>
             <Layer level="ARTWORK">
                 <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                     <Size x="242" y="0" />

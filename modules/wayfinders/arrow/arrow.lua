@@ -75,7 +75,9 @@ function MapPinEnhancedWayfinderArrow:SetStep(step)
     local inside = step and step.insideObjectiveArea
     local showDirection = step == nil or step.showDirection and step.desiredAction == nil and not inside
     frame.needleContainer:SetShown(showDirection)
-    frame.pin:SetShown(not (step and step.showInstruction ~= false and step.desiredAction))
+    local calculating = step and step.phase == "calculating"
+    frame.loading:SetShown(calculating == true)
+    frame.pin:SetShown(not calculating and not (step and step.showInstruction ~= false and step.desiredAction))
     frame.textContainer:Show()
     frame.clearButton:SetEnabled(step ~= nil and Providers:CanClearNavigationTracking())
     frame.readout:SetStatusText(inside and MapPinEnhanced.L["In objective area"] or nil)
@@ -155,6 +157,7 @@ function MapPinEnhancedWayfinderArrow:Init(wayfinderData)
     local frame = self:GetFrame()
     frame:OnLeave()
     if not wayfinderData or not wayfinderData.mapID or not wayfinderData.x or not wayfinderData.y then
+        frame.loading:Hide()
         self.description = nil
         frame.textContainer.description:Apply(nil, nil)
         frame:ResetDistanceReadout()
@@ -191,6 +194,7 @@ function MapPinEnhancedWayfinderArrow:Disable()
     if self.frame then self.frame.step = nil end
     if self.positionFrame then self.positionFrame.instruction:SetStep(nil) end
     if self.frame then
+        self.frame.loading:Hide()
         self.frame.readout:SetStatusText(nil)
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
     end
