@@ -16,6 +16,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field arrived boolean?
 
 local characterKey ---@type string?
+local preferredToyID ---@type number?
 local destination ---@type NavigationHearthstoneDestination?
 local pendingCast ---@type NavigationHearthstoneCast?
 local expiryTimer ---@type FunctionContainer?
@@ -23,9 +24,45 @@ local positionTimer ---@type FunctionContainer?
 local learning = false
 local setup = false
 local hearthstoneSpells = {} ---@type table<number, boolean>
+local toysBySpellID = {} ---@type table<number, number>
 local SetLearning ---@type fun(enabled: boolean)
 
 MapPinEnhanced:SetDefault("hearthstoneDestinations", {})
+MapPinEnhanced:SetDefault("hearthstoneToys", {})
+
+---@param graph NavigationGraph
+---@return number?
+function Navigation:GetPreferredHearthstoneToy(graph)
+    local itemID = preferredToyID
+    if not itemID or not PlayerHasToy or not C_ToyBox or not C_ToyBox.IsToyUsable then return nil end
+    local owned = PlayerHasToy(itemID)
+    local usable = C_ToyBox.IsToyUsable(itemID)
+    if MapPinEnhanced:IsSecretValue(owned) or owned ~= true or
+        MapPinEnhanced:IsSecretValue(usable) or usable ~= true or
+        not self:GetActionCooldown("toy", itemID) then return nil end
+    -- A failed preferred toy must not block the remaining home-bind actions.
+    for reference in pairs(self.avoidedPaths) do
+        if graph.pathTypes[reference] == "hearthstone" and
+            self:GetRequirementResource(graph.pathRequirements[reference], "toy") == itemID then return nil end
+    end
+    return itemID
+end
+
+---@param unit string
+---@param _ string
+---@param spellID number
+local function SaveUsedToy(unit, _, spellID)
+    if not characterKey or MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" or
+        MapPinEnhanced:IsSecretValue(spellID) then return end
+    local itemID = toysBySpellID[spellID]
+    if not itemID or itemID == preferredToyID then return end
+    local saved = MapPinEnhanced:GetVar("hearthstoneToys")
+    if type(saved) ~= "table" then saved = {} end
+    ---@cast saved table<string, number>
+    saved[characterKey] = itemID
+    MapPinEnhanced:SetVar("hearthstoneToys", saved)
+    preferredToyID = itemID
+end
 
 ---@param value any
 ---@return boolean
@@ -174,8 +211,16 @@ function Navigation:SetupHearthstoneDestination()
     characterKey = MapPinEnhanced:GetCharacterKey()
     if not characterKey then return end
     setup = true
-    for _, spellID in pairs(self.hearthstoneItems) do hearthstoneSpells[spellID] = true end
+    for itemID, spellID in pairs(self.hearthstoneItems) do
+        hearthstoneSpells[spellID] = true
+        if itemID ~= 6948 then toysBySpellID[spellID] = itemID end
+    end
     for _, spellID in ipairs(self.hearthstoneSpells or {}) do hearthstoneSpells[spellID] = true end
+    local savedToys = MapPinEnhanced:GetVar("hearthstoneToys")
+    local toyID = type(savedToys) == "table" and savedToys[characterKey] or nil
+    if type(toyID) == "number" and toyID ~= 6948 and self.hearthstoneItems[toyID] then
+        preferredToyID = toyID
+    end
     local saved = MapPinEnhanced:GetVar("hearthstoneDestinations")
     local value = type(saved) == "table" and saved[characterKey] or nil
     if IsDestination(value) then
@@ -183,6 +228,8 @@ function Navigation:SetupHearthstoneDestination()
         destination = { mapID = value.mapID, x = value.x, y = value.y }
     end
     MapPinEnhanced:RegisterEvent("HEARTHSTONE_BOUND", OnBound)
+    -- Toy preference continues learning after home coordinates are already known.
+    MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", SaveUsedToy)
     SetLearning(destination == nil)
     self:UpdateHearthstonePath(destination)
 end

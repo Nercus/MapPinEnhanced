@@ -158,6 +158,12 @@ local function RegisterAction(pathType, icon, method, instruction)
         local requirement = graph.pathRequirements[pathReference]
         local action = Navigation:GetPathAction(pathType, requirement)
         if not action then return nil, "action unavailable" end
+        if pathType == "hearthstone" and action.type ~= "spell" then
+            local preferredToyID = Navigation:GetPreferredHearthstoneToy(graph)
+            if preferredToyID and action.id ~= preferredToyID then
+                return nil, "preferred hearthstone toy available"
+            end
+        end
         if action.type == "toy" then
             local usable = C_ToyBox and C_ToyBox.IsToyUsable and C_ToyBox.IsToyUsable(action.id)
             if MapPinEnhanced:IsSecretValue(usable) or usable ~= true then return nil, "toy unavailable" end
