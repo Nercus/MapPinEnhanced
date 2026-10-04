@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerPinEntryTemplate : Button
 ---@field pinFrame MapPinEnhancedBasePinTemplate
 ---@field pin MapPinEnhancedPinMixin
+---@field ordinal number?
 ---@field title FontString
 ---@field location FontString
 ---@field unsubscribePinCallbacks fun()?
@@ -57,6 +58,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Reset()
         self.unsubscribePinCallbacks = nil
     end
     self.pin = nil
+    self.ordinal = nil
     self.pinFrame:SetLock(false)
     self.pinFrame:SetUntracked()
     self.pinFrame:SetHovered(false)
@@ -64,11 +66,12 @@ function MapPinEnhancedTrackerPinEntryMixin:Reset()
     self.location:SetAlpha(0.5)
 end
 
----@param treeNode TreeNodeMixin
+---@param treeNode MapPinEnhancedTrackerPinNode
 function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
     ---@type MapPinEnhancedPinMixin
     local pin = treeNode:GetData()
     self.pin = pin
+    self.ordinal = treeNode.ordinal
 
     if pin:IsTracked() then
         self.pinFrame:SetTracked()
@@ -90,7 +93,7 @@ function MapPinEnhancedTrackerPinEntryMixin:Init(treeNode)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetTitle(title)
-    self.title:SetText(title)
+    self.title:SetText(self.ordinal and string.format("%d. %s", self.ordinal, title or "") or title)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetLocationText(x, y, mapID)

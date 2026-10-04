@@ -25,7 +25,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field desiredHeight number?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
 ---@field superTrackedEntry MapPinEnhancedSuperTrackedEntryTemplate
-MapPinEnhancedTrackerMixin = {}
+MapPinEnhancedTrackerMixin = CreateFromMixins(MapPinEnhancedTrackerListMixin)
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
@@ -37,60 +37,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
 ---@alias EntryTemplateString 'MapPinEnhancedTrackerGroupEntryTemplate' | 'MapPinEnhancedTrackerPinEntryTemplate'
-
----@param group MapPinEnhancedGroupMixin
----@param pin1 MapPinEnhancedPinMixin
----@param pin2 MapPinEnhancedPinMixin
----@return boolean
-local function IsPinBefore(group, pin1, pin2)
-    local order1 = group:GetPinOrder(pin1.pinID)
-    local order2 = group:GetPinOrder(pin2.pinID)
-
-    if order1 ~= order2 then
-        return order1 > order2
-    end
-
-    local title1 = pin1.pinData.title or pin1.pinID or ""
-    local title2 = pin2.pinData.title or pin2.pinID or ""
-    if title1 ~= title2 then
-        return title1 < title2
-    end
-
-    return (pin1.pinID or "") < (pin2.pinID or "")
-end
-
----@param groupnode1 TreeNodeMixin
----@param groupnode2 TreeNodeMixin
----@return boolean
-local function GroupSortComparator(groupnode1, groupnode2)
-    ---@type MapPinEnhancedGroupMixin, MapPinEnhancedGroupMixin
-    local group1, group2 = groupnode1:GetData(), groupnode2:GetData()
-
-    if group1.classification ~= "group" or group2.classification ~= "group" then
-        return false
-    end
-    return Groups:IsGroupBefore(group1, group2)
-end
-
----@param pinNode1 TreeNodeMixin
----@param pinNode2 TreeNodeMixin
----@return boolean
-local function PinSortComparator(pinNode1, pinNode2)
-    ---@type MapPinEnhancedPinMixin, MapPinEnhancedPinMixin
-    local pin1, pin2 = pinNode1:GetData(), pinNode2:GetData()
-
-    if pin1.classification ~= "pin" or pin2.classification ~= "pin" then
-        return false
-    end
-
-    local group1 = pin1.group
-    local group2 = pin2.group
-    if group1 and group1 == group2 then
-        return IsPinBefore(group1, pin1, pin2)
-    end
-
-    return false
-end
 
 ---@class MapPinEnhancedTrackerGroupNode : TreeNodeMixin
 ---@field groupID UUID
@@ -108,35 +54,6 @@ function MapPinEnhancedTrackerMixin:SaveCollapsedGroups()
         -- Capture identity on construction: the domain group may already be released.
         self.collapsedGroups[node.groupID] = node:IsCollapsed() or false
     end
-end
-
----@param scrollToTrackedPin boolean?
----@return TreeDataProviderMixin, number, number
-function MapPinEnhancedTrackerMixin:UpdatePinList(scrollToTrackedPin)
-    local dataProvider = CreateTreeDataProvider()
-    local reachedPins, totalPins = 0, 0
-    local trackedPin = scrollToTrackedPin and Pins:GetTrackedPin() or nil
-    for group in Groups:EnumerateGroups() do
-        if not group.pinsUpdating and not group:IsHidden() then
-            local active, reached, total = group:GetPinCounts()
-            if total > 0 then
-                local node = dataProvider:Insert(group) --[[@as MapPinEnhancedTrackerGroupNode]]
-                node.groupID = group:GetGroupID()
-                node.activePins, node.reachedPins, node.totalPins = active, reached, total
-                for _, pin in group:EnumeratePins() do
-                    node:Insert(pin)
-                end
-                -- Insert sorts when a comparator exists. Install it only after all children.
-                node:SetSortComparator(PinSortComparator, false, false)
-                local collapsed = self.collapsedGroups[node.groupID] or false
-                if trackedPin and trackedPin.group == group then collapsed = false end
-                node:SetCollapsed(collapsed, false, TreeDataProviderConstants.SkipInvalidation)
-                reachedPins, totalPins = reachedPins + reached, totalPins + total
-            end
-        end
-    end
-    dataProvider:SetSortComparator(GroupSortComparator, false, false)
-    return dataProvider, reachedPins, totalPins
 end
 
 ---@param scrollToTrackedPin boolean?
@@ -253,6 +170,7 @@ local function TrackerElementFactory(factory, node)
     elseif data.classification == "pin" then
         factory("MapPinEnhancedTrackerPinEntryTemplate", function(frame)
             ---@cast frame MapPinEnhancedTrackerPinEntryTemplate
+            ---@cast node MapPinEnhancedTrackerPinNode
             frame:Init(node)
         end)
     end
