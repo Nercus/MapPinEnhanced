@@ -22,6 +22,7 @@ MapPinEnhancedFloatingPanelMixin = {}
 
 function MapPinEnhancedFloatingPanelMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self, true)
+    self.pinFrame:SetTracked(true)
     if self.actionButton then
         MapPinEnhancedWayfinderInstructionMixin.OnLoad(self)
         -- Only travel controls have protected ancestry. Objective information
