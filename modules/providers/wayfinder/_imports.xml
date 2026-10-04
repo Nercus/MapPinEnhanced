@@ -14,4 +14,5 @@
     <Script file="vignette.lua" />
     <Script file="scenario.lua" />
     <Script file="fallback.lua" />
+    <Script file="instanceTracking.lua" />
 </Ui>

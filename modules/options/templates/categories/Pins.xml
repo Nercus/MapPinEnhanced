@@ -51,6 +51,11 @@
                     <KeyValue key="key" value="Pins.Tracking.ArrivalNotification" />
                 </KeyValues>
             </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Pins.Tracking.AutoUntrack" />
+                </KeyValues>
+            </Frame>
         </Frames>
     </Frame>
 </Ui>

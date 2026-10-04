@@ -161,11 +161,13 @@ function Providers:RefreshSuperTrackingSelection(selectionOnly)
 end
 
 local function RefreshActiveProvider()
+    if Providers:IsClearingTracking() then return end
     Providers:RefreshSuperTrackingSelection()
 end
 
 ---@param event WowEvent
 local function OnSourceEvent(event)
+    if Providers:IsClearingTracking() then return end
     if Providers:IsChangingSuperTrackingEntry() then return end
     if Providers:ShouldIgnoreStepTrackingChange(true) then
         local owner = Navigation:GetActiveDestinationState()
@@ -301,6 +303,7 @@ end
 
 ---@param source string
 function Providers:RefreshSuperTrackingProvider(source)
+    if self:IsClearingTracking() then return end
     if self:IsChangingSuperTrackingEntry() then return end
     if self:ShouldIgnoreStepTrackingChange(true) then
         self:RefreshOwnedDestinationText(source)

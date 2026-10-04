@@ -63,6 +63,7 @@ Options.DEFAULTS = {
     ["Pins.Appearance.ShowMinimapPins"] = true,
     ["Pins.Miscellaneous.EnableLockedPins"] = true,
     ["Pins.Tracking.ArrivalNotification"] = "locked",
+    ["Pins.Tracking.AutoUntrack"] = false,
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
