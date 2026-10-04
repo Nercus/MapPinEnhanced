@@ -28,6 +28,7 @@ end
 -- Most generated portals omit a duration. Price the loading transition here
 -- instead of allowing the generic fixed-duration guard to exclude the portal.
 local DEFAULT_PORTAL_SECONDS = 5
+local LOADING_SCREEN_PENALTY_SECONDS = 10
 
 ---@param graph NavigationGraph
 ---@param _preparedData NavigationPreparedData
@@ -47,8 +48,9 @@ local function PortalCostCalculator(graph, _preparedData, pathReference)
     return {
         expectedSeconds = seconds,
         uncertaintySeconds = 0,
-        comparisonSeconds = seconds,
-        explanation = { kind = "portal", seconds = seconds, estimated = estimated },
+        comparisonSeconds = seconds + LOADING_SCREEN_PENALTY_SECONDS,
+        explanation = { kind = "portal", seconds = seconds, estimated = estimated,
+            penaltySeconds = LOADING_SCREEN_PENALTY_SECONDS },
     }
 end
 
