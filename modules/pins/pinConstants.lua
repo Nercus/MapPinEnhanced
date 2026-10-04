@@ -241,7 +241,11 @@ Pins.PIN_ICONS = {
     ["QuestLegendary"] = { icon = iconPath .. "questlegendary.png", color = CreateColor(0.8745, 0.539, 0.013) },
     ["QuestLegendaryTurnin"] = { icon = iconPath .. "questlegendaryturnin.png", color = CreateColor(0.8835, 0.5466, 0.0158) },
     ["QuestNormal"] = { icon = iconPath .. "questnormal.png", color = CreateColor(0.9607, 0.8187, 0.0116) },
-    ["QuestObjective"] = { icon = MapPinEnhanced.assetsPath .. "\\icons\\IconEllipsis.png", color = CreateColor(0.8, 0.8, 0.8) },
+    ["QuestProgressCampaign"] = { icon = iconPath .. "QuestProgressCampaign.png", color = CreateColor(88 / 255, 49 / 255, 18 / 255) },
+    ["QuestProgressImportant"] = { icon = iconPath .. "QuestProgressImportant.png", color = CreateColor(191 / 255, 26 / 255, 218 / 255) },
+    ["QuestProgressLegendary"] = { icon = iconPath .. "QuestProgressLegendary.png", color = CreateColor(231 / 255, 140 / 255, 5 / 255) },
+    ["QuestProgressRecurring"] = { icon = iconPath .. "QuestProgressRecurring.png", color = CreateColor(28 / 255, 184 / 255, 236 / 255) },
+    ["QuestProgressStandard"] = { icon = iconPath .. "QuestProgressStandard.png", color = CreateColor(239 / 255, 210 / 255, 11 / 255) },
     ["QuestRepeatableTurnin-MainMap"] = { icon = iconPath .. "questrepeatableturnin-mainmap.png", color = CreateColor(0.1513, 0.6086, 0.918) },
     ["QuestRepeatableTurnin"] = { icon = iconPath .. "questrepeatableturnin.png", color = CreateColor(0.1439, 0.5615, 0.9376) },
     ["QuestSkull"] = { icon = iconPath .. "questskull.png", color = CreateColor(0.7977, 0.6322, 0.0875) },
@@ -357,8 +361,9 @@ Pins.PIN_ICONS = {
 -- Aliases point directly to catalog keys; saved atlas names remain unchanged.
 ---@type table<string, string>
 Pins.PIN_ICON_ALIASES = {
-    ["Quest-In-Progress-Icon-yellow"] = "QuestObjective",
-    ["Quest-In-Progress-Icon-Brown"] = "QuestObjective",
+    ["QuestObjective"] = "QuestProgressStandard",
+    ["Quest-In-Progress-Icon-yellow"] = "QuestProgressStandard",
+    ["Quest-In-Progress-Icon-Brown"] = "QuestProgressCampaign",
     ["UI-QuestPoi-QuestBangTurnIn"] = "QuestTurnin",
     ["Bonus-Objective-Star"] = "QuestBonusObjective",
     ["worldquest-icon-boss"] = "vignettekillboss",

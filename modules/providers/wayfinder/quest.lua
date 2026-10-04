@@ -10,6 +10,14 @@ local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 local pendingQuestTitles = {}
 
 ---@type table<Enum.QuestClassification, string>
+local questProgressAtlas = {
+    [Enum.QuestClassification.Recurring] = "QuestProgressRecurring",
+    [Enum.QuestClassification.Campaign] = "QuestProgressCampaign",
+    [Enum.QuestClassification.Legendary] = "QuestProgressLegendary",
+    [Enum.QuestClassification.Important] = "QuestProgressImportant",
+}
+
+---@type table<Enum.QuestClassification, string>
 local questTurnInAtlas = {
     [Enum.QuestClassification.Recurring] = "quest-recurring-turnin",
     [Enum.QuestClassification.Meta] = "quest-wrapper-turnin",
@@ -46,7 +54,9 @@ local function GetQuestAtlas(questID)
     local isTask = C_QuestLog.IsQuestTask(questID)
     if issecretvalue(isTask) or type(isTask) ~= "boolean" then return nil end
     if isTask then return "Bonus-Objective-Star" end
-    return "Quest-In-Progress-Icon-yellow"
+    local classification = C_QuestInfoSystem.GetQuestClassification(questID)
+    if issecretvalue(classification) then return nil end
+    return questProgressAtlas[classification] or "QuestProgressStandard"
 end
 
 ---@param eventQuestID number?
