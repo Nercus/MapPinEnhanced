@@ -83,16 +83,49 @@ local function CopyWayfinderData(data)
     }
 end
 
+---@param mapID number
+---@param parentMapID number
+---@return boolean
+local function HasParentMap(mapID, parentMapID)
+    local visited = {} ---@type table<number, boolean>
+    while mapID > 0 and not visited[mapID] do
+        if mapID == parentMapID then return true end
+        visited[mapID] = true
+        local info = C_Map.GetMapInfo(mapID)
+        if not info then break end
+        mapID = info.parentMapID
+    end
+    return false
+end
+
 ---@param data WayfinderData
 ---@return WayfinderData
 local function CopyRoutingData(data)
     local copy = CopyWayfinderData(data)
     local hbd = MapPinEnhanced.HBD
-    if not hbd or not C_Map.GetMapInfoAtPosition or type(copy.mapID) ~= "number" or
+    if not hbd or type(copy.mapID) ~= "number" or
         type(copy.x) ~= "number" or type(copy.y) ~= "number" then
         return copy
     end
+    local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+    if playerMapID == copy.mapID then return copy end
     local mapInfo = C_Map.GetMapInfo(copy.mapID)
+    local playerMapInfo = playerMapID and C_Map.GetMapInfo(playerMapID)
+    -- Cities can be siblings of their surrounding zone (Ironforge/Dun Morogh).
+    -- Shared zone parents qualify only when the target also fits the player's map.
+    local siblingZone = mapInfo and playerMapInfo and mapInfo.mapType == Enum.UIMapType.Zone and
+        playerMapInfo.mapType == Enum.UIMapType.Zone and mapInfo.parentMapID > 0 and
+        mapInfo.parentMapID == playerMapInfo.parentMapID
+    if playerMapID and (siblingZone or HasParentMap(playerMapID, copy.mapID) or
+            HasParentMap(copy.mapID, playerMapID)) then
+        local x, y = hbd:TranslateZoneCoordinates(copy.x, copy.y, copy.mapID, playerMapID)
+        if type(x) == "number" and type(y) == "number" and
+            x >= 0 and x <= 1 and y >= 0 and y <= 1 then
+            copy.mapID, copy.x, copy.y = playerMapID, x, y
+            return copy
+        end
+    end
+    if not C_Map.GetMapInfoAtPosition then return copy end
     while mapInfo and mapInfo.mapType <= Enum.UIMapType.Continent do
         local child = C_Map.GetMapInfoAtPosition(copy.mapID, copy.x, copy.y)
         if not child or child.mapID == copy.mapID or child.mapType <= mapInfo.mapType then break end
@@ -1004,8 +1037,6 @@ local ELIGIBILITY_EVENTS = {
     "QUEST_TURNED_IN",
     "SKILL_LINES_CHANGED",
     "SPELLS_CHANGED",
-    "TAXIMAP_OPENED",
-    "TAXI_NODE_STATUS_CHANGED",
     "TOYS_UPDATED",
     "TRAIT_CONFIG_UPDATED",
     "UNIT_AURA",
@@ -1059,6 +1090,8 @@ end
 
 function Navigation:SetupEligibilityRefresh()
     if self.unsubscribeEligibilityRefresh then return end
+    -- flightTaxiMap refreshes taxi events immediately. Bucketing them here would
+    -- cancel its fresh calculation and postpone the restart by one second.
     self.unsubscribeEligibilityRefresh = MapPinEnhanced:RegisterEventBucket(ELIGIBILITY_EVENTS, function(events)
         self:RefreshEligibility(events)
     end, 1, function(event, unit)
@@ -1297,41 +1330,6 @@ local function AcquireRouteMapEndpoints(step, isWorldMap, fromMapID, fromX, from
     return startFrame, endFrame
 end
 
--- Flight shapes are display-only: booking, costs and arrival still use exact
--- taxi node identities. HBD's world axes are west/north; DB2 stores north/west.
----@param step NavigationStep
----@param isWorldMap boolean
----@param shape number[]?
----@param isCurrent boolean
----@return boolean
-local function DrawFlightShape(step, isWorldMap, shape, isCurrent)
-    if not shape or #shape < 6 then return false end
-    local drawn = false
-    -- Bound pooled map frames even when a source polyline has many points.
-    local stride = 3 * math.max(1, math.ceil((#shape / 3 - 1) / 32))
-    for index = 1, #shape - 3, stride do
-        local nextIndex = math.min(index + stride, #shape - 2)
-        local world = shape[index]
-        local mapID = world == 0 and 1415 or world == 1 and 1414 or nil
-        if mapID and world == shape[nextIndex] then
-            local fromX, fromY ---@type number?, number?
-            fromX, fromY = MapPinEnhanced.HBD:GetZoneCoordinatesFromWorldInstance(
-                shape[index + 2], shape[index + 1], world, mapID)
-            local toX, toY ---@type number?, number?
-            toX, toY = MapPinEnhanced.HBD:GetZoneCoordinatesFromWorldInstance(
-                shape[nextIndex + 2], shape[nextIndex + 1], world, mapID)
-            if fromX and fromY and toX and toY then
-                local first, last = AcquireRouteMapEndpoints(step, isWorldMap, mapID, fromX, fromY, mapID, toX, toY)
-                if first and last then
-                    first:SetRouteLine(last, isCurrent)
-                    drawn = true
-                end
-            end
-        end
-    end
-    return drawn
-end
-
 ---@param isWorldMap boolean
 ---@param startFrame MapPinEnhancedNavigationMapPinTemplate
 ---@param endFrame MapPinEnhancedNavigationMapPinTemplate
@@ -1426,16 +1424,11 @@ function Navigation:BuildRouteLayer(isWorldMap)
                     from = graph.pathFromPointIndexes[sourceReference]
                     to = graph.pathToPointIndexes[sourceReference]
                 end
-                local sourceReference = journey and journey.legs[legIndex].sourceReferences[1] or pathReference
-                local data ---@type NavigationFlightTaxiData?
-                if graph.pathTypes[sourceReference] == "flighttaxi" then data = graph.pathHandlerData[sourceReference] end
-                local shaped = DrawFlightShape(self:GetRouteStep(pathIndex), isWorldMap,
-                    data and data.flightShape, pathIndex == progression.pathIndex)
                 local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
                     isWorldMap, graph.pointMapIDs[from], graph.pointXs[from], graph.pointYs[from],
                     graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
                 if startFrame and endFrame then
-                    if not shaped then startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex) end
+                    startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
                     -- The active floor shows only its current endpoint; keep
                     -- the exit as a line anchor until entrance arrival.
                     if legIndex == segments and

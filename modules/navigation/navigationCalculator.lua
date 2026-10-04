@@ -956,7 +956,9 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
             end
         end,
     }, nil, function()
+        local wasCurrent = self.activeCalculation == job
         self:CancelRouteCalculation(job)
+        if wasCurrent then self:TryAutomaticTaxiSelection() end
     end, 1, function(message)
         self:CancelRouteCalculation(job)
         geterrorhandler()(message)

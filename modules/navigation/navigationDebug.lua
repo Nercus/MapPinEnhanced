@@ -140,6 +140,8 @@ function Navigation:ShowDebugDump()
         ---@param cost NavigationCalculatedPathCost?
         local function AddPath(reference, cost)
             local freshCost, failure = Navigation:GetFreshPathCost(reference)
+            ---@type NavigationFlightTaxiData?
+            local taxi = graph.pathTypes[reference] == "flighttaxi" and graph.pathHandlerData[reference] or nil
             Add("Path " .. reference, {
                 type = graph.pathTypes[reference],
                 from = GetPoint(graph, graph.pathFromPointIndexes[reference]),
@@ -151,7 +153,14 @@ function Navigation:ShowDebugDump()
                 routeExclusion = route and route.preparedData.exclusionReasonByPath[reference],
                 routeCost = cost,
                 freshCost = freshCost,
-                freshFailure = failure
+                freshFailure = failure,
+                taxi = taxi and {
+                    origin = taxi.fromTaxiNodeID,
+                    destination = taxi.toTaxiNodeID,
+                    destinationKnown = taxi.toTaxiNodeID and Navigation:IsTaxiNodeKnown(taxi.toTaxiNodeID),
+                    preparedCost = prepared and prepared.taxiCosts[reference],
+                    preparedFailure = prepared and prepared.taxiFailures[reference]
+                } or nil
             })
         end
         lines[#lines + 1] = "Ordered route paths:"
@@ -168,6 +177,14 @@ function Navigation:ShowDebugDump()
             local fromIndex = graph.pathFromPointIndexes[reference]
             if fromIndex and graph.pointMapIDs[fromIndex] == playerMapID and
                 (pathType == "portal" or pathType == "localportal") then
+                AddPath(reference)
+            end
+        end
+        lines[#lines + 1] = "Taxi paths from player map:"
+        for reference = 1, graph.pathCount do
+            local fromIndex = graph.pathFromPointIndexes[reference]
+            if graph.pathTypes[reference] == "flighttaxi" and fromIndex and
+                graph.pointMapIDs[fromIndex] == playerMapID then
                 AddPath(reference)
             end
         end

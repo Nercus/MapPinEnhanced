@@ -139,6 +139,22 @@ function Navigation:RegisterPathData(pathType, paths)
     assert(type(pathType) == "string" and pathType ~= "",
         "Navigation:RegisterPathData requires a Path type")
     assert(type(paths) == "table", "Navigation:RegisterPathData requires a Path table")
+    if pathType == "flighttaxi" then
+        -- Generated taxi requirements include both endpoints. The departure
+        -- can be learned on arrival, so retain only the destination/access checks.
+        for _, path in ipairs(paths) do
+            local requirement = path.requirement
+            if requirement and requirement.operation == "all" then
+                for index = #requirement.children, 1, -1 do
+                    local child = requirement.children[index]
+                    if child.operation == "check" and child.kind == "taxiNodeKnown" and
+                        child.value == path.fromTaxiNodeID then
+                        table.remove(requirement.children, index)
+                    end
+                end
+            end
+        end
+    end
     table.insert(registeredPathData, { pathType = pathType, paths = paths })
 end
 

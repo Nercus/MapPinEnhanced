@@ -142,7 +142,7 @@ local function Invalidate()
     Navigation:ClearTaxiNodeKnowledge()
 end
 
-local function TakeRequiredFlight()
+function Navigation:TryAutomaticTaxiSelection()
     if not automaticDestination then return end
     if automaticDestination ~= Navigation.activeDestination or not Navigation.routeNavigationEnabled or
         Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true or
@@ -152,8 +152,8 @@ local function TakeRequiredFlight()
     end
     local progression = Navigation.progression
     local journey = activeJourney
-    -- The ride ticker waits for publication of the route calculated from this
-    -- open map. An older route must never select a slot from a new observation.
+    -- Calculation completion and the ride ticker share the same booking gate.
+    -- An older route must never select a slot from a new observation.
     if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or Navigation.pendingCalculationRestart or
         not observation or
         not progression or progression.route.preparedData.taxiObservation ~= observation or
@@ -205,7 +205,7 @@ function Navigation:ActivateTaxiJourney(context, report)
             -- A rejected booking leaves the interaction open. Do not leave
             -- calculation publication suspended after that ordinary failure.
             if interactionOpen then bookingPending = false end
-            TakeRequiredFlight()
+            Navigation:TryAutomaticTaxiSelection()
             return
         end
         local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
@@ -273,7 +273,12 @@ MapPinEnhanced:RegisterEvent("TAXIMAP_CLOSED", function()
     Navigation:RefreshPreparedData()
 end)
 MapPinEnhanced:RegisterEvent("TAXI_NODE_STATUS_CHANGED", function()
-    if interactionOpen then Observe() else Invalidate() end
+    if interactionOpen then
+        Observe()
+    else
+        Invalidate()
+        RefreshRoutes()
+    end
 end)
 for _, event in ipairs({ "PLAYER_ENTERING_WORLD", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS",
     "ZONE_CHANGED_NEW_AREA", "QUEST_LOG_UPDATE", "UPDATE_FACTION", "COVENANT_CHOSEN" }) do
