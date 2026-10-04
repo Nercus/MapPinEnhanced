@@ -66,17 +66,30 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
     callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED" },
 })
 
+---@param shouldShow boolean
+local function ApplyVisibility(shouldShow)
+    local minimizeMode = MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
+    if shouldShow or minimizeMode and MapPinEnhanced:GetVar("trackerVisible") == true then
+        local frame = Tracker:GetTrackerFrame()
+        frame.automaticallyMinimized = not shouldShow
+        frame:ShowFrame()
+    elseif Tracker.trackerFrame and Tracker.trackerFrame:IsShown() then
+        Tracker.trackerFrame:HideFrame()
+    end
+end
+
 MapPinEnhanced:RegisterVisibilityTarget("tracker", {
     optionKey = "Miscellaneous.Tracker.Visibility",
     rules = { "dungeon", "raid", "scenario", "battleground", "arena", "noActivePins" },
     isManuallyEnabled = function() return MapPinEnhanced:GetVar("trackerVisible") == true end,
-    show = function() Tracker:GetTrackerFrame():ShowFrame() end,
-    hide = function()
-        local frame = Tracker.trackerFrame
-        if frame and frame:IsShown() then frame:HideFrame() end
-    end,
+    show = function() ApplyVisibility(true) end,
+    hide = function() ApplyVisibility(false) end,
 })
 
+MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Miscellaneous.Tracker.CloseAction", function(value)
+    if not value then MapPinEnhanced:SetVar("trackerMinimized", false) end
+    Tracker:RestoreTrackerVisibility()
+end)
 
 MapPinEnhanced:AddSlashCommand("tracker", function()
     Tracker:ToggleTracker()
@@ -84,7 +97,10 @@ end, L["Toggle the tracker visibility."])
 
 function Tracker:SetMinimized(minimized)
     MapPinEnhanced:SetVar("trackerMinimized", minimized == true)
-    if self.trackerFrame then self.trackerFrame:ApplyMinimizedState() end
+    if self.trackerFrame then
+        self.trackerFrame.automaticallyMinimized = false
+        self.trackerFrame:ApplyMinimizedState()
+    end
 end
 
 -- Explicit user creation/import calls this only after at least one accepted addition.
@@ -96,7 +112,7 @@ end
 
 function Tracker:ApplyCloseAction()
     if MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.CloseAction") == true then
-        self:SetMinimized(not MapPinEnhanced:GetVar("trackerMinimized"))
+        self:SetMinimized(not self:GetTrackerFrame().minimized)
     else
         self:HideTracker()
     end

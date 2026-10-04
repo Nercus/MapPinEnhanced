@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="SuperTrackedEntry.lua" />
-    <Button name="MapPinEnhancedSuperTrackedEntryTemplate" virtual="true" mixin="MapPinEnhancedSuperTrackedEntryMixin" hidden="true" registerForClicks="LeftButtonUp, RightButtonUp">
+    <Button name="MapPinEnhancedSuperTrackedEntryTemplate" virtual="true" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" mixin="MapPinEnhancedSuperTrackedEntryMixin" hidden="true" registerForClicks="LeftButtonUp, RightButtonUp">
         <Size x="305" y="35" />
         <Frames>
             <Button parentKey="removeButton" inherits="MapPinEnhancedIconButtonTemplate" mixin="MapPinEnhancedSuperTrackedEntryRemoveMixin">
@@ -33,6 +33,9 @@
                 </FontString>
             </Layer>
         </Layers>
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" setAllPoints="true" alphaMode="BLEND">
+            <Color r="1" g="0.82" b="0" a="0.2" />
+        </HighlightTexture>
         <Scripts>
             <OnClick method="OnClick" />
             <OnEnter method="OnEnter" />

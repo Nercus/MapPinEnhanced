@@ -10,6 +10,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class MapPinEnhancedTrackerTemplate : Frame, MapPinEnhancedFadingFrameTemplate
 ---@field contentBackground Texture
 ---@field minimized boolean?
+---@field automaticallyMinimized boolean?
 ---@field minimizedScroll number?
 ---@field scrollBox MapPinEnhancedTrackerScrollBox
 ---@field scrollBar MapPinEnhancedTrackerScrollBar
@@ -135,7 +136,7 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
     local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
-    self.contentBackground:SetShown(not self.minimized or fixedEntryHeight > 0)
+    self.contentBackground:SetShown(not self.minimized)
     local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or 0
     local visibleEntries = self.minimized and 0 or math.min(numberOfEntries,
         Options:GetOptionValue("Miscellaneous.Tracker.MaximumRows"))
@@ -217,11 +218,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     Options:SubscribeToOptionChanges("Miscellaneous.Tracker.ShowBlizzardEntry", function()
         if self:IsShown() then self:UpdateSuperTrackedEntry() end
     end)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.CloseAction", function(value)
-        if not value then MapPinEnhanced:SetVar("trackerMinimized", false) end
-        self:ApplyMinimizedState()
-    end)
-
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function()
         self:UpdateListAndScrollToTrackedPin()
     end)
@@ -247,7 +243,6 @@ function MapPinEnhancedTrackerMixin:OnShow()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
     self.refreshPending, self.scrollPending = nil, nil
     local restoreScroll = self.minimizedScroll ~= nil
-    self:UpdateSuperTrackedEntry(true)
     self:ApplyMinimizedState(true)
     self:UpdateList(not self.minimizedScroll)
     self:RestoreListScroll()
@@ -302,7 +297,7 @@ end
 function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry(skipHeight)
     ---@type SuperTrackingEntry?
     local entry
-    if Options:GetOptionValue("Miscellaneous.Tracker.ShowBlizzardEntry") then
+    if not self.minimized and Options:GetOptionValue("Miscellaneous.Tracker.ShowBlizzardEntry") then
         entry = Providers:GetSuperTrackingEntry()
     end
     self.superTrackedEntry:ApplyEntry(entry)
@@ -327,8 +322,9 @@ end
 ---@param skipRefresh boolean?
 function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
     local minimizeMode = Options:GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
-    self.minimized = minimizeMode and MapPinEnhanced:GetVar("trackerMinimized") == true
-    self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "plus" or "minus") or "close")
+    self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true)
+    self:UpdateSuperTrackedEntry(true)
+    self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "downcaret" or "upcaret") or "close")
     self.header.closeButton:SetTooltip(L[minimizeMode and (self.minimized and "Expand" or "Minimize") or "Close"])
     if GameTooltip:IsOwned(self.header.closeButton) then self.header.closeButton:OnTooltipEnter() end
     self.scrollBox:SetShown(not self.minimized)

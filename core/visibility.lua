@@ -44,7 +44,8 @@ local registeredCallbacks = {}
 local updateQueued = false
 
 ---@param targetID string
-local function UpdateTargetVisibility(targetID)
+---@param force boolean?
+local function UpdateTargetVisibility(targetID, force)
     local target = targets[targetID]
     if not target then return end
 
@@ -74,7 +75,7 @@ local function UpdateTargetVisibility(targetID)
         wipe(target.ruleStartedAt)
     end
 
-    if target.isShown == shouldShow then return end
+    if not force and target.isShown == shouldShow then return end
     target.isShown = shouldShow
     if shouldShow then
         target.show()
@@ -155,7 +156,7 @@ end
 
 ---@param targetID string
 function MapPinEnhanced:UpdateVisibilityTarget(targetID)
-    UpdateTargetVisibility(targetID)
+    UpdateTargetVisibility(targetID, true)
 end
 
 ---@param instanceType string
