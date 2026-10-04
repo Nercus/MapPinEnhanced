@@ -22,6 +22,16 @@
                             <KeyValue key="key" value="Miscellaneous.Coords.Lock" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Coords.ShowZone" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Miscellaneous.Coords.ShowDecimals" />
+                        </KeyValues>
+                    </Frame>
                     <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                         <KeyValues>
                             <KeyValue key="key" value="Miscellaneous.Coords.Visibility" />

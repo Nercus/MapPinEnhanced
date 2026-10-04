@@ -3,8 +3,11 @@
 
     <Include file="CoordinatesDisplay.lua" />
 
-    <Frame name="MapPinEnhancedCoordinatesDisplayTemplate" mixin="MapPinEnhancedCoordinatesDisplayMixin" movable="true" virtual="true" hidden="true" parent="UIParent" inherits="MapPinEnhancedFadingFrameTemplate">
+    <Frame name="MapPinEnhancedCoordinatesDisplayTemplate" mixin="MapPinEnhancedCoordinatesDisplayMixin" movable="true" virtual="true" hidden="true" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="140" y="20" />
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
                 <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" desaturated="true">
@@ -15,6 +18,11 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
+                <FontString inherits="GameFontNormalSmall" parentKey="zoneName" justifyH="CENTER" wordwrap="false">
+                    <Anchors>
+                        <Anchor point="CENTER" />
+                    </Anchors>
+                </FontString>
                 <Texture atlas="housing-dashboard-initiatives-fillbar-tickbar-complete" parentKey="separator" desaturated="true">
                     <Size x="1" />
                     <Color r="1" g="0.82" b="0" />
@@ -108,4 +116,11 @@
     </Frame>
 
 
+    <!-- Fixed dimensions preserve legacy anchors while the centered display grows. -->
+    <Frame name="MapPinEnhancedCoordinatesPositionTemplate" virtual="true" movable="true">
+        <Size x="140" y="20" />
+        <Frames>
+            <Frame parentKey="display" inherits="MapPinEnhancedCoordinatesDisplayTemplate" />
+        </Frames>
+    </Frame>
 </Ui>

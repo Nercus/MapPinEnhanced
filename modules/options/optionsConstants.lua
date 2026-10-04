@@ -46,6 +46,8 @@ Options.TRACKING_MODE_OPTIONS = {
 }
 
 Options.DEFAULTS = {
+    ["Miscellaneous.Coords.ShowZone"] = false,
+    ["Miscellaneous.Coords.ShowDecimals"] = true,
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
@@ -54,7 +56,7 @@ Options.DEFAULTS = {
     ["Pins.Miscellaneous.ScaleOnHover"] = false,
     ["Miscellaneous.Coords.Enable"] = true,
     ["Miscellaneous.Coords.Lock"] = false,
-    ["Miscellaneous.Coords.Visibility"] = {},
+    ["Miscellaneous.Coords.Visibility"] = { noCoordinates = true },
     ["Miscellaneous.Tracker.Visibility"] = {},
     ["Wayfinder.General.HideBlizzardFloatingDiamond"] = false,
     ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_ARROW,

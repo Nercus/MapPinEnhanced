@@ -386,3 +386,9 @@ L["This shared group is no longer available. Ask the sender for a new link."] =
 
 L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
 "Pin operation stopped after %d of %d pins. Completed changes were kept."
+
+-- Category options (0041).
+L["Miscellaneous.Coords.ShowZone_LABEL"] = "Show zone"
+L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Show the full map name between your X and Y coordinates."
+L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Show decimal points"
+L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] = "Display two decimal places. Turn off to show truncated whole coordinates."

@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
--- FIXME: small ui scales cause the numbers to be cut off, fix that
 -- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
 
 ---@class MapPinEnhancedCoordinatesDisplayButton : MapPinEnhancedIconButtonTemplate
@@ -9,7 +8,15 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 
 
+---@class MapPinEnhancedCoordinatesPositionTemplate : Frame
+---@field display MapPinEnhancedCoordinatesDisplayTemplate
+
 ---@class MapPinEnhancedCoordinatesDisplayTemplate : Frame, MapPinEnhancedFadingFrameTemplate
+---@field zoneName FontString
+---@field separator Texture
+---@field position Frame
+---@field cachedX number?
+---@field cachedY number?
 ---@field coordsXInt FontString
 ---@field coordsXDec FontString
 ---@field coordsYInt FontString
@@ -48,11 +55,45 @@ function MapPinEnhancedCoordinatesDisplayMixin:LinkPlayerPosition()
     Providers:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
 end
 
+function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
+    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    self.coordsXDec:SetShown(showDecimals)
+    self.coordsYDec:SetShown(showDecimals)
+    self.zoneName:SetWidth(0)
+    self.coordsXInt:SetWidth(0)
+    self.coordsYInt:SetWidth(0)
+    self.coordsXDec:SetWidth(0)
+    self.coordsYDec:SetWidth(0)
+    local zoneWidth = self.zoneName:GetStringWidth()
+    self.zoneName:SetWidth(zoneWidth)
+    self.separator:SetShown(zoneWidth == 0)
+    local gap = zoneWidth > 0 and zoneWidth / 2 + 8 or 5
+    local xWidth = self.coordsXInt:GetStringWidth()
+    local yWidth = self.coordsYInt:GetStringWidth()
+    local xDecWidth = showDecimals and self.coordsXDec:GetStringWidth() or 0
+    local yDecWidth = showDecimals and self.coordsYDec:GetStringWidth() or 0
+    self.coordsXInt:SetWidth(xWidth)
+    self.coordsYInt:SetWidth(yWidth)
+    self.coordsXDec:SetWidth(math.max(1, xDecWidth))
+    self.coordsYDec:SetWidth(math.max(1, yDecWidth))
+    self.coordsXInt:ClearAllPoints()
+    self.coordsXInt:SetPoint("RIGHT", self, "CENTER", -gap - xDecWidth, 0)
+    self.coordsXDec:ClearAllPoints()
+    self.coordsXDec:SetPoint("LEFT", self.coordsXInt, "RIGHT", 0, 0)
+    self.coordsYInt:ClearAllPoints()
+    self.coordsYInt:SetPoint("LEFT", self, "CENTER", gap, 0)
+    local width = 2 * (gap + math.max(xWidth + xDecWidth, yWidth + yDecWidth) + 25)
+    if width == self:GetWidth() then return end
+    self:SetWidth(width)
+end
+
 function MapPinEnhancedCoordinatesDisplayMixin:SetUndefinedPosition()
+    self.cachedX, self.cachedY = nil, nil
     self.coordsXInt:SetText("--")
     self.coordsXDec:SetText(".--")
     self.coordsYInt:SetText("--")
     self.coordsYDec:SetText(".--")
+    self:UpdateCoordinateLayout()
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
@@ -75,6 +116,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     self.coordsXDec:SetText(format(".%02d", xDec))
     self.coordsYInt:SetText(format("%02d", yInt))
     self.coordsYDec:SetText(format(".%02d", yDec))
+    self:UpdateCoordinateLayout()
 end
 
 local UPDATE_RATE = 0.1
@@ -86,6 +128,14 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
     end
     self.lastUpdate = 0
     local playerMap = GetBestMapForUnit("player")
+    if not MapPinEnhanced:IsReadablePositiveInteger(playerMap) then playerMap = nil end
+    local mapInfo = playerMap and C_Map.GetMapInfo(playerMap)
+    local name = Options:GetOptionValue("Miscellaneous.Coords.ShowZone") and mapInfo and mapInfo.name or ""
+    if name ~= self.zoneName:GetText() then
+        self.zoneName:SetWidth(0)
+        self.zoneName:SetText(name)
+        self:UpdateCoordinateLayout()
+    end
     if not playerMap then
         self:SetUndefinedPosition()
         return
@@ -96,7 +146,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
         return
     end
     local x, y = position:GetXY()
-    if not x or not y then
+    if not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
         self:SetUndefinedPosition()
         return
     end
@@ -116,7 +166,8 @@ end
 function MapPinEnhancedCoordinatesDisplayMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     -- Keep the saved-position key so existing frame placement survives this rename.
-    MapPinEnhanced:RegisterDraggableFrame(self, "coordsDisplayFrame", self.dragHandle, function()
+    self.position = self:GetParent() -- the fixed rectangle retains the original saved center
+    MapPinEnhanced:RegisterDraggableFrame(self.position, "coordsDisplayFrame", self.dragHandle, function()
         return not self:IsMovable()
     end)
 
@@ -157,7 +208,9 @@ end
 
 function MapPinEnhancedCoordinatesDisplayMixin:ShowFrame()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
-    MapPinEnhanced:RestoreFrame(self)
+    MapPinEnhanced:RestoreFrame(self.position)
+    self.cachedX, self.cachedY = nil, nil
+    self:OnUpdate(1)
     self:Show()
 end
 
@@ -166,11 +219,13 @@ function MapPinEnhancedCoordinatesDisplayMixin:HideFrame()
     self:Hide()
 end
 
+---@type MapPinEnhancedCoordinatesDisplayTemplate?
 local coordinatesDisplayFrame = nil
 
 local function InitCoordinatesDisplayFrame()
     if coordinatesDisplayFrame then return end
-    coordinatesDisplayFrame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedCoordinatesDisplayTemplate")
+    local position = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedCoordinatesPositionTemplate") --[[@as MapPinEnhancedCoordinatesPositionTemplate]]
+    coordinatesDisplayFrame = position.display
 end
 
 local function ShowCoordinatesDisplay()
@@ -238,3 +293,11 @@ Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
         UnlockCoordinatesDisplay()
     end
 end)
+
+for _, key in ipairs({ "Miscellaneous.Coords.ShowZone", "Miscellaneous.Coords.ShowDecimals" }) do
+    Options:SubscribeToOptionChanges(key, function()
+        if not coordinatesDisplayFrame then return end
+        coordinatesDisplayFrame.cachedX, coordinatesDisplayFrame.cachedY = nil, nil
+        coordinatesDisplayFrame:OnUpdate(1)
+    end)
+end
