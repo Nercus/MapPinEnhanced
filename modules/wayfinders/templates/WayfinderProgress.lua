@@ -4,6 +4,7 @@
 ---@field stepCount integer?
 ---@field columns integer?
 ---@field entries WayfinderProgressEntry[]?
+---@field changeNumber integer?
 MapPinEnhancedWayfinderProgressMixin = {}
 
 local PIN_SIZE = 12
@@ -19,11 +20,13 @@ local function ResetPin(pool, pin)
     pin:OnHide()
     pin:SetActive(false)
     pin.entry = nil
+    pin.stepIndex = nil
+    pin.changeNumber = nil
     pin.pin:SetVertexColor(1, 1, 1)
 end
 
 function MapPinEnhancedWayfinderProgressMixin:OnLoad()
-    self.pool = CreateFramePool("Frame", self, "MapPinEnhancedWayfinderProgressPinTemplate", ResetPin)
+    self.pool = CreateFramePool("Button", self, "MapPinEnhancedWayfinderProgressPinTemplate", ResetPin)
 end
 
 ---@param step WayfinderStepData?
@@ -33,6 +36,7 @@ function MapPinEnhancedWayfinderProgressMixin:Apply(step, width)
     if not step or not step.progressEntries or not index or not count or count <= 1 or index < 1 or index > count then
         self.stepIndex, self.stepCount, self.columns = nil, nil, nil
         self.entries = nil
+        self.changeNumber = nil
         self:Hide()
         self.pool:ReleaseAll()
         return
@@ -40,8 +44,9 @@ function MapPinEnhancedWayfinderProgressMixin:Apply(step, width)
     local columns = math.min(count, math.max(1, math.floor((width - 2 * HORIZONTAL_PADDING + SPACING) /
         (PIN_SIZE + SPACING))))
     local changed = self.stepIndex ~= index or self.stepCount ~= count or self.columns ~= columns or
-        self.entries ~= step.progressEntries
+        self.entries ~= step.progressEntries or self.changeNumber ~= step.changeNumber
     self.entries = step.progressEntries
+    self.changeNumber = step.changeNumber
     self.stepIndex, self.stepCount, self.columns = index, count, columns
     local rows = math.ceil(count / columns)
     self:SetSize(columns * (PIN_SIZE + SPACING) - SPACING + 2 * HORIZONTAL_PADDING,
@@ -67,6 +72,8 @@ function MapPinEnhancedWayfinderProgressMixin:Refresh()
             -VERTICAL_PADDING - row * (PIN_SIZE + SPACING))
         local entry = self.entries and self.entries[number]
         pin.entry = entry
+        pin.stepIndex = number
+        pin.changeNumber = self.changeNumber
         if entry then pin.pin:SetVertexColor(entry.r, entry.g, entry.b) end
         pin:SetActive(number == index)
         pin:Show()

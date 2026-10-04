@@ -818,24 +818,43 @@ function Navigation:PublishStep(progression)
 end
 
 ---@param progression NavigationProgression
-function Navigation:CompleteCurrentPath(progression)
-    if not self:IsCurrentProgression(progression) then return end
-    -- A pending job priced the old Step and must not replace completed progress.
-    self:CancelRouteCalculation(self.activeCalculation)
-    self.activeCalculation = nil
-    self:DeactivatePathHandler()
-    progression.pathIndex = progression.pathIndex + 1
+---@param stepIndex integer
+local function ApplyStepIndex(progression, stepIndex)
+    -- A pending job priced the old Step and must not replace selected progress.
+    Navigation:CancelRouteCalculation(Navigation.activeCalculation)
+    Navigation.activeCalculation = nil
+    Navigation:DeactivatePathHandler()
+    progression.pathIndex = stepIndex
     progression.changeNumber = progression.changeNumber + 1
     progression.status = nil
     progression.attempted = nil
     progression.pathUnavailable = nil
     ResetDeviationState(progression)
-    local graph = self.progression and self.progression.route.graph or self:GetGraph()
+    local graph = progression.route.graph
     local nextReference = progression.route.pathReferences[progression.pathIndex]
     if not graph then return end
     progression.phase = nextReference and graph.pathFromPointIndexes[nextReference] and "approach" or
         nextReference and "ready" or "approach"
-    self:PublishStep(progression)
+    Navigation:PublishStep(progression)
+end
+
+---@param progression NavigationProgression
+function Navigation:CompleteCurrentPath(progression)
+    if not self:IsCurrentProgression(progression) then return end
+    ApplyStepIndex(progression, progression.pathIndex + 1)
+end
+
+---@param stepIndex integer
+---@param changeNumber integer
+---@return boolean
+function Navigation:SelectStep(stepIndex, changeNumber)
+    local progression = self.progression
+    if changeNumber ~= presentationChangeNumber or not progression or not self.routeNavigationEnabled or
+        not self:IsCurrentProgression(progression) then return false end
+    if type(stepIndex) ~= "number" or stepIndex % 1 ~= 0 or stepIndex < 1 or
+        stepIndex > GetRouteStepCount(progression.route) or stepIndex == progression.pathIndex then return false end
+    ApplyStepIndex(progression, stepIndex)
+    return true
 end
 
 ---@param progression NavigationProgression
