@@ -10,9 +10,8 @@ local L = MapPinEnhanced.L
 ---@field reportButton MapPinEnhancedIconButtonTemplate
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field title FontString
----@field distance FontString
+---@field areaStatus FontString
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
----@field distanceCallback fun(distance: number)?
 ---@field target WayfinderData?
 ---@field destinationText string?
 ---@field textTruncated boolean?
@@ -52,7 +51,6 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     end
     local target = self.target
     self:SetDestinationText()
-    self:UpdateDistanceSubscription()
     if target then
         ---@type boolean?
         local hasIcon = false
@@ -123,11 +121,13 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     self.textTruncated = titleTruncated or not inside and destinationTruncated
     self.progress:Apply(self.step, self:GetWidth())
     local descriptionHeight = self.description:IsShown() and self.description:GetHeight() + 3 or 0
-    self.distance:ClearAllPoints()
-    self.distance:SetPoint("TOPLEFT", inside and (descriptionHeight > 0 and self.description or self.title) or self.text,
+    Wayfinders:ApplyWrappedText(self.areaStatus, inside and L["In objective area"] or "", 210, 2)
+    self.areaStatus:SetShown(inside == true)
+    self.areaStatus:ClearAllPoints()
+    self.areaStatus:SetPoint("TOPLEFT", descriptionHeight > 0 and self.description or self.title,
         "BOTTOMLEFT", 0, -3)
-    local textHeight = self.title:GetHeight() + self.distance:GetHeight() + 3 +
-        (inside and descriptionHeight or self.text:GetHeight() + 3)
+    local textHeight = self.title:GetHeight() +
+        (inside and descriptionHeight + self.areaStatus:GetHeight() + 3 or self.text:GetHeight() + 3)
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local height = math.max(62, math.max(textHeight, self.pinFrame:GetHeight(),
         self.actionButton and self.actionButton:GetHeight() or 0) + 32)
@@ -155,27 +155,6 @@ function MapPinEnhancedFloatingPanelMixin:OnLeave()
     if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
 
--- The panel shares the active Wayfinder target's sampler and owns only its
--- visible subscription. Re-registering replays the latest sample after a Step change.
-function MapPinEnhancedFloatingPanelMixin:UpdateDistanceSubscription()
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
-    self.distance:SetText("")
-    if self.step and self.step.insideObjectiveArea then
-        Wayfinders:ApplyWrappedText(self.distance, L["In objective area"], 210, 2)
-        self:UpdateLayout()
-        return
-    end
-    if not self:IsShown() or not self.step or self.step.showInstruction == false then return end
-    self.distanceCallback = function(distance)
-        Wayfinders:ApplyWrappedText(self.distance, MapPinEnhanced:FormatDistance(distance), 210, 2)
-        self:UpdateLayout()
-    end
-    MapPinEnhanced:RegisterContinuousDistanceCallback(self.distanceCallback)
-end
-
 function MapPinEnhancedFloatingPanelMixin:OnShow()
     -- A travel view activated during combat could not restore its position yet.
     if not InCombatLockdown() or not self:IsProtected() then self:RestorePosition() end
@@ -184,16 +163,11 @@ function MapPinEnhancedFloatingPanelMixin:OnShow()
     else
         self:SetStep(self.step)
     end
-    self:UpdateDistanceSubscription()
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnHide()
     MapPinEnhancedWayfinderInstructionMixin.OnHide(self)
-    if self.distanceCallback then
-        MapPinEnhanced:UnregisterContinuousDistanceCallback(self.distanceCallback)
-        self.distanceCallback = nil
-    end
-    self.distance:SetText("")
+    self.areaStatus:SetText("")
 end
 
 function MapPinEnhancedFloatingPanelMixin:ReportNavigation()

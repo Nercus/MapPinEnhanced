@@ -21,11 +21,11 @@
                         <Anchor point="TOPLEFT" relativeKey="$parent.title" relativePoint="BOTTOMLEFT" y="-3" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="distance" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                <FontString parentKey="areaStatus" inherits="GameFontHighlightSmall" justifyH="LEFT" hidden="true">
                     <Size x="242" y="12" />
                     <Color r="0.65" g="0.65" b="0.65" />
                     <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.text" relativePoint="BOTTOMLEFT" y="-3" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.title" relativePoint="BOTTOMLEFT" y="-3" />
                     </Anchors>
                 </FontString>
             </Layer>
