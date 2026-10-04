@@ -89,6 +89,7 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
         self.actionButton:SetAlpha(1)
         self.actionBlocker:Hide()
     end
+    self.actionButton:UpdateCooldown()
     local text = visible and step and step.instruction or ""
     if visible and status ~= "" then text = text .. "\n" .. status end
     self.fullText = text

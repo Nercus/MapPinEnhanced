@@ -12,60 +12,50 @@ local MINIMUM_ACTION_COOLDOWN_SECONDS = 1.5
 ---@param startTime any
 ---@param duration any
 ---@param modRate any
----@return boolean?
-local function IsCooldownFinished(startTime, duration, modRate)
-    if MapPinEnhanced:IsSecretValue(startTime) or MapPinEnhanced:IsSecretValue(duration) or
-        MapPinEnhanced:IsSecretValue(modRate) then
-        return nil
-    end
-    if type(startTime) ~= "number" or type(duration) ~= "number" then return nil end
-    -- Brief global cooldowns must not make repeated action clicks invalidate the route.
-    if startTime <= 0 or duration < MINIMUM_ACTION_COOLDOWN_SECONDS then return true end
+---@return number? remainingSeconds
+---@return number? startTime
+---@return number? duration
+---@return number? modRate
+local function ReadCooldown(startTime, duration, modRate)
+    if not MapPinEnhanced:IsReadableNumber(startTime) or not MapPinEnhanced:IsReadableNumber(duration) or
+        MapPinEnhanced:IsSecretValue(modRate) then return nil end
     local rate = type(modRate) == "number" and modRate > 0 and modRate or 1
-    return startTime + duration / rate <= GetTime()
+    if not (startTime < math.huge and duration >= 0 and duration < math.huge and rate < math.huge) then return nil end
+    -- Ignore brief global cooldowns, not the final seconds of a longer cooldown.
+    if startTime <= 0 or duration < MINIMUM_ACTION_COOLDOWN_SECONDS then return 0 end
+    local remaining = math.max(0, startTime + duration / rate - GetTime())
+    if remaining < math.huge then return remaining, startTime, duration, rate end
 end
 
 ---@param actionType "spell"|"item"|"toy"
 ---@param actionID number
----@return boolean?
----@return string? failure
-local function IsActionReady(actionType, actionID)
-    if actionType == "spell" then
-        if not C_Spell or not C_Spell.GetSpellCooldown then return nil, "spell cooldown unavailable" end
-        if C_Spell.GetSpellCharges then
-            local chargeInfo = C_Spell.GetSpellCharges(actionID)
-            if chargeInfo and not MapPinEnhanced:IsSecretTable(chargeInfo) then
-                local currentCharges = chargeInfo.currentCharges
-                local maxCharges = chargeInfo.maxCharges
-                if not MapPinEnhanced:IsSecretValue(currentCharges) and not MapPinEnhanced:IsSecretValue(maxCharges) and
-                    type(currentCharges) == "number" and type(maxCharges) == "number" and maxCharges > 0 then
-                    if currentCharges > 0 then return true end
-                    return false, "spell is on cooldown"
-                end
-            end
-        end
-
-        local cooldownInfo = C_Spell.GetSpellCooldown(actionID)
-        if not cooldownInfo or MapPinEnhanced:IsSecretTable(cooldownInfo) then
-            return nil, "spell cooldown unavailable"
-        end
-        if MapPinEnhanced:IsSecretValue(cooldownInfo.isOnGCD) or MapPinEnhanced:IsSecretValue(cooldownInfo.isEnabled) then
-            return nil, "spell cooldown unavailable"
-        end
-        if cooldownInfo.isEnabled == false then return false, "spell is unavailable" end
-        if cooldownInfo.isOnGCD then return true end
-        local ready = IsCooldownFinished(cooldownInfo.startTime, cooldownInfo.duration, cooldownInfo.modRate)
-        if ready == nil then return nil, "spell cooldown unavailable" end
-        if ready then return true end
-        return false, "spell is on cooldown"
+---@return number? remainingSeconds
+---@return number? startTime
+---@return number? duration
+---@return number? modRate
+function Navigation:GetActionCooldown(actionType, actionID)
+    if actionType ~= "spell" then
+        if not C_Item or not C_Item.GetItemCooldown then return nil end
+        local startTime, duration = C_Item.GetItemCooldown(actionID)
+        return ReadCooldown(startTime, duration, 1)
     end
-
-    if not C_Item or not C_Item.GetItemCooldown then return nil, "item cooldown unavailable" end
-    local startTime, duration = C_Item.GetItemCooldown(actionID)
-    local ready = IsCooldownFinished(startTime, duration, 1)
-    if ready == nil then return nil, "item cooldown unavailable" end
-    if ready then return true end
-    return false, actionType .. " is on cooldown"
+    if not C_Spell or not C_Spell.GetSpellCooldown then return nil end
+    local charges = C_Spell.GetSpellCharges and C_Spell.GetSpellCharges(actionID)
+    if MapPinEnhanced:IsSecretValue(charges) then return nil end
+    if charges then
+        if not MapPinEnhanced:IsReadableTable(charges) or not MapPinEnhanced:IsReadableNumber(charges.currentCharges) or
+            not MapPinEnhanced:IsReadableNumber(charges.maxCharges) then return nil end
+        if charges.maxCharges > 0 then
+            if charges.currentCharges > 0 then return 0 end
+            return ReadCooldown(charges.cooldownStartTime, charges.cooldownDuration, charges.chargeModRate)
+        end
+    end
+    local cooldown = C_Spell.GetSpellCooldown(actionID)
+    if not MapPinEnhanced:IsReadableTable(cooldown) or MapPinEnhanced:IsSecretValue(cooldown.isEnabled) or
+        MapPinEnhanced:IsSecretValue(cooldown.isOnGCD) then return nil end
+    if cooldown.isEnabled == false then return nil end
+    if cooldown.isOnGCD then return 0 end
+    return ReadCooldown(cooldown.startTime, cooldown.duration, cooldown.modRate)
 end
 
 ---@param pathType string
@@ -171,23 +161,26 @@ local function RegisterAction(pathType, icon, method, instruction)
             local usable = C_ToyBox and C_ToyBox.IsToyUsable and C_ToyBox.IsToyUsable(action.id)
             if MapPinEnhanced:IsSecretValue(usable) or usable ~= true then return nil, "toy unavailable" end
         end
-        local actionReady, actionFailure = IsActionReady(action.type, action.id)
-        if not actionReady then return nil, actionFailure or "action cooldown unavailable" end
+        local cooldownSeconds = Navigation:GetActionCooldown(action.type, action.id)
+        if not cooldownSeconds then return nil, "action cooldown unavailable" end
         local castSeconds = GetActionCastSeconds(action)
+        local expectedSeconds = castSeconds + cooldownSeconds
         -- Equipment travel also requires swapping gear and waiting for its
         -- equip cooldown. Keep that conservative estimate out of cast duration.
         local equipmentPenalty = action.type == "item" and C_Item.IsEquippableItem(action.id) and
             not C_Item.IsEquippedItem(action.id) and EQUIPMENT_CHANGE_PENALTY_SECONDS or 0
         local penaltySeconds = ACTION_PENALTY_SECONDS + equipmentPenalty
         return {
-            expectedSeconds = castSeconds,
+            expectedSeconds = expectedSeconds,
             uncertaintySeconds = 0,
             -- Prefer ordinary movement for short trips without delaying action execution.
-            comparisonSeconds = castSeconds + penaltySeconds,
+            comparisonSeconds = expectedSeconds + penaltySeconds,
             explanation = {
                 kind = "cast",
                 pathType = pathType,
-                seconds = castSeconds,
+                seconds = expectedSeconds,
+                castSeconds = castSeconds,
+                cooldownSeconds = cooldownSeconds,
                 penaltySeconds = penaltySeconds,
                 equipmentChangeSeconds = equipmentPenalty,
             },

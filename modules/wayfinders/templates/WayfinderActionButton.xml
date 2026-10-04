@@ -56,7 +56,17 @@
             <TextureSliceMode mode="Stretched" />
             <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
         </PushedTexture>
+        <Frames>
+            <Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" drawBling="false" drawEdge="false" hideCountdownNumbers="false" useParentLevel="true" enableMouse="false">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                    <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                </Anchors>
+            </Cooldown>
+        </Frames>
         <Scripts>
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
         </Scripts>
