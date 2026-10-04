@@ -6,51 +6,20 @@
             <KeyValue key="categoryName" value="General" />
         </KeyValues>
         <Frames>
-            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Minimap" />
+                    <KeyValue key="key" value="General.Minimap.ShowButton" />
                 </KeyValues>
-                <Frames>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Minimap.ShowButton" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Minimap.CustomButton" />
-                        </KeyValues>
-                    </Frame>
-                </Frames>
             </Frame>
-            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Distance" />
+                    <KeyValue key="key" value="General.Minimap.CustomButton" />
                 </KeyValues>
-                <Frames>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Distance.ShowUnit" />
-                        </KeyValues>
-                    </Frame>
-                </Frames>
             </Frame>
-            <Frame inherits="MapPinEnhancedOptionGroupTemplate">
+            <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Tracking" />
+                    <KeyValue key="key" value="General.Tracking.DefaultMode" />
                 </KeyValues>
-                <Frames>
-                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Tracking.DefaultMode" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Tracking.ArrivalMode" />
-                        </KeyValues>
-                    </Frame>
-                </Frames>
             </Frame>
         </Frames>
     </Frame>

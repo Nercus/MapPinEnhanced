@@ -43,7 +43,17 @@
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                         <KeyValues>
+                            <KeyValue key="key" value="General.Distance.ShowUnit" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
                             <KeyValue key="key" value="Wayfinder.General.ShowETA" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="General.Tracking.ArrivalMode" />
                         </KeyValues>
                     </Frame>
                 </Frames>

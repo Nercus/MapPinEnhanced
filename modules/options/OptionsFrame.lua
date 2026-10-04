@@ -10,6 +10,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field SetPanExtent fun(self: ScrollFrameTemplate, panExtent: number)
 
 ---@class MapPinEnhancedOptionsScrollChild : Frame
+---@field General MapPinEnhancedOptionCategoryBaseTemplate
+---@field Coordinates MapPinEnhancedOptionCategoryBaseTemplate
+---@field Pins MapPinEnhancedOptionCategoryBaseTemplate
+---@field Tracker MapPinEnhancedOptionCategoryBaseTemplate
 ---@field Wayfinder MapPinEnhancedOptionCategoryWayfinderTemplate
 
 ---@class MapPinEnhancedOptionsScrollFrame : ScrollFrameTemplate
