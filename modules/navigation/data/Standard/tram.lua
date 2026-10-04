@@ -16,7 +16,7 @@ local TRAM = {
         toX = 0.4577,
         toY = 0.1247,
         type = "tram",
-        travelDuration = 30,
+        travelDuration = 180,
     },
     -- Deeprun Tram (map 499 45.77,12.47) -> Deeprun Tram (map 499 42.53,11.53) via tram
     {
@@ -29,7 +29,7 @@ local TRAM = {
         toX = 0.4253,
         toY = 0.1153,
         type = "tram",
-        travelDuration = 30,
+        travelDuration = 180,
     },
 }
 
