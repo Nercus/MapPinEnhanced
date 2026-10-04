@@ -727,12 +727,12 @@ function Navigation:PublishStep(progression)
             if not self:IsCurrentProgression(progression) then return end
             self:ApplyProgressionPhase(progression, "ready")
         end
-    elseif self:IsMovementPath(pathType) or
+    elseif pathType == "floor" or self:IsMovementPath(pathType) or
         progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" then
         onArrival = function()
             self:CompleteCurrentPath(progression)
         end
-    elseif pathType ~= "floor" and (progression.phase ~= "in-transit" or pathType ~= "flighttaxi") then
+    elseif progression.phase ~= "in-transit" or pathType ~= "flighttaxi" then
         targetPointIndex = fromPointIndex or toPointIndex
     end
 
@@ -758,9 +758,9 @@ function Navigation:PublishStep(progression)
         showDirection = desiredAction == nil and
             (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
-        arrivalMapID = progression.phase == "in-transit" and
+        arrivalMapID = (pathType == "floor" or progression.phase == "in-transit") and
             RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
-                graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[toPointIndex] or nil,
+                graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[targetPointIndex] or nil,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
         progressEntries = CopyRouteProgress(progression, graph),
@@ -839,16 +839,12 @@ function Navigation:CheckCurrentPathCompletion(identity)
         return
     end
     if graph.pathTypes[pathReference] == "phaseswitch" or graph.pathTypes[pathReference] == "flighttaxi" then return end
+    -- Floor endpoints advance through their own arrival callbacks in order.
+    -- Exit vicinity must not skip the entrance or hide exit guidance.
+    if pathType == "floor" and destinationDistance then return end
     if destinationDistance and destinationDistance <= 100 and
         (not RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
             graph.pointMapIDs[toPointIndex]) or playerMapID == graph.pointMapIDs[toPointIndex]) then
-        if pathType == "floor" and fromPointIndex and
-            graph.pointMapIDs[fromPointIndex] ~= graph.pointMapIDs[toPointIndex] then
-            -- Floors can overlap in world XY. Destination-map exit proximity
-            -- proves the crossing without a second pin-arrival pass.
-            self:CompleteCurrentPath(progression)
-            return
-        end
         local requiresObservedAttempt = self:GetPathAction(pathType,
             graph.pathRequirements[pathReference]) ~= nil
         if not requiresObservedAttempt or progression.attempted then
@@ -1380,6 +1376,7 @@ function Navigation:BuildRouteLayer(isWorldMap)
     currentY = currentY or route.originY
     local firstPathReference = route.pathReferences[progression.pathIndex]
     local targetsPathEnd = firstPathReference and (self:IsMovementPath(graph.pathTypes[firstPathReference]) or
+        graph.pathTypes[firstPathReference] == "floor" and progression.phase ~= "approach" or
         progression.phase == "in-transit" and graph.pathTypes[firstPathReference] ~= "phaseswitch")
     if firstPathReference then
         local firstFromPointIndex = graph.pathFromPointIndexes[firstPathReference]
@@ -1438,7 +1435,12 @@ function Navigation:BuildRouteLayer(isWorldMap)
                     graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
                 if startFrame and endFrame then
                     if not shaped then startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex) end
-                    if legIndex == segments then endFrame:SetRoutePoint(graph.pathTypes[pathReference]) end
+                    -- The active floor shows only its current endpoint; keep
+                    -- the exit as a line anchor until entrance arrival.
+                    if legIndex == segments and
+                        (pathIndex ~= progression.pathIndex or graph.pathTypes[pathReference] ~= "floor") then
+                        endFrame:SetRoutePoint(graph.pathTypes[pathReference])
+                    end
                 end
             end
         end
