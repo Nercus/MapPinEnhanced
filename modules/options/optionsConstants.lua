@@ -13,8 +13,6 @@ local L = MapPinEnhanced.L
 ---@field WAYFINDER_SELECTION_FLOATING WayfinderSelection
 local Options = MapPinEnhanced:GetModule("Options")
 
-Options.TRACKING_MODE_NEAREST = "nearest"
-Options.TRACKING_MODE_ORDERED = "ordered"
 Options.ARRIVAL_MODE_DYNAMIC = "dynamic"
 Options.ARRIVAL_MODE_STATIC = "static"
 Options.WAYFINDER_SELECTION_ARROW = "arrow"
@@ -40,10 +38,8 @@ if savedWayfinderSelection ~= Options.WAYFINDER_SELECTION_ARROW and
     end
 end
 
-Options.TRACKING_MODE_OPTIONS = {
-    { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Distance"]), value = Options.TRACKING_MODE_NEAREST },
-    { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Options.TRACKING_MODE_ORDERED },
-}
+-- Tracking mode belongs to each group; the retired global default no longer applies.
+MapPinEnhanced:DeleteVar("options", "General.Tracking.DefaultMode")
 
 Options.SCALE_PRESETS = {
     { label = L["Small (90%)"], value = 0.9 },
@@ -106,7 +102,6 @@ Options.DEFAULTS = {
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
-    ["General.Tracking.DefaultMode"] = Options.TRACKING_MODE_NEAREST --[[@as GroupTrackingMode]],
     ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
     ["Pins.Miscellaneous.ScaleOnHover"] = false,
     ["Miscellaneous.Coords.Enable"] = true,
@@ -171,7 +166,6 @@ Options.OPTIONS_CONFIG = {
         { label = L["Navigation Transportation Personal teleports"],  value = "personalTeleports" },
         { label = L["Navigation Transportation Dungeon teleports"],   value = "dungeonTeleports" },
     },
-    ["General.Tracking.DefaultMode"] = Options.TRACKING_MODE_OPTIONS,
     ["General.Tracking.ArrivalMode"] = {
         { label = L["Dynamic"], value = Options.ARRIVAL_MODE_DYNAMIC },
         { label = L["Static"],  value = Options.ARRIVAL_MODE_STATIC },

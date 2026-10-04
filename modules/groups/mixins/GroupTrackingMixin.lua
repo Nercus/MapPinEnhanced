@@ -4,15 +4,18 @@ local MapPinEnhanced = select(2, ...)
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
-local Options = MapPinEnhanced:GetModule("Options")
+local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupTrackingMixin = {}
 
 ---@alias GroupTrackingMode "nearest"|"ordered"
-Groups.TRACKING_MODE_NEAREST = Options.TRACKING_MODE_NEAREST
-Groups.TRACKING_MODE_ORDERED = Options.TRACKING_MODE_ORDERED
-Groups.TRACKING_MODE_OPTIONS = Options.TRACKING_MODE_OPTIONS
+Groups.TRACKING_MODE_NEAREST = "nearest"
+Groups.TRACKING_MODE_ORDERED = "ordered"
+Groups.TRACKING_MODE_OPTIONS = {
+    { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Distance"]), value = Groups.TRACKING_MODE_NEAREST },
+    { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Groups.TRACKING_MODE_ORDERED },
+}
 
 ---@type table<GroupTrackingMode, boolean>
 local TRACKING_MODES = {
@@ -20,21 +23,10 @@ local TRACKING_MODES = {
     [Groups.TRACKING_MODE_ORDERED] = true,
 }
 
-local DEFAULT_TRACKING_MODE_OPTION = "General.Tracking.DefaultMode"
-
 ---@param mode any
 ---@return boolean
 function Groups:IsValidTrackingMode(mode)
     return TRACKING_MODES[mode] == true
-end
-
----@return GroupTrackingMode
-function Groups:GetDefaultTrackingMode()
-    local mode = Options:GetOptionInitValue(DEFAULT_TRACKING_MODE_OPTION)
-    if self:IsValidTrackingMode(mode) then
-        return mode --[[@as GroupTrackingMode]]
-    end
-    return self.TRACKING_MODE_NEAREST
 end
 
 ---@param mode any
@@ -43,7 +35,7 @@ function Groups:GetTrackingModeOrDefault(mode)
     if self:IsValidTrackingMode(mode) then
         return mode --[[@as GroupTrackingMode]]
     end
-    return self:GetDefaultTrackingMode()
+    return self.TRACKING_MODE_NEAREST
 end
 
 ---@param group MapPinEnhancedGroupMixin

@@ -213,9 +213,6 @@ L["General.Distance_GROUPLABEL"] = "Distance"
 L["General.Distance.ShowUnit_LABEL"] = "Show Distance Unit"
 L["General.Distance.ShowUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
 L["General.Tracking_GROUPLABEL"] = "Tracking"
-L["General.Tracking.DefaultMode_LABEL"] = "Default Tracking Mode"
-L["General.Tracking.DefaultMode_DESCRIPTION"] =
-"Choose how newly created groups select the next pin to track."
 L["General.Tracking.ArrivalMode_LABEL"] = "Wayfinder Arrival Detection"
 L["General.Tracking.ArrivalMode_DESCRIPTION"] =
 "Dynamic adjusts the arrival distance based on your approach speed. Static completes a target as soon as you are within 10 metres."

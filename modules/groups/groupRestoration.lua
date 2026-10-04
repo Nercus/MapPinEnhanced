@@ -60,7 +60,7 @@ function Groups:CreateGroupFromUngrouped(name)
         source = MapPinEnhanced.name,
         icon = ungroupedGroup:GetIcon(),
         order = GetTime(),
-        trackingMode = self:GetDefaultTrackingMode(),
+        trackingMode = self.TRACKING_MODE_NEAREST,
     })
     if not targetGroup then return nil end
 

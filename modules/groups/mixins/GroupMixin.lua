@@ -50,7 +50,7 @@ function MapPinEnhancedGroupMixin:Init()
     self.pinState = CreateAndInitFromMixin(MapPinEnhancedGroupPinStateMixin, self)
     self.order = GetTime()
     self.hidden = false
-    self.trackingMode = Groups:GetDefaultTrackingMode()
+    self.trackingMode = Groups.TRACKING_MODE_NEAREST
     self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
