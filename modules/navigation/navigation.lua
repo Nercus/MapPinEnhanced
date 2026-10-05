@@ -1265,6 +1265,7 @@ local layerPathIndex ---@type integer?
 local layerPhase ---@type string?
 local worldMapApproachTimer ---@type FunctionContainer?
 local minimapApproachTimer ---@type FunctionContainer?
+local surfaceApproaches = {} ---@type table<boolean, fun()>
 
 function Navigation:GetRouteMapFramePool()
     if not self.routeMapFramePool then
@@ -1276,6 +1277,8 @@ end
 
 ---@param isWorldMap boolean? nil releases both surfaces
 function Navigation:ReleaseRouteLayers(isWorldMap)
+    if isWorldMap ~= false then surfaceApproaches[true] = nil end
+    if isWorldMap ~= true then surfaceApproaches[false] = nil end
     if isWorldMap ~= false and worldMapApproachTimer then
         worldMapApproachTimer:Cancel()
         worldMapApproachTimer = nil
@@ -1432,6 +1435,33 @@ local function AcquireRouteMapEndpoints(step, isWorldMap, fromMapID, fromX, from
     return startFrame, endFrame
 end
 
+-- One worker per surface covers all geometry, even a route without a player
+-- approach. HBD still anchors/clips each frame; native UV scrolling is independent.
+local function EnsureSurfaceGeometry(isWorldMap)
+    if isWorldMap and worldMapApproachTimer or not isWorldMap and minimapApproachTimer then return end
+    local timer = C_Timer.NewTicker(0.05, function()
+        if isWorldMap and not WorldMapFrame:IsShown() then return end
+        local approach = surfaceApproaches[isWorldMap]
+        if approach then approach() end
+        local hasLines = false
+        for _, step in pairs(Navigation.routeSteps) do
+            for _, entry in ipairs(step.mapEntries) do
+                if entry.isWorldMap == isWorldMap and entry.frame.lineEnd then
+                    hasLines = true
+                    entry.frame:RefreshLine()
+                end
+            end
+        end
+        if not hasLines then
+            local current = isWorldMap and worldMapApproachTimer or minimapApproachTimer
+            if current then current:Cancel() end
+            if isWorldMap then worldMapApproachTimer = nil else minimapApproachTimer = nil end
+            surfaceApproaches[isWorldMap] = nil
+        end
+    end)
+    if isWorldMap then worldMapApproachTimer = timer else minimapApproachTimer = timer end
+end
+
 ---@param isWorldMap boolean
 ---@param startFrame MapPinEnhancedNavigationMapPinTemplate
 ---@param endFrame MapPinEnhancedNavigationMapPinTemplate
@@ -1440,7 +1470,7 @@ end
 ---@param toY number
 local function FollowPlayerApproach(isWorldMap, startFrame, endFrame, toMapID, toX, toY)
     local previousMapID, previousX, previousY ---@type number?, number?, number?
-    local timer = C_Timer.NewTicker(0.05, function()
+    surfaceApproaches[isWorldMap] = function()
         if isWorldMap and not WorldMapFrame:IsShown() then return end
         local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
         if not mapID or not x or not y then return end
@@ -1459,17 +1489,18 @@ local function FollowPlayerApproach(isWorldMap, startFrame, endFrame, toMapID, t
             endFrame:SetRoutePoint(endFrame.routePathType)
         end
         startFrame:RefreshLine()
-    end)
-    if isWorldMap then worldMapApproachTimer = timer else minimapApproachTimer = timer end
+    end
+    EnsureSurfaceGeometry(isWorldMap)
 end
 
 ---@param isWorldMap boolean
 function Navigation:BuildRouteLayer(isWorldMap)
-    if isWorldMap and not WorldMapFrame:IsShown() then return end
+    if isWorldMap and not WorldMapFrame:IsShown() or not isWorldMap and not Minimap:IsVisible() then return end
     local progression = self.progression
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local destination = self.activeDestination
     if not progression or not graph or not destination then return end
+    EnsureSurfaceGeometry(isWorldMap)
     local route = progression.route
     local stepCount = GetRouteStepCount(route)
     local currentX, currentY, currentMapID = MapPinEnhanced:GetPlayerMapPosition()
@@ -1592,6 +1623,11 @@ end
 hooksecurefunc(WorldMapFrame, "OnMapChanged", RefreshWorldMapRouteLayer)
 WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
 WorldMapFrame:HookScript("OnHide", function() Navigation:ReleaseRouteLayers(true) end)
+Minimap:HookScript("OnHide", function() Navigation:ReleaseRouteLayers(false) end)
+Minimap:HookScript("OnShow", function()
+    Navigation:ReleaseRouteLayers(false)
+    if Navigation.minimapRouteEnabled then Navigation:BuildRouteLayer(false) end
+end)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Navigation:SetupCalendarRequirements()

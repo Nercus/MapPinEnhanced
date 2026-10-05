@@ -22,6 +22,11 @@
                 </FontString>
             </Layer>
         </Layers>
+        <Animations>
+            <AnimationGroup parentKey="lineScroll" looping="REPEAT">
+                <TextureCoordTranslation childKey="line" duration="1.3333333333333" order="1" offsetU="-1" offsetV="0" smoothing="NONE" />
+            </AnimationGroup>
+        </Animations>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

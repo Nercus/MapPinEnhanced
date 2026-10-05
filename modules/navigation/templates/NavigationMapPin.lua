@@ -11,7 +11,8 @@ local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / 0.15
 ---@class MapPinEnhancedNavigationMapPinTemplate : Frame
 ---@field line Line
 ---@field step NavigationStep?
----@field antOffset number?
+---@field lineScroll AnimationGroup
+---@field lineSpan number?
 ---@field circle Texture
 ---@field number FontString
 ---@field lineEnd MapPinEnhancedNavigationMapPinTemplate?
@@ -35,7 +36,6 @@ function MapPinEnhancedNavigationMapPinMixin:SetRouteLine(endFrame, isCurrent)
     self.line:SetEndPoint("CENTER", endFrame)
     self.line:SetTexture("Interface/AddOns/MapPinEnhanced/assets/navigation/AntLine.png", "REPEAT", "CLAMP")
     self.line:SetVertexColor(1, 1, 1, isCurrent and 1 or 0.55)
-    self.antOffset = 0
     self:RefreshLine()
 end
 
@@ -47,10 +47,11 @@ function MapPinEnhancedNavigationMapPinMixin:ClearRouteLine()
         endFrame.lineStart = nil
     end
     self.lineEnd = nil
+    self.lineScroll:Stop()
     self.line:Hide()
     self.line:ClearAllPoints()
     self:RefreshUpdateScript()
-    self.antOffset = nil
+    self.lineSpan = nil
 end
 
 ---@param pathType string
@@ -80,15 +81,20 @@ function MapPinEnhancedNavigationMapPinMixin:SetLineEndpoint()
 end
 
 function MapPinEnhancedNavigationMapPinMixin:RefreshLine()
-    local shown = self.lineEnd ~= nil and self:IsShown() and self.lineEnd:IsShown()
+    local shown = self.lineEnd ~= nil and self:IsVisible() and self.lineEnd:IsVisible()
     self.line:SetShown(shown)
-    self:RefreshUpdateScript()
-    if shown then self:OnUpdate(0) end
+    if shown then
+        self:RefreshLineGeometry()
+        if not self.lineScroll:IsPlaying() then self.lineScroll:Play() end
+    else
+        self.lineScroll:Stop()
+        self.lineSpan = nil
+    end
 end
 
--- Line scrolling and hover scaling share the frame's single update handler.
+-- Only the brief hover interpolation owns a Lua frame-update script.
 function MapPinEnhancedNavigationMapPinMixin:RefreshUpdateScript()
-    local animate = self:IsShown() and (self.line:IsShown() or self.hoverScaleTarget ~= nil)
+    local animate = self:IsShown() and self.hoverScaleTarget ~= nil
     self:SetScript("OnUpdate", animate and self.OnUpdate or nil)
 end
 
@@ -105,8 +111,7 @@ function MapPinEnhancedNavigationMapPinMixin:ResetHoverScale()
     self:RefreshUpdateScript()
 end
 
--- UV scrolling keeps dash spacing constant as the map zooms or endpoints move.
--- Only visible lines scroll; reset/hide also stop pending hover scaling.
+-- The surface owner samples geometry at 20 Hz; hover refreshes its two affected lines.
 ---@param elapsed number
 function MapPinEnhancedNavigationMapPinMixin:OnUpdate(elapsed)
     local target = self.hoverScaleTarget
@@ -120,6 +125,11 @@ function MapPinEnhancedNavigationMapPinMixin:OnUpdate(elapsed)
             self:RefreshUpdateScript()
         end
     end
+    self:RefreshLineGeometry()
+    if self.lineStart then self.lineStart:RefreshLineGeometry() end
+end
+
+function MapPinEnhancedNavigationMapPinMixin:RefreshLineGeometry()
     local endpoint = self.lineEnd
     if not endpoint or not self.line:IsShown() then return end
     local x, y = self:GetCenter()
@@ -128,8 +138,11 @@ function MapPinEnhancedNavigationMapPinMixin:OnUpdate(elapsed)
     local scale = endpoint:GetEffectiveScale() / self:GetEffectiveScale()
     local dx, dy = endX * scale - x, endY * scale - y
     local length = math.sqrt(dx * dx + dy * dy)
-    self.antOffset = ((self.antOffset or 0) - elapsed * 0.75) % 1
-    self.line:SetTexCoord(self.antOffset, self.antOffset + length / 16, 0, 1)
+    local span = length / 16
+    if span ~= self.lineSpan then
+        self.lineSpan = span
+        self.line:SetTexCoord(0, span, 0, 1)
+    end
 end
 
 function MapPinEnhancedNavigationMapPinMixin:OnShow()
@@ -141,6 +154,8 @@ function MapPinEnhancedNavigationMapPinMixin:OnHide()
     self:OnLeave()
     self:ResetHoverScale()
     self:SetScript("OnUpdate", nil)
+    self.lineScroll:Stop()
+    self.lineSpan = nil
     self.line:Hide()
     if self.lineStart then self.lineStart:RefreshLine() end
 end
