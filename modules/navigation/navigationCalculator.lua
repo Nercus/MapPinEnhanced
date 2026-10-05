@@ -379,18 +379,36 @@ end
 ---@param previousPathReference integer?
 ---@param signature string
 ---@param finalCost NavigationCalculatedPathCost?
+---@param includePath boolean?
 local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
-                          previousPointIndex, previousPathReference, signature, finalCost)
+                          previousPointIndex, previousPathReference, signature, finalCost, includePath)
     local costBucket = GetCostBucket(cost)
     -- All remaining travel costs are nonnegative. Keep equal buckets for the
     -- existing uncertainty/Path-count/signature ties, but discard costlier prefixes.
     if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
     local bestCostBucket = job.bestCostBuckets[pointIndex]
-    local isBetter = bestCostBucket == nil or costBucket < bestCostBucket or costBucket == bestCostBucket and
-        (uncertainty < job.bestUncertainties[pointIndex] or uncertainty == job.bestUncertainties[pointIndex] and
-            (pathCount < job.bestPathCounts[pointIndex] or pathCount == job.bestPathCounts[pointIndex] and
-                signature < (job.bestSignatures[pointIndex] or "")))
-    if not isBetter then return end
+    if bestCostBucket then
+        if costBucket > bestCostBucket then return end
+        if costBucket == bestCostBucket then
+            local bestUncertainty = job.bestUncertainties[pointIndex]
+            if uncertainty > bestUncertainty then return end
+            if uncertainty == bestUncertainty and pathCount > job.bestPathCounts[pointIndex] then return end
+        end
+    end
+    -- Build a Path signature only once the cheaper tuple comparisons admit it.
+    -- Observed negative references retain their journey identity ordering.
+    if includePath and previousPathReference then
+        local journey = job.taxiJourneys[previousPathReference]
+        if job.reverseSearch then
+            signature = (journey and journey.identity .. "," or
+                AddPathToSignature("", previousPathReference)) .. signature
+        else
+            signature = journey and signature .. journey.identity .. "," or
+                AddPathToSignature(signature, previousPathReference)
+        end
+    end
+    if costBucket == bestCostBucket and uncertainty == job.bestUncertainties[pointIndex] and
+        pathCount == job.bestPathCounts[pointIndex] and signature >= job.bestSignatures[pointIndex] then return end
     job.bestCostBuckets[pointIndex] = costBucket
     job.bestUncertainties[pointIndex] = uncertainty
     job.bestPathCounts[pointIndex] = pathCount
@@ -593,7 +611,7 @@ local function ExpandPoint(job, entry)
                     entry.cost + pathCost.comparisonSeconds,
                     entry.uncertainty + pathCost.uncertaintySeconds,
                     entry.pathCount + 1, entry.pointIndex, pathReference,
-                    AddPathToSignature(entry.signature, pathReference))
+                    entry.signature, nil, true)
             end
         end
     end
@@ -603,7 +621,7 @@ local function ExpandPoint(job, entry)
         local cost = journey.cost
         OfferPoint(job, journey.toPointIndex, entry.cost + cost.comparisonSeconds,
             entry.uncertainty + cost.uncertaintySeconds, entry.pathCount + 1,
-            entry.pointIndex, reference, entry.signature .. journey.identity .. ",")
+            entry.pointIndex, reference, entry.signature, nil, true)
     end
     -- Authored data describes transitions, not every walk between entrances.
     -- Offer connections from actual Path arrivals. Initial player approaches
@@ -638,14 +656,11 @@ local function ExpandReversePoint(job, entry, reverse)
             end
             if cost then
                 local fromPointIndex = graph.pathFromPointIndexes[reference]
-                local journey = job.taxiJourneys[reference]
-                local signature = journey and journey.identity .. "," .. entry.signature or
-                    AddPathToSignature("", reference) .. entry.signature
                 local totalCost = entry.cost + cost.comparisonSeconds
                 local uncertainty = entry.uncertainty + cost.uncertaintySeconds
                 if fromPointIndex then
                     OfferPoint(job, fromPointIndex, totalCost, uncertainty, entry.pathCount + 1,
-                        entry.pointIndex, reference, signature, entry.finalCost)
+                        entry.pointIndex, reference, entry.signature, entry.finalCost, true)
                 elseif Navigation:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
                     -- Only a usable current-player action may close this
                     -- fallback. No player map coordinates or approach are needed.
@@ -658,7 +673,9 @@ local function ExpandReversePoint(job, entry, reverse)
                         previousPointIndex = entry.pointIndex,
                         firstPathReference = reference,
                         finalCost = entry.finalCost,
-                        signature = signature,
+                        signature = job.taxiJourneys[reference] and
+                            job.taxiJourneys[reference].identity .. "," .. entry.signature or
+                            AddPathToSignature("", reference) .. entry.signature,
                     })
                 end
             end
@@ -782,7 +799,7 @@ local function SeedJob(job)
                 job.pathCostByReference[pathReference] = pathCost
                 OfferPoint(job, graph.pathToPointIndexes[pathReference], pathCost.comparisonSeconds,
                     pathCost.uncertaintySeconds, 1, nil, pathReference,
-                    AddPathToSignature("", pathReference))
+                    "", nil, true)
             end
         end
     end
