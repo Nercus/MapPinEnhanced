@@ -112,16 +112,9 @@ local function RefreshRoutes()
     if not MapPinEnhanced:IsSecretValue(flying) and flying then return end
     if bookingPending or progression and (progression.attempted or progression.phase == "in-transit") then return end
     if not Navigation.routeNavigationEnabled or not Navigation.activeDestination then return end
-    if Navigation:EnsurePreparedData() then
-        Navigation:StartCalculation(true)
-    else
-        -- Publication owns the restart; do not create a waiting job that the
-        -- changed observation would immediately replace on publication.
-        local destination = Navigation.activeDestination
-        Navigation.pendingCalculationRestart = function()
-            if Navigation.activeDestination == destination then Navigation:StartCalculation(true) end
-        end
-    end
+    -- The calculation owns its preparation budget, including a current-master
+    -- refresh. A short direct request can still avoid transport work entirely.
+    Navigation:StartCalculation(true)
 end
 
 local function Observe()
@@ -166,7 +159,8 @@ function Navigation:TryAutomaticTaxiSelection()
     local journey = activeJourney
     -- Calculation completion and the ride ticker share the same booking gate.
     -- An older route must never select a slot from a new observation.
-    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or Navigation.pendingCalculationRestart or
+    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation and not Navigation.activeCalculation.background or
+        Navigation.pendingCalculationRestart or not Navigation:IsCurrentPathReady() or
         not observation or
         not progression or progression.route.preparedData.taxiObservation ~= observation or
         not journey or not journey.observed or journey.origin ~= observation.origin or
@@ -185,6 +179,7 @@ function Navigation:TryAutomaticTaxiSelection()
     -- Consume this opening before booking, which can synchronously close the
     -- map. A rejected booking stays manual until the next interaction.
     automaticDestination = nil
+    Navigation:CancelRouteCalculation(Navigation.activeCalculation)
     TakeTaxiNode(destinationSlot)
 end
 
@@ -254,12 +249,11 @@ end
 if TakeTaxiNode then
     hooksecurefunc("TakeTaxiNode", function(slot)
         automaticDestination = nil
+        Navigation:CancelRouteCalculation(Navigation.activeCalculation)
         local evidence = observation or closingObservation
         if activeData and evidence and MapPinEnhanced:IsReadablePositiveInteger(slot) then
             bookedDestination = evidence.destinationsBySlot[slot]
             bookingPending = bookedDestination ~= nil
-            Navigation:CancelRouteCalculation(Navigation.activeCalculation)
-            Navigation.activeCalculation = nil
         end
     end)
 end

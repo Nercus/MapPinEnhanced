@@ -34,6 +34,7 @@ local function SelectTravelOption()
         selectedOptionID or InCombatLockdown() then
         return
     end
+    if not Navigation:IsCurrentPathReady() then return end
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
@@ -51,6 +52,7 @@ local function SelectTravelOption()
             -- Set the guard before selection: it can synchronously close gossip.
             -- Selection is only an attempt; the destination still proves arrival.
             selectedOptionID = data.gossipOptionID
+            Navigation:CancelRouteCalculation(Navigation.activeCalculation)
             C_GossipInfo.SelectOption(data.gossipOptionID)
             report("attempted")
             return

@@ -45,6 +45,11 @@ local L = MapPinEnhanced.L
 ---@field progression NavigationProgression?
 ---@field unsubscribeEligibilityRefresh fun()?
 ---@field lastCalculationFailure string?
+---@field lastCalculationTermination string?
+---@field lastCalculationInputs NavigationPreparedData?
+---@field lastCalculationOriginMapID number?
+---@field transportationChangedDuringTravel boolean?
+---@field backgroundSearchEnabled boolean?
 ---@field lastCalculationExclusions string[]?
 ---@field routeMapFramePool FramePoolCollection<MapPinEnhancedNavigationMapPinTemplate>?
 ---@field routeSteps table<integer, NavigationStep>
@@ -52,6 +57,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 local DEVIATION_RECALCULATION_COOLDOWN = 15
 local presentationChangeNumber = 0
+local publicationNumber = 0
 
 ---@param pathType string
 ---@param fromMapID number?
@@ -232,6 +238,8 @@ function Navigation:CompleteFinalDestination(destination)
     local data = destination.routingData
     local distance = self:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
     if not distance or distance > 50 then return end
+    self:CancelRouteCalculation(self.activeCalculation)
+    self:CancelPreparedData()
     local removeDestination = destination.removeDestination
     if not destination.data.lock then destination.removeDestination = nil end
     if removeDestination then
@@ -239,110 +247,150 @@ function Navigation:CompleteFinalDestination(destination)
     end
 end
 
+function Navigation:IsDirectOnlyRoute()
+    return self.progression ~= nil and #self.progression.route.pathReferences == 0 and
+        not self.activeCalculation and not self.pendingCalculationRestart
+end
+
+-- Automatic adapters share this gate. A displayed frozen Route is not itself
+-- proof that dirty observations still permit executing its current operation.
+function Navigation:IsCurrentPathReady()
+    local progression = self.progression
+    if not progression or progression.pathUnavailable or not self:ArePreparedInputsFresh() then return false end
+    local reference = progression.route.pathReferences[progression.pathIndex]
+    if not reference then return false end
+    if reference > 0 then return self:GetFreshPathCost(reference) ~= nil end
+    local prepared = self:GetPreparedData()
+    local journey = progression.route.taxiJourneys[reference]
+    return prepared ~= nil and journey ~= nil and
+        progression.route.preparedData.taxiObservation == self:GetTaxiObservation() and
+        self:IsTaxiJourneyEligible(journey, prepared)
+end
+
+---@param destination NavigationDestination
+---@param route NavigationRoute?
+---@param failure string?
+---@param checkpoint fun()
 ---@param currentRouteUnusable boolean?
-function Navigation:StartCalculation(currentRouteUnusable)
+function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint, currentRouteUnusable)
+    if not IsCurrentDestination(destination) or not self.routeNavigationEnabled then return end
+    local job = self.activeCalculation
+    local previous = self.progression
+    local prepared ---@type NavigationPreparedData|NavigationMovementData|nil
+    if route and #route.pathReferences == 0 then
+        prepared = { movement = self:GetMovementCapabilities(), movementOnly = true }
+    elseif self:ArePreparedInputsFresh() then
+        prepared = self:GetPreparedData()
+    end
+    if not IsCurrentDestination(destination) or self.progression ~= previous then return end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    local position = { x = x, y = y, mapID = mapID }
+    local remaining ---@type number?
+    if previous and not currentRouteUnusable then
+        -- A cheap direct candidate cannot assume that a dirty transport Route
+        -- is unusable. Its ordinary refresh owns that decision.
+        if #previous.route.pathReferences > 0 and not self:ArePreparedInputsFresh() then return end
+        local currentInputs = #previous.route.pathReferences > 0 and self:GetPreparedData() or prepared or
+            { movement = self:GetMovementCapabilities(), movementOnly = true }
+        remaining = self:GetRemainingRouteCost(previous, currentInputs, checkpoint, position)
+        currentRouteUnusable = remaining == nil
+    end
+    if route and prepared then
+        if mapID and x and y and (not HasRouteOrigin(route) or mapID ~= route.originMapID) then
+            self:StartCalculation(currentRouteUnusable)
+            return
+        end
+        if not self:ValidateRoute(route, prepared, checkpoint, position) then route = nil end
+        -- Validation may yield. Freshness must hold after the last selected leg.
+        if route and not prepared.movementOnly and
+            (not self:ArePreparedInputsFresh() or self:GetPreparedData() ~= prepared) then route = nil end
+    else
+        route = nil
+    end
+    if not IsCurrentDestination(destination) or self.progression ~= previous then return end
+    if not route and job and job.preparedData and job.preparedData ~= self:GetPreparedData() and
+        self:ArePreparedInputsFresh() and (not previous or currentRouteUnusable) then
+        self:StartCalculation(true)
+        return
+    end
+    self.lastCalculationInputs = self:GetPreparedData()
+    self.lastCalculationOriginMapID = select(3, MapPinEnhanced:GetPlayerMapPosition())
+    if not route then
+        self.lastCalculationFailure = failure or "selected route unavailable"
+        if job and failure == "no route" then
+            local counts = {} ---@type table<string, integer>
+            for _, reason in pairs(job.unavailablePathCosts) do
+                counts[reason] = (counts[reason] or 0) + 1
+                checkpoint()
+            end
+            local exclusions = {} ---@type string[]
+            for reason, count in pairs(counts) do
+                exclusions[#exclusions + 1] = string.format("%s (%d)", reason, count)
+            end
+            table.sort(exclusions)
+            self.lastCalculationExclusions = exclusions
+        end
+        if not previous or currentRouteUnusable then
+            self.progression = nil
+            local direct = self:CanGuideDirectly()
+            local continuing = self.backgroundSearchEnabled and failure == "initial budget"
+            self:ApplyDirectDestination(direct, direct and L["Navigation Direct Guidance"] or
+                continuing and L["Navigation Calculating"] or L["Navigation No Direction"],
+                direct and "direct" or continuing and "calculating" or "no-direction")
+        end
+        return
+    end
+    if remaining and remaining - route.comparisonSeconds < math.max(15, remaining * 0.1) then return end
+    self.lastCalculationFailure = nil
+    if job then
+        route.calculationSeconds = GetTimePreciseSec() - job.startedAt
+        route.calculationSlices = job.calculationSlices
+    end
+    publicationNumber = publicationNumber + 1
+    route.calculationID = publicationNumber
+    self:DeactivatePathHandler()
+    self.progression = {
+        route = route, pathIndex = 1, changeNumber = 1,
+        phase = route.pathReferences[1] and not route.graph.pathFromPointIndexes[route.pathReferences[1]] and
+            "ready" or "approach",
+    }
+    self:PublishStep(self.progression)
+end
+
+---@param currentRouteUnusable boolean?
+---@param improvement boolean? Explicit opt-in pass after usable guidance.
+function Navigation:StartCalculation(currentRouteUnusable, improvement)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled or self:IsTaxiBookingPending() then return end
     destination.routingData = CopyRoutingData(destination.data)
     self:CancelRouteCalculation(self.activeCalculation)
     self.lastCalculationFailure = nil
     self.lastCalculationExclusions = nil
-    local previousProgression = self.progression
-    if not previousProgression then
+    self.lastCalculationTermination = nil
+    local direct = self:CreateDirectRoute(destination.destinationID, destination.changeNumber, destination.routingData)
+    local shortcut = direct and direct.comparisonSeconds <= 60
+    if shortcut then
+        self:ApplyCalculatedRoute(destination, direct, nil, function() end, currentRouteUnusable)
+        if self.progression then currentRouteUnusable = false end
+        if not self.backgroundSearchEnabled then
+            self:CancelPreparedData()
+            self.lastCalculationTermination = "short direct journey"
+            return
+        end
+    elseif not self.progression then
         self:ApplyDirectDestination(false, L["Navigation Calculating"], "calculating")
     end
-    local expectedDestination = destination
+    if not IsCurrentDestination(destination) then return end
     self.activeCalculation = self:StartRouteCalculation(destination.destinationID, destination.changeNumber,
         destination.routingData, self.avoidedPaths,
-        ---@async
         function(route, failure, checkpoint)
-            if not IsCurrentDestination(expectedDestination) then return end
-            local prepared = self:AwaitPreparedData(checkpoint)
-            local finishedCalculation = self.activeCalculation
-            local currentRemainingCost ---@type number?
-            if previousProgression and self:IsCurrentProgression(previousProgression) and
-                not currentRouteUnusable and prepared then
-                currentRemainingCost = self:GetRemainingRouteCost(previousProgression, prepared, checkpoint)
-                currentRouteUnusable = currentRemainingCost == nil
-            end
-            if not route then
-                -- Login data or failure recovery may change eligibility while
-                -- this job uses its frozen snapshot. Retry if no usable Route remains.
-                if (not previousProgression or currentRouteUnusable) and finishedCalculation and
-                    finishedCalculation.preparedData ~= prepared then
-                    self:StartCalculation(true)
-                    return
-                end
-                self.lastCalculationFailure = failure or "route calculation failed"
-                local reasonCounts = {} ---@type table<string, integer>
-                if finishedCalculation then
-                    for _, reason in pairs(finishedCalculation.unavailablePathCosts) do
-                        reasonCounts[reason] = (reasonCounts[reason] or 0) + 1
-                        checkpoint()
-                    end
-                end
-                local exclusions = {}
-                for reason, count in pairs(reasonCounts) do
-                    table.insert(exclusions, string.format("%s (%d)", reason, count))
-                end
-                table.sort(exclusions)
-                self.lastCalculationExclusions = exclusions
-                if currentRouteUnusable or not previousProgression then
-                    self.progression = nil
-                    local canGuideDirectly = self:CanGuideDirectly()
-                    self:ApplyDirectDestination(canGuideDirectly, canGuideDirectly and
-                        L["Navigation Direct Guidance"] or L["Navigation No Direction"],
-                        canGuideDirectly and "direct" or "no-direction")
-                end
-                return
-            end
-            if route.preparedData.taxiObservation ~= self:GetTaxiObservation() then
-                self:StartCalculation(currentRouteUnusable)
-                return
-            end
-            if prepared and route.preparedData ~= prepared then
-                for _, reference in ipairs(route.pathReferences) do
-                    checkpoint()
-                    if reference > 0 and prepared.requirementStateByPath[reference] ~= "satisfied" then
-                        self:StartCalculation(currentRouteUnusable)
-                        return
-                    end
-                    local journey = route.taxiJourneys[reference]
-                    if journey and not self:IsTaxiJourneyEligible(journey, prepared) then
-                        self:StartCalculation(currentRouteUnusable)
-                        return
-                    end
-                end
-            end
-            local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
-            if mapID and x and y and (not HasRouteOrigin(route) or mapID ~= route.originMapID) then
-                self:RefreshPreparedData()
-                self:StartCalculation(currentRouteUnusable)
-                return
-            end
-            -- Preserve the replacement threshold after the sliced remaining-cost check.
-            if currentRemainingCost then
-                local requiredSavings = math.max(15, currentRemainingCost * 0.1)
-                if currentRemainingCost - route.comparisonSeconds < requiredSavings then return end
-            end
-            if finishedCalculation then
-                route.calculationSeconds = GetTimePreciseSec() - finishedCalculation.startedAt
-                route.calculationSlices = finishedCalculation.calculationSlices
-            end
-            self:DeactivatePathHandler()
-            local graph = route.graph
-            self.progression = {
-                route = route,
-                pathIndex = 1,
-                phase = route.pathReferences[1] and graph and
-                    graph.pathFromPointIndexes[route.pathReferences[1]] and "approach" or
-                    route.pathReferences[1] and "ready" or "approach",
-                changeNumber = 1,
-            }
-            self:PublishStep(self.progression)
+            self:ApplyCalculatedRoute(destination, route, failure, checkpoint, currentRouteUnusable)
+            -- Recovery bypass applies only to the first publication, never every
+            -- improvement within a job that has already restored usable guidance.
+            if self.progression then currentRouteUnusable = false end
         end, function()
-            if IsCurrentDestination(expectedDestination) then self:StartCalculation(currentRouteUnusable) end
-        end)
+            if IsCurrentDestination(destination) then self:StartCalculation(currentRouteUnusable) end
+        end, shortcut or improvement)
 end
 
 ---@param owner string
@@ -381,6 +429,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         removeDestination = removeDestination,
     }
     self.avoidedPaths = {}
+    self.transportationChangedDuringTravel = nil
     self.progression = nil
     if self.routeNavigationEnabled then
         self:StartCalculation(true)
@@ -512,7 +561,7 @@ function Navigation:Recalculate(changeNumber)
     if changeNumber ~= presentationChangeNumber or not self.activeDestination or not self.routeNavigationEnabled then
         return false
     end
-    self:RefreshPreparedData()
+    self:InvalidatePreparedData()
     self:StartCalculation()
     return true
 end
@@ -773,7 +822,7 @@ function Navigation:PublishStep(progression)
     local destination = self.activeDestination
     if not destination then return end
     local travelIcon = self:GetPathIcon(pathType)
-    local desiredAction = progression.phase == "ready" and not progression.pathUnavailable and
+    local desiredAction = progression.phase == "ready" and self:IsCurrentPathReady() and
         self:GetPathAction(pathType, graph.pathRequirements[pathReference]) or nil
     local targetData = CopyWayfinderData(destination.data)
     targetData.mapID = graph.pointMapIDs[targetPointIndex]
@@ -803,7 +852,7 @@ function Navigation:PublishStep(progression)
         desiredAction = desiredAction,
     })
     local identity = self:CaptureStepIdentity(progression)
-    if identity then
+    if identity and not progression.pathUnavailable then
         self:ActivatePathHandler({
             pathType = pathType,
             pathReference = pathReference,
@@ -841,7 +890,14 @@ end
 ---@param progression NavigationProgression
 function Navigation:CompleteCurrentPath(progression)
     if not self:IsCurrentProgression(progression) then return end
-    ApplyStepIndex(progression, progression.pathIndex + 1)
+    if self.transportationChangedDuringTravel then
+        self.transportationChangedDuringTravel = nil
+        self:DeactivatePathHandler()
+        self.progression = nil
+        self:StartCalculation(true)
+    else
+        ApplyStepIndex(progression, progression.pathIndex + 1)
+    end
 end
 
 ---@param stepIndex integer
@@ -1075,38 +1131,56 @@ function Navigation:RefreshEligibility(events)
     if not self.routeNavigationEnabled or not self.activeDestination then return end
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
-    local prepared = self:EnsurePreparedData()
-    if not prepared then return end
-    local progression = self.progression
-    local graph = self.progression and self.progression.route.graph or self:GetGraph()
-    local reference = progression and progression.route.pathReferences[progression.pathIndex]
-    if progression and not progression.pathUnavailable and not progression.attempted and
-        progression.phase ~= "in-transit" and
-        reference and graph and prepared and prepared.requirementStateByPath[reference] == "unsatisfied" and
-        self:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
-        local identity = self:CaptureStepIdentity(progression)
-        if identity then self:HandlePathHandlerReport(identity, "failed", "action requirements no longer satisfied") end
+    if self:IsDirectOnlyRoute() then
+        local route = self.progression.route
+        local current = self:CreateDirectRoute(self.activeDestination.destinationID,
+            self.activeDestination.changeNumber, self.activeDestination.routingData)
+        if not current or current.originMapID ~= route.originMapID or
+            current.finalCost.explanation.mode ~= route.finalCost.explanation.mode then
+            self:StartCalculation(true)
+        end
         return
     end
-    if progression and not progression.attempted and progression.phase ~= "in-transit" and
-        progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation() then
+    local prepared = self:EnsurePreparedData()
+    if not prepared then return end
+    local job = self.activeCalculation
+    if job and job.preparedData and job.preparedData.movement ~= prepared.movement then
         self:StartCalculation(true)
         return
     end
-    if progression and prepared and not progression.attempted and progression.phase ~= "in-transit" then
+    local progression = self.progression
+    if progression and not progression.attempted and progression.phase ~= "in-transit" then
         for index = progression.pathIndex, #progression.route.pathReferences do
-            local journey = progression.route.taxiJourneys[progression.route.pathReferences[index]]
-            if journey and not self:IsTaxiJourneyEligible(journey, prepared) then
+            local reference = progression.route.pathReferences[index]
+            local journey = progression.route.taxiJourneys[reference]
+            if reference > 0 and not self:GetFreshPathCost(reference) or
+                journey and (not self:IsTaxiJourneyEligible(journey, prepared) or
+                    reference < 0 and progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation()) then
+                progression.pathUnavailable = true
+                self:DeactivatePathHandler()
+                self:PublishStep(progression)
                 self:StartCalculation(true)
                 return
             end
         end
+        if not self:GetRemainingRouteCost(progression, prepared, function() end) then
+            progression.pathUnavailable = true
+            self:DeactivatePathHandler()
+            self:PublishStep(progression)
+            self:StartCalculation(true)
+            return
+        end
+        -- Restore a ready action/adapter after dirty authoritative inputs clear.
+        self:PublishStep(progression)
+        self:TryAutomaticTaxiSelection()
     end
     if RefreshRouteOrigin() then return end
     local restart = self.pendingCalculationRestart
     if restart then
         restart()
-    elseif self.activeDestination and not self.progression and not self.activeCalculation then
+    elseif not self.progression and not self.activeCalculation and
+        (prepared ~= self.lastCalculationInputs or
+            select(3, MapPinEnhanced:GetPlayerMapPosition()) ~= self.lastCalculationOriginMapID) then
         self:StartCalculation(true)
     end
 end
@@ -1124,6 +1198,11 @@ function Navigation:SetupEligibilityRefresh()
         end
         -- Mark inputs stale at intake, before a new job can beat the bucket timer.
         self:InvalidatePreparedData(event)
+        local progression = self.progression
+        if progression and not progression.attempted and progression.phase ~= "in-transit" and
+            progression.route.pathReferences[progression.pathIndex] then
+            self:PublishStep(progression)
+        end
         return true
     end)
 end
@@ -1544,6 +1623,27 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
     end
 end)
 
+Options:SubscribeToOptionChanges("Wayfinder.Navigation.BackgroundSearch", function(value)
+    local enabled = value == true
+    if Navigation.backgroundSearchEnabled == enabled then return end
+    Navigation.backgroundSearchEnabled = enabled
+    local job = Navigation.activeCalculation
+    if not enabled and job and job.background then
+        Navigation:CancelPreparedData()
+        Navigation:CancelRouteCalculation(job)
+        if Navigation.progression and #Navigation.progression.route.pathReferences > 0 and
+            not Navigation:ArePreparedInputsFresh() then Navigation:EnsurePreparedData() end
+        if not Navigation.progression and Navigation.activeDestination then
+            local direct = Navigation:CanGuideDirectly()
+            Navigation:ApplyDirectDestination(direct, direct and L["Navigation Direct Guidance"] or
+                L["Navigation No Direction"], direct and "direct" or "no-direction")
+        end
+    elseif enabled and not job and Navigation.progression and not Navigation.progression.attempted and
+        Navigation.progression.phase ~= "in-transit" then
+        Navigation:StartCalculation(false, true)
+    end
+end)
+
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.WorldMap", function(value)
     Navigation.worldMapRouteEnabled = value == true
     RefreshWorldMapRouteLayer()
@@ -1557,6 +1657,13 @@ end)
 
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.TransportationGroups", function(groups)
     Navigation:SetTransportationGroups(groups)
+    local progression = Navigation.progression
+    if progression and (progression.attempted or progression.phase == "in-transit" or
+            Navigation:IsTaxiBookingPending()) then
+        Navigation.transportationChangedDuringTravel = true
+        return
+    end
+    Navigation.transportationChangedDuringTravel = nil
     -- A preference change invalidates the old Route, even if a replacement
     -- would not meet the usual cost-savings threshold. Keep the Destination
     -- and its failure records, but stop presenting or executing excluded Steps.

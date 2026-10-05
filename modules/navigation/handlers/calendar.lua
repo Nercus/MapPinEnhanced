@@ -103,7 +103,7 @@ local function RefreshHolidayStates()
     else
         -- Intake may have cancelled preparation even when the observed holidays
         -- stayed equal. Resume demand without inventing another input change.
-        Navigation:EnsurePreparedData()
+        if not Navigation:IsDirectOnlyRoute() then Navigation:EnsurePreparedData() end
     end
 end
 

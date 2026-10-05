@@ -128,7 +128,12 @@ end
 ---@field excludedPaths table<integer, string>
 ---@field pathCount integer
 
----@class NavigationPreparedData
+---@class NavigationMovementData
+---@field movement NavigationMovementCapabilities
+---@field movementOnly true?
+---@field taxiObservation NavigationTaxiObservation?
+
+---@class NavigationPreparedData : NavigationMovementData
 ---@field requirementStateByPath table<integer, NavigationRequirementState>
 ---@field exclusionReasonByPath table<integer, string>
 ---@field movement NavigationMovementCapabilities
@@ -790,6 +795,20 @@ local REQUIREMENT_KINDS_BY_EVENT = {
     TAXIMAP_OPENED = { "taxiNodeKnown" },
 }
 
+local SOFT_EVENTS = {
+    BAG_UPDATE_DELAYED = true,
+    QUEST_ACCEPTED = true,
+    QUEST_LOG_UPDATE = true,
+    QUEST_REMOVED = true,
+    QUEST_TURNED_IN = true,
+    ACHIEVEMENT_EARNED = true,
+    CRITERIA_UPDATE = true,
+}
+
+function Navigation:ArePreparedInputsFresh()
+    return not preparedDataDirty and preparedNavigationData ~= nil
+end
+
 -- Invalidations retain no event payloads. Published tables belong to snapshots and
 -- must never be refilled while a Route or calculation still references them.
 ---@param event? WowEvent
@@ -805,6 +824,7 @@ function Navigation:InvalidatePreparedData(event)
     preparedDataDirty = true
     preparationChangeNumber = preparationChangeNumber + 1
     preparationFailure = nil
+    if event and SOFT_EVENTS[event] then return end
     self:CancelPreparedData()
     local job = self.activeCalculation
     if job then
@@ -817,13 +837,18 @@ function Navigation:InvalidatePreparedData(event)
 end
 
 function Navigation:CancelPreparedData()
-    if cancelPreparation then cancelPreparation() end
+    if cancelPreparation then
+        cancelPreparation()
+        -- An interrupted private pass owes its captured scope as well as queued events.
+        allRequirementsDirty = true
+        preparedDataDirty = true
+    end
     cancelPreparation = nil
 end
 
 function Navigation:RefreshPreparedData()
     self:InvalidatePreparedData()
-    if self.routeNavigationEnabled and self.activeDestination then
+    if self.routeNavigationEnabled and self.activeDestination and not self:IsDirectOnlyRoute() then
         self:EnsurePreparedData()
     end
 end
@@ -846,7 +871,8 @@ end
 function Navigation:NeedsAuraRefresh()
     if hasBuffRequirements then return true end
     local movement = self:GetMovementCapabilities()
-    local previous = observedMovementCapabilities
+    local previous = observedMovementCapabilities or
+        self.progression and self.progression.route.preparedData.movement
     observedMovementCapabilities = movement
     return previous ~= nil and not SameMovementCapabilities(movement, previous)
 end
@@ -860,8 +886,10 @@ function Navigation:EnsurePreparedData()
     if not preparedDataDirty then return preparedNavigationData end
     if self.routeNavigationEnabled and self.activeDestination and not cancelPreparation and not preparationFailure then
         local graph, changeNumber = navigationGraph, preparationChangeNumber
+        local fullRefresh, kinds = allRequirementsDirty, dirtyRequirementKinds
+        allRequirementsDirty, dirtyRequirementKinds = false, {}
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
-            local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+            local checkpoint = self:CreateNavigationCheckpoint(nil, true)
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
             local previous = preparedNavigationData
@@ -880,8 +908,8 @@ function Navigation:EnsurePreparedData()
             local reasons = previous and previous.exclusionReasonByPath or {}
             local selectedPaths = {} ---@type table<integer, boolean>
             local unknownPaths = {} ---@type table<integer, boolean>
-            if previous and not allRequirementsDirty then
-                for kind in pairs(dirtyRequirementKinds) do
+            if previous and not fullRefresh then
+                for kind in pairs(kinds) do
                     for _, reference in ipairs(graph.pathsByRequirementKind[kind] or {}) do
                         selectedPaths[reference] = true
                         checkpoint()
@@ -921,7 +949,7 @@ function Navigation:EnsurePreparedData()
                     reasons[pathReference] = reason
                 end
             end
-            if not previous or allRequirementsDirty then
+            if not previous or fullRefresh then
                 for reference = 1, graph.pathCount do EvaluatePath(reference) end
             else
                 for reference in pairs(selectedPaths) do EvaluatePath(reference) end
@@ -931,9 +959,17 @@ function Navigation:EnsurePreparedData()
             if previous and SameMovementCapabilities(movement, previous.movement) then
                 movement = previous.movement
             end
-            local costs, failures = self:GetPreparedTaxiCosts(graph, checkpoint)
+            -- Disabled taxis need no pricing snapshot. Existing booked Routes own
+            -- their evidence; enabling the preference invalidates this snapshot.
+            local costs, failures = {}, {}
+            if not IsTransportationDisabled("flighttaxi") then
+                costs, failures = self:GetPreparedTaxiCosts(graph, checkpoint)
+            elseif previous and not next(previous.taxiCosts) and not next(previous.taxiFailures) then
+                costs, failures = previous.taxiCosts, previous.taxiFailures
+            end
             local observation = self:GetTaxiObservation()
-            if graph ~= navigationGraph or changeNumber ~= preparationChangeNumber then return end
+            checkpoint()
+            if graph ~= navigationGraph then return end
             if not previous or states ~= previous.requirementStateByPath or reasons ~= previous.exclusionReasonByPath or
                 movement ~= previous.movement or costs ~= previous.taxiCosts or failures ~= previous.taxiFailures or
                 observation ~= previous.taxiObservation then
@@ -947,14 +983,27 @@ function Navigation:EnsurePreparedData()
                 }
             end
             unknownRequirementPaths = unknownPaths
-            allRequirementsDirty = false
-            wipe(dirtyRequirementKinds)
-            preparedDataDirty = false
+            -- A soft event may queue another pass while this one runs. Keep its
+            -- completed immutable observations, but do not certify freshness yet.
+            preparedDataDirty = changeNumber ~= preparationChangeNumber
         end }, nil, function()
+            local owner, started = self.activeCalculation, debugprofilestop()
             cancelPreparation = nil
-            self:RefreshEligibility({})
+            if preparedDataDirty then
+                self:EnsurePreparedData()
+            else
+                self:RefreshEligibility({})
+            end
+            -- Batch terminal callbacks are synchronous. Charge this selected-route
+            -- refresh too, without attributing it to a replacement job it starts.
+            if owner and self.activeCalculation == owner then
+                local elapsed = debugprofilestop() - started
+                owner.activeMilliseconds = owner.activeMilliseconds + elapsed
+                owner.frameMilliseconds = (owner.frameMilliseconds or 0) + elapsed
+            end
         end, 1, function(message)
             cancelPreparation = nil
+            allRequirementsDirty = true
             preparationFailure = message
             local restart = self.pendingCalculationRestart
             if restart then restart() end
@@ -966,12 +1015,13 @@ end
 
 ---@async
 ---@param checkpoint fun()
+---@param wait fun()?
 ---@return NavigationPreparedData?
 ---@return string? failure
-function Navigation:AwaitPreparedData(checkpoint)
+function Navigation:AwaitPreparedData(checkpoint, wait)
     local prepared, failure = self:EnsurePreparedData()
     while not prepared and cancelPreparation do
-        coroutine.yield()
+        if wait then wait() else coroutine.yield() end
         checkpoint()
         prepared, failure = self:EnsurePreparedData()
     end

@@ -70,6 +70,8 @@ function Navigation:ShowDebugDump()
     Add("Step", Wayfinders:GetStepSnapshot())
     Add("Action display", Wayfinders:GetActionDebugText())
     Add("Calculation active", Navigation.activeCalculation ~= nil)
+    Add("Calculation termination", Navigation.lastCalculationTermination)
+    Add("Background search", Navigation.activeCalculation and Navigation.activeCalculation.background)
     local job = Navigation.activeCalculation
     local completedRoute = Navigation.progression and Navigation.progression.route
     Add("Calculation work", job and {
@@ -149,8 +151,8 @@ function Navigation:ShowDebugDump()
                 requirement = graph.pathRequirements[reference],
                 preparedState = prepared and prepared.requirementStateByPath[reference],
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],
-                routeState = route and route.preparedData.requirementStateByPath[reference],
-                routeExclusion = route and route.preparedData.exclusionReasonByPath[reference],
+                routeState = route and not route.preparedData.movementOnly and route.preparedData.requirementStateByPath[reference],
+                routeExclusion = route and not route.preparedData.movementOnly and route.preparedData.exclusionReasonByPath[reference],
                 routeCost = cost,
                 freshCost = freshCost,
                 freshFailure = failure,
