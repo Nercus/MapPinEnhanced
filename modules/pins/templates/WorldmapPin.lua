@@ -14,21 +14,7 @@ local HOVER_SCALE_DURATION = 0.15
 local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / HOVER_SCALE_DURATION
 
 function MapPinEnhancedWorldmapPinMixin:OnLoad()
-    Options:SubscribeToOptionChanges("Pins.Appearance.AlwaysPingTracked", function()
-        self:RefreshTrackingPulse()
-    end)
     self.pulseHighlight:SetIgnoreParentScale(true)
-    Options:SubscribeToOptionChanges("Pins.Appearance.WorldMapScale", function(value)
-        self:SetSize(25 * value, 25 * value)
-    end)
-    Options:SubscribeToOptionChanges("Pins.Appearance.FadeUntracked", function()
-        self:ApplyHoverStyle()
-    end)
-    Options:SubscribeToOptionChanges("Pins.Miscellaneous.ScaleOnHover", function(value)
-        self.hoverScaleEnabled = value
-        if value then return end
-        self:ResetHoverScale()
-    end)
 end
 
 function MapPinEnhancedWorldmapPinMixin:ResetHoverScale()

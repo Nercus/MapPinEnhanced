@@ -71,6 +71,7 @@ function MapPinEnhancedPinMixin:Init(pinID)
         self:OnMouseDown(_, button)
     end)
     self.initialized = true
+    Pins:ApplyPinAppearance(self)
 end
 
 function MapPinEnhancedPinMixin:OverridePinID(pinID)
@@ -203,8 +204,10 @@ function MapPinEnhancedPinMixin:Reset()
         self.worldmapPin.pin = nil
         self.worldmapPin:SetUntracked()
         self.worldmapPin:SetHovered(false)
-        self.worldmapPin:SetAlpha(1)
+        self.worldmapPin:ResetHoverScale()
+        self.worldmapPin:SetLock(false)
         Pins:GetFramePool():Release(self.worldmapPin)
+        self.worldmapPin:SetAlpha(1)
         self.worldmapPin = nil
     end
     if self.minimapPin then
@@ -216,8 +219,10 @@ function MapPinEnhancedPinMixin:Reset()
         self.minimapPin.pin = nil
         self.minimapPin:SetUntracked()
         self.minimapPin:SetHovered(false)
-        self.minimapPin:SetAlpha(1)
+        self.minimapPin:SetLock(false)
+        self.minimapPin:SetScale(1)
         Pins:GetFramePool():Release(self.minimapPin)
+        self.minimapPin:SetAlpha(1)
         self.minimapPin = nil
     end
 

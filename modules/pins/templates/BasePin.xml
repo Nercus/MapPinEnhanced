@@ -56,7 +56,7 @@
             </Layer>
         </Layers>
         <Scripts>
-            <OnLoad method="OnLoad"/>
+            <OnLoad method="OnBasePinLoad"/>
             <OnSizeChanged method="OnSizeChanged"/>
             <OnHide method="OnPinHide"/>
         </Scripts>

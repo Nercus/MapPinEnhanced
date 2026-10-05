@@ -9,12 +9,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 
 function MapPinEnhancedMinimapPinMixin:OnLoad()
     self.pulseHighlight:SetIgnoreParentScale(true)
-    Options:SubscribeToOptionChanges("Pins.Appearance.MinimapScale", function(value)
-        self:SetSize(22 * value, 22 * value)
-    end)
-    Options:SubscribeToOptionChanges("Pins.Appearance.FadeUntracked", function()
-        self:ApplyHoverStyle()
-    end)
 end
 
 function MapPinEnhancedMinimapPinMixin:OnEnter()

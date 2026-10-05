@@ -338,7 +338,7 @@ function MapPinEnhancedBasePinMixin:SetLock(lock)
     self:ApplyHoverStyle()
 end
 
-function MapPinEnhancedBasePinMixin:OnLoad()
+function MapPinEnhancedBasePinMixin:OnBasePinLoad()
     self.standardColor = PIN_COLORS_BY_NAME[Pins.DEFAULT_COLOR] or DEFAULT_TRACKED_COLOR
     self.renderMode = STYLE_STANDARD
     self.iconMaskApplied = false
