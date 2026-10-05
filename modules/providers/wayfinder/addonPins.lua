@@ -58,7 +58,7 @@ local function SetTrackedPinUserWaypoint(wayfinderData)
     placedUserWaypoint = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     shouldSuperTrackUserWaypoint = true
     OverrideSuperTrackedReachedBehavior()
-    C_Map.SetUserWaypoint(placedUserWaypoint)
+    Providers:SetOwnedUserWaypoint(placedUserWaypoint)
 end
 
 

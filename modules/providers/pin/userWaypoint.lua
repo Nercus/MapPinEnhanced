@@ -7,12 +7,22 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 
 local L = MapPinEnhanced.L
 
--- block SetUserWaypoint calls from other addons which should not trigger the pin provider
--- MapPinEenhanced is in here as well to prevent infinite loops when the pin provider is used to set a waypoint
+-- Foreign integrations retain their stack-based exclusion. Owned writes are identified before inspection.
 local BLOCKED_ADDON_LIST = {
     "WorldQuestTracker",
-    MapPinEnhanced.name,
 }
+
+---@type UiMapPoint?
+local ownedWaypoint
+
+---@param waypoint UiMapPoint?
+function Providers:SetOwnedUserWaypoint(waypoint)
+    if not waypoint then return end
+    local previous = ownedWaypoint
+    ownedWaypoint = waypoint
+    C_Map.SetUserWaypoint(waypoint)
+    ownedWaypoint = previous
+end
 
 local function isBlockedAddon(stack)
     for _, blockedAddon in ipairs(BLOCKED_ADDON_LIST) do
@@ -98,7 +108,7 @@ end
 
 ---@param uiMapPoint {uiMapID: number, position: {x: number, y: number}}
 local function OnUserWaypoint(uiMapPoint)
-    if not uiMapPoint then return end
+    if not uiMapPoint or uiMapPoint == ownedWaypoint then return end
     local stack = debugstack(2) ---@type string
     if isBlockedAddon(stack) then return end -- ignore calls from this function
 

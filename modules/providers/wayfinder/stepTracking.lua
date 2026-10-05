@@ -160,7 +160,7 @@ function Providers:ClearStepSuperTracking(restore)
     end
     if ownsWaypoint then
         if waypoint then
-            C_Map.SetUserWaypoint(waypoint)
+            Providers:SetOwnedUserWaypoint(waypoint)
         else
             C_Map.ClearUserWaypoint()
         end
@@ -214,7 +214,7 @@ function Providers:SetStepSuperTracking(data)
     KeepStepWaypointOnArrival()
     -- Rebuild native guidance even when both adjacent Steps use user waypoints.
     C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-    C_Map.SetUserWaypoint(waypoint)
+    Providers:SetOwnedUserWaypoint(waypoint)
     C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     changingTracking = false
     if self:IsStepSuperTracking() then return true end
