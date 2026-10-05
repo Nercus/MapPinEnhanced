@@ -29,6 +29,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
 ---@field needleRotation number | nil
 ---@field newNeedleRotation number | nil
+---@field needleFrameIndex integer?
 ---@field directionVisible boolean?
 ---@field step WayfinderStepData?
 ---@field clearButton Button
@@ -141,6 +142,8 @@ local FULL_ROTATION = 2 * math.pi
 function MapPinEnhancedWayfinderArrowMixin:SetNeedleRotation(rotation)
     -- The sheet advances clockwise in 3-degree steps; its final eight cells are empty.
     local frame = math.floor((-rotation % FULL_ROTATION) / FULL_ROTATION * FRAME_COUNT + 0.5) % FRAME_COUNT
+    if self.needleFrameIndex == frame then return end
+    self.needleFrameIndex = frame
     local column = frame % COLUMNS
     local row = math.floor(frame / COLUMNS)
     self.needleContainer.needle:SetTexCoord(column / COLUMNS, (column + 1) / COLUMNS, row / ROWS, (row + 1) / ROWS)
@@ -236,6 +239,7 @@ function MapPinEnhancedWayfinderArrowMixin:SetDirectionVisible(visible)
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnShow()
+    self.needleFrameIndex = nil
     MapPinEnhanced:RegisterDraggableFrame(self:GetParent(), "floatingArrow", self, InCombatLockdown)
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     self:StartDistanceUpdates(self.readout, function(distance, timeToTarget)
@@ -255,6 +259,7 @@ function MapPinEnhancedWayfinderArrowMixin:Reset()
     self:ResetDirectionSampling()
     self.needleRotation = nil
     self.newNeedleRotation = nil
+    self.needleFrameIndex = nil
     self:SetNeedleRotation(0)
     self.needleContainer.needle:SetAlpha(MAX_NEEDLE_ALPHA)
 end
