@@ -6,7 +6,11 @@ local MapPinEnhanced = select(2, ...)
 local CallbackHandler = LibStub:GetLibrary("CallbackHandler-1.0");
 
 
----@type table<WowEvent, function[]>
+---@class MapPinEnhancedEventHandler
+---@field callback function
+---@field active boolean
+
+---@type table<WowEvent, MapPinEnhancedEventHandler[]>
 local registeredEvents = {}
 
 ---@type function[] | nil
@@ -16,8 +20,10 @@ local addonWasLoaded = false
 local function EventFrameHandler(self, event, ...)
     local functions = registeredEvents[event]
     if (functions) then
-        for _, func in ipairs(functions) do
-            func(...)
+        -- Mutations replace the registry array; this dispatch retains its original order.
+        -- Removals take effect immediately; additions start with the next (including nested) dispatch.
+        for _, handler in ipairs(functions) do
+            if handler.active then handler.callback(...) end
         end
     end
     if event == "ADDON_LOADED" then
@@ -42,13 +48,13 @@ addonEventFrame:SetScript("OnEvent", EventFrameHandler)
 function MapPinEnhanced:RegisterEvent(event, func)
     assert(event, "Event must be provided")
     assert(func, "Function must be provided")
-    if not registeredEvents then
-        registeredEvents = {}
+    ---@type MapPinEnhancedEventHandler[]
+    local handlers = {}
+    for _, handler in ipairs(registeredEvents[event] or {}) do
+        handlers[#handlers + 1] = handler
     end
-    if not registeredEvents[event] then
-        registeredEvents[event] = {}
-    end
-    table.insert(registeredEvents[event], func)
+    handlers[#handlers + 1] = { callback = func, active = true }
+    registeredEvents[event] = handlers
     addonEventFrame:RegisterEvent(event)
 end
 
@@ -138,24 +144,21 @@ end
 function MapPinEnhanced:UnregisterEventForFunction(event, func)
     assert(event, "Event must be provided")
     assert(func, "Function must be provided")
-    if not registeredEvents then
-        registeredEvents = {}
-    end
-    if not registeredEvents[event] then
-        registeredEvents[event] = {}
-    end
-    if registeredEvents[event] then
-        for i, f in ipairs(registeredEvents[event]) do
-            if f == func then
-                table.remove(registeredEvents[event], i)
-                break
-            end
+    local handlers = registeredEvents[event]
+    if not handlers then return end
+    ---@type MapPinEnhancedEventHandler[]
+    local remaining = {}
+    local removed = false
+    for _, handler in ipairs(handlers) do
+        if not removed and handler.callback == func then
+            handler.active = false
+            removed = true
+        else
+            remaining[#remaining + 1] = handler
         end
     end
-    if #registeredEvents[event] == 0 then
-        registeredEvents[event] = nil
-        addonEventFrame:UnregisterEvent(event)
-    end
+    registeredEvents[event] = #remaining > 0 and remaining or nil
+    if #remaining == 0 then addonEventFrame:UnregisterEvent(event) end
 end
 
 ---Run a callback when Map Pin Enhanced is loaded
@@ -176,9 +179,7 @@ end
 ---@param event WowEvent the event to unregister for
 function MapPinEnhanced:UnregisterEvent(event)
     assert(event, "Event must be provided")
-    if not registeredEvents then
-        registeredEvents = {}
-    end
+    for _, handler in ipairs(registeredEvents[event] or {}) do handler.active = false end
     registeredEvents[event] = nil
     addonEventFrame:UnregisterEvent(event)
 end
@@ -337,8 +338,8 @@ function MapPinEnhanced:CallRestricted(func, warning, ...)
         ---@type function
         local functionToRun
         functionToRun = function()
-            func(unpack(args))
             self:UnregisterEventForFunction("PLAYER_REGEN_ENABLED", functionToRun)
+            func(unpack(args))
         end
         self:RegisterEvent("PLAYER_REGEN_ENABLED", functionToRun)
     else
