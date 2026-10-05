@@ -266,7 +266,10 @@ function MapPinEnhancedTrackerMixin:OnUpdate()
     local refresh, scroll = self.refreshPending, self.scrollPending
     -- Consume before building so a callback during publication remains pending next frame.
     self.refreshPending, self.scrollPending = nil, nil
-    if refresh then self:UpdateList(scroll) end
+    if refresh then
+        self:UpdateList(scroll)
+        self:RestoreListScroll()
+    end
     if scroll then self:ScrollToTrackedPin() end
     -- Position can change during a drag or a screen/scale change; resizing never moves it.
     self:UpdateViewportHeight()
@@ -306,10 +309,15 @@ function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry(skipHeight)
 end
 
 function MapPinEnhancedTrackerMixin:ShowFrame()
-    local wasShown = self:IsShown()
+    local wasShown, wasHiding = self:IsShown(), self.visibilityHiding
     self:Show()
     -- Reversing a fade does not fire OnShow; it still needs the latest tree.
-    if wasShown then self:OnShow() end
+    if wasShown and wasHiding then
+        self:OnShow()
+    elseif wasShown then
+        self:ApplyMinimizedState()
+        self:RequestListUpdate()
+    end
 end
 
 function MapPinEnhancedTrackerMixin:HideFrame()
@@ -322,7 +330,8 @@ end
 ---@param skipRefresh boolean?
 function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
     local minimizeMode = Options:GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
-    self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true)
+    local wasMinimized = self.minimized
+    self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true) or false
     self:UpdateSuperTrackedEntry(true)
     self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "downcaret" or "upcaret") or "close")
     self.header.closeButton:SetTooltip(L[minimizeMode and (self.minimized and "Expand" or "Minimize") or "Close"])
@@ -336,9 +345,8 @@ function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
         self.refreshPending, self.scrollPending = nil, nil
         self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
         self.header.hiddenGroupsMenu:Close()
-    elseif self:IsShown() and not skipRefresh then
-        self:UpdateList()
-        self:RestoreListScroll()
+    elseif wasMinimized ~= self.minimized and self:IsShown() and not skipRefresh then
+        self:RequestListUpdate(true)
     end
     self:UpdateHeight()
 end

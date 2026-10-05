@@ -96,7 +96,11 @@ MapPinEnhanced:AddSlashCommand("tracker", function()
 end, L["Toggle the tracker visibility."])
 
 function Tracker:SetMinimized(minimized)
-    MapPinEnhanced:SetVar("trackerMinimized", minimized == true)
+    minimized = minimized == true
+    local frame = self.trackerFrame
+    if MapPinEnhanced:GetVar("trackerMinimized") == minimized and
+        (not frame or not frame.automaticallyMinimized) then return end
+    MapPinEnhanced:SetVar("trackerMinimized", minimized)
     if self.trackerFrame then
         self.trackerFrame.automaticallyMinimized = false
         self.trackerFrame:ApplyMinimizedState()
