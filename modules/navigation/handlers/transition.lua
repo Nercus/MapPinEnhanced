@@ -49,8 +49,12 @@ local function PortalCostCalculator(graph, _preparedData, pathReference)
         expectedSeconds = seconds,
         uncertaintySeconds = 0,
         comparisonSeconds = seconds + LOADING_SCREEN_PENALTY_SECONDS,
-        explanation = { kind = "portal", seconds = seconds, estimated = estimated,
-            penaltySeconds = LOADING_SCREEN_PENALTY_SECONDS },
+        explanation = {
+            kind = "portal",
+            seconds = seconds,
+            estimated = estimated,
+            penaltySeconds = LOADING_SCREEN_PENALTY_SECONDS
+        },
     }
 end
 

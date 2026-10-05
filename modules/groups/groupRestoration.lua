@@ -19,7 +19,9 @@ function Groups:RestoreGroup(groupData)
     ---@param pendingGroup MapPinEnhancedGroupMixin
     for pendingGroup in self:GetObjectPool():EnumerateActive() do
         if pendingGroup.isDeleting and (pendingGroup:GetGroupID() == groupData.groupID or
-            self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupData.name)) then return nil end
+                self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupData.name)) then
+            return nil
+        end
     end
 
     local group = self:GetGroupByID(groupData.groupID)

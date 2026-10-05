@@ -20,8 +20,16 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 
 ---@type table<string, boolean>
 local PORTABLE_PIN_FIELDS = {
-    mapID = true, x = true, y = true, title = true, description = true,
-    texture = true, usesAtlas = true, color = true, lock = true, pinID = true,
+    mapID = true,
+    x = true,
+    y = true,
+    title = true,
+    description = true,
+    texture = true,
+    usesAtlas = true,
+    color = true,
+    lock = true,
+    pinID = true,
 }
 
 ---Copy only portable scalar fields; unknown nested data never enters the preview.
@@ -30,10 +38,16 @@ local PORTABLE_PIN_FIELDS = {
 function Transfer:CopyPortablePin(data)
     ---@cast data PortablePinData
     return {
-        mapID = data.mapID, x = data.x, y = data.y,
-        title = data.title, description = data.description,
-        texture = data.texture, usesAtlas = data.usesAtlas,
-        color = data.color, lock = data.lock, pinID = data.pinID,
+        mapID = data.mapID,
+        x = data.x,
+        y = data.y,
+        title = data.title,
+        description = data.description,
+        texture = data.texture,
+        usesAtlas = data.usesAtlas,
+        color = data.color,
+        lock = data.lock,
+        pinID = data.pinID,
     }
 end
 

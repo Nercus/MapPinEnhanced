@@ -26,7 +26,9 @@ function MapPinEnhancedWayfinderReadoutMixin:NotifyLayoutChanged()
     local shown, hiding, scale = self:IsShown(), self.visibilityHiding == true, self:GetEffectiveScale()
     local visible = self:IsVisible()
     if width == self.layoutWidth and height == self.layoutHeight and scale == self.layoutScale and
-        shown == self.layoutShown and visible == self.layoutVisible and hiding == self.layoutHiding then return end
+        shown == self.layoutShown and visible == self.layoutVisible and hiding == self.layoutHiding then
+        return
+    end
     self.layoutWidth, self.layoutHeight, self.layoutScale = width, height, scale
     self.layoutShown, self.layoutHiding, self.layoutVisible = shown, hiding, visible
     if self.onTextChanged then self.onTextChanged() end

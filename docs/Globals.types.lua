@@ -8,7 +8,6 @@ LE_PARTY_CATEGORY_HOME = 1
 ---@return string? text
 function GetQuestLogCompletionText(questLogIndex) end
 
-
 ---@class NumyFunctionProfiler
 NumyFunctionProfiler = {}
 

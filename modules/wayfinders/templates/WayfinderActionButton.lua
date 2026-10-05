@@ -17,7 +17,8 @@ function MapPinEnhancedWayfinderActionButtonMixin:UpdateCooldown()
     local instruction = self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
     local action = self:IsVisible() and self:GetAlpha() > 0 and instruction.preparedAction
     if action then
-        local remaining, startTime, duration, rate = MapPinEnhanced:GetModule("Navigation"):GetActionCooldown(action.type, action.id)
+        local remaining, startTime, duration, rate = MapPinEnhanced:GetModule("Navigation"):GetActionCooldown(
+            action.type, action.id)
         if remaining and remaining > 0 then
             self.cooldown:SetCooldown(startTime, duration, rate)
             return

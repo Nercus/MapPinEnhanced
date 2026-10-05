@@ -388,35 +388,47 @@ L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
 L["Miscellaneous.Coords.ShowZone_LABEL"] = "Show zone"
 L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Show the full map name between your X and Y coordinates."
 L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Show decimal points"
-L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] = "Display two decimal places. Turn off to show truncated whole coordinates."
+L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] =
+"Display two decimal places. Turn off to show truncated whole coordinates."
 L["Pins.Appearance.AlwaysPingTracked_LABEL"] = "Always ping tracked pin"
 L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] = "Pulse the tracked world-map pin every two seconds while visible."
 L["Pins.Appearance.MinimapScale_LABEL"] = "Minimap pin size"
 L["Pins.Appearance.MinimapScale_DESCRIPTION"] = "Choose the size of ordinary minimap pins."
 L["Pins.Appearance.WorldMapScale_LABEL"] = "World-map pin size"
-L["Pins.Appearance.WorldMapScale_DESCRIPTION"] = "Choose the size of ordinary world-map pins. Hover scaling applies on top."
+L["Pins.Appearance.WorldMapScale_DESCRIPTION"] =
+"Choose the size of ordinary world-map pins. Hover scaling applies on top."
 L["Pins.Appearance.DefaultColor_LABEL"] = "Default pin color"
-L["Pins.Appearance.DefaultColor_DESCRIPTION"] = "Color for new pins without an explicit icon or color. Existing and imported pins keep their appearance."
+L["Pins.Appearance.DefaultColor_DESCRIPTION"] =
+"Color for new pins without an explicit icon or color. Existing and imported pins keep their appearance."
 L["Pins.Appearance.FadeUntracked_LABEL"] = "Fade out untracked pins"
 L["Pins.Appearance.FadeUntracked_DESCRIPTION"] = "Dim untracked map pins to 40% opacity. Hover restores full opacity."
 L["Pins.Appearance.ShowMinimapPins_LABEL"] = "Show minimap pins"
-L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] = "Show ordinary addon pins on the minimap. Minimap pins require position updates; guidance and route markers remain independent."
+L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] =
+"Show ordinary addon pins on the minimap. Minimap pins require position updates; guidance and route markers remain independent."
 L["Pins.Miscellaneous.EnableLockedPins_LABEL"] = "Enable locked pins"
-L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] = "Allow new locks. Locked pins remain until you remove them; existing pins can always be unlocked."
+L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
+"Allow new locks. Locked pins remain until you remove them; existing pins can always be unlocked."
 L["Pins.Tracking.ArrivalNotification_LABEL"] = "Notification when reaching pin"
-L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] = "Notify once per tracking session when physically reaching the final addon destination."
+L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
+"Notify once per tracking session when physically reaching the final addon destination."
 L["Pins.Tracking.AutoUntrack_LABEL"] = "Auto untrack"
-L["Pins.Tracking.AutoUntrack_DESCRIPTION"] = "Clear addon and Blizzard tracking when entering a dungeon, raid, scenario, battleground or arena."
+L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
+"Clear addon and Blizzard tracking when entering a dungeon, raid, scenario, battleground or arena."
 L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Auto show on new pin"
-L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] = "Show and expand Tracker after creating a user pin or confirming an import. Tracking a Blizzard element does not trigger this. Automatic hide rules still apply."
+L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
+"Show and expand Tracker after creating a user pin or confirming an import. Tracking a Blizzard element does not trigger this. Automatic hide rules still apply."
 L["Miscellaneous.Tracker.ShowBlizzardEntry_LABEL"] = "Show Blizzard element"
-L["Miscellaneous.Tracker.ShowBlizzardEntry_DESCRIPTION"] = "Show the tracked Blizzard destination in Tracker. Hiding this entry does not stop tracking or wayfinder guidance."
+L["Miscellaneous.Tracker.ShowBlizzardEntry_DESCRIPTION"] =
+"Show the tracked Blizzard destination in Tracker. Hiding this entry does not stop tracking or wayfinder guidance."
 L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Minimize tracker instead of closing"
-L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] = "Keep the header and external destination visible when minimizing the tracker."
+L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
+"Keep the header and external destination visible when minimizing the tracker."
 L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Maximum visible rows"
-L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] = "Maximum group and pin rows before scrolling, excluding the header and external destination."
+L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
+"Maximum group and pin rows before scrolling, excluding the header and external destination."
 L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Tracker background opacity"
-L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] = "Opacity behind the pin list and tracked Blizzard entry, from 0% to 100%."
+L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] =
+"Opacity behind the pin list and tracked Blizzard entry, from 0% to 100%."
 L["Miscellaneous.Tracker.Scale_LABEL"] = "Tracker size"
 L["Miscellaneous.Tracker.Scale_DESCRIPTION"] = "Choose the size of Tracker."
 L["Pins.Appearance_GROUPLABEL"] = "Appearance"
@@ -445,6 +457,9 @@ L["Lock Pin"] = "Lock Pin"
 L["Unlock Pin"] = "Unlock Pin"
 
 ------------------------------ Legacy migration ------------------------------
-L["Legacy migration could not update groups. Original saved data was kept."] = "Legacy migration could not update groups. Original saved data was kept."
-L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] = "Migrated %d legacy pins and %d saved sets. Original saved data was kept."
-L["%d legacy entries could not be migrated. Original saved data was kept."] = "%d legacy entries could not be migrated. Original saved data was kept."
+L["Legacy migration could not update groups. Original saved data was kept."] =
+"Legacy migration could not update groups. Original saved data was kept."
+L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
+"Migrated %d legacy pins and %d saved sets. Original saved data was kept."
+L["%d legacy entries could not be migrated. Original saved data was kept."] =
+"%d legacy entries could not be migrated. Original saved data was kept."

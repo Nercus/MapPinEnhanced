@@ -137,7 +137,8 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local entryHeight = 35
     local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
     self.contentBackground:SetShown(not self.minimized)
-    local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or 0
+    local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or
+        0
     local visibleEntries = self.minimized and 0 or math.min(numberOfEntries,
         Options:GetOptionValue("Miscellaneous.Tracker.MaximumRows"))
     local newHeight = visibleEntries * entryHeight
@@ -331,7 +332,8 @@ end
 function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
     local minimizeMode = Options:GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
     local wasMinimized = self.minimized
-    self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true) or false
+    self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true) or
+        false
     self:UpdateSuperTrackedEntry(true)
     self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "downcaret" or "upcaret") or "close")
     self.header.closeButton:SetTooltip(L[minimizeMode and (self.minimized and "Expand" or "Minimize") or "Close"])

@@ -99,7 +99,9 @@ function Tracker:SetMinimized(minimized)
     minimized = minimized == true
     local frame = self.trackerFrame
     if MapPinEnhanced:GetVar("trackerMinimized") == minimized and
-        (not frame or not frame.automaticallyMinimized) then return end
+        (not frame or not frame.automaticallyMinimized) then
+        return
+    end
     MapPinEnhanced:SetVar("trackerMinimized", minimized)
     if self.trackerFrame then
         self.trackerFrame.automaticallyMinimized = false

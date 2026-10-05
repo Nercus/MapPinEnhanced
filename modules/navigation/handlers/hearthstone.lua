@@ -39,11 +39,15 @@ function Navigation:GetPreferredHearthstoneToy(graph)
     local usable = C_ToyBox.IsToyUsable(itemID)
     if MapPinEnhanced:IsSecretValue(owned) or owned ~= true or
         MapPinEnhanced:IsSecretValue(usable) or usable ~= true or
-        not self:GetActionCooldown("toy", itemID) then return nil end
+        not self:GetActionCooldown("toy", itemID) then
+        return nil
+    end
     -- A failed preferred toy must not block the remaining home-bind actions.
     for reference in pairs(self.avoidedPaths) do
         if graph.pathTypes[reference] == "hearthstone" and
-            self:GetRequirementResource(graph.pathRequirements[reference], "toy") == itemID then return nil end
+            self:GetRequirementResource(graph.pathRequirements[reference], "toy") == itemID then
+            return nil
+        end
     end
     return itemID
 end
@@ -53,7 +57,9 @@ end
 ---@param spellID number
 local function SaveUsedToy(unit, _, spellID)
     if not characterKey or MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" or
-        MapPinEnhanced:IsSecretValue(spellID) then return end
+        MapPinEnhanced:IsSecretValue(spellID) then
+        return
+    end
     local itemID = toysBySpellID[spellID]
     if not itemID or itemID == preferredToyID then return end
     local saved = MapPinEnhanced:GetVar("hearthstoneToys")

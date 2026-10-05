@@ -18,9 +18,12 @@ MapPinEnhancedWayfinderDescriptionMixin = {}
 function MapPinEnhancedWayfinderDescriptionMixin:Apply(title, description)
     local font, size, flags = self.text:GetFont()
     local maxWidth = self.maxWidth or 325
-    local layoutKey = table.concat({ maxWidth, UIParent:GetHeight(), font, size, flags or "", self.text:GetSpacing() }, ":")
+    local layoutKey = table.concat({ maxWidth, UIParent:GetHeight(), font, size, flags or "", self.text:GetSpacing() },
+        ":")
     if self.truncated ~= nil and self.title == title and self.description == description and
-        self.layoutKey == layoutKey then return end
+        self.layoutKey == layoutKey then
+        return
+    end
     self:OnLeave()
     self.layoutKey = layoutKey
     self.title, self.description = title, description

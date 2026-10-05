@@ -20,7 +20,8 @@ MapPinEnhancedNavigationReportMixin = CreateFromMixins(MapPinEnhancedCopyTextDia
 function MapPinEnhancedNavigationReportMixin:OnLoad()
     MapPinEnhancedCopyTextDialogMixin.OnLoad(self)
     self.heading:SetText(L["Help improve navigation"])
-    self.instructions:SetText(L["Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."])
+    self.instructions:SetText(L
+        ["Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."])
     self.descriptionLabel:SetText(L["What went wrong?"])
     self.description:SetPlaceholder(L["What happened, what did you expect, and how can we reproduce it?"])
     self.description.editbox:SetMaxLetters(0)

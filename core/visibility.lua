@@ -54,7 +54,10 @@ local function UpdatePolling()
     if not visibilityLoaded then return end
     local needed = false
     for _, target in pairs(targets) do
-        if target.needsPoll then needed = true break end
+        if target.needsPoll then
+            needed = true
+            break
+        end
     end
     if needed and not pollTicker then
         pollTicker = C_Timer.NewTicker(0.25, function()

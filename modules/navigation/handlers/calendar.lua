@@ -116,7 +116,9 @@ MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE"
         -- Blizzard Calendar owns five calendarShow filters. Admit the family
         -- case-insensitively, including filters beyond our two named holidays.
         if event == "CVAR_UPDATE" and (MapPinEnhanced:IsSecretValue(name) or
-            type(name) ~= "string" or not string.lower(name):match("^calendarshow")) then return false end
+                type(name) ~= "string" or not string.lower(name):match("^calendarshow")) then
+            return false
+        end
         observationsDirty = true
         Navigation:InvalidatePreparedData(event)
         return true

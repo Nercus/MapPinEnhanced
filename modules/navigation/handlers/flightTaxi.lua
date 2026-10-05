@@ -85,7 +85,8 @@ local function Dataprovider(path)
     if type(path.toTaxiNodeID) == "number" then taxiMapByNodeID[path.toTaxiNodeID] = path.toMap end
     local ids = {} ---@type integer[]
     for _, id in ipairs(path.taxiPathIDs or {}) do
-        assert(MapPinEnhanced:IsReadablePositiveInteger(id), "Navigation flight taxi requires positive integer source IDs")
+        assert(MapPinEnhanced:IsReadablePositiveInteger(id),
+            "Navigation flight taxi requires positive integer source IDs")
         assert(MapPinEnhanced:IsReadablePositiveInteger(path.fromTaxiNodeID) and
             MapPinEnhanced:IsReadablePositiveInteger(path.toTaxiNodeID),
             "Navigation flight taxi source IDs require node endpoints")
@@ -160,7 +161,8 @@ local function GetTaxiNodes(mapID)
                     x = x,
                     y = y,
                     known = known,
-                    name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or nil,
+                    name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or
+                        nil,
                 }
                 table.insert(taxiNodes, record)
                 -- Preserve the first matching record, as the former array lookup did.
@@ -298,13 +300,19 @@ local function PriceLeg(graph, reference)
     -- has not been measured, so even authored leg sums retain uncertainty.
     local uncertainty = math.max(30, seconds * 0.25)
     local cost = {
-        expectedSeconds = seconds, uncertaintySeconds = uncertainty,
+        expectedSeconds = seconds,
+        uncertaintySeconds = uncertainty,
         comparisonSeconds = seconds + uncertainty,
-        explanation = { kind = "flight-taxi", timingScope = not hasDuration and "endpoint-estimate" or
-            estimated and "path-geometry-estimate" or "authored-pair",
-            estimated = estimated, sourceVerified = #data.taxiPathIDs > 0,
-            taxiPathIDs = data.taxiPathIDs, fromTaxiNodeID = data.fromTaxiNodeID,
-            toTaxiNodeID = data.toTaxiNodeID },
+        explanation = {
+            kind = "flight-taxi",
+            timingScope = not hasDuration and "endpoint-estimate" or
+                estimated and "path-geometry-estimate" or "authored-pair",
+            estimated = estimated,
+            sourceVerified = #data.taxiPathIDs > 0,
+            taxiPathIDs = data.taxiPathIDs,
+            fromTaxiNodeID = data.fromTaxiNodeID,
+            toTaxiNodeID = data.toTaxiNodeID
+        },
     }
     -- Missing-duration geometry stays fresh; authored prices depend only on graph.
     if hasDuration then authoredPrices[reference] = cost end
@@ -346,8 +354,13 @@ local function PriceDirectedLeg(graph, prepared, from, to, checkpoint)
     end
     if not cost then return nil, "taxi leg has no eligible source connection " .. from .. ":" .. to end
     table.sort(ids)
-    return { fromTaxiNodeID = from, toTaxiNodeID = to,
-        sourceReferences = usable, taxiPathIDs = ids, cost = cost }
+    return {
+        fromTaxiNodeID = from,
+        toTaxiNodeID = to,
+        sourceReferences = usable,
+        taxiPathIDs = ids,
+        cost = cost
+    }
 end
 
 ---@param graph NavigationGraph
@@ -391,12 +404,28 @@ function Navigation:PriceTaxiJourney(graph, prepared, nodes, checkpoint, legMemo
     ---@cast seconds number
     ---@cast uncertainty number
     local identity = "taxi:" .. table.concat(nodes, ":")
-    return { identity = identity, origin = origin, destination = destination,
-        fromPointIndex = fromPoint, toPointIndex = toPoint, legs = legs, observed = true,
-        cost = { expectedSeconds = seconds, uncertaintySeconds = uncertainty,
+    return {
+        identity = identity,
+        origin = origin,
+        destination = destination,
+        fromPointIndex = fromPoint,
+        toPointIndex = toPoint,
+        legs = legs,
+        observed = true,
+        cost = {
+            expectedSeconds = seconds,
+            uncertaintySeconds = uncertainty,
             comparisonSeconds = seconds + uncertainty,
-            explanation = { kind = "flight-taxi", identity = identity, observed = true,
-                nodes = nodes, legs = legs, timingScope = "sum-of-pair-estimates" } } }
+            explanation = {
+                kind = "flight-taxi",
+                identity = identity,
+                observed = true,
+                nodes = nodes,
+                legs = legs,
+                timingScope = "sum-of-pair-estimates"
+            }
+        }
+    }
 end
 
 ---@param journey NavigationTaxiJourney
@@ -420,11 +449,23 @@ end
 function Navigation:GetInferredTaxiJourney(graph, reference, cost)
     local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
     local nodes = cost.explanation.nodes ---@type number[]
-    return { identity = "taxi-estimate:" .. table.concat(nodes, ":"), origin = nodes[1], destination = nodes[2],
-        fromPointIndex = graph.pathFromPointIndexes[reference], toPointIndex = graph.pathToPointIndexes[reference],
-        observed = false, cost = cost, destinationName = cost.explanation.destinationName,
-        legs = { { fromTaxiNodeID = nodes[1], toTaxiNodeID = nodes[2], sourceReferences = { reference },
-            taxiPathIDs = data.taxiPathIDs, cost = cost } } }
+    return {
+        identity = "taxi-estimate:" .. table.concat(nodes, ":"),
+        origin = nodes[1],
+        destination = nodes[2],
+        fromPointIndex = graph.pathFromPointIndexes[reference],
+        toPointIndex = graph.pathToPointIndexes[reference],
+        observed = false,
+        cost = cost,
+        destinationName = cost.explanation.destinationName,
+        legs = { {
+            fromTaxiNodeID = nodes[1],
+            toTaxiNodeID = nodes[2],
+            sourceReferences = { reference },
+            taxiPathIDs = data.taxiPathIDs,
+            cost = cost
+        } }
+    }
 end
 
 -- Dirty intake cancels unsafe work immediately; unchanged complete observations
@@ -496,9 +537,12 @@ function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
                     explanation.observed = false
                     explanation.nodes = { origin, to.nodeID }
                     explanation.destinationName = to.name
-                    costs[reference] = { expectedSeconds = base.expectedSeconds,
-                        uncertaintySeconds = base.uncertaintySeconds, comparisonSeconds = base.comparisonSeconds,
-                        explanation = explanation }
+                    costs[reference] = {
+                        expectedSeconds = base.expectedSeconds,
+                        uncertaintySeconds = base.uncertaintySeconds,
+                        comparisonSeconds = base.comparisonSeconds,
+                        explanation = explanation
+                    }
                 end
             end
         end

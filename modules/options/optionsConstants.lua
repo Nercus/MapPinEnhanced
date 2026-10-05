@@ -42,10 +42,10 @@ end
 MapPinEnhanced:DeleteVar("options", "General.Tracking.DefaultMode")
 
 Options.SCALE_PRESETS = {
-    { label = L["Small (90%)"], value = 0.9 },
+    { label = L["Small (90%)"],    value = 0.9 },
     { label = L["Default (100%)"], value = 1 },
-    { label = L["Large (125%)"], value = 1.25 },
-    { label = L["Huge (150%)"], value = 1.5 },
+    { label = L["Large (125%)"],   value = 1.25 },
+    { label = L["Huge (150%)"],    value = 1.5 },
 }
 
 -- Move retired Tiny selections to the smallest available preset before controls load.
@@ -142,20 +142,20 @@ Options.OPTIONS_CONFIG = {
     ["Pins.Appearance.WorldMapScale"] = Options.SCALE_PRESETS,
     ["Miscellaneous.Tracker.Scale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.DefaultColor"] = {
-        { label = L["Red"], value = "Red" },
-        { label = L["Orange"], value = "Orange" },
-        { label = L["Pale"], value = "Pale" },
-        { label = L["Yellow"], value = "Yellow" },
-        { label = L["Green"], value = "Green" },
+        { label = L["Red"],       value = "Red" },
+        { label = L["Orange"],    value = "Orange" },
+        { label = L["Pale"],      value = "Pale" },
+        { label = L["Yellow"],    value = "Yellow" },
+        { label = L["Green"],     value = "Green" },
         { label = L["LightBlue"], value = "LightBlue" },
-        { label = L["DarkBlue"], value = "DarkBlue" },
-        { label = L["Purple"], value = "Purple" },
-        { label = L["Pink"], value = "Pink" },
+        { label = L["DarkBlue"],  value = "DarkBlue" },
+        { label = L["Purple"],    value = "Purple" },
+        { label = L["Pink"],      value = "Pink" },
     },
     ["Pins.Tracking.ArrivalNotification"] = {
         { label = L["Only locked pins"], value = "locked" },
-        { label = L["All pins"], value = "all" },
-        { label = L["Disabled"], value = "disabled" },
+        { label = L["All pins"],         value = "all" },
+        { label = L["Disabled"],         value = "disabled" },
     },
     ["Wayfinder.Navigation.TransportationGroups"] = {
         { label = L["Navigation Transportation Portals"],             value = "portals" },

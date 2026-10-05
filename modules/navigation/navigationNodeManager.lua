@@ -464,7 +464,9 @@ local function EvaluateDirectCheck(key, value)
         return StateFromBoolean(Navigation:IsCalendarEventActive(value))
     elseif key == "mapPOIPresent" then
         if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.poiID) ~= "number" or
-            not C_AreaPoiInfo or not C_AreaPoiInfo.GetAreaPOIForMap then return UNKNOWN end
+            not C_AreaPoiInfo or not C_AreaPoiInfo.GetAreaPOIForMap then
+            return UNKNOWN
+        end
         local poiIDs = C_AreaPoiInfo.GetAreaPOIForMap(value.mapID)
         if not MapPinEnhanced:IsReadableTable(poiIDs) then return UNKNOWN end
         local sawUnknown = false
@@ -478,24 +480,34 @@ local function EvaluateDirectCheck(key, value)
         return sawUnknown and UNKNOWN or UNSATISFIED
     elseif key == "mapOverlayTexture" then
         if type(value) ~= "table" or type(value.mapID) ~= "number" or type(value.textureID) ~= "number" or
-            not C_MapExplorationInfo or not C_MapExplorationInfo.GetExploredMapTextures then return UNKNOWN end
+            not C_MapExplorationInfo or not C_MapExplorationInfo.GetExploredMapTextures then
+            return UNKNOWN
+        end
         local textures = C_MapExplorationInfo.GetExploredMapTextures(value.mapID)
         if not MapPinEnhanced:IsReadableTable(textures) or not MapPinEnhanced:IsReadableTable(textures[1]) or
-            not MapPinEnhanced:IsReadableTable(textures[1].fileDataIDs) then return UNKNOWN end
+            not MapPinEnhanced:IsReadableTable(textures[1].fileDataIDs) then
+            return UNKNOWN
+        end
         -- The source invasion selector observes the first overlay's first texture.
         local textureID = textures[1].fileDataIDs[1]
         if MapPinEnhanced:IsSecretValue(textureID) or type(textureID) ~= "number" then return UNKNOWN end
         return StateFromBoolean(textureID == value.textureID)
     elseif key == "contributionStateMin" then
         if type(value) ~= "table" or type(value.collectorID) ~= "number" or type(value.state) ~= "number" or
-            not C_ContributionCollector or not C_ContributionCollector.GetState then return UNKNOWN end
+            not C_ContributionCollector or not C_ContributionCollector.GetState then
+            return UNKNOWN
+        end
         local state = C_ContributionCollector.GetState(value.collectorID)
         if MapPinEnhanced:IsSecretValue(state) or type(state) ~= "number" or
-            state == Enum.ContributionState.None then return UNKNOWN end
+            state == Enum.ContributionState.None then
+            return UNKNOWN
+        end
         return StateFromBoolean(state >= value.state)
     elseif key == "garrison" then
         if type(value) ~= "table" or type(value.type) ~= "number" or type(value.level) ~= "number" or
-            not C_Garrison or not C_Garrison.GetGarrisonInfo then return UNKNOWN end
+            not C_Garrison or not C_Garrison.GetGarrisonInfo then
+            return UNKNOWN
+        end
         local level = C_Garrison.GetGarrisonInfo(value.type)
         if MapPinEnhanced:IsSecretValue(level) or type(level) ~= "number" then return UNKNOWN end
         return StateFromBoolean(level == value.level)
@@ -561,7 +573,9 @@ local function EvaluateDirectCheck(key, value)
         if type(value) == "table" then
             if not MapPinEnhanced:IsReadableTable(value) or type(value.id) ~= "number" or
                 type(value.criteria) ~= "number" or value.id <= 0 or value.id % 1 ~= 0 or
-                value.criteria <= 0 or value.criteria % 1 ~= 0 or not GetAchievementCriteriaInfo then return UNKNOWN end
+                value.criteria <= 0 or value.criteria % 1 ~= 0 or not GetAchievementCriteriaInfo then
+                return UNKNOWN
+            end
             -- Authored criteria are indexes, as in the source's achieved(id, index).
             -- Unavailable criteria can throw; keep that observation unknown without aborting preparation.
             local success, _, _, completed = pcall(GetAchievementCriteriaInfo, value.id, value.criteria)
@@ -587,7 +601,9 @@ local function EvaluateDirectCheck(key, value)
     elseif key == "buff" then
         if type(value) ~= "number" or value <= 0 or value % 1 ~= 0 or
             not C_UnitAuras or not C_UnitAuras.GetPlayerAuraBySpellID or
-            not C_Secrets or not C_Secrets.ShouldSpellAuraBeSecret then return UNKNOWN end
+            not C_Secrets or not C_Secrets.ShouldSpellAuraBeSecret then
+            return UNKNOWN
+        end
         -- Restricted lookups can return nil too; that is not proof of absence.
         local restricted = C_Secrets.ShouldSpellAuraBeSecret(value)
         if MapPinEnhanced:IsSecretValue(restricted) or restricted ~= false then return UNKNOWN end
@@ -598,7 +614,9 @@ local function EvaluateDirectCheck(key, value)
         return SATISFIED
     elseif key == "covenant" then
         if type(value) ~= "number" or value < 1 or value > 4 or value % 1 ~= 0 or
-            not C_Covenants or not C_Covenants.GetActiveCovenantID then return UNKNOWN end
+            not C_Covenants or not C_Covenants.GetActiveCovenantID then
+            return UNKNOWN
+        end
         local covenantID = C_Covenants.GetActiveCovenantID()
         if MapPinEnhanced:IsSecretValue(covenantID) or type(covenantID) ~= "number" then return UNKNOWN end
         return StateFromBoolean(covenantID == value)

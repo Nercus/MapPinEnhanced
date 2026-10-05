@@ -19,7 +19,9 @@ function MapPinEnhancedGroupPinAddingMixin:AddBeforePersist(pinData, overridePin
         group.pinState:Reset()
         replacedWayBackPin = true
         if group.isDeleting or group:GetGroupID() ~= groupID or
-            group.lifetimeChangeNumber ~= lifetimeChangeNumber then return nil, nil, true, false end
+            group.lifetimeChangeNumber ~= lifetimeChangeNumber then
+            return nil, nil, true, false
+        end
     end
 
     if group.hidden then

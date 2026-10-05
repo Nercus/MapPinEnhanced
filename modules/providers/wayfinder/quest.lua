@@ -36,10 +36,14 @@ local function GetQuestAtlas(questID, ready)
     if isWorldQuest then
         local tagInfo = C_QuestLog.GetQuestTagInfo(questID)
         if not MapPinEnhanced:IsReadableTable(tagInfo) or not QuestUtil or
-            not QuestUtil.GetWorldQuestAtlasInfo then return nil end
+            not QuestUtil.GetWorldQuestAtlasInfo then
+            return nil
+        end
         ---@cast tagInfo QuestTagInfo
         if issecretvalue(tagInfo.worldQuestType) or issecretvalue(tagInfo.isElite) or
-            issecretvalue(tagInfo.quality) or issecretvalue(tagInfo.tradeskillLineID) then return nil end
+            issecretvalue(tagInfo.quality) or issecretvalue(tagInfo.tradeskillLineID) then
+            return nil
+        end
         -- World quests retain Blizzard's objective-type icon while in progress.
         local atlas = QuestUtil.GetWorldQuestAtlasInfo(questID, tagInfo, false)
         if not issecretvalue(atlas) and type(atlas) == "string" and atlas ~= "" then return atlas end

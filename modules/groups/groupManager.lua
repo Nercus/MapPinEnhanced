@@ -139,7 +139,7 @@ function Groups:RegisterGroup(groupInfo)
     ---@param pendingGroup MapPinEnhancedGroupMixin
     for pendingGroup in self:GetObjectPool():EnumerateActive() do
         if pendingGroup.isDeleting and (pendingGroup:GetGroupID() == groupID or
-            self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupInfo.name)) then
+                self:GetNameKey(pendingGroup:GetName()) == self:GetNameKey(groupInfo.name)) then
             return nil, "the group is being deleted"
         end
     end

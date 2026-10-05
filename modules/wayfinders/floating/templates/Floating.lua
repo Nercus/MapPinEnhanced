@@ -191,7 +191,9 @@ function MapPinEnhancedWayfinderFloatingMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
     if not self.content:IsShown() or not self.presentationInitialized or
-        self.isClamped and not self.customDirection then return end
+        self.isClamped and not self.customDirection then
+        return
+    end
     self:RefreshPresentation()
 end
 
@@ -201,7 +203,7 @@ end
 ---@param nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval,
-                                                             movementState)
+                                                               movementState)
     -- The bearing fallback matches Arrow; native marker layout anticipates approach speed.
     local isFallbackClose = distance ~= nil and distance < 10
     local fallbackChanged = self.isFallbackClose ~= isFallbackClose
@@ -350,9 +352,10 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
-    self:StartDistanceUpdates(self.readout, function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
-        self:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
-    end)
+    self:StartDistanceUpdates(self.readout,
+        function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
+            self:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
+        end)
 end
 
 -- Release Blizzard ownership when hiding starts; only the last rendered marker

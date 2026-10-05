@@ -850,9 +850,13 @@ end
 function Navigation:SelectStep(stepIndex, changeNumber)
     local progression = self.progression
     if changeNumber ~= presentationChangeNumber or not progression or not self.routeNavigationEnabled or
-        not self:IsCurrentProgression(progression) then return false end
+        not self:IsCurrentProgression(progression) then
+        return false
+    end
     if type(stepIndex) ~= "number" or stepIndex % 1 ~= 0 or stepIndex < 1 or
-        stepIndex > GetRouteStepCount(progression.route) or stepIndex == progression.pathIndex then return false end
+        stepIndex > GetRouteStepCount(progression.route) or stepIndex == progression.pathIndex then
+        return false
+    end
     ApplyStepIndex(progression, stepIndex)
     return true
 end

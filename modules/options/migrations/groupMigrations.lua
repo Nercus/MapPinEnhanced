@@ -29,7 +29,9 @@ end
 local function CopyLegacyPin(raw)
     if type(raw) ~= "table" or not IsNumber(raw.mapID) or raw.mapID <= 0 or raw.mapID % 1 ~= 0 or
         not IsNumber(raw.x) or raw.x < 0 or raw.x > 1 or
-        not IsNumber(raw.y) or raw.y < 0 or raw.y > 1 then return nil end
+        not IsNumber(raw.y) or raw.y < 0 or raw.y > 1 then
+        return nil
+    end
     ---@cast raw table<string, any>
     local options = type(raw.optionals) == "table" and raw.optionals or raw
     ---@type pinData
@@ -45,10 +47,16 @@ local function CopyLegacyPin(raw)
     elseif raw.optionals and type(pin.texture) == "string" then
         pin.usesAtlas = true -- AceDB-era string textures were atlas names.
     end
-    if type(raw.lock) == "boolean" then pin.lock = raw.lock
-    elseif type(options.persistent) == "boolean" then pin.lock = options.persistent end
-    if type(raw.setTracked) == "boolean" then pin.setTracked = raw.setTracked
-    elseif type(options.noTrack) == "boolean" then pin.setTracked = not options.noTrack end
+    if type(raw.lock) == "boolean" then
+        pin.lock = raw.lock
+    elseif type(options.persistent) == "boolean" then
+        pin.lock = options.persistent
+    end
+    if type(raw.setTracked) == "boolean" then
+        pin.setTracked = raw.setTracked
+    elseif type(options.noTrack) == "boolean" then
+        pin.setTracked = not options.noTrack
+    end
     return pin
 end
 
@@ -151,14 +159,21 @@ function Groups:MigrateLegacyData()
     if storedPins ~= nil or acePins ~= nil then
         local existing = groups[ungroupedID]
         if existing ~= nil and (type(existing) ~= "table" or existing.source ~= MapPinEnhanced.name or
-            type(existing.pins) ~= "table" or type(existing.pinOrder) ~= "table" or type(existing.pinArchive) ~= "table") then
+                type(existing.pins) ~= "table" or type(existing.pinOrder) ~= "table" or type(existing.pinArchive) ~= "table") then
             MapPinEnhanced:Print(L["Legacy migration could not update groups. Original saved data was kept."])
             return
         end
         ---@type SaveableGroupData
         local group = existing and CopyTable(existing) or {
-            groupID = ungroupedID, name = L["Ungrouped Pins"], source = MapPinEnhanced.name,
-            groupType = "ungrouped", hidden = false, order = -1, pins = {}, pinOrder = {}, pinArchive = {},
+            groupID = ungroupedID,
+            name = L["Ungrouped Pins"],
+            source = MapPinEnhanced.name,
+            groupType = "ungrouped",
+            hidden = false,
+            order = -1,
+            pins = {},
+            pinOrder = {},
+            pinArchive = {},
         }
         -- An existing tracked selection wins when old and new saves coexist.
         local alreadyTracked = false
@@ -174,8 +189,11 @@ function Groups:MigrateLegacyData()
         AddPins(group, acePins, false)
         for index = previousCount + 1, #group.pins do
             local pin = group.pins[index]
-            if alreadyTracked then pin.setTracked = nil
-            elseif pin.setTracked then alreadyTracked = true end
+            if alreadyTracked then
+                pin.setTracked = nil
+            elseif pin.setTracked then
+                alreadyTracked = true
+            end
         end
         groups[ungroupedID] = group
     end
@@ -189,8 +207,14 @@ function Groups:MigrateLegacyData()
                 if groups[groupID] or self:GetSystemGroupType(groupID) then groupID = NewID("group", groups) end
                 ---@type SaveableGroupData
                 local group = {
-                    groupID = groupID, name = AvailableName(set.name), source = MapPinEnhanced.name,
-                    hidden = true, order = 0, pins = {}, pinOrder = {}, pinArchive = {},
+                    groupID = groupID,
+                    name = AvailableName(set.name),
+                    source = MapPinEnhanced.name,
+                    hidden = true,
+                    order = 0,
+                    pins = {},
+                    pinOrder = {},
+                    pinArchive = {},
                     trackingMode = self.TRACKING_MODE_NEAREST,
                 }
                 AddPins(group, set.pins, true)
@@ -211,6 +235,7 @@ function Groups:MigrateLegacyData()
     MapPinEnhanced:Print(string.format(L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."],
         pinCount, groupCount))
     if skipped > 0 then
-        MapPinEnhanced:Print(string.format(L["%d legacy entries could not be migrated. Original saved data was kept."], skipped))
+        MapPinEnhanced:Print(string.format(L["%d legacy entries could not be migrated. Original saved data was kept."],
+            skipped))
     end
 end

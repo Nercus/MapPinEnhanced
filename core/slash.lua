@@ -41,7 +41,8 @@ end
 local bulletColor = CreateColor(1, 0.82, 0)
 local helpColor = CreateColor(1, 0.82, 0)
 local r, g, b = bulletColor:GetRGBAsBytes()
-local helpPattern = string.format("|T%s\\shared\\SlashHelpBulletPoint.png:8:8:2:-2:1:1:0:1:0:1:%d:%d:%d|t |cffffffff%%s|r - %%s",
+local helpPattern = string.format(
+    "|T%s\\shared\\SlashHelpBulletPoint.png:8:8:2:-2:1:1:0:1:0:1:%d:%d:%d|t |cffffffff%%s|r - %%s",
     MapPinEnhanced.assetsPath, r, g, b)
 
 ---Print the help message for the addon

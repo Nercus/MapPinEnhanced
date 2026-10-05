@@ -18,7 +18,7 @@ local minimapHighlightPath = MapPinEnhanced.assetsPath .. "\\shared\\MinimapHigh
 local function ClearAllPins()
     if not Groups:MarkAllPinsReached() then
         MapPinEnhanced:Print(L
-        ["Some pins are still being updated. Try clearing again when the current operation finishes."])
+            ["Some pins are still being updated. Try clearing again when the current operation finishes."])
     end
 end
 

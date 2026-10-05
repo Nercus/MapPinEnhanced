@@ -409,7 +409,9 @@ local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
         end
     end
     if costBucket == bestCostBucket and uncertainty == job.bestUncertainties[pointIndex] and
-        pathCount == job.bestPathCounts[pointIndex] and signature >= job.bestSignatures[pointIndex] then return end
+        pathCount == job.bestPathCounts[pointIndex] and signature >= job.bestSignatures[pointIndex] then
+        return
+    end
     job.bestCostBuckets[pointIndex] = costBucket
     job.bestUncertainties[pointIndex] = uncertainty
     job.bestPathCounts[pointIndex] = pathCount
@@ -522,8 +524,12 @@ local function GetFinalMovementCost(job, pointIndex)
     local distance = MapPinEnhanced.HBD:GetWorldDistance(origin.instanceID, origin.x, origin.y, target.x, target.y)
     if type(distance) ~= "number" or distance < 0 then return nil end
     local seconds = distance / speed
-    return { expectedSeconds = seconds, uncertaintySeconds = 0, comparisonSeconds = seconds,
-        explanation = { kind = "distance", distance = distance, mode = mode, speed = speed } }
+    return {
+        expectedSeconds = seconds,
+        uncertaintySeconds = 0,
+        comparisonSeconds = seconds,
+        explanation = { kind = "distance", distance = distance, mode = mode, speed = speed }
+    }
 end
 
 ---@param job NavigationCalculationJob
@@ -732,7 +738,9 @@ local function OfferNextMovementPoint(job)
         -- Reject distant entrances before computing distance or building heap entries.
         local remainingDistance = (job.destinationCostBucket + 0.5 - entry.cost) * speed
         if math.abs(origin.x - target.x) > remainingDistance or
-            math.abs(origin.y - target.y) > remainingDistance then return end
+            math.abs(origin.y - target.y) > remainingDistance then
+            return
+        end
     end
     local seconds = MapPinEnhanced:GetPointDistance(origin, target) / speed
     OfferPoint(job, pointIndex, entry.cost + seconds,

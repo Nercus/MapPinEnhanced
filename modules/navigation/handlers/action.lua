@@ -19,7 +19,9 @@ local MINIMUM_ACTION_COOLDOWN_SECONDS = 1.5
 ---@return number? modRate
 local function ReadCooldown(startTime, duration, modRate)
     if not MapPinEnhanced:IsReadableNumber(startTime) or not MapPinEnhanced:IsReadableNumber(duration) or
-        MapPinEnhanced:IsSecretValue(modRate) then return nil end
+        MapPinEnhanced:IsSecretValue(modRate) then
+        return nil
+    end
     local rate = type(modRate) == "number" and modRate > 0 and modRate or 1
     if not (startTime < math.huge and duration >= 0 and duration < math.huge and rate < math.huge) then return nil end
     -- Ignore brief global cooldowns, not the final seconds of a longer cooldown.
@@ -45,7 +47,9 @@ function Navigation:GetActionCooldown(actionType, actionID)
     if MapPinEnhanced:IsSecretValue(charges) then return nil end
     if charges then
         if not MapPinEnhanced:IsReadableTable(charges) or not MapPinEnhanced:IsReadableNumber(charges.currentCharges) or
-            not MapPinEnhanced:IsReadableNumber(charges.maxCharges) then return nil end
+            not MapPinEnhanced:IsReadableNumber(charges.maxCharges) then
+            return nil
+        end
         if charges.maxCharges > 0 then
             if charges.currentCharges > 0 then return 0 end
             return ReadCooldown(charges.cooldownStartTime, charges.cooldownDuration, charges.chargeModRate)
@@ -53,7 +57,9 @@ function Navigation:GetActionCooldown(actionType, actionID)
     end
     local cooldown = C_Spell.GetSpellCooldown(actionID)
     if not MapPinEnhanced:IsReadableTable(cooldown) or MapPinEnhanced:IsSecretValue(cooldown.isEnabled) or
-        MapPinEnhanced:IsSecretValue(cooldown.isOnGCD) then return nil end
+        MapPinEnhanced:IsSecretValue(cooldown.isOnGCD) then
+        return nil
+    end
     if cooldown.isEnabled == false then return nil end
     if cooldown.isOnGCD then return 0 end
     return ReadCooldown(cooldown.startTime, cooldown.duration, cooldown.modRate)
