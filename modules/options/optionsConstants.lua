@@ -55,6 +55,7 @@ Options.DEFAULTS = {
     ["Wayfinder.General.HideBlizzardFloatingDiamond"] = false,
     ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_ARROW,
     ["Wayfinder.General.ShowETA"] = true,
+    ["Wayfinder.General.ShowObjectiveFrame"] = true,
     ["Wayfinder.Navigation.Enable"] = true,
     ["Wayfinder.Navigation.BackgroundSearch"] = false,
     ["Wayfinder.Navigation.AutomaticTravelSelection"] = false,

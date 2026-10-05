@@ -56,6 +56,11 @@
                             <KeyValue key="key" value="General.Tracking.ArrivalMode" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.General.ShowObjectiveFrame" />
+                        </KeyValues>
+                    </Frame>
                 </Frames>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionGroupTemplate" parentKey="navigation">

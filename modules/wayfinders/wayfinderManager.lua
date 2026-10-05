@@ -166,6 +166,7 @@ function Wayfinders:UpdateDestinationAreaState(inside)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_REGEN_ENABLED", ApplyActiveStep)
+Options:SubscribeToOptionChanges("Wayfinder.General.ShowObjectiveFrame", ApplyActiveStep)
 
 ---@return WayfinderStepData?
 function Wayfinders:GetStepSnapshot()

@@ -31,6 +31,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field newNeedleRotation number | nil
 ---@field needleFrameIndex integer?
 ---@field directionVisible boolean?
+---@field forceClose boolean?
 ---@field step WayfinderStepData?
 ---@field clearButton Button
 ---@field reportButton MapPinEnhancedIconButtonTemplate
@@ -100,6 +101,7 @@ end
 
 ---@param displayType 'close' | 'far'
 function MapPinEnhancedWayfinderArrowMixin:SetDisplayType(displayType)
+    if self.forceClose then displayType = "close" end
     if self.displayType == displayType then return end
     self.displayType = displayType
     local needle = self.needleContainer.needle

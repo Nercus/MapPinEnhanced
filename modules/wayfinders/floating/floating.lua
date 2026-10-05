@@ -83,7 +83,10 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
     local inside = step and step.insideObjectiveArea
     if self.panel then self.panel:Apply(not inside and step or nil, self.data) end
-    if self.objectivePanel then self.objectivePanel:Apply(inside and step or nil, self.data) end
+    if self.objectivePanel then
+        local showObjectives = inside and Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
+        self.objectivePanel:Apply(showObjectives and step or nil, self.data)
+    end
     -- Reset has released tracking; retain the last artwork until its fade ends.
     if not self.data then return end
     local frame = self:GetFrame()

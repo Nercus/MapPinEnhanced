@@ -350,6 +350,9 @@ L["Apply"] = "Apply"
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
 L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
 L["Wayfinder.General.ShowETA_LABEL"] = "Show estimated arrival time"
+L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Show quest objective frame"
+L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =
+"Show quest objectives when entering an objective area. When disabled, the floating wayfinder is hidden and the arrow stays in its close state."
 L["Wayfinder.General.ShowETA_DESCRIPTION"] =
 "Show the movement time estimate to the current target alongside its distance, when available."
 L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Transportation"

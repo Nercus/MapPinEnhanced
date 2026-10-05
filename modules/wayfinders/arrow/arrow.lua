@@ -73,16 +73,20 @@ function MapPinEnhancedWayfinderArrow:SetStep(step)
     frame.step = step
     if self.positionFrame then self.positionFrame.instruction:SetStep(step) end
     local inside = step and step.insideObjectiveArea
-    local showDirection = step == nil or step.showDirection and step.desiredAction == nil and not inside
+    local showObjectives = inside and Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
+    frame.forceClose = inside == true and not showObjectives
+    local showDirection = frame.forceClose or step == nil or
+        step.showDirection and step.desiredAction == nil and not inside
     frame.needleContainer:SetShown(showDirection)
     local calculating = step and step.phase == "calculating"
     frame.loading:SetShown(calculating == true)
     frame.pin:SetShown(not calculating and not (step and step.showInstruction ~= false and step.desiredAction))
     frame.textContainer:Show()
     frame.clearButton:SetEnabled(step ~= nil and Providers:CanClearNavigationTracking())
-    frame.readout:SetStatusText(inside and MapPinEnhanced.L["In objective area"] or nil)
+    frame.readout:SetStatusText(showObjectives and MapPinEnhanced.L["In objective area"] or nil)
     self:UpdateText()
     frame:SetDirectionVisible(showDirection)
+    if frame.forceClose then frame:SetDisplayType("close") end
 end
 
 function MapPinEnhancedWayfinderArrow:UpdateText()
@@ -191,7 +195,10 @@ end
 
 function MapPinEnhancedWayfinderArrow:Disable()
     self.step = nil
-    if self.frame then self.frame.step = nil end
+    if self.frame then
+        self.frame.step = nil
+        self.frame.forceClose = nil
+    end
     if self.positionFrame then self.positionFrame.instruction:SetStep(nil) end
     if self.frame then
         self.frame.loading:Hide()
