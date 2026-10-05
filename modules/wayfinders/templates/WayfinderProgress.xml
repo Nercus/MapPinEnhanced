@@ -8,11 +8,14 @@
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
-                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate">
+                <Texture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" scale="0.5">
+                    <Color r="0" g="0" b="0" a="1" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-2" />
                         <Anchor point="BOTTOMRIGHT" x="2" />
                     </Anchors>
+                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMode mode="Stretched" />
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
