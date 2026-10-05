@@ -165,13 +165,13 @@ local function RefreshActiveProvider()
     Providers:RefreshSuperTrackingSelection()
 end
 
----@param event WowEvent
-local function OnSourceEvent(event)
+---@param events table<string, boolean>
+local function OnSourceEvents(events)
     if Providers:IsClearingTracking() then return end
     if Providers:IsChangingSuperTrackingEntry() then return end
     if Providers:ShouldIgnoreStepTrackingChange(true) then
         local owner = Navigation:GetActiveDestinationState()
-        if owner and sourceEventProviders[event] and sourceEventProviders[event][owner] then
+        if owner and events[owner] then
             Providers:RefreshOwnedDestinationText(owner)
         end
         return
@@ -181,8 +181,7 @@ local function OnSourceEvent(event)
         UpdateProviderTarget(nil)
         return
     end
-    local eventProviders = sourceEventProviders[event]
-    if eventProviders and eventProviders[provider.source] then UpdateProviderTarget(provider) end
+    if events[provider.source] then UpdateProviderTarget(provider) end
 end
 
 ---@param provider SuperTrackingProvider|SuperTrackingFallbackProvider
@@ -203,12 +202,43 @@ local function RegisterSourceEvents(provider)
         if not eventProviders then
             eventProviders = {}
             sourceEventProviders[event] = eventProviders
-            local sourceEvent = event
-            MapPinEnhanced:RegisterEvent(sourceEvent, function() OnSourceEvent(sourceEvent) end)
         end
         eventProviders[provider.source] = true
     end
 end
+
+-- Source data bursts publish current state once, never captured target data.
+-- Stage identity and clearing remain immediate.
+local BUCKET_SOURCE_EVENTS = {
+    AREA_POIS_UPDATED = true,
+    NEIGHBORHOOD_MAP_DATA_UPDATED = true,
+    QUEST_POI_UPDATE = true,
+    QUEST_LOG_UPDATE = true,
+    QUEST_WATCH_UPDATE = true,
+    SCENARIO_CRITERIA_UPDATE = true,
+    SCENARIO_POI_UPDATE = true,
+}
+MapPinEnhanced:OnLoad(function()
+    ---@type WowEvent[]
+    local bucketEvents = {}
+    for event, sources in pairs(sourceEventProviders) do
+        if not BUCKET_SOURCE_EVENTS[event] then
+            MapPinEnhanced:RegisterEvent(event, function() OnSourceEvents(sources) end)
+        else
+            bucketEvents[#bucketEvents + 1] = event
+        end
+    end
+    if #bucketEvents > 0 then
+        MapPinEnhanced:RegisterEventBucket(bucketEvents, function(events)
+            ---@type table<string, boolean>
+            local sources = {}
+            for event in pairs(events) do
+                for source in pairs(sourceEventProviders[event]) do sources[source] = true end
+            end
+            OnSourceEvents(sources)
+        end)
+    end
+end)
 
 ---@param provider SuperTrackingProvider|SuperTrackingFallbackProvider
 local function CheckProvider(provider)
@@ -317,20 +347,21 @@ end
 ---@param targetID string
 ---@param targetData WayfinderData
 ---@param removeDestination NavigationDestinationRemoval?
+---@param textAvailable boolean? nil reads text; true uses prepared text; false retains previous text
 ---@return integer changeNumber
-function Providers:SetSuperTrackingWayfinderData(source, targetID, targetData, removeDestination)
+function Providers:SetSuperTrackingWayfinderData(source, targetID, targetData, removeDestination, textAvailable)
     CancelTargetRetry(source)
     CancelOtherTargetRetries(source)
     local provider = providersBySource[source]
-    if provider.readText then
+    if textAvailable == nil and provider.readText then
         local title, description, available = provider.readText(targetID, targetData)
-        if available then
-            targetData.title, targetData.description = title, description
-        else
-            local _, _, changeNumber = Navigation:GetActiveDestinationState()
-            local previous = Navigation:GetDestinationData(source, targetID, changeNumber)
-            if previous then targetData.title, targetData.description = previous.title, previous.description end
-        end
+        textAvailable = available == true
+        if textAvailable then targetData.title, targetData.description = title, description end
+    end
+    if textAvailable == false then
+        local _, _, changeNumber = Navigation:GetActiveDestinationState()
+        local previous = Navigation:GetDestinationData(source, targetID, changeNumber)
+        if previous then targetData.title, targetData.description = previous.title, previous.description end
     end
     targetData.title = self:PlainDescription(targetData.title) or L["Target"]
     targetData.description = self:PlainDescription(targetData.description, targetData.title)

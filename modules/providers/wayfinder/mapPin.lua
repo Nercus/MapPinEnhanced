@@ -68,65 +68,49 @@ end
 ---@param pinType Enum.SuperTrackingMapPinType
 ---@param typeID number
 ---@param mapID number
+---@return number? x
+---@return number? y
 ---@return string? title
 ---@return string|number? texture
 ---@return boolean? usesAtlas
 ---@return string? description
-local function GetMapPinDisplayInfo(pinType, typeID, mapID)
+local function GetMapPinInfo(pinType, typeID, mapID)
     if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
-        local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID) or C_AreaPoiInfo.GetAreaPOIInfo(nil, typeID)
-        return info and info.name, info and info.atlasName, true, info and info.description
+        local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
+        local display = info or C_AreaPoiInfo.GetAreaPOIInfo(nil, typeID)
+        return info and info.position.x, info and info.position.y,
+            display and display.name, display and display.atlasName, true, display and display.description
     elseif pinType == Enum.SuperTrackingMapPinType.TaxiNode then
         for _, node in ipairs(C_TaxiMap.GetTaxiNodesForMap(mapID) or {}) do
-            if node.nodeID == typeID then return node.name, node.atlasName, true end
+            if node.nodeID == typeID then
+                return node.position.x, node.position.y, node.name, node.atlasName, true
+            end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        local _, _, title = GetQuestOfferInfo(typeID, mapID)
+        local x, y, title = GetQuestOfferInfo(typeID, mapID)
         title = title or C_QuestLog.GetTitleForQuestID(typeID)
         if not title and not pendingQuestTitles[typeID] then
             pendingQuestTitles[typeID] = true
             C_QuestLog.RequestLoadQuestByID(typeID)
         end
         local classification = C_QuestInfoSystem.GetQuestClassification(typeID)
-        local atlas = questClassificationAtlas[classification] or "QuestLog-tab-icon-quest"
-        return title, atlas, true
+        return x, y, title, questClassificationAtlas[classification] or "QuestLog-tab-icon-quest", true
     elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
         for _, digSite in ipairs(C_ResearchInfo.GetDigSitesForMap(mapID) or {}) do
-            if digSite.researchSiteID == typeID then return digSite.name, "ArchBlob", true end
+            if digSite.researchSiteID == typeID then
+                return digSite.position.x, digSite.position.y, digSite.name, "ArchBlob", true
+            end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.HousingPlot then
         local plotInfo = GetHousingPlotInfo(typeID)
-        if not plotInfo then return L["House"] end
-        ---@type string?
-        local title
+        if not plotInfo then return nil, nil, L["House"] end
+        local title ---@type string?
         if plotInfo.ownerName and plotInfo.ownerName ~= "" then
             title = string.format(L["%s's House"], plotInfo.ownerName)
         elseif C_HousingNeighborhood.GetNeighborhoodPlotName then
             title = C_HousingNeighborhood.GetNeighborhoodPlotName(plotInfo.plotID)
         end
-        return title or L["House"], housingOwnerAtlas[plotInfo.ownerType], true
-    end
-end
-
----@param pinType Enum.SuperTrackingMapPinType
----@param typeID number
----@param mapID number
----@return number? x
----@return number? y
-local function GetMapPinPositionForMap(pinType, typeID, mapID)
-    if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
-        local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
-        return info and info.position.x, info and info.position.y
-    elseif pinType == Enum.SuperTrackingMapPinType.TaxiNode then
-        for _, node in ipairs(C_TaxiMap.GetTaxiNodesForMap(mapID) or {}) do
-            if node.nodeID == typeID then return node.position.x, node.position.y end
-        end
-    elseif pinType == Enum.SuperTrackingMapPinType.QuestOffer then
-        return GetQuestOfferInfo(typeID, mapID)
-    elseif pinType == Enum.SuperTrackingMapPinType.DigSite then
-        for _, digSite in ipairs(C_ResearchInfo.GetDigSitesForMap(mapID) or {}) do
-            if digSite.researchSiteID == typeID then return digSite.position.x, digSite.position.y end
-        end
+        return nil, nil, title or L["House"], housingOwnerAtlas[plotInfo.ownerType], true
     end
 end
 
@@ -145,7 +129,7 @@ local function ReadMapPinText(targetID, data)
     local typeText, idText = targetID:match("^mapPin:(%d+):(%d+)$")
     local pinType, typeID = tonumber(typeText), tonumber(idText)
     if not pinType or not typeID then return end
-    local title, _, _, description = GetMapPinDisplayInfo(pinType, typeID, data.mapID)
+    local _, _, title, _, _, description = GetMapPinInfo(pinType, typeID, data.mapID)
     title = Providers:PlainDescription(title)
     if not title or issecretvalue(description) then return end
     if pinType ~= Enum.SuperTrackingMapPinType.AreaPOI then
@@ -172,25 +156,44 @@ local function RefreshMapPin()
         (not questMapID or questMapID == 0) then
         questMapID = C_TaskQuest.GetQuestZoneID(typeID)
     end
+    ---@type number?, string?, string|number?, boolean?, string?
+    local resolvedMapID, title, texture, usesAtlas, description
     local x, y, mapID, waypointDescription, traversalOnly = Providers:GetSuperTrackingWaypoint(
         hasPin and function(candidateMapID)
-            return GetMapPinPositionForMap(pinType, typeID, candidateMapID)
+            local x, y
+            x, y, title, texture, usesAtlas, description = GetMapPinInfo(pinType, typeID, candidateMapID)
+            resolvedMapID = candidateMapID
+            return x, y
         end or nil, questMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
-    local title, texture, usesAtlas, description = GetMapPinDisplayInfo(pinType, typeID, mapID)
+    if resolvedMapID ~= mapID then
+        local x, y
+        x, y, title, texture, usesAtlas, description = GetMapPinInfo(pinType, typeID, mapID)
+    end
+    local textAvailable = Providers:PlainDescription(title) ~= nil and not issecretvalue(description)
     local superTrackedName, superTrackedDescription = C_SuperTrack.GetSuperTrackedItemName()
+    local displayTitle = title or superTrackedName or waypointDescription
+    local displayDescription = description or superTrackedDescription or waypointDescription
+    if textAvailable then
+        displayTitle = Providers:PlainDescription(title)
+        if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
+            displayDescription = description
+        else
+            displayDescription = Providers:PlainDescription(superTrackedDescription, displayTitle) or displayDescription
+        end
+    end
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
-        title = title or superTrackedName or waypointDescription,
-        description = description or superTrackedDescription or waypointDescription,
+        title = displayTitle,
+        description = displayDescription,
         texture = texture,
         usesAtlas = usesAtlas,
-    }, not traversalOnly and ClearMapPin or nil)
+    }, not traversalOnly and ClearMapPin or nil, textAvailable)
 end
 
 Providers:RegisterSuperTrackingProvider({
@@ -206,7 +209,7 @@ Providers:RegisterSuperTrackingProvider({
         return function()
             if pinType == Enum.SuperTrackingMapPinType.HousingPlot then
                 if not GetHousingPlotInfo(typeID) then return false end
-            elseif GetMapPinPositionForMap(pinType, typeID, mapID) == nil then
+            elseif GetMapPinInfo(pinType, typeID, mapID) == nil then
                 return false
             end
             C_SuperTrack.SetSuperTrackedMapPin(pinType, typeID)

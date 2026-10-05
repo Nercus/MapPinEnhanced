@@ -5,10 +5,12 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "scenario"
 
+---@param scenario ScenarioInformation?
+---@param step ScenarioStepInfo?
 ---@return string
-local function GetScenarioTargetID()
-    local scenario = C_ScenarioInfo.GetScenarioInfo()
-    local step = C_ScenarioInfo.GetScenarioStepInfo()
+local function GetScenarioTargetID(scenario, step)
+    scenario = scenario or C_ScenarioInfo.GetScenarioInfo()
+    step = step or C_ScenarioInfo.GetScenarioStepInfo()
     return string.format("scenario:%s:%s", tostring(scenario and scenario.scenarioID),
         tostring(step and step.stepID or scenario and scenario.currentStage))
 end
@@ -75,32 +77,39 @@ end
 local function RefreshScenario()
     local scenario = C_ScenarioInfo.GetScenarioInfo()
     local step = C_ScenarioInfo.GetScenarioStepInfo()
-    local targetID = GetScenarioTargetID()
-    local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(GetScenarioWaypoint)
+    local targetID = GetScenarioTargetID(scenario, step)
+    ---@type number?, ScenarioIconInfo[]?
+    local resolvedMapID, icons
+    local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(function(candidateMapID)
+        resolvedMapID, icons = candidateMapID, GetScenarioIcons(candidateMapID)
+        if #icons == 1 then return icons[1].x, icons[1].y, icons[1].description end
+    end)
     if x == nil or y == nil or mapID == nil then
         Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
-
-    local title, description = ReadScenarioText(targetID, { mapID = mapID, x = x, y = y })
-    title = title or NonEmpty(step and step.title) or NonEmpty(scenario and scenario.name) or L["Scenario"]
-    local atlas = "Navigation-Tracked-Icon"
-    for _, icon in ipairs(GetScenarioIcons(mapID)) do
+    if resolvedMapID ~= mapID then icons = GetScenarioIcons(mapID) end
+    local title = NonEmpty(step and step.title) or NonEmpty(scenario and scenario.name) or L["Scenario"]
+    local atlas, description, matches = "Navigation-Tracked-Icon", nil, 0
+    for _, icon in ipairs(icons or {}) do
         if not issecretvalue(icon.x) and not issecretvalue(icon.y) and
             math.abs(icon.x - x) < 0.0001 and math.abs(icon.y - y) < 0.0001 then
-            atlas = NonEmpty(icon.atlas) or atlas
-            break
+            matches = matches + 1
+            if matches == 1 then atlas = NonEmpty(icon.atlas) or atlas end
+            description = Providers:PlainDescription(icon.description, title)
         end
     end
+    if matches ~= 1 then description = nil end
     Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
         mapID = mapID,
         x = x,
         y = y,
         title = title,
-        description = description,
+        description = description or Providers:PlainDescription(waypointDescription, title) or
+            Providers:PlainDescription(step and step.description, title),
         texture = atlas,
         usesAtlas = true,
-    })
+    }, nil, scenario ~= nil and step ~= nil)
 end
 
 Providers:RegisterSuperTrackingProvider({
@@ -109,7 +118,7 @@ Providers:RegisterSuperTrackingProvider({
     getTargetID = GetScenarioTargetID,
     refresh = RefreshScenario,
     readText = ReadScenarioText,
-    events = { "SCENARIO_UPDATE", "SCENARIO_CRITERIA_UPDATE", "SCENARIO_POI_UPDATE",
+    events = { "SCENARIO_CRITERIA_UPDATE", "SCENARIO_POI_UPDATE",
         "SCENARIO_COMPLETED", "ZONE_CHANGED_NEW_AREA" },
 })
 
@@ -120,9 +129,10 @@ MapPinEnhanced:RegisterEvent("SCENARIO_UPDATE", function()
     local Navigation = MapPinEnhanced:GetModule("Navigation")
     local scenario = C_ScenarioInfo.GetScenarioInfo()
     local step = C_ScenarioInfo.GetScenarioStepInfo()
-    if not scenario or not step then return end
     local owner, targetID = Navigation:GetActiveDestinationState()
-    if owner ~= SOURCE or not Providers:IsStepSuperTracking() or targetID == GetScenarioTargetID() then return end
-    Providers:ClearStepSuperTracking()
+    if scenario and step and owner == SOURCE and Providers:IsStepSuperTracking() and
+        targetID ~= GetScenarioTargetID(scenario, step) then
+        Providers:ClearStepSuperTracking()
+    end
     Providers:RefreshSuperTrackingProvider(SOURCE)
 end)
