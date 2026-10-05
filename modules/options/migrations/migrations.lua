@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
--- SavedVariables load before XML. Run before optionsConstants and frame creation
+-- SavedVariables load before XML. Run before optionMigrations and frame creation
 -- so defaults and LibWindow registrations cannot hide the legacy preferences.
 if MapPinEnhanced:GetVar("legacyOptionsMigrated") then return end
 
@@ -50,7 +50,7 @@ end
 if IsNumber(minimap.minimapPos) then SaveMissing(minimap.minimapPos, "minimapButton", "minimapPos") end
 
 if IsNumber(tracker.trackerScale) and tracker.trackerScale >= 0.5 and tracker.trackerScale <= 2 then
-    -- optionsConstants applies the existing nearest-preset conversion.
+    -- optionMigrations applies the existing nearest-preset conversion.
     SaveMissing(tracker.trackerScale, "frames", "tracker", "scale")
 end
 if IsNumber(tracker.trackerHeight) then

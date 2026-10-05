@@ -1,8 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
-    <Include file="migrations/migrations.lua" />
-    <Include file="migrations/groupMigrations.lua" />
     <Include file="optionsConstants.lua" />
+    <Include file="migrations/migrations.lua" />
+    <Include file="migrations/optionMigrations.lua" />
+    <Include file="migrations/groupMigrations.lua" />
+    <Include file="migrations/trackerMigrations.lua" />
     <Include file="optionsManager.lua" />
     <Include file="templates/_imports.xml" />
     <Include file="OptionsFrame.xml" />
