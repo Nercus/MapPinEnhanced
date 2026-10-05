@@ -21,6 +21,7 @@ local rideStarted = false
 local bookedDestination ---@type number?
 local bookingPending = false
 local closingObservation ---@type NavigationTaxiObservation?
+local interactionChangeNumber = 0
 local rideTimer ---@type FunctionContainer?
 local automaticDestination ---@type NavigationDestination?
 
@@ -105,17 +106,26 @@ local function ReadObservation()
 end
 
 local function RefreshRoutes()
-    Navigation:ClearTaxiNodeKnowledge()
     Navigation:RecheckFailedPaths("taxi")
-    if Navigation.routeNavigationEnabled and Navigation.activeDestination then Navigation:EnsurePreparedData() end
     local progression = Navigation.progression
     local flying = UnitOnTaxi("player")
     if not MapPinEnhanced:IsSecretValue(flying) and flying then return end
     if bookingPending or progression and (progression.attempted or progression.phase == "in-transit") then return end
-    if Navigation.activeDestination then Navigation:StartCalculation(true) end
+    if not Navigation.routeNavigationEnabled or not Navigation.activeDestination then return end
+    if Navigation:EnsurePreparedData() then
+        Navigation:StartCalculation(true)
+    else
+        -- Publication owns the restart; do not create a waiting job that the
+        -- changed observation would immediately replace on publication.
+        local destination = Navigation.activeDestination
+        Navigation.pendingCalculationRestart = function()
+            if Navigation.activeDestination == destination then Navigation:StartCalculation(true) end
+        end
+    end
 end
 
 local function Observe()
+    interactionChangeNumber = interactionChangeNumber + 1
     if not rideStarted then bookingPending = false end
     closingObservation = nil
     local previousOrigin = interactionOpen and observation and observation.origin
@@ -133,10 +143,12 @@ local function Observe()
     if fresh.origin then Navigation:RecordLearnedTaxiNodes(fresh.learnedNodeIDs) end
     fresh.origin = fresh.origin or previousOrigin
     observation = fresh
+    Navigation:ClearTaxiNodeKnowledge()
     RefreshRoutes()
 end
 
 local function Invalidate()
+    interactionChangeNumber = interactionChangeNumber + 1
     automaticDestination = nil
     observation = nil
     Navigation:ClearTaxiNodeKnowledge()
@@ -262,15 +274,15 @@ MapPinEnhanced:RegisterEvent("TAXIMAP_CLOSED", function()
     interactionOpen = false
     closingObservation = observation
     local closed = closingObservation
+    Invalidate()
+    local changeNumber = interactionChangeNumber
     C_Timer.After(0, function()
-        if closingObservation == closed then
+        if interactionChangeNumber == changeNumber and closingObservation == closed then
             closingObservation = nil
             if not bookingPending and not rideStarted then RefreshRoutes() end
         end
     end)
-    Invalidate()
-    -- Do not discard a selected journey between booking and UnitOnTaxi becoming true.
-    Navigation:RefreshPreparedData()
+    -- The deferred close refresh owns the sole restart after the booking hook.
 end)
 MapPinEnhanced:RegisterEvent("TAXI_NODE_STATUS_CHANGED", function()
     if interactionOpen then
