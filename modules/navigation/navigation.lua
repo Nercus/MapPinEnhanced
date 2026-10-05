@@ -15,6 +15,7 @@ local L = MapPinEnhanced.L
 ---@field routingData WayfinderData
 ---@field removeDestination NavigationDestinationRemoval?
 ---@field insideObjectiveArea boolean?
+---@field objectiveAreaExitTimer FunctionContainer?
 
 ---@class NavigationProgression
 ---@field route NavigationRoute
@@ -420,6 +421,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
     self:CancelRouteCalculation(self.activeCalculation)
     self:DeactivatePathHandler()
     self.destinationChangeNumber = self.destinationChangeNumber + 1
+    if active and active.objectiveAreaExitTimer then active.objectiveAreaExitTimer:Cancel() end
     self.activeDestination = {
         owner = owner,
         destinationID = destinationID,
@@ -510,10 +512,26 @@ end
 ---@param destinationID string
 ---@param changeNumber integer
 ---@param inside boolean
-function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside)
+---@param exitGraceSeconds number? provider-owned grace for a readable area exit
+function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     local destination = self.activeDestination
-    if not destination or (destination.insideObjectiveArea == true) == inside then return end
+    if not destination then return end
+    if not inside and exitGraceSeconds and destination.insideObjectiveArea then
+        -- Repeated outside samples share one deadline; re-entry cancels it below.
+        if not destination.objectiveAreaExitTimer then
+            destination.objectiveAreaExitTimer = C_Timer.NewTimer(exitGraceSeconds, function()
+                destination.objectiveAreaExitTimer = nil
+                self:UpdateDestinationAreaState(owner, destinationID, changeNumber, false)
+            end)
+        end
+        return
+    end
+    if destination.objectiveAreaExitTimer then
+        destination.objectiveAreaExitTimer:Cancel()
+        destination.objectiveAreaExitTimer = nil
+    end
+    if (destination.insideObjectiveArea == true) == inside then return end
     destination.insideObjectiveArea = inside
     for _, step in pairs(self.routeSteps) do
         if step.info then
@@ -540,6 +558,8 @@ end
 ---@return boolean
 function Navigation:ClearDestination(owner, destinationID, changeNumber)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return false end
+    local destination = self.activeDestination
+    if destination and destination.objectiveAreaExitTimer then destination.objectiveAreaExitTimer:Cancel() end
     self:CancelRouteCalculation(self.activeCalculation)
     self:DeactivatePathHandler()
     self.activeCalculation = nil

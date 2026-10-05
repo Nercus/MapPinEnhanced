@@ -5,6 +5,7 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
+local OBJECTIVE_EXIT_GRACE_SECONDS = 3
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
@@ -66,21 +67,24 @@ end
 ---@param questID number
 ---@param inside boolean?
 ---@return string? atlas
----@return boolean active
+---@return boolean? active nil when membership or unfinished readiness is unavailable
 ---@return boolean? ready
 local function ReadQuestState(questID, inside)
     local ready = C_QuestLog.ReadyForTurnIn and C_QuestLog.ReadyForTurnIn(questID)
     if not issecretvalue(inside) and inside == nil and C_Minimap and C_Minimap.IsInsideQuestBlob then
         inside = C_Minimap.IsInsideQuestBlob(questID)
     end
-    local active = not issecretvalue(inside) and inside == true and
-        not issecretvalue(ready) and ready == false
+    local active ---@type boolean?
+    if not issecretvalue(inside) and type(inside) == "boolean" and
+        not issecretvalue(ready) and ready == false then
+        active = inside
+    end
     return GetQuestAtlas(questID, ready), active, ready
 end
 
 ---@param questID number
 ---@param atlas string?
----@param active boolean
+---@param active boolean?
 local function ApplyQuestState(questID, atlas, active)
     if Providers:IsChangingSuperTrackingEntry() then return end
     local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
@@ -89,7 +93,8 @@ local function ApplyQuestState(questID, atlas, active)
         Navigation:UpdateDestinationIcon(owner, targetID, changeNumber, atlas, true)
         Providers:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
     end
-    Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active)
+    Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active == true,
+        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil)
 end
 
 ---@param eventQuestID number?
@@ -198,7 +203,7 @@ local function RefreshQuest()
         texture = atlas or previous and previous.texture or "Navigation-Tracked-Icon",
         usesAtlas = true,
     }, nil, titleAvailable and textAvailable)
-    ApplyQuestState(questID, atlas, active == true)
+    ApplyQuestState(questID, atlas, active)
 end
 
 local function OnQuestProgress()
