@@ -230,6 +230,14 @@ end
 -- Incremental route calculation
 local MAX_OPERATIONS_PER_SLICE = 2500
 local MAX_MILLISECONDS_PER_SLICE = 2
+local FLIGHT_PRUNABLE_TYPES = {
+    flighttaxi = true,
+    tram = true,
+    boat = true,
+    ship = true,
+    zeppelin = true,
+    transport = true,
+}
 
 ---@class NavigationRoute
 ---@field destinationID string
@@ -281,6 +289,7 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field previousPathReferences table<integer, integer>
 ---@field pathCostByReference table<integer, NavigationCalculatedPathCost>
 ---@field unavailablePathCosts table<integer, string>
+---@field prunedPaths table<integer, boolean>
 ---@field originMapID number?
 ---@field originX number?
 ---@field originY number?
@@ -291,6 +300,7 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field nextMovementPointIndex integer?
 ---@field destinationWorldPoint NavigationWorldPoint?
 ---@field worldPoints table<integer, NavigationWorldPoint>
+---@field attemptedWorldPoints table<integer, boolean>
 ---@field entrancesByInstance table<number, integer[]>
 ---@field entrancesByInstanceX table<number, integer[]>
 ---@field startedAt number
@@ -515,9 +525,58 @@ end
 
 ---@param job NavigationCalculationJob
 ---@param pointIndex integer
+---@return NavigationWorldPoint?
+local function GetWorldPoint(job, pointIndex)
+    if not job.attemptedWorldPoints[pointIndex] then
+        job.attemptedWorldPoints[pointIndex] = true
+        local graph = job.graph
+        -- HBD normalizes instances here. Missing geometry is retried by the
+        -- next job, without repeatedly converting this point in the current one.
+        local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
+            graph.pointXs[pointIndex], graph.pointYs[pointIndex], graph.pointMapIDs[pointIndex])
+        if x and y and instanceID then
+            job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID, mapID = graph.pointMapIDs[pointIndex] }
+        end
+    end
+    return job.worldPoints[pointIndex]
+end
+
+---@param job NavigationCalculationJob
+---@param reference integer
+---@return boolean
+local function IsRetainedPath(job, reference)
+    return not job.avoidedPaths[reference] and not job.prunedPaths[reference] and
+        not job.unavailablePathCosts[reference] and
+        job.preparedData.requirementStateByPath[reference] == "satisfied"
+end
+
+---@param job NavigationCalculationJob
+---@param fromPointIndex integer?
+---@param toPointIndex integer
+---@param cost NavigationCalculatedPathCost
+---@return boolean
+local function IsSlowerThanFlight(job, fromPointIndex, toPointIndex, cost)
+    if not fromPointIndex or not (cost.comparisonSeconds >= 0 and cost.comparisonSeconds < math.huge) then
+        return false
+    end
+    local graph = job.graph
+    local _, speed = GetMovementSpeed(job.preparedData.movement, "flight",
+        graph.pointMapIDs[fromPointIndex], graph.pointMapIDs[toPointIndex])
+    if not speed or speed <= 0 then return false end
+    local origin, target = GetWorldPoint(job, fromPointIndex), GetWorldPoint(job, toPointIndex)
+    if not origin or not target or origin.instanceID ~= target.instanceID then return false end
+    local distance = MapPinEnhanced.HBD:GetWorldDistance(origin.instanceID, origin.x, origin.y, target.x, target.y)
+    -- With the same instance, endpoint permissions and flight speed, direct
+    -- movement can bypass these detours by the triangle inequality. Keep a
+    -- margin greater than the existing one-second comparison bucket.
+    return type(distance) == "number" and distance >= 0 and distance / speed + 1 < cost.comparisonSeconds
+end
+
+---@param job NavigationCalculationJob
+---@param pointIndex integer
 ---@return NavigationCalculatedPathCost?
 local function GetFinalMovementCost(job, pointIndex)
-    local origin, target = job.worldPoints[pointIndex], job.destinationWorldPoint
+    local origin, target = GetWorldPoint(job, pointIndex), job.destinationWorldPoint
     if not origin or not target or origin.instanceID ~= target.instanceID then return nil end
     local mode, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, target.mapID)
     if not speed or speed <= 0 then return nil end
@@ -612,7 +671,7 @@ local function ExpandPoint(job, entry)
     for offset = firstOffset, firstOffset + count - 1 do
         job.checkpoint()
         local pathReference = graph.outgoingPathReferences[offset]
-        if not job.avoidedPaths[pathReference] and not job.unavailablePathCosts[pathReference] then
+        if IsRetainedPath(job, pathReference) then
             ---@type NavigationCalculatedPathCost?
             local pathCost = job.pathCostByReference[pathReference]
             if pathCost == nil then
@@ -828,17 +887,25 @@ end
 
 ---@param job NavigationCalculationJob
 ---@param graph NavigationGraph
-local function PrepareMovementPoints(job, graph)
-    -- HBD applies the same instance overrides and coordinate conversion used by
-    -- GetComparableDistance. Freeze them once per job, not once per candidate.
-    for pointIndex = 1, #graph.pointIDs do
+local function PrepareTransportCandidates(job, graph)
+    for reference = 1, graph.pathCount do
         job.checkpoint()
-        local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
-            graph.pointXs[pointIndex], graph.pointYs[pointIndex], graph.pointMapIDs[pointIndex])
-        if x and y and instanceID then
-            job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID, mapID = graph.pointMapIDs[pointIndex] }
+        if FLIGHT_PRUNABLE_TYPES[graph.pathTypes[reference]] and IsRetainedPath(job, reference) then
+            local cost, failure = Navigation:GetPathCost(graph, job.preparedData, reference)
+            if cost then
+                job.pathCostByReference[reference] = cost
+                job.prunedPaths[reference] = IsSlowerThanFlight(job, graph.pathFromPointIndexes[reference],
+                    graph.pathToPointIndexes[reference], cost) or nil
+            else
+                job.unavailablePathCosts[reference] = failure or "path cost unavailable"
+            end
         end
     end
+end
+
+---@param job NavigationCalculationJob
+---@param graph NavigationGraph
+local function PrepareMovementPoints(job, graph)
     local destination = job.destinationData
     local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
         destination.x, destination.y, destination.mapID)
@@ -848,12 +915,19 @@ local function PrepareMovementPoints(job, graph)
     local seen = {} ---@type table<integer, boolean>
     for reference = 1, graph.pathCount do
         job.checkpoint()
-        local pointIndex = graph.pathFromPointIndexes[reference]
-        local point = pointIndex and job.worldPoints[pointIndex]
-        if pointIndex and point and not seen[pointIndex] and not job.avoidedPaths[reference] and
-            job.preparedData.requirementStateByPath[reference] == "satisfied" then
-            seen[pointIndex] = true
+        if IsRetainedPath(job, reference) then
+            local from, to = graph.pathFromPointIndexes[reference], graph.pathToPointIndexes[reference]
+            if from and GetWorldPoint(job, from) then seen[from] = true end
+            -- Incoming-only junctions and player-origin action exits still need
+            -- final movement and reverse fallback geometry.
+            GetWorldPoint(job, to)
         end
+    end
+    -- Observed departures survive independently of their static source legs.
+    for _, journey in pairs(job.taxiJourneys) do
+        job.checkpoint()
+        if GetWorldPoint(job, journey.fromPointIndex) then seen[journey.fromPointIndex] = true end
+        GetWorldPoint(job, journey.toPointIndex)
     end
     -- Dense point order produces the same sorted entrances without a monolithic sort.
     for pointIndex = 1, #graph.pointIDs do
@@ -888,7 +962,7 @@ local function SeedReverseFallback(job)
     end
     for reference = 1, graph.pathCount do
         job.checkpoint()
-        if not job.avoidedPaths[reference] and job.preparedData.requirementStateByPath[reference] == "satisfied" then
+        if IsRetainedPath(job, reference) then
             AddIncomingPath(reference)
         end
     end
@@ -946,7 +1020,10 @@ local function PrepareTaxiCandidates(job, source)
                 end
             end
         end
-        if journey and not avoided then
+        if journey and not avoided and IsSlowerThanFlight(job, journey.fromPointIndex, journey.toPointIndex,
+            journey.cost) then
+            job.prunedPaths[reference] = true
+        elseif journey and not avoided then
             journey.destinationName = observation.names[destination]
             job.taxiJourneys[reference] = journey
             job.pathCostByReference[reference] = journey.cost
@@ -1006,11 +1083,13 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         previousPathReferences = {},
         pathCostByReference = {},
         unavailablePathCosts = {},
+        prunedPaths = {},
         originMapID = playerMapID,
         originX = playerX,
         originY = playerY,
         cancelled = false,
         worldPoints = {},
+        attemptedWorldPoints = {},
         entrancesByInstance = {},
         entrancesByInstanceX = {},
         startedAt = startedAt,
@@ -1052,6 +1131,7 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
                 job.avoidedPaths[reference] = true
                 job.checkpoint()
             end
+            PrepareTransportCandidates(job, graph)
             PrepareTaxiCandidates(job, graph)
             PrepareMovementPoints(job, graph)
             SeedJob(job)
