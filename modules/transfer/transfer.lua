@@ -57,7 +57,7 @@ function Transfer:ShowImportWindow(dataString)
         window.dataString = dataString
         window.textarea:SetValue(dataString)
         window:PreparseImport(dataString)
-    elseif not window.parsedData and not window.cancelPreview then
+    elseif not window.parsedData and not window.cancelPreview and not window.previewTimer then
         window:PreparseImport(window.dataString)
     end
 end

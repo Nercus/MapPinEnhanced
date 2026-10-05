@@ -17,6 +17,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field invalidPinCount number
 ---@field previewChangeNumber number
 ---@field cancelPreview fun()?
+---@field previewTimer FunctionContainer?
 MapPinEnhancedImportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 ---The preview owns these copies. Remap at confirmation, without yielding, so
@@ -85,6 +86,27 @@ function MapPinEnhancedImportWindowMixin:CancelPreview()
     self.previewChangeNumber = (self.previewChangeNumber or 0) + 1
     if self.cancelPreview then self.cancelPreview() end
     self.cancelPreview = nil
+    if self.previewTimer then self.previewTimer:Cancel() end
+    self.previewTimer = nil
+end
+
+---Text edits invalidate now; only parsing waits for the user to pause.
+function MapPinEnhancedImportWindowMixin:ScheduleTextPreview()
+    self:CancelPreview()
+    self.parsedData = nil
+    self.validPinCount, self.invalidPinCount = 0, 0
+    self:UpdateImportButtonDisabledState()
+    self.summary:SetText("")
+    if not self.dataString or self.dataString == "" or not self:IsVisible() or self.visibilityHiding then return end
+    self.summary:SetTextColor(1, 1, 1)
+    self.summary:SetText(L["Loading"])
+    local changeNumber = self.previewChangeNumber
+    self.previewTimer = C_Timer.NewTimer(0.2, function()
+        if self.previewChangeNumber ~= changeNumber then return end
+        self.previewTimer = nil
+        if not self:IsVisible() or self.visibilityHiding then return end
+        self:PreparseImport(self.dataString)
+    end)
 end
 
 ---@param input string|table?
@@ -165,6 +187,13 @@ function MapPinEnhancedImportWindowMixin:OnHide()
     self:UpdateImportButtonDisabledState()
 end
 
+function MapPinEnhancedImportWindowMixin:HideWithFade()
+    self:CancelPreview()
+    self.parsedData = nil
+    self:UpdateImportButtonDisabledState()
+    MapPinEnhancedFadingFrameMixin.HideWithFade(self)
+end
+
 function MapPinEnhancedImportWindowMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self.validPinCount, self.invalidPinCount = 0, 0
@@ -184,7 +213,7 @@ function MapPinEnhancedImportWindowMixin:OnLoad()
     self.textarea.editbox:SetScript("OnTextChanged", function(editbox, userInput)
         if not userInput then return end
         self.dataString = editbox:GetText()
-        self:PreparseImport(self.dataString)
+        self:ScheduleTextPreview()
     end)
     self:UpdateImportButtonDisabledState()
 end
