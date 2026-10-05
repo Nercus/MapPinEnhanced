@@ -609,10 +609,16 @@ local function GetObservationScalarKey(value)
 end
 
 ---@param value any
----@return string?
+---@return string|number|boolean|nil
 local function GetObservationKey(value)
-    local scalar = GetObservationScalarKey(value)
-    if scalar then return scalar end
+    if MapPinEnhanced:IsSecretValue(value) then return nil end
+    local kind = type(value)
+    if kind == "number" then
+        return MapPinEnhanced:IsReadableNumber(value) and value or nil
+    end
+    if kind == "boolean" then return value end
+    if kind == "string" then return "s:" .. value end
+    if value == nil then return "nil" end
     if not MapPinEnhanced:IsReadableTable(value) then return nil end
     local fields = {} ---@type string[]
     ---@cast value table<any, any>
@@ -626,7 +632,7 @@ local function GetObservationKey(value)
     return "table:" .. table.concat(fields)
 end
 
----@alias NavigationRequirementObservations table<string, table<string, NavigationRequirementState>>
+---@alias NavigationRequirementObservations table<string, table<string|number|boolean, NavigationRequirementState>>
 
 ---@param kind string
 ---@param value any
@@ -639,9 +645,9 @@ local function ObserveRequirement(kind, value, observations)
     if kind == "event" and type(value) == "string" then value = string.upper(value) end
     local key = observations and GetObservationKey(value)
     local states = observations and observations[kind]
-    if key and states and states[key] then return states[key] end
+    if key ~= nil and states and states[key] then return states[key] end
     local state = EvaluateDirectCheck(kind, value)
-    if key and observations then
+    if key ~= nil and observations then
         states = states or {}
         states[key] = state
         observations[kind] = states
