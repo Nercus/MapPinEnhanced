@@ -566,7 +566,9 @@ end
 ---@return boolean
 local function IsRetainedPath(job, reference)
     if job.avoidedPaths[reference] or job.prunedPaths[reference] or job.unavailablePathCosts[reference] or
-        job.preparedData.requirementStateByPath[reference] ~= "satisfied" then return false end
+        job.preparedData.requirementStateByPath[reference] ~= "satisfied" then
+        return false
+    end
     if job.graph.pathTypes[reference] == "flighttaxi" and not job.pathCostByReference[reference] then
         -- This is a prepared-table lookup, not dominance pricing. Even ground
         -- jobs must exclude unknown destinations and replaced master departures
@@ -1081,7 +1083,7 @@ local function PrepareTaxiCandidates(job, source)
             end
         end
         if journey and not avoided and IsSlowerThanFlight(job, journey.fromPointIndex, journey.toPointIndex,
-            journey.cost) then
+                journey.cost) then
             job.prunedPaths[reference] = true
         elseif journey and not avoided then
             journey.destinationName = observation.names[destination]
@@ -1160,7 +1162,9 @@ function Navigation:CreateNavigationCheckpoint(job, preparation)
         operations = operations + 1
         local budget = owner and owner.background and 0.25 or MAX_MILLISECONDS_PER_SLICE
         if operations >= MAX_OPERATIONS_PER_SLICE or now - slice >= budget or
-            owner and owner.background and (owner.frameMilliseconds or 0) >= budget then Wait() end
+            owner and owner.background and (owner.frameMilliseconds or 0) >= budget then
+            Wait()
+        end
         if job and job.cancelled then coroutine.yield() end
     end
     return Checkpoint, Wait
@@ -1177,14 +1181,28 @@ function Navigation:CreateDirectRoute(destinationID, destinationChangeNumber, da
     local inputs = { movement = self:GetMovementCapabilities(), movementOnly = true }
     local cost = self:GetPlayerTravelCost(inputs, mapID, x, y, data.mapID, data.x, data.y, "automatic")
     if not cost or not MapPinEnhanced:IsReadableNumber(cost.comparisonSeconds) or
-        not (cost.comparisonSeconds >= 0 and cost.comparisonSeconds < math.huge) then return nil end
+        not (cost.comparisonSeconds >= 0 and cost.comparisonSeconds < math.huge) then
+        return nil
+    end
     calculationNumber = calculationNumber + 1
     return {
-        destinationID = destinationID, destinationChangeNumber = destinationChangeNumber,
-        calculationID = calculationNumber, graph = graph, taxiJourneys = {},
-        pathReferences = {}, pathCosts = {}, finalCost = cost, comparisonSeconds = cost.comparisonSeconds,
-        preparedData = inputs, originMapID = mapID, originX = x, originY = y,
-        signature = "", calculationSeconds = 0, calculationSlices = 0, movementCandidates = 0,
+        destinationID = destinationID,
+        destinationChangeNumber = destinationChangeNumber,
+        calculationID = calculationNumber,
+        graph = graph,
+        taxiJourneys = {},
+        pathReferences = {},
+        pathCosts = {},
+        finalCost = cost,
+        comparisonSeconds = cost.comparisonSeconds,
+        preparedData = inputs,
+        originMapID = mapID,
+        originX = x,
+        originY = y,
+        signature = "",
+        calculationSeconds = 0,
+        calculationSlices = 0,
+        movementCandidates = 0,
     }
 end
 
@@ -1223,7 +1241,9 @@ function Navigation:ValidateRoute(route, prepared, checkpoint, position)
     end
     ---@type NavigationProgression
     local progression = {
-        route = route, pathIndex = 1, changeNumber = 1,
+        route = route,
+        pathIndex = 1,
+        changeNumber = 1,
         phase = route.pathReferences[1] and not route.graph.pathFromPointIndexes[route.pathReferences[1]] and
             "ready" or "approach",
     }
@@ -1328,7 +1348,9 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
                     -- A retained transport Route still consumes authoritative
                     -- observations. Finish that refresh without another search.
                     if self.progression and #self.progression.route.pathReferences > 0 and
-                        not self:ArePreparedInputsFresh() then self:EnsurePreparedData() end
+                        not self:ArePreparedInputsFresh() then
+                        self:EnsurePreparedData()
+                    end
                     self:TryAutomaticTaxiSelection()
                     coroutine.yield()
                 end

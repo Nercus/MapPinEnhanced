@@ -151,8 +151,10 @@ function Navigation:ShowDebugDump()
                 requirement = graph.pathRequirements[reference],
                 preparedState = prepared and prepared.requirementStateByPath[reference],
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],
-                routeState = route and not route.preparedData.movementOnly and route.preparedData.requirementStateByPath[reference],
-                routeExclusion = route and not route.preparedData.movementOnly and route.preparedData.exclusionReasonByPath[reference],
+                routeState = route and not route.preparedData.movementOnly and
+                    route.preparedData.requirementStateByPath[reference],
+                routeExclusion = route and not route.preparedData.movementOnly and
+                    route.preparedData.exclusionReasonByPath[reference],
                 routeCost = cost,
                 freshCost = freshCost,
                 freshFailure = failure,

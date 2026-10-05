@@ -469,4 +469,4 @@ L["%d legacy entries could not be migrated. Original saved data was kept."] =
 
 L["Wayfinder.Navigation.BackgroundSearch_LABEL"] = "Improve routes in the background"
 L["Wayfinder.Navigation.BackgroundSearch_DESCRIPTION"] =
-    "Continue looking for a faster route after guidance appears. Uses additional processing time."
+"Continue looking for a faster route after guidance appears. Uses additional processing time."

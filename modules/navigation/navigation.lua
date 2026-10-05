@@ -309,7 +309,9 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
         if not self:ValidateRoute(route, prepared, checkpoint, position) then route = nil end
         -- Validation may yield. Freshness must hold after the last selected leg.
         if route and not prepared.movementOnly and
-            (not self:ArePreparedInputsFresh() or self:GetPreparedData() ~= prepared) then route = nil end
+            (not self:ArePreparedInputsFresh() or self:GetPreparedData() ~= prepared) then
+            route = nil
+        end
     else
         route = nil
     end
@@ -356,7 +358,9 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
     route.calculationID = publicationNumber
     self:DeactivatePathHandler()
     self.progression = {
-        route = route, pathIndex = 1, changeNumber = 1,
+        route = route,
+        pathIndex = 1,
+        changeNumber = 1,
         phase = route.pathReferences[1] and not route.graph.pathFromPointIndexes[route.pathReferences[1]] and
             "ready" or "approach",
     }
@@ -1719,7 +1723,9 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.BackgroundSearch", functi
         Navigation:CancelPreparedData()
         Navigation:CancelRouteCalculation(job)
         if Navigation.progression and #Navigation.progression.route.pathReferences > 0 and
-            not Navigation:ArePreparedInputsFresh() then Navigation:EnsurePreparedData() end
+            not Navigation:ArePreparedInputsFresh() then
+            Navigation:EnsurePreparedData()
+        end
         if not Navigation.progression and Navigation.activeDestination then
             local direct = Navigation:CanGuideDirectly()
             Navigation:ApplyDirectDestination(direct, direct and L["Navigation Direct Guidance"] or
