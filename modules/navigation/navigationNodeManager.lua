@@ -51,6 +51,9 @@ local registeredPathData = {} ---@type NavigationPathData[]
 local navigationGraph ---@type NavigationGraph?
 local preparedNavigationData ---@type NavigationPreparedData?
 local preparedDataDirty = true
+local allRequirementsDirty = true
+local dirtyRequirementKinds = {} ---@type table<string, boolean>
+local unknownRequirementPaths = {} ---@type table<integer, boolean>
 local preparationChangeNumber = 0
 local cancelPreparation ---@type fun()?
 local preparationFailure ---@type string?
@@ -118,6 +121,7 @@ end
 ---@field pathTypes string[]
 ---@field pathDurations table<integer, number>
 ---@field pathRequirements table<integer, table>
+---@field pathsByRequirementKind table<string, integer[]>
 ---@field pathHandlerData table<integer, any>
 ---@field currentPlayerPathReferences integer[]
 ---@field outgoingPathReferences integer[]
@@ -211,16 +215,21 @@ local function PrepareStaticPath(path)
 end
 
 ---@param requirement NavigationRequirement?
----@return boolean
-local function HasBuffRequirement(requirement)
-    if type(requirement) ~= "table" then return false end
-    if requirement.operation == "check" then return requirement.kind == "buff" end
-    if type(requirement.children) == "table" then
+---@param kinds table<string, boolean>
+local function CollectRequirementKinds(requirement, kinds)
+    if type(requirement) ~= "table" then return end
+    if requirement.operation == "check" then
+        local kind = requirement.kind
+        if kind == "spellKnown" then kind = "spell" end
+        if kind == "toyKnown" then kind = "toy" end
+        if type(kind) == "string" then kinds[kind] = true end
+    elseif type(requirement.children) == "table" then
+        -- Include every branch, even one currently short-circuited by all/any/not.
+        -- Tagged item+toy groups also retain their toy ownership dependency.
         for _, child in ipairs(requirement.children) do
-            if HasBuffRequirement(child) then return true end
+            CollectRequirementKinds(child, kinds)
         end
     end
-    return false
 end
 
 function Navigation:BuildGraph()
@@ -237,6 +246,7 @@ function Navigation:BuildGraph()
         pathTypes = {},
         pathDurations = {},
         pathRequirements = {},
+        pathsByRequirementKind = {},
         pathHandlerData = {},
         currentPlayerPathReferences = {},
         outgoingPathReferences = {},
@@ -338,13 +348,20 @@ function Navigation:BuildGraph()
     end
 
     self:IndexTaxiConnections(graph)
-    hasBuffRequirements = false
-    for _, requirement in pairs(graph.pathRequirements) do
-        if HasBuffRequirement(requirement) then
-            hasBuffRequirements = true
-            break
+    for reference, requirement in pairs(graph.pathRequirements) do
+        local kinds = {} ---@type table<string, boolean>
+        CollectRequirementKinds(requirement, kinds)
+        for kind in pairs(kinds) do
+            local paths = graph.pathsByRequirementKind[kind]
+            if not paths then
+                paths = {}
+                graph.pathsByRequirementKind[kind] = paths
+            end
+            paths[#paths + 1] = reference
         end
     end
+    hasBuffRequirements = graph.pathsByRequirementKind.buff ~= nil
+    unknownRequirementPaths = {}
     navigationGraph = graph
     preparedNavigationData = nil
     registeredPathData = {}
@@ -737,9 +754,38 @@ function Navigation:GetRequirementResource(requirement, resourceKey)
     return found
 end
 
+-- Only narrowly understood events use selective requirements. Quest/world/phase,
+-- map art/POIs, faction, preferences and hearth changes deliberately retain a full
+-- pass: their effects cross requirement kinds. New/unmapped events do the same.
+-- Movement and handler-owned taxi inputs are still refreshed on every pass.
+local REQUIREMENT_KINDS_BY_EVENT = {
+    BAG_UPDATE_DELAYED = { "item" },
+    NEW_TOY_ADDED = { "toy" },
+    TOYS_UPDATED = { "toy" },
+    SPELLS_CHANGED = { "spell", "buff" },
+    PLAYER_SPECIALIZATION_CHANGED = { "spell", "buff" },
+    PLAYER_TALENT_UPDATE = { "spell", "buff" },
+    TRAIT_CONFIG_UPDATED = { "spell", "buff" },
+    UNIT_AURA = { "buff" },
+    ACHIEVEMENT_EARNED = { "achievement" },
+    CRITERIA_UPDATE = { "achievement" },
+    CALENDAR_UPDATE_EVENT_LIST = { "event" },
+    CVAR_UPDATE = { "event" }, -- Only filtered calendarShow input reaches this owner.
+    TAXIMAP_OPENED = { "taxiNodeKnown" },
+}
+
 -- Invalidations retain no event payloads. Published tables belong to snapshots and
 -- must never be refilled while a Route or calculation still references them.
-function Navigation:InvalidatePreparedData()
+---@param event? WowEvent
+function Navigation:InvalidatePreparedData(event)
+    local kinds = event and REQUIREMENT_KINDS_BY_EVENT[event]
+    if not kinds then
+        allRequirementsDirty = true
+    elseif not allRequirementsDirty then
+        for _, kind in ipairs(kinds) do dirtyRequirementKinds[kind] = true end
+    end
+    -- Do not clear dirty kinds when cancelling: the replacement still owes every
+    -- observation accepted since the last complete publication.
     preparedDataDirty = true
     preparationChangeNumber = preparationChangeNumber + 1
     preparationFailure = nil
@@ -816,7 +862,23 @@ function Navigation:EnsurePreparedData()
             end
             local states = previous and previous.requirementStateByPath or {}
             local reasons = previous and previous.exclusionReasonByPath or {}
-            for pathReference = 1, graph.pathCount do
+            local selectedPaths = {} ---@type table<integer, boolean>
+            local unknownPaths = {} ---@type table<integer, boolean>
+            if previous and not allRequirementsDirty then
+                for kind in pairs(dirtyRequirementKinds) do
+                    for _, reference in ipairs(graph.pathsByRequirementKind[kind] or {}) do
+                        selectedPaths[reference] = true
+                        checkpoint()
+                    end
+                end
+                -- Temporary API absence must recover even when the next event
+                -- names a different dependency. Unknown observations are not cached.
+                for reference in pairs(unknownRequirementPaths) do
+                    selectedPaths[reference] = true
+                    checkpoint()
+                end
+            end
+            local function EvaluatePath(pathReference)
                 checkpoint()
                 local staticFailure = graph.excludedPaths[pathReference]
                 local state, reason ---@type NavigationRequirementState, string?
@@ -828,6 +890,7 @@ function Navigation:EnsurePreparedData()
                     local failure
                     state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference], observations)
                     if state ~= SATISFIED then reason = failure or state end
+                    if state == UNKNOWN then unknownPaths[pathReference] = true end
                 end
                 if states[pathReference] ~= state then
                     if previous and states == previous.requirementStateByPath then
@@ -841,6 +904,11 @@ function Navigation:EnsurePreparedData()
                     end
                     reasons[pathReference] = reason
                 end
+            end
+            if not previous or allRequirementsDirty then
+                for reference = 1, graph.pathCount do EvaluatePath(reference) end
+            else
+                for reference in pairs(selectedPaths) do EvaluatePath(reference) end
             end
             local movement = self:GetMovementCapabilities()
             observedMovementCapabilities = movement
@@ -862,6 +930,9 @@ function Navigation:EnsurePreparedData()
                     taxiFailures = failures,
                 }
             end
+            unknownRequirementPaths = unknownPaths
+            allRequirementsDirty = false
+            wipe(dirtyRequirementKinds)
             preparedDataDirty = false
         end }, nil, function()
             cancelPreparation = nil

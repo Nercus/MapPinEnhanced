@@ -98,7 +98,8 @@ local function RefreshHolidayStates()
     ObserveHolidayStates()
     if holidayStatesChanged and Navigation:GetGraph() then
         holidayStatesChanged = false
-        Navigation:RefreshEligibility()
+        Navigation:InvalidatePreparedData("CALENDAR_UPDATE_EVENT_LIST")
+        Navigation:RefreshEligibility({})
     else
         -- Intake may have cancelled preparation even when the observed holidays
         -- stayed equal. Resume demand without inventing another input change.
@@ -117,7 +118,7 @@ MapPinEnhanced:RegisterEventBucket({ "CALENDAR_UPDATE_EVENT_LIST", "CVAR_UPDATE"
         if event == "CVAR_UPDATE" and (MapPinEnhanced:IsSecretValue(name) or
             type(name) ~= "string" or not string.lower(name):match("^calendarshow")) then return false end
         observationsDirty = true
-        Navigation:InvalidatePreparedData()
+        Navigation:InvalidatePreparedData(event)
         return true
     end)
 

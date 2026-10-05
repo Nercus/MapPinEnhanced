@@ -570,7 +570,7 @@ end
 function Navigation:ClearTaxiNodeKnowledge()
     for mapID in pairs(taxiNodesByMap) do dirtyTaxiMaps[mapID] = true end
     taxiPricesDirty = true
-    self:InvalidatePreparedData()
+    self:InvalidatePreparedData("TAXIMAP_OPENED")
 end
 
 Navigation:RegisterPathHandler("flighttaxi", Presentation, Dataprovider, CostCalculator,

@@ -1119,7 +1119,7 @@ function Navigation:SetupEligibilityRefresh()
             if not self:NeedsAuraRefresh() then return false end
         end
         -- Mark inputs stale at intake, before a new job can beat the bucket timer.
-        self:InvalidatePreparedData()
+        self:InvalidatePreparedData(event)
         return true
     end)
 end
