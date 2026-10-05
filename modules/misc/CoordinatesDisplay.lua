@@ -15,6 +15,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field zoneName FontString
 ---@field separator Texture
 ---@field position Frame
+---@field positionDefined boolean?
+---@field cachedDecimals boolean?
+---@field cachedMapID number?
+---@field cachedMapName string?
 ---@field cachedX number?
 ---@field cachedY number?
 ---@field coordsXInt FontString
@@ -88,11 +92,15 @@ function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:SetUndefinedPosition()
+    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    if self.positionDefined == false and self.cachedDecimals == showDecimals then return end
+    self.positionDefined = false
+    self.cachedDecimals = showDecimals
     self.cachedX, self.cachedY = nil, nil
     self.coordsXInt:SetText("--")
-    self.coordsXDec:SetText(".--")
+    if showDecimals then self.coordsXDec:SetText(".--") end
     self.coordsYInt:SetText("--")
-    self.coordsYDec:SetText(".--")
+    if showDecimals then self.coordsYDec:SetText(".--") end
     self:UpdateCoordinateLayout()
 end
 
@@ -100,12 +108,18 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     local xHundredths = floor(x * 10000)
     local yHundredths = floor(y * 10000)
 
-    if self.cachedX == xHundredths and self.cachedY == yHundredths then
+    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    local displayedX = showDecimals and xHundredths or floor(xHundredths / 100)
+    local displayedY = showDecimals and yHundredths or floor(yHundredths / 100)
+    if self.positionDefined and self.cachedDecimals == showDecimals and
+        self.cachedX == displayedX and self.cachedY == displayedY then
         return
     end
 
-    self.cachedX = xHundredths
-    self.cachedY = yHundredths
+    self.positionDefined = true
+    self.cachedDecimals = showDecimals
+    self.cachedX = displayedX
+    self.cachedY = displayedY
 
     local xInt = floor(xHundredths / 100)
     local xDec = xHundredths % 100
@@ -113,9 +127,9 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     local yDec = yHundredths % 100
 
     self.coordsXInt:SetText(format("%02d", xInt))
-    self.coordsXDec:SetText(format(".%02d", xDec))
+    if showDecimals then self.coordsXDec:SetText(format(".%02d", xDec)) end
     self.coordsYInt:SetText(format("%02d", yInt))
-    self.coordsYDec:SetText(format(".%02d", yDec))
+    if showDecimals then self.coordsYDec:SetText(format(".%02d", yDec)) end
     self:UpdateCoordinateLayout()
 end
 
@@ -129,9 +143,19 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
     self.lastUpdate = 0
     local playerMap = GetBestMapForUnit("player")
     if not MapPinEnhanced:IsReadablePositiveInteger(playerMap) then playerMap = nil end
-    local mapInfo = playerMap and C_Map.GetMapInfo(playerMap)
-    local name = Options:GetOptionValue("Miscellaneous.Coords.ShowZone") and mapInfo and mapInfo.name or ""
-    if name ~= self.zoneName:GetText() then
+    if playerMap ~= self.cachedMapID then
+        self.cachedMapID, self.cachedMapName = playerMap, nil
+    end
+    local name = ""
+    if Options:GetOptionValue("Miscellaneous.Coords.ShowZone") and playerMap then
+        if not self.cachedMapName then
+            local mapInfo = C_Map.GetMapInfo(playerMap)
+            local name = mapInfo and mapInfo.name
+            self.cachedMapName = name ~= "" and name or nil
+        end
+        name = self.cachedMapName or ""
+    end
+    if name ~= (self.zoneName:GetText() or "") then
         self.zoneName:SetWidth(0)
         self.zoneName:SetText(name)
         self:UpdateCoordinateLayout()
@@ -209,7 +233,7 @@ end
 function MapPinEnhancedCoordinatesDisplayMixin:ShowFrame()
     self:SetScript("OnUpdate", function(_, elapsed) self:OnUpdate(elapsed) end)
     MapPinEnhanced:RestoreFrame(self.position)
-    self.cachedX, self.cachedY = nil, nil
+    self.positionDefined, self.cachedMapName = nil, nil
     self:OnUpdate(1)
     self:Show()
 end
@@ -251,11 +275,11 @@ end)
 MapPinEnhanced:AddVisibilityRule("noCoordinates", {
     isActive = function()
         local playerMap = GetBestMapForUnit("player")
-        if not playerMap then return true end
+        if not MapPinEnhanced:IsReadablePositiveInteger(playerMap) then return true end
         local position = GetPlayerMapPosition(playerMap, "player")
         if not position then return true end
         local x, y = position:GetXY()
-        return x == nil or y == nil
+        return not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y)
     end,
     events = { "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA" },
     delay = 1,
@@ -297,7 +321,7 @@ end)
 for _, key in ipairs({ "Miscellaneous.Coords.ShowZone", "Miscellaneous.Coords.ShowDecimals" }) do
     Options:SubscribeToOptionChanges(key, function()
         if not coordinatesDisplayFrame then return end
-        coordinatesDisplayFrame.cachedX, coordinatesDisplayFrame.cachedY = nil, nil
+        coordinatesDisplayFrame.positionDefined, coordinatesDisplayFrame.cachedMapName = nil, nil
         coordinatesDisplayFrame:OnUpdate(1)
     end)
 end
