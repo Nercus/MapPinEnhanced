@@ -289,6 +289,7 @@ local MAX_MILLISECONDS_PER_SLICE = 2
 ---@field movementEntry NavigationHeapEntry?
 ---@field movementPointIndexes integer[]?
 ---@field nextMovementPointIndex integer?
+---@field destinationWorldPoint NavigationWorldPoint?
 ---@field worldPoints table<integer, NavigationWorldPoint>
 ---@field entrancesByInstance table<number, integer[]>
 ---@field entrancesByInstanceX table<number, integer[]>
@@ -511,14 +512,26 @@ local function BuildRoute(job, destinationEntry)
 end
 
 ---@param job NavigationCalculationJob
+---@param pointIndex integer
+---@return NavigationCalculatedPathCost?
+local function GetFinalMovementCost(job, pointIndex)
+    local origin, target = job.worldPoints[pointIndex], job.destinationWorldPoint
+    if not origin or not target or origin.instanceID ~= target.instanceID then return nil end
+    local mode, speed = GetMovementSpeed(job.preparedData.movement, "automatic", origin.mapID, target.mapID)
+    if not speed or speed <= 0 then return nil end
+    local distance = MapPinEnhanced.HBD:GetWorldDistance(origin.instanceID, origin.x, origin.y, target.x, target.y)
+    if type(distance) ~= "number" or distance < 0 then return nil end
+    local seconds = distance / speed
+    return { expectedSeconds = seconds, uncertaintySeconds = 0, comparisonSeconds = seconds,
+        explanation = { kind = "distance", distance = distance, mode = mode, speed = speed } }
+end
+
+---@param job NavigationCalculationJob
 ---@param entry NavigationHeapEntry
 local function OfferDestination(job, entry)
     local graph = job.graph
     if not graph or entry.pathCount == 0 then return end
-    local destination = job.destinationData
-    local finalCost = Navigation:GetPlayerTravelCost(job.preparedData,
-        graph.pointMapIDs[entry.pointIndex], graph.pointXs[entry.pointIndex], graph.pointYs[entry.pointIndex],
-        destination.mapID, destination.x, destination.y, "automatic")
+    local finalCost = GetFinalMovementCost(job, entry.pointIndex)
     if not finalCost then return end
     local costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds)
     if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
@@ -818,6 +831,12 @@ local function PrepareMovementPoints(job, graph)
             job.worldPoints[pointIndex] = { x = x, y = y, instanceID = instanceID, mapID = graph.pointMapIDs[pointIndex] }
         end
     end
+    local destination = job.destinationData
+    local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
+        destination.x, destination.y, destination.mapID)
+    if x and y and instanceID then
+        job.destinationWorldPoint = { x = x, y = y, instanceID = instanceID, mapID = destination.mapID }
+    end
     local seen = {} ---@type table<integer, boolean>
     for reference = 1, graph.pathCount do
         job.checkpoint()
@@ -870,7 +889,6 @@ local function SeedReverseFallback(job)
         AddIncomingPath(reference)
         job.checkpoint()
     end
-    local destination = job.destinationData
     for pointIndex = 1, #graph.pointIDs do
         job.checkpoint()
         if reverse.incomingPathsByPoint[pointIndex] then
@@ -880,9 +898,7 @@ local function SeedReverseFallback(job)
                 reverse.exitsByInstance[point.instanceID] = exits
                 exits[#exits + 1] = pointIndex
             end
-            local finalCost = Navigation:GetPlayerTravelCost(job.preparedData,
-                graph.pointMapIDs[pointIndex], graph.pointXs[pointIndex], graph.pointYs[pointIndex],
-                destination.mapID, destination.x, destination.y, "automatic")
+            local finalCost = GetFinalMovementCost(job, pointIndex)
             if finalCost then
                 OfferPoint(job, pointIndex, finalCost.comparisonSeconds, finalCost.uncertaintySeconds,
                     0, nil, nil, "", finalCost)
