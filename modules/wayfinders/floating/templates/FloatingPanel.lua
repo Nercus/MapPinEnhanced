@@ -16,6 +16,7 @@ local L = MapPinEnhanced.L
 ---@field target WayfinderData?
 ---@field destinationText string?
 ---@field textTruncated boolean?
+---@field applying boolean?
 ---@field pendingApply { step: WayfinderStepData?, target: WayfinderData? }?
 ---@field combatPanel MapPinEnhancedFloatingPanelTemplate?
 ---@field actionPreview MapPinEnhancedWayfinderActionVisual?
@@ -114,12 +115,18 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
         self:RestorePosition()
     end
     self.target = target
+    self.applying = true
     self:SetStep(step)
-    local menu = step and Wayfinders:BuildNavigationMenuEntries()
-    self.onMenu = menu and function(owner) MapPinEnhanced:GenerateMenu(owner, menu) end or nil
+    self.applying = nil
+    self:UpdateLayout()
+    self.onMenu = step and function(owner)
+        MapPinEnhanced:GenerateMenu(owner, Wayfinders:BuildNavigationMenuEntries())
+    end or nil
     self:PrepareCombatDisplay()
+    self.applying = true
     self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
         step.showInstruction ~= false and step.stepCount ~= 1), returningFromCombat)
+    self.applying = nil
 end
 
 ---@param shown boolean
@@ -139,7 +146,8 @@ end
 
 function MapPinEnhancedFloatingPanelMixin:PrepareCombatDisplay()
     local panel = self.combatPanel
-    if not panel or InCombatLockdown() then return end
+    if not panel or self.applying or InCombatLockdown() then return end
+    panel.applying = true
     panel.target = self.target
     panel:SetStep(self.step)
     panel.fullText = self.fullText
@@ -147,6 +155,7 @@ function MapPinEnhancedFloatingPanelMixin:PrepareCombatDisplay()
     panel.onMenu = self.onMenu
     panel.actionPreview.icon:SetTexture(self.actionButton.icon:GetTexture())
     panel.actionPreview:SetShown(self.actionButton:IsShown())
+    panel.applying = nil
     panel:UpdateLayout()
 end
 
@@ -170,7 +179,7 @@ function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
 end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
-    if InCombatLockdown() then return end
+    if self.applying or InCombatLockdown() then return end
     local inside = self.step and self.step.insideObjectiveArea
     local target = self.target
     local title = inside and target and target.title or self.fullText
@@ -221,6 +230,7 @@ end
 function MapPinEnhancedFloatingPanelMixin:OnShow()
     -- The combat copy already has the source view's exact position.
     if not InCombatLockdown() then self:RestorePosition() end
+    if self.applying then return end
     if self.actionButton then
         MapPinEnhancedWayfinderInstructionMixin.OnShow(self)
     else
