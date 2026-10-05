@@ -184,14 +184,17 @@ end, function(sender, kind)
     return IsWhisper(kind) and pending ~= nil and sender == pending.sender
 end)
 
+local function ReplaceChatToken(sender, token, name)
+    if #sender > 100 or #token > 64 then return end
+    return MakeLink(sender, token, name)
+end
+
 -- Render incoming plain tokens using the same compact link as the editbox.
 local function FilterChat(_, _, message, ...)
     ---@cast message string
     if MapPinEnhanced:IsSecretValue(message) or type(message) ~= "string" then return end
-    local changed, count = message:gsub(TOKEN_PATTERN, function(sender, token, name)
-        if #sender > 100 or #token > 64 then return end
-        return MakeLink(sender, token, name)
-    end)
+    if not message:find("[MPH:", 1, true) then return end
+    local changed, count = message:gsub(TOKEN_PATTERN, ReplaceChatToken)
     if count > 0 then return false, changed, ... end
 end
 
