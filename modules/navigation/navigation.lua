@@ -875,8 +875,9 @@ function Navigation:PublishStep(progression)
     local destination = self.activeDestination
     if not destination then return end
     local travelIcon = self:GetPathIcon(pathType)
-    local desiredAction = progression.phase == "ready" and self:IsCurrentPathReady() and
+    local desiredAction = progression.phase == "ready" and not progression.pathUnavailable and
         self:GetPathAction(pathType, graph.pathRequirements[pathReference]) or nil
+    if desiredAction and not self:GetFreshPathCost(pathReference) then desiredAction = nil end
     local targetData = CopyWayfinderData(destination.data)
     targetData.mapID = graph.pointMapIDs[targetPointIndex]
     targetData.x = graph.pointXs[targetPointIndex]
