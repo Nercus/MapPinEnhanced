@@ -12,13 +12,38 @@ local L = MapPinEnhanced.L
 ---@field onTextChanged fun()?
 ---@field maxWidth number?
 ---@field statusText string?
+---@field layoutWidth number?
+---@field layoutHeight number?
+---@field layoutScale number?
+---@field layoutShown boolean?
+---@field layoutVisible boolean?
+---@field layoutHiding boolean?
 MapPinEnhancedWayfinderReadoutMixin = {}
+
+-- Text samples may change without changing the space retained by the fade.
+function MapPinEnhancedWayfinderReadoutMixin:NotifyLayoutChanged()
+    local width, height = self:GetSize()
+    local shown, hiding, scale = self:IsShown(), self.visibilityHiding == true, self:GetEffectiveScale()
+    local visible = self:IsVisible()
+    if width == self.layoutWidth and height == self.layoutHeight and scale == self.layoutScale and
+        shown == self.layoutShown and visible == self.layoutVisible and hiding == self.layoutHiding then return end
+    self.layoutWidth, self.layoutHeight, self.layoutScale = width, height, scale
+    self.layoutShown, self.layoutHiding, self.layoutVisible = shown, hiding, visible
+    if self.onTextChanged then self.onTextChanged() end
+end
 
 function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
     local text = self.statusText or self.distanceText or ""
     local showETA = not self.statusText and self.showETA and self.hasETA
     if text ~= "" and showETA then
         text = string.format(L["%s - %s"], text, self.etaText or "")
+    end
+    -- Ancestor suppression retains current text; OnShow measures it before rendering again.
+    if not self:GetParent():IsVisible() then
+        self.text:SetText(text)
+        self:SetShown(self.displayVisible == true and text ~= "")
+        self:NotifyLayoutChanged()
+        return
     end
     if text ~= "" or not self:IsVisible() then
         self.text:SetText(text)
@@ -31,9 +56,9 @@ function MapPinEnhancedWayfinderReadoutMixin:UpdateText()
         self.text:SetWordWrap(true)
         self.text:SetNonSpaceWrap(true)
         self:SetSize(width, math.max(1, self.text:GetStringHeight()))
-        if self.onTextChanged then self.onTextChanged() end
     end
     self:SetShown(self.displayVisible == true and text ~= "")
+    self:NotifyLayoutChanged()
 end
 
 ---@param text string?
@@ -51,7 +76,7 @@ end
 
 function MapPinEnhancedWayfinderReadoutMixin:OnHide()
     if not self.distanceText or self.distanceText == "" then self.text:SetText("") end
-    if self.onTextChanged then self.onTextChanged() end
+    self:NotifyLayoutChanged()
 end
 
 ---@param showETA boolean
