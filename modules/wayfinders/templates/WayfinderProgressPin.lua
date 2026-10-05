@@ -1,14 +1,10 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Navigation = MapPinEnhanced:GetModule("Navigation")
-
 
 ---@class MapPinEnhancedWayfinderProgressPin : Button
 ---@field pin Texture
 ---@field active boolean?
 ---@field entry WayfinderProgressEntry?
----@field stepIndex integer?
----@field changeNumber integer?
 MapPinEnhancedWayfinderProgressPinMixin = {}
 
 local PIN_SIZE = 12
@@ -26,16 +22,6 @@ function MapPinEnhancedWayfinderProgressPinMixin:SetActive(active)
         self.pin:SetAlpha(0.5)
         self.pin:SetTexture(DEFAULT_TEXTURE)
         self.pin:SetSize(PIN_SIZE, PIN_SIZE)
-    end
-end
-
-function MapPinEnhancedWayfinderProgressPinMixin:OnLoad()
-    self:RegisterForClicks("LeftButtonUp")
-end
-
-function MapPinEnhancedWayfinderProgressPinMixin:OnClick()
-    if self.stepIndex and self.changeNumber then
-        Navigation:SelectStep(self.stepIndex, self.changeNumber)
     end
 end
 
