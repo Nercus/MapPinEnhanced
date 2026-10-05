@@ -45,7 +45,7 @@
             <Frame parentKey="info" enableMouse="true" propagateMouseInput="Clicks" hidden="true">
                 <Size x="18" y="18" />
                 <Anchors>
-                    <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
