@@ -23,6 +23,8 @@ local MAX_CLOSE_DISTANCE = 200
 ---@field clampedChanged boolean?
 ---@field customDirection boolean?
 ---@field lastNavigationTargetCheck number?
+---@field lastNavigationReadinessCheck number?
+---@field nativePositionReady boolean?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
@@ -188,7 +190,8 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetDisplayType(displayType)
     if self.displayType == displayType then return end
     self.displayType = displayType
-    if not self.presentationInitialized or self.isClamped and not self.customDirection then return end
+    if not self.content:IsShown() or not self.presentationInitialized or
+        self.isClamped and not self.customDirection then return end
     self:RefreshPresentation()
 end
 
@@ -210,7 +213,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToT
             MIN_CLOSE_DISTANCE + math.max(0, closingSpeed) * nextUpdateInterval)
     end
     self:SetDisplayType(distance and distance < closeDistance and "close" or "far")
-    if fallbackChanged and self.customDirection and self.presentationInitialized then
+    if self.content:IsShown() and fallbackChanged and self.customDirection and self.presentationInitialized then
         self:RefreshPresentation()
     end
 end
@@ -218,7 +221,10 @@ end
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     local angle = self:SampleTargetAngle(elapsed)
-    if self.customDirection then self.navigationOpacity:SetAlpha(angle ~= nil and 1 or 0) end
+    if self.customDirection then
+        local alpha = angle ~= nil and 1 or 0
+        if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
+    end
     if angle ~= nil then
         self.newNeedleRotation = angle
     end
@@ -239,8 +245,18 @@ function MapPinEnhancedWayfinderFloatingMixin:AnimateNeedleRotation(elapsed)
 end
 
 ---@param elapsed number
-function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed)
-    if not self.lastNavigationTargetCheck or GetTime() - self.lastNavigationTargetCheck >= 0.1 then
+---@param preparingShow boolean?
+function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
+    if not preparingShow and not self.content:IsShown() then return end
+    local now = GetTime()
+    if not self.lastNavigationReadinessCheck or now - self.lastNavigationReadinessCheck >= 0.1 then
+        self.lastNavigationReadinessCheck = now
+        local ready = C_Navigation.GetFrame() ~= nil and C_Navigation.HasValidScreenPosition()
+        if ready ~= self.nativePositionReady then self.lastNavigationTargetCheck = nil end
+        self.nativePositionReady = ready
+    end
+    -- Events/owned target changes invalidate immediately; retain a full-match recovery poll.
+    if not self.lastNavigationTargetCheck or now - self.lastNavigationTargetCheck >= 1 then
         self:RefreshNavigationTarget()
     end
     if self.customDirection then
@@ -272,6 +288,16 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed)
     end
 end
 
+---@param shown boolean
+function MapPinEnhancedWayfinderFloatingMixin:SetDirectionShown(shown)
+    if shown and (not self.content:IsShown() or self.content.visibilityHiding) then
+        self.lastNavigationTargetCheck = nil
+        self.presentationInitialized = nil
+        self:OnUpdate(0, true)
+    end
+    self.content:SetShown(shown)
+end
+
 function MapPinEnhancedWayfinderFloatingMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     -- Navigation availability must not overwrite the root visibility fade.
@@ -288,6 +314,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
     self.lastNavigationTargetCheck = nil
+    if not self.content:IsShown() then return end
     if event == "SUPER_TRACKING_CHANGED" or event == "SUPER_TRACKING_PATH_UPDATED" then
         self:RefreshNavigationTarget()
         return
@@ -310,6 +337,8 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
     self:RegisterEvent("SUPER_TRACKING_CHANGED")
     self:RegisterEvent("SUPER_TRACKING_PATH_UPDATED")
+    self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD")
     SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_CREATED")
     SuperTrackedFrame:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
     SuperTrackedFrame:UnregisterEvent("SUPER_TRACKING_CHANGED")
@@ -334,6 +363,8 @@ function MapPinEnhancedWayfinderFloatingMixin:StopTracking()
     self:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
     self:UnregisterEvent("SUPER_TRACKING_CHANGED")
     self:UnregisterEvent("SUPER_TRACKING_PATH_UPDATED")
+    self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
+    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
     self:StopDistanceUpdates()
     self:ResetDirectionSampling()
     if self.needsBlizzardReset then
@@ -363,6 +394,8 @@ function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.needle:SetRotation(0)
     self.customDirection = nil
     self.lastNavigationTargetCheck = nil
+    self.lastNavigationReadinessCheck = nil
+    self.nativePositionReady = nil
 end
 
 ---@param title string?

@@ -10,6 +10,8 @@
 ---@field fallbackTexture MapPinEnhancedFloatingFallbackTexture
 ---@field fallbackCloseTexture MapPinEnhancedFloatingFallbackCloseTexture
 ---@field fallbackBackground Texture
+---@field rotation number?
+---@field spriteCell number?
 ---@field fallback boolean?
 ---@field fallbackClose boolean?
 MapPinEnhancedWayfinderFloatingNeedleMixin = {}
@@ -64,6 +66,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingNeedleMixin:OnShow()
     self:SetFallback(self.fallback == true, self.fallbackClose)
+    self:SetRotation(self.rotation or 0)
 end
 
 function MapPinEnhancedWayfinderFloatingNeedleMixin:OnHide()
@@ -84,10 +87,14 @@ end
 
 ---@param rotation number
 function MapPinEnhancedWayfinderFloatingNeedleMixin:SetRotation(rotation)
-    self.texture:SetRotation(rotation)
+    self.rotation = rotation
+    if self.texture:IsShown() then self.texture:SetRotation(rotation) end
+    if not self.fallbackTexture:IsShown() then return end
     -- Match Arrow's clockwise, 120-frame sheet while retaining continuous native clamping.
     local fullRotation = 2 * math.pi
     local frame = math.floor((-rotation % fullRotation) / fullRotation * 120 + 0.5) % 120
+    if self.spriteCell == frame then return end
+    self.spriteCell = frame
     local column = frame % 16
     local row = math.floor(frame / 16)
     self.fallbackTexture:SetTexCoord(column / 16, (column + 1) / 16, row / 8, (row + 1) / 8)

@@ -96,8 +96,8 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     else
         Providers:ClearStepSuperTracking()
     end
-    frame:RefreshNavigationTarget()
-    frame.content:SetShown(showDirection)
+    frame.lastNavigationTargetCheck = nil
+    frame:SetDirectionShown(showDirection)
 end
 
 function MapPinEnhancedWayfinderFloating:Reset()
