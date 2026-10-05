@@ -23,6 +23,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field isManuallyEnabled fun(): boolean
 ---@field show fun()
 ---@field hide fun()
+---@field selected table<string, boolean>
+---@field needsPoll boolean?
 ---@field ruleStartedAt table<string, number>
 ---@field isShown boolean?
 
@@ -42,38 +44,67 @@ local registeredEvents = {}
 ---@type table<VisibilityCallbackEvent, boolean>
 local registeredCallbacks = {}
 local updateQueued = false
+local visibilityLoaded = false
+---@type FunctionContainer?
+local pollTicker
+---@type fun(targetID: string, force: boolean?)
+local UpdateTargetVisibility
+
+local function UpdatePolling()
+    if not visibilityLoaded then return end
+    local needed = false
+    for _, target in pairs(targets) do
+        if target.needsPoll then needed = true break end
+    end
+    if needed and not pollTicker then
+        pollTicker = C_Timer.NewTicker(0.25, function()
+            for targetID, target in pairs(targets) do
+                if target.needsPoll then UpdateTargetVisibility(targetID) end
+            end
+        end)
+    elseif not needed and pollTicker then
+        pollTicker:Cancel()
+        pollTicker = nil
+    end
+end
 
 ---@param targetID string
 ---@param force boolean?
-local function UpdateTargetVisibility(targetID, force)
+UpdateTargetVisibility = function(targetID, force)
     local target = targets[targetID]
     if not target then return end
 
     local shouldShow = target.isManuallyEnabled()
+    target.needsPoll = false
     if shouldShow then
-        local Options = MapPinEnhanced:GetModule("Options")
-        local selected = Options:GetOptionValue(target.optionKey) --[[@as MapPinEnhancedMultiselectValue]]
         local now = GetTime()
-        for ruleID in pairs(target.rules) do
-            local rule = rules[ruleID]
-            assert(rule, "Visibility target references an unregistered rule: " .. ruleID)
-            if selected[ruleID] and rule.isActive() then
-                local startedAt = target.ruleStartedAt[ruleID]
-                if not startedAt then
-                    startedAt = now
-                    target.ruleStartedAt[ruleID] = startedAt
+        -- Nonpolling suppression takes precedence, so hidden instance targets do not read positions.
+        for pass = 1, 2 do
+            local polling = pass == 2
+            for ruleID in pairs(target.rules) do
+                local rule = rules[ruleID]
+                if target.selected[ruleID] and (rule.poll == true) == polling then
+                    if polling then target.needsPoll = true end
+                    if rule.isActive() then
+                        local startedAt = target.ruleStartedAt[ruleID] or now
+                        target.ruleStartedAt[ruleID] = startedAt
+                        if not rule.delay or now - startedAt >= rule.delay then shouldShow = false end
+                    else
+                        target.ruleStartedAt[ruleID] = nil
+                    end
                 end
-                if not rule.delay or now - startedAt >= rule.delay then
-                    shouldShow = false
-                    break
+            end
+            if not shouldShow and not polling then
+                for ruleID in pairs(target.rules) do
+                    if rules[ruleID].poll then target.ruleStartedAt[ruleID] = nil end
                 end
-            else
-                target.ruleStartedAt[ruleID] = nil
+                break
             end
         end
     else
         wipe(target.ruleStartedAt)
     end
+    UpdatePolling()
 
     if not force and target.isShown == shouldShow then return end
     target.isShown = shouldShow
@@ -145,10 +176,14 @@ function MapPinEnhanced:RegisterVisibilityTarget(targetID, settings)
         show = settings.show,
         hide = settings.hide,
         ruleStartedAt = {},
+        selected = {},
     }
 
     local Options = self:GetModule("Options")
-    Options:SubscribeToOptionChanges(settings.optionKey, function()
+    targets[targetID].selected = Options:GetOptionValue(settings.optionKey) --[[@as table<string, boolean>]]
+    Options:SubscribeToOptionChanges(settings.optionKey, function(value)
+        targets[targetID].selected = value or {}
+        wipe(targets[targetID].ruleStartedAt)
         UpdateTargetVisibility(targetID)
     end)
     QueueAllTargetVisibilityUpdates()
@@ -176,18 +211,7 @@ MapPinEnhanced:AddVisibilityRule("scenario",
 MapPinEnhanced:AddVisibilityRule("battleground", { isActive = IsInstanceType("pvp"), events = INSTANCE_EVENTS })
 MapPinEnhanced:AddVisibilityRule("arena", { isActive = IsInstanceType("arena"), events = INSTANCE_EVENTS })
 
-local function InitVisibility()
-    C_Timer.NewTicker(0.25, function()
-        for targetID, target in pairs(targets) do
-            for ruleID in pairs(target.rules) do
-                local rule = rules[ruleID]
-                if rule and rule.poll then
-                    UpdateTargetVisibility(targetID)
-                    break
-                end
-            end
-        end
-    end)
-end
-
-MapPinEnhanced:OnLoad(InitVisibility)
+MapPinEnhanced:OnLoad(function()
+    visibilityLoaded = true
+    UpdatePolling()
+end)
