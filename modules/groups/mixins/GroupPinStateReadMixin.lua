@@ -55,6 +55,63 @@ function MapPinEnhancedGroupPinStateReadMixin:GetCounts()
     return self.count, reached, total
 end
 
+---@class MapPinEnhancedGroupPinDisplayEntry
+---@field pinID UUID
+---@field state "active"|"reached"|"hidden"
+---@field order number
+---@field title string?
+---@field pin MapPinEnhancedPinMixin?
+
+---Fresh display metadata keeps title edits current without exposing archive payloads.
+---@return MapPinEnhancedGroupPinDisplayEntry[]
+function MapPinEnhancedGroupPinStateReadMixin:GetDisplayEntries()
+    ---@type MapPinEnhancedGroupPinDisplayEntry[]
+    local entries = {}
+    for pinID, pin in pairs(self.pins) do
+        entries[#entries + 1] = {
+            pinID = pinID,
+            state = "active",
+            order = self.orders[pinID],
+            title = pin:GetPinData().title,
+            pin = pin,
+        }
+    end
+    for pinID, archivedPin in pairs(self.archive) do
+        entries[#entries + 1] = {
+            pinID = pinID,
+            state = archivedPin.state,
+            order = archivedPin.order,
+            title = archivedPin.data.title,
+        }
+    end
+    return entries
+end
+
+---@param pinID UUID
+---@return MapPinEnhancedGroupPinEntry?
+function MapPinEnhancedGroupPinStateReadMixin:GetEntryCopy(pinID)
+    local pin = self.pins[pinID]
+    if pin then
+        return {
+            pinID = pinID,
+            state = "active",
+            order = self.orders[pinID],
+            data = CopyTable(pin:GetSaveableData()),
+            pin = pin,
+        }
+    end
+    local archivedPin = self.archive[pinID]
+    if archivedPin then
+        return {
+            pinID = pinID,
+            state = archivedPin.state,
+            order = archivedPin.order,
+            data = CopyTable(archivedPin.data),
+        }
+    end
+    return nil
+end
+
 ---@return MapPinEnhancedGroupPinEntry[]
 function MapPinEnhancedGroupPinStateReadMixin:GetEntries()
     ---@type MapPinEnhancedGroupPinEntry[]

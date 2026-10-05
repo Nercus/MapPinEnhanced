@@ -9,12 +9,12 @@ MapPinEnhancedTrackerListMixin = {}
 ---@class MapPinEnhancedTrackerPinNode : TreeNodeMixin
 ---@field ordinal number?
 
----@param first MapPinEnhancedGroupPinEntry
----@param second MapPinEnhancedGroupPinEntry
+---@param first MapPinEnhancedGroupPinDisplayEntry
+---@param second MapPinEnhancedGroupPinDisplayEntry
 ---@return boolean
 local function IsEntryBefore(first, second)
     if first.order ~= second.order then return first.order > second.order end
-    local firstTitle, secondTitle = first.data.title or first.pinID, second.data.title or second.pinID
+    local firstTitle, secondTitle = first.title or first.pinID, second.title or second.pinID
     if firstTitle ~= secondTitle then return firstTitle < secondTitle end
     return first.pinID < second.pinID
 end
@@ -33,7 +33,7 @@ function MapPinEnhancedTrackerListMixin:UpdatePinList(scrollToTrackedPin)
                 node.groupID = group:GetGroupID()
                 node.activePins, node.reachedPins, node.totalPins = active, reached, total
                 -- Retained archives occupy ordinals too. Sort once before publishing the tree.
-                local entries = group:GetPinEntries()
+                local entries = group:GetPinDisplayEntries()
                 table.sort(entries, IsEntryBefore)
                 local ordered = group:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED
                 for ordinal, entry in ipairs(entries) do

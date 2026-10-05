@@ -172,18 +172,15 @@ end
 ---@return UUID?
 function MapPinEnhancedGroupPinOperationsMixin:DuplicatePin(pinID)
     if not self:CancelBatch() then return nil end
-    local entries = self:GetPinEntries()
-    ---@type SaveablePinData?
-    local sourceData
-    for _, entry in ipairs(entries) do
-        if entry.pinID == pinID then sourceData = entry.data end
-    end
-    if not sourceData then return nil end
+    local sourceEntry = self.pinState:GetEntryCopy(pinID)
+    if not sourceEntry then return nil end
+    local sourceData = sourceEntry.data
+    local entries = self:GetPinDisplayEntries()
 
-    -- GetPinEntries is unordered; preserve the editor's order before inserting the copy.
+    -- Display entries are unordered; preserve the editor's order before inserting the copy.
     table.sort(entries, function(a, b)
         if a.order ~= b.order then return a.order > b.order end
-        return (a.data.title or "") < (b.data.title or "")
+        return (a.title or "") < (b.title or "")
     end)
     sourceData.pinID = nil
     sourceData.title = string.format(MapPinEnhanced.L["copy of %s"], sourceData.title)
@@ -215,12 +212,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
     if not self:CancelBatch() then return false end
     if self == targetGroup then return false end
     if not targetGroup:CancelBatch() then return false end
-    local entries = self:GetPinEntries()
-    ---@type MapPinEnhancedGroupPinEntry?
-    local sourceEntry
-    for _, entry in ipairs(entries) do
-        if entry.pinID == pinID then sourceEntry = entry end
-    end
+    local sourceEntry = self.pinState:GetEntryCopy(pinID)
     if not sourceEntry then return false end
 
     local sourcePin = self:GetPinByID(pinID)
@@ -236,7 +228,7 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
         MapPinEnhanced:FireCallback("PIN_REMOVED", nil, self, pinID)
     end
 
-    local targetEntries = targetGroup:GetPinEntries()
+    local targetEntries = targetGroup:GetPinDisplayEntries()
     local success, targetPin, targetPinID, replacedWayBackPin, shouldTrack =
         pcall(targetGroup.AddBeforePersist, targetGroup, sourceEntry.data, pinID)
     local message = not success and tostring(targetPin) or nil

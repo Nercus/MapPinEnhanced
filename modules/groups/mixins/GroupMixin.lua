@@ -210,6 +210,11 @@ function MapPinEnhancedGroupMixin:GetPinEntries()
     return self.pinState:GetEntries()
 end
 
+---@return MapPinEnhancedGroupPinDisplayEntry[]
+function MapPinEnhancedGroupMixin:GetPinDisplayEntries()
+    return self.pinState:GetDisplayEntries()
+end
+
 ---@return SaveablePinData[]
 function MapPinEnhancedGroupMixin:GetAllPinData()
     ---@type SaveablePinData[]
