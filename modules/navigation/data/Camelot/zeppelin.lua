@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
--- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local ZEPPELIN = {
 
     -- Zone: Durotar (map 1411)
@@ -17,7 +16,7 @@ local ZEPPELIN = {
         toX = 0.3135,
         toY = 0.3012,
         type = "zeppelin",
-        transportSchedule = { routeID = 285, fromDock = 4, toDock = 3 },
+        travelDuration = 266,
         requirement = {
             operation = "all",
             children = {
@@ -28,7 +27,6 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 114,
     },
     -- Durotar (map 1411 50.82,13.81) -> Tirisfal Glades (map 1420 60.70,58.76) via zeppelin
     {
@@ -41,7 +39,7 @@ local ZEPPELIN = {
         toX = 0.607,
         toY = 0.5876,
         type = "zeppelin",
-        transportSchedule = { routeID = 302, fromDock = 13, toDock = 14 },
+        travelDuration = 348,
         requirement = {
             operation = "all",
             children = {
@@ -52,7 +50,6 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 170,
     },
 
     -- Zone: Stranglethorn Vale (map 1434)
@@ -67,7 +64,7 @@ local ZEPPELIN = {
         toX = 0.5057,
         toY = 0.1266,
         type = "zeppelin",
-        transportSchedule = { routeID = 285, fromDock = 3, toDock = 4 },
+        travelDuration = 293,
         requirement = {
             operation = "all",
             children = {
@@ -78,7 +75,6 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 141,
     },
     -- Stranglethorn Vale (map 1434 31.53,29.15) -> Tirisfal Glades (map 1420 61.88,59.10) via zeppelin
     {
@@ -91,7 +87,7 @@ local ZEPPELIN = {
         toX = 0.6188,
         toY = 0.591,
         type = "zeppelin",
-        transportSchedule = { routeID = 301, fromDock = 11, toDock = 12 },
+        travelDuration = 318,
         requirement = {
             operation = "all",
             children = {
@@ -102,7 +98,6 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 151,
     },
 
     -- Zone: Tirisfal Glades (map 1420)
@@ -117,7 +112,7 @@ local ZEPPELIN = {
         toX = 0.5082,
         toY = 0.1381,
         type = "zeppelin",
-        transportSchedule = { routeID = 302, fromDock = 14, toDock = 13 },
+        travelDuration = 318,
         requirement = {
             operation = "all",
             children = {
@@ -128,7 +123,6 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 140,
     },
     -- Tirisfal Glades (map 1420 61.88,59.10) -> Stranglethorn Vale (map 1434 31.53,29.15) via zeppelin
     {
@@ -141,7 +135,7 @@ local ZEPPELIN = {
         toX = 0.3153,
         toY = 0.2915,
         type = "zeppelin",
-        transportSchedule = { routeID = 301, fromDock = 12, toDock = 11 },
+        travelDuration = 302,
         requirement = {
             operation = "all",
             children = {
@@ -152,10 +146,8 @@ local ZEPPELIN = {
                 },
             },
         },
-        travelDuration = 135,
     },
 
-    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
     -- Alterac Mountains (map 1416 12.83,51.17) -> Zephras Isle (map 2521 65.84,83.81) via zeppelin
     {
         fromPointID = 1300010,
@@ -167,8 +159,7 @@ local ZEPPELIN = {
         toX = 0.6584,
         toY = 0.8381,
         type = "zeppelin",
-        transportSchedule = { routeID = 11398, fromDock = 20, toDock = 21 },
-        travelDuration = 151,
+        travelDuration = 328,
         requirement = {
             operation = "all",
             children = {
@@ -191,8 +182,7 @@ local ZEPPELIN = {
         toX = 0.1283,
         toY = 0.5117,
         type = "zeppelin",
-        transportSchedule = { routeID = 11398, fromDock = 21, toDock = 20 },
-        travelDuration = 170,
+        travelDuration = 347,
         requirement = {
             operation = "all",
             children = {
@@ -215,8 +205,7 @@ local ZEPPELIN = {
         toX = 0.5775,
         toY = 0.81,
         type = "zeppelin",
-        transportSchedule = { routeID = 11457, fromDock = 22, toDock = 23 },
-        travelDuration = 135,
+        travelDuration = 295,
     },
     -- Zephras Isle (map 2521 57.75,81.00) -> Mulgore (map 1412 34.33,26.05) via zeppelin
     {
@@ -229,8 +218,7 @@ local ZEPPELIN = {
         toX = 0.3433,
         toY = 0.2605,
         type = "zeppelin",
-        transportSchedule = { routeID = 11457, fromDock = 23, toDock = 22 },
-        travelDuration = 174,
+        travelDuration = 334,
     },
 }
 

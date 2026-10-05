@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
--- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local SHIP = {
 
     -- Zone: Darkshore (map 1439)
@@ -17,8 +16,7 @@ local SHIP = {
         toX = 0.2253,
         toY = 0.562,
         type = "ship",
-        transportSchedule = { routeID = 11616, fromDock = 24, toDock = 25 },
-        travelDuration = 112,
+        travelDuration = 236,
         requirement = {
             operation = "all",
             children = {
@@ -41,7 +39,7 @@ local SHIP = {
         toX = 0.5057,
         toY = 0.6967,
         type = "ship",
-        transportSchedule = { routeID = 11167, fromDock = 10, toDock = 17 },
+        travelDuration = 525,
     },
     -- Darkshore (map 1439 32.42,43.77) -> Wetlands (map 1437 4.64,57.17) via ship
     {
@@ -54,8 +52,7 @@ local SHIP = {
         toX = 0.0464,
         toY = 0.5717,
         type = "ship",
-        transportSchedule = { routeID = 295, fromDock = 10, toDock = 9 },
-        travelDuration = 119,
+        travelDuration = 267,
         requirement = {
             operation = "all",
             children = {
@@ -78,7 +75,7 @@ local SHIP = {
         toX = 0.5486,
         toY = 0.9679,
         type = "ship",
-        transportSchedule = { routeID = 293, fromDock = 8, toDock = 7 },
+        travelDuration = 295,
         requirement = {
             operation = "all",
             children = {
@@ -89,7 +86,6 @@ local SHIP = {
                 },
             },
         },
-        travelDuration = 137,
     },
 
     -- Zone: Dustwallow Marsh (map 1445)
@@ -104,7 +100,7 @@ local SHIP = {
         toX = 0.0508,
         toY = 0.634,
         type = "ship",
-        transportSchedule = { routeID = 292, fromDock = 6, toDock = 5 },
+        travelDuration = 310,
         requirement = {
             operation = "all",
             children = {
@@ -115,7 +111,6 @@ local SHIP = {
                 },
             },
         },
-        travelDuration = 145,
     },
 
     -- Zone: Hillsbrad Foothills (map 1424)
@@ -130,8 +125,7 @@ local SHIP = {
         toX = 0.3242,
         toY = 0.4377,
         type = "ship",
-        transportSchedule = { routeID = 11167, fromDock = 17, toDock = 10 },
-        travelDuration = 125,
+        travelDuration = 368,
         requirement = {
             operation = "all",
             children = {
@@ -156,8 +150,7 @@ local SHIP = {
         toX = 0.3074,
         toY = 0.4103,
         type = "ship",
-        transportSchedule = { routeID = 11616, fromDock = 25, toDock = 24 },
-        travelDuration = 102,
+        travelDuration = 226,
         requirement = {
             operation = "all",
             children = {
@@ -182,8 +175,7 @@ local SHIP = {
         toX = 0.6366,
         toY = 0.3865,
         type = "ship",
-        transportSchedule = { routeID = 241, fromDock = 2, toDock = 1 },
-        travelDuration = 161,
+        travelDuration = 336,
     },
 
     -- Zone: Teldrassil (map 1438)
@@ -198,7 +190,7 @@ local SHIP = {
         toX = 0.3319,
         toY = 0.4013,
         type = "ship",
-        transportSchedule = { routeID = 293, fromDock = 7, toDock = 8 },
+        travelDuration = 292,
         requirement = {
             operation = "all",
             children = {
@@ -209,7 +201,6 @@ local SHIP = {
                 },
             },
         },
-        travelDuration = 134,
     },
 
     -- Zone: The Barrens (map 1413)
@@ -224,8 +215,7 @@ local SHIP = {
         toX = 0.2592,
         toY = 0.7315,
         type = "ship",
-        transportSchedule = { routeID = 241, fromDock = 1, toDock = 2 },
-        travelDuration = 153,
+        travelDuration = 328,
     },
 
     -- Zone: Wetlands (map 1437)
@@ -240,8 +230,7 @@ local SHIP = {
         toX = 0.5057,
         toY = 0.6967,
         type = "ship",
-        transportSchedule = { routeID = 11167, fromDock = 9, toDock = 17 },
-        travelDuration = 171,
+        travelDuration = 414,
         requirement = {
             operation = "all",
             children = {
@@ -264,8 +253,7 @@ local SHIP = {
         toX = 0.3242,
         toY = 0.4377,
         type = "ship",
-        transportSchedule = { routeID = 295, fromDock = 9, toDock = 10 },
-        travelDuration = 132,
+        travelDuration = 280,
         requirement = {
             operation = "all",
             children = {
@@ -288,7 +276,7 @@ local SHIP = {
         toX = 0.7154,
         toY = 0.5634,
         type = "ship",
-        transportSchedule = { routeID = 292, fromDock = 5, toDock = 6 },
+        travelDuration = 306,
         requirement = {
             operation = "all",
             children = {
@@ -299,10 +287,8 @@ local SHIP = {
                 },
             },
         },
-        travelDuration = 141,
     },
 
-    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
     -- Feralas (map 1444 31.01,39.51) -> Feralas (map 1444 43.13,42.76) via ship
     {
         fromPointID = 1300006,
@@ -314,8 +300,7 @@ local SHIP = {
         toX = 0.4313,
         toY = 0.4276,
         type = "ship",
-        transportSchedule = { routeID = 303, fromDock = 15, toDock = 16 },
-        travelDuration = 60,
+        travelDuration = 219,
     },
     -- Feralas (map 1444 43.13,42.76) -> Feralas (map 1444 31.01,39.51) via ship
     {
@@ -328,8 +313,7 @@ local SHIP = {
         toX = 0.3101,
         toY = 0.3951,
         type = "ship",
-        transportSchedule = { routeID = 303, fromDock = 16, toDock = 15 },
-        travelDuration = 166,
+        travelDuration = 325,
     },
     -- Tanaris (map 1446 68.58,22.99) -> Riverglades (map 2548 80.60,54.61) via ship
     {
@@ -342,8 +326,7 @@ local SHIP = {
         toX = 0.806,
         toY = 0.5461,
         type = "ship",
-        transportSchedule = { routeID = 11391, fromDock = 18, toDock = 19 },
-        travelDuration = 112,
+        travelDuration = 248,
     },
     -- Riverglades (map 2548 80.60,54.61) -> Tanaris (map 1446 68.58,22.99) via ship
     {
@@ -356,8 +339,7 @@ local SHIP = {
         toX = 0.6858,
         toY = 0.2299,
         type = "ship",
-        transportSchedule = { routeID = 11391, fromDock = 19, toDock = 18 },
-        travelDuration = 113,
+        travelDuration = 249,
     },
 }
 

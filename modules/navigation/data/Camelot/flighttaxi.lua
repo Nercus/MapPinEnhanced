@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
--- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local FLIGHTTAXI = {
 
     -- Original source zone: Alterac Mountains (map 1416)
@@ -11322,7 +11321,6 @@ local FLIGHTTAXI = {
         travelDuration = 115,
     },
 
-    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
     -- Riverglades (map 2548 76.80,52.99) -> Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
         fromPointID = 1300003,

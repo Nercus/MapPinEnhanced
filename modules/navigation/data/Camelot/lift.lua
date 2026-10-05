@@ -15,7 +15,7 @@ Navigation:RegisterPathData("transport", {
         toX = 0.3225,
         toY = 0.2217,
         type = "transport",
-        transportSchedule = { routeID = 118981, fromDock = 1001, toDock = 1002 },
+        travelDuration = 18,
     },
     {
         fromPointID = 100042,
@@ -27,7 +27,7 @@ Navigation:RegisterPathData("transport", {
         toX = 0.4455,
         toY = 0.8657,
         type = "transport",
-        transportSchedule = { routeID = 118981, fromDock = 1002, toDock = 1001 },
+        travelDuration = 18,
     },
     {
         fromPointID = 1300022,
@@ -39,7 +39,7 @@ Navigation:RegisterPathData("transport", {
         toX = 0.3209,
         toY = 0.672,
         type = "transport",
-        transportSchedule = { routeID = 41701, fromDock = 1006, toDock = 1005 },
+        travelDuration = 25,
     },
     {
         fromPointID = 1300023,
@@ -51,7 +51,7 @@ Navigation:RegisterPathData("transport", {
         toX = 0.3733,
         toY = 0.3862,
         type = "transport",
-        transportSchedule = { routeID = 41701, fromDock = 1005, toDock = 1006 },
+        travelDuration = 25,
     },
     {
         fromPointID = 1300024,
@@ -63,7 +63,7 @@ Navigation:RegisterPathData("transport", {
         toX = 0.519,
         toY = 0.247,
         type = "transport",
-        transportSchedule = { routeID = 472971, fromDock = 1008, toDock = 1007 },
+        travelDuration = 25,
     },
     {
         fromPointID = 1300025,
@@ -75,6 +75,6 @@ Navigation:RegisterPathData("transport", {
         toX = 0.4069,
         toY = 0.3141,
         type = "transport",
-        transportSchedule = { routeID = 472971, fromDock = 1007, toDock = 1008 },
+        travelDuration = 25,
     },
 })

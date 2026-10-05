@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
--- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local BORDER = {
 
     -- Zone: Alterac Mountains (map 1416)
@@ -1125,7 +1124,6 @@ local BORDER = {
         type = "border",
     },
 
-    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
     -- Durotar (map 1411 34.14,42.27) -> The Barrens (map 1413 63.06,19.16) via border
     {
         fromPointID = 1300014,

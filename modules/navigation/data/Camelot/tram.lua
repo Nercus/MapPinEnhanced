@@ -16,9 +16,7 @@ local TRAM = {
         toX = 0.6958,
         toY = 0.3027,
         type = "tram",
-        transportSchedule = { routeID = 176080, fromDock = 1101, toDock = 1102 },
-        -- Two loading transitions plus station walks, rounded up at 7 yd/s.
-        transportAccessSeconds = 38,
+        travelDuration = 168,
         requirement = {
             operation = "all",
             children = {
@@ -43,9 +41,7 @@ local TRAM = {
         toX = 0.7802,
         toY = 0.5137,
         type = "tram",
-        transportSchedule = { routeID = 176080, fromDock = 1102, toDock = 1101 },
-        -- Two loading transitions plus station walks, rounded up at 7 yd/s.
-        transportAccessSeconds = 38,
+        travelDuration = 168,
         requirement = {
             operation = "all",
             children = {

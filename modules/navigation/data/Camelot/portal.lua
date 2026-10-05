@@ -2,7 +2,6 @@
 local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
--- Reconciled with VSS_Skeleton_Camelot.lua (2026-09-28); existing point IDs retained.
 local PORTAL = {
 
     -- Zone: Darnassus (map 1457)
@@ -55,7 +54,6 @@ local PORTAL = {
         travelDuration = 5,
     },
 
-    -- Additions from VSS_Skeleton_Camelot.lua (2026-09-28).
     -- Alterac Mountains (map 1416 12.05,56.23) -> Stormwind City (map 1453 50.04,86.99) via portal
     {
         fromPointID = 1300004,

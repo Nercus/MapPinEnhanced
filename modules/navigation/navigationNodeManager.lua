@@ -21,8 +21,6 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field taxiPathIDs integer[]?
 ---@field requirement NavigationRequirement?
 ---@field gossip NavigationStaticGossip?
----@field transportSchedule NavigationTransportLink?
----@field transportAccessSeconds number?
 
 ---@class NavigationStaticGossip
 ---@field npcID number
