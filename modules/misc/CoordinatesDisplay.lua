@@ -64,22 +64,15 @@ function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
     self.coordsXDec:SetShown(showDecimals)
     self.coordsYDec:SetShown(showDecimals)
     self.zoneName:SetWidth(0)
-    self.coordsXInt:SetWidth(0)
-    self.coordsYInt:SetWidth(0)
-    self.coordsXDec:SetWidth(0)
-    self.coordsYDec:SetWidth(0)
     local zoneWidth = self.zoneName:GetStringWidth()
     self.zoneName:SetWidth(zoneWidth)
     self.separator:SetShown(zoneWidth == 0)
     local gap = zoneWidth > 0 and zoneWidth / 2 + 8 or 5
-    local xWidth = self.coordsXInt:GetStringWidth()
-    local yWidth = self.coordsYInt:GetStringWidth()
-    local xDecWidth = showDecimals and self.coordsXDec:GetStringWidth() or 0
-    local yDecWidth = showDecimals and self.coordsYDec:GetStringWidth() or 0
-    self.coordsXInt:SetWidth(xWidth)
-    self.coordsYInt:SetWidth(yWidth)
-    self.coordsXDec:SetWidth(math.max(1, xDecWidth))
-    self.coordsYDec:SetWidth(math.max(1, yDecWidth))
+    -- XML reserves fixed coordinate columns so changing digits never changes geometry.
+    local xWidth = self.coordsXInt:GetWidth()
+    local yWidth = self.coordsYInt:GetWidth()
+    local xDecWidth = showDecimals and self.coordsXDec:GetWidth() or 0
+    local yDecWidth = showDecimals and self.coordsYDec:GetWidth() or 0
     self.coordsXInt:ClearAllPoints()
     self.coordsXInt:SetPoint("RIGHT", self, "CENTER", -gap - xDecWidth, 0)
     self.coordsXDec:ClearAllPoints()
@@ -101,7 +94,6 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetUndefinedPosition()
     if showDecimals then self.coordsXDec:SetText(".--") end
     self.coordsYInt:SetText("--")
     if showDecimals then self.coordsYDec:SetText(".--") end
-    self:UpdateCoordinateLayout()
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
@@ -130,7 +122,6 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     if showDecimals then self.coordsXDec:SetText(format(".%02d", xDec)) end
     self.coordsYInt:SetText(format("%02d", yInt))
     if showDecimals then self.coordsYDec:SetText(format(".%02d", yDec)) end
-    self:UpdateCoordinateLayout()
 end
 
 local UPDATE_RATE = 0.1
@@ -189,6 +180,7 @@ end
 
 function MapPinEnhancedCoordinatesDisplayMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
+    self:UpdateCoordinateLayout()
     -- Keep the saved-position key so existing frame placement survives this rename.
     self.position = self:GetParent() -- the fixed rectangle retains the original saved center
     MapPinEnhanced:RegisterDraggableFrame(self.position, "coordsDisplayFrame", self.dragHandle, function()
@@ -323,5 +315,8 @@ for _, key in ipairs({ "Miscellaneous.Coords.ShowZone", "Miscellaneous.Coords.Sh
         if not coordinatesDisplayFrame then return end
         coordinatesDisplayFrame.positionDefined, coordinatesDisplayFrame.cachedMapName = nil, nil
         coordinatesDisplayFrame:OnUpdate(1)
+        if key == "Miscellaneous.Coords.ShowDecimals" then
+            coordinatesDisplayFrame:UpdateCoordinateLayout()
+        end
     end)
 end

@@ -44,7 +44,7 @@
                     </Anchors>
                 </FontString>
                 <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt" text="00" justifyH="RIGHT">
-                    <Size x="18" y="20" />
+                    <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.separator" relativePoint="RIGHT" />
                     </Anchors>
