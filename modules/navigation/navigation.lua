@@ -1382,6 +1382,7 @@ end
 
 ---@param isWorldMap boolean
 function Navigation:BuildRouteLayer(isWorldMap)
+    if isWorldMap and not WorldMapFrame:IsShown() then return end
     local progression = self.progression
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
     local destination = self.activeDestination
@@ -1507,6 +1508,7 @@ end
 
 hooksecurefunc(WorldMapFrame, "OnMapChanged", RefreshWorldMapRouteLayer)
 WorldMapFrame:HookScript("OnShow", RefreshWorldMapRouteLayer)
+WorldMapFrame:HookScript("OnHide", function() Navigation:ReleaseRouteLayers(true) end)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Navigation:SetupCalendarRequirements()
