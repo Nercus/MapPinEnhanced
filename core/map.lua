@@ -409,7 +409,8 @@ function MapPinEnhanced:FormatDistance(distance)
         return distanceText
     end
 
-    return string.format(IN_GAME_NAVIGATION_RANGE, distanceText)
+    local distanceFormat = IN_GAME_NAVIGATION_RANGE:gsub("(|4[^;]+)$", "%1;")
+    return string.format(distanceFormat, distanceText)
 end
 
 function MapPinEnhanced:FormatETA(time)
