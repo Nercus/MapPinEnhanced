@@ -62,6 +62,7 @@ function MapPinEnhancedGroupEditorMixin:RequestRefresh()
 end
 
 function MapPinEnhancedGroupEditorMixin:OnUpdate()
+    if not self:IsVisible() or self.visibilityHiding then return end
     ---@type ScriptRegion?
     local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
     local groupEditorContentHasFocus = false
@@ -107,7 +108,16 @@ function MapPinEnhancedGroupEditorMixin:OnLoad()
                 self.groupEditorContent:SetGroup(group)
                 if group.isDeleting then self.selectedGroup = nil end
             end
-            self.groupEditorSidebar:Refresh()
+            if self:IsVisible() and not self.visibilityHiding then
+                self.groupEditorSidebar:Refresh()
+            else
+                -- Detach pooled group references without rebuilding a hidden sidebar.
+                self.groupEditorSidebar.dataProvider:Flush()
+                for _, entry in ipairs(self.groupEditorSidebar.systemGroups.entries) do
+                    entry:Reset()
+                    entry:Hide()
+                end
+            end
         end
         self:RequestRefresh()
     end)
@@ -157,6 +167,7 @@ end
 function MapPinEnhancedGroupEditorMixin:ShowFrame()
     MapPinEnhanced:RestoreFrame(self)
     self.selectedGroup = nil
+    self.refreshPending = nil
     self.groupEditorSidebar:ClearSearch()
     self.groupEditorSidebar:Refresh()
     self.groupEditorContent:SetGroup(nil)
