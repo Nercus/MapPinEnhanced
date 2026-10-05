@@ -92,7 +92,6 @@ function MapPinEnhancedInputMixin:SetInlineIcon(icon)
 end
 
 function MapPinEnhancedInputMixin:OnLoad()
-    self:RegisterEvent("GLOBAL_MOUSE_DOWN")
     if self.placeholderFont then
         self:SetPlaceholderFont(self.placeholderFont)
     end
@@ -132,15 +131,22 @@ function MapPinEnhancedInputMixin:OnEscapePressed()
 end
 
 function MapPinEnhancedInputMixin:OnEditFocusGained()
+    self:RegisterEvent("GLOBAL_MOUSE_DOWN")
     self:HighlightText()
     self:UpdateClearButtonVisibility()
     self:UpdatePlaceholderVisibility()
 end
 
 function MapPinEnhancedInputMixin:OnEditFocusLost()
+    self:UnregisterEvent("GLOBAL_MOUSE_DOWN")
     self:ClearHighlightText()
     self:UpdateClearButtonVisibility()
     self:UpdatePlaceholderVisibility()
+end
+
+function MapPinEnhancedInputMixin:OnInputHide()
+    self:UnregisterEvent("GLOBAL_MOUSE_DOWN")
+    self:ClearFocus()
 end
 
 ---Set up text that applies on Enter or focus loss and restores on Escape.

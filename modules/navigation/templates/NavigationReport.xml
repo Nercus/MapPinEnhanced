@@ -7,7 +7,7 @@
             <OnTextChanged>
                 if self:GetText() ~= self.url then self:SetText(self.url) end
             </OnTextChanged>
-            <OnEditFocusGained>
+            <OnEditFocusGained inherit="append">
                 self:HighlightText()
                 self.clearButton:Hide()
             </OnEditFocusGained>

@@ -25,7 +25,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true" clampedToScreen="true">
+            <Frame mixin="MapPinEnhancedAutocompleteResultsMixin" parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true" clampedToScreen="true">
                 <Anchors>
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="-4" />
                 </Anchors>
@@ -64,13 +64,18 @@
                         </Anchors>
                     </EventFrame>
                 </Frames>
+                <Scripts>
+                    <OnShow method="OnShow" />
+                    <OnHide method="OnHide" />
+                    <OnEvent method="OnEvent" />
+                </Scripts>
             </Frame>
         </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
             <OnTextChanged method="OnTextChanged" />
             <OnKeyDown method="OnKeyDown" />
-            <OnHide method="OnHide" />
+            <OnHide method="OnHide" inherit="append" />
             <OnEditFocusLost method="OnEditFocusLost" />
         </Scripts>
     </EditBox>

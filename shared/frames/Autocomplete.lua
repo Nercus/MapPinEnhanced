@@ -58,6 +58,21 @@ MapPinEnhancedAutocompleteMixin = {}
 ---@field scrollBox WowScrollBoxList
 ---@field scrollBar MinimalScrollBar
 
+MapPinEnhancedAutocompleteResultsMixin = {}
+
+function MapPinEnhancedAutocompleteResultsMixin:OnShow()
+    self:RegisterEvent("GLOBAL_MOUSE_DOWN")
+end
+
+function MapPinEnhancedAutocompleteResultsMixin:OnHide()
+    self:UnregisterEvent("GLOBAL_MOUSE_DOWN")
+end
+
+function MapPinEnhancedAutocompleteResultsMixin:OnEvent()
+    local owner = self:GetParent() --[[@as MapPinEnhancedAutocompleteTemplate]]
+    owner:OnGlobalMouseDown()
+end
+
 ---@class AutocompleteOption
 ---@field label string display label for the option
 ---@field description string? additional description for the option, shown smaller below the label
@@ -290,10 +305,21 @@ function MapPinEnhancedAutocompleteMixin:OnTextChanged()
     self.filterFunction()
 end
 
+---@return boolean
+function MapPinEnhancedAutocompleteMixin:IsMouseOverResults()
+    for _, focus in ipairs(GetMouseFoci()) do
+        while focus do
+            if focus == self.resultsFrame then return true end
+            focus = focus:GetParent()
+        end
+    end
+    return false
+end
+
 function MapPinEnhancedAutocompleteMixin:OnEditFocusLost()
     MapPinEnhancedInputMixin.OnEditFocusLost(self)
     -- if over search results, do not hide
-    if self.resultsFrame:IsShown() and self.resultsFrame:IsMouseOver() then return end
+    if self.resultsFrame:IsShown() and self:IsMouseOverResults() then return end
     self:CancelSearch()
 end
 
