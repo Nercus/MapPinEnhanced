@@ -76,7 +76,8 @@ function MapPinEnhancedWayfinderArrow:SetStep(step)
     local showObjectives = inside and Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
     frame.forceClose = inside == true and not showObjectives
     local showDirection = frame.forceClose or step == nil or
-        step.showDirection and step.desiredAction == nil and not inside
+        step.showDirection and step.desiredAction == nil and
+        (not inside or step.showDirectionInObjectiveArea == true)
     frame.needleContainer:SetShown(showDirection)
     local calculating = step and step.phase == "calculating"
     frame.loading:SetShown(calculating == true)

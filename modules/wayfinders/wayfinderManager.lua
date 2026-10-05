@@ -84,6 +84,7 @@ local activeTarget
 ---@field phase string
 ---@field isFinalDestination boolean?
 ---@field insideObjectiveArea boolean?
+---@field showDirectionInObjectiveArea boolean?
 ---@field stepIndex integer?
 ---@field stepCount integer?
 ---@field progressEntries WayfinderProgressEntry[]?
@@ -128,6 +129,7 @@ local function CopyStep(step)
         phase = step.phase,
         isFinalDestination = step.isFinalDestination,
         insideObjectiveArea = step.insideObjectiveArea,
+        showDirectionInObjectiveArea = step.showDirectionInObjectiveArea,
         stepIndex = step.stepIndex,
         stepCount = step.stepCount,
         progressEntries = step.progressEntries and CopyTable(step.progressEntries) or nil,
@@ -158,10 +160,13 @@ function Wayfinders:UpdateDestinationIcon(texture, usesAtlas)
 end
 
 ---@param inside boolean
-function Wayfinders:UpdateDestinationAreaState(inside)
+---@param showDirection boolean
+function Wayfinders:UpdateDestinationAreaState(inside, showDirection)
     if not activeStep or not activeStep.isFinalDestination then return end
-    if (activeStep.insideObjectiveArea == true) == inside then return end
+    if (activeStep.insideObjectiveArea == true) == inside and
+        (activeStep.showDirectionInObjectiveArea == true) == showDirection then return end
     activeStep.insideObjectiveArea = inside
+    activeStep.showDirectionInObjectiveArea = showDirection
     ApplyActiveStep()
 end
 

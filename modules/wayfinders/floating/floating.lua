@@ -91,7 +91,8 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     if not self.data then return end
     local frame = self:GetFrame()
     self:RefreshTitle()
-    local showDirection = step == nil or step.showDirection and not step.insideObjectiveArea
+    local showDirection = step == nil or step.showDirection and
+        (not inside or step.showDirectionInObjectiveArea == true)
     -- Reaching an entrance can hide direction while its Step still owns tracking.
     -- Keep the waypoint protected from native arrival clearing until the Step ends.
     if self.data and self.data.mapDistanceOnly then

@@ -5,11 +5,8 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
----@type NavigationObjectiveAreaPolicy
-local OBJECTIVE_AREA_POLICY = {
-    exitGraceSeconds = 3,
-    directionDistance = 40,
-}
+local OBJECTIVE_EXIT_GRACE_SECONDS = 3
+local OBJECTIVE_DIRECTION_DISTANCE = 40
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
@@ -69,10 +66,28 @@ local function GetQuestAtlas(questID, ready)
 end
 
 ---@param questID number
+---@return number?
+local function GetObjectiveDirectionDistance(questID)
+    local objectives = C_QuestLog.GetQuestObjectives(questID)
+    if not MapPinEnhanced:IsReadableTable(objectives) then return nil end
+    local maximumRequired = 0
+    for _, objective in ipairs(objectives) do
+        if not MapPinEnhanced:IsReadableTable(objective) then return nil end
+        local required = objective.numRequired
+        if not MapPinEnhanced:IsReadableNumber(required) or required < 0 or
+            required > 1 or required % 1 ~= 0 then return nil end
+        -- Completed objectives still classify the quest, including higher counts.
+        maximumRequired = math.max(maximumRequired, required)
+    end
+    return maximumRequired == 1 and OBJECTIVE_DIRECTION_DISTANCE or nil
+end
+
+---@param questID number
 ---@param inside boolean?
 ---@return string? atlas
 ---@return boolean? active nil when membership or unfinished readiness is unavailable
 ---@return boolean? ready
+---@return number? directionDistance
 local function ReadQuestState(questID, inside)
     local ready = C_QuestLog.ReadyForTurnIn and C_QuestLog.ReadyForTurnIn(questID)
     if not issecretvalue(inside) and inside == nil and C_Minimap and C_Minimap.IsInsideQuestBlob then
@@ -83,13 +98,15 @@ local function ReadQuestState(questID, inside)
         not issecretvalue(ready) and ready == false then
         active = inside
     end
-    return GetQuestAtlas(questID, ready), active, ready
+    return GetQuestAtlas(questID, ready), active, ready,
+        active == true and GetObjectiveDirectionDistance(questID) or nil
 end
 
 ---@param questID number
 ---@param atlas string?
 ---@param active boolean?
-local function ApplyQuestState(questID, atlas, active)
+---@param directionDistance number?
+local function ApplyQuestState(questID, atlas, active, directionDistance)
     if Providers:IsChangingSuperTrackingEntry() then return end
     local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
     if owner ~= SOURCE or targetID ~= string.format("quest:%s", questID) then return end
@@ -98,7 +115,7 @@ local function ApplyQuestState(questID, atlas, active)
         Providers:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
     end
     Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active == true,
-        active ~= nil and OBJECTIVE_AREA_POLICY or nil)
+        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil, directionDistance)
 end
 
 ---@param eventQuestID number?
@@ -110,8 +127,8 @@ local function RefreshQuestState(eventQuestID, inside)
     if owner ~= SOURCE or not targetID then return end
     local questID = tonumber(targetID:match("^quest:(%d+)$"))
     if not questID or issecretvalue(eventQuestID) or eventQuestID and eventQuestID ~= questID then return end
-    local atlas, active = ReadQuestState(questID, inside)
-    ApplyQuestState(questID, atlas, active)
+    local atlas, active, _, directionDistance = ReadQuestState(questID, inside)
+    ApplyQuestState(questID, atlas, active, directionDistance)
 end
 
 ---@return string
@@ -171,10 +188,10 @@ local function RefreshQuest()
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
     -- Apply artwork before SetDestination compares data and decides to reroute.
-    local atlas, active, ready ---@type string?, boolean?, boolean?
+    local atlas, active, ready, directionDistance ---@type string?, boolean?, boolean?, number?
     if questID then
-        atlas, active, ready = ReadQuestState(questID)
-        ApplyQuestState(questID, atlas, active)
+        atlas, active, ready, directionDistance = ReadQuestState(questID)
+        ApplyQuestState(questID, atlas, active, directionDistance)
     end
     local targetID = GetQuestTargetID()
     local questMapID = questID and C_TaskQuest.GetQuestZoneID(questID)
@@ -207,7 +224,7 @@ local function RefreshQuest()
         texture = atlas or previous and previous.texture or "Navigation-Tracked-Icon",
         usesAtlas = true,
     }, nil, titleAvailable and textAvailable)
-    ApplyQuestState(questID, atlas, active)
+    ApplyQuestState(questID, atlas, active, directionDistance)
 end
 
 local function OnQuestProgress()
@@ -220,8 +237,8 @@ end
 local function ReadQuestText(targetID, data)
     local questID = tonumber(targetID:match("^quest:(%d+)$"))
     if not questID then return end
-    local atlas, active, ready = ReadQuestState(questID)
-    ApplyQuestState(questID, atlas, active)
+    local atlas, active, ready, directionDistance = ReadQuestState(questID)
+    ApplyQuestState(questID, atlas, active, directionDistance)
     local title = Providers:PlainDescription(C_QuestLog.GetTitleForQuestID(questID)) or
         Providers:PlainDescription(C_TaskQuest.GetQuestInfoByQuestID(questID))
     if not title then return end

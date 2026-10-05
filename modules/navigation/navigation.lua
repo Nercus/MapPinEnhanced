@@ -7,10 +7,6 @@ local L = MapPinEnhanced.L
 
 ---@alias NavigationDestinationRemoval fun(owner: string, destinationID: string, changeNumber: integer)
 
----@class NavigationObjectiveAreaPolicy
----@field exitGraceSeconds number
----@field directionDistance number
-
 ---@class NavigationDestination
 ---@field owner string
 ---@field destinationID string
@@ -19,7 +15,8 @@ local L = MapPinEnhanced.L
 ---@field routingData WayfinderData
 ---@field removeDestination NavigationDestinationRemoval?
 ---@field insideObjectiveArea boolean?
----@field showObjectiveArea boolean?
+---@field objectiveDirectionDistance number?
+---@field showDirectionInObjectiveArea boolean?
 ---@field objectiveAreaExitTimer FunctionContainer?
 
 ---@class NavigationProgression
@@ -516,49 +513,48 @@ function Navigation:IsDestinationActive(owner, destinationID, changeNumber)
 end
 
 ---@param destination NavigationDestination
----@param policy NavigationObjectiveAreaPolicy?
-local function ApplyObjectiveAreaPresentation(destination, policy)
-    local showArea = destination.insideObjectiveArea == true
-    if showArea and policy then
-        -- Choose once on entry from the original waypoint, never a temporary
-        -- Step or Blizzard's distance to a blob edge. Unknown distance keeps guidance.
+---@param membershipChanged boolean?
+local function RefreshObjectiveAreaPresentation(destination, membershipChanged)
+    local inside = destination.insideObjectiveArea == true
+    local showDirection = false
+    if inside and destination.objectiveDirectionDistance then
+        -- Native navigation can measure to a blob edge or temporary Step. This
+        -- rule needs the original quest waypoint, even while its marker is hidden.
         local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
-        local distance ---@type number?
         if MapPinEnhanced:IsReadableNumber(mapID) and MapPinEnhanced:IsCoordinate(x) and
             MapPinEnhanced:IsCoordinate(y) then
             local data = destination.data
-            distance = Navigation:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
-        end
-        if MapPinEnhanced:IsReadableNumber(distance) then
-            showArea = distance > policy.directionDistance
-        else
-            showArea = false
+            local distance = Navigation:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
+            showDirection = MapPinEnhanced:IsReadableNumber(distance) and
+                distance >= 0 and distance <= destination.objectiveDirectionDistance
         end
     end
-    if (destination.showObjectiveArea == true) == showArea then return end
-    destination.showObjectiveArea = showArea
+    if not membershipChanged and (destination.showDirectionInObjectiveArea == true) == showDirection then return end
+    destination.showDirectionInObjectiveArea = showDirection
     for _, step in pairs(Navigation.routeSteps) do
         if step.info then
-            step.info.insideObjectiveArea = step.info.isFinalDestination == true and showArea
+            step.info.insideObjectiveArea = step.info.isFinalDestination == true and inside
+            step.info.showDirectionInObjectiveArea = step.info.isFinalDestination == true and showDirection
         end
     end
-    -- Presentation changes preserve jobs, route layers, Step identity and arrival.
-    Wayfinders:UpdateDestinationAreaState(showArea)
+    -- Presentation changes preserve routes, target identity and arrival state.
+    Wayfinders:UpdateDestinationAreaState(inside, showDirection)
 end
 
 ---@param owner string
 ---@param destinationID string
 ---@param changeNumber integer
 ---@param inside boolean
----@param policy NavigationObjectiveAreaPolicy? provider-owned proximity and exit grace
-function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, policy)
+---@param exitGraceSeconds number? provider-owned grace for a readable area exit
+---@param directionDistance number? provider-approved maximum distance for guidance inside the area
+function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds, directionDistance)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     local destination = self.activeDestination
     if not destination then return end
-    if not inside and policy and destination.insideObjectiveArea then
+    if not inside and exitGraceSeconds and destination.insideObjectiveArea then
         -- Repeated outside samples share one deadline; re-entry cancels it below.
         if not destination.objectiveAreaExitTimer then
-            destination.objectiveAreaExitTimer = C_Timer.NewTimer(policy.exitGraceSeconds, function()
+            destination.objectiveAreaExitTimer = C_Timer.NewTimer(exitGraceSeconds, function()
                 destination.objectiveAreaExitTimer = nil
                 self:UpdateDestinationAreaState(owner, destinationID, changeNumber, false)
             end)
@@ -569,11 +565,12 @@ function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumbe
         destination.objectiveAreaExitTimer:Cancel()
         destination.objectiveAreaExitTimer = nil
     end
-    -- Brief re-entry during the exit grace is still the same visit. Repeated
-    -- quest updates retain its presentation without another distance lookup.
-    if (destination.insideObjectiveArea == true) == inside then return end
+    -- Re-entry cancels the exit; quest updates can change direction eligibility
+    -- even when membership stays the same.
+    local membershipChanged = (destination.insideObjectiveArea == true) ~= inside
     destination.insideObjectiveArea = inside
-    ApplyObjectiveAreaPresentation(destination, policy)
+    destination.objectiveDirectionDistance = inside and directionDistance or nil
+    RefreshObjectiveAreaPresentation(destination, membershipChanged)
 end
 
 ---@return string? owner
@@ -1038,6 +1035,9 @@ end
 ---@param _nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _nextUpdateInterval, movementState)
+    if self.activeDestination and self.activeDestination.insideObjectiveArea then
+        RefreshObjectiveAreaPresentation(self.activeDestination)
+    end
     if RefreshRouteOrigin() then return end
     local progression = self.progression
     if not progression or not self:IsCurrentProgression(progression) then return end
@@ -1287,7 +1287,9 @@ end
 function Navigation:ApplyStepPresentation(target, onArrival, info)
     local destination = self.activeDestination
     info.insideObjectiveArea = info.isFinalDestination == true and
-        destination ~= nil and destination.showObjectiveArea == true
+        destination ~= nil and destination.insideObjectiveArea == true
+    info.showDirectionInObjectiveArea = info.insideObjectiveArea == true and
+        destination ~= nil and destination.showDirectionInObjectiveArea == true
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()
