@@ -54,6 +54,14 @@ function Pins:GetFramePool()
     return self.framePool
 end
 
+---@param frame MapPinEnhancedWorldmapPinTemplate|MapPinEnhancedMinimapPinTemplate
+---@param button string
+local function OnPinMouseDown(frame, button)
+    local pin = frame.pin
+    if not pin or not pin.initialized or (pin.worldmapPin ~= frame and pin.minimapPin ~= frame) then return end
+    pin:OnMouseDown(frame, button)
+end
+
 function MapPinEnhancedPinMixin:Init(pinID)
     self.pinID = pinID
 
@@ -63,13 +71,8 @@ function MapPinEnhancedPinMixin:Init(pinID)
     self.worldmapPin.pin = self
     self.minimapPin.pin = self
 
-    self.worldmapPin:SetScript("OnMouseDown", function(_, button)
-        self:OnMouseDown(_, button)
-    end)
-    -- RightClick doesn't seem to work on minimap pins, but I guess that's just intended. It's not a bug, it's a feature ¯\_(ツ)_/¯
-    self.minimapPin:SetScript("OnMouseDown", function(_, button)
-        self:OnMouseDown(_, button)
-    end)
+    self.worldmapPin:SetScript("OnMouseDown", OnPinMouseDown)
+    self.minimapPin:SetScript("OnMouseDown", OnPinMouseDown)
     self.initialized = true
     Pins:ApplyPinAppearance(self)
 end
@@ -198,7 +201,7 @@ function MapPinEnhancedPinMixin:Reset()
     if self.worldmapPin then
         if GameTooltip:IsOwned(self.worldmapPin) then GameTooltip:Hide() end
         self.worldmapPin:HidePulse()
-        self.worldmapPin.groupBadge:SetIcon(nil)
+        self.worldmapPin.groupBadge:Reset()
         HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
         self.worldmapPin:SetScript("OnMouseDown", nil)
         self.worldmapPin.pin = nil
@@ -213,7 +216,7 @@ function MapPinEnhancedPinMixin:Reset()
     if self.minimapPin then
         if GameTooltip:IsOwned(self.minimapPin) then GameTooltip:Hide() end
         self.minimapPin:HidePulse()
-        self.minimapPin.groupBadge:SetIcon(nil)
+        self.minimapPin.groupBadge:Reset()
         HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
         self.minimapPin:SetScript("OnMouseDown", nil)
         self.minimapPin.pin = nil
