@@ -43,6 +43,9 @@ end
 
 local taxiNodesByMap = {} ---@type table<number, NavigationTaxiNodeState[]|false>
 local taxiNodesByIDByMap = {} ---@type table<number, table<number, NavigationTaxiNodeState>>
+local dirtyTaxiMaps = {} ---@type table<number, boolean>
+local taxiKnowledgeChangeNumber = 0
+local taxiPricesDirty = true
 local taxiMapByNodeID = {} ---@type table<number, number>
 ---@class NavigationTaxiLeg
 ---@field fromTaxiNodeID number
@@ -65,6 +68,7 @@ local taxiMapByNodeID = {} ---@type table<number, number>
 local connections = {} ---@type table<number, table<number, integer[]>>
 local sourcePairs = {} ---@type table<integer, string>
 local pointsByNode = {} ---@type table<number, integer>
+local hasGeometryPrices = false
 
 local function Presentation()
     return "FlightMaster", L["Navigation Method Flight Taxi"], L["Navigation Take Transport"]
@@ -86,8 +90,9 @@ local function Dataprovider(path)
             MapPinEnhanced:IsReadablePositiveInteger(path.toTaxiNodeID),
             "Navigation flight taxi source IDs require node endpoints")
         local pair = path.fromTaxiNodeID .. ":" .. path.toTaxiNodeID
-        assert(not sourcePairs[id] or sourcePairs[id] == pair,
-            "Navigation flight taxi source ID has conflicting endpoints: " .. id)
+        if sourcePairs[id] and sourcePairs[id] ~= pair then
+            error("Navigation flight taxi source ID has conflicting endpoints: " .. id)
+        end
         sourcePairs[id] = pair
         ids[#ids + 1] = id
     end
@@ -113,9 +118,12 @@ end
 ---@return NavigationTaxiNodeState[]?
 local function GetTaxiNodes(mapID)
     local cached = taxiNodesByMap[mapID]
-    if cached ~= nil then return cached or nil end
+    if cached ~= nil and not dirtyTaxiMaps[mapID] then return cached or nil end
+    dirtyTaxiMaps[mapID] = nil
     if not C_TaxiMap or not C_TaxiMap.GetTaxiNodesForMap then
+        if cached ~= false then taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1 end
         taxiNodesByMap[mapID] = false
+        taxiNodesByIDByMap[mapID] = nil
         return nil
     end
 
@@ -123,7 +131,9 @@ local function GetTaxiNodes(mapID)
     local nodesByID = {} ---@type table<number, NavigationTaxiNodeState>
     local observedNodes = C_TaxiMap.GetTaxiNodesForMap(mapID)
     if MapPinEnhanced:IsSecretValue(observedNodes) or type(observedNodes) ~= "table" then
+        if cached ~= false then taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1 end
         taxiNodesByMap[mapID] = false
+        taxiNodesByIDByMap[mapID] = nil
         return nil
     end
     local learnedTaxiNodes = not mapReportsDiscovery and GetLearnedTaxiNodes() or nil
@@ -158,6 +168,22 @@ local function GetTaxiNodes(mapID)
             end
         end
     end
+    -- Preserve complete observations, including order for equal-distance fallback,
+    -- missing nodes, unknown discovery, identity, coordinates and display names.
+    local equal = type(cached) == "table" and #cached == #taxiNodes
+    if equal then
+        ---@cast cached NavigationTaxiNodeState[]
+        for index, node in ipairs(taxiNodes) do
+            local previous = cached[index]
+            if previous.nodeID ~= node.nodeID or previous.known ~= node.known or
+                previous.x ~= node.x or previous.y ~= node.y or previous.name ~= node.name then
+                equal = false
+                break
+            end
+        end
+    end
+    if equal then return cached end
+    taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
     taxiNodesByIDByMap[mapID] = nodesByID
     taxiNodesByMap[mapID] = taxiNodes
     return taxiNodes
@@ -225,9 +251,14 @@ end
 function Navigation:IndexTaxiConnections(graph)
     connections = {}
     pointsByNode = {}
+    hasGeometryPrices = false
     for reference = 1, graph.pathCount do
         if graph.pathTypes[reference] == "flighttaxi" then
             local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
+            local duration = graph.pathDurations[reference]
+            if type(duration) ~= "number" or duration <= 0 or duration >= math.huge or duration ~= duration then
+                hasGeometryPrices = true
+            end
             local origin, destination = data.fromTaxiNodeID, data.toTaxiNodeID
             if origin and destination then
                 connections[origin] = connections[origin] or {}
@@ -241,10 +272,18 @@ function Navigation:IndexTaxiConnections(graph)
     end
 end
 
+local pricedGraph ---@type NavigationGraph?
+local authoredPrices = {} ---@type table<integer, NavigationCalculatedPathCost>
+
 ---@param graph NavigationGraph
 ---@param reference integer
 ---@return NavigationCalculatedPathCost
 local function PriceLeg(graph, reference)
+    if pricedGraph ~= graph then
+        pricedGraph = graph
+        authoredPrices = {}
+    end
+    if authoredPrices[reference] then return authoredPrices[reference] end
     local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
     local duration = graph.pathDurations[reference]
     local hasDuration = type(duration) == "number" and duration > 0 and duration < math.huge
@@ -258,7 +297,7 @@ local function PriceLeg(graph, reference)
     -- Pair timings have no variant/context evidence. Through-flight overhead
     -- has not been measured, so even authored leg sums retain uncertainty.
     local uncertainty = math.max(30, seconds * 0.25)
-    return {
+    local cost = {
         expectedSeconds = seconds, uncertaintySeconds = uncertainty,
         comparisonSeconds = seconds + uncertainty,
         explanation = { kind = "flight-taxi", timingScope = not hasDuration and "endpoint-estimate" or
@@ -267,15 +306,58 @@ local function PriceLeg(graph, reference)
             taxiPathIDs = data.taxiPathIDs, fromTaxiNodeID = data.fromTaxiNodeID,
             toTaxiNodeID = data.toTaxiNodeID },
     }
+    -- Missing-duration geometry stays fresh; authored prices depend only on graph.
+    if hasDuration then authoredPrices[reference] = cost end
+    return cost
+end
+
+---@alias NavigationTaxiLegMemo table<number, table<number, NavigationTaxiLeg|string>>
+
+---@param graph NavigationGraph
+---@param prepared NavigationPreparedData
+---@param from number
+---@param to number
+---@param checkpoint fun()
+---@return NavigationTaxiLeg?, string?
+local function PriceDirectedLeg(graph, prepared, from, to, checkpoint)
+    local references = connections[from] and connections[from][to]
+    if not references then return nil, "unmapped taxi leg " .. from .. ":" .. to end
+    local ids = {} ---@type integer[]
+    local usable = {} ---@type integer[]
+    local cost ---@type NavigationCalculatedPathCost?
+    local seen = {} ---@type table<integer, boolean>
+    for _, reference in ipairs(references) do
+        checkpoint()
+        local candidate = prepared.taxiCosts[reference]
+        if candidate and prepared.requirementStateByPath[reference] == "satisfied" then
+            local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
+            if #data.taxiPathIDs > 0 then
+                usable[#usable + 1] = reference
+                for _, id in ipairs(data.taxiPathIDs) do
+                    assert(sourcePairs[id] == from .. ":" .. to,
+                        "Navigation:PriceTaxiJourney source ID does not match its directed leg")
+                    if not seen[id] then ids[#ids + 1] = id end
+                    seen[id] = true
+                end
+                -- Conflicting pair estimates cannot resolve source variants.
+                if not cost or candidate.comparisonSeconds > cost.comparisonSeconds then cost = candidate end
+            end
+        end
+    end
+    if not cost then return nil, "taxi leg has no eligible source connection " .. from .. ":" .. to end
+    table.sort(ids)
+    return { fromTaxiNodeID = from, toTaxiNodeID = to,
+        sourceReferences = usable, taxiPathIDs = ids, cost = cost }
 end
 
 ---@param graph NavigationGraph
 ---@param prepared NavigationPreparedData
 ---@param nodes number[]
 ---@param checkpoint fun()
+---@param legMemo NavigationTaxiLegMemo
 ---@return NavigationTaxiJourney? journey
 ---@return string? failure
-function Navigation:PriceTaxiJourney(graph, prepared, nodes, checkpoint)
+function Navigation:PriceTaxiJourney(graph, prepared, nodes, checkpoint, legMemo)
     local origin, destination = nodes[1], nodes[#nodes]
     local fromPoint, toPoint = pointsByNode[origin], pointsByNode[destination]
     if not fromPoint or not toPoint then return nil, "taxi destination or origin has no graph point" end
@@ -285,34 +367,24 @@ function Navigation:PriceTaxiJourney(graph, prepared, nodes, checkpoint)
     for index = 1, #nodes - 1 do
         checkpoint()
         local from, to = nodes[index], nodes[index + 1]
-        local references = connections[from] and connections[from][to]
-        if not references then return nil, "unmapped taxi leg " .. from .. ":" .. to end
-        local ids = {} ---@type integer[]
-        local usable = {} ---@type integer[]
-        local cost ---@type NavigationCalculatedPathCost?
-        local seen = {} ---@type table<integer, boolean>
-        for _, reference in ipairs(references) do
-            checkpoint()
-            local candidate = prepared.taxiCosts[reference]
-            if candidate and prepared.requirementStateByPath[reference] == "satisfied" then
-                local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
-                if #data.taxiPathIDs > 0 then
-                    usable[#usable + 1] = reference
-                    for _, id in ipairs(data.taxiPathIDs) do
-                        assert(sourcePairs[id] == from .. ":" .. to,
-                            "Navigation:PriceTaxiJourney source ID does not match its directed leg")
-                        if not seen[id] then ids[#ids + 1] = id end
-                        seen[id] = true
-                    end
-                    -- Conflicting pair estimates cannot resolve source variants.
-                    if not cost or candidate.comparisonSeconds > cost.comparisonSeconds then cost = candidate end
-                end
-            end
+        local outgoing = legMemo[from]
+        if not outgoing then
+            outgoing = {}
+            legMemo[from] = outgoing
         end
-        if not cost then return nil, "taxi leg has no eligible source connection " .. from .. ":" .. to end
-        table.sort(ids)
-        legs[#legs + 1] = { fromTaxiNodeID = from, toTaxiNodeID = to,
-            sourceReferences = usable, taxiPathIDs = ids, cost = cost }
+        local leg = outgoing[to]
+        if not leg then
+            local failure
+            leg, failure = PriceDirectedLeg(graph, prepared, from, to, checkpoint)
+            if not leg then
+                outgoing[to] = failure
+                return nil, failure
+            end
+            outgoing[to] = leg
+        end
+        if type(leg) == "string" then return nil, leg end
+        legs[#legs + 1] = leg
+        local cost = leg.cost
         seconds = seconds + cost.expectedSeconds
         uncertainty = uncertainty + cost.uncertaintySeconds
     end
@@ -355,9 +427,8 @@ function Navigation:GetInferredTaxiJourney(graph, reference, cost)
             taxiPathIDs = data.taxiPathIDs, cost = cost } } }
 end
 
--- Shared cost tables are immutable. A knowledge invalidation replaces the next
--- snapshot; fresh single-Path checks never replace this session-owned cache.
-local taxiKnowledgeChangeNumber = 0
+-- Dirty intake cancels unsafe work immediately; unchanged complete observations
+-- retain immutable prices. Fresh single-Path checks never publish this cache.
 local preparedTaxiChangeNumber = -1
 local preparedTaxiGraph ---@type NavigationGraph?
 local preparedTaxiCosts ---@type table<integer, NavigationCalculatedPathCost>?
@@ -367,11 +438,21 @@ local preparedTaxiFailures ---@type table<integer, string>?
 ---@param checkpoint fun()
 ---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
 function Navigation:GetPreparedTaxiCosts(graph, checkpoint)
-    if preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber then
-        local changeNumber = taxiKnowledgeChangeNumber
+    if taxiPricesDirty or preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber then
+        for mapID in pairs(taxiNodesByMap) do
+            GetTaxiNodes(mapID)
+            checkpoint()
+        end
+        if preparedTaxiGraph == graph and preparedTaxiChangeNumber == taxiKnowledgeChangeNumber and
+            not hasGeometryPrices then
+            taxiPricesDirty = false
+            return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
+                assert(preparedTaxiFailures, "Navigation:GetPreparedTaxiCosts: missing failures")
+        end
         local costs, failures = self:PrepareTaxiCosts(graph, nil, checkpoint)
         preparedTaxiGraph = graph
-        preparedTaxiChangeNumber = changeNumber
+        preparedTaxiChangeNumber = taxiKnowledgeChangeNumber
+        taxiPricesDirty = false
         preparedTaxiCosts, preparedTaxiFailures = costs, failures
     end
     return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
@@ -401,12 +482,46 @@ function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
                 failures[reference] = to and to.known == false and
                     "destination taxi node is undiscovered" or "destination taxi knowledge is unknown"
             else
-                costs[reference] = PriceLeg(graph, reference)
-                costs[reference].explanation.observed = false
-                costs[reference].explanation.nodes = { origin, to.nodeID }
-                costs[reference].explanation.destinationName = to.name
+                local base = PriceLeg(graph, reference)
+                local previous = preparedTaxiGraph == graph and preparedTaxiCosts and preparedTaxiCosts[reference]
+                if previous and previous.expectedSeconds == base.expectedSeconds and
+                    previous.uncertaintySeconds == base.uncertaintySeconds and
+                    previous.explanation.nodes[1] == origin and previous.explanation.nodes[2] == to.nodeID and
+                    previous.explanation.destinationName == to.name then
+                    costs[reference] = previous
+                else
+                    -- Never decorate the cached base record or an older Route's cost.
+                    local explanation = {} ---@type table<string, any>
+                    for key, value in pairs(base.explanation) do explanation[key] = value end
+                    explanation.observed = false
+                    explanation.nodes = { origin, to.nodeID }
+                    explanation.destinationName = to.name
+                    costs[reference] = { expectedSeconds = base.expectedSeconds,
+                        uncertaintySeconds = base.uncertaintySeconds, comparisonSeconds = base.comparisonSeconds,
+                        explanation = explanation }
+                end
             end
         end
+    end
+    if not onlyReference and preparedTaxiGraph == graph then
+        ---@generic T
+        ---@param values table<integer, T>
+        ---@param previous table<integer, T>?
+        ---@return table<integer, T>
+        local function ReuseEqual(values, previous)
+            if not previous then return values end
+            for key, value in pairs(values) do
+                if checkpoint then checkpoint() end
+                if previous[key] ~= value then return values end
+            end
+            for key in pairs(previous) do
+                if checkpoint then checkpoint() end
+                if values[key] == nil then return values end
+            end
+            return previous
+        end
+        costs = ReuseEqual(costs, preparedTaxiCosts)
+        failures = ReuseEqual(failures, preparedTaxiFailures)
     end
     return costs, failures
 end
@@ -438,20 +553,23 @@ function Navigation:RecordLearnedTaxiNodes(nodeIDs)
     local learnedTaxiNodes = GetLearnedTaxiNodes() or {}
     -- Persist positive character knowledge only. Missing/unreachable nodes at
     -- another master must not erase it; reachability and itineraries stay live.
+    local changed = false
     for _, nodeID in ipairs(nodeIDs) do
-        if MapPinEnhanced:IsReadablePositiveInteger(nodeID) then
+        if MapPinEnhanced:IsReadablePositiveInteger(nodeID) and learnedTaxiNodes[nodeID] ~= true then
+            changed = true
             learnedTaxiNodes[nodeID] = true
         end
     end
+    if not changed then return end
+    taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
     saved[characterKey] = learnedTaxiNodes
     MapPinEnhanced:SetVar("learnedTaxiNodes", saved)
     self:ClearTaxiNodeKnowledge()
 end
 
 function Navigation:ClearTaxiNodeKnowledge()
-    taxiNodesByMap = {}
-    taxiNodesByIDByMap = {}
-    taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
+    for mapID in pairs(taxiNodesByMap) do dirtyTaxiMaps[mapID] = true end
+    taxiPricesDirty = true
     self:InvalidatePreparedData()
 end
 

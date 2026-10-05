@@ -890,10 +890,11 @@ local function PrepareTaxiCandidates(job, source)
         job.checkpoint()
     end
     table.sort(destinations)
+    local legs = {} ---@type NavigationTaxiLegMemo
     for index, destination in ipairs(destinations) do
         job.checkpoint()
         local journey, failure = Navigation:PriceTaxiJourney(source, job.preparedData,
-            observation.itineraries[destination], job.checkpoint)
+            observation.itineraries[destination], job.checkpoint, legs)
         local reference = -index
         local avoided = false
         if journey then
