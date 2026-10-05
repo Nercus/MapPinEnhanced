@@ -785,7 +785,7 @@ function Navigation:PublishStep(progression)
             changeNumber = presentationChangeNumber,
             arrivalIdentity = arrivalIdentity,
             showDirection = true,
-            showInstruction = not isFlying,
+            showInstruction = GetRouteStepCount(progression.route) > 1,
             phase = "approach",
             isFinalDestination = true,
             stepIndex = progression.pathIndex,
