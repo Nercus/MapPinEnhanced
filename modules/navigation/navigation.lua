@@ -341,10 +341,8 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
         if not previous or currentRouteUnusable then
             self.progression = nil
             local direct = self:CanGuideDirectly()
-            local continuing = self.backgroundSearchEnabled and failure == "initial budget"
             self:ApplyDirectDestination(direct, direct and L["Navigation Direct Guidance"] or
-                continuing and L["Navigation Calculating"] or L["Navigation No Direction"],
-                direct and "direct" or continuing and "calculating" or "no-direction")
+                L["Navigation No Direction"], direct and "direct" or "no-direction")
         end
         return
     end

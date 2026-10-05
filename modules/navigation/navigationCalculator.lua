@@ -322,7 +322,6 @@ local FLIGHT_PRUNABLE_TYPES = {
 ---@field handlingLimit boolean?
 ---@field frameMilliseconds number?
 ---@field budgetFrame number?
----@field activeMilliseconds number
 ---@field onLimit fun()?
 ---@field wait fun()
 ---@field checkpoint fun()
@@ -1132,7 +1131,6 @@ function Navigation:CreateNavigationCheckpoint(job, preparation)
                 owner.budgetFrame, owner.frameMilliseconds = frame, 0
             end
             owner.frameMilliseconds = (owner.frameMilliseconds or 0) + now - last
-            owner.activeMilliseconds = owner.activeMilliseconds + now - last
         end
         last = now
         return owner, now
@@ -1148,13 +1146,14 @@ function Navigation:CreateNavigationCheckpoint(job, preparation)
     ---@async
     local function Checkpoint()
         local owner, now = Charge()
-        if owner and not owner.cancelled and not owner.handlingLimit then
-            local elapsed = GetTimePreciseSec() - owner.startedAt
-            local limit = not owner.background and (elapsed >= 0.1 or owner.activeMilliseconds >= 8)
-            if not preparation and (limit or elapsed >= 30) and owner.onLimit then
+        -- Initial routing finishes across small slices. Only optional
+        -- improvement has a total lifetime.
+        if owner and owner.background and not owner.cancelled and not owner.handlingLimit and
+            GetTimePreciseSec() - owner.startedAt >= 30 then
+            if not preparation and owner.onLimit then
                 owner.onLimit()
                 if owner.cancelled then coroutine.yield() end
-            elseif preparation and (limit or elapsed >= 30) then
+            elseif preparation then
                 Wait()
                 return
             end
@@ -1316,7 +1315,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         entrancesByMapX = {},
         startedAt = startedAt,
         background = background,
-        activeMilliseconds = 0,
         calculationSlices = 0,
         movementCandidates = 0,
         onFinish = onFinish,
@@ -1331,8 +1329,7 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
             ---@async
             job.onLimit = function()
                 job.handlingLimit = true
-                local expired = GetTimePreciseSec() - job.startedAt >= 30
-                local reason = expired and "background lifetime" or "initial budget"
+                local reason = "background lifetime"
                 self.lastCalculationTermination = reason
                 local candidate = job.bestComplete and BuildRoute(job, job.bestComplete) or
                     self:CreateDirectRoute(destinationID, destinationChangeNumber, destinationData)
@@ -1342,22 +1339,16 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
                 end
                 job.onFinish(candidate, reason, job.checkpoint)
                 if job.cancelled then coroutine.yield() end
-                if expired or not self.backgroundSearchEnabled then
-                    self:CancelPreparedData()
-                    self:CancelRouteCalculation(job)
-                    -- A retained transport Route still consumes authoritative
-                    -- observations. Finish that refresh without another search.
-                    if self.progression and #self.progression.route.pathReferences > 0 and
-                        not self:ArePreparedInputsFresh() then
-                        self:EnsurePreparedData()
-                    end
-                    self:TryAutomaticTaxiSelection()
-                    coroutine.yield()
+                self:CancelPreparedData()
+                self:CancelRouteCalculation(job)
+                -- A retained transport Route still consumes authoritative
+                -- observations. Finish that refresh without another search.
+                if self.progression and #self.progression.route.pathReferences > 0 and
+                    not self:ArePreparedInputsFresh() then
+                    self:EnsurePreparedData()
                 end
-                job.background = true
-                job.handlingLimit = nil
                 self:TryAutomaticTaxiSelection()
-                if job.cancelled then coroutine.yield() end
+                coroutine.yield()
             end
             if not graph then
                 job.onFinish(nil, "navigation data is not ready", job.checkpoint)

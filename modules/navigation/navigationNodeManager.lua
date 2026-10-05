@@ -998,7 +998,6 @@ function Navigation:EnsurePreparedData()
             -- refresh too, without attributing it to a replacement job it starts.
             if owner and self.activeCalculation == owner then
                 local elapsed = debugprofilestop() - started
-                owner.activeMilliseconds = owner.activeMilliseconds + elapsed
                 owner.frameMilliseconds = (owner.frameMilliseconds or 0) + elapsed
             end
         end, 1, function(message)
