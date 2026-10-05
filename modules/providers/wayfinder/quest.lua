@@ -5,7 +5,11 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
-local OBJECTIVE_EXIT_GRACE_SECONDS = 3
+---@type NavigationObjectiveAreaPolicy
+local OBJECTIVE_AREA_POLICY = {
+    exitGraceSeconds = 3,
+    directionDistance = 40,
+}
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
@@ -94,7 +98,7 @@ local function ApplyQuestState(questID, atlas, active)
         Providers:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
     end
     Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active == true,
-        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil)
+        active ~= nil and OBJECTIVE_AREA_POLICY or nil)
 end
 
 ---@param eventQuestID number?

@@ -7,6 +7,10 @@ local L = MapPinEnhanced.L
 
 ---@alias NavigationDestinationRemoval fun(owner: string, destinationID: string, changeNumber: integer)
 
+---@class NavigationObjectiveAreaPolicy
+---@field exitGraceSeconds number
+---@field directionDistance number
+
 ---@class NavigationDestination
 ---@field owner string
 ---@field destinationID string
@@ -15,6 +19,7 @@ local L = MapPinEnhanced.L
 ---@field routingData WayfinderData
 ---@field removeDestination NavigationDestinationRemoval?
 ---@field insideObjectiveArea boolean?
+---@field showObjectiveArea boolean?
 ---@field objectiveAreaExitTimer FunctionContainer?
 
 ---@class NavigationProgression
@@ -508,19 +513,50 @@ function Navigation:IsDestinationActive(owner, destinationID, changeNumber)
     return true
 end
 
+---@param destination NavigationDestination
+---@param policy NavigationObjectiveAreaPolicy?
+local function ApplyObjectiveAreaPresentation(destination, policy)
+    local showArea = destination.insideObjectiveArea == true
+    if showArea and policy then
+        -- Choose once on entry from the original waypoint, never a temporary
+        -- Step or Blizzard's distance to a blob edge. Unknown distance keeps guidance.
+        local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+        local distance ---@type number?
+        if MapPinEnhanced:IsReadableNumber(mapID) and MapPinEnhanced:IsCoordinate(x) and
+            MapPinEnhanced:IsCoordinate(y) then
+            local data = destination.data
+            distance = Navigation:GetComparableDistance(mapID, x, y, data.mapID, data.x, data.y)
+        end
+        if MapPinEnhanced:IsReadableNumber(distance) then
+            showArea = distance > policy.directionDistance
+        else
+            showArea = false
+        end
+    end
+    if (destination.showObjectiveArea == true) == showArea then return end
+    destination.showObjectiveArea = showArea
+    for _, step in pairs(Navigation.routeSteps) do
+        if step.info then
+            step.info.insideObjectiveArea = step.info.isFinalDestination == true and showArea
+        end
+    end
+    -- Presentation changes preserve jobs, route layers, Step identity and arrival.
+    Wayfinders:UpdateDestinationAreaState(showArea)
+end
+
 ---@param owner string
 ---@param destinationID string
 ---@param changeNumber integer
 ---@param inside boolean
----@param exitGraceSeconds number? provider-owned grace for a readable area exit
-function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds)
+---@param policy NavigationObjectiveAreaPolicy? provider-owned proximity and exit grace
+function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, policy)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     local destination = self.activeDestination
     if not destination then return end
-    if not inside and exitGraceSeconds and destination.insideObjectiveArea then
+    if not inside and policy and destination.insideObjectiveArea then
         -- Repeated outside samples share one deadline; re-entry cancels it below.
         if not destination.objectiveAreaExitTimer then
-            destination.objectiveAreaExitTimer = C_Timer.NewTimer(exitGraceSeconds, function()
+            destination.objectiveAreaExitTimer = C_Timer.NewTimer(policy.exitGraceSeconds, function()
                 destination.objectiveAreaExitTimer = nil
                 self:UpdateDestinationAreaState(owner, destinationID, changeNumber, false)
             end)
@@ -531,16 +567,11 @@ function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumbe
         destination.objectiveAreaExitTimer:Cancel()
         destination.objectiveAreaExitTimer = nil
     end
+    -- Brief re-entry during the exit grace is still the same visit. Repeated
+    -- quest updates retain its presentation without another distance lookup.
     if (destination.insideObjectiveArea == true) == inside then return end
     destination.insideObjectiveArea = inside
-    for _, step in pairs(self.routeSteps) do
-        if step.info then
-            step.info.insideObjectiveArea = step.info.isFinalDestination == true and inside
-        end
-    end
-    -- Membership only changes presentation. Preserve jobs, route layers, Step
-    -- identity and any arrival callback already consumed by distance sampling.
-    Wayfinders:UpdateDestinationAreaState(inside)
+    ApplyObjectiveAreaPresentation(destination, policy)
 end
 
 ---@return string? owner
@@ -1270,7 +1301,7 @@ end
 function Navigation:ApplyStepPresentation(target, onArrival, info)
     local destination = self.activeDestination
     info.insideObjectiveArea = info.isFinalDestination == true and
-        destination ~= nil and destination.insideObjectiveArea == true
+        destination ~= nil and destination.showObjectiveArea == true
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()
