@@ -67,7 +67,15 @@ function MapPinEnhanced:DebounceChange(func, delay, onChange)
     return Schedule, Cancel, Flush
 end
 
----Batch the execution of a list of functions with a delay between each execution
+-- Each worker owns its frame independently; this pool is not a shared work queue.
+-- Parentless frames keep persistence/restoration running when UIParent is hidden.
+---@type FramePool<Frame>
+local batchFrames = CreateFramePool("Frame", nil, nil, function(_, frame)
+    frame:SetScript("OnUpdate", nil)
+    frame:Hide()
+end)
+
+---Resume each batch worker at most once per rendered frame.
 ---@param funcList (fun(): boolean?)[] functions may return false to stop the batch early
 ---@param onUpdate fun(progress: integer, maxProgress: integer)?
 ---@param onFinish fun(status: "complete"|"stopped")?
@@ -83,22 +91,18 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
         batchSize = 1
     end
 
-    local frameRate = GetFramerate()
-    if frameRate == 0 then frameRate = 1 end
-    local delay = 1 / frameRate
-
     local finished = false
-    ---@type FunctionContainer?
-    local ticker
+    ---@type Frame?
+    local workerFrame
     ---@type thread?
     local workerThread
 
-    -- Clear captures as well as the timer: callers may retain the cancel function.
+    -- Clear captures as well as the frame script: callers may retain cancellation.
     local function Cancel()
         if finished then return end
         finished = true
-        if ticker then ticker:Cancel() end
-        ticker, workerThread = nil, nil
+        if workerFrame then batchFrames:Release(workerFrame) end
+        workerFrame, workerThread = nil, nil
         funcList = {}
         onUpdate, onFinish, onError = nil, nil, nil
     end
@@ -124,7 +128,10 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
     end
 
     workerThread = coroutine.create(Worker)
-    ticker = C_Timer.NewTicker(delay, function()
+    workerFrame = batchFrames:Acquire()
+    -- OnUpdate follows rendered frames directly, with no frozen startup FPS or
+    -- timer catch-up. Start asynchronously so callers can retain cancellation first.
+    workerFrame:SetScript("OnUpdate", function()
         if finished then return end
         local success, message = coroutine.resume(workerThread)
         if finished then return end
@@ -138,6 +145,7 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
             if complete then complete(message) end
         end
     end)
+    workerFrame:Show()
     return Cancel
 end
 
