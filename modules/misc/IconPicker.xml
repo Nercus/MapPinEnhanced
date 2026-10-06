@@ -72,16 +72,16 @@
                     <Anchor point="BOTTOMLEFT" relativeKey="$parent.scrollBox" relativePoint="BOTTOMRIGHT" x="8" y="2" />
                 </Anchors>
             </EventFrame>
-            <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonTemplate" text="Confirm">
+            <Button parentKey="cancelButton" inherits="MapPinEnhancedButtonTemplate" text="Cancel">
                 <Size x="104" y="30" />
                 <Anchors>
                     <Anchor point="BOTTOMRIGHT" x="-24" y="15" />
                 </Anchors>
             </Button>
-            <Button parentKey="cancelButton" inherits="MapPinEnhancedButtonTemplate" text="Cancel">
+            <Button parentKey="confirmButton" inherits="MapPinEnhancedButtonTemplate" text="Confirm">
                 <Size x="104" y="30" />
                 <Anchors>
-                    <Anchor point="RIGHT" relativeKey="$parent.confirmButton" relativePoint="LEFT" x="-8" />
+                    <Anchor point="RIGHT" relativeKey="$parent.cancelButton" relativePoint="LEFT" x="-8" />
                 </Anchors>
             </Button>
         </Frames>
