@@ -80,7 +80,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetColor(color)
 
 
     local lightR, lightG, lightB = math.min(r * 1.5, 1), math.min(g * 1.5, 1), math.min(b * 1.5, 1)
-    self.readout.text:SetTextColor(lightR, lightG, lightB)
+    if self.textShowsTitle then self.readout.text:SetTextColor(lightR, lightG, lightB) end
     for _, chevron in ipairs(self.chevronTextures) do
         chevron:SetVertexColor(lightR, lightG, lightB)
     end
@@ -115,10 +115,22 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetShowBeam(showBeam)
     self:UpdateBeam()
 end
 
--- Both phases use the same readout; the container owns their sequential fade.
+---@param showTitle boolean
+function MapPinEnhancedWayfinderFloatingContentMixin:ApplyReadoutStyle(showTitle)
+    local font, size, flags = GameFontNormalSmall:GetFont()
+    self.readout.text:SetFont(font, showTitle and size or 8, flags)
+    if showTitle then
+        self.readout.text:SetTextColor(self.title.title:GetTextColor())
+    else
+        self.readout.text:SetTextColor(1, 1, 1)
+    end
+end
+
+-- Apply the phase's style before measuring its text; the container owns the fade.
 ---@param showTitle boolean
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyFarText(showTitle)
     self.textShowsTitle = showTitle
+    self:ApplyReadoutStyle(showTitle)
     self.readout:SetStatusText(showTitle and self.title.fullTitle or nil)
     self.readout:StopVisibilityFade()
     self.readout:SetAlpha(1)
@@ -133,6 +145,8 @@ function MapPinEnhancedWayfinderFloatingContentMixin:StopTextTransition()
     self.textHovered = nil
     if self.textElapsed then self.textElapsed = 0 end
     self.visual.hover:Hide()
+    self.textShowsTitle = nil
+    self:ApplyReadoutStyle(false)
     if self.readout.statusText then self.readout:SetStatusText(nil) end
 end
 
@@ -165,12 +179,16 @@ end
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingContentMixin:UpdateFarText(elapsed)
     if self.currentPresentation ~= "far" or self.pendingPresentation or not self:IsVisible() or
-        self.visibilityHiding then return end
+        self.visibilityHiding then
+        return
+    end
 
     local text = self.visual.text
     if text.fadeOut:IsPlaying() or text.fadeIn:IsPlaying() or
         self.visual.fadeOut:IsPlaying() or self.visual.fadeIn:IsPlaying() or
-        self.visibilityFadeIn:IsPlaying() then return end
+        self.visibilityFadeIn:IsPlaying() then
+        return
+    end
     local showTitle = self.textElapsed ~= nil or self.textHovered == true
     if showTitle ~= self.textShowsTitle then
         text.fadeOut:Play()
