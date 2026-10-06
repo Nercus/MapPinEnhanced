@@ -121,10 +121,17 @@ local function CopyRoutingData(data)
     local mapInfo = C_Map.GetMapInfo(copy.mapID)
     local playerMapInfo = playerMapID and C_Map.GetMapInfo(playerMapID)
     -- Cities can be siblings of their surrounding zone (Ironforge/Dun Morogh).
-    -- Shared zone parents qualify only when the target also fits the player's map.
+    -- Require the whole player map inside the source zone: overlapping zone
+    -- rectangles alone cannot establish a walkable route across their border.
     local siblingZone = mapInfo and playerMapInfo and mapInfo.mapType == Enum.UIMapType.Zone and
         playerMapInfo.mapType == Enum.UIMapType.Zone and mapInfo.parentMapID > 0 and
         mapInfo.parentMapID == playerMapInfo.parentMapID
+    if siblingZone then
+        local minX, minY = hbd:TranslateZoneCoordinates(0, 0, playerMapID, copy.mapID)
+        local maxX, maxY = hbd:TranslateZoneCoordinates(1, 1, playerMapID, copy.mapID)
+        siblingZone = MapPinEnhanced:IsCoordinate(minX) and MapPinEnhanced:IsCoordinate(minY) and
+            MapPinEnhanced:IsCoordinate(maxX) and MapPinEnhanced:IsCoordinate(maxY)
+    end
     if playerMapID and (siblingZone or HasParentMap(playerMapID, copy.mapID) or
             HasParentMap(copy.mapID, playerMapID)) then
         local x, y = hbd:TranslateZoneCoordinates(copy.x, copy.y, copy.mapID, playerMapID)
