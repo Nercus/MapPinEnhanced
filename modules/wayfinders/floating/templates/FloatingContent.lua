@@ -8,11 +8,17 @@
 ---@field middle MapPinEnhancedWayfinderFloatingChevron
 ---@field bottom MapPinEnhancedWayfinderFloatingChevron
 
+---@class MapPinEnhancedWayfinderFloatingText : Frame
+---@field title MapPinEnhancedWayfinderFloatingTitleTemplate
+---@field readout MapPinEnhancedWayfinderReadoutTemplate
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
 ---@class MapPinEnhancedWayfinderFloatingContentVisual : Frame
 ---@field pin MapPinEnhancedBasePinTemplate
 ---@field beam MapPinEnhancedWayfinderFloatingBeamTemplate
----@field title MapPinEnhancedWayfinderFloatingTitleTemplate
----@field readout MapPinEnhancedWayfinderReadoutTemplate
+---@field text MapPinEnhancedWayfinderFloatingText
+---@field hover Frame
 ---@field closePinAnchor Frame
 ---@field fallbackTitleAnchor Frame
 ---@field chevrons MapPinEnhancedWayfinderFloatingChevrons
@@ -30,14 +36,17 @@
 ---@field pendingPresentation FloatingPresentation?
 ---@field showBeam boolean?
 ---@field chevronTextures MapPinEnhancedWayfinderFloatingChevron[]
+---@field textShowsTitle boolean?
+---@field textHovered boolean?
+---@field textElapsed number? nil once the intro ends
 MapPinEnhancedWayfinderFloatingContentMixin = {}
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     self.pin = self.visual.pin
     self.beam = self.visual.beam
-    self.title = self.visual.title
-    self.readout = self.visual.readout
+    self.title = self.visual.text.title
+    self.readout = self.visual.text.readout
     self.chevronTextures = { self.visual.chevrons.top, self.visual.chevrons.middle, self.visual.chevrons.bottom }
     local frameLevel = self:GetFrameLevel()
     self.visual:SetFrameLevel(frameLevel)
@@ -46,9 +55,16 @@ function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
     self.pin:SetFrameLevel(frameLevel + 2)
     self.title:SetFrameLevel(frameLevel + 3)
     self.readout:SetFrameLevel(frameLevel + 3)
+    self.visual.hover:SetFrameLevel(frameLevel + 4)
+    self.visual.hover:SetMouseClickEnabled(false)
     for _, group in ipairs({ self.visual.fadeIn, self.visual.fadeOut }) do
         for _, animation in ipairs({ group:GetAnimations() }) do
             animation:SetDuration(0.25)
+        end
+    end
+    for _, group in ipairs({ self.visual.text.fadeIn, self.visual.text.fadeOut }) do
+        for _, animation in ipairs({ group:GetAnimations() }) do
+            animation:SetDuration(0.2)
         end
     end
     self:Reset()
@@ -86,6 +102,7 @@ end
 ---@param title string?
 function MapPinEnhancedWayfinderFloatingContentMixin:SetTitle(title)
     self.title:SetTitle(title)
+    if self.currentPresentation == "far" and self.textShowsTitle then self.readout:SetStatusText(title) end
 end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:UpdateBeam()
@@ -98,6 +115,74 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetShowBeam(showBeam)
     self:UpdateBeam()
 end
 
+-- Both phases use the same readout; the container owns their sequential fade.
+---@param showTitle boolean
+function MapPinEnhancedWayfinderFloatingContentMixin:ApplyFarText(showTitle)
+    self.textShowsTitle = showTitle
+    self.readout:SetStatusText(showTitle and self.title.fullTitle or nil)
+    self.readout:StopVisibilityFade()
+    self.readout:SetAlpha(1)
+    local text = self.readout.statusText or self.readout.distanceText
+    if not text or text == "" then self.readout:HideImmediately() end
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:StopTextTransition()
+    self.visual.text.fadeOut:Stop()
+    self.visual.text.fadeIn:Stop()
+    self.visual.text:SetAlpha(1)
+    self.textHovered = nil
+    if self.textElapsed then self.textElapsed = 0 end
+    self.visual.hover:Hide()
+    if self.readout.statusText then self.readout:SetStatusText(nil) end
+end
+
+-- Only the tracking owner starts an intro. Temporary hiding preserves its state.
+function MapPinEnhancedWayfinderFloatingContentMixin:BeginTextIntro()
+    self:StopTextTransition()
+    self.textElapsed = 0
+    if self.currentPresentation == "far" then
+        self:ApplyFarText(true)
+        self.visual.hover:Show()
+    end
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:OnTextEnter()
+    if self.currentPresentation ~= "far" or self.pendingPresentation or self.visibilityHiding then return end
+    self.textElapsed = nil
+    self.textHovered = true
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:OnTextLeave()
+    self.textHovered = nil
+end
+
+function MapPinEnhancedWayfinderFloatingContentMixin:FinishTextTransition()
+    if self.currentPresentation ~= "far" or not self:IsVisible() then return end
+    self:ApplyFarText(self.textElapsed ~= nil or self.textHovered == true)
+    self.visual.text.fadeIn:Play()
+end
+
+---@param elapsed number
+function MapPinEnhancedWayfinderFloatingContentMixin:UpdateFarText(elapsed)
+    if self.currentPresentation ~= "far" or self.pendingPresentation or not self:IsVisible() or
+        self.visibilityHiding then return end
+
+    local text = self.visual.text
+    if text.fadeOut:IsPlaying() or text.fadeIn:IsPlaying() or
+        self.visual.fadeOut:IsPlaying() or self.visual.fadeIn:IsPlaying() or
+        self.visibilityFadeIn:IsPlaying() then return end
+    local showTitle = self.textElapsed ~= nil or self.textHovered == true
+    if showTitle ~= self.textShowsTitle then
+        text.fadeOut:Play()
+        return
+    end
+    if not self.textElapsed or self.readout.visibilityFadeIn:IsPlaying() then return end
+    self.textElapsed = self.textElapsed + elapsed
+    if self.textElapsed < 7 then return end
+    self.textElapsed = nil
+    text.fadeOut:Play()
+end
+
 ---@param presentation FloatingPresentation
 function MapPinEnhancedWayfinderFloatingContentMixin:SetPresentation(presentation)
     local distancePresentation = presentation == "close" or presentation == "far"
@@ -107,6 +192,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetPresentation(presentatio
     end
     self.pendingPresentation = nil
     if self.currentPresentation == presentation then return end
+    self:StopTextTransition()
     if (self.currentPresentation == "close" or self.currentPresentation == "far") and
         distancePresentation and self:IsVisible() then
         self.pendingPresentation = presentation
@@ -133,6 +219,7 @@ end
 
 ---@param presentation FloatingPresentation
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentation)
+    self:StopTextTransition()
     self.currentPresentation = presentation
     local clamped = presentation == "clamped"
     local close = presentation == "close"
@@ -160,6 +247,11 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     end
     self.needle:SetFallback(fallback, fallbackClose)
     self.needle:SetActive((clamped or fallback) and self:IsVisible())
+    if presentation == "far" then
+        self.title:HideImmediately()
+        self:ApplyFarText(self.textElapsed ~= nil)
+        self.visual.hover:Show()
+    end
     self:UpdateBeam()
 end
 
@@ -169,6 +261,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingContentMixin:OnHide()
     -- Direction can hide independently of the target frame during an action Step.
+    self:StopTextTransition()
     self:StopPresentationAnimation()
     self:SetChevronsActive(false)
     self.currentPresentation = self.pendingPresentation or self.currentPresentation
@@ -195,4 +288,5 @@ end
 ---@param description string?
 function MapPinEnhancedWayfinderFloatingContentMixin:SetDestinationText(title, description)
     self.title:SetDestinationText(title, description)
+    if self.currentPresentation == "far" and self.textShowsTitle then self.readout:SetStatusText(title) end
 end

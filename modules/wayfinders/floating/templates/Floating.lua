@@ -288,6 +288,9 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:UpdateNeedlePosition(elapsed)
         self:AnimateNeedleRotation(elapsed)
     end
+    if not self.visibilityFadeIn:IsPlaying() and not self.visibilityHiding then
+        self.content:UpdateFarText(elapsed)
+    end
 end
 
 ---@param shown boolean
@@ -362,6 +365,7 @@ end
 -- remains for the fade. A later OnHide must not undo a new wayfinder's takeover.
 function MapPinEnhancedWayfinderFloatingMixin:StopTracking()
     self:SetScript("OnUpdate", nil)
+    self.content:StopTextTransition()
     self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
     self:UnregisterEvent("NAVIGATION_FRAME_DESTROYED")
     self:UnregisterEvent("SUPER_TRACKING_CHANGED")

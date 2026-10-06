@@ -15,6 +15,7 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeBeamOption fun()?
 ---@field step WayfinderStepData?
+---@field textIntroIdentity string?
 local MapPinEnhancedWayfinderFloating = {}
 
 function MapPinEnhancedWayfinderFloating:Setup()
@@ -90,6 +91,11 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     -- Reset has released tracking; retain the last artwork until its fade ends.
     if not self.data then return end
     local frame = self:GetFrame()
+    -- Retain this identity across display disable/reacquisition so the intro stays one-time.
+    if step and self.textIntroIdentity ~= step.arrivalIdentity then
+        self.textIntroIdentity = step.arrivalIdentity
+        frame.content:BeginTextIntro()
+    end
     self:RefreshTitle()
     local showDirection = step == nil or step.showDirection and
         (not inside or step.showDirectionInObjectiveArea == true)
@@ -124,9 +130,15 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     end
 
     if not wayfinderData.mapDistanceOnly then Providers:ClearStepSuperTracking() end
+    local previous = self.data
     self.data = wayfinderData
     local frame = self:GetFrame()
-    frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    -- Wording/icon refreshes keep the far text phase and existing distance samples.
+    if not previous or previous.mapID ~= wayfinderData.mapID or previous.x ~= wayfinderData.x or
+        previous.y ~= wayfinderData.y or previous.lock ~= wayfinderData.lock or
+        previous.mapDistanceOnly ~= wayfinderData.mapDistanceOnly then
+        frame:SetLocation(wayfinderData.mapID, wayfinderData.x, wayfinderData.y)
+    end
     ---@type boolean?
     local hasIcon = false
     if wayfinderData.texture then
