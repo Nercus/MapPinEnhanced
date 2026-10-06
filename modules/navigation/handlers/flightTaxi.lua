@@ -70,8 +70,14 @@ local sourcePairs = {} ---@type table<integer, string>
 local pointsByNode = {} ---@type table<number, integer>
 local hasGeometryPrices = false
 
-local function Presentation()
-    return "FlightMaster", L["Navigation Method Flight Taxi"], L["Navigation Take Transport"]
+---@param context NavigationPathPresentationContext?
+---@return string icon, string method, string instruction
+local function Presentation(context)
+    local key = context and context.phase == "in-transit" and "Navigation Traveling By Flight" or
+        "Navigation Take Flight"
+    local destination = context and context.destinationName
+    local instruction = destination and string.format(L[key .. " To"], destination) or L[key]
+    return "FlightMaster", L["Navigation Method Flight Taxi"], instruction
 end
 
 ---@param path NavigationStaticPath

@@ -3,26 +3,37 @@ local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 
-local function PortalPresentation(destinationMapID)
-    local instruction = L["Navigation Use Portal"]
-    local mapInfo = destinationMapID and C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(destinationMapID)
-    if mapInfo and type(mapInfo.name) == "string" and mapInfo.name ~= "" then
-        instruction = string.format(L["Navigation Use Portal To"], mapInfo.name)
+---@param context NavigationPathPresentationContext?
+---@return string icon, string method, string instruction
+local function PortalPresentation(context)
+    local instruction = L["Navigation Take Portal"]
+    if context and context.destinationName then
+        instruction = context.originName and
+            string.format(L["Navigation Take Portal From To"], context.originName, context.destinationName) or
+            string.format(L["Navigation Take Portal To"], context.destinationName)
     end
     return "MagePortalAlliance", L["Navigation Method Portal"], instruction
 end
 
-local function LocalPortalPresentation(destinationMapID)
-    local _, method, instruction = PortalPresentation(destinationMapID)
+local function LocalPortalPresentation(context)
+    local _, method, instruction = PortalPresentation(context)
     return "PortalBlue", method, instruction
 end
 
-local function BorderPresentation()
-    return "poi-traveldirections-arrow2", L["Navigation Method Border"], L["Navigation Cross Border"]
+---@param context NavigationPathPresentationContext?
+---@return string icon, string method, string instruction
+local function BorderPresentation(context)
+    local destination = context and context.destinationName
+    return "poi-traveldirections-arrow2", L["Navigation Method Border"],
+        destination and string.format(L["Navigation Cross Border To"], destination) or L["Navigation Cross Border"]
 end
 
-local function FloorPresentation()
-    return "poi-door", L["Navigation Method Floor Change"], L["Navigation Change Floor"]
+---@param context NavigationPathPresentationContext?
+---@return string icon, string method, string instruction
+local function FloorPresentation(context)
+    local destination = context and context.destinationName
+    return "poi-door", L["Navigation Method Floor Change"],
+        destination and string.format(L["Navigation Change Floor To"], destination) or L["Navigation Change Floor"]
 end
 
 -- Most generated portals omit a duration. Price the loading transition here

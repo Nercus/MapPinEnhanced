@@ -121,6 +121,36 @@ local function ActionDeactivator()
     activeReport = nil
 end
 
+---@param action WayfinderDesiredAction
+---@return string?
+local function GetActionName(action)
+    if action.type == "spell" then
+        local info = C_Spell and C_Spell.GetSpellInfo and C_Spell.GetSpellInfo(action.id)
+        if MapPinEnhanced:IsReadableTable(info) then return MapPinEnhanced:NormalizeText(info.name) end
+    elseif C_Item and C_Item.GetItemInfo then
+        -- GetItemInfo requests uncached names. The data event republishes only
+        -- the current Route, so a late reply cannot revive an old Step.
+        local name = C_Item.GetItemInfo(action.id)
+        return MapPinEnhanced:NormalizeText(name)
+    end
+end
+
+MapPinEnhanced:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(itemID, success)
+    if MapPinEnhanced:IsSecretValue(success) or success ~= true or
+        not MapPinEnhanced:IsReadablePositiveInteger(itemID) then return end
+    local progression = Navigation.progression
+    if not progression then return end
+    local graph = progression.route.graph
+    for index = progression.pathIndex, #progression.route.pathReferences do
+        local reference = progression.route.pathReferences[index]
+        local action = Navigation:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference])
+        if action and action.type ~= "spell" and action.id == itemID then
+            Navigation:PublishStep(progression)
+            return
+        end
+    end
+end)
+
 ---@param result "attempted"|"failed"
 ---@param unit string
 ---@param _ string
@@ -149,10 +179,32 @@ MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_FAILED", OnSpellcastFailed)
 ---@param pathType string
 ---@param icon string
 ---@param method string
----@param instruction string
-local function RegisterAction(pathType, icon, method, instruction)
-    local function Presentation()
-        return icon, method, instruction
+---@param instructionKey string
+local function RegisterAction(pathType, icon, method, instructionKey)
+    ---@param context NavigationPathPresentationContext?
+    ---@return string icon, string method, string instruction
+    local function Presentation(context)
+        local action = context and Navigation:GetPathAction(pathType, context.requirement)
+        local name = action and GetActionName(action)
+        local destination = context and context.destinationName
+        if not name then
+            local fallback = destination and string.format(L[instructionKey .. " To"], destination) or L[instructionKey]
+            return icon, method, fallback
+        end
+        local isSpell = action.type == "spell"
+        local key = isSpell and "Navigation Cast Named Spell" or "Navigation Use Named Item"
+        -- Teleport: Stormwind already identifies Stormwind City. Match the
+        -- named suffix too, without treating localized place names as patterns.
+        local namedDestination = name:match(":%s*(.+)$")
+        local namesDestination = destination and (name:find(destination, 1, true) or
+            namedDestination and destination:find(namedDestination, 1, true))
+        if destination and not namesDestination then
+            key = pathType == "hearthstone" and
+                (isSpell and "Navigation Cast Named Spell Return" or "Navigation Use Named Item Return") or
+                (isSpell and "Navigation Cast Named Spell To" or "Navigation Use Named Item To")
+            return icon, method, string.format(L[key], name, destination)
+        end
+        return icon, method, string.format(L[key], name)
     end
 
     ---@param graph NavigationGraph
@@ -203,12 +255,12 @@ local function RegisterAction(pathType, icon, method, instruction)
     Navigation:RegisterPathHandler(pathType, Presentation, nil, CostCalculator, ActionActivator, ActionDeactivator)
 end
 
-RegisterAction("spell", "MagePortalAlliance", L["Navigation Method Spell"], L["Navigation Use Spell"])
-RegisterAction("dungeonteleport", "PortalRed", L["Navigation Method Teleport"], L["Navigation Use Teleport"])
-RegisterAction("item", "Object", L["Navigation Method Item"], L["Navigation Use Item"])
-RegisterAction("toy", "Gear", L["Navigation Method Toy"], L["Navigation Use Toy"])
-RegisterAction("hearthstone", "Innkeeper", L["Navigation Method Hearthstone"], L["Navigation Use Hearthstone"])
-RegisterAction("unboundteleport", "PortalRed", L["Navigation Method Teleport"], L["Navigation Use Teleport"])
+RegisterAction("spell", "MagePortalAlliance", L["Navigation Method Spell"], "Navigation Use Spell")
+RegisterAction("dungeonteleport", "PortalRed", L["Navigation Method Teleport"], "Navigation Use Teleport")
+RegisterAction("item", "Object", L["Navigation Method Item"], "Navigation Use Item")
+RegisterAction("toy", "Gear", L["Navigation Method Toy"], "Navigation Use Toy")
+RegisterAction("hearthstone", "Innkeeper", L["Navigation Method Hearthstone"], "Navigation Use Hearthstone")
+RegisterAction("unboundteleport", "PortalRed", L["Navigation Method Teleport"], "Navigation Use Teleport")
 
 -- Session-long cooldown observations recover only recorded action failures.
 -- Navigation's eligibility bucket handles inventory, collection, and spell changes.

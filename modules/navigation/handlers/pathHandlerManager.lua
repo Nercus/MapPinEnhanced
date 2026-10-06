@@ -5,7 +5,13 @@ local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
----@alias NavigationPathPresentation fun(destinationMapID: number?): icon: string, method: string, instruction: string
+---@class NavigationPathPresentationContext
+---@field destinationName string?
+---@field originName string? Only supplied when repeated portal destinations need disambiguation
+---@field requirement NavigationRequirement?
+---@field phase "approach"|"ready"|"in-transit"?
+
+---@alias NavigationPathPresentation fun(context: NavigationPathPresentationContext?): icon: string, method: string, instruction: string
 ---@alias NavigationPathDataprovider fun(path: NavigationStaticPath): data: any, failure: string?
 ---@alias NavigationPathCostCalculator fun(graph: NavigationGraph, preparedData: NavigationPreparedData, pathReference: integer): cost: NavigationCalculatedPathCost?, failure: string?
 ---@alias NavigationPathActivator fun(context: NavigationActivePathContext, report: NavigationPathReport)
@@ -83,14 +89,14 @@ function Navigation:GetPathData(path)
 end
 
 ---@param pathType string
----@param destinationMapID number?
+---@param context NavigationPathPresentationContext?
 ---@return string icon
 ---@return string method
 ---@return string instruction
-local function GetPresentation(pathType, destinationMapID)
+local function GetPresentation(pathType, context)
     local presentation = presentations[pathType]
     assert(presentation, "Navigation path type is not registered: " .. tostring(pathType))
-    local icon, method, instruction = presentation(destinationMapID)
+    local icon, method, instruction = presentation(context)
     assert(Pins.PIN_ICONS[Pins:ResolveIcon(icon)], "Navigation handler PIN_ICONS entry is missing: " .. tostring(icon))
     assert(type(method) == "string" and method ~= "", "Navigation handler method is missing: " .. pathType)
     assert(type(instruction) == "string" and instruction ~= "",
@@ -121,11 +127,57 @@ function Navigation:GetPathMethod(pathType)
     return method
 end
 
----@param pathType string
----@param destinationMapID number
+---@param mapID number?
+---@return string?
+local function GetMapName(mapID)
+    local info = mapID and C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(mapID)
+    if MapPinEnhanced:IsReadableTable(info) and info then return MapPinEnhanced:NormalizeText(info.name) end
+end
+
+---@param route NavigationRoute
+---@param pathIndex integer
+---@param phase "approach"|"ready"|"in-transit"?
 ---@return string
-function Navigation:GetPathInstruction(pathType, destinationMapID)
-    local _, _, instruction = GetPresentation(pathType, destinationMapID)
+function Navigation:GetPathInstruction(route, pathIndex, phase)
+    local graph = route.graph
+    local reference = route.pathReferences[pathIndex]
+    local pathType = graph.pathTypes[reference]
+    -- Movement immediately before an interaction describes that action on every
+    -- surface. Its own endpoint and arrival rules are unaffected.
+    if self:IsMovementPath(pathType) then
+        local nextReference = route.pathReferences[pathIndex + 1]
+        if nextReference and not self:IsMovementPath(graph.pathTypes[nextReference]) then
+            return self:GetPathInstruction(route, pathIndex + 1, "approach")
+        end
+    end
+    local destinationMapID = graph.pointMapIDs[graph.pathToPointIndexes[reference]]
+    local journey = route.taxiJourneys[reference]
+    local destinationName = journey and MapPinEnhanced:NormalizeText(journey.destinationName) or
+        pathType == "hearthstone" and MapPinEnhanced:NormalizeText(graph.hearthstoneBindName) or nil
+    local originName ---@type string?
+    if pathType == "portal" or pathType == "localportal" then
+        local origin = graph.pathFromPointIndexes[reference]
+        local originMapID = origin and graph.pointMapIDs[origin]
+        -- The normal instruction stays short. Origins distinguish repeated visits
+        -- to the same destination through portals in different maps on this Route.
+        for _, other in ipairs(route.pathReferences) do
+            local otherType = graph.pathTypes[other]
+            local otherOrigin = graph.pathFromPointIndexes[other]
+            if (otherType == "portal" or otherType == "localportal") and otherOrigin and
+                graph.pointMapIDs[graph.pathToPointIndexes[other]] == destinationMapID and
+                graph.pointMapIDs[otherOrigin] ~= originMapID then
+                originName = GetMapName(originMapID)
+                break
+            end
+        end
+    end
+    local _, _, instruction = GetPresentation(pathType, {
+        destinationName = destinationName or GetMapName(graph.pathDestinationNameMapIDs[reference]) or
+            GetMapName(destinationMapID),
+        originName = originName,
+        requirement = graph.pathRequirements[reference],
+        phase = phase,
+    })
     return instruction
 end
 

@@ -11,7 +11,8 @@ local DEFAULT_BOAT_SECONDS = 150
 ---@param pathType string
 ---@param icon string
 ---@param method string
-local function RegisterTransport(pathType, icon, method)
+---@param name string Localization key suffix, never interpolated into a sentence
+local function RegisterTransport(pathType, icon, method, name)
     local defaultSeconds = pathType == "tram" and DEFAULT_TRAM_SECONDS or
         (pathType == "boat" or pathType == "ship") and DEFAULT_BOAT_SECONDS or DEFAULT_TRANSPORT_SECONDS
     ---@param graph NavigationGraph
@@ -36,13 +37,17 @@ local function RegisterTransport(pathType, icon, method)
         }
     end
 
-    Navigation:RegisterPathHandler(pathType, function()
-        return icon, method, L["Navigation Take Transport"]
+    Navigation:RegisterPathHandler(pathType, function(context)
+        local key = (context and context.phase == "in-transit" and "Navigation Traveling By " or
+            "Navigation Take ") .. name
+        local destination = context and context.destinationName
+        local instruction = destination and string.format(L[key .. " To"], destination) or L[key]
+        return icon, method, instruction
     end, nil, CostCalculator)
 end
 
-RegisterTransport("boat", "FlightMasterFerry", L["Navigation Method Boat"])
-RegisterTransport("ship", "FlightMasterFerry", L["Navigation Method Ship"])
-RegisterTransport("zeppelin", "Vehicle-Air-Unoccupied", L["Navigation Method Zeppelin"])
-RegisterTransport("tram", "Vehicle-SilvershardMines-MineCart", L["Navigation Method Tram"])
-RegisterTransport("transport", "Vehicle-Ground-Unoccupied", L["Navigation Method Transport"])
+RegisterTransport("boat", "FlightMasterFerry", L["Navigation Method Boat"], "Boat")
+RegisterTransport("ship", "FlightMasterFerry", L["Navigation Method Ship"], "Ship")
+RegisterTransport("zeppelin", "Vehicle-Air-Unoccupied", L["Navigation Method Zeppelin"], "Zeppelin")
+RegisterTransport("tram", "Vehicle-SilvershardMines-MineCart", L["Navigation Method Tram"], "Tram")
+RegisterTransport("transport", "Vehicle-Ground-Unoccupied", L["Navigation Method Transport"], "Transport")

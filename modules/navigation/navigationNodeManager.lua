@@ -11,6 +11,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field fromY number?
 ---@field toPointID number
 ---@field toMap number
+---@field destinationNameMapID number? Display-only arrival city when the endpoint map names an interior
 ---@field toX number
 ---@field toY number
 ---@field type string
@@ -118,6 +119,8 @@ end
 ---@field pathToPointIndexes integer[]
 ---@field pathTypes string[]
 ---@field pathDurations table<integer, number>
+---@field pathDestinationNameMapIDs table<integer, number>
+---@field hearthstoneBindName string?
 ---@field pathRequirements table<integer, table>
 ---@field pathsByRequirementKind table<string, integer[]>
 ---@field pathHandlerData table<integer, any>
@@ -248,6 +251,7 @@ function Navigation:BuildGraph()
         pathToPointIndexes = {},
         pathTypes = {},
         pathDurations = {},
+        pathDestinationNameMapIDs = {},
         pathRequirements = {},
         pathsByRequirementKind = {},
         pathHandlerData = {},
@@ -290,6 +294,7 @@ function Navigation:BuildGraph()
                 graph.pathToPointIndexes[pathReference] = toPointIndex
                 graph.pathTypes[pathReference] = path.type
                 graph.pathDurations[pathReference] = path.travelDuration
+                graph.pathDestinationNameMapIDs[pathReference] = path.destinationNameMapID
                 graph.pathRequirements[pathReference] = path.requirement
                 graph.pathHandlerData[pathReference] = handlerData
                 if fromPointIndex then
@@ -387,6 +392,7 @@ function Navigation:UpdateHearthstonePath(destination)
     replacement.pointMapIDs[point] = destination and destination.mapID or 0
     replacement.pointXs[point] = destination and destination.x or 0
     replacement.pointYs[point] = destination and destination.y or 0
+    replacement.hearthstoneBindName = destination and MapPinEnhanced:NormalizeText(destination.bindName) or nil
     for _, hearthReference in ipairs(hearthstonePathReferences) do
         replacement.excludedPaths[hearthReference] = not destination and "hearthstone destination unknown" or nil
         self.avoidedPaths[hearthReference] = nil

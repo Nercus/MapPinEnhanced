@@ -9,8 +9,12 @@ local L = MapPinEnhanced.L
 ---@param method string
 ---@param instruction string
 local function RegisterMovement(pathType, mode, icon, method, instruction)
-    local function Presentation()
-        return icon, method, instruction
+    ---@param context NavigationPathPresentationContext?
+    ---@return string icon, string method, string instruction
+    local function Presentation(context)
+        local destination = context and context.destinationName
+        local key = pathType == "fly" and "Navigation Fly To Destination" or "Navigation Travel To Destination"
+        return icon, method, destination and string.format(L[key], destination) or instruction
     end
 
     ---@param graph NavigationGraph

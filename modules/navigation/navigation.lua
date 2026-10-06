@@ -634,25 +634,6 @@ local function ResetDeviationState(progression)
     progression.movingAwayStartedAt = nil
 end
 
-local CHAT_PATH_INSTRUCTIONS = {
-    walk = "Navigation Chat Walk To",
-    fly = "Navigation Chat Fly To",
-    border = "Navigation Chat Travel To",
-    floor = "Navigation Chat Change Floor To",
-    gossip = "Navigation Chat Talk To NPC",
-    phaseswitch = "Navigation Chat Change Phase To",
-}
-
----@param pathType string
----@param location string
----@return string
-local function GetChatInstruction(pathType, location)
-    local key = CHAT_PATH_INSTRUCTIONS[pathType]
-    if key then return string.format(L[key], location) end
-    return string.format(L["Navigation Chat Use To"],
-        MapPinEnhanced:CompactChatLabel(Navigation:GetPathMethod(pathType), 24), location)
-end
-
 ---@param changeNumber integer
 ---@return string[]? steps
 ---@return {mapID: number, x: number, y: number, header: string}? destination
@@ -665,21 +646,18 @@ function Navigation:GetRouteChatSteps(changeNumber)
     ---@type string[]
     local steps = {}
     for index = progression.pathIndex, #progression.route.pathReferences do
-        local reference = progression.route.pathReferences[index]
-        local mapID = graph.pointMapIDs[graph.pathToPointIndexes[reference]]
-        local info = C_Map.GetMapInfo(mapID)
-        local journey = progression.route.taxiJourneys[reference]
-        steps[#steps + 1] = GetChatInstruction(graph.pathTypes[reference],
-            MapPinEnhanced:CompactChatLabel(journey and journey.destinationName or info and info.name or tostring(mapID),
-                80))
+        local phase = index == progression.pathIndex and progression.phase or nil
+        steps[#steps + 1] = MapPinEnhanced:CompactChatLabel(
+            self:GetPathInstruction(progression.route, index, phase), 240)
     end
     local data = destination.data
     local info = C_Map.GetMapInfo(data.mapID)
     ---@type string?
     local mode = progression.route.finalCost.explanation and progression.route.finalCost.explanation.mode
     local isFlying = mode == "steady-flight" or mode == "skyriding"
-    steps[#steps + 1] = GetChatInstruction(isFlying and "fly" or "walk",
-        MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80))
+    steps[#steps + 1] = MapPinEnhanced:CompactChatLabel(string.format(
+        L[isFlying and "Navigation Fly To Destination" or "Navigation Travel To Destination"],
+        GetDestinationTitle(destination)), 240)
     return steps, {
         mapID = data.mapID,
         x = data.x,
@@ -689,46 +667,6 @@ function Navigation:GetRouteChatSteps(changeNumber)
             MapPinEnhanced:CompactChatLabel(info and info.name or tostring(data.mapID), 80),
             MapPinEnhanced.displayName),
     }
-end
-
----@param progression NavigationProgression
----@param graph NavigationGraph
----@return string
-local function GetCurrentPathInstruction(progression, graph)
-    local pathIndex = progression.pathIndex
-    local pathReference = progression.route.pathReferences[pathIndex]
-    local pathType = graph.pathTypes[pathReference]
-    local fromPointIndex = graph.pathFromPointIndexes[pathReference]
-    local toPointIndex = graph.pathToPointIndexes[pathReference]
-    -- Portal wording names the action while progression still guides to its entrance.
-    if pathType == "portal" or pathType == "localportal" then
-        return Navigation:GetPathInstruction(pathType, graph.pointMapIDs[toPointIndex])
-    end
-    if progression.phase == "approach" and fromPointIndex and
-        not Navigation:IsMovementPath(pathType) then
-        return string.format(L["Navigation Approach Method"], Navigation:GetPathMethod(pathType))
-    end
-    if Navigation:IsMovementPath(pathType) then
-        local nextPathReference = progression.route.pathReferences[pathIndex + 1]
-        if nextPathReference then
-            local nextPathType = graph.pathTypes[nextPathReference]
-            if nextPathType == "portal" or nextPathType == "localportal" then
-                local portalDestinationIndex = graph.pathToPointIndexes[nextPathReference]
-                return Navigation:GetPathInstruction(nextPathType, graph.pointMapIDs[portalDestinationIndex])
-            end
-            return string.format(L["Navigation Continue To Method"],
-                Navigation:GetPathMethod(nextPathType))
-        end
-        local mapInfo = toPointIndex and C_Map and C_Map.GetMapInfo and C_Map.GetMapInfo(graph.pointMapIDs[toPointIndex])
-        if mapInfo and type(mapInfo.name) == "string" and mapInfo.name ~= "" then
-            return string.format(L["Navigation Approach"], mapInfo.name)
-        end
-    end
-    local journey = progression.route.taxiJourneys[pathReference]
-    if journey and journey.destinationName then
-        return string.format(L["Navigation Take Flight To"], journey.destinationName)
-    end
-    return Navigation:GetPathInstruction(pathType, graph.pointMapIDs[toPointIndex])
 end
 
 ---@param progression NavigationProgression
@@ -798,17 +736,15 @@ local function CopyRouteProgress(progression, graph)
         local mapInfo = C_Map.GetMapInfo(mapID)
         local color = Navigation:GetPathColor(pathType)
         local r, g, b = color:GetRGB()
-        local journey = reference and route.taxiJourneys[reference]
         entries[index] = {
             r = r,
             g = g,
             b = b,
             title = string.format(L["Navigation Step Number"], index, Navigation:GetPathMethod(pathType)),
-            instruction = journey and journey.destinationName and
-                string.format(L["Navigation Take Flight To"], journey.destinationName) or
-                (reference and Navigation:GetPathInstruction(pathType, mapID) or
-                    string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
-                    "Navigation Travel To Destination"], GetDestinationTitle(destination))),
+            instruction = reference and Navigation:GetPathInstruction(route, index,
+                index == progression.pathIndex and progression.phase or nil) or
+                string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
+                    "Navigation Travel To Destination"], GetDestinationTitle(destination)),
             location = string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID), x * 100, y * 100),
         }
     end
@@ -902,7 +838,7 @@ function Navigation:PublishStep(progression)
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
         progressEntries = CopyRouteProgress(progression, graph),
-        instruction = GetCurrentPathInstruction(progression, graph),
+        instruction = self:GetPathInstruction(progression.route, progression.pathIndex, progression.phase),
         status = progression.status,
         desiredAction = desiredAction,
     })

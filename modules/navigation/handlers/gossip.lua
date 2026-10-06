@@ -4,8 +4,12 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
-local function GossipPresentation()
-    return "ChatBallon", L["Navigation Method NPC Travel"], L["Navigation Talk To NPC"]
+---@param context NavigationPathPresentationContext?
+---@return string icon, string method, string instruction
+local function GossipPresentation(context)
+    local destination = context and context.destinationName
+    return "ChatBallon", L["Navigation Method NPC Travel"],
+        destination and string.format(L["Navigation Talk To NPC To"], destination) or L["Navigation Talk To NPC"]
 end
 
 ---@param path NavigationStaticPath
@@ -86,8 +90,9 @@ Navigation:RegisterPathHandler("gossip", GossipPresentation, GossipDataprovider,
 ---@field fromMap number
 ---@field toMap number
 
-local function PhasePresentation()
-    return "ChromieTime-32x32", L["Navigation Method Phase Change"], L["Navigation Talk To NPC"]
+local function PhasePresentation(context)
+    local _, _, instruction = GossipPresentation(context)
+    return "ChromieTime-32x32", L["Navigation Method Phase Change"], instruction
 end
 
 ---@param path NavigationStaticPath

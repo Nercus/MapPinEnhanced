@@ -184,7 +184,7 @@ function MapPinEnhancedNavigationMapPinMixin:OnEnter()
     local progression = Navigation.progression
     local graph = progression and progression.route.graph
     local reference = step and progression and progression.route.pathReferences[step.index]
-    if not step or not graph or not reference or self.isMapEdge then return end
+    if not step or not progression or not graph or not reference or self.isMapEdge then return end
     local pathType = graph.pathTypes[reference]
     local pointIndex = graph.pathToPointIndexes[reference]
     local mapID = graph.pointMapIDs[pointIndex]
@@ -193,7 +193,8 @@ function MapPinEnhancedNavigationMapPinMixin:OnEnter()
     GameTooltip:AddLine(string.format(L["Navigation Step Number"], step.index,
         Navigation:GetPathMethod(pathType)), color:GetRGB())
     local info = step.info
-    GameTooltip:AddLine(info and info.instruction or Navigation:GetPathInstruction(pathType, mapID), 1, 1, 1, true)
+    GameTooltip:AddLine(Navigation:GetPathInstruction(progression.route, step.index,
+        step.index == progression.pathIndex and progression.phase or nil), 1, 1, 1, true)
     local mapInfo = C_Map.GetMapInfo(mapID)
     GameTooltip:AddLine(string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID),
         graph.pointXs[pointIndex] * 100, graph.pointYs[pointIndex] * 100), 0.7, 0.7, 0.7, true)

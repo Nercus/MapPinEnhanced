@@ -231,7 +231,8 @@ function Navigation:SetupHearthstoneDestination()
     local value = type(saved) == "table" and saved[characterKey] or nil
     if IsDestination(value) then
         ---@cast value NavigationHearthstoneDestination
-        destination = { mapID = value.mapID, x = value.x, y = value.y }
+        destination = { mapID = value.mapID, x = value.x, y = value.y,
+            bindName = MapPinEnhanced:NormalizeText(value.bindName) }
     end
     MapPinEnhanced:RegisterEvent("HEARTHSTONE_BOUND", OnBound)
     -- Toy preference continues learning after home coordinates are already known.
