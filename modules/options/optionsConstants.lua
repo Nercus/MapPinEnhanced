@@ -38,7 +38,6 @@ Options.DEFAULTS = {
     ["Pins.Tracking.ArrivalNotification"] = "locked",
     ["Pins.Tracking.AutoUntrack"] = false,
     ["Miscellaneous.Tracker.AutoShow"] = true,
-    ["Miscellaneous.Tracker.ShowBlizzardEntry"] = true,
     ["Miscellaneous.Tracker.CloseAction"] = false,
     ["Miscellaneous.Tracker.MaximumRows"] = 7,
     ["Miscellaneous.Tracker.BackgroundOpacity"] = 0,

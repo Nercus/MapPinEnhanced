@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
-local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@class SuperTrackingEntry
 ---@field description string?
@@ -25,15 +24,9 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local entry
 local changeNumber = 0
 local changingSelection = false
----@type string?
-local dismissedSource
----@type string?
-local dismissedTargetID
-
-local function PublishEntry()
+local function UpdateEntryChangeNumber()
     changeNumber = changeNumber + 1
     if entry then entry.changeNumber = changeNumber end
-    MapPinEnhanced:FireCallback("SUPER_TRACKING_ENTRY_CHANGED")
 end
 
 ---@param source string
@@ -47,7 +40,7 @@ function Providers:UpdateSuperTrackingEntryText(source, targetID, title, descrip
     entry.pinData.description = description
     entry.title = title
     entry.pinData.title = title
-    PublishEntry()
+    UpdateEntryChangeNumber()
 end
 
 ---@param source string
@@ -59,21 +52,7 @@ function Providers:UpdateSuperTrackingEntryIcon(source, targetID, texture, usesA
     if entry.texture == texture and entry.usesAtlas == usesAtlas then return end
     entry.texture, entry.usesAtlas = texture, usesAtlas
     entry.pinData.texture, entry.pinData.usesAtlas = texture, usesAtlas
-    PublishEntry()
-end
-
----@return SuperTrackingEntry?
-function Providers:GetSuperTrackingEntry()
-    if not entry then return nil end
-    return {
-        title = entry.title,
-        description = entry.description,
-        texture = entry.texture,
-        usesAtlas = entry.usesAtlas,
-        tracked = entry.tracked,
-        canToggle = entry.canToggle,
-        changeNumber = entry.changeNumber,
-    }
+    UpdateEntryChangeNumber()
 end
 
 ---@return boolean
@@ -85,21 +64,17 @@ end
 ---@param targetID string?
 ---@param isUserWaypoint boolean
 function Providers:UpdateSuperTrackingEntrySelection(source, targetID, isUserWaypoint)
-    if source ~= dismissedSource or targetID ~= dismissedTargetID then
-        dismissedSource, dismissedTargetID = nil, nil
-    end
     if not entry then return end
     if source and entry.tracked and entry.source == source and entry.targetID == targetID then return end
     if not source and not isUserWaypoint and not entry.tracked then return end
     entry = nil
-    PublishEntry()
+    UpdateEntryChangeNumber()
 end
 
 ---@param provider SuperTrackingProvider|SuperTrackingFallbackProvider
 ---@param targetID string
 ---@param data WayfinderData
 function Providers:ApplySuperTrackingEntry(provider, targetID, data)
-    if dismissedSource == provider.source and dismissedTargetID == targetID then return end
     if entry and entry.tracked and entry.source == provider.source and entry.targetID == targetID and
         entry.title == data.title and entry.description == data.description and entry.texture == data.texture and
         entry.usesAtlas == data.usesAtlas and entry.pinData.mapID == data.mapID and
@@ -129,55 +104,7 @@ function Providers:ApplySuperTrackingEntry(provider, targetID, data)
             usesAtlas = data.texture == nil or data.usesAtlas,
         },
     }
-    PublishEntry()
-end
-
----@param expectedChangeNumber integer
----@return SuperTrackingEntryState?
-local function GetCommandEntry(expectedChangeNumber)
-    if changingSelection then return nil end
-    Providers:RefreshSuperTrackingSelection(true)
-    if entry and entry.changeNumber == expectedChangeNumber then return entry end
-end
-
----@param expectedChangeNumber integer
-function Providers:RemoveSuperTrackingEntry(expectedChangeNumber)
-    local selectedEntry = GetCommandEntry(expectedChangeNumber)
-    if not selectedEntry then return end
-    if selectedEntry.tracked and selectedEntry.canToggle then
-        self:ToggleSuperTrackingEntry(expectedChangeNumber)
-        -- An automatic replacement wins; only discard our own retained object.
-        if entry ~= selectedEntry or selectedEntry.tracked then return end
-    elseif selectedEntry.tracked then
-        -- Sources without selection setters remain Blizzard-owned. Dismiss the
-        -- row until a genuine source change, including across metadata refreshes.
-        dismissedSource, dismissedTargetID = selectedEntry.source, selectedEntry.targetID
-    end
-    entry = nil
-    PublishEntry()
-end
-
----@param expectedChangeNumber integer
-function Providers:ConvertSuperTrackingEntryToPin(expectedChangeNumber)
-    local selectedEntry = GetCommandEntry(expectedChangeNumber)
-    local group = Groups:GetUngroupedGroup()
-    if not selectedEntry or not group then return end
-    local data = CopyTable(selectedEntry.pinData)
-    data.setTracked = false
-    local pin = group:AddPin(data)
-    if pin then MapPinEnhanced:GetModule("Tracker"):OnUserPinsAdded() end
-    if not pin then return end
-    local wasTracked = selectedEntry.tracked
-    self:RemoveSuperTrackingEntry(expectedChangeNumber)
-    if wasTracked then pin:Track() end
-end
-
----@param expectedChangeNumber integer
-function Providers:ShareSuperTrackingEntry(expectedChangeNumber)
-    local selectedEntry = GetCommandEntry(expectedChangeNumber)
-    if not selectedEntry then return end
-    local data = selectedEntry.pinData
-    self:LinkToChat(data.x, data.y, data.mapID, data.title)
+    UpdateEntryChangeNumber()
 end
 
 ---@param source string
@@ -186,7 +113,7 @@ function Providers:ClearSuperTrackingEntry(source, targetID)
     if not entry or not entry.tracked or entry.source ~= source then return end
     if targetID and entry.targetID ~= targetID then return end
     entry = nil
-    PublishEntry()
+    UpdateEntryChangeNumber()
 end
 
 ---@param expectedChangeNumber integer
@@ -216,8 +143,8 @@ function Providers:ToggleSuperTrackingEntry(expectedChangeNumber)
         track()
     end
     changingSelection = false
-    PublishEntry()
-    -- Any automatic selection caused by clearing wins over the retained row.
+    UpdateEntryChangeNumber()
+    -- Reconcile any automatic selection caused by clearing the original source.
     self:RefreshSuperTrackingSelection()
 end
 

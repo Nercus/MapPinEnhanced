@@ -22,8 +22,6 @@ L["Save"] = "Save"
 L["Stop tracking"] = "Stop tracking"
 L["Track"] = "Track"
 L["Remove"] = "Remove"
-L["Convert to Pin"] = "Convert to Pin"
-L["Share as Pin"] = "Share as Pin"
 
 L["Click to edit"] = "Click to edit"
 L["<x> <y> [title]"] = "<x> <y> [title]"
@@ -464,18 +462,15 @@ L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
 L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Auto show on new pin"
 L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
 "Show and expand Tracker after creating a user pin or confirming an import. Tracking a Blizzard element does not trigger this. Automatic hide rules still apply."
-L["Miscellaneous.Tracker.ShowBlizzardEntry_LABEL"] = "Show Blizzard element"
-L["Miscellaneous.Tracker.ShowBlizzardEntry_DESCRIPTION"] =
-"Show the tracked Blizzard destination in Tracker. Hiding this entry does not stop tracking or wayfinder guidance."
 L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Minimize tracker instead of closing"
 L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
-"Keep the header and external destination visible when minimizing the tracker."
+"Keep only the header visible when minimizing the tracker."
 L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Maximum visible rows"
 L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
-"Maximum group and pin rows before scrolling, excluding the header and external destination."
+"Maximum group and pin rows before scrolling, excluding the header."
 L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Tracker background opacity"
 L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] =
-"Opacity behind the pin list and tracked Blizzard entry, from 0% to 100%."
+"Opacity behind the pin list, from 0% to 100%."
 L["Miscellaneous.Tracker.Scale_LABEL"] = "Tracker size"
 L["Miscellaneous.Tracker.Scale_DESCRIPTION"] = "Choose the size of Tracker."
 L["Pins.Appearance_GROUPLABEL"] = "Appearance"

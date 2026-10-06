@@ -13,11 +13,6 @@
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Tracker.ShowBlizzardEntry" />
-                </KeyValues>
-            </Frame>
-            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                <KeyValues>
                     <KeyValue key="key" value="Miscellaneous.Tracker.CloseAction" />
                 </KeyValues>
             </Frame>

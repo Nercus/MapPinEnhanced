@@ -25,13 +25,11 @@ local MapPinEnhanced = select(2, ...)
 ---@field position MapPinEnhancedTrackerPositionTemplate
 ---@field desiredHeight number?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
----@field superTrackedEntry MapPinEnhancedSuperTrackedEntryTemplate
 MapPinEnhancedTrackerMixin = CreateFromMixins(MapPinEnhancedTrackerListMixin)
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
-local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local Options = MapPinEnhanced:GetModule("Options")
 
@@ -135,14 +133,13 @@ end
 function MapPinEnhancedTrackerMixin:UpdateHeight()
     local headerHeight = self.header:GetHeight() + 5 -- header plus padding
     local entryHeight = 35
-    local fixedEntryHeight = self.superTrackedEntry:IsShown() and self.superTrackedEntry:GetHeight() or 0
     self.contentBackground:SetShown(not self.minimized)
     local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or
         0
     local visibleEntries = self.minimized and 0 or math.min(numberOfEntries,
         Options:GetOptionValue("Miscellaneous.Tracker.MaximumRows"))
     local newHeight = visibleEntries * entryHeight
-    self.desiredHeight = newHeight + headerHeight + fixedEntryHeight
+    self.desiredHeight = newHeight + headerHeight
     self:UpdateViewportHeight()
 end
 
@@ -216,9 +213,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         self.contentBackground:SetAlpha(value / 100)
     end)
     Options:SubscribeToOptionChanges("Miscellaneous.Tracker.Scale", function() self.position:ApplyTrackerScale() end)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.ShowBlizzardEntry", function()
-        if self:IsShown() then self:UpdateSuperTrackedEntry() end
-    end)
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function()
         self:UpdateListAndScrollToTrackedPin()
     end)
@@ -234,9 +228,6 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     end)
     MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", function(_, _, isTracked)
         if isTracked and self:IsShown() and not self.visibilityHiding then self.scrollPending = true end
-    end)
-    MapPinEnhanced:RegisterCallback("SUPER_TRACKING_ENTRY_CHANGED", function()
-        if self:IsShown() then self:UpdateSuperTrackedEntry() end
     end)
 end
 
@@ -287,28 +278,6 @@ function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
     self.header.hiddenGroupsButton:SetIconTexture("eyeslash")
 end
 
-function MapPinEnhancedTrackerMixin:UpdateViewLayout()
-    self.scrollBox:ClearAllPoints()
-    if self.superTrackedEntry:IsShown() then
-        self.scrollBox:SetPoint("TOPLEFT", self.superTrackedEntry, "BOTTOMLEFT", 0, 0)
-    else
-        self.scrollBox:SetPoint("TOPLEFT", self.header, "BOTTOMLEFT", 5, 0)
-    end
-    self.scrollBox:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -5, 5)
-end
-
----@param skipHeight boolean?
-function MapPinEnhancedTrackerMixin:UpdateSuperTrackedEntry(skipHeight)
-    ---@type SuperTrackingEntry?
-    local entry
-    if not self.minimized and Options:GetOptionValue("Miscellaneous.Tracker.ShowBlizzardEntry") then
-        entry = Providers:GetSuperTrackingEntry()
-    end
-    self.superTrackedEntry:ApplyEntry(entry)
-    self:UpdateViewLayout()
-    if not skipHeight then self:UpdateHeight() end
-end
-
 function MapPinEnhancedTrackerMixin:ShowFrame()
     local wasShown, wasHiding = self:IsShown(), self.visibilityHiding
     self:Show()
@@ -334,7 +303,6 @@ function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
     local wasMinimized = self.minimized
     self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true) or
         false
-    self:UpdateSuperTrackedEntry(true)
     self.header.closeButton:SetIconTexture(minimizeMode and (self.minimized and "downcaret" or "upcaret") or "close")
     self.header.closeButton:SetTooltip(L[minimizeMode and (self.minimized and "Expand" or "Minimize") or "Close"])
     if GameTooltip:IsOwned(self.header.closeButton) then self.header.closeButton:OnTooltipEnter() end

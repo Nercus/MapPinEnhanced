@@ -6,7 +6,6 @@ local MapPinEnhanced = select(2, ...)
 ---| "PIN_REMOVED"
 ---| "PIN_REACHED"
 ---| "PIN_TRACKING_CHANGED"
----| "SUPER_TRACKING_ENTRY_CHANGED"
 ---| "GROUP_UPDATED"
 ---| "GROUP_DELETED"
 
