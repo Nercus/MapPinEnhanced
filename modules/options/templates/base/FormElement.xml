@@ -11,22 +11,23 @@
             <KeyValue key="scrollPadding" value="12" type="number" />
         </KeyValues>
         <Layers>
-            <Layer level="ARTWORK">
-                <Texture parentKey="searchHighlight" inherits="MapPinEnhancedIconTemplate" hidden="true">
-                    <KeyValues>
-                        <KeyValue key="icon" value="rightcaret" />
-                    </KeyValues>
-                    <Size x="20" y="20" />
+            <Layer level="BORDER">
+                <Texture parentKey="searchHighlight" scale="0.5" file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrame.png" alphaMode="ADD" hidden="true">
                     <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="RIGHT" relativeKey="$parent.label" relativePoint="LEFT" x="-4" />
+                        <Anchor point="TOPLEFT" x="-4" y="12" />
+                        <Anchor point="BOTTOMRIGHT" x="4" y="-4" />
                     </Anchors>
+                    <TextureSliceMargins left="20" top="20" right="20" bottom="20" />
+                    <TextureSliceMode mode="Stretched" />
                     <Scripts>
                         <OnShow>
                             self:GetParent().searchAnimation:Play()
                             C_Timer.After(5, function() if self:IsShown() then self:Hide() end end)
                         </OnShow>
-                        <OnHide>self:GetParent().searchAnimation:Stop()</OnHide>
+                        <OnHide>
+                            self:GetParent().searchAnimation:Stop()
+                        </OnHide>
                     </Scripts>
                 </Texture>
             </Layer>
