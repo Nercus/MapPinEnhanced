@@ -14,43 +14,20 @@
                 </Texture>
             </Layer>
             <Layer level="BORDER">
-                <Texture parentKey="DownLine" atlas="UI-World-Quest-golden-line" useAtlasSize="true" desaturated="true">
+                <Texture parentKey="DownLine" file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
+                    <Size x="1" y="1" />
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="BOTTOM" relativePoint="TOP" y="-2" />
+                        <Anchor point="BOTTOMLEFT" x="-5" />
+                        <Anchor point="BOTTOMRIGHT" x="5" />
                     </Anchors>
                 </Texture>
-                <Texture parentKey="UpLine" atlas="UI-World-Quest-golden-line" useAtlasSize="true" desaturated="true">
+                <Texture parentKey="UpLine" file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png">
+                    <Size x="1" y="1" />
+                    <Color r="1" g="0.82" b="0" />
                     <Anchors>
-                        <Anchor point="TOP" relativePoint="BOTTOM" y="2" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY" textureSubLevel="0">
-                <Texture parentKey="logoBG" file="interface/common/commonmaskcircle.blp">
-                    <Size x="36" y="36" />
-                    <Anchors>
-                        <Anchor point="CENTER" relativePoint="TOP" x="0" y="0" />
-                    </Anchors>
-                    <Gradient orientation="VERTICAL">
-                        <MaxColor r="0.2" g="0.2" b="0.2" />
-                        <MinColor r="0" g="0" b="0" />
-                    </Gradient>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY" textureSubLevel="1">
-                <Texture file="Interface/AddOns/MapPinEnhanced/assets/LogoTransparent.png" parentKey="logo">
-                    <Size x="26" y="26" />
-                    <Anchors>
-                        <Anchor point="CENTER" relativePoint="CENTER" relativeKey="$parent.logoBG" y="-1" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY" textureSubLevel="2">
-                <Texture atlas="charactercreate-ring-metallight" scale="0.5" desaturated="true">
-                    <Color r="1" g="1" b="1" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" relativeKey="$parent.logoBG" x="-26" y="26" />
-                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.logoBG" x="26" y="-26" />
+                        <Anchor point="TOPLEFT" x="-5" />
+                        <Anchor point="TOPRIGHT" x="5" />
                     </Anchors>
                 </Texture>
             </Layer>
