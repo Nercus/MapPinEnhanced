@@ -7,7 +7,7 @@ local L = MapPinEnhanced.L
 local ACTION_TYPES = { "toy", "spell", "item" }
 local ACTION_PENALTY_SECONDS = 10
 local LOADING_SCREEN_PENALTY_SECONDS = 10
-local EQUIPMENT_CHANGE_PENALTY_SECONDS = 30
+local EQUIPMENT_CHANGE_PENALTY_SECONDS = 10
 local MINIMUM_ACTION_COOLDOWN_SECONDS = 1.5
 
 ---@param startTime any
