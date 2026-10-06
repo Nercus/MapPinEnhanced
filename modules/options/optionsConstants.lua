@@ -59,6 +59,7 @@ Options.DEFAULTS = {
     ["Wayfinder.Navigation.Enable"] = true,
     ["Wayfinder.Navigation.BackgroundSearch"] = false,
     ["Wayfinder.Navigation.AutomaticTravelSelection"] = false,
+    ["Wayfinder.Navigation.RestoreEquipment"] = false,
     ["Wayfinder.Navigation.WorldMap"] = true,
     ["Wayfinder.Navigation.Minimap"] = true,
     ["Wayfinder.Navigation.TransportationGroups"] = {

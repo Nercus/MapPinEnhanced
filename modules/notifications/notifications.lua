@@ -23,6 +23,11 @@ local NOTIFICATION_MESSAGES = {
     ["PIN_LOCKED"] = L["Location reached at %s."] .. "\n" .. L["It is locked."],
     ["MAP_UNAVAILABLE"] = L["Cannot set waypoint on the %s map."],
     ["GROUP_RECEIVED"] = L["Shared group \"%s\" received."],
+    ["NAVIGATION_ITEM_EQUIPPED"] = L["Equipped %s."],
+    ["NAVIGATION_ITEM_RESTORED"] = L["Re-equipped %s."],
+    ["NAVIGATION_EMPTY_SLOT_RESTORED"] = L["Restored empty equipment slot."],
+    ["NAVIGATION_ITEM_RESTORE_FAILED"] = L["Could not restore %s."],
+    ["NAVIGATION_EMPTY_SLOT_RESTORE_FAILED"] = L["Could not restore empty equipment slot."],
 }
 
 

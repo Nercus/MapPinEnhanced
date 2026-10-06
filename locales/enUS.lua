@@ -164,6 +164,11 @@ L["TomTom Is Loaded! You may experience some unexpected behavior."] =
 "TomTom Is Loaded! You may experience some unexpected behavior."
 L["\"%s\" reached at %s."] = "\"%s\" reached at %s."
 L["Location reached at %s."] = "Location reached at %s."
+L["Equipped %s."] = "Equipped %s."
+L["Re-equipped %s."] = "Re-equipped %s."
+L["Restored empty equipment slot."] = "Restored empty equipment slot."
+L["Could not restore %s."] = "Could not restore %s."
+L["Could not restore empty equipment slot."] = "Could not restore empty equipment slot."
 L["It is locked."] = "It is locked."
 L["Cannot set waypoint on the %s map."] = "Cannot set waypoint on the %s map."
 L["Accept: %s"] = "Accept: %s"
@@ -467,6 +472,9 @@ L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
 L["%d legacy entries could not be migrated. Original saved data was kept."] =
 "%d legacy entries could not be migrated. Original saved data was kept."
 
+L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Restore equipment after travel"
+L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
+"Restore gear replaced by navigation items and show equipment notifications. Turning this off still restores gear already replaced."
 L["Wayfinder.Navigation.BackgroundSearch_LABEL"] = "Improve routes in the background"
 L["Wayfinder.Navigation.BackgroundSearch_DESCRIPTION"] =
 "Continue looking for a faster route after guidance appears. Uses additional processing time."

@@ -213,6 +213,7 @@ end
 function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction, fallbackPhase)
     local destination = self.activeDestination
     if not destination then return end
+    if fallbackPhase ~= "calculating" then self:RestoreActionEquipment() end
     self:DeactivatePathHandler()
     self:ReleaseRouteLayers()
     local phase = fallbackPhase or "direct"
@@ -424,6 +425,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
     end
     self:CancelRouteCalculation(self.activeCalculation)
     self:DeactivatePathHandler()
+    self:RestoreActionEquipment()
     self.destinationChangeNumber = self.destinationChangeNumber + 1
     if active and active.objectiveAreaExitTimer then active.objectiveAreaExitTimer:Cancel() end
     self.activeDestination = {
@@ -588,6 +590,7 @@ end
 ---@return boolean
 function Navigation:ClearDestination(owner, destinationID, changeNumber)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return false end
+    self:RestoreActionEquipment()
     local destination = self.activeDestination
     if destination and destination.objectiveAreaExitTimer then destination.objectiveAreaExitTimer:Cancel() end
     self:CancelRouteCalculation(self.activeCalculation)
@@ -815,6 +818,7 @@ end
 ---@param progression NavigationProgression
 function Navigation:PublishStep(progression)
     if not self:IsCurrentProgression(progression) then return end
+    self:ReconcileActionEquipment()
     local graph = self.progression and self.progression.route.graph or self:GetGraph()
     if not graph then return end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
@@ -941,6 +945,7 @@ end
 ---@param progression NavigationProgression
 function Navigation:CompleteCurrentPath(progression)
     if not self:IsCurrentProgression(progression) then return end
+    self:RestoreActionEquipment()
     if self.transportationChangedDuringTravel then
         self.transportationChangedDuringTravel = nil
         self:DeactivatePathHandler()

@@ -13,6 +13,16 @@ function MapPinEnhancedWayfinderActionButtonMixin:Setup()
     self:SetPropagateMouseClicks(false)
 end
 
+function MapPinEnhancedWayfinderActionButtonMixin:OnPreClick(button)
+    if button ~= "LeftButton" or not self:IsVisible() or self:GetAlpha() <= 0 then return end
+    local instruction = self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
+    MapPinEnhanced:GetModule("Navigation"):BeginActionEquipmentClick(instruction.preparedAction)
+end
+
+function MapPinEnhancedWayfinderActionButtonMixin:OnPostClick()
+    MapPinEnhanced:GetModule("Navigation"):EndActionEquipmentClick()
+end
+
 function MapPinEnhancedWayfinderActionButtonMixin:UpdateCooldown()
     local instruction = self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
     local action = self:IsVisible() and self:GetAlpha() > 0 and instruction.preparedAction

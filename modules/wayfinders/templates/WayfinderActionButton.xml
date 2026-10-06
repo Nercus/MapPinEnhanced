@@ -65,6 +65,8 @@
             </Cooldown>
         </Frames>
         <Scripts>
+            <PreClick method="OnPreClick" />
+            <PostClick method="OnPostClick" />
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
             <OnEnter method="OnEnter" />

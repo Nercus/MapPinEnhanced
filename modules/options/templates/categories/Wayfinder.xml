@@ -90,6 +90,11 @@
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                         <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.Navigation.RestoreEquipment" />
+                        </KeyValues>
+                    </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                        <KeyValues>
                             <KeyValue key="key" value="Wayfinder.Navigation.BackgroundSearch" />
                         </KeyValues>
                     </Frame>
