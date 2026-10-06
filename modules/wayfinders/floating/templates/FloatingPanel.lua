@@ -51,7 +51,7 @@ end
 
 ---@param step WayfinderStepData?
 function MapPinEnhancedFloatingPanelMixin:SetStep(step)
-    if InCombatLockdown() then return end
+    if InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
     if self.actionButton then
         MapPinEnhancedWayfinderInstructionMixin.SetStep(self, step)
     else
@@ -85,7 +85,7 @@ end
 ---@param step WayfinderStepData?
 ---@param target WayfinderData?
 function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
-    if InCombatLockdown() then
+    if InCombatLockdown() and self.actionButton then
         -- Keep the displayed Step intact. Retain only the latest request, including
         -- clears and selection changes that the active-wayfinder replay cannot see.
         self.pendingApply = { step = step, target = target }
@@ -109,8 +109,8 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
         MapPinEnhanced:SaveFramePosition(self.combatPanel)
         self:RestorePosition()
     end
-    -- Both variants share one saved position. Refresh it when switching views,
-    -- after any combat-deferred transition.
+    -- The objective view has no protected controls and can update in combat.
+    -- Both variants restore their shared saved position when switching views.
     if step and not self.step and (not InCombatLockdown() or not self:IsProtected()) then
         self:RestorePosition()
     end
@@ -165,7 +165,7 @@ end
 
 ---@param title string?
 function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
-    if InCombatLockdown() then return end
+    if InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
     local step = self.step
     if step and step.destinationMapID then
         local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
@@ -179,7 +179,7 @@ function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
 end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
-    if self.applying or InCombatLockdown() then return end
+    if self.applying or InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
     local inside = self.step and self.step.insideObjectiveArea
     local target = self.target
     local title = inside and target and target.title or self.fullText
