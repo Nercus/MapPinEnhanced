@@ -118,12 +118,16 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
     local navFrame = C_Navigation.GetFrame()
+    -- Cached native frames still need opacity restored after fallback or shutdown.
+    if not self.customDirection then
+        local alpha = navFrame and 1 or 0
+        if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
+    end
     if self.navFrame == navFrame then return end
     self.navFrame = navFrame
     self.isClamped = nil
     self.presentationInitialized = nil
     if self.customDirection then return end
-    self.navigationOpacity:SetAlpha(self.navFrame and 1 or 0)
 
     if self.navFrame then
         self:ClearAllPoints()
