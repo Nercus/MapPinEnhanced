@@ -86,6 +86,7 @@ end
 function MapPinEnhancedWayfinderFloatingTitleMixin:UpdateLayout()
     local shown = self.description:IsShown()
     local width = math.max(self.title:GetWidth(), shown and self.description:GetWidth() or 0, 40)
+    self.title:SetWidth(width)
     local height = self.title:GetHeight() + (shown and self.description:GetHeight() + 3 or 0)
     self:SetSize(width + (self.fallback and 38 or 30), height + (self.fallback and 10 or 20))
 end
