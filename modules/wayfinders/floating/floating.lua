@@ -14,6 +14,7 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@field runtimeEnabled boolean?
 ---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeBeamOption fun()?
+---@field unsubscribeTextOutlineOption fun()?
 ---@field step WayfinderStepData?
 ---@field textIntroIdentity string?
 local MapPinEnhancedWayfinderFloating = {}
@@ -42,6 +43,7 @@ function MapPinEnhancedWayfinderFloating:GetFrame()
         self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", nil,
             "MapPinEnhancedWayfinderFloatingTemplate")
         self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.Floating.ShowBeam") == true)
+        self.frame.content:SetShowTextOutline(Options:GetOptionValue("Wayfinder.Floating.ShowTextOutline") == true)
     end
     return self.frame
 end
@@ -196,6 +198,9 @@ function MapPinEnhancedWayfinderFloating:Enable()
     self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
         if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)
+    self.unsubscribeTextOutlineOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowTextOutline", function(value)
+        if self.frame then self.frame.content:SetShowTextOutline(value == true) end
+    end)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()
@@ -206,6 +211,10 @@ function MapPinEnhancedWayfinderFloating:Disable()
     if self.unsubscribeBeamOption then
         self.unsubscribeBeamOption()
         self.unsubscribeBeamOption = nil
+    end
+    if self.unsubscribeTextOutlineOption then
+        self.unsubscribeTextOutlineOption()
+        self.unsubscribeTextOutlineOption = nil
     end
 end
 

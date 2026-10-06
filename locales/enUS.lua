@@ -391,6 +391,9 @@ L["Apply"] = "Apply"
 
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
 L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
+L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Show text outline"
+L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] =
+"Outline the floating marker's distance, estimated arrival time and intro or hover title."
 L["Wayfinder.General.ShowETA_LABEL"] = "Show estimated arrival time"
 L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Show quest objective frame"
 L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =

@@ -35,6 +35,7 @@
 ---@field currentPresentation FloatingPresentation?
 ---@field pendingPresentation FloatingPresentation?
 ---@field showBeam boolean?
+---@field showTextOutline boolean?
 ---@field chevronTextures MapPinEnhancedWayfinderFloatingChevron[]
 ---@field textShowsTitle boolean?
 ---@field textHovered boolean?
@@ -115,10 +116,17 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetShowBeam(showBeam)
     self:UpdateBeam()
 end
 
+---@param showTextOutline boolean
+function MapPinEnhancedWayfinderFloatingContentMixin:SetShowTextOutline(showTextOutline)
+    self.showTextOutline = showTextOutline
+    self:ApplyReadoutStyle(self.textShowsTitle == true)
+    self.readout:UpdateText()
+end
+
 ---@param showTitle boolean
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyReadoutStyle(showTitle)
-    local font, size, flags = GameFontNormalSmall:GetFont()
-    self.readout.text:SetFont(font, showTitle and size or 8, flags)
+    local font, size = GameFontNormalSmall:GetFont()
+    self.readout.text:SetFont(font, showTitle and size or 8, self.showTextOutline and "OUTLINE" or "")
     if showTitle then
         self.readout.text:SetTextColor(self.title.title:GetTextColor())
     else

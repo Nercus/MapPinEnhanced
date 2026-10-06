@@ -35,6 +35,11 @@
                             <KeyValue key="key" value="Wayfinder.Floating.ShowBeam" />
                         </KeyValues>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="textOutline">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.Floating.ShowTextOutline" />
+                        </KeyValues>
+                    </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="hideBlizzard">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
