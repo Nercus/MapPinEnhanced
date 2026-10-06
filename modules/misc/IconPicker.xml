@@ -61,7 +61,7 @@
                 </Anchors>
             </EditBox>
             <Frame parentKey="scrollBox" inherits="WowScrollBoxList" enableMouse="true">
-                <Size x="364" y="246" />
+                <Size x="364" y="226" />
                 <Anchors>
                     <Anchor point="TOPLEFT" x="24" y="-126" />
                 </Anchors>
