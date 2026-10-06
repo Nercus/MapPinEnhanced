@@ -195,7 +195,8 @@ end
 local function onPinTrackingChanged(eventName, pinID, isTracked)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin.pinID == pinID and isTracked then
-        Providers:ClearStepSuperTracking()
+        -- The pin supersedes the old destination; restoring its quest can untrack this pin.
+        Providers:ClearStepSuperTracking(false)
         -- Navigation can acquire a Step before the pin's deferred waypoint
         -- selection. This domain command already supersedes the external row.
         Providers:UpdateSuperTrackingEntrySelection(nil, nil, true)
