@@ -4,6 +4,7 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 
 local MIN_CLOSE_DISTANCE = 50
 local MAX_CLOSE_DISTANCE = 200
+local FALLBACK_DELAY = 1
 
 ---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin, MapPinEnhancedFadingFrameTemplate
 ---@field navigationOpacity Frame | { content: MapPinEnhancedWayfinderFloatingContentTemplate }
@@ -22,6 +23,7 @@ local MAX_CLOSE_DISTANCE = 200
 ---@field isClamped boolean?
 ---@field clampedChanged boolean?
 ---@field customDirection boolean?
+---@field fallbackReadyAt number?
 ---@field lastNavigationTargetCheck number?
 ---@field lastNavigationReadinessCheck number?
 ---@field nativePositionReady boolean?
@@ -64,6 +66,8 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
     self.displayType = "far"
     self.isFallbackClose = nil
     self.presentationInitialized = nil
+    self.customDirection = nil
+    self.fallbackReadyAt = nil
     self.content:PrepareForTarget()
     self.needleRotation = nil
     self.newNeedleRotation = nil
@@ -85,13 +89,15 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     if self.customDirection == enabled then return end
     self.customDirection = enabled
+    -- Native frame/path setup can lag behind tracking. Only show a persistent fallback.
+    self.fallbackReadyAt = enabled and GetTime() + FALLBACK_DELAY or nil
     self.isClamped = nil
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self:ClearAllPoints()
     if enabled then
         self:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200)
-        self.navigationOpacity:SetAlpha(1)
+        self.navigationOpacity:SetAlpha(0)
     elseif self.navFrame then
         self.navigationOpacity:SetAlpha(1)
         self:SetPoint("CENTER", self.navFrame, "CENTER")
@@ -224,7 +230,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
-        local alpha = angle ~= nil and 1 or 0
+        local alpha = angle ~= nil and not self.fallbackReadyAt and 1 or 0
         if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
     end
     if angle ~= nil then
@@ -254,13 +260,15 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
     if not self.lastNavigationReadinessCheck or now - self.lastNavigationReadinessCheck >= 0.1 then
         self.lastNavigationReadinessCheck = now
         local ready = C_Navigation.GetFrame() ~= nil and C_Navigation.HasValidScreenPosition()
-        if ready ~= self.nativePositionReady then self.lastNavigationTargetCheck = nil end
+        if ready ~= self.nativePositionReady or self.fallbackReadyAt then self.lastNavigationTargetCheck = nil end
         self.nativePositionReady = ready
     end
     -- Events/owned target changes invalidate immediately; retain a full-match recovery poll.
-    if not self.lastNavigationTargetCheck or now - self.lastNavigationTargetCheck >= 1 then
+    if not self.lastNavigationTargetCheck or now - self.lastNavigationTargetCheck >= 1 or
+        self.fallbackReadyAt and now >= self.fallbackReadyAt then
         self:RefreshNavigationTarget()
     end
+    if self.fallbackReadyAt and now >= self.fallbackReadyAt then self.fallbackReadyAt = nil end
     if self.customDirection then
         self.isClamped = true
         if not self.presentationInitialized then
@@ -400,6 +408,7 @@ function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.newNeedleRotation = nil
     self.needle:SetRotation(0)
     self.customDirection = nil
+    self.fallbackReadyAt = nil
     self.lastNavigationTargetCheck = nil
     self.lastNavigationReadinessCheck = nil
     self.nativePositionReady = nil
