@@ -469,6 +469,9 @@ L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
 L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Minimize tracker instead of closing"
 L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
 "Keep only the header visible when minimizing the tracker."
+L["Miscellaneous.Tracker.ShowCoordinates_LABEL"] = "Show coordinates"
+L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] =
+"Show coordinates next to the zone name in tracker pin entries."
 L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Maximum visible rows"
 L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
 "Maximum group and pin rows before scrolling, excluding the header."

@@ -39,6 +39,7 @@ Options.DEFAULTS = {
     ["Pins.Tracking.AutoUntrack"] = false,
     ["Miscellaneous.Tracker.AutoShow"] = true,
     ["Miscellaneous.Tracker.CloseAction"] = false,
+    ["Miscellaneous.Tracker.ShowCoordinates"] = true,
     ["Miscellaneous.Tracker.MaximumRows"] = 7,
     ["Miscellaneous.Tracker.BackgroundOpacity"] = 0,
     ["Miscellaneous.Tracker.Scale"] = 1,

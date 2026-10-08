@@ -16,6 +16,11 @@
                     <KeyValue key="key" value="Miscellaneous.Tracker.CloseAction" />
                 </KeyValues>
             </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Miscellaneous.Tracker.ShowCoordinates" />
+                </KeyValues>
+            </Frame>
             <Frame inherits="MapPinEnhancedOptionSliderTemplate">
                 <KeyValues>
                     <KeyValue key="key" value="Miscellaneous.Tracker.MaximumRows" />

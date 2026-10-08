@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 MapPinEnhancedTrackerPinEntryMixin = {}
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Options = MapPinEnhanced:GetModule("Options")
 
 function MapPinEnhancedTrackerPinEntryMixin:RegisterCallbackEvents()
     local pin = self.pin
@@ -99,7 +100,8 @@ end
 function MapPinEnhancedTrackerPinEntryMixin:SetLocationText(x, y, mapID)
     local mapInfo = C_Map.GetMapInfo(mapID)
     local mapName = mapInfo and mapInfo.name or ""
-    self.location:SetText(string.format("%d, %d - %s", x * 100, y * 100, mapName))
+    self.location:SetText(Options:GetOptionValue("Miscellaneous.Tracker.ShowCoordinates") and
+        string.format("%d, %d - %s", x * 100, y * 100, mapName) or mapName)
 end
 
 function MapPinEnhancedTrackerPinEntryMixin:SetIcon(icon)

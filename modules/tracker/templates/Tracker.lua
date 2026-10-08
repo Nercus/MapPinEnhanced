@@ -209,6 +209,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
     Options:SubscribeToOptionChanges("Miscellaneous.Tracker.MaximumRows", function() self:UpdateHeight() end)
+    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.ShowCoordinates", function() self:RequestListUpdate() end)
     Options:SubscribeToOptionChanges("Miscellaneous.Tracker.BackgroundOpacity", function(value)
         self.contentBackground:SetAlpha(value / 100)
     end)
