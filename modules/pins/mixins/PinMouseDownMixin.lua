@@ -19,6 +19,10 @@ function MapPinEnhancedPinMouseDownMixin:OnMouseDown(frame, button)
             self:SharePin()
             return
         end
+        if IsAltKeyDown() then
+            self:ShowOnMap()
+            return
+        end
         self:ToggleTracked()
     elseif button == "RightButton" then
         self:ShowMenu(frame)

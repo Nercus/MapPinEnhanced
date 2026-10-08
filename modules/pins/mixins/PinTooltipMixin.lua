@@ -42,5 +42,6 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     GameTooltip:AddLine(string.format("%s %s", mapName, coordinates), 1, 1, 1, true)
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65, true)
+    GameTooltip:AddLine(L["Alt + left-click to show on map"], 0.65, 0.65, 0.65, true)
     GameTooltip:Show()
 end
