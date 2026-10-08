@@ -10933,16 +10933,16 @@ local PORTAL = {
     },
 
     -- Zone: Millenia's Threshold (map 2266)
-    -- Millenia's Threshold (map 2266 43.55,49.90) -> Dornogal (map 2339 53.98,38.72) via portal
+    -- Millenia's Threshold (map 2266 43.55,49.90) -> Silvermoon (map 2393 41.97,58.29) via portal
     {
         fromPointID = 1100237,
         fromMap = 2266,
         fromX = 0.4355,
         fromY = 0.499,
-        toPointID = 1200131,
-        toMap = 2339,
-        toX = 0.5398,
-        toY = 0.3872,
+        toPointID = 200662,
+        toMap = 2393,
+        toX = 0.4197,
+        toY = 0.5829,
         type = "portal",
         requirement = {
             operation = "all",
@@ -10950,57 +10950,45 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "minLevel",
-                    value = 80,
+                    value = 90,
                 },
             },
         },
     },
-    -- Millenia's Threshold (map 2266 60.53,69.47) -> Eredath (map 882 20.60,59.47) via portal
-    {
-        fromPointID = 1100238,
-        fromMap = 2266,
-        fromX = 0.6053,
-        fromY = 0.6947,
-        toPointID = 700299,
-        toMap = 882,
-        toX = 0.206,
-        toY = 0.5947,
-        type = "portal",
-    },
-    -- Millenia's Threshold (map 2266 64.54,43.67) -> Spires of Arak (map 542 35.83,20.21) via portal
-    {
-        fromPointID = 1100239,
-        fromMap = 2266,
-        fromX = 0.6454,
-        fromY = 0.4367,
-        toPointID = 600075,
-        toMap = 542,
-        toX = 0.3583,
-        toY = 0.2021,
-        type = "portal",
-    },
-    -- Millenia's Threshold (map 2266 70.44,72.85) -> Thaldraszus (map 2025 57.78,45.84) via portal
+    -- Millenia's Threshold (map 2266 70.44,72.85) -> Vol'dun (map 864 50.92,38.22) via portal
     {
         fromPointID = 1100240,
         fromMap = 2266,
         fromX = 0.7044,
         fromY = 0.7285,
-        toPointID = 1100065,
-        toMap = 2025,
-        toX = 0.5778,
-        toY = 0.4584,
+        toPointID = 900112,
+        toMap = 864,
+        toX = 0.50916749238968,
+        toY = 0.38219237327576,
         type = "portal",
     },
-    -- Millenia's Threshold (map 2266 74.39,47.09) -> Icecrown (map 118 49.28,89.86) via portal
+    -- Millenia's Threshold (map 2266 74.39,47.09) -> Zuldazar (map 862 43.68,45.43) via portal
     {
         fromPointID = 1100241,
         fromMap = 2266,
         fromX = 0.7439,
         fromY = 0.4709,
-        toPointID = 400068,
-        toMap = 118,
-        toX = 0.4928,
-        toY = 0.8986,
+        toPointID = 900111,
+        toMap = 862,
+        toX = 0.43678778409958,
+        toY = 0.45432794094086,
+        type = "portal",
+    },
+    -- Millenia's Threshold (map 2266 77.06,61.41) -> The Waking Shores (map 2022 58.04,78.40) via portal
+    {
+        fromPointID = 1100242,
+        fromMap = 2266,
+        fromX = 0.77057862281799,
+        fromY = 0.61411869525909,
+        toPointID = 1100243,
+        toMap = 2022,
+        toX = 0.58035147190094,
+        toY = 0.78400069475174,
         type = "portal",
     },
 
