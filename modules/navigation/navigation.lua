@@ -107,6 +107,30 @@ local function HasParentMap(mapID, parentMapID)
     return false
 end
 
+---@param mapID number
+---@param x number
+---@param y number
+---@return number mapID
+---@return number x
+---@return number y
+function Navigation:ResolveZonePosition(mapID, x, y)
+    local hbd = MapPinEnhanced.HBD
+    if not hbd or not C_Map.GetMapInfoAtPosition then return mapID, x, y end
+    local mapInfo = C_Map.GetMapInfo(mapID)
+    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Continent do
+        local child = C_Map.GetMapInfoAtPosition(mapID, x, y)
+        if not child or child.mapID == mapID or child.mapType <= mapInfo.mapType then break end
+        local childX, childY = hbd:TranslateZoneCoordinates(x, y, mapID, child.mapID)
+        if type(childX) ~= "number" or type(childY) ~= "number" or
+            not (childX >= 0 and childX <= 1 and childY >= 0 and childY <= 1) then
+            break
+        end
+        mapID, x, y = child.mapID, childX, childY
+        mapInfo = child
+    end
+    return mapID, x, y
+end
+
 ---@param data WayfinderData
 ---@return WayfinderData
 local function CopyRoutingData(data)
@@ -141,18 +165,7 @@ local function CopyRoutingData(data)
             return copy
         end
     end
-    if not C_Map.GetMapInfoAtPosition then return copy end
-    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Continent do
-        local child = C_Map.GetMapInfoAtPosition(copy.mapID, copy.x, copy.y)
-        if not child or child.mapID == copy.mapID or child.mapType <= mapInfo.mapType then break end
-        local x, y = hbd:TranslateZoneCoordinates(copy.x, copy.y, copy.mapID, child.mapID)
-        if type(x) ~= "number" or type(y) ~= "number" or
-            not (x >= 0 and x <= 1 and y >= 0 and y <= 1) then
-            break
-        end
-        copy.mapID, copy.x, copy.y = child.mapID, x, y
-        mapInfo = child
-    end
+    copy.mapID, copy.x, copy.y = Navigation:ResolveZonePosition(copy.mapID, copy.x, copy.y)
     return copy
 end
 

@@ -138,6 +138,22 @@ function Navigation:ShowDebugDump()
         })
     end
     if graph then
+        local hearthstoneDestination ---@type NavigationHearthstoneDestination?
+        for _, reference in ipairs(graph.currentPlayerPathReferences) do
+            if graph.pathTypes[reference] == "hearthstone" then
+                local point = graph.pathToPointIndexes[reference]
+                if graph.pointMapIDs[point] > 0 then
+                    hearthstoneDestination = {
+                        mapID = graph.pointMapIDs[point],
+                        x = graph.pointXs[point],
+                        y = graph.pointYs[point],
+                        bindName = graph.hearthstoneBindName
+                    }
+                end
+                break
+            end
+        end
+        Add("Hearthstone destination", hearthstoneDestination)
         ---@param reference integer
         ---@param cost NavigationCalculatedPathCost?
         local function AddPath(reference, cost)

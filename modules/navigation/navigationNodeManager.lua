@@ -383,6 +383,12 @@ function Navigation:UpdateHearthstonePath(destination)
     local reference = hearthstonePathReferences[1]
     if not graph or not reference then return end
     local point = graph.pathToPointIndexes[reference]
+    local mapID, x, y = 0, 0, 0
+    if destination then
+        -- Bind observations can use a continent map. Resolve the routing copy
+        -- on both restore and learning without replacing the saved observation.
+        mapID, x, y = self:ResolveZonePosition(destination.mapID, destination.x, destination.y)
+    end
     -- Existing Routes and jobs own immutable geometry. Share the static arrays,
     -- copying only the arrays whose hearth endpoint changes.
     local replacement = CopyTable(graph, true) ---@type NavigationGraph
@@ -390,9 +396,9 @@ function Navigation:UpdateHearthstonePath(destination)
     replacement.pointXs = CopyTable(graph.pointXs)
     replacement.pointYs = CopyTable(graph.pointYs)
     replacement.excludedPaths = CopyTable(graph.excludedPaths)
-    replacement.pointMapIDs[point] = destination and destination.mapID or 0
-    replacement.pointXs[point] = destination and destination.x or 0
-    replacement.pointYs[point] = destination and destination.y or 0
+    replacement.pointMapIDs[point] = mapID
+    replacement.pointXs[point] = x
+    replacement.pointYs[point] = y
     replacement.hearthstoneBindName = destination and MapPinEnhanced:NormalizeText(destination.bindName) or nil
     for _, hearthReference in ipairs(hearthstonePathReferences) do
         replacement.excludedPaths[hearthReference] = not destination and "hearthstone destination unknown" or nil
