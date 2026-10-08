@@ -626,6 +626,20 @@ local ITEM = {
     },
 
     -- Zone: Timeless Isle (map 554)
+    -- Time-Lost Artifact -> The Celestial Court (map 554 34.20,55.30)
+    {
+        toPointID = 1100248,
+        toMap = 554,
+        toX = 0.342,
+        toY = 0.553,
+        type = "item",
+        travelDuration = 10,
+        requirement = {
+            operation = "check",
+            kind = "item",
+            value = 103678,
+        },
+    },
     -- current position -> Timeless Isle (map 554 21.32,39.52) via item
     {
         toPointID = 500257,
