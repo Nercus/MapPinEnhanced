@@ -1,8 +1,57 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+---@class Navigation
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
+local toyOptions = {} ---@type table<number, table<number, boolean>>
+MapPinEnhanced:SetDefault("toyGossipOptions", {})
+
+---@param gossip NavigationStaticGossip
+---@return boolean
+function Navigation:IsToyGossipAvailable(gossip)
+    local key = MapPinEnhanced:GetCharacterKey()
+    local saved = MapPinEnhanced:GetVar("toyGossipOptions")
+    local options = key and type(saved) == "table" and saved[key]
+    local known = type(options) == "table" and options[gossip.gossipOptionID]
+    if type(known) == "boolean" then return known end
+    return not gossip.requiresObservation
+end
+
+local function ObserveToyOptions()
+    local guid = UnitGUID("npc")
+    if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
+    local npcID = select(6, strsplit("-", guid))
+    local known = toyOptions[tonumber(npcID)]
+    if not known then return end
+    local key = MapPinEnhanced:GetCharacterKey()
+    if not key then return end
+    local observed = {} ---@type table<number, boolean>
+    for id in pairs(known) do observed[id] = false end
+    local options = C_GossipInfo.GetOptions()
+    if not MapPinEnhanced:IsReadableTable(options) or #options == 0 then return end
+    for _, option in ipairs(options) do
+        if not MapPinEnhanced:IsReadableTable(option) or
+            MapPinEnhanced:IsSecretValue(option.gossipOptionID) or
+            MapPinEnhanced:IsSecretValue(option.status) then return end
+        if known[option.gossipOptionID] then
+            observed[option.gossipOptionID] = option.status == Enum.GossipOptionStatus.Available
+        end
+    end
+    local saved = MapPinEnhanced:GetVar("toyGossipOptions")
+    if type(saved) ~= "table" then saved = {} end
+    ---@cast saved table<string, table<number, boolean>>
+    saved[key] = type(saved[key]) == "table" and saved[key] or {}
+    local changed = false
+    for id, available in pairs(observed) do
+        if saved[key][id] ~= available then changed = true end
+        saved[key][id] = available
+    end
+    if changed then
+        MapPinEnhanced:SetVar("toyGossipOptions", saved)
+        Navigation:RefreshPreparedData()
+    end
+end
 
 ---@param context NavigationPathPresentationContext?
 ---@return string icon, string method, string instruction
@@ -15,7 +64,7 @@ end
 ---@param path NavigationStaticPath
 ---@return NavigationStaticGossip?
 ---@return string? failure
-local function GossipDataprovider(path)
+function Navigation:GetGossipPathData(path)
     local gossip = path.gossip ---@type NavigationStaticGossip?
     if type(gossip) ~= "table" or type(gossip.npcID) ~= "number" or
         type(gossip.gossipOptionID) ~= "number" then
@@ -23,7 +72,12 @@ local function GossipDataprovider(path)
     end
     local npcID = gossip.npcID
     local gossipOptionID = gossip.gossipOptionID
-    return { npcID = npcID, gossipOptionID = gossipOptionID }
+    if path.type == "toy" then
+        toyOptions[npcID] = toyOptions[npcID] or {}
+        toyOptions[npcID][gossipOptionID] = true
+    end
+    return { npcID = npcID, gossipOptionID = gossipOptionID,
+        requiresObservation = gossip.requiresObservation }
 end
 
 local activeContext ---@type NavigationActivePathContext?
@@ -34,11 +88,15 @@ local gossipOpen = false
 local function SelectTravelOption()
     local context, report = activeContext, activeReport
     if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then return end
-    if not gossipOpen or not context or not report or context.phase == "in-transit" or
-        selectedOptionID or InCombatLockdown() then
+    local isToy = context and context.pathType == "toy"
+    if not gossipOpen or not context or not report or
+        (isToy and context.phase ~= "in-transit" or not isToy and context.phase == "in-transit") or
+        selectedOptionID or InCombatLockdown() or IsShiftKeyDown() then
         return
     end
-    if not Navigation:IsCurrentPathReady() then return end
+    -- A summoned toy is already on cooldown. Its retained interaction is
+    -- validated by the exact live menu, rather than pre-summon eligibility.
+    if not isToy and not Navigation:IsCurrentPathReady() then return end
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
@@ -62,19 +120,23 @@ local function SelectTravelOption()
             return
         end
     end
+    if isToy and not Navigation:IsToyGossipAvailable(data) then report("failed") end
 end
 
-local function Activate(context, report)
+---@param context NavigationActivePathContext
+---@param report NavigationPathReport
+function Navigation:ActivateGossipPath(context, report)
     activeContext, activeReport = context, report
     SelectTravelOption()
 end
 
-local function Deactivate()
+function Navigation:DeactivateGossipPath()
     activeContext, activeReport, selectedOptionID = nil, nil, nil
 end
 
 MapPinEnhanced:RegisterEvent("GOSSIP_SHOW", function()
     gossipOpen = true
+    ObserveToyOptions()
     SelectTravelOption()
 end)
 MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
@@ -82,7 +144,10 @@ MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
     selectedOptionID = nil
 end)
 
-Navigation:RegisterPathHandler("gossip", GossipPresentation, GossipDataprovider, nil, Activate, Deactivate)
+Navigation:RegisterPathHandler("gossip", GossipPresentation,
+    function(path) return Navigation:GetGossipPathData(path) end, nil,
+    function(context, report) Navigation:ActivateGossipPath(context, report) end,
+    function() Navigation:DeactivateGossipPath() end)
 
 -- Phase interactions share exact gossip selection, but only the phase owner
 -- can report completion. Proximity and closing the menu are never evidence.
@@ -102,7 +167,7 @@ local function PhaseDataprovider(path)
     if type(path.fromMap) ~= "number" or path.fromMap == path.toMap then
         return nil, "phase switch requires distinct origin and destination maps"
     end
-    local gossip, failure = GossipDataprovider(path)
+    local gossip, failure = Navigation:GetGossipPathData(path)
     if not gossip then return nil, failure end
     return {
         npcID = gossip.npcID,
@@ -141,4 +206,5 @@ MapPinEnhanced:RegisterEventBucket({
 }, CheckPhaseChange, 1)
 
 Navigation:RegisterPathHandler("phaseswitch", PhasePresentation, PhaseDataprovider, PhaseCostCalculator,
-    Activate, Deactivate)
+    function(context, report) Navigation:ActivateGossipPath(context, report) end,
+    function() Navigation:DeactivateGossipPath() end)

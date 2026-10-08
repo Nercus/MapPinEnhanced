@@ -7,6 +7,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@class NavigationPathPresentationContext
 ---@field destinationName string?
+---@field data NavigationStaticGossip?
 ---@field originName string? Only supplied when repeated portal destinations need disambiguation
 ---@field requirement NavigationRequirement?
 ---@field phase "approach"|"ready"|"in-transit"?
@@ -176,6 +177,7 @@ function Navigation:GetPathInstruction(route, pathIndex, phase)
             GetMapName(destinationMapID),
         originName = originName,
         requirement = graph.pathRequirements[reference],
+        data = graph.pathHandlerData[reference],
         phase = phase,
     })
     return instruction

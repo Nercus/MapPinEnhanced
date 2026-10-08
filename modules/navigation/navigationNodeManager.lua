@@ -26,6 +26,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@class NavigationStaticGossip
 ---@field npcID number
 ---@field gossipOptionID number
+---@field requiresObservation boolean? Require positive character-specific menu observation
 
 ---@class NavigationRequirementCheck
 ---@field operation "check"

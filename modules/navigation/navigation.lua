@@ -430,6 +430,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
             destinationData.title or "", destinationData.description)
         return active.changeNumber
     end
+    self:CancelToyTravel()
     self:CancelRouteCalculation(self.activeCalculation)
     self:DeactivatePathHandler()
     self:RestoreActionEquipment()
@@ -601,6 +602,7 @@ function Navigation:ClearDestination(owner, destinationID, changeNumber)
     local destination = self.activeDestination
     if destination and destination.objectiveAreaExitTimer then destination.objectiveAreaExitTimer:Cancel() end
     self:CancelRouteCalculation(self.activeCalculation)
+    self:CancelToyTravel()
     self:DeactivatePathHandler()
     self.activeCalculation = nil
     self.activeDestination = nil
@@ -1633,6 +1635,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
 end)
 
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
+    Navigation:CancelToyTravel()
     Navigation.routeNavigationEnabled = value == true
     if Navigation.routeNavigationEnabled then
         Navigation:StartCalculation()
