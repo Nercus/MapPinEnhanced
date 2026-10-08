@@ -174,6 +174,13 @@ function Navigation:ShowDebugDump()
                 AddPath(reference, route.pathCosts[index])
             end
         end
+        -- Toys have no entrance on the player map; include rejected candidates too.
+        lines[#lines + 1] = "Toy paths:"
+        for reference = 1, graph.pathCount do
+            if graph.pathTypes[reference] == "toy" then
+                AddPath(reference)
+            end
+        end
         -- Include rejected local portals, which never appear in the winning route.
         lines[#lines + 1] = "Portals from player map:"
         for reference = 1, graph.pathCount do

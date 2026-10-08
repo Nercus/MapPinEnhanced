@@ -12,9 +12,13 @@ MapPinEnhanced:SetDefault("toyGossipOptions", {})
 function Navigation:IsToyGossipAvailable(gossip)
     local key = MapPinEnhanced:GetCharacterKey()
     local saved = MapPinEnhanced:GetVar("toyGossipOptions")
+    ---@cast saved table<string, table<number, boolean>>?
     local options = key and type(saved) == "table" and saved[key]
-    local known = type(options) == "table" and options[gossip.gossipOptionID]
-    if type(known) == "boolean" then return known end
+    -- Missing character data is unobserved, not a recorded unavailable option.
+    if type(options) == "table" then
+        local known = options[gossip.gossipOptionID]
+        if type(known) == "boolean" then return known end
+    end
     return not gossip.requiresObservation
 end
 

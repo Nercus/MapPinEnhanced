@@ -90,10 +90,7 @@ local TOY = {
             },
         },
     },
-    -- Engineering landing coordinates: navigation-data data_items.lua and
-    -- https://github.com/p3lim-wow/InteractiveWormholes/blob/master/data/wormholes.lua
-    -- Gossip NPC identities: DialogueUI GossipData_Teleport.lua.
-    -- Transporter coordinates are approximate; arrival uses actual position.
+
     -- Gadgetzan
     {
         toPointID = 1400001,
