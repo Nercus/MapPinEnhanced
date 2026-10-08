@@ -1,6 +1,7 @@
 ---@meta
 
 IN_GAME_NAVIGATION_RANGE = "%s |4yd:yds"
+MAP_PIN = "Map Pin"
 
 LE_PARTY_CATEGORY_HOME = 1
 
