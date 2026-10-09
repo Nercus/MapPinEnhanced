@@ -14,15 +14,12 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedOptionCategoryWayfinderTemplate : MapPinEnhancedOptionCategoryBaseTemplate
 ---@field display MapPinEnhancedWayfinderOptionsDisplay
----@field navigation MapPinEnhancedOptionGroupTemplate
 ---@field searchPresentation WayfinderSelection?
 ---@field unsubscribeSelection fun()?
----@field unsubscribeNavigation fun()?
 ---@field showNumber number?
 MapPinEnhancedOptionCategoryWayfinderMixin = CreateFromMixins(MapPinEnhancedOptionCategoryBaseMixin)
 
 local SELECTION_KEY = "Wayfinder.General.Selection"
-local NAVIGATION_KEY = "Wayfinder.Navigation.Enable"
 ---@type table<string, WayfinderSelection>
 local PRESENTATION_BY_OPTION = {
     ["Wayfinder.Floating.ShowBeam"] = "floating",
@@ -59,16 +56,6 @@ function MapPinEnhancedOptionCategoryWayfinderMixin:RevealOption(key)
     self:RefreshDisplay()
 end
 
-function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshNavigation()
-    local enabled = Options:GetOptionValue(NAVIGATION_KEY) == true
-    Options:SetOptionEnabled("Wayfinder.Navigation.AutomaticTravelSelection", enabled)
-    Options:SetOptionEnabled("Wayfinder.Navigation.RestoreEquipment", enabled)
-    Options:SetOptionEnabled("Wayfinder.Navigation.BackgroundSearch", enabled)
-    Options:SetOptionEnabled("Wayfinder.Navigation.WorldMap", enabled)
-    Options:SetOptionEnabled("Wayfinder.Navigation.Minimap", enabled)
-    Options:SetOptionEnabled("Wayfinder.Navigation.TransportationGroups", enabled)
-end
-
 function MapPinEnhancedOptionCategoryWayfinderMixin:OnShow()
     self.showNumber = (self.showNumber or 0) + 1
     local showNumber = self.showNumber
@@ -78,20 +65,13 @@ function MapPinEnhancedOptionCategoryWayfinderMixin:OnShow()
         self.searchPresentation = nil
         self:RefreshDisplay()
     end)
-    self.unsubscribeNavigation = Options:SubscribeToOptionChanges(NAVIGATION_KEY, function()
-        if self.showNumber ~= showNumber then return end
-        self:RefreshNavigation()
-    end)
-    self:RefreshNavigation()
     self:RefreshDisplay()
 end
 
 function MapPinEnhancedOptionCategoryWayfinderMixin:OnHide()
     self.showNumber = (self.showNumber or 0) + 1
     if self.unsubscribeSelection then self.unsubscribeSelection() end
-    if self.unsubscribeNavigation then self.unsubscribeNavigation() end
     self.unsubscribeSelection = nil
-    self.unsubscribeNavigation = nil
     self.searchPresentation = nil
     self.display.searchNote:Hide()
 end

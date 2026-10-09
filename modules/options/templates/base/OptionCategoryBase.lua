@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
+local Options = MapPinEnhanced:GetModule("Options")
 
 ---@class MapPinEnhancedOptionCategoryBaseHeader : Button
 ---@field icon MapPinEnhancedIconMixin
@@ -14,6 +15,9 @@ local L = MapPinEnhanced.L
 ---@field headerBottomSpacing number
 ---@field groupSpacing number
 ---@field bottomPadding number
+---@field enableKey string?
+---@field unsubscribeEnable fun()?
+---@field showNumber number?
 MapPinEnhancedOptionCategoryBaseMixin = {}
 
 function MapPinEnhancedOptionCategoryBaseMixin:UpdateHeight()
@@ -60,6 +64,35 @@ function MapPinEnhancedOptionCategoryBaseMixin:OnLoad()
 end
 
 function MapPinEnhancedOptionCategoryBaseMixin:OnShow()
+    if self.enableKey then
+        self.showNumber = (self.showNumber or 0) + 1
+        local showNumber = self.showNumber
+        self.unsubscribeEnable = Options:SubscribeToOptionChanges(self.enableKey, function()
+            -- Startup may deliver an initial value after this show has ended.
+            if self.showNumber ~= showNumber then return end
+            self:RefreshEnabledOptions()
+        end)
+        self:RefreshEnabledOptions()
+    end
     self:LayoutChildren()
     self:UpdateHeight()
+end
+
+function MapPinEnhancedOptionCategoryBaseMixin:RefreshEnabledOptions()
+    local enabled = Options:GetOptionValue(self.enableKey) == true
+    ---@param child MapPinEnhancedFormElementTemplate
+    for _, child in ipairs({ self:GetChildren() }) do
+        if child ~= self.header and child.key ~= self.enableKey then
+            child:SetEnabledState(enabled)
+            child:SetShown(enabled)
+            if not enabled then child.searchHighlight:Hide() end
+        end
+    end
+    if Options.frame then Options.frame:UpdateLayout() end
+end
+
+function MapPinEnhancedOptionCategoryBaseMixin:OnHide()
+    self.showNumber = (self.showNumber or 0) + 1
+    if self.unsubscribeEnable then self.unsubscribeEnable() end
+    self.unsubscribeEnable = nil
 end

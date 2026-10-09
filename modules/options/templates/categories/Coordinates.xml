@@ -4,6 +4,7 @@
     <Frame name="MapPinEnhancedOptionCategoryCoordinatesTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
             <KeyValue key="categoryName" value="Coordinates" />
+            <KeyValue key="enableKey" value="Miscellaneous.Coords.Enable" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">

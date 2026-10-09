@@ -213,6 +213,10 @@ function Options:ScrollToOption(key)
     end
     assert(frame.ScrollToOption, "Option frame must have a ScrollToOption method")
     if self.frame then self.frame.scrollFrame.Child.Wayfinder:RevealOption(key) end
+    if not frame:IsShown() then
+        local category = frame:GetParent() --[[@as MapPinEnhancedOptionCategoryBaseTemplate]]
+        if category.enableKey then frame = self.options[category.enableKey] end
+    end
     for _, option in pairs(self.options) do option.searchHighlight:Hide() end
     frame:ScrollToOption()
 end

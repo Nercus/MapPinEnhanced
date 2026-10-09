@@ -1,0 +1,47 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+
+    <Frame name="MapPinEnhancedOptionCategoryNavigationTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
+        <KeyValues>
+            <KeyValue key="categoryName" value="Wayfinder.Navigation_GROUPLABEL" />
+            <KeyValue key="enableKey" value="Wayfinder.Navigation.Enable" />
+        </KeyValues>
+        <Frames>
+            <Frame inherits="MapPinEnhancedOptionToggleTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.Enable" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.WorldMap" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.Minimap" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.AutomaticTravelSelection" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.RestoreEquipment" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.BackgroundSearch" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Navigation.TransportationGroups" />
+                </KeyValues>
+            </Frame>
+        </Frames>
+    </Frame>
+</Ui>

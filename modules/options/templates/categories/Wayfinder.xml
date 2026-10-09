@@ -68,48 +68,6 @@
                     </Frame>
                 </Frames>
             </Frame>
-            <Frame inherits="MapPinEnhancedOptionGroupTemplate" parentKey="navigation">
-                <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation" />
-                </KeyValues>
-                <Frames>
-                    <Frame inherits="MapPinEnhancedOptionToggleTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.Enable" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.WorldMap" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.Minimap" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.AutomaticTravelSelection" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.RestoreEquipment" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.BackgroundSearch" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Navigation.TransportationGroups" />
-                        </KeyValues>
-                    </Frame>
-                </Frames>
-            </Frame>
         </Frames>
         <Scripts>
             <OnShow method="OnShow" />

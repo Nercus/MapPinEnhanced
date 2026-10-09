@@ -5,4 +5,5 @@
     <Include file="Coordinates.xml" />
     <Include file="Tracker.xml" />
     <Include file="Wayfinder.xml" />
+    <Include file="Navigation.xml" />
 </Ui>
