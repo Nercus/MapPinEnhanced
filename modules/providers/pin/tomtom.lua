@@ -55,18 +55,39 @@ local function AddTomTomWaypoint(mapID, x, y, info)
     })
 end
 
----@type table<function, boolean>
+local tomTomShim = {}
+
+---@param mapID any
+---@param x any
+---@param y any
+---@param info any
+local function AddShimWaypoint(_, mapID, x, y, info)
+    -- Saved shim references stop ingesting once another owner takes over.
+    if TomTom ~= tomTomShim or C_AddOns.IsAddOnLoaded("TomTom") then return end
+    AddTomTomWaypoint(mapID, x, y, info)
+end
+
+tomTomShim.AddWaypoint = AddShimWaypoint
+
+---@type table<table, table<function, boolean>>
 local hookedMethods = {}
 
 -- Post-hooks leave TomTom's behavior and return values with its original owner.
 local function HookTomTomAddWaypoint()
     if not C_AddOns.IsAddOnLoaded("TomTom") or not MapPinEnhanced:IsReadableTable(TomTom) then return end
     local method = TomTom.AddWaypoint
-    if MapPinEnhanced:IsSecretValue(method) or type(method) ~= "function" or hookedMethods[method] then return end
+    if MapPinEnhanced:IsSecretValue(method) or type(method) ~= "function" or method == AddShimWaypoint then return end
+    local methods = hookedMethods[TomTom]
+    if not methods then
+        methods = {}
+        hookedMethods[TomTom] = methods
+    end
+    if methods[method] then return end
     hooksecurefunc(TomTom, "AddWaypoint", function(_, mapID, x, y, info)
         AddTomTomWaypoint(mapID, x, y, info)
     end)
-    hookedMethods[TomTom.AddWaypoint] = true
+    methods[method] = true
+    methods[TomTom.AddWaypoint] = true
 end
 
 function Providers:CheckForTomTom()
@@ -88,4 +109,7 @@ end)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Providers:CheckForTomTom()
+    if not Providers.isTomTomLoaded and TomTom == nil then
+        TomTom = tomTomShim
+    end
 end)

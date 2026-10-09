@@ -31,11 +31,12 @@ TomTom = {}
 ---@field callbacks? TomTomCallbacks
 
 ---Add a waypoint to the map.
+---MapPinEnhanced's no-addon shim exposes only this method and returns nil.
 ---@param map number
 ---@param x number
 ---@param y number
 ---@param options TomTomWaypointOptions?
----@return TomTomUID
+---@return TomTomUID?
 function TomTom:AddWaypoint(map, x, y, options) end
 
 ---Generate the default callback tables using the given options table.
