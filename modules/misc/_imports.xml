@@ -7,4 +7,5 @@
     <Include file="wayBack.lua" />
     <Include file="CoordinatesDisplay.xml" />
     <Include file="IconPicker.xml" />
+    <Include file="Startup.xml" />
 </Ui>

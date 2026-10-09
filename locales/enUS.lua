@@ -527,3 +527,28 @@ L["Options"] = "Options"
 L["Minimap"] = "Minimap"
 L["Help"] = "Help"
 L["Mark all active pins as reached."] = "Mark all active pins as reached."
+
+-- Startup introduction
+L["Example pin"] = "Example pin"
+L["Introduction"] = "Introduction"
+L["Step %d of %d"] = "Step %d of %d"
+L["Reset the startup introduction."] = "Reset the startup introduction."
+L["This introduction covers some of the addon's core settings. You can change all of these choices later in settings."] =
+"This introduction covers some of the addon's core settings. You can change all of these choices later in settings."
+L["Find your way"] = "Find your way"
+L["Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction."] =
+"Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction."
+L["Let the journey begin"] = "Let the journey begin"
+L["Navigation shows the best available route to your target location."] =
+"Navigation shows the best available route to your target location."
+L["Your next adventure starts here"] = "Your next adventure starts here"
+L["Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction."] =
+"Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction."
+L["Let's go!"] = "Let's go!"
+L["Finish"] = "Finish"
+L["Next"] = "Next"
+L["Place test pin and finish"] = "Place test pin and finish"
+L["Welcome to Map Pin Enhanced!"] = "Welcome to Map Pin Enhanced!"
+L["Select a wayfinder"] = "Select a wayfinder"
+L["Enable navigation"] = "Enable navigation"
+L["Place your first pin"] = "Place your first pin"

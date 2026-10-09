@@ -17,6 +17,7 @@
 ---@field legacyOptionsMigrated boolean? Legacy preferences were copied; source fields remain for recovery.
 ---@field legacyGroupsMigrated boolean? Legacy pins/sets were copied once; source fields remain for recovery.
 ---@field options table<string, number|string|boolean|table>?
+---@field startupWizard StartupProgress? Account introduction progress.
 ---@field trackerVisible boolean?
 ---@field trackerMinimized boolean?
 ---@field minimapButton MapPinEnhancedMinimapSettings? LibDBIcon visibility, position and compartment preferences.
