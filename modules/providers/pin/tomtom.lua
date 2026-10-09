@@ -7,7 +7,7 @@ local L = MapPinEnhanced.L
 local Providers = MapPinEnhanced:GetModule("Providers")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
----@return MapPinEnhancedGroupMixin
+---@return MapPinEnhancedGroupMixin?
 local function EnsureTomTomGroup()
     local group = Groups:GetGroupByName(L["TomTom Pins"])
     if group then return group end
@@ -18,47 +18,69 @@ local function EnsureTomTomGroup()
         icon = "Interface\\Icons\\INV_Misc_Map_01",
         order = GetTime()
     })
-    assert(group, "EnsureTomTomGroup: failed to register the TomTom group")
     return group
+end
+
+---@param mapID any
+---@param x any
+---@param y any
+---@param info any
+local function AddTomTomWaypoint(mapID, x, y, info)
+    if not MapPinEnhanced:IsReadablePositiveInteger(mapID) or
+        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
+        return
+    end
+    if not MapPinEnhanced:IsReadableTable(info) then info = {} end
+    local title = info.title
+    if MapPinEnhanced:IsSecretValue(title) or type(title) ~= "string" or title == "" then
+        title = L["TomTom Waypoint"]
+    end
+    local texture = info.minimap_icon
+    if MapPinEnhanced:IsSecretValue(texture) or
+        not ((type(texture) == "string" and texture ~= "") or
+            MapPinEnhanced:IsReadablePositiveInteger(texture)) then
+        texture = "Interface\\Icons\\INV_Misc_Map_01"
+    end
+
+    -- Groups are deletable pooled objects; resolve ownership for every call.
+    local group = EnsureTomTomGroup()
+    if not group then return end
+    group:AddPin({
+        mapID = mapID,
+        x = x,
+        y = y,
+        title = title,
+        texture = texture,
+        setTracked = true,
+    })
+end
+
+---@type table<function, boolean>
+local hookedMethods = {}
+
+-- Post-hooks leave TomTom's behavior and return values with its original owner.
+local function HookTomTomAddWaypoint()
+    if not C_AddOns.IsAddOnLoaded("TomTom") or not MapPinEnhanced:IsReadableTable(TomTom) then return end
+    local method = TomTom.AddWaypoint
+    if MapPinEnhanced:IsSecretValue(method) or type(method) ~= "function" or hookedMethods[method] then return end
+    hooksecurefunc(TomTom, "AddWaypoint", function(_, mapID, x, y, info)
+        AddTomTomWaypoint(mapID, x, y, info)
+    end)
+    hookedMethods[TomTom.AddWaypoint] = true
 end
 
 function Providers:CheckForTomTom()
     self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
-    if not self.isTomTomLoaded then
-        ---@diagnostic disable-next-line: global-element slash command definition has to be global
-        SLASH_MapPinEnhanced3 = "/way"
-        return
-    end
-    EnsureTomTomGroup()
+    MapPinEnhanced.isTomTomLoaded = self.isTomTomLoaded
+    if not self.isTomTomLoaded then return end
+    HookTomTomAddWaypoint()
     MapPinEnhanced:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
-end
-
-local isHooked = false
---- Hook TomTom's AddWaypoint function to add pins to the map when a use has TomTom installed and adds a waypoint to the map.
-local function HookTomTomAddWaypoint()
-    if isHooked then return end
-    if not TomTom then return end
-    if not TomTom.AddWaypoint then return end
-    local group = EnsureTomTomGroup()
-    hooksecurefunc(TomTom, "AddWaypoint", function(_, ...)
-        local mapID, x, y, info = ...
-        ---@cast info TomTomWaypointOptions
-        if not mapID or not x or not y then return end
-        group:AddPin({
-            mapID = mapID,
-            x = x,
-            y = y,
-            title = info.title or L["TomTom Waypoint"],
-            texture = info.minimap_icon or "Interface\\Icons\\INV_Misc_Map_01",
-        })
-    end)
-    isHooked = true
 end
 
 MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(addon)
     if addon == "TomTom" then
         MapPinEnhanced.isTomTomLoaded = true
-        EnsureTomTomGroup()
+        Providers.isTomTomLoaded = true
         HookTomTomAddWaypoint()
     end
 end)
@@ -66,7 +88,4 @@ end)
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Providers:CheckForTomTom()
-    if Providers.isTomTomLoaded then
-        HookTomTomAddWaypoint()
-    end
 end)

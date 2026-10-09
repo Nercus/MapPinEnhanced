@@ -15,8 +15,8 @@ TomTom = {}
 ---@field world { onclick: fun(event, uid: TomTomUID, self, button), tooltip_show: fun(event, tooltip, uid: TomTomUID, dist), tooltip_update: fun(event, tooltip, uid: TomTomUID, dist) }
 
 ---@class TomTomWaypointOptions
----@field title string
----@field source string
+---@field title? string
+---@field source? string
 ---@field persistent? boolean
 ---@field minimap? boolean
 ---@field minimap_icon? any
@@ -34,7 +34,7 @@ TomTom = {}
 ---@param map number
 ---@param x number
 ---@param y number
----@param options TomTomWaypointOptions
+---@param options TomTomWaypointOptions?
 ---@return TomTomUID
 function TomTom:AddWaypoint(map, x, y, options) end
 
