@@ -87,7 +87,7 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
     self.layoutReady = true
     self:UpdateLayout()
 
-    MapPinEnhanced:AddSlashCommand("options", function()
+    MapPinEnhanced:AddSlashCommand({ "options", L["Options"]:lower() }, function()
         Options:OpenOptions()
     end, L["Open the options frame"])
 end

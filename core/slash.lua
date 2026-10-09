@@ -4,6 +4,9 @@ local MapPinEnhanced = select(2, ...)
 ---@type table<string, function> a list of commands and their associated functions
 local commandList = {}
 
+---@type table<string, function> locale and secondary aliases; canonical commands take precedence
+local commandAliases = {}
+
 ---@type table<string, string> a list of commands and their associated help strings
 local commandHelpStrings = {}
 
@@ -28,8 +31,9 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
         end
         local command = args[1]
         local secondArg = args[2]
-        if commandList[command] then
-            commandList[command](unpack(args))
+        local handler = commandList[command] or commandAliases[command]
+        if handler then
+            handler(unpack(args))
         elseif secondArg == nil then
             self:PrintHelp()
         else
@@ -80,20 +84,24 @@ function MapPinEnhanced:AddSlashCommand(command, func, help, showInHelp)
     assert(type(command) == "string" or type(command) == "table", "Command not provided")
     assert(type(func) == "function", "Function not provided")
     assert(type(help) == "string", "Help not provided")
-    if not commandList then
-        commandList = {}
-    end
-    if not commandHelpStrings then
-        commandHelpStrings = {}
-    end
-
     local commands = type(command) == "table" and command or { command }
     local mainCommand = commands[1]
     assert(type(mainCommand) == "string", "Command not provided")
+    assert(not commandList[mainCommand] or commandList[mainCommand] == func,
+        "MapPinEnhanced:AddSlashCommand: duplicate command " .. mainCommand)
 
+    -- Validate before publishing. Canonical names win regardless of registration order.
     for _, alias in ipairs(commands) do
         assert(type(alias) == "string", "Command alias must be a string")
-        commandList[alias] = func
+        assert(alias == mainCommand or commandList[alias] or not commandAliases[alias] or
+            commandAliases[alias] == func,
+            "MapPinEnhanced:AddSlashCommand: conflicting alias " .. alias)
+    end
+    commandList[mainCommand] = func
+    for _, alias in ipairs(commands) do
+        if alias ~= mainCommand and not commandList[alias] then
+            commandAliases[alias] = func
+        end
     end
     commandHelpStrings[mainCommand] = showInHelp ~= false and help or nil
 
@@ -109,6 +117,7 @@ end
 function MapPinEnhanced:RemoveSlashCommand(command)
     assert(type(command) == "string", "Command not provided")
     commandList[command] = nil
+    commandAliases[command] = nil
     commandHelpStrings[command] = nil
 end
 
@@ -117,13 +126,14 @@ function MapPinEnhanced:EnableHelpCommand()
     ---@diagnostic disable-next-line: undefined-global
     local helpString = HELP_LABEL --[[@as string]]
 
-    self:AddSlashCommand(helpString:lower(), function()
+    self:AddSlashCommand({ "help", self.L["Help"]:lower(), helpString:lower() }, function()
         self:PrintHelp()
         ---@diagnostic disable-next-line: undefined-global
     end, helpString, false)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    MapPinEnhanced:EnableHelpCommand()
     local isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
     MapPinEnhanced:SetSlashTrigger("/mph", 1)
     MapPinEnhanced:SetSlashTrigger("/mpe", 2)

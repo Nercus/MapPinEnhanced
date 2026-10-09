@@ -22,6 +22,9 @@ local function ClearAllPins()
     end
 end
 
+MapPinEnhanced:AddSlashCommand({ "clear", L["Clear"]:lower() }, ClearAllPins,
+    L["Mark all active pins as reached."])
+
 ---@param owner Region
 local function ShowMinimapMenu(owner)
     MapPinEnhanced:GenerateMenu(owner, {
@@ -127,7 +130,7 @@ local function InitMinimapIcon()
     Options:SubscribeToOptionChanges(SHOW_BUTTON_OPTION, ApplyMinimapButtonVisibility)
 end
 
-MapPinEnhanced:AddSlashCommand("minimap", function()
+MapPinEnhanced:AddSlashCommand({ "minimap", L["Minimap"]:lower() }, function()
     Options:SetOptionValue(SHOW_BUTTON_OPTION, not Options:GetOptionValue(SHOW_BUTTON_OPTION))
 end, L["Toggle the minimap button visibility."])
 

@@ -96,6 +96,6 @@ function Transfer:HideExportWindow()
     end
 end
 
-MapPinEnhanced:AddSlashCommand("import",
+MapPinEnhanced:AddSlashCommand({ "import", L["Import"]:lower() },
     function() Transfer:ShowImportWindow() end,
     L["Open the import dialog to import map pins from a string."])

@@ -521,3 +521,9 @@ L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
 L["Wayfinder.Navigation.BackgroundSearch_LABEL"] = "Improve routes in the background"
 L["Wayfinder.Navigation.BackgroundSearch_DESCRIPTION"] =
 "Continue looking for a faster route after guidance appears. Uses additional processing time."
+
+L["Clear"] = "Clear"
+L["Options"] = "Options"
+L["Minimap"] = "Minimap"
+L["Help"] = "Help"
+L["Mark all active pins as reached."] = "Mark all active pins as reached."

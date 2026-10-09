@@ -120,7 +120,7 @@ function Editor:IsShown()
     return frame and frame:IsShown() and not frame.visibilityFadeOut:IsPlaying() or false
 end
 
-MapPinEnhanced:AddSlashCommand("editor", function()
+MapPinEnhanced:AddSlashCommand({ "editor", L["Editor"]:lower() }, function()
     if Editor:IsShown() then
         Editor:HideEditor()
     else

@@ -91,7 +91,7 @@ MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Miscellaneous.Trac
     Tracker:RestoreTrackerVisibility()
 end)
 
-MapPinEnhanced:AddSlashCommand("tracker", function()
+MapPinEnhanced:AddSlashCommand({ "tracker", L["Tracker"]:lower() }, function()
     Tracker:ToggleTracker()
 end, L["Toggle the tracker visibility."])
 
