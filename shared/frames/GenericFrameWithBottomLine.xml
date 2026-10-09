@@ -4,6 +4,23 @@
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="1">
                 <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" alpha="0.75" />
+                <Texture parentKey="mapArt" inherits="MapPinEnhancedMapArtTemplate">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="5" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-5" y="3" />
+                    </Anchors>
+                </Texture>
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" scale="0.5" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.mapArt" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.mapArt" />
+                    </Anchors>
+                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMode mode="Stretched" />
+                    <MaskedTextures>
+                        <MaskedTexture childKey="mapArt" />
+                    </MaskedTextures>
+                </MaskTexture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="2">
                 <Texture inherits="MapPinEnhancedBottomLineTextureTemplate" />

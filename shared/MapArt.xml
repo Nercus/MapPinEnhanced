@@ -1,0 +1,14 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="MapArt.lua" />
+    <Texture name="MapPinEnhancedMapArtTemplate" virtual="true" mixin="MapPinEnhancedMapArtMixin" file="Interface/AddOns/MapPinEnhanced/assets/shared/MapTexture.png">
+        <Gradient>
+            <MaxColor r="0.3" g="0.3" b="0.3" a="0.4"/>
+            <MinColor r="0.3" g="0.3" b="0.3" a="0" />
+        </Gradient>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="UpdateCrop" />
+        </Scripts>
+    </Texture>
+</Ui>

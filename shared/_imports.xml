@@ -4,6 +4,7 @@
     <Script file="descriptionText.lua" />
     <Include file="theme.xml" />
     <Include file="textures.xml" />
+    <Include file="MapArt.xml" />
     <Include file="animations.xml" />
 
     <Include file="utils/_imports.xml" />

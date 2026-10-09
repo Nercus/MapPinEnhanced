@@ -19,10 +19,10 @@
                 </Texture>
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="-4">
-                <Texture parentKey="backgroundArt" atlas="shop-bg-map-blue" desaturated="true">
-                    <Size x="1058" y="600" />
+                <Texture parentKey="backgroundArt" inherits="MapPinEnhancedMapArtTemplate">
                     <Anchors>
-                        <Anchor point="RIGHT" x="-5" />
+                        <Anchor point="TOPLEFT" x="2" y="-21" />
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
                     </Anchors>
                 </Texture>
                 <MaskTexture file="interface/masks/squaremask.blp" parentKey="backgroundMask" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">

@@ -14,7 +14,7 @@ local L = MapPinEnhanced.L
 ---@field PortraitContainer MapPinEnhancedWindowPortraitContainer
 ---@field CloseButton Button
 ---@field background Texture
----@field backgroundArt Texture
+---@field backgroundArt MapPinEnhancedMapArtMixin
 ---@field backgroundMask MaskTexture
 ---@field windowTitle string? set through keyvalues
 MapPinEnhancedWindowMixin = CreateFromMixins(PortraitFrameMixin)
