@@ -394,4 +394,13 @@ end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshActiveProvider)
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_PATH_UPDATED", RefreshActiveProvider)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", RefreshActiveProvider)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
+    -- Startup configuration only; later user changes remain authoritative.
+    if C_CVar and C_CVar.GetCVar and C_CVar.SetCVar then
+        local value = C_CVar.GetCVar("showInGameNavigation")
+        if not MapPinEnhanced:IsSecretValue(value) and value == "0" then
+            C_CVar.SetCVar("showInGameNavigation", "1")
+        end
+    end
+    RefreshActiveProvider()
+end)
