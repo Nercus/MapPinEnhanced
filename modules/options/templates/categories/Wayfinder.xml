@@ -12,7 +12,7 @@
                     <KeyValue key="key" value="Wayfinder.Display" />
                 </KeyValues>
                 <Frames>
-                    <Frame inherits="MapPinEnhancedOptionRadiogroupTemplate">
+                    <Frame inherits="MapPinEnhancedOptionWayfinderTemplate">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.General.Selection" />
                         </KeyValues>

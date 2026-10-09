@@ -10,4 +10,5 @@
     <Include file="OptionRadiogroup.xml" />
     <Include file="OptionSlider.xml" />
     <Include file="OptionToggle.xml" />
+    <Include file="OptionWayfinder.xml" />
 </Ui>
