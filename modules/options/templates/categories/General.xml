@@ -8,6 +8,11 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
+                    <KeyValue key="key" value="General.TooltipHelper" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
                     <KeyValue key="key" value="General.Minimap.ShowButton" />
                 </KeyValues>
             </Frame>

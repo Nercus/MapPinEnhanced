@@ -162,9 +162,20 @@ end
 
 function MapPinEnhancedTrackerGroupEntryMixin:OnEnter()
     self.actionButtons.fadeIn:PlayShowing(self.actionButtons.fadeOut)
+    if not self.group or self.actionButtons.clearButton:IsMouseOver() or
+        self.actionButtons.restoreButton:IsMouseOver() then return end
+    local leftAction = self.group:IsHidden() and L["Show Group"] or
+        (self:CanExpandGroup() and (self.treeNode:IsCollapsed() and L["Expand"] or L["Collapse"]) or nil)
+    GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+    MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
+        { L["Left Click"], leftAction },
+        { L["Right Click"], L["Open menu"] },
+    })
+    if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
     if self:IsMouseOver() then return end
     self.actionButtons.fadeOut:PlayHiding(self.actionButtons.fadeIn)
 end

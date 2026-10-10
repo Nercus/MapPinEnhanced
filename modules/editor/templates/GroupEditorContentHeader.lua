@@ -32,6 +32,8 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.editor = nil
     self.iconButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
+    self.deleteButton.tooltipInteractions = nil
+    self.deleteButton:OnTooltipLeave()
     self.exportButton:SetScript("OnClick", nil)
     self.exportButton:Disable()
     self.hideButton:SetScript("OnClick", nil)
@@ -151,6 +153,10 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
         editor.groupEditorSidebar:Refresh()
     end)
 
+    self.deleteButton.tooltipInteractions = {
+        { L["Left Click"], protected and L["Clear Group"] or L["Delete Group"] },
+        { L["Shift + Left Click"], protected and L["Clear without confirmation"] or L["Delete without confirmation"] },
+    }
     self.deleteButton:SetScript("OnClick", function()
         local function destroy()
             if protected then

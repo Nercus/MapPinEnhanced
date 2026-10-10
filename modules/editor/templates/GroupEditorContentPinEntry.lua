@@ -147,7 +147,13 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Reset()
     self.dragHandle:SetScript("OnDragStop", nil)
     self.dragHandle:SetScript("OnEnter", nil)
     self.dragHandle:SetScript("OnLeave", nil)
+    if GameTooltip:IsOwned(self.pinFrame) then GameTooltip:Hide() end
+    self.pinFrame:SetScript("OnEnter", nil)
+    self.pinFrame:SetScript("OnLeave", nil)
+    self.pinFrame:SetScript("OnHide", MapPinEnhancedBasePinMixin.OnPinHide)
     self.pinFrame:SetScript("OnMouseDown", nil)
+    self.deleteButton.tooltipInteractions = nil
+    self.deleteButton:OnTooltipLeave()
     self.duplicateButton:SetScript("OnClick", nil)
     self.deleteButton:SetScript("OnClick", nil)
     self:ClearDropTarget()
@@ -334,6 +340,28 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     end)
     self.mapField.child:SetScript("OnEscapePressed", restore)
 
+    self.pinFrame:SetScript("OnEnter", function(frame)
+        local data = Editor:GetPinData(pinNode)
+        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") == true
+        GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
+        MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
+            { L["Left Click"], L["Change pin appearance"] },
+            { L["Middle Click"], showLockHint and (data.lock and L["Unlock Pin"] or L["Lock Pin"]) or nil },
+        })
+        if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
+    end)
+    local function hidePreviewTooltip(frame)
+        if GameTooltip:IsOwned(frame) then GameTooltip:Hide() end
+    end
+    self.pinFrame:SetScript("OnLeave", hidePreviewTooltip)
+    self.pinFrame:SetScript("OnHide", function(frame)
+        frame:OnPinHide()
+        hidePreviewTooltip(frame)
+    end)
+    self.deleteButton.tooltipInteractions = {
+        { L["Left Click"], L["Delete Pin"] },
+        { L["Shift + Left Click"], L["Delete without confirmation"] },
+    }
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
         if button == "LeftButton" then self:ShowStyleMenu() end
         if button == "MiddleButton" then

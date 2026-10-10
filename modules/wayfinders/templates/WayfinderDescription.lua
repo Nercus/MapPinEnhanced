@@ -45,6 +45,10 @@ end
 function MapPinEnhancedWayfinderDescriptionMixin:OnEnter()
     if not self.truncated or not self.description then return end
     Wayfinders:ShowTextTooltip(self, self.title, self.description)
+    if self.mouseOwner then
+        MapPinEnhanced:AddTooltipInteractions(GameTooltip, { { MapPinEnhanced.L["Right Click"], MapPinEnhanced.L["Open menu"] } })
+        GameTooltip:Show()
+    end
 end
 
 function MapPinEnhancedWayfinderDescriptionMixin:OnLeave()

@@ -15,6 +15,7 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 MapPinEnhancedGroupEditorSidebarEntryMixin = {}
 
 function MapPinEnhancedGroupEditorSidebarEntryMixin:Reset()
+    self:OnLeave()
     self.group = nil
     self.editor = nil
     self:UnlockHighlight()
@@ -123,4 +124,20 @@ end
 
 function MapPinEnhancedGroupEditorSidebarEntryMixin:OnReceiveDrag()
     if self.editor and self.editor.draggedPinNode then self.editor:StopPinDrag() end
+end
+
+
+function MapPinEnhancedGroupEditorSidebarEntryMixin:OnEnter()
+    if not self.group or not self.editor or self.editor.draggedPinNode then return end
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
+        { L["Left Click"], L["Select"] },
+        { L["Shift + Left Click"], self.group:GetTotalPinCount() > 0 and L["Share to Chat"] or nil },
+        { L["Right Click"], L["Open menu"] },
+    })
+    if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
+end
+
+function MapPinEnhancedGroupEditorSidebarEntryMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end

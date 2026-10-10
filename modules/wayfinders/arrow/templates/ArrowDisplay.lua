@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedArrowNeedle : Texture
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
@@ -278,7 +279,11 @@ function MapPinEnhancedWayfinderArrowMixin:OnEnter()
     if self.textTruncated then
         local title = self.instructionText and self.instructionText .. "\n" .. (self.fullTitle or "") or self.fullTitle
         Wayfinders:ShowTextTooltip(self, title, self.fullDescription)
+    else
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
     end
+    MapPinEnhanced:AddTooltipInteractions(GameTooltip, { { L["Right Click"], L["Open menu"] } })
+    if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
 end
 
 function MapPinEnhancedWayfinderArrowMixin:OnLeave()

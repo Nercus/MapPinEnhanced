@@ -105,6 +105,14 @@ local function InitMinimapIcon()
         type = "launcher",
         text = MapPinEnhanced.name,
         icon = customLogoPath,
+        OnTooltipShow = function(tooltip)
+            tooltip:AddLine(MapPinEnhanced.displayName)
+            MapPinEnhanced:AddTooltipInteractions(tooltip, {
+                { L["Left Click"], MapPinEnhanced:GetVar("trackerVisible") and L["Hide Tracker"] or L["Show Tracker"] },
+                { L["Alt + Left Click"], L["Mark all active pins as reached."] },
+                { L["Right Click"], L["Open menu"] },
+            })
+        end,
         OnClick = function(owner, button)
             if button == "LeftButton" then
                 if IsAltKeyDown() then

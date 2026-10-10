@@ -26,6 +26,7 @@ Options.SCALE_PRESETS = {
 }
 
 Options.DEFAULTS = {
+    ["General.TooltipHelper"] = true,
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
     ["Pins.Appearance.AlwaysPingTracked"] = false,

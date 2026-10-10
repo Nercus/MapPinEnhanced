@@ -120,6 +120,7 @@
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
+            <OnHide method="OnLeave" />
             <OnMouseDown method="OnMouseDown" />
             <OnSizeChanged method="UpdateTitleWidth" />
         </Scripts>

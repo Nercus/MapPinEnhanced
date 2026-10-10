@@ -220,3 +220,10 @@ function Options:ScrollToOption(key)
     for _, option in pairs(self.options) do option.searchHighlight:Hide() end
     frame:ScrollToOption()
 end
+
+
+MapPinEnhanced:OnLoad(function()
+    Options:SubscribeToOptionChanges("General.TooltipHelper", function(enabled)
+        MapPinEnhanced:SetTooltipHelperEnabled(enabled)
+    end)
+end)

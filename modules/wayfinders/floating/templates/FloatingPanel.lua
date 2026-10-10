@@ -214,12 +214,19 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnEnter()
-    if not self.textTruncated then return end
-    if self.step and self.step.insideObjectiveArea and self.target then
-        Wayfinders:ShowTextTooltip(self, self.target.title, self.target.description)
+    if self.textTruncated then
+        if self.step and self.step.insideObjectiveArea and self.target then
+            Wayfinders:ShowTextTooltip(self, self.target.title, self.target.description)
+        else
+            Wayfinders:ShowTextTooltip(self, self.fullText, self.destinationText)
+        end
     else
-        Wayfinders:ShowTextTooltip(self, self.fullText, self.destinationText)
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
     end
+    if self.onMenu then
+        MapPinEnhanced:AddTooltipInteractions(GameTooltip, { { L["Right Click"], L["Open menu"] } })
+    end
+    if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnLeave()
