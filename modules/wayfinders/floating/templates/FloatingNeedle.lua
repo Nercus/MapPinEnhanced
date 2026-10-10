@@ -57,10 +57,10 @@ function MapPinEnhancedWayfinderFloatingNeedleMixin:FinishFallbackTransition()
     if not self.fallback or not self:IsVisible() then return end
     if self.fallbackClose then
         local closeTexture = self.fallbackCloseTexture
-        closeTexture.fadeIn:PlayShowing(closeTexture.fadeOut)
+        closeTexture.fadeIn:PlayReplacing(closeTexture.fadeOut)
         if not closeTexture.jump:IsPlaying() then closeTexture.jump:Play() end
     else
-        self.fallbackTexture.fadeIn:PlayShowing(self.fallbackTexture.fadeOut)
+        self.fallbackTexture.fadeIn:PlayReplacing(self.fallbackTexture.fadeOut)
     end
 end
 
