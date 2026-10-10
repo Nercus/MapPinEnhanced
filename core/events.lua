@@ -196,6 +196,7 @@ local CALLBACK_EVENTS = {
     PIN_REMOVED = { event = "PIN_REMOVED", pattern = false },
     PIN_REACHED = { event = "PIN_REACHED", pattern = false },
     PIN_TRACKING_CHANGED = { event = "PIN_TRACKING_CHANGED", pattern = false },
+    NAVIGATION_DESTINATION_CHANGED = { event = "NAVIGATION_DESTINATION_CHANGED", pattern = false },
     GROUP_UPDATED = { event = "GROUP_UPDATED", pattern = false },
     GROUP_DELETED = { event = "GROUP_DELETED", pattern = false },
 }

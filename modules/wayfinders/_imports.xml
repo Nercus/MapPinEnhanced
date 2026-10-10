@@ -7,4 +7,5 @@
     <Include file="arrow/_imports.xml" />
     <Include file="wayfinderManager.lua" />
     <Include file="wayfinderArrival.lua" />
+    <Include file="misc/_imports.xml" />
 </Ui>

@@ -465,6 +465,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
     else
         self:ApplyDirectDestination(true)
     end
+    MapPinEnhanced:FireCallback("NAVIGATION_DESTINATION_CHANGED")
     return self.destinationChangeNumber
 end
 
@@ -626,6 +627,7 @@ function Navigation:ClearDestination(owner, destinationID, changeNumber)
     presentationChangeNumber = presentationChangeNumber + 1
     self:ReleaseRouteLayers()
     Wayfinders:ClearPresentation()
+    MapPinEnhanced:FireCallback("NAVIGATION_DESTINATION_CHANGED")
     return true
 end
 
