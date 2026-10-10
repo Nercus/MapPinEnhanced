@@ -1,8 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+---@class Pins
+local Pins = MapPinEnhanced:GetModule("Pins")
 
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 local MAP_PIN_PATTERN = "|cffffff00|Hworldmap:%d:%d:%d|h[%s]|h|r"
 local MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location"
@@ -11,7 +11,7 @@ local MAP_PIN_HYPERLINK = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Locat
 ---@param y number
 ---@param mapID number
 ---@return string
-function Providers:GetMapPinChatLink(x, y, mapID)
+function Pins:GetMapPinChatLink(x, y, mapID)
     return MAP_PIN_PATTERN:format(mapID, x * 10000, y * 10000, MAP_PIN_HYPERLINK)
 end
 
@@ -19,7 +19,7 @@ end
 ---@param y number
 ---@param mapID number
 ---@param title string?
-function Providers:LinkToChat(x, y, mapID, title)
+function Pins:LinkToChat(x, y, mapID, title)
     if not x or not y or not mapID then return end
     ---@type string
     local waypointLink = self:GetMapPinChatLink(x, y, mapID)

@@ -164,7 +164,9 @@ end
 function Wayfinders:UpdateDestinationAreaState(inside, showDirection)
     if not activeStep or not activeStep.isFinalDestination then return end
     if (activeStep.insideObjectiveArea == true) == inside and
-        (activeStep.showDirectionInObjectiveArea == true) == showDirection then return end
+        (activeStep.showDirectionInObjectiveArea == true) == showDirection then
+        return
+    end
     activeStep.insideObjectiveArea = inside
     activeStep.showDirectionInObjectiveArea = showDirection
     ApplyActiveStep()
@@ -210,7 +212,7 @@ function Wayfinders:BuildNavigationMenuEntries()
             type = "button",
             label = MapPinEnhanced:Iconize("share", MapPinEnhanced.L["Share to Chat"]),
             onClick = function()
-                MapPinEnhanced:GetModule("Providers"):ShareRouteToChat(step.changeNumber)
+                self:ShareRouteToChat(step.changeNumber)
             end,
         }
     end

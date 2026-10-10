@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
@@ -11,31 +12,32 @@ local function GetCorpseTargetID()
     return "corpse"
 end
 
-local function RefreshCorpse()
-    local targetID = GetCorpseTargetID()
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadCorpse()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(function(candidateMapID)
         local position = C_DeathInfo.GetCorpseMapPosition(candidateMapID)
         if position then return position:GetXY() end
     end)
     local isTrackingCorpse = C_SuperTrack.IsSuperTrackingCorpse()
     if not isTrackingCorpse or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
         title = L["Corpse"],
         texture = "poi-graveyard-neutral",
         usesAtlas = true,
-    })
+    }
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetCorpseTargetID,
-    refresh = RefreshCorpse,
+    read = ReadCorpse,
     events = { "PLAYER_DEAD", "PLAYER_ALIVE", "PLAYER_UNGHOST" },
 })

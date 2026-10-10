@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
+---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "scenario"
@@ -8,7 +10,7 @@ local SOURCE = "scenario"
 ---@param scenario ScenarioInformation?
 ---@param step ScenarioStepInfo?
 ---@return string
-local function GetScenarioTargetID(scenario, step)
+function Providers:GetScenarioTargetID(scenario, step)
     scenario = scenario or C_ScenarioInfo.GetScenarioInfo()
     step = step or C_ScenarioInfo.GetScenarioStepInfo()
     return string.format("scenario:%s:%s", tostring(scenario and scenario.scenarioID),
@@ -51,7 +53,7 @@ end
 ---@param data WayfinderData
 ---@return string?, string?, boolean?
 local function ReadScenarioText(targetID, data)
-    if targetID ~= GetScenarioTargetID() then return end
+    if targetID ~= Providers:GetScenarioTargetID() then return end
     local scenario = C_ScenarioInfo.GetScenarioInfo()
     local step = C_ScenarioInfo.GetScenarioStepInfo()
     if not scenario or not step then return end
@@ -67,17 +69,19 @@ local function ReadScenarioText(targetID, data)
         end
     end
     if matches ~= 1 then description = nil end
-    if not description and not Providers:IsStepSuperTracking() then
+    if not description and not Wayfinders:IsStepSuperTracking() then
         local _, _, _, waypoint = Providers:GetSuperTrackingWaypoint(GetScenarioWaypoint)
         description = Providers:PlainDescription(waypoint, title)
     end
     return title, description or Providers:PlainDescription(step.description, title), true
 end
 
-local function RefreshScenario()
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadScenario()
     local scenario = C_ScenarioInfo.GetScenarioInfo()
     local step = C_ScenarioInfo.GetScenarioStepInfo()
-    local targetID = GetScenarioTargetID(scenario, step)
     ---@type number?, ScenarioIconInfo[]?
     local resolvedMapID, icons
     local x, y, mapID, waypointDescription = Providers:GetSuperTrackingWaypoint(function(candidateMapID)
@@ -85,7 +89,6 @@ local function RefreshScenario()
         if #icons == 1 then return icons[1].x, icons[1].y, icons[1].description end
     end)
     if x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     if resolvedMapID ~= mapID then icons = GetScenarioIcons(mapID) end
@@ -100,7 +103,7 @@ local function RefreshScenario()
         end
     end
     if matches ~= 1 then description = nil end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
@@ -109,30 +112,15 @@ local function RefreshScenario()
             Providers:PlainDescription(step and step.description, title),
         texture = atlas,
         usesAtlas = true,
-    }, nil, scenario ~= nil and step ~= nil)
+    }, false, scenario ~= nil and step ~= nil
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = Enum.SuperTrackingType.Scenario,
-    getTargetID = GetScenarioTargetID,
-    refresh = RefreshScenario,
+    getTargetID = function() return Providers:GetScenarioTargetID() end,
+    read = ReadScenario,
     readText = ReadScenarioText,
     events = { "SCENARIO_CRITERIA_UPDATE", "SCENARIO_POI_UPDATE",
         "SCENARIO_COMPLETED", "ZONE_CHANGED_NEW_AREA" },
 })
-
--- Stage identity is independent of Blizzard's temporary UserWaypoint selection.
--- Replacing a stage is a destination change, not a text refresh for the old route.
-MapPinEnhanced:RegisterEvent("SCENARIO_UPDATE", function()
-    if Providers:IsChangingSuperTrackingEntry() then return end
-    local Navigation = MapPinEnhanced:GetModule("Navigation")
-    local scenario = C_ScenarioInfo.GetScenarioInfo()
-    local step = C_ScenarioInfo.GetScenarioStepInfo()
-    local owner, targetID = Navigation:GetActiveDestinationState()
-    if scenario and step and owner == SOURCE and Providers:IsStepSuperTracking() and
-        targetID ~= GetScenarioTargetID(scenario, step) then
-        Providers:ClearStepSuperTracking()
-    end
-    Providers:RefreshSuperTrackingProvider(SOURCE)
-end)

@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+---@class Wayfinders
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 ---@class SuperTrackingEntry
@@ -33,7 +33,7 @@ end
 ---@param targetID string
 ---@param title string
 ---@param description string?
-function Providers:UpdateSuperTrackingEntryText(source, targetID, title, description)
+function Wayfinders:UpdateSuperTrackingEntryText(source, targetID, title, description)
     if not entry or not entry.tracked or entry.source ~= source or entry.targetID ~= targetID then return end
     if entry.title == title and entry.description == description then return end
     entry.description = description
@@ -47,7 +47,7 @@ end
 ---@param targetID string
 ---@param texture string|number
 ---@param usesAtlas boolean
-function Providers:UpdateSuperTrackingEntryIcon(source, targetID, texture, usesAtlas)
+function Wayfinders:UpdateSuperTrackingEntryIcon(source, targetID, texture, usesAtlas)
     if not entry or not entry.tracked or entry.source ~= source or entry.targetID ~= targetID then return end
     if entry.texture == texture and entry.usesAtlas == usesAtlas then return end
     entry.texture, entry.usesAtlas = texture, usesAtlas
@@ -56,14 +56,14 @@ function Providers:UpdateSuperTrackingEntryIcon(source, targetID, texture, usesA
 end
 
 ---@return boolean
-function Providers:IsChangingSuperTrackingEntry()
+function Wayfinders:IsChangingSuperTrackingEntry()
     return changingSelection
 end
 
 ---@param source string?
 ---@param targetID string?
 ---@param isUserWaypoint boolean
-function Providers:UpdateSuperTrackingEntrySelection(source, targetID, isUserWaypoint)
+function Wayfinders:UpdateSuperTrackingEntrySelection(source, targetID, isUserWaypoint)
     if not entry then return end
     if source and entry.tracked and entry.source == source and entry.targetID == targetID then return end
     if not source and not isUserWaypoint and not entry.tracked then return end
@@ -74,14 +74,14 @@ end
 ---@param provider SuperTrackingProvider|SuperTrackingFallbackProvider
 ---@param targetID string
 ---@param data WayfinderData
-function Providers:ApplySuperTrackingEntry(provider, targetID, data)
+function Wayfinders:ApplySuperTrackingEntry(provider, targetID, data)
     if entry and entry.tracked and entry.source == provider.source and entry.targetID == targetID and
         entry.title == data.title and entry.description == data.description and entry.texture == data.texture and
         entry.usesAtlas == data.usesAtlas and entry.pinData.mapID == data.mapID and
         entry.pinData.x == data.x and entry.pinData.y == data.y then
         return
     end
-    local track = provider.captureTracking and provider.captureTracking(data)
+    local track, untrack = self:CaptureSourceTracking(provider.source, data)
     entry = {
         source = provider.source,
         targetID = targetID,
@@ -90,9 +90,9 @@ function Providers:ApplySuperTrackingEntry(provider, targetID, data)
         texture = data.texture,
         usesAtlas = data.usesAtlas,
         tracked = true,
-        canToggle = track ~= nil and provider.untrack ~= nil,
+        canToggle = track ~= nil and untrack ~= nil,
         track = track,
-        untrack = provider.untrack,
+        untrack = untrack,
         changeNumber = changeNumber,
         pinData = {
             mapID = data.mapID,
@@ -109,7 +109,7 @@ end
 
 ---@param source string
 ---@param targetID string?
-function Providers:ClearSuperTrackingEntry(source, targetID)
+function Wayfinders:ClearSuperTrackingEntry(source, targetID)
     if not entry or not entry.tracked or entry.source ~= source then return end
     if targetID and entry.targetID ~= targetID then return end
     entry = nil
@@ -117,7 +117,7 @@ function Providers:ClearSuperTrackingEntry(source, targetID)
 end
 
 ---@param expectedChangeNumber integer
-function Providers:ToggleSuperTrackingEntry(expectedChangeNumber)
+function Wayfinders:ToggleSuperTrackingEntry(expectedChangeNumber)
     if changingSelection or not entry or not entry.canToggle or entry.changeNumber ~= expectedChangeNumber then return end
     -- Reconcile a selection that changed before its event reached the coordinator.
     -- An owned Step still represents this entry's original source.
@@ -150,7 +150,7 @@ end
 
 -- Stop tracking through the original source, never through Step arrival.
 ---@return boolean
-function Providers:CanClearNavigationTracking()
+function Wayfinders:CanClearNavigationTracking()
     local owner, targetID = Navigation:GetActiveDestinationState()
     local pin = MapPinEnhanced:GetModule("Pins"):GetTrackedPin()
     if owner == "addonPins" then return pin ~= nil and pin.pinID == targetID end
@@ -159,7 +159,7 @@ function Providers:CanClearNavigationTracking()
 end
 
 ---@param expectedChangeNumber integer
-function Providers:ClearNavigationTracking(expectedChangeNumber)
+function Wayfinders:ClearNavigationTracking(expectedChangeNumber)
     local step = MapPinEnhanced:GetModule("Wayfinders"):GetStepSnapshot()
     if not step or step.changeNumber ~= expectedChangeNumber or not self:CanClearNavigationTracking() then return end
     local owner = Navigation:GetActiveDestinationState()

@@ -287,7 +287,7 @@ end
 
 function MapPinEnhancedWayfinderArrowMixin:ClearTracking()
     if self.step then
-        MapPinEnhanced:GetModule("Providers"):ClearNavigationTracking(self.step.changeNumber)
+        MapPinEnhanced:GetModule("Wayfinders"):ClearNavigationTracking(self.step.changeNumber)
     end
 end
 

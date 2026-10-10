@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local Providers = MapPinEnhanced:GetModule("Providers")
 local SOURCE = "vignette"
@@ -20,18 +21,19 @@ local function GetVignettePositionForMap(vignetteGUID, mapID)
     return position.x, position.y
 end
 
-local function RefreshVignette()
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadVignette()
     local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
-    local targetID = GetVignetteTargetID()
     local vignetteInfo = vignetteGUID and C_VignetteInfo.GetVignetteInfo(vignetteGUID)
     local x, y, mapID = Providers:GetSuperTrackingWaypoint(vignetteGUID and function(candidateMapID)
         return GetVignettePositionForMap(vignetteGUID, candidateMapID)
     end or nil)
     if not vignetteGUID or not vignetteInfo or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
@@ -39,24 +41,13 @@ local function RefreshVignette()
         description = select(2, C_SuperTrack.GetSuperTrackedItemName()),
         texture = vignetteInfo.atlasName,
         usesAtlas = true,
-    })
+    }
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetVignetteTargetID,
-    refresh = RefreshVignette,
-    captureTracking = function()
-        local guid = C_SuperTrack.GetSuperTrackedVignette()
-        if not guid then return nil end
-        return function()
-            if not C_VignetteInfo.GetVignetteInfo(guid) then return false end
-            C_SuperTrack.SetSuperTrackedVignette(guid)
-            return true
-        end
-    end,
-    -- Retail exposes no vignette-specific clear operation.
-    untrack = function() C_SuperTrack.ClearAllSuperTracked() end,
+    read = ReadVignette,
     events = { "VIGNETTES_UPDATED" },
 })

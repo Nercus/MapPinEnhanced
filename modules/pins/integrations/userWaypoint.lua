@@ -1,28 +1,13 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Groups = MapPinEnhanced:GetModule("Groups")
-
-local L = MapPinEnhanced.L
 
 -- Foreign integrations retain their stack-based exclusion. Owned writes are identified before inspection.
 local BLOCKED_ADDON_LIST = {
     "WorldQuestTracker",
 }
-
----@type UiMapPoint?
-local ownedWaypoint
-
----@param waypoint UiMapPoint?
-function Providers:SetOwnedUserWaypoint(waypoint)
-    if not waypoint then return end
-    local previous = ownedWaypoint
-    ownedWaypoint = waypoint
-    C_Map.SetUserWaypoint(waypoint)
-    ownedWaypoint = previous
-end
 
 local function isBlockedAddon(stack)
     for _, blockedAddon in ipairs(BLOCKED_ADDON_LIST) do
@@ -108,7 +93,7 @@ end
 
 ---@param uiMapPoint {uiMapID: number, position: {x: number, y: number}}
 local function OnUserWaypoint(uiMapPoint)
-    if not uiMapPoint or uiMapPoint == ownedWaypoint then return end
+    if not uiMapPoint or Wayfinders:IsOwnedUserWaypoint(uiMapPoint) then return end
     local stack = debugstack(2) ---@type string
     if isBlockedAddon(stack) then return end -- ignore calls from this function
 
@@ -147,15 +132,4 @@ local function HookSetUserWaypoint()
     isHooked = true
 end
 
----Hide default world map Pin
-local function HideBlizzardPin()
-    if not WaypointLocationPinMixin then return end
-    hooksecurefunc(WaypointLocationPinMixin, "OnAcquired", function(waypointSelf) -- hide default blizzard waypoint
-        waypointSelf:SetAlpha(0)
-        waypointSelf:EnableMouse(false)
-    end)
-end
-
-
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HookSetUserWaypoint)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", HideBlizzardPin)

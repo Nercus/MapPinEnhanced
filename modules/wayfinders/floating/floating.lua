@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedWayfinderFloating : MapPinEnhancedWayfinder
 ---@field data WayfinderData?
@@ -110,9 +109,9 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     -- Reaching an entrance can hide direction while its Step still owns tracking.
     -- Keep the waypoint protected from native arrival clearing until the Step ends.
     if self.data and self.data.mapDistanceOnly then
-        Providers:SetStepSuperTracking(self.data)
+        Wayfinders:SetStepSuperTracking(self.data)
     else
-        Providers:ClearStepSuperTracking()
+        Wayfinders:ClearStepSuperTracking()
     end
     frame.lastNavigationTargetCheck = nil
     frame:SetDirectionShown(showDirection)
@@ -125,7 +124,7 @@ function MapPinEnhancedWayfinderFloating:Reset()
         self.frame:Hide()
         self.frame:StopTracking()
     end
-    Providers:ClearStepSuperTracking()
+    Wayfinders:ClearStepSuperTracking()
     self.data = nil
     self.step = nil
 end
@@ -137,7 +136,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
         return
     end
 
-    if not wayfinderData.mapDistanceOnly then Providers:ClearStepSuperTracking() end
+    if not wayfinderData.mapDistanceOnly then Wayfinders:ClearStepSuperTracking() end
     local previous = self.data
     self.data = wayfinderData
     local frame = self:GetFrame()
@@ -198,9 +197,10 @@ function MapPinEnhancedWayfinderFloating:Enable()
     self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
         if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)
-    self.unsubscribeTextOutlineOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowTextOutline", function(value)
-        if self.frame then self.frame.content:SetShowTextOutline(value == true) end
-    end)
+    self.unsubscribeTextOutlineOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowTextOutline",
+        function(value)
+            if self.frame then self.frame.content:SetShowTextOutline(value == true) end
+        end)
 end
 
 function MapPinEnhancedWayfinderFloating:Disable()

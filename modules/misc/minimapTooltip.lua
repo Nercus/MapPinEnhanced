@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
-local Providers = MapPinEnhanced:GetModule("Providers")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local L = MapPinEnhanced.L
 
@@ -12,8 +11,8 @@ local L = MapPinEnhanced.L
 local function GetWaypointDetails()
     if C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= Enum.SuperTrackingType.UserWaypoint then return end
     -- A temporary Step takes precedence over the original tracked pin. These
-    -- optional readers enrich native tracking without requiring Wayfinders.
-    if Providers.IsStepSuperTracking and Providers:IsStepSuperTracking() then
+    -- optional readers tolerate the late tracking-owner initialization.
+    if Wayfinders.IsStepSuperTracking and Wayfinders:IsStepSuperTracking() then
         local step = Wayfinders.GetStepSnapshot and Wayfinders:GetStepSnapshot()
         if step then
             local description = step.destinationTitle
@@ -70,7 +69,7 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.MinimapMouseover, f
             data.x * 100, data.y * 100), 1, 1, 1, true)
         local group = pin.group
         tooltip:AddLine(string.format("%s: %d/%d", group and group:GetName() or L["Ungrouped Pins"],
-            group and group:GetReachedPinCount() or 0, group and group:GetTotalPinCount() or 1),
+                group and group:GetReachedPinCount() or 0, group and group:GetTotalPinCount() or 1),
             0.65, 0.65, 0.65, true)
     end
 end)

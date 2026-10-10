@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Pins = MapPinEnhanced:GetModule("Pins")
 
 -- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
 
@@ -34,7 +35,6 @@ MapPinEnhancedCoordinatesDisplayMixin = {}
 
 local L = MapPinEnhanced.L
 
-local Providers = MapPinEnhanced:GetModule("Providers")
 local Options = MapPinEnhanced:GetModule("Options")
 
 local GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -56,7 +56,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:LinkPlayerPosition()
         return
     end
     local x, y = position:GetXY()
-    Providers:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
+    Pins:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()

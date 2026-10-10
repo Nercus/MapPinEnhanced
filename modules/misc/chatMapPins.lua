@@ -7,7 +7,9 @@ local NATIVE_LABEL = "|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a Map Pin Location"
 local function ReplaceMapPin(prefix, mapToken, xToken, yToken)
     local mapID, x, y = tonumber(mapToken), tonumber(xToken), tonumber(yToken)
     if not MapPinEnhanced:IsReadablePositiveInteger(mapID) or not x or not y or
-        not MapPinEnhanced:IsCoordinate(x / 10000) or not MapPinEnhanced:IsCoordinate(y / 10000) then return end
+        not MapPinEnhanced:IsCoordinate(x / 10000) or not MapPinEnhanced:IsCoordinate(y / 10000) then
+        return
+    end
     local info = C_Map.GetMapInfo(mapID)
     if not info then return end
     return string.format("%s[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a %s (%.2f, %.2f)]|h",

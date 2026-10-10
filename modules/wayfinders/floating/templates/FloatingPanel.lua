@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedFloatingPanelTemplate : MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate
@@ -77,7 +76,7 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     if not InCombatLockdown() or not self:IsProtected() then
         local action = step and step.showInstruction ~= false and step.desiredAction
         self.pinFrame:SetShown(target ~= nil and not action and not calculating)
-        self.clearButton:SetEnabled(Providers:CanClearNavigationTracking())
+        self.clearButton:SetEnabled(Wayfinders:CanClearNavigationTracking())
         self:UpdateLayout()
     end
 end
@@ -160,7 +159,7 @@ function MapPinEnhancedFloatingPanelMixin:PrepareCombatDisplay()
 end
 
 function MapPinEnhancedFloatingPanelMixin:ClearTracking()
-    if self.step then Providers:ClearNavigationTracking(self.step.changeNumber) end
+    if self.step then Wayfinders:ClearNavigationTracking(self.step.changeNumber) end
 end
 
 ---@param title string?

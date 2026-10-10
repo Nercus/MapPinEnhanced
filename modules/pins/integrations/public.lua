@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 ---@type table<string, function>
 local publicAPI = _G[MapPinEnhanced.name]

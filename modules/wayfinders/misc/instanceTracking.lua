@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+---@class Wayfinders
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
@@ -10,20 +10,20 @@ local baselineReady = false
 local previousInstance ---@type string?
 local instanceTypes = { party = true, raid = true, scenario = true, pvp = true, arena = true }
 
-function Providers:IsClearingTracking()
+function Wayfinders:IsClearingTracking()
     return clearingTracking
 end
 
 local function ClearTrackingOnEntry()
     -- Invalidate deferred addon selection before releasing Steps. Native clear is last.
     clearingTracking = true
-    Providers:CancelAddonPinSelection()
-    Providers:CancelSuperTrackingTargetRetries()
-    Providers:ClearStepSuperTracking(false)
+    Wayfinders:CancelAddonPinSelection()
+    Wayfinders:CancelSuperTrackingTargetRetries()
+    Wayfinders:ClearStepSuperTracking(false)
     Pins:UntrackTrackedPin()
     local owner, destinationID, changeNumber = Navigation:GetActiveDestinationState()
     if owner then Navigation:ClearDestination(owner, destinationID, changeNumber) end
-    Providers:UpdateSuperTrackingEntrySelection(nil, nil, true)
+    Wayfinders:UpdateSuperTrackingEntrySelection(nil, nil, true)
     C_SuperTrack.ClearAllSuperTracked()
     clearingTracking = false
 end

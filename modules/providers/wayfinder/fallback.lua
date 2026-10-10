@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
@@ -17,17 +18,17 @@ local function GetFallbackTargetID()
         tostring(contentID), tostring(questID), tostring(vignetteGUID))
 end
 
-local function RefreshFallbackTarget()
-    local targetID = GetFallbackTargetID()
-
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadFallbackTarget()
     local x, y, mapID = Providers:GetSuperTrackingWaypoint()
     if x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
 
     local name, description = C_SuperTrack.GetSuperTrackedItemName()
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
@@ -35,12 +36,12 @@ local function RefreshFallbackTarget()
         description = description,
         texture = "Navigation-Tracked-Icon",
         usesAtlas = true,
-    })
+    }
 end
 
-Providers:RegisterSuperTrackingFallback({
+Wayfinders:RegisterSuperTrackingFallback({
     source = SOURCE,
     getTargetID = GetFallbackTargetID,
-    refresh = RefreshFallbackTarget,
+    read = ReadFallbackTarget,
     events = { "GROUP_ROSTER_UPDATE", "ZONE_CHANGED_NEW_AREA" },
 })

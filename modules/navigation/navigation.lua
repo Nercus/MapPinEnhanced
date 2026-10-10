@@ -571,7 +571,8 @@ end
 ---@param inside boolean
 ---@param exitGraceSeconds number? provider-owned grace for a readable area exit
 ---@param directionDistance number? provider-approved maximum distance for guidance inside the area
-function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds, directionDistance)
+function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds,
+                                               directionDistance)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     local destination = self.activeDestination
     if not destination then return end
@@ -766,9 +767,9 @@ local function CopyRouteProgress(progression, graph)
             b = b,
             title = string.format(L["Navigation Step Number"], index, Navigation:GetPathMethod(pathType)),
             instruction = reference and Navigation:GetPathInstruction(route, index,
-                index == progression.pathIndex and progression.phase or nil) or
+                    index == progression.pathIndex and progression.phase or nil) or
                 string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
-                    "Navigation Travel To Destination"], GetDestinationTitle(destination)),
+                "Navigation Travel To Destination"], GetDestinationTitle(destination)),
             location = string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID), x * 100, y * 100),
         }
     end

@@ -4,7 +4,6 @@ local MapPinEnhanced = select(2, ...)
 ---@class Wayfinders
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Options = MapPinEnhanced:GetModule("Options")
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedWayfinderArrow : MapPinEnhancedWayfinder
 ---@field frame MapPinEnhancedWayfinderArrowTemplate
@@ -83,7 +82,7 @@ function MapPinEnhancedWayfinderArrow:SetStep(step)
     frame.loading:SetShown(calculating == true)
     frame.pin:SetShown(not calculating and not (step and step.showInstruction ~= false and step.desiredAction))
     frame.textContainer:Show()
-    frame.clearButton:SetEnabled(step ~= nil and Providers:CanClearNavigationTracking())
+    frame.clearButton:SetEnabled(step ~= nil and Wayfinders:CanClearNavigationTracking())
     frame.readout:SetStatusText(showObjectives and MapPinEnhanced.L["In objective area"] or nil)
     self:UpdateText()
     frame:SetDirectionVisible(showDirection)

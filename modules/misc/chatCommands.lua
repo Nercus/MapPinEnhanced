@@ -112,11 +112,13 @@ LinkUtil.RegisterLinkHandler(LINK_TYPE, function(link)
     local mapToken, xToken, yToken = link:match("^mappinenhancedpin:(%d+):(%d+%.?%d*):(%d+%.?%d*)$")
     local mapID, x, y = tonumber(mapToken), tonumber(xToken), tonumber(yToken)
     if not MapPinEnhanced:IsReadablePositiveInteger(mapID) or not IsChatCoordinate(x) or
-        not IsChatCoordinate(y) or not C_Map.GetMapInfo(mapID) then return end
+        not IsChatCoordinate(y) or not C_Map.GetMapInfo(mapID) then
+        return
+    end
     -- The link retains the map at receipt, even if the player changes zones before clicking.
     local data = { mapID = mapID, x = x / 100, y = y / 100 }
     if IsModifiedClick("CHATLINK") then
-        ChatEdit_InsertLink(MapPinEnhanced:GetModule("Providers"):GetMapPinChatLink(data.x, data.y, mapID))
+        ChatEdit_InsertLink(MapPinEnhanced:GetModule("Pins"):GetMapPinChatLink(data.x, data.y, mapID))
         return
     end
     local group = Groups:GetUngroupedGroup()

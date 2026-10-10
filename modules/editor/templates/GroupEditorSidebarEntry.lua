@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Transfer = MapPinEnhanced:GetModule("Transfer")
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 ---@class MapPinEnhancedGroupEditorSidebarEntryTemplate : Button
 ---@field group MapPinEnhancedGroupMixin?
@@ -66,7 +65,7 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:BuildMenu()
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("export", L["Share to Chat"]),
-            onClick = function() Providers:ShareGroupToChat(group) end,
+            onClick = function() Transfer:ShareGroupToChat(group) end,
         })
         table.insert(menu, {
             type = "button",
@@ -106,7 +105,7 @@ end
 function MapPinEnhancedGroupEditorSidebarEntryMixin:OnClick(button)
     if button == "LeftButton" and self.editor and not self.editor.draggedPinNode then
         if IsShiftKeyDown() and self.group then
-            Providers:ShareGroupToChat(self.group)
+            Transfer:ShareGroupToChat(self.group)
             return
         end
         self.editor:SelectGroup(self.group)

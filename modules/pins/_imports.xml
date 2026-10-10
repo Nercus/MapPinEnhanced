@@ -4,4 +4,7 @@
     <Include file="templates/_imports.xml" />
     <Include file="mixins/_imports.xml" />
     <Include file="pinManager.lua" />
+    <Script file="linkShare.lua" />
+    <Script file="nativePin.lua" />
+    <Script file="pinArrival.lua" />
 </Ui>

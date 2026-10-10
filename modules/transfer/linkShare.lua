@@ -1,7 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+---@class Transfer
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local Notifications = MapPinEnhanced:GetModule("Notifications")
 
@@ -51,10 +50,10 @@ EventRegistry:RegisterCallback("ChatFrame.OnEditBoxPreSendText", function(_, edi
     local outgoing = text:gsub("|c%x%x%x%x%x%x%x%x" .. LINK_PATTERN .. "|r", MakeToken)
     outgoing = outgoing:gsub(LINK_PATTERN, MakeToken)
     if outgoing ~= text then editBox:SetText(outgoing) end
-end, Providers)
+end, Transfer)
 
 ---@param group MapPinEnhancedGroupMixin
-function Providers:ShareGroupToChat(group)
+function Transfer:ShareGroupToChat(group)
     if not group or group:GetTotalPinCount() == 0 then return end
     local now = GetTime()
     local count = 0

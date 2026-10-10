@@ -1,11 +1,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
+---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
-local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 local SOURCE = "quest"
-local OBJECTIVE_EXIT_GRACE_SECONDS = 3
 local OBJECTIVE_DIRECTION_DISTANCE = 40
 local SUPER_TRACKING_TYPE = Enum.SuperTrackingType.Quest
 ---@type table<number, boolean>
@@ -75,7 +75,9 @@ local function GetObjectiveDirectionDistance(questID)
         if not MapPinEnhanced:IsReadableTable(objective) then return nil end
         local required = objective.numRequired
         if not MapPinEnhanced:IsReadableNumber(required) or required < 0 or
-            required > 1 or required % 1 ~= 0 then return nil end
+            required > 1 or required % 1 ~= 0 then
+            return nil
+        end
         -- Completed objectives still classify the quest, including higher counts.
         maximumRequired = math.max(maximumRequired, required)
     end
@@ -88,7 +90,7 @@ end
 ---@return boolean? active nil when membership or unfinished readiness is unavailable
 ---@return boolean? ready
 ---@return number? directionDistance
-local function ReadQuestState(questID, inside)
+function Providers:ReadQuestState(questID, inside)
     local ready = C_QuestLog.ReadyForTurnIn and C_QuestLog.ReadyForTurnIn(questID)
     if not issecretvalue(inside) and inside == nil and C_Minimap and C_Minimap.IsInsideQuestBlob then
         inside = C_Minimap.IsInsideQuestBlob(questID)
@@ -100,35 +102,6 @@ local function ReadQuestState(questID, inside)
     end
     return GetQuestAtlas(questID, ready), active, ready,
         active == true and GetObjectiveDirectionDistance(questID) or nil
-end
-
----@param questID number
----@param atlas string?
----@param active boolean?
----@param directionDistance number?
-local function ApplyQuestState(questID, atlas, active, directionDistance)
-    if Providers:IsChangingSuperTrackingEntry() then return end
-    local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
-    if owner ~= SOURCE or targetID ~= string.format("quest:%s", questID) then return end
-    if atlas then
-        Navigation:UpdateDestinationIcon(owner, targetID, changeNumber, atlas, true)
-        Providers:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
-    end
-    Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active == true,
-        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil, directionDistance)
-end
-
----@param eventQuestID number?
----@param inside boolean?
-local function RefreshQuestState(eventQuestID, inside)
-    if Providers:IsChangingSuperTrackingEntry() then return end
-    -- The original quest still owns area state during temporary Step supertracking.
-    local owner, targetID = Navigation:GetActiveDestinationState()
-    if owner ~= SOURCE or not targetID then return end
-    local questID = tonumber(targetID:match("^quest:(%d+)$"))
-    if not questID or issecretvalue(eventQuestID) or eventQuestID and eventQuestID ~= questID then return end
-    local atlas, active, _, directionDistance = ReadQuestState(questID, inside)
-    ApplyQuestState(questID, atlas, active, directionDistance)
 end
 
 ---@return string
@@ -184,16 +157,17 @@ local function GetQuestWaypointForMap(questID, mapID)
     end
 end
 
-local function RefreshQuest()
+---@param previous WayfinderData?
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadQuest(previous)
     local questID = C_SuperTrack.GetSuperTrackedQuestID()
     if questID == 0 then questID = nil end
-    -- Apply artwork before SetDestination compares data and decides to reroute.
     local atlas, active, ready, directionDistance ---@type string?, boolean?, boolean?, number?
     if questID then
-        atlas, active, ready, directionDistance = ReadQuestState(questID)
-        ApplyQuestState(questID, atlas, active, directionDistance)
+        atlas, active, ready, directionDistance = Providers:ReadQuestState(questID)
     end
-    local targetID = GetQuestTargetID()
     local questMapID = questID and C_TaskQuest.GetQuestZoneID(questID)
     if questID and (not questMapID or questMapID == 0) then questMapID = GetQuestUiMapID(questID) end
     local questTitle = questID and (C_QuestLog.GetTitleForQuestID(questID) or
@@ -206,16 +180,13 @@ local function RefreshQuest()
         return GetQuestWaypointForMap(questID, candidateMapID)
     end or nil, questMapID, questID and function() return C_QuestLog.GetNextWaypoint(questID) end or nil)
     if questID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     local titleAvailable = Providers:PlainDescription(questTitle) ~= nil
     local superTrackedName = C_SuperTrack.GetSuperTrackedItemName()
     questTitle = Providers:PlainDescription(questTitle) or Providers:PlainDescription(superTrackedName) or L["Quest"]
-    local _, _, changeNumber = Navigation:GetActiveDestinationState()
-    local previous = Navigation:GetDestinationData(SOURCE, targetID, changeNumber)
     local description, textAvailable = GetQuestDescription(questID, questTitle, ready)
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
@@ -223,12 +194,11 @@ local function RefreshQuest()
         description = description,
         texture = atlas or previous and previous.texture or "Navigation-Tracked-Icon",
         usesAtlas = true,
-    }, nil, titleAvailable and textAvailable)
-    ApplyQuestState(questID, atlas, active, directionDistance)
+    }, false, titleAvailable and textAvailable
 end
 
 local function OnQuestProgress()
-    Providers:RefreshSuperTrackingProvider(SOURCE)
+    Wayfinders:RefreshSuperTrackingProvider(SOURCE)
 end
 
 ---@param targetID string
@@ -237,8 +207,7 @@ end
 local function ReadQuestText(targetID, data)
     local questID = tonumber(targetID:match("^quest:(%d+)$"))
     if not questID then return end
-    local atlas, active, ready, directionDistance = ReadQuestState(questID)
-    ApplyQuestState(questID, atlas, active, directionDistance)
+    local atlas, active, ready, directionDistance = Providers:ReadQuestState(questID)
     local title = Providers:PlainDescription(C_QuestLog.GetTitleForQuestID(questID)) or
         Providers:PlainDescription(C_TaskQuest.GetQuestInfoByQuestID(questID))
     if not title then return end
@@ -256,24 +225,12 @@ local function OnQuestDataLoadResult(questID, success)
     end
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetQuestTargetID,
-    refresh = RefreshQuest,
+    read = ReadQuest,
     events = { "QUEST_POI_UPDATE", "QUEST_LOG_UPDATE", "QUEST_WATCH_UPDATE" },
     readText = ReadQuestText,
-    captureTracking = function()
-        local questID = C_SuperTrack.GetSuperTrackedQuestID()
-        if not questID or questID == 0 then return nil end
-        return function()
-            if not C_QuestLog.IsOnQuest(questID) and not C_TaskQuest.IsActive(questID) then return false end
-            C_SuperTrack.SetSuperTrackedQuestID(questID)
-            return true
-        end
-    end,
-    untrack = function() C_SuperTrack.SetSuperTrackedQuestID(0) end,
 })
-MapPinEnhanced:RegisterEvent("PLAYER_INSIDE_QUEST_BLOB_STATE_CHANGED", RefreshQuestState)
-MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", OnQuestProgress)
 MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", OnQuestDataLoadResult)

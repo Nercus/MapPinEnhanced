@@ -11,7 +11,6 @@ local MapPinEnhanced = select(2, ...)
 ---@field actionButtons Frame | { restoreButton: MapPinEnhancedIconButtonTemplate, clearButton: MapPinEnhancedIconButtonTemplate, fadeIn: MapPinEnhancedAnimationVisibilityMixin, fadeOut: MapPinEnhancedAnimationVisibilityMixin }
 MapPinEnhancedTrackerGroupEntryMixin = {}
 local Transfer = MapPinEnhanced:GetModule("Transfer")
-local Providers = MapPinEnhanced:GetModule("Providers")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 ---@type { EditGroup: fun(self: table, group: MapPinEnhancedGroupMixin) }
@@ -289,7 +288,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddTransferMenuActions(menu)
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("export", L["Share to Chat"]),
-            onClick = function() Providers:ShareGroupToChat(group) end,
+            onClick = function() Transfer:ShareGroupToChat(group) end,
         })
         table.insert(menu, {
             type = "button",

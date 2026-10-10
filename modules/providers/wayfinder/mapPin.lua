@@ -1,6 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
+---@class Providers
 local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "mapPin"
@@ -58,7 +60,7 @@ local housingOwnerAtlas = {
 
 ---@param plotDataID number
 ---@return NeighborhoodPlotMapInfo?
-local function GetHousingPlotInfo(plotDataID)
+function Providers:GetHousingPlotInfo(plotDataID)
     if not C_HousingNeighborhood or not C_HousingNeighborhood.GetNeighborhoodMapData then return nil end
     for _, plotInfo in ipairs(C_HousingNeighborhood.GetNeighborhoodMapData() or {}) do
         if plotInfo.plotDataID == plotDataID then return plotInfo end
@@ -74,7 +76,7 @@ end
 ---@return string|number? texture
 ---@return boolean? usesAtlas
 ---@return string? description
-local function GetMapPinInfo(pinType, typeID, mapID)
+function Providers:GetMapPinInfo(pinType, typeID, mapID)
     if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
         local info = C_AreaPoiInfo.GetAreaPOIInfo(mapID, typeID)
         local display = info or C_AreaPoiInfo.GetAreaPOIInfo(nil, typeID)
@@ -102,7 +104,7 @@ local function GetMapPinInfo(pinType, typeID, mapID)
             end
         end
     elseif pinType == Enum.SuperTrackingMapPinType.HousingPlot then
-        local plotInfo = GetHousingPlotInfo(typeID)
+        local plotInfo = Providers:GetHousingPlotInfo(typeID)
         if not plotInfo then return nil, nil, L["House"] end
         local title ---@type string?
         if plotInfo.ownerName and plotInfo.ownerName ~= "" then
@@ -114,14 +116,6 @@ local function GetMapPinInfo(pinType, typeID, mapID)
     end
 end
 
----@param _ string
----@param targetID string
----@param changeNumber integer
-local function ClearMapPin(_, targetID, changeNumber)
-    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, targetID, changeNumber) then return end
-    C_SuperTrack.ClearSuperTrackedMapPin()
-end
-
 ---@param targetID string
 ---@param data WayfinderData
 ---@return string?, string?, boolean?
@@ -129,13 +123,13 @@ local function ReadMapPinText(targetID, data)
     local typeText, idText = targetID:match("^mapPin:(%d+):(%d+)$")
     local pinType, typeID = tonumber(typeText), tonumber(idText)
     if not pinType or not typeID then return end
-    local _, _, title, _, _, description = GetMapPinInfo(pinType, typeID, data.mapID)
+    local _, _, title, _, _, description = Providers:GetMapPinInfo(pinType, typeID, data.mapID)
     title = Providers:PlainDescription(title)
     if not title or issecretvalue(description) then return end
     if pinType ~= Enum.SuperTrackingMapPinType.AreaPOI then
         -- A temporary Step has no original-source supertracking text. Keep its
         -- last attributable detail while independently refreshing the name.
-        if Providers:IsStepSuperTracking() then
+        if Wayfinders:IsStepSuperTracking() then
             description = data.description
         else
             local _, sourceText = C_SuperTrack.GetSuperTrackedItemName()
@@ -145,9 +139,11 @@ local function ReadMapPinText(targetID, data)
     return title, description, true
 end
 
-local function RefreshMapPin()
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadMapPin()
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-    local targetID = GetMapPinTargetID()
     local hasPin = pinType ~= nil and typeID ~= nil
     local questOffer = pinType == Enum.SuperTrackingMapPinType.QuestOffer and
         C_QuestLine.GetQuestLineInfo(typeID)
@@ -161,17 +157,16 @@ local function RefreshMapPin()
     local x, y, mapID, waypointDescription, traversalOnly = Providers:GetSuperTrackingWaypoint(
         hasPin and function(candidateMapID)
             local x, y
-            x, y, title, texture, usesAtlas, description = GetMapPinInfo(pinType, typeID, candidateMapID)
+            x, y, title, texture, usesAtlas, description = Providers:GetMapPinInfo(pinType, typeID, candidateMapID)
             resolvedMapID = candidateMapID
             return x, y
         end or nil, questMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     if resolvedMapID ~= mapID then
         local x, y
-        x, y, title, texture, usesAtlas, description = GetMapPinInfo(pinType, typeID, mapID)
+        x, y, title, texture, usesAtlas, description = Providers:GetMapPinInfo(pinType, typeID, mapID)
     end
     local textAvailable = Providers:PlainDescription(title) ~= nil and not issecretvalue(description)
     local superTrackedName, superTrackedDescription = C_SuperTrack.GetSuperTrackedItemName()
@@ -185,7 +180,7 @@ local function RefreshMapPin()
             displayDescription = Providers:PlainDescription(superTrackedDescription, displayTitle) or displayDescription
         end
     end
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID,
         x = x,
         y = y,
@@ -193,40 +188,25 @@ local function RefreshMapPin()
         description = displayDescription,
         texture = texture,
         usesAtlas = usesAtlas,
-    }, not traversalOnly and ClearMapPin or nil, textAvailable)
+    }, not traversalOnly, textAvailable
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetMapPinTargetID,
-    refresh = RefreshMapPin,
+    read = ReadMapPin,
     readText = ReadMapPinText,
-    captureTracking = function(data)
-        local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
-        local mapID = data.mapID
-        if pinType == nil or typeID == nil or not mapID then return nil end
-        return function()
-            if pinType == Enum.SuperTrackingMapPinType.HousingPlot then
-                if not GetHousingPlotInfo(typeID) then return false end
-            elseif GetMapPinInfo(pinType, typeID, mapID) == nil then
-                return false
-            end
-            C_SuperTrack.SetSuperTrackedMapPin(pinType, typeID)
-            return true
-        end
-    end,
-    untrack = function() C_SuperTrack.ClearSuperTrackedMapPin() end,
     events = { "AREA_POIS_UPDATED", "NEIGHBORHOOD_MAP_DATA_UPDATED", "QUEST_POI_UPDATE", "QUEST_LOG_UPDATE" },
 })
 
 MapPinEnhanced:RegisterEvent("QUESTLINE_UPDATE", function(requestRequired)
     if requestRequired then wipe(requestedQuestMaps) end
-    Providers:RefreshSuperTrackingProvider(SOURCE)
+    Wayfinders:RefreshSuperTrackingProvider(SOURCE)
 end)
 
 MapPinEnhanced:RegisterEvent("QUEST_DATA_LOAD_RESULT", function(questID, success)
     if not pendingQuestTitles[questID] then return end
     pendingQuestTitles[questID] = nil
-    if success then Providers:RefreshSuperTrackingProvider(SOURCE) end
+    if success then Wayfinders:RefreshSuperTrackingProvider(SOURCE) end
 end)

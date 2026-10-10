@@ -1,6 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
-local Providers = MapPinEnhanced:GetModule("Providers")
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local MIN_CLOSE_DISTANCE = 50
 local MAX_CLOSE_DISTANCE = 200
@@ -82,7 +82,7 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
     self.lastNavigationTargetCheck = GetTime()
-    self:SetCustomDirectionEnabled(not Providers:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
+    self:SetCustomDirectionEnabled(not Wayfinders:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
 end
 
 ---@param enabled boolean

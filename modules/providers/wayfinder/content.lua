@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local Providers = MapPinEnhanced:GetModule("Providers")
 local SOURCE = "content"
@@ -29,13 +30,6 @@ local function GetContentIcon(trackableType, trackableID)
     end
 end
 
----@param _ string
----@param targetID string
----@param changeNumber integer
-local function ClearContent(_, targetID, changeNumber)
-    if not Providers:ClearSuperTrackingWayfinderData(SOURCE, targetID, changeNumber) then return end
-    C_SuperTrack.ClearSuperTrackedContent()
-end
 
 ---@param trackableType Enum.ContentTrackingType
 ---@param trackableID number
@@ -78,7 +72,7 @@ local function ReadContentText(targetID, data)
         available = available or text ~= nil
         description = Providers:PlainDescription(text, title)
     end
-    if not description and not Providers:IsStepSuperTracking() and targetID == GetContentTargetID() then
+    if not description and not Wayfinders:IsStepSuperTracking() and targetID == GetContentTargetID() then
         local _, text = C_SuperTrack.GetSuperTrackedItemName()
         if not issecretvalue(text) then
             available = available or text ~= nil
@@ -88,9 +82,11 @@ local function ReadContentText(targetID, data)
     return title, description, available
 end
 
-local function RefreshContent()
+---@return WayfinderData?
+---@return boolean? removable
+---@return boolean? textAvailable
+local function ReadContent()
     local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
-    local targetID = GetContentTargetID()
     local hasTrackable = trackableType ~= nil and trackableID ~= nil
     local bestMapID ---@type number?
     if hasTrackable and C_ContentTracking and C_ContentTracking.GetBestMapForTrackable then
@@ -101,35 +97,22 @@ local function RefreshContent()
         return GetContentWaypointForMap(trackableType, trackableID, candidateMapID)
     end or nil, bestMapID)
     if trackableType == nil or trackableID == nil or x == nil or y == nil or mapID == nil then
-        Providers:HandleUnresolvedSuperTrackingTarget(SOURCE, targetID)
         return
     end
     local title, description = C_SuperTrack.GetSuperTrackedItemName()
     title = title or description
     if not title and C_ContentTracking then title = C_ContentTracking.GetTitle(trackableType, trackableID) end
     local texture, usesAtlas = GetContentIcon(trackableType, trackableID)
-    Providers:SetSuperTrackingWayfinderData(SOURCE, targetID, {
+    return {
         mapID = mapID, x = x, y = y, title = title, description = description, texture = texture, usesAtlas = usesAtlas,
-    }, not traversalOnly and mapID == bestMapID and ClearContent or nil)
+    }, not traversalOnly and mapID == bestMapID
 end
 
-Providers:RegisterSuperTrackingProvider({
+Wayfinders:RegisterSuperTrackingProvider({
     source = SOURCE,
     superTrackingType = SUPER_TRACKING_TYPE,
     getTargetID = GetContentTargetID,
-    refresh = RefreshContent,
+    read = ReadContent,
     readText = ReadContentText,
-    captureTracking = function()
-        local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
-        if trackableType == nil or trackableID == nil then return nil end
-        return function()
-            if not C_ContentTracking or not C_ContentTracking.IsTrackable(trackableType, trackableID) then
-                return false
-            end
-            C_SuperTrack.SetSuperTrackedContent(trackableType, trackableID)
-            return true
-        end
-    end,
-    untrack = function() C_SuperTrack.ClearSuperTrackedContent() end,
     events = { "CONTENT_TRACKING_UPDATE", "TRACKABLE_INFO_UPDATE", "TRACKING_TARGET_INFO_UPDATE" },
 })

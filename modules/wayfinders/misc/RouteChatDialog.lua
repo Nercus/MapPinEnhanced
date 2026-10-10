@@ -1,5 +1,6 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedRouteChatDialogTemplate : MapPinEnhancedWindowTemplate

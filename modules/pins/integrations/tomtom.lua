@@ -3,8 +3,6 @@
 local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
 local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@return MapPinEnhancedGroupMixin?
@@ -90,10 +88,9 @@ local function HookTomTomAddWaypoint()
     methods[TomTom.AddWaypoint] = true
 end
 
-function Providers:CheckForTomTom()
-    self.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
-    MapPinEnhanced.isTomTomLoaded = self.isTomTomLoaded
-    if not self.isTomTomLoaded then return end
+local function CheckForTomTom()
+    MapPinEnhanced.isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
+    if not MapPinEnhanced.isTomTomLoaded then return end
     HookTomTomAddWaypoint()
     MapPinEnhanced:Print(L["TomTom Is Loaded! You may experience some unexpected behavior."])
 end
@@ -101,15 +98,14 @@ end
 MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(addon)
     if addon == "TomTom" then
         MapPinEnhanced.isTomTomLoaded = true
-        Providers.isTomTomLoaded = true
         HookTomTomAddWaypoint()
     end
 end)
 
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    Providers:CheckForTomTom()
-    if not Providers.isTomTomLoaded and TomTom == nil then
+    CheckForTomTom()
+    if not MapPinEnhanced.isTomTomLoaded and TomTom == nil then
         TomTom = tomTomShim
     end
 end)

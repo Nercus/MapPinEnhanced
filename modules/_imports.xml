@@ -10,5 +10,9 @@
     <Include file="tracker/_imports.xml" />
     <Include file="editor/_imports.xml" />
     <Include file="misc/_imports.xml" />
+    <Include file="pins/integrations/_imports.xml" />
+    <Include file="groups/integrations/_imports.xml" />
+    <Script file="transfer/linkShare.lua" />
+    <Include file="wayfinders/misc/tracking.xml" />
     <Include file="providers/_imports.xml" />
 </Ui>

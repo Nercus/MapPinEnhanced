@@ -37,7 +37,9 @@ local function ObserveToyOptions()
     for _, option in ipairs(options) do
         if not MapPinEnhanced:IsReadableTable(option) or
             MapPinEnhanced:IsSecretValue(option.gossipOptionID) or
-            MapPinEnhanced:IsSecretValue(option.status) then return end
+            MapPinEnhanced:IsSecretValue(option.status) then
+            return
+        end
         if known[option.gossipOptionID] then
             observed[option.gossipOptionID] = option.status == Enum.GossipOptionStatus.Available
         end
@@ -80,8 +82,11 @@ function Navigation:GetGossipPathData(path)
         toyOptions[npcID] = toyOptions[npcID] or {}
         toyOptions[npcID][gossipOptionID] = true
     end
-    return { npcID = npcID, gossipOptionID = gossipOptionID,
-        requiresObservation = gossip.requiresObservation }
+    return {
+        npcID = npcID,
+        gossipOptionID = gossipOptionID,
+        requiresObservation = gossip.requiresObservation
+    }
 end
 
 local activeContext ---@type NavigationActivePathContext?

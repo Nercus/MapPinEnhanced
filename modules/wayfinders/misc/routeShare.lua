@@ -1,7 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
+local Pins = MapPinEnhanced:GetModule("Pins")
+---@class Wayfinders
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local L = MapPinEnhanced.L
 
@@ -21,7 +22,7 @@ local function SendRoute(changeNumber, chatType, target, language)
         MapPinEnhanced:Print(L["Navigation Chat Unavailable"])
         return false
     end
-    local link = Providers:GetMapPinChatLink(destination.x, destination.y, destination.mapID)
+    local link = Pins:GetMapPinChatLink(destination.x, destination.y, destination.mapID)
     for index = 0, #steps do
         local instruction = index == 0 and destination.header or steps[index]
         local prefix = index > 0 and string.format("%d. ", index) or ""
@@ -49,7 +50,7 @@ local channelDialog ---@type MapPinEnhancedRouteChatDialogTemplate?
 
 ---@param changeNumber integer
 ---@return boolean
-function Providers:ShareRouteToChat(changeNumber)
+function Wayfinders:ShareRouteToChat(changeNumber)
     local steps, destination = Navigation:GetRouteChatSteps(changeNumber)
     if not steps or not destination then return false end
     local editBox = ChatFrameUtil.GetActiveWindow() or ChatFrameUtil.ChooseBoxForSend()

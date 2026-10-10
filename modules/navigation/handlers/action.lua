@@ -150,7 +150,9 @@ end
 
 local function ObserveToyTravel(unit, spellID)
     if MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" or
-        not MapPinEnhanced:IsReadablePositiveInteger(spellID) then return end
+        not MapPinEnhanced:IsReadablePositiveInteger(spellID) then
+        return
+    end
     local itemID = toysBySpell[spellID]
     if not itemID or not Navigation.routeNavigationEnabled or not Navigation.activeDestination then return end
     Navigation:CancelToyTravel()
@@ -165,7 +167,9 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
 end)
 MapPinEnhanced:RegisterEvent("ITEM_DATA_LOAD_RESULT", function(itemID, success)
     if not MapPinEnhanced:IsSecretValue(success) and success == true and
-        MapPinEnhanced:IsReadablePositiveInteger(itemID) then CacheToySpell(itemID) end
+        MapPinEnhanced:IsReadablePositiveInteger(itemID) then
+        CacheToySpell(itemID)
+    end
 end)
 MapPinEnhanced:RegisterEvent("LOADING_SCREEN_ENABLED", function()
     if pendingToyDestination then
@@ -231,7 +235,9 @@ end
 
 MapPinEnhanced:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(itemID, success)
     if MapPinEnhanced:IsSecretValue(success) or success ~= true or
-        not MapPinEnhanced:IsReadablePositiveInteger(itemID) then return end
+        not MapPinEnhanced:IsReadablePositiveInteger(itemID) then
+        return
+    end
     CacheToySpell(itemID)
     local progression = Navigation.progression
     if not progression then return end
@@ -255,7 +261,9 @@ local function ReportActionEvent(result, unit, _, spellID)
     local report = activeReport
     if not context or not report then return end
     if MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" or
-        not MapPinEnhanced:IsReadablePositiveInteger(spellID) then return end
+        not MapPinEnhanced:IsReadablePositiveInteger(spellID) then
+        return
+    end
     local expectedSpellID = GetActionSpellID(Navigation:GetPathAction(context.pathType, context.requirement))
     if expectedSpellID ~= spellID then return end
     report(result)

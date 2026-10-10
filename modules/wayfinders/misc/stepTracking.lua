@@ -1,8 +1,8 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+---@class Wayfinders
+local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
----@class Providers
-local Providers = MapPinEnhanced:GetModule("Providers")
 local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@type UiMapPoint?
@@ -139,13 +139,13 @@ local function KeepStepWaypointOnArrival()
 end
 
 ---@return boolean
-function Providers:IsStepSuperTracking()
+function Wayfinders:IsStepSuperTracking()
     return changingTracking or stepWaypoint ~= nil and
         C_SuperTrack.IsSuperTrackingUserWaypoint() and WaypointsMatch(stepWaypoint, C_Map.GetUserWaypoint())
 end
 
 ---@param restore boolean? restore the previous selection unless another selection has taken ownership
-function Providers:ClearStepSuperTracking(restore)
+function Wayfinders:ClearStepSuperTracking(restore)
     if not stepWaypoint then return end
     local ownsWaypoint = WaypointsMatch(stepWaypoint, C_Map.GetUserWaypoint())
     local ownsTracking = ownsWaypoint and C_SuperTrack.IsSuperTrackingUserWaypoint()
@@ -169,7 +169,7 @@ function Providers:ClearStepSuperTracking(restore)
     end
     if ownsWaypoint then
         if waypoint then
-            Providers:SetOwnedUserWaypoint(waypoint)
+            Wayfinders:SetOwnedUserWaypoint(waypoint)
         else
             C_Map.ClearUserWaypoint()
         end
@@ -190,7 +190,7 @@ end
 
 ---@param sourceChanged boolean? refresh the original source after restoration
 ---@return boolean
-function Providers:ShouldIgnoreStepTrackingChange(sourceChanged)
+function Wayfinders:ShouldIgnoreStepTrackingChange(sourceChanged)
     if self:IsStepSuperTracking() then return true end
     if stepWaypoint then self:ClearStepSuperTracking(false) end
     if not sourceChanged and restoredTrackingIdentity == GetTrackingIdentity() then return true end
@@ -200,7 +200,7 @@ end
 
 ---@param data {mapID: number?, x: number?, y: number?}
 ---@return boolean usesNavigationFrame
-function Providers:SetStepSuperTracking(data)
+function Wayfinders:SetStepSuperTracking(data)
     local mapID, x, y = data.mapID, data.x, data.y
     local waypoint = mapID and x and y and CreateStepWaypoint(mapID, x, y)
     if not waypoint then
@@ -224,7 +224,7 @@ function Providers:SetStepSuperTracking(data)
     KeepStepWaypointOnArrival()
     -- Rebuild native guidance even when both adjacent Steps use user waypoints.
     C_SuperTrack.SetSuperTrackedUserWaypoint(false)
-    Providers:SetOwnedUserWaypoint(waypoint)
+    Wayfinders:SetOwnedUserWaypoint(waypoint)
     C_SuperTrack.SetSuperTrackedUserWaypoint(true)
     changingTracking = false
     if self:IsStepSuperTracking() then return true end
@@ -236,8 +236,8 @@ MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", KeepStepWaypointOnArriv
 -- Reproject the owned location when the player crosses maps during one Step.
 -- Clearing tracking releases this copy; zone events never reclaim another selection.
 local function RefreshStepWaypointMap()
-    if changingTracking or pendingRestore or not stepTarget or not Providers:IsStepSuperTracking() then return end
-    Providers:SetStepSuperTracking({
+    if changingTracking or pendingRestore or not stepTarget or not Wayfinders:IsStepSuperTracking() then return end
+    Wayfinders:SetStepSuperTracking({
         mapID = stepTarget.uiMapID,
         x = stepTarget.position.x,
         y = stepTarget.position.y
@@ -251,9 +251,9 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RefreshStepWaypointMap)
 MapPinEnhanced:RegisterEvent("LOADING_SCREEN_ENABLED", function() loadingScreen = true end)
 MapPinEnhanced:RegisterEvent("LOADING_SCREEN_DISABLED", function()
     loadingScreen = false
-    if pendingRestore then Providers:ClearStepSuperTracking() end
+    if pendingRestore then Wayfinders:ClearStepSuperTracking() end
 end)
 MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function()
     loadingScreen = false
-    Providers:ClearStepSuperTracking()
+    Wayfinders:ClearStepSuperTracking()
 end)

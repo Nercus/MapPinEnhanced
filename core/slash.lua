@@ -1,5 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+---@type fun(message: string)?
+local fallbackHandler
 
 ---@type table<string, function> a list of commands and their associated functions
 local commandList = {}
@@ -10,7 +12,11 @@ local commandAliases = {}
 ---@type table<string, string> a list of commands and their associated help strings
 local commandHelpStrings = {}
 
-local Providers = MapPinEnhanced:GetModule("Providers")
+---@param handler fun(message: string)
+function MapPinEnhanced:SetSlashFallback(handler)
+    assert(type(handler) == "function", "MapPinEnhanced:SetSlashFallback: handler must be a function")
+    fallbackHandler = handler
+end
 
 ---Set a slash command trigger for the addon
 ---@param trigger string the slash command trigger
@@ -36,8 +42,8 @@ function MapPinEnhanced:SetSlashTrigger(trigger, triggerIndex)
             handler(unpack(args))
         elseif secondArg == nil then
             self:PrintHelp()
-        else
-            Providers:ImportSlashCommand(msg)
+        elseif fallbackHandler then
+            fallbackHandler(msg)
         end
     end
 end

@@ -83,10 +83,14 @@ function Navigation:BeginActionEquipmentClick(action)
     click = nil
     if not enabled or equipping or not inWorld or InCombatLockdown() or not characterKey or not action or
         action.type ~= "item" or not C_Item.GetItemGUID or not C_Item.GetItemLocation or
-        not C_Item.IsEquippableItem(action.id) or C_Item.IsEquippedItem(action.id) then return end
+        not C_Item.IsEquippableItem(action.id) or C_Item.IsEquippedItem(action.id) then
+        return
+    end
     local pathKey, currentAction = GetCurrentPath()
     if not pathKey or not currentAction or currentAction.id ~= action.id or
-        not self.progression or self.progression.phase ~= "ready" then return end
+        not self.progression or self.progression.phase ~= "ready" then
+        return
+    end
     local slots = {} ---@type table<integer, NavigationEquipmentSnapshot>
     for slot = INVSLOT_FIRST_EQUIPPED, INVSLOT_LAST_EQUIPPED do
         local guid = ReadSlot(slot)
@@ -119,8 +123,12 @@ local function ObserveEquipment()
                 -- A second navigation item can replace one whose restoration is
                 -- still blocked. Retain the original gear, not the first travel item.
                 if not record or record.travelGUID ~= previous.guid then
-                    record = { originalGUID = previous.guid, originalLink = previous.link,
-                        travelGUID = guid, pathKey = observation.pathKey }
+                    record = {
+                        originalGUID = previous.guid,
+                        originalLink = previous.link,
+                        travelGUID = guid,
+                        pathKey = observation.pathKey
+                    }
                     pending[slot] = record
                 end
                 record.travelGUID = guid
@@ -131,10 +139,13 @@ local function ObserveEquipment()
                 local offHand = observation.slots[INVSLOT_OFFHAND]
                 if slot == INVSLOT_MAINHAND and offHand.guid and ReadSlot(INVSLOT_OFFHAND) == false then
                     pending[INVSLOT_OFFHAND] = {
-                        originalGUID = offHand.guid, originalLink = offHand.link,
-                        travelGUID = false, mainHandTravelGUID = guid,
+                        originalGUID = offHand.guid,
+                        originalLink = offHand.link,
+                        travelGUID = false,
+                        mainHandTravelGUID = guid,
                         originalMainHandGUID = record.originalGUID or false,
-                        pathKey = observation.pathKey, due = record.due,
+                        pathKey = observation.pathKey,
+                        due = record.due,
                     }
                 end
                 ClearEquipObservation()

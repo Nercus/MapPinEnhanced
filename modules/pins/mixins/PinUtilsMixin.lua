@@ -1,17 +1,17 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
+local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@class MapPinEnhancedPinMixin
 MapPinEnhancedPinUtilsMixin = {}
 
-local Providers = MapPinEnhanced:GetModule("Providers")
 
 local L = MapPinEnhanced.L
 
 function MapPinEnhancedPinUtilsMixin:SharePin()
     local x, y, mapID = self.pinData.x, self.pinData.y, self.pinData.mapID
     if x and y and mapID then
-        Providers:LinkToChat(x, y, mapID)
+        Pins:LinkToChat(x, y, mapID)
     end
 end
 
