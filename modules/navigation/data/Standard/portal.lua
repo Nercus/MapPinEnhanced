@@ -12485,33 +12485,6 @@ local PORTAL = {
             },
         },
     },
-    -- Orgrimmar (map 85 48.23,62.17) -> Mulgore (map 7 36.49,35.11) via portal
-    {
-        fromPointID = 100261,
-        fromMap = 85,
-        fromX = 0.4823,
-        fromY = 0.6217,
-        toPointID = 100032,
-        toMap = 7,
-        toX = 0.3649,
-        toY = 0.3511,
-        type = "portal",
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "event",
-                    value = "DARKMOON FAIRE",
-                },
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Horde",
-                },
-            },
-        },
-    },
     -- Orgrimmar (map 85 48.87,38.55) -> Uldum New (map 1527 54.90,34.25) via portal
     {
         fromPointID = 100262,
@@ -17379,33 +17352,6 @@ local PORTAL = {
                     operation = "check",
                     kind = "questCompleted",
                     value = 79010,
-                },
-            },
-        },
-    },
-    -- Stormwind City (map 84 62.26,72.96) -> Elwynn Forest (map 37 41.87,68.17) via portal
-    {
-        fromPointID = 200310,
-        fromMap = 84,
-        fromX = 0.6226,
-        fromY = 0.7296,
-        toPointID = 200180,
-        toMap = 37,
-        toX = 0.4187,
-        toY = 0.6817,
-        type = "portal",
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "event",
-                    value = "DARKMOON FAIRE",
-                },
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Alliance",
                 },
             },
         },

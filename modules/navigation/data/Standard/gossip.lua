@@ -238,6 +238,39 @@ local GOSSIP = {
         },
     },
 
+    -- Zone: Orgrimmar (map 85)
+    -- Orgrimmar (map 85 48.23,62.17) -> Mulgore (map 7 36.49,35.11) via gossip
+    {
+        fromPointID = 100261,
+        fromMap = 85,
+        fromX = 0.4823,
+        fromY = 0.6217,
+        toPointID = 100032,
+        toMap = 7,
+        toX = 0.3649,
+        toY = 0.3511,
+        type = "gossip",
+        gossip = {
+            gossipOptionID = 40007,
+            npcID = 55382,
+        },
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "event",
+                    value = "DARKMOON FAIRE",
+                },
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Horde",
+                },
+            },
+        },
+    },
+
     -- Zone: Oribos (map 1670)
     -- Oribos (map 1670 38.88,70.00) -> Zereth Mortis (map 1970 33.27,69.43) via gossip
     {
@@ -405,6 +438,39 @@ local GOSSIP = {
                     operation = "check",
                     kind = "questCompleted",
                     value = 51532,
+                },
+            },
+        },
+    },
+
+    -- Zone: Stormwind City (map 84)
+    -- Stormwind City (map 84 62.26,72.96) -> Elwynn Forest (map 37 41.87,68.17) via gossip
+    {
+        fromPointID = 200310,
+        fromMap = 84,
+        fromX = 0.6226,
+        fromY = 0.7296,
+        toPointID = 200180,
+        toMap = 37,
+        toX = 0.4187,
+        toY = 0.6817,
+        type = "gossip",
+        gossip = {
+            gossipOptionID = 40457,
+            npcID = 54334,
+        },
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "event",
+                    value = "DARKMOON FAIRE",
+                },
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
                 },
             },
         },
