@@ -118,9 +118,22 @@ function Navigation:ResolveZonePosition(mapID, x, y)
     local hbd = MapPinEnhanced.HBD
     if not hbd or not C_Map.GetMapInfoAtPosition then return mapID, x, y end
     local mapInfo = C_Map.GetMapInfo(mapID)
-    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Continent do
+    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Zone do
         local child = C_Map.GetMapInfoAtPosition(mapID, x, y)
-        if not child or child.mapID == mapID or child.mapType <= mapInfo.mapType then break end
+        if not child or child.mapID == mapID or child.mapType < mapInfo.mapType then break end
+        if child.mapType == mapInfo.mapType then
+            -- Cities and surrounding zones can have the same map type. Only
+            -- descend into a strictly contained map, never an overlapping zone.
+            if child.mapType ~= Enum.UIMapType.Zone then break end
+            local minX, minY = hbd:TranslateZoneCoordinates(0, 0, child.mapID, mapID)
+            local maxX, maxY = hbd:TranslateZoneCoordinates(1, 1, child.mapID, mapID)
+            if not MapPinEnhanced:IsCoordinate(minX) or not MapPinEnhanced:IsCoordinate(minY) or
+                not MapPinEnhanced:IsCoordinate(maxX) or not MapPinEnhanced:IsCoordinate(maxY) or
+                not (minX < maxX and minY < maxY) or
+                not (minX > 0 or minY > 0 or maxX < 1 or maxY < 1) then
+                break
+            end
+        end
         local childX, childY = hbd:TranslateZoneCoordinates(x, y, mapID, child.mapID)
         if type(childX) ~= "number" or type(childY) ~= "number" or
             not (childX >= 0 and childX <= 1 and childY >= 0 and childY <= 1) then
@@ -141,6 +154,10 @@ local function CopyRoutingData(data)
         type(copy.x) ~= "number" or type(copy.y) ~= "number" then
         return copy
     end
+    -- Resolve the destination before preferring the player's map; otherwise a
+    -- city pin placed on its surrounding zone gains an unnecessary exit leg.
+    copy.mapID, copy.x, copy.y = Navigation:ResolveZonePosition(copy.mapID, copy.x, copy.y)
+    if copy.mapID ~= data.mapID then return copy end
     local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if playerMapID == copy.mapID then return copy end
     local mapInfo = C_Map.GetMapInfo(copy.mapID)
@@ -166,7 +183,6 @@ local function CopyRoutingData(data)
             return copy
         end
     end
-    copy.mapID, copy.x, copy.y = Navigation:ResolveZonePosition(copy.mapID, copy.x, copy.y)
     return copy
 end
 
