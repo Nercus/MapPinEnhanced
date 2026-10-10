@@ -108,10 +108,14 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
         (not inside or step.showDirectionInObjectiveArea == true)
     -- Reaching an entrance can hide direction while its Step still owns tracking.
     -- Keep the waypoint protected from native arrival clearing until the Step ends.
-    if self.data and self.data.mapDistanceOnly then
-        Wayfinders:SetStepSuperTracking(self.data)
-    else
-        Wayfinders:ClearStepSuperTracking()
+    -- A native traversal describes the existing selection. Retargeting its
+    -- entrance would discard the path that tells us when the crossing is done.
+    if not step or not step.isTraversal then
+        if self.data and self.data.mapDistanceOnly then
+            Wayfinders:SetStepSuperTracking(self.data)
+        else
+            Wayfinders:ClearStepSuperTracking()
+        end
     end
     frame.lastNavigationTargetCheck = nil
     frame:SetDirectionShown(showDirection)

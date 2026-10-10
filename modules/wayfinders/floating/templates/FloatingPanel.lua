@@ -124,7 +124,7 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     self:PrepareCombatDisplay()
     self.applying = true
     self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
-        step.showInstruction ~= false and step.stepCount ~= 1), returningFromCombat)
+        step.showInstruction ~= false and (step.isTraversal or step.stepCount ~= 1)), returningFromCombat)
     self.applying = nil
 end
 

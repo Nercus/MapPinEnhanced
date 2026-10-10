@@ -30,6 +30,7 @@ local L = MapPinEnhanced.L
 ---@field attempted boolean?
 ---@field pathUnavailable boolean?
 ---@field lastDeviationCalculationAt number?
+---@field traversal WayfinderData?
 
 ---@class NavigationRouteLayerEntry
 ---@field frame MapPinEnhancedNavigationMapPinTemplate
@@ -254,6 +255,7 @@ end
 ---@param destination NavigationDestination
 function Navigation:CompleteFinalDestination(destination)
     if not IsCurrentDestination(destination) then return end
+    if Wayfinders:GetNavigationTraversal(destination.routingData) then return end
     if destination.data.lock and destination.data.targetType ~= Wayfinders.TARGET_TYPE_PIN then return end
     local progression = self.progression
     if progression and progression.route.pathReferences[progression.pathIndex] then return end
@@ -980,6 +982,26 @@ function Navigation:CheckCurrentPathCompletion(identity)
     end
 end
 
+-- Native paths can arrive after route publication and can change without a map
+-- change (the Sanctum and the city both use Stormwind's map ID).
+---@return boolean? changed
+local function RefreshNativeTraversal()
+    local progression = Navigation.progression
+    local destination = Navigation.activeDestination
+    if not progression or not destination or not Navigation:IsCurrentProgression(progression) or
+        progression.phase ~= "approach" or progression.route.pathReferences[progression.pathIndex] then return end
+    local previous = progression.traversal
+    local traversal = Wayfinders:GetNavigationTraversal(destination.routingData)
+    if not previous and not traversal then return end
+    if previous and traversal and previous.mapID == traversal.mapID and previous.x == traversal.x and
+        previous.y == traversal.y and previous.title == traversal.title then return end
+    progression.closestDistance, progression.movingAwayStartedAt = nil, nil
+    Navigation:PublishStep(progression)
+    return true
+end
+
+MapPinEnhanced:RegisterEventBucket({ "SUPER_TRACKING_PATH_UPDATED" }, RefreshNativeTraversal, 0.1)
+
 ---@return boolean
 function Navigation:CanGuideDirectly()
     local destination = self.activeDestination
@@ -1001,12 +1023,14 @@ end
 ---@param _nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _nextUpdateInterval, movementState)
+    if RefreshNativeTraversal() then return end
     if self.activeDestination and self.activeDestination.insideObjectiveArea then
         RefreshObjectiveAreaPresentation(self.activeDestination)
     end
     if RefreshRouteOrigin() then return end
     local progression = self.progression
     if not progression or not self:IsCurrentProgression(progression) then return end
+    if progression.traversal then return end
     local reference = progression.route.pathReferences[progression.pathIndex]
     if reference and not self:IsMovementPath(progression.route.graph.pathTypes[reference]) then
         local changeNumber = progression.changeNumber
@@ -1252,6 +1276,31 @@ end
 ---@param info WayfinderStepData
 function Navigation:ApplyStepPresentation(target, onArrival, info)
     local destination = self.activeDestination
+    local progression = self.progression
+    -- Authored entrances take precedence: Blizzard can interpret an interior
+    -- portal's Stormwind coordinates as a target outside the Wizard's Sanctum.
+    -- Use native traversal only to fill in the final movement leg.
+    local traversal = progression and info.isFinalDestination and info.phase == "approach" and
+        Wayfinders:GetNavigationTraversal(target) or nil
+    if progression then
+        progression.traversal = traversal
+    end
+    if traversal then
+        -- Native traversal supplies interior boundaries absent from UI map IDs.
+        -- Retain the route target and native selection until Blizzard reports
+        -- the crossing, rather than treating entrance proximity as completion.
+        target = CopyWayfinderData(target)
+        target.mapID, target.x, target.y = traversal.mapID, traversal.x, traversal.y
+        target.mapDistanceOnly = true
+        target.lock = false
+        onArrival = nil
+        info.arrivalIdentity = info.arrivalIdentity .. ":traversal:" .. traversal.mapID .. ":" ..
+            traversal.x .. ":" .. traversal.y
+        info.instruction = traversal.title or info.instruction
+        info.showInstruction = true
+        info.isFinalDestination = false
+        info.isTraversal = true
+    end
     info.insideObjectiveArea = info.isFinalDestination == true and
         destination ~= nil and destination.insideObjectiveArea == true
     info.showDirectionInObjectiveArea = info.insideObjectiveArea == true and

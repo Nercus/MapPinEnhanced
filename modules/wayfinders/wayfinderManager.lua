@@ -83,6 +83,7 @@ local activeTarget
 ---@field showInstruction boolean? false hides navigation instructions when routing is disabled
 ---@field phase string
 ---@field isFinalDestination boolean?
+---@field isTraversal boolean?
 ---@field insideObjectiveArea boolean?
 ---@field showDirectionInObjectiveArea boolean?
 ---@field stepIndex integer?
@@ -128,6 +129,7 @@ local function CopyStep(step)
         showInstruction = step.showInstruction,
         phase = step.phase,
         isFinalDestination = step.isFinalDestination,
+        isTraversal = step.isTraversal,
         insideObjectiveArea = step.insideObjectiveArea,
         showDirectionInObjectiveArea = step.showDirectionInObjectiveArea,
         stepIndex = step.stepIndex,
@@ -182,8 +184,8 @@ end
 
 ---@return boolean
 function Wayfinders:IsIntermediateStep()
-    return activeStep ~= nil and activeStep.stepIndex ~= nil and activeStep.stepCount ~= nil and
-        activeStep.stepIndex < activeStep.stepCount
+    return activeStep ~= nil and (activeStep.isTraversal == true or
+        activeStep.stepIndex ~= nil and activeStep.stepCount ~= nil and activeStep.stepIndex < activeStep.stepCount)
 end
 
 ---@return string

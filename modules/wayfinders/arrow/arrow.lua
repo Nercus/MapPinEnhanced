@@ -94,7 +94,7 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     local step = self.step
     local intermediate = Wayfinders:IsIntermediateStep()
     local showInstruction = step and not step.insideObjectiveArea and step.showInstruction ~= false and
-        ((step.stepCount or 0) > 1 or step.phase == "calculating" or step.phase == "no-direction" or
+        (step.isTraversal or (step.stepCount or 0) > 1 or step.phase == "calculating" or step.phase == "no-direction" or
             step.desiredAction ~= nil or step.status and step.status ~= "")
     local instruction = self.positionFrame and self.positionFrame.instruction
     local title = self.title

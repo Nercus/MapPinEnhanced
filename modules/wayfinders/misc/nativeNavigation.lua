@@ -4,6 +4,27 @@ local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local Providers = MapPinEnhanced:GetModule("Providers")
 
+---@param target WayfinderData
+---@return WayfinderData?
+function Wayfinders:GetNavigationTraversal(target)
+    local matches = self:IsSuperTrackingDestination(target.mapID, target.x, target.y)
+    if not matches and C_SuperTrack.IsSuperTrackingUserWaypoint() then
+        local waypoint = C_Map.GetUserWaypoint()
+        local distance = waypoint and MapPinEnhanced.HBD:GetZoneDistance(waypoint.uiMapID,
+            waypoint.position.x, waypoint.position.y, target.mapID, target.x, target.y)
+        matches = type(distance) == "number" and distance <= 5
+    end
+    if not matches then return end
+    local mapID = C_Map.GetBestMapForUnit("player")
+    if not mapID then return end
+    local x, y, description = Providers:GetNavigationWaypointForMap(mapID)
+    if not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) or
+        type(description) ~= "string" or description == "" then return end
+    local distance = MapPinEnhanced.HBD:GetZoneDistance(mapID, x, y, target.mapID, target.x, target.y)
+    if type(distance) ~= "number" or distance <= 5 then return end
+    return { mapID = mapID, x = x, y = y, title = description }
+end
+
 ---@param mapID number?
 ---@param x number?
 ---@param y number?
