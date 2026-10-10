@@ -17,6 +17,8 @@ local restoreTracking
 local restoredTrackingIdentity
 local changingTracking = false
 local restoreReachedEvent = false
+local loadingScreen = false
+local pendingRestore = false
 
 ---@param mapID number
 ---@return number?
@@ -147,6 +149,13 @@ function Providers:ClearStepSuperTracking(restore)
     if not stepWaypoint then return end
     local ownsWaypoint = WaypointsMatch(stepWaypoint, C_Map.GetUserWaypoint())
     local ownsTracking = ownsWaypoint and C_SuperTrack.IsSuperTrackingUserWaypoint()
+    -- Quest selection can silently fail before LOADING_SCREEN_DISABLED. Keep
+    -- Step ownership until then so queued source events cannot clear its destination.
+    if restore ~= false and ownsTracking and loadingScreen then
+        pendingRestore = true
+        return
+    end
+    pendingRestore = false
     local waypoint = previousWaypoint
     local applyTracking = restoreTracking
     restoredTrackingIdentity = nil
@@ -198,6 +207,7 @@ function Providers:SetStepSuperTracking(data)
         self:ClearStepSuperTracking()
         return false
     end
+    pendingRestore = false
     if stepWaypoint and not self:IsStepSuperTracking() then self:ClearStepSuperTracking(false) end
     stepTarget = UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     if stepWaypoint and WaypointsMatch(stepWaypoint, waypoint) then return true end
@@ -226,7 +236,7 @@ MapPinEnhanced:RegisterEvent("NAVIGATION_FRAME_CREATED", KeepStepWaypointOnArriv
 -- Reproject the owned location when the player crosses maps during one Step.
 -- Clearing tracking releases this copy; zone events never reclaim another selection.
 local function RefreshStepWaypointMap()
-    if changingTracking or not stepTarget or not Providers:IsStepSuperTracking() then return end
+    if changingTracking or pendingRestore or not stepTarget or not Providers:IsStepSuperTracking() then return end
     Providers:SetStepSuperTracking({
         mapID = stepTarget.uiMapID,
         x = stepTarget.position.x,
@@ -238,4 +248,12 @@ MapPinEnhanced:RegisterEvent("ZONE_CHANGED", RefreshStepWaypointMap)
 MapPinEnhanced:RegisterEvent("ZONE_CHANGED_INDOORS", RefreshStepWaypointMap)
 MapPinEnhanced:RegisterEvent("ZONE_CHANGED_NEW_AREA", RefreshStepWaypointMap)
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", RefreshStepWaypointMap)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function() Providers:ClearStepSuperTracking() end)
+MapPinEnhanced:RegisterEvent("LOADING_SCREEN_ENABLED", function() loadingScreen = true end)
+MapPinEnhanced:RegisterEvent("LOADING_SCREEN_DISABLED", function()
+    loadingScreen = false
+    if pendingRestore then Providers:ClearStepSuperTracking() end
+end)
+MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function()
+    loadingScreen = false
+    Providers:ClearStepSuperTracking()
+end)
