@@ -17103,16 +17103,16 @@ local PORTAL = {
             },
         },
     },
-    -- Stormwind City (map 84 46.85,93.45) -> Founder's Point (map 2352 57.43,26.62) via portal
+    -- Stormwind City (map 84 46.85,93.45) -> Founder's Point (map 2352 57.28,27.48) via portal
     {
         fromPointID = 200293,
         fromMap = 84,
         fromX = 0.4685,
         fromY = 0.9345,
-        toPointID = 200651,
+        toPointID = 1400018,
         toMap = 2352,
-        toX = 0.5743,
-        toY = 0.2662,
+        toX = 0.5728,
+        toY = 0.2747,
         type = "portal",
         requirement = {
             operation = "all",
