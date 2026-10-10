@@ -25,7 +25,7 @@ local function GetProgress()
         ---@cast saved table<string, any>
         local step = saved.step
         progress = {
-            step = type(step) == "number" and step >= 1 and step <= 5 and math.min(4, math.floor(step)) or 1,
+            step = type(step) == "number" and step >= 1 and step <= 5 and math.floor(step) or 1,
             completed = saved.completed == true,
             suppressed = saved.suppressed == true,
         }
@@ -106,32 +106,56 @@ end
 ---@field heading FontString
 ---@field description FontString
 ---@field pageNumber FontString
----@field arrow MapPinEnhancedOptionWayfinderCard
----@field floating MapPinEnhancedOptionWayfinderCard
+---@field arrow MapPinEnhancedStartupWayfinderCard
+---@field floating MapPinEnhancedStartupWayfinderCard
 ---@field logo Texture
 ---@field addonName FontString
----@field preview Texture
+---@field preview MapPinEnhancedImageTemplate
 ---@field navigationOption MapPinEnhancedStartupNavigationOption
+---@field tooltipHelp MapPinEnhancedStartupCheckboxOption
+---@field minimapButton MapPinEnhancedStartupCheckboxOption
+---@field lockedPins MapPinEnhancedStartupCheckboxOption
+---@field coordinates MapPinEnhancedStartupCheckboxOption
 ---@field example MapPinEnhancedButtonTemplate
 ---@field back MapPinEnhancedButtonTemplate
 ---@field next MapPinEnhancedButtonTemplate
 ---@field compactHeight number
 ---@field illustratedHeight number
+---@field commonOptionsHeight number
 ---@field unsubscribeOptions fun()[]?
 MapPinEnhancedStartupMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
+
+---@class MapPinEnhancedStartupWayfinderCard : Button
+---@field preview MapPinEnhancedImageTemplate
+---@field background Texture
+---@field label FontString
+---@field value WayfinderSelection
 
 ---@class MapPinEnhancedStartupNavigationOption : Button
 ---@field toggle MapPinEnhancedToggleTemplate
 ---@field label FontString
 
+---@class MapPinEnhancedStartupCheckboxOption : Button
+---@field optionKey string
+---@field checkbox MapPinEnhancedCheckboxTemplate
+---@field label FontString
+---@field description FontString
+
+local COMMON_OPTIONS = { "tooltipHelp", "minimapButton", "lockedPins", "coordinates" }
+
 local STEPS = {
     { "Welcome to Map Pin Enhanced!", "This introduction covers some of the addon's core settings. You can change all of these choices later in settings." },
     { "Select a wayfinder",           "Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction." },
     { "Enable navigation",            "Navigation shows the best available route to your target location." },
+    { "Common options",              "Choose which helpers you want to enable. You can change these choices later in settings." },
     { "Place your first pin",         "Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction." },
 }
 
-local OPTION_KEYS = { "Wayfinder.General.Selection", "Wayfinder.Navigation.Enable" }
+local OPTION_KEYS = {
+    "Wayfinder.General.Selection", "Wayfinder.Navigation.Enable",
+    "General.TooltipHelper", "General.Minimap.ShowButton",
+    "Pins.Miscellaneous.EnableLockedPins", "Miscellaneous.Coords.Enable",
+}
 
 function MapPinEnhancedStartupMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
@@ -142,6 +166,11 @@ function MapPinEnhancedStartupMixin:OnLoad()
     self.arrow.label:SetText(L["Arrow"])
     self.floating.label:SetText(L["Floating"])
     self.navigationOption.label:SetText(L["Wayfinder.Navigation.Enable_LABEL"])
+    for _, name in ipairs(COMMON_OPTIONS) do
+        local card = self[name] --[[@as MapPinEnhancedStartupCheckboxOption]]
+        card.label:SetText(L[card.optionKey .. "_LABEL"])
+        card.description:SetText(L[card.optionKey .. "_DESCRIPTION"])
+    end
     self.addonName:SetText(MapPinEnhanced.displayName)
 end
 
@@ -156,7 +185,8 @@ end
 
 function MapPinEnhancedStartupMixin:Refresh()
     local step = GetProgress().step
-    self:SetHeight(step <= 2 and self.compactHeight or self.illustratedHeight)
+    self:SetHeight(step == 4 and self.commonOptionsHeight or
+        step <= 2 and self.compactHeight or self.illustratedHeight)
     self.heading:SetText(L[STEPS[step][1]])
     self.description:SetText(L[STEPS[step][2]])
     self.pageNumber:SetText(string.format(L["Step %d of %d"], step, #STEPS))
@@ -167,16 +197,21 @@ function MapPinEnhancedStartupMixin:Refresh()
     self.arrow:SetShown(step == 2)
     self.floating:SetShown(step == 2)
     self.navigationOption:SetShown(step == 3)
-    self.preview:SetShown(step >= 3)
-    if step >= 3 then
-        self.preview:SetTexture(MapPinEnhanced.assetsPath .. "/options/" ..
+    self.preview:SetShown(step == 3 or step == 5)
+    if step == 3 or step == 5 then
+        self.preview:SetImage(MapPinEnhanced.assetsPath .. "/options/" ..
             (step == 3 and "OptionNavigation.png" or "OptionPin.png"))
     end
-    self.example:SetShown(step == 4)
+    self.example:SetShown(step == 5)
+    for _, name in ipairs(COMMON_OPTIONS) do
+        local card = self[name] --[[@as MapPinEnhancedStartupCheckboxOption]]
+        card:SetShown(step == 4)
+        card.checkbox:SetValue(Options:GetOptionValue(card.optionKey) == true, false, true)
+    end
     local selection = Options:GetOptionValue(OPTION_KEYS[1]) --[[@as WayfinderSelection]]
     for _, card in ipairs({ self.arrow, self.floating }) do
         local selected = card.value == selection
-        card.image:SetDesaturated(not selected)
+        card.preview.image:SetDesaturated(not selected)
         card.background:SetVertexColor(1, selected and 0.82 or 1, selected and 0 or 1)
         card.label:SetTextColor(1, selected and 0.82 or 1, selected and 0 or 1)
     end
@@ -223,6 +258,12 @@ end
 ---@field optionKey string?
 ---@field value string?
 MapPinEnhancedStartupControlMixin = {}
+
+function MapPinEnhancedStartupControlMixin:OnStartupOptionClick()
+    -- The child consumes its own click; the card owns the option write.
+    local card = self:GetParent() --[[@as MapPinEnhancedStartupControl]]
+    card:OnStartupClick()
+end
 
 function MapPinEnhancedStartupControlMixin:OnStartupClick()
     if not active or InCombatLockdown() then return end

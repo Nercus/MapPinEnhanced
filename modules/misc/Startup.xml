@@ -9,11 +9,49 @@
         </Scripts>
     </Button>
 
+    <Button name="MapPinEnhancedStartupCheckboxOptionTemplate" mixin="MapPinEnhancedStartupControlMixin" virtual="true">
+        <Size x="452" y="64" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString parentKey="label" inherits="GameFontHighlight" justifyH="LEFT" wordwrap="true">
+                    <Size x="360" y="16" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="12" y="-9" />
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="description" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                    <Size x="360" y="28" />
+                    <Color r="0.7" g="0.7" b="0.7" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="12" y="-29" />
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <CheckButton parentKey="checkbox" inherits="MapPinEnhancedCheckboxTemplate" mixin="MapPinEnhancedStartupControlMixin">
+                <Anchors>
+                    <Anchor point="RIGHT" x="-12" />
+                </Anchors>
+                <Scripts>
+                    <OnClick method="OnStartupOptionClick" />
+                </Scripts>
+            </CheckButton>
+        </Frames>
+        <Scripts>
+            <OnClick method="OnStartupClick" />
+        </Scripts>
+    </Button>
+
     <Frame name="MapPinEnhancedStartupTemplate" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedStartupMixin" virtual="true" frameStrata="DIALOG">
         <Size x="500" y="420" />
         <KeyValues>
             <KeyValue key="compactHeight" value="350" type="number" />
             <KeyValue key="illustratedHeight" value="420" type="number" />
+            <KeyValue key="commonOptionsHeight" value="490" type="number" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
@@ -47,15 +85,15 @@
                         <Anchor point="TOP" y="-266" />
                     </Anchors>
                 </FontString>
-                <Texture parentKey="preview">
-                    <Size x="320" y="180" />
-                    <Anchors>
-                        <Anchor point="TOP" y="-132" />
-                    </Anchors>
-                </Texture>
             </Layer>
         </Layers>
         <Frames>
+            <Frame parentKey="preview" inherits="MapPinEnhancedImageTemplate" enableMouse="false">
+                <Size x="320" y="180" />
+                <Anchors>
+                    <Anchor point="TOP" y="-132" />
+                </Anchors>
+            </Frame>
             <Button parentKey="arrow" inherits="MapPinEnhancedOptionWayfinderCardTemplate" mixin="MapPinEnhancedStartupControlMixin">
                 <Size x="220" y="147" />
                 <KeyValues>
@@ -65,16 +103,17 @@
                 <Anchors>
                     <Anchor point="TOPLEFT" x="24" y="-142" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <Texture parentKey="image" file="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="6" y="-6" />
-                                <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
+                <Frames>
+                    <Frame parentKey="preview" inherits="MapPinEnhancedImageTemplate" enableMouse="false">
+                        <KeyValues>
+                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="6" y="-6" />
+                            <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
                 <Scripts>
                     <OnClick method="OnStartupClick" />
                 </Scripts>
@@ -88,16 +127,17 @@
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="-24" y="-142" />
                 </Anchors>
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <Texture parentKey="image" file="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="6" y="-6" />
-                                <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                            </Anchors>
-                        </Texture>
-                    </Layer>
-                </Layers>
+                <Frames>
+                    <Frame parentKey="preview" inherits="MapPinEnhancedImageTemplate" enableMouse="false">
+                        <KeyValues>
+                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png" />
+                        </KeyValues>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="6" y="-6" />
+                            <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
+                        </Anchors>
+                    </Frame>
+                </Frames>
                 <Scripts>
                     <OnClick method="OnStartupClick" />
                 </Scripts>
@@ -121,22 +161,56 @@
                     </Layer>
                 </Layers>
                 <Frames>
-                    <Button parentKey="toggle" inherits="MapPinEnhancedToggleTemplate" enableMouse="false">
+                    <Button parentKey="toggle" inherits="MapPinEnhancedToggleTemplate" mixin="MapPinEnhancedStartupControlMixin">
                         <Anchors>
                             <Anchor point="RIGHT" x="-12" />
                         </Anchors>
+                        <Scripts>
+                            <OnClick method="OnStartupOptionClick" />
+                        </Scripts>
                     </Button>
                 </Frames>
                 <Scripts>
                     <OnClick method="OnStartupClick" />
                 </Scripts>
             </Button>
+            <Button parentKey="tooltipHelp" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="General.TooltipHelper" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOP" y="-142" />
+                </Anchors>
+            </Button>
+            <Button parentKey="minimapButton" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="General.Minimap.ShowButton" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOP" y="-214" />
+                </Anchors>
+            </Button>
+            <Button parentKey="lockedPins" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="Pins.Miscellaneous.EnableLockedPins" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOP" y="-286" />
+                </Anchors>
+            </Button>
+            <Button parentKey="coordinates" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
+                <KeyValues>
+                    <KeyValue key="optionKey" value="Miscellaneous.Coords.Enable" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOP" y="-358" />
+                </Anchors>
+            </Button>
             <Button parentKey="example" inherits="MapPinEnhancedStartupButtonTemplate" text="Place test pin and finish">
-                <Size x="388" y="48" />
+                <Size x="250" y="32" />
                 <KeyValues>
                     <KeyValue key="action" value="example" />
                     <KeyValue key="icon" value="pin" />
-                    <KeyValue key="fontSize" value="large" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOP" y="-322" />

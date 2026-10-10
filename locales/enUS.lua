@@ -569,3 +569,7 @@ L["Delete without confirmation"] = "Delete without confirmation"
 L["Change pin appearance"] = "Change pin appearance"
 L["General.TooltipHelper_LABEL"] = "Enable tooltip helper"
 L["General.TooltipHelper_DESCRIPTION"] = "Show available click actions in tooltips."
+
+L["Common options"] = "Common options"
+L["Choose which helpers you want to enable. You can change these choices later in settings."] =
+"Choose which helpers you want to enable. You can change these choices later in settings."
