@@ -10,7 +10,7 @@ local devAddonList = {
     "!BugGrabber",
     "BugSack",
     "TextureAtlasViewer",
-    "DevTool - Numy",
+    "DevTool_Numy",
     "!!AddonProfiler",
 }
 local preFiredQueue = {}
@@ -25,13 +25,13 @@ function MapPinEnhanced:Debug(...)
         table.insert(preFiredQueue, { args })
         return
     end
-    if (C_AddOns.IsAddOnLoaded("DevTool") == false) then
+    if (C_AddOns.IsAddOnLoaded("DevTool_Numy") == false) then
         C_Timer.After(1, function()
             self:Debug(args)
         end)
         return
     end
-    local DevToolFrame = _G["DevToolFrame"] ---@type Frame
+    local DevToolFrame = _G["DevTool_Numy_Frame"] ---@type Frame
     local DevTool = _G["DevTool"] ---@type any // don't want to type all of DevTool
     DevTool:AddData(args)
     if not DevToolFrame then
