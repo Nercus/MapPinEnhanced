@@ -597,3 +597,11 @@ L["Capture stopped: %.2f seconds. Export to inspect results."] = "Capture stoppe
 L["Select modules, then start a new capture."] = "Select modules, then start a new capture."
 L["Open the profiler."] = "Open the profiler."
 --@end-debug@
+
+L["General.FlightTimer.Enable_LABEL"] = "Enable flight timer"
+L["General.FlightTimer.Enable_DESCRIPTION"] = "Show a movable progress bar and estimated remaining time during flight-master flights."
+L["General.FlightTimer.Lock_LABEL"] = "Lock flight timer"
+L["General.FlightTimer.Lock_DESCRIPTION"] = "Prevent the flight timer from being moved."
+L["Flight timer"] = "Flight timer"
+L["Flight elapsed: %s"] = "Elapsed: %s"
+L["Flight remaining: %s"] = "~%s remaining"

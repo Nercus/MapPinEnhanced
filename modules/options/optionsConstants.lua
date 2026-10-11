@@ -27,6 +27,8 @@ Options.SCALE_PRESETS = {
 
 Options.DEFAULTS = {
     ["General.TooltipHelper"] = true,
+    ["General.FlightTimer.Enable"] = true,
+    ["General.FlightTimer.Lock"] = false,
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
     ["Pins.Appearance.AlwaysPingTracked"] = false,

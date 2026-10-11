@@ -356,6 +356,30 @@ local function PriceLeg(graph, reference, speedMultiplier)
     return cost
 end
 
+-- A booked itinerary is live evidence of availability. Estimate its actual legs
+-- without depending on route options or triggering a navigation calculation.
+---@param nodes number[]?
+---@return number?
+function Navigation:GetBookedFlightDuration(nodes)
+    local graph = self:GetGraph()
+    if not graph or not nodes or #nodes < 2 then return nil end
+    local speedMultiplier = self:IsLegacyTraitKnown(110300) and 1.2 or 1
+    local seconds = 0 ---@type number
+    for index = 1, #nodes - 1 do
+        local references = connections[nodes[index]] and connections[nodes[index]][nodes[index + 1]]
+        if not references then return nil end
+        local longest = 0 ---@type number
+        for _, reference in ipairs(references) do
+            longest = math.max(longest, PriceLeg(graph, reference, speedMultiplier).expectedSeconds)
+        end
+        ---@cast longest number
+        if longest <= 0 then return nil end
+        seconds = seconds + longest
+    end
+    ---@cast seconds number
+    return seconds
+end
+
 ---@alias NavigationTaxiLegMemo table<number, table<number, NavigationTaxiLeg|string>>
 
 ---@param graph NavigationGraph

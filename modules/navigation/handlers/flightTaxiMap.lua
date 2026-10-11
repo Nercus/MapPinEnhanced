@@ -256,6 +256,12 @@ if TakeTaxiNode then
         automaticDestination = nil
         Navigation:CancelRouteCalculation(Navigation.activeCalculation)
         local evidence = observation or closingObservation
+        if MapPinEnhanced:IsReadablePositiveInteger(slot) then
+            local destination = evidence and evidence.destinationsBySlot[slot]
+            Navigation:StartFlightTimer(
+                Navigation:GetBookedFlightDuration(evidence and destination and evidence.itineraries[destination]),
+                evidence and destination and evidence.names[destination])
+        end
         if activeData and evidence and MapPinEnhanced:IsReadablePositiveInteger(slot) then
             bookedDestination = evidence.destinationsBySlot[slot]
             bookingPending = bookedDestination ~= nil

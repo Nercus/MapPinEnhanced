@@ -1,0 +1,47 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Include file="FlightTimer.lua" />
+    <Frame name="MapPinEnhancedFlightTimerTemplate" mixin="MapPinEnhancedFlightTimerMixin" virtual="true" hidden="true" movable="true" enableMouse="true" clampedToScreen="true">
+        <Size x="340" y="44" />
+        <Anchors>
+            <Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" y="-180" />
+        </Anchors>
+        <Frames>
+            <StatusBar parentKey="progress" inherits="MapPinEnhancedStatusbarTemplate">
+                <Size x="284" y="18" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" x="28" y="6" />
+                </Anchors>
+            </StatusBar>
+            <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true" propagateMouseInput="Motion">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="close" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" relativeKey="$parent.progress" relativePoint="LEFT" x="-8" />
+                </Anchors>
+            </Button>
+            <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true" propagateMouseInput="Motion">
+                <Size x="20" y="20" />
+                <KeyValues>
+                    <KeyValue key="icon" value="unlock" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="LEFT" relativeKey="$parent.progress" relativePoint="RIGHT" x="8" />
+                </Anchors>
+            </Button>
+            <Frame parentKey="dragHandle" propagateMouseInput="Both">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="22" />
+                    <Anchor point="BOTTOMRIGHT" x="-22" />
+                </Anchors>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>
