@@ -595,4 +595,5 @@ L["Profiles module methods. Private helpers, UI Mixins and earlier callback refe
 L["Recording. Closing this window stops capture."] = "Recording. Closing this window stops capture."
 L["Capture stopped: %.2f seconds. Export to inspect results."] = "Capture stopped: %.2f seconds. Export to inspect results."
 L["Select modules, then start a new capture."] = "Select modules, then start a new capture."
+L["Open the profiler."] = "Open the profiler."
 --@end-debug@

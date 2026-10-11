@@ -214,7 +214,7 @@ function MapPinEnhancedProfilerMixin:SelectModules()
 end
 
 function MapPinEnhancedProfilerMixin:StartCapture()
-    if activeCapture or not MapPinEnhanced:GetVar("devMode") then return end
+    if activeCapture then return end
     local modules, names = GetModules()
     ---@type ProfilerCapture
     local capture = { started = 0, duration = 0, modules = {}, rows = {}, replacements = {} }
@@ -316,20 +316,12 @@ function MapPinEnhancedProfilerMixin:ExportCapture()
     exportWindow:Open(L["Profiler"], table.concat(lines, "\n"))
 end
 
--- Define the virtual template's Mixin even outside devmode; only developer
--- sessions register an entry point, and Start checks the flag again.
-if not MapPinEnhanced:GetVar("devMode") then return end
-
 ---@type MapPinEnhancedProfilerTemplate?
 local window
-MapPinEnhanced:AddDebugCustomDebugAction({
-    type = "button", label = L["Profiler"],
-    onClick = function()
-        if not MapPinEnhanced:GetVar("devMode") then return end
-        if not window then
-            window = CreateFrame("Frame", "MapPinEnhancedProfiler", UIParent,
-                "MapPinEnhancedProfilerTemplate") --[[@as MapPinEnhancedProfilerTemplate]]
-        end
-        window:RestoreWindow()
-    end,
-})
+MapPinEnhanced:AddSlashCommand("profiler", function()
+    if not window then
+        window = CreateFrame("Frame", "MapPinEnhancedProfiler", UIParent,
+            "MapPinEnhancedProfilerTemplate") --[[@as MapPinEnhancedProfilerTemplate]]
+    end
+    window:RestoreWindow()
+end, L["Open the profiler."])
