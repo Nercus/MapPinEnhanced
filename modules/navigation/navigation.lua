@@ -1557,7 +1557,7 @@ end
 -- approach. HBD still anchors/clips each frame; native UV scrolling is independent.
 local function EnsureSurfaceGeometry(isWorldMap)
     if isWorldMap and worldMapApproachTimer or not isWorldMap and minimapApproachTimer then return end
-    local timer = C_Timer.NewTicker(0.05, function()
+    local timer = C_Timer.NewTicker(0.1, function()
         if isWorldMap and not WorldMapFrame:IsShown() then return end
         local approach = surfaceApproaches[isWorldMap]
         if approach then approach() end

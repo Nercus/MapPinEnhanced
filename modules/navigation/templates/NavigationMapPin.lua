@@ -111,7 +111,7 @@ function MapPinEnhancedNavigationMapPinMixin:ResetHoverScale()
     self:RefreshUpdateScript()
 end
 
--- The surface owner samples geometry at 20 Hz; hover refreshes its two affected lines.
+-- The surface owner samples geometry at 10 Hz; hover refreshes its two affected lines.
 ---@param elapsed number
 function MapPinEnhancedNavigationMapPinMixin:OnUpdate(elapsed)
     local target = self.hoverScaleTarget
