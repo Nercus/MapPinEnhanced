@@ -305,7 +305,7 @@ function Navigation:IsCurrentPathReady()
     local prepared = self:GetPreparedData()
     local journey = progression.route.taxiJourneys[reference]
     return prepared ~= nil and journey ~= nil and
-        progression.route.preparedData.taxiObservation == self:GetTaxiObservation() and
+        (not journey.observed or progression.route.preparedData.taxiObservation == self:GetTaxiObservation()) and
         self:IsTaxiJourneyEligible(journey, prepared)
 end
 
@@ -1217,7 +1217,7 @@ function Navigation:RefreshEligibility(events)
             local journey = progression.route.taxiJourneys[reference]
             if reference > 0 and not self:GetFreshPathCost(reference) or
                 journey and (not self:IsTaxiJourneyEligible(journey, prepared) or
-                    reference < 0 and progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation()) then
+                    journey.observed and progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation()) then
                 progression.pathUnavailable = true
                 self:DeactivatePathHandler()
                 self:PublishStep(progression)

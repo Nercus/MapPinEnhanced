@@ -505,6 +505,128 @@ function Navigation:GetInferredTaxiJourney(graph, reference, cost)
     }
 end
 
+-- Selected remote legs describe one intended ride. Keep their exact source
+-- references and estimates until the departure master supplies a real preview.
+---@param route NavigationRoute
+---@param observedJourneys table<integer, NavigationTaxiJourney>
+---@param checkpoint fun()
+function Navigation:CombineRouteTaxiJourneys(route, observedJourneys, checkpoint)
+    local graph = route.graph
+    local nextReference = 0 ---@type integer
+    for reference in pairs(route.taxiJourneys) do
+        if reference < nextReference then nextReference = reference end
+    end
+    local index = 1
+    while index < #route.pathReferences do
+        checkpoint()
+        local firstReference, secondReference = route.pathReferences[index], route.pathReferences[index + 1]
+        local first, second = route.taxiJourneys[firstReference], route.taxiJourneys[secondReference]
+        local combined ---@type NavigationTaxiJourney?
+        if first and second and first.destination == second.origin and
+            first.toPointIndex == second.fromPointIndex then
+            if not first.observed and not second.observed then
+                local legs = {} ---@type NavigationTaxiLeg[]
+                local nodes = { first.origin }
+                for _, journey in ipairs({ first, second }) do
+                    for _, leg in ipairs(journey.legs) do
+                        legs[#legs + 1] = leg
+                        nodes[#nodes + 1] = leg.toTaxiNodeID
+                        checkpoint()
+                    end
+                end
+                local seconds = first.cost.expectedSeconds + second.cost.expectedSeconds
+                local uncertainty = first.cost.uncertaintySeconds + second.cost.uncertaintySeconds
+                combined = {
+                    identity = "taxi-estimate:" .. table.concat(nodes, ":"),
+                    origin = first.origin, destination = second.destination,
+                    fromPointIndex = first.fromPointIndex, toPointIndex = second.toPointIndex,
+                    destinationName = second.destinationName, legs = legs, observed = false,
+                    cost = {
+                        expectedSeconds = seconds, uncertaintySeconds = uncertainty,
+                        comparisonSeconds = seconds + uncertainty,
+                        explanation = { kind = "flight-taxi", observed = false, nodes = nodes,
+                            legs = legs, timingScope = "sum-of-pair-estimates" }
+                    }
+                }
+            else
+                -- Never invent a through booking from two separate previews.
+                for _, journey in pairs(observedJourneys) do
+                    checkpoint()
+                    if journey.origin == first.origin and journey.destination == second.destination then
+                        combined = journey
+                        break
+                    end
+                end
+            end
+        end
+        if combined then
+            nextReference = nextReference - 1
+            local reference = nextReference
+            for _, oldReference in ipairs({ firstReference, secondReference }) do
+                route.taxiJourneys[oldReference] = nil
+                if oldReference < 0 then
+                    graph.pathTypes[oldReference] = nil
+                    graph.pathFromPointIndexes[oldReference] = nil
+                    graph.pathToPointIndexes[oldReference] = nil
+                    graph.pathHandlerData[oldReference] = nil
+                end
+            end
+            route.taxiJourneys[reference] = combined
+            route.comparisonSeconds = route.comparisonSeconds - first.cost.comparisonSeconds -
+                second.cost.comparisonSeconds + combined.cost.comparisonSeconds
+            route.pathReferences[index] = reference
+            route.pathCosts[index] = combined.cost
+            table.remove(route.pathReferences, index + 1)
+            table.remove(route.pathCosts, index + 1)
+            graph.pathTypes[reference] = "flighttaxi"
+            graph.pathFromPointIndexes[reference] = combined.fromPointIndex
+            graph.pathToPointIndexes[reference] = combined.toPointIndex
+            local from, to = combined.fromPointIndex, combined.toPointIndex
+            graph.pathHandlerData[reference] = {
+                fromMap = graph.pointMapIDs[from], fromX = graph.pointXs[from], fromY = graph.pointYs[from],
+                toMap = graph.pointMapIDs[to], toX = graph.pointXs[to], toY = graph.pointYs[to],
+                fromTaxiNodeID = combined.origin, toTaxiNodeID = combined.destination, taxiPathIDs = {}
+            }
+        else
+            index = index + 1
+        end
+    end
+end
+
+---@param journey NavigationTaxiJourney
+---@param prepared NavigationPreparedData
+---@param checkpoint fun()
+---@return NavigationTaxiJourney?
+function Navigation:RefreshTaxiJourney(journey, prepared, checkpoint)
+    if not self:IsTaxiJourneyEligible(journey, prepared) then return nil end
+    local observation = self:GetTaxiObservation()
+    if journey.observed then
+        local nodes = observation and observation.itineraries[journey.destination]
+        if not nodes then return nil end
+        local fresh = self:PriceTaxiJourney(self:GetGraph(), prepared, nodes, checkpoint, {})
+        if not fresh or fresh.identity ~= journey.identity then return nil end
+        fresh.destinationName = journey.destinationName
+        return fresh
+    end
+    -- Current-master evidence must replace the estimate before boarding.
+    if observation and observation.origin == journey.origin then return nil end
+    local fresh = CopyTable(journey) ---@type NavigationTaxiJourney
+    local seconds, uncertainty = 0, 0
+    for _, leg in ipairs(fresh.legs) do
+        checkpoint()
+        local cost = self:GetFreshPathCost(leg.sourceReferences[1])
+        if not cost then return nil end
+        leg.cost = cost
+        seconds = seconds + cost.expectedSeconds
+        uncertainty = uncertainty + cost.uncertaintySeconds
+    end
+    fresh.cost.expectedSeconds = seconds
+    fresh.cost.uncertaintySeconds = uncertainty
+    fresh.cost.comparisonSeconds = seconds + uncertainty
+    fresh.cost.explanation.legs = fresh.legs
+    return fresh
+end
+
 -- Dirty intake cancels unsafe work immediately; unchanged complete observations
 -- retain immutable prices. Fresh single-Path checks never publish this cache.
 local preparedTaxiChangeNumber = -1

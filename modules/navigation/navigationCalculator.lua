@@ -196,15 +196,13 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
             if reference < 0 then
                 local journey = progression.route.taxiJourneys[reference]
                 local observation = self:GetTaxiObservation()
-                if not observation or observation ~= progression.route.preparedData.taxiObservation or
-                    not observation.itineraries[journey.destination] or
-                    preparedData.movementOnly or not self:IsTaxiJourneyEligible(journey, preparedData) then
+                if journey.observed and (not observation or observation ~= progression.route.preparedData.taxiObservation) or
+                    preparedData.movementOnly then
                     return nil
                 end
                 ---@cast preparedData NavigationPreparedData
-                local fresh = self:PriceTaxiJourney(self:GetGraph(), preparedData,
-                    observation.itineraries[journey.destination], checkpoint, {})
-                if not fresh or fresh.identity ~= journey.identity then return nil end
+                local fresh = self:RefreshTaxiJourney(journey, preparedData, checkpoint)
+                if not fresh then return nil end
                 remainingPathCost = fresh.cost
             else
                 remainingPathCost = self:GetFreshPathCost(reference)
@@ -529,7 +527,7 @@ local function BuildRoute(job, destinationEntry)
         end
         job.checkpoint()
     end
-    return {
+    local route = {
         graph = graph,
         taxiJourneys = journeys,
         destinationID = job.destinationID,
@@ -548,6 +546,8 @@ local function BuildRoute(job, destinationEntry)
         calculationSlices = job.calculationSlices,
         movementCandidates = job.movementCandidates,
     }
+    Navigation:CombineRouteTaxiJourneys(route, job.taxiJourneys, job.checkpoint)
+    return route
 end
 
 ---@param job NavigationCalculationJob
@@ -1226,15 +1226,13 @@ function Navigation:ValidateRoute(route, prepared, checkpoint, position)
         if reference < 0 then
             local journey = route.taxiJourneys[reference]
             local observation = self:GetTaxiObservation()
-            if not observation or observation ~= route.preparedData.taxiObservation or
-                observation ~= prepared.taxiObservation or not observation.itineraries[journey.destination] then
+            if journey.observed and (not observation or observation ~= route.preparedData.taxiObservation or
+                observation ~= prepared.taxiObservation) then
                 return false
             end
             ---@cast prepared NavigationPreparedData
-            local fresh = self:PriceTaxiJourney(self:GetGraph(), prepared,
-                observation.itineraries[journey.destination], checkpoint, {})
-            if not fresh or fresh.identity ~= journey.identity then return false end
-            fresh.destinationName = journey.destinationName
+            local fresh = self:RefreshTaxiJourney(journey, prepared, checkpoint)
+            if not fresh then return false end
             route.taxiJourneys[reference] = fresh
             cost = fresh.cost
         else
