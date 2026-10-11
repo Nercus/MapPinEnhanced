@@ -64,7 +64,6 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     local target = self.target
     local calculating = step and step.phase == "calculating"
     self.loading:SetShown(calculating == true)
-    self:SetDestinationText()
     if target then
         ---@type boolean?
         local hasIcon = false
@@ -81,8 +80,8 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
         local action = step and step.showInstruction ~= false and step.desiredAction
         self.pinFrame:SetShown(target ~= nil and not action and not calculating)
         self.clearButton:SetEnabled(Wayfinders:CanClearNavigationTracking())
-        self:UpdateLayout()
     end
+    self:SetDestinationText()
 end
 
 ---@param step WayfinderStepData?
