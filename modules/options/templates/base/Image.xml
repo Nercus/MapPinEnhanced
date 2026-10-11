@@ -6,7 +6,7 @@
         <Size x="400" y="300" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate">
+                <Texture parentKey="border" inherits="MapPinEnhancedGenericFrameTextureTemplate">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="-5" y="5" />
                         <Anchor point="BOTTOMRIGHT" x="5" y="-5" />
@@ -18,18 +18,16 @@
             <Layer level="ARTWORK">
                 <Texture parentKey="image">
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.border" x="2.5" y="-2.5" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.border" x="-2.5" y="2.5" />
                     </Anchors>
                 </Texture>
-
-
                 <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
                     <Anchors>
-                        <Anchor point="TOPLEFT" />
-                        <Anchor point="BOTTOMRIGHT" />
+                        <Anchor point="TOPLEFT" relativeKey="$parent.image" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.image" />
                     </Anchors>
-                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMargins left="8" top="8" right="8" bottom="8" />
                     <TextureSliceMode mode="Stretched" />
 
                     <MaskedTextures>

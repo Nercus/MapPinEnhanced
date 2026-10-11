@@ -1,4 +1,5 @@
 ---@class MapPinEnhancedImageTemplate : Frame
+---@field border Texture
 ---@field image Texture
 ---@field imagePath string
 MapPinEnhancedImageMixin = {}
