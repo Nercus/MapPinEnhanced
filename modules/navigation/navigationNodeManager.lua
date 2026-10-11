@@ -30,7 +30,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 ---@class NavigationRequirementCheck
 ---@field operation "check"
----@field kind string
+---@field kind string A reagent check denotes a vendor-purchased spell reagent, not a travel item.
 ---@field value any
 
 ---@class NavigationRequirementGroup
@@ -429,6 +429,26 @@ local SATISFIED = "satisfied"
 local UNSATISFIED = "unsatisfied"
 local UNKNOWN = "unknown"
 
+---@param nodeID number
+---@return boolean? known
+function Navigation:IsLegacyTraitKnown(nodeID)
+    local legacy = Constants and Constants.LegacyConsts
+    if not legacy then return false end
+    if not C_Traits or not C_Traits.GetConfigIDByTreeID or not C_Traits.GetNodeInfo then return nil end
+    local treeID = legacy.LEGACY_TREE_ADVENTURE_ID
+    if not MapPinEnhanced:IsReadablePositiveInteger(treeID) then return nil end
+    -- Forever's three Legacy trees share one character-specific configuration.
+    -- Committed entries exclude purchases/refunds still staged in the Legacy UI.
+    local configID = C_Traits.GetConfigIDByTreeID(treeID)
+    if not MapPinEnhanced:IsReadablePositiveInteger(configID) then return nil end
+    local node = C_Traits.GetNodeInfo(configID, nodeID)
+    if not MapPinEnhanced:IsReadableTable(node) or
+        not MapPinEnhanced:IsReadableTable(node.entryIDsWithCommittedRanks) then
+        return nil
+    end
+    return #node.entryIDsWithCommittedRanks > 0
+end
+
 ---@param result boolean?
 ---@return NavigationRequirementState
 local function StateFromBoolean(result)
@@ -590,11 +610,17 @@ local function EvaluateDirectCheck(key, value)
         if IsPlayerSpell then return StateFromBoolean(IsPlayerSpell(value)) end
         if IsSpellKnown then return StateFromBoolean(IsSpellKnown(value)) end
         return UNKNOWN
-    elseif key == "item" then
+    elseif key == "item" or key == "reagent" then
         if type(value) ~= "number" then return UNKNOWN end
+        local reagentFree = false
+        if key == "reagent" then
+            reagentFree = Navigation:IsLegacyTraitKnown(110309) -- Reagent Economy
+            if reagentFree then return SATISFIED end
+        end
         local count = C_Item and C_Item.GetItemCount and C_Item.GetItemCount(value) or
             GetItemCount and GetItemCount(value)
         if MapPinEnhanced:IsSecretValue(count) or type(count) ~= "number" then return UNKNOWN end
+        if count <= 0 and reagentFree == nil then return UNKNOWN end
         return StateFromBoolean(count > 0)
     elseif key == "toy" or key == "toyKnown" then
         return EvaluateToyOwnership(value)
@@ -806,13 +832,13 @@ end
 -- pass: their effects cross requirement kinds. New/unmapped events do the same.
 -- Movement and handler-owned taxi inputs are still refreshed on every pass.
 local REQUIREMENT_KINDS_BY_EVENT = {
-    BAG_UPDATE_DELAYED = { "item" },
+    BAG_UPDATE_DELAYED = { "item", "reagent" },
     NEW_TOY_ADDED = { "toy" },
     TOYS_UPDATED = { "toy" },
     SPELLS_CHANGED = { "spell", "buff" },
     PLAYER_SPECIALIZATION_CHANGED = { "spell", "buff" },
     PLAYER_TALENT_UPDATE = { "spell", "buff" },
-    TRAIT_CONFIG_UPDATED = { "spell", "buff" },
+    TRAIT_CONFIG_UPDATED = { "spell", "buff", "reagent" },
     UNIT_AURA = { "buff" },
     ACHIEVEMENT_EARNED = { "achievement" },
     CRITERIA_UPDATE = { "achievement" },

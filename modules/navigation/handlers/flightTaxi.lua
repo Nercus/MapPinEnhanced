@@ -306,14 +306,17 @@ function Navigation:IndexTaxiConnections(graph)
 end
 
 local pricedGraph ---@type NavigationGraph?
+local pricedSpeedMultiplier ---@type number?
 local authoredPrices = {} ---@type table<integer, NavigationCalculatedPathCost>
 
 ---@param graph NavigationGraph
 ---@param reference integer
+---@param speedMultiplier number
 ---@return NavigationCalculatedPathCost
-local function PriceLeg(graph, reference)
-    if pricedGraph ~= graph then
+local function PriceLeg(graph, reference, speedMultiplier)
+    if pricedGraph ~= graph or pricedSpeedMultiplier ~= speedMultiplier then
         pricedGraph = graph
+        pricedSpeedMultiplier = speedMultiplier
         authoredPrices = {}
     end
     if authoredPrices[reference] then return authoredPrices[reference] end
@@ -327,6 +330,8 @@ local function PriceLeg(graph, reference)
             data.toMap, data.toX, data.toY)
         seconds = distance and math.max(1, distance / TAXI_ESTIMATED_SPEED) or TAXI_FALLBACK_SECONDS
     end
+    -- Frequent Flier raises speed by 20%, so duration is divided by 1.2.
+    seconds = seconds / speedMultiplier
     -- Pair timings have no variant/context evidence. Through-flight overhead
     -- has not been measured, so even authored leg sums retain uncertainty.
     local uncertainty = math.max(30, seconds * 0.25)
@@ -336,6 +341,7 @@ local function PriceLeg(graph, reference)
         comparisonSeconds = seconds + uncertainty,
         explanation = {
             kind = "flight-taxi",
+            speedMultiplier = speedMultiplier,
             timingScope = not hasDuration and "endpoint-estimate" or
                 estimated and "path-geometry-estimate" or "authored-pair",
             estimated = estimated,
@@ -345,7 +351,7 @@ local function PriceLeg(graph, reference)
             toTaxiNodeID = data.toTaxiNodeID
         },
     }
-    -- Missing-duration geometry stays fresh; authored prices depend only on graph.
+    -- Missing-duration geometry stays fresh; authored prices also depend on the perk.
     if hasDuration then authoredPrices[reference] = cost end
     return cost
 end
@@ -502,6 +508,7 @@ end
 -- Dirty intake cancels unsafe work immediately; unchanged complete observations
 -- retain immutable prices. Fresh single-Path checks never publish this cache.
 local preparedTaxiChangeNumber = -1
+local preparedTaxiSpeedMultiplier ---@type number?
 local preparedTaxiGraph ---@type NavigationGraph?
 local preparedTaxiCosts ---@type table<integer, NavigationCalculatedPathCost>?
 local preparedTaxiFailures ---@type table<integer, string>?
@@ -510,13 +517,15 @@ local preparedTaxiFailures ---@type table<integer, string>?
 ---@param checkpoint fun()
 ---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
 function Navigation:GetPreparedTaxiCosts(graph, checkpoint)
-    if taxiPricesDirty or preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber then
+    local speedMultiplier = self:IsLegacyTraitKnown(110300) and 1.2 or 1
+    if taxiPricesDirty or preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber or
+        preparedTaxiSpeedMultiplier ~= speedMultiplier then
         for mapID in pairs(taxiNodesByMap) do
             GetTaxiNodes(mapID)
             checkpoint()
         end
         if preparedTaxiGraph == graph and preparedTaxiChangeNumber == taxiKnowledgeChangeNumber and
-            not hasGeometryPrices then
+            preparedTaxiSpeedMultiplier == speedMultiplier and not hasGeometryPrices then
             taxiPricesDirty = false
             return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
                 assert(preparedTaxiFailures, "Navigation:GetPreparedTaxiCosts: missing failures")
@@ -524,6 +533,7 @@ function Navigation:GetPreparedTaxiCosts(graph, checkpoint)
         local costs, failures = self:PrepareTaxiCosts(graph, nil, checkpoint)
         preparedTaxiGraph = graph
         preparedTaxiChangeNumber = taxiKnowledgeChangeNumber
+        preparedTaxiSpeedMultiplier = speedMultiplier
         taxiPricesDirty = false
         preparedTaxiCosts, preparedTaxiFailures = costs, failures
     end
@@ -538,6 +548,7 @@ end
 function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
     local costs = {} ---@type table<integer, NavigationCalculatedPathCost>
     local failures = {} ---@type table<integer, string>
+    local speedMultiplier = self:IsLegacyTraitKnown(110300) and 1.2 or 1
     for reference = onlyReference or 1, onlyReference or graph.pathCount do
         if checkpoint then checkpoint() end
         if graph.pathTypes[reference] == "flighttaxi" then
@@ -554,7 +565,7 @@ function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
                 failures[reference] = to and to.known == false and
                     "destination taxi node is undiscovered" or "destination taxi knowledge is unknown"
             else
-                local base = PriceLeg(graph, reference)
+                local base = PriceLeg(graph, reference, speedMultiplier)
                 local previous = preparedTaxiGraph == graph and preparedTaxiCosts and preparedTaxiCosts[reference]
                 if previous and previous.expectedSeconds == base.expectedSeconds and
                     previous.uncertaintySeconds == base.uncertaintySeconds and

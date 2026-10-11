@@ -5,3 +5,7 @@
 ---@return number? y
 ---@return string? waypointDescription
 function C_Navigation.GetNextWaypointForMap(uiMapID) end
+
+-- Forever-only constants are absent from the installed Retail annotations.
+---@type { LEGACY_TREE_ADVENTURE_ID: number }?
+Constants.LegacyConsts = nil

@@ -1181,6 +1181,18 @@ function Navigation:RefreshEligibility(events)
     if not self.routeNavigationEnabled or not self.activeDestination then return end
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
+    -- Applied Legacy perks can change the best route even when the old one
+    -- remains usable. Reuse the transportation-change deferral for a booked leg.
+    if events and events.TRAIT_CONFIG_UPDATED and Constants and Constants.LegacyConsts then
+        local progression = self.progression
+        if progression and (progression.attempted or progression.phase == "in-transit" or
+                self:IsTaxiBookingPending()) then
+            self.transportationChangedDuringTravel = true
+            return
+        end
+        self:StartCalculation(true)
+        return
+    end
     if self:IsDirectOnlyRoute() then
         local route = self.progression.route
         local current = self:CreateDirectRoute(self.activeDestination.destinationID,
