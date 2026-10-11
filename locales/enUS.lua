@@ -11,6 +11,8 @@ local L = MapPinEnhanced.L
 ------------------------------ Shared UI ------------------------------
 L["Cancel"] = "Cancel"
 L["Close"] = "Close"
+L["Addon conflicts"] = "Addon conflicts"
+L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."] = "The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."
 L["Confirm"] = "Confirm"
 L["Icon Picker"] = "Icon Picker"
 L["More..."] = "More..."

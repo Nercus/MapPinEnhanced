@@ -75,6 +75,7 @@ local RENAME_PIN_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_PIN"
 local RENAME_GROUP_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_GROUP"
 local ABOUT_DIALOG_NAME = DIALOG_PREFIX .. "ABOUT"
 local COPY_TEXT_DIALOG_NAME = DIALOG_PREFIX .. "COPY_TEXT"
+local ADDON_CONFLICTS_DIALOG_NAME = DIALOG_PREFIX .. "ADDON_CONFLICTS"
 
 ---@param dialogName string
 ---@param definition MapPinEnhancedStaticDialogDefinition
@@ -290,6 +291,12 @@ RegisterStaticDialog(ABOUT_DIALOG_NAME, {
     button1 = L["Close"],
 })
 
+RegisterStaticDialog(ADDON_CONFLICTS_DIALOG_NAME, {
+    text = "",
+    button1 = L["Close"],
+    showAlert = true,
+})
+
 RegisterStaticDialog(COPY_TEXT_DIALOG_NAME, {
     text = "",
     button1 = L["Close"],
@@ -331,6 +338,15 @@ function MapPinEnhanced:ShowConfirmDialog(title, message, onConfirm, onCancel, o
     }
 
     return ShowStaticDialog(CONFIRM_DIALOG_NAME, BuildDialogText(title or L["Confirm"], message), data)
+end
+
+---@param addonNames string[]
+---@return MapPinEnhancedStaticDialogFrame?
+function MapPinEnhanced:ShowAddonConflictsDialog(addonNames)
+    local message = string.format(
+        L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."],
+        table.concat(addonNames, "\n"))
+    return ShowStaticDialog(ADDON_CONFLICTS_DIALOG_NAME, BuildDialogText(L["Addon conflicts"], message))
 end
 
 ---@param pin MapPinEnhancedPinMixin
