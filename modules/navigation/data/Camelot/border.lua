@@ -391,8 +391,8 @@ local BORDER = {
         fromY = 0.5002,
         toPointID = 200100,
         toMap = 1453,
-        toX = 0.693,
-        toY = 0.8544,
+        toX = 0.7010,
+        toY = 0.8455,
         type = "border",
     },
     -- Elwynn Forest (map 1429 91.26,73.48) -> Redridge Mountains (map 1433 10.70,71.99) via border
