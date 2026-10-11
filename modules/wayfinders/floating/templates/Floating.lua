@@ -160,8 +160,11 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdateClampedState()
     self.isClamped = clamped
 end
 
+local centerX, centerY = nil, nil
 function MapPinEnhancedWayfinderFloatingMixin:ClampElliptical()
-    local centerX, centerY = MapPinEnhanced:GetCenterScreenPoint()
+    if not centerX or not centerY then
+        centerX, centerY = MapPinEnhanced:GetCenterScreenPoint()
+    end
     local navX, navY = self.navFrame:GetCenter()
 
     if type(navX) ~= "number" or type(navY) ~= "number" then return end
