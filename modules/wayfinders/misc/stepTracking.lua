@@ -4,6 +4,7 @@ local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 ---@type UiMapPoint?
 local stepWaypoint
@@ -192,7 +193,17 @@ end
 ---@return boolean
 function Wayfinders:ShouldIgnoreStepTrackingChange(sourceChanged)
     if self:IsStepSuperTracking() then return true end
-    if stepWaypoint then self:ClearStepSuperTracking(false) end
+    if stepWaypoint then
+        local owner, targetID, changeNumber = Navigation:GetActiveDestinationState()
+        local questID = C_SuperTrack.GetSuperTrackedQuestID()
+        local selectedOriginalQuest = owner == "quest" and MapPinEnhanced:IsReadableNumber(questID) and
+            targetID == string.format("quest:%d", questID) and
+            C_SuperTrack.GetHighestPrioritySuperTrackingType() == Enum.SuperTrackingType.Quest
+        self:ClearStepSuperTracking(false)
+        -- Reselecting the original quest replaces its temporary Step. Release
+        -- ownership before publishing direct guidance so cleanup cannot restore it.
+        if selectedOriginalQuest then Navigation:UseDirectDestination(owner, targetID, changeNumber) end
+    end
     if not sourceChanged and restoredTrackingIdentity == GetTrackingIdentity() then return true end
     restoredTrackingIdentity = nil
     return false

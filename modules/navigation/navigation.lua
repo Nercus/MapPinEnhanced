@@ -18,6 +18,7 @@ local L = MapPinEnhanced.L
 ---@field objectiveDirectionDistance number?
 ---@field showDirectionInObjectiveArea boolean?
 ---@field objectiveAreaExitTimer FunctionContainer?
+---@field directGuidance boolean? user abandoned routing for this destination
 
 ---@class NavigationProgression
 ---@field route NavigationRoute
@@ -260,12 +261,25 @@ function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction,
     end or nil, {
         changeNumber = presentationChangeNumber,
         arrivalIdentity = string.format("%d:direct:%s", destination.changeNumber, tostring(removeOnArrival)),
-        showDirection = not self.routeNavigationEnabled or phase ~= "no-direction" and self:CanGuideDirectly(),
+        showDirection = destination.directGuidance or not self.routeNavigationEnabled or
+            phase ~= "no-direction" and self:CanGuideDirectly(),
         showInstruction = self.routeNavigationEnabled == true,
         phase = phase,
         isFinalDestination = true,
         instruction = fallbackInstruction or destination.data.title or "",
     })
+end
+
+---@param owner string
+---@param destinationID string
+---@param changeNumber integer
+function Navigation:UseDirectDestination(owner, destinationID, changeNumber)
+    if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
+    self.activeDestination.directGuidance = true
+    self:CancelToyTravel()
+    self:CancelRouteCalculation(self.activeCalculation)
+    self.progression = nil
+    self:ApplyDirectDestination(true)
 end
 
 ---@param destination NavigationDestination
@@ -315,7 +329,7 @@ end
 ---@param checkpoint fun()
 ---@param currentRouteUnusable boolean?
 function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint, currentRouteUnusable)
-    if not IsCurrentDestination(destination) or not self.routeNavigationEnabled then return end
+    if not IsCurrentDestination(destination) or destination.directGuidance or not self.routeNavigationEnabled then return end
     local job = self.activeCalculation
     local previous = self.progression
     local prepared ---@type NavigationPreparedData|NavigationMovementData|nil
@@ -324,7 +338,7 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
     elseif self:ArePreparedInputsFresh() then
         prepared = self:GetPreparedData()
     end
-    if not IsCurrentDestination(destination) or self.progression ~= previous then return end
+    if not IsCurrentDestination(destination) or destination.directGuidance or self.progression ~= previous then return end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     local position = { x = x, y = y, mapID = mapID }
     if previous and (not mapID or not x or not y) then return end
@@ -352,7 +366,7 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
     else
         route = nil
     end
-    if not IsCurrentDestination(destination) or self.progression ~= previous then return end
+    if not IsCurrentDestination(destination) or destination.directGuidance or self.progression ~= previous then return end
     if not route and job and job.preparedData and job.preparedData ~= self:GetPreparedData() and
         self:ArePreparedInputsFresh() and (not previous or currentRouteUnusable) then
         self:StartCalculation(true)
@@ -406,7 +420,13 @@ end
 ---@param improvement boolean? Explicit opt-in pass after usable guidance.
 function Navigation:StartCalculation(currentRouteUnusable, improvement)
     local destination = self.activeDestination
-    if not destination or not self.routeNavigationEnabled or self:IsTaxiBookingPending() then return end
+    if not destination or not self.routeNavigationEnabled then return end
+    if destination.directGuidance then
+        destination.routingData = CopyRoutingData(destination.data)
+        self:ApplyDirectDestination(true)
+        return
+    end
+    if self:IsTaxiBookingPending() then return end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if self.progression and (not mapID or not x or not y) then return end
     destination.routingData = CopyRoutingData(destination.data)
@@ -477,6 +497,8 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         data = CopyWayfinderData(destinationData),
         routingData = CopyRoutingData(destinationData),
         removeDestination = removeDestination,
+        directGuidance = active and active.owner == owner and active.destinationID == destinationID and
+            active.directGuidance or nil,
     }
     self.avoidedPaths = {}
     self.transportationChangedDuringTravel = nil
@@ -1179,6 +1201,10 @@ local ELIGIBILITY_EVENTS = {
 function Navigation:RefreshEligibility(events)
     if not events then self:InvalidatePreparedData() end
     if not self.routeNavigationEnabled or not self.activeDestination then return end
+    if self.activeDestination.directGuidance then
+        self:StartCalculation()
+        return
+    end
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
     -- Applied Legacy perks can change the best route even when the old one
