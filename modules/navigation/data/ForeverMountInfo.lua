@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 ---@class Navigation
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
---- Note: There is no flying mounts in Camelot
+--- Note: There are no flying mounts in Forever
 ---@type table<number, NavigationMountInfo>
 local mountData = {}
 
