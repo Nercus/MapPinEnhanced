@@ -140,11 +140,16 @@ local function Observe()
     RefreshRoutes()
 end
 
-local function Invalidate()
+local function InvalidateInteraction()
+    local hadInteraction = interactionOpen or observation ~= nil or automaticDestination ~= nil
+    -- Always advance the generation so even an empty close/reopen rejects old callbacks.
     interactionChangeNumber = interactionChangeNumber + 1
+    interactionOpen = false
     automaticDestination = nil
     observation = nil
-    Navigation:ClearTaxiNodeKnowledge()
+    -- Closing invalidates slot/itinerary evidence, not learned nodes or map prices.
+    -- The close handler retains closingObservation for the synchronous booking hook.
+    if hadInteraction then Navigation:InvalidatePreparedData("TAXIMAP_OPENED") end
 end
 
 function Navigation:TryAutomaticTaxiSelection()
@@ -265,10 +270,9 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.AutomaticTravelSelection"
 end)
 MapPinEnhanced:RegisterEvent("TAXIMAP_OPENED", Observe)
 MapPinEnhanced:RegisterEvent("TAXIMAP_CLOSED", function()
-    interactionOpen = false
     closingObservation = observation
     local closed = closingObservation
-    Invalidate()
+    InvalidateInteraction()
     local changeNumber = interactionChangeNumber
     C_Timer.After(0, function()
         if interactionChangeNumber == changeNumber and closingObservation == closed then
@@ -282,15 +286,16 @@ MapPinEnhanced:RegisterEvent("TAXI_NODE_STATUS_CHANGED", function()
     if interactionOpen then
         Observe()
     else
-        Invalidate()
+        InvalidateInteraction()
+        Navigation:ClearTaxiNodeKnowledge()
         RefreshRoutes()
     end
 end)
 for _, event in ipairs({ "PLAYER_ENTERING_WORLD", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS",
     "ZONE_CHANGED_NEW_AREA", "QUEST_LOG_UPDATE", "UPDATE_FACTION", "COVENANT_CHOSEN" }) do
     MapPinEnhanced:RegisterEvent(event, function()
-        interactionOpen = false
+        InvalidateInteraction()
         closingObservation = nil
-        Invalidate()
+        Navigation:ClearTaxiNodeKnowledge(event)
     end)
 end

@@ -653,10 +653,12 @@ function Navigation:RecordLearnedTaxiNodes(nodeIDs)
     self:ClearTaxiNodeKnowledge()
 end
 
-function Navigation:ClearTaxiNodeKnowledge()
+---@param event? WowEvent
+function Navigation:ClearTaxiNodeKnowledge(event)
     for mapID in pairs(taxiNodesByMap) do dirtyTaxiMaps[mapID] = true end
     taxiPricesDirty = true
-    self:InvalidatePreparedData("TAXIMAP_OPENED")
+    -- Preserve soft quest refreshes when no flight-master interaction changed.
+    self:InvalidatePreparedData(event or "TAXIMAP_OPENED")
 end
 
 Navigation:RegisterPathHandler("flighttaxi", Presentation, Dataprovider, CostCalculator,
