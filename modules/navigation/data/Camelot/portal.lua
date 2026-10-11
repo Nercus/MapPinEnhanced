@@ -74,6 +74,11 @@ local PORTAL = {
                     kind = "faction",
                     value = "Alliance",
                 },
+                {
+                    operation = "check",
+                    kind = "race",
+                    value = "HighOrderSkyborne",
+                },
             },
         },
     },
@@ -96,6 +101,11 @@ local PORTAL = {
                     operation = "check",
                     kind = "faction",
                     value = "Alliance",
+                },
+                {
+                    operation = "check",
+                    kind = "race",
+                    value = "HighOrderSkyborne",
                 },
             },
         },
