@@ -35,6 +35,19 @@
                     </MaskedTextures>
                 </MaskTexture>
             </Layer>
+            <Layer level="BACKGROUND" textureSubLevel="2">
+                <Texture atlas="characterupdate_background" rotation="180">
+                    <Size x="450" y="1" />
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2"/>
+                        <Anchor point="BOTTOMLEFT" y="2" x="2"/>
+                    </Anchors>
+                    <Gradient>
+                        <MaxColor r="1" g="0.82" b="0" a="0.8"/>
+                        <MinColor r="0" g="0" b="0" a="0"/>
+                    </Gradient>
+                </Texture>
+            </Layer>
         </Layers>
         <Scripts>
             <OnLoad method="OnLoad" />
