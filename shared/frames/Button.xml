@@ -5,10 +5,10 @@
         <KeyValues>
             <KeyValue key="fontSize" value="medium" />
         </KeyValues>
-        <NormalTexture atlas="common-button-tertiary-normal-small" setAllPoints="true" />
-        <PushedTexture atlas="common-button-tertiary-pressed-small" setAllPoints="true" />
-        <DisabledTexture atlas="common-button-tertiary-disabled-small" setAllPoints="true" />
-        <HighlightTexture atlas="common-button-tertiary-normal-small" alphaMode="ADD" alpha="0.6" setAllPoints="true">
+        <NormalTexture atlas="common-button-tertiary-normal" setAllPoints="true" />
+        <PushedTexture atlas="common-button-tertiary-pressed" setAllPoints="true" />
+        <DisabledTexture atlas="common-button-tertiary-disabled" setAllPoints="true" />
+        <HighlightTexture atlas="common-button-tertiary-normal" alphaMode="ADD" alpha="0.6" setAllPoints="true">
             <Color r="1" g="0.82" b="0.00" />
         </HighlightTexture>
         <PushedTextOffset x="-2" y="-1" />
@@ -24,6 +24,12 @@
                         <Anchor point="LEFT" relativePoint="LEFT" x="0" y="0" />
                     </Anchors>
                     <Size x="16" y="16" />
+                </Texture>
+                <Texture parentKey="bottomLine" inherits="MapPinEnhancedBottomLineTextureTemplate">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="1" y="4" />
+                        <Anchor point="BOTTOMRIGHT" x="-1" y="4" />
+                    </Anchors>
                 </Texture>
             </Layer>
         </Layers>

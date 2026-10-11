@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedIconButtonTemplate: Button, MapPinEnhancedTooltipMixin
 ---@field iconTexture MapPinEnhancedIconMixin
+---@field bottomLine Texture
 ---@field icon MapPinEnhancedIcon
 ---@field iconSize MapPinEnhancedIconButtonSize
 ---@field customIcon boolean?
@@ -46,6 +47,7 @@ end
 
 function MapPinEnhancedIconButtonMixin:UpdateIconState()
     self.iconTexture:SetIconEnabled(self:IsEnabled())
+    self.bottomLine:SetShown(self:IsEnabled())
 end
 
 function MapPinEnhancedIconButtonMixin:OnSizeChanged()

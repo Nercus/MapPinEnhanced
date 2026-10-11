@@ -6,6 +6,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field fontSize MapPinEnhancedButtonFontSize
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field text FontString
+---@field bottomLine Texture
 MapPinEnhancedButtonMixin = {};
 
 local L = MapPinEnhanced.L
@@ -40,6 +41,7 @@ function MapPinEnhancedButtonMixin:OnLoad()
         self.iconTexture:SetIconTexture(self.icon)
     end
     self.iconTexture:SetIconEnabled(self:IsEnabled())
+    self.bottomLine:SetShown(self:IsEnabled())
     self:UpdateFontSize()
 end
 
@@ -130,8 +132,10 @@ end
 
 function MapPinEnhancedButtonMixin:OnEnable()
     self.iconTexture:SetIconEnabled(true)
+    self.bottomLine:Show()
 end
 
 function MapPinEnhancedButtonMixin:OnDisable()
     self.iconTexture:SetIconEnabled(false)
+    self.bottomLine:Hide()
 end

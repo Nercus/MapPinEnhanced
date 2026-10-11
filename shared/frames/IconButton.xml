@@ -12,12 +12,17 @@
         <HighlightTexture atlas="common-button-tertiary-square-normal" alphaMode="ADD" setAllPoints="true">
             <Color r="1" g="0.82" b="0.00" />
         </HighlightTexture>
-
         <Layers>
             <Layer level="OVERLAY">
                 <Texture parentKey="iconTexture" inherits="MapPinEnhancedIconTemplate">
                     <Anchors>
                         <Anchor point="CENTER" />
+                    </Anchors>
+                </Texture>
+                <Texture parentKey="bottomLine" inherits="MapPinEnhancedBottomLineTextureTemplate">
+                    <Anchors>
+                        <Anchor point="BOTTOMLEFT" x="4" y="2" />
+                        <Anchor point="BOTTOMRIGHT" x="-4" y="2" />
                     </Anchors>
                 </Texture>
             </Layer>
