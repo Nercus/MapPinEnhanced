@@ -208,3 +208,8 @@ function MapPinEnhancedNavigationMapPinMixin:OnLeave()
     self:SetHoverScale(false)
     if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
 end
+
+--@debug@
+MapPinEnhancedNavigationMapPinMixin.RefreshLineGeometry = MapPinEnhanced.profiler:WrapScope("Navigation.MapPin.RefreshLineGeometry",
+    MapPinEnhancedNavigationMapPinMixin.RefreshLineGeometry)
+--@end-debug@

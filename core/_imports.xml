@@ -7,6 +7,9 @@
     <Include file="menu.lua" />
     <Include file="persistence.lua" />
     <Include file="print.lua" />
+    <!--@debug@-->
+    <Include file="profilerCapture.lua" />
+    <!--@end-debug@-->
     <Include file="async.lua" />
     <Include file="events.lua" />
     <Include file="visibility.lua" />

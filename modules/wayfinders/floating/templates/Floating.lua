@@ -436,3 +436,8 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetDestinationText(title, description)
     self.content:SetDestinationText(title, description)
 end
+
+--@debug@
+MapPinEnhancedWayfinderFloatingMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.OnUpdate",
+    MapPinEnhancedWayfinderFloatingMixin.OnUpdate)
+--@end-debug@

@@ -21,6 +21,7 @@ ignore:
   - annotations.lua
   - docs
   - tests
+  - core/profilerCapture.lua
   - core/Profiler.lua
   - core/Profiler.xml
 

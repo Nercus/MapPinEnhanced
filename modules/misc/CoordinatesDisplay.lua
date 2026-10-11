@@ -168,6 +168,12 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
     self:SetCoordinatesText(x, y)
 end
 
+
+--@debug@
+MapPinEnhancedCoordinatesDisplayMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Misc.Coordinates.OnUpdate",
+    MapPinEnhancedCoordinatesDisplayMixin.OnUpdate)
+--@end-debug@
+
 function MapPinEnhancedCoordinatesDisplayMixin:LockPosition()
     self:SetMovable(false)
     self.lockButton:SetIconTexture("lock")

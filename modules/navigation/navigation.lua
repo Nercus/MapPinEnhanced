@@ -1557,7 +1557,7 @@ end
 -- approach. HBD still anchors/clips each frame; native UV scrolling is independent.
 local function EnsureSurfaceGeometry(isWorldMap)
     if isWorldMap and worldMapApproachTimer or not isWorldMap and minimapApproachTimer then return end
-    local timer = C_Timer.NewTicker(0.1, function()
+    local function UpdateGeometry()
         if isWorldMap and not WorldMapFrame:IsShown() then return end
         local approach = surfaceApproaches[isWorldMap]
         if approach then approach() end
@@ -1576,7 +1576,12 @@ local function EnsureSurfaceGeometry(isWorldMap)
             if isWorldMap then worldMapApproachTimer = nil else minimapApproachTimer = nil end
             surfaceApproaches[isWorldMap] = nil
         end
-    end)
+    end
+    --@debug@
+    UpdateGeometry = MapPinEnhanced.profiler:WrapScope(isWorldMap and
+        "Navigation.WorldMap.UpdateGeometry" or "Navigation.Minimap.UpdateGeometry", UpdateGeometry)
+    --@end-debug@
+    local timer = C_Timer.NewTicker(0.1, UpdateGeometry)
     if isWorldMap then worldMapApproachTimer = timer else minimapApproachTimer = timer end
 end
 

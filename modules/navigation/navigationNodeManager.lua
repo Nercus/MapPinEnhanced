@@ -57,6 +57,9 @@ local unknownRequirementPaths = {} ---@type table<integer, boolean>
 local preparationChangeNumber = 0
 local cancelPreparation ---@type fun()?
 local preparationFailure ---@type string?
+--@debug@
+local profilePreparation ---@type ProfilerPreparation?
+--@end-debug@
 local hearthstonePathReferences = {} ---@type integer[]
 local hasBuffRequirements = false
 local observedMovementCapabilities ---@type NavigationMovementCapabilities?
@@ -865,6 +868,9 @@ end
 -- must never be refilled while a Route or calculation still references them.
 ---@param event? WowEvent
 function Navigation:InvalidatePreparedData(event)
+    --@debug@
+    MapPinEnhanced.profiler:InvalidatePreparation(event)
+    --@end-debug@
     local kinds = event and REQUIREMENT_KINDS_BY_EVENT[event]
     if not kinds then
         allRequirementsDirty = true
@@ -890,6 +896,10 @@ end
 
 function Navigation:CancelPreparedData()
     if cancelPreparation then
+        --@debug@
+        MapPinEnhanced.profiler:FinishPreparation(profilePreparation, "cancelled")
+        profilePreparation = nil
+        --@end-debug@
         cancelPreparation()
         -- An interrupted private pass owes its captured scope as well as queued events.
         allRequirementsDirty = true
@@ -940,7 +950,14 @@ function Navigation:EnsurePreparedData()
         local graph, changeNumber = navigationGraph, preparationChangeNumber
         local fullRefresh, kinds = allRequirementsDirty, dirtyRequirementKinds
         allRequirementsDirty, dirtyRequirementKinds = false, {}
+        --@debug@
+        local profilePass = MapPinEnhanced.profiler:BeginPreparation(not preparedNavigationData or fullRefresh)
+        profilePreparation = profilePass
+        --@end-debug@
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerScope("Navigation.PreparationSlice", profilePass)
+            --@end-debug@
             local checkpoint = self:CreateNavigationCheckpoint(nil, true)
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
@@ -976,6 +993,9 @@ function Navigation:EnsurePreparedData()
             end
             local function EvaluatePath(pathReference)
                 checkpoint()
+                --@debug@
+                MapPinEnhanced.profiler:CountPreparationPath(profilePass)
+                --@end-debug@
                 local staticFailure = graph.excludedPaths[pathReference]
                 local state, reason ---@type NavigationRequirementState, string?
                 if IsTransportationDisabled(graph.pathTypes[pathReference]) then
@@ -1039,6 +1059,11 @@ function Navigation:EnsurePreparedData()
             -- completed immutable observations, but do not certify freshness yet.
             preparedDataDirty = changeNumber ~= preparationChangeNumber
         end }, nil, function()
+            --@debug@
+            MapPinEnhanced.profiler:FinishPreparation(profilePass,
+                graph ~= navigationGraph and "graph replaced" or preparedDataDirty and "completed; inputs changed" or "completed")
+            profilePreparation = nil
+            --@end-debug@
             local owner, started = self.activeCalculation, debugprofilestop()
             cancelPreparation = nil
             if preparedDataDirty then
@@ -1053,6 +1078,10 @@ function Navigation:EnsurePreparedData()
                 owner.frameMilliseconds = (owner.frameMilliseconds or 0) + elapsed
             end
         end, 1, function(message)
+            --@debug@
+            MapPinEnhanced.profiler:FinishPreparation(profilePass, "error")
+            profilePreparation = nil
+            --@end-debug@
             cancelPreparation = nil
             allRequirementsDirty = true
             preparationFailure = message

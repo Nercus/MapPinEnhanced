@@ -1330,6 +1330,9 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
     job.cancel = MapPinEnhanced:BatchExecution({
         ---@async
         function()
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerScope("Navigation.CalculationSlice")
+            --@end-debug@
             job.calculationSlices = 1
             job.checkpoint, job.wait = self:CreateNavigationCheckpoint(job)
             ---@async

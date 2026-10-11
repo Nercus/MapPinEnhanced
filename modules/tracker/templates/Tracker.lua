@@ -327,3 +327,8 @@ function MapPinEnhancedTrackerMixin:RestoreListScroll()
     self.scrollBox:SetScrollPercentage(self.minimizedScroll)
     self.minimizedScroll = nil
 end
+
+--@debug@
+MapPinEnhancedTrackerMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Tracker.Frame.OnUpdate",
+    MapPinEnhancedTrackerMixin.OnUpdate)
+--@end-debug@

@@ -299,3 +299,8 @@ end
 function MapPinEnhancedWayfinderArrowMixin:ReportNavigation()
     MapPinEnhanced:GetModule("Navigation"):ShowDebugDump()
 end
+
+--@debug@
+MapPinEnhancedWayfinderArrowMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Wayfinders.Arrow.OnUpdate",
+    MapPinEnhancedWayfinderArrowMixin.OnUpdate)
+--@end-debug@
