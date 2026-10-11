@@ -327,6 +327,7 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
     if not IsCurrentDestination(destination) or self.progression ~= previous then return end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     local position = { x = x, y = y, mapID = mapID }
+    if previous and (not mapID or not x or not y) then return end
     local remaining ---@type number?
     if previous and not currentRouteUnusable then
         -- A cheap direct candidate cannot assume that a dirty transport Route
@@ -406,6 +407,8 @@ end
 function Navigation:StartCalculation(currentRouteUnusable, improvement)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled or self:IsTaxiBookingPending() then return end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    if self.progression and (not mapID or not x or not y) then return end
     destination.routingData = CopyRoutingData(destination.data)
     self:CancelRouteCalculation(self.activeCalculation)
     self.lastCalculationFailure = nil
@@ -1005,12 +1008,16 @@ local function RefreshNativeTraversal()
     local progression = Navigation.progression
     local destination = Navigation.activeDestination
     if not progression or not destination or not Navigation:IsCurrentProgression(progression) or
-        progression.phase ~= "approach" or progression.route.pathReferences[progression.pathIndex] then return end
+        progression.phase ~= "approach" or progression.route.pathReferences[progression.pathIndex] then
+        return
+    end
     local previous = progression.traversal
     local traversal = Wayfinders:GetNavigationTraversal(destination.routingData)
     if not previous and not traversal then return end
     if previous and traversal and previous.mapID == traversal.mapID and previous.x == traversal.x and
-        previous.y == traversal.y and previous.title == traversal.title then return end
+        previous.y == traversal.y and previous.title == traversal.title then
+        return
+    end
     progression.closestDistance, progression.movingAwayStartedAt = nil, nil
     Navigation:PublishStep(progression)
     return true
@@ -1206,7 +1213,9 @@ function Navigation:RefreshEligibility(events)
                 return
             end
         end
-        if not self:GetRemainingRouteCost(progression, prepared, function() end) then
+        local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+        if mapID and x and y and not self:GetRemainingRouteCost(progression, prepared, function() end,
+                { x = x, y = y, mapID = mapID }) then
             progression.pathUnavailable = true
             self:DeactivatePathHandler()
             self:PublishStep(progression)
