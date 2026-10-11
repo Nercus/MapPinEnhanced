@@ -10,7 +10,7 @@ local devAddonList = {
     "!BugGrabber",
     "BugSack",
     "TextureAtlasViewer",
-    "DevTool",
+    "DevTool - Numy",
     "!!AddonProfiler",
 }
 local preFiredQueue = {}
