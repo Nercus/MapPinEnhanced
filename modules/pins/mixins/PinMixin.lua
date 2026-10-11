@@ -261,5 +261,8 @@ function MapPinEnhancedPinMixin:UpdateMinimapVisibility()
         return true
     end
     local data = self.pinData
-    return HBDP:AddMinimapIconMap(MapPinEnhanced, self.minimapPin, data.mapID, data.x, data.y, false, false)
+    local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(data.x, data.y, data.mapID)
+    if not x or not y or not instanceID then return false end
+    -- Nearby pins remain visible across zone borders; HBD still checks instance and minimap range.
+    return HBDP:AddMinimapIconWorld(MapPinEnhanced, self.minimapPin, instanceID, x, y, false)
 end
