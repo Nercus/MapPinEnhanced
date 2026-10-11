@@ -151,8 +151,12 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
     if not graph or not destination or not preparedData then return nil end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
     if not pathReference then
-        local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
-        if position then playerX, playerY, playerMapID = position.x, position.y, position.mapID end
+        local playerX, playerY, playerMapID ---@type number?, number?, number?
+        if position then
+            playerX, playerY, playerMapID = position.x, position.y, position.mapID
+        else
+            playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+        end
         if not playerMapID or not playerX or not playerY then return nil end
         local finalCost = self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY,
             destination.routingData.mapID, destination.routingData.x, destination.routingData.y, "automatic")
@@ -168,8 +172,12 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
         local isMovement = self:IsMovementPath(pathType)
         local targetPointIndex = isMovement and toPointIndex or fromPointIndex
         if not targetPointIndex then return nil end
-        local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
-        if position then playerX, playerY, playerMapID = position.x, position.y, position.mapID end
+        local playerX, playerY, playerMapID ---@type number?, number?, number?
+        if position then
+            playerX, playerY, playerMapID = position.x, position.y, position.mapID
+        else
+            playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+        end
         if not playerMapID or not playerX or not playerY then return nil end
         local mode = self:GetPathApproachMode(pathType)
         local approachCost = self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY,

@@ -1580,7 +1580,7 @@ local function FollowPlayerApproach(isWorldMap, startFrame, endFrame, toMapID, t
         if updateEnd and endFrame.routePathType then
             endFrame:SetRoutePoint(endFrame.routePathType)
         end
-        startFrame:RefreshLine()
+        -- The surface worker refreshes all lines after updating this approach.
     end
     EnsureSurfaceGeometry(isWorldMap)
 end

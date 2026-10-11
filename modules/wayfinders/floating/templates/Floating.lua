@@ -27,6 +27,8 @@ local FALLBACK_DELAY = 1
 ---@field lastNavigationTargetCheck number?
 ---@field lastNavigationReadinessCheck number?
 ---@field nativePositionReady boolean?
+---@field clampedOffsetX number?
+---@field clampedOffsetY number?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
@@ -92,6 +94,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     -- Native frame/path setup can lag behind tracking. Only show a persistent fallback.
     self.fallbackReadyAt = enabled and GetTime() + FALLBACK_DELAY or nil
     self.isClamped = nil
+    self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self:ClearAllPoints()
@@ -126,6 +129,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
     if self.navFrame == navFrame then return end
     self.navFrame = navFrame
     self.isClamped = nil
+    self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.presentationInitialized = nil
     if self.customDirection then return end
 
@@ -140,6 +144,7 @@ function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
     self.navigationOpacity:SetAlpha(0)
     self.navFrame = nil
     self.isClamped = nil
+    self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.clampedChanged = nil
     self.presentationInitialized = nil
     self.content:Reset()
@@ -170,14 +175,21 @@ function MapPinEnhancedWayfinderFloatingMixin:ClampElliptical()
 
     if denominator ~= 0 then
         local ratio = axesMultiplied / denominator
-        self:SetPoint("CENTER", WorldFrame, "CENTER", offsetX * ratio, offsetY * ratio)
+        local x, y = offsetX * ratio, offsetY * ratio
+        if x ~= self.clampedOffsetX or y ~= self.clampedOffsetY then
+            self:SetPoint("CENTER", WorldFrame, "CENTER", x, y)
+            self.clampedOffsetX, self.clampedOffsetY = x, y
+        end
     end
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:UpdatePosition()
     if not self.isClamped and not self.clampedChanged then return end
 
-    self:ClearAllPoints()
+    if self.clampedChanged then
+        self:ClearAllPoints()
+        self.clampedOffsetX, self.clampedOffsetY = nil, nil
+    end
     if self.isClamped then
         self:ClampElliptical()
     else
@@ -404,6 +416,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
+    self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.displayType = "far"
     self.isFallbackClose = nil
     self.presentationInitialized = nil

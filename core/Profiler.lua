@@ -25,6 +25,7 @@ local clock = GetTimePreciseSec
 ---@field modules string[]
 ---@field rows ProfilerRow[]
 ---@field replacements ProfilerReplacement[]
+---@field batchResume? fun(worker: thread): boolean, any
 
 ---@type ProfilerCapture?
 local activeCapture
@@ -88,6 +89,9 @@ local function StopCapture()
     if not capture then return end
     activeCapture = nil
     capture.duration = clock() - capture.started
+    if MapPinEnhanced.profileBatchResume == capture.batchResume then
+        MapPinEnhanced.profileBatchResume = nil
+    end
     for _, entry in ipairs(capture.replacements) do
         -- Do not overwrite a replacement installed by another owner mid-capture.
         if entry.owner[entry.key] == entry.wrapper then
@@ -152,7 +156,7 @@ end
 function MapPinEnhancedProfilerMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self:SetTitle(L["Profiler"])
-    self.coverage:SetText(L["Profiles module methods. Private helpers, UI Mixins and earlier callback references are not individually covered. Coroutine calls are counted without timing."])
+    self.coverage:SetText(L["Profiles module methods. Private helpers, UI Mixins and earlier callback references have no individual coverage. Select Core for aggregate batch-slice timing; coroutine methods remain untimed."])
     self:Refresh()
 end
 
@@ -235,6 +239,22 @@ function MapPinEnhancedProfilerMixin:StartCapture()
         end
     end
     if #capture.modules == 0 then return end
+    if allModules or selected.Core then
+        ---@type ProfilerRow
+        local row = {
+            name = "Core.BatchExecutionSlice", calls = 0, completed = 0,
+            coroutineCalls = 0, total = 0, maximum = 0,
+        }
+        capture.rows[#capture.rows + 1] = row
+        -- A resume returns on yield/completion/error, excluding suspended frames.
+        -- This aggregate covers all batch workers, regardless of feature selection.
+        capture.batchResume = function(worker)
+            if activeCapture ~= capture then return coroutine.resume(worker) end
+            row.calls = row.calls + 1
+            return FinishCall(capture, row, clock(), coroutine.resume(worker))
+        end
+        MapPinEnhanced.profileBatchResume = capture.batchResume
+    end
     if exportWindow then exportWindow:Hide() end
     lastCapture = capture
     -- Wrappers only record after every selected method has been installed.
@@ -270,14 +290,16 @@ function MapPinEnhancedProfilerMixin:ExportCapture()
     end)
     local version, build = GetBuildInfo()
     local lines = {
-        "Map Pin Enhanced profiler v1",
+        "Map Pin Enhanced profiler v2",
         "Addon: " .. (C_AddOns.GetAddOnMetadata(MapPinEnhanced.name, "Version") or "unknown"),
         "Client: " .. version .. " (" .. build .. ")",
         "Modules: " .. table.concat(capture.modules, ", "),
         string.format("Capture seconds: %.6f", capture.duration),
         "Scope: table methods present at Start; Core is the addon table. Zero-call rows included.",
         "Private helpers and UI Mixins have no separate rows; previously captured callbacks can bypass wrappers.",
-        "Coroutine calls are counted but not timed. Deferred work is not attributed to its scheduling method.",
+        "Coroutine methods are counted but not timed. Deferred work is not attributed to its scheduling method.",
+        "Core.BatchExecutionSlice (Core selected) times resumes of all batch workers, including existing workers, excluding suspended time.",
+        "Slice rows count resumes, including returns on worker error; nested method times overlap them.",
         "Times are inclusive elapsed milliseconds with profiler overhead; do not sum rows as CPU usage.",
         "Average uses completed timed calls. Incomplete calls errored or were in flight when capture stopped.",
         "Function\tCalls\tTimed calls\tCoroutine calls\tIncomplete calls\tTotal ms\tMax ms\tAverage ms",

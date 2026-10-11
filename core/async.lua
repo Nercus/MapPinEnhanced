@@ -1,6 +1,11 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
+--@debug@
+---@class MapPinEnhanced
+---@field profileBatchResume? fun(worker: thread): boolean, any
+--@end-debug@
+
 
 ---@class MapPinEnhancedPackedArguments : table
 ---@field n integer
@@ -133,7 +138,12 @@ function MapPinEnhanced:BatchExecution(funcList, onUpdate, onFinish, batchSize, 
     -- timer catch-up. Start asynchronously so callers can retain cancellation first.
     workerFrame:SetScript("OnUpdate", function()
         if finished then return end
-        local success, message = coroutine.resume(workerThread)
+        local resume = coroutine.resume
+        --@debug@
+        -- Resolve per slice so captures include workers created before Start.
+        resume = MapPinEnhanced.profileBatchResume or resume
+        --@end-debug@
+        local success, message = resume(workerThread)
         if finished then return end
         if not success then
             local failed = onError or geterrorhandler()
