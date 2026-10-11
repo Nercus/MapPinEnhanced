@@ -11,6 +11,13 @@ local LibWindow = LibStub("LibWindow-1.1")
 ---@type table<Frame, MapPinEnhancedDragRegistration>
 local draggableFrames = {}
 
+---@param frame Frame
+---@return boolean
+function MapPinEnhanced:IsFrameDragging(frame)
+    local registration = draggableFrames[frame]
+    return registration ~= nil and registration.moving == true
+end
+
 local function StopDragging(frame, registration)
     if not registration.moving then return end
     registration.moving = false

@@ -24,6 +24,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field totalPins number
 ---@field position MapPinEnhancedTrackerPositionTemplate
 ---@field desiredHeight number?
+---@field idleUpdateElapsed number?
+---@field wasDragging boolean?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
 MapPinEnhancedTrackerMixin = CreateFromMixins(MapPinEnhancedTrackerListMixin)
 
@@ -32,6 +34,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local L = MapPinEnhanced.L
 local Options = MapPinEnhanced:GetModule("Options")
+local IDLE_UPDATE_INTERVAL = 0.1
 
 ---@alias EntryTemplate MapPinEnhancedTrackerGroupEntryTemplate | MapPinEnhancedTrackerPinEntryTemplate
 
@@ -214,6 +217,13 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         self.contentBackground:SetAlpha(value / 100)
     end)
     Options:SubscribeToOptionChanges("Miscellaneous.Tracker.Scale", function() self.position:ApplyTrackerScale() end)
+    -- The singleton owns these subscriptions for its full lifetime. OnShow also
+    -- refreshes geometry if a display change happened while the tracker was hidden.
+    local function RefreshViewport()
+        if self:IsVisible() then self:UpdateViewportHeight() end
+    end
+    MapPinEnhanced:RegisterEvent("UI_SCALE_CHANGED", RefreshViewport)
+    MapPinEnhanced:RegisterEvent("DISPLAY_SIZE_CHANGED", RefreshViewport)
     MapPinEnhanced:RegisterCallback("PIN_ADDED", function()
         self:UpdateListAndScrollToTrackedPin()
     end)
@@ -233,6 +243,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
 end
 
 function MapPinEnhancedTrackerMixin:OnShow()
+    self.idleUpdateElapsed, self.wasDragging = IDLE_UPDATE_INTERVAL, nil
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
     self.refreshPending, self.scrollPending = nil, nil
     local restoreScroll = self.minimizedScroll ~= nil
@@ -246,6 +257,7 @@ function MapPinEnhancedTrackerMixin:OnShow()
 end
 
 function MapPinEnhancedTrackerMixin:OnHide()
+    self.idleUpdateElapsed, self.wasDragging = nil, nil
     self.changeNumber = self.changeNumber + 1
     self.refreshPending, self.scrollPending = nil, nil
     self:SaveCollapsedGroups()
@@ -254,7 +266,8 @@ function MapPinEnhancedTrackerMixin:OnHide()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
 end
 
-function MapPinEnhancedTrackerMixin:OnUpdate()
+---@param elapsed number
+function MapPinEnhancedTrackerMixin:OnUpdate(elapsed)
     if self.visibilityHiding then return end
     local refresh, scroll = self.refreshPending, self.scrollPending
     -- Consume before building so a callback during publication remains pending next frame.
@@ -264,8 +277,19 @@ function MapPinEnhancedTrackerMixin:OnUpdate()
         self:RestoreListScroll()
     end
     if scroll then self:ScrollToTrackedPin() end
-    -- Position can change during a drag or a screen/scale change; resizing never moves it.
-    self:UpdateViewportHeight()
+    -- Core owns drag lifetime, including a hidden drag handle stopping movement.
+    -- Refresh the final position on the first frame after movement stops as well.
+    local dragging = MapPinEnhanced:IsFrameDragging(self.position)
+    local updateForDrag = dragging or self.wasDragging
+    self.wasDragging = dragging
+    if updateForDrag then self:UpdateViewportHeight() end
+
+    self.idleUpdateElapsed = (self.idleUpdateElapsed or 0) + elapsed
+    if self.idleUpdateElapsed < IDLE_UPDATE_INTERVAL then return end
+    self.idleUpdateElapsed = 0
+    -- Retain a cheap recovery poll for external anchor changes and geometry that
+    -- becomes available after a display event. Native fades still run every frame.
+    if not updateForDrag then self:UpdateViewportHeight() end
     if not self.minimized and self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
         self.scrollBar.fadeIn:PlayShowing(self.scrollBar.fadeOut)
     else
