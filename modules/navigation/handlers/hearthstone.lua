@@ -30,6 +30,11 @@ local SetLearning ---@type fun(enabled: boolean)
 MapPinEnhanced:SetDefault("hearthstoneDestinations", {})
 MapPinEnhanced:SetDefault("hearthstoneToys", {})
 
+---@return boolean
+function Navigation:HasHearthstoneDestination()
+    return destination ~= nil
+end
+
 ---@param graph NavigationGraph
 ---@return number?
 function Navigation:GetPreferredHearthstoneToy(graph)

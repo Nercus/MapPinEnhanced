@@ -89,6 +89,19 @@ local function IsTransportationDisabled(pathType)
     return group ~= nil and disabledTransportationGroups[group] == true
 end
 
+---@return string?
+function Navigation:GetMissingTravelDataWarning()
+    if not self.routeNavigationEnabled then return nil end
+    local warnings = {} ---@type string[]
+    if not IsTransportationDisabled("hearthstone") and not self:HasHearthstoneDestination() then
+        warnings[#warnings + 1] = MapPinEnhanced.L["Navigation Hearthstone Data Missing"]
+    end
+    if not IsTransportationDisabled("flighttaxi") and not self:HasTaxiNodeKnowledge() then
+        warnings[#warnings + 1] = MapPinEnhanced.L["Navigation Flight Data Missing"]
+    end
+    return #warnings > 0 and table.concat(warnings, "\n") or nil
+end
+
 ---@param groups table<string, boolean>
 function Navigation:SetTransportationGroups(groups)
     -- Store our own boolean set; Options and prepared Route snapshots never

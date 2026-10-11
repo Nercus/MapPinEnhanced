@@ -228,6 +228,31 @@ function Navigation:IsTaxiNodeKnown(nodeID)
     return nil
 end
 
+---@return boolean
+function Navigation:HasTaxiNodeKnowledge()
+    if not mapReportsDiscovery then
+        local learned = GetLearnedTaxiNodes()
+        if learned then
+            for _, known in pairs(learned) do
+                if known == true then return true end
+            end
+        end
+        return false
+    end
+    -- Retail supplies discovery directly; opening a master is unnecessary when
+    -- readable discovery data is already available from the native map API.
+    local checked = {} ---@type table<number, boolean>
+    for _, mapID in pairs(taxiMapByNodeID) do
+        if not checked[mapID] then
+            checked[mapID] = true
+            for _, node in ipairs(GetTaxiNodes(mapID) or {}) do
+                if node.known ~= nil then return true end
+            end
+        end
+    end
+    return false
+end
+
 ---@param mapID number
 ---@param x number
 ---@param y number

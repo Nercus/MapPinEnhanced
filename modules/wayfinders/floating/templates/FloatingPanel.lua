@@ -11,6 +11,7 @@ local L = MapPinEnhanced.L
 ---@field progress MapPinEnhancedWayfinderProgressTemplate
 ---@field title FontString
 ---@field areaStatus FontString
+---@field dataWarning MapPinEnhancedTooltipMixin
 ---@field description MapPinEnhancedWayfinderDescriptionTemplate
 ---@field target WayfinderData?
 ---@field destinationText string?
@@ -56,6 +57,9 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
     else
         self.step = step
         self.fullText = step and step.instruction or ""
+    end
+    if step and step.dataWarning and step.showInstruction == false then
+        self.fullText = step.instruction
     end
     local target = self.target
     local calculating = step and step.phase == "calculating"
@@ -123,7 +127,7 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     end or nil
     self:PrepareCombatDisplay()
     self.applying = true
-    self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
+    self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or step.dataWarning ~= nil or
         step.showInstruction ~= false and (step.isTraversal or step.stepCount ~= 1)), returningFromCombat)
     self.applying = nil
 end
@@ -182,8 +186,10 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     local inside = self.step and self.step.insideObjectiveArea
     local target = self.target
     local title = inside and target and target.title or self.fullText
-    local titleTruncated = Wayfinders:ApplyWrappedText(self.title, title, 210, 4)
-    local destinationTruncated = Wayfinders:ApplyWrappedText(self.text, self.destinationText, 210, 4)
+    local warning = self.step and self.step.dataWarning
+    local textWidth = warning and 198 or 210
+    local titleTruncated = Wayfinders:ApplyWrappedText(self.title, title, textWidth, 4)
+    local destinationTruncated = Wayfinders:ApplyWrappedText(self.text, self.destinationText, textWidth, 4)
     self.text:SetShown(not inside)
     self.description:Apply(target and target.title, inside and target and target.description or nil)
     self.textTruncated = titleTruncated or not inside and destinationTruncated
@@ -196,6 +202,8 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
         "BOTTOMLEFT", 0, -3)
     local textHeight = self.title:GetHeight() +
         (inside and descriptionHeight + self.areaStatus:GetHeight() + 3 or self.text:GetHeight() + 3)
+    self.dataWarning:SetTooltip(warning)
+    self.dataWarning:SetShown(warning ~= nil)
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local action = self.actionButton or self.actionPreview
     local height = math.max(62, math.max(textHeight, self.pinFrame:GetHeight(),

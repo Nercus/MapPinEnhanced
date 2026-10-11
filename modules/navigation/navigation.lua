@@ -1321,6 +1321,7 @@ function Navigation:ApplyStepPresentation(target, onArrival, info)
         destination ~= nil and destination.insideObjectiveArea == true
     info.showDirectionInObjectiveArea = info.insideObjectiveArea == true and
         destination ~= nil and destination.showDirectionInObjectiveArea == true
+    info.dataWarning = self:GetMissingTravelDataWarning()
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()
@@ -1770,6 +1771,7 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.TransportationGroups", fu
     if progression and (progression.attempted or progression.phase == "in-transit" or
             Navigation:IsTaxiBookingPending()) then
         Navigation.transportationChangedDuringTravel = true
+        Navigation:PublishStep(progression)
         return
     end
     Navigation.transportationChangedDuringTravel = nil
