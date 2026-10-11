@@ -1,0 +1,63 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+    <Script file="Profiler.lua" />
+    <Button name="MapPinEnhancedProfilerCompactTemplate" inherits="MapPinEnhancedButtonTemplate" mixin="MapPinEnhancedProfilerCompactMixin" text="Profiler: restore" parent="UIParent" hidden="true" virtual="true" frameStrata="DIALOG">
+        <Size x="230" y="40" />
+        <Anchors><Anchor point="TOPLEFT" x="20" y="-20" /></Anchors>
+        <Scripts>
+            <OnClick method="RestoreProfiler" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Button>
+    <Frame name="MapPinEnhancedProfilerTemplate" inherits="MapPinEnhancedWindowTemplate" mixin="MapPinEnhancedProfilerMixin" virtual="true">
+        <Size x="650" y="260" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="status" inherits="GameFontHighlight" justifyH="LEFT">
+                    <Size x="600" y="40" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-95" /></Anchors>
+                </FontString>
+                <FontString parentKey="coverage" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="600" y="65" />
+                    <Anchors><Anchor point="TOPLEFT" x="25" y="-140" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="minimizeButton" inherits="MapPinEnhancedButtonTemplate" text="Minimize">
+                <Size x="130" y="28" />
+                <Anchors><Anchor point="TOPRIGHT" x="-25" y="-55" /></Anchors>
+                <Scripts><OnClick>self:GetParent():Minimize()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="modulesButton" inherits="MapPinEnhancedButtonTemplate" text="Modules">
+                <Size x="180" y="28" />
+                <Anchors><Anchor point="TOPLEFT" x="25" y="-55" /></Anchors>
+                <Scripts><OnClick>self:GetParent():SelectModules()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="startButton" inherits="MapPinEnhancedButtonTemplate" text="Start">
+                <Size x="130" y="28" />
+                <Anchors><Anchor point="BOTTOMLEFT" x="25" y="20" /></Anchors>
+                <Scripts><OnClick>self:GetParent():StartCapture()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="stopButton" inherits="MapPinEnhancedButtonTemplate" text="Stop">
+                <Size x="130" y="28" />
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.startButton" relativePoint="RIGHT" x="15" /></Anchors>
+                <Scripts><OnClick>self:GetParent():StopCapture()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="resetButton" inherits="MapPinEnhancedButtonTemplate" text="Reset">
+                <Size x="130" y="28" />
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.stopButton" relativePoint="RIGHT" x="15" /></Anchors>
+                <Scripts><OnClick>self:GetParent():ResetCapture()</OnClick></Scripts>
+            </Button>
+            <Button parentKey="exportButton" inherits="MapPinEnhancedButtonTemplate" text="Export">
+                <Size x="130" y="28" />
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.resetButton" relativePoint="RIGHT" x="15" /></Anchors>
+                <Scripts><OnClick>self:GetParent():ExportCapture()</OnClick></Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+        </Scripts>
+    </Frame>
+</Ui>

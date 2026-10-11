@@ -21,6 +21,8 @@ ignore:
   - annotations.lua
   - docs
   - tests
+  - core/Profiler.lua
+  - core/Profiler.xml
 
 manual-changelog:
   filename: CHANGELOG.md

@@ -579,3 +579,20 @@ L["General.TooltipHelper_DESCRIPTION"] = "Show available click actions in toolti
 L["Common options"] = "Common options"
 L["Choose which helpers you want to enable. You can change these choices later in settings."] =
 "Choose which helpers you want to enable. You can change these choices later in settings."
+
+--@debug@
+L["Profiler"] = "Profiler"
+L["Minimize"] = "Minimize"
+L["Profiler: restore"] = "Profiler: restore"
+L["Profiler: recording - restore"] = "Profiler: recording - restore"
+L["Modules"] = "Modules"
+L["Modules: %d"] = "Modules: %d"
+L["All modules"] = "All modules"
+L["Start"] = "Start"
+L["Stop"] = "Stop"
+L["Reset"] = "Reset"
+L["Profiles module methods. Private helpers, UI Mixins and earlier callback references are not individually covered. Coroutine calls are counted without timing."] = "Profiles module methods. Private helpers, UI Mixins and earlier callback references are not individually covered. Coroutine calls are counted without timing."
+L["Recording. Closing this window stops capture."] = "Recording. Closing this window stops capture."
+L["Capture stopped: %.2f seconds. Export to inspect results."] = "Capture stopped: %.2f seconds. Export to inspect results."
+L["Select modules, then start a new capture."] = "Select modules, then start a new capture."
+--@end-debug@

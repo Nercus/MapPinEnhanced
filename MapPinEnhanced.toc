@@ -43,3 +43,6 @@ locales\_imports.xml
 core\_imports.xml
 shared\_imports.xml
 modules\_imports.xml
+#@debug@
+core\Profiler.xml
+#@end-debug@

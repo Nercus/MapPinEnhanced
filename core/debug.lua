@@ -12,7 +12,6 @@ local devAddonList = {
     "TextureAtlasViewer",
     "DevTool",
     "!!AddonProfiler",
-    "FunctionProfiler",
 }
 local preFiredQueue = {}
 local playerLoginFired = false
@@ -65,17 +64,6 @@ end
 local tickAtlas = "UI-QuestTracker-Tracker-Check"
 local crossAtlas = "UI-QuestTracker-Objective-Fail"
 local pausedAtlas = "CreditsScreen-Assets-Buttons-Pause"
-
-
-local function WrapFunctionProfiler()
-    if not NumyFunctionProfiler then return end
-
-    NumyFunctionProfiler:WrapModules(MapPinEnhanced.name, "Core", MapPinEnhanced)
-
-    for moduleName, moduleTable in pairs(MapPinEnhanced.modules) do
-        NumyFunctionProfiler:WrapModules(MapPinEnhanced.name, moduleName, moduleTable)
-    end
-end
 
 
 table.insert(devAddonList, MapPinEnhanced.name)
@@ -315,7 +303,6 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
             MapPinEnhanced:Debug(unpack(preFiredQueue[i]))
         end
     end)
-    WrapFunctionProfiler()
     loadDevMode()
 end)
 
