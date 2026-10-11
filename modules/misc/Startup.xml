@@ -55,13 +55,13 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
+                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="CENTER">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="24" y="-54" />
                         <Anchor point="TOPRIGHT" x="-24" y="-54" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER" justifyV="TOP" wordwrap="true">
                     <Size x="452" y="50" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="24" y="-82" />
@@ -219,6 +219,7 @@
             <Button parentKey="back" inherits="MapPinEnhancedStartupButtonTemplate" text="Back">
                 <KeyValues>
                     <KeyValue key="action" value="back" />
+                    <KeyValue key="icon" value="leftcaret" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" x="24" y="14" />

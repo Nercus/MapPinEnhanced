@@ -3,6 +3,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedButtonTemplate : Button, MapPinEnhancedTooltipMixin
 ---@field icon MapPinEnhancedIcon?
+---@field iconOnRight boolean?
 ---@field fontSize MapPinEnhancedButtonFontSize
 ---@field iconTexture MapPinEnhancedIconMixin
 ---@field text FontString
@@ -71,15 +72,21 @@ function MapPinEnhancedButtonMixin:Update()
         self.iconTexture:SetSize(labelHeight, labelHeight)
         local padding = labelHeight * 0.25
         local labelOffset = labelHeight / 2 + padding
-        self.text:SetPoint("CENTER", self, "CENTER", labelOffset, 0)
-        self.iconTexture:SetPoint("RIGHT", self.text, "LEFT", -padding, 0)
+        self.text:SetPoint("CENTER", self, "CENTER", self.iconOnRight and -labelOffset or labelOffset, 0)
+        if self.iconOnRight then
+            self.iconTexture:SetPoint("LEFT", self.text, "RIGHT", padding, 0)
+        else
+            self.iconTexture:SetPoint("RIGHT", self.text, "LEFT", -padding, 0)
+        end
         self.iconTexture:Show()
     end
 end
 
 ---@param icon MapPinEnhancedIcon?
-function MapPinEnhancedButtonMixin:SetIcon(icon)
+---@param onRight boolean?
+function MapPinEnhancedButtonMixin:SetIcon(icon, onRight)
     self.icon = icon
+    self.iconOnRight = onRight
     if icon then
         self.iconTexture:SetIconTexture(icon)
     end
