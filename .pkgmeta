@@ -19,6 +19,7 @@ ignore:
   - README.md
   - CHANGELOG.md
   - annotations.lua
+  - docs
   - tests
 
 manual-changelog:
