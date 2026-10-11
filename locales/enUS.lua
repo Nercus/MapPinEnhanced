@@ -20,6 +20,7 @@ L["%d icons (loading...)"] = "%d icons (loading...)"
 L["Import"] = "Import"
 L["Save"] = "Save"
 L["Stop tracking"] = "Stop tracking"
+L["This is the location you are navigating to."] = "This is the location you are navigating to."
 L["Track"] = "Track"
 L["Remove"] = "Remove"
 
