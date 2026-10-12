@@ -7,6 +7,7 @@ local LibWindow = LibStub("LibWindow-1.1")
 ---@field moving boolean?
 ---@field dragArea ScriptRegion
 ---@field isLocked fun(): boolean
+---@field onDragChanged? fun(moving: boolean)
 
 ---@type table<Frame, MapPinEnhancedDragRegistration>
 local draggableFrames = {}
@@ -28,6 +29,7 @@ local function StopDragging(frame, registration)
         LibWindow.SavePosition(frame)
     end
     ResetCursor()
+    if registration.onDragChanged then registration.onDragChanged(false) end
 end
 
 ---@param frame Frame
@@ -43,7 +45,8 @@ end
 ---@param frameName string
 ---@param dragArea ScriptRegion?
 ---@param isLocked? fun(): boolean
-function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLocked)
+---@param onDragChanged? fun(moving: boolean) Notification after core starts or stops movement, including hide/unregister.
+function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLocked, onDragChanged)
     assert(type(frameName) == "string", "Frame name must be a string")
     assert(type(frame) == "table", "Frame must be a valid Frame object")
     dragArea = dragArea or frame
@@ -52,10 +55,12 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
         assert(registration.dragArea == dragArea,
             "RegisterDraggableFrame requires the original drag area when registering again")
         registration.isLocked = isLocked or function() return false end
+        registration.onDragChanged = onDragChanged
         registration.active = true
         return
     end
-    registration = { active = true, dragArea = dragArea, isLocked = isLocked or function() return false end }
+    registration = { active = true, dragArea = dragArea, isLocked = isLocked or function() return false end,
+        onDragChanged = onDragChanged }
     draggableFrames[frame] = registration
     if dragArea ~= frame then
         dragArea:EnableMouse(true)
@@ -88,6 +93,7 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
         registration.moving = true
         frame:StartMoving()
         SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
+        if registration.onDragChanged then registration.onDragChanged(true) end
     end)
     dragArea:HookScript("OnMouseUp", function(_, button)
         if button ~= "LeftButton" or not registration.moving then return end

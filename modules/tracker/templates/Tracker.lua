@@ -24,8 +24,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field totalPins number
 ---@field position MapPinEnhancedTrackerPositionTemplate
 ---@field desiredHeight number?
----@field idleUpdateElapsed number?
----@field wasDragging boolean?
+---@field idleTicker FunctionContainer?
+---@field dragging boolean?
 ---@field header MapPinEnhancedTrackerHeaderTemplate
 MapPinEnhancedTrackerMixin = CreateFromMixins(MapPinEnhancedTrackerListMixin)
 
@@ -90,6 +90,7 @@ function MapPinEnhancedTrackerMixin:RequestListUpdate(scrollToTrackedPin)
     if not self:IsShown() or self.visibilityHiding then return end
     self.refreshPending = true
     self.scrollPending = self.scrollPending or scrollToTrackedPin
+    self:SetScript("OnUpdate", self.OnUpdate)
 end
 
 function MapPinEnhancedTrackerMixin:UpdateListAndScrollToTrackedPin()
@@ -197,6 +198,12 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.position = self:GetParent() --[[@as MapPinEnhancedTrackerPositionTemplate]]
     MapPinEnhanced:RegisterDraggableFrame(self.position, "tracker", self.header, function()
         return MapPinEnhanced:GetVar("tracker", "lockTracker") --[[@as boolean]]
+    end, function(moving)
+        self.dragging = moving
+        if self:IsShown() and not self.visibilityHiding then
+            self:UpdateViewportHeight()
+            if moving then self:SetScript("OnUpdate", self.OnUpdate) end
+        end
     end)
     self.scrollBar:SetHideIfUnscrollable(false)
     self.collapsedGroups = {}
@@ -238,12 +245,19 @@ function MapPinEnhancedTrackerMixin:OnLoad()
         end
     end)
     MapPinEnhanced:RegisterCallback("PIN_TRACKING_CHANGED", function(_, _, isTracked)
-        if isTracked and self:IsShown() and not self.visibilityHiding then self.scrollPending = true end
+        if isTracked and self:IsShown() and not self.visibilityHiding then
+            self.scrollPending = true
+            self:SetScript("OnUpdate", self.OnUpdate)
+        end
     end)
 end
 
 function MapPinEnhancedTrackerMixin:OnShow()
-    self.idleUpdateElapsed, self.wasDragging = IDLE_UPDATE_INTERVAL, nil
+    if not self.idleTicker then
+        self.idleTicker = C_Timer.NewTicker(IDLE_UPDATE_INTERVAL, function() self:RefreshIdleState() end)
+    end
+    self.dragging = MapPinEnhanced:IsFrameDragging(self.position)
+    if self.dragging then self:SetScript("OnUpdate", self.OnUpdate) end
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
     self.refreshPending, self.scrollPending = nil, nil
     local restoreScroll = self.minimizedScroll ~= nil
@@ -257,7 +271,9 @@ function MapPinEnhancedTrackerMixin:OnShow()
 end
 
 function MapPinEnhancedTrackerMixin:OnHide()
-    self.idleUpdateElapsed, self.wasDragging = nil, nil
+    if self.idleTicker then self.idleTicker:Cancel() end
+    self.idleTicker, self.dragging = nil, nil
+    self:SetScript("OnUpdate", nil)
     self.changeNumber = self.changeNumber + 1
     self.refreshPending, self.scrollPending = nil, nil
     self:SaveCollapsedGroups()
@@ -266,9 +282,11 @@ function MapPinEnhancedTrackerMixin:OnHide()
     self.scrollBar.fadeOut:SetParentShownInstantly(false, self.scrollBar.fadeIn)
 end
 
----@param elapsed number
-function MapPinEnhancedTrackerMixin:OnUpdate(elapsed)
-    if self.visibilityHiding then return end
+function MapPinEnhancedTrackerMixin:OnUpdate()
+    if self.visibilityHiding then
+        self:SetScript("OnUpdate", nil)
+        return
+    end
     local refresh, scroll = self.refreshPending, self.scrollPending
     -- Consume before building so a callback during publication remains pending next frame.
     self.refreshPending, self.scrollPending = nil, nil
@@ -277,19 +295,17 @@ function MapPinEnhancedTrackerMixin:OnUpdate(elapsed)
         self:RestoreListScroll()
     end
     if scroll then self:ScrollToTrackedPin() end
-    -- Core owns drag lifetime, including a hidden drag handle stopping movement.
-    -- Refresh the final position on the first frame after movement stops as well.
-    local dragging = MapPinEnhanced:IsFrameDragging(self.position)
-    local updateForDrag = dragging or self.wasDragging
-    self.wasDragging = dragging
-    if updateForDrag then self:UpdateViewportHeight() end
+    if self.dragging then self:UpdateViewportHeight() end
+    if not self.dragging and not self.refreshPending and not self.scrollPending then
+        self:SetScript("OnUpdate", nil)
+    end
+end
 
-    self.idleUpdateElapsed = (self.idleUpdateElapsed or 0) + elapsed
-    if self.idleUpdateElapsed < IDLE_UPDATE_INTERVAL then return end
-    self.idleUpdateElapsed = 0
-    -- Retain a cheap recovery poll for external anchor changes and geometry that
-    -- becomes available after a display event. Native fades still run every frame.
-    if not updateForDrag then self:UpdateViewportHeight() end
+-- Idle geometry recovery and hover fading need no per-frame Lua work. Native
+-- animations still interpolate smoothly; core notifies drag start/stop directly.
+function MapPinEnhancedTrackerMixin:RefreshIdleState()
+    if self.visibilityHiding then return end
+    if not self.dragging then self:UpdateViewportHeight() end
     if not self.minimized and self:IsMouseOver() and self.scrollBar:HasScrollableExtent() and self.scrollBar:IsScrollAllowed() then
         self.scrollBar.fadeIn:PlayShowing(self.scrollBar.fadeOut)
     else
@@ -355,4 +371,6 @@ end
 --@debug@
 MapPinEnhancedTrackerMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Tracker.Frame.OnUpdate",
     MapPinEnhancedTrackerMixin.OnUpdate)
+MapPinEnhancedTrackerMixin.RefreshIdleState = MapPinEnhanced.profiler:WrapScope("Tracker.Frame.RefreshIdleState",
+    MapPinEnhancedTrackerMixin.RefreshIdleState)
 --@end-debug@

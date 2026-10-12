@@ -48,7 +48,6 @@
             <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
-            <OnUpdate method="OnUpdate" />
         </Scripts>
     </Frame>
 </Ui>
