@@ -8,18 +8,25 @@ local TAXI_ESTIMATED_SPEED = 25
 local TAXI_FALLBACK_SECONDS = 240
 local TAXI_POSITION_TOLERANCE = 0.005
 
--- The 1.60 client returns false undiscovered flags even for unlearned nodes.
--- Only mainline's 11.0+ discovery contract can establish knowledge from maps.
-local _, _, _, interfaceVersion = GetBuildInfo()
-local mapReportsDiscovery = type(interfaceVersion) == "number" and interfaceVersion >= 110000
-
+-- Positive discoveries belong to this character and are learned only at a master.
+local learnedTaxiNodes ---@type table<number, boolean>?
 ---@return table<number, boolean>?
 local function GetLearnedTaxiNodes()
+    if learnedTaxiNodes then return learnedTaxiNodes end
     local characterKey = MapPinEnhanced:GetCharacterKey()
     if not characterKey then return nil end
     local saved = MapPinEnhanced:GetVar("learnedTaxiNodes")
     local nodes = type(saved) == "table" and saved[characterKey] or nil
-    return type(nodes) == "table" and nodes or nil
+    learnedTaxiNodes = {}
+    if type(nodes) == "table" then
+        ---@cast nodes table<any, any>
+        for nodeID, known in pairs(nodes) do
+            if MapPinEnhanced:IsReadablePositiveInteger(nodeID) and known == true then
+                learnedTaxiNodes[nodeID] = true
+            end
+        end
+    end
+    return learnedTaxiNodes
 end
 
 ---@class NavigationFlightTaxiData
@@ -38,15 +45,13 @@ end
 ---@field nodeID number
 ---@field x number?
 ---@field y number?
----@field known boolean?
 ---@field name string?
 
-local taxiNodesByMap = {} ---@type table<number, NavigationTaxiNodeState[]|false>
+local taxiNodesByMap = {} ---@type table<number, NavigationTaxiNodeState[]>
 local taxiNodesByIDByMap = {} ---@type table<number, table<number, NavigationTaxiNodeState>>
-local dirtyTaxiMaps = {} ---@type table<number, boolean>
 local taxiKnowledgeChangeNumber = 0
-local taxiPricesDirty = true
 local taxiMapByNodeID = {} ---@type table<number, number>
+local taxiMapIDs = {} ---@type table<number, boolean>
 ---@class NavigationTaxiLeg
 ---@field fromTaxiNodeID number
 ---@field toTaxiNodeID number
@@ -68,7 +73,6 @@ local taxiMapByNodeID = {} ---@type table<number, number>
 local connections = {} ---@type table<number, table<number, integer[]>>
 local sourcePairs = {} ---@type table<integer, string>
 local pointsByNode = {} ---@type table<number, integer>
-local hasGeometryPrices = false
 
 ---@param context NavigationPathPresentationContext?
 ---@return string icon, string method, string instruction
@@ -87,6 +91,7 @@ local function Dataprovider(path)
     if type(path.fromMap) ~= "number" or type(path.fromX) ~= "number" or type(path.fromY) ~= "number" then
         return nil, "missing taxi origin"
     end
+    taxiMapIDs[path.fromMap], taxiMapIDs[path.toMap] = true, true
     if type(path.fromTaxiNodeID) == "number" then taxiMapByNodeID[path.fromTaxiNodeID] = path.fromMap end
     if type(path.toTaxiNodeID) == "number" then taxiMapByNodeID[path.toTaxiNodeID] = path.toMap end
     local ids = {} ---@type integer[]
@@ -121,80 +126,161 @@ local function Dataprovider(path)
     }
 end
 
----@param mapID number
----@return NavigationTaxiNodeState[]?
-local function GetTaxiNodes(mapID)
-    local cached = taxiNodesByMap[mapID]
-    if cached ~= nil and not dirtyTaxiMaps[mapID] then return cached or nil end
-    dirtyTaxiMaps[mapID] = nil
-    if not C_TaxiMap or not C_TaxiMap.GetTaxiNodesForMap then
-        if cached ~= false then taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1 end
-        taxiNodesByMap[mapID] = false
-        taxiNodesByIDByMap[mapID] = nil
-        return nil
-    end
-
-    local taxiNodes = {} ---@type NavigationTaxiNodeState[]
-    local nodesByID = {} ---@type table<number, NavigationTaxiNodeState>
-    local observedNodes = C_TaxiMap.GetTaxiNodesForMap(mapID)
-    if MapPinEnhanced:IsSecretValue(observedNodes) or type(observedNodes) ~= "table" then
-        if cached ~= false then taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1 end
-        taxiNodesByMap[mapID] = false
-        taxiNodesByIDByMap[mapID] = nil
-        return nil
-    end
-    local learnedTaxiNodes = not mapReportsDiscovery and GetLearnedTaxiNodes() or nil
-    for _, node in ipairs(observedNodes) do
-        if not MapPinEnhanced:IsSecretValue(node) and type(node) == "table" then
-            local position = node.position
+-- Strip native vectors and accept only plain, readable metadata for persistence.
+---@param nodes table<any, any>
+---@param native boolean
+---@param checkpoint? fun()
+---@return NavigationTaxiNodeState[]
+local function CopyTaxiNodes(nodes, native, checkpoint)
+    local result = {} ---@type NavigationTaxiNodeState[]
+    for _, node in ipairs(nodes) do
+        if checkpoint then checkpoint() end
+        if MapPinEnhanced:IsReadableTable(node) and MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) then
+            ---@cast node { nodeID: number, position: Vector2DMixin?, x: number?, y: number?, name: string? }
             local x ---@type number?
             local y ---@type number?
-            if not MapPinEnhanced:IsSecretValue(position) and position and position.GetXY then
-                x, y = position:GetXY()
-                if MapPinEnhanced:IsSecretValue(x) or MapPinEnhanced:IsSecretValue(y) then x, y = nil, nil end
-            end
-            if MapPinEnhanced:IsReadablePositiveInteger(node.nodeID) then
-                local known = learnedTaxiNodes and learnedTaxiNodes[node.nodeID] == true or nil ---@type boolean?
-                if mapReportsDiscovery then
-                    known = nil
-                    if not MapPinEnhanced:IsSecretValue(node.isUndiscovered) and
-                        type(node.isUndiscovered) == "boolean" then
-                        known = not node.isUndiscovered
-                    end
+            if native then
+                local position = node.position
+                if not MapPinEnhanced:IsSecretValue(position) and position and position.GetXY then
+                    x, y = position:GetXY()
                 end
-                local record = {
-                    nodeID = node.nodeID,
-                    x = x,
-                    y = y,
-                    known = known,
-                    name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or
-                        nil,
-                }
-                table.insert(taxiNodes, record)
-                -- Preserve the first matching record, as the former array lookup did.
-                if not nodesByID[node.nodeID] then nodesByID[node.nodeID] = record end
+            else
+                x, y = node.x, node.y
             end
+            if not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then x, y = nil, nil end
+            result[#result + 1] = {
+                nodeID = node.nodeID, x = x, y = y,
+                name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or nil,
+            }
         end
     end
-    -- Preserve complete observations, including order for equal-distance fallback,
-    -- missing nodes, unknown discovery, identity, coordinates and display names.
-    local equal = type(cached) == "table" and #cached == #taxiNodes
-    if equal then
-        ---@cast cached NavigationTaxiNodeState[]
-        for index, node in ipairs(taxiNodes) do
-            local previous = cached[index]
-            if previous.nodeID ~= node.nodeID or previous.known ~= node.known or
-                previous.x ~= node.x or previous.y ~= node.y or previous.name ~= node.name then
-                equal = false
-                break
-            end
+    return result
+end
+
+---@param nodes NavigationTaxiNodeState[]
+---@param checkpoint? fun()
+---@return table<number, NavigationTaxiNodeState>
+local function IndexTaxiNodes(nodes, checkpoint)
+    local byID = {} ---@type table<number, NavigationTaxiNodeState>
+    for _, node in ipairs(nodes) do
+        if checkpoint then checkpoint() end
+        if not byID[node.nodeID] then byID[node.nodeID] = node end
+    end
+    return byID
+end
+
+---@param mapID number
+---@param checkpoint? fun()
+---@return NavigationTaxiNodeState[]?
+local function GetTaxiNodes(mapID, checkpoint)
+    if taxiNodesByMap[mapID] then return taxiNodesByMap[mapID] end
+    local characterKey = MapPinEnhanced:GetCharacterKey()
+    if not characterKey then return nil end
+    local saved = MapPinEnhanced:GetVar("taxiNodeMaps")
+    local maps = type(saved) == "table" and saved[characterKey]
+    local nodes = type(maps) == "table" and maps[mapID]
+    local copy = type(nodes) == "table" and CopyTaxiNodes(nodes, false, checkpoint) or {}
+    local byID = IndexTaxiNodes(copy, checkpoint)
+    taxiNodesByMap[mapID], taxiNodesByIDByMap[mapID] = copy, byID
+    return copy
+end
+
+---@param previous NavigationTaxiNodeState[]?
+---@param nodes NavigationTaxiNodeState[]
+---@param checkpoint fun()
+---@return boolean
+local function SameTaxiNodes(previous, nodes, checkpoint)
+    if not previous or #previous ~= #nodes then return false end
+    for index, node in ipairs(nodes) do
+        checkpoint()
+        local old = previous[index]
+        if old.nodeID ~= node.nodeID or old.x ~= node.x or old.y ~= node.y or old.name ~= node.name then
+            return false
         end
     end
-    if equal then return cached end
-    taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
-    taxiNodesByIDByMap[mapID] = nodesByID
-    taxiNodesByMap[mapID] = taxiNodes
-    return taxiNodes
+    return true
+end
+
+---@param mapID number
+---@return MapTaxiNodeInfo[]?
+local function ReadTaxiNodeMap(mapID)
+    return C_TaxiMap.GetTaxiNodesForMap(mapID)
+end
+
+--@debug@
+ReadTaxiNodeMap = MapPinEnhanced.profiler:WrapScope("Navigation.TaxiNodeMaps.NativeQuery", ReadTaxiNodeMap)
+--@end-debug@
+
+-- The interaction owner retains cancellation. Staging may yield, publication may
+-- not: readers keep the previous metadata until every queried map is processed.
+---@param onComplete fun(changed: boolean)
+---@return fun()? cancel
+function Navigation:RefreshTaxiNodeMaps(onComplete)
+    if not C_TaxiMap or not C_TaxiMap.GetTaxiNodesForMap then return nil end
+    local characterKey = MapPinEnhanced:GetCharacterKey()
+    if not characterKey then return nil end
+    local cancelled = false
+    local updates = {} ---@type table<number, NavigationTaxiNodeState[]>
+    local indexes = {} ---@type table<number, table<number, NavigationTaxiNodeState>>
+    local savedMaps = {} ---@type table<number, NavigationTaxiNodeState[]>
+    local cancel = MapPinEnhanced:BatchExecution({ function()
+        --@debug@
+        MapPinEnhanced.profiler:SetWorkerScope("Navigation.TaxiNodeMapRefreshSlice")
+        --@end-debug@
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+        for mapID in pairs(taxiMapIDs) do
+            checkpoint()
+            if cancelled then return false end
+            local previous = GetTaxiNodes(mapID, checkpoint)
+            if cancelled then return false end
+            local observed = ReadTaxiNodeMap(mapID)
+            checkpoint()
+            if MapPinEnhanced:IsReadableTable(observed) then
+                local nodes = CopyTaxiNodes(observed, true, checkpoint)
+                if #nodes > 0 and not SameTaxiNodes(previous, nodes, checkpoint) then
+                    updates[mapID] = nodes
+                    indexes[mapID] = IndexTaxiNodes(nodes, checkpoint)
+                end
+            end
+        end
+        if not next(updates) then return end
+        -- Preserve maps outside the authored graph without mutating the saved
+        -- table during yields; discoveries use their separate immediate save.
+        local saved = MapPinEnhanced:GetVar("taxiNodeMaps")
+        local maps = type(saved) == "table" and saved[characterKey] or nil
+        if type(maps) == "table" then
+            ---@cast maps table<number, NavigationTaxiNodeState[]>
+            for mapID, nodes in pairs(maps) do
+                savedMaps[mapID] = nodes
+                checkpoint()
+            end
+        end
+        for mapID, nodes in pairs(updates) do
+            savedMaps[mapID] = nodes
+            checkpoint()
+        end
+    end }, nil, function(status)
+        if cancelled or status ~= "complete" then return end
+        local changed = next(updates) ~= nil
+        if changed then
+            -- All per-node copying/indexing is finished. Only map-level reference
+            -- swaps remain in this synchronous publication, followed by one save.
+            for mapID, nodes in pairs(updates) do
+                taxiNodesByMap[mapID], taxiNodesByIDByMap[mapID] = nodes, indexes[mapID]
+            end
+            local saved = MapPinEnhanced:GetVar("taxiNodeMaps")
+            if type(saved) ~= "table" then saved = {} end
+            ---@cast saved table<string, table<number, NavigationTaxiNodeState[]>>
+            saved[characterKey] = savedMaps
+            MapPinEnhanced:SetVar("taxiNodeMaps", saved)
+            taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
+        end
+        onComplete(changed)
+    end)
+    return function()
+        cancelled = true
+        cancel()
+    end
 end
 
 ---@param nodeID number
@@ -205,52 +291,21 @@ local function GetTaxiNodeByID(nodeID)
         local node = taxiNodesByIDByMap[mapID][nodeID]
         if node then return node end
     end
-    -- Older clients use saved flight-master observations for discovery. A city
-    -- map omitting the node must not discard that positive character knowledge.
-    if not mapReportsDiscovery then
-        local learnedTaxiNodes = GetLearnedTaxiNodes()
-        if learnedTaxiNodes and learnedTaxiNodes[nodeID] == true then
-            return { nodeID = nodeID, known = true }
-        end
-    end
-    return nil
+    -- Authored identity plus positive saved knowledge needs no live map record.
+    return { nodeID = nodeID }
 end
 
 ---@param nodeID number
 ---@return boolean? known
 function Navigation:IsTaxiNodeKnown(nodeID)
-    if not mapReportsDiscovery then
-        local learnedTaxiNodes = GetLearnedTaxiNodes()
-        return learnedTaxiNodes and learnedTaxiNodes[nodeID] == true or nil
-    end
-    local node = GetTaxiNodeByID(nodeID)
-    if node then return node.known end
-    return nil
+    local learned = GetLearnedTaxiNodes()
+    return learned and learned[nodeID] == true or nil
 end
 
 ---@return boolean
 function Navigation:HasTaxiNodeKnowledge()
-    if not mapReportsDiscovery then
-        local learned = GetLearnedTaxiNodes()
-        if learned then
-            for _, known in pairs(learned) do
-                if known == true then return true end
-            end
-        end
-        return false
-    end
-    -- Retail supplies discovery directly; opening a master is unnecessary when
-    -- readable discovery data is already available from the native map API.
-    local checked = {} ---@type table<number, boolean>
-    for _, mapID in pairs(taxiMapByNodeID) do
-        if not checked[mapID] then
-            checked[mapID] = true
-            for _, node in ipairs(GetTaxiNodes(mapID) or {}) do
-                if node.known ~= nil then return true end
-            end
-        end
-    end
-    return false
+    local learned = GetLearnedTaxiNodes()
+    return learned ~= nil and next(learned) ~= nil
 end
 
 ---@param mapID number
@@ -284,14 +339,9 @@ end
 function Navigation:IndexTaxiConnections(graph)
     connections = {}
     pointsByNode = {}
-    hasGeometryPrices = false
     for reference = 1, graph.pathCount do
         if graph.pathTypes[reference] == "flighttaxi" then
             local data = graph.pathHandlerData[reference] ---@type NavigationFlightTaxiData
-            local duration = graph.pathDurations[reference]
-            if type(duration) ~= "number" or duration <= 0 or duration >= math.huge or duration ~= duration then
-                hasGeometryPrices = true
-            end
             local origin, destination = data.fromTaxiNodeID, data.toTaxiNodeID
             if origin and destination then
                 connections[origin] = connections[origin] or {}
@@ -651,8 +701,8 @@ function Navigation:RefreshTaxiJourney(journey, prepared, checkpoint)
     return fresh
 end
 
--- Dirty intake cancels unsafe work immediately; unchanged complete observations
--- retain immutable prices. Fresh single-Path checks never publish this cache.
+-- Only flight-master observations change discovery/metadata. Route eligibility
+-- still refreshes independently; unchanged inputs retain immutable taxi prices.
 local preparedTaxiChangeNumber = -1
 local preparedTaxiSpeedMultiplier ---@type number?
 local preparedTaxiGraph ---@type NavigationGraph?
@@ -664,23 +714,12 @@ local preparedTaxiFailures ---@type table<integer, string>?
 ---@return table<integer, NavigationCalculatedPathCost>, table<integer, string>
 function Navigation:GetPreparedTaxiCosts(graph, checkpoint)
     local speedMultiplier = self:IsLegacyTraitKnown(110300) and 1.2 or 1
-    if taxiPricesDirty or preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber or
+    if preparedTaxiGraph ~= graph or preparedTaxiChangeNumber ~= taxiKnowledgeChangeNumber or
         preparedTaxiSpeedMultiplier ~= speedMultiplier then
-        for mapID in pairs(taxiNodesByMap) do
-            GetTaxiNodes(mapID)
-            checkpoint()
-        end
-        if preparedTaxiGraph == graph and preparedTaxiChangeNumber == taxiKnowledgeChangeNumber and
-            preparedTaxiSpeedMultiplier == speedMultiplier and not hasGeometryPrices then
-            taxiPricesDirty = false
-            return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
-                assert(preparedTaxiFailures, "Navigation:GetPreparedTaxiCosts: missing failures")
-        end
         local costs, failures = self:PrepareTaxiCosts(graph, nil, checkpoint)
         preparedTaxiGraph = graph
         preparedTaxiChangeNumber = taxiKnowledgeChangeNumber
         preparedTaxiSpeedMultiplier = speedMultiplier
-        taxiPricesDirty = false
         preparedTaxiCosts, preparedTaxiFailures = costs, failures
     end
     return assert(preparedTaxiCosts, "Navigation:GetPreparedTaxiCosts: missing costs"),
@@ -707,9 +746,8 @@ function Navigation:PrepareTaxiCosts(graph, onlyReference, checkpoint)
             local to = FindTaxiNode(data.toMap, data.toX, data.toY, data.toTaxiNodeID)
             if not origin then
                 failures[reference] = "origin taxi node ID is unavailable"
-            elseif not to or to.known ~= true then
-                failures[reference] = to and to.known == false and
-                    "destination taxi node is undiscovered" or "destination taxi knowledge is unknown"
+            elseif not to or self:IsTaxiNodeKnown(to.nodeID) ~= true then
+                failures[reference] = "destination taxi knowledge is unknown"
             else
                 local base = PriceLeg(graph, reference, speedMultiplier)
                 local previous = preparedTaxiGraph == graph and preparedTaxiCosts and preparedTaxiCosts[reference]
@@ -776,35 +814,26 @@ end
 
 ---@param nodeIDs number[]
 function Navigation:RecordLearnedTaxiNodes(nodeIDs)
-    if mapReportsDiscovery then return end
     local characterKey = MapPinEnhanced:GetCharacterKey()
     if not characterKey then return end
     local saved = MapPinEnhanced:GetVar("learnedTaxiNodes")
     if type(saved) ~= "table" then saved = {} end
     ---@cast saved table<string, table<number, boolean>>
-    local learnedTaxiNodes = GetLearnedTaxiNodes() or {}
+    local learned = GetLearnedTaxiNodes()
+    if not learned then return end
     -- Persist positive character knowledge only. Missing/unreachable nodes at
     -- another master must not erase it; reachability and itineraries stay live.
     local changed = false
     for _, nodeID in ipairs(nodeIDs) do
-        if MapPinEnhanced:IsReadablePositiveInteger(nodeID) and learnedTaxiNodes[nodeID] ~= true then
+        if MapPinEnhanced:IsReadablePositiveInteger(nodeID) and learned[nodeID] ~= true then
             changed = true
-            learnedTaxiNodes[nodeID] = true
+            learned[nodeID] = true
         end
     end
     if not changed then return end
     taxiKnowledgeChangeNumber = taxiKnowledgeChangeNumber + 1
-    saved[characterKey] = learnedTaxiNodes
+    saved[characterKey] = learned
     MapPinEnhanced:SetVar("learnedTaxiNodes", saved)
-    self:ClearTaxiNodeKnowledge()
-end
-
----@param event? WowEvent
-function Navigation:ClearTaxiNodeKnowledge(event)
-    for mapID in pairs(taxiNodesByMap) do dirtyTaxiMaps[mapID] = true end
-    taxiPricesDirty = true
-    -- Preserve soft quest refreshes when no flight-master interaction changed.
-    self:InvalidatePreparedData(event or "TAXIMAP_OPENED")
 end
 
 Navigation:RegisterPathHandler("flighttaxi", Presentation, Dataprovider, CostCalculator,

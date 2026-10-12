@@ -22,7 +22,8 @@
 ---@field trackerMinimized boolean?
 ---@field minimapButton MapPinEnhancedMinimapSettings? LibDBIcon visibility, position and compartment preferences.
 ---@field flightTimer table<string, NavigationSavedFlight>? Character-scoped active flight for reload recovery.
----@field learnedTaxiNodes table<string, table<number, boolean>>? Character-scoped positive flight-master discoveries on older clients.
+---@field learnedTaxiNodes table<string, table<number, boolean>>? Character-scoped positive discoveries observed at flight masters.
+---@field taxiNodeMaps table<string, table<number, NavigationTaxiNodeState[]>>? Plain character-scoped node metadata refreshed only at flight masters.
 ---@field groups table<UUID, SaveableGroupData>?
 ---@field frames table<string, MapPinEnhancedSavedFramePosition>?
 ---@field notificationOffsetY number? Shared notification offset from the top of UIParent.

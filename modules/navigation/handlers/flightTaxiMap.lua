@@ -22,6 +22,7 @@ local bookedDestination ---@type number?
 local bookingPending = false
 local closingObservation ---@type NavigationTaxiObservation?
 local interactionChangeNumber = 0
+local cancelNodeRefresh ---@type fun()?
 local rideTimer ---@type FunctionContainer?
 local automaticDestination ---@type NavigationDestination?
 
@@ -112,12 +113,14 @@ local function RefreshRoutes()
     if not MapPinEnhanced:IsSecretValue(flying) and flying then return end
     if bookingPending or progression and (progression.attempted or progression.phase == "in-transit") then return end
     if not Navigation.routeNavigationEnabled or not Navigation.activeDestination then return end
-    -- The calculation owns its preparation budget, including a current-master
-    -- refresh. A short direct request can still avoid transport work entirely.
+    -- Route preparation has its own budget; metadata refresh publishes separately.
+    -- A short direct request can still avoid transport work entirely.
     Navigation:StartCalculation(true)
 end
 
 local function Observe()
+    if cancelNodeRefresh then cancelNodeRefresh() end
+    cancelNodeRefresh = nil
     interactionChangeNumber = interactionChangeNumber + 1
     if not rideStarted then bookingPending = false end
     closingObservation = nil
@@ -133,14 +136,27 @@ local function Observe()
     end
     interactionOpen = true
     local fresh = ReadObservation()
-    if fresh.origin then Navigation:RecordLearnedTaxiNodes(fresh.learnedNodeIDs) end
+    if fresh.origin then
+        Navigation:RecordLearnedTaxiNodes(fresh.learnedNodeIDs)
+        local changeNumber = interactionChangeNumber
+        cancelNodeRefresh = Navigation:RefreshTaxiNodeMaps(function(changed)
+            if not interactionOpen or interactionChangeNumber ~= changeNumber then return end
+            cancelNodeRefresh = nil
+            if changed then
+                Navigation:InvalidatePreparedData("TAXIMAP_OPENED")
+                RefreshRoutes()
+            end
+        end)
+    end
     fresh.origin = fresh.origin or previousOrigin
     observation = fresh
-    Navigation:ClearTaxiNodeKnowledge()
+    Navigation:InvalidatePreparedData("TAXIMAP_OPENED")
     RefreshRoutes()
 end
 
 local function InvalidateInteraction()
+    if cancelNodeRefresh then cancelNodeRefresh() end
+    cancelNodeRefresh = nil
     local hadInteraction = interactionOpen or observation ~= nil or automaticDestination ~= nil
     -- Always advance the generation so even an empty close/reopen rejects old callbacks.
     interactionChangeNumber = interactionChangeNumber + 1
@@ -291,10 +307,6 @@ end)
 MapPinEnhanced:RegisterEvent("TAXI_NODE_STATUS_CHANGED", function()
     if interactionOpen then
         Observe()
-    else
-        InvalidateInteraction()
-        Navigation:ClearTaxiNodeKnowledge()
-        RefreshRoutes()
     end
 end)
 for _, event in ipairs({ "PLAYER_ENTERING_WORLD", "ZONE_CHANGED", "ZONE_CHANGED_INDOORS",
@@ -302,6 +314,5 @@ for _, event in ipairs({ "PLAYER_ENTERING_WORLD", "ZONE_CHANGED", "ZONE_CHANGED_
     MapPinEnhanced:RegisterEvent(event, function()
         InvalidateInteraction()
         closingObservation = nil
-        Navigation:ClearTaxiNodeKnowledge(event)
     end)
 end
