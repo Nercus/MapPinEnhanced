@@ -147,7 +147,7 @@ local STEPS = {
     { "Welcome to Map Pin Enhanced!", "This introduction covers some of the addon's core settings. You can change all of these choices later in settings." },
     { "Select a wayfinder",           "Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction." },
     { "Enable navigation",            "Navigation shows the best available route to your target location." },
-    { "Common options",              "Choose which helpers you want to enable. You can change these choices later in settings." },
+    { "Common options",               "Choose which helpers you want to enable. You can change these choices later in settings." },
     { "Place your first pin",         "Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction." },
 }
 
@@ -159,6 +159,7 @@ local OPTION_KEYS = {
 
 function MapPinEnhancedStartupMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
+    tDeleteItem(UISpecialFrames, self:GetName())
     -- Close/Escape must settle before another event can reverse the shared fade.
     -- Combat/loading also hides synchronously while the suspension flag is set.
     self.Hide = self.HideStartup
