@@ -1,3 +1,5 @@
+local MapPinEnhanced = select(2, ...)
+
 ---@alias FloatingPresentation "close"|"far"|"clamped"|"fallback"|"fallback-close"
 
 ---@class MapPinEnhancedWayfinderFloatingChevron : Texture
