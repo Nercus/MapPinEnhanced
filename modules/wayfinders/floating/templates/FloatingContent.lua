@@ -316,3 +316,8 @@ function MapPinEnhancedWayfinderFloatingContentMixin:SetDestinationText(title, d
     self.title:SetDestinationText(title, description)
     if self.currentPresentation == "far" and self.textShowsTitle then self.readout:SetStatusText(title) end
 end
+
+--@debug@
+MapPinEnhancedWayfinderFloatingContentMixin.UpdateFarText = MapPinEnhanced.profiler:WrapScope(
+    "Wayfinders.Floating.UpdateFarText", MapPinEnhancedWayfinderFloatingContentMixin.UpdateFarText)
+--@end-debug@

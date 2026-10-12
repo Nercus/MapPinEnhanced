@@ -11,6 +11,7 @@ local lastCapture
 ---@type table<string, boolean>
 local selected = {}
 local allModules = true
+local baseline = false
 ---@type MapPinEnhancedCopyTextDialogTemplate?
 local exportWindow
 
@@ -33,6 +34,7 @@ end
 
 ---@class MapPinEnhancedProfilerTemplate : MapPinEnhancedWindowTemplate
 ---@field modulesButton Button
+---@field modeButton Button
 ---@field startButton Button
 ---@field stopButton Button
 ---@field resetButton Button
@@ -86,7 +88,7 @@ end
 function MapPinEnhancedProfilerMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self:SetTitle(L["Profiler"])
-    self.coverage:SetText(L["Profiles module methods plus selected UI and geometry scopes. Navigation adds preparation passes and worker timing; Core adds all batch slices. Inclusive times overlap; other private work remains uncovered."])
+    self.coverage:SetText(L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."])
     self:Refresh()
 end
 
@@ -97,8 +99,10 @@ function MapPinEnhancedProfilerMixin:Refresh()
         if allModules or selected[name] then count = count + 1 end
     end
     self.modulesButton:SetText(string.format(L["Modules: %d"], count))
-    self.modulesButton:SetEnabled(activeCapture == nil)
-    self.startButton:SetEnabled(activeCapture == nil and count > 0)
+    self.modeButton:SetEnabled(activeCapture == nil)
+    self.modeButton:SetText(baseline and L["Mode: baseline"] or L["Mode: detailed"])
+    self.modulesButton:SetEnabled(activeCapture == nil and not baseline)
+    self.startButton:SetEnabled(activeCapture == nil and (baseline or count > 0))
     self.stopButton:SetEnabled(activeCapture ~= nil)
     self.resetButton:SetEnabled(activeCapture == nil and lastCapture ~= nil)
     self.exportButton:SetEnabled(activeCapture == nil and lastCapture ~= nil)
@@ -109,6 +113,12 @@ function MapPinEnhancedProfilerMixin:Refresh()
     else
         self.status:SetText(L["Select modules, then start a new capture."])
     end
+end
+
+function MapPinEnhancedProfilerMixin:ToggleMode()
+    if activeCapture then return end
+    baseline = not baseline
+    self:Refresh()
 end
 
 function MapPinEnhancedProfilerMixin:SelectModules()
@@ -150,9 +160,9 @@ function MapPinEnhancedProfilerMixin:StartCapture()
     for _, name in ipairs(names) do
         if allModules or selected[name] then chosen[#chosen + 1] = name end
     end
-    if #chosen == 0 then return end
+    if #chosen == 0 and not baseline then return end
     if exportWindow then exportWindow:Hide() end
-    activeCapture = Profiler:Start(modules, chosen)
+    activeCapture = Profiler:Start(modules, chosen, baseline)
     lastCapture = activeCapture
     self:Refresh()
 end
@@ -184,10 +194,11 @@ function MapPinEnhancedProfilerMixin:ExportCapture()
     end)
     local version, build = GetBuildInfo()
     local lines = {
-        "Map Pin Enhanced profiler v3",
+        "Map Pin Enhanced profiler v4",
         "Addon: " .. (C_AddOns.GetAddOnMetadata(MapPinEnhanced.name, "Version") or "unknown"),
         "Client: " .. version .. " (" .. build .. ")",
-        "Modules: " .. table.concat(capture.modules, ", "),
+        "Mode: " .. (capture.baseline and "baseline (native metrics only)" or "detailed"),
+        "Modules: " .. (capture.baseline and "native whole-addon only" or table.concat(capture.modules, ", ")),
         string.format("Capture seconds: %.6f", capture.duration),
         "Scope: table methods present at Start; Core is the addon table. Zero-call rows included.",
         "Named scopes include Floating, Arrow, Tracker, coordinates and route geometry, including existing frames. Other private/UI work and earlier module callbacks remain uncovered.",
@@ -195,13 +206,18 @@ function MapPinEnhancedProfilerMixin:ExportCapture()
         "Core.BatchExecutionSlice (Core selected) times resumes of all batch workers, including existing workers, excluding suspended time.",
         "Navigation.PreparationSlice and CalculationSlice time tagged worker resumes, including workers predating capture; they overlap Core.BatchExecutionSlice. Completion callbacks are outside resumes.",
         "Times are inclusive elapsed milliseconds with profiler overhead; do not sum rows as CPU usage.",
+        "Preparation phase rows count resume segments, excluding suspension; they overlap worker slices and nested requirement scopes.",
         "Average uses completed timed calls. Incomplete calls errored or were in flight when capture stopped.",
-        "Function\tCalls\tTimed calls\tCoroutine calls\tIncomplete calls\tTotal ms\tMax ms\tAverage ms",
     }
+    Profiler:AppendMetricsExport(capture, lines)
+    lines[#lines + 1] = ""
+    lines[#lines + 1] = "Function\tCalls\tTimed calls\tCoroutine calls\tIncomplete calls\tTotal ms\tMax ms\tAverage ms\tCalls/s\tms/s"
     for _, row in ipairs(capture.rows) do
-        lines[#lines + 1] = string.format("%s\t%d\t%d\t%d\t%d\t%.6f\t%.6f\t%.6f", row.name,
+        lines[#lines + 1] = string.format("%s\t%d\t%d\t%d\t%d\t%.6f\t%.6f\t%.6f\t%.3f\t%.6f", row.name,
             row.calls, row.completed, row.coroutineCalls, row.calls - row.completed - row.coroutineCalls,
-            row.total, row.maximum, row.completed > 0 and row.total / row.completed or 0)
+            row.total, row.maximum, row.completed > 0 and row.total / row.completed or 0,
+            capture.duration > 0 and row.calls / capture.duration or 0,
+            capture.duration > 0 and row.total / capture.duration or 0)
     end
     Profiler:AppendPreparationExport(capture, lines)
     if not exportWindow then

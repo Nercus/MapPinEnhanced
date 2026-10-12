@@ -607,3 +607,8 @@ L["General.FlightTimer.Scale_DESCRIPTION"] = "Choose the size of the flight time
 L["Flight timer"] = "Flight timer"
 L["Flight elapsed: %s"] = "Elapsed: %s"
 L["Flight remaining: %s"] = "%s remaining"
+
+L["Mode: baseline"] = "Mode: baseline"
+L["Mode: detailed"] = "Mode: detailed"
+
+L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] = "Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."

@@ -727,6 +727,10 @@ end
 
 ---@alias NavigationRequirementObservations table<string, table<string|number|boolean, NavigationRequirementState>>
 
+--@debug@
+EvaluateDirectCheck = MapPinEnhanced.profiler:WrapScope("Navigation.Requirements.DirectCheck", EvaluateDirectCheck)
+--@end-debug@
+
 ---@param kind string
 ---@param value any
 ---@param observations NavigationRequirementObservations?
@@ -747,6 +751,10 @@ local function ObserveRequirement(kind, value, observations)
     end
     return state
 end
+
+--@debug@
+ObserveRequirement = MapPinEnhanced.profiler:WrapScope("Navigation.Requirements.Observe", ObserveRequirement)
+--@end-debug@
 
 ---@param requirement NavigationRequirement?
 ---@param observations NavigationRequirementObservations?
@@ -957,6 +965,7 @@ function Navigation:EnsurePreparedData()
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
             --@debug@
             MapPinEnhanced.profiler:SetWorkerScope("Navigation.PreparationSlice", profilePass)
+            MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.Requirements")
             --@end-debug@
             local checkpoint = self:CreateNavigationCheckpoint(nil, true)
             -- The memo belongs only to this pass; published snapshots retain no observations.
@@ -1026,6 +1035,9 @@ function Navigation:EnsurePreparedData()
             else
                 for reference in pairs(selectedPaths) do EvaluatePath(reference) end
             end
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.Movement")
+            --@end-debug@
             local movement = self:GetMovementCapabilities()
             observedMovementCapabilities = movement
             if previous and SameMovementCapabilities(movement, previous.movement) then
@@ -1033,12 +1045,18 @@ function Navigation:EnsurePreparedData()
             end
             -- Disabled taxis need no pricing snapshot. Existing booked Routes own
             -- their evidence; enabling the preference invalidates this snapshot.
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.TaxiCosts")
+            --@end-debug@
             local costs, failures = {}, {}
             if not IsTransportationDisabled("flighttaxi") then
                 costs, failures = self:GetPreparedTaxiCosts(graph, checkpoint)
             elseif previous and not next(previous.taxiCosts) and not next(previous.taxiFailures) then
                 costs, failures = previous.taxiCosts, previous.taxiFailures
             end
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.Publication")
+            --@end-debug@
             local observation = self:GetTaxiObservation()
             checkpoint()
             if graph ~= navigationGraph then return end

@@ -271,17 +271,36 @@ function MapPinEnhancedWayfinderFloatingMixin:AnimateNeedleRotation(elapsed)
     self.needle:SetRotation(-newRotation)
 end
 
----@param elapsed number
----@param preparingShow boolean?
-function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
-    if not preparingShow and not self.content:IsShown() then return end
-    local now = GetTime()
+---@param self MapPinEnhancedWayfinderFloatingTemplate
+---@param now number
+local function RefreshNavigationReadiness(self, now)
     if not self.lastNavigationReadinessCheck or now - self.lastNavigationReadinessCheck >= 0.1 then
         self.lastNavigationReadinessCheck = now
         local ready = C_Navigation.GetFrame() ~= nil and C_Navigation.HasValidScreenPosition()
         if ready ~= self.nativePositionReady or self.fallbackReadyAt then self.lastNavigationTargetCheck = nil end
         self.nativePositionReady = ready
     end
+end
+
+---@param self MapPinEnhancedWayfinderFloatingTemplate
+---@param elapsed number
+local function UpdateFloatingText(self, elapsed)
+    if not self.visibilityFadeIn:IsPlaying() and not self.visibilityHiding then
+        self.content:UpdateFarText(elapsed)
+    end
+end
+
+--@debug@
+RefreshNavigationReadiness = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.Readiness", RefreshNavigationReadiness)
+UpdateFloatingText = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.TextUpdate", UpdateFloatingText)
+--@end-debug@
+
+---@param elapsed number
+---@param preparingShow boolean?
+function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
+    if not preparingShow and not self.content:IsShown() then return end
+    local now = GetTime()
+    RefreshNavigationReadiness(self, now)
     -- Events/owned target changes invalidate immediately; retain a full-match recovery poll.
     if not self.lastNavigationTargetCheck or now - self.lastNavigationTargetCheck >= 1 or
         self.fallbackReadyAt and now >= self.fallbackReadyAt then
@@ -315,9 +334,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:UpdateNeedlePosition(elapsed)
         self:AnimateNeedleRotation(elapsed)
     end
-    if not self.visibilityFadeIn:IsPlaying() and not self.visibilityHiding then
-        self.content:UpdateFarText(elapsed)
-    end
+    UpdateFloatingText(self, elapsed)
 end
 
 ---@param shown boolean
@@ -441,6 +458,9 @@ function MapPinEnhancedWayfinderFloatingMixin:SetDestinationText(title, descript
 end
 
 --@debug@
-MapPinEnhancedWayfinderFloatingMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.OnUpdate",
-    MapPinEnhancedWayfinderFloatingMixin.OnUpdate)
+local floatingMethods = MapPinEnhancedWayfinderFloatingMixin --[[@as table<string, function>]]
+for _, method in ipairs({ "OnUpdate", "RefreshNavigationTarget", "UpdateClampedState", "UpdatePosition",
+    "UpdateNeedlePosition", "AnimateNeedleRotation", "RefreshPresentation", "OnDistanceUpdate", "SetupNavigationFrame" }) do
+    floatingMethods[method] = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating." .. method, floatingMethods[method])
+end
 --@end-debug@

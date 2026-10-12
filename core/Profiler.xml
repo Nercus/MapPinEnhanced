@@ -34,6 +34,11 @@
                 <Anchors><Anchor point="TOPLEFT" x="25" y="-55" /></Anchors>
                 <Scripts><OnClick>self:GetParent():SelectModules()</OnClick></Scripts>
             </Button>
+            <Button parentKey="modeButton" inherits="MapPinEnhancedButtonTemplate" text="Mode: detailed">
+                <Size x="230" y="28" />
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.modulesButton" relativePoint="RIGHT" x="15" /></Anchors>
+                <Scripts><OnClick>self:GetParent():ToggleMode()</OnClick></Scripts>
+            </Button>
             <Button parentKey="startButton" inherits="MapPinEnhancedButtonTemplate" text="Start">
                 <Size x="130" y="28" />
                 <Anchors><Anchor point="BOTTOMLEFT" x="25" y="20" /></Anchors>

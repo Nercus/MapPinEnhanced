@@ -9,6 +9,7 @@
     <Include file="print.lua" />
     <!--@debug@-->
     <Include file="profilerCapture.lua" />
+    <Include file="profilerMetrics.lua" />
     <!--@end-debug@-->
     <Include file="async.lua" />
     <Include file="events.lua" />

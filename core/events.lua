@@ -39,6 +39,19 @@ local function EventFrameHandler(self, event, ...)
     end
 end
 
+--@debug@
+local dispatchEvent = EventFrameHandler
+local eventScopes = {} ---@type table<string, function>
+EventFrameHandler = function(self, event, ...)
+    local dispatch = eventScopes[event]
+    if not dispatch then
+        dispatch = MapPinEnhanced.profiler:WrapScope("Core.Events." .. event, dispatchEvent)
+        eventScopes[event] = dispatch
+    end
+    return dispatch(self, event, ...)
+end
+--@end-debug@
+
 local addonEventFrame = CreateFrame("Frame")
 addonEventFrame:SetScript("OnEvent", EventFrameHandler)
 
@@ -101,6 +114,10 @@ function MapPinEnhanced:RegisterEventBucket(events, callback, throttleSeconds, a
         pendingEvents = {}
         callback(publishedEvents)
     end
+
+    --@debug@
+    Publish = MapPinEnhanced.profiler:WrapScope("Core.EventBucket." .. table.concat(ownedEvents, ","), Publish)
+    --@end-debug@
 
     local function OnEvent(event, ...)
         if not isSubscribed or acceptEvent and not acceptEvent(event, ...) then return end

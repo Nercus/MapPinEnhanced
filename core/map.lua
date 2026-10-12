@@ -297,6 +297,13 @@ local function OnUpdate(_, elapsed)
     SampleTargetDistance(target.allowNavigationDistance)
 end
 
+--@debug@
+OnUpdate = MapPinEnhanced.profiler:WrapScope("Core.Distance.OnUpdate", OnUpdate)
+SampleTargetDistance = MapPinEnhanced.profiler:WrapScope("Core.Distance.Sample", SampleTargetDistance)
+NotifyDistanceCallbacks = MapPinEnhanced.profiler:WrapScope("Core.Distance.NotifyDisplay", NotifyDistanceCallbacks)
+NotifyDistanceSampleCallbacks = MapPinEnhanced.profiler:WrapScope("Core.Distance.NotifySample", NotifyDistanceSampleCallbacks)
+--@end-debug@
+
 --- Register a callback to be called when the distance to the target is updated
 ---@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState) The callback function that will be called with the current navigation sample
 function MapPinEnhanced:RegisterContinuousDistanceCallback(callback)
