@@ -29,6 +29,7 @@ Options.DEFAULTS = {
     ["General.TooltipHelper"] = true,
     ["General.FlightTimer.Enable"] = true,
     ["General.FlightTimer.Lock"] = false,
+    ["General.FlightTimer.Scale"] = 1,
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
     ["Pins.Appearance.AlwaysPingTracked"] = false,
@@ -82,6 +83,7 @@ Options.DEFAULTS = {
 -- config for radiogroups, dropdowns
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
+    ["General.FlightTimer.Scale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.MinimapScale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.WorldMapScale"] = Options.SCALE_PRESETS,
     ["Miscellaneous.Tracker.Scale"] = Options.SCALE_PRESETS,

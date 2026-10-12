@@ -21,16 +21,6 @@
                     <KeyValue key="key" value="General.Minimap.CustomButton" />
                 </KeyValues>
             </Frame>
-            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Enable" />
-                </KeyValues>
-            </Frame>
-            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Lock" />
-                </KeyValues>
-            </Frame>
         </Frames>
     </Frame>
 </Ui>

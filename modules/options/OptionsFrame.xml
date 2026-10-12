@@ -106,6 +106,12 @@
                                     <Anchor point="TOPRIGHT" relativeKey="$parent.Tracker" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
+                            <Frame inherits="MapPinEnhancedOptionCategoryFlightTimerTemplate" parentKey="FlightTimer">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Coordinates" relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Coordinates" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
+                                </Anchors>
+                            </Frame>
                         </Frames>
                     </Frame>
                 </ScrollChild>

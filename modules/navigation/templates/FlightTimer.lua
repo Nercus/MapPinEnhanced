@@ -81,6 +81,7 @@ end
 
 function MapPinEnhancedFlightTimerMixin:OnLoad()
     self.progress:SetMinMaxValues(0, 1)
+    self.progress.progress:SetTextColor(1, 1, 1)
     MapPinEnhanced:RegisterDraggableFrame(self, "flightTimerFrame", self.dragHandle, function()
         return Options:GetOptionValue("General.FlightTimer.Lock") == true
     end)
@@ -100,6 +101,10 @@ local function RefreshDisplay()
         frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFlightTimerTemplate") --[[@as MapPinEnhancedFlightTimer]]
     end
     if not frame then return end
+    local scale = Options:GetOptionValue("General.FlightTimer.Scale") --[[@as number]]
+    if frame:GetScale() ~= scale then
+        MapPinEnhanced:SetFrameScale(frame, scale)
+    end
     frame.lockButton:SetIconTexture(Options:GetOptionValue("General.FlightTimer.Lock") == true and "lock" or "unlock")
     frame:SetShown(shown)
 end
@@ -177,6 +182,6 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     -- Do not expose saved data until a live taxi check after loading.
     WatchFlight()
 end)
-for _, key in ipairs({ "General.FlightTimer.Enable", "General.FlightTimer.Lock" }) do
+for _, key in ipairs({ "General.FlightTimer.Enable", "General.FlightTimer.Lock", "General.FlightTimer.Scale" }) do
     Options:SubscribeToOptionChanges(key, RefreshDisplay)
 end

@@ -3,6 +3,7 @@
     <Include file="General.xml" />
     <Include file="Pins.xml" />
     <Include file="Coordinates.xml" />
+    <Include file="FlightTimer.xml" />
     <Include file="Tracker.xml" />
     <Include file="Wayfinder.xml" />
     <Include file="Navigation.xml" />

@@ -2,15 +2,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="FlightTimer.lua" />
     <Frame name="MapPinEnhancedFlightTimerTemplate" mixin="MapPinEnhancedFlightTimerMixin" virtual="true" hidden="true" movable="true" enableMouse="true" clampedToScreen="true">
-        <Size x="340" y="44" />
+        <Size x="425" y="66" />
         <Anchors>
             <Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" y="-180" />
         </Anchors>
         <Frames>
             <StatusBar parentKey="progress" inherits="MapPinEnhancedStatusbarTemplate">
-                <Size x="284" y="18" />
+                <Size x="355" y="27" />
                 <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="28" y="6" />
+                    <Anchor point="BOTTOMLEFT" x="35" y="9" />
                 </Anchors>
             </StatusBar>
             <Button parentKey="closeButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true" propagateMouseInput="Motion">
