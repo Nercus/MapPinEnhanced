@@ -7,7 +7,7 @@
 MapPinEnhancedWayfinderProgressMixin = {}
 
 local PIN_SIZE = 16
-local SPACING = 10
+local SPACING = 18
 local HORIZONTAL_PADDING = 12
 local VERTICAL_PADDING = 6
 
@@ -18,6 +18,7 @@ local function ResetPin(pool, pin)
     pin:ClearAllPoints()
     pin:OnHide()
     pin.entry = nil
+    pin.separator:Hide()
     pin:SetActive(false)
 end
 
@@ -66,6 +67,7 @@ function MapPinEnhancedWayfinderProgressMixin:Refresh()
             -VERTICAL_PADDING - row * (PIN_SIZE + SPACING))
         local entry = self.entries and self.entries[number]
         pin.entry = entry
+        pin.separator:SetShown(column < rowCount - 1)
         pin:SetActive(number == index)
         pin:Show()
     end

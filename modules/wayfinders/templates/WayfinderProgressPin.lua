@@ -4,6 +4,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 
 ---@class MapPinEnhancedWayfinderProgressPin : Button
 ---@field pin Texture
+---@field separator Texture
 ---@field destinationPin MapPinEnhancedBasePinTemplate
 ---@field active boolean?
 ---@field entry WayfinderProgressEntry?

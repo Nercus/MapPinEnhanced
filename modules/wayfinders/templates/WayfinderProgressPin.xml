@@ -5,6 +5,12 @@
         <Size x="16" y="16" />
         <Layers>
             <Layer level="ARTWORK">
+                <Texture parentKey="separator" file="Interface/AddOns/MapPinEnhanced/assets/icons/IconCaretRight.png" alpha="0.5" hidden="true">
+                    <Size x="8" y="8" />
+                    <Anchors>
+                        <Anchor point="CENTER" relativePoint="RIGHT" x="9" />
+                    </Anchors>
+                </Texture>
                 <Texture parentKey="pin">
                     <Size x="16" y="16" />
                     <Anchors>
@@ -14,7 +20,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="destinationPin" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" hidden="true">
+            <Frame parentKey="destinationPin" inherits="MapPinEnhancedBasePinTemplate" enableMouse="true" hidden="true">
                 <Size x="16" y="16" />
                 <KeyValues>
                     <KeyValue key="hideHighlight" value="true" type="boolean" />
@@ -22,6 +28,10 @@
                 <Anchors>
                     <Anchor point="CENTER" />
                 </Anchors>
+                <Scripts>
+                    <OnEnter>self:GetParent():OnEnter()</OnEnter>
+                    <OnLeave>self:GetParent():OnLeave()</OnLeave>
+                </Scripts>
             </Frame>
         </Frames>
         <Scripts>
