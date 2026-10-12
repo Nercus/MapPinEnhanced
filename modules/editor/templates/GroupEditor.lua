@@ -21,6 +21,7 @@ local L = MapPinEnhanced.L
 ---@field draggedPinNode MapPinEnhancedEditorPinNodeData?
 ---@field dragSourceFrame MapPinEnhancedGroupEditorContentPinEntryTemplate?
 ---@field refreshPending boolean?
+---@field focusCheckElapsed number?
 MapPinEnhancedGroupEditorMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 function MapPinEnhancedGroupEditorMixin:GetAvailableNewGroupName()
@@ -57,37 +58,51 @@ function MapPinEnhancedGroupEditorMixin:SelectGroup(group, focusName)
     if group then self.groupEditorSidebar:ScrollToGroup(group) end
 end
 
-function MapPinEnhancedGroupEditorMixin:RequestRefresh()
-    self.refreshPending = true
+function MapPinEnhancedGroupEditorMixin:RefreshUpdateHandler()
+    local needsUpdate = self:IsVisible() and not self.visibilityHiding
+        and (self.refreshPending or self.draggedPinNode)
+    self:SetScript("OnUpdate", needsUpdate and self.OnUpdate or nil)
 end
 
-function MapPinEnhancedGroupEditorMixin:OnUpdate()
-    if not self:IsVisible() or self.visibilityHiding then return end
-    ---@type ScriptRegion?
-    local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
-    local groupEditorContentHasFocus = false
-    while focused do
-        if focused == self.groupEditorContent then
-            groupEditorContentHasFocus = true
-            break
-        end
-        focused = focused.GetParent and focused:GetParent()
-    end
+function MapPinEnhancedGroupEditorMixin:RequestRefresh()
+    if not self.refreshPending then self.focusCheckElapsed = nil end
+    self.refreshPending = true
+    self:RefreshUpdateHandler()
+end
 
-    if self.refreshPending and not groupEditorContentHasFocus and not self.draggedPinNode then
-        self.refreshPending = nil
-        if self.selectedGroup and not Groups:GetGroupByID(self.selectedGroup:GetGroupID()) then
-            Editor:CloseDescriptionEditor()
-            self.selectedGroup = nil
+---@param elapsed number
+function MapPinEnhancedGroupEditorMixin:OnUpdate(elapsed)
+    if not self:IsVisible() or self.visibilityHiding then
+        self:SetScript("OnUpdate", nil)
+        return
+    end
+    if self.refreshPending and not self.draggedPinNode then
+        self.focusCheckElapsed = (self.focusCheckElapsed or 0.1) + elapsed
+        if self.focusCheckElapsed >= 0.1 then
+            self.focusCheckElapsed = 0
+            ---@type ScriptRegion?
+            local focused = GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus()
+            while focused and focused ~= self.groupEditorContent do
+                focused = focused.GetParent and focused:GetParent()
+            end
+            if not focused then
+                -- Consume before rebuilding so callbacks can request another refresh.
+                self.refreshPending = nil
+                if self.selectedGroup and not Groups:GetGroupByID(self.selectedGroup:GetGroupID()) then
+                    Editor:CloseDescriptionEditor()
+                    self.selectedGroup = nil
+                end
+                self.groupEditorSidebar:Refresh()
+                self.groupEditorContent:SetGroup(self.selectedGroup)
+            end
         end
-        self.groupEditorSidebar:Refresh()
-        self.groupEditorContent:SetGroup(self.selectedGroup)
     end
     if self.draggedPinNode then
         self.pinDragGhost:UpdatePosition()
         self.groupEditorContent:UpdateDrag()
         self.groupEditorSidebar:UpdateDropTarget()
     end
+    self:RefreshUpdateHandler()
 end
 
 function MapPinEnhancedGroupEditorMixin:OnLoad()
@@ -130,6 +145,7 @@ function MapPinEnhancedGroupEditorMixin:StartPinDrag(pinNode, sourceFrame)
     sourceFrame:SetAlpha(0.45)
     self.pinDragGhost:Init(Editor:GetPinData(pinNode))
     SetCursorByMode(Enum.Cursormode.HoldingHandCursor)
+    self:RefreshUpdateHandler()
 end
 
 function MapPinEnhancedGroupEditorMixin:StopPinDrag()
@@ -162,6 +178,7 @@ function MapPinEnhancedGroupEditorMixin:CancelPinDrag()
     self.dragSourceFrame = nil
     self.groupEditorSidebar:ClearDropTarget()
     self.groupEditorContent:ClearDropTarget()
+    self:RefreshUpdateHandler()
 end
 
 function MapPinEnhancedGroupEditorMixin:ShowFrame()
@@ -172,9 +189,17 @@ function MapPinEnhancedGroupEditorMixin:ShowFrame()
     self.groupEditorSidebar:Refresh()
     self.groupEditorContent:SetGroup(nil)
     self:Show()
+    self:RefreshUpdateHandler()
+end
+
+function MapPinEnhancedGroupEditorMixin:OnShow()
+    MapPinEnhancedWindowMixin.OnShow(self)
+    self:RefreshUpdateHandler()
 end
 
 function MapPinEnhancedGroupEditorMixin:OnHide()
+    self:SetScript("OnUpdate", nil)
+    self.focusCheckElapsed = nil
     Editor:CloseDescriptionEditor()
     MapPinEnhancedWindowMixin.OnHide(self)
     self:CancelPinDrag()
