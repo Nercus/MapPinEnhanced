@@ -10,6 +10,7 @@ local L = MapPinEnhanced.L
 ---@field child MapPinEnhancedOptionControl
 ---@field searchHighlight Texture
 ---@field searchAnimation AnimationGroup
+---@field searchHighlightTimer FunctionContainer?
 ---@field key string
 ---@field scrollPadding number
 ---@field requireReload? OptionReloadRequirement
@@ -86,7 +87,28 @@ function MapPinEnhancedFormElementMixin:ScrollToOption()
     local target = math.max(0, math.min(childTop - selfTop - self.scrollPadding,
         Options.frame.scrollFrame:GetVerticalScrollRange() or 0))
     Options.frame.scrollFrame:SetVerticalScroll(target)
-    self.searchHighlight:Show()
+    self:OnSearchHighlightHide()
+    if self.searchHighlight:IsShown() then
+        self:OnSearchHighlightShow()
+    else
+        self.searchHighlight:Show()
+    end
+    self.searchHighlightTimer = C_Timer.NewTimer(5, function()
+        self.searchHighlightTimer = nil
+        self.searchHighlight:Hide()
+    end)
+end
+
+function MapPinEnhancedFormElementMixin:OnSearchHighlightShow()
+    self.searchAnimation:Play()
+end
+
+function MapPinEnhancedFormElementMixin:OnSearchHighlightHide()
+    if self.searchHighlightTimer then
+        self.searchHighlightTimer:Cancel()
+        self.searchHighlightTimer = nil
+    end
+    self.searchAnimation:Stop()
 end
 
 function MapPinEnhancedFormElementMixin:OnLoad()

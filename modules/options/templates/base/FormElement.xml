@@ -22,11 +22,10 @@
                     <TextureSliceMode mode="Stretched" />
                     <Scripts>
                         <OnShow>
-                            self:GetParent().searchAnimation:Play()
-                            C_Timer.After(5, function() if self:IsShown() then self:Hide() end end)
+                            self:GetParent():OnSearchHighlightShow()
                         </OnShow>
                         <OnHide>
-                            self:GetParent().searchAnimation:Stop()
+                            self:GetParent():OnSearchHighlightHide()
                         </OnHide>
                     </Scripts>
                 </Texture>
