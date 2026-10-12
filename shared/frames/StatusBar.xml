@@ -2,39 +2,83 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Include file="StatusBar.lua" />
 
-    <StatusBar name="MapPinEnhancedStatusbarTemplate" mixin="MapPinEnhancedStatusbarMixin" virtual="true">
-        <BarTexture atlas="UI-HUD-CoolDownManager-Bar" setAllPoints="true">
-            <Color r="0.55" g="0" b="0" />
-        </BarTexture>
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture atlas="UI-HUD-CoolDownManager-Bar-BG">
-                    <Size x="1" y="1" />
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-2" y="3" />
-                        <Anchor point="BOTTOMRIGHT" x="6" y="-6" />
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="OVERLAY">
-                <Texture parentKey="pip" atlas="UI-HUD-CoolDownManager-Bar-Pip" />
-                <FontString parentKey="name" inherits="GameFontNormalTiny" justifyH="LEFT">
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="5" y="4" relativePoint="TOPLEFT" />
-                    </Anchors>
-                </FontString>
-                <FontString parentKey="progress" inherits="GameFontNormalSmallOutline" justifyH="LEFT">
-                    <Anchors>
-                        <Anchor point="CENTER" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
+    <StatusBar name="MapPinEnhancedStatusbarTemplate" mixin="MapPinEnhancedStatusbarMixin" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" virtual="true">
+        <Frames>
+            <Frame parentKey="fillClip" clipChildren="true">
+                <Size x="1" y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="3" y="-3" />
+                </Anchors>
+                <Frames>
+                    <Frame parentKey="canvas">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" />
+                        </Anchors>
+                        <Layers>
+                            <Layer level="ARTWORK">
+                                <Texture parentKey="fill" file="Interface/AddOns/MapPinEnhanced/assets/shared/WhiteSquare.png">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" />
+                                        <Anchor point="BOTTOMRIGHT" />
+                                    </Anchors>
+                                    <Gradient orientation="HORIZONTAL">
+                                        <MinColor r="0.45" g="0.22" b="0.02" />
+                                        <MaxColor r="1" g="0.82" b="0" />
+                                    </Gradient>
+                                </Texture>
+                            </Layer>
+                            <Layer level="ARTWORK" textureSubLevel="1">
+                                <Texture parentKey="fillArt" inherits="MapPinEnhancedMapArtTemplate">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" x="2" />
+                                        <Anchor point="BOTTOMRIGHT" x="-2" />
+                                    </Anchors>
+                                    <Gradient orientation="VERTICAL">
+                                        <MinColor r="1" g="1" b="1" a="0.5" />
+                                        <MaxColor r="1" g="1" b="1" a="0.5" />
+                                    </Gradient>
+                                </Texture>
+                                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT" relativeKey="$parent.fill" />
+                                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.fill" />
+                                    </Anchors>
+                                    <TextureSliceMargins left="4" top="4" right="4" bottom="4" />
+                                    <TextureSliceMode mode="Stretched" />
+                                    <MaskedTextures>
+                                        <MaskedTexture childKey="fill" />
+                                        <MaskedTexture childKey="fillArt" />
+                                    </MaskedTextures>
+                                </MaskTexture>
+                            </Layer>
+                        </Layers>
+                    </Frame>
+                </Frames>
+            </Frame>
+            <Frame parentKey="labels" setAllPoints="true">
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="name" inherits="GameFontNormalTiny" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" x="5" y="4" relativePoint="TOPLEFT" />
+                            </Anchors>
+                        </FontString>
+                        <FontString parentKey="progress" inherits="GameFontNormalSmallOutline" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnValueChanged method="OnValueChanged" />
             <OnLoad method="OnLoad" />
+            <OnHide method="OnHide" />
+            <OnSizeChanged method="UpdateLayout" />
+            <OnShow method="UpdateLayout" />
+            <OnMinMaxChanged method="UpdateFill" />
         </Scripts>
     </StatusBar>
-
-
 </Ui>
