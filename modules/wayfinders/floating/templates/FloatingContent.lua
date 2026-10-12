@@ -186,6 +186,12 @@ function MapPinEnhancedWayfinderFloatingContentMixin:FinishTextTransition()
     self.visual.text.fadeIn:Play()
 end
 
+---@return boolean
+function MapPinEnhancedWayfinderFloatingContentMixin:NeedsTextUpdate()
+    return self.currentPresentation == "far" and not self.pendingPresentation and
+        (self.textElapsed ~= nil or (self.textHovered == true) ~= self.textShowsTitle)
+end
+
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingContentMixin:UpdateFarText(elapsed)
     if self.currentPresentation ~= "far" or self.pendingPresentation or not self:IsVisible() or

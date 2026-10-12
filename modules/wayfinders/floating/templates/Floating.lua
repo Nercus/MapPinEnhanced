@@ -5,6 +5,7 @@ local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 local MIN_CLOSE_DISTANCE = 50
 local MAX_CLOSE_DISTANCE = 200
 local FALLBACK_DELAY = 1
+local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the needle's size.
 
 ---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin, MapPinEnhancedFadingFrameTemplate
 ---@field navigationOpacity Frame | { content: MapPinEnhancedWayfinderFloatingContentTemplate }
@@ -70,6 +71,7 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
     self.presentationInitialized = nil
     self.customDirection = nil
     self.fallbackReadyAt = nil
+    self.lastNavigationReadinessCheck = nil
     self.content:PrepareForTarget()
     self.needleRotation = nil
     self.newNeedleRotation = nil
@@ -148,10 +150,6 @@ function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
     self.clampedChanged = nil
     self.presentationInitialized = nil
     self.content:Reset()
-end
-
-function MapPinEnhancedWayfinderFloatingMixin:EnsureNavigationFrameIsSetup()
-    self:SetupNavigationFrame()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:UpdateClampedState()
@@ -262,13 +260,17 @@ function MapPinEnhancedWayfinderFloatingMixin:AnimateNeedleRotation(elapsed)
     if not self.isClamped then return end
     local currentRotation = self.needleRotation or 0
     local targetRotation = self.newNeedleRotation or 0
-    local angleDifference = mathAtan2(
-        mathSin(targetRotation - currentRotation),
-        mathCos(targetRotation - currentRotation)
-    )
-    local newRotation = DeltaLerp(currentRotation, currentRotation + angleDifference, .1, elapsed)
-    self.needleRotation = newRotation
-    self.needle:SetRotation(-newRotation)
+    if currentRotation ~= targetRotation then
+        local angleDifference = mathAtan2(
+            mathSin(targetRotation - currentRotation),
+            mathCos(targetRotation - currentRotation)
+        )
+        currentRotation = math.abs(angleDifference) < NEEDLE_SETTLE_ANGLE and targetRotation or
+            DeltaLerp(currentRotation, currentRotation + angleDifference, .1, elapsed)
+    end
+    self.needleRotation = currentRotation
+    -- The needle caches actual texture writes and restores them after presentation changes.
+    self.needle:SetRotation(-currentRotation)
 end
 
 ---@param self MapPinEnhancedWayfinderFloatingTemplate
@@ -276,7 +278,8 @@ end
 local function RefreshNavigationReadiness(self, now)
     if not self.lastNavigationReadinessCheck or now - self.lastNavigationReadinessCheck >= 0.1 then
         self.lastNavigationReadinessCheck = now
-        local ready = C_Navigation.GetFrame() ~= nil and C_Navigation.HasValidScreenPosition()
+        self:SetupNavigationFrame()
+        local ready = self.navFrame ~= nil and C_Navigation.HasValidScreenPosition()
         if ready ~= self.nativePositionReady or self.fallbackReadyAt then self.lastNavigationTargetCheck = nil end
         self.nativePositionReady = ready
     end
@@ -317,7 +320,6 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:AnimateNeedleRotation(elapsed)
         return
     end
-    self:EnsureNavigationFrameIsSetup()
     if not self.navFrame then return end
 
     self:UpdateClampedState()
@@ -334,13 +336,14 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:UpdateNeedlePosition(elapsed)
         self:AnimateNeedleRotation(elapsed)
     end
-    UpdateFloatingText(self, elapsed)
+    if self.content:NeedsTextUpdate() then UpdateFloatingText(self, elapsed) end
 end
 
 ---@param shown boolean
 function MapPinEnhancedWayfinderFloatingMixin:SetDirectionShown(shown)
     if shown and (not self.content:IsShown() or self.content.visibilityHiding) then
         self.lastNavigationTargetCheck = nil
+        self.lastNavigationReadinessCheck = nil
         self.presentationInitialized = nil
         self:OnUpdate(0, true)
     end
@@ -363,8 +366,10 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
     self.lastNavigationTargetCheck = nil
+    self.lastNavigationReadinessCheck = nil
     if not self.content:IsShown() then return end
     if event == "SUPER_TRACKING_CHANGED" or event == "SUPER_TRACKING_PATH_UPDATED" then
+        self:SetupNavigationFrame()
         self:RefreshNavigationTarget()
         return
     end
@@ -382,6 +387,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnShow()
+    self.lastNavigationReadinessCheck = nil
     self:RegisterEvent("NAVIGATION_FRAME_CREATED")
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
     self:RegisterEvent("SUPER_TRACKING_CHANGED")

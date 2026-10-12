@@ -7,6 +7,8 @@ local MapPinEnhanced = select(2, ...)
 ---@field targetInstance number?
 ---@field lastDirectionSample number?
 ---@field sampledWorldAngle number?
+---@field sampledRelativeAngle number?
+---@field sampledTargetAngle number?
 MapPinEnhancedWayfinderDirectionMixin = {}
 
 local HBD = MapPinEnhanced.HBD
@@ -46,10 +48,17 @@ function MapPinEnhancedWayfinderDirectionMixin:SampleTargetAngle(elapsed)
     if not worldAngle or not facing then return nil end
 
     local relativeAngle = worldAngle - facing
-    return mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
+    -- Facing remains live every frame; unchanged bearings need no angle conversion.
+    if self.sampledRelativeAngle ~= relativeAngle then
+        self.sampledRelativeAngle = relativeAngle
+        self.sampledTargetAngle = mathAtan2(-mathSin(relativeAngle), mathCos(relativeAngle))
+    end
+    return self.sampledTargetAngle
 end
 
 function MapPinEnhancedWayfinderDirectionMixin:ResetDirectionSampling()
     self.lastDirectionSample = nil
     self.sampledWorldAngle = nil
+    self.sampledRelativeAngle = nil
+    self.sampledTargetAngle = nil
 end

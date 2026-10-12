@@ -11,6 +11,8 @@
 ---@field fallbackCloseTexture MapPinEnhancedFloatingFallbackCloseTexture
 ---@field fallbackBackground Texture
 ---@field rotation number?
+---@field nativeRotation number?
+---@field fallbackRotation number?
 ---@field spriteCell number?
 ---@field fallback boolean?
 ---@field fallbackClose boolean?
@@ -88,8 +90,13 @@ end
 ---@param rotation number
 function MapPinEnhancedWayfinderFloatingNeedleMixin:SetRotation(rotation)
     self.rotation = rotation
-    if self.texture:IsShown() then self.texture:SetRotation(rotation) end
-    if not self.fallbackTexture:IsShown() then return end
+    -- Hidden textures retain their last applied state, independently of the requested rotation.
+    if self.texture:IsShown() and self.nativeRotation ~= rotation then
+        self.texture:SetRotation(rotation)
+        self.nativeRotation = rotation
+    end
+    if not self.fallbackTexture:IsShown() or self.fallbackRotation == rotation then return end
+    self.fallbackRotation = rotation
     -- Match Arrow's clockwise, 120-frame sheet while retaining continuous native clamping.
     local fullRotation = 2 * math.pi
     local frame = math.floor((-rotation % fullRotation) / fullRotation * 120 + 0.5) % 120
