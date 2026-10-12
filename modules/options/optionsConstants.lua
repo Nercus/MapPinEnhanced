@@ -51,7 +51,7 @@ Options.DEFAULTS = {
     ["General.Distance.ShowUnit"] = true,
     ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
     ["Pins.Miscellaneous.ScaleOnHover"] = false,
-    ["Miscellaneous.Coords.Enable"] = true,
+    ["Miscellaneous.Coords.Enable"] = false,
     ["Miscellaneous.Coords.Lock"] = false,
     ["Miscellaneous.Coords.Visibility"] = { noCoordinates = true },
     ["Miscellaneous.Tracker.Visibility"] = { noActivePins = true },
