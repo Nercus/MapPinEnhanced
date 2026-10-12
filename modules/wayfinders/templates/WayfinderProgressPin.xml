@@ -2,17 +2,28 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="WayfinderProgressPin.lua" />
     <Button name="MapPinEnhancedWayfinderProgressPinTemplate" virtual="true" enableMouse="true" mixin="MapPinEnhancedWayfinderProgressPinMixin">
-        <Size x="12" y="12" />
+        <Size x="16" y="16" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="pin" file="Interface/AddOns/MapPinEnhanced/assets/navigation/StepBlip.png">
-                    <Size x="12" y="12" />
+                <Texture parentKey="pin">
+                    <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
             </Layer>
         </Layers>
+        <Frames>
+            <Frame parentKey="destinationPin" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" hidden="true">
+                <Size x="16" y="16" />
+                <KeyValues>
+                    <KeyValue key="hideHighlight" value="true" type="boolean" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="CENTER" />
+                </Anchors>
+            </Frame>
+        </Frames>
         <Scripts>
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />

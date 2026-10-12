@@ -559,6 +559,11 @@ function Navigation:UpdateDestinationIcon(owner, destinationID, changeNumber, te
     destination.data.texture, destination.data.usesAtlas = texture, usesAtlas
     destination.routingData.texture, destination.routingData.usesAtlas = texture, usesAtlas
     for _, step in pairs(self.routeSteps) do
+        local entries = step.info and step.info.progressEntries
+        local finalEntry = entries and entries[#entries]
+        if finalEntry and finalEntry.destination then
+            finalEntry.destination.texture, finalEntry.destination.usesAtlas = texture, usesAtlas
+        end
         if step.target and step.info and step.info.isFinalDestination then
             step.target.texture, step.target.usesAtlas = texture, usesAtlas
         end
@@ -805,6 +810,8 @@ local function CopyRouteProgress(progression, graph)
         local color = Navigation:GetPathColor(pathType)
         local r, g, b = color:GetRGB()
         entries[index] = {
+            icon = reference and Navigation:GetPathIcon(pathType) or nil,
+            destination = not reference and CopyWayfinderData(destination.data) or nil,
             r = r,
             g = g,
             b = b,

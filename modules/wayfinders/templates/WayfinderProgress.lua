@@ -6,7 +6,7 @@
 ---@field entries WayfinderProgressEntry[]?
 MapPinEnhancedWayfinderProgressMixin = {}
 
-local PIN_SIZE = 12
+local PIN_SIZE = 16
 local SPACING = 10
 local HORIZONTAL_PADDING = 12
 local VERTICAL_PADDING = 6
@@ -17,9 +17,8 @@ local function ResetPin(pool, pin)
     pin:Hide()
     pin:ClearAllPoints()
     pin:OnHide()
-    pin:SetActive(false)
     pin.entry = nil
-    pin.pin:SetVertexColor(1, 1, 1)
+    pin:SetActive(false)
 end
 
 function MapPinEnhancedWayfinderProgressMixin:OnLoad()
@@ -67,7 +66,6 @@ function MapPinEnhancedWayfinderProgressMixin:Refresh()
             -VERTICAL_PADDING - row * (PIN_SIZE + SPACING))
         local entry = self.entries and self.entries[number]
         pin.entry = entry
-        if entry then pin.pin:SetVertexColor(entry.r, entry.g, entry.b) end
         pin:SetActive(number == index)
         pin:Show()
     end

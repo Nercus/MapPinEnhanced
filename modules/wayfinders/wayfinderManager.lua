@@ -68,6 +68,8 @@ local activeTarget
 ---@field id number
 
 ---@class WayfinderProgressEntry
+---@field icon string? intermediate step pin icon catalog key
+---@field destination WayfinderData? final destination appearance
 ---@field r number
 ---@field g number
 ---@field b number
@@ -153,11 +155,22 @@ end
 ---@param texture string|number
 ---@param usesAtlas boolean
 function Wayfinders:UpdateDestinationIcon(texture, usesAtlas)
-    if not activeTarget or not activeStep or not activeStep.isFinalDestination then return end
-    local data = activeTarget.data
-    data.texture, data.usesAtlas = texture, usesAtlas
-    if self.activeWayfinder then
-        self.activeWayfinder:SetTexture(texture, usesAtlas)
+    if not activeStep then return end
+    local entries = activeStep.progressEntries
+    local finalEntry = entries and entries[#entries]
+    if finalEntry and finalEntry.destination then
+        -- A new presentation copy also invalidates the progress strip's pooled rows.
+        entries = CopyTable(entries) ---@type WayfinderProgressEntry[]
+        activeStep.progressEntries = entries
+        local destination = entries[#entries].destination
+        if destination then destination.texture, destination.usesAtlas = texture, usesAtlas end
+    end
+    if activeTarget and activeStep.isFinalDestination then
+        local data = activeTarget.data
+        data.texture, data.usesAtlas = texture, usesAtlas
+        if self.activeWayfinder then
+            self.activeWayfinder:SetTexture(texture, usesAtlas)
+        end
     end
     ApplyActiveStep()
 end
