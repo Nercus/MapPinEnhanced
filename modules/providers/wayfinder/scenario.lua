@@ -7,6 +7,17 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 local L = MapPinEnhanced.L
 local SOURCE = "scenario"
 
+---@return string? title
+---@return string? description
+function Providers:ReadScenarioObjectiveText()
+    if not C_Scenario.IsInScenario() then return end
+    local scenario = C_ScenarioInfo.GetScenarioInfo()
+    local step = C_ScenarioInfo.GetScenarioStepInfo()
+    if not scenario or scenario.isComplete or not step or step.stepFailed then return end
+    local title = self:PlainDescription(step.title) or self:PlainDescription(scenario.name) or L["Scenario"]
+    return title, self:PlainDescription(step.description, title)
+end
+
 ---@param scenario ScenarioInformation?
 ---@param step ScenarioStepInfo?
 ---@return string

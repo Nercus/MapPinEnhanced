@@ -30,6 +30,7 @@ local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the n
 ---@field nativePositionReady boolean?
 ---@field clampedOffsetX number?
 ---@field clampedOffsetY number?
+---@field nativeScenarioID string?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
@@ -79,6 +80,7 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetLocation(mapID, x, y)
+    self.nativeScenarioID = nil
     self:SetTargetLocation(mapID, x, y)
     self:PrepareForTarget()
     self:RefreshNavigationTarget()
@@ -86,6 +88,10 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
     self.lastNavigationTargetCheck = GetTime()
+    if self.nativeScenarioID then
+        self:SetCustomDirectionEnabled(false)
+        return
+    end
     self:SetCustomDirectionEnabled(not Wayfinders:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
 end
 
@@ -125,7 +131,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
     local navFrame = C_Navigation.GetFrame()
     -- Cached native frames still need opacity restored after fallback or shutdown.
     if not self.customDirection then
-        local alpha = navFrame and 1 or 0
+        local alpha = navFrame and (not self.nativeScenarioID or self:IsNativeScenarioReady()) and 1 or 0
         if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
     end
     if self.navFrame == navFrame then return end
@@ -245,6 +251,10 @@ end
 
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
+    if self.nativeScenarioID then
+        self:UpdateNativeScenarioNeedle()
+        return
+    end
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
         local alpha = angle ~= nil and not self.fallbackReadyAt and 1 or 0
@@ -280,8 +290,10 @@ local function RefreshNavigationReadiness(self, now)
         self.lastNavigationReadinessCheck = now
         self:SetupNavigationFrame()
         local ready = self.navFrame ~= nil and C_Navigation.HasValidScreenPosition()
+        if self.nativeScenarioID then ready = ready and self:IsNativeScenarioReady() end
         if ready ~= self.nativePositionReady or self.fallbackReadyAt then self.lastNavigationTargetCheck = nil end
         self.nativePositionReady = ready
+        if self.nativeScenarioID then self:UpdateNativeScenarioDistance() end
     end
 end
 
@@ -320,7 +332,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:AnimateNeedleRotation(elapsed)
         return
     end
-    if not self.navFrame then return end
+    if not self.navFrame or self.nativeScenarioID and not self.nativePositionReady then return end
 
     self:UpdateClampedState()
     self:UpdatePosition()
@@ -405,6 +417,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
+    if self.nativeScenarioID then return end
     self:StartDistanceUpdates(self.readout,
         function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
             self:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
@@ -442,6 +455,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
+    self.nativeScenarioID = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.displayType = "far"
     self.isFallbackClose = nil
