@@ -20,6 +20,10 @@
             </Layer>
             <Layer level="BACKGROUND" textureSubLevel="-4">
                 <Texture parentKey="backgroundArt" inherits="MapPinEnhancedMapArtTemplate">
+                    <Gradient>
+                        <MaxColor r="0.5" g="0.5" b="0.5" a="0.35"/>
+                        <MinColor r="0.5" g="0.5" b="0.5" a="0" />
+                    </Gradient>
                     <Anchors>
                         <Anchor point="TOPLEFT" x="2" y="-21" />
                         <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
