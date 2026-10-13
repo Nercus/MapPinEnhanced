@@ -6,10 +6,10 @@
 
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture atlas="shop-bg-map-blue" setAllPoints="true" desaturated="true">
-                    <Gradient orientation="HORIZONTAL">
-                        <MinColor r="1" g="1" b="1" a="0" />
-                        <MaxColor r="1" g="1" b="1" a="1" />
+                <Texture inherits="MapPinEnhancedMapArtTemplate" setAllPoints="true">
+                    <Gradient>
+                        <MaxColor r="0.5" g="0.5" b="0.5" a="0.2"/>
+                        <MinColor r="0.5" g="0.5" b="0.5" a="0" />
                     </Gradient>
                 </Texture>
             </Layer>
