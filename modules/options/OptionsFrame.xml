@@ -39,7 +39,7 @@
                 </Layers>
                 <Frames>
                     <EditBox inherits="MapPinEnhancedAutocompleteTemplate" parentKey="search">
-                        <Size x="260" y="25" />
+                        <Size x="320" y="27" />
                         <Anchors>
                             <Anchor point="TOPRIGHT" x="-16" y="-13" />
                         </Anchors>
