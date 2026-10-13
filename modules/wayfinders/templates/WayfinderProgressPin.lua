@@ -10,8 +10,6 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field entry WayfinderProgressEntry?
 MapPinEnhancedWayfinderProgressPinMixin = {}
 
-local PIN_SIZE = 16
-
 ---@param active boolean
 function MapPinEnhancedWayfinderProgressPinMixin:SetActive(active)
     self.active = active
@@ -28,16 +26,8 @@ function MapPinEnhancedWayfinderProgressPinMixin:SetActive(active)
             self.destinationPin:SetIconTexture("Navigation-Tracked-Icon", true)
         end
     end
-    local size = active and PIN_SIZE * 1.5 or PIN_SIZE
-    self.destinationPin:SetSize(size, size)
     self.destinationPin:SetAlpha(active and 1 or 0.5)
-    if active then
-        self.pin:SetAlpha(1)
-        self.pin:SetSize(PIN_SIZE * 1.5, PIN_SIZE * 1.5)
-    else
-        self.pin:SetAlpha(0.5)
-        self.pin:SetSize(PIN_SIZE, PIN_SIZE)
-    end
+    self.pin:SetAlpha(active and 1 or 0.5)
 end
 
 function MapPinEnhancedWayfinderProgressPinMixin:OnEnter()
