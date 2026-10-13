@@ -19,7 +19,7 @@ function MapPinEnhanced:FormatPercent(value)
 end
 
 ---@param text string
----@param length integer Maximum byte length; incomplete UTF-8 characters are omitted.
+---@param length integer Maximum byte length; incomplete characters are omitted.
 ---@return string
 function MapPinEnhanced:GetUTF8Prefix(text, length)
     while length > 0 do

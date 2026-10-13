@@ -6,7 +6,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@class GroupInfo
 ---@field groupID UUID? stable group identifier
----@field name string the name of the group
+---@field name string the name of the group; registration accepts at most 32 characters after trimming
 ---@field source string the addon which owns the group
 ---@field icon string|number? the icon displayed for the group
 ---@field order number? higher group orders render earlier

@@ -113,6 +113,8 @@ function Groups:RegisterGroup(groupInfo)
     assert(groupInfo.name, "Groups:RegisterGroup: groupInfo.name is nil")
     assert(type(groupInfo.name) == "string", "Groups:RegisterGroup: groupInfo.name must be a string")
     assert(self:IsValidGroupName(groupInfo.name), "Groups:RegisterGroup: groupInfo.name is empty")
+    assert(strlenutf8(self:CleanGroupName(groupInfo.name)) <= 32,
+        "Groups:RegisterGroup: groupInfo.name must not exceed 32 characters after trimming whitespace")
     assert(groupInfo.source, "Groups:RegisterGroup: groupInfo.source is nil")
     assert(type(groupInfo.source) == "string", "Groups:RegisterGroup: groupInfo.source must be a string")
     assert(groupInfo.source ~= "", "Groups:RegisterGroup: groupInfo.source is empty")

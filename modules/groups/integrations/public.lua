@@ -66,6 +66,15 @@ MapPinEnhanced:RegisterGlobalAPI("MarkPinReached", function(pinID)
     return false
 end)
 
+MapPinEnhanced:RegisterGlobalAPI("MarkPinUnreached", function(pinID)
+    for group in Groups:EnumerateGroups() do
+        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:MarkPinUnreached(pinID) then
+            return true
+        end
+    end
+    return false
+end)
+
 MapPinEnhanced:RegisterGlobalAPI("GetGroupTrackingMode", function(groupID)
     local group = Groups:GetGroupByID(groupID)
     if not group then return nil end

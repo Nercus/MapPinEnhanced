@@ -122,3 +122,20 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreReachedPins()
     if self.hidden or self:GetReachedPinCount() == 0 then return false end
     return self:RestoreArchivedPins(nil, "reached")
 end
+
+---@param pinID UUID
+---@return boolean
+function MapPinEnhancedGroupPinRestorationMixin:MarkPinUnreached(pinID)
+    if not self:CancelBatch() then return false end
+    assert(pinID, "MapPinEnhancedGroupMixin:MarkPinUnreached: pinID is nil")
+    if self.hidden then return false end
+    if self:GetPinByID(pinID) then return true end
+
+    local archivedPin = self:GetArchivedPinByID(pinID)
+    if not archivedPin or archivedPin.state ~= "reached" then return false end
+    if not self.pinState:RestoreArchivedPin(pinID) then return false end
+
+    self:PersistPinChanges(true)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
+end

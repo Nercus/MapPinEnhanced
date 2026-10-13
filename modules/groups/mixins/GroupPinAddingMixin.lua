@@ -7,6 +7,22 @@ local ARCHIVE_STATE_HIDDEN = "hidden"
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinAddingMixin = {}
 
+-- Validate new input before cancelling work or acquiring active/archived state.
+-- Saved-state restoration deliberately bypasses this boundary to retain older text.
+---@param pinData pinData|SaveablePinData
+local function ValidatePinText(pinData)
+    assert(type(pinData) == "table", "Groups:AddPin: pinData must be a table")
+    assert(pinData.title == nil or type(pinData.title) == "string",
+        "Groups:AddPin: title must be a string")
+    assert(pinData.description == nil or type(pinData.description) == "string",
+        "Groups:AddPin: description must be a string")
+    assert(not pinData.title or strlenutf8(pinData.title) <= 64,
+        "Groups:AddPin: title must not exceed 64 characters")
+    local description = MapPinEnhanced:NormalizeText(pinData.description)
+    assert(not description or strlenutf8(description) <= 2048,
+        "Groups:AddPin: description must not exceed 2048 characters after trimming whitespace")
+end
+
 ---@param pinData pinData|SaveablePinData
 ---@param overridePinID UUID?
 ---@param order number?
@@ -37,8 +53,8 @@ end
 ---@param overridePinID UUID?
 ---@return MapPinEnhancedPinMixin?, UUID?
 function MapPinEnhancedGroupPinAddingMixin:AddPin(pinData, overridePinID)
+    ValidatePinText(pinData)
     if not self:CancelBatch() then return nil end
-    assert(pinData, "MapPinEnhancedGroupMixin:AddPin: pinData is nil")
 
     -- Only new additions materialize the preference. Restore/import use their retained data.
     if not overridePinID and not pinData.texture and not pinData.color then
@@ -67,8 +83,9 @@ end
 ---@param onAdded fun(count: number)? called once with the accepted count after the worker stops
 ---@return boolean accepted
 function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGroupOrder, pinOrders, onAdded)
-    if not self:CancelBatch() then return false end
     assert(type(pinsData) == "table", "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData must be a table")
+    for _, pinData in ipairs(pinsData) do ValidatePinText(pinData) end
+    if not self:CancelBatch() then return false end
     if #pinsData == 0 then return true end
 
     local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
