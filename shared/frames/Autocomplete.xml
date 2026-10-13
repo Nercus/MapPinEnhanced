@@ -27,17 +27,12 @@
         <Frames>
             <Frame mixin="MapPinEnhancedAutocompleteResultsMixin" parentKey="resultsFrame" frameStrata="DIALOG" enableMouse="true" hidden="true" clampedToScreen="true">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="-4" />
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="3"/>
                 </Anchors>
                 <Size x="320" y="96" />
                 <Layers>
                     <Layer level="ARTWORK">
-                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="-9" y="6" />
-                                <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="9" y="-8" />
-                            </Anchors>
-                        </Texture>
+                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" setAllPoints="true" />
                     </Layer>
                     <Layer level="OVERLAY">
                         <FontString parentKey="message" inherits="GameFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="BROWSE_NO_RESULTS">

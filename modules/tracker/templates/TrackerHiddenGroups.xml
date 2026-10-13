@@ -5,20 +5,16 @@
     <Frame name="MapPinEnhancedTrackerHiddenGroupsTemplate" mixin="MapPinEnhancedTrackerHiddenGroupsMixin" virtual="true" hidden="true" enableMouse="true" frameStrata="DIALOG" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="315" y="36" />
         <Anchors>
-            <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="5" x="-4"/>
-            <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="5" x="4"/>
+            <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" y="3"/>
+            <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" y="3" />
         </Anchors>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate">
+                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" setAllPoints="true">
                     <Gradient orientation="VERTICAL">
                         <MinColor r="0.5" g="0.5" b="0.5" a="0.7" />
                         <MaxColor r="0.5" g="0.5" b="0.5" a="0.9" />
                     </Gradient>
-                    <Anchors>
-                        <Anchor point="TOPLEFT" y="6" x="-8"/>
-                        <Anchor point="BOTTOMRIGHT" y="6" x="8"/>
-                    </Anchors>
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
