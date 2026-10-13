@@ -22,8 +22,8 @@
                                         <Anchor point="BOTTOMRIGHT" />
                                     </Anchors>
                                     <Gradient orientation="HORIZONTAL">
-                                        <MinColor r="0.45" g="0.22" b="0.02" />
-                                        <MaxColor r="1" g="0.82" b="0" />
+                                        <MinColor r="0" g="0.05" b="0.25" />
+                                        <MaxColor r="0.38" g="0.49" b="0.55" />
                                     </Gradient>
                                 </Texture>
                             </Layer>
