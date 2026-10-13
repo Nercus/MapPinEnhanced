@@ -321,6 +321,12 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
         onClick = function() group:RestoreReachedPins() end,
     })
 
+    self:AddTransferMenuActions(menu)
+
+    table.insert(menu, {
+        type = "divider",
+    })
+
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
@@ -328,12 +334,6 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildFullyReachedMenu()
             onClick = function() group:HideGroup() end,
         })
     end
-
-    self:AddTransferMenuActions(menu)
-
-    table.insert(menu, {
-        type = "divider",
-    })
 
     self:AddDeleteOrClearMenuAction(menu)
 
@@ -353,6 +353,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
             label = MapPinEnhanced:Iconize("eye", L["Show Group"]),
             onClick = function() group:ShowGroup() end,
         })
+        table.insert(menu, { type = "divider" })
         table.insert(menu, {
             type = "button",
             label = MapPinEnhanced:Iconize("trash", L["Delete Group"]),
@@ -377,6 +378,10 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
         })
     end
 
+    self:AddTransferMenuActions(menu)
+
+    table.insert(menu, { type = "divider" })
+
     if not group:IsProtected() then
         table.insert(menu, {
             type = "button",
@@ -384,9 +389,6 @@ function MapPinEnhancedTrackerGroupEntryMixin:BuildMenu()
             onClick = function() group:HideGroup() end,
         })
     end
-
-    self:AddTransferMenuActions(menu)
-
 
     self:AddDeleteOrClearMenuAction(menu)
 
