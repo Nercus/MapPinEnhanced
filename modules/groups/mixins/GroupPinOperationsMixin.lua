@@ -90,15 +90,16 @@ function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
     local pin = self:GetPinByID(pinID)
     if not pin then return false end
     local order = self.pinState:GetOrder(pinID)
-    local nextOrderedPin = pin:IsTracked() and self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and
-        self:GetOrderedTrackablePin(order) or nil
+    local ordered = self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED
+    -- Manual completion also advances an ordered group when another pin is tracked.
+    local nextOrderedPin = ordered and self:GetOrderedTrackablePin(order, pinID) or nil
     local changed, data, wasTracked = self.pinState:ArchiveActive(pinID, ARCHIVE_STATE_REACHED)
     if not changed then return false end
 
     self:PruneOldestReachedPins()
     self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, data)
-    if wasTracked then
+    if wasTracked or ordered then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
             nextOrderedPin:TrackWithoutPersisting()
         else

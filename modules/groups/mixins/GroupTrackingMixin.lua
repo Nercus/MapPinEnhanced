@@ -114,8 +114,9 @@ function MapPinEnhancedGroupTrackingMixin:SetTrackingCursorPin(pin)
     self.trackingCursorOrder = self:GetPinOrder(pin.pinID)
 end
 
----@return MapPinEnhancedPinMixin?
-function MapPinEnhancedGroupTrackingMixin:GetNearestTrackablePin()
+---@param includeTracked boolean?
+---@return MapPinEnhancedPinMixin?, number?
+function MapPinEnhancedGroupTrackingMixin:GetNearestTrackablePin(includeTracked)
     ---@type MapPinEnhancedPinMixin?
     local nearestPin
     ---@type number?
@@ -125,7 +126,7 @@ function MapPinEnhancedGroupTrackingMixin:GetNearestTrackablePin()
     local playerX, playerY, playerMap = MapPinEnhanced:GetPlayerMapPosition()
 
     for _, pin in self:EnumeratePins() do
-        if not pin:IsTracked() then
+        if includeTracked or not pin:IsTracked() then
             local pinData = pin:GetPinData()
             ---@type number?
             local distance
@@ -146,14 +147,15 @@ function MapPinEnhancedGroupTrackingMixin:GetNearestTrackablePin()
     end
 
     if nearestPin then
-        return nearestPin
+        return nearestPin, nearestDistance
     end
     return fallbackPin
 end
 
 ---@param cursorOrder number?
+---@param excludedPinID UUID?
 ---@return MapPinEnhancedPinMixin?
-function MapPinEnhancedGroupTrackingMixin:GetOrderedTrackablePin(cursorOrder)
+function MapPinEnhancedGroupTrackingMixin:GetOrderedTrackablePin(cursorOrder, excludedPinID)
     ---@type MapPinEnhancedPinMixin?
     local bestBelowCursor
     ---@type MapPinEnhancedPinMixin?
@@ -161,7 +163,7 @@ function MapPinEnhancedGroupTrackingMixin:GetOrderedTrackablePin(cursorOrder)
     cursorOrder = cursorOrder or self.trackingCursorOrder
 
     for _, pin in self:EnumeratePins() do
-        if not pin:IsTracked() then
+        if pin.pinID ~= excludedPinID and (excludedPinID or not pin:IsTracked()) then
             local order = self:GetPinOrder(pin.pinID)
             if IsBetterFallbackPin(self, pin, bestOverall) then
                 bestOverall = pin

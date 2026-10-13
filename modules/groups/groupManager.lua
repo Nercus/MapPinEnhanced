@@ -279,17 +279,23 @@ end
 function Groups:GetNextTrackableGroup(excludedGroup)
     ---@type MapPinEnhancedGroupMixin?
     local bestGroup
+    ---@type MapPinEnhancedPinMixin?
+    local bestPin
+    ---@type number?
+    local bestDistance
 
     for group in self:EnumerateGroups() do
-        if group ~= excludedGroup and not group.pinsUpdating and not group:IsHidden() and group:GetPinCount() > 0 then
-            if not bestGroup or self:IsGroupBefore(group, bestGroup) then
-                bestGroup = group
+        if group ~= excludedGroup and not group.pinsUpdating and not group:IsHidden() then
+            local pin, distance = group:GetNearestTrackablePin(true)
+            if pin and (not bestGroup or
+                    distance and (not bestDistance or distance < bestDistance) or
+                    distance == bestDistance and self:IsGroupBefore(group, bestGroup)) then
+                bestGroup, bestPin, bestDistance = group, pin, distance
             end
         end
     end
 
-    if not bestGroup then return nil, nil end
-    return bestGroup, bestGroup:GetNextTrackablePin()
+    return bestGroup, bestPin
 end
 
 ---@param group MapPinEnhancedGroupMixin
