@@ -3,18 +3,13 @@ local MapPinEnhanced = select(2, ...)
 
 local L = MapPinEnhanced.L
 
----@alias PinArrivalMode "dynamic"|"static"
 ---@alias WayfinderSelection "arrow"|"floating"
 
 ---@class Options
----@field ARRIVAL_MODE_DYNAMIC PinArrivalMode
----@field ARRIVAL_MODE_STATIC PinArrivalMode
 ---@field WAYFINDER_SELECTION_ARROW WayfinderSelection
 ---@field WAYFINDER_SELECTION_FLOATING WayfinderSelection
 local Options = MapPinEnhanced:GetModule("Options")
 
-Options.ARRIVAL_MODE_DYNAMIC = "dynamic"
-Options.ARRIVAL_MODE_STATIC = "static"
 Options.WAYFINDER_SELECTION_ARROW = "arrow"
 Options.WAYFINDER_SELECTION_FLOATING = "floating"
 
@@ -50,7 +45,6 @@ Options.DEFAULTS = {
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = true,
     ["General.Distance.ShowUnit"] = true,
-    ["General.Tracking.ArrivalMode"] = Options.ARRIVAL_MODE_DYNAMIC,
     ["Pins.Miscellaneous.ScaleOnHover"] = false,
     ["Miscellaneous.Coords.Enable"] = false,
     ["Miscellaneous.Coords.Lock"] = false,
@@ -112,10 +106,6 @@ Options.OPTIONS_CONFIG = {
         { label = L["Navigation Transportation Phase changes"],       value = "phaseChanges" },
         { label = L["Navigation Transportation Personal teleports"],  value = "personalTeleports" },
         { label = L["Navigation Transportation Dungeon teleports"],   value = "dungeonTeleports" },
-    },
-    ["General.Tracking.ArrivalMode"] = {
-        { label = L["Dynamic"], value = Options.ARRIVAL_MODE_DYNAMIC },
-        { label = L["Static"],  value = Options.ARRIVAL_MODE_STATIC },
     },
     ["Wayfinder.General.Selection"] = {
         { label = L["Arrow"],    value = Options.WAYFINDER_SELECTION_ARROW },

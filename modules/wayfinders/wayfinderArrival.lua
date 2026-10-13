@@ -1,27 +1,19 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 
-local Options = MapPinEnhanced:GetModule("Options")
-
 ---@class WayfinderArrivalConfig
----@field STATIC_RADIUS number
----@field STATIC_CONFIRM_SAMPLES integer
 ---@field DYNAMIC_MIN_RADIUS number
 ---@field DYNAMIC_MAX_RADIUS number
 
 ---@class Wayfinders
 ---@field ARRIVAL_CONFIG WayfinderArrivalConfig
----@field arrivalStaticSamples integer
 ---@field arrivalDynamicSamples integer
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
 -- Arrival detection tuning. Distances and speeds are in yards / yards per second.
 -- Keep these values together so the detector can be tuned from in-game testing.
 Wayfinders.ARRIVAL_CONFIG = {
-    STATIC_RADIUS = 10,
-    STATIC_CONFIRM_SAMPLES = 2,
-
-    -- Dynamic mode adds the distance likely to be travelled before the next
+    -- Dynamic arrival adds the distance likely to be travelled before the next
     -- navigation sample to this minimum positional tolerance.
     DYNAMIC_MIN_RADIUS = 3,
     DYNAMIC_MAX_RADIUS = 50,
@@ -44,31 +36,11 @@ local function GetDynamicArrivalRadius(closingSpeed, nextUpdateInterval, movemen
 end
 
 function Wayfinders:ResetArrivalDetection()
-    self.arrivalStaticSamples = 0
     self.arrivalDynamicSamples = 0
 end
 
 function Wayfinders:CompleteArrival()
     self:CompleteActiveTargetArrival()
-end
-
----@param distance number
----@param movementState DistanceMovementState
-function Wayfinders:UpdateStaticArrival(distance, movementState)
-    if movementState == "unknown" then
-        self.arrivalStaticSamples = 0
-    end
-
-    local config = self.ARRIVAL_CONFIG
-    if distance <= config.STATIC_RADIUS then
-        self.arrivalStaticSamples = self.arrivalStaticSamples + 1
-    else
-        self.arrivalStaticSamples = 0
-    end
-
-    if self.arrivalStaticSamples >= config.STATIC_CONFIRM_SAMPLES then
-        self:CompleteArrival()
-    end
 end
 
 ---@param distance number
@@ -106,13 +78,7 @@ function Wayfinders:CheckArrival(distance, closingSpeed, nextUpdateInterval, mov
         return
     end
 
-    ---@type PinArrivalMode
-    local mode = Options:GetOptionValue("General.Tracking.ArrivalMode")
-    if self:IsIntermediateStep() or mode == Options.ARRIVAL_MODE_STATIC then
-        self:UpdateStaticArrival(arrivalDistance, movementState)
-    else
-        self:UpdateDynamicArrival(arrivalDistance, closingSpeed, nextUpdateInterval, movementState)
-    end
+    self:UpdateDynamicArrival(arrivalDistance, closingSpeed, nextUpdateInterval, movementState)
 end
 
 ---@param distance number
@@ -125,9 +91,3 @@ local function OnDistanceUpdate(distance, _, closingSpeed, nextUpdateInterval, m
 end
 
 MapPinEnhanced:RegisterContinuousDistanceSampleCallback(OnDistanceUpdate)
-
-local function OnArrivalModeChanged()
-    Wayfinders:ResetArrivalDetection()
-end
-
-Options:SubscribeToOptionChanges("General.Tracking.ArrivalMode", OnArrivalModeChanged)

@@ -223,11 +223,6 @@ L["General.Distance_GROUPLABEL"] = "Distance"
 L["General.Distance.ShowUnit_LABEL"] = "Show Distance Unit"
 L["General.Distance.ShowUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
 L["General.Tracking_GROUPLABEL"] = "Tracking"
-L["General.Tracking.ArrivalMode_LABEL"] = "Wayfinder Arrival Detection"
-L["General.Tracking.ArrivalMode_DESCRIPTION"] =
-"Dynamic adjusts the arrival distance based on your approach speed. Static completes a target as soon as you are within 10 metres."
-L["Dynamic"] = "Dynamic"
-L["Static"] = "Static"
 L["Reload UI"] = "Reload UI"
 L["This change requires a UI reload. Reload now?"] = "This change requires a UI reload. Reload now?"
 

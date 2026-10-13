@@ -84,7 +84,8 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdatePinScale(distance)
     local scale = 1
     if self.scaleWithDistance and distance then
         SetUpDistanceScaleRange()
-        scale = 1 - 0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
+        scale = 1 -
+        0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
     end
     if self.pin:GetScale() ~= scale then self.pin:SetScale(scale) end
     if self.content.beam:GetScale() ~= scale then self.content.beam:SetScale(scale) end
@@ -340,7 +341,8 @@ local function UpdateFloatingText(self, elapsed)
 end
 
 --@debug@
-RefreshNavigationReadiness = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.Readiness", RefreshNavigationReadiness)
+RefreshNavigationReadiness = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.Readiness",
+    RefreshNavigationReadiness)
 UpdateFloatingText = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating.TextUpdate", UpdateFloatingText)
 --@end-debug@
 
@@ -516,6 +518,7 @@ end
 local floatingMethods = MapPinEnhancedWayfinderFloatingMixin --[[@as table<string, function>]]
 for _, method in ipairs({ "OnUpdate", "RefreshNavigationTarget", "UpdateClampedState", "UpdatePosition",
     "UpdateNeedlePosition", "AnimateNeedleRotation", "RefreshPresentation", "OnDistanceUpdate", "SetupNavigationFrame" }) do
-    floatingMethods[method] = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating." .. method, floatingMethods[method])
+    floatingMethods[method] = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating." .. method, floatingMethods
+    [method])
 end
 --@end-debug@
