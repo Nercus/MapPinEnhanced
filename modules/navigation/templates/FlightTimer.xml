@@ -21,6 +21,18 @@
                 <Anchors>
                     <Anchor point="RIGHT" relativeKey="$parent.progress" relativePoint="LEFT" x="-8" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomOut" parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
             </Button>
             <Button parentKey="lockButton" inherits="MapPinEnhancedIconButtonTemplate" hidden="true" propagateMouseInput="Motion">
                 <Size x="20" y="20" />
@@ -30,6 +42,18 @@
                 <Anchors>
                     <Anchor point="LEFT" relativeKey="$parent.progress" relativePoint="RIGHT" x="8" />
                 </Anchors>
+                <Animations>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomIn" parentKey="fadeIn">
+                        <KeyValues>
+                            <KeyValue key="showOnPlay" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                    <AnimationGroup inherits="MapPinEnhancedAnimationFadeZoomOut" parentKey="fadeOut">
+                        <KeyValues>
+                            <KeyValue key="hideOnFinished" value="true" />
+                        </KeyValues>
+                    </AnimationGroup>
+                </Animations>
             </Button>
             <Frame parentKey="dragHandle" propagateMouseInput="Both">
                 <Anchors>
@@ -42,6 +66,8 @@
             <OnLoad method="OnLoad" />
             <OnShow method="OnShow" />
             <OnHide method="OnHide" />
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
 </Ui>

@@ -10,10 +10,15 @@ local L = MapPinEnhanced.L
 ---@field duration number? Estimated total seconds, absent when unknown.
 ---@field destination string?
 
+---@class MapPinEnhancedFlightTimerButton : MapPinEnhancedIconButtonTemplate
+---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
+---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
+
 ---@class MapPinEnhancedFlightTimer : Frame
 ---@field progress MapPinEnhancedStatusbarTemplate
----@field closeButton MapPinEnhancedIconButtonTemplate
----@field lockButton MapPinEnhancedIconButtonTemplate
+---@field closeButton MapPinEnhancedFlightTimerButton
+---@field lockButton MapPinEnhancedFlightTimerButton
+---@field buttonVisibilityTimer FunctionContainer?
 ---@field dragHandle Frame
 ---@field elapsed number
 MapPinEnhancedFlightTimerMixin = {}
@@ -55,9 +60,25 @@ function MapPinEnhancedFlightTimerMixin:Update()
         -- visible until the taxi state confirms the flight has actually ended.
         self.progress.progress:SetText(string.format(L["Flight elapsed: %s"], FormatTime(elapsed)))
     end
-    local hovering = self:IsMouseOver()
-    self.closeButton:SetShown(hovering)
-    self.lockButton:SetShown(hovering)
+end
+
+function MapPinEnhancedFlightTimerMixin:OnEnter()
+    if self.buttonVisibilityTimer then self.buttonVisibilityTimer:Cancel() end
+    self.buttonVisibilityTimer = C_Timer.NewTimer(0.5, function()
+        self.buttonVisibilityTimer = nil
+        if not self:IsShown() or not self:IsMouseOver() then return end
+        self.closeButton.fadeIn:PlayShowing(self.closeButton.fadeOut)
+        self.lockButton.fadeIn:PlayShowing(self.lockButton.fadeOut)
+    end)
+end
+
+function MapPinEnhancedFlightTimerMixin:OnLeave()
+    if self.buttonVisibilityTimer then
+        self.buttonVisibilityTimer:Cancel()
+        self.buttonVisibilityTimer = nil
+    end
+    self.closeButton.fadeOut:PlayHiding(self.closeButton.fadeIn)
+    self.lockButton.fadeOut:PlayHiding(self.lockButton.fadeIn)
 end
 
 function MapPinEnhancedFlightTimerMixin:OnUpdate(elapsed)
@@ -75,8 +96,12 @@ end
 
 function MapPinEnhancedFlightTimerMixin:OnHide()
     self:SetScript("OnUpdate", nil)
-    self.closeButton:Hide()
-    self.lockButton:Hide()
+    if self.buttonVisibilityTimer then
+        self.buttonVisibilityTimer:Cancel()
+        self.buttonVisibilityTimer = nil
+    end
+    self.closeButton.fadeIn:SetParentShownInstantly(false, self.closeButton.fadeOut)
+    self.lockButton.fadeIn:SetParentShownInstantly(false, self.lockButton.fadeOut)
 end
 
 function MapPinEnhancedFlightTimerMixin:OnLoad()
