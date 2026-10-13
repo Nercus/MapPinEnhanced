@@ -51,8 +51,6 @@ local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the n
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
--- TODO: use interpolation to smooth movement when clamped to the edge of the screen
-
 local mathSqrt = math.sqrt
 local mathSin = math.sin
 local mathCos = math.cos
