@@ -30,6 +30,11 @@
                             </Layer>
                         </Layers>
                     </Frame>
+                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="scaleWithDistance">
+                        <KeyValues>
+                            <KeyValue key="key" value="Wayfinder.Floating.ScaleWithDistance" />
+                        </KeyValues>
+                    </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="beam">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.Floating.ShowBeam" />

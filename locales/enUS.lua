@@ -398,6 +398,9 @@ L["Add notes for this pin. Descriptions appear in pin tooltips and below the way
 L["This pin is no longer in this group."] = "This pin is no longer in this group."
 L["Apply"] = "Apply"
 
+L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Scale with distance"
+L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
+    "Grow the floating pin and beam from 75% to 100% as you approach. Distance ranges use your learned riding or flying ability at addon load and stay fixed until reload."
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
 L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
 L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Show text outline"

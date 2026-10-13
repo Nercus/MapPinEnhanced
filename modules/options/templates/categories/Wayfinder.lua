@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 ---@field text FontString
 
 ---@class MapPinEnhancedWayfinderOptionsDisplay : MapPinEnhancedOptionGroupTemplate
+---@field scaleWithDistance MapPinEnhancedFormElementTemplate
 ---@field beam MapPinEnhancedFormElementTemplate
 ---@field textOutline MapPinEnhancedFormElementTemplate
 ---@field hideBlizzard MapPinEnhancedFormElementTemplate
@@ -22,6 +23,7 @@ MapPinEnhancedOptionCategoryWayfinderMixin = CreateFromMixins(MapPinEnhancedOpti
 local SELECTION_KEY = "Wayfinder.General.Selection"
 ---@type table<string, WayfinderSelection>
 local PRESENTATION_BY_OPTION = {
+    ["Wayfinder.Floating.ScaleWithDistance"] = "floating",
     ["Wayfinder.Floating.ShowBeam"] = "floating",
     ["Wayfinder.Floating.ShowTextOutline"] = "floating",
     ["Wayfinder.General.HideBlizzardFloatingDiamond"] = "arrow",
@@ -31,6 +33,7 @@ function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshDisplay()
     local selection = Options:GetOptionValue(SELECTION_KEY) --[[@as WayfinderSelection]]
     local display = self.display
     local showFloating = selection == "floating" or self.searchPresentation == "floating"
+    display.scaleWithDistance:SetShown(showFloating)
     display.beam:SetShown(showFloating)
     display.textOutline:SetShown(showFloating)
     local showArrow = selection == "arrow" or self.searchPresentation == "arrow"

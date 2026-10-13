@@ -75,6 +75,7 @@ Options.DEFAULTS = {
         personalTeleports = true,
         dungeonTeleports = false,
     },
+    ["Wayfinder.Floating.ScaleWithDistance"] = false,
     ["Wayfinder.Floating.ShowBeam"] = true,
     ["Wayfinder.Floating.ShowTextOutline"] = false,
 }

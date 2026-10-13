@@ -13,6 +13,7 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field runtimeEnabled boolean?
 ---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeBeamOption fun()?
+---@field unsubscribeScaleOption fun()?
 ---@field unsubscribeTextOutlineOption fun()?
 ---@field unsubscribeScenarioEvents fun()?
 ---@field step WayfinderStepData?
@@ -42,6 +43,7 @@ function MapPinEnhancedWayfinderFloating:GetFrame()
     if not self.frame then
         self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", nil,
             "MapPinEnhancedWayfinderFloatingTemplate")
+        self.frame:SetScaleWithDistance(Options:GetOptionValue("Wayfinder.Floating.ScaleWithDistance") == true)
         self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.Floating.ShowBeam") == true)
         self.frame.content:SetShowTextOutline(Options:GetOptionValue("Wayfinder.Floating.ShowTextOutline") == true)
     end
@@ -238,6 +240,9 @@ function MapPinEnhancedWayfinderFloating:Enable()
     }, function() self:RefreshNativeScenario() end)
     self:RestoreBlizzardForFloating()
     OverrideSuperTrackedAlphaState(true)
+    self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ScaleWithDistance", function(value)
+        if self.frame then self.frame:SetScaleWithDistance(value == true) end
+    end)
     self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
         if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)
@@ -256,6 +261,10 @@ function MapPinEnhancedWayfinderFloating:Disable()
     end
     self:Reset()
     OverrideSuperTrackedAlphaState(false)
+    if self.unsubscribeScaleOption then
+        self.unsubscribeScaleOption()
+        self.unsubscribeScaleOption = nil
+    end
     if self.unsubscribeBeamOption then
         self.unsubscribeBeamOption()
         self.unsubscribeBeamOption = nil

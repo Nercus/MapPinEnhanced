@@ -2,6 +2,21 @@
 local MapPinEnhanced = select(2, ...)
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
 
+local scaleNearDistance, scaleFarDistance = 100, 750
+local scaleRangeSet = false
+local function SetUpDistanceScaleRange()
+    if scaleRangeSet then return end
+    scaleRangeSet = true
+    -- Learned ability is fixed for this load; zone and mount changes do not alter scaling.
+    local movement = MapPinEnhanced:GetModule("Navigation"):GetMovementCapabilities()
+    if movement.canFly then
+        scaleNearDistance, scaleFarDistance = 250, 1500
+    elseif movement.groundSpeed > 7 then
+        scaleNearDistance, scaleFarDistance = 200, 1000
+    end
+end
+MapPinEnhanced:OnLoad(SetUpDistanceScaleRange)
+
 local MIN_CLOSE_DISTANCE = 50
 local MAX_CLOSE_DISTANCE = 200
 local FALLBACK_DELAY = 1
@@ -31,10 +46,11 @@ local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the n
 ---@field clampedOffsetX number?
 ---@field clampedOffsetY number?
 ---@field nativeScenarioID string?
+---@field scaleWithDistance boolean?
+---@field scaleDistance number?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
     MapPinEnhancedWayfinderDirectionMixin)
 
--- TODO: the distant floating marker should scale based on distance
 -- TODO: use interpolation to smooth movement when clamped to the edge of the screen
 
 local mathSqrt = math.sqrt
@@ -64,7 +80,26 @@ function MapPinEnhancedWayfinderFloatingMixin:SetTitle(title)
     self.content:SetTitle(title)
 end
 
+---@param distance number?
+function MapPinEnhancedWayfinderFloatingMixin:UpdatePinScale(distance)
+    self.scaleDistance = distance
+    local scale = 1
+    if self.scaleWithDistance and distance then
+        SetUpDistanceScaleRange()
+        scale = 1 - 0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
+    end
+    if self.pin:GetScale() ~= scale then self.pin:SetScale(scale) end
+    if self.content.beam:GetScale() ~= scale then self.content.beam:SetScale(scale) end
+end
+
+---@param enabled boolean
+function MapPinEnhancedWayfinderFloatingMixin:SetScaleWithDistance(enabled)
+    self.scaleWithDistance = enabled
+    self:UpdatePinScale(self.scaleDistance)
+end
+
 function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
+    self:UpdatePinScale(nil)
     self:ResetDistanceReadout()
     self:ResetDirectionSampling()
     self.displayType = "far"
@@ -233,6 +268,7 @@ end
 ---@param movementState DistanceMovementState
 function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval,
                                                                movementState)
+    self:UpdatePinScale(distance)
     -- The bearing fallback matches Arrow; native marker layout anticipates approach speed.
     local isFallbackClose = distance ~= nil and distance < 10
     local fallbackChanged = self.isFallbackClose ~= isFallbackClose
@@ -455,6 +491,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
+    self:UpdatePinScale(nil)
     self.nativeScenarioID = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.displayType = "far"
