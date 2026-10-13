@@ -610,3 +610,6 @@ L["Mode: baseline"] = "Mode: baseline"
 L["Mode: detailed"] = "Mode: detailed"
 
 L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] = "Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."
+
+L["Share location"] = "Share location"
+L["Place a pin here"] = "Place a pin here"

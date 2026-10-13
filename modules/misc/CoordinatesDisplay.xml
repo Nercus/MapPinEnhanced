@@ -3,7 +3,7 @@
 
     <Include file="CoordinatesDisplay.lua" />
 
-    <Frame name="MapPinEnhancedCoordinatesDisplayTemplate" mixin="MapPinEnhancedCoordinatesDisplayMixin" movable="true" virtual="true" hidden="true" inherits="MapPinEnhancedFadingFrameTemplate">
+    <Frame name="MapPinEnhancedCoordinatesDisplayTemplate" mixin="MapPinEnhancedCoordinatesDisplayMixin" movable="true" enableMouse="true" virtual="true" hidden="true" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="140" y="20" />
         <Anchors>
             <Anchor point="CENTER" />
@@ -109,6 +109,7 @@
             </Frame>
         </Frames>
         <Scripts>
+            <OnMouseUp method="OnMouseUp" />
             <OnEnter method="OnEnter" />
             <OnLeave method="OnLeave" />
             <OnLoad method="OnLoad" />

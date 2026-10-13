@@ -2,7 +2,8 @@
 local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 
--- TODO: add a rightclick menu to share location, save location, add waypoint to current location for wayback, scale, close and lock
+local Groups = MapPinEnhanced:GetModule("Groups")
+local Tracker = MapPinEnhanced:GetModule("Tracker")
 
 ---@class MapPinEnhancedCoordinatesDisplayButton : MapPinEnhancedIconButtonTemplate
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
@@ -44,19 +45,50 @@ local modf = math.modf
 local format = string.format
 local DeltaLerp = DeltaLerp
 
-function MapPinEnhancedCoordinatesDisplayMixin:LinkPlayerPosition()
-    local playerMap = C_Map.GetBestMapForUnit("player")
-    if not playerMap then
-        MapPinEnhanced:Print(L["Unable to determine your current map location."])
-        return
+---@param button string
+function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
+    if button ~= "RightButton" then return end
+    GameTooltip:Hide()
+    -- Capture the menu's location once so moving while it is open does not change its actions.
+    local mapID = GetBestMapForUnit("player")
+    local position = MapPinEnhanced:IsReadablePositiveInteger(mapID) and GetPlayerMapPosition(mapID, "player")
+    ---@type number?, number?
+    local x, y
+    if position then x, y = position:GetXY() end
+    local hasPosition = MapPinEnhanced:IsCoordinate(x) and MapPinEnhanced:IsCoordinate(y)
+    ---@type AnyMenuEntry[]
+    local entries = { { type = "title", label = L["Coordinates"] } }
+    if hasPosition then
+        table.insert(entries, {
+            type = "button", label = L["Share location"],
+            onClick = function()
+                Pins:LinkToChat(x, y, mapID, format(L["%s's Position"], MapPinEnhanced.me))
+            end,
+        })
+        table.insert(entries, {
+            type = "button", label = L["Place a pin here"],
+            onClick = function()
+                local group = Groups:GetUngroupedGroup()
+                if not group then return end
+                local _, pinID = group:AddPin({ x = x, y = y, mapID = mapID, setTracked = false })
+                if pinID then Tracker:OnUserPinsAdded() end
+            end,
+        })
+    else
+        table.insert(entries, { type = "title", label = L["Unable to determine your current position on the map."] })
     end
-    local position = C_Map.GetPlayerMapPosition(playerMap, "player")
-    if not position then
-        MapPinEnhanced:Print(L["Unable to determine your current position on the map."])
-        return
+    table.insert(entries, { type = "divider" })
+    for _, suffix in ipairs({ "Lock", "ShowZone", "ShowDecimals" }) do
+        local key = "Miscellaneous.Coords." .. suffix
+        table.insert(entries, {
+            type = "checkbox", label = L[key .. "_LABEL"],
+            isSelected = function() return Options:GetOptionValue(key) == true end,
+            setSelected = function()
+                Options:SetOptionValue(key, not Options:GetOptionValue(key))
+            end,
+        })
     end
-    local x, y = position:GetXY()
-    Pins:LinkToChat(x, y, playerMap, format(L["%s's Position"], MapPinEnhanced.me))
+    MapPinEnhanced:GenerateMenu(self, entries)
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
@@ -212,6 +244,10 @@ end
 
 local HOVER_TIME = 0.5
 function MapPinEnhancedCoordinatesDisplayMixin:OnEnter()
+    GameTooltip:SetOwner(self, "ANCHOR_TOP")
+    MapPinEnhanced:AddTooltipInteractions(GameTooltip, { { L["Right Click"], L["Open menu"] } })
+    if GameTooltip:NumLines() > 0 then GameTooltip:Show() else GameTooltip:Hide() end
+    if self.buttonVisibilityTimer then self.buttonVisibilityTimer:Cancel() end
     self.buttonVisibilityTimer = C_Timer.NewTimer(HOVER_TIME, function()
         if not self:IsMouseOver() then return end
         self.closeButton.fadeIn:PlayShowing(self.closeButton.fadeOut)
@@ -220,6 +256,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnEnter()
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:OnLeave()
+    if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
     if self.buttonVisibilityTimer then
         self.buttonVisibilityTimer:Cancel()
         self.buttonVisibilityTimer = nil
@@ -238,6 +275,7 @@ end
 
 function MapPinEnhancedCoordinatesDisplayMixin:HideFrame()
     self:SetScript("OnUpdate", nil)
+    self:OnLeave()
     self:Hide()
 end
 
