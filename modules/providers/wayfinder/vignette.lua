@@ -27,7 +27,7 @@ end
 local function ReadVignette()
     local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
     local vignetteInfo = vignetteGUID and C_VignetteInfo.GetVignetteInfo(vignetteGUID)
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint(vignetteGUID and function(candidateMapID)
+    local x, y, mapID, _, traversalOnly = Providers:GetSuperTrackingWaypoint(vignetteGUID and function(candidateMapID)
         return GetVignettePositionForMap(vignetteGUID, candidateMapID)
     end or nil)
     if not vignetteGUID or not vignetteInfo or x == nil or y == nil or mapID == nil then
@@ -41,7 +41,7 @@ local function ReadVignette()
         description = select(2, C_SuperTrack.GetSuperTrackedItemName()),
         texture = vignetteInfo.atlasName,
         usesAtlas = true,
-    }
+    }, not traversalOnly
 end
 
 Wayfinders:RegisterSuperTrackingProvider({
