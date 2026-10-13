@@ -20,7 +20,7 @@
             </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="destinationPin" inherits="MapPinEnhancedBasePinTemplate" enableMouse="true" hidden="true">
+            <Frame parentKey="destinationPin" inherits="MapPinEnhancedBasePinTemplate" enableMouse="true" hidden="true" frameStrata="LOW">
                 <Size x="16" y="16" />
                 <KeyValues>
                     <KeyValue key="hideHighlight" value="true" type="boolean" />
