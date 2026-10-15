@@ -126,9 +126,9 @@ end
 MapPinEnhancedStartupMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
 ---@class MapPinEnhancedStartupWayfinderCard : Button
----@field preview MapPinEnhancedImageTemplate
----@field background Texture
----@field label FontString
+---@field image Texture
+---@field border Texture
+---@field title MapPinEnhancedOptionWayfinderCardTitle
 ---@field value WayfinderSelection
 
 ---@class MapPinEnhancedStartupNavigationOption : Button
@@ -164,8 +164,8 @@ function MapPinEnhancedStartupMixin:OnLoad()
     -- Combat/loading also hides synchronously while the suspension flag is set.
     self.Hide = self.HideStartup
     self:SetTitle(L["Introduction"])
-    self.arrow.label:SetText(L["Arrow"])
-    self.floating.label:SetText(L["Floating"])
+    self.arrow.title.label:SetText(L["Arrow"])
+    self.floating.title.label:SetText(L["Floating"])
     self.navigationOption.label:SetText(L["Wayfinder.Navigation.Enable_LABEL"])
     for _, name in ipairs(COMMON_OPTIONS) do
         local card = self[name] --[[@as MapPinEnhancedStartupCheckboxOption]]
@@ -213,9 +213,9 @@ function MapPinEnhancedStartupMixin:Refresh()
     local selection = Options:GetOptionValue(OPTION_KEYS[1]) --[[@as WayfinderSelection]]
     for _, card in ipairs({ self.arrow, self.floating }) do
         local selected = card.value == selection
-        card.preview.image:SetDesaturated(not selected)
-        card.background:SetVertexColor(1, selected and 0.82 or 1, selected and 0 or 1)
-        card.label:SetTextColor(1, selected and 0.82 or 1, selected and 0 or 1)
+        card.image:SetDesaturated(not selected)
+        card.border:SetVertexColor(1, selected and 0.82 or 1, selected and 0 or 1)
+        card.title.label:SetTextColor(1, selected and 0.82 or 1, selected and 0 or 1)
     end
     self.navigationOption.toggle:SetValue(Options:GetOptionValue(OPTION_KEYS[2]) == true, false, true)
 end

@@ -3,10 +3,12 @@ local MapPinEnhanced = select(2, ...)
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 
----@class MapPinEnhancedOptionWayfinderCard : Button
+---@class MapPinEnhancedOptionWayfinderCardTitle : Frame
 ---@field background Texture
----@field image Texture
 ---@field label FontString
+
+---@class MapPinEnhancedOptionWayfinderCard : Button, MapPinEnhancedImageTemplate
+---@field title MapPinEnhancedOptionWayfinderCardTitle
 ---@field value WayfinderSelection
 MapPinEnhancedOptionWayfinderCardMixin = {}
 
@@ -41,9 +43,9 @@ function MapPinEnhancedOptionWayfinderMixin:SetValue(value)
     for _, card in ipairs({ self.child.arrow, self.child.floating }) do
         local selected = card.value == value
         local labelColor = selected and 1 or 0.6
-        card.label:SetTextColor(labelColor, labelColor, labelColor)
+        card.title.label:SetTextColor(labelColor, labelColor, labelColor)
         card.image:SetDesaturated(not selected)
-        card.background:SetVertexColor(1, selected and 0.82 or 1, selected and 0 or 1)
+        card.border:SetVertexColor(1, selected and 0.82 or 1, selected and 0 or 1)
     end
 end
 
@@ -53,7 +55,7 @@ end
 
 function MapPinEnhancedOptionWayfinderMixin:UpdateLayout()
     local cardWidth = math.max(1, (self:GetWidth() - 16) / 2)
-    local cardHeight = cardWidth * 9 / 16 + 24
+    local cardHeight = cardWidth * 9 / 16
     self.child.arrow:SetSize(cardWidth, cardHeight)
     self.child.floating:SetSize(cardWidth, cardHeight)
     self.child:SetHeight(cardHeight)
@@ -67,8 +69,8 @@ end
 
 ---@param initialValue WayfinderSelection
 function MapPinEnhancedOptionWayfinderMixin:Setup(initialValue)
-    self.child.arrow.label:SetText(L["Arrow"])
-    self.child.floating.label:SetText(L["Floating"])
+    self.child.arrow.title.label:SetText(L["Arrow"])
+    self.child.floating.title.label:SetText(L["Floating"])
     self:SetValue(initialValue)
     self:UpdateLayout()
 end

@@ -95,49 +95,29 @@
                 </Anchors>
             </Frame>
             <Button parentKey="arrow" inherits="MapPinEnhancedOptionWayfinderCardTemplate" mixin="MapPinEnhancedStartupControlMixin">
-                <Size x="220" y="147" />
+                <Size x="220" y="123.75" />
                 <KeyValues>
                     <KeyValue key="optionKey" value="Wayfinder.General.Selection" />
                     <KeyValue key="value" value="arrow" />
+                    <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOPLEFT" x="24" y="-142" />
                 </Anchors>
-                <Frames>
-                    <Frame parentKey="preview" inherits="MapPinEnhancedImageTemplate" enableMouse="false">
-                        <KeyValues>
-                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png" />
-                        </KeyValues>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="6" y="-6" />
-                            <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                        </Anchors>
-                    </Frame>
-                </Frames>
                 <Scripts>
                     <OnClick method="OnStartupClick" />
                 </Scripts>
             </Button>
             <Button parentKey="floating" inherits="MapPinEnhancedOptionWayfinderCardTemplate" mixin="MapPinEnhancedStartupControlMixin">
-                <Size x="220" y="147" />
+                <Size x="220" y="123.75" />
                 <KeyValues>
                     <KeyValue key="optionKey" value="Wayfinder.General.Selection" />
                     <KeyValue key="value" value="floating" />
+                    <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOPRIGHT" x="-24" y="-142" />
                 </Anchors>
-                <Frames>
-                    <Frame parentKey="preview" inherits="MapPinEnhancedImageTemplate" enableMouse="false">
-                        <KeyValues>
-                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png" />
-                        </KeyValues>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" x="6" y="-6" />
-                            <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                        </Anchors>
-                    </Frame>
-                </Frames>
                 <Scripts>
                     <OnClick method="OnStartupClick" />
                 </Scripts>

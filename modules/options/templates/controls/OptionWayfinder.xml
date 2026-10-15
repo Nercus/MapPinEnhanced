@@ -2,20 +2,29 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="OptionWayfinder.lua" />
 
-    <Button name="MapPinEnhancedOptionWayfinderCardTemplate" virtual="true" mixin="MapPinEnhancedOptionWayfinderCardMixin">
-        <Layers>
-            <Layer level="BACKGROUND">
-                <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
-            </Layer>
-            <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontHighlightSmall" justifyH="CENTER">
-                    <Anchors>
-                        <Anchor point="BOTTOMLEFT" x="6" y="9" />
-                        <Anchor point="BOTTOMRIGHT" x="-6" y="9" />
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
+    <Button name="MapPinEnhancedOptionWayfinderCardTemplate" virtual="true" inherits="MapPinEnhancedImageTemplate" mixin="MapPinEnhancedOptionWayfinderCardMixin">
+        <Frames>
+            <Frame parentKey="title" enableMouse="false">
+                <Size y="28" />
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" />
+                    <Anchor point="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers>
+                    <Layer level="BACKGROUND">
+                        <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
+                    </Layer>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="label" inherits="GameFontNormalSmall" justifyH="CENTER">
+                            <Anchors>
+                                <Anchor point="LEFT" x="6" />
+                                <Anchor point="RIGHT" x="-6" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+        </Frames>
         <HighlightTexture inherits="MapPinEnhancedGenericFrameTextureTemplate" alphaMode="ADD" alpha="0.2" setAllPoints="true" />
         <Scripts>
             <OnClick method="OnClick" />
@@ -52,38 +61,20 @@
                     <Button parentKey="arrow" inherits="MapPinEnhancedOptionWayfinderCardTemplate">
                         <KeyValues>
                             <KeyValue key="value" value="arrow" />
+                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png" />
                         </KeyValues>
                         <Anchors>
                             <Anchor point="TOPLEFT" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="ARTWORK">
-                                <Texture parentKey="image" file="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png">
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
                     </Button>
                     <Button parentKey="floating" inherits="MapPinEnhancedOptionWayfinderCardTemplate">
                         <KeyValues>
                             <KeyValue key="value" value="floating" />
+                            <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png" />
                         </KeyValues>
                         <Anchors>
                             <Anchor point="TOPRIGHT" />
                         </Anchors>
-                        <Layers>
-                            <Layer level="ARTWORK">
-                                <Texture parentKey="image" file="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png">
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" x="6" y="-6" />
-                                        <Anchor point="BOTTOMRIGHT" x="-6" y="24" />
-                                    </Anchors>
-                                </Texture>
-                            </Layer>
-                        </Layers>
                     </Button>
                 </Frames>
             </Frame>
