@@ -12,7 +12,8 @@ local L = MapPinEnhanced.L
 L["Cancel"] = "Cancel"
 L["Close"] = "Close"
 L["Addon conflicts"] = "Addon conflicts"
-L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."] = "The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."
+L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."] =
+"The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."
 L["Confirm"] = "Confirm"
 L["Icon Picker"] = "Icon Picker"
 L["More..."] = "More..."
@@ -395,7 +396,7 @@ L["Apply"] = "Apply"
 
 L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Scale with distance"
 L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
-    "Grow the floating pin and beam from 75% to 100% as you approach. Distance ranges use your learned riding or flying ability at addon load and stay fixed until reload."
+"Grow the floating pin and beam from 75% to 100% as you approach. Distance ranges use your learned riding or flying ability at addon load and stay fixed until reload."
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
 L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
 L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Show text outline"
@@ -589,27 +590,31 @@ L["All modules"] = "All modules"
 L["Start"] = "Start"
 L["Stop"] = "Stop"
 L["Reset"] = "Reset"
-L["Profiles module methods plus selected UI and geometry scopes. Navigation adds preparation passes and worker timing; Core adds all batch slices. Inclusive times overlap; other private work remains uncovered."] = "Profiles module methods plus selected UI and geometry scopes. Navigation adds preparation passes and worker timing; Core adds all batch slices. Inclusive times overlap; other private work remains uncovered."
+L["Profiles module methods plus selected UI and geometry scopes. Navigation adds preparation passes and worker timing; Core adds all batch slices. Inclusive times overlap; other private work remains uncovered."] =
+"Profiles module methods plus selected UI and geometry scopes. Navigation adds preparation passes and worker timing; Core adds all batch slices. Inclusive times overlap; other private work remains uncovered."
 L["Recording. Closing this window stops capture."] = "Recording. Closing this window stops capture."
-L["Capture stopped: %.2f seconds. Export to inspect results."] = "Capture stopped: %.2f seconds. Export to inspect results."
+L["Capture stopped: %.2f seconds. Export to inspect results."] =
+"Capture stopped: %.2f seconds. Export to inspect results."
 L["Select modules, then start a new capture."] = "Select modules, then start a new capture."
 L["Open the profiler."] = "Open the profiler."
 --@end-debug@
 
 L["General.FlightTimer.Enable_LABEL"] = "Enable flight timer"
-L["General.FlightTimer.Enable_DESCRIPTION"] = "Show a movable progress bar and estimated remaining time during flight-master flights."
+L["General.FlightTimer.Enable_DESCRIPTION"] =
+"Show a movable progress bar and estimated remaining time during flight-master flights."
 L["General.FlightTimer.Lock_LABEL"] = "Lock flight timer"
 L["General.FlightTimer.Lock_DESCRIPTION"] = "Prevent the flight timer from being moved."
 L["General.FlightTimer.Scale_LABEL"] = "Flight timer size"
 L["General.FlightTimer.Scale_DESCRIPTION"] = "Choose the size of the flight timer."
-L["Flight timer"] = "Flight timer"
+L["Flight Timer"] = "Flight Timer"
 L["Flight elapsed: %s"] = "Elapsed: %s"
 L["Flight remaining: %s"] = "%s remaining"
 
 L["Mode: baseline"] = "Mode: baseline"
 L["Mode: detailed"] = "Mode: detailed"
 
-L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] = "Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."
+L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] =
+"Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."
 
 L["Share location"] = "Share location"
 L["Place a pin here"] = "Place a pin here"

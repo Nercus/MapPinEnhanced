@@ -50,7 +50,7 @@ function MapPinEnhancedFlightTimerMixin:Update()
     local elapsed = math.max(0, GetTime() - startedAt)
     local duration = flight.duration
     self.progress:SetValue(duration and math.min(1, elapsed / duration) or 0)
-    self.progress:SetName(flight.destination or L["Flight timer"])
+    self.progress:SetName(flight.destination or L["Flight Timer"])
     -- Refresh the inherited text even when the bar is unchanged (unknown or
     -- expired estimates); OnValueChanged alone cannot keep that clock running.
     if duration and elapsed < duration then

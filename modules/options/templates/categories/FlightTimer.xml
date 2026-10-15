@@ -3,7 +3,7 @@
 
     <Frame name="MapPinEnhancedOptionCategoryFlightTimerTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
-            <KeyValue key="categoryName" value="Flight timer" />
+            <KeyValue key="categoryName" value="Flight Timer" />
             <KeyValue key="enableKey" value="General.FlightTimer.Enable" />
         </KeyValues>
         <Frames>
