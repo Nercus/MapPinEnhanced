@@ -28,7 +28,7 @@ function PinManager:GetPositionStringForPin(pinData)
     return string.format("%s:%.4f:%.4f", pinData.mapID, pinData.x, pinData.y)
 end
 
-function PinManager:TrackNearestPin()
+function PinManager:GetNearestPin()
     local nearestPin = nil
     local playerX, playerY, playerMap = Blizz:GetPlayerMapPosition()
     if not playerMap or not playerX or not playerY then return end
@@ -42,6 +42,12 @@ function PinManager:TrackNearestPin()
             }
         end
     end
+
+    return nearestPin
+end
+
+function PinManager:TrackNearestPin()
+    local nearestPin = self:GetNearestPin()
     if nearestPin then
         nearestPin.pin:Track()
     end
