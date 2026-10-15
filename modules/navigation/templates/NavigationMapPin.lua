@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
-local L = MapPinEnhanced.L
 
 local HOVER_SCALE = 1.4
 local HOVER_SCALE_SPEED = (HOVER_SCALE - 1) / 0.15
@@ -181,23 +180,13 @@ end
 function MapPinEnhancedNavigationMapPinMixin:OnEnter()
     self:SetHoverScale(true)
     local step = self.step
-    local progression = Navigation.progression
-    local graph = progression and progression.route.graph
-    local reference = step and progression and progression.route.pathReferences[step.index]
-    if not step or not progression or not graph or not reference or self.isMapEdge then return end
-    local pathType = graph.pathTypes[reference]
-    local pointIndex = graph.pathToPointIndexes[reference]
-    local mapID = graph.pointMapIDs[pointIndex]
-    local color = Navigation:GetPathColor(pathType)
+    local entry = step and step.progressEntry
+    if not step or not entry or self.isMapEdge then return end
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:AddLine(string.format(L["Navigation Step Number"], step.index,
-        Navigation:GetPathMethod(pathType)), color:GetRGB())
+    GameTooltip:AddLine(entry.title, entry.r, entry.g, entry.b)
     local info = step.info
-    GameTooltip:AddLine(Navigation:GetPathInstruction(progression.route, step.index,
-        step.index == progression.pathIndex and progression.phase or nil), 1, 1, 1, true)
-    local mapInfo = C_Map.GetMapInfo(mapID)
-    GameTooltip:AddLine(string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(mapID),
-        graph.pointXs[pointIndex] * 100, graph.pointYs[pointIndex] * 100), 0.7, 0.7, 0.7, true)
+    GameTooltip:AddLine(entry.instruction, 1, 1, 1, true)
+    GameTooltip:AddLine(entry.location, 0.7, 0.7, 0.7, true)
     if info and info.status and info.status ~= "" then
         GameTooltip:AddLine(info.status, 1, 0.82, 0, true)
     end

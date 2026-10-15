@@ -86,6 +86,7 @@ local activeTarget
 ---@field phase string
 ---@field isFinalDestination boolean?
 ---@field isTraversal boolean?
+---@field nativeTraversalTarget WayfinderData? Native tracking owned by an explicit entrance step
 ---@field insideObjectiveArea boolean?
 ---@field showDirectionInObjectiveArea boolean?
 ---@field stepIndex integer?
@@ -101,6 +102,7 @@ local activeTarget
 local activeStep
 ---@type WayfinderSelection?
 local selectedWayfinder
+local ownsTraversalTracking = false
 
 ---@param wayfinderType WayfinderType
 ---@return MapPinEnhancedWayfinder
@@ -132,6 +134,7 @@ local function CopyStep(step)
         phase = step.phase,
         isFinalDestination = step.isFinalDestination,
         isTraversal = step.isTraversal,
+        nativeTraversalTarget = step.nativeTraversalTarget and CopyTable(step.nativeTraversalTarget) or nil,
         insideObjectiveArea = step.insideObjectiveArea,
         showDirectionInObjectiveArea = step.showDirectionInObjectiveArea,
         stepIndex = step.stepIndex,
@@ -146,6 +149,16 @@ local function CopyStep(step)
 end
 
 local function ApplyActiveStep()
+    -- Both displays select an explicit entrance while its step is active.
+    -- Reapply after display replacement; stepTracking owns restoration/feedback.
+    local target = activeStep and activeStep.nativeTraversalTarget
+    if target then
+        ownsTraversalTracking = true
+        Wayfinders:SetStepSuperTracking(target)
+    elseif ownsTraversalTracking then
+        ownsTraversalTracking = false
+        Wayfinders:ClearStepSuperTracking()
+    end
     if Wayfinders.activeWayfinder then
         Wayfinders.activeWayfinder:SetStep(activeStep)
     end

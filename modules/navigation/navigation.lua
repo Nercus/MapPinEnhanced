@@ -32,6 +32,20 @@ local L = MapPinEnhanced.L
 ---@field pathUnavailable boolean?
 ---@field lastDeviationCalculationAt number?
 ---@field traversal WayfinderData?
+---@field portalEntranceSteps table<integer, NavigationPortalEntranceStep>?
+
+---@class NavigationPortalEntranceStep
+---@field approach NavigationPortalApproach
+---@field shown boolean
+---@field completed boolean
+
+---@class NavigationPortalApproach
+---@field mapID number
+---@field x number
+---@field y number
+---@field exitX number
+---@field exitY number
+---@field instruction string
 
 ---@class NavigationRouteLayerEntry
 ---@field frame MapPinEnhancedNavigationMapPinTemplate
@@ -57,6 +71,7 @@ local L = MapPinEnhanced.L
 ---@field lastCalculationExclusions string[]?
 ---@field routeMapFramePool FramePoolCollection<MapPinEnhancedNavigationMapPinTemplate>?
 ---@field routeSteps table<integer, NavigationStep>
+---@field portalApproaches table<number, NavigationPortalApproach>?
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 local DEVIATION_RECALCULATION_COOLDOWN = 15
@@ -199,6 +214,18 @@ end
 ---@return integer
 local function GetRouteStepCount(route)
     return #route.pathReferences + 1
+end
+
+---@param progression NavigationProgression
+---@param pathIndex integer
+---@return integer
+local function GetDisplayedStepIndex(progression, pathIndex)
+    if not progression.portalEntranceSteps then return pathIndex end
+    local index = pathIndex
+    for beforePath, entrance in pairs(progression.portalEntranceSteps) do
+        if entrance.shown and beforePath <= pathIndex then index = index + 1 end
+    end
+    return index
 end
 
 ---@param progression NavigationProgression
@@ -692,6 +719,10 @@ function Navigation:GetRouteChatSteps(changeNumber)
     ---@type string[]
     local steps = {}
     for index = progression.pathIndex, #progression.route.pathReferences do
+        local entrance = progression.portalEntranceSteps and progression.portalEntranceSteps[index]
+        if entrance and entrance.shown and not entrance.completed then
+            steps[#steps + 1] = MapPinEnhanced:CompactChatLabel(L[entrance.approach.instruction], 240)
+        end
         local phase = index == progression.pathIndex and progression.phase or nil
         steps[#steps + 1] = MapPinEnhanced:CompactChatLabel(
             self:GetPathInstruction(progression.route, index, phase), 240)
@@ -771,6 +802,21 @@ local function CopyRouteProgress(progression, graph)
     if not destination then return entries end
     local route = progression.route
     for index = 1, GetRouteStepCount(route) do
+        local entrance = progression.portalEntranceSteps and progression.portalEntranceSteps[index]
+        if entrance and entrance.shown then
+            local approach = entrance.approach
+            local mapInfo = C_Map.GetMapInfo(approach.mapID)
+            local r, g, b = Navigation:GetPathColor("localportal"):GetRGB()
+            entries[#entries + 1] = {
+                icon = Navigation:GetPathIcon("localportal"),
+                r = r, g = g, b = b,
+                title = string.format(L["Navigation Step Number"], #entries + 1,
+                    Navigation:GetPathMethod("localportal")),
+                instruction = L[approach.instruction],
+                location = string.format("%s (%.1f, %.1f)", mapInfo and mapInfo.name or tostring(approach.mapID),
+                    approach.x * 100, approach.y * 100),
+            }
+        end
         local reference = route.pathReferences[index]
         local point = reference and graph.pathToPointIndexes[reference]
         local mode = route.finalCost.explanation and route.finalCost.explanation.mode
@@ -782,13 +828,13 @@ local function CopyRouteProgress(progression, graph)
         local mapInfo = C_Map.GetMapInfo(mapID)
         local color = Navigation:GetPathColor(pathType)
         local r, g, b = color:GetRGB()
-        entries[index] = {
+        entries[#entries + 1] = {
             icon = reference and Navigation:GetPathIcon(pathType) or nil,
             destination = not reference and CopyWayfinderData(destination.data) or nil,
             r = r,
             g = g,
             b = b,
-            title = string.format(L["Navigation Step Number"], index, Navigation:GetPathMethod(pathType)),
+            title = string.format(L["Navigation Step Number"], #entries + 1, Navigation:GetPathMethod(pathType)),
             instruction = reference and Navigation:GetPathInstruction(route, index,
                     index == progression.pathIndex and progression.phase or nil) or
                 string.format(L[pathType == "fly" and "Navigation Fly To Destination" or
@@ -828,7 +874,6 @@ function Navigation:PublishStep(progression)
             isFinalDestination = true,
             stepIndex = progression.pathIndex,
             stepCount = GetRouteStepCount(progression.route),
-            progressEntries = CopyRouteProgress(progression, graph),
             instruction = string.format(L[instructionKey], GetDestinationTitle(destination)),
             status = progression.status,
         })
@@ -885,7 +930,6 @@ function Navigation:PublishStep(progression)
                 graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[targetPointIndex] or nil,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
-        progressEntries = CopyRouteProgress(progression, graph),
         instruction = self:GetPathInstruction(progression.route, progression.pathIndex, progression.phase),
         status = progression.status,
         desiredAction = desiredAction,
@@ -1010,18 +1054,79 @@ function Navigation:CheckCurrentPathCompletion(identity)
     end
 end
 
+---@param progression NavigationProgression?
+---@return NavigationPortalApproach? approach
+---@return WayfinderData? target
+local function GetPortalApproach(progression)
+    if not progression or (progression.phase ~= "approach" and progression.phase ~= "ready") then return end
+    local graph = progression.route.graph
+    local reference = progression.route.pathReferences[progression.pathIndex]
+    if not reference or graph.pathTypes[reference] ~= "portal" then return end
+    local point = graph.pathFromPointIndexes[reference]
+    if not point then return end
+    local approach = Navigation.portalApproaches and Navigation.portalApproaches[graph.pointIDs[point]]
+    if not approach or graph.pointMapIDs[point] ~= approach.mapID then return end
+    return approach, { mapID = graph.pointMapIDs[point], x = graph.pointXs[point], y = graph.pointYs[point] }
+end
+
+---@param progression NavigationProgression
+---@param approach NavigationPortalApproach
+---@param target WayfinderData
+---@return WayfinderData? entrance
+local function GetPortalTraversal(progression, approach, target)
+    local steps = progression.portalEntranceSteps
+    local step = steps and steps[progression.pathIndex]
+    if step and step.completed then return end
+    local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+    if playerMapID and playerMapID ~= approach.mapID then return end
+    local entrance = { mapID = approach.mapID, x = approach.x, y = approach.y, title = L[approach.instruction] }
+    -- On first publication the portal may still be selected. Afterwards the
+    -- entrance itself owns native projection, including the exit after crossing.
+    local native = Wayfinders:GetNavigationTraversal(entrance) or Wayfinders:GetNavigationTraversal(target)
+    local inside = false
+    if native and native.mapID == approach.mapID then
+        local distance = Navigation:GetComparableDistance(native.mapID, native.x, native.y,
+            approach.mapID, approach.exitX, approach.exitY)
+        -- The exit hint proves which side of this same-map boundary contains
+        -- the player. Its localized wording must never become portal guidance.
+        inside = distance ~= nil and distance <= 5
+    end
+    if not steps then
+        steps = {}
+        progression.portalEntranceSteps = steps
+    end
+    if not step then
+        step = { approach = approach, shown = not inside, completed = inside }
+        steps[progression.pathIndex] = step
+    end
+    if inside then
+        -- Completion belongs to this progression. Retargeting the portal can
+        -- temporarily remove native traversal data and must not reinsert entry.
+        step.completed = true
+        return
+    end
+    -- Missing/delayed native data cannot prove entry. Proximity to the tower
+    -- or the mountain above the room must never consume the entrance guidance.
+    return entrance
+end
+
 -- Native paths can arrive after route publication and can change without a map
 -- change (the Sanctum and the city both use Stormwind's map ID).
 ---@return boolean? changed
 local function RefreshNativeTraversal()
     local progression = Navigation.progression
     local destination = Navigation.activeDestination
-    if not progression or not destination or not Navigation:IsCurrentProgression(progression) or
-        progression.phase ~= "approach" or progression.route.pathReferences[progression.pathIndex] then
+    if not progression or not destination or not Navigation:IsCurrentProgression(progression) then return end
+    local previous = progression.traversal
+    local approach, target = GetPortalApproach(progression)
+    local traversal ---@type WayfinderData?
+    if approach and target then
+        traversal = GetPortalTraversal(progression, approach, target)
+    elseif progression.phase == "approach" and not progression.route.pathReferences[progression.pathIndex] then
+        traversal = Wayfinders:GetNavigationTraversal(destination.routingData)
+    else
         return
     end
-    local previous = progression.traversal
-    local traversal = Wayfinders:GetNavigationTraversal(destination.routingData)
     if not previous and not traversal then return end
     if previous and traversal and previous.mapID == traversal.mapID and previous.x == traversal.x and
         previous.y == traversal.y and previous.title == traversal.title then
@@ -1295,6 +1400,7 @@ local HBDP = MapPinEnhanced.HBDP
 ---@field mapEntries NavigationRouteLayerEntry[]
 ---@field info WayfinderStepData?
 ---@field target WayfinderData?
+---@field progressEntry WayfinderProgressEntry?
 
 Navigation.routeSteps = {}
 ---@return NavigationStep
@@ -1306,6 +1412,7 @@ end
 local function ResetStep(_, step)
     wipe(step.mapEntries)
     step.info, step.target = nil, nil
+    step.progressEntry = nil
     step.index = 0
 end
 
@@ -1330,22 +1437,26 @@ end
 function Navigation:ApplyStepPresentation(target, onArrival, info)
     local destination = self.activeDestination
     local progression = self.progression
-    -- Authored entrances take precedence: Blizzard can interpret an interior
-    -- portal's Stormwind coordinates as a target outside the Wizard's Sanctum.
-    -- Use native traversal only to fill in the final movement leg.
-    local traversal = progression and info.isFinalDestination and info.phase == "approach" and
-        Wayfinders:GetNavigationTraversal(target) or nil
+    local approach, portalTarget = GetPortalApproach(progression)
+    local traversal ---@type WayfinderData?
+    if approach and portalTarget and not info.isFinalDestination then
+        traversal = GetPortalTraversal(progression, approach, portalTarget)
+        info.nativeTraversalTarget = traversal
+    elseif progression and info.isFinalDestination and info.phase == "approach" then
+        traversal = Wayfinders:GetNavigationTraversal(target)
+    end
     if progression then
         progression.traversal = traversal
     end
     if traversal then
-        -- Native traversal supplies interior boundaries absent from UI map IDs.
-        -- Retain the route target and native selection until Blizzard reports
-        -- the crossing, rather than treating entrance proximity as completion.
+        -- Native traversal supplies boundaries absent from UI map IDs. Final
+        -- movement retains its selection; an authored entrance selects itself.
+        -- Neither advances from entrance proximity alone.
         target = CopyWayfinderData(target)
         target.mapID, target.x, target.y = traversal.mapID, traversal.x, traversal.y
         target.mapDistanceOnly = true
         target.lock = false
+        if approach then target.texture = self:GetPathIcon("localportal") end
         onArrival = nil
         info.arrivalIdentity = info.arrivalIdentity .. ":traversal:" .. traversal.mapID .. ":" ..
             traversal.x .. ":" .. traversal.y
@@ -1354,6 +1465,14 @@ function Navigation:ApplyStepPresentation(target, onArrival, info)
         info.isFinalDestination = false
         info.isTraversal = true
     end
+    if progression and info.stepIndex then
+        -- Entrance execution is independent of the transport Path index. Keep
+        -- its numbered history when the portal and final movement become active.
+        info.progressEntries = CopyRouteProgress(progression, progression.route.graph)
+        info.stepCount = #info.progressEntries
+        info.stepIndex = GetDisplayedStepIndex(progression, progression.pathIndex) -
+            (approach and traversal and 1 or 0)
+    end
     info.insideObjectiveArea = info.isFinalDestination == true and
         destination ~= nil and destination.insideObjectiveArea == true
     info.showDirectionInObjectiveArea = info.insideObjectiveArea == true and
@@ -1361,6 +1480,9 @@ function Navigation:ApplyStepPresentation(target, onArrival, info)
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()
+    for index, entry in ipairs(info.progressEntries or {}) do
+        self:GetRouteStep(index).progressEntry = entry
+    end
     local step = self:GetRouteStep(info.stepIndex or 1)
     step.target = CopyWayfinderData(target)
     step.info = info
@@ -1370,6 +1492,7 @@ end
 local layerRoute ---@type NavigationRoute?
 local layerPathIndex ---@type integer?
 local layerPhase ---@type string?
+local layerDisplayedStepIndex ---@type integer?
 local worldMapApproachTimer ---@type FunctionContainer?
 local minimapApproachTimer ---@type FunctionContainer?
 local surfaceApproaches = {} ---@type table<boolean, fun()>
@@ -1398,6 +1521,7 @@ function Navigation:ReleaseRouteLayers(isWorldMap)
         layerRoute = nil
         layerPathIndex = nil
         layerPhase = nil
+        layerDisplayedStepIndex = nil
     end
     local pool = self.routeMapFramePool
     for stepIndex, step in pairs(self.routeSteps) do
@@ -1615,6 +1739,9 @@ function Navigation:BuildRouteLayer(isWorldMap)
     EnsureSurfaceGeometry(isWorldMap)
     local route = progression.route
     local stepCount = GetRouteStepCount(route)
+    local portalStepIndex = GetDisplayedStepIndex(progression, progression.pathIndex)
+    local entranceStep = progression.portalEntranceSteps and progression.portalEntranceSteps[progression.pathIndex]
+    local entrance = progression.traversal and entranceStep and not entranceStep.completed and entranceStep.approach
     local currentX, currentY, currentMapID = MapPinEnhanced:GetPlayerMapPosition()
     currentMapID = currentMapID or route.originMapID
     currentX = currentX or route.originX
@@ -1629,15 +1756,26 @@ function Navigation:BuildRouteLayer(isWorldMap)
         local firstToPointIndex = graph.pathToPointIndexes[firstPathReference]
         local firstPointIndex = targetsPathEnd and firstToPointIndex or firstFromPointIndex or firstToPointIndex
         if firstPointIndex and currentMapID and currentX and currentY then
-            local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(progression.pathIndex),
+            local approachStep = self:GetRouteStep(portalStepIndex - (entrance and 1 or 0))
+            local approachMapID = entrance and entrance.mapID or graph.pointMapIDs[firstPointIndex]
+            local approachX = entrance and entrance.x or graph.pointXs[firstPointIndex]
+            local approachY = entrance and entrance.y or graph.pointYs[firstPointIndex]
+            local startFrame, endFrame = AcquireRouteMapEndpoints(approachStep,
                 isWorldMap, currentMapID, currentX, currentY,
-                graph.pointMapIDs[firstPointIndex],
-                graph.pointXs[firstPointIndex], graph.pointYs[firstPointIndex])
+                approachMapID, approachX, approachY)
             if startFrame and endFrame then
                 startFrame:SetRouteLine(endFrame, true)
-                FollowPlayerApproach(isWorldMap, startFrame, endFrame, graph.pointMapIDs[firstPointIndex],
-                    graph.pointXs[firstPointIndex], graph.pointYs[firstPointIndex])
-                endFrame:SetRoutePoint(graph.pathTypes[firstPathReference])
+                FollowPlayerApproach(isWorldMap, startFrame, endFrame, approachMapID, approachX, approachY)
+                endFrame:SetRoutePoint(entrance and "localportal" or graph.pathTypes[firstPathReference])
+            end
+            if entrance then
+                local portalStart, portalEnd = AcquireRouteMapEndpoints(self:GetRouteStep(portalStepIndex),
+                    isWorldMap, entrance.mapID, entrance.exitX, entrance.exitY,
+                    graph.pointMapIDs[firstPointIndex], graph.pointXs[firstPointIndex], graph.pointYs[firstPointIndex])
+                if portalStart and portalEnd then
+                    portalStart:SetRouteLine(portalEnd, false)
+                    portalEnd:SetRoutePoint(graph.pathTypes[firstPathReference])
+                end
             end
         end
     end
@@ -1645,13 +1783,14 @@ function Navigation:BuildRouteLayer(isWorldMap)
     local firstDrawnPathIndex = progression.pathIndex + (targetsPathEnd and 1 or 0)
     for pathIndex = firstDrawnPathIndex, #route.pathReferences do
         local pathReference = route.pathReferences[pathIndex]
+        local step = self:GetRouteStep(GetDisplayedStepIndex(progression, pathIndex))
         local fromPointIndex = graph.pathFromPointIndexes[pathReference]
         local toPointIndex = graph.pathToPointIndexes[pathReference]
         if pathIndex > progression.pathIndex and fromPointIndex then
             local previousReference = route.pathReferences[pathIndex - 1]
             local previousPointIndex = graph.pathToPointIndexes[previousReference]
             if previousPointIndex ~= fromPointIndex then
-                local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
+                local startFrame, endFrame = AcquireRouteMapEndpoints(step,
                     isWorldMap, graph.pointMapIDs[previousPointIndex], graph.pointXs[previousPointIndex],
                     graph.pointYs[previousPointIndex], graph.pointMapIDs[fromPointIndex],
                     graph.pointXs[fromPointIndex], graph.pointYs[fromPointIndex])
@@ -1671,11 +1810,11 @@ function Navigation:BuildRouteLayer(isWorldMap)
                     from = graph.pathFromPointIndexes[sourceReference]
                     to = graph.pathToPointIndexes[sourceReference]
                 end
-                local startFrame, endFrame = AcquireRouteMapEndpoints(self:GetRouteStep(pathIndex),
+                local startFrame, endFrame = AcquireRouteMapEndpoints(step,
                     isWorldMap, graph.pointMapIDs[from], graph.pointXs[from], graph.pointYs[from],
                     graph.pointMapIDs[to], graph.pointXs[to], graph.pointYs[to])
                 if startFrame and endFrame then
-                    startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex)
+                    startFrame:SetRouteLine(endFrame, pathIndex == progression.pathIndex and not entrance)
                     -- The active floor or border shows only its current endpoint; keep
                     -- the exit as a line anchor until entrance arrival.
                     if legIndex == segments and
@@ -1699,7 +1838,8 @@ function Navigation:BuildRouteLayer(isWorldMap)
         finalStartY = graph.pointYs[finalPointIndex]
     end
     if not finalStartMapID or not finalStartX or not finalStartY then return end
-    local finalStartFrame, finalEndFrame = AcquireRouteMapEndpoints(self:GetRouteStep(stepCount), isWorldMap,
+    local finalStep = self:GetRouteStep(GetDisplayedStepIndex(progression, stepCount))
+    local finalStartFrame, finalEndFrame = AcquireRouteMapEndpoints(finalStep, isWorldMap,
         finalStartMapID, finalStartX, finalStartY, destination.routingData.mapID, destination.routingData.x,
         destination.routingData.y)
     if finalStartFrame and finalEndFrame then
@@ -1716,7 +1856,12 @@ end
 
 function Navigation:RefreshRouteLayers()
     local progression = self.progression
-    if progression and layerRoute == progression.route and layerPathIndex == progression.pathIndex and layerPhase == progression.phase then
+    local entrance = progression and progression.portalEntranceSteps and
+        progression.portalEntranceSteps[progression.pathIndex]
+    local displayedStepIndex = progression and GetDisplayedStepIndex(progression, progression.pathIndex) -
+        (progression.traversal and entrance and not entrance.completed and 1 or 0)
+    if progression and layerRoute == progression.route and layerPathIndex == progression.pathIndex and
+        layerPhase == progression.phase and layerDisplayedStepIndex == displayedStepIndex then
         return
     end
     self:ReleaseRouteLayers()
@@ -1725,6 +1870,7 @@ function Navigation:RefreshRouteLayers()
     layerRoute = progression and progression.route
     layerPathIndex = progression and progression.pathIndex
     layerPhase = progression and progression.phase
+    layerDisplayedStepIndex = displayedStepIndex
 end
 
 local function RefreshWorldMapRouteLayer()

@@ -615,3 +615,4 @@ L["Baseline measures whole-addon engine time. Detailed adds function scopes and 
 
 L["Share location"] = "Share location"
 L["Place a pin here"] = "Place a pin here"
+L["Enter the Wizard's Sanctum."] = "Enter the Wizard's Sanctum."

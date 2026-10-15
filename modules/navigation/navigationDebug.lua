@@ -135,6 +135,8 @@ function Navigation:ShowDebugDump()
             changeNumber = progression.changeNumber,
             status = progression.status,
             attempted = progression.attempted,
+            traversal = progression.traversal,
+            portalEntranceSteps = progression.portalEntranceSteps,
             pathUnavailable = progression.pathUnavailable
         })
     end

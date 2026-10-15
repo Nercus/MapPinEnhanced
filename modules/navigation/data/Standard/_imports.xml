@@ -9,6 +9,7 @@
     <Script file="item.lua" />
     <Script file="phaseswitch.lua" />
     <Script file="portal.lua" />
+    <Script file="portalApproaches.lua" />
     <Script file="ship.lua" />
     <Script file="spell.lua" />
     <Script file="toy.lua" />
