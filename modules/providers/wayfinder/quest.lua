@@ -149,11 +149,12 @@ local function GetQuestWaypointForMap(questID, mapID)
     local x, y = C_QuestLog.GetNextWaypointForMap(questID, mapID)
     if x and y then return x, y end
     -- Blizzard renders objective POIs independently of navigation waypoints.
+    -- Quest-start POIs can remain in progress; their giver is not an objective.
     for _, info in ipairs(C_QuestLog.GetQuestsOnMap(mapID) or {}) do
-        if info.questID == questID then return info.x, info.y end
+        if info.questID == questID and not info.isQuestStart then return info.x, info.y end
     end
     for _, info in ipairs(C_TaskQuest.GetQuestsOnMap(mapID) or {}) do
-        if info.questID == questID then return info.x, info.y end
+        if info.questID == questID and not info.isQuestStart then return info.x, info.y end
     end
 end
 
