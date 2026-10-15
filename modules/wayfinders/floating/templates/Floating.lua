@@ -435,6 +435,8 @@ function MapPinEnhancedWayfinderFloatingMixin:OnEvent(event)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnShow()
+    -- The facade also calls OnShow directly when replacing an active target.
+    if not UIParent:IsShown() then return end
     self.lastNavigationReadinessCheck = nil
     self:RegisterEvent("NAVIGATION_FRAME_CREATED")
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
@@ -485,6 +487,8 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnHide()
     self:StopTracking()
+    -- Ancestor hiding suspends updates without discarding the active target.
+    if self:IsShown() then return end
     self:ShutdownNavigationFrame()
     self:SetDestinationText(nil, nil)
     self:Reset()

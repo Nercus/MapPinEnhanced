@@ -41,7 +41,7 @@ end
 ---@return MapPinEnhancedWayfinderFloatingTemplate
 function MapPinEnhancedWayfinderFloating:GetFrame()
     if not self.frame then
-        self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", nil,
+        self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", UIParent,
             "MapPinEnhancedWayfinderFloatingTemplate")
         self.frame:SetScaleWithDistance(Options:GetOptionValue("Wayfinder.Floating.ScaleWithDistance") == true)
         self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.Floating.ShowBeam") == true)
