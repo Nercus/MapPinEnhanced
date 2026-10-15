@@ -153,7 +153,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self:ClearAllPoints()
-    self.navigationOpacity:SetShown(not enabled or Round(self.scaleDistance or 1) > 0)
+    self:RefreshNavigationVisibility()
     if enabled then
         -- LibWindow needs inherited parent scale; the projected marker keeps its independent scale.
         local position = self.fallbackPosition
@@ -183,7 +183,23 @@ function MapPinEnhancedWayfinderFloatingMixin:SetEllipticalRadii(major, minor)
     self.axesMultiplied = major * minor
 end
 
+function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationVisibility()
+    local hideInvalidTarget = false
+    if C_Navigation.GetTargetState() == Enum.NavigationState.Invalid then
+        hideInvalidTarget = IsInInstance() or C_Scenario.IsInScenario()
+        if not hideInvalidTarget then
+            local _, _, _, instanceMapID = UnitPosition("player")
+            hideInvalidTarget = MapPinEnhanced:IsReadableNumber(instanceMapID) and
+                C_DelvesUI.HasActiveDelve(instanceMapID)
+        end
+    end
+    -- Hide only the presentation so readiness sampling can restore it when the target recovers.
+    self.navigationOpacity:SetShown(not hideInvalidTarget and
+        (not self.customDirection or Round(self.scaleDistance or 1) > 0))
+end
+
 function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
+    self:RefreshNavigationVisibility()
     local navFrame = C_Navigation.GetFrame()
     -- Cached native frames still need opacity restored after fallback or shutdown.
     if not self.customDirection then
@@ -290,6 +306,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval,
                                                                movementState)
     self:UpdatePinScale(distance)
+    self:RefreshNavigationVisibility()
     -- The bearing fallback matches Arrow; native marker layout anticipates approach speed.
     local isFallbackClose = distance ~= nil and distance < 10
     local fallbackChanged = self.isFallbackClose ~= isFallbackClose
@@ -314,8 +331,6 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     end
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
-        -- Match the rounded readout and keep sampling while only the presentation is hidden.
-        self.navigationOpacity:SetShown(Round(self.scaleDistance or 1) > 0)
         local alpha = angle ~= nil and not self.fallbackReadyAt and 1 or 0
         if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
     end
