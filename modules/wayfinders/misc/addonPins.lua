@@ -168,6 +168,9 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
     if trackedPin and trackedPin.pinID == pinID and isTracked then
         -- The pin supersedes the old destination; restoring its quest can untrack this pin.
         Wayfinders:ClearStepSuperTracking(false)
+        -- Selecting an existing pin must clear the native source just like placing
+        -- a new waypoint does; otherwise its quest remains selected alongside the pin.
+        C_SuperTrack.ClearAllSuperTracked()
         -- Navigation can acquire a Step before the pin's deferred waypoint
         -- selection. This domain command already supersedes the external row.
         Wayfinders:UpdateSuperTrackingEntrySelection(nil, nil, true)
