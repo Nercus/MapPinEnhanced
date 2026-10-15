@@ -16,10 +16,11 @@ local L = MapPinEnhanced.L
 ---@field normalFontSize number
 ---@field normalTextAnchor Frame
 ---@field fallbackTextAnchor Frame
+---@field fallbackReadoutHeight number?
 MapPinEnhancedWayfinderFloatingTitleMixin = {}
 
 local MAX_TITLE_WIDTH = 325
-local FALLBACK_TITLE_WIDTH = 180
+local FALLBACK_TITLE_WIDTH = 166
 
 function MapPinEnhancedWayfinderFloatingTitleMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
@@ -49,11 +50,15 @@ function MapPinEnhancedWayfinderFloatingTitleMixin:SetFallback(fallback)
     if self.fallback == fallback then return end
     self.fallback = fallback
     local font, _, flags = self.title:GetFont()
-    self.title:SetFont(font, fallback and math.max(8, self.normalFontSize - 1) or self.normalFontSize, flags)
+    local _, fallbackFontSize = GameFontNormal:GetFont()
+    self.title:SetFont(font, fallback and fallbackFontSize or self.normalFontSize, flags)
+    self.title:SetJustifyH(fallback and "LEFT" or "CENTER")
     self.title:SetSpacing(fallback and 2 or 3)
     self.title:ClearAllPoints()
     self.title:SetPoint("TOPLEFT", fallback and self.fallbackTextAnchor or self.normalTextAnchor, "TOPLEFT")
     self.info:SetShown(fallback)
+    self.background:SetShown(not fallback)
+    self.border:SetShown(not fallback)
     self:SetDestinationText(self.fullTitle, self.fullDescription)
 end
 
@@ -85,6 +90,12 @@ function MapPinEnhancedWayfinderFloatingTitleMixin:SetDestinationText(title, des
 end
 
 function MapPinEnhancedWayfinderFloatingTitleMixin:UpdateLayout()
+    if self.fallback then
+        self.title:SetWidth(FALLBACK_TITLE_WIDTH)
+        local readoutHeight = self.fallbackReadoutHeight or 0
+        self:SetSize(318, math.max(62, self.title:GetHeight() + readoutHeight + 19))
+        return
+    end
     local shown = self.description:IsShown()
     local width = math.max(self.title:GetWidth(), shown and self.description:GetWidth() or 0, 40)
     self.title:SetWidth(width)

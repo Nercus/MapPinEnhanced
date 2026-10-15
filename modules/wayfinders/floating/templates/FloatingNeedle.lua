@@ -9,7 +9,6 @@
 ---@field texture Texture
 ---@field fallbackTexture MapPinEnhancedFloatingFallbackTexture
 ---@field fallbackCloseTexture MapPinEnhancedFloatingFallbackCloseTexture
----@field fallbackBackground Texture
 ---@field rotation number?
 ---@field nativeRotation number?
 ---@field fallbackRotation number?
@@ -35,7 +34,6 @@ function MapPinEnhancedWayfinderFloatingNeedleMixin:SetFallback(fallback, close)
     self.fallback = fallback
     self.fallbackClose = fallback and close == true
     self.texture:SetShown(not fallback)
-    self.fallbackBackground:SetShown(fallback)
     local instantly = not fallback or not self:IsVisible()
     local farTexture = self.fallbackTexture
     local closeTexture = self.fallbackCloseTexture

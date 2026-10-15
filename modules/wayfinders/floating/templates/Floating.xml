@@ -2,6 +2,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
 
     <Script file="Floating.lua" />
+    <Frame name="MapPinEnhancedFloatingFallbackPositionTemplate" virtual="true" enableMouse="false">
+        <Size x="50" y="50" />
+    </Frame>
     <Frame name="MapPinEnhancedWayfinderFloatingTemplate" virtual="true" mixin="MapPinEnhancedWayfinderFloatingMixin" hidden="true" frameStrata="LOW" ignoreParentScale="true" inherits="MapPinEnhancedFadingFrameTemplate">
         <Size x="50" y="50" />
         <Frames>

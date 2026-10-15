@@ -23,6 +23,7 @@ local FALLBACK_DELAY = 1
 local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the needle's size.
 
 ---@class MapPinEnhancedWayfinderFloatingTemplate : Frame, MapPinEnhancedWayfinderDistanceMixin, MapPinEnhancedWayfinderDirectionMixin, MapPinEnhancedFadingFrameTemplate
+---@field fallbackPosition Frame
 ---@field navigationOpacity Frame | { content: MapPinEnhancedWayfinderFloatingContentTemplate }
 ---@field content MapPinEnhancedWayfinderFloatingContentTemplate
 ---@field pin MapPinEnhancedBasePinTemplate
@@ -81,8 +82,8 @@ end
 ---@param distance number?
 function MapPinEnhancedWayfinderFloatingMixin:UpdatePinScale(distance)
     self.scaleDistance = distance
-    local scale = 1
-    if self.scaleWithDistance and distance then
+    local scale = self.customDirection and 42 / 25 or 1
+    if not self.customDirection and self.scaleWithDistance and distance then
         SetUpDistanceScaleRange()
         scale = 1 -
         0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
@@ -98,14 +99,14 @@ function MapPinEnhancedWayfinderFloatingMixin:SetScaleWithDistance(enabled)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
-    MapPinEnhanced:UnregisterDraggableFrame(self)
-    self:UpdatePinScale(nil)
+    MapPinEnhanced:UnregisterDraggableFrame(self.fallbackPosition)
     self:ResetDistanceReadout()
     self:ResetDirectionSampling()
     self.displayType = "far"
     self.isFallbackClose = nil
     self.presentationInitialized = nil
     self.customDirection = nil
+    self:UpdatePinScale(nil)
     self.fallbackReadyAt = nil
     self.lastNavigationReadinessCheck = nil
     self.content:PrepareForTarget()
@@ -132,7 +133,7 @@ end
 
 ---@param self MapPinEnhancedWayfinderFloatingTemplate
 local function RegisterFallbackDragging(self)
-    MapPinEnhanced:RegisterDraggableFrame(self, "floatingFallbackFrame", self.titleContainer, function()
+    MapPinEnhanced:RegisterDraggableFrame(self.fallbackPosition, "floatingFallbackFrame", self.titleContainer, function()
         return not self.customDirection or self.visibilityHiding or self.navigationOpacity:GetAlpha() == 0
     end)
     self.titleContainer:SetPropagateMouseClicks(false)
@@ -142,8 +143,9 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     if self.customDirection == enabled then return end
     -- Save an in-progress drag before native guidance replaces the fallback anchor.
-    MapPinEnhanced:UnregisterDraggableFrame(self)
+    MapPinEnhanced:UnregisterDraggableFrame(self.fallbackPosition)
     self.customDirection = enabled
+    self:UpdatePinScale(self.scaleDistance)
     -- Native frame/path setup can lag behind tracking. Only show a persistent fallback.
     self.fallbackReadyAt = enabled and GetTime() + FALLBACK_DELAY or nil
     self.isClamped = nil
@@ -151,12 +153,17 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self:ClearAllPoints()
+    self.navigationOpacity:SetShown(not enabled or Round(self.scaleDistance or 1) > 0)
     if enabled then
-        self:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200)
+        -- LibWindow needs inherited parent scale; the projected marker keeps its independent scale.
+        local position = self.fallbackPosition
+        position:ClearAllPoints()
+        position:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200 / position:GetEffectiveScale())
         RegisterFallbackDragging(self)
         if MapPinEnhanced:GetVar("frames", "floatingFallbackFrame", "point") then
-            MapPinEnhanced:RestoreFrame(self)
+            MapPinEnhanced:RestoreFrame(position)
         end
+        self:SetPoint("CENTER", position, "CENTER")
         self.navigationOpacity:SetAlpha(0)
     elseif self.navFrame then
         self.navigationOpacity:SetAlpha(1)
@@ -307,6 +314,8 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     end
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
+        -- Match the rounded readout and keep sampling while only the presentation is hidden.
+        self.navigationOpacity:SetShown(Round(self.scaleDistance or 1) > 0)
         local alpha = angle ~= nil and not self.fallbackReadyAt and 1 or 0
         if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
     end
@@ -414,6 +423,8 @@ function MapPinEnhancedWayfinderFloatingMixin:SetDirectionShown(shown)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:OnLoad()
+    self.fallbackPosition = CreateFrame("Frame", nil, UIParent,
+        "MapPinEnhancedFloatingFallbackPositionTemplate")
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     -- Navigation availability must not overwrite the root visibility fade.
     self.content = self.navigationOpacity.content
@@ -481,7 +492,7 @@ end
 -- Release Blizzard ownership when hiding starts; only the last rendered marker
 -- remains for the fade. A later OnHide must not undo a new wayfinder's takeover.
 function MapPinEnhancedWayfinderFloatingMixin:StopTracking()
-    MapPinEnhanced:UnregisterDraggableFrame(self)
+    MapPinEnhanced:UnregisterDraggableFrame(self.fallbackPosition)
     self:SetScript("OnUpdate", nil)
     self.content:StopTextTransition()
     self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
@@ -512,8 +523,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
-    MapPinEnhanced:UnregisterDraggableFrame(self)
-    self:UpdatePinScale(nil)
+    MapPinEnhanced:UnregisterDraggableFrame(self.fallbackPosition)
     self.nativeScenarioID = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.displayType = "far"
@@ -524,6 +534,7 @@ function MapPinEnhancedWayfinderFloatingMixin:Reset()
     self.newNeedleRotation = nil
     self.needle:SetRotation(0)
     self.customDirection = nil
+    self:UpdatePinScale(nil)
     self.fallbackReadyAt = nil
     self.lastNavigationTargetCheck = nil
     self.lastNavigationReadinessCheck = nil

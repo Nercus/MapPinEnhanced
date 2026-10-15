@@ -23,6 +23,9 @@ local MapPinEnhanced = select(2, ...)
 ---@field hover Frame
 ---@field closePinAnchor Frame
 ---@field fallbackTitleAnchor Frame
+---@field fallbackPanel Frame
+---@field fallbackPinAnchor Frame
+---@field fallbackNeedleAnchor Frame
 ---@field chevrons MapPinEnhancedWayfinderFloatingChevrons
 ---@field fadeIn MapPinEnhancedAnimationVisibilityMixin
 ---@field fadeOut MapPinEnhancedAnimationVisibilityMixin
@@ -50,9 +53,15 @@ function MapPinEnhancedWayfinderFloatingContentMixin:OnLoad()
     self.beam = self.visual.beam
     self.title = self.visual.text.title
     self.readout = self.visual.text.readout
+    -- The singleton title owns the fallback panel's hit area and wrapped text height.
+    self.readout.onTextChanged = function()
+        self.title.fallbackReadoutHeight = self.readout:IsShown() and self.readout:GetHeight() or 0
+        self.title:UpdateLayout()
+    end
     self.chevronTextures = { self.visual.chevrons.top, self.visual.chevrons.middle, self.visual.chevrons.bottom }
     local frameLevel = self:GetFrameLevel()
     self.visual:SetFrameLevel(frameLevel)
+    self.visual.fallbackPanel:SetFrameLevel(frameLevel)
     self.needle:SetFrameLevel(frameLevel)
     self.beam:SetFrameLevel(frameLevel + 1)
     self.pin:SetFrameLevel(frameLevel + 2)
@@ -127,10 +136,14 @@ end
 
 ---@param showTitle boolean
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyReadoutStyle(showTitle)
+    local fallback = self.currentPresentation == "fallback" or self.currentPresentation == "fallback-close"
     local font, size = GameFontNormalSmall:GetFont()
-    self.readout.text:SetFont(font, showTitle and size or 8, self.showTextOutline and "OUTLINE" or "")
+    self.readout.text:SetFont(font, (showTitle or fallback) and size or 8, self.showTextOutline and "OUTLINE" or "")
+    self.readout.text:SetJustifyH(fallback and "LEFT" or "CENTER")
     if showTitle then
         self.readout.text:SetTextColor(self.title.title:GetTextColor())
+    elseif fallback then
+        self.readout.text:SetTextColor(0.65, 0.65, 0.65)
     else
         self.readout.text:SetTextColor(1, 1, 1)
     end
@@ -255,16 +268,24 @@ end
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentation)
     self:StopTextTransition()
     self.currentPresentation = presentation
+    self:ApplyReadoutStyle(false)
     local clamped = presentation == "clamped"
     local close = presentation == "close"
     local fallbackClose = presentation == "fallback-close"
     local fallback = presentation == "fallback" or fallbackClose
+    self:SetScale(fallback and 0.6 or 1)
     self.title:SetFallback(fallback)
     self.visual:Show()
-    self.pin:SetShown(not fallback)
-    self.pin:ClearAllPoints()
-    self.pin:SetPoint("CENTER", close and self.visual.closePinAnchor or self.visual, "CENTER")
+    self.visual.fallbackPanel:SetShown(fallback)
+    self.pin:Show()
+    -- Break the native title-to-pin anchor before the fallback pin anchors to the title.
     self.title:ClearAllPoints()
+    self.pin:ClearAllPoints()
+    self.pin:SetPoint("CENTER", fallback and self.visual.fallbackPinAnchor or
+        (close and self.visual.closePinAnchor or self.visual), "CENTER")
+    self.needle:ClearAllPoints()
+    self.needle:SetPoint("CENTER", fallback and self.visual.fallbackNeedleAnchor or self, "CENTER")
+    self.needle:SetFrameLevel(self:GetFrameLevel() + (fallback and 2 or 0))
     if fallback then
         self.title:SetPoint("TOP", self.visual.fallbackTitleAnchor, "TOP")
     else
@@ -272,13 +293,13 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
     end
     self.title:SetVisible(close or fallback)
     self:SetChevronsActive(close and self:IsVisible())
-    self.readout.maxWidth = fallback and 180 or nil
+    self.readout.maxWidth = fallback and 166 or nil
     self.readout:SetDisplayVisible(not clamped)
     self.readout:ClearAllPoints()
     if close then
         self.readout:SetPoint("BOTTOM", self.title, "TOP", 0, 0)
     elseif fallback then
-        self.readout:SetPoint("TOP", self.title, "BOTTOM", 0, -3)
+        self.readout:SetPoint("TOPLEFT", self.title.title, "BOTTOMLEFT", 0, -3)
     else
         self.readout:SetPoint("TOP", self.pin, "BOTTOM", 0, -3)
     end

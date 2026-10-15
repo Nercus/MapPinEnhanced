@@ -39,13 +39,13 @@
             <Frame parentKey="fallbackTextAnchor">
                 <Size x="1" y="1" />
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="8" y="-5" />
+                    <Anchor point="TOPLEFT" x="64" y="-8" />
                 </Anchors>
             </Frame>
             <Frame parentKey="info" enableMouse="true" propagateMouseInput="Clicks" hidden="true">
                 <Size x="18" y="18" />
                 <Anchors>
-                    <Anchor point="RIGHT" relativePoint="RIGHT" />
+                    <Anchor point="RIGHT" relativePoint="RIGHT" x="-8" />
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">

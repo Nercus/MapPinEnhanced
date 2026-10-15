@@ -27,7 +27,7 @@
                     <Frame parentKey="fallbackTitleAnchor">
                         <Size x="1" y="1" />
                         <Anchors>
-                            <Anchor point="TOP" relativePoint="CENTER" y="-16" />
+                            <Anchor point="TOP" relativePoint="CENTER" y="31" />
                         </Anchors>
                     </Frame>
                     <Frame parentKey="closePinAnchor">
@@ -77,6 +77,24 @@
                                 </Anchors>
                             </Frame>
                         </Frames>
+                    </Frame>
+                    <Frame parentKey="fallbackPanel" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" hidden="true">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeKey="$parent.text.title" />
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.text.title" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="fallbackPinAnchor">
+                        <Size x="1" y="1" />
+                        <Anchors>
+                            <Anchor point="CENTER" relativePoint="LEFT" relativeKey="$parent.text.title" x="37" />
+                        </Anchors>
+                    </Frame>
+                    <Frame parentKey="fallbackNeedleAnchor">
+                        <Size x="1" y="1" />
+                        <Anchors>
+                            <Anchor point="CENTER" relativePoint="RIGHT" relativeKey="$parent.text.title" x="-60" />
+                        </Anchors>
                     </Frame>
                     <Frame parentKey="hover" hidden="true" enableMouse="true" propagateMouseInput="Clicks">
                         <Size x="325" />
