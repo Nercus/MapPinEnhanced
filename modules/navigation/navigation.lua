@@ -1367,7 +1367,6 @@ function Navigation:ApplyStepPresentation(target, onArrival, info)
         destination ~= nil and destination.insideObjectiveArea == true
     info.showDirectionInObjectiveArea = info.insideObjectiveArea == true and
         destination ~= nil and destination.showDirectionInObjectiveArea == true
-    info.dataWarning = self:GetMissingTravelDataWarning()
     info.destinationTitle = destination and destination.data.title
     info.destinationMapID = destination and destination.data.mapID
     self:RefreshRouteLayers()

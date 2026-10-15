@@ -94,7 +94,6 @@ local activeTarget
 ---@field instruction string
 ---@field destinationTitle string? original destination title
 ---@field destinationMapID number? original destination map
----@field dataWarning string? missing enabled travel data
 ---@field status string?
 ---@field desiredAction WayfinderDesiredAction?
 

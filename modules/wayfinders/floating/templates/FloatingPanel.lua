@@ -58,7 +58,7 @@ function MapPinEnhancedFloatingPanelMixin:SetStep(step)
         self.step = step
         self.fullText = step and step.instruction or ""
     end
-    if step and step.dataWarning and step.showInstruction == false then
+    if step and step.showInstruction == false then
         self.fullText = step.instruction
     end
     local target = self.target
@@ -126,7 +126,7 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     end or nil
     self:PrepareCombatDisplay()
     self.applying = true
-    self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or step.dataWarning ~= nil or
+    self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or self.dataWarning:IsShown() or
         step.showInstruction ~= false and (step.isTraversal or step.stepCount ~= 1)), returningFromCombat)
     self.applying = nil
 end
@@ -185,7 +185,7 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     local inside = self.step and self.step.insideObjectiveArea
     local target = self.target
     local title = inside and target and target.title or self.fullText
-    local warning = self.step and self.step.dataWarning
+    local warning = self.step and MapPinEnhanced:GetModule("Navigation"):GetMissingTravelDataWarning()
     local textWidth = warning and 198 or 210
     local titleTruncated = Wayfinders:ApplyWrappedText(self.title, title, textWidth, 4)
     local destinationTruncated = Wayfinders:ApplyWrappedText(self.text, self.destinationText, textWidth, 4)
