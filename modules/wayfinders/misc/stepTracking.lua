@@ -34,6 +34,7 @@ end
 ---@param candidateMapID number
 ---@return UiMapPoint?
 local function ProjectStepWaypoint(mapID, x, y, candidateMapID)
+    if not MapPinEnhanced:IsZoneMap(candidateMapID) then return end
     if not C_Map.CanSetUserWaypointOnMap(candidateMapID) then return end
     local hbd = MapPinEnhanced.HBD
     local projectedX, projectedY = hbd:TranslateZoneCoordinates(x, y, mapID, candidateMapID)
@@ -76,7 +77,7 @@ local function CreateStepWaypoint(mapID, x, y)
             parentMapID = GetParentMapID(parentMapID)
         end
     end
-    if C_Map.CanSetUserWaypointOnMap(mapID) then
+    if MapPinEnhanced:IsZoneMap(mapID) and C_Map.CanSetUserWaypointOnMap(mapID) then
         return UiMapPoint.CreateFromCoordinates(mapID, x, y, 0)
     end
 end

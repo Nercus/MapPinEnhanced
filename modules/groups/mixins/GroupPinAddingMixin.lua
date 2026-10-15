@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Pins = MapPinEnhanced:GetModule("Pins")
 local ARCHIVE_STATE_HIDDEN = "hidden"
 
 ---@class MapPinEnhancedGroupMixin
@@ -24,10 +25,28 @@ local function ValidatePinText(pinData)
 end
 
 ---@param pinData pinData|SaveablePinData
+---@param retainedPinID UUID?
+---@return pinData?
+local function PreparePinPlacement(pinData, retainedPinID)
+    -- Moves, restore and portable imports retain their existing identity and
+    -- coordinates. New placements resolve before any group state is changed.
+    if retainedPinID then return pinData end
+    local mapID, x, y = Pins:ResolvePinPosition(pinData.mapID, pinData.x, pinData.y)
+    if not mapID then return nil end
+    if mapID == pinData.mapID and x == pinData.x and y == pinData.y then return pinData end
+    local copy = CopyTable(pinData)
+    copy.mapID, copy.x, copy.y = mapID, x, y
+    return copy
+end
+
+---@param pinData pinData|SaveablePinData
 ---@param overridePinID UUID?
 ---@param order number?
 ---@return MapPinEnhancedPinMixin?, UUID?, boolean replacedWayBackPin, boolean shouldTrack
 function MapPinEnhancedGroupPinAddingMixin:AddBeforePersist(pinData, overridePinID, order)
+    local placement = PreparePinPlacement(pinData, overridePinID)
+    if not placement then return nil, nil, false, false end
+    pinData = placement
     local group = self
     local groupID, lifetimeChangeNumber = group:GetGroupID(), group.lifetimeChangeNumber
     local replacedWayBackPin = false
@@ -54,6 +73,9 @@ end
 ---@return MapPinEnhancedPinMixin?, UUID?
 function MapPinEnhancedGroupPinAddingMixin:AddPin(pinData, overridePinID)
     ValidatePinText(pinData)
+    local placement = PreparePinPlacement(pinData, overridePinID)
+    if not placement then return nil, nil end
+    pinData = placement
     if not self:CancelBatch() then return nil end
 
     -- Only new additions materialize the preference. Restore/import use their retained data.
@@ -85,6 +107,13 @@ end
 function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGroupOrder, pinOrders, onAdded)
     assert(type(pinsData) == "table", "MapPinEnhancedGroupMixin:AddMultiplePins: pinsData must be a table")
     for _, pinData in ipairs(pinsData) do ValidatePinText(pinData) end
+    local placements = {} ---@type pinData[]
+    for _, pinData in ipairs(pinsData) do
+        local placement = PreparePinPlacement(pinData, pinData.pinID)
+        if not placement then return false end
+        placements[#placements + 1] = placement
+    end
+    pinsData = placements
     if not self:CancelBatch() then return false end
     if #pinsData == 0 then return true end
 

@@ -24,6 +24,7 @@
     <Include file="secrets.lua" />
     <Include file="notify.lua" />
     <Include file="map.lua" />
+    <Include file="mapPosition.lua" />
     <Include file="dialogs.lua" />
 
     <!--@debug@-->

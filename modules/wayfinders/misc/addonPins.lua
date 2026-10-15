@@ -44,6 +44,8 @@ end
 local function SetTrackedPinUserWaypoint(wayfinderData)
     local mapID, x, y = wayfinderData.mapID, wayfinderData.x, wayfinderData.y
     if not mapID or not x or not y then return end
+    mapID, x, y = MapPinEnhanced:ResolveZonePosition(mapID, x, y)
+    if not MapPinEnhanced:IsZoneMap(mapID) then return end
 
     if not C_Map.CanSetUserWaypointOnMap(mapID) then
         local mapInfo = C_Map.GetMapInfo(mapID)

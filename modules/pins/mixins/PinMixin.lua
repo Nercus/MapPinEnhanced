@@ -148,8 +148,9 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     assert(y, "MapPinEnhancedPinMixin:SetPinPosition: y is nil")
     assert(type(y) == "number", "MapPinEnhancedPinMixin:SetPinPosition: y must be a number")
 
-    x = Pins:ConvertPercentCoordinate(x)
-    y = Pins:ConvertPercentCoordinate(y)
+    local resolvedMapID, resolvedX, resolvedY = Pins:ResolvePinPosition(mapID, x, y)
+    if not resolvedMapID then return end
+    mapID, x, y = resolvedMapID, resolvedX, resolvedY
 
     if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return end
 

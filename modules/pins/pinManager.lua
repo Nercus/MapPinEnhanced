@@ -48,6 +48,26 @@ function Pins:ConvertPercentCoordinate(value)
     return value > 1 and value / 100 or value
 end
 
+---@param mapID number
+---@param x number
+---@param y number
+---@return number? mapID
+---@return number? x
+---@return number? y
+function Pins:ResolvePinPosition(mapID, x, y)
+    x, y = self:ConvertPercentCoordinate(x), self:ConvertPercentCoordinate(y)
+    if not MapPinEnhanced:IsZoneMap(mapID) then
+        mapID, x, y = MapPinEnhanced:ResolveZonePosition(mapID, x, y)
+    end
+    if not MapPinEnhanced:IsZoneMap(mapID) or
+        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
+        MapPinEnhanced:Notify(MapPinEnhanced.L["Failed to place pin on the map. Please check if the coordinates are correct!"],
+            "ERROR")
+        return
+    end
+    return mapID, x, y
+end
+
 ---@param initPinData pinData
 ---@param overridePinID UUID?
 ---@param group MapPinEnhancedGroupMixin?

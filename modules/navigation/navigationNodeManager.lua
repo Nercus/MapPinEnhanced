@@ -403,7 +403,7 @@ function Navigation:UpdateHearthstonePath(destination)
     if destination then
         -- Bind observations can use a continent map. Resolve the routing copy
         -- on both restore and learning without replacing the saved observation.
-        mapID, x, y = self:ResolveZonePosition(destination.mapID, destination.x, destination.y)
+        mapID, x, y = MapPinEnhanced:ResolveZonePosition(destination.mapID, destination.x, destination.y)
     end
     -- Existing Routes and jobs own immutable geometry. Share the static arrays,
     -- copying only the arrays whose hearth endpoint changes.

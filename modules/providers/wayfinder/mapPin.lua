@@ -147,10 +147,13 @@ local function ReadMapPin()
     local hasPin = pinType ~= nil and typeID ~= nil
     local questOffer = pinType == Enum.SuperTrackingMapPinType.QuestOffer and
         C_QuestLine.GetQuestLineInfo(typeID)
-    local questMapID = questOffer and questOffer.startMapID or nil
+    local targetMapID = questOffer and questOffer.startMapID or nil
     if hasPin and pinType == Enum.SuperTrackingMapPinType.QuestOffer and
-        (not questMapID or questMapID == 0) then
-        questMapID = C_TaskQuest.GetQuestZoneID(typeID)
+        (not targetMapID or targetMapID == 0) then
+        targetMapID = C_TaskQuest.GetQuestZoneID(typeID)
+    elseif hasPin and pinType == Enum.SuperTrackingMapPinType.AreaPOI and
+        C_EventScheduler and C_EventScheduler.GetEventUiMapID then
+        targetMapID = C_EventScheduler.GetEventUiMapID(typeID)
     end
     ---@type number?, string?, string|number?, boolean?, string?
     local resolvedMapID, title, texture, usesAtlas, description
@@ -160,7 +163,7 @@ local function ReadMapPin()
             x, y, title, texture, usesAtlas, description = Providers:GetMapPinInfo(pinType, typeID, candidateMapID)
             resolvedMapID = candidateMapID
             return x, y
-        end or nil, questMapID)
+        end or nil, targetMapID)
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
         return
     end
@@ -197,7 +200,8 @@ Wayfinders:RegisterSuperTrackingProvider({
     getTargetID = GetMapPinTargetID,
     read = ReadMapPin,
     readText = ReadMapPinText,
-    events = { "AREA_POIS_UPDATED", "NEIGHBORHOOD_MAP_DATA_UPDATED", "QUEST_POI_UPDATE", "QUEST_LOG_UPDATE" },
+    events = { "AREA_POIS_UPDATED", "EVENT_SCHEDULER_UPDATE", "NEIGHBORHOOD_MAP_DATA_UPDATED",
+        "QUEST_POI_UPDATE", "QUEST_LOG_UPDATE" },
 })
 
 MapPinEnhanced:RegisterEvent("QUESTLINE_UPDATE", function(requestRequired)

@@ -117,43 +117,6 @@ local function HasParentMap(mapID, parentMapID)
     return false
 end
 
----@param mapID number
----@param x number
----@param y number
----@return number mapID
----@return number x
----@return number y
-function Navigation:ResolveZonePosition(mapID, x, y)
-    local hbd = MapPinEnhanced.HBD
-    if not hbd or not C_Map.GetMapInfoAtPosition then return mapID, x, y end
-    local mapInfo = C_Map.GetMapInfo(mapID)
-    while mapInfo and mapInfo.mapType <= Enum.UIMapType.Zone do
-        local child = C_Map.GetMapInfoAtPosition(mapID, x, y)
-        if not child or child.mapID == mapID or child.mapType < mapInfo.mapType then break end
-        if child.mapType == mapInfo.mapType then
-            -- Cities and surrounding zones can have the same map type. Only
-            -- descend into a strictly contained map, never an overlapping zone.
-            if child.mapType ~= Enum.UIMapType.Zone then break end
-            local minX, minY = hbd:TranslateZoneCoordinates(0, 0, child.mapID, mapID)
-            local maxX, maxY = hbd:TranslateZoneCoordinates(1, 1, child.mapID, mapID)
-            if not MapPinEnhanced:IsCoordinate(minX) or not MapPinEnhanced:IsCoordinate(minY) or
-                not MapPinEnhanced:IsCoordinate(maxX) or not MapPinEnhanced:IsCoordinate(maxY) or
-                not (minX < maxX and minY < maxY) or
-                not (minX > 0 or minY > 0 or maxX < 1 or maxY < 1) then
-                break
-            end
-        end
-        local childX, childY = hbd:TranslateZoneCoordinates(x, y, mapID, child.mapID)
-        if type(childX) ~= "number" or type(childY) ~= "number" or
-            not (childX >= 0 and childX <= 1 and childY >= 0 and childY <= 1) then
-            break
-        end
-        mapID, x, y = child.mapID, childX, childY
-        mapInfo = child
-    end
-    return mapID, x, y
-end
-
 ---@param data WayfinderData
 ---@return WayfinderData
 local function CopyRoutingData(data)
@@ -165,7 +128,7 @@ local function CopyRoutingData(data)
     end
     -- Resolve the destination before preferring the player's map; otherwise a
     -- city pin placed on its surrounding zone gains an unnecessary exit leg.
-    copy.mapID, copy.x, copy.y = Navigation:ResolveZonePosition(copy.mapID, copy.x, copy.y)
+    copy.mapID, copy.x, copy.y = MapPinEnhanced:ResolveZonePosition(copy.mapID, copy.x, copy.y)
     if copy.mapID ~= data.mapID then return copy end
     local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if playerMapID == copy.mapID then return copy end
@@ -259,18 +222,19 @@ end
 function Navigation:ApplyDirectDestination(removeOnArrival, fallbackInstruction, fallbackPhase)
     local destination = self.activeDestination
     if not destination then return end
+    local hasZone = MapPinEnhanced:IsZoneMap(destination.routingData.mapID)
     if fallbackPhase ~= "calculating" then self:RestoreActionEquipment() end
     self:DeactivatePathHandler()
     self:ReleaseRouteLayers()
     local phase = fallbackPhase or "direct"
     presentationChangeNumber = presentationChangeNumber + 1
-    self:ApplyStepPresentation(destination.routingData, removeOnArrival and function()
+    self:ApplyStepPresentation(destination.routingData, hasZone and removeOnArrival and function()
         self:CompleteFinalDestination(destination)
     end or nil, {
         changeNumber = presentationChangeNumber,
         arrivalIdentity = string.format("%d:direct:%s", destination.changeNumber, tostring(removeOnArrival)),
-        showDirection = destination.directGuidance or not self.routeNavigationEnabled or
-            phase ~= "no-direction" and self:CanGuideDirectly(),
+        showDirection = hasZone and (destination.directGuidance or not self.routeNavigationEnabled or
+            phase ~= "no-direction" and self:CanGuideDirectly()),
         showInstruction = self.routeNavigationEnabled == true,
         phase = phase,
         isFinalDestination = true,
@@ -428,15 +392,23 @@ end
 function Navigation:StartCalculation(currentRouteUnusable)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled then return end
+    destination.routingData = CopyRoutingData(destination.data)
+    if not MapPinEnhanced:IsZoneMap(destination.routingData.mapID) then
+        self:CancelRouteCalculation(self.activeCalculation)
+        self.progression = nil
+        self.lastCalculationFailure = "destination zone unavailable"
+        self.lastCalculationTermination = "destination zone unavailable"
+        self.lastCalculationExclusions = nil
+        self:ApplyDirectDestination(false, L["Navigation No Direction"], "no-direction")
+        return
+    end
     if destination.directGuidance then
-        destination.routingData = CopyRoutingData(destination.data)
         self:ApplyDirectDestination(true)
         return
     end
     if self:IsTaxiBookingPending() then return end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if self.progression and (not mapID or not x or not y) then return end
-    destination.routingData = CopyRoutingData(destination.data)
     self:CancelRouteCalculation(self.activeCalculation)
     self.lastCalculationFailure = nil
     self.lastCalculationExclusions = nil
@@ -1066,6 +1038,7 @@ MapPinEnhanced:RegisterEventBucket({ "SUPER_TRACKING_PATH_UPDATED" }, RefreshNat
 function Navigation:CanGuideDirectly()
     local destination = self.activeDestination
     if not destination then return false end
+    if not MapPinEnhanced:IsZoneMap(destination.routingData.mapID) then return false end
     if type(destination.routingData.mapID) ~= "number" or type(destination.routingData.x) ~= "number" or
         type(destination.routingData.y) ~= "number" then
         return false
