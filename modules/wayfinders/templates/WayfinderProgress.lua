@@ -30,7 +30,9 @@ end
 ---@param width number
 function MapPinEnhancedWayfinderProgressMixin:Apply(step, width)
     local index, count = step and step.stepIndex, step and step.stepCount
-    if not step or not step.progressEntries or not index or not count or count <= 1 or index < 1 or index > count then
+    -- Objective-area presentation replaces travel guidance until the player leaves.
+    if not step or step.insideObjectiveArea or not step.progressEntries or
+        not index or not count or count <= 1 or index < 1 or index > count then
         self.stepIndex, self.stepCount, self.columns = nil, nil, nil
         self.entries = nil
         self:Hide()
