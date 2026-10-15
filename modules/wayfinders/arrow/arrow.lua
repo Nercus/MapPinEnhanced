@@ -92,6 +92,9 @@ end
 function MapPinEnhancedWayfinderArrow:UpdateText()
     local frame = self:GetFrame()
     local step = self.step
+    local warning = step and MapPinEnhanced:GetModule("Navigation"):GetMissingTravelDataWarning()
+    frame.dataWarning:SetTooltip(warning)
+    frame.dataWarning:SetShown(warning ~= nil)
     local intermediate = Wayfinders:IsIntermediateStep()
     local showInstruction = step and not step.insideObjectiveArea and step.showInstruction ~= false and
         (step.isTraversal or (step.stepCount or 0) > 1 or step.phase == "calculating" or step.phase == "no-direction" or
@@ -136,7 +139,7 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
     -- Match the 16-unit side inset; the progress strip is only an overlay.
     local artworkHeight = math.max(frame.pin:GetHeight(),
         frame.needleContainer:IsShown() and frame.needleContainer:GetHeight() or 0)
-    local height = math.max(62, math.max(textHeight, artworkHeight) + 32)
+    local height = math.max(warning and 92 or 62, math.max(textHeight, artworkHeight) + 32)
     frame.pin:SetPoint("LEFT", frame.textContainer, "LEFT", 16, 0)
     frame.needleContainer:SetPoint("RIGHT", frame.textContainer, "RIGHT", -32, 0)
     frame.textContainer:SetHeight(height)
@@ -202,6 +205,8 @@ function MapPinEnhancedWayfinderArrow:Disable()
     if self.positionFrame then self.positionFrame.instruction:SetStep(nil) end
     if self.frame then
         self.frame.loading:Hide()
+        self.frame.dataWarning:SetTooltip(nil)
+        self.frame.dataWarning:Hide()
         self.frame.readout:SetStatusText(nil)
         self.frame.fadeOut:PlayHiding(self.frame.fadeIn)
     end

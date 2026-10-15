@@ -34,6 +34,7 @@ local L = MapPinEnhanced.L
 ---@field directionVisible boolean?
 ---@field forceClose boolean?
 ---@field step WayfinderStepData?
+---@field dataWarning MapPinEnhancedTooltipMixin
 ---@field clearButton Button
 ---@field reportButton MapPinEnhancedIconButtonTemplate
 ---@field progress MapPinEnhancedWayfinderProgressTemplate

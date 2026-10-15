@@ -167,6 +167,23 @@
                     <OnClick>self:GetParent():ReportNavigation()</OnClick>
                 </Scripts>
             </Button>
+            <Frame parentKey="dataWarning" mixin="MapPinEnhancedTooltipMixin" enableMouse="true" propagateMouseInput="Clicks" hidden="true">
+                <Size x="18" y="18" />
+                <Anchors>
+                    <Anchor point="TOP" relativeKey="$parent.reportButton" relativePoint="BOTTOM" y="-4" />
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture file="Interface/AddOns/MapPinEnhanced/assets/icons/IconInfo.png">
+                            <Size x="16" y="16" />
+                            <Color r="1" g="0.15" b="0.15" />
+                            <Anchors>
+                                <Anchor point="CENTER" />
+                            </Anchors>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
         </Frames>
         <Animations>
             <AnimationGroup inherits="MapPinEnhancedAnimationFadeIn" parentKey="fadeIn">
