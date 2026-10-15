@@ -136,6 +136,45 @@ local GOSSIP = {
         },
     },
 
+    -- Zone: Dornogal (map 2339)
+    -- Dornogal (map 2339 73.55,5.29) -> Siren Isle (map 2369 70.69,53.49) via gossip
+    {
+        fromPointID = 1200134,
+        fromMap = 2339,
+        fromX = 0.7355,
+        fromY = 0.0529,
+        toPointID = 1200158,
+        toMap = 2369,
+        toX = 0.7069,
+        toY = 0.5349,
+        type = "gossip",
+        travelDuration = 10,
+        gossip = {
+            gossipOptionID = 125352,
+            npcID = 231541,
+        },
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questActive",
+                            value = 84720,
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 84720,
+                        },
+                    },
+                },
+            },
+        },
+    },
+
     -- Zone: Drustvar (map 896)
     -- Drustvar (map 896 20.60,43.34) -> Zuldazar (map 862 58.40,62.50) via gossip
     {
@@ -371,6 +410,45 @@ local GOSSIP = {
                     value = {
                         81,
                         86,
+                    },
+                },
+            },
+        },
+    },
+
+    -- Zone: Siren Isle (map 2369)
+    -- Siren Isle (map 2369 70.69,53.49) -> Dornogal (map 2339 73.55,5.29) via gossip
+    {
+        fromPointID = 1200158,
+        fromMap = 2369,
+        fromX = 0.7069,
+        fromY = 0.5349,
+        toPointID = 1200134,
+        toMap = 2339,
+        toX = 0.7355,
+        toY = 0.0529,
+        type = "gossip",
+        travelDuration = 10,
+        gossip = {
+            gossipOptionID = 125349,
+            npcID = 231541,
+        },
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "any",
+                    children = {
+                        {
+                            operation = "check",
+                            kind = "questActive",
+                            value = 84720,
+                        },
+                        {
+                            operation = "check",
+                            kind = "questCompleted",
+                            value = 84720,
+                        },
                     },
                 },
             },

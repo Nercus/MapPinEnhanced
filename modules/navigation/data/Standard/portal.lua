@@ -5651,38 +5651,6 @@ local PORTAL = {
             },
         },
     },
-    -- Dornogal (map 2339 73.55,5.29) -> Siren Isle (map 2369 70.69,53.49) via portal
-    {
-        fromPointID = 1200134,
-        fromMap = 2339,
-        fromX = 0.7355,
-        fromY = 0.0529,
-        toPointID = 1200158,
-        toMap = 2369,
-        toX = 0.7069,
-        toY = 0.5349,
-        type = "portal",
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "any",
-                    children = {
-                        {
-                            operation = "check",
-                            kind = "questActive",
-                            value = 84720,
-                        },
-                        {
-                            operation = "check",
-                            kind = "questCompleted",
-                            value = 84720,
-                        },
-                    },
-                },
-            },
-        },
-    },
 
     -- Zone: Dragon Soul (map 409)
     -- Dragon Soul (map 409 49.16,59.04) -> Dragon Soul (map 410 32.66,45.49) via portal
@@ -16096,38 +16064,6 @@ local PORTAL = {
         toMap = 2214,
         toX = 0.4192,
         toY = 0.3023,
-        type = "portal",
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "any",
-                    children = {
-                        {
-                            operation = "check",
-                            kind = "questActive",
-                            value = 84720,
-                        },
-                        {
-                            operation = "check",
-                            kind = "questCompleted",
-                            value = 84720,
-                        },
-                    },
-                },
-            },
-        },
-    },
-    -- Siren Isle (map 2369 70.69,53.49) -> Dornogal (map 2339 73.55,5.29) via portal
-    {
-        fromPointID = 1200158,
-        fromMap = 2369,
-        fromX = 0.7069,
-        fromY = 0.5349,
-        toPointID = 1200134,
-        toMap = 2339,
-        toX = 0.7355,
-        toY = 0.0529,
         type = "portal",
         requirement = {
             operation = "all",
