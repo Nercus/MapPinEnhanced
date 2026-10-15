@@ -540,38 +540,6 @@ local GOSSIP = {
     },
 
     -- Zone: Vol'dun (map 864)
-    -- Vol'dun (map 864 34.91,33.76) -> Boralus (map 1161 70.22,27.06) via gossip
-    {
-        fromPointID = 900055,
-        fromMap = 864,
-        fromX = 0.3491,
-        fromY = 0.3376,
-        toPointID = 800083,
-        toMap = 1161,
-        toX = 0.7022,
-        toY = 0.2706,
-        type = "gossip",
-        travelDuration = 1,
-        gossip = {
-            gossipOptionID = 48172,
-            npcID = 135681,
-        },
-        requirement = {
-            operation = "all",
-            children = {
-                {
-                    operation = "check",
-                    kind = "faction",
-                    value = "Alliance",
-                },
-                {
-                    operation = "check",
-                    kind = "questCompleted",
-                    value = 51229,
-                },
-            },
-        },
-    },
     -- Vol'dun (map 864 36.69,34.28) -> Boralus (map 1161 70.22,27.06) via gossip
     {
         fromPointID = 900057,
@@ -585,7 +553,7 @@ local GOSSIP = {
         type = "gossip",
         travelDuration = 1,
         gossip = {
-            gossipOptionID = 49006,
+            gossipOptionID = 49007,
             npcID = 135383,
         },
         requirement = {

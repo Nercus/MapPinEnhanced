@@ -93,14 +93,23 @@ local activeContext ---@type NavigationActivePathContext?
 local activeReport ---@type NavigationPathReport?
 local selectedOptionID ---@type number?
 local gossipOpen = false
+local selectionSuppressed = false
+local selectionTimer ---@type FunctionContainer?
+
+local function CancelSelection()
+    if selectionTimer then selectionTimer:Cancel() end
+    selectionTimer = nil
+end
 
 local function SelectTravelOption()
     local context, report = activeContext, activeReport
-    if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then return end
+    if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true or IsShiftKeyDown() then
+        selectionSuppressed = true
+    end
     local isToy = context and context.pathType == "toy"
     if not gossipOpen or not context or not report or
         (isToy and context.phase ~= "in-transit" or not isToy and context.phase == "in-transit") or
-        selectedOptionID or InCombatLockdown() or IsShiftKeyDown() then
+        selectedOptionID or selectionSuppressed or InCombatLockdown() then
         return
     end
     -- A summoned toy is already on cooldown. Its retained interaction is
@@ -115,8 +124,10 @@ local function SelectTravelOption()
         if MapPinEnhanced:IsSecretValue(mapID) or mapID ~= data.fromMap then return end
     end
     if tonumber(npcID) ~= data.npcID then return end
-    for _, option in ipairs(C_GossipInfo.GetOptions()) do
-        if not MapPinEnhanced:IsSecretTable(option) and
+    local options = C_GossipInfo.GetOptions()
+    if not MapPinEnhanced:IsReadableTable(options) then return end
+    for _, option in ipairs(options) do
+        if MapPinEnhanced:IsReadableTable(option) and
             not MapPinEnhanced:IsSecretValue(option.gossipOptionID) and
             not MapPinEnhanced:IsSecretValue(option.status) and
             option.gossipOptionID == data.gossipOptionID and option.status == Enum.GossipOptionStatus.Available then
@@ -132,26 +143,72 @@ local function SelectTravelOption()
     if isToy and not Navigation:IsToyGossipAvailable(data) then report("failed") end
 end
 
+local function ScheduleTravelSelection()
+    if not gossipOpen then return end
+    -- Shift bypass lasts for this opening, including delayed route/menu updates.
+    if IsShiftKeyDown() or Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then
+        selectionSuppressed = true
+    end
+    if not activeContext or not activeReport or selectedOptionID or selectionSuppressed or selectionTimer then return end
+    -- Finish native gossip dispatch and route publication before selection can
+    -- synchronously close the interaction. Repeated updates share one callback.
+    selectionTimer = C_Timer.NewTimer(0, function()
+        selectionTimer = nil
+        SelectTravelOption()
+    end)
+end
+
 ---@param context NavigationActivePathContext
 ---@param report NavigationPathReport
 function Navigation:ActivateGossipPath(context, report)
     activeContext, activeReport = context, report
-    SelectTravelOption()
+    ScheduleTravelSelection()
 end
 
 function Navigation:DeactivateGossipPath()
-    activeContext, activeReport, selectedOptionID = nil, nil, nil
+    CancelSelection()
+    activeContext, activeReport = nil, nil
+    -- Selection belongs to the menu opening, not a republished route handler.
 end
 
 MapPinEnhanced:RegisterEvent("GOSSIP_SHOW", function()
+    if not gossipOpen then
+        selectedOptionID = nil
+        selectionSuppressed = false
+    end
     gossipOpen = true
     ObserveToyOptions()
-    SelectTravelOption()
+    ScheduleTravelSelection()
+end)
+MapPinEnhanced:RegisterEvent("GOSSIP_OPTIONS_REFRESHED", function()
+    if not gossipOpen then return end
+    ObserveToyOptions()
+    ScheduleTravelSelection()
 end)
 MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
+    CancelSelection()
     gossipOpen = false
     selectedOptionID = nil
+    selectionSuppressed = false
 end)
+Options:SubscribeToOptionChanges("Wayfinder.Navigation.AutomaticTravelSelection", function(value)
+    if value == true then return end
+    if gossipOpen then selectionSuppressed = true end
+    CancelSelection()
+end)
+MapPinEnhanced:RegisterEvent("PLAYER_REGEN_ENABLED", ScheduleTravelSelection)
+
+---@return table
+function Navigation:GetGossipSelectionState()
+    return {
+        open = gossipOpen,
+        pending = selectionTimer ~= nil,
+        suppressed = selectionSuppressed,
+        selectedOptionID = selectedOptionID,
+        pathReference = activeContext and activeContext.pathReference,
+        phase = activeContext and activeContext.phase,
+    }
+end
 
 Navigation:RegisterPathHandler("gossip", GossipPresentation,
     function(path) return Navigation:GetGossipPathData(path) end, nil,

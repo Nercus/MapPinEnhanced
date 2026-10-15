@@ -70,6 +70,7 @@ function Navigation:ShowDebugDump()
     Add("Automatic travel selection", MapPinEnhanced:GetModule("Options"):GetOptionValue(
         "Wayfinder.Navigation.AutomaticTravelSelection"))
     Add("Prepared inputs fresh", Navigation:ArePreparedInputsFresh())
+    Add("Gossip selection", Navigation:GetGossipSelectionState())
     Add("Gossip NPC", UnitGUID("npc"))
     local gossipOptions = C_GossipInfo.GetOptions()
     if MapPinEnhanced:IsReadableTable(gossipOptions) then
