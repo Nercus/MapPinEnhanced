@@ -1698,7 +1698,7 @@ local mountData = {
     [2240] = { fly = false, ground = false }, -- Amirdrassil
     [2241] = { fly = false, ground = false }, -- Emerald Dream
     [2244] = { fly = false, ground = false }, -- Amirdrassil
-    [2248] = { fly = false, ground = false }, -- Isle of Dorn
+    [2248] = { fly = true, ground = false },  -- Isle of Dorn; live skyriding confirmed outside Dornogal.
     [2249] = { fly = false, ground = false }, -- Fungal Folly
     [2250] = { fly = false, ground = false }, -- Kriegval's Rest
     [2251] = { fly = false, ground = false }, -- The Waterworks
