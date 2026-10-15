@@ -38,8 +38,9 @@ function MapPinEnhancedWayfinderFloatingTitleMixin:SetTitle(title)
     self.fullTitle = title
     self.titleTruncated = Wayfinders:ApplyWrappedText(self.title, title,
         self.fallback and FALLBACK_TITLE_WIDTH or MAX_TITLE_WIDTH, self.fallback and 2 or 4)
-    self:EnableMouse(self.titleTruncated)
-    self:SetMouseClickEnabled(false)
+    self:EnableMouse(self.fallback or self.titleTruncated)
+    self:SetMouseClickEnabled(self.fallback == true)
+    self:SetPropagateMouseClicks(not self.fallback)
     self:UpdateLayout()
 end
 
@@ -68,8 +69,8 @@ end
 ---@param shown boolean
 function MapPinEnhancedWayfinderFloatingTitleMixin:SetVisible(shown)
     if not shown then self:OnLeave() end
-    self:EnableMouse(shown and self.titleTruncated == true)
-    self:SetMouseClickEnabled(false)
+    self:EnableMouse(shown and (self.fallback or self.titleTruncated == true))
+    self:SetMouseClickEnabled(shown and self.fallback == true)
     self:SetShown(shown)
 end
 

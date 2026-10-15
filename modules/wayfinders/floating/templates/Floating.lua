@@ -98,6 +98,7 @@ function MapPinEnhancedWayfinderFloatingMixin:SetScaleWithDistance(enabled)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
+    MapPinEnhanced:UnregisterDraggableFrame(self)
     self:UpdatePinScale(nil)
     self:ResetDistanceReadout()
     self:ResetDirectionSampling()
@@ -129,9 +130,19 @@ function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
     self:SetCustomDirectionEnabled(not Wayfinders:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
 end
 
+---@param self MapPinEnhancedWayfinderFloatingTemplate
+local function RegisterFallbackDragging(self)
+    MapPinEnhanced:RegisterDraggableFrame(self, "floatingFallbackFrame", self.titleContainer, function()
+        return not self.customDirection or self.visibilityHiding or self.navigationOpacity:GetAlpha() == 0
+    end)
+    self.titleContainer:SetPropagateMouseClicks(false)
+end
+
 ---@param enabled boolean
 function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     if self.customDirection == enabled then return end
+    -- Save an in-progress drag before native guidance replaces the fallback anchor.
+    MapPinEnhanced:UnregisterDraggableFrame(self)
     self.customDirection = enabled
     -- Native frame/path setup can lag behind tracking. Only show a persistent fallback.
     self.fallbackReadyAt = enabled and GetTime() + FALLBACK_DELAY or nil
@@ -142,6 +153,10 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self:ClearAllPoints()
     if enabled then
         self:SetPoint("CENTER", WorldFrame, "CENTER", 0, 200)
+        RegisterFallbackDragging(self)
+        if MapPinEnhanced:GetVar("frames", "floatingFallbackFrame", "point") then
+            MapPinEnhanced:RestoreFrame(self)
+        end
         self.navigationOpacity:SetAlpha(0)
     elseif self.navFrame then
         self.navigationOpacity:SetAlpha(1)
@@ -437,6 +452,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     -- The facade also calls OnShow directly when replacing an active target.
     if not UIParent:IsShown() then return end
+    if self.customDirection then RegisterFallbackDragging(self) end
     self.lastNavigationReadinessCheck = nil
     self:RegisterEvent("NAVIGATION_FRAME_CREATED")
     self:RegisterEvent("NAVIGATION_FRAME_DESTROYED")
@@ -465,6 +481,7 @@ end
 -- Release Blizzard ownership when hiding starts; only the last rendered marker
 -- remains for the fade. A later OnHide must not undo a new wayfinder's takeover.
 function MapPinEnhancedWayfinderFloatingMixin:StopTracking()
+    MapPinEnhanced:UnregisterDraggableFrame(self)
     self:SetScript("OnUpdate", nil)
     self.content:StopTextTransition()
     self:UnregisterEvent("NAVIGATION_FRAME_CREATED")
@@ -495,6 +512,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
+    MapPinEnhanced:UnregisterDraggableFrame(self)
     self:UpdatePinScale(nil)
     self.nativeScenarioID = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
