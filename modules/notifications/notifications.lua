@@ -21,7 +21,6 @@ local NOTIFICATION_MESSAGES = {
     ["PIN_REACHED"] = L["Location reached at %s."],
     ["PIN_LOCKED_NAMED"] = L["\"%s\" reached at %s."] .. "\n" .. L["It is locked."],
     ["PIN_LOCKED"] = L["Location reached at %s."] .. "\n" .. L["It is locked."],
-    ["MAP_UNAVAILABLE"] = L["Cannot set waypoint on the %s map."],
     ["GROUP_RECEIVED"] = L["Shared group \"%s\" received."],
     ["NAVIGATION_ITEM_EQUIPPED"] = L["Equipped %s."],
     ["NAVIGATION_ITEM_RESTORED"] = L["Re-equipped %s."],

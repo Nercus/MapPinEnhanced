@@ -48,8 +48,6 @@ local function SetTrackedPinUserWaypoint(wayfinderData)
     if not MapPinEnhanced:IsZoneMap(mapID) then return end
 
     if not C_Map.CanSetUserWaypointOnMap(mapID) then
-        local mapInfo = C_Map.GetMapInfo(mapID)
-        Notifications:ShowNotification("MAP_UNAVAILABLE", (mapInfo and mapInfo.name or tostring(mapID)))
         return
     end
 
