@@ -104,7 +104,6 @@ end
 ---@return boolean accepted
 function MapPinEnhancedGroupVisibilityMixin:ClearGroup()
     if not self:CancelBatch() then return false end
-    if not self.protected then return false end
     self:ReleasePins(false)
     return true
 end

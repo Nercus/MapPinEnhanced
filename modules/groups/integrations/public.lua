@@ -14,6 +14,9 @@ local function ValidateGroupInfo(groupInfo, apiName)
     if type(groupInfo.source) ~= "string" or groupInfo.source == "" then
         error(apiName .. ": groupInfo.source must be a non-empty string")
     end
+    if groupInfo.source == MapPinEnhanced.name then
+        error(apiName .. ": player-owned groups cannot be registered through the public API")
+    end
     if type(groupInfo.groupID) ~= "string" or groupInfo.groupID == "" then
         error(apiName .. ": groupInfo.groupID must be a non-empty stable ID")
     end
@@ -25,6 +28,113 @@ local function ValidateGroupInfo(groupInfo, apiName)
     end
 end
 
+---@param group MapPinEnhancedGroupMixin
+---@return MapPinEnhancedPublicGroupProxy
+local function CreateGroupProxy(group)
+    local groupID, source = group:GetGroupID(), group:GetSource()
+    local lifetimeChangeNumber = group.lifetimeChangeNumber
+
+    -- IDs can be registered again and pooled objects reused. A proxy belongs
+    -- only to this lifetime; caller-supplied fields never select its group.
+    ---@return MapPinEnhancedGroupMixin?
+    local function GetGroup()
+        if not group:IsSameGroup(groupID, lifetimeChangeNumber) or group:IsProtected() or
+            group:GetSource() ~= source then
+            return nil
+        end
+        return group
+    end
+
+    ---@param pinID UUID
+    ---@return MapPinEnhancedGroupMixin?
+    local function GetPinGroup(pinID)
+        local current = GetGroup()
+        if not current or type(pinID) ~= "string" then return nil end
+        -- Owner operations may cancel batches even for missing pins. Check
+        -- membership first, including hidden/reached pins and pins moved away.
+        if current:GetPinByID(pinID) or current:GetArchivedPinByID(pinID) then
+            return current
+        end
+        return nil
+    end
+
+    ---@class MapPinEnhancedPublicGroupProxy
+    local proxy = {}
+
+    ---@param pinData pinData
+    ---@return UUID? pinID
+    function proxy:AddPin(pinData)
+        local current = GetGroup()
+        if not current then return nil end
+        assert(type(pinData) == "table", "MapPinEnhancedPublicGroupProxy:AddPin: pinData must be a table")
+        -- Hidden storage accepts retained IDs for restore; public additions
+        -- must never introduce an identity belonging to another group.
+        assert(rawget(pinData, "pinID") == nil, "MapPinEnhancedPublicGroupProxy:AddPin: pinID must not be supplied")
+        local _, pinID = current:AddPin(pinData)
+        return pinID
+    end
+
+    ---@param pinID UUID
+    ---@return boolean deleted
+    function proxy:DeletePin(pinID)
+        local current = GetPinGroup(pinID)
+        if not current then return false end
+        return current:RemovePin(pinID)
+    end
+
+    ---@param pinID UUID
+    ---@return boolean reached
+    function proxy:MarkPinReached(pinID)
+        local current = GetPinGroup(pinID)
+        if not current then return false end
+        return current:MarkPinReached(pinID)
+    end
+
+    ---@param pinID UUID
+    ---@return boolean unreached
+    function proxy:MarkPinUnreached(pinID)
+        local current = GetPinGroup(pinID)
+        if not current then return false end
+        return current:MarkPinUnreached(pinID)
+    end
+
+    ---@return boolean accepted
+    function proxy:DeleteAllPins()
+        local current = GetGroup()
+        if not current then return false end
+        return current:ClearGroup()
+    end
+
+    ---@return boolean accepted
+    function proxy:MarkAllPinsReached()
+        local current = GetGroup()
+        if not current then return false end
+        return current:MarkAllPinsReached()
+    end
+
+    ---@return GroupTrackingMode? mode
+    function proxy:GetTrackingMode()
+        local current = GetGroup()
+        if not current then return nil end
+        return current:GetTrackingMode()
+    end
+
+    ---@param mode GroupTrackingMode
+    ---@return boolean accepted
+    function proxy:SetTrackingMode(mode)
+        if not Groups:IsValidTrackingMode(mode) then
+            error("MapPinEnhancedPublicGroupProxy:SetTrackingMode: invalid tracking mode")
+        end
+        local current = GetGroup()
+        if not current then return false end
+        return current:SetTrackingMode(mode)
+    end
+
+    return proxy
+end
+
+---@param groupInfo GroupInfo
+---@return MapPinEnhancedPublicGroupProxy
 MapPinEnhanced:RegisterGlobalAPI("RegisterGroup", function(groupInfo)
     ValidateGroupInfo(groupInfo, "MapPinEnhanced.RegisterGroup")
 
@@ -33,60 +143,10 @@ MapPinEnhanced:RegisterGlobalAPI("RegisterGroup", function(groupInfo)
         error("MapPinEnhanced.RegisterGroup: " .. (failureReason or "failed to register group"))
     end
 
-    if group:IsHidden() and group:GetSource() ~= MapPinEnhanced.name then
+    local proxy = CreateGroupProxy(group)
+    if group:IsHidden() then
         MapPinEnhanced:Print(string.format(L["%s added hidden group \"%s\"."], group:GetSource(), group:GetName()))
     end
 
-    return group:GetGroupID()
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("AddPinToGroup", function(groupID, pinData)
-    local group = Groups:GetGroupByID(groupID)
-    if not group or group:IsProtected() then return nil end
-
-    local _, pinID = group:AddPin(pinData)
-    return pinID
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("DeletePin", function(pinID)
-    for group in Groups:EnumerateGroups() do
-        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:RemovePin(pinID) then
-            return true
-        end
-    end
-    return false
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("MarkPinReached", function(pinID)
-    for group in Groups:EnumerateGroups() do
-        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:MarkPinReached(pinID) then
-            return true
-        end
-    end
-    return false
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("MarkPinUnreached", function(pinID)
-    for group in Groups:EnumerateGroups() do
-        if group:GetGroupID() ~= Groups.SYSTEM_GROUP_IDS.WAY_BACK and group:MarkPinUnreached(pinID) then
-            return true
-        end
-    end
-    return false
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("GetGroupTrackingMode", function(groupID)
-    local group = Groups:GetGroupByID(groupID)
-    if not group then return nil end
-    return group:GetTrackingMode()
-end)
-
-MapPinEnhanced:RegisterGlobalAPI("SetGroupTrackingMode", function(groupID, mode)
-    if not Groups:IsValidTrackingMode(mode) then
-        error("MapPinEnhanced.SetGroupTrackingMode: invalid tracking mode")
-    end
-
-    local group = Groups:GetGroupByID(groupID)
-    if not group then return false end
-    return group:SetTrackingMode(mode)
+    return proxy
 end)
