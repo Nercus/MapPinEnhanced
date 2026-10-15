@@ -67,9 +67,18 @@ local publicationNumber = 0
 ---@param fromMapID number?
 ---@param toMapID number
 ---@return boolean
+local function IsCrossMapTransition(pathType, fromMapID, toMapID)
+    return fromMapID ~= nil and fromMapID ~= toMapID and
+        (pathType == "portal" or pathType == "localportal" or pathType == "gossip")
+end
+
+---@param pathType string
+---@param fromMapID number?
+---@param toMapID number
+---@return boolean
 local function RequiresDestinationMap(pathType, fromMapID, toMapID)
     return pathType == "floor" or pathType == "border" or
-        (pathType == "portal" or pathType == "localportal" or pathType == "gossip") and fromMapID ~= toMapID
+        IsCrossMapTransition(pathType, fromMapID, toMapID)
 end
 
 Navigation.destinationChangeNumber = Navigation.destinationChangeNumber or 0
@@ -1000,6 +1009,13 @@ function Navigation:CheckCurrentPathCompletion(identity)
     if destinationDistance and destinationDistance <= 100 and
         (not RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
             graph.pointMapIDs[toPointIndex]) or playerMapID == graph.pointMapIDs[toPointIndex]) then
+        -- A distinct destination map plus exit vicinity proves this transition.
+        -- Spawn offsets must not require walking back to an exact authored exit.
+        if IsCrossMapTransition(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
+                graph.pointMapIDs[toPointIndex]) then
+            self:CompleteCurrentPath(progression)
+            return
+        end
         local requiresObservedAttempt = self:GetPathAction(pathType,
             graph.pathRequirements[pathReference]) ~= nil
         if not requiresObservedAttempt or progression.attempted then
@@ -1104,15 +1120,13 @@ end
 -- Handler results and eligibility events
 
 ---@param identity NavigationStepIdentity
----@param result "check-completion"|"attempted"|"completed"|"failed"
+---@param result "attempted"|"completed"|"failed"
 ---@param detail string?
 function Navigation:HandlePathHandlerReport(identity, result, detail)
     if not self:IsStepIdentityCurrent(identity) then return end
     local progression = self.progression
     if not progression then return end
-    if result == "check-completion" then
-        self:CheckCurrentPathCompletion(identity)
-    elseif result == "attempted" then
+    if result == "attempted" then
         progression.attempted = true
         self:ApplyProgressionPhase(progression, "in-transit", detail or L["Navigation Action Started"])
     elseif result == "completed" then
@@ -1204,6 +1218,9 @@ function Navigation:RefreshEligibility(events)
         self:StartCalculation()
         return
     end
+    -- Loading can invalidate the departure before its handler sees the exit.
+    -- Observe arrival before revalidating operations that are already finished.
+    self:CheckCurrentPathCompletion()
     self:RecheckFailedPaths("action")
     self:RecheckFailedPaths("taxi")
     -- Applied Legacy perks can change the best route even when the old one
@@ -1260,6 +1277,7 @@ function Navigation:RefreshEligibility(events)
             return
         end
         -- Restore a ready action/adapter after dirty authoritative inputs clear.
+        progression.pathUnavailable = nil
         self:PublishStep(progression)
         self:TryAutomaticTaxiSelection()
     end

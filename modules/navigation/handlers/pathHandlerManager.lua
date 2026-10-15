@@ -26,7 +26,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field data any
 ---@field taxiJourney NavigationTaxiJourney?
 
----@alias NavigationPathReport fun(result: "check-completion"|"attempted"|"completed"|"failed", detail: string?)
+---@alias NavigationPathReport fun(result: "attempted"|"completed"|"failed", detail: string?)
 
 ---@type table<string, NavigationPathPresentation>
 local presentations = {}
@@ -40,7 +40,6 @@ local activators = {}
 local deactivators = {}
 local activePathType ---@type string?
 local activePathReference ---@type integer?
-local activeReport ---@type NavigationPathReport?
 local unsubscribeProgressEvents ---@type function?
 
 local PROGRESS_EVENTS = {
@@ -226,7 +225,9 @@ end
 function Navigation:SetupPathHandlers()
     if unsubscribeProgressEvents then return end
     unsubscribeProgressEvents = MapPinEnhanced:RegisterEventBucket(PROGRESS_EVENTS, function()
-        if activeReport then activeReport("check-completion") end
+        -- Eligibility can deactivate execution while the player is loading.
+        -- Arrival belongs to the retained progression, not its active adapter.
+        Navigation:CheckCurrentPathCompletion()
     end)
 end
 
@@ -234,7 +235,6 @@ function Navigation:DeactivatePathHandler()
     local pathType = activePathType
     activePathType = nil
     activePathReference = nil
-    activeReport = nil
     local deactivator = pathType and deactivators[pathType] or nil
     if deactivator then deactivator() end
 end
@@ -246,13 +246,11 @@ function Navigation:ActivatePathHandler(context, report)
         "Navigation:ActivatePathHandler path type is not registered: " .. context.pathType)
     local activator = activators[context.pathType]
     if activePathType == context.pathType and activePathReference == context.pathReference then
-        activeReport = report
         if activator then activator(context, report) end
         return
     end
     self:DeactivatePathHandler()
     activePathType = context.pathType
     activePathReference = context.pathReference
-    activeReport = report
     if activator then activator(context, report) end
 end

@@ -67,6 +67,22 @@ function Navigation:ShowDebugDump()
         routingData = destination.routingData
     })
     Add("Navigation enabled", Navigation.routeNavigationEnabled)
+    Add("Automatic travel selection", MapPinEnhanced:GetModule("Options"):GetOptionValue(
+        "Wayfinder.Navigation.AutomaticTravelSelection"))
+    Add("Prepared inputs fresh", Navigation:ArePreparedInputsFresh())
+    Add("Gossip NPC", UnitGUID("npc"))
+    local gossipOptions = C_GossipInfo.GetOptions()
+    if MapPinEnhanced:IsReadableTable(gossipOptions) then
+        for _, option in ipairs(gossipOptions) do
+            if MapPinEnhanced:IsReadableTable(option) then
+                Add("Gossip option", {
+                    id = option.gossipOptionID,
+                    name = option.name,
+                    status = option.status,
+                })
+            end
+        end
+    end
     Add("Step", Wayfinders:GetStepSnapshot())
     Add("Action display", Wayfinders:GetActionDebugText())
     Add("Calculation active", Navigation.activeCalculation ~= nil)
@@ -159,11 +175,14 @@ function Navigation:ShowDebugDump()
             local freshCost, failure = Navigation:GetFreshPathCost(reference)
             ---@type NavigationFlightTaxiData?
             local taxi = graph.pathTypes[reference] == "flighttaxi" and graph.pathHandlerData[reference] or nil
+            local pathType = graph.pathTypes[reference]
             Add("Path " .. reference, {
                 type = graph.pathTypes[reference],
                 from = GetPoint(graph, graph.pathFromPointIndexes[reference]),
                 to = GetPoint(graph, graph.pathToPointIndexes[reference]),
                 requirement = graph.pathRequirements[reference],
+                gossip = (pathType == "gossip" or pathType == "phaseswitch" or pathType == "toy") and
+                    graph.pathHandlerData[reference] or nil,
                 preparedState = prepared and prepared.requirementStateByPath[reference],
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],
                 routeState = route and not route.preparedData.movementOnly and
