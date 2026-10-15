@@ -73,6 +73,7 @@ local function SaveUsedToy(unit, _, spellID)
     saved[characterKey] = itemID
     MapPinEnhanced:SetVar("hearthstoneToys", saved)
     preferredToyID = itemID
+    Navigation:RefreshEligibility()
 end
 
 ---@param value any
