@@ -18,7 +18,7 @@ local GOSSIP = {
         type = "gossip",
         travelDuration = 1,
         gossip = {
-            gossipOptionID = 48163,
+            gossipOptionID = 48169,
             npcID = 135681,
         },
         requirement = {
