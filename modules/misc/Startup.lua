@@ -109,7 +109,6 @@ end
 ---@field arrow MapPinEnhancedStartupWayfinderCard
 ---@field floating MapPinEnhancedStartupWayfinderCard
 ---@field logo Texture
----@field addonName FontString
 ---@field preview MapPinEnhancedImageTemplate
 ---@field navigationOption MapPinEnhancedStartupNavigationOption
 ---@field tooltipHelp MapPinEnhancedStartupCheckboxOption
@@ -121,6 +120,7 @@ end
 ---@field next MapPinEnhancedButtonTemplate
 ---@field compactHeight number
 ---@field illustratedHeight number
+---@field navigationHeight number
 ---@field commonOptionsHeight number
 ---@field unsubscribeOptions fun()[]?
 MapPinEnhancedStartupMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
@@ -172,7 +172,6 @@ function MapPinEnhancedStartupMixin:OnLoad()
         card.label:SetText(L[card.optionKey .. "_LABEL"])
         card.description:SetText(L[card.optionKey .. "_DESCRIPTION"])
     end
-    self.addonName:SetText(MapPinEnhanced.displayName)
 end
 
 function MapPinEnhancedStartupMixin:HideStartup()
@@ -186,7 +185,7 @@ end
 
 function MapPinEnhancedStartupMixin:Refresh()
     local step = GetProgress().step
-    self:SetHeight(step == 4 and self.commonOptionsHeight or
+    self:SetHeight(step == 3 and self.navigationHeight or step == 4 and self.commonOptionsHeight or
         step <= 2 and self.compactHeight or self.illustratedHeight)
     self.heading:SetText(L[STEPS[step][1]])
     self.description:SetText(L[STEPS[step][2]])
@@ -195,7 +194,6 @@ function MapPinEnhancedStartupMixin:Refresh()
     self.next:SetIcon(step == #STEPS and "tick" or "rightcaret", step ~= #STEPS)
     self.next:SetLabel(L[step == 1 and "Let's go!" or step == #STEPS and "Finish" or "Next"])
     self.logo:SetShown(step == 1)
-    self.addonName:SetShown(step == 1)
     self.arrow:SetShown(step == 2)
     self.floating:SetShown(step == 2)
     self.navigationOption:SetShown(step == 3)
