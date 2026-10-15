@@ -54,7 +54,6 @@ local L = MapPinEnhanced.L
 ---@field lastCalculationInputs NavigationPreparedData?
 ---@field lastCalculationOriginMapID number?
 ---@field transportationChangedDuringTravel boolean?
----@field backgroundSearchEnabled boolean?
 ---@field lastCalculationExclusions string[]?
 ---@field routeMapFramePool FramePoolCollection<MapPinEnhancedNavigationMapPinTemplate>?
 ---@field routeSteps table<integer, NavigationStep>
@@ -417,8 +416,7 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
 end
 
 ---@param currentRouteUnusable boolean?
----@param improvement boolean? Explicit opt-in pass after usable guidance.
-function Navigation:StartCalculation(currentRouteUnusable, improvement)
+function Navigation:StartCalculation(currentRouteUnusable)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled then return end
     if destination.directGuidance then
@@ -438,12 +436,9 @@ function Navigation:StartCalculation(currentRouteUnusable, improvement)
     local shortcut = direct and direct.comparisonSeconds <= 60
     if shortcut then
         self:ApplyCalculatedRoute(destination, direct, nil, function() end, currentRouteUnusable)
-        if self.progression then currentRouteUnusable = false end
-        if not self.backgroundSearchEnabled then
-            self:CancelPreparedData()
-            self.lastCalculationTermination = "short direct journey"
-            return
-        end
+        self:CancelPreparedData()
+        self.lastCalculationTermination = "short direct journey"
+        return
     elseif not self.progression then
         self:ApplyDirectDestination(false, L["Navigation Calculating"], "calculating")
     end
@@ -452,12 +447,9 @@ function Navigation:StartCalculation(currentRouteUnusable, improvement)
         destination.routingData, self.avoidedPaths,
         function(route, failure, checkpoint)
             self:ApplyCalculatedRoute(destination, route, failure, checkpoint, currentRouteUnusable)
-            -- Recovery bypass applies only to the first publication, never every
-            -- improvement within a job that has already restored usable guidance.
-            if self.progression then currentRouteUnusable = false end
         end, function()
             if IsCurrentDestination(destination) then self:StartCalculation(currentRouteUnusable) end
-        end, shortcut or improvement)
+        end)
 end
 
 ---@param owner string
@@ -1787,29 +1779,6 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
         Navigation.progression = nil
         Navigation:ReleaseRouteLayers()
         Navigation:ApplyDirectDestination(true)
-    end
-end)
-
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.BackgroundSearch", function(value)
-    local enabled = value == true
-    if Navigation.backgroundSearchEnabled == enabled then return end
-    Navigation.backgroundSearchEnabled = enabled
-    local job = Navigation.activeCalculation
-    if not enabled and job and job.background then
-        Navigation:CancelPreparedData()
-        Navigation:CancelRouteCalculation(job)
-        if Navigation.progression and #Navigation.progression.route.pathReferences > 0 and
-            not Navigation:ArePreparedInputsFresh() then
-            Navigation:EnsurePreparedData()
-        end
-        if not Navigation.progression and Navigation.activeDestination then
-            local direct = Navigation:CanGuideDirectly()
-            Navigation:ApplyDirectDestination(direct, direct and L["Navigation Direct Guidance"] or
-                L["Navigation No Direction"], direct and "direct" or "no-direction")
-        end
-    elseif enabled and not job and Navigation.progression and not Navigation.progression.attempted and
-        Navigation.progression.phase ~= "in-transit" then
-        Navigation:StartCalculation(false, true)
     end
 end)
 

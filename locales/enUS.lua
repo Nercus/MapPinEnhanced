@@ -523,9 +523,6 @@ L["%d legacy entries could not be migrated. Original saved data was kept."] =
 L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Restore equipment after travel"
 L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
 "Restore gear replaced by navigation items and show equipment notifications. Turning this off still restores gear already replaced."
-L["Wayfinder.Navigation.BackgroundSearch_LABEL"] = "Improve routes in the background"
-L["Wayfinder.Navigation.BackgroundSearch_DESCRIPTION"] =
-"Continue looking for a faster route after guidance appears. Uses additional processing time."
 
 L["Clear"] = "Clear"
 L["Options"] = "Options"

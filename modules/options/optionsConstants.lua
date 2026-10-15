@@ -55,7 +55,6 @@ Options.DEFAULTS = {
     ["Wayfinder.General.ShowETA"] = true,
     ["Wayfinder.General.ShowObjectiveFrame"] = true,
     ["Wayfinder.Navigation.Enable"] = true,
-    ["Wayfinder.Navigation.BackgroundSearch"] = false,
     ["Wayfinder.Navigation.AutomaticTravelSelection"] = false,
     ["Wayfinder.Navigation.RestoreEquipment"] = false,
     ["Wayfinder.Navigation.WorldMap"] = true,

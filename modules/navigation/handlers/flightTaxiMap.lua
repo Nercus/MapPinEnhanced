@@ -180,7 +180,7 @@ function Navigation:TryAutomaticTaxiSelection()
     local journey = activeJourney
     -- Calculation completion and the ride ticker share the same booking gate.
     -- An older route must never select a slot from a new observation.
-    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation and not Navigation.activeCalculation.background or
+    if not TakeTaxiNode or bookingPending or Navigation.activeCalculation or
         Navigation.pendingCalculationRestart or not Navigation:IsCurrentPathReady() or
         not observation or
         not progression or progression.route.preparedData.taxiObservation ~= observation or

@@ -71,7 +71,6 @@ function Navigation:ShowDebugDump()
     Add("Action display", Wayfinders:GetActionDebugText())
     Add("Calculation active", Navigation.activeCalculation ~= nil)
     Add("Calculation termination", Navigation.lastCalculationTermination)
-    Add("Background search", Navigation.activeCalculation and Navigation.activeCalculation.background)
     local job = Navigation.activeCalculation
     local completedRoute = Navigation.progression and Navigation.progression.route
     Add("Calculation work", job and {

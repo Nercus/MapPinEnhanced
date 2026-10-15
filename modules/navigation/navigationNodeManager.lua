@@ -967,7 +967,7 @@ function Navigation:EnsurePreparedData()
             MapPinEnhanced.profiler:SetWorkerScope("Navigation.PreparationSlice", profilePass)
             MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.Requirements")
             --@end-debug@
-            local checkpoint = self:CreateNavigationCheckpoint(nil, true)
+            local checkpoint = self:CreateNavigationCheckpoint()
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
             local previous = preparedNavigationData
@@ -1082,18 +1082,11 @@ function Navigation:EnsurePreparedData()
                 graph ~= navigationGraph and "graph replaced" or preparedDataDirty and "completed; inputs changed" or "completed")
             profilePreparation = nil
             --@end-debug@
-            local owner, started = self.activeCalculation, debugprofilestop()
             cancelPreparation = nil
             if preparedDataDirty then
                 self:EnsurePreparedData()
             else
                 self:RefreshEligibility({})
-            end
-            -- Batch terminal callbacks are synchronous. Charge this selected-route
-            -- refresh too, without attributing it to a replacement job it starts.
-            if owner and self.activeCalculation == owner then
-                local elapsed = debugprofilestop() - started
-                owner.frameMilliseconds = (owner.frameMilliseconds or 0) + elapsed
             end
         end, 1, function(message)
             --@debug@

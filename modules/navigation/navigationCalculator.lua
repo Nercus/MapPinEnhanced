@@ -302,7 +302,6 @@ local FLIGHT_PRUNABLE_TYPES = {
 ---@field bestPathCounts table<integer, integer>
 ---@field bestSignatures table<integer, string>
 ---@field destinationCostBucket integer?
----@field bestComplete NavigationHeapEntry?
 ---@field pathCostByReference table<integer, NavigationCalculatedPathCost>
 ---@field unavailablePathCosts table<integer, string>
 ---@field prunedPaths table<integer, boolean>
@@ -324,11 +323,6 @@ local FLIGHT_PRUNABLE_TYPES = {
 ---@field startedAt number
 ---@field calculationSlices integer
 ---@field movementCandidates integer
----@field background boolean?
----@field handlingLimit boolean?
----@field frameMilliseconds number?
----@field budgetFrame number?
----@field onLimit fun()?
 ---@field wait fun()
 ---@field checkpoint fun()
 ---@field cancel fun()?
@@ -633,15 +627,6 @@ end
 
 ---@param job NavigationCalculationJob
 ---@param entry NavigationHeapEntry
-local function OfferComplete(job, entry)
-    if not job.bestComplete or IsHeapEntryLess(entry, job.bestComplete) then
-        job.bestComplete = entry
-    end
-    HeapPush(job.heap, entry)
-end
-
----@param job NavigationCalculationJob
----@param entry NavigationHeapEntry
 local function OfferDestination(job, entry)
     local graph = job.graph
     if not graph or entry.pathCount == 0 then return end
@@ -650,7 +635,7 @@ local function OfferDestination(job, entry)
     local costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds)
     if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
     job.destinationCostBucket = costBucket
-    OfferComplete(job, {
+    HeapPush(job.heap, {
         pointIndex = 0,
         cost = entry.cost + finalCost.comparisonSeconds,
         costBucket = costBucket,
@@ -795,7 +780,7 @@ local function ExpandReversePoint(job, entry, reverse)
                 elseif Navigation:GetPathAction(graph.pathTypes[reference], graph.pathRequirements[reference]) then
                     -- Only a usable current-player action may close this
                     -- fallback. No player map coordinates or approach are needed.
-                    OfferComplete(job, {
+                    HeapPush(job.heap, {
                         pointIndex = 0,
                         cost = totalCost,
                         costBucket = GetCostBucket(totalCost),
@@ -899,7 +884,7 @@ local function SeedJob(job)
             playerMapID, playerX, playerY, destination.mapID, destination.x, destination.y, "automatic")
         if directCost then
             job.destinationCostBucket = GetCostBucket(directCost.comparisonSeconds)
-            OfferComplete(job, {
+            HeapPush(job.heap, {
                 pointIndex = 0,
                 cost = directCost.comparisonSeconds,
                 costBucket = job.destinationCostBucket,
@@ -1120,56 +1105,23 @@ local function PrepareTaxiCandidates(job, source)
     end
 end
 
--- Both workers charge only running time. Awaiting observations resets the clock
--- through wait(), so suspended frames never count as active CPU.
+-- Awaiting observations resets the slice clock, excluding suspended frames.
 ---@param job NavigationCalculationJob?
----@param preparation boolean?
 ---@return fun() checkpoint
 ---@return fun() wait
-function Navigation:CreateNavigationCheckpoint(job, preparation)
-    local last = debugprofilestop()
-    local slice = last
+function Navigation:CreateNavigationCheckpoint(job)
+    local slice = debugprofilestop()
     local operations = 0
-    local function Charge()
-        local now = debugprofilestop()
-        local owner = job or self.activeCalculation
-        if owner and not owner.cancelled then
-            local frame = GetTime()
-            if owner.budgetFrame ~= frame then
-                owner.budgetFrame, owner.frameMilliseconds = frame, 0
-            end
-            owner.frameMilliseconds = (owner.frameMilliseconds or 0) + now - last
-        end
-        last = now
-        return owner, now
-    end
     ---@async
     local function Wait()
-        Charge()
         coroutine.yield()
-        last = debugprofilestop()
-        slice, operations = last, 0
+        slice, operations = debugprofilestop(), 0
         if job then job.calculationSlices = (job.calculationSlices or 0) + 1 end
     end
     ---@async
     local function Checkpoint()
-        local owner, now = Charge()
-        -- Initial routing finishes across small slices. Only optional
-        -- improvement has a total lifetime.
-        if owner and owner.background and not owner.cancelled and not owner.handlingLimit and
-            GetTimePreciseSec() - owner.startedAt >= 30 then
-            if not preparation and owner.onLimit then
-                owner.onLimit()
-                if owner.cancelled then coroutine.yield() end
-            elseif preparation then
-                Wait()
-                return
-            end
-        end
         operations = operations + 1
-        local budget = owner and owner.background and 0.25 or MAX_MILLISECONDS_PER_SLICE
-        if operations >= MAX_OPERATIONS_PER_SLICE or now - slice >= budget or
-            owner and owner.background and (owner.frameMilliseconds or 0) >= budget then
+        if operations >= MAX_OPERATIONS_PER_SLICE or debugprofilestop() - slice >= MAX_MILLISECONDS_PER_SLICE then
             Wait()
         end
         if job and job.cancelled then coroutine.yield() end
@@ -1283,10 +1235,9 @@ end
 ---@param avoidedPaths table<integer, NavigationPathFailure>
 ---@param onFinish async fun(route: NavigationRoute?, failure: string?, checkpoint: fun())
 ---@param onRestart fun()
----@param background boolean?
 ---@return NavigationCalculationJob?
 function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish,
-                                          onRestart, background)
+                                          onRestart)
     local graph = self:GetGraph()
     calculationNumber = calculationNumber + 1
     local startedAt = GetTimePreciseSec()
@@ -1320,7 +1271,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         entrancesByMap = {},
         entrancesByMapX = {},
         startedAt = startedAt,
-        background = background,
         calculationSlices = 0,
         movementCandidates = 0,
         onFinish = onFinish,
@@ -1335,30 +1285,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
             --@end-debug@
             job.calculationSlices = 1
             job.checkpoint, job.wait = self:CreateNavigationCheckpoint(job)
-            ---@async
-            job.onLimit = function()
-                job.handlingLimit = true
-                local reason = "background lifetime"
-                self.lastCalculationTermination = reason
-                local candidate = job.bestComplete and BuildRoute(job, job.bestComplete) or
-                    self:CreateDirectRoute(destinationID, destinationChangeNumber, destinationData)
-                -- An unfinished authoritative refresh cannot certify transport.
-                if candidate and #candidate.pathReferences > 0 and not self:ArePreparedInputsFresh() then
-                    candidate = self:CreateDirectRoute(destinationID, destinationChangeNumber, destinationData)
-                end
-                job.onFinish(candidate, reason, job.checkpoint)
-                if job.cancelled then coroutine.yield() end
-                self:CancelPreparedData()
-                self:CancelRouteCalculation(job)
-                -- A retained transport Route still consumes authoritative
-                -- observations. Finish that refresh without another search.
-                if self.progression and #self.progression.route.pathReferences > 0 and
-                    not self:ArePreparedInputsFresh() then
-                    self:EnsurePreparedData()
-                end
-                self:TryAutomaticTaxiSelection()
-                coroutine.yield()
-            end
             if not graph then
                 job.onFinish(nil, "navigation data is not ready", job.checkpoint)
                 return
@@ -1385,7 +1311,6 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
             end
             self:AwaitPreparedData(job.checkpoint, job.wait)
             self.lastCalculationTermination = "complete"
-            job.handlingLimit = true
             if result then
                 job.onFinish(BuildRoute(job, result), nil, job.checkpoint)
             else
