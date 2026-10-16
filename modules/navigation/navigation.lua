@@ -809,7 +809,9 @@ local function CopyRouteProgress(progression, graph)
             local r, g, b = Navigation:GetPathColor("localportal"):GetRGB()
             entries[#entries + 1] = {
                 icon = Navigation:GetPathIcon("localportal"),
-                r = r, g = g, b = b,
+                r = r,
+                g = g,
+                b = b,
                 title = string.format(L["Navigation Step Number"], #entries + 1,
                     Navigation:GetPathMethod("localportal")),
                 instruction = L[approach.instruction],

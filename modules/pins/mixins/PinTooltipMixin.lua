@@ -43,14 +43,15 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65, true)
     if self:CanApplyChanges() then
-        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") == true
+        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") ==
+            true
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
-            { L["Left Click"], self:IsTracked() and L["Stop tracking"] or L["Track"] },
-            { L["Ctrl + Left Click"], L["Mark Reached"] },
+            { L["Left Click"],         self:IsTracked() and L["Stop tracking"] or L["Track"] },
+            { L["Ctrl + Left Click"],  L["Mark Reached"] },
             { L["Shift + Left Click"], L["Share to Chat"] },
-            { L["Alt + Left Click"], not InCombatLockdown() and L["Show on Map"] or nil },
-            { L["Right Click"], L["Open menu"] },
-            { L["Middle Click"], showLockHint and (self:IsLocked() and L["Unlock Pin"] or L["Lock Pin"]) or nil },
+            { L["Alt + Left Click"],   not InCombatLockdown() and L["Show on Map"] or nil },
+            { L["Right Click"],        L["Open menu"] },
+            { L["Middle Click"],       showLockHint and (self:IsLocked() and L["Unlock Pin"] or L["Lock Pin"]) or nil },
         })
     end
     GameTooltip:Show()

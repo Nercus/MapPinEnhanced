@@ -154,7 +154,7 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     end)
 
     self.deleteButton.tooltipInteractions = {
-        { L["Left Click"], protected and L["Clear Group"] or L["Delete Group"] },
+        { L["Left Click"],         protected and L["Clear Group"] or L["Delete Group"] },
         { L["Shift + Left Click"], protected and L["Clear without confirmation"] or L["Delete without confirmation"] },
     }
     self.deleteButton:SetScript("OnClick", function()

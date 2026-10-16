@@ -25,8 +25,18 @@ local Profiler = MapPinEnhanced.profiler
 
 ---@return ProfilerMetrics
 local function NewMetrics()
-    return { frames = 0, addon = 0, application = 0, overall = 0, maximum = 0,
-        over1 = 0, over2 = 0, over5 = 0, over10 = 0, seconds = 0 }
+    return {
+        frames = 0,
+        addon = 0,
+        application = 0,
+        overall = 0,
+        maximum = 0,
+        over1 = 0,
+        over2 = 0,
+        over5 = 0,
+        over10 = 0,
+        seconds = 0
+    }
 end
 
 ---@param values ProfilerMetrics
@@ -74,7 +84,10 @@ function Profiler:StartMetrics(capture)
     local bucket = NewMetrics()
     driver:SetScript("OnUpdate", function(_, elapsed)
         -- The first tick may precede Start; omit it instead of charging setup to the capture.
-        if first then first = false return end
+        if first then
+            first = false
+            return
+        end
         if not C_AddOnProfiler.IsEnabled() then
             capture.nativeSkipped = capture.nativeSkipped + 1
             return
@@ -119,17 +132,23 @@ end
 ---@param lines string[]
 function Profiler:AppendMetricsExport(capture, lines)
     lines[#lines + 1] = ""
-    lines[#lines + 1] = "Native whole-addon measurements (engine attribution, including libraries and profiler overhead):"
+    lines[#lines + 1] =
+    "Native whole-addon measurements (engine attribution, including libraries and profiler overhead):"
     if capture.nativeUnavailable or not capture.native then
         lines[#lines + 1] = capture.nativeUnavailable or "No native samples available."
         return
     end
-    lines[#lines + 1] = "LastTime sampled once per frame; first tick omitted. Final current tick is not yet available. No native counters are reset."
-    lines[#lines + 1] = "Blizzard impact % = addon / (application - all addons + addon); application % = addon / application; addon share % = addon / all addons. Ratios use summed sampled times, not averages of percentages."
-    lines[#lines + 1] = "Blizzard impact uses the tooltip denominator over this capture, not its rolling recent-average window. These are engine time ratios, not OS CPU utilization or measured FPS loss."
-    lines[#lines + 1] = "Timeline buckets contain approximately 10 sampled seconds; final bucket may be shorter. Baseline avoids detailed wrappers; neither mode removes the sampling cost."
+    lines[#lines + 1] =
+    "LastTime sampled once per frame; first tick omitted. Final current tick is not yet available. No native counters are reset."
+    lines[#lines + 1] =
+    "Blizzard impact % = addon / (application - all addons + addon); application % = addon / application; addon share % = addon / all addons. Ratios use summed sampled times, not averages of percentages."
+    lines[#lines + 1] =
+    "Blizzard impact uses the tooltip denominator over this capture, not its rolling recent-average window. These are engine time ratios, not OS CPU utilization or measured FPS loss."
+    lines[#lines + 1] =
+    "Timeline buckets contain approximately 10 sampled seconds; final bucket may be shorter. Baseline avoids detailed wrappers; neither mode removes the sampling cost."
     lines[#lines + 1] = string.format("Skipped unavailable/secret samples: %d", capture.nativeSkipped)
-    lines[#lines + 1] = "Window\tFrames\tSampled seconds\tAddon ms\tAddon ms/frame\tPeak ms\tBlizzard impact %\tApplication %\tAddon share %\tFrames >1ms\tFrames >2ms\tFrames >5ms\tFrames >10ms"
+    lines[#lines + 1] =
+    "Window\tFrames\tSampled seconds\tAddon ms\tAddon ms/frame\tPeak ms\tBlizzard impact %\tApplication %\tAddon share %\tFrames >1ms\tFrames >2ms\tFrames >5ms\tFrames >10ms"
     lines[#lines + 1] = FormatMetrics("Capture", capture.native)
     for index, bucket in ipairs(capture.timeline) do
         lines[#lines + 1] = FormatMetrics("Window " .. index, bucket)

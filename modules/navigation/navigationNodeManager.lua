@@ -1079,7 +1079,8 @@ function Navigation:EnsurePreparedData()
         end }, nil, function()
             --@debug@
             MapPinEnhanced.profiler:FinishPreparation(profilePass,
-                graph ~= navigationGraph and "graph replaced" or preparedDataDirty and "completed; inputs changed" or "completed")
+                graph ~= navigationGraph and "graph replaced" or preparedDataDirty and "completed; inputs changed" or
+                "completed")
             profilePreparation = nil
             --@end-debug@
             cancelPreparation = nil

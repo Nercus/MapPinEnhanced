@@ -342,10 +342,11 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
 
     self.pinFrame:SetScript("OnEnter", function(frame)
         local data = Editor:GetPinData(pinNode)
-        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") == true
+        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") ==
+            true
         GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
-            { L["Left Click"], L["Change pin appearance"] },
+            { L["Left Click"],   L["Change pin appearance"] },
             { L["Middle Click"], showLockHint and (data.lock and L["Unlock Pin"] or L["Lock Pin"]) or nil },
         })
         if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
@@ -359,7 +360,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         hidePreviewTooltip(frame)
     end)
     self.deleteButton.tooltipInteractions = {
-        { L["Left Click"], L["Delete Pin"] },
+        { L["Left Click"],         L["Delete Pin"] },
         { L["Shift + Left Click"], L["Delete without confirmation"] },
     }
     self.pinFrame:SetScript("OnMouseDown", function(_, button)

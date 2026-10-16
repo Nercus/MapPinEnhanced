@@ -1179,7 +1179,7 @@ function Navigation:ValidateRoute(route, prepared, checkpoint, position)
             local journey = route.taxiJourneys[reference]
             local observation = self:GetTaxiObservation()
             if journey.observed and (not observation or observation ~= route.preparedData.taxiObservation or
-                observation ~= prepared.taxiObservation) then
+                    observation ~= prepared.taxiObservation) then
                 return false
             end
             ---@cast prepared NavigationPreparedData

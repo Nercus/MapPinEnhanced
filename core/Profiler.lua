@@ -88,7 +88,8 @@ end
 function MapPinEnhancedProfilerMixin:OnLoad()
     MapPinEnhancedWindowMixin.OnLoad(self)
     self:SetTitle(L["Profiler"])
-    self.coverage:SetText(L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."])
+    self.coverage:SetText(L
+        ["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."])
     self:Refresh()
 end
 
@@ -109,7 +110,8 @@ function MapPinEnhancedProfilerMixin:Refresh()
     if activeCapture then
         self.status:SetText(L["Recording. Closing this window stops capture."])
     elseif lastCapture then
-        self.status:SetText(string.format(L["Capture stopped: %.2f seconds. Export to inspect results."], lastCapture.duration))
+        self.status:SetText(string.format(L["Capture stopped: %.2f seconds. Export to inspect results."],
+            lastCapture.duration))
     else
         self.status:SetText(L["Select modules, then start a new capture."])
     end
@@ -127,7 +129,8 @@ function MapPinEnhancedProfilerMixin:SelectModules()
     ---@type AnyMenuEntry[]
     local entries = {
         {
-            type = "checkbox", label = L["All modules"],
+            type = "checkbox",
+            label = L["All modules"],
             isSelected = function() return allModules end,
             setSelected = function()
                 allModules = not allModules
@@ -138,7 +141,8 @@ function MapPinEnhancedProfilerMixin:SelectModules()
     }
     for _, name in ipairs(names) do
         entries[#entries + 1] = {
-            type = "checkbox", label = name,
+            type = "checkbox",
+            label = name,
             isSelected = function() return allModules or selected[name] == true end,
             setSelected = function()
                 if allModules then
@@ -211,7 +215,8 @@ function MapPinEnhancedProfilerMixin:ExportCapture()
     }
     Profiler:AppendMetricsExport(capture, lines)
     lines[#lines + 1] = ""
-    lines[#lines + 1] = "Function\tCalls\tTimed calls\tCoroutine calls\tIncomplete calls\tTotal ms\tMax ms\tAverage ms\tCalls/s\tms/s"
+    lines[#lines + 1] =
+    "Function\tCalls\tTimed calls\tCoroutine calls\tIncomplete calls\tTotal ms\tMax ms\tAverage ms\tCalls/s\tms/s"
     for _, row in ipairs(capture.rows) do
         lines[#lines + 1] = string.format("%s\t%d\t%d\t%d\t%d\t%.6f\t%.6f\t%.6f\t%.3f\t%.6f", row.name,
             row.calls, row.completed, row.coroutineCalls, row.calls - row.completed - row.coroutineCalls,

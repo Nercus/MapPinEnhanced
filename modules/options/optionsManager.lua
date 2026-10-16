@@ -221,7 +221,6 @@ function Options:ScrollToOption(key)
     frame:ScrollToOption()
 end
 
-
 MapPinEnhanced:OnLoad(function()
     Options:SubscribeToOptionChanges("General.TooltipHelper", function(enabled)
         MapPinEnhanced:SetTooltipHelperEnabled(enabled)

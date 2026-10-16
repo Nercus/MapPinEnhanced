@@ -301,7 +301,8 @@ end
 OnUpdate = MapPinEnhanced.profiler:WrapScope("Core.Distance.OnUpdate", OnUpdate)
 SampleTargetDistance = MapPinEnhanced.profiler:WrapScope("Core.Distance.Sample", SampleTargetDistance)
 NotifyDistanceCallbacks = MapPinEnhanced.profiler:WrapScope("Core.Distance.NotifyDisplay", NotifyDistanceCallbacks)
-NotifyDistanceSampleCallbacks = MapPinEnhanced.profiler:WrapScope("Core.Distance.NotifySample", NotifyDistanceSampleCallbacks)
+NotifyDistanceSampleCallbacks = MapPinEnhanced.profiler:WrapScope("Core.Distance.NotifySample",
+    NotifyDistanceSampleCallbacks)
 --@end-debug@
 
 --- Register a callback to be called when the distance to the target is updated

@@ -126,14 +126,13 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:OnReceiveDrag()
     if self.editor and self.editor.draggedPinNode then self.editor:StopPinDrag() end
 end
 
-
 function MapPinEnhancedGroupEditorSidebarEntryMixin:OnEnter()
     if not self.group or not self.editor or self.editor.draggedPinNode then return end
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
-        { L["Left Click"], L["Select"] },
+        { L["Left Click"],         L["Select"] },
         { L["Shift + Left Click"], self.group:GetTotalPinCount() > 0 and L["Share to Chat"] or nil },
-        { L["Right Click"], L["Open menu"] },
+        { L["Right Click"],        L["Open menu"] },
     })
     if GameTooltip:NumLines() > 0 then GameTooltip:Show() end
 end

@@ -240,9 +240,10 @@ function MapPinEnhancedWayfinderFloating:Enable()
     }, function() self:RefreshNativeScenario() end)
     self:RestoreBlizzardForFloating()
     OverrideSuperTrackedAlphaState(true)
-    self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ScaleWithDistance", function(value)
-        if self.frame then self.frame:SetScaleWithDistance(value == true) end
-    end)
+    self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ScaleWithDistance",
+        function(value)
+            if self.frame then self.frame:SetScaleWithDistance(value == true) end
+        end)
     self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
         if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)

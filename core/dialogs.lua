@@ -344,7 +344,8 @@ end
 ---@return MapPinEnhancedStaticDialogFrame?
 function MapPinEnhanced:ShowAddonConflictsDialog(addonNames)
     local message = string.format(
-        L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."],
+        L
+        ["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."],
         table.concat(addonNames, "\n"))
     return ShowStaticDialog(ADDON_CONFLICTS_DIALOG_NAME, BuildDialogText(L["Addon conflicts"], message))
 end

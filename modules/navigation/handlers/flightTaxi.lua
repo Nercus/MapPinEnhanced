@@ -149,7 +149,9 @@ local function CopyTaxiNodes(nodes, native, checkpoint)
             end
             if not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then x, y = nil, nil end
             result[#result + 1] = {
-                nodeID = node.nodeID, x = x, y = y,
+                nodeID = node.nodeID,
+                x = x,
+                y = y,
                 name = not MapPinEnhanced:IsSecretValue(node.name) and type(node.name) == "string" and node.name or nil,
             }
         end
@@ -612,14 +614,24 @@ function Navigation:CombineRouteTaxiJourneys(route, observedJourneys, checkpoint
                 local uncertainty = first.cost.uncertaintySeconds + second.cost.uncertaintySeconds
                 combined = {
                     identity = "taxi-estimate:" .. table.concat(nodes, ":"),
-                    origin = first.origin, destination = second.destination,
-                    fromPointIndex = first.fromPointIndex, toPointIndex = second.toPointIndex,
-                    destinationName = second.destinationName, legs = legs, observed = false,
+                    origin = first.origin,
+                    destination = second.destination,
+                    fromPointIndex = first.fromPointIndex,
+                    toPointIndex = second.toPointIndex,
+                    destinationName = second.destinationName,
+                    legs = legs,
+                    observed = false,
                     cost = {
-                        expectedSeconds = seconds, uncertaintySeconds = uncertainty,
+                        expectedSeconds = seconds,
+                        uncertaintySeconds = uncertainty,
                         comparisonSeconds = seconds + uncertainty,
-                        explanation = { kind = "flight-taxi", observed = false, nodes = nodes,
-                            legs = legs, timingScope = "sum-of-pair-estimates" }
+                        explanation = {
+                            kind = "flight-taxi",
+                            observed = false,
+                            nodes = nodes,
+                            legs = legs,
+                            timingScope = "sum-of-pair-estimates"
+                        }
                     }
                 }
             else
@@ -657,9 +669,15 @@ function Navigation:CombineRouteTaxiJourneys(route, observedJourneys, checkpoint
             graph.pathToPointIndexes[reference] = combined.toPointIndex
             local from, to = combined.fromPointIndex, combined.toPointIndex
             graph.pathHandlerData[reference] = {
-                fromMap = graph.pointMapIDs[from], fromX = graph.pointXs[from], fromY = graph.pointYs[from],
-                toMap = graph.pointMapIDs[to], toX = graph.pointXs[to], toY = graph.pointYs[to],
-                fromTaxiNodeID = combined.origin, toTaxiNodeID = combined.destination, taxiPathIDs = {}
+                fromMap = graph.pointMapIDs[from],
+                fromX = graph.pointXs[from],
+                fromY = graph.pointYs[from],
+                toMap = graph.pointMapIDs[to],
+                toX = graph.pointXs[to],
+                toY = graph.pointYs[to],
+                fromTaxiNodeID = combined.origin,
+                toTaxiNodeID = combined.destination,
+                taxiPathIDs = {}
             }
         else
             index = index + 1

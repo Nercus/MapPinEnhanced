@@ -199,6 +199,7 @@ function MapPinEnhancedNavigationMapPinMixin:OnLeave()
 end
 
 --@debug@
-MapPinEnhancedNavigationMapPinMixin.RefreshLineGeometry = MapPinEnhanced.profiler:WrapScope("Navigation.MapPin.RefreshLineGeometry",
+MapPinEnhancedNavigationMapPinMixin.RefreshLineGeometry = MapPinEnhanced.profiler:WrapScope(
+    "Navigation.MapPin.RefreshLineGeometry",
     MapPinEnhancedNavigationMapPinMixin.RefreshLineGeometry)
 --@end-debug@

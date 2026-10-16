@@ -60,13 +60,15 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
     local entries = { { type = "title", label = L["Coordinates"] } }
     if hasPosition then
         table.insert(entries, {
-            type = "button", label = L["Share location"],
+            type = "button",
+            label = L["Share location"],
             onClick = function()
                 Pins:LinkToChat(x, y, mapID, format(L["%s's Position"], MapPinEnhanced.me))
             end,
         })
         table.insert(entries, {
-            type = "button", label = L["Place a pin here"],
+            type = "button",
+            label = L["Place a pin here"],
             onClick = function()
                 local group = Groups:GetUngroupedGroup()
                 if not group then return end
@@ -81,7 +83,8 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
     for _, suffix in ipairs({ "Lock", "ShowZone", "ShowDecimals" }) do
         local key = "Miscellaneous.Coords." .. suffix
         table.insert(entries, {
-            type = "checkbox", label = L[key .. "_LABEL"],
+            type = "checkbox",
+            label = L[key .. "_LABEL"],
             isSelected = function() return Options:GetOptionValue(key) == true end,
             setSelected = function()
                 Options:SetOptionValue(key, not Options:GetOptionValue(key))
@@ -199,7 +202,6 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
     end
     self:SetCoordinatesText(x, y)
 end
-
 
 --@debug@
 MapPinEnhancedCoordinatesDisplayMixin.OnUpdate = MapPinEnhanced.profiler:WrapScope("Misc.Coordinates.OnUpdate",

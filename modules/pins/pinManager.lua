@@ -61,7 +61,8 @@ function Pins:ResolvePinPosition(mapID, x, y)
     end
     if not MapPinEnhanced:IsZoneMap(mapID) or
         not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
-        MapPinEnhanced:Notify(MapPinEnhanced.L["Failed to place pin on the map. Please check if the coordinates are correct!"],
+        MapPinEnhanced:Notify(
+            MapPinEnhanced.L["Failed to place pin on the map. Please check if the coordinates are correct!"],
             "ERROR")
         return
     end

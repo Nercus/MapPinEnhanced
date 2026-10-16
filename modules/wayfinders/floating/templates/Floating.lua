@@ -87,7 +87,7 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdatePinScale(distance)
     if not self.customDirection and self.scaleWithDistance and distance then
         SetUpDistanceScaleRange()
         scale = 1 -
-        0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
+            0.25 * math.min(1, math.max(0, (distance - scaleNearDistance) / (scaleFarDistance - scaleNearDistance)))
     end
     if self.pin:GetScale() ~= scale then self.pin:SetScale(scale) end
     if self.content.beam:GetScale() ~= scale then self.content.beam:SetScale(scale) end
@@ -579,6 +579,6 @@ local floatingMethods = MapPinEnhancedWayfinderFloatingMixin --[[@as table<strin
 for _, method in ipairs({ "OnUpdate", "RefreshNavigationTarget", "UpdateClampedState", "UpdatePosition",
     "UpdateNeedlePosition", "AnimateNeedleRotation", "RefreshPresentation", "OnDistanceUpdate", "SetupNavigationFrame" }) do
     floatingMethods[method] = MapPinEnhanced.profiler:WrapScope("Wayfinders.Floating." .. method, floatingMethods
-    [method])
+        [method])
 end
 --@end-debug@

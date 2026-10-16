@@ -193,8 +193,21 @@ end
 function Profiler:Start(modules, names, baseline)
     self:Stop()
     ---@type ProfilerCapture
-    local capture = { started = 0, duration = 0, modules = names, selected = {}, rows = {}, byName = {},
-        replacements = {}, preparations = {}, invalidations = {}, pendingEvents = {}, timeline = {}, nativeSkipped = 0, baseline = baseline == true }
+    local capture = {
+        started = 0,
+        duration = 0,
+        modules = names,
+        selected = {},
+        rows = {},
+        byName = {},
+        replacements = {},
+        preparations = {},
+        invalidations = {},
+        pendingEvents = {},
+        timeline = {},
+        nativeSkipped = 0,
+        baseline = baseline == true
+    }
     self:StartMetrics(capture)
     for _, name in ipairs(baseline and {} or names) do
         capture.selected[name] = true
@@ -269,10 +282,17 @@ function Profiler:BeginPreparation(full)
     table.sort(events)
     wipe(capture.pendingEvents)
     ---@type ProfilerPreparation
-    local pass = { capture = capture, mode = full and "full" or "selective",
+    local pass = {
+        capture = capture,
+        mode = full and "full" or "selective",
         events = #events > 0 and table.concat(events, ",") or "before capture / no captured invalidation",
-        paths = 0, slices = 0, total = 0, maximum = 0, outcome = "in flight at stop",
-        started = clock() - capture.started }
+        paths = 0,
+        slices = 0,
+        total = 0,
+        maximum = 0,
+        outcome = "in flight at stop",
+        started = clock() - capture.started
+    }
     capture.preparations[#capture.preparations + 1] = pass
     return pass
 end
@@ -305,9 +325,12 @@ function Profiler:AppendPreparationExport(capture, lines)
         lines[#lines + 1] = string.format("%s\t%d", event, capture.invalidations[event])
     end
     lines[#lines + 1] = ""
-    lines[#lines + 1] = "Preparation passes started during capture; events are intake since previous pass start, not exclusive causes."
-    lines[#lines + 1] = "Active ms excludes suspended time and completion callbacks; paths count evaluations, not unique requirements."
-    lines[#lines + 1] = "Pass\tMode\tEvents\tPaths evaluated\tSlices\tActive ms\tMax slice ms\tOutcome\tStart s\tElapsed s"
+    lines[#lines + 1] =
+    "Preparation passes started during capture; events are intake since previous pass start, not exclusive causes."
+    lines[#lines + 1] =
+    "Active ms excludes suspended time and completion callbacks; paths count evaluations, not unique requirements."
+    lines[#lines + 1] =
+    "Pass\tMode\tEvents\tPaths evaluated\tSlices\tActive ms\tMax slice ms\tOutcome\tStart s\tElapsed s"
     for index, pass in ipairs(capture.preparations) do
         lines[#lines + 1] = string.format("%d\t%s\t%s\t%d\t%d\t%.6f\t%.6f\t%s\t%.3f\t%.3f", index,
             pass.mode, pass.events, pass.paths, pass.slices, pass.total, pass.maximum, pass.outcome,

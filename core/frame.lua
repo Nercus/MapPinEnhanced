@@ -59,8 +59,12 @@ function MapPinEnhanced:RegisterDraggableFrame(frame, frameName, dragArea, isLoc
         registration.active = true
         return
     end
-    registration = { active = true, dragArea = dragArea, isLocked = isLocked or function() return false end,
-        onDragChanged = onDragChanged }
+    registration = {
+        active = true,
+        dragArea = dragArea,
+        isLocked = isLocked or function() return false end,
+        onDragChanged = onDragChanged
+    }
     draggableFrames[frame] = registration
     if dragArea ~= frame then
         dragArea:EnableMouse(true)
