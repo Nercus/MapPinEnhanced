@@ -384,9 +384,8 @@ local function PriceLeg(graph, reference, speedMultiplier)
     end
     -- Frequent Flier raises speed by 20%, so duration is divided by 1.2.
     seconds = seconds / speedMultiplier
-    -- Pair timings have no variant/context evidence. Through-flight overhead
-    -- has not been measured, so even authored leg sums retain uncertainty.
-    local uncertainty = math.max(30, seconds * 0.25)
+    -- Only estimated durations need a margin; authored timings compare as stored.
+    local uncertainty = estimated and math.max(30, seconds * 0.25) or 0
     local cost = {
         expectedSeconds = seconds,
         uncertaintySeconds = uncertainty,
