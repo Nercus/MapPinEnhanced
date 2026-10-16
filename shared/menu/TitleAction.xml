@@ -30,7 +30,7 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString parentKey="label" inherits="MapPinEnhancedFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Size y="16" />
                     <Anchors>
                         <Anchor point="LEFT" y="-2" />

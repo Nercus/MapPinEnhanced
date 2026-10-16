@@ -29,7 +29,7 @@
         </CheckedTexture>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parentText" parentKey="text" font="GameFontHighlight" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString name="$parentText" parentKey="text" font="MapPinEnhancedFontHighlight" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" x="22" y="0" />
                     </Anchors>

@@ -17,19 +17,19 @@ local L = MapPinEnhanced.L
 ---@type table<MapPinEnhancedButtonFontSize, {normal: Font, highlight: Font, disabled: Font}>
 local FONT_OBJECTS = {
     small = {
-        normal = GameFontNormalSmall,
-        highlight = GameFontHighlightSmall,
-        disabled = GameFontDisableSmall,
+        normal = MapPinEnhancedFontNormalSmall,
+        highlight = MapPinEnhancedFontHighlightSmall,
+        disabled = MapPinEnhancedFontDisabledSmall,
     },
     medium = {
-        normal = GameFontNormal,
-        highlight = GameFontHighlight,
-        disabled = GameFontDisable,
+        normal = MapPinEnhancedFontNormal,
+        highlight = MapPinEnhancedFontHighlight,
+        disabled = MapPinEnhancedFontDisabled,
     },
     large = {
-        normal = GameFontNormalLarge,
-        highlight = GameFontHighlightLarge,
-        disabled = GameFontDisableLarge,
+        normal = MapPinEnhancedFontNormalLarge,
+        highlight = MapPinEnhancedFontHighlightLarge,
+        disabled = MapPinEnhancedFontDisabledLarge,
     },
 }
 

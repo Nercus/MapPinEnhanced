@@ -13,7 +13,7 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormalOutline" justifyH="LEFT" justifyV="TOP">
+                <FontString parentKey="label" inherits="MapPinEnhancedFontNormalOutline" justifyH="LEFT" justifyV="TOP">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="TOPRIGHT" />

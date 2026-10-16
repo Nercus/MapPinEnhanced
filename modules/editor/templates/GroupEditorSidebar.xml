@@ -76,7 +76,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
+                        <FontString parentKey="title" inherits="MapPinEnhancedFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" relativeKey="$parent.divider" relativePoint="TOPLEFT" x="8" y="2" />
                             </Anchors>

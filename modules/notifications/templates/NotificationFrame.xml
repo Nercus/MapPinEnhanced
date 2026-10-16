@@ -32,7 +32,7 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="text" inherits="GameFontHighlightLarge" justifyV="MIDDLE" justifyH="CENTER">
+                <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightLarge" justifyV="MIDDLE" justifyH="CENTER">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="30" />
                         <Anchor point="BOTTOMRIGHT" x="-30" />

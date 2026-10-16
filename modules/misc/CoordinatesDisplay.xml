@@ -18,7 +18,7 @@
                 </Texture>
             </Layer>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontNormalSmall" parentKey="zoneName" justifyH="CENTER" wordwrap="false">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="zoneName" justifyH="CENTER" wordwrap="false">
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
@@ -31,25 +31,25 @@
                         <Anchor point="BOTTOM" relativePoint="BOTTOM" x="0" y="2" />
                     </Anchors>
                 </Texture>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsXDec" text=".00" justifyH="LEFT">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="coordsXDec" text=".00" justifyH="LEFT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativeKey="$parent.separator" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsXInt" text="00" justifyH="RIGHT">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="coordsXInt" text="00" justifyH="RIGHT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativeKey="$parent.coordsXDec" relativePoint="LEFT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsYInt" text="00" justifyH="RIGHT">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="coordsYInt" text="00" justifyH="RIGHT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.separator" relativePoint="RIGHT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="coordsYDec" text=".00" justifyH="LEFT">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="coordsYDec" text=".00" justifyH="LEFT">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.coordsYInt" relativePoint="RIGHT" />

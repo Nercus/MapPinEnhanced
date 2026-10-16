@@ -23,7 +23,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontHighlightHuge" justifyH="LEFT" justifyV="MIDDLE">
+                        <FontString parentKey="title" inherits="MapPinEnhancedFontHighlightHuge" justifyH="LEFT" justifyV="MIDDLE">
                             <Size x="320" y="24" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="16" y="-15" />

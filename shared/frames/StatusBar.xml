@@ -58,12 +58,12 @@
             <Frame parentKey="labels" setAllPoints="true">
                 <Layers>
                     <Layer level="OVERLAY">
-                        <FontString parentKey="name" inherits="GameFontNormalTiny" justifyH="LEFT">
+                        <FontString parentKey="name" inherits="MapPinEnhancedFontNormalTiny" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" x="5" y="4" relativePoint="TOPLEFT" />
                             </Anchors>
                         </FontString>
-                        <FontString parentKey="progress" inherits="GameFontNormalSmallOutline" justifyH="LEFT">
+                        <FontString parentKey="progress" inherits="MapPinEnhancedFontNormalSmallOutline" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="CENTER" />
                             </Anchors>

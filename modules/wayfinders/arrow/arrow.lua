@@ -107,7 +107,7 @@ function MapPinEnhancedWayfinderArrow:UpdateText()
             step.destinationTitle or MapPinEnhanced.L["Map Pin"],
             mapInfo and mapInfo.name or tostring(step.destinationMapID))
     end
-    frame.title:SetFontObject(showInstruction and GameFontHighlightSmall or GameFontNormal)
+    frame.title:SetFontObject(showInstruction and MapPinEnhancedFontHighlightSmall or MapPinEnhancedFontNormal)
     frame.fullTitle = title
     frame.fullDescription = not intermediate and self.description or nil
     frame.textTruncated = Wayfinders:ApplyWrappedText(frame.title, title, 166, 4)

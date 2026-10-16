@@ -18,13 +18,13 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString inherits="GameFontHighlight" parentKey="title" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
+                <FontString inherits="MapPinEnhancedFontHighlight" parentKey="title" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" relativePoint="RIGHT" x="10" y="-5" relativeKey="$parent.pinFrame" />
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormalSmall" parentKey="location" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
+                <FontString inherits="MapPinEnhancedFontNormalSmall" parentKey="location" justifyH="LEFT" justifyV="MIDDLE" alpha="0.5">
                     <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="RIGHT" x="10" y="5" relativeKey="$parent.pinFrame" />
                         <Anchor point="BOTTOMRIGHT" />

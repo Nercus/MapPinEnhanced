@@ -21,7 +21,7 @@
                         <Size x="1" y="20" />
                         <Layers>
                             <Layer level="ARTWORK">
-                                <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                                <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="TOPLEFT" />
                                         <Anchor point="TOPRIGHT" />

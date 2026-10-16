@@ -42,12 +42,12 @@ local tooltipMeasure
 function MapPinEnhanced:AddDescriptionToTooltip(description, maxLines)
     if not description then return end
     if not tooltipMeasure then
-        tooltipMeasure = UIParent:CreateFontString(nil, "ARTWORK", "GameTooltipText")
+        tooltipMeasure = UIParent:CreateFontString(nil, "ARTWORK", "MapPinEnhancedFontTooltip")
         tooltipMeasure:Hide()
     end
     -- Wrap privately, then supply non-wrapping lines. GameTooltip can grow to
     -- their measured width without narrowing the four-line budget afterward.
-    tooltipMeasure:SetFontObject(GameTooltipText)
+    tooltipMeasure:SetFontObject(MapPinEnhancedFontTooltip)
     tooltipMeasure:SetWidth(0)
     tooltipMeasure:SetWordWrap(false)
     ---@type string

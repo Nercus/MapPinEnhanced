@@ -52,7 +52,7 @@
         </Frames>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="valueText" inherits="GameFontNormalSmall">
+                <FontString parentKey="valueText" inherits="MapPinEnhancedFontNormalSmall">
                     <Anchors>
                         <Anchor point="RIGHT" relativePoint="LEFT" x="-5" />
                     </Anchors>

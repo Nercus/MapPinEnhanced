@@ -9,13 +9,13 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="description" inherits="GameFontHighlight" justifyH="CENTER" justifyV="TOP" spacing="2">
+                <FontString parentKey="description" inherits="MapPinEnhancedFontHighlight" justifyH="CENTER" justifyV="TOP" spacing="2">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="100" y="-50" />
                         <Anchor point="TOPRIGHT" x="-100" y="-50" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="summary" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                <FontString parentKey="summary" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT">
                     <Size x="450" y="18" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="20" y="-82" />

@@ -5,13 +5,13 @@
         <Size x="650" y="520" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
+                <FontString parentKey="heading" inherits="MapPinEnhancedFontNormalLarge" justifyH="LEFT">
                     <Size x="600" y="24" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-45" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="info" inherits="GameFontHighlight" justifyH="LEFT" justifyV="TOP">
+                <FontString parentKey="info" inherits="MapPinEnhancedFontHighlight" justifyH="LEFT" justifyV="TOP">
                     <Size x="600" y="40" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.heading" relativePoint="BOTTOMLEFT" y="-8" />

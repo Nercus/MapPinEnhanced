@@ -15,7 +15,7 @@
                         <Texture parentKey="background" inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="label" inherits="GameFontNormalSmall" justifyH="CENTER">
+                        <FontString parentKey="label" inherits="MapPinEnhancedFontNormalSmall" justifyH="CENTER">
                             <Anchors>
                                 <Anchor point="LEFT" x="6" />
                                 <Anchor point="RIGHT" x="-6" />
@@ -37,13 +37,13 @@
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="label" inherits="GameFontNormalSmall" justifyH="LEFT">
+                <FontString parentKey="label" inherits="MapPinEnhancedFontNormalSmall" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" />
                         <Anchor point="TOPRIGHT" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="description" inherits="GameFontNormalSmall" wordwrap="true" justifyH="LEFT" justifyV="TOP">
+                <FontString parentKey="description" inherits="MapPinEnhancedFontNormalSmall" wordwrap="true" justifyH="LEFT" justifyV="TOP">
                     <Color r="0.7" g="0.7" b="0.7" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.label" relativePoint="BOTTOMLEFT" y="-5" />

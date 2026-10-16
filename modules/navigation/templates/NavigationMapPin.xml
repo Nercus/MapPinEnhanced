@@ -13,7 +13,7 @@
                 </Line>
             </Layer>
             <Layer level="OVERLAY">
-                <FontString parentKey="number" inherits="GameFontNormal" hidden="true" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="true">
+                <FontString parentKey="number" inherits="MapPinEnhancedFontNormal" hidden="true" justifyH="CENTER" justifyV="MIDDLE" setAllPoints="true">
                     <Color r="1" g="1" b="1" />
                     <Shadow>
                         <Offset x="1" y="-1" />

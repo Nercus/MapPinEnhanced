@@ -34,7 +34,7 @@
                         <MaskedTexture childKey="icon" />
                     </MaskedTextures>
                 </MaskTexture>
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT">
+                <FontString parentKey="title" inherits="MapPinEnhancedFontNormal" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.icon" x="2" />
                     </Anchors>

@@ -27,7 +27,7 @@
                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="5" y="-5" />
                     <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="5" />
                 </Anchors>
-                <FontString inherits="GameFontHighlight" />
+                <FontString inherits="MapPinEnhancedFontHighlight" />
                 <Scripts>
                     <OnLoad function="ScrollingEdit_OnLoad" />
                     <OnEscapePressed function="EditBox_ClearFocus" />
@@ -47,7 +47,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="text" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" inherits="GameFontNormal" alpha="0.75" />
+                        <FontString parentKey="text" setAllPoints="true" justifyH="CENTER" justifyV="MIDDLE" inherits="MapPinEnhancedFontNormal" alpha="0.75" />
                     </Layer>
                 </Layers>
                 <Animations>

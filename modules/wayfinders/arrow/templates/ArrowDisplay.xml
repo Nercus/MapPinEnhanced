@@ -23,7 +23,7 @@
                         </Texture>
                     </Layer>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                        <FontString parentKey="title" inherits="MapPinEnhancedFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                             <Size x="166" y="0" />
                             <Anchors>
                                 <Anchor point="TOPLEFT" x="64" y="-8" />
@@ -42,7 +42,7 @@
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
-                                <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="LEFT" wordwrap="false">
+                                <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT" wordwrap="false">
                                     <Size x="0" y="12" />
                                     <Color r="0.65" g="0.65" b="0.65" />
                                     <Anchors>
@@ -61,7 +61,7 @@
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
-                                <FontString parentKey="text" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                                <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT">
                                     <Anchors>
                                         <Anchor point="TOPLEFT" />
                                     </Anchors>

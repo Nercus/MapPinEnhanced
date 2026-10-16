@@ -22,7 +22,7 @@
                     </MaskedTextures>
                 </MaskTexture>
 
-                <FontString parentKey="label" inherits="GameFontHighlightSmall" justifyH="LEFT" wordwrap="false">
+                <FontString parentKey="label" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT" wordwrap="false">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="30" />
                         <Anchor point="BOTTOMRIGHT" x="-6" />

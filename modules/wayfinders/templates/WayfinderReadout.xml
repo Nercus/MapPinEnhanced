@@ -6,7 +6,7 @@
         <Size x="1" y="1" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="text" inherits="GameFontNormalSmall">
+                <FontString parentKey="text" inherits="MapPinEnhancedFontNormalSmall">
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>

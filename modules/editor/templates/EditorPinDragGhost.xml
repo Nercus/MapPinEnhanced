@@ -9,7 +9,7 @@
                 <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate" setAllPoints="true" />
             </Layer>
             <Layer level="ARTWORK">
-                <FontString parentKey="title" inherits="GameFontNormal" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString parentKey="title" inherits="MapPinEnhancedFontNormal" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="58" y="-8" />
                         <Anchor point="BOTTOMRIGHT" x="-70" y="8" />

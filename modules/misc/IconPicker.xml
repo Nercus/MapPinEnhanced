@@ -22,13 +22,13 @@
                         <Anchor point="TOPLEFT" x="24" y="-45" />
                     </Anchors>
                 </Texture>
-                <FontString parentKey="selectedName" inherits="GameFontHighlight" justifyH="LEFT">
+                <FontString parentKey="selectedName" inherits="MapPinEnhancedFontHighlight" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.preview" relativePoint="RIGHT" x="8" />
                         <Anchor point="RIGHT" x="-24" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="resultCount" inherits="GameFontDisableSmall" justifyH="LEFT">
+                <FontString parentKey="resultCount" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="LEFT" relativeKey="$parent.loadingSpinner" relativePoint="RIGHT" x="5" />
                     </Anchors>

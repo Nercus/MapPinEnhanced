@@ -4,7 +4,7 @@
         <Size x="318" y="62" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="text" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                <FontString parentKey="text" inherits="MapPinEnhancedFontNormal" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                     <Size x="166" y="0" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="64" y="-8" />

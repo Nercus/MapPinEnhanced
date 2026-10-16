@@ -50,7 +50,7 @@ function MapPinEnhancedWayfinderFloatingTitleMixin:SetFallback(fallback)
     if self.fallback == fallback then return end
     self.fallback = fallback
     local font, _, flags = self.title:GetFont()
-    local _, fallbackFontSize = GameFontNormal:GetFont()
+    local _, fallbackFontSize = MapPinEnhancedFontNormal:GetFont()
     self.title:SetFont(font, fallback and fallbackFontSize or self.normalFontSize, flags)
     self.title:SetJustifyH(fallback and "LEFT" or "CENTER")
     self.title:SetSpacing(fallback and 2 or 3)

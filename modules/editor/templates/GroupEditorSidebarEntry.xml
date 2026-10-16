@@ -47,14 +47,14 @@
                         <MaskedTexture childKey="icon" />
                     </MaskedTextures>
                 </MaskTexture>
-                <FontString parentKey="name" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false">
+                <FontString parentKey="name" inherits="MapPinEnhancedFontNormal" justifyH="LEFT" wordwrap="false">
                     <Size y="14" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="44" y="-10" />
                         <Anchor point="TOPRIGHT" x="-8" y="-10" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="detail" inherits="GameFontDisableSmall" justifyH="LEFT" wordwrap="false">
+                <FontString parentKey="detail" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT" wordwrap="false">
                     <Size y="12" />
                     <Anchors>
                         <Anchor point="TOPLEFT" relativeKey="$parent.name" relativePoint="BOTTOMLEFT" x="16" y="-2" />

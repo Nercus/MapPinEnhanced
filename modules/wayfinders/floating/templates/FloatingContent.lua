@@ -137,7 +137,7 @@ end
 ---@param showTitle boolean
 function MapPinEnhancedWayfinderFloatingContentMixin:ApplyReadoutStyle(showTitle)
     local fallback = self.currentPresentation == "fallback" or self.currentPresentation == "fallback-close"
-    local font, size = GameFontNormalSmall:GetFont()
+    local font, size = MapPinEnhancedFontNormalSmall:GetFont()
     self.readout.text:SetFont(font, (showTitle or fallback) and size or 8, self.showTextOutline and "OUTLINE" or "")
     self.readout.text:SetJustifyH(fallback and "LEFT" or "CENTER")
     if showTitle then

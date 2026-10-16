@@ -20,41 +20,41 @@
         <Size x="700" y="620" />
         <Layers>
             <Layer level="ARTWORK">
-                <FontString parentKey="heading" inherits="GameFontNormalLarge" justifyH="LEFT">
+                <FontString parentKey="heading" inherits="MapPinEnhancedFontNormalLarge" justifyH="LEFT">
                     <Size x="650" y="24" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-45" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="instructions" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" wordwrap="true">
+                <FontString parentKey="instructions" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT" justifyV="TOP" wordwrap="true">
                     <Size x="650" y="36" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-76" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormal" text="GitHub" justifyH="LEFT">
+                <FontString inherits="MapPinEnhancedFontNormal" text="GitHub" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-124" />
                     </Anchors>
                 </FontString>
-                <FontString inherits="GameFontNormal" text="CurseForge" justifyH="LEFT">
+                <FontString inherits="MapPinEnhancedFontNormal" text="CurseForge" justifyH="LEFT">
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-160" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="descriptionLabel" inherits="GameFontNormal" justifyH="LEFT">
+                <FontString parentKey="descriptionLabel" inherits="MapPinEnhancedFontNormal" justifyH="LEFT">
                     <Size x="650" y="20" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-198" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="reportLabel" inherits="GameFontNormal" justifyH="LEFT">
+                <FontString parentKey="reportLabel" inherits="MapPinEnhancedFontNormal" justifyH="LEFT">
                     <Size x="650" y="20" />
                     <Anchors>
                         <Anchor point="TOPLEFT" x="25" y="-330" />
                     </Anchors>
                 </FontString>
-                <FontString parentKey="copyHint" inherits="GameFontHighlightSmall" justifyH="LEFT" wordwrap="true">
+                <FontString parentKey="copyHint" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT" wordwrap="true">
                     <Size x="650" y="26" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" x="25" y="12" />

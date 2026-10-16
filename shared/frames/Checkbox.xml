@@ -47,7 +47,7 @@
         </DisabledCheckedTexture>
         <Layers>
             <Layer level="ARTWORK">
-                <FontString name="$parentText" parentKey="text" font="GameFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
+                <FontString name="$parentText" parentKey="text" font="MapPinEnhancedFontNormalSmall" justifyH="LEFT" justifyV="MIDDLE">
                     <Anchors>
                         <Anchor point="LEFT" relativePoint="LEFT" relativeKey="$parent" x="28" />
                         <Anchor point="RIGHT" relativePoint="RIGHT" relativeKey="$parent" />
