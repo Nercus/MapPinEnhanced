@@ -421,6 +421,7 @@ function Navigation:GetBookedFlightDuration(nodes)
         if not references then return nil end
         local longest = 0 ---@type number
         for _, reference in ipairs(references) do
+            ---@type number
             longest = math.max(longest, PriceLeg(graph, reference, speedMultiplier).expectedSeconds)
         end
         ---@cast longest number
