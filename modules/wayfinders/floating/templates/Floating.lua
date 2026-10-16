@@ -186,7 +186,8 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationVisibility()
     local hideInvalidTarget = false
     if C_Navigation.GetTargetState() == Enum.NavigationState.Invalid then
-        hideInvalidTarget = IsInInstance() or C_Scenario.IsInScenario()
+        -- Instanced zones can report Invalid near quest turn-ins before actual arrival.
+        hideInvalidTarget = C_Scenario.IsInScenario() == true
         if not hideInvalidTarget then
             local _, _, _, instanceMapID = UnitPosition("player")
             hideInvalidTarget = MapPinEnhanced:IsReadableNumber(instanceMapID) and
