@@ -247,6 +247,13 @@ function Navigation:SetupHearthstoneDestination()
     MapPinEnhanced:RegisterEvent("HEARTHSTONE_BOUND", OnBound)
     -- Toy preference continues learning after home coordinates are already known.
     MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", SaveUsedToy)
+    local bindName = MapPinEnhanced:NormalizeText(GetBindLocation())
+    if destination and bindName and destination.bindName ~= bindName then
+        -- A bind changed outside this session has no known coordinates until
+        -- the next observed hearthstone arrival or innkeeper bind.
+        SaveDestination(nil)
+        return
+    end
     SetLearning(destination == nil)
     self:UpdateHearthstonePath(destination)
 end
