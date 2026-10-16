@@ -292,6 +292,7 @@ function MapPinEnhancedWayfinderFloatingContentMixin:ApplyPresentation(presentat
         self.title:SetPoint("BOTTOM", self.pin, "BOTTOM", 0, 3)
     end
     self.title:SetVisible(close or fallback)
+    if clamped then self.title:HideImmediately() end
     self:SetChevronsActive(close and self:IsVisible())
     self.readout.maxWidth = fallback and 166 or nil
     self.readout:SetDisplayVisible(not clamped)

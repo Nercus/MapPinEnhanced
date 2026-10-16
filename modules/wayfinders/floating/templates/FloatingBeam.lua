@@ -1,4 +1,4 @@
----@class MapPinEnhancedWayfinderFloatingBeamTemplate : Frame, MapPinEnhancedFadingFrameTemplate
+---@class MapPinEnhancedWayfinderFloatingBeamTemplate : Frame
 ---@field line Texture
 ---@field blip MapPinEnhancedWayfinderFloatingBeamBlip
 ---@field active boolean?
@@ -8,7 +8,6 @@ MapPinEnhancedWayfinderFloatingBeamMixin = {}
 ---@field animation AnimationGroup
 
 function MapPinEnhancedWayfinderFloatingBeamMixin:OnLoad()
-    MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self)
     self:SetActive(false)
 end
 
@@ -23,6 +22,7 @@ end
 function MapPinEnhancedWayfinderFloatingBeamMixin:SetActive(active)
     if self.active == active then return end
     self.active = active
+    -- Inherit the content/root fade; clamping must hide the beam immediately.
     self:SetShown(active)
     if active then
         self.blip.animation:Play()

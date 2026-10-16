@@ -44,6 +44,7 @@ local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the n
 ---@field lastNavigationTargetCheck number?
 ---@field lastNavigationReadinessCheck number?
 ---@field nativePositionReady boolean?
+---@field navigationReady boolean?
 ---@field clampedOffsetX number?
 ---@field clampedOffsetY number?
 ---@field nativeScenarioID string?
@@ -134,7 +135,7 @@ end
 ---@param self MapPinEnhancedWayfinderFloatingTemplate
 local function RegisterFallbackDragging(self)
     MapPinEnhanced:RegisterDraggableFrame(self.fallbackPosition, "floatingFallbackFrame", self.titleContainer, function()
-        return not self.customDirection or self.visibilityHiding or self.navigationOpacity:GetAlpha() == 0
+        return not self.customDirection or self.visibilityHiding or not self.navigationReady
     end)
     self.titleContainer:SetPropagateMouseClicks(false)
 end
@@ -153,7 +154,6 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
     self:ResetDirectionSampling()
     self.presentationInitialized = nil
     self:ClearAllPoints()
-    self:RefreshNavigationVisibility()
     if enabled then
         -- LibWindow needs inherited parent scale; the projected marker keeps its independent scale.
         local position = self.fallbackPosition
@@ -164,13 +164,14 @@ function MapPinEnhancedWayfinderFloatingMixin:SetCustomDirectionEnabled(enabled)
             MapPinEnhanced:RestoreFrame(position)
         end
         self:SetPoint("CENTER", position, "CENTER")
-        self.navigationOpacity:SetAlpha(0)
+        self.navigationReady = false
     elseif self.navFrame then
-        self.navigationOpacity:SetAlpha(1)
+        self.navigationReady = true
         self:SetPoint("CENTER", self.navFrame, "CENTER")
     else
         self:ShutdownNavigationFrame()
     end
+    self:RefreshNavigationVisibility()
 end
 
 ---@param major number
@@ -195,23 +196,27 @@ function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationVisibility()
         end
     end
     -- Hide only the presentation so readiness sampling can restore it when the target recovers.
-    self.navigationOpacity:SetShown(not hideInvalidTarget and
+    -- Readiness uses visibility: the root alpha animation can restore a child's
+    -- old alpha after native guidance replaces a hidden fallback during its fade.
+    self.navigationOpacity:SetShown(self.navigationReady == true and self.presentationInitialized == true and
+        not hideInvalidTarget and
         (not self.customDirection or Round(self.scaleDistance or 1) > 0))
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
-    self:RefreshNavigationVisibility()
     local navFrame = C_Navigation.GetFrame()
-    -- Cached native frames still need opacity restored after fallback or shutdown.
     if not self.customDirection then
-        local alpha = navFrame and (not self.nativeScenarioID or self:IsNativeScenarioReady()) and 1 or 0
-        if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
+        self.navigationReady = navFrame ~= nil and (not self.nativeScenarioID or self:IsNativeScenarioReady())
     end
-    if self.navFrame == navFrame then return end
+    if self.navFrame == navFrame then
+        self:RefreshNavigationVisibility()
+        return
+    end
     self.navFrame = navFrame
     self.isClamped = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.presentationInitialized = nil
+    self:RefreshNavigationVisibility()
     if self.customDirection then return end
 
     if self.navFrame then
@@ -222,7 +227,8 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:ShutdownNavigationFrame()
     self:ClearAllPoints()
-    self.navigationOpacity:SetAlpha(0)
+    self.navigationReady = false
+    self:RefreshNavigationVisibility()
     self.navFrame = nil
     self.isClamped = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
@@ -286,6 +292,8 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshPresentation()
     self.content:SetPresentation(self:GetPresentation())
+    -- Apply clamp/fallback layout before readiness reveals the container.
+    self:RefreshNavigationVisibility()
 end
 
 ---@param displayType 'close' | 'far'
@@ -332,8 +340,11 @@ function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
     end
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
-        local alpha = angle ~= nil and not self.fallbackReadyAt and 1 or 0
-        if self.navigationOpacity:GetAlpha() ~= alpha then self.navigationOpacity:SetAlpha(alpha) end
+        local ready = angle ~= nil and not self.fallbackReadyAt
+        if self.navigationReady ~= ready then
+            self.navigationReady = ready
+            self:RefreshNavigationVisibility()
+        end
     end
     if angle ~= nil then
         self.newNeedleRotation = angle
