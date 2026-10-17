@@ -41,7 +41,6 @@ function MapPinEnhancedWayfinderFloatingTitleMixin:SetTitle(title)
         self.fallback and FALLBACK_TITLE_WIDTH or MAX_TITLE_WIDTH, self.fallback and 2 or 4)
     self:EnableMouse(self.fallback or self.titleTruncated)
     self:SetMouseClickEnabled(self.fallback == true)
-    self:SetPropagateMouseClicks(not self.fallback)
     self:UpdateLayout()
 end
 
