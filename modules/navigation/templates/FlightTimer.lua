@@ -106,6 +106,7 @@ end
 
 function MapPinEnhancedFlightTimerMixin:OnLoad()
     self.progress:SetMinMaxValues(0, 1)
+    self.progress:SetFillGradient(CreateColor(0.55, 0.40, 0.02), CreateColor(0.28, 0.20, 0.01))
     self.progress.progress:SetTextColor(1, 1, 1)
     MapPinEnhanced:RegisterDraggableFrame(self, "flightTimerFrame", self.dragHandle, function()
         return Options:GetOptionValue("General.FlightTimer.Lock") == true

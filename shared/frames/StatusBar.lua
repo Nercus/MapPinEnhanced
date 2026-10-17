@@ -1,6 +1,6 @@
 ---@class MapPinEnhancedStatusbarTemplate : StatusBar
 ---@field mapArt MapPinEnhancedMapArtMixin
----@field fillClip Frame|{canvas: Frame|{fillArt: MapPinEnhancedMapArtMixin}}
+---@field fillClip Frame|{canvas: Frame|{fill: Texture, fillArt: MapPinEnhancedMapArtMixin}}
 ---@field labels Frame|{name: FontString, progress: FontString}
 ---@field name FontString
 ---@field progress FontString
@@ -57,6 +57,12 @@ end
 
 function MapPinEnhancedStatusbarMixin:SetName(name)
     self.name:SetText(name)
+end
+
+---@param startColor colorRGBA
+---@param endColor colorRGBA
+function MapPinEnhancedStatusbarMixin:SetFillGradient(startColor, endColor)
+    self.fillClip.canvas.fill:SetGradient("HORIZONTAL", startColor, endColor)
 end
 
 function MapPinEnhancedStatusbarMixin:SetProgressFormatter(formatter)
