@@ -206,6 +206,16 @@ local ZEPPELIN = {
         toY = 0.81,
         type = "zeppelin",
         travelDuration = 295,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Horde",
+                },
+            },
+        },
     },
     -- Zephras Isle (map 2521 57.75,81.00) -> Mulgore (map 1412 34.33,26.05) via zeppelin
     {
@@ -219,6 +229,16 @@ local ZEPPELIN = {
         toY = 0.2605,
         type = "zeppelin",
         travelDuration = 334,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Horde",
+                },
+            },
+        },
     },
 }
 
