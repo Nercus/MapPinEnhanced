@@ -26,6 +26,9 @@ local function ValidateGroupInfo(groupInfo, apiName)
     if groupInfo.groupType ~= nil or Groups:GetSystemGroupType(groupInfo.groupID) ~= nil then
         error(apiName .. ": system groups cannot be registered through the public API")
     end
+    if groupInfo.restorable ~= nil and type(groupInfo.restorable) ~= "boolean" then
+        error(apiName .. ": groupInfo.restorable must be a boolean")
+    end
 end
 
 ---@param group MapPinEnhancedGroupMixin
@@ -112,7 +115,8 @@ local function CreateGroupProxy(group)
         return current:ClearAllPins()
     end
 
-    ---@return boolean accepted
+    ---Restore cleared pins without starting tracking; hidden groups stay hidden.
+    ---@return boolean accepted true means accepted, not necessarily completed
     function proxy:RestorePins()
         local current = GetGroup()
         if not current then return false end
@@ -127,8 +131,11 @@ local function CreateGroupProxy(group)
     end
 
     ---@param restorable boolean
-    ---@return boolean accepted
+    ---@return boolean accepted disabling may restore cleared pins over multiple frames
     function proxy:SetRestorable(restorable)
+        if type(restorable) ~= "boolean" then
+            error("MapPinEnhancedPublicGroupProxy:SetRestorable: restorable must be a boolean")
+        end
         local current = GetGroup()
         if not current then return false end
         return current:SetRestorable(restorable)
