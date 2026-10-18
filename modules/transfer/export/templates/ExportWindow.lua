@@ -11,7 +11,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field warning FontString
 ---@field exportData SerializedExport?
 ---@field selectedExportType "way"|"serialized"
----@field selectedPrefix "/way"|"/mph"|"/mappin"
+---@field selectedPrefix "/way"|"/mpe"|"/mappin"
 ---@field output string
 MapPinEnhancedExportWindowMixin = CreateFromMixins(MapPinEnhancedWindowMixin)
 
@@ -27,7 +27,7 @@ local exportOptions = {
 
 local prefixOptions = {
     { label = "/way",                                                                                   value = "/way" },
-    { label = "/mph",                                                                                   value = "/mph" },
+    { label = "/mpe",                                                                                   value = "/mpe" },
     { label = "/mappin " .. "|T" .. MapPinEnhanced.assetsPath .. "\\shared\\WoWLogo.png" .. ":14:14|t", value = "/mappin" },
 }
 

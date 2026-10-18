@@ -29,10 +29,9 @@ L["Remove"] = "Remove"
 
 L["Click to edit"] = "Click to edit"
 L["<x> <y> [title]"] = "<x> <y> [title]"
-L["Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"] =
-"Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"
-L["You can also use /mpe instead of /mph."] = "You can also use /mpe instead of /mph."
-L["You can also use /mpe or /way instead of /mph."] = "You can also use /mpe or /way instead of /mph."
+L["Create and track a pin at percentage coordinates. Example: /mpe 50 50 My pin"] =
+"Create and track a pin at percentage coordinates. Example: /mpe 50 50 My pin"
+L["You can also use /way instead of /mpe."] = "You can also use /way instead of /mpe."
 
 L["Navigation Hearthstone Data Missing"] = "Hearthstone location unknown. Use your hearthstone once to record it."
 L["Navigation Flight Data Missing"] = "Flight paths not collected. Visit a flight master to collect them."

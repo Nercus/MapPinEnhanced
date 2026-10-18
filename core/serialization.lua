@@ -12,7 +12,7 @@ local inverse_decimal_separator = decimal_separator == "," and "." or ","
 local DECIMAL_SEPARATOR_PATTERN = decimal_separator == "." and "%." or ","
 local INVERSE_DECIMAL_SEPARATOR_PATTERN = inverse_decimal_separator == "." and "%." or ","
 
-local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][Hh]"
+local SLASH_PREFIX_PATTERN_1 = "/[Mm][Pp][EeHh]"
 local SLASH_PREFIX_PATTERN_2 = "/[Mm][Aa][Pp][Pp][Ii][Nn]"
 local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
@@ -240,7 +240,7 @@ end
 
 ---create a wayString from pinData
 ---@param pinData pinData
----@param prefix "/way"|"/mph"|"/mappin"?
+---@param prefix "/way"|"/mpe"|"/mph"|"/mappin"?
 ---@return string wayLine
 function MapPinEnhanced:SerializeWayLine(pinData, prefix)
     local mapID = pinData.mapID or ""

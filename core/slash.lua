@@ -68,15 +68,15 @@ function MapPinEnhanced:PrintHelp()
     table.sort(commands)
     for _, command in ipairs(commands) do
         local help = commandHelpStrings[command]
-        local helpString = helpPattern:format("/mph " .. command, self:WrapTextInColor(help, helpColor))
+        local helpString = helpPattern:format("/mpe " .. command, self:WrapTextInColor(help, helpColor))
         self:PrintUnformatted(helpString)
     end
-    self:PrintUnformatted(helpPattern:format("/mph " .. self.L["<x> <y> [title]"],
-        self:WrapTextInColor(self.L["Create and track a pin at percentage coordinates. Example: /mph 50 50 My pin"],
+    self:PrintUnformatted(helpPattern:format("/mpe " .. self.L["<x> <y> [title]"],
+        self:WrapTextInColor(self.L["Create and track a pin at percentage coordinates. Example: /mpe 50 50 My pin"],
             helpColor)))
-    local aliases = self.isTomTomLoaded and self.L["You can also use /mpe instead of /mph."] or
-        self.L["You can also use /mpe or /way instead of /mph."]
-    self:PrintUnformatted(self:WrapTextInColor(aliases, helpColor))
+    if not self.isTomTomLoaded then
+        self:PrintUnformatted(self:WrapTextInColor(self.L["You can also use /way instead of /mpe."], helpColor))
+    end
 end
 
 ---@alias SlashCommand string|string[]
@@ -132,8 +132,8 @@ end
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     MapPinEnhanced:EnableHelpCommand()
     local isTomTomLoaded = C_AddOns.IsAddOnLoaded("TomTom")
-    MapPinEnhanced:SetSlashTrigger("/mph", 1)
-    MapPinEnhanced:SetSlashTrigger("/mpe", 2)
+    MapPinEnhanced:SetSlashTrigger("/mpe", 1)
+    MapPinEnhanced:SetSlashTrigger("/mph", 2)
     if not isTomTomLoaded then
         MapPinEnhanced:SetSlashTrigger("/way", 3)
     end
