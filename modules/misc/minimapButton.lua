@@ -7,6 +7,7 @@ local Editor = MapPinEnhanced:GetModule("Editor")
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Transfer = MapPinEnhanced:GetModule("Transfer")
 local L = MapPinEnhanced.L
 local SHOW_BUTTON_OPTION = "General.Minimap.ShowButton"
 
@@ -16,7 +17,8 @@ local customLogoPath = MapPinEnhanced.assetsPath .. "\\LogoTransparent.png"
 local minimapHighlightPath = MapPinEnhanced.assetsPath .. "\\shared\\MinimapHighlight.png"
 
 local function ClearAllPins()
-    if not Groups:ClearAllPins() then
+    local success = Groups:ClearAllPins()
+    if not success then
         MapPinEnhanced:Print(L
             ["Some pins are still being updated. Try clearing again when the current operation finishes."])
     end
@@ -32,6 +34,7 @@ local function ShowMinimapMenu(owner)
             type = "title",
             label = MapPinEnhanced.displayName .. " " .. MapPinEnhanced.version,
         },
+        { type = "divider" },
         {
             type = "button",
             label = MapPinEnhanced:Iconize("trash", L["Clear all pins"]),
@@ -39,16 +42,11 @@ local function ShowMinimapMenu(owner)
         },
         {
             type = "button",
-            label = MapPinEnhanced:Iconize("map", L["Show tracked pin on map"]),
+            label = MapPinEnhanced:Iconize("import", L["Import"]),
             onClick = function()
-                local pin = Pins:GetTrackedPin()
-                if pin then pin:ShowOnMap() end
-            end,
-            initializer = function(_, description)
-                description:SetEnabled(Pins:GetTrackedPin() ~= nil)
+                Transfer:ShowImportWindow()
             end,
         },
-        { type = "divider" },
         {
             type = "button",
             label = MapPinEnhanced:Iconize("edit", L["Open editor"]),
@@ -108,19 +106,14 @@ local function InitMinimapIcon()
         OnTooltipShow = function(tooltip)
             tooltip:AddLine(MapPinEnhanced.displayName)
             MapPinEnhanced:AddTooltipInteractions(tooltip, {
-                { L["Left Click"],       MapPinEnhanced:GetVar("trackerVisible") and L["Hide Tracker"] or L["Show Tracker"] },
-                { L["Alt + Left Click"], L["Clear all active pins in visible groups."] },
-                { L["Right Click"],      L["Open menu"] },
+                { L["Click"],       L["Open menu"] },
+                { L["Alt + Click"], L["Clear all active pins in visible groups."] },
             })
         end,
-        OnClick = function(owner, button)
-            if button == "LeftButton" then
-                if IsAltKeyDown() then
-                    ClearAllPins()
-                else
-                    Tracker:ToggleTracker()
-                end
-            elseif button == "RightButton" then
+        OnClick = function(owner)
+            if IsAltKeyDown() then
+                ClearAllPins()
+            else
                 ShowMinimapMenu(owner)
             end
         end,
