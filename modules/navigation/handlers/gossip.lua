@@ -5,7 +5,6 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 local toyOptions = {} ---@type table<number, table<number, boolean>>
-MapPinEnhanced:SetDefault("toyGossipOptions", {})
 
 ---@param gossip NavigationStaticGossip
 ---@return boolean

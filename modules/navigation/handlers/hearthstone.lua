@@ -27,9 +27,6 @@ local hearthstoneSpells = {} ---@type table<number, boolean>
 local toysBySpellID = {} ---@type table<number, number>
 local SetLearning ---@type fun(enabled: boolean)
 
-MapPinEnhanced:SetDefault("hearthstoneDestinations", {})
-MapPinEnhanced:SetDefault("hearthstoneToys", {})
-
 ---@return boolean
 function Navigation:HasHearthstoneDestination()
     return destination ~= nil

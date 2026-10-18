@@ -1,61 +1,5 @@
 ---@class MapPinEnhanced
----@field defaults table<string, any> a list of default values for the addon
 local MapPinEnhanced = select(2, ...)
-
----Retrieves the default value for a given set of keys, or nil when none is registered.
----@param ... string The keys to traverse to get the default value
----@return boolean | number | string | table | nil
-function MapPinEnhanced:GetDefault(...)
-    if not self.defaults then
-        self.defaults = {}
-    end
-
-    local arg = { ... }
-    local currentTable = self.defaults
-    for index, key in ipairs(arg) do
-        if index == #arg then -- last key
-            return currentTable[key]
-        end
-        if currentTable[key] == nil then
-            return nil
-        end
-        currentTable = currentTable[key] --[[@as table]]
-    end
-    error("defaults table is empty")
-end
-
----Set the default value for a given set of keys.
----@param ... string | number | boolean | table The last element is the value to save and the rest are keys where the value should be saved
-function MapPinEnhanced:SetDefault(...)
-    if not self.defaults then
-        self.defaults = {}
-    end
-
-    -- move all arguments into a table
-    local arg = { ... }
-    local value = arg[#arg] -- last argument is the value
-
-    -- remove the last argument from the tables
-    arg[#arg] = nil
-    -- iterate table and create sub-tables if needed and on last iteration set the value
-    local currentTable = self.defaults -- start at the root
-    for index, key in ipairs(arg) do
-        if index == #arg then
-            break
-        end
-        if not currentTable[key] then
-            currentTable[key] = {}
-        end
-        ---@type table<string, boolean | number | string | table>
-        currentTable = currentTable[key]
-    end
-    if type(currentTable) ~= "table" then
-        return
-    end
-    -- arg[#arg] is the last key
-    ---@type table<string, boolean | number | string | table>
-    currentTable[arg[#arg]] = value
-end
 
 ---Save a variable to the saved variables
 ---@param ... string | number | boolean | table The last element is the value to save and the rest are keys where the value should be saved
@@ -104,23 +48,9 @@ function MapPinEnhanced:GetVar(...)
 
     for index, key in ipairs(arg) do
         if index == #arg then
-            local value = dbTable[key]
-            if value ~= nil then
-                return value
-            end
-
-            if self.defaults then
-                local defaultValue = self:GetDefault(...)
-                return defaultValue
-            end
-
-            return nil
+            return dbTable[key]
         end
         if not dbTable[key] then
-            if self.defaults then
-                local defaultValue = self:GetDefault(...)
-                return defaultValue
-            end
             return nil
         end
         dbTable = dbTable[key] --[[@as table]]
