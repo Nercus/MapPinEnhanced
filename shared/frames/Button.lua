@@ -71,7 +71,7 @@ function MapPinEnhancedButtonMixin:Update()
         local _, labelHeight = self.text:GetFont()
         self.iconTexture:SetSize(labelHeight, labelHeight)
         local padding = labelHeight * 0.25
-        local labelOffset = labelHeight / 2 + padding
+        local labelOffset = labelHeight / 2
         self.text:SetPoint("CENTER", self, "CENTER", self.iconOnRight and -labelOffset or labelOffset, 0)
         if self.iconOnRight then
             self.iconTexture:SetPoint("LEFT", self.text, "RIGHT", padding, 0)
@@ -80,6 +80,7 @@ function MapPinEnhancedButtonMixin:Update()
         end
         self.iconTexture:Show()
     end
+    self.text:AdjustPointsOffset(0, 1)
     -- Click handlers can rebuild anchors before WoW removes the pressed offset.
     -- Keep that offset in the new layout so release restores the normal position.
     if self:GetButtonState() == "PUSHED" then
