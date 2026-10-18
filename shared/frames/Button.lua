@@ -80,6 +80,11 @@ function MapPinEnhancedButtonMixin:Update()
         end
         self.iconTexture:Show()
     end
+    -- Click handlers can rebuild anchors before WoW removes the pressed offset.
+    -- Keep that offset in the new layout so release restores the normal position.
+    if self:GetButtonState() == "PUSHED" then
+        self.text:AdjustPointsOffset(self:GetPushedTextOffset())
+    end
 end
 
 ---@param icon MapPinEnhancedIcon?
