@@ -17,10 +17,8 @@ local L = MapPinEnhanced.L
 ---@field destinationText string?
 ---@field textTruncated boolean?
 ---@field applying boolean?
+---@field savePositionAfterCombat boolean?
 ---@field pendingApply { step: WayfinderStepData?, target: WayfinderData? }?
----@field combatPanel MapPinEnhancedFloatingPanelTemplate?
----@field actionPreview MapPinEnhancedWayfinderActionVisual?
----@field panelShown boolean?
 ---@field actionButton MapPinEnhancedWayfinderActionButton? only the travel variant
 ---@field actionBlocker MapPinEnhancedWayfinderActionVisual? only the travel variant
 MapPinEnhancedFloatingPanelMixin = {}
@@ -29,10 +27,17 @@ function MapPinEnhancedFloatingPanelMixin:OnLoad()
     MapPinEnhancedFadingFrameMixin.SetupVisibilityFade(self, true)
     self.pinFrame:SetTracked(true)
     if self.actionButton then
+        SecureHandler_OnLoad(self)
         MapPinEnhancedWayfinderInstructionMixin.OnLoad(self)
-        -- The unprotected copy keeps the same display movable while secure
-        -- travel controls are hidden by Blizzard during combat.
-        RegisterStateDriver(self, "visibility", "[combat] hide;")
+        -- Secure hide/show stops a drag already in progress when combat begins,
+        -- while retaining the prepared action and the panel's prior visibility.
+        self:SetAttribute("_onstate-combat", [[
+            if newstate == "combat" and self:IsShown() then
+                self:Hide()
+                self:Show()
+            end
+        ]])
+        RegisterStateDriver(self, "combat", "[combat] combat; peace")
     end
     self.description.mouseOwner = self
     MapPinEnhanced:RegisterDraggableFrame(self, "navigationStepFrame", nil,
@@ -51,7 +56,7 @@ end
 
 ---@param step WayfinderStepData?
 function MapPinEnhancedFloatingPanelMixin:SetStep(step)
-    if InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
+    if InCombatLockdown() and self.actionButton then return end
     if self.actionButton then
         MapPinEnhancedWayfinderInstructionMixin.SetStep(self, step)
     else
@@ -104,12 +109,9 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
         self.reconcileAfterCombat = nil
     end
     self.pendingApply = nil
-    local returningFromCombat = self.combatPanel and self.combatPanel:IsShown()
-    if self.combatPanel and self.combatPanel:IsShown() then
-        -- Hiding stops any active drag before we restore the protected view.
-        self.combatPanel:HideImmediately()
-        MapPinEnhanced:SaveFramePosition(self.combatPanel)
-        self:RestorePosition()
+    if self.savePositionAfterCombat then
+        MapPinEnhanced:SaveFramePosition(self)
+        self.savePositionAfterCombat = nil
     end
     -- The objective view has no protected controls and can update in combat.
     -- Both variants restore their shared saved position when switching views.
@@ -124,41 +126,16 @@ function MapPinEnhancedFloatingPanelMixin:Apply(step, target)
     self.onMenu = step and function(owner)
         MapPinEnhanced:GenerateMenu(owner, Wayfinders:BuildNavigationMenuEntries())
     end or nil
-    self:PrepareCombatDisplay()
     self.applying = true
     self:ApplyVisibility(step ~= nil and (step.insideObjectiveArea == true or
-        step.showInstruction ~= false and (step.isTraversal or step.stepCount ~= 1)), returningFromCombat)
+        step.showInstruction ~= false and (step.isTraversal or step.stepCount ~= 1)))
     self.applying = nil
 end
 
 ---@param shown boolean
----@param immediate boolean?
-function MapPinEnhancedFloatingPanelMixin:ApplyVisibility(shown, immediate)
-    self.panelShown = shown
+function MapPinEnhancedFloatingPanelMixin:ApplyVisibility(shown)
     if InCombatLockdown() and self:IsProtected() then return end
-    if immediate then
-        -- The combat copy was already visible. Fading its replacement from zero
-        -- would leave the panel invisible at the handoff.
-        self:ResetVisibilityFade()
-        self:SetShown(shown)
-    else
-        self:SetShownWithFade(shown)
-    end
-end
-
-function MapPinEnhancedFloatingPanelMixin:PrepareCombatDisplay()
-    local panel = self.combatPanel
-    if not panel or self.applying or InCombatLockdown() then return end
-    panel.applying = true
-    panel.target = self.target
-    panel:SetStep(self.step)
-    panel.fullText = self.fullText
-    panel.destinationText = self.destinationText
-    panel.onMenu = self.onMenu
-    panel.actionPreview.icon:SetTexture(self.actionButton.icon:GetTexture())
-    panel.actionPreview:SetShown(self.actionButton:IsShown())
-    panel.applying = nil
-    panel:UpdateLayout()
+    self:SetShownWithFade(shown)
 end
 
 function MapPinEnhancedFloatingPanelMixin:ClearTracking()
@@ -167,7 +144,7 @@ end
 
 ---@param title string?
 function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
-    if InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
+    if InCombatLockdown() and self.actionButton then return end
     local step = self.step
     if step and step.destinationMapID then
         local mapInfo = C_Map.GetMapInfo(step.destinationMapID)
@@ -177,11 +154,10 @@ function MapPinEnhancedFloatingPanelMixin:SetDestinationText(title)
         self.destinationText = ""
     end
     self:UpdateLayout()
-    self:PrepareCombatDisplay()
 end
 
 function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
-    if self.applying or InCombatLockdown() and (self.actionButton or self.actionPreview) then return end
+    if self.applying or InCombatLockdown() and self.actionButton then return end
     local inside = self.step and self.step.insideObjectiveArea
     local target = self.target
     local title = inside and target and target.title or self.fullText
@@ -204,7 +180,7 @@ function MapPinEnhancedFloatingPanelMixin:UpdateLayout()
     self.dataWarning:SetTooltip(warning)
     self.dataWarning:SetShown(warning ~= nil)
     -- Match the 16-unit side inset; the progress strip is only an overlay.
-    local action = self.actionButton or self.actionPreview
+    local action = self.actionButton
     local height = math.max(62, math.max(textHeight, self.pinFrame:GetHeight(),
         action and action:GetHeight() or 0) + 32)
     self:SetHeight(height)
@@ -230,6 +206,7 @@ function MapPinEnhancedFloatingPanelMixin:OnEnter()
     else
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
     end
+    self:AddCombatTooltip()
     if self.onMenu then
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, { { L["Right Click"], L["Open menu"] } })
     end
@@ -241,7 +218,6 @@ function MapPinEnhancedFloatingPanelMixin:OnLeave()
 end
 
 function MapPinEnhancedFloatingPanelMixin:OnShow()
-    -- The combat copy already has the source view's exact position.
     if not InCombatLockdown() then self:RestorePosition() end
     if self.applying then return end
     if self.actionButton then
@@ -254,17 +230,25 @@ end
 function MapPinEnhancedFloatingPanelMixin:OnHide()
     MapPinEnhancedWayfinderInstructionMixin.OnHide(self)
     self.areaStatus:SetText("")
-    local panel = self.combatPanel
-    if panel and self.panelShown and InCombatLockdown() then
-        -- Capture the actual position, including a drag interrupted by combat.
-        -- No anchors or parents connect this copy to the protected source.
-        local x, y = self:GetCenter()
-        if not x or not y then return end
-        panel:SetScale(self:GetScale())
-        panel:ClearAllPoints()
-        panel:SetPoint("CENTER", UIParent, "BOTTOMLEFT", x, y)
-        panel:Show()
+    if InCombatLockdown() and self.actionButton and MapPinEnhanced:IsFrameDragging(self) then
+        -- LibWindow saves also reanchor the frame, so wait until that is safe.
+        self.savePositionAfterCombat = true
     end
+end
+
+function MapPinEnhancedFloatingPanelMixin:AddCombatTooltip()
+    if not self.actionButton or not InCombatLockdown() then return end
+    GameTooltip:AddLine(L["Navigation Step Waiting Combat"], 1, 0.82, 0, true)
+    if self.preparedAction and self.actionButton:IsShown() then
+        GameTooltip:AddLine(L["Navigation Action Shift Combat"], 1, 1, 1, true)
+    end
+end
+
+---@param owner Frame
+function MapPinEnhancedFloatingPanelMixin:OnActionEnter(owner)
+    MapPinEnhancedWayfinderInstructionMixin.OnActionEnter(self, owner)
+    self:AddCombatTooltip()
+    GameTooltip:Show()
 end
 
 function MapPinEnhancedFloatingPanelMixin:ReportNavigation()

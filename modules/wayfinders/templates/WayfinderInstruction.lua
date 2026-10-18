@@ -75,6 +75,10 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
             self.reconcileAfterCombat()
             self.reconcileAfterCombat = nil
         end
+        if self.actionButton.requiresShiftInCombat then
+            UnregisterAttributeDriver(self.actionButton, "type")
+            self.actionButton:SetAttribute("shift-type1", nil)
+        end
         self.actionButton:SetAttribute("type", nil)
         self.actionButton:SetAttribute("spell", nil)
         self.actionButton:SetAttribute("item", nil)
@@ -83,6 +87,12 @@ function MapPinEnhancedWayfinderInstructionMixin:SetStep(step)
             local actionValue = action.type == "item" and "item:" .. tostring(action.id) or action.id
             self.actionButton:SetAttribute("type", action.type)
             self.actionButton:SetAttribute(action.type, actionValue)
+            if self.actionButton.requiresShiftInCombat then
+                -- Prepare the explicit override before combat; insecure clicks
+                -- must never rewrite protected attributes during lockdown.
+                self.actionButton:SetAttribute("shift-type1", action.type)
+                RegisterAttributeDriver(self.actionButton, "type", "[combat] nil; " .. action.type)
+            end
         end
         self.preparedAction = action and { type = action.type, id = action.id } or nil
         self.actionButton:SetShown(action ~= nil)

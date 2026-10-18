@@ -24,9 +24,6 @@ function MapPinEnhancedWayfinderFloating:Setup()
     local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
     ---@cast panel MapPinEnhancedFloatingPanelTemplate
     self.panel = panel
-    local combatPanel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelCombatTemplate")
-    ---@cast combatPanel MapPinEnhancedFloatingPanelTemplate
-    panel.combatPanel = combatPanel
     local objectivePanel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelDisplayTemplate")
     ---@cast objectivePanel MapPinEnhancedFloatingPanelTemplate
     self.objectivePanel = objectivePanel
@@ -89,12 +86,8 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     if self.panel then self.panel:Apply(not inside and step or nil, self.data) end
     if self.objectivePanel then
         local showObjectives = inside and Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
-        local combatPanel = self.panel and self.panel.combatPanel
-        if showObjectives and InCombatLockdown() and combatPanel and combatPanel:IsShown() then
-            -- The live objective view replaces the frozen travel copy at its saved position.
-            combatPanel:HideImmediately()
-            MapPinEnhanced:SaveFramePosition(combatPanel)
-        end
+        -- The protected travel panel retains its last Step until combat ends.
+        if InCombatLockdown() and self.panel and self.panel:IsShown() then showObjectives = false end
         self.objectivePanel:Apply(showObjectives and step or nil, self.data)
     end
     -- Reset has released tracking; retain the last artwork until its fade ends.
