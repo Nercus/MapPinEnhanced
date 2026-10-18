@@ -373,10 +373,10 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         end
     end)
     self.duplicateButton:SetScript("OnClick", function()
-        if Editor:DuplicatePin(pinNode) then editor:RequestRefresh() end
+        if pinNode.group:DuplicatePin(pinNode.pinID) then editor:RequestRefresh() end
     end)
     self.deleteButton:SetScript("OnClick", function()
-        local function remove() Editor:RemovePinCompletely(pinNode.group, pinNode.pinID) end
+        local function remove() pinNode.group:RemovePin(pinNode.pinID) end
         if IsShiftKeyDown() then
             remove()
         else

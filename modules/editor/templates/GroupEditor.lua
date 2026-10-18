@@ -154,7 +154,7 @@ function MapPinEnhancedGroupEditorMixin:StopPinDrag()
     if self.dragSourceFrame then self.dragSourceFrame:SetAlpha(1) end
     local targetGroup = self.groupEditorSidebar:GetDropTarget()
     if targetGroup and self.draggedPinNode then
-        Editor:MovePinToGroup(self.draggedPinNode.group, self.draggedPinNode.pinID, targetGroup)
+        self.draggedPinNode.group:MovePinToGroup(self.draggedPinNode.pinID, targetGroup)
     else
         self.groupEditorContent:FinishPinDrop()
     end

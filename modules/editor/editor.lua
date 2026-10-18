@@ -60,32 +60,6 @@ function Editor:GetSortedPins(group)
     return nodes
 end
 
----@param group MapPinEnhancedGroupMixin
----@param pinIDs UUID[]
-function Editor:ApplyPinOrder(group, pinIDs)
-    group:ReorderPins(pinIDs)
-end
-
----@param group MapPinEnhancedGroupMixin
----@param pinID UUID
-function Editor:RemovePinCompletely(group, pinID)
-    group:RemovePin(pinID)
-end
-
----@param pinNode MapPinEnhancedEditorPinNodeData
----@return UUID?
-function Editor:DuplicatePin(pinNode)
-    return pinNode.group:DuplicatePin(pinNode.pinID)
-end
-
----@param sourceGroup MapPinEnhancedGroupMixin
----@param pinID UUID
----@param targetGroup MapPinEnhancedGroupMixin
----@return boolean
-function Editor:MovePinToGroup(sourceGroup, pinID, targetGroup)
-    return sourceGroup:MovePinToGroup(pinID, targetGroup)
-end
-
 function Editor:GetGroupEditorFrame()
     if not self.groupEditor then
         self.groupEditor = CreateFrame("Frame", "MapPinEnhancedGroupEditor", UIParent,

@@ -86,7 +86,7 @@ function MapPinEnhancedGroupEditorContentMixin:AddPin()
         if node.pinID ~= pinID then pinIDs[#pinIDs + 1] = node.pinID end
     end
     pinIDs[#pinIDs + 1] = pinID
-    Editor:ApplyPinOrder(group, pinIDs)
+    group:ReorderPins(pinIDs)
 end
 
 ---@param loading boolean
@@ -225,5 +225,5 @@ function MapPinEnhancedGroupEditorContentMixin:FinishPinDrop()
             if node.pinID == target.pinID and placement == "after" then table.insert(ids, moved.pinID) end
         end
     end
-    Editor:ApplyPinOrder(target.group, ids)
+    target.group:ReorderPins(ids)
 end
