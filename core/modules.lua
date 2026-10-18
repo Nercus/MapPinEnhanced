@@ -13,13 +13,8 @@ function MapPinEnhanced:GetModule(name)
     assert(self.modules, "Modules not initialized")
     assert(name, "Module name not provided")
 
-    if (not self.modules or not self.modules[name]) then
-        local m = {}
-        if (not self.modules) then
-            self.modules = {}
-        end
-        self.modules[name] = m
-        return m
+    if not self.modules[name] then
+        self.modules[name] = {}
     end
     return self.modules[name]
 end
