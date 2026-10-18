@@ -116,7 +116,7 @@ LinkUtil.RegisterLinkHandler(LINK_TYPE, function(link)
         return
     end
     -- The link retains the map at receipt, even if the player changes zones before clicking.
-    local data = { mapID = mapID, x = x / 100, y = y / 100 }
+    local data = { mapID = mapID, x = x / 100, y = y / 100, setTracked = true }
     if IsModifiedClick("CHATLINK") then
         ChatEdit_InsertLink(MapPinEnhanced:GetModule("Pins"):GetMapPinChatLink(data.x, data.y, mapID))
         return
