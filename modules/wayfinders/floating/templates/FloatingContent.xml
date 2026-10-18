@@ -114,7 +114,7 @@
                         </Anchors>
                         <Layers>
                             <Layer level="ARTWORK">
-                                <Texture parentKey="top" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                <Texture parentKey="top" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png" texelSnappingBias="0" snapToPixelGrid="false">
                                     <Size x="34" y="19" />
                                     <Anchors>
                                         <Anchor point="TOP" />
@@ -126,7 +126,7 @@
                                         </AnimationGroup>
                                     </Animations>
                                 </Texture>
-                                <Texture parentKey="middle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                <Texture parentKey="middle" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png" texelSnappingBias="0" snapToPixelGrid="false">
                                     <Size x="34" y="19" />
                                     <Anchors>
                                         <Anchor point="TOP" y="-10" />
@@ -138,7 +138,7 @@
                                         </AnimationGroup>
                                     </Animations>
                                 </Texture>
-                                <Texture parentKey="bottom" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png">
+                                <Texture parentKey="bottom" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarBottomChevron.png" texelSnappingBias="0" snapToPixelGrid="false">
                                     <Size x="34" y="19" />
                                     <Anchors>
                                         <Anchor point="TOP" y="-20" />

@@ -6,7 +6,7 @@
         <Size x="20" y="287" />
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="line" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarLine.png" setAllPoints="true">
+                <Texture parentKey="line" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingFarLine.png" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Gradient orientation="VERTICAL">
                         <MaxColor r="1" g="0.82" b="0" a="0.3" />
                         <MinColor r="1" g="0.82" b="0" a="1" />

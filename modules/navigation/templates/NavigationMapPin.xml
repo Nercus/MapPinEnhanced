@@ -5,7 +5,7 @@
         <Size x="23" y="23" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="circle" file="Interface/AddOns/MapPinEnhanced/assets/navigation/StepPin.png" hidden="true" setAllPoints="true" snapToPixelGrid="true" texelSnappingBias="0" />
+                <Texture parentKey="circle" file="Interface/AddOns/MapPinEnhanced/assets/navigation/StepPin.png" hidden="true" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
             </Layer>
             <Layer level="BACKGROUND">
                 <Line parentKey="line" thickness="2" hidden="true">

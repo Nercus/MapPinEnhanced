@@ -10,7 +10,7 @@
                 <Texture setAllPoints="true" inherits="MapPinEnhancedGenericFrameTextureTemplate" />
             </Layer>
             <Layer level="ARTWORK" textureSubLevel="1">
-                <Texture parentKey="thumb" file="Interface/AddOns/MapPinEnhanced/assets/shared/ToggleThumb.png">
+                <Texture parentKey="thumb" file="Interface/AddOns/MapPinEnhanced/assets/shared/ToggleThumb.png" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="LEFT" x="4" />

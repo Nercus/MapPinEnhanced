@@ -5,7 +5,7 @@
     <EditBox name="MapPinEnhancedAutocompleteTemplate" mixin="MapPinEnhancedAutocompleteMixin" virtual="true" font="MapPinEnhancedFontHighlight" autoFocus="false" multiLine="false" inherits="MapPinEnhancedInputTemplate">
         <Layers>
             <Layer level="OVERLAY">
-                <Texture atlas="Spinner_Ring" hidden="true" parentKey="spinner">
+                <Texture atlas="Spinner_Ring" hidden="true" parentKey="spinner" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="20" y="20" />
                     <Anchors>
                         <Anchor point="RIGHT" relativePoint="RIGHT" x="-5" />

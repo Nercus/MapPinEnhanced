@@ -6,8 +6,8 @@
         <Size x="64" y="64" />
         <Layers>
             <Layer level="ARTWORK">
-                <Texture parentKey="texture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingClampedArrow.png" desaturated="true" setAllPoints="true" />
-                <Texture parentKey="fallbackTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinder.png" desaturated="true" hidden="true">
+                <Texture parentKey="texture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/floating/FloatingClampedArrow.png" desaturated="true" setAllPoints="true" texelSnappingBias="0" snapToPixelGrid="false" />
+                <Texture parentKey="fallbackTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinder.png" desaturated="true" hidden="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="52" y="52" />
                     <Anchors>
                         <Anchor point="CENTER" />
@@ -29,7 +29,7 @@
                         </AnimationGroup>
                     </Animations>
                 </Texture>
-                <Texture parentKey="fallbackCloseTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinderClose.png" desaturated="true" hidden="true" alpha="0">
+                <Texture parentKey="fallbackCloseTexture" file="Interface/AddOns/MapPinEnhanced/assets/wayfinders/arrow/ArrowWayfinderClose.png" desaturated="true" hidden="true" alpha="0" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="40" y="40" />
                     <Anchors>
                         <Anchor point="CENTER" />

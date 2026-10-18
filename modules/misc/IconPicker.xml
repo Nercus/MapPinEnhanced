@@ -33,7 +33,7 @@
                         <Anchor point="LEFT" relativeKey="$parent.loadingSpinner" relativePoint="RIGHT" x="5" />
                     </Anchors>
                 </FontString>
-                <Texture parentKey="loadingSpinner" atlas="Spinner_Ring" hidden="true">
+                <Texture parentKey="loadingSpinner" atlas="Spinner_Ring" hidden="true" texelSnappingBias="0" snapToPixelGrid="false">
                     <Size x="16" y="16" />
                     <Anchors>
                         <Anchor point="BOTTOMLEFT" x="24" y="20" />
