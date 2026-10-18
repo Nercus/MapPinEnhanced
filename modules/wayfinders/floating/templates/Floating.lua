@@ -47,7 +47,6 @@ local NEEDLE_SETTLE_ANGLE = 0.0001 -- Radians; below a visible rotation at the n
 ---@field navigationReady boolean?
 ---@field clampedOffsetX number?
 ---@field clampedOffsetY number?
----@field nativeScenarioID string?
 ---@field scaleWithDistance boolean?
 ---@field scaleDistance number?
 MapPinEnhancedWayfinderFloatingMixin = CreateFromMixins(MapPinEnhancedWayfinderDistanceMixin,
@@ -117,7 +116,6 @@ function MapPinEnhancedWayfinderFloatingMixin:PrepareForTarget()
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetLocation(mapID, x, y)
-    self.nativeScenarioID = nil
     self:SetTargetLocation(mapID, x, y)
     self:PrepareForTarget()
     self:RefreshNavigationTarget()
@@ -125,10 +123,6 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationTarget()
     self.lastNavigationTargetCheck = GetTime()
-    if self.nativeScenarioID then
-        self:SetCustomDirectionEnabled(false)
-        return
-    end
     self:SetCustomDirectionEnabled(not Wayfinders:CanFollowNavigationTarget(self.targetMapID, self.targetX, self.targetY))
 end
 
@@ -185,28 +179,17 @@ function MapPinEnhancedWayfinderFloatingMixin:SetEllipticalRadii(major, minor)
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:RefreshNavigationVisibility()
-    local hideInvalidTarget = false
-    if C_Navigation.GetTargetState() == Enum.NavigationState.Invalid then
-        -- Instanced zones can report Invalid near quest turn-ins before actual arrival.
-        hideInvalidTarget = C_Scenario.IsInScenario() == true
-        if not hideInvalidTarget then
-            local _, _, _, instanceMapID = UnitPosition("player")
-            hideInvalidTarget = MapPinEnhanced:IsReadableNumber(instanceMapID) and
-                C_DelvesUI.HasActiveDelve(instanceMapID)
-        end
-    end
     -- Hide only the presentation so readiness sampling can restore it when the target recovers.
     -- Readiness uses visibility: the root alpha animation can restore a child's
     -- old alpha after native guidance replaces a hidden fallback during its fade.
     self.navigationOpacity:SetShown(self.navigationReady == true and self.presentationInitialized == true and
-        not hideInvalidTarget and
         (not self.customDirection or Round(self.scaleDistance or 1) > 0))
 end
 
 function MapPinEnhancedWayfinderFloatingMixin:SetupNavigationFrame()
     local navFrame = C_Navigation.GetFrame()
     if not self.customDirection then
-        self.navigationReady = navFrame ~= nil and (not self.nativeScenarioID or self:IsNativeScenarioReady())
+        self.navigationReady = navFrame ~= nil
     end
     if self.navFrame == navFrame then
         self:RefreshNavigationVisibility()
@@ -334,10 +317,6 @@ end
 
 ---@param elapsed number
 function MapPinEnhancedWayfinderFloatingMixin:UpdateNeedlePosition(elapsed)
-    if self.nativeScenarioID then
-        self:UpdateNativeScenarioNeedle()
-        return
-    end
     local angle = self:SampleTargetAngle(elapsed)
     if self.customDirection then
         local ready = angle ~= nil and not self.fallbackReadyAt
@@ -376,10 +355,8 @@ local function RefreshNavigationReadiness(self, now)
         self.lastNavigationReadinessCheck = now
         self:SetupNavigationFrame()
         local ready = self.navFrame ~= nil and C_Navigation.HasValidScreenPosition()
-        if self.nativeScenarioID then ready = ready and self:IsNativeScenarioReady() end
         if ready ~= self.nativePositionReady or self.fallbackReadyAt then self.lastNavigationTargetCheck = nil end
         self.nativePositionReady = ready
-        if self.nativeScenarioID then self:UpdateNativeScenarioDistance() end
     end
 end
 
@@ -419,7 +396,7 @@ function MapPinEnhancedWayfinderFloatingMixin:OnUpdate(elapsed, preparingShow)
         self:AnimateNeedleRotation(elapsed)
         return
     end
-    if not self.navFrame or self.nativeScenarioID and not self.nativePositionReady then return end
+    if not self.navFrame then return end
 
     self:UpdateClampedState()
     self:UpdatePosition()
@@ -509,7 +486,6 @@ function MapPinEnhancedWayfinderFloatingMixin:OnShow()
     self:SetScript("OnUpdate", function(_, elapsed)
         self:OnUpdate(elapsed)
     end)
-    if self.nativeScenarioID then return end
     self:StartDistanceUpdates(self.readout,
         function(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
             self:OnDistanceUpdate(distance, timeToTarget, closingSpeed, nextUpdateInterval, movementState)
@@ -551,7 +527,6 @@ end
 
 function MapPinEnhancedWayfinderFloatingMixin:Reset()
     MapPinEnhanced:UnregisterDraggableFrame(self.fallbackPosition)
-    self.nativeScenarioID = nil
     self.clampedOffsetX, self.clampedOffsetY = nil, nil
     self.displayType = "far"
     self.isFallbackClose = nil

@@ -15,7 +15,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field unsubscribeBeamOption fun()?
 ---@field unsubscribeScaleOption fun()?
 ---@field unsubscribeTextOutlineOption fun()?
----@field unsubscribeScenarioEvents fun()?
 ---@field step WayfinderStepData?
 ---@field textIntroIdentity string?
 local MapPinEnhancedWayfinderFloating = {}
@@ -83,34 +82,6 @@ function MapPinEnhancedWayfinderFloating:SetLock(lock)
     self:GetFrame().pin:SetLock(lock)
 end
 
-function MapPinEnhancedWayfinderFloating:RefreshNativeScenario()
-    if not self.runtimeEnabled or self.data or self.step then return end
-    -- A selected scenario can expose a native screen marker without map coordinates.
-    ---@type string?, string?
-    local title, description
-    if not Wayfinders:IsClearingTracking() and
-        not MapPinEnhanced:GetModule("Navigation"):GetActiveDestinationState() and
-        not MapPinEnhanced:GetModule("Pins"):GetTrackedPin() and
-        C_SuperTrack.GetHighestPrioritySuperTrackingType() == Enum.SuperTrackingType.Scenario then
-        title, description = MapPinEnhanced:GetModule("Providers"):ReadScenarioObjectiveText()
-    end
-    if title then
-        local frame = self:GetFrame()
-        local targetID = MapPinEnhanced:GetModule("Providers"):GetScenarioTargetID()
-        local restart = frame:IsShown() and (frame.nativeScenarioID ~= targetID or frame.visibilityHiding)
-        frame:SetNativeScenario(targetID)
-        frame:SetTexture("Navigation-Tracked-Icon", true)
-        frame:SetDestinationText(title, description)
-        frame.pin:SetLock(false)
-        frame:SetDirectionShown(true)
-        frame:Show()
-        if restart then frame:OnShow() end
-    elseif self.frame and self.frame.nativeScenarioID then
-        self.frame:Hide()
-        self.frame:StopTracking()
-    end
-end
-
 ---@param step WayfinderStepData?
 function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
@@ -127,10 +98,7 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
         self.objectivePanel:Apply(showObjectives and step or nil, self.data)
     end
     -- Reset has released tracking; retain the last artwork until its fade ends.
-    if not self.data then
-        self:RefreshNativeScenario()
-        return
-    end
+    if not self.data then return end
     local frame = self:GetFrame()
     -- Retain this identity across display disable/reacquisition so the intro stays one-time.
     if step and self.textIntroIdentity ~= step.arrivalIdentity then
@@ -178,8 +146,6 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     local previous = self.data
     self.data = wayfinderData
     local frame = self:GetFrame()
-    local wasNativeScenario = frame.nativeScenarioID ~= nil
-    if wasNativeScenario then frame:StopTracking() end
     -- Wording/icon refreshes keep the far text phase and existing distance samples.
     if not previous or previous.mapID ~= wayfinderData.mapID or previous.x ~= wayfinderData.x or
         previous.y ~= wayfinderData.y or previous.lock ~= wayfinderData.lock or
@@ -200,14 +166,7 @@ function MapPinEnhancedWayfinderFloating:Init(wayfinderData)
     frame.pin:SetLock(wayfinderData.lock)
     local wasFadingOut = frame.visibilityFadeOut:IsPlaying()
     frame:Show()
-    if wasFadingOut or wasNativeScenario then frame:OnShow() end
-end
-
----@param enable boolean
-local function OverrideSuperTrackedAlphaState(enable)
-    local alpha = enable and 1 or 0
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Invalid, alpha)
-    SuperTrackedFrameMixin:SetTargetAlphaForState(Enum.NavigationState.Occluded, alpha)
+    if wasFadingOut then frame:OnShow() end
 end
 
 function MapPinEnhancedWayfinderFloating:RestoreBlizzardForFloating()
@@ -232,14 +191,7 @@ end
 function MapPinEnhancedWayfinderFloating:Enable()
     if self.runtimeEnabled then return end
     self.runtimeEnabled = true
-    -- Reconcile after native selection and destination cleanup have completed.
-    self.unsubscribeScenarioEvents = MapPinEnhanced:RegisterEventBucket({
-        "SUPER_TRACKING_CHANGED", "SUPER_TRACKING_PATH_UPDATED", "SCENARIO_UPDATE",
-        "SCENARIO_CRITERIA_UPDATE", "SCENARIO_POI_UPDATE", "SCENARIO_COMPLETED",
-        "PLAYER_ENTERING_WORLD", "ZONE_CHANGED_NEW_AREA",
-    }, function() self:RefreshNativeScenario() end)
     self:RestoreBlizzardForFloating()
-    OverrideSuperTrackedAlphaState(true)
     self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ScaleWithDistance",
         function(value)
             if self.frame then self.frame:SetScaleWithDistance(value == true) end
@@ -256,12 +208,7 @@ end
 function MapPinEnhancedWayfinderFloating:Disable()
     if not self.runtimeEnabled then return end
     self.runtimeEnabled = nil
-    if self.unsubscribeScenarioEvents then
-        self.unsubscribeScenarioEvents()
-        self.unsubscribeScenarioEvents = nil
-    end
     self:Reset()
-    OverrideSuperTrackedAlphaState(false)
     if self.unsubscribeScaleOption then
         self.unsubscribeScaleOption()
         self.unsubscribeScaleOption = nil

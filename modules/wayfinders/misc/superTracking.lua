@@ -63,7 +63,11 @@ local waitingTargets = {}
 ---@return SuperTrackingProvider|SuperTrackingFallbackProvider|nil
 local function GetActiveProvider()
     local superTrackingType = C_SuperTrack.GetHighestPrioritySuperTrackingType()
-    if superTrackingType == nil or superTrackingType == Enum.SuperTrackingType.UserWaypoint then return nil end
+    -- Scenario guidance belongs entirely to Blizzard, including coordinate-bearing targets.
+    if superTrackingType == nil or superTrackingType == Enum.SuperTrackingType.UserWaypoint or
+        superTrackingType == Enum.SuperTrackingType.Scenario then
+        return nil
+    end
     return providersByType[superTrackingType] or fallbackProvider
 end
 
@@ -224,15 +228,13 @@ local function RegisterSourceEvents(provider)
 end
 
 -- Source data bursts publish current state once, never captured target data.
--- Stage identity and clearing remain immediate.
+-- Selection and clearing remain immediate.
 local BUCKET_SOURCE_EVENTS = {
     AREA_POIS_UPDATED = true,
     NEIGHBORHOOD_MAP_DATA_UPDATED = true,
     QUEST_POI_UPDATE = true,
     QUEST_LOG_UPDATE = true,
     QUEST_WATCH_UPDATE = true,
-    SCENARIO_CRITERIA_UPDATE = true,
-    SCENARIO_POI_UPDATE = true,
 }
 MapPinEnhanced:OnLoad(function()
     ---@type WowEvent[]

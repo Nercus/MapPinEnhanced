@@ -86,18 +86,3 @@ function Wayfinders:RemoveSuperTrackingDestination(source, targetID, changeNumbe
     local control = controls[source]
     if control then control.untrack() end
 end
-
--- Stage identity is independent of Blizzard's temporary UserWaypoint selection.
--- Replacing a stage is a destination change, not a text refresh for the old route.
-MapPinEnhanced:RegisterEvent("SCENARIO_UPDATE", function()
-    if Wayfinders:IsChangingSuperTrackingEntry() then return end
-    local Navigation = MapPinEnhanced:GetModule("Navigation")
-    local scenario = C_ScenarioInfo.GetScenarioInfo()
-    local step = C_ScenarioInfo.GetScenarioStepInfo()
-    local owner, targetID = Navigation:GetActiveDestinationState()
-    if scenario and step and owner == "scenario" and Wayfinders:IsStepSuperTracking() and
-        targetID ~= Providers:GetScenarioTargetID(scenario, step) then
-        Wayfinders:ClearStepSuperTracking()
-    end
-    Wayfinders:RefreshSuperTrackingProvider("scenario")
-end)

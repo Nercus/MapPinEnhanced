@@ -363,6 +363,21 @@ local function RefreshWayfinder(wayfinder)
     end
 end
 
+local function RefreshBlizzardVisibility()
+    if not selectedWayfinder then return end
+    -- Floating owns native visibility while presenting a target. Scenarios have
+    -- no addon presentation and must keep Blizzard's diamond even in Arrow mode.
+    if selectedWayfinder == Options.WAYFINDER_SELECTION_FLOATING then return end
+    local floating = GetWayfinder(AVAILABLE_WAYFINDERS.WAYFINDER_FLOATING)
+    ---@cast floating MapPinEnhancedWayfinderFloating
+    if Options:GetOptionValue(HIDE_BLIZZARD_OPTION) and
+        C_SuperTrack.GetHighestPrioritySuperTrackingType() ~= Enum.SuperTrackingType.Scenario then
+        floating:HideBlizzardForSession()
+    else
+        floating:RestoreBlizzardForFloating()
+    end
+end
+
 ---@param selection WayfinderSelection
 function Wayfinders:SelectWayfinder(selection)
     local wayfinderType = WAYFINDER_TYPES_BY_SELECTION[selection]
@@ -400,12 +415,11 @@ function Wayfinders:SelectWayfinder(selection)
 
     local floatingSelected = selection == Options.WAYFINDER_SELECTION_FLOATING
     Options:SetOptionEnabled(HIDE_BLIZZARD_OPTION, not floatingSelected)
-    local floating = GetWayfinder(AVAILABLE_WAYFINDERS.WAYFINDER_FLOATING)
-    ---@cast floating MapPinEnhancedWayfinderFloating
-    if not floatingSelected and Options:GetOptionValue(HIDE_BLIZZARD_OPTION) then
-        floating:HideBlizzardForSession()
-    end
+    RefreshBlizzardVisibility()
 end
+
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", RefreshBlizzardVisibility)
+Options:SubscribeToOptionChanges(HIDE_BLIZZARD_OPTION, RefreshBlizzardVisibility)
 
 Options:SubscribeToOptionChanges(WAYFINDER_SELECTION_OPTION, function(selection)
     Wayfinders:SelectWayfinder(selection)
