@@ -39,7 +39,7 @@ end
 ---@return string formatName
 ---@return string? errorMessage
 function Transfer:ParseImport(input, checkpoint)
-    local serialized = type(input) == "table" or MapPinEnhanced:IsSerializedData(input)
+    local serialized = type(input) == "table" or self:IsSerializedData(input)
     local formatName = serialized and L["Serialized data"] or L["Way commands"]
     ---@type SerializedExportGroup
     local group = { pins = {}, pinOrder = {} }
@@ -65,10 +65,10 @@ function Transfer:ParseImport(input, checkpoint)
         local export = input
         if type(input) == "string" then
             local ok
-            ok, export = pcall(MapPinEnhanced.DeserializeData, MapPinEnhanced, input)
+            ok, export = pcall(self.DeserializeData, self, input)
             if not ok then export = nil end
         end
-        if type(export) ~= "table" or export.version ~= MapPinEnhanced.EXPORT_VERSION or
+        if type(export) ~= "table" or export.version ~= self.EXPORT_VERSION or
             type(export.group) ~= "table" or type(export.group.pins) ~= "table" then
             return nil, 0, 0, formatName, L["Invalid or corrupted serialized data."]
         end

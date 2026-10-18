@@ -44,6 +44,7 @@ local floor = math.floor
 local modf = math.modf
 local format = string.format
 local DeltaLerp = DeltaLerp
+local playerName = UnitName("player")
 
 ---@param button string
 function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
@@ -63,7 +64,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
             type = "button",
             label = L["Share location"],
             onClick = function()
-                Pins:LinkToChat(x, y, mapID, format(L["%s's Position"], MapPinEnhanced.me))
+                Pins:LinkToChat(x, y, mapID, format(L["%s's Position"], playerName))
             end,
         })
         table.insert(entries, {

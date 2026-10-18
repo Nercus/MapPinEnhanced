@@ -47,7 +47,7 @@ function MapPinEnhancedExportWindowMixin:UpdateOutput()
     ---@type string
     local output
     if self.selectedExportType == "serialized" then
-        output = MapPinEnhanced:SerializeData(self.exportData)
+        output = Transfer:SerializeData(self.exportData)
     else
         local lines = {}
         for _, pinData in ipairs(pins) do

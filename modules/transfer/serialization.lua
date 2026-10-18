@@ -3,6 +3,36 @@ local MapPinEnhanced = select(2, ...)
 ---@class Transfer
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 
+Transfer.PREFIX = "!MPH!"
+Transfer.EXPORT_VERSION = 1
+
+---deserialize a table from a string received through import/export
+---@param data string
+---@return table | nil
+function Transfer:DeserializeData(data)
+    local dataWithoutPrefix = string.sub(data, #self.PREFIX + 1)
+    local decoded = C_EncodingUtil.DecodeBase64(dataWithoutPrefix)
+    if not decoded then return end
+    local decompressed = C_EncodingUtil.DecompressString(decoded)
+    if not decompressed then return end
+    local deserialized = C_EncodingUtil.DeserializeCBOR(decompressed)
+    return deserialized
+end
+
+---serialize a table for import/export
+---@param data table
+---@return string
+function Transfer:SerializeData(data)
+    local serialized = C_EncodingUtil.SerializeCBOR(data)
+    local compressed = C_EncodingUtil.CompressString(serialized)
+    local encoded = C_EncodingUtil.EncodeBase64(compressed)
+    return self.PREFIX .. encoded
+end
+
+function Transfer:IsSerializedData(str)
+    return type(str) == "string" and str:sub(1, #self.PREFIX) == self.PREFIX
+end
+
 ---@alias ExportTarget MapPinEnhancedGroupMixin | MapPinEnhancedPinMixin
 ---@class SerializedExport
 ---@field version integer
@@ -92,5 +122,5 @@ function Transfer:GetSerializedTarget(target)
             exportGroup.pinOrder[entry.pinID] = entry.order
         end
     end
-    return { version = MapPinEnhanced.EXPORT_VERSION, group = exportGroup }
+    return { version = self.EXPORT_VERSION, group = exportGroup }
 end

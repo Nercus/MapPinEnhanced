@@ -18,8 +18,6 @@ local SLASH_PREFIX_PATTERN_3 = "/[Ww][Aa][Yy]"
 
 local WAY_COMMAND_PATTERN = "/way %s %.2f %.2f %s"
 local MAPPIN_COMMAND_PATTERN = "/mappin %s %.2f %.2f"
-local PREFIX = "!MPH!"
-MapPinEnhanced.PREFIX = PREFIX
 
 
 local MAPID_MAPTYPE_OVERRIDE = {
@@ -257,32 +255,3 @@ function MapPinEnhanced:SerializeWayLine(pinData, prefix)
     local command = wayLine:gsub("^/way", prefix or "/way", 1)
     return command
 end
-
----deserialize a table from a string received through import/export
----@param data string
----@return table | nil
-function MapPinEnhanced:DeserializeData(data)
-    local dataWithoutPrefix = string.sub(data, #PREFIX + 1)
-    local decoded = C_EncodingUtil.DecodeBase64(dataWithoutPrefix)
-    if not decoded then return end
-    local decompressed = C_EncodingUtil.DecompressString(decoded)
-    if not decompressed then return end
-    local deserialized = C_EncodingUtil.DeserializeCBOR(decompressed)
-    return deserialized
-end
-
----serialize a table for import/export
----@param data table
----@return string
-function MapPinEnhanced:SerializeData(data)
-    local serialized = C_EncodingUtil.SerializeCBOR(data)
-    local compressed = C_EncodingUtil.CompressString(serialized)
-    local encoded = C_EncodingUtil.EncodeBase64(compressed)
-    return PREFIX .. encoded
-end
-
-function MapPinEnhanced:IsSerializedData(str)
-    return type(str) == "string" and str:sub(1, #PREFIX) == PREFIX
-end
-
-MapPinEnhanced.EXPORT_VERSION = 1

@@ -203,7 +203,7 @@ function MapPinEnhancedImportWindowMixin:OnLoad()
     self.cancelButton:SetScript("OnClick", function() Transfer:HideImportWindow() end)
     self.description:SetText(string.format(L[
         "You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"],
-        MapPinEnhanced.PREFIX))
+        Transfer.PREFIX))
     self.textarea:Setup({
         onChange = function() end,
         placeholder = L["Click to paste export string or slash commands here"],
