@@ -21,5 +21,5 @@ function Pins:ApplyTrackedPinArrival(pinID, notify)
         end
     end
     -- Detection is independent of removal permission; a locked destination stays owned.
-    if not locked and pin.group then pin.group:MarkPinReached(pinID) end
+    if not locked and pin.group then pin.group:ClearPin(pinID) end
 end

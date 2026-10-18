@@ -58,12 +58,14 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
         -- Blizzard tracking alone must not reopen a tracker hidden for having no addon pins.
         for group in Groups:EnumerateGroups() do
             if not group:IsHidden() then
-                for _ in group:EnumeratePins() do return false end
+                if group:GetPinCount() > 0 or group:IsRestorable() and group:GetClearedPinCount() > 0 then
+                    return false
+                end
             end
         end
         return true
     end,
-    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_REACHED", "GROUP_UPDATED", "GROUP_DELETED" },
+    callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_CLEARED", "GROUP_UPDATED", "GROUP_DELETED" },
 })
 
 ---@param shouldShow boolean

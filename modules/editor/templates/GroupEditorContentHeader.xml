@@ -110,7 +110,7 @@
                 </Frames>
             </Frame>
             <Frame parentKey="trackingModeField" inherits="MapPinEnhancedFormFieldTemplate">
-                <Size x="240" y="24" />
+                <Size x="150" y="24" />
                 <KeyValues>
                     <KeyValue key="labelText" value="Tracking Mode" />
                 </KeyValues>
@@ -118,12 +118,21 @@
                     <Anchor point="LEFT" relativeKey="$parent.nameField" relativePoint="RIGHT" x="12" />
                 </Anchors>
                 <Frames>
-                    <Frame parentKey="child" inherits="MapPinEnhancedRadioGroupTemplate">
-                        <Size x="240" y="24" />
-                        <KeyValues>
-                            <KeyValue key="orientation" value="horizontal" />
-                        </KeyValues>
-                    </Frame>
+                    <DropdownButton parentKey="child" inherits="MapPinEnhancedDropdownTemplate">
+                        <Size x="150" y="24" />
+                    </DropdownButton>
+                </Frames>
+            </Frame>
+            <Frame parentKey="restorableField" inherits="MapPinEnhancedFormFieldTemplate">
+                <Size x="180" y="25" />
+                <KeyValues>
+                    <KeyValue key="labelText" value="Make pins restorable" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.trackingModeField" relativePoint="TOPRIGHT" x="12" />
+                </Anchors>
+                <Frames>
+                    <Button parentKey="child" inherits="MapPinEnhancedToggleTemplate" />
                 </Frames>
             </Frame>
 
@@ -162,5 +171,8 @@
                 </Anchors>
             </Button>
         </Frames>
+        <Scripts>
+            <OnHide method="Reset" />
+        </Scripts>
     </Frame>
 </Ui>

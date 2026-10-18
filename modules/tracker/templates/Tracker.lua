@@ -20,8 +20,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field refreshPending boolean?
 ---@field scrollPending boolean?
 ---@field changeNumber number
----@field reachedPins number
----@field totalPins number
+---@field activePins number
 ---@field position MapPinEnhancedTrackerPositionTemplate
 ---@field desiredHeight number?
 ---@field idleTicker FunctionContainer?
@@ -43,7 +42,7 @@ local IDLE_UPDATE_INTERVAL = 0.1
 ---@class MapPinEnhancedTrackerGroupNode : TreeNodeMixin
 ---@field groupID UUID
 ---@field activePins number
----@field reachedPins number
+---@field clearedPins number
 ---@field totalPins number
 
 function MapPinEnhancedTrackerMixin:SaveCollapsedGroups()
@@ -61,11 +60,10 @@ end
 ---@param scrollToTrackedPin boolean?
 function MapPinEnhancedTrackerMixin:UpdateList(scrollToTrackedPin)
     if self.minimized then
-        self.reachedPins, self.totalPins = 0, 0
+        self.activePins = 0
         for group in Groups:EnumerateGroups() do
             if not group.pinsUpdating and not group:IsHidden() then
-                local _, reached, total = group:GetPinCounts()
-                self.reachedPins, self.totalPins = self.reachedPins + reached, self.totalPins + total
+                self.activePins = self.activePins + group:GetPinCount()
             end
         end
         self:UpdateTrackerHeader()
@@ -74,11 +72,11 @@ function MapPinEnhancedTrackerMixin:UpdateList(scrollToTrackedPin)
     end
     self:SaveCollapsedGroups()
     local changeNumber = self.changeNumber
-    local dataProvider, reachedPins, totalPins = self:UpdatePinList(scrollToTrackedPin)
+    local dataProvider, activePins = self:UpdatePinList(scrollToTrackedPin)
     if changeNumber ~= self.changeNumber then return end
 
     self.dataProvider = dataProvider
-    self.reachedPins, self.totalPins = reachedPins, totalPins
+    self.activePins = activePins
     -- Only the complete tree reaches ScrollBox; replacement releases rows via their resetters.
     self.scrollBox:SetDataProvider(dataProvider, ScrollBoxConstants.RetainScrollPosition)
     self:UpdateHeight()
@@ -208,7 +206,7 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollBar:SetHideIfUnscrollable(false)
     self.collapsedGroups = {}
     self.changeNumber = 0
-    self.reachedPins, self.totalPins = 0, 0
+    self.activePins = 0
     self.scrollView = CreateScrollBoxListTreeListView()
 
     self.scrollView:SetElementFactory(TrackerElementFactory)
@@ -314,7 +312,7 @@ function MapPinEnhancedTrackerMixin:RefreshIdleState()
 end
 
 function MapPinEnhancedTrackerMixin:UpdateTrackerHeader()
-    self.header:SetTitle(string.format(L["Your pins (%d/%d)"], self.reachedPins, self.totalPins))
+    self.header:SetTitle(string.format(L["Your pins (%d)"], self.activePins))
     self.header:SetIcon("pin")
     self.header.hiddenGroupsButton:SetIconTexture("eyeslash")
 end

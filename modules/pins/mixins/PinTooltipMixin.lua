@@ -35,19 +35,20 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     local coordinates = string.format("%.2f, %.2f", pinData.x * 100, pinData.y * 100)
     local group = self.group
     local groupName = group and group:GetName() or L["Ungrouped Pins"]
-    local reached = group and group:GetReachedPinCount() or 0
-    local total = group and group:GetTotalPinCount() or 1
+    local count = group and group:GetPinCount() or 1
+    local progress = group and group:IsRestorable() and
+        string.format("%d/%d", group:GetClearedPinCount(), group:GetTotalPinCount()) or tostring(count)
 
     MapPinEnhanced:AddDescriptionToTooltip(pinData.description)
     GameTooltip:AddLine(string.format("%s %s", mapName, coordinates), 1, 1, 1, true)
     GameTooltip:AddLine(" ")
-    GameTooltip:AddLine(string.format("%s: %d/%d", groupName, reached, total), 0.65, 0.65, 0.65, true)
+    GameTooltip:AddLine(string.format("%s: %s", groupName, progress), 0.65, 0.65, 0.65, true)
     if self:CanApplyChanges() then
         local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") ==
             true
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
             { L["Left Click"],         self:IsTracked() and L["Stop tracking"] or L["Track"] },
-            { L["Ctrl + Left Click"],  L["Mark Reached"] },
+            { L["Ctrl + Left Click"],  L["Clear Pin"] },
             { L["Shift + Left Click"], L["Share to Chat"] },
             { L["Alt + Left Click"],   not InCombatLockdown() and L["Show on Map"] or nil },
             { L["Right Click"],        L["Open menu"] },

@@ -20,18 +20,18 @@ local function IsEntryBefore(first, second)
 end
 
 ---@param scrollToTrackedPin boolean?
----@return TreeDataProviderMixin, number, number
+---@return TreeDataProviderMixin, number activePins
 function MapPinEnhancedTrackerListMixin:UpdatePinList(scrollToTrackedPin)
     local provider = CreateTreeDataProvider()
-    local reachedPins, totalPins = 0, 0
+    local activePins = 0
     local trackedPin = scrollToTrackedPin and Pins:GetTrackedPin() or nil
     for group in Groups:EnumerateGroups() do
         if not group.pinsUpdating and not group:IsHidden() then
-            local active, reached, total = group:GetPinCounts()
+            local active, cleared, total = group:GetPinCounts()
             if total > 0 then
                 local node = provider:Insert(group) --[[@as MapPinEnhancedTrackerGroupNode]]
                 node.groupID = group:GetGroupID()
-                node.activePins, node.reachedPins, node.totalPins = active, reached, total
+                node.activePins, node.clearedPins, node.totalPins = active, cleared, total
                 -- Retained archives occupy ordinals too. Sort once before publishing the tree.
                 local entries = group:GetPinDisplayEntries()
                 table.sort(entries, IsEntryBefore)
@@ -45,12 +45,12 @@ function MapPinEnhancedTrackerListMixin:UpdatePinList(scrollToTrackedPin)
                 local collapsed = self.collapsedGroups[node.groupID] or false
                 if trackedPin and trackedPin.group == group then collapsed = false end
                 node:SetCollapsed(collapsed, false, TreeDataProviderConstants.SkipInvalidation)
-                reachedPins, totalPins = reachedPins + reached, totalPins + total
+                activePins = activePins + active
             end
         end
     end
     provider:SetSortComparator(function(first, second)
         return Groups:IsGroupBefore(first:GetData(), second:GetData())
     end, false, false)
-    return provider, reachedPins, totalPins
+    return provider, activePins
 end

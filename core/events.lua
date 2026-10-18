@@ -211,7 +211,7 @@ local CALLBACK_EVENTS = {
     PIN_UPDATED_LOCK = { event = "PIN_UPDATED_LOCK_%w+", pattern = true },
     PIN_ADDED = { event = "PIN_ADDED", pattern = false },
     PIN_REMOVED = { event = "PIN_REMOVED", pattern = false },
-    PIN_REACHED = { event = "PIN_REACHED", pattern = false },
+    PIN_CLEARED = { event = "PIN_CLEARED", pattern = false },
     PIN_TRACKING_CHANGED = { event = "PIN_TRACKING_CHANGED", pattern = false },
     NAVIGATION_DESTINATION_CHANGED = { event = "NAVIGATION_DESTINATION_CHANGED", pattern = false },
     GROUP_UPDATED = { event = "GROUP_UPDATED", pattern = false },

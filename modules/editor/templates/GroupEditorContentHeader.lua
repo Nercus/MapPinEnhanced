@@ -9,8 +9,11 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis
 ---@class MapPinEnhancedEditorInputField : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedInputTemplate
 
----@class MapPinEnhancedEditorRadioGroupField : MapPinEnhancedFormFieldTemplate
----@field child MapPinEnhancedRadioGroupTemplate
+---@class MapPinEnhancedEditorDropdownField : MapPinEnhancedFormFieldTemplate
+---@field child MapPinEnhancedDropdownTemplate
+
+---@class MapPinEnhancedEditorToggleField : MapPinEnhancedFormFieldTemplate
+---@field child MapPinEnhancedToggleTemplate
 
 ---@class MapPinEnhancedEditorGroupIconButton : Button, MapPinEnhancedTooltipMixin
 ---@field iconTexture Texture
@@ -20,7 +23,8 @@ local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis
 ---@field editor MapPinEnhancedGroupEditorTemplate?
 ---@field iconButton MapPinEnhancedEditorGroupIconButton
 ---@field nameField MapPinEnhancedEditorInputField
----@field trackingModeField MapPinEnhancedEditorRadioGroupField
+---@field trackingModeField MapPinEnhancedEditorDropdownField
+---@field restorableField MapPinEnhancedEditorToggleField
 ---@field hideButton MapPinEnhancedIconButtonTemplate
 ---@field deleteButton MapPinEnhancedIconButtonTemplate
 ---@field exportButton MapPinEnhancedIconButtonTemplate
@@ -28,6 +32,12 @@ MapPinEnhancedGroupEditorContentHeaderMixin = {}
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:Reset()
     self.nameField.child:ClearTextApply()
+    self.trackingModeField.child:ClearMenuState()
+    self.trackingModeField.child:SetSelectedValue(nil)
+    self.trackingModeField.child:Disable()
+    self.restorableField.child:SetScript("OnClick", nil)
+    self.restorableField.child:SetValue(false, false, true)
+    self.restorableField:Hide()
     self.group = nil
     self.editor = nil
     self.iconButton:SetScript("OnClick", nil)
@@ -127,19 +137,38 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
         return group:GetName()
     end)
 
-    self.trackingModeField.child:Setup({
-        options = Groups.TRACKING_MODE_OPTIONS,
-        orientation = "horizontal",
-        init = function() return group:GetTrackingMode() end,
-        onChange = function(value)
-            if not protected then
-                group:SetTrackingMode(value)
-            end
-        end,
-    })
+    local dropdown = self.trackingModeField.child
+    dropdown.options = Groups.TRACKING_MODE_OPTIONS
+    local entries = {}
+    -- Apply editor choices immediately; a delayed callback must not edit a previous group.
     for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
-        self.trackingModeField.child:SetOptionDisabledState(option.value, protected)
+        local mode = option.value
+        table.insert(entries, {
+            type = "radio",
+            label = option.label,
+            isSelected = function() return group:GetTrackingMode() == mode end,
+            setSelected = function()
+                if self.group == group and not protected then
+                    group:SetTrackingMode(mode)
+                    dropdown:SetSelectedValue(group:GetTrackingMode())
+                end
+            end,
+        })
     end
+    dropdown:SetupMenu(MapPinEnhanced:GetGeneratorFunction(entries))
+    dropdown:SetSelectedValue(group:GetTrackingMode())
+    dropdown:SetEnabled(not protected)
+
+    self.restorableField:SetShown(not protected)
+    self.restorableField.child:SetValue(group:IsRestorable(), false, true)
+    self.restorableField.child:SetScript("OnClick", function()
+        if self.group ~= group or protected then return end
+        group:SetRestorable(not group:IsRestorable())
+        -- Disabling retention may synchronously detach this header while pins restore.
+        if self.group == group then
+            self.restorableField.child:SetValue(group:IsRestorable(), false, false)
+        end
+    end)
 
     self.exportButton:SetEnabled(group:GetTotalPinCount() > 0)
     self.exportButton:SetScript("OnClick", function() Transfer:ShowExportWindow(group) end)

@@ -16,14 +16,14 @@ local customLogoPath = MapPinEnhanced.assetsPath .. "\\LogoTransparent.png"
 local minimapHighlightPath = MapPinEnhanced.assetsPath .. "\\shared\\MinimapHighlight.png"
 
 local function ClearAllPins()
-    if not Groups:MarkAllPinsReached() then
+    if not Groups:ClearAllPins() then
         MapPinEnhanced:Print(L
             ["Some pins are still being updated. Try clearing again when the current operation finishes."])
     end
 end
 
 MapPinEnhanced:AddSlashCommand({ "clear", L["Clear"]:lower() }, ClearAllPins,
-    L["Mark all active pins as reached."])
+    L["Clear all active pins in visible groups."])
 
 ---@param owner Region
 local function ShowMinimapMenu(owner)
@@ -109,7 +109,7 @@ local function InitMinimapIcon()
             tooltip:AddLine(MapPinEnhanced.displayName)
             MapPinEnhanced:AddTooltipInteractions(tooltip, {
                 { L["Left Click"],       MapPinEnhanced:GetVar("trackerVisible") and L["Hide Tracker"] or L["Show Tracker"] },
-                { L["Alt + Left Click"], L["Mark all active pins as reached."] },
+                { L["Alt + Left Click"], L["Clear all active pins in visible groups."] },
                 { L["Right Click"],      L["Open menu"] },
             })
         end,

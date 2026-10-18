@@ -211,6 +211,7 @@ function Groups:MigrateLegacyData()
                     name = AvailableName(set.name),
                     source = MapPinEnhanced.name,
                     hidden = true,
+                    restorable = true,
                     order = 0,
                     pins = {},
                     pinOrder = {},

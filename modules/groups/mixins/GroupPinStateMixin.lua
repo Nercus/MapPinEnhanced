@@ -78,7 +78,7 @@ function MapPinEnhancedGroupPinStateMixin:CheckPinState(checkpoint)
             "MapPinEnhancedGroupPinStateMixin: archived pin has an active order")
         assert(type(archivedPin.order) == "number",
             "MapPinEnhancedGroupPinStateMixin: archived pin has no numeric order")
-        assert(archivedPin.state == "reached" or archivedPin.state == "hidden",
+        assert(archivedPin.state == "cleared" or archivedPin.state == "hidden",
             "MapPinEnhancedGroupPinStateMixin: archived pin has an invalid state")
         assert(archivedPin.data.pinID == pinID,
             "MapPinEnhancedGroupPinStateMixin: archived pin ID does not match its key")
@@ -149,12 +149,12 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
 end
 
 ---@param pinData pinData|SaveablePinData
----@param state "reached"|"hidden"
+---@param state "cleared"|"hidden"
 ---@param order number?
 ---@param overridePinID UUID?
 ---@return UUID
 function MapPinEnhancedGroupPinStateMixin:AddArchived(pinData, state, order, overridePinID)
-    assert(state == "reached" or state == "hidden",
+    assert(state == "cleared" or state == "hidden",
         "MapPinEnhancedGroupPinStateMixin:AddArchived: invalid archive state")
     local data = GetSaveablePinData(pinData, overridePinID)
     local pinID = data.pinID
@@ -202,10 +202,10 @@ function MapPinEnhancedGroupPinStateMixin:ReleaseDetachedPin(pin)
 end
 
 ---@param pinID UUID
----@param state "reached"|"hidden"
+---@param state "cleared"|"hidden"
 ---@return boolean, SaveablePinData?, boolean?, number?
 function MapPinEnhancedGroupPinStateMixin:ArchiveActive(pinID, state)
-    assert(state == "reached" or state == "hidden",
+    assert(state == "cleared" or state == "hidden",
         "MapPinEnhancedGroupPinStateMixin:ArchiveActive: invalid archive state")
     local pin = self.pins[pinID]
     if not pin then return false end
@@ -302,30 +302,4 @@ function MapPinEnhancedGroupPinStateMixin:UpdateArchived(pinID, update)
     archivedPin.data.setTracked = nil
     self.changeNumber = self.changeNumber + 1
     return true
-end
-
----@param keepCount number
----@return number
-function MapPinEnhancedGroupPinStateMixin:PruneOldestReached(keepCount)
-    ---@type {pinID: UUID, order: number}[]
-    local reachedPins = {}
-    for pinID, archivedPin in pairs(self.archive) do
-        if archivedPin.state == "reached" then
-            reachedPins[#reachedPins + 1] = { pinID = pinID, order = archivedPin.order }
-        end
-    end
-    table.sort(reachedPins, function(left, right)
-        if left.order ~= right.order then return left.order < right.order end
-        return left.pinID < right.pinID
-    end)
-
-    local removeCount = math.min(self.count + self:GetArchiveCount() - keepCount, #reachedPins)
-    for index = 1, removeCount do
-        self.archive[reachedPins[index].pinID] = nil
-    end
-    if removeCount > 0 then
-        self.orderCacheValid = false
-        self.changeNumber = self.changeNumber + 1
-    end
-    return removeCount
 end

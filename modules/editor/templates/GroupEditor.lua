@@ -10,7 +10,7 @@ local L = MapPinEnhanced.L
 ---@field pin MapPinEnhancedPinMixin?
 ---@field pinID UUID
 ---@field pinData SaveablePinData
----@field archiveState "reached"|"hidden"|nil
+---@field archiveState "cleared"|"hidden"|nil
 ---@field order number
 
 ---@class MapPinEnhancedGroupEditorTemplate : MapPinEnhancedWindowTemplate

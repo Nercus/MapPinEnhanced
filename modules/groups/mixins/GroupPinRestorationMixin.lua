@@ -8,9 +8,10 @@ MapPinEnhancedGroupPinRestorationMixin = {}
 ---Saved input is retained by this operation until intake finishes. Only deletion
 ---may discard it; other commands are rejected while intake is copying archives.
 ---@param groupData SaveableGroupData?
----@param state "reached"|"hidden"?
+---@param state "cleared"|"hidden"?
+---@param onComplete fun()? applied before publishing the completed state
 ---@return boolean accepted
-function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, state)
+function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, state, onComplete)
     if not self:CancelBatch() then return false end
     local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
     local completed, total, finished = 0, 0, false
@@ -37,7 +38,7 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, s
             Groups:PersistGroup(self)
         else
             self.restoreData = nil
-            self:PruneOldestReachedPins()
+            if status == "complete" and onComplete then onComplete() end
             self:PersistPinChanges(not groupData, status == "complete")
         end
         local trackedPin = trackedPinID and self:GetPinByID(trackedPinID)
@@ -62,8 +63,11 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, s
                 if finished then return false end
                 if type(pinID) == "string" and type(archivedPin) == "table" and
                     type(archivedPin.data) == "table" and
-                    (archivedPin.state == "reached" or archivedPin.state == "hidden") then
-                    self.pinState:AddArchived(archivedPin.data, wasHidden and "hidden" or archivedPin.state,
+                    (archivedPin.state == "cleared" or archivedPin.state == "hidden" or archivedPin.state == "reached") then
+                    -- Old inactive records remain ordinary pins when restoration is off.
+                    -- No existing group is opted in or migration replayed during loading.
+                    local archiveState = self:IsRestorable() and archivedPin.state == "cleared" and "cleared" or "hidden"
+                    self.pinState:AddArchived(archivedPin.data, archiveState,
                         type(archivedPin.order) == "number" and archivedPin.order or nil, pinID)
                 end
                 checkpoint()
@@ -86,9 +90,9 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, s
             self.restoreData = nil
             self.batchLocked = nil
         end
-        -- A hidden saved group stays archived; ShowGroup activates its archives.
+        -- A hidden saved group stays archived; ShowGroup activates only hidden pins.
         if not groupData or not wasHidden then
-            self.hidden = false
+            if state == "hidden" then self.hidden = false end
             for _, archivedPin in pairs(self.pinState.archive) do
                 if not state or archivedPin.state == state then total = total + 1 end
                 checkpoint()
@@ -96,7 +100,13 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, s
             for pinID, archivedPin in pairs(self.pinState.archive) do
                 if not state or archivedPin.state == state then
                     if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return false end
-                    if not self.pinState:RestoreArchivedPin(pinID) then return false end
+                    if self.hidden then
+                        -- Restoring cleared pins in a hidden group keeps the group hidden.
+                        archivedPin.state = "hidden"
+                        self.pinState.changeNumber = self.pinState.changeNumber + 1
+                    elseif not self.pinState:RestoreArchivedPin(pinID) then
+                        return false
+                    end
                     completed = completed + 1
                 end
                 checkpoint()
@@ -113,26 +123,42 @@ end
 ---@param groupData SaveableGroupData
 ---@return boolean accepted
 function MapPinEnhancedGroupPinRestorationMixin:RestorePinState(groupData)
-    -- Visible saved groups retry hidden archives, but preserve reached history.
+    -- Visible saved groups retry hidden archives, but preserve cleared pins.
     return self:RestoreArchivedPins(groupData, "hidden")
 end
 
 ---@return boolean accepted
-function MapPinEnhancedGroupPinRestorationMixin:RestoreReachedPins()
-    if self.hidden or self:GetReachedPinCount() == 0 then return false end
-    return self:RestoreArchivedPins(nil, "reached")
+function MapPinEnhancedGroupPinRestorationMixin:RestorePins()
+    if not self:IsRestorable() or self:GetClearedPinCount() == 0 then return false end
+    return self:RestoreArchivedPins(nil, "cleared")
+end
+
+---@param restorable boolean
+---@return boolean accepted
+function MapPinEnhancedGroupPinRestorationMixin:SetRestorable(restorable)
+    assert(type(restorable) == "boolean", "MapPinEnhancedGroupMixin:SetRestorable: restorable must be a boolean")
+    if self:IsProtected() or not self:CancelBatch() then return false end
+    if restorable == self.restorable then return true end
+    if not restorable and self:GetClearedPinCount() > 0 then
+        -- Keep retention enabled if activation is interrupted or fails partway.
+        return self:RestoreArchivedPins(nil, "cleared", function() self.restorable = false end)
+    end
+    self.restorable = restorable
+    Groups:PersistGroup(self)
+    MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
+    return true
 end
 
 ---@param pinID UUID
 ---@return boolean
-function MapPinEnhancedGroupPinRestorationMixin:MarkPinUnreached(pinID)
+function MapPinEnhancedGroupPinRestorationMixin:RestorePin(pinID)
     if not self:CancelBatch() then return false end
-    assert(pinID, "MapPinEnhancedGroupMixin:MarkPinUnreached: pinID is nil")
-    if self.hidden then return false end
+    assert(pinID, "MapPinEnhancedGroupMixin:RestorePin: pinID is nil")
+    if self.hidden or not self:IsRestorable() then return false end
     if self:GetPinByID(pinID) then return true end
 
     local archivedPin = self:GetArchivedPinByID(pinID)
-    if not archivedPin or archivedPin.state ~= "reached" then return false end
+    if not archivedPin or archivedPin.state ~= "cleared" then return false end
     if not self.pinState:RestoreArchivedPin(pinID) then return false end
 
     self:PersistPinChanges(true)

@@ -11,6 +11,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field icon string|number? the icon displayed for the group
 ---@field order number? higher group orders render earlier
 ---@field hidden boolean? true when the group has no active map pins
+---@field restorable boolean? retain cleared pins for explicit restoration; defaults to false
 ---@field groupType "ungrouped"|"way-back"? protected system group type
 ---@field trackingMode GroupTrackingMode? controls how the next tracked pin is selected
 
@@ -23,6 +24,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field icon string|number?
 ---@field order number
 ---@field hidden boolean
+---@field restorable boolean
 ---@field groupType "ungrouped"|"way-back"|nil
 ---@field protected boolean
 ---@field trackingMode GroupTrackingMode
@@ -33,7 +35,6 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field restoreData SaveableGroupData?
 ---@field lifetimeChangeNumber number
 ---@field isDeleting boolean
----@field limitWarningShown boolean
 MapPinEnhancedGroupMixin = CreateFromMixins(
     { classification = "group" },
     MapPinEnhancedGroupTrackingMixin,
@@ -50,11 +51,11 @@ function MapPinEnhancedGroupMixin:Init()
     self.pinState = CreateAndInitFromMixin(MapPinEnhancedGroupPinStateMixin, self)
     self.order = GetTime()
     self.hidden = false
+    self.restorable = false
     self.trackingMode = Groups.TRACKING_MODE_NEAREST
     self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
-    self.limitWarningShown = false
 end
 
 ---@param force boolean? owner teardown may discard locked work
@@ -97,12 +98,12 @@ function MapPinEnhancedGroupMixin:Reset()
     self.icon = nil
     self.order = 0
     self.hidden = false
+    self.restorable = false
     self.groupType = nil
     self.trackingMode = nil
     self.trackingCursorOrder = nil
     self.protected = false
     self.isDeleting = false
-    self.limitWarningShown = false
 end
 
 ---@param groupInfo GroupInfo
@@ -115,6 +116,7 @@ function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
     self.groupType = Groups:GetSystemGroupType(self.groupID)
     self.protected = self.groupType ~= nil
     self.hidden = not self.protected and groupInfo.hidden and true or false
+    self.restorable = not self.protected and groupInfo.restorable == true
     if self.protected then
         self.trackingMode = Groups.TRACKING_MODE_NEAREST
     else
@@ -193,6 +195,11 @@ function MapPinEnhancedGroupMixin:IsProtected()
     return self.protected
 end
 
+---@return boolean
+function MapPinEnhancedGroupMixin:IsRestorable()
+    return not self.protected and self.restorable
+end
+
 ---@return fun(table: table<UUID, MapPinEnhancedPinMixin>, index?: UUID): UUID, MapPinEnhancedPinMixin
 ---@return table<UUID, MapPinEnhancedPinMixin>
 ---@return nil
@@ -244,15 +251,15 @@ function MapPinEnhancedGroupMixin:GetPinCount()
     return self.pinState.count
 end
 
----@param state "reached"|"hidden"?
+---@param state "cleared"|"hidden"?
 ---@return number
 function MapPinEnhancedGroupMixin:GetArchiveCount(state)
     return self.pinState:GetArchiveCount(state)
 end
 
 ---@return number
-function MapPinEnhancedGroupMixin:GetReachedPinCount()
-    return self:GetArchiveCount("reached")
+function MapPinEnhancedGroupMixin:GetClearedPinCount()
+    return self:GetArchiveCount("cleared")
 end
 
 ---@return number
@@ -261,7 +268,7 @@ function MapPinEnhancedGroupMixin:GetTotalPinCount()
 end
 
 ---@return number active
----@return number reached
+---@return number cleared
 ---@return number total
 function MapPinEnhancedGroupMixin:GetPinCounts()
     return self.pinState:GetCounts()
@@ -362,6 +369,7 @@ function MapPinEnhancedGroupMixin:GetSaveableData(checkpoint)
         icon = self.icon,
         order = self.order,
         hidden = self.hidden,
+        restorable = self:IsRestorable(),
         groupType = self.groupType,
         pins = pins,
         pinOrder = pinOrder,

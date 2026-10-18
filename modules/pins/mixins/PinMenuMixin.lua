@@ -151,21 +151,14 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
         },
         {
             type = "button",
-            label = MapPinEnhanced:Iconize("tick", L["Mark Reached"]),
+            label = MapPinEnhanced:Iconize("trash", L["Clear Pin"]),
             onClick = function()
-                self.group:MarkPinReached(self.pinID)
-            end
-        },
-        {
-            type = "button",
-            label = MapPinEnhanced:Iconize("trash", L["Delete Pin"]),
-            onClick = function()
-                self.group:RemovePin(self.pinID)
+                self.group:ClearPin(self.pinID)
             end
         }
     }
     if self:IsLocked() or MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") then
-        table.insert(entries, #entries - 2, {
+        table.insert(entries, #entries - 1, {
             type = "button",
             label = MapPinEnhanced:Iconize(self:IsLocked() and "unlock" or "lock",
                 self:IsLocked() and L["Unlock Pin"] or L["Lock Pin"]),

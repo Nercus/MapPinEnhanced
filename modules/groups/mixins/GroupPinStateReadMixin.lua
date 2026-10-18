@@ -1,11 +1,11 @@
 ---@class ArchivedPinData
----@field state "reached"|"hidden"
+---@field state "cleared"|"hidden"
 ---@field data SaveablePinData
 ---@field order number
 
 ---@class MapPinEnhancedGroupPinEntry
 ---@field pinID UUID
----@field state "active"|"reached"|"hidden"
+---@field state "active"|"cleared"|"hidden"
 ---@field order number
 ---@field data SaveablePinData
 ---@field pin MapPinEnhancedPinMixin?
@@ -33,7 +33,7 @@ function MapPinEnhancedGroupPinStateReadMixin:GetOrder(pinID)
     return self.orders[pinID] or (archivedPin and archivedPin.order or nil)
 end
 
----@param state "reached"|"hidden"?
+---@param state "cleared"|"hidden"?
 ---@return number
 function MapPinEnhancedGroupPinStateReadMixin:GetArchiveCount(state)
     local count = 0
@@ -44,20 +44,20 @@ function MapPinEnhancedGroupPinStateReadMixin:GetArchiveCount(state)
 end
 
 ---@return number active
----@return number reached
+---@return number cleared
 ---@return number total
 function MapPinEnhancedGroupPinStateReadMixin:GetCounts()
-    local reached, total = 0, self.count
+    local cleared, total = 0, self.count
     for _, archivedPin in pairs(self.archive) do
         total = total + 1
-        if archivedPin.state == "reached" then reached = reached + 1 end
+        if archivedPin.state == "cleared" then cleared = cleared + 1 end
     end
-    return self.count, reached, total
+    return self.count, cleared, total
 end
 
 ---@class MapPinEnhancedGroupPinDisplayEntry
 ---@field pinID UUID
----@field state "active"|"reached"|"hidden"
+---@field state "active"|"cleared"|"hidden"
 ---@field order number
 ---@field title string?
 ---@field pin MapPinEnhancedPinMixin?

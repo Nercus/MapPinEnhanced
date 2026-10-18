@@ -68,8 +68,10 @@ TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.MinimapMouseover, f
         tooltip:AddLine(string.format("%s (%.2f, %.2f)", mapInfo and mapInfo.name or tostring(data.mapID),
             data.x * 100, data.y * 100), 1, 1, 1, true)
         local group = pin.group
-        tooltip:AddLine(string.format("%s: %d/%d", group and group:GetName() or L["Ungrouped Pins"],
-                group and group:GetReachedPinCount() or 0, group and group:GetTotalPinCount() or 1),
+        local count = group and group:GetPinCount() or 1
+        local progress = group and group:IsRestorable() and
+            string.format("%d/%d", group:GetClearedPinCount(), group:GetTotalPinCount()) or tostring(count)
+        tooltip:AddLine(string.format("%s: %s", group and group:GetName() or L["Ungrouped Pins"], progress),
             0.65, 0.65, 0.65, true)
     end
 end)

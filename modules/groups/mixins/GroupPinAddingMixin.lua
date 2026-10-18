@@ -85,7 +85,6 @@ function MapPinEnhancedGroupPinAddingMixin:AddPin(pinData, overridePinID)
     end
     local pin, pinID, replacedWayBackPin, shouldTrack = self:AddBeforePersist(pinData, overridePinID)
     if not pinID then return nil, nil end
-    self:PruneOldestReachedPins()
     self:PersistPinChanges(true, true)
     if shouldTrack and pin then pin:TrackWithoutPersisting() end
     if pin then
@@ -134,7 +133,6 @@ function MapPinEnhancedGroupPinAddingMixin:AddMultiplePins(pinsData, preserveGro
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return end
         self.pinsUpdating = nil
-        self:PruneOldestReachedPins()
         self:PersistPinChanges(not preserveGroupOrder, status == "complete")
         if trackedPin and trackedPin.group == self and self:GetPinByID(trackedPin.pinID) == trackedPin then
             trackedPin:TrackWithoutPersisting()

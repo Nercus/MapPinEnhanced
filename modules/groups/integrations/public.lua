@@ -51,7 +51,7 @@ local function CreateGroupProxy(group)
         local current = GetGroup()
         if not current or type(pinID) ~= "string" then return nil end
         -- Owner operations may cancel batches even for missing pins. Check
-        -- membership first, including hidden/reached pins and pins moved away.
+        -- membership first, including hidden/cleared pins and pins moved away.
         if current:GetPinByID(pinID) or current:GetArchivedPinByID(pinID) then
             return current
         end
@@ -83,19 +83,19 @@ local function CreateGroupProxy(group)
     end
 
     ---@param pinID UUID
-    ---@return boolean reached
-    function proxy:MarkPinReached(pinID)
+    ---@return boolean cleared
+    function proxy:ClearPin(pinID)
         local current = GetPinGroup(pinID)
         if not current then return false end
-        return current:MarkPinReached(pinID)
+        return current:ClearPin(pinID)
     end
 
     ---@param pinID UUID
-    ---@return boolean unreached
-    function proxy:MarkPinUnreached(pinID)
+    ---@return boolean restored
+    function proxy:RestorePin(pinID)
         local current = GetPinGroup(pinID)
         if not current then return false end
-        return current:MarkPinUnreached(pinID)
+        return current:RestorePin(pinID)
     end
 
     ---@return boolean accepted
@@ -106,10 +106,32 @@ local function CreateGroupProxy(group)
     end
 
     ---@return boolean accepted
-    function proxy:MarkAllPinsReached()
+    function proxy:ClearAllPins()
         local current = GetGroup()
         if not current then return false end
-        return current:MarkAllPinsReached()
+        return current:ClearAllPins()
+    end
+
+    ---@return boolean accepted
+    function proxy:RestorePins()
+        local current = GetGroup()
+        if not current then return false end
+        return current:RestorePins()
+    end
+
+    ---@return boolean? restorable
+    function proxy:IsRestorable()
+        local current = GetGroup()
+        if not current then return nil end
+        return current:IsRestorable()
+    end
+
+    ---@param restorable boolean
+    ---@return boolean accepted
+    function proxy:SetRestorable(restorable)
+        local current = GetGroup()
+        if not current then return false end
+        return current:SetRestorable(restorable)
     end
 
     ---@return GroupTrackingMode? mode

@@ -4,46 +4,11 @@ local MapPinEnhanced = select(2, ...)
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
 
-local ARCHIVE_STATE_REACHED = "reached"
+local ARCHIVE_STATE_CLEARED = "cleared"
 local ARCHIVE_STATE_HIDDEN = "hidden"
-local UNGROUPED_PIN_LIMIT = 100
-local UNGROUPED_PIN_CLEANUP_TARGET = 90
 
 ---@class MapPinEnhancedGroupMixin
 MapPinEnhancedGroupPinOperationsMixin = {}
-
----@param group MapPinEnhancedGroupMixin
-local function ResetLimitWarningIfBelowTarget(group)
-    if group.groupType == "ungrouped" and group:GetTotalPinCount() <= UNGROUPED_PIN_CLEANUP_TARGET then
-        group.limitWarningShown = false
-    end
-end
-
----@return number
-function MapPinEnhancedGroupPinOperationsMixin:PruneOldestReachedPins()
-    if self.groupType ~= "ungrouped" then return 0 end
-
-    local totalPinCount = self:GetTotalPinCount()
-    if totalPinCount <= UNGROUPED_PIN_CLEANUP_TARGET then
-        self.limitWarningShown = false
-        return 0
-    end
-    if totalPinCount < UNGROUPED_PIN_LIMIT then return 0 end
-
-    local removed = self.pinState:PruneOldestReached(UNGROUPED_PIN_CLEANUP_TARGET)
-    local remainingPinCount = totalPinCount - removed
-    if remainingPinCount <= UNGROUPED_PIN_CLEANUP_TARGET then
-        self.limitWarningShown = false
-    elseif remainingPinCount > UNGROUPED_PIN_LIMIT and not self.limitWarningShown then
-        self.limitWarningShown = true
-        MapPinEnhanced:Print(string.format(
-            MapPinEnhanced.L
-            ["To maintain performance, Ungrouped Pins normally keeps up to 100 pins. " ..
-            "It currently has %d; older pins will be removed automatically as more pins are reached."],
-            remainingPinCount))
-    end
-    return removed
-end
 
 ---@param pinID UUID
 ---@return boolean
@@ -59,7 +24,6 @@ function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
     local removedPin, archivedPin = self.pinState:Remove(pinID)
     if not removedPin and not archivedPin then return false end
 
-    ResetLimitWarningIfBelowTarget(self)
     self:PersistPinChanges(true)
     if removedPin then
         self.pinState:ReleaseDetachedPin(removedPin)
@@ -80,25 +44,30 @@ end
 
 ---@param pinID UUID
 ---@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:MarkPinReached(pinID)
+function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID)
     if not self:CancelBatch() then return false end
-    assert(pinID, "MapPinEnhancedGroupMixin:MarkPinReached: pinID is nil")
+    assert(pinID, "MapPinEnhancedGroupMixin:ClearPin: pinID is nil")
 
     local archivedPin = self:GetArchivedPinByID(pinID)
-    if archivedPin then return archivedPin.state == ARCHIVE_STATE_REACHED end
+    if archivedPin then return archivedPin.state == ARCHIVE_STATE_CLEARED end
 
     local pin = self:GetPinByID(pinID)
     if not pin then return false end
     local order = self.pinState:GetOrder(pinID)
     local ordered = self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED
-    -- Manual completion also advances an ordered group when another pin is tracked.
+    -- Manual clearing also advances an ordered group when another pin is tracked.
     local nextOrderedPin = ordered and self:GetOrderedTrackablePin(order, pinID) or nil
-    local changed, data, wasTracked = self.pinState:ArchiveActive(pinID, ARCHIVE_STATE_REACHED)
-    if not changed then return false end
+    local wasTracked = pin:IsTracked()
+    local data = CopyTable(pin:GetSaveableData())
+    if self:IsRestorable() then
+        if not self.pinState:ArchiveActive(pinID, ARCHIVE_STATE_CLEARED) then return false end
+    else
+        self.pinState:Remove(pinID)
+        self.pinState:ReleaseDetachedPin(pin)
+    end
 
-    self:PruneOldestReachedPins()
     self:PersistPinChanges(true)
-    MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, data)
+    MapPinEnhanced:FireCallback("PIN_CLEARED", nil, self, pinID, data)
     if wasTracked or ordered then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
             nextOrderedPin:TrackWithoutPersisting()
@@ -132,7 +101,6 @@ function MapPinEnhancedGroupPinOperationsMixin:RemoveMultiplePins(pinIDs)
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) then return end
         self.pinsUpdating = nil
-        ResetLimitWarningIfBelowTarget(self)
         self:PersistPinChanges(true, status == "complete")
         MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
         if status ~= "complete" then Groups:ReportStoppedPinOperation(completed, #pinIDs) end
@@ -222,7 +190,6 @@ function MapPinEnhancedGroupPinOperationsMixin:MovePinToGroup(pinID, targetGroup
     local nextOrderedPin = wasTracked and self:GetTrackingMode() == Groups.TRACKING_MODE_ORDERED and
         self:GetOrderedTrackablePin(cursorOrder) or nil
     self.pinState:Remove(pinID)
-    ResetLimitWarningIfBelowTarget(self)
     self:PersistPinChanges(true)
     if sourcePin then
         self.pinState:ReleaseDetachedPin(sourcePin)

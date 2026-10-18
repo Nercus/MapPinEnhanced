@@ -360,7 +360,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         hidePreviewTooltip(frame)
     end)
     self.deleteButton.tooltipInteractions = {
-        { L["Left Click"],         L["Delete Pin"] },
+        { L["Left Click"],         L["Delete Permanently"] },
         { L["Shift + Left Click"], L["Delete without confirmation"] },
     }
     self.pinFrame:SetScript("OnMouseDown", function(_, button)
@@ -380,7 +380,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         if IsShiftKeyDown() then
             remove()
         else
-            MapPinEnhanced:ShowConfirmDialog(L["Delete Pin"],
+            MapPinEnhanced:ShowConfirmDialog(L["Delete Permanently"],
                 string.format(L["Delete pin \"%s\"?"], pinData.title or L["Map Pin"]), remove)
         end
     end)

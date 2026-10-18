@@ -4,7 +4,7 @@ local MapPinEnhanced = select(2, ...)
 ---@alias VisibilityCallbackEvent
 ---| "PIN_ADDED"
 ---| "PIN_REMOVED"
----| "PIN_REACHED"
+---| "PIN_CLEARED"
 ---| "PIN_TRACKING_CHANGED"
 ---| "GROUP_UPDATED"
 ---| "GROUP_DELETED"

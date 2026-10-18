@@ -7,7 +7,7 @@ MapPinEnhancedGroupVisibilityMixin = {}
 
 ---Drain live resources before publishing hidden/empty state or releasing the group.
 ---Conflicting commands are rejected; only owner teardown may interrupt this work.
----@param archiveState "hidden"|"reached"|false
+---@param archiveState "hidden"|"cleared"|false
 ---@param onComplete fun()?
 function MapPinEnhancedGroupVisibilityMixin:ReleasePins(archiveState, onComplete)
     local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
@@ -31,11 +31,7 @@ function MapPinEnhancedGroupVisibilityMixin:ReleasePins(archiveState, onComplete
         if self.cancelBatch == cancelBatch then self.cancelBatch = nil end
         if not isCurrent() then return end
         self.pinsUpdating, self.batchLocked = nil, nil
-        if status == "complete" then
-            if archiveState == "hidden" then self.hidden = true end
-            if archiveState == "reached" then self:PruneOldestReachedPins() end
-            self.limitWarningShown = false
-        end
+        if status == "complete" and archiveState == "hidden" then self.hidden = true end
         if not deleting then
             self:PersistPinChanges(true, status == "complete")
             MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)
@@ -55,26 +51,25 @@ function MapPinEnhancedGroupVisibilityMixin:ReleasePins(archiveState, onComplete
         for pinID, pin in pairs(self.pinState.pins) do
             if not isCurrent() then return false end
             hadTrackedPin = hadTrackedPin or pin:IsTracked()
-            if archiveState then
+            if archiveState == "hidden" or archiveState == "cleared" and self:IsRestorable() then
                 local changed, data = self.pinState:ArchiveActive(pinID, archiveState)
-                if changed and archiveState == "reached" then
-                    MapPinEnhanced:FireCallback("PIN_REACHED", nil, self, pinID, data)
+                if changed and archiveState == "cleared" then
+                    MapPinEnhanced:FireCallback("PIN_CLEARED", nil, self, pinID, data)
                 end
             else
+                local data = archiveState == "cleared" and CopyTable(pin:GetSaveableData()) or nil
                 self.pinState:Remove(pinID)
                 self.pinState:ReleaseDetachedPin(pin)
+                if data then MapPinEnhanced:FireCallback("PIN_CLEARED", nil, self, pinID, data) end
             end
             if finished then return false end
             checkpoint()
         end
-        -- Marking active pins reached leaves existing reached/hidden archives intact.
-        if archiveState ~= "reached" then
-            for pinID, archivedPin in pairs(self.pinState.archive) do
-                if archiveState == "hidden" then
-                    archivedPin.state = "hidden"
-                else
-                    self.pinState:Remove(pinID)
-                end
+        -- Hiding and clearing active pins preserve all previously retained state.
+        -- Only permanent group deletion/emptying discards the archive.
+        if archiveState == false then
+            for pinID in pairs(self.pinState.archive) do
+                self.pinState:Remove(pinID)
                 checkpoint()
             end
         end
@@ -98,7 +93,7 @@ end
 function MapPinEnhancedGroupVisibilityMixin:ShowGroup()
     if not self:CancelBatch() then return false end
     if not self.hidden then return false end
-    return self:RestoreArchivedPins()
+    return self:RestoreArchivedPins(nil, "hidden")
 end
 
 ---@return boolean accepted
@@ -109,9 +104,9 @@ function MapPinEnhancedGroupVisibilityMixin:ClearGroup()
 end
 
 ---@return boolean accepted
-function MapPinEnhancedGroupVisibilityMixin:MarkAllPinsReached()
+function MapPinEnhancedGroupVisibilityMixin:ClearAllPins()
     if not self:CancelBatch() then return false end
     if self.hidden or self:GetPinCount() == 0 then return true end
-    self:ReleasePins("reached")
+    self:ReleasePins("cleared")
     return true
 end

@@ -123,6 +123,8 @@ function Groups:RegisterGroup(groupInfo)
         "Groups:RegisterGroup: groupInfo.groupID must be a string")
     assert(groupInfo.groupID == nil or groupInfo.groupID ~= "",
         "Groups:RegisterGroup: groupInfo.groupID must not be empty")
+    assert(groupInfo.restorable == nil or type(groupInfo.restorable) == "boolean",
+        "Groups:RegisterGroup: groupInfo.restorable must be a boolean")
 
     local groupID = groupInfo.groupID or MapPinEnhanced:GenerateUUID("group")
     if groupInfo.groupID then
@@ -224,10 +226,10 @@ function Groups:GetGroupByID(groupID)
 end
 
 ---@return boolean accepted
-function Groups:MarkAllPinsReached()
+function Groups:ClearAllPins()
     local accepted = true
     for group in self:EnumerateGroups() do
-        if not group:IsHidden() and not group:MarkAllPinsReached() then
+        if not group:IsHidden() and not group:ClearAllPins() then
             accepted = false
         end
     end
