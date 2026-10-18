@@ -96,7 +96,7 @@
                             <Anchor point="CENTER" relativePoint="RIGHT" relativeKey="$parent.text.title" x="-60" />
                         </Anchors>
                     </Frame>
-                    <Frame parentKey="hover" hidden="true" enableMouse="true" propagateMouseInput="Clicks">
+                    <Frame parentKey="hover" hidden="true" enableMouse="true" propagateMouseInput="Both">
                         <Size x="325" />
                         <Anchors>
                             <Anchor point="TOP" relativePoint="TOP" relativeKey="$parent.pin" y="4" />
