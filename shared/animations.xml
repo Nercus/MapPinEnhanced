@@ -19,17 +19,6 @@
         </Scripts>
     </AnimationGroup>
 
-    <!-- Fade + Slide Up -->
-    <AnimationGroup name="MapPinEnhancedAnimationFadeSlideUpIn" setToFinalAlpha="true" virtual="true">
-        <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="8" duration="0.15" smoothing="IN_OUT" />
-    </AnimationGroup>
-
-    <AnimationGroup name="MapPinEnhancedAnimationFadeSlideUpOut" setToFinalAlpha="true" virtual="true">
-        <Alpha fromAlpha="1" toAlpha="0" duration="0.15" smoothing="IN_OUT" />
-        <Translation offsetY="8" duration="0.15" smoothing="IN_OUT" />
-    </AnimationGroup>
-
     <!-- Fade + Scale In/Out -->
     <AnimationGroup name="MapPinEnhancedAnimationFadeZoomIn" mixin="MapPinEnhancedAnimationVisibilityMixin" setToFinalAlpha="true" virtual="true">
         <Alpha fromAlpha="0" toAlpha="1" duration="0.15" smoothing="IN_OUT" />
@@ -53,18 +42,4 @@
         <Rotation degrees="360" duration="0.5" smoothing="IN_OUT" />
     </AnimationGroup>
 
-    <!-- Rotate -->
-    <AnimationGroup name="MapPinEnhancedAnimationRotateRight90" mixin="MapPinEnhancedAnimationRotationMixin" virtual="true">
-        <Rotation degrees="90" duration="0.15" smoothing="IN_OUT" />
-        <Scripts>
-            <OnFinished method="OnFinishedRotateRight90" />
-        </Scripts>
-    </AnimationGroup>
-
-    <AnimationGroup name="MapPinEnhancedAnimationRotateLeft90" mixin="MapPinEnhancedAnimationRotationMixin" virtual="true">
-        <Rotation degrees="-90" duration="0.15" smoothing="IN_OUT" />
-        <Scripts>
-            <OnFinished method="OnFinishedRotateLeft90" />
-        </Scripts>
-    </AnimationGroup>
 </Ui>

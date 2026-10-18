@@ -103,7 +103,6 @@ function MapPinEnhancedGroupPinRestorationMixin:RestoreArchivedPins(groupData, s
                     if self.hidden then
                         -- Restoring cleared pins in a hidden group keeps the group hidden.
                         archivedPin.state = "hidden"
-                        self.pinState.changeNumber = self.pinState.changeNumber + 1
                     elseif not self.pinState:RestoreArchivedPin(pinID) then
                         return false
                     end

@@ -49,30 +49,12 @@ MapPinEnhancedWayfinderArrowMixin = CreateFromMixins(MapPinEnhancedWayfinderDist
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
-local MIN_NEEDLE_ALPHA = 0.5
 local MAX_NEEDLE_ALPHA = 1
 
 local mathSin = math.sin
 local mathCos = math.cos
 local mathAtan2 = math.atan2
-local mathAbs = math.abs
-local mathPi = math.pi
 local DeltaLerp = DeltaLerp
-
----@return AnyMenuEntry[]
-local function BuildArrowSettingsMenuEntries()
-    return {
-        {
-            type = "title",
-            label = MapPinEnhanced.L["Wayfinder.Arrow_GROUPLABEL"],
-        },
-    }
-end
-
----@return AnyMenuEntry[]
-local function BuildNavigationMenuEntries()
-    return Wayfinders:BuildNavigationMenuEntries()
-end
 
 ---@param color PinColor
 function MapPinEnhancedWayfinderArrowMixin:SetColor(color)
@@ -198,11 +180,7 @@ function MapPinEnhancedWayfinderArrowMixin:OnMouseDown(mouseButton)
         })
     end
 
-    -- NOTE: no arrow wayfinder specific settings to put on the menu right now
-    -- for _, entry in ipairs(BuildArrowSettingsMenuEntries()) do
-    --     table.insert(menu, entry)
-    -- end
-    for _, entry in ipairs(BuildNavigationMenuEntries()) do
+    for _, entry in ipairs(Wayfinders:BuildNavigationMenuEntries()) do
         table.insert(menu, entry)
     end
 

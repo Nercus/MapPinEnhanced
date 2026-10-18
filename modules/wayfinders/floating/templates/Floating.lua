@@ -171,8 +171,6 @@ end
 ---@param major number
 ---@param minor number
 function MapPinEnhancedWayfinderFloatingMixin:SetEllipticalRadii(major, minor)
-    self.majorAxis = major
-    self.minorAxis = minor
     self.majorAxisSquared = major * major
     self.minorAxisSquared = minor * minor
     self.axesMultiplied = major * minor

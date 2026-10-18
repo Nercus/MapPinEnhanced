@@ -189,13 +189,3 @@ function MapPinEnhancedGroupTrackingMixin:GetNextTrackablePin(cursorOrder)
 
     return self:GetNearestTrackablePin()
 end
-
----@param cursorOrder number?
----@return MapPinEnhancedPinMixin?
-function MapPinEnhancedGroupTrackingMixin:TrackNextTrackablePin(cursorOrder)
-    local pin = self:GetNextTrackablePin(cursorOrder)
-    if pin then
-        pin:Track()
-    end
-    return pin
-end

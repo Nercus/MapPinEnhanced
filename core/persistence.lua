@@ -80,14 +80,3 @@ function MapPinEnhanced:DeleteVar(...)
         dbTable = dbTable[key]
     end
 end
-
----Migrate a variable from one set of keys to another
----@param prevKeys string | string[]
----@param newKeys string | string[]
-function MapPinEnhanced:MigrateVar(prevKeys, newKeys)
-    local prevValue = self:GetVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys --[[@as string]])
-    if prevValue ~= nil then
-        self:SetVar(type(newKeys) == "table" and unpack(newKeys) or newKeys, prevValue)
-        self:DeleteVar(type(prevKeys) == "table" and unpack(prevKeys) or prevKeys --[[@as string]])
-    end
-end

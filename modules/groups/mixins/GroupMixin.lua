@@ -207,11 +207,6 @@ function MapPinEnhancedGroupMixin:EnumeratePins()
     return self.pinState:EnumeratePins()
 end
 
----@return fun(): UUID?, ArchivedPinData?
-function MapPinEnhancedGroupMixin:EnumerateArchivedPins()
-    return self.pinState:EnumerateArchivedCopies()
-end
-
 ---@return MapPinEnhancedGroupPinEntry[]
 function MapPinEnhancedGroupMixin:GetPinEntries()
     return self.pinState:GetEntries()
@@ -220,16 +215,6 @@ end
 ---@return MapPinEnhancedGroupPinDisplayEntry[]
 function MapPinEnhancedGroupMixin:GetPinDisplayEntries()
     return self.pinState:GetDisplayEntries()
-end
-
----@return SaveablePinData[]
-function MapPinEnhancedGroupMixin:GetAllPinData()
-    ---@type SaveablePinData[]
-    local pins = {}
-    for _, entry in ipairs(self:GetPinEntries()) do
-        pins[#pins + 1] = entry.data
-    end
-    return pins
 end
 
 ---@param pinID UUID
@@ -292,11 +277,6 @@ function MapPinEnhancedGroupMixin:SetPinOrder(pinID, order)
     if not self.pinState:SetOrder(pinID, order) then return false end
     self:PersistPinChanges()
     return true
-end
-
----@return number
-function MapPinEnhancedGroupMixin:GetPinChangeNumber()
-    return self.pinState.changeNumber
 end
 
 ---@param order number

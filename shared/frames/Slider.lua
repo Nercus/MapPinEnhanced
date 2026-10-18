@@ -81,25 +81,6 @@ function MapPinEnhancedSliderMixin:OnValueChanged(value)
     end
 end
 
----@param disabled boolean
-function MapPinEnhancedSliderMixin:SetDisabledState(disabled)
-    if disabled then
-        self.slider:Disable()
-        self:SetAlpha(0.5)
-        self.back:Disable()
-        self.back:SetAlpha(0.5)
-        self.forward:Disable()
-        self.forward:SetAlpha(0.5)
-    else
-        self.slider:Enable()
-        self:SetAlpha(1)
-        self.back:Enable()
-        self.back:SetAlpha(1)
-        self.forward:Enable()
-        self.forward:SetAlpha(1)
-    end
-end
-
 function MapPinEnhancedSliderMixin:GetValue()
     return self.slider:GetValue()
 end

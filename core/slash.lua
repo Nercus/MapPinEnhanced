@@ -118,15 +118,6 @@ function MapPinEnhanced:AddSlashCommand(command, func, help, showInHelp)
     })
 end
 
----Remove a slash command from the list
----@param command string the command to remove
-function MapPinEnhanced:RemoveSlashCommand(command)
-    assert(type(command) == "string", "Command not provided")
-    commandList[command] = nil
-    commandAliases[command] = nil
-    commandHelpStrings[command] = nil
-end
-
 ---Enable the help command for the addon
 function MapPinEnhanced:EnableHelpCommand()
     ---@diagnostic disable-next-line: undefined-global

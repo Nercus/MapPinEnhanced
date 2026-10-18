@@ -149,12 +149,6 @@ function MapPinEnhanced:IsCoordinate(value)
     return self:IsReadableNumber(value) and value >= 0 and value <= 1
 end
 
----Wrapper for the current map the player is on
----@return number? mapID
-function MapPinEnhanced:GetPlayerMap()
-    return C_Map.GetBestMapForUnit("player")
-end
-
 ---Wrapper for the current map position of the player
 ---@return number x, number y, number currentPlayerUIMapID, Enum.UIMapType currentPlayerUIMapType
 function MapPinEnhanced:GetPlayerMapPosition()
@@ -174,29 +168,6 @@ function MapPinEnhanced:GetDistanceBetweenPoints(mapID1, x1, y1, mapID2, x2, y2)
         return 0
     end
     return HBD:GetZoneDistance(mapID1, x1, y1, mapID2, x2, y2) or 0
-end
-
---- Get the distance from the player to a target point on the map
---- @param mapID number The map ID of the target location
---- @param x number The X coordinate of the target location (0 to 1)
---- @param y number The Y coordinate of the target location (0 to 1)
---- @return number The distance in yards from the player to the target location
-function MapPinEnhanced:GetDistanceToTarget(mapID, x, y)
-    local playerX, playerY, playerMap = self:GetPlayerMapPosition()
-    if not playerMap or not playerX or not playerY then return 0 end
-    return self:GetDistanceBetweenPoints(playerMap, playerX, playerY, mapID, x, y)
-end
-
-function MapPinEnhanced:GetWorldVectorForTarget(mapID, x, y)
-    local playerX, playerY, playerMap = self:GetPlayerMapPosition()
-    if not playerMap or not playerX or not playerY then return nil end
-
-    local pwx, pwy, pInst = HBD:GetWorldCoordinatesFromZone(playerX, playerY, playerMap)
-    local twx, twy, tInst = HBD:GetWorldCoordinatesFromZone(x, y, mapID)
-    if not pwx or not pwy or not twx or not twy then return nil end
-    if pInst ~= tInst then return nil end
-
-    return HBD:GetWorldVector(pInst, pwx, pwy, twx, twy)
 end
 
 ---@param distance any
@@ -335,16 +306,6 @@ function MapPinEnhanced:RegisterContinuousDistanceSampleCallback(callback)
     table.insert(onSampleCallbacks, callback)
     if target and lastDistance ~= nil then
         callback(lastDistance, lastTimeToTarget, smoothedClosingSpeed, throttleInterval, movementState)
-    end
-end
-
----@param callback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)
-function MapPinEnhanced:UnregisterContinuousDistanceSampleCallback(callback)
-    for i, currentCallback in ipairs(onSampleCallbacks) do
-        if currentCallback == callback then
-            table.remove(onSampleCallbacks, i)
-            return
-        end
     end
 end
 

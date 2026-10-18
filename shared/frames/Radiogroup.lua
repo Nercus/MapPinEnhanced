@@ -148,20 +148,6 @@ function MapPinEnhancedRadioGroupMixin:SetValue(value, triggerCallback, skipAnim
     error("Value not found in options: " .. tostring(value))
 end
 
----@param value any
----@param state boolean
-function MapPinEnhancedRadioGroupMixin:SetOptionDisabledState(value, state)
-    assert(self.options, "RadioGroupMixin requires 'options' table to be defined.")
-    ---@param button MapPinEnhancedRadioButtonTemplate
-    for button in self.pool:EnumerateActive() do
-        if button.value == value then
-            button:SetEnabled(not state)
-            return
-        end
-    end
-    error("Value not found in options: " .. tostring(value))
-end
-
 ---@param callback fun(isChecked: boolean)
 function MapPinEnhancedRadioGroupMixin:SetCallback(callback)
     assert(type(callback) == "function", "Callback must be a function.")

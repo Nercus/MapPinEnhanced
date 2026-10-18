@@ -73,7 +73,6 @@ function MapPinEnhancedGroupVisibilityMixin:ReleasePins(archiveState, onComplete
                 checkpoint()
             end
         end
-        self.pinState.changeNumber = self.pinState.changeNumber + 1
         self.pinState:CheckPinState(checkpoint)
     end }, nil, finish, 1, function(message)
         finish("stopped")

@@ -9,7 +9,6 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 ---@field orders table<UUID, number>
 ---@field archive table<UUID, ArchivedPinData>
 ---@field count number
----@field changeNumber number
 ---@field maximumOrder number?
 ---@field orderCacheValid boolean?
 MapPinEnhancedGroupPinStateMixin = CreateFromMixins(MapPinEnhancedGroupPinStateReadMixin)
@@ -36,7 +35,6 @@ function MapPinEnhancedGroupPinStateMixin:Init(group)
     self.maximumOrder = nil
     self.orderCacheValid = true
     self.count = 0
-    self.changeNumber = 0
 end
 
 ---@param checkpoint fun()?
@@ -52,7 +50,6 @@ function MapPinEnhancedGroupPinStateMixin:Reset(checkpoint)
     end
     self.maximumOrder = nil
     self.orderCacheValid = true
-    self.changeNumber = self.changeNumber + 1
 end
 
 ---@param checkpoint fun()?
@@ -144,7 +141,6 @@ function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, orde
     self.orders[pinID] = type(order) == "number" and order or nextOrder
     self.maximumOrder = math.max(self.maximumOrder or self.orders[pinID], self.orders[pinID])
     self.count = self.count + 1
-    self.changeNumber = self.changeNumber + 1
     return pin, shouldTrack
 end
 
@@ -167,7 +163,6 @@ function MapPinEnhancedGroupPinStateMixin:AddArchived(pinData, state, order, ove
         order = type(order) == "number" and order or nextOrder,
     }
     self.maximumOrder = math.max(self.maximumOrder or self.archive[pinID].order, self.archive[pinID].order)
-    self.changeNumber = self.changeNumber + 1
     return pinID
 end
 
@@ -181,14 +176,12 @@ function MapPinEnhancedGroupPinStateMixin:Remove(pinID)
         self.pins[pinID] = nil
         self.orders[pinID] = nil
         self.count = self.count - 1
-        self.changeNumber = self.changeNumber + 1
         return pin, nil, order
     end
 
     local archivedPin = self.archive[pinID]
     if archivedPin then
         self.archive[pinID] = nil
-        self.changeNumber = self.changeNumber + 1
         return nil, archivedPin, archivedPin.order
     end
 end
@@ -217,7 +210,6 @@ function MapPinEnhancedGroupPinStateMixin:ArchiveActive(pinID, state)
     self.orders[pinID] = nil
     self.count = self.count - 1
     self.archive[pinID] = { state = state, data = data, order = order }
-    self.changeNumber = self.changeNumber + 1
     pin.suppressPersistence = true
     Pins:ReleasePin(pin)
     return true, data, wasTracked, order
@@ -243,7 +235,6 @@ function MapPinEnhancedGroupPinStateMixin:RestoreArchivedPin(pinID)
     self.pins[pinID] = pin
     self.orders[pinID] = archivedPin.order
     self.count = self.count + 1
-    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -260,7 +251,6 @@ function MapPinEnhancedGroupPinStateMixin:SetOrder(pinID, order)
     else
         return false
     end
-    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -287,7 +277,6 @@ function MapPinEnhancedGroupPinStateMixin:Reorder(pinIDs)
             self.orders[pinID] = order
         end
     end
-    self.changeNumber = self.changeNumber + 1
     return true
 end
 
@@ -300,6 +289,5 @@ function MapPinEnhancedGroupPinStateMixin:UpdateArchived(pinID, update)
     update(archivedPin.data)
     archivedPin.data.pinID = pinID
     archivedPin.data.setTracked = nil
-    self.changeNumber = self.changeNumber + 1
     return true
 end

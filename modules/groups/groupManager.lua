@@ -83,16 +83,6 @@ local DEFAULT_GROUPS = {
     }
 }
 
-function Groups:GetAllGroups()
-    local groups = {}
-    local groupsPool = Groups:GetObjectPool()
-    ---@param group MapPinEnhancedGroupMixin
-    for group in groupsPool:EnumerateActive() do
-        if not group.isDeleting then table.insert(groups, group) end
-    end
-    return groups
-end
-
 ---@param group1 MapPinEnhancedGroupMixin
 ---@param group2 MapPinEnhancedGroupMixin
 ---@return boolean

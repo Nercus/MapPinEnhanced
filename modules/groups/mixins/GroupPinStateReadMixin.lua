@@ -163,15 +163,3 @@ end
 function MapPinEnhancedGroupPinStateReadMixin:EnumeratePins()
     return pairs(self.pins)
 end
-
----@return fun(): UUID?, ArchivedPinData?
-function MapPinEnhancedGroupPinStateReadMixin:EnumerateArchivedCopies()
-    ---@type UUID?
-    local pinID
-    return function()
-        ---@type ArchivedPinData?
-        local archivedPin
-        pinID, archivedPin = next(self.archive, pinID)
-        if pinID then return pinID, CopyTable(archivedPin) end
-    end
-end
