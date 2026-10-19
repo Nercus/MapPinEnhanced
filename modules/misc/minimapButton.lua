@@ -106,14 +106,17 @@ local function InitMinimapIcon()
         OnTooltipShow = function(tooltip)
             tooltip:AddLine(MapPinEnhanced.displayName)
             MapPinEnhanced:AddTooltipInteractions(tooltip, {
-                { L["Click"],       L["Open menu"] },
+                { L["Left Click"],  L["Toggle the tracker visibility."] },
+                { L["Right Click"], L["Open menu"] },
                 { L["Alt + Click"], L["Clear all active pins in visible groups."] },
             })
         end,
-        OnClick = function(owner)
+        OnClick = function(owner, button)
             if IsAltKeyDown() then
                 ClearAllPins()
-            else
+            elseif button == "LeftButton" then
+                Tracker:ToggleTracker()
+            elseif button == "RightButton" then
                 ShowMinimapMenu(owner)
             end
         end,
