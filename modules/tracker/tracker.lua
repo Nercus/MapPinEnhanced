@@ -5,6 +5,8 @@ local MapPinEnhanced = select(2, ...)
 local Tracker = MapPinEnhanced:GetModule("Tracker")
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
+-- Explicitly opening an empty tracker lasts until it has content again.
+local hideWhenEmpty = false
 
 function Tracker:GetTrackerFrame()
     if not self.trackerFrame then
@@ -16,6 +18,7 @@ function Tracker:GetTrackerFrame()
 end
 
 function Tracker:ShowTracker()
+    hideWhenEmpty = false
     MapPinEnhanced:SetVar("trackerVisible", true)
     MapPinEnhanced:UpdateVisibilityTarget("tracker")
 end
@@ -26,7 +29,8 @@ function Tracker:HideTracker()
 end
 
 function Tracker:ToggleTracker()
-    if MapPinEnhanced:GetVar("trackerVisible") then
+    local frame = self.trackerFrame
+    if MapPinEnhanced:GetVar("trackerVisible") and frame and frame:IsShown() and not frame.visibilityHiding then
         self:HideTracker()
     else
         self:ShowTracker()
@@ -59,11 +63,12 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
         for group in Groups:EnumerateGroups() do
             if not group:IsHidden() then
                 if group:GetPinCount() > 0 or group:IsRestorable() and group:GetClearedPinCount() > 0 then
+                    hideWhenEmpty = true
                     return false
                 end
             end
         end
-        return true
+        return hideWhenEmpty
     end,
     callbacks = { "PIN_ADDED", "PIN_REMOVED", "PIN_CLEARED", "GROUP_UPDATED", "GROUP_DELETED" },
 })
