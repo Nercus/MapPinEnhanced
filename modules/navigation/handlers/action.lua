@@ -7,6 +7,7 @@ local L = MapPinEnhanced.L
 local ACTION_TYPES = { "toy", "spell", "item" }
 local ACTION_PENALTY_SECONDS = 10
 local LOADING_SCREEN_PENALTY_SECONDS = 10
+local HEARTHSTONE_PRESERVATION_PENALTY_SECONDS = 90
 local EQUIPMENT_CHANGE_PENALTY_SECONDS = 10
 local MINIMUM_ACTION_COOLDOWN_SECONDS = 1.5
 
@@ -350,6 +351,10 @@ local function RegisterAction(pathType, icon, method, instructionKey)
         local equipmentPenalty = action.type == "item" and C_Item.IsEquippableItem(action.id) and
             not C_Item.IsEquippedItem(action.id) and EQUIPMENT_CHANGE_PENALTY_SECONDS or 0
         local penaltySeconds = ACTION_PENALTY_SECONDS + LOADING_SCREEN_PENALTY_SECONDS + equipmentPenalty
+        -- Preserve Forever's home return unless its route offers a substantial saving.
+        if MapPinEnhanced.isForever and pathType == "hearthstone" then
+            penaltySeconds = penaltySeconds + HEARTHSTONE_PRESERVATION_PENALTY_SECONDS
+        end
         return {
             expectedSeconds = expectedSeconds,
             uncertaintySeconds = 0,
