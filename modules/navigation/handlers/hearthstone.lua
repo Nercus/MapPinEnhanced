@@ -246,10 +246,19 @@ function Navigation:SetupHearthstoneDestination()
     MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", SaveUsedToy)
     local bindName = MapPinEnhanced:NormalizeText(GetBindLocation())
     if destination and bindName and destination.bindName ~= bindName then
-        -- A bind changed outside this session has no known coordinates until
-        -- the next observed hearthstone arrival or innkeeper bind.
+        -- A bind changed outside this session invalidates the saved coordinates.
         SaveDestination(nil)
-        return
+    end
+    if not destination and bindName and MapPinEnhanced.isForever and self.hearthstoneDefaults then
+        local _, race = UnitRace("player")
+        if not MapPinEnhanced:IsSecretValue(race) and type(race) == "string" then
+            local default = self.hearthstoneDefaults[race]
+            -- Race alone cannot establish that the character is still bound at home.
+            if default and default.bindName == bindName then
+                SaveDestination(CopyTable(default))
+                return
+            end
+        end
     end
     SetLearning(destination == nil)
     self:UpdateHearthstonePath(destination)

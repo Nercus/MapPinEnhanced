@@ -48,3 +48,18 @@ Navigation.hearthstoneItems = {
 
 -- Astral Recall shares the learned home bind with hearthstone items.
 Navigation.hearthstoneSpells = { 556 }
+
+-- Collected Forever starting binds (build 70450). The owner requires a matching
+-- bind name before using these coordinates; both Skyborne factions share a home.
+---@type table<string, NavigationHearthstoneDestination>?
+Navigation.hearthstoneDefaults = {
+    Human = { mapID = 1415, x = 0.45831092596814, y = 0.69957300514969, bindName = "Northshire Valley" },
+    Dwarf = { mapID = 1415, x = 0.44514327433917, y = 0.58410251721633, bindName = "Coldridge Valley" },
+    NightElf = { mapID = 1414, x = 0.44117348593828, y = 0.10143803860171, bindName = "Shadowglen" },
+    Gnome = { mapID = 1415, x = 0.44514327433917, y = 0.58410251721633, bindName = "Coldridge Valley" },
+    Skyborne = { mapID = 2521, x = 0.42814380705758, y = 0.23141122993427, bindName = "Thendal Village" },
+    Orc = { mapID = 1414, x = 0.57930462982148, y = 0.5469486182547, bindName = "Valley of Trials" },
+    Scourge = { mapID = 1415, x = 0.4068903230589, y = 0.24674216466572, bindName = "Shadow Grave" },
+    Tauren = { mapID = 1414, x = 0.47077961504559, y = 0.64066244975121, bindName = "Camp Narache" },
+    Troll = { mapID = 1414, x = 0.57930462982148, y = 0.5469486182547, bindName = "Valley of Trials" },
+}
