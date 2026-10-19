@@ -3,7 +3,8 @@
 ---@field locale AceLocale.LocaleCode the locale for the addon
 local MapPinEnhanced = select(2, ...)
 
--- might want to check out using the @localization@ in the future for curseforge translations
+-- Translations are maintained in locale files through GitHub pull requests.
+-- English defaults and the selected locale overlay load before consumers.
 -- *** Using Phanx's method to localize strings ***
 -- You can find the original code here: https://phanx.net/addons/tutorials/localize
 local L = setmetatable({}, {
