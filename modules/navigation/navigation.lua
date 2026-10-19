@@ -619,18 +619,48 @@ end
 ---@param inside boolean
 ---@param exitGraceSeconds number? provider-owned grace for a readable area exit
 ---@param directionDistance number? provider-approved maximum distance for guidance inside the area
+---@param exitDistance number? minimum displacement from the first readable exit position
 function Navigation:UpdateDestinationAreaState(owner, destinationID, changeNumber, inside, exitGraceSeconds,
-                                               directionDistance)
+                                               directionDistance, exitDistance)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     local destination = self.activeDestination
     if not destination then return end
     if not inside and exitGraceSeconds and destination.insideObjectiveArea then
-        -- Repeated outside samples share one deadline; re-entry cancels it below.
+        -- Keep the first exit position across repeated outside samples. Re-entry,
+        -- readiness changes and destination release cancel this pending exit.
         if not destination.objectiveAreaExitTimer then
-            destination.objectiveAreaExitTimer = C_Timer.NewTimer(exitGraceSeconds, function()
-                destination.objectiveAreaExitTimer = nil
-                self:UpdateDestinationAreaState(owner, destinationID, changeNumber, false)
-            end)
+            local exitX, exitY, exitMapID = MapPinEnhanced:GetPlayerMapPosition()
+            local clearSince ---@type number?
+            local function CheckExit()
+                if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
+                local farEnough = not exitDistance
+                if exitDistance then
+                    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+                    if MapPinEnhanced:IsReadableNumber(mapID) and MapPinEnhanced:IsCoordinate(x) and
+                        MapPinEnhanced:IsCoordinate(y) then
+                        -- If the boundary position was unavailable, start the buffer
+                        -- at the first readable position instead of guessing distance.
+                        if not MapPinEnhanced:IsReadableNumber(exitMapID) or
+                            not MapPinEnhanced:IsCoordinate(exitX) or not MapPinEnhanced:IsCoordinate(exitY) then
+                            exitX, exitY, exitMapID = x, y, mapID
+                        end
+                        local distance = self:GetComparableDistance(mapID, x, y, exitMapID, exitX, exitY)
+                        farEnough = MapPinEnhanced:IsReadableNumber(distance) and distance >= exitDistance
+                    end
+                end
+                if farEnough and not InCombatLockdown() then
+                    clearSince = clearSince or GetTime()
+                    if GetTime() - clearSince >= exitGraceSeconds then
+                        destination.objectiveAreaExitTimer = nil
+                        self:UpdateDestinationAreaState(owner, destinationID, changeNumber, false)
+                        return
+                    end
+                else
+                    clearSince = nil
+                end
+                destination.objectiveAreaExitTimer = C_Timer.NewTimer(0.25, CheckExit)
+            end
+            CheckExit()
         end
         return
     end

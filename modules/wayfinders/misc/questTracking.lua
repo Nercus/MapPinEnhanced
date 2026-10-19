@@ -6,6 +6,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Providers = MapPinEnhanced:GetModule("Providers")
 local SOURCE = "quest"
 local OBJECTIVE_EXIT_GRACE_SECONDS = 3
+local OBJECTIVE_EXIT_DISTANCE = 25
 
 ---@param questID number
 ---@param atlas string?
@@ -20,7 +21,7 @@ local function ApplyQuestState(questID, atlas, active, directionDistance)
         Wayfinders:UpdateSuperTrackingEntryIcon(owner, targetID, atlas, true)
     end
     Navigation:UpdateDestinationAreaState(owner, targetID, changeNumber, active == true,
-        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil, directionDistance)
+        active == false and OBJECTIVE_EXIT_GRACE_SECONDS or nil, directionDistance, OBJECTIVE_EXIT_DISTANCE)
 end
 
 ---@param eventQuestID number?
