@@ -3891,7 +3891,7 @@ local BORDER = {
         type = "border",
         travelDuration = 48,
     },
-    -- The Coiled Isle (map 2512 35.69,67.54) -> Vaults of Atal'Utek (map 2509 42.43,89.80) via border
+    -- The Coiled Isle (map 2512 35.69,67.54) -> Vaults of Atal'Utek (map 2509 47.16,79.20) via border
     {
         fromPointID = 200776,
         fromMap = 2512,
@@ -3899,8 +3899,8 @@ local BORDER = {
         fromY = 0.6754,
         toPointID = 200760,
         toMap = 2509,
-        toX = 0.4722,
-        toY = 0.8595,
+        toX = 0.4716,
+        toY = 0.7920,
         type = "border",
         travelDuration = 48,
     },

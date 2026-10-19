@@ -12076,17 +12076,18 @@ local FLOOR = {
     },
 
     -- Zone: The Coiled Isle (map 2512)
-    -- The Coiled Isle (map 2512 31.91,64.87) -> Vaults of Atal'Utek (map 2509 47.22,85.95) via floor
+    -- The Coiled Isle (map 2512 31.91,64.87) -> Vaults of Atal'Utek (map 2509 47.16,79.20) via floor
     {
         fromPointID = 200774,
         fromMap = 2512,
         fromX = 0.3191,
         fromY = 0.6487,
-        toPointID = 200765,
+        toPointID = 200760,
         toMap = 2509,
-        toX = 0.4722,
-        toY = 0.8595,
+        toX = 0.4716,
+        toY = 0.7920,
         type = "floor",
+        travelDuration = 5,
     },
     -- The Coiled Isle (map 2512 44.68,34.45) -> Kin's Rest (map 2645 78.59,41.39) via floor
     {
@@ -12114,16 +12115,16 @@ local FLOOR = {
         type = "floor",
         travelDuration = 5,
     },
-    -- The Coiled Isle (map 2512 45.37,64.93) -> Vaults of Atal'Utek (map 2509 51.29,82.10) via floor
+    -- The Coiled Isle (map 2512 45.37,64.93) -> Vaults of Atal'Utek (map 2509 47.16,79.20) via floor
     {
         fromPointID = 200786,
         fromMap = 2512,
         fromX = 0.4537,
         fromY = 0.6493,
-        toPointID = 200765,
+        toPointID = 200760,
         toMap = 2509,
-        toX = 0.4722,
-        toY = 0.8595,
+        toX = 0.4716,
+        toY = 0.7920,
         type = "floor",
         travelDuration = 5,
     },
@@ -15202,12 +15203,12 @@ local FLOOR = {
         type = "floor",
         travelDuration = 5,
     },
-    -- Vaults of Atal'Utek (map 2509 51.29,82.10) -> The Coiled Isle (map 2512 45.37,64.93) via floor
+    -- Vaults of Atal'Utek (map 2509 47.16,79.20) -> The Coiled Isle (map 2512 45.37,64.93) via floor
     {
-        fromPointID = 200765,
+        fromPointID = 200760,
         fromMap = 2509,
-        fromX = 0.4722,
-        fromY = 0.8595,
+        fromX = 0.4716,
+        fromY = 0.7920,
         toPointID = 200786,
         toMap = 2512,
         toX = 0.4537,
