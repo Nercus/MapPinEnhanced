@@ -31,7 +31,7 @@ local iconPath = MapPinEnhanced.assetsPath .. "\\pins\\icons\\"
 
 ---@type table<string, PinIcon> custom artwork keyed by the original atlas name
 Pins.PIN_ICONS = {
-    ["lift"] = { icon = iconPath .. "lift.png", color = CreateColor(1, 0.82, 0) },
+    ["lift"] = { icon = iconPath .. "lift.png", color = CreateColor(239 / 255, 193 / 255, 0) },
     ["Adventures-32x32"] = { icon = iconPath .. "adventures-32x32.png", color = CreateColor(0.2342, 0.6349, 0.8338) },
     ["AllianceAssaultsMapBanner"] = { icon = iconPath .. "allianceassaultsmapbanner.png", color = CreateColor(0.7369, 0.608, 0.139) },
     ["AllianceSymbol"] = { icon = iconPath .. "alliancesymbol.png", color = CreateColor(0.0, 0.3804, 1.0) },
