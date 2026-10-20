@@ -14,6 +14,13 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field succeeded boolean?
 ---@field loading boolean?
 ---@field arrived boolean?
+---@field position NavigationHearthstoneDestination?
+---@field sampledAt number?
+---@field landing NavigationHearthstoneDestination?
+---@field landedAt number?
+---@field bindName string?
+---@field arrivalAttempts number?
+---@field arrivalReadyAt number?
 
 local characterKey ---@type string?
 local preferredToyID ---@type number?
@@ -91,10 +98,7 @@ local function ReadPosition()
     local x, y = position:GetXY()
     local value = { mapID = mapID, x = x, y = y }
     if not IsDestination(value) then return nil end
-    local bindName = GetBindLocation()
-    if not MapPinEnhanced:IsSecretValue(bindName) and type(bindName) == "string" then
-        value.bindName = bindName
-    end
+    value.bindName = MapPinEnhanced:NormalizeText(GetBindLocation())
     return value
 end
 
@@ -119,21 +123,54 @@ local function SaveDestination(value)
     Navigation:UpdateHearthstonePath(value)
 end
 
-local function TryArrival()
+local function SampleArrival()
     local cast = pendingCast
-    if destination or not cast or not cast.succeeded or not cast.arrived or positionTimer then return end
-    -- Wait until after the loading callback before reading map position. Retry
-    -- briefly for unavailable maps, but never infer arrival from a delay alone.
-    local attempts = 0
-    positionTimer = C_Timer.NewTicker(0.1, function()
-        attempts = attempts + 1
+    if destination or not cast or cast.loading and not cast.arrived then return end
+    if cast.arrived and cast.succeeded then
+        -- Loading is independent arrival evidence; allow briefly unavailable maps.
+        if cast.arrivalReadyAt and GetTime() < cast.arrivalReadyAt then return end
+        cast.arrivalAttempts = (cast.arrivalAttempts or 0) + 1
         local value = ReadPosition()
         if value then
             SaveDestination(value)
-        elseif attempts >= 20 then
+        elseif cast.arrivalAttempts >= 20 then
             ClearPendingCast()
         end
-    end)
+        return
+    end
+
+    local value = ReadPosition()
+    local previous, sampledAt = cast.position, cast.sampledAt
+    local now = GetTime()
+    cast.position, cast.sampledAt = value, value and now or nil
+    if not value then
+        cast.landing, cast.landedAt = nil, nil
+        return
+    end
+    if cast.bindName and value.bindName ~= cast.bindName then
+        ClearPendingCast()
+        return
+    end
+    -- Sample during the cast too: the client can move the player just before
+    -- delivering SUCCEEDED. Only a recent discontinuity plus success may save.
+    if previous and sampledAt and value.mapID == previous.mapID and now - sampledAt <= 1 then
+        local distance = Navigation:GetComparableDistance(previous.mapID, previous.x, previous.y,
+            value.mapID, value.x, value.y)
+        if distance and not MapPinEnhanced:IsSecretValue(distance) and
+            distance > 100 + 100 * (now - sampledAt) then
+            cast.landing, cast.landedAt = value, now
+        end
+    end
+    local landing, landedAt = cast.landing, cast.landedAt
+    if landing and landedAt then
+        local distance = Navigation:GetComparableDistance(landing.mapID, landing.x, landing.y,
+            value.mapID, value.x, value.y)
+        if now - landedAt > 1 or not distance or MapPinEnhanced:IsSecretValue(distance) or distance > 10 then
+            cast.landing, cast.landedAt = nil, nil
+        elseif cast.succeeded and cast.bindName and landing.bindName == cast.bindName then
+            SaveDestination(landing)
+        end
+    end
 end
 
 ---@param unit string
@@ -146,7 +183,15 @@ local function OnCastStart(unit, guid, spellID)
         type(guid) ~= "string" or not hearthstoneSpells[spellID] then
         return
     end
-    pendingCast = { guid = guid }
+    local position = ReadPosition()
+    pendingCast = {
+        guid = guid,
+        position = position,
+        sampledAt = position and GetTime() or nil,
+        bindName = MapPinEnhanced:NormalizeText(GetBindLocation()),
+    }
+    -- This short-lived sampler belongs to an unknown-home cast, never idle routing.
+    positionTimer = C_Timer.NewTicker(0.1, SampleArrival)
     expiryTimer = C_Timer.NewTimer(60, ClearPendingCast)
 end
 
@@ -166,7 +211,7 @@ local function OnCastSucceeded(unit, guid)
         if expiryTimer then expiryTimer:Cancel() end
         expiryTimer = C_Timer.NewTimer(5, ClearPendingCast)
     end
-    TryArrival()
+    SampleArrival()
 end
 
 local function OnCastFailed(unit, guid)
@@ -176,6 +221,8 @@ end
 local function OnLoadingStarted()
     if not pendingCast then return end
     pendingCast.loading = true
+    pendingCast.position, pendingCast.sampledAt = nil, nil
+    pendingCast.landing, pendingCast.landedAt = nil, nil
     if expiryTimer then expiryTimer:Cancel() end
     expiryTimer = C_Timer.NewTimer(60, ClearPendingCast)
 end
@@ -183,7 +230,8 @@ end
 local function OnLoadingFinished()
     if not pendingCast or not pendingCast.loading then return end
     pendingCast.arrived = true
-    TryArrival()
+    pendingCast.arrivalReadyAt = GetTime() + 0.1
+    -- The cast-owned sampler reads position after this loading callback.
 end
 
 ---@type table<WowEvent, function>
