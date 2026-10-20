@@ -6,6 +6,7 @@ local L = MapPinEnhanced.L
 local DEFAULT_TRANSPORT_SECONDS = 240
 local DEFAULT_TRAM_SECONDS = 300
 local DEFAULT_BOAT_SECONDS = 150
+local DEFAULT_LIFT_SECONDS = 30
 -- Authored travelDuration includes average waiting; compare expected totals only.
 
 ---@param pathType string
@@ -13,7 +14,8 @@ local DEFAULT_BOAT_SECONDS = 150
 ---@param method string
 ---@param name string Localization key suffix, never interpolated into a sentence
 local function RegisterTransport(pathType, icon, method, name)
-    local defaultSeconds = pathType == "tram" and DEFAULT_TRAM_SECONDS or
+    local defaultSeconds = pathType == "lift" and DEFAULT_LIFT_SECONDS or
+        pathType == "tram" and DEFAULT_TRAM_SECONDS or
         (pathType == "boat" or pathType == "ship") and DEFAULT_BOAT_SECONDS or DEFAULT_TRANSPORT_SECONDS
     ---@param graph NavigationGraph
     ---@param _preparedData NavigationPreparedData
@@ -51,3 +53,4 @@ RegisterTransport("ship", "FlightMasterFerry", L["Navigation Method Ship"], "Shi
 RegisterTransport("zeppelin", "Vehicle-Air-Unoccupied", L["Navigation Method Zeppelin"], "Zeppelin")
 RegisterTransport("tram", "Vehicle-SilvershardMines-MineCart", L["Navigation Method Tram"], "Tram")
 RegisterTransport("transport", "Vehicle-Ground-Unoccupied", L["Navigation Method Transport"], "Transport")
+RegisterTransport("lift", "lift", L["Navigation Method Lift"], "Lift")

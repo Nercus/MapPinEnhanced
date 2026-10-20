@@ -1,10 +1,11 @@
--- Existing map crossings with sourced lift schedules; endpoint IDs retained.
+-- Lift connections use distinct walk-on/walk-off points, not shaft centers.
+-- Existing map crossings, endpoint IDs and baked travel durations are retained.
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 ---@class Navigation
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 
-Navigation:RegisterPathData("transport", {
+Navigation:RegisterPathData("lift", {
     {
         fromPointID = 100011,
         fromMap = 1413,
@@ -14,7 +15,7 @@ Navigation:RegisterPathData("transport", {
         toMap = 1441,
         toX = 0.3225,
         toY = 0.2217,
-        type = "transport",
+        type = "lift",
         travelDuration = 18,
     },
     {
@@ -26,7 +27,7 @@ Navigation:RegisterPathData("transport", {
         toMap = 1413,
         toX = 0.4455,
         toY = 0.8657,
-        type = "transport",
+        type = "lift",
         travelDuration = 18,
     },
     {
@@ -38,7 +39,7 @@ Navigation:RegisterPathData("transport", {
         toMap = 1456,
         toX = 0.3209,
         toY = 0.672,
-        type = "transport",
+        type = "lift",
         travelDuration = 25,
     },
     {
@@ -50,7 +51,7 @@ Navigation:RegisterPathData("transport", {
         toMap = 1412,
         toX = 0.3733,
         toY = 0.3862,
-        type = "transport",
+        type = "lift",
         travelDuration = 25,
     },
     {
@@ -62,7 +63,7 @@ Navigation:RegisterPathData("transport", {
         toMap = 1456,
         toX = 0.519,
         toY = 0.247,
-        type = "transport",
+        type = "lift",
         travelDuration = 25,
     },
     {
@@ -74,7 +75,111 @@ Navigation:RegisterPathData("transport", {
         toMap = 1412,
         toX = 0.4069,
         toY = 0.3141,
-        type = "transport",
+        type = "lift",
         travelDuration = 25,
+    },
+    -- Freewind Post: down.
+    {
+        fromPointID = 1300100,
+        fromMap = 1441,
+        fromX = 0.465061,
+        fromY = 0.486262,
+        toPointID = 1300101,
+        toMap = 1441,
+        toX = 0.472298,
+        toY = 0.488976,
+        type = "lift",
+        travelDuration = 18,
+    },
+    -- Freewind Post: up.
+    {
+        fromPointID = 1300101,
+        fromMap = 1441,
+        fromX = 0.472298,
+        fromY = 0.488976,
+        toPointID = 1300100,
+        toMap = 1441,
+        toX = 0.465061,
+        toY = 0.486262,
+        type = "lift",
+        travelDuration = 18,
+    },
+    -- Undercity west: down.
+    {
+        fromPointID = 200021,
+        fromMap = 1420,
+        fromX = 0.610502,
+        fromY = 0.744060,
+        toPointID = 200108,
+        toMap = 1458,
+        toX = 0.590723,
+        toY = 0.440437,
+        type = "lift",
+        travelDuration = 12,
+    },
+    -- Undercity west: up.
+    {
+        fromPointID = 200108,
+        fromMap = 1458,
+        fromX = 0.590723,
+        fromY = 0.440437,
+        toPointID = 200021,
+        toMap = 1420,
+        toX = 0.610502,
+        toY = 0.744060,
+        type = "lift",
+        travelDuration = 12,
+    },
+    -- Undercity east: down.
+    {
+        fromPointID = 1300102,
+        fromMap = 1420,
+        fromX = 0.626356,
+        fromY = 0.744060,
+        toPointID = 1300103,
+        toMap = 1458,
+        toX = 0.731777,
+        toY = 0.440437,
+        type = "lift",
+        travelDuration = 12,
+    },
+    -- Undercity east: up.
+    {
+        fromPointID = 1300103,
+        fromMap = 1458,
+        fromX = 0.731777,
+        fromY = 0.440437,
+        toPointID = 1300102,
+        toMap = 1420,
+        toX = 0.626356,
+        toY = 0.744060,
+        type = "lift",
+        travelDuration = 12,
+    },
+    -- Undercity south: down.
+    {
+        fromPointID = 1300104,
+        fromMap = 1420,
+        fromX = 0.617549,
+        fromY = 0.757272,
+        toPointID = 1300105,
+        toMap = 1458,
+        toX = 0.657101,
+        toY = 0.539924,
+        type = "lift",
+        travelDuration = 12,
+    },
+    -- Undercity south: up.
+    {
+        fromPointID = 1300105,
+        fromMap = 1458,
+        fromX = 0.657101,
+        fromY = 0.539924,
+        toPointID = 1300104,
+        toMap = 1420,
+        toX = 0.617549,
+        toY = 0.757272,
+        type = "lift",
+        travelDuration = 12,
     },
 })

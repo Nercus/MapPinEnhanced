@@ -92,7 +92,7 @@ end
 ---@param toMapID number
 ---@return boolean
 local function RequiresDestinationMap(pathType, fromMapID, toMapID)
-    return pathType == "floor" or pathType == "border" or
+    return pathType == "floor" or pathType == "border" or pathType == "lift" or
         IsCrossMapTransition(pathType, fromMapID, toMapID)
 end
 
@@ -925,7 +925,7 @@ function Navigation:PublishStep(progression)
             if not self:IsCurrentProgression(progression) then return end
             self:ApplyProgressionPhase(progression, "ready")
         end
-    elseif pathType == "floor" or pathType == "border" or self:IsMovementPath(pathType) or
+    elseif pathType == "floor" or pathType == "border" or pathType == "lift" or self:IsMovementPath(pathType) or
         progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" then
         onArrival = function()
             self:CompleteCurrentPath(progression)
@@ -957,7 +957,8 @@ function Navigation:PublishStep(progression)
         showDirection = desiredAction == nil and
             (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
-        arrivalMapID = (pathType == "floor" or pathType == "border" or progression.phase == "in-transit") and
+        arrivalMapID = (pathType == "floor" or pathType == "border" or pathType == "lift" or
+            progression.phase == "in-transit") and
             RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
                 graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[targetPointIndex] or nil,
         stepIndex = progression.pathIndex,
@@ -1042,6 +1043,9 @@ function Navigation:CheckCurrentPathCompletion(identity)
     local toPointIndex = graph.pathToPointIndexes[pathReference]
     local fromPointIndex = graph.pathFromPointIndexes[pathReference]
     local pathType = graph.pathTypes[pathReference]
+    -- Lifts visit the walk-on and walk-off points in order. The broad transition
+    -- vicinity below cannot skip either point or complete at the lift shaft.
+    if pathType == "lift" then return end
     local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     if not playerMapID or not playerX or not playerY then return end
     local destinationDistance = self:GetComparableDistance(playerMapID, playerX, playerY,
@@ -1780,7 +1784,8 @@ function Navigation:BuildRouteLayer(isWorldMap)
     currentY = currentY or route.originY
     local firstPathReference = route.pathReferences[progression.pathIndex]
     local targetsPathEnd = firstPathReference and (self:IsMovementPath(graph.pathTypes[firstPathReference]) or
-        (graph.pathTypes[firstPathReference] == "floor" or graph.pathTypes[firstPathReference] == "border") and
+        (graph.pathTypes[firstPathReference] == "floor" or graph.pathTypes[firstPathReference] == "border" or
+            graph.pathTypes[firstPathReference] == "lift") and
         progression.phase ~= "approach" or
         progression.phase == "in-transit" and graph.pathTypes[firstPathReference] ~= "phaseswitch")
     if firstPathReference then

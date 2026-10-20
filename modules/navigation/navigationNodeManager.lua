@@ -74,6 +74,7 @@ local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
     zeppelin = "scheduledTransport",
     tram = "scheduledTransport",
     transport = "scheduledTransport",
+    lift = "scheduledTransport",
     gossip = "npcTravel",
     phaseswitch = "phaseChanges",
     spell = "personalTeleports",

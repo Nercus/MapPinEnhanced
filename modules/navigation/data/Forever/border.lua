@@ -969,18 +969,6 @@ local BORDER = {
         toY = 0.0765,
         type = "border",
     },
-    -- Tirisfal Glades (map 1420 61.87,65.01) -> Undercity (map 1458 66.22,1.89) via border
-    {
-        fromPointID = 200021,
-        fromMap = 1420,
-        fromX = 0.6187,
-        fromY = 0.6501,
-        toPointID = 200108,
-        toMap = 1458,
-        toX = 0.6622,
-        toY = 0.0189,
-        type = "border",
-    },
     -- Tirisfal Glades (map 1420 84.50,70.39) -> Western Plaguelands (map 1422 28.99,57.48) via border
     {
         fromPointID = 200023,
@@ -1031,18 +1019,6 @@ local BORDER = {
         toMap = 1420,
         toX = 0.1528,
         toY = 0.3086,
-        type = "border",
-    },
-    -- Undercity (map 1458 66.22,1.89) -> Tirisfal Glades (map 1420 61.87,65.01) via border
-    {
-        fromPointID = 200108,
-        fromMap = 1458,
-        fromX = 0.6622,
-        fromY = 0.0189,
-        toPointID = 200021,
-        toMap = 1420,
-        toX = 0.6187,
-        toY = 0.6501,
         type = "border",
     },
 
