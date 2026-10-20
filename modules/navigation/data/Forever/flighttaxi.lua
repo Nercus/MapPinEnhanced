@@ -41,7 +41,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             441,
         },
-        travelDuration = 93,
+        travelDuration = 101,
     },
     -- Hillsbrad Foothills (map 1424 60.21,18.75) -> Undercity (map 1458 63.09,48.32) via flighttaxi
     {
@@ -79,7 +79,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             24,
         },
-        travelDuration = 130,
+        travelDuration = 140,
     },
     -- Hillsbrad Foothills (map 1424 60.21,18.75) -> Arathi Highlands (map 1417 73.06,32.62) via flighttaxi
     {
@@ -117,7 +117,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             322,
         },
-        travelDuration = 110,
+        travelDuration = 119,
     },
     -- Hillsbrad Foothills (map 1424 60.21,18.75) -> The Hinterlands (map 1425 81.70,81.89) via flighttaxi
     {
@@ -155,7 +155,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             413,
         },
-        travelDuration = 182,
+        travelDuration = 197,
     },
     -- Western Plaguelands (map 1422 42.95,84.95) -> Hillsbrad Foothills (map 1424 49.44,52.10) via flighttaxi
     {
@@ -193,7 +193,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             346,
         },
-        travelDuration = 80,
+        travelDuration = 86,
     },
     -- Western Plaguelands (map 1422 42.95,84.95) -> The Hinterlands (map 1425 11.11,46.09) via flighttaxi
     {
@@ -231,7 +231,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             476,
         },
-        travelDuration = 61,
+        travelDuration = 68,
     },
     -- Western Plaguelands (map 1422 42.95,84.95) -> Eastern Plaguelands (map 1423 71.70,49.55) via flighttaxi
     {
@@ -269,7 +269,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             431,
         },
-        travelDuration = 137,
+        travelDuration = 149,
     },
     -- Western Plaguelands (map 1422 42.95,84.95) -> Ironforge (map 1455 55.89,47.87) via flighttaxi
     {
@@ -307,7 +307,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             429,
         },
-        travelDuration = 243,
+        travelDuration = 262,
     },
     -- The Hinterlands (map 1425 11.11,46.09) -> Hillsbrad Foothills (map 1424 49.44,52.10) via flighttaxi
     {
@@ -345,7 +345,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             229,
         },
-        travelDuration = 64,
+        travelDuration = 70,
     },
     -- The Hinterlands (map 1425 11.11,46.09) -> Arathi Highlands (map 1417 45.79,46.13) via flighttaxi
     {
@@ -383,7 +383,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             276,
         },
-        travelDuration = 71,
+        travelDuration = 77,
     },
     -- The Hinterlands (map 1425 11.11,46.09) -> Western Plaguelands (map 1422 42.95,84.95) via flighttaxi
     {
@@ -421,7 +421,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             475,
         },
-        travelDuration = 50,
+        travelDuration = 56,
     },
     -- The Hinterlands (map 1425 11.11,46.09) -> Eastern Plaguelands (map 1423 71.70,49.55) via flighttaxi
     {
@@ -459,7 +459,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             349,
         },
-        travelDuration = 154,
+        travelDuration = 165,
     },
     -- The Hinterlands (map 1425 11.11,46.09) -> Ironforge (map 1455 55.89,47.87) via flighttaxi
     {
@@ -497,7 +497,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             264,
         },
-        travelDuration = 239,
+        travelDuration = 258,
     },
 
     -- Original source zone: Alterac Valley (map 1459)
@@ -613,7 +613,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             273,
         },
-        travelDuration = 81,
+        travelDuration = 87,
     },
     -- Arathi Highlands (map 1417 45.79,46.13) -> The Hinterlands (map 1425 11.11,46.09) via flighttaxi
     {
@@ -651,7 +651,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             275,
         },
-        travelDuration = 67,
+        travelDuration = 74,
     },
     -- Refuge Pointe, Arathi (map 1417 45.79,46.13) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -689,7 +689,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             30,
         },
-        travelDuration = 253,
+        travelDuration = 272,
     },
     -- Refuge Pointe, Arathi (map 1417 45.79,46.13) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
@@ -727,7 +727,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             270,
         },
-        travelDuration = 118,
+        travelDuration = 128,
     },
     -- Refuge Pointe, Arathi (map 1417 45.79,46.13) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
@@ -765,7 +765,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             268,
         },
-        travelDuration = 160,
+        travelDuration = 172,
     },
     -- Hammerfall, Arathi (map 1417 73.06,32.62) -> Undercity, Tirisfal (map 1458 63.09,48.32) via flighttaxi
     {
@@ -803,7 +803,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             32,
         },
-        travelDuration = 243,
+        travelDuration = 260,
     },
     -- Arathi Highlands (map 1417 73.06,32.62) -> Hillsbrad Foothills (map 1424 60.21,18.75) via flighttaxi
     {
@@ -841,7 +841,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             321,
         },
-        travelDuration = 109,
+        travelDuration = 118,
     },
     -- Arathi Highlands (map 1417 73.06,32.62) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -879,7 +879,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             320,
         },
-        travelDuration = 243,
+        travelDuration = 260,
     },
     -- Hammerfall, Arathi (map 1417 73.06,32.62) -> Rog'mar, Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
@@ -917,7 +917,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11581,
         },
-        travelDuration = 305,
+        travelDuration = 306.2,
     },
     -- Hammerfall, Arathi (map 1417 73.06,32.62) -> Revantusk Village, The Hinterlands (map 1425 81.70,81.89) via flighttaxi
     {
@@ -955,7 +955,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             484,
         },
-        travelDuration = 85,
+        travelDuration = 93,
     },
 
     -- Original source zone: Ashenvale (map 1440)
@@ -995,7 +995,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             327,
         },
-        travelDuration = 90,
+        travelDuration = 97,
     },
     -- Ashenvale (map 1440 73.26,61.67) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -1033,7 +1033,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             333,
         },
-        travelDuration = 150,
+        travelDuration = 161,
     },
     -- Splintertree Post, Ashenvale (map 1440 73.26,61.67) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -1071,7 +1071,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             481,
         },
-        travelDuration = 90,
+        travelDuration = 98,
     },
     -- Ashenvale (map 1440 73.26,61.67) -> Ashenvale (map 1440 12.19,33.77) via flighttaxi
     {
@@ -1109,7 +1109,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             351,
         },
-        travelDuration = 156,
+        travelDuration = 168,
     },
 
     -- Original source zone: Azshara (map 1447)
@@ -1149,7 +1149,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             329,
         },
-        travelDuration = 282,
+        travelDuration = 302,
     },
     -- Azshara (map 1447 11.90,77.48) -> Ashenvale (map 1440 34.50,48.01) via flighttaxi
     {
@@ -1187,7 +1187,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             468,
         },
-        travelDuration = 143,
+        travelDuration = 154,
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
@@ -1225,7 +1225,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             446,
         },
-        travelDuration = 226,
+        travelDuration = 242,
     },
     -- Talrendis Point, Azshara (map 1447 11.90,77.48) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
@@ -1263,7 +1263,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             447,
         },
-        travelDuration = 167,
+        travelDuration = 179,
     },
     -- Azshara (map 1447 11.90,77.48) -> Felwood (map 1448 62.46,24.19) via flighttaxi
     {
@@ -1301,7 +1301,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             332,
         },
-        travelDuration = 266,
+        travelDuration = 285,
     },
     -- Azshara (map 1447 11.90,77.48) -> The Barrens (map 1413 63.12,37.11) via flighttaxi
     {
@@ -1339,7 +1339,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             465,
         },
-        travelDuration = 127,
+        travelDuration = 136,
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -1377,7 +1377,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             291,
         },
-        travelDuration = 241,
+        travelDuration = 258,
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
@@ -1415,7 +1415,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             242,
         },
-        travelDuration = 113,
+        travelDuration = 123,
     },
     -- Azshara (map 1447 21.95,49.69) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -1453,7 +1453,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             284,
         },
-        travelDuration = 161,
+        travelDuration = 174,
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
@@ -1491,7 +1491,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             400,
         },
-        travelDuration = 217,
+        travelDuration = 233,
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
@@ -1529,7 +1529,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             500,
         },
-        travelDuration = 122,
+        travelDuration = 133,
     },
     -- Valormok, Azshara (map 1447 21.95,49.69) -> Splintertree Post, Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
@@ -1567,7 +1567,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             482,
         },
-        travelDuration = 87,
+        travelDuration = 96,
     },
 
     -- Original source zone: Burning Steppes (map 1428)
@@ -1607,7 +1607,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             425,
         },
-        travelDuration = 141,
+        travelDuration = 153,
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
@@ -1645,7 +1645,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11587,
         },
-        travelDuration = 123,
+        travelDuration = 125,
     },
     -- Burning Steppes (map 1428 84.38,68.30) -> Blasted Lands (map 1419 65.49,24.43) via flighttaxi
     {
@@ -1683,7 +1683,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             381,
         },
-        travelDuration = 196,
+        travelDuration = 211,
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
@@ -1721,7 +1721,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             470,
         },
-        travelDuration = 59,
+        travelDuration = 65,
     },
     -- Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) -> Thorium Point, Searing Gorge (map 1427 37.89,30.43) via flighttaxi
     {
@@ -1759,7 +1759,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             410,
         },
-        travelDuration = 97,
+        travelDuration = 106,
     },
 
     -- Original source zone: Deadwind Pass (map 1430)
@@ -1799,7 +1799,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             259,
         },
-        travelDuration = 160,
+        travelDuration = 173,
     },
     -- Duskwood (map 1431 77.59,44.38) -> Stormwind City (map 1453 70.98,72.93) via flighttaxi
     {
@@ -1837,7 +1837,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             22,
         },
-        travelDuration = 82,
+        travelDuration = 89,
     },
     -- Duskwood (map 1431 77.59,44.38) -> Blasted Lands (map 1419 65.49,24.43) via flighttaxi
     {
@@ -1875,7 +1875,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             261,
         },
-        travelDuration = 91,
+        travelDuration = 99,
     },
     -- Duskwood (map 1431 77.59,44.38) -> Westfall (map 1436 56.57,52.67) via flighttaxi
     {
@@ -1913,7 +1913,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             252,
         },
-        travelDuration = 87,
+        travelDuration = 94,
     },
     -- Duskwood (map 1431 77.59,44.38) -> Redridge Mountains (map 1433 25.34,58.99) via flighttaxi
     {
@@ -1951,7 +1951,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             258,
         },
-        travelDuration = 56,
+        travelDuration = 62,
     },
 
     -- Original source zone: Desolace (map 1443)
@@ -1991,7 +1991,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             161,
         },
-        travelDuration = 167,
+        travelDuration = 179,
     },
     -- Shadowprey Village, Desolace (map 1443 21.56,74.04) -> Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) via flighttaxi
     {
@@ -2029,7 +2029,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             356,
         },
-        travelDuration = 186,
+        travelDuration = 201,
     },
     -- Shadowprey Village, Desolace (map 1443 21.56,74.04) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -2067,7 +2067,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             376,
         },
-        travelDuration = 184,
+        travelDuration = 197,
     },
     -- Desolace (map 1443 64.67,10.44) -> Darkshore (map 1439 36.40,45.62) via flighttaxi
     {
@@ -2105,7 +2105,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             384,
         },
-        travelDuration = 264,
+        travelDuration = 284,
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
@@ -2143,7 +2143,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             141,
         },
-        travelDuration = 288,
+        travelDuration = 310,
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
@@ -2181,7 +2181,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             477,
         },
-        travelDuration = 112,
+        travelDuration = 121,
     },
     -- Nijel's Point, Desolace (map 1443 64.67,10.44) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
@@ -2219,7 +2219,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             373,
         },
-        travelDuration = 217,
+        travelDuration = 233,
     },
 
     -- Original source zone: Durotar (map 1411)
@@ -2259,7 +2259,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             44,
         },
-        travelDuration = 171,
+        travelDuration = 184,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Orgrimmar (map 1454 45.28,63.75) via flighttaxi
     {
@@ -2297,7 +2297,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             45,
         },
-        travelDuration = 133,
+        travelDuration = 143,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Stonetalon Mountains (map 1442 45.16,59.89) via flighttaxi
     {
@@ -2335,7 +2335,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             279,
         },
-        travelDuration = 140,
+        travelDuration = 151,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
@@ -2373,7 +2373,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             281,
         },
-        travelDuration = 173,
+        travelDuration = 186,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -2411,7 +2411,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             393,
         },
-        travelDuration = 284,
+        travelDuration = 305,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -2449,7 +2449,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             355,
         },
-        travelDuration = 236,
+        travelDuration = 254,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -2487,7 +2487,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             283,
         },
-        travelDuration = 158,
+        travelDuration = 170,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Felwood (map 1448 34.42,53.87) via flighttaxi
     {
@@ -2525,7 +2525,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             287,
         },
-        travelDuration = 238,
+        travelDuration = 255,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
@@ -2563,7 +2563,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             360,
         },
-        travelDuration = 152,
+        travelDuration = 163,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Ashenvale (map 1440 12.19,33.77) via flighttaxi
     {
@@ -2601,7 +2601,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             354,
         },
-        travelDuration = 216,
+        travelDuration = 233,
     },
     -- The Barrens (map 1413 51.50,30.41) -> Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
@@ -2639,7 +2639,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             334,
         },
-        travelDuration = 152,
+        travelDuration = 163,
     },
     -- The Barrens (map 1413 51.50,30.41) -> The Barrens (map 1413 44.46,59.10) via flighttaxi
     {
@@ -2677,7 +2677,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             417,
         },
-        travelDuration = 85,
+        travelDuration = 91,
     },
     -- The Barrens (map 1413 51.50,30.41) -> The Barrens (map 1413 63.12,37.11) via flighttaxi
     {
@@ -2715,7 +2715,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             462,
         },
-        travelDuration = 48,
+        travelDuration = 54,
     },
     -- The Barrens (map 1413 63.12,37.11) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -2753,7 +2753,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             461,
         },
-        travelDuration = 64,
+        travelDuration = 71,
     },
     -- The Barrens (map 1413 63.12,37.11) -> Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
@@ -2791,7 +2791,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             460,
         },
-        travelDuration = 98,
+        travelDuration = 107,
     },
     -- The Barrens (map 1413 63.12,37.11) -> Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -2829,7 +2829,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             466,
         },
-        travelDuration = 124,
+        travelDuration = 133,
     },
 
     -- Original source zone: Dustwallow Marsh (map 1445)
@@ -2869,7 +2869,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             420,
         },
-        travelDuration = 107,
+        travelDuration = 116,
     },
     -- The Barrens (map 1413 44.46,59.10) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -2907,7 +2907,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             416,
         },
-        travelDuration = 74,
+        travelDuration = 80,
     },
     -- The Barrens (map 1413 44.46,59.10) -> Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
@@ -2945,7 +2945,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             421,
         },
-        travelDuration = 117,
+        travelDuration = 127,
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -2983,7 +2983,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             348,
         },
-        travelDuration = 210,
+        travelDuration = 226,
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
@@ -3021,7 +3021,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             336,
         },
-        travelDuration = 203,
+        travelDuration = 218,
     },
     -- Dustwallow Marsh (map 1445 35.57,31.83) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -3059,7 +3059,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             304,
         },
-        travelDuration = 151,
+        travelDuration = 163,
     },
     -- Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -3097,7 +3097,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             390,
         },
-        travelDuration = 208,
+        travelDuration = 224,
     },
     -- Dustwallow Marsh (map 1445 67.46,51.20) -> Darkshore (map 1439 36.40,45.62) via flighttaxi
     {
@@ -3135,7 +3135,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             182,
         },
-        travelDuration = 582,
+        travelDuration = 621,
     },
     -- Dustwallow Marsh (map 1445 67.46,51.20) -> Feralas (map 1444 89.46,45.87) via flighttaxi
     {
@@ -3173,7 +3173,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             56,
         },
-        travelDuration = 153,
+        travelDuration = 164,
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
@@ -3211,7 +3211,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             163,
         },
-        travelDuration = 313,
+        travelDuration = 336,
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
@@ -3249,7 +3249,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             222,
         },
-        travelDuration = 147,
+        travelDuration = 159,
     },
     -- Theramore, Dustwallow Marsh (map 1445 67.46,51.20) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -3287,7 +3287,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             445,
         },
-        travelDuration = 220,
+        travelDuration = 236,
     },
     -- Dustwallow Marsh (map 1445 67.46,51.20) -> The Barrens (map 1413 63.12,37.11) via flighttaxi
     {
@@ -3325,7 +3325,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             464,
         },
-        travelDuration = 108,
+        travelDuration = 116,
     },
 
     -- Original source zone: Eastern Plaguelands (map 1423)
@@ -3365,7 +3365,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             359,
         },
-        travelDuration = 245,
+        travelDuration = 264,
     },
     -- Light's Hope Chapel, Eastern Plaguelands (map 1423 70.45,47.59) -> Revantusk Village, The Hinterlands (map 1425 81.70,81.89) via flighttaxi
     {
@@ -3403,7 +3403,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             474,
         },
-        travelDuration = 132,
+        travelDuration = 142,
     },
     -- Eastern Plaguelands (map 1423 71.70,49.55) -> The Hinterlands (map 1425 11.11,46.09) via flighttaxi
     {
@@ -3441,7 +3441,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             352,
         },
-        travelDuration = 152,
+        travelDuration = 164,
     },
     -- Eastern Plaguelands (map 1423 71.70,49.55) -> Western Plaguelands (map 1422 42.95,84.95) via flighttaxi
     {
@@ -3479,7 +3479,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             432,
         },
-        travelDuration = 140,
+        travelDuration = 152,
     },
     -- Light's Hope Chapel, Eastern Plaguelands (map 1423 71.70,49.55) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -3517,7 +3517,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             437,
         },
-        travelDuration = 345,
+        travelDuration = 371,
     },
 
     -- Original source zone: Felwood (map 1448)
@@ -3557,7 +3557,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             305,
         },
-        travelDuration = 213,
+        travelDuration = 230,
     },
     -- Ashenvale (map 1440 12.19,33.77) -> Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
@@ -3595,7 +3595,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             350,
         },
-        travelDuration = 157,
+        travelDuration = 169,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Teldrassil (map 1438 58.40,93.93) via flighttaxi
     {
@@ -3633,7 +3633,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             101,
         },
-        travelDuration = 79,
+        travelDuration = 86,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Ashenvale (map 1440 34.50,48.01) via flighttaxi
     {
@@ -3671,7 +3671,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             51,
         },
-        travelDuration = 165,
+        travelDuration = 177,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
@@ -3709,7 +3709,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             181,
         },
-        travelDuration = 632,
+        travelDuration = 676,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
@@ -3747,7 +3747,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             59,
         },
-        travelDuration = 170,
+        travelDuration = 183,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Desolace (map 1443 64.67,10.44) via flighttaxi
     {
@@ -3785,7 +3785,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             385,
         },
-        travelDuration = 273,
+        travelDuration = 293,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Feralas (map 1444 30.26,43.32) via flighttaxi
     {
@@ -3823,7 +3823,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             226,
         },
-        travelDuration = 443,
+        travelDuration = 475,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
@@ -3861,7 +3861,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             289,
         },
-        travelDuration = 141,
+        travelDuration = 153,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -3899,7 +3899,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             330,
         },
-        travelDuration = 281,
+        travelDuration = 302,
     },
     -- Darkshore (map 1439 36.40,45.62) -> Felwood (map 1448 62.46,24.19) via flighttaxi
     {
@@ -3937,7 +3937,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             386,
         },
-        travelDuration = 178,
+        travelDuration = 192,
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
@@ -3975,7 +3975,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             341,
         },
-        travelDuration = 242,
+        travelDuration = 261,
     },
     -- Felwood (map 1448 34.42,53.87) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -4013,7 +4013,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             286,
         },
-        travelDuration = 226,
+        travelDuration = 243,
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -4051,7 +4051,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             401,
         },
-        travelDuration = 226,
+        travelDuration = 242,
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
@@ -4089,7 +4089,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             307,
         },
-        travelDuration = 178,
+        travelDuration = 192,
     },
     -- Bloodvenom Post, Felwood (map 1448 34.42,53.87) -> Moonglade (map 1450 32.15,66.33) via flighttaxi
     {
@@ -4127,7 +4127,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             365,
         },
-        travelDuration = 155,
+        travelDuration = 168,
     },
 
     -- Original source zone: Feralas (map 1444)
@@ -4167,7 +4167,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             225,
         },
-        travelDuration = 438,
+        travelDuration = 470,
     },
     -- Feralas (map 1444 30.26,43.32) -> Feralas (map 1444 89.46,45.87) via flighttaxi
     {
@@ -4205,7 +4205,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             326,
         },
-        travelDuration = 145,
+        travelDuration = 156,
     },
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
@@ -4243,7 +4243,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             374,
         },
-        travelDuration = 212,
+        travelDuration = 228,
     },
     -- Feathermoon, Feralas (map 1444 30.26,43.32) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
@@ -4281,7 +4281,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             471,
         },
-        travelDuration = 149,
+        travelDuration = 160,
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -4319,7 +4319,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             227,
         },
-        travelDuration = 243,
+        travelDuration = 260,
     },
     -- Feralas (map 1444 75.43,44.31) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -4357,7 +4357,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             353,
         },
-        travelDuration = 247,
+        travelDuration = 265,
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
@@ -4395,7 +4395,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             486,
         },
-        travelDuration = 100,
+        travelDuration = 108,
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
@@ -4433,7 +4433,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             375,
         },
-        travelDuration = 188,
+        travelDuration = 202,
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -4471,7 +4471,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             391,
         },
-        travelDuration = 188,
+        travelDuration = 202,
     },
     -- Camp Mojache, Feralas (map 1444 75.43,44.31) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
@@ -4509,7 +4509,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             450,
         },
-        travelDuration = 122,
+        travelDuration = 133,
     },
 
     -- Original source zone: Hillsbrad Foothills (map 1424)
@@ -4549,7 +4549,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             274,
         },
-        travelDuration = 69,
+        travelDuration = 75,
     },
     -- Hillsbrad Foothills (map 1424 49.44,52.10) -> The Hinterlands (map 1425 11.11,46.09) via flighttaxi
     {
@@ -4587,7 +4587,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             230,
         },
-        travelDuration = 67,
+        travelDuration = 73,
     },
     -- Hillsbrad Foothills (map 1424 49.44,52.10) -> Western Plaguelands (map 1422 42.95,84.95) via flighttaxi
     {
@@ -4625,7 +4625,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             347,
         },
-        travelDuration = 76,
+        travelDuration = 82,
     },
     -- Southshore, Hillsbrad (map 1424 49.44,52.10) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -4663,7 +4663,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             26,
         },
-        travelDuration = 193,
+        travelDuration = 207,
     },
     -- Southshore, Hillsbrad (map 1424 49.44,52.10) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
@@ -4701,7 +4701,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             272,
         },
-        travelDuration = 103,
+        travelDuration = 112,
     },
 
     -- Original source zone: Ironforge (map 1455)
@@ -4741,7 +4741,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             27,
         },
-        travelDuration = 248,
+        travelDuration = 266,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Refuge Pointe, Arathi (map 1417 45.79,46.13) via flighttaxi
     {
@@ -4779,7 +4779,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             31,
         },
-        travelDuration = 237,
+        travelDuration = 254,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
@@ -4817,7 +4817,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             12,
         },
-        travelDuration = 197,
+        travelDuration = 211,
     },
     -- Ironforge (map 1455 55.89,47.87) -> The Hinterlands (map 1425 11.11,46.09) via flighttaxi
     {
@@ -4855,7 +4855,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             263,
         },
-        travelDuration = 279,
+        travelDuration = 300,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Dun Baldar, Alterac Valley (map 1459 43.14,18.10) via flighttaxi
     {
@@ -4930,7 +4930,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             428,
         },
-        travelDuration = 276,
+        travelDuration = 295,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Light's Hope Chapel, Eastern Plaguelands (map 1423 71.70,49.55) via flighttaxi
     {
@@ -4968,7 +4968,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             438,
         },
-        travelDuration = 326,
+        travelDuration = 351,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Thorium Point, Searing Gorge (map 1427 37.89,30.43) via flighttaxi
     {
@@ -5006,7 +5006,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             404,
         },
-        travelDuration = 81,
+        travelDuration = 88,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
@@ -5044,7 +5044,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             18,
         },
-        travelDuration = 121,
+        travelDuration = 130,
     },
     -- Ironforge, Dun Morogh (map 1455 55.89,47.87) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
@@ -5082,7 +5082,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             16,
         },
-        travelDuration = 95,
+        travelDuration = 102,
     },
 
     -- Original source zone: Loch Modan (map 1432)
@@ -5122,7 +5122,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             267,
         },
-        travelDuration = 153,
+        travelDuration = 165,
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
@@ -5160,7 +5160,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11589,
         },
-        travelDuration = 173,
+        travelDuration = 173.8,
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -5198,7 +5198,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             15,
         },
-        travelDuration = 102,
+        travelDuration = 110,
     },
     -- Thelsamar, Loch Modan (map 1432 33.94,50.79) -> Menethil Harbor, Wetlands (map 1437 9.52,59.66) via flighttaxi
     {
@@ -5236,7 +5236,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             265,
         },
-        travelDuration = 143,
+        travelDuration = 155,
     },
 
     -- Original source zone: Moonglade (map 1450)
@@ -5276,7 +5276,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             364,
         },
-        travelDuration = 147,
+        travelDuration = 159,
     },
     -- Moonglade (map 1450 32.15,66.33) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
@@ -5314,7 +5314,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             366,
         },
-        travelDuration = 133,
+        travelDuration = 143,
     },
     -- Moonglade (map 1450 44.19,45.33) -> Teldrassil (map 1438 58.33,93.86) via flighttaxi
     {
@@ -5485,7 +5485,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             368,
         },
-        travelDuration = 133,
+        travelDuration = 144,
     },
     -- Moonglade (map 1450 47.91,67.11) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
@@ -5523,7 +5523,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             367,
         },
-        travelDuration = 122,
+        travelDuration = 133,
     },
     -- Moonglade (map 1450 47.91,67.11) -> Felwood (map 1448 62.46,24.19) via flighttaxi
     {
@@ -5561,7 +5561,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             479,
         },
-        travelDuration = 57,
+        travelDuration = 62,
     },
 
     -- Original source zone: Mount Hyjal (map 2482)
@@ -5601,7 +5601,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             369,
         },
-        travelDuration = 176,
+        travelDuration = 190,
     },
     -- Felwood (map 1448 62.46,24.19) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
@@ -5639,7 +5639,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             480,
         },
-        travelDuration = 63,
+        travelDuration = 68,
     },
     -- Felwood (map 1448 62.46,24.19) -> Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
@@ -5677,7 +5677,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             371,
         },
-        travelDuration = 113,
+        travelDuration = 123,
     },
     -- Felwood (map 1448 62.46,24.19) -> Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -5715,7 +5715,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             372,
         },
-        travelDuration = 265,
+        travelDuration = 284,
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Everlook, Winterspring (map 1452 62.33,36.64) via flighttaxi
     {
@@ -5753,7 +5753,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11529,
         },
-        travelDuration = 117,
+        travelDuration = 118,
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
@@ -5791,7 +5791,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11526,
         },
-        travelDuration = 124,
+        travelDuration = 126,
     },
     -- Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) -> Summit of Eternity, Mount Hyjal (map 2482 68.64,44.11) via flighttaxi
     {
@@ -5824,7 +5824,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11528,
         },
-        travelDuration = 58,
+        travelDuration = 59.8,
     },
     -- Summit of Eternity, Mount Hyjal (map 2482 68.64,44.11) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
@@ -5857,7 +5857,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11524,
         },
-        travelDuration = 58,
+        travelDuration = 60.3,
     },
 
     -- Original source zone: Orgrimmar (map 1454)
@@ -5897,7 +5897,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             42,
         },
-        travelDuration = 211,
+        travelDuration = 226,
     },
     -- Orgrimmar (map 1454 45.28,63.75) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -5935,7 +5935,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             47,
         },
-        travelDuration = 103,
+        travelDuration = 111,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -5973,7 +5973,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             224,
         },
-        travelDuration = 391,
+        travelDuration = 419,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -6011,7 +6011,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             243,
         },
-        travelDuration = 93,
+        travelDuration = 101,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
@@ -6049,7 +6049,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             338,
         },
-        travelDuration = 236,
+        travelDuration = 254,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Everlook, Winterspring (map 1452 60.49,36.34) via flighttaxi
     {
@@ -6087,7 +6087,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             399,
         },
-        travelDuration = 299,
+        travelDuration = 320,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
@@ -6125,7 +6125,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             335,
         },
-        travelDuration = 214,
+        travelDuration = 230,
     },
     -- Orgrimmar, Durotar (map 1454 45.28,63.75) -> Splintertree Post, Ashenvale (map 1440 73.26,61.67) via flighttaxi
     {
@@ -6163,7 +6163,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             328,
         },
-        travelDuration = 84,
+        travelDuration = 90,
     },
 
     -- Original source zone: Redridge Mountains (map 1433)
@@ -6203,7 +6203,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             257,
         },
-        travelDuration = 57,
+        travelDuration = 62,
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
@@ -6241,7 +6241,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             8,
         },
-        travelDuration = 105,
+        travelDuration = 115,
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Farholde Keep, Riverglades (map 2548 60.59,81.57) via flighttaxi
     {
@@ -6279,7 +6279,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11585,
         },
-        travelDuration = 124,
+        travelDuration = 125.8,
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
@@ -6317,7 +6317,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             254,
         },
-        travelDuration = 125,
+        travelDuration = 135,
     },
     -- Lakeshire, Redridge (map 1433 25.34,58.99) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
@@ -6355,7 +6355,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             469,
         },
-        travelDuration = 57,
+        travelDuration = 62,
     },
 
     -- Original source zone: Riverglades (map 2548)
@@ -6395,7 +6395,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11580,
         },
-        travelDuration = 308,
+        travelDuration = 308.7,
     },
     -- Riverglades (map 2548 59.61,45.06) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -6433,7 +6433,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11576,
         },
-        travelDuration = 113,
+        travelDuration = 113.7,
     },
     -- Rog'mar, Riverglades (map 2548 59.61,45.06) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
@@ -6471,7 +6471,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11574,
         },
-        travelDuration = 144,
+        travelDuration = 146.5,
     },
     -- Riverglades (map 2548 59.61,45.06) -> Burning Steppes (map 1428 65.58,24.22) via flighttaxi
     {
@@ -6509,7 +6509,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11578,
         },
-        travelDuration = 125,
+        travelDuration = 126.8,
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
@@ -6547,7 +6547,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11584,
         },
-        travelDuration = 122,
+        travelDuration = 124.4,
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
@@ -6585,7 +6585,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11586,
         },
-        travelDuration = 115,
+        travelDuration = 116.9,
     },
     -- Farholde Keep, Riverglades (map 2548 60.59,81.57) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
@@ -6623,7 +6623,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11588,
         },
-        travelDuration = 162,
+        travelDuration = 163.3,
     },
 
     -- Original source zone: Searing Gorge (map 1427)
@@ -6663,7 +6663,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             407,
         },
-        travelDuration = 65,
+        travelDuration = 71,
     },
     -- Searing Gorge (map 1427 34.83,30.58) -> Burning Steppes (map 1428 65.58,24.22) via flighttaxi
     {
@@ -6701,7 +6701,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             409,
         },
-        travelDuration = 72,
+        travelDuration = 79,
     },
     -- Thorium Point, Searing Gorge (map 1427 37.89,30.43) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -6739,7 +6739,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             402,
         },
-        travelDuration = 88,
+        travelDuration = 95,
     },
     -- Thorium Point, Searing Gorge (map 1427 37.89,30.43) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
@@ -6777,7 +6777,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             411,
         },
-        travelDuration = 90,
+        travelDuration = 98,
     },
     -- Badlands (map 1418 4.06,44.89) -> Undercity (map 1458 63.09,48.32) via flighttaxi
     {
@@ -6815,7 +6815,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             38,
         },
-        travelDuration = 466,
+        travelDuration = 498,
     },
     -- Badlands (map 1418 4.06,44.89) -> Arathi Highlands (map 1417 73.06,32.62) via flighttaxi
     {
@@ -6853,7 +6853,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             319,
         },
-        travelDuration = 246,
+        travelDuration = 264,
     },
     -- Badlands (map 1418 4.06,44.89) -> Stranglethorn Vale (map 1434 26.82,77.00) via flighttaxi
     {
@@ -6891,7 +6891,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             37,
         },
-        travelDuration = 390,
+        travelDuration = 419,
     },
     -- Badlands (map 1418 4.06,44.89) -> Stranglethorn Vale (map 1434 32.51,29.28) via flighttaxi
     {
@@ -6929,7 +6929,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             362,
         },
-        travelDuration = 293,
+        travelDuration = 315,
     },
     -- Badlands (map 1418 4.06,44.89) -> Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
@@ -6967,7 +6967,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11577,
         },
-        travelDuration = 119,
+        travelDuration = 120.4,
     },
     -- Badlands (map 1418 4.06,44.89) -> Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
@@ -7005,7 +7005,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             317,
         },
-        travelDuration = 263,
+        travelDuration = 282,
     },
     -- Badlands (map 1418 4.06,44.89) -> Burning Steppes (map 1428 65.58,24.22) via flighttaxi
     {
@@ -7043,7 +7043,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             378,
         },
-        travelDuration = 81,
+        travelDuration = 89,
     },
     -- Badlands (map 1418 4.06,44.89) -> Searing Gorge (map 1427 34.83,30.58) via flighttaxi
     {
@@ -7081,7 +7081,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             406,
         },
-        travelDuration = 53,
+        travelDuration = 57,
     },
     -- Burning Steppes (map 1428 65.58,24.22) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -7119,7 +7119,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             377,
         },
-        travelDuration = 94,
+        travelDuration = 101,
     },
     -- Burning Steppes (map 1428 65.58,24.22) -> Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
@@ -7157,7 +7157,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11579,
         },
-        travelDuration = 129,
+        travelDuration = 130.5,
     },
     -- Burning Steppes (map 1428 65.58,24.22) -> Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
@@ -7195,7 +7195,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             379,
         },
-        travelDuration = 199,
+        travelDuration = 214,
     },
     -- Burning Steppes (map 1428 65.58,24.22) -> Searing Gorge (map 1427 34.83,30.58) via flighttaxi
     {
@@ -7233,7 +7233,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             408,
         },
-        travelDuration = 67,
+        travelDuration = 74,
     },
 
     -- Original source zone: Silithus (map 1451)
@@ -7273,7 +7273,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             423,
         },
-        travelDuration = 226,
+        travelDuration = 242,
     },
     -- Cenarion Hold, Silithus (map 1451 48.83,36.72) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -7311,7 +7311,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             449,
         },
-        travelDuration = 122,
+        travelDuration = 130,
     },
     -- Cenarion Hold, Silithus (map 1451 48.83,36.72) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
@@ -7349,7 +7349,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             456,
         },
-        travelDuration = 91,
+        travelDuration = 99,
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Gadgetzan, Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
@@ -7387,7 +7387,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             424,
         },
-        travelDuration = 177,
+        travelDuration = 190,
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Feathermoon, Feralas (map 1444 30.26,43.32) via flighttaxi
     {
@@ -7425,7 +7425,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             451,
         },
-        travelDuration = 164,
+        travelDuration = 176,
     },
     -- Cenarion Hold, Silithus (map 1451 50.68,34.59) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
@@ -7463,7 +7463,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             457,
         },
-        travelDuration = 86,
+        travelDuration = 93,
     },
 
     -- Original source zone: Silverpine Forest (map 1421)
@@ -7503,7 +7503,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             21,
         },
-        travelDuration = 105,
+        travelDuration = 114,
     },
     -- Silverpine Forest (map 1421 45.56,42.42) -> Hillsbrad Foothills (map 1424 60.21,18.75) via flighttaxi
     {
@@ -7541,7 +7541,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             440,
         },
-        travelDuration = 90,
+        travelDuration = 97,
     },
 
     -- Original source zone: Stonetalon Mountains (map 1442)
@@ -7581,7 +7581,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             58,
         },
-        travelDuration = 166,
+        travelDuration = 179,
     },
     -- Stonetalon Mountains (map 1442 36.54,7.23) -> Ashenvale (map 1440 34.50,48.01) via flighttaxi
     {
@@ -7619,7 +7619,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             444,
         },
-        travelDuration = 144,
+        travelDuration = 156,
     },
     -- Stonetalon Peak, Stonetalon Mountains (map 1442 36.54,7.23) -> Nijel's Point, Desolace (map 1443 64.67,10.44) via flighttaxi
     {
@@ -7657,7 +7657,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             478,
         },
-        travelDuration = 119,
+        travelDuration = 127,
     },
     -- Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -7695,7 +7695,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             52,
         },
-        travelDuration = 163,
+        travelDuration = 177,
     },
     -- Stonetalon Mountains (map 1442 45.16,59.89) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -7733,7 +7733,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             280,
         },
-        travelDuration = 140,
+        travelDuration = 151,
     },
     -- Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
@@ -7771,7 +7771,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             358,
         },
-        travelDuration = 134,
+        travelDuration = 145,
     },
     -- Ashenvale (map 1440 34.50,48.01) -> Darkshore (map 1439 36.40,45.62) via flighttaxi
     {
@@ -7809,7 +7809,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             50,
         },
-        travelDuration = 138,
+        travelDuration = 149,
     },
     -- Ashenvale (map 1440 34.50,48.01) -> Stonetalon Mountains (map 1442 36.54,7.23) via flighttaxi
     {
@@ -7847,7 +7847,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             443,
         },
-        travelDuration = 144,
+        travelDuration = 155,
     },
     -- Ashenvale (map 1440 34.50,48.01) -> Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -7885,7 +7885,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             467,
         },
-        travelDuration = 138,
+        travelDuration = 151,
     },
 
     -- Original source zone: Stormwind City (map 1453)
@@ -7925,7 +7925,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             23,
         },
-        travelDuration = 108,
+        travelDuration = 117,
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Booty Bay, Stranglethorn (map 1434 27.53,77.67) via flighttaxi
     {
@@ -7963,7 +7963,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             40,
         },
-        travelDuration = 229,
+        travelDuration = 247,
     },
     -- Stormwind City (map 1453 70.98,72.93) -> Blasted Lands (map 1419 65.49,24.43) via flighttaxi
     {
@@ -8001,7 +8001,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             245,
         },
-        travelDuration = 165,
+        travelDuration = 178,
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
@@ -8039,7 +8039,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             6,
         },
-        travelDuration = 72,
+        travelDuration = 79,
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
@@ -8077,7 +8077,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             9,
         },
-        travelDuration = 105,
+        travelDuration = 115,
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -8115,7 +8115,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             13,
         },
-        travelDuration = 242,
+        travelDuration = 260,
     },
     -- Stormwind, Elwynn (map 1453 70.98,72.93) -> Morgan's Vigil, Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
@@ -8153,7 +8153,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             427,
         },
-        travelDuration = 147,
+        travelDuration = 159,
     },
 
     -- Original source zone: Stranglethorn Vale (map 1434)
@@ -8193,7 +8193,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             35,
         },
-        travelDuration = 95,
+        travelDuration = 103,
     },
     -- Stranglethorn Vale (map 1434 26.82,77.00) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -8231,7 +8231,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             36,
         },
-        travelDuration = 381,
+        travelDuration = 408,
     },
     -- Booty Bay, Stranglethorn (map 1434 26.82,77.00) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
@@ -8269,7 +8269,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             82,
         },
-        travelDuration = 250,
+        travelDuration = 268,
     },
     -- Stranglethorn Vale (map 1434 27.53,77.67) -> Duskwood (map 1431 77.59,44.38) via flighttaxi
     {
@@ -8307,7 +8307,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             260,
         },
-        travelDuration = 164,
+        travelDuration = 177,
     },
     -- Booty Bay, Stranglethorn (map 1434 27.53,77.67) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
@@ -8345,7 +8345,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             41,
         },
-        travelDuration = 206,
+        travelDuration = 222,
     },
     -- Booty Bay, Stranglethorn (map 1434 27.53,77.67) -> Sentinel Hill, Westfall (map 1436 56.57,52.67) via flighttaxi
     {
@@ -8383,7 +8383,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             256,
         },
-        travelDuration = 170,
+        travelDuration = 183,
     },
     -- Grom'gol, Stranglethorn (map 1434 32.51,29.28) -> Booty Bay, Stranglethorn (map 1434 26.82,77.00) via flighttaxi
     {
@@ -8421,7 +8421,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             34,
         },
-        travelDuration = 76,
+        travelDuration = 82,
     },
     -- Stranglethorn Vale (map 1434 32.51,29.28) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -8459,7 +8459,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             361,
         },
-        travelDuration = 306,
+        travelDuration = 329,
     },
     -- Grom'gol, Stranglethorn (map 1434 32.51,29.28) -> Stonard, Swamp of Sorrows (map 1435 46.05,54.68) via flighttaxi
     {
@@ -8497,7 +8497,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             344,
         },
-        travelDuration = 192,
+        travelDuration = 206,
     },
 
     -- Original source zone: Swamp of Sorrows (map 1435)
@@ -8537,7 +8537,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             121,
         },
-        travelDuration = 244,
+        travelDuration = 261,
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Grom'gol, Stranglethorn (map 1434 32.51,29.28) via flighttaxi
     {
@@ -8575,7 +8575,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             343,
         },
-        travelDuration = 176,
+        travelDuration = 190,
     },
     -- Swamp of Sorrows (map 1435 46.05,54.68) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -8613,7 +8613,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             318,
         },
-        travelDuration = 267,
+        travelDuration = 287,
     },
     -- Stonard, Swamp of Sorrows (map 1435 46.05,54.68) -> Rog'mar, Riverglades (map 2548 59.61,45.06) via flighttaxi
     {
@@ -8651,7 +8651,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11575,
         },
-        travelDuration = 159,
+        travelDuration = 160.9,
     },
     -- Swamp of Sorrows (map 1435 46.05,54.68) -> Burning Steppes (map 1428 65.58,24.22) via flighttaxi
     {
@@ -8689,7 +8689,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             380,
         },
-        travelDuration = 185,
+        travelDuration = 198,
     },
     -- Blasted Lands (map 1419 65.49,24.43) -> Duskwood (map 1431 77.59,44.38) via flighttaxi
     {
@@ -8727,7 +8727,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             262,
         },
-        travelDuration = 86,
+        travelDuration = 93,
     },
     -- Blasted Lands (map 1419 65.49,24.43) -> Stormwind City (map 1453 70.98,72.93) via flighttaxi
     {
@@ -8765,7 +8765,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             244,
         },
-        travelDuration = 177,
+        travelDuration = 191,
     },
     -- Blasted Lands (map 1419 65.49,24.43) -> Burning Steppes (map 1428 84.38,68.30) via flighttaxi
     {
@@ -8803,7 +8803,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             382,
         },
-        travelDuration = 195,
+        travelDuration = 208,
     },
 
     -- Original source zone: Tanaris (map 1446)
@@ -8843,7 +8843,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             323,
         },
-        travelDuration = 166,
+        travelDuration = 178,
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Theramore, Dustwallow Marsh (map 1445 67.46,51.20) via flighttaxi
     {
@@ -8881,7 +8881,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             201,
         },
-        travelDuration = 144,
+        travelDuration = 156,
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
@@ -8919,7 +8919,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             394,
         },
-        travelDuration = 185,
+        travelDuration = 198,
     },
     -- Gadgetzan, Tanaris (map 1446 50.95,29.33) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
@@ -8957,7 +8957,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             458,
         },
-        travelDuration = 97,
+        travelDuration = 105,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -8995,7 +8995,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             311,
         },
-        travelDuration = 285,
+        travelDuration = 305,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Orgrimmar, Durotar (map 1454 45.28,63.75) via flighttaxi
     {
@@ -9033,7 +9033,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             223,
         },
-        travelDuration = 328,
+        travelDuration = 352,
     },
     -- Tanaris (map 1446 51.62,25.52) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -9071,7 +9071,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             392,
         },
-        travelDuration = 282,
+        travelDuration = 303,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
@@ -9109,7 +9109,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             310,
         },
-        travelDuration = 81,
+        travelDuration = 88,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -9147,7 +9147,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             389,
         },
-        travelDuration = 187,
+        travelDuration = 201,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
@@ -9185,7 +9185,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             388,
         },
-        travelDuration = 208,
+        travelDuration = 224,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
@@ -9223,7 +9223,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             395,
         },
-        travelDuration = 218,
+        travelDuration = 234,
     },
     -- Gadgetzan, Tanaris (map 1446 51.62,25.52) -> Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) via flighttaxi
     {
@@ -9261,7 +9261,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             459,
         },
-        travelDuration = 101,
+        travelDuration = 110,
     },
 
     -- Original source zone: Teldrassil (map 1438)
@@ -9301,7 +9301,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             102,
         },
-        travelDuration = 80,
+        travelDuration = 88,
     },
 
     -- Original source zone: The Hinterlands (map 1425)
@@ -9341,7 +9341,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             415,
         },
-        travelDuration = 267,
+        travelDuration = 286,
     },
     -- The Hinterlands (map 1425 81.70,81.89) -> Hillsbrad Foothills (map 1424 60.21,18.75) via flighttaxi
     {
@@ -9379,7 +9379,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             412,
         },
-        travelDuration = 149,
+        travelDuration = 161,
     },
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
@@ -9417,7 +9417,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             485,
         },
-        travelDuration = 87,
+        travelDuration = 95,
     },
     -- Revantusk Village, The Hinterlands (map 1425 81.70,81.89) -> Light's Hope Chapel, Eastern Plaguelands (map 1423 70.45,47.59) via flighttaxi
     {
@@ -9455,7 +9455,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             473,
         },
-        travelDuration = 130,
+        travelDuration = 140,
     },
 
     -- Original source zone: Thousand Needles (map 1441)
@@ -9495,7 +9495,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             57,
         },
-        travelDuration = 149,
+        travelDuration = 161,
     },
     -- Feralas (map 1444 89.46,45.87) -> Tanaris (map 1446 50.95,29.33) via flighttaxi
     {
@@ -9533,7 +9533,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             324,
         },
-        travelDuration = 160,
+        travelDuration = 172,
     },
     -- Feralas (map 1444 89.46,45.87) -> Feralas (map 1444 30.26,43.32) via flighttaxi
     {
@@ -9571,7 +9571,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             325,
         },
-        travelDuration = 167,
+        travelDuration = 180,
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Thunder Bluff, Mulgore (map 1456 46.65,49.90) via flighttaxi
     {
@@ -9609,7 +9609,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             54,
         },
-        travelDuration = 211,
+        travelDuration = 226,
     },
     -- Thousand Needles (map 1441 45.02,49.13) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -9647,7 +9647,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             282,
         },
-        travelDuration = 182,
+        travelDuration = 196,
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -9685,7 +9685,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             308,
         },
-        travelDuration = 87,
+        travelDuration = 94,
     },
     -- Freewind Post, Thousand Needles (map 1441 45.02,49.13) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -9723,7 +9723,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             487,
         },
-        travelDuration = 115,
+        travelDuration = 125,
     },
     -- Thousand Needles (map 1441 45.02,49.13) -> The Barrens (map 1413 44.46,59.10) via flighttaxi
     {
@@ -9761,7 +9761,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             422,
         },
-        travelDuration = 128,
+        travelDuration = 139,
     },
 
     -- Original source zone: Thunder Bluff (map 1456)
@@ -9801,7 +9801,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             387,
         },
-        travelDuration = 194,
+        travelDuration = 209,
     },
     -- Thunder Bluff (map 1456 46.65,49.90) -> The Barrens (map 1413 51.50,30.41) via flighttaxi
     {
@@ -9839,7 +9839,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             46,
         },
-        travelDuration = 149,
+        travelDuration = 161,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Sun Rock Retreat, Stonetalon Mountains (map 1442 45.16,59.89) via flighttaxi
     {
@@ -9877,7 +9877,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             53,
         },
-        travelDuration = 170,
+        travelDuration = 184,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Freewind Post, Thousand Needles (map 1441 45.02,49.13) via flighttaxi
     {
@@ -9915,7 +9915,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             55,
         },
-        travelDuration = 191,
+        travelDuration = 205,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Shadowprey Village, Desolace (map 1443 21.56,74.04) via flighttaxi
     {
@@ -9953,7 +9953,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             162,
         },
-        travelDuration = 148,
+        travelDuration = 160,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -9991,7 +9991,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             309,
         },
-        travelDuration = 272,
+        travelDuration = 291,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Camp Mojache, Feralas (map 1444 75.43,44.31) via flighttaxi
     {
@@ -10029,7 +10029,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             228,
         },
-        travelDuration = 236,
+        travelDuration = 253,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -10067,7 +10067,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             290,
         },
-        travelDuration = 252,
+        travelDuration = 270,
     },
     -- Thunder Bluff, Mulgore (map 1456 46.65,49.90) -> Brackenwall Village, Dustwallow Marsh (map 1445 35.57,31.83) via flighttaxi
     {
@@ -10105,7 +10105,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             345,
         },
-        travelDuration = 223,
+        travelDuration = 241,
     },
     -- Thunder Bluff (map 1456 46.65,49.90) -> The Barrens (map 1413 44.46,59.10) via flighttaxi
     {
@@ -10143,7 +10143,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             419,
         },
-        travelDuration = 81,
+        travelDuration = 89,
     },
 
     -- Original source zone: Un'Goro Crater (map 1449)
@@ -10183,7 +10183,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             452,
         },
-        travelDuration = 97,
+        travelDuration = 105,
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Gadgetzan, Tanaris (map 1446 51.62,25.52) via flighttaxi
     {
@@ -10221,7 +10221,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             453,
         },
-        travelDuration = 106,
+        travelDuration = 115,
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Cenarion Hold, Silithus (map 1451 48.83,36.72) via flighttaxi
     {
@@ -10259,7 +10259,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             454,
         },
-        travelDuration = 94,
+        travelDuration = 102,
     },
     -- Marshal's Refuge, Un'Goro Crater (map 1449 45.30,5.97) -> Cenarion Hold, Silithus (map 1451 50.68,34.59) via flighttaxi
     {
@@ -10297,7 +10297,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             455,
         },
-        travelDuration = 88,
+        travelDuration = 95,
     },
 
     -- Original source zone: Undercity (map 1458)
@@ -10337,7 +10337,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             20,
         },
-        travelDuration = 99,
+        travelDuration = 108,
     },
     -- Undercity (map 1458 63.09,48.32) -> Hillsbrad Foothills (map 1424 60.21,18.75) via flighttaxi
     {
@@ -10375,7 +10375,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             25,
         },
-        travelDuration = 132,
+        travelDuration = 142,
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Hammerfall, Arathi (map 1417 73.06,32.62) via flighttaxi
     {
@@ -10413,7 +10413,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             33,
         },
-        travelDuration = 282,
+        travelDuration = 302,
     },
     -- Undercity (map 1458 63.09,48.32) -> Badlands (map 1418 4.06,44.89) via flighttaxi
     {
@@ -10451,7 +10451,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             39,
         },
-        travelDuration = 470,
+        travelDuration = 489,
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Frostwolf Keep, Alterac Valley (map 1459 49.58,85.69) via flighttaxi
     {
@@ -10526,7 +10526,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             357,
         },
-        travelDuration = 245,
+        travelDuration = 263,
     },
     -- Undercity, Tirisfal (map 1458 63.09,48.32) -> Revantusk Village, The Hinterlands (map 1425 81.70,81.89) via flighttaxi
     {
@@ -10564,7 +10564,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             414,
         },
-        travelDuration = 267,
+        travelDuration = 286,
     },
 
     -- Original source zone: Western Plaguelands (map 1422)
@@ -10706,7 +10706,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             250,
         },
-        travelDuration = 91,
+        travelDuration = 98,
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Booty Bay, Stranglethorn (map 1434 27.53,77.67) via flighttaxi
     {
@@ -10744,7 +10744,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             255,
         },
-        travelDuration = 174,
+        travelDuration = 187,
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Stormwind, Elwynn (map 1453 70.98,72.93) via flighttaxi
     {
@@ -10782,7 +10782,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             7,
         },
-        travelDuration = 76,
+        travelDuration = 87,
     },
     -- Sentinel Hill, Westfall (map 1436 56.57,52.67) -> Lakeshire, Redridge (map 1433 25.34,58.99) via flighttaxi
     {
@@ -10820,7 +10820,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             249,
         },
-        travelDuration = 122,
+        travelDuration = 132,
     },
 
     -- Original source zone: Wetlands (map 1437)
@@ -10860,7 +10860,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             271,
         },
-        travelDuration = 100,
+        travelDuration = 109,
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Refuge Pointe, Arathi (map 1417 45.79,46.13) via flighttaxi
     {
@@ -10898,7 +10898,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             269,
         },
-        travelDuration = 106,
+        travelDuration = 115,
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Ironforge, Dun Morogh (map 1455 55.89,47.87) via flighttaxi
     {
@@ -10936,7 +10936,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             17,
         },
-        travelDuration = 83,
+        travelDuration = 91,
     },
     -- Menethil Harbor, Wetlands (map 1437 9.52,59.66) -> Thelsamar, Loch Modan (map 1432 33.94,50.79) via flighttaxi
     {
@@ -10974,7 +10974,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             266,
         },
-        travelDuration = 152,
+        travelDuration = 165,
     },
 
     -- Original source zone: Winterspring (map 1452)
@@ -11014,7 +11014,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             398,
         },
-        travelDuration = 285,
+        travelDuration = 305,
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
@@ -11052,7 +11052,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11525,
         },
-        travelDuration = 127,
+        travelDuration = 129.4,
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Valormok, Azshara (map 1447 21.95,49.69) via flighttaxi
     {
@@ -11090,7 +11090,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             499,
         },
-        travelDuration = 127,
+        travelDuration = 137,
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Bloodvenom Post, Felwood (map 1448 34.42,53.87) via flighttaxi
     {
@@ -11128,7 +11128,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             306,
         },
-        travelDuration = 183,
+        travelDuration = 197,
     },
     -- Everlook, Winterspring (map 1452 60.49,36.34) -> Moonglade (map 1450 32.15,66.33) via flighttaxi
     {
@@ -11166,7 +11166,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             363,
         },
-        travelDuration = 125,
+        travelDuration = 135,
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Tainted Foothills, Mount Hyjal (map 2482 55.10,82.55) via flighttaxi
     {
@@ -11204,7 +11204,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             11530,
         },
-        travelDuration = 127,
+        travelDuration = 127.8,
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Moonglade (map 1450 47.91,67.11) via flighttaxi
     {
@@ -11242,7 +11242,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             298,
         },
-        travelDuration = 114,
+        travelDuration = 124,
     },
     -- Everlook, Winterspring (map 1452 62.33,36.64) -> Talrendis Point, Azshara (map 1447 11.90,77.48) via flighttaxi
     {
@@ -11280,7 +11280,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             448,
         },
-        travelDuration = 165,
+        travelDuration = 177,
     },
     -- Winterspring (map 1452 62.33,36.64) -> Felwood (map 1448 62.46,24.19) via flighttaxi
     {
@@ -11318,7 +11318,7 @@ local FLIGHTTAXI = {
         taxiPathIDs = {
             339,
         },
-        travelDuration = 115,
+        travelDuration = 124,
     },
 
     -- Riverglades (map 2548 76.80,52.99) -> Riverglades (map 2548 60.59,81.57) via flighttaxi
