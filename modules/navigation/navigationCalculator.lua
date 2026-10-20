@@ -23,8 +23,8 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 local MOVEMENT_SPEEDS = {
     walking = 7,
-    ground = 14,
-    fastGround = 21,
+    ground = 11.2,
+    fastGround = 14,
     steadyFlight = 29,
     fastSteadyFlight = 35,
     skyriding = 50,
