@@ -28,7 +28,8 @@
 ---@field frames table<string, MapPinEnhancedSavedFramePosition>?
 ---@field notificationOffsetY number? Shared notification offset from the top of UIParent.
 ---@field hearthstoneDestinations table<string, NavigationHearthstoneDestination>? Character-scoped home bind coordinates.
----@field toyGossipOptions table<string, table<number, boolean>>? Character-scoped toy destination availability
+---@field campDestinations table<string, NavigationCampDestination>? Character-scoped observed Vulpera camps.
+---@field toyGossipOptions table<string, table<number, boolean>>? Character-scoped toy/spell destination availability by globally unique gossip option ID; historical key retained.
 ---@field hearthstoneToys table<string, number>? Character-scoped last successfully used home-bind toy item IDs.
 ---@field navigationEquipment table<string, table<integer, NavigationEquipmentRestore>>? Character-scoped pending travel-gear restoration by equipment slot.
 MapPinEnhancedDB = {}

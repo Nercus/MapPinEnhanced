@@ -517,7 +517,7 @@ end
 function MapPinEnhancedWayfinderFloatingMixin:OnHide()
     self:StopTracking()
     -- Ancestor hiding suspends updates without discarding the active target.
-    if self:IsShown() then return end
+    --if self:IsShown() then return end
     self:ShutdownNavigationFrame()
     self:SetDestinationText(nil, nil)
     self:Reset()

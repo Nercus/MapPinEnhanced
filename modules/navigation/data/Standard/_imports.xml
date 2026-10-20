@@ -12,6 +12,7 @@
     <Script file="portalApproaches.lua" />
     <Script file="ship.lua" />
     <Script file="spell.lua" />
+    <Script file="moleMachine.lua" />
     <Script file="toy.lua" />
     <Script file="tram.lua" />
     <Script file="walk.lua" />

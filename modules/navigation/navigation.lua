@@ -275,7 +275,7 @@ end
 function Navigation:UseDirectDestination(owner, destinationID, changeNumber)
     if not self:IsDestinationActive(owner, destinationID, changeNumber) then return end
     self.activeDestination.directGuidance = true
-    self:CancelToyTravel()
+    self:CancelActionTravel()
     self:CancelRouteCalculation(self.activeCalculation)
     self.progression = nil
     self:ApplyDirectDestination(true)
@@ -490,7 +490,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
             destinationData.title or "", destinationData.description)
         return active.changeNumber
     end
-    self:CancelToyTravel()
+    self:CancelActionTravel()
     self:CancelRouteCalculation(self.activeCalculation)
     self:DeactivatePathHandler()
     self:RestoreActionEquipment()
@@ -701,7 +701,7 @@ function Navigation:ClearDestination(owner, destinationID, changeNumber)
     local destination = self.activeDestination
     if destination and destination.objectiveAreaExitTimer then destination.objectiveAreaExitTimer:Cancel() end
     self:CancelRouteCalculation(self.activeCalculation)
-    self:CancelToyTravel()
+    self:CancelActionTravel()
     self:DeactivatePathHandler()
     self.activeCalculation = nil
     self.activeDestination = nil
@@ -728,7 +728,7 @@ function Navigation:Recalculate(changeNumber)
     return true
 end
 
-function Navigation:RefreshHearthstoneRoute()
+function Navigation:RefreshDynamicDestinationRoute()
     self:CancelRouteCalculation(self.activeCalculation)
     self.activeCalculation = nil
     self:DeactivatePathHandler()
@@ -922,6 +922,7 @@ function Navigation:PublishStep(progression)
     local fromPointIndex = graph.pathFromPointIndexes[pathReference]
     local toPointIndex = graph.pathToPointIndexes[pathReference]
     local targetPointIndex = toPointIndex
+    local isSummonedSpell = pathType == "spell" and graph.pathHandlerData[pathReference] ~= nil
     ---@type WayfinderTargetArrival?
     local onArrival
 
@@ -932,7 +933,8 @@ function Navigation:PublishStep(progression)
             self:ApplyProgressionPhase(progression, "ready")
         end
     elseif pathType == "floor" or pathType == "border" or pathType == "lift" or self:IsMovementPath(pathType) or
-        progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" then
+        progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" and
+            not isSummonedSpell then
         onArrival = function()
             self:CompleteCurrentPath(progression)
         end
@@ -1056,6 +1058,9 @@ function Navigation:CheckCurrentPathCompletion(identity)
     local toPointIndex = graph.pathToPointIndexes[pathReference]
     local fromPointIndex = graph.pathFromPointIndexes[pathReference]
     local pathType = graph.pathTypes[pathReference]
+    -- Summoning a spell menu and selecting an option do not prove teleportation.
+    -- Its travel observer replans only after loading, or on bounded expiry.
+    if pathType == "spell" and graph.pathHandlerData[pathReference] then return end
     -- Lifts visit the walk-on and walk-off points in order. The broad transition
     -- vicinity below cannot skip either point or complete at the lift shaft.
     if pathType == "lift" then return end
@@ -1210,6 +1215,7 @@ end
 ---@param _nextUpdateInterval number
 ---@param movementState DistanceMovementState
 function Navigation:OnDistanceSample(distance, _timeToTarget, _closingSpeed, _nextUpdateInterval, movementState)
+    if self:ObserveActionTravelPosition() then return end
     if RefreshNativeTraversal() then return end
     if self.activeDestination and self.activeDestination.insideObjectiveArea then
         RefreshObjectiveAreaPresentation(self.activeDestination)
@@ -1942,6 +1948,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     Navigation:BuildGraph()
     MapPinEnhanced:CallRestricted(function()
         Navigation:SetupHearthstoneDestination()
+        Navigation:SetupCampDestination()
     end)
     Navigation:SetupPathHandlers()
     Navigation:SetupEligibilityRefresh()
@@ -1954,7 +1961,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
 end)
 
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
-    Navigation:CancelToyTravel()
+    Navigation:CancelActionTravel()
     Navigation.routeNavigationEnabled = value == true
     if Navigation.routeNavigationEnabled then
         Navigation:StartCalculation()

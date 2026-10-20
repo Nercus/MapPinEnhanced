@@ -26,7 +26,10 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@class NavigationStaticGossip
 ---@field npcID number
 ---@field gossipOptionID number
+---@field parentOptionID number? Category option preceding a destination submenu
+---@field destinationNameKey string? Localized destination option label when the map name differs
 ---@field requiresObservation boolean? Require positive character-specific menu observation
+---@field unlockQuestID number? Completed destination unlock also satisfies the observation gate
 
 ---@class NavigationRequirementCheck
 ---@field operation "check"
@@ -61,6 +64,7 @@ local preparationFailure ---@type string?
 local profilePreparation ---@type ProfilerPreparation?
 --@end-debug@
 local hearthstonePathReferences = {} ---@type integer[]
+local campPathReferences = {} ---@type integer[]
 local hasBuffRequirements = false
 local observedMovementCapabilities ---@type NavigationMovementCapabilities?
 
@@ -357,6 +361,20 @@ function Navigation:BuildGraph()
         table.insert(hearthstonePathReferences, reference)
     end
 
+    if not MapPinEnhanced.isForever then
+        local point = #graph.pointIDs + 1
+        graph.pointIDs[point] = -2
+        graph.pointMapIDs[point], graph.pointXs[point], graph.pointYs[point] = 0, 0, 0
+        local reference = graph.pathCount + 1
+        graph.pathCount = reference
+        graph.pathToPointIndexes[reference] = point
+        graph.pathTypes[reference] = "spell"
+        graph.pathRequirements[reference] = { operation = "check", kind = "spellKnown", value = 312372 }
+        graph.excludedPaths[reference] = "camp destination unknown"
+        table.insert(graph.currentPlayerPathReferences, reference)
+        campPathReferences = { reference }
+    end
+
     local nextOffset = 1
     local nextPathOffsetByPointIndex = {} ---@type integer[]
     for pointIndex = 1, #graph.pointIDs do
@@ -394,10 +412,13 @@ function Navigation:BuildGraph()
     self:RefreshPreparedData()
 end
 
----@param destination NavigationHearthstoneDestination?
-function Navigation:UpdateHearthstonePath(destination)
+---@param references integer[]
+---@param destination NavigationCampDestination|NavigationHearthstoneDestination|nil
+---@param missingReason string
+---@return NavigationGraph?
+local function ReplaceDestination(references, destination, missingReason)
     local graph = navigationGraph
-    local reference = hearthstonePathReferences[1]
+    local reference = references[1]
     if not graph or not reference then return end
     local point = graph.pathToPointIndexes[reference]
     local mapID, x, y = 0, 0, 0
@@ -407,7 +428,7 @@ function Navigation:UpdateHearthstonePath(destination)
         mapID, x, y = MapPinEnhanced:ResolveZonePosition(destination.mapID, destination.x, destination.y)
     end
     -- Existing Routes and jobs own immutable geometry. Share the static arrays,
-    -- copying only the arrays whose hearth endpoint changes.
+    -- copying only the arrays whose character destination changes.
     local replacement = CopyTable(graph, true) ---@type NavigationGraph
     replacement.pointMapIDs = CopyTable(graph.pointMapIDs)
     replacement.pointXs = CopyTable(graph.pointXs)
@@ -416,14 +437,28 @@ function Navigation:UpdateHearthstonePath(destination)
     replacement.pointMapIDs[point] = mapID
     replacement.pointXs[point] = x
     replacement.pointYs[point] = y
-    replacement.hearthstoneBindName = destination and MapPinEnhanced:NormalizeText(destination.bindName) or nil
-    for _, hearthReference in ipairs(hearthstonePathReferences) do
-        replacement.excludedPaths[hearthReference] = not destination and "hearthstone destination unknown" or nil
-        self.avoidedPaths[hearthReference] = nil
+    for _, pathReference in ipairs(references) do
+        replacement.excludedPaths[pathReference] = not destination and missingReason or nil
+        Navigation.avoidedPaths[pathReference] = nil
     end
     navigationGraph = replacement
+    return replacement
+end
+
+---@param destination NavigationHearthstoneDestination?
+function Navigation:UpdateHearthstonePath(destination)
+    local graph = ReplaceDestination(hearthstonePathReferences, destination, "hearthstone destination unknown")
+    if not graph then return end
+    graph.hearthstoneBindName = destination and MapPinEnhanced:NormalizeText(destination.bindName) or nil
     self:RefreshPreparedData()
-    self:RefreshHearthstoneRoute()
+    self:RefreshDynamicDestinationRoute()
+end
+
+---@param destination NavigationCampDestination?
+function Navigation:UpdateCampPath(destination)
+    if not ReplaceDestination(campPathReferences, destination, "camp destination unknown") then return end
+    self:RefreshPreparedData()
+    self:RefreshDynamicDestinationRoute()
 end
 
 -- Character requirement preparation

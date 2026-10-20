@@ -4,11 +4,20 @@ local MapPinEnhanced = select(2, ...)
 local Navigation = MapPinEnhanced:GetModule("Navigation")
 local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
-local toyOptions = {} ---@type table<number, table<number, boolean>>
+local travelOptions = {} ---@type table<number, table<number, number>> NPC -> option -> parent (0 for flat menus)
 
 ---@param gossip NavigationStaticGossip
 ---@return boolean
-function Navigation:IsToyGossipAvailable(gossip)
+---@return string? failure
+function Navigation:IsTravelGossipAvailable(gossip)
+    -- Read the character's unlock before saved menu observations. Requiring a
+    -- summon to discover an already learned destination consumes its cooldown;
+    -- a newly completed unlock also supersedes an older missing-menu record.
+    local unlocked ---@type boolean?
+    if gossip.unlockQuestID and C_QuestLog and C_QuestLog.IsQuestFlaggedCompleted then
+        unlocked = C_QuestLog.IsQuestFlaggedCompleted(gossip.unlockQuestID)
+        if not MapPinEnhanced:IsSecretValue(unlocked) and unlocked == true then return true end
+    end
     local key = MapPinEnhanced:GetCharacterKey()
     local saved = MapPinEnhanced:GetVar("toyGossipOptions")
     ---@cast saved table<string, table<number, boolean>>?
@@ -16,32 +25,51 @@ function Navigation:IsToyGossipAvailable(gossip)
     -- Missing character data is unobserved, not a recorded unavailable option.
     if type(options) == "table" then
         local known = options[gossip.gossipOptionID]
-        if type(known) == "boolean" then return known end
+        if type(known) == "boolean" then
+            return known, not known and "travel gossip observed unavailable" or nil
+        end
     end
-    return not gossip.requiresObservation
+    if gossip.unlockQuestID and not MapPinEnhanced:IsSecretValue(unlocked) and unlocked == false then
+        return false, "travel destination not unlocked or observed"
+    end
+    return not gossip.requiresObservation, gossip.requiresObservation and "travel gossip not yet observed" or nil
 end
 
-local function ObserveToyOptions()
+local function ObserveTravelOptions()
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
-    local known = toyOptions[tonumber(npcID)]
+    local known = travelOptions[tonumber(npcID)]
     if not known then return end
     local key = MapPinEnhanced:GetCharacterKey()
     if not key then return end
     local observed = {} ---@type table<number, boolean>
-    for id in pairs(known) do observed[id] = false end
     local options = C_GossipInfo.GetOptions()
     if not MapPinEnhanced:IsReadableTable(options) or #options == 0 then return end
+    local branch ---@type number?
     for _, option in ipairs(options) do
         if not MapPinEnhanced:IsReadableTable(option) or
-            MapPinEnhanced:IsSecretValue(option.gossipOptionID) or
+            not MapPinEnhanced:IsReadablePositiveInteger(option.gossipOptionID) or
             MapPinEnhanced:IsSecretValue(option.status) then
             return
         end
-        if known[option.gossipOptionID] then
+        local parent = known[option.gossipOptionID]
+        if parent then
+            if branch and branch ~= parent then return end
+            branch = parent
             observed[option.gossipOptionID] = option.status == Enum.GossipOptionStatus.Available
         end
+    end
+    -- A category page says nothing about its unvisited destinations. A known
+    -- leaf identifies only its own complete submenu. Preserve all other pages.
+    if not branch then
+        for _, parent in pairs(known) do
+            if parent ~= 0 then return end
+        end
+        branch = 0
+    end
+    for id, parent in pairs(known) do
+        if parent == branch and observed[id] == nil then observed[id] = false end
     end
     local saved = MapPinEnhanced:GetVar("toyGossipOptions")
     if type(saved) ~= "table" then saved = {} end
@@ -77,13 +105,23 @@ function Navigation:GetGossipPathData(path)
     end
     local npcID = gossip.npcID
     local gossipOptionID = gossip.gossipOptionID
-    if path.type == "toy" then
-        toyOptions[npcID] = toyOptions[npcID] or {}
-        toyOptions[npcID][gossipOptionID] = true
+    local parentOptionID = gossip.parentOptionID
+    if parentOptionID and not MapPinEnhanced:IsReadablePositiveInteger(parentOptionID) then
+        return nil, "invalid gossip category identity"
+    end
+    if gossip.unlockQuestID and not MapPinEnhanced:IsReadablePositiveInteger(gossip.unlockQuestID) then
+        return nil, "invalid gossip unlock quest identity"
+    end
+    if path.type == "toy" or path.type == "spell" then
+        travelOptions[npcID] = travelOptions[npcID] or {}
+        travelOptions[npcID][gossipOptionID] = parentOptionID or 0
     end
     return {
         npcID = npcID,
         gossipOptionID = gossipOptionID,
+        parentOptionID = parentOptionID,
+        destinationNameKey = gossip.destinationNameKey,
+        unlockQuestID = gossip.unlockQuestID,
         requiresObservation = gossip.requiresObservation
     }
 end
@@ -91,11 +129,14 @@ end
 local activeContext ---@type NavigationActivePathContext?
 local activeReport ---@type NavigationPathReport?
 local selectedOptionID ---@type number?
+local selectedOptions = {} ---@type table<number, boolean>
 local gossipOpen = false
 local selectionSuppressed = false
 local selectionTimer ---@type FunctionContainer?
+local selectionChangeNumber = 0
 
 local function CancelSelection()
+    selectionChangeNumber = selectionChangeNumber + 1
     if selectionTimer then selectionTimer:Cancel() end
     selectionTimer = nil
 end
@@ -105,19 +146,20 @@ local function SelectTravelOption()
     if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true or IsShiftKeyDown() then
         selectionSuppressed = true
     end
-    local isToy = context and context.pathType == "toy"
+    local isSummoned = context and (context.pathType == "toy" or context.pathType == "spell")
     if not gossipOpen or not context or not report or
-        (isToy and context.phase ~= "in-transit" or not isToy and context.phase == "in-transit") or
-        selectedOptionID or selectionSuppressed or InCombatLockdown() then
+        (isSummoned and context.phase ~= "in-transit" or not isSummoned and context.phase == "in-transit") or
+        selectionSuppressed or InCombatLockdown() then
         return
     end
-    -- A summoned toy is already on cooldown. Its retained interaction is
+    -- A summoned action is already on cooldown. Its retained interaction is
     -- validated by the exact live menu, rather than pre-summon eligibility.
-    if not isToy and not Navigation:IsCurrentPathReady() then return end
+    if not isSummoned and not Navigation:IsCurrentPathReady() then return end
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
     local data = context.data ---@type NavigationPhaseSwitchData
+    if selectedOptionID and (not data.parentOptionID or selectedOptionID ~= data.parentOptionID) then return end
     if context.pathType == "phaseswitch" then
         local mapID = C_Map.GetBestMapForUnit("player")
         if MapPinEnhanced:IsSecretValue(mapID) or mapID ~= data.fromMap then return end
@@ -127,19 +169,23 @@ local function SelectTravelOption()
     if not MapPinEnhanced:IsReadableTable(options) then return end
     for _, option in ipairs(options) do
         if MapPinEnhanced:IsReadableTable(option) and
-            not MapPinEnhanced:IsSecretValue(option.gossipOptionID) and
+            MapPinEnhanced:IsReadablePositiveInteger(option.gossipOptionID) and
             not MapPinEnhanced:IsSecretValue(option.status) and
-            option.gossipOptionID == data.gossipOptionID and option.status == Enum.GossipOptionStatus.Available then
+            (option.gossipOptionID == data.gossipOptionID or option.gossipOptionID == data.parentOptionID) and
+            not selectedOptions[option.gossipOptionID] and option.status == Enum.GossipOptionStatus.Available then
             -- Set the guard before selection: it can synchronously close gossip.
             -- Selection is only an attempt; the destination still proves arrival.
-            selectedOptionID = data.gossipOptionID
+            local optionID = option.gossipOptionID
+            ---@cast optionID number
+            selectedOptionID = optionID
+            selectedOptions[optionID] = true
             Navigation:CancelRouteCalculation(Navigation.activeCalculation)
-            C_GossipInfo.SelectOption(data.gossipOptionID)
-            report("attempted")
+            C_GossipInfo.SelectOption(optionID)
+            if optionID == data.gossipOptionID then report("attempted") end
             return
         end
     end
-    if isToy and not Navigation:IsToyGossipAvailable(data) then report("failed") end
+    if isSummoned and not Navigation:IsTravelGossipAvailable(data) then report("failed") end
 end
 
 local function ScheduleTravelSelection()
@@ -148,10 +194,12 @@ local function ScheduleTravelSelection()
     if IsShiftKeyDown() or Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then
         selectionSuppressed = true
     end
-    if not activeContext or not activeReport or selectedOptionID or selectionSuppressed or selectionTimer then return end
+    if not activeContext or not activeReport or selectionSuppressed or selectionTimer then return end
     -- Finish native gossip dispatch and route publication before selection can
     -- synchronously close the interaction. Repeated updates share one callback.
+    local changeNumber = selectionChangeNumber
     selectionTimer = C_Timer.NewTimer(0, function()
+        if changeNumber ~= selectionChangeNumber then return end
         selectionTimer = nil
         SelectTravelOption()
     end)
@@ -173,21 +221,23 @@ end
 MapPinEnhanced:RegisterEvent("GOSSIP_SHOW", function()
     if not gossipOpen then
         selectedOptionID = nil
+        wipe(selectedOptions)
         selectionSuppressed = false
     end
     gossipOpen = true
-    ObserveToyOptions()
+    ObserveTravelOptions()
     ScheduleTravelSelection()
 end)
 MapPinEnhanced:RegisterEvent("GOSSIP_OPTIONS_REFRESHED", function()
     if not gossipOpen then return end
-    ObserveToyOptions()
+    ObserveTravelOptions()
     ScheduleTravelSelection()
 end)
 MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
     CancelSelection()
     gossipOpen = false
     selectedOptionID = nil
+    wipe(selectedOptions)
     selectionSuppressed = false
 end)
 Options:SubscribeToOptionChanges("Wayfinder.Navigation.AutomaticTravelSelection", function(value)

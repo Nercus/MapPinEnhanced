@@ -86,7 +86,7 @@ end
 
 ---@param action WayfinderDesiredAction?
 ---@return number?
-local function GetActionSpellID(action)
+function Navigation:GetActionSpellID(action)
     if not action then return nil end
     if action.type == "spell" then return action.id end
     if C_Item and C_Item.GetItemSpell then return select(2, C_Item.GetItemSpell(action.id)) end
@@ -96,7 +96,7 @@ end
 ---@param action WayfinderDesiredAction
 ---@return number
 local function GetActionCastSeconds(action)
-    local spellID = GetActionSpellID(action)
+    local spellID = Navigation:GetActionSpellID(action)
     if not spellID then return 1 end
     if C_Spell and C_Spell.GetSpellInfo then
         local spellInfo = C_Spell.GetSpellInfo(spellID)
@@ -107,100 +107,6 @@ local function GetActionCastSeconds(action)
     return 1
 end
 
--- Toy uses can land away from the planned endpoint, or have no fixed endpoint
--- at all. Observe their loading transition and replan from the actual position.
-local travelToys = {} ---@type table<number, boolean>
-local toysBySpell = {} ---@type table<number, number>
-local pendingToyDestination ---@type NavigationDestination?
-local pendingToyLoading = false
-local toyExpiry ---@type FunctionContainer?
-local toyPositionTimer ---@type FunctionContainer?
-
----@param itemID number
-local function CacheToySpell(itemID)
-    if travelToys[itemID] == nil then return end
-    local spellID = GetActionSpellID({ type = "toy", id = itemID })
-    if spellID and MapPinEnhanced:IsReadablePositiveInteger(spellID) then toysBySpell[spellID] = itemID end
-end
-
----@param items table<number, boolean> True for toys that summon an interaction
-function Navigation:RegisterTravelToys(items)
-    for itemID, summons in pairs(items) do
-        travelToys[itemID] = summons
-        CacheToySpell(itemID)
-        if C_Item and C_Item.RequestLoadItemDataByID then C_Item.RequestLoadItemDataByID(itemID) end
-    end
-end
-
-function Navigation:CancelToyTravel()
-    pendingToyDestination = nil
-    pendingToyLoading = false
-    if toyExpiry then toyExpiry:Cancel() end
-    if toyPositionTimer then toyPositionTimer:Cancel() end
-    toyExpiry, toyPositionTimer = nil, nil
-end
-
-local function RecoverToyTravel()
-    local destination = pendingToyDestination
-    Navigation:CancelToyTravel()
-    if not destination or Navigation.activeDestination ~= destination then return end
-    Navigation:DeactivatePathHandler()
-    Navigation:RefreshPreparedData()
-    Navigation:StartCalculation(true)
-end
-
-local function ObserveToyTravel(unit, spellID)
-    if MapPinEnhanced:IsSecretValue(unit) or unit ~= "player" or
-        not MapPinEnhanced:IsReadablePositiveInteger(spellID) then
-        return
-    end
-    local itemID = toysBySpell[spellID]
-    if not itemID or not Navigation.routeNavigationEnabled or not Navigation.activeDestination then return end
-    Navigation:CancelToyTravel()
-    pendingToyDestination = Navigation.activeDestination
-    -- Summoning is an attempt, not arrival. Keep the route while its toy is
-    -- on cooldown, but recover if the player never uses the summoned wormhole.
-    toyExpiry = C_Timer.NewTimer(travelToys[itemID] and 65 or 5, RecoverToyTravel)
-end
-
-MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    for itemID in pairs(travelToys) do CacheToySpell(itemID) end
-end)
-MapPinEnhanced:RegisterEvent("ITEM_DATA_LOAD_RESULT", function(itemID, success)
-    if not MapPinEnhanced:IsSecretValue(success) and success == true and
-        MapPinEnhanced:IsReadablePositiveInteger(itemID) then
-        CacheToySpell(itemID)
-    end
-end)
-MapPinEnhanced:RegisterEvent("LOADING_SCREEN_ENABLED", function()
-    if pendingToyDestination then
-        pendingToyLoading = true
-        if toyExpiry then toyExpiry:Cancel() end
-        toyExpiry = C_Timer.NewTimer(60, RecoverToyTravel)
-    end
-end)
-MapPinEnhanced:RegisterEvent("LOADING_SCREEN_DISABLED", function()
-    if not pendingToyDestination or not pendingToyLoading then return end
-    if toyExpiry then toyExpiry:Cancel() end
-    if toyPositionTimer then toyPositionTimer:Cancel() end
-    local attempts = 20
-    local function ReadPosition()
-        if Navigation.activeDestination ~= pendingToyDestination then
-            Navigation:CancelToyTravel()
-            return
-        end
-        local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
-        attempts = attempts - 1
-        if mapID and x and y or attempts == 0 then
-            RecoverToyTravel()
-        else
-            toyPositionTimer = C_Timer.NewTimer(0.1, ReadPosition)
-        end
-    end
-    toyPositionTimer = C_Timer.NewTimer(0.1, ReadPosition)
-end)
-MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function() Navigation:CancelToyTravel() end)
-
 local activeContext ---@type NavigationActivePathContext?
 local activeReport ---@type NavigationPathReport?
 
@@ -209,12 +115,13 @@ local activeReport ---@type NavigationPathReport?
 local function ActionActivator(context, report)
     activeContext = context
     activeReport = report
-    if context.pathType == "toy" and context.data then
+    if context.data then
         Navigation:ActivateGossipPath(context, report)
     end
 end
 
 local function ActionDeactivator()
+    if activeContext and activeContext.data then Navigation:CancelActionTravel() end
     activeContext = nil
     activeReport = nil
     Navigation:DeactivateGossipPath()
@@ -239,7 +146,6 @@ MapPinEnhanced:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(itemID, success)
         not MapPinEnhanced:IsReadablePositiveInteger(itemID) then
         return
     end
-    CacheToySpell(itemID)
     local progression = Navigation.progression
     if not progression then return end
     local graph = progression.route.graph
@@ -265,13 +171,13 @@ local function ReportActionEvent(result, unit, _, spellID)
         not MapPinEnhanced:IsReadablePositiveInteger(spellID) then
         return
     end
-    local expectedSpellID = GetActionSpellID(Navigation:GetPathAction(context.pathType, context.requirement))
+    local expectedSpellID = Navigation:GetActionSpellID(Navigation:GetPathAction(context.pathType, context.requirement))
     if expectedSpellID ~= spellID then return end
     report(result)
 end
 
 local function OnSpellcastSucceeded(unit, castGUID, spellID)
-    ObserveToyTravel(unit, spellID)
+    Navigation:ObserveActionTravel(unit, spellID)
     ReportActionEvent("attempted", unit, castGUID, spellID)
 end
 
@@ -281,6 +187,7 @@ end
 
 MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", OnSpellcastSucceeded)
 MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_FAILED", OnSpellcastFailed)
+MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", OnSpellcastFailed)
 
 ---@param pathType string
 ---@param icon string
@@ -293,11 +200,14 @@ local function RegisterAction(pathType, icon, method, instructionKey)
         local action = context and Navigation:GetPathAction(pathType, context.requirement)
         local name = action and GetActionName(action)
         local destination = context and context.destinationName
-        if pathType == "toy" and context and context.data and destination then
+        if context and context.data and context.data.destinationNameKey then
+            destination = L[context.data.destinationNameKey]
+        end
+        if context and context.data and destination then
             if context.phase == "in-transit" then
-                return icon, method, string.format(L["Navigation Select Toy Destination"], destination)
+                return icon, method, string.format(L[pathType == "spell" and "Navigation Select Spell Destination" or "Navigation Select Toy Destination"], destination)
             end
-            return icon, method, string.format(L["Navigation Use Toy And Select"], name or method, destination)
+            return icon, method, string.format(L[pathType == "spell" and "Navigation Cast And Select" or "Navigation Use Toy And Select"], name or method, destination)
         end
         if not name then
             local fallback = destination and string.format(L[instructionKey .. " To"], destination) or L[instructionKey]
@@ -334,11 +244,18 @@ local function RegisterAction(pathType, icon, method, instructionKey)
                 return nil, "preferred hearthstone toy available"
             end
         end
-        if action.type == "toy" then
-            local gossip = graph.pathHandlerData[pathReference]
-            if gossip and not Navigation:IsToyGossipAvailable(gossip) then
-                return nil, "toy gossip unavailable or unobserved"
+        local gossip = graph.pathHandlerData[pathReference]
+        if gossip then
+            local available, failure = Navigation:IsTravelGossipAvailable(gossip)
+            if not available then return nil, failure end
+        end
+        if action.type == "spell" and gossip then
+            local outdoors = IsOutdoors()
+            if MapPinEnhanced:IsSecretValue(outdoors) or outdoors ~= true then
+                return nil, "summoned travel requires outdoors"
             end
+        end
+        if action.type == "toy" then
             local usable = C_ToyBox and C_ToyBox.IsToyUsable and C_ToyBox.IsToyUsable(action.id)
             if MapPinEnhanced:IsSecretValue(usable) or usable ~= true then return nil, "toy unavailable" end
         end
@@ -375,10 +292,10 @@ local function RegisterAction(pathType, icon, method, instructionKey)
     ---@param path NavigationStaticPath
     ---@return NavigationStaticGossip?
     ---@return string?
-    local function ToyData(path)
+    local function ActionData(path)
         if path.gossip then return Navigation:GetGossipPathData(path) end
     end
-    Navigation:RegisterPathHandler(pathType, Presentation, pathType == "toy" and ToyData or nil,
+    Navigation:RegisterPathHandler(pathType, Presentation, (pathType == "toy" or pathType == "spell") and ActionData or nil,
         CostCalculator, ActionActivator, ActionDeactivator)
 end
 

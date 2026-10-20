@@ -49,7 +49,9 @@ function Navigation:ShowDebugDump()
         interfaceVersion = interfaceVersion,
         locale = GetLocale(),
         combat = InCombatLockdown(),
-        faction = UnitFactionGroup("player")
+        faction = UnitFactionGroup("player"),
+        race = select(2, UnitRace("player")),
+        outdoors = IsOutdoors()
     })
     local playerX, playerY, playerMapID = MapPinEnhanced.HBD:GetPlayerZonePosition()
     Add("Player", {
@@ -184,7 +186,8 @@ function Navigation:ShowDebugDump()
                 from = GetPoint(graph, graph.pathFromPointIndexes[reference]),
                 to = GetPoint(graph, graph.pathToPointIndexes[reference]),
                 requirement = graph.pathRequirements[reference],
-                gossip = (pathType == "gossip" or pathType == "phaseswitch" or pathType == "toy") and
+                gossip = (pathType == "gossip" or pathType == "phaseswitch" or pathType == "toy" or
+                    pathType == "spell") and
                     graph.pathHandlerData[reference] or nil,
                 preparedState = prepared and prepared.requirementStateByPath[reference],
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],
@@ -215,6 +218,13 @@ function Navigation:ShowDebugDump()
         lines[#lines + 1] = "Toy paths:"
         for reference = 1, graph.pathCount do
             if graph.pathTypes[reference] == "toy" then
+                AddPath(reference)
+            end
+        end
+        -- Spell menus also have no entrance and can be rejected before routing.
+        lines[#lines + 1] = "Spell destination menu paths:"
+        for reference = 1, graph.pathCount do
+            if graph.pathTypes[reference] == "spell" and graph.pathHandlerData[reference] then
                 AddPath(reference)
             end
         end
