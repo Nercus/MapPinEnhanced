@@ -78,11 +78,17 @@ function Wayfinders:CaptureSourceTracking(source, data)
     return control.captureTracking(data), control.untrack
 end
 
+-- Callers validate the selected source identity before invoking native writes.
+---@param source string
+function Wayfinders:UntrackSuperTrackingSource(source)
+    local control = controls[source]
+    if control then control.untrack() end
+end
+
 ---@param source string
 ---@param targetID string
 ---@param changeNumber integer
 function Wayfinders:RemoveSuperTrackingDestination(source, targetID, changeNumber)
     if not self:ClearSuperTrackingWayfinderData(source, targetID, changeNumber) then return end
-    local control = controls[source]
-    if control then control.untrack() end
+    self:UntrackSuperTrackingSource(source)
 end

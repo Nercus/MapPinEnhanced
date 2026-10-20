@@ -304,6 +304,13 @@ function Wayfinders:HandleUnresolvedSuperTrackingTarget(source, targetID)
         -- repeated source events cannot restart the retry timers.
         self:ClearSuperTrackingEntry(source, targetID)
         Navigation:ClearDestination(source, targetID, waitingTarget.changeNumber)
+        -- A vanished map marker must not remain selected after its wayfinder
+        -- clears. Destination callbacks may have selected another target.
+        if source == "mapPin" and waitingTargets[source] == waitingTarget and
+            GetActiveProvider() == provider and provider.getTargetID() == targetID then
+            CancelTargetRetry(source)
+            self:UntrackSuperTrackingSource(source)
+        end
         return
     end
 
