@@ -211,6 +211,7 @@ function Options:ScrollToOption(key)
     if not frame then
         error("Option with key " .. key .. " not found")
     end
+    if not frame:IsAvailable() then return end
     assert(frame.ScrollToOption, "Option frame must have a ScrollToOption method")
     if self.frame then self.frame.scrollFrame.Child.Wayfinder:RevealOption(key) end
     if not frame:IsShown() then

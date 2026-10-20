@@ -12,6 +12,7 @@ local L = MapPinEnhanced.L
 ---@field searchAnimation AnimationGroup
 ---@field searchHighlightTimer FunctionContainer?
 ---@field key string
+---@field requiredAddon string?
 ---@field scrollPadding number
 ---@field requireReload? OptionReloadRequirement
 ---@field optionEnabled boolean
@@ -53,6 +54,11 @@ end
 
 function MapPinEnhancedFormElementMixin:IsOptionEnabled()
     return self.optionEnabled
+end
+
+---@return boolean
+function MapPinEnhancedFormElementMixin:IsAvailable()
+    return not self.requiredAddon or C_AddOns.IsAddOnLoaded(self.requiredAddon)
 end
 
 ---@param enabled boolean
@@ -118,4 +124,17 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     MapPinEnhancedFormFieldMixin.OnLoad(self)
     self.optionEnabled = true
     Options:RegisterOption(self.key, self)
+    if self.requiredAddon then
+        self:SetShown(self:IsAvailable())
+        -- Option frames live for the session; listen while hidden for late addon loads.
+        MapPinEnhanced:RegisterEvent("ADDON_LOADED", function(addon)
+            if addon ~= self.requiredAddon then return end
+            self:SetShown(self:IsAvailable())
+            if Options.frame then
+                Options.frame.searchInitialized = false
+                Options.frame:SetupOptionSearch()
+                Options.frame:UpdateLayout()
+            end
+        end)
+    end
 end

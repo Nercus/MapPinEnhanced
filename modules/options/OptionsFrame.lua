@@ -25,6 +25,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field header MapPinEnhancedOptionsFrameHeader
 ---@field scrollFrame MapPinEnhancedOptionsScrollFrame
 ---@field layoutReady boolean?
+---@field searchInitialized boolean?
 MapPinEnhancedOptionsFrameMixin = {}
 
 ---@class Options
@@ -49,14 +50,16 @@ function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
     local entries = {}
 
     for key, option in pairs(options) do
-        local optionLabel = option:GetLabelText() or ""
-        local optionDescription = option:HasDescription() and option:GetDescriptionText() or ""
-        local searchString = optionLabel:lower() .. " " .. optionDescription:lower()
-        table.insert(entries, {
-            label = optionLabel,
-            searchString = searchString,
-            value = key,
-        })
+        if option:IsAvailable() then
+            local optionLabel = option:GetLabelText() or ""
+            local optionDescription = option:HasDescription() and option:GetDescriptionText() or ""
+            local searchString = optionLabel:lower() .. " " .. optionDescription:lower()
+            table.insert(entries, {
+                label = optionLabel,
+                searchString = searchString,
+                value = key,
+            })
+        end
     end
 
     self.header.search:Setup({

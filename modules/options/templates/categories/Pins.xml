@@ -56,6 +56,12 @@
                     <KeyValue key="key" value="Pins.Tracking.AutoUntrack" />
                 </KeyValues>
             </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Pins.Integrations.TomTom" />
+                    <KeyValue key="requiredAddon" value="TomTom" />
+                </KeyValues>
+            </Frame>
         </Frames>
     </Frame>
 </Ui>

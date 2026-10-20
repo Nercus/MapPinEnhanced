@@ -440,6 +440,9 @@ L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
 L["Pins.Tracking.ArrivalNotification_LABEL"] = "Notification when reaching pin"
 L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
 "Notify once per tracking session when physically reaching the final addon destination."
+L["Pins.Integrations.TomTom_LABEL"] = "Enable TomTom integration"
+L["Pins.Integrations.TomTom_DESCRIPTION"] =
+"Follow TomTom's selected waypoint and removals, or accept TomTom waypoints from other addons when TomTom is not installed. Disabling stops tracking the synced target and keeps existing pins. After enabling, select a waypoint again to resume."
 L["Pins.Tracking.AutoUntrack_LABEL"] = "Auto untrack"
 L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
 "Clear addon and Blizzard tracking when entering a dungeon, raid, scenario, battleground or arena."

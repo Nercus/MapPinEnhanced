@@ -36,6 +36,7 @@ Options.DEFAULTS = {
     ["Pins.Miscellaneous.EnableLockedPins"] = true,
     ["Pins.Tracking.ArrivalNotification"] = "locked",
     ["Pins.Tracking.AutoUntrack"] = false,
+    ["Pins.Integrations.TomTom"] = C_AddOns.IsAddOnLoaded("TomTom") and true or false,
     ["Miscellaneous.Tracker.AutoShow"] = true,
     ["Miscellaneous.Tracker.CloseAction"] = false,
     ["Miscellaneous.Tracker.ShowCoordinates"] = true,
