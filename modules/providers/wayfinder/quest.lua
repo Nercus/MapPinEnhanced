@@ -14,6 +14,7 @@ local pendingQuestTitles = {}
 ---@type table<Enum.QuestClassification, string>
 local questProgressAtlas = {
     [Enum.QuestClassification.Recurring] = "QuestProgressRecurring",
+    [Enum.QuestClassification.Meta] = "QuestProgressWrapper",
     [Enum.QuestClassification.Campaign] = "QuestProgressCampaign",
     [Enum.QuestClassification.Legendary] = "QuestProgressLegendary",
     [Enum.QuestClassification.Important] = "QuestProgressImportant",
