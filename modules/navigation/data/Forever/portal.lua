@@ -77,7 +77,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "race",
-                    value = "HighOrderSkyborne",
+                    value = "Skyborne",
                 },
             },
         },
@@ -105,7 +105,7 @@ local PORTAL = {
                 {
                     operation = "check",
                     kind = "race",
-                    value = "HighOrderSkyborne",
+                    value = "Skyborne",
                 },
             },
         },
