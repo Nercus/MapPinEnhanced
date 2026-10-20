@@ -5,8 +5,8 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 -- Travel actions can land away from the planned endpoint. Observe their
 -- loading transition and replan from the actual position, including manual use.
-local travelToys = {} ---@type table<number, boolean>
-local toysBySpell = {} ---@type table<number, number>
+local travelItems = {} ---@type table<number, boolean>
+local itemsBySpell = {} ---@type table<number, number>
 local travelSpells = {} ---@type table<number, boolean>
 local travelChangeNumber = 0
 local pendingTravelSpellID ---@type number?
@@ -17,17 +17,17 @@ local travelPositionTimer ---@type FunctionContainer?
 local previousPosition ---@type { mapID: number, x: number, y: number, sampledAt: number }?
 
 ---@param itemID number
-local function CacheToySpell(itemID)
-    if travelToys[itemID] == nil then return end
+local function CacheItemSpell(itemID)
+    if travelItems[itemID] == nil then return end
     local spellID = Navigation:GetActionSpellID({ type = "toy", id = itemID })
-    if spellID and MapPinEnhanced:IsReadablePositiveInteger(spellID) then toysBySpell[spellID] = itemID end
+    if spellID and MapPinEnhanced:IsReadablePositiveInteger(spellID) then itemsBySpell[spellID] = itemID end
 end
 
----@param items table<number, boolean> True for toys that summon an interaction
-function Navigation:RegisterTravelToys(items)
+---@param items table<number, boolean> True for items or toys that summon an interaction
+function Navigation:RegisterTravelItems(items)
     for itemID, summons in pairs(items) do
-        travelToys[itemID] = summons
-        CacheToySpell(itemID)
+        travelItems[itemID] = summons
+        CacheItemSpell(itemID)
         if C_Item and C_Item.RequestLoadItemDataByID then C_Item.RequestLoadItemDataByID(itemID) end
     end
 end
@@ -88,8 +88,8 @@ function Navigation:ObserveActionTravel(unit, spellID)
         not MapPinEnhanced:IsReadablePositiveInteger(spellID) then
         return
     end
-    local itemID = toysBySpell[spellID]
-    local summons = itemID and travelToys[itemID] or travelSpells[spellID]
+    local itemID = itemsBySpell[spellID]
+    local summons = itemID and travelItems[itemID] or travelSpells[spellID]
     if (summons == nil and not itemID) or not Navigation.routeNavigationEnabled or
         not Navigation.activeDestination then return end
     Navigation:CancelActionTravel()
@@ -103,12 +103,12 @@ function Navigation:ObserveActionTravel(unit, spellID)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
-    for itemID in pairs(travelToys) do CacheToySpell(itemID) end
+    for itemID in pairs(travelItems) do CacheItemSpell(itemID) end
 end)
 MapPinEnhanced:RegisterEvent("ITEM_DATA_LOAD_RESULT", function(itemID, success)
     if not MapPinEnhanced:IsSecretValue(success) and success == true and
         MapPinEnhanced:IsReadablePositiveInteger(itemID) then
-        CacheToySpell(itemID)
+        CacheItemSpell(itemID)
     end
 end)
 MapPinEnhanced:RegisterEvent("LOADING_SCREEN_ENABLED", function()
@@ -154,6 +154,6 @@ MapPinEnhanced:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", OnCastFailed)
 MapPinEnhanced:RegisterEvent("GET_ITEM_INFO_RECEIVED", function(itemID, success)
     if not MapPinEnhanced:IsSecretValue(success) and success == true and
         MapPinEnhanced:IsReadablePositiveInteger(itemID) then
-        CacheToySpell(itemID)
+        CacheItemSpell(itemID)
     end
 end)

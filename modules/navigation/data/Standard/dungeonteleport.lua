@@ -1753,6 +1753,19 @@ local DUNGEONTELEPORT = {
             },
         },
     },
+    {
+        toPointID = 1500001,
+        toMap = 2405,
+        toX = 0.6477,
+        toY = 0.6163,
+        type = "dungeonteleport",
+        travelDuration = 10,
+        requirement = {
+            operation = "check",
+            kind = "spell",
+            value = 1254563,
+        },
+    },
 }
 
 Navigation:RegisterPathData("dungeonteleport", DUNGEONTELEPORT)

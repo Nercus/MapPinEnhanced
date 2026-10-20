@@ -9,6 +9,7 @@
     <Include file="hearthstone.lua" />
     <Include file="camp.lua" />
     <Include file="gossip.lua" />
+    <Include file="phase.lua" />
     <Include file="transport.lua" />
     <Include file="flightTaxi.lua" />
     <Include file="flightTaxiMap.lua" />

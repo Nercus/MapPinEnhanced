@@ -16,12 +16,13 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field toY number
 ---@field type string
 ---@field travelDuration number?
----@field travelDurationEstimated boolean? TaxiPathNode geometry estimate, not a measured timing
+---@field travelDurationEstimated boolean? Estimated taxi timing, not a measurement
 ---@field fromTaxiNodeID number?
 ---@field toTaxiNodeID number?
 ---@field taxiPathIDs integer[]?
 ---@field requirement NavigationRequirement?
 ---@field gossip NavigationStaticGossip?
+---@field phase NavigationStaticPhase?
 
 ---@class NavigationStaticGossip
 ---@field npcID number
@@ -159,6 +160,8 @@ end
 ---@field taxiObservation NavigationTaxiObservation?
 
 ---@class NavigationPreparedData : NavigationMovementData
+---@field phaseRequirements table<integer, boolean>? Calculation-local phase-dependent requirements
+---@field phaseObservations NavigationRequirementObservations?
 ---@field requirementStateByPath table<integer, NavigationRequirementState>
 ---@field exclusionReasonByPath table<integer, string>
 ---@field movement NavigationMovementCapabilities
@@ -796,7 +799,8 @@ ObserveRequirement = MapPinEnhanced.profiler:WrapScope("Navigation.Requirements.
 ---@param observations NavigationRequirementObservations?
 ---@return NavigationRequirementState state
 ---@return string? failure
-function Navigation:EvaluateRequirement(requirement, observations)
+---@param phaseState table<string, number>?
+function Navigation:EvaluateRequirement(requirement, observations, phaseState)
     if requirement == nil then return SATISFIED end
     if type(requirement) ~= "table" then return UNKNOWN, "invalid requirement" end
 
@@ -814,7 +818,7 @@ function Navigation:EvaluateRequirement(requirement, observations)
         local sawUnknown = false
         local unknownFailure ---@type string?
         for _, child in ipairs(children) do
-            local state, failure = self:EvaluateRequirement(child, observations)
+            local state, failure = self:EvaluateRequirement(child, observations, phaseState)
             if operation == "all" and state == UNSATISFIED then return UNSATISFIED end
             if operation == "any" and state == SATISFIED then return SATISFIED end
             if state == UNKNOWN then
@@ -827,14 +831,15 @@ function Navigation:EvaluateRequirement(requirement, observations)
     elseif operation == "not" then
         local children = requirement.children
         if type(children) ~= "table" or #children ~= 1 then return UNKNOWN, "invalid negation requirement" end
-        local state, failure = self:EvaluateRequirement(children[1], observations)
+        local state, failure = self:EvaluateRequirement(children[1], observations, phaseState)
         if state == UNKNOWN then return UNKNOWN, failure or "requirement unavailable" end
         return state == SATISFIED and UNSATISFIED or SATISFIED
     elseif operation ~= "check" or type(requirement.kind) ~= "string" then
         return UNKNOWN, "invalid requirement shape"
     end
 
-    local state = ObserveRequirement(requirement.kind, requirement.value, observations)
+    local state = self:EvaluateTravelPhaseRequirement(requirement, phaseState) or
+        ObserveRequirement(requirement.kind, requirement.value, observations)
     if state == UNKNOWN then
         return state, "unsupported or unavailable requirement: " .. requirement.kind
     end
@@ -1161,7 +1166,8 @@ end
 ---@param pathReference integer
 ---@return NavigationCalculatedPathCost?
 ---@return string? failure
-function Navigation:GetFreshPathCost(pathReference)
+---@param phaseState table<string, number>?
+function Navigation:GetFreshPathCost(pathReference, phaseState)
     if pathReference < 0 then return nil, "taxi journey requires current interaction" end
     local graph = navigationGraph
     if not graph then return nil, "navigation data is not ready" end
@@ -1169,7 +1175,12 @@ function Navigation:GetFreshPathCost(pathReference)
         return nil, "transportation group disabled"
     end
     if graph.excludedPaths[pathReference] then return nil, graph.excludedPaths[pathReference] end
-    local state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference])
+    local data = graph.pathTypes[pathReference] == "phaseswitch" and graph.pathHandlerData[pathReference]
+    if data and data.phase then
+        local current = phaseState or self:GetTravelPhaseState()
+        if current[data.phase.group] ~= data.phase.fromArtID then return nil, "phase origin unavailable" end
+    end
+    local state, failure = self:EvaluateRequirement(graph.pathRequirements[pathReference], nil, phaseState)
     if state ~= SATISFIED then return nil, failure or state end
     local fresh = {
         requirementStateByPath = { [pathReference] = state },

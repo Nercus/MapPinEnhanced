@@ -544,10 +544,13 @@ end
 ---@param journey NavigationTaxiJourney
 ---@param prepared NavigationPreparedData
 ---@return boolean
-function Navigation:IsTaxiJourneyEligible(journey, prepared)
+---@param phaseState table<string, number>?
+function Navigation:IsTaxiJourneyEligible(journey, prepared, phaseState)
     for _, leg in ipairs(journey.legs) do
         for _, reference in ipairs(leg.sourceReferences) do
-            if not prepared.taxiCosts[reference] or prepared.requirementStateByPath[reference] ~= "satisfied" then
+            if phaseState and not self:GetFreshPathCost(reference, phaseState) or
+                not phaseState and (not prepared.taxiCosts[reference] or
+                    prepared.requirementStateByPath[reference] ~= "satisfied") then
                 return false
             end
         end
@@ -689,8 +692,9 @@ end
 ---@param prepared NavigationPreparedData
 ---@param checkpoint fun()
 ---@return NavigationTaxiJourney?
-function Navigation:RefreshTaxiJourney(journey, prepared, checkpoint)
-    if not self:IsTaxiJourneyEligible(journey, prepared) then return nil end
+---@param phaseState table<string, number>?
+function Navigation:RefreshTaxiJourney(journey, prepared, checkpoint, phaseState)
+    if not self:IsTaxiJourneyEligible(journey, prepared, phaseState) then return nil end
     local observation = self:GetTaxiObservation()
     if journey.observed then
         local nodes = observation and observation.itineraries[journey.destination]
@@ -706,7 +710,7 @@ function Navigation:RefreshTaxiJourney(journey, prepared, checkpoint)
     local seconds, uncertainty = 0, 0
     for _, leg in ipairs(fresh.legs) do
         checkpoint()
-        local cost = self:GetFreshPathCost(leg.sourceReferences[1])
+        local cost = self:GetFreshPathCost(leg.sourceReferences[1], phaseState)
         if not cost then return nil end
         leg.cost = cost
         seconds = seconds + cost.expectedSeconds

@@ -1387,12 +1387,21 @@ function Navigation:RefreshEligibility(events)
     end
     local progression = self.progression
     if progression and not progression.attempted and progression.phase ~= "in-transit" then
+        local phaseState = self:GetTravelPhaseState()
         for index = progression.pathIndex, #progression.route.pathReferences do
             local reference = progression.route.pathReferences[index]
             local journey = progression.route.taxiJourneys[reference]
-            if reference > 0 and not self:GetFreshPathCost(reference) or
-                journey and (not self:IsTaxiJourneyEligible(journey, prepared) or
+            if reference > 0 and not self:GetFreshPathCost(reference, phaseState) or
+                journey and (not self:IsTaxiJourneyEligible(journey, prepared, phaseState) or
                     journey.observed and progression.route.preparedData.taxiObservation ~= self:GetTaxiObservation()) then
+                progression.pathUnavailable = true
+                self:DeactivatePathHandler()
+                self:PublishStep(progression)
+                self:StartCalculation(true)
+                return
+            end
+            phaseState = self:AdvanceTravelPhase(progression.route.graph, reference, phaseState)
+            if not phaseState then
                 progression.pathUnavailable = true
                 self:DeactivatePathHandler()
                 self:PublishStep(progression)

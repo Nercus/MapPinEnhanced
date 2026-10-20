@@ -158,11 +158,12 @@ local function SelectTravelOption()
     local guid = UnitGUID("npc")
     if MapPinEnhanced:IsSecretValue(guid) or type(guid) ~= "string" then return end
     local npcID = select(6, strsplit("-", guid))
-    local data = context.data ---@type NavigationPhaseSwitchData
+    local data = context.data ---@type NavigationStaticGossip
     if selectedOptionID and (not data.parentOptionID or selectedOptionID ~= data.parentOptionID) then return end
     if context.pathType == "phaseswitch" then
         local mapID = C_Map.GetBestMapForUnit("player")
-        if MapPinEnhanced:IsSecretValue(mapID) or mapID ~= data.fromMap then return end
+        local phaseData = context.data ---@type NavigationPhaseSwitchData
+        if MapPinEnhanced:IsSecretValue(mapID) or mapID ~= phaseData.fromMap then return end
     end
     if tonumber(npcID) ~= data.npcID then return end
     local options = C_GossipInfo.GetOptions()
@@ -261,65 +262,5 @@ end
 
 Navigation:RegisterPathHandler("gossip", GossipPresentation,
     function(path) return Navigation:GetGossipPathData(path) end, nil,
-    function(context, report) Navigation:ActivateGossipPath(context, report) end,
-    function() Navigation:DeactivateGossipPath() end)
-
--- Phase interactions share exact gossip selection, but only the phase owner
--- can report completion. Proximity and closing the menu are never evidence.
----@class NavigationPhaseSwitchData : NavigationStaticGossip
----@field fromMap number
----@field toMap number
-
-local function PhasePresentation(context)
-    local _, _, instruction = GossipPresentation(context)
-    return "ChromieTime-32x32", L["Navigation Method Phase Change"], instruction
-end
-
----@param path NavigationStaticPath
----@return NavigationPhaseSwitchData? data
----@return string? failure
-local function PhaseDataprovider(path)
-    if type(path.fromMap) ~= "number" or path.fromMap == path.toMap then
-        return nil, "phase switch requires distinct origin and destination maps"
-    end
-    local gossip, failure = Navigation:GetGossipPathData(path)
-    if not gossip then return nil, failure end
-    return {
-        npcID = gossip.npcID,
-        gossipOptionID = gossip.gossipOptionID,
-        fromMap = path.fromMap,
-        toMap = path.toMap
-    }
-end
-
----@return NavigationCalculatedPathCost
-local function PhaseCostCalculator()
-    return {
-        expectedSeconds = 10,
-        uncertaintySeconds = 0,
-        comparisonSeconds = 10,
-        explanation = { kind = "phase-switch", seconds = 10 },
-    }
-end
-
-local function CheckPhaseChange()
-    local context, report = activeContext, activeReport
-    if not context or not report or context.pathType ~= "phaseswitch" or context.phase == "approach" then return end
-    local data = context.data ---@type NavigationPhaseSwitchData
-    local currentMapID = C_Map and C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player") or nil
-    if MapPinEnhanced:IsSecretValue(currentMapID) then return end
-    if currentMapID == data.toMap then report("completed") end
-end
-
-MapPinEnhanced:RegisterEventBucket({
-    "LOADING_SCREEN_DISABLED",
-    "PLAYER_ENTERING_WORLD",
-    "QUEST_LOG_UPDATE",
-    "ZONE_CHANGED",
-    "ZONE_CHANGED_INDOORS",
-    "ZONE_CHANGED_NEW_AREA",
-}, CheckPhaseChange, 1)
-
-Navigation:RegisterPathHandler("phaseswitch", PhasePresentation, PhaseDataprovider, PhaseCostCalculator,
     function(context, report) Navigation:ActivateGossipPath(context, report) end,
     function() Navigation:DeactivateGossipPath() end)

@@ -299,6 +299,88 @@ local TOY = {
             requiresObservation = true,
         },
     },
+    {
+        toPointID = 1500002,
+        toMap = 2339,
+        toX = 0.4946,
+        toY = 0.4441,
+        type = "toy",
+        travelDuration = 10,
+        requirement = {
+            operation = "check",
+            kind = "toy",
+            value = 243056,
+        },
+    },
+    {
+        toPointID = 1500004,
+        toMap = 582,
+        toX = 0.299,
+        toY = 0.339,
+        type = "toy",
+        travelDuration = 10,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "toy",
+                    value = 110560,
+                },
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
+    },
+    {
+        toPointID = 1500013,
+        toMap = 525,
+        toX = 0.4792,
+        toY = 0.6808,
+        type = "toy",
+        travelDuration = 10,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "toy",
+                    value = 110560,
+                },
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Horde",
+                },
+            },
+        },
+    },
+    {
+        toPointID = 1500015,
+        toMap = 217,
+        toX = 0.589,
+        toY = 0.4746,
+        type = "toy",
+        travelDuration = 10,
+        requirement = {
+            operation = "all",
+            children = {
+                {
+                    operation = "check",
+                    kind = "toy",
+                    value = 211788,
+                },
+                {
+                    operation = "check",
+                    kind = "faction",
+                    value = "Alliance",
+                },
+            },
+        },
+    },
 }
 
 Navigation:RegisterPathData("toy", TOY)
@@ -306,7 +388,10 @@ Navigation:RegisterPathData("toy", TOY)
 -- Recognize manual use without fabricating fixed endpoints for random landings.
 -- True means the toy summons an interaction before teleporting. All entries
 -- remain toys; only the fixed destinations above participate in route search.
-Navigation:RegisterTravelToys({
+Navigation:RegisterTravelItems({
+    [110560] = false,
+    [211788] = false,
+    [243056] = true,
     [18986] = false,  -- Ultrasafe Transporter: Gadgetzan
     [18984] = false,  -- Dimensional Ripper - Everlook
     [30544] = false,  -- Ultrasafe Transporter: Toshley's Station

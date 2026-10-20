@@ -126,6 +126,7 @@ end
 ---@param travelMode "automatic"|"ground"|"flight"|"border"?
 ---@return NavigationCalculatedPathCost?
 function Navigation:GetPlayerTravelCost(preparedData, mapID1, x1, y1, mapID2, x2, y2, travelMode)
+    if self:IsTravelPhaseCrossing(mapID1, mapID2) then return nil end
     local distance = self:GetComparableDistance(mapID1, x1, y1, mapID2, x2, y2)
     if not distance then return nil end
     local mode, speed = GetMovementSpeed(preparedData.movement, travelMode, mapID1, mapID2)
@@ -147,6 +148,7 @@ end
 ---@return number?
 function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint, position, useSelectedCosts)
     local graph = progression.route.graph
+    local phaseState = self:GetTravelPhaseState()
     local destination = self.activeDestination
     if not graph or not destination or not preparedData then return nil end
     local pathReference = progression.route.pathReferences[progression.pathIndex]
@@ -207,14 +209,17 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
                     return nil
                 end
                 ---@cast preparedData NavigationPreparedData
-                local fresh = self:RefreshTaxiJourney(journey, preparedData, checkpoint)
+                local fresh = self:RefreshTaxiJourney(journey, preparedData, checkpoint, phaseState)
                 if not fresh then return nil end
                 remainingPathCost = fresh.cost
             else
-                remainingPathCost = self:GetFreshPathCost(reference)
+                remainingPathCost = self:GetFreshPathCost(reference, phaseState)
             end
         end
         if not remainingPathCost then return nil end
+        local reference = progression.route.pathReferences[index]
+        phaseState = self:AdvanceTravelPhase(graph, reference, phaseState)
+        if not phaseState then return nil end
         total = total + remainingPathCost.comparisonSeconds
         checkpoint()
     end
@@ -239,6 +244,8 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
         end
     end
 
+    if not self:IsTravelPhaseDestinationAllowed(phaseState, destination.routingData.mapID,
+        progression.route.destinationPhaseState or phaseState) then return nil end
     local finalPathReference = progression.route.pathReferences[#progression.route.pathReferences]
     local finalPointIndex = finalPathReference and graph.pathToPointIndexes[finalPathReference] or nil
     if not finalPointIndex then return total end
@@ -262,6 +269,7 @@ local FLIGHT_PRUNABLE_TYPES = {
 }
 
 ---@class NavigationRoute
+---@field destinationPhaseState table<string, number>?
 ---@field destinationID string
 ---@field destinationChangeNumber integer
 ---@field calculationID integer
@@ -303,10 +311,11 @@ local FLIGHT_PRUNABLE_TYPES = {
 ---@field preparedData NavigationPreparedData
 ---@field avoidedPaths table<integer, boolean>
 ---@field heap NavigationHeapEntry[]
----@field bestCostBuckets table<integer, integer>
----@field bestUncertainties table<integer, number>
----@field bestPathCounts table<integer, integer>
----@field bestSignatures table<integer, string>
+---@field initialPhaseState table<string, number>
+---@field bestCostBuckets table<string, integer>
+---@field bestUncertainties table<string, number>
+---@field bestPathCounts table<string, integer>
+---@field bestSignatures table<string, string>
 ---@field destinationCostBucket integer?
 ---@field pathCostByReference table<integer, NavigationCalculatedPathCost>
 ---@field unavailablePathCosts table<integer, string>
@@ -338,6 +347,8 @@ local FLIGHT_PRUNABLE_TYPES = {
 local calculationNumber = 0
 
 ---@class NavigationHeapEntry
+---@field stateKey string?
+---@field phaseState table<string, number>?
 ---@field pointIndex integer
 ---@field cost number
 ---@field costBucket integer
@@ -418,17 +429,41 @@ end
 ---@param includePath boolean?
 local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
                           previousEntry, previousPathReference, signature, finalCost, includePath)
+    local phaseState = previousEntry and previousEntry.phaseState or job.initialPhaseState
+    if previousPathReference then
+        local journey = job.taxiJourneys[previousPathReference]
+        if journey then
+            for _, leg in ipairs(journey.legs) do
+                for _, reference in ipairs(leg.sourceReferences) do
+                    if not Navigation:IsTravelPhasePathAllowed(job.graph, job.preparedData, reference, phaseState) then
+                        return
+                    end
+                end
+            end
+        end
+        if job.reverseSearch then
+            if job.graph.pathTypes[previousPathReference] == "phaseswitch" or
+                not Navigation:IsTravelPhasePathAllowed(job.graph, job.preparedData, previousPathReference, phaseState) then
+                return
+            end
+        else
+            phaseState = Navigation:AdvanceTravelPhase(job.graph, previousPathReference, phaseState)
+            if not phaseState then return end
+        end
+    end
+    if not Navigation:IsTravelPhasePointAllowed(job.graph, pointIndex, phaseState) then return end
+    local stateKey = pointIndex .. "/" .. Navigation:GetTravelPhaseKey(phaseState)
     local costBucket = GetCostBucket(cost)
     -- All remaining travel costs are nonnegative. Keep equal buckets for the
     -- existing uncertainty/Path-count/signature ties, but discard costlier prefixes.
     if job.destinationCostBucket and costBucket > job.destinationCostBucket then return end
-    local bestCostBucket = job.bestCostBuckets[pointIndex]
+    local bestCostBucket = job.bestCostBuckets[stateKey]
     if bestCostBucket then
         if costBucket > bestCostBucket then return end
         if costBucket == bestCostBucket then
-            local bestUncertainty = job.bestUncertainties[pointIndex]
+            local bestUncertainty = job.bestUncertainties[stateKey]
             if uncertainty > bestUncertainty then return end
-            if uncertainty == bestUncertainty and pathCount > job.bestPathCounts[pointIndex] then return end
+            if uncertainty == bestUncertainty and pathCount > job.bestPathCounts[stateKey] then return end
         end
     end
     -- Build a Path signature only once the cheaper tuple comparisons admit it.
@@ -443,16 +478,18 @@ local function OfferPoint(job, pointIndex, cost, uncertainty, pathCount,
                 AddPathToSignature(signature, previousPathReference)
         end
     end
-    if costBucket == bestCostBucket and uncertainty == job.bestUncertainties[pointIndex] and
-        pathCount == job.bestPathCounts[pointIndex] and signature >= job.bestSignatures[pointIndex] then
+    if costBucket == bestCostBucket and uncertainty == job.bestUncertainties[stateKey] and
+        pathCount == job.bestPathCounts[stateKey] and signature >= job.bestSignatures[stateKey] then
         return
     end
-    job.bestCostBuckets[pointIndex] = costBucket
-    job.bestUncertainties[pointIndex] = uncertainty
-    job.bestPathCounts[pointIndex] = pathCount
-    job.bestSignatures[pointIndex] = signature
+    job.bestCostBuckets[stateKey] = costBucket
+    job.bestUncertainties[stateKey] = uncertainty
+    job.bestPathCounts[stateKey] = pathCount
+    job.bestSignatures[stateKey] = signature
     local accepted = {
         pointIndex = pointIndex,
+        stateKey = stateKey,
+        phaseState = phaseState,
         cost = cost,
         costBucket = costBucket,
         uncertainty = uncertainty,
@@ -469,10 +506,10 @@ end
 ---@param entry NavigationHeapEntry
 ---@return boolean
 local function IsCurrentEntry(job, entry)
-    return job.bestCostBuckets[entry.pointIndex] == entry.costBucket and
-        job.bestUncertainties[entry.pointIndex] == entry.uncertainty and
-        job.bestPathCounts[entry.pointIndex] == entry.pathCount and
-        job.bestSignatures[entry.pointIndex] == entry.signature
+    return job.bestCostBuckets[entry.stateKey] == entry.costBucket and
+        job.bestUncertainties[entry.stateKey] == entry.uncertainty and
+        job.bestPathCounts[entry.stateKey] == entry.pathCount and
+        job.bestSignatures[entry.stateKey] == entry.signature
 end
 
 -- Each overlay falls back directly to the base graph, never another job's
@@ -538,6 +575,7 @@ local function BuildRoute(job, destinationEntry)
         finalCost = destinationEntry.finalCost,
         comparisonSeconds = destinationEntry.cost,
         preparedData = job.preparedData,
+        destinationPhaseState = job.initialPhaseState,
         originMapID = job.originMapID,
         originX = job.originX,
         originY = job.originY,
@@ -572,6 +610,10 @@ end
 ---@param reference integer
 ---@return boolean
 local function IsRetainedPath(job, reference)
+    if job.reverseSearch and (job.graph.pathTypes[reference] == "phaseswitch" or
+        not Navigation:IsTravelPhasePathAllowed(job.graph, job.preparedData, reference, job.initialPhaseState)) then
+        return false
+    end
     if job.avoidedPaths[reference] or job.prunedPaths[reference] or job.unavailablePathCosts[reference] or
         job.preparedData.requirementStateByPath[reference] ~= "satisfied" then
         return false
@@ -636,6 +678,8 @@ end
 local function OfferDestination(job, entry)
     local graph = job.graph
     if not graph or entry.pathCount == 0 then return end
+    if not Navigation:IsTravelPhaseDestinationAllowed(entry.phaseState or job.initialPhaseState,
+        job.destinationData.mapID, job.initialPhaseState) then return end
     local finalCost = GetFinalMovementCost(job, entry.pointIndex)
     if not finalCost then return end
     local costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds)
@@ -715,7 +759,8 @@ local function ExpandPoint(job, entry)
     for offset = firstOffset, firstOffset + count - 1 do
         job.checkpoint()
         local pathReference = graph.outgoingPathReferences[offset]
-        if IsRetainedPath(job, pathReference) then
+        if IsRetainedPath(job, pathReference) and
+            Navigation:IsTravelPhasePathAllowed(graph, job.preparedData, pathReference, entry.phaseState or job.initialPhaseState) then
             ---@type NavigationCalculatedPathCost?
             local pathCost = job.pathCostByReference[pathReference]
             if pathCost == nil then
@@ -834,7 +879,8 @@ local function OfferNextMovementPoint(job)
     job.nextMovementPointIndex = candidateIndex + 1
     job.movementCandidates = job.movementCandidates + 1
     if pointIndex == entry.pointIndex then return end
-    local bestCostBucket = job.bestCostBuckets[pointIndex]
+    local bestCostBucket = job.bestCostBuckets[pointIndex .. "/" ..
+        Navigation:GetTravelPhaseKey(entry.phaseState or job.initialPhaseState)]
     if bestCostBucket and entry.costBucket > bestCostBucket then return end
     local target = job.worldPoints[pointIndex]
     local fromMapID = job.reverseSearch and target.mapID or origin.mapID
@@ -888,7 +934,8 @@ local function SeedJob(job)
         local destination = job.destinationData
         local directCost = Navigation:GetPlayerTravelCost(job.preparedData,
             playerMapID, playerX, playerY, destination.mapID, destination.x, destination.y, "automatic")
-        if directCost then
+        if directCost and Navigation:IsTravelPhaseDestinationAllowed(job.initialPhaseState,
+            destination.mapID, job.initialPhaseState) then
             job.destinationCostBucket = GetCostBucket(directCost.comparisonSeconds)
             HeapPush(job.heap, {
                 pointIndex = 0,
@@ -922,7 +969,8 @@ local function SeedJob(job)
     -- the escape route when the player's instance cannot attach to world travel.
     for _, pathReference in ipairs(graph.currentPlayerPathReferences) do
         job.checkpoint()
-        if not job.avoidedPaths[pathReference] then
+        if not job.avoidedPaths[pathReference] and
+            Navigation:IsTravelPhasePathAllowed(graph, job.preparedData, pathReference, job.initialPhaseState) then
             local pathCost = Navigation:GetPathCost(graph, job.preparedData, pathReference)
             if pathCost then
                 job.pathCostByReference[pathReference] = pathCost
@@ -1054,7 +1102,8 @@ end
 -- providing endpoint/type views to existing presentation consumers.
 ---@param job NavigationCalculationJob
 ---@param source NavigationGraph
-local function PrepareTaxiCandidates(job, source)
+---@param prepared NavigationPreparedData
+local function PrepareTaxiCandidates(job, source, prepared)
     local graph = CreateGraphOverlay(source)
     job.graph = graph
     local observation = job.preparedData.taxiObservation
@@ -1068,7 +1117,7 @@ local function PrepareTaxiCandidates(job, source)
     local legs = {} ---@type NavigationTaxiLegMemo
     for index, destination in ipairs(destinations) do
         job.checkpoint()
-        local journey, failure = Navigation:PriceTaxiJourney(source, job.preparedData,
+        local journey, failure = Navigation:PriceTaxiJourney(source, prepared,
             observation.itineraries[destination], job.checkpoint, legs)
         local reference = -index
         local avoided = false
@@ -1143,6 +1192,7 @@ function Navigation:CreateDirectRoute(destinationID, destinationChangeNumber, da
     local graph = self:GetGraph()
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if not graph or not mapID or not x or not y then return nil end
+    if not self:IsTravelPhaseMapAllowed(self:GetTravelPhaseState(), data.mapID) then return nil end
     local inputs = { movement = self:GetMovementCapabilities(), movementOnly = true }
     local cost = self:GetPlayerTravelCost(inputs, mapID, x, y, data.mapID, data.x, data.y, "automatic")
     if not cost or not MapPinEnhanced:IsReadableNumber(cost.comparisonSeconds) or
@@ -1178,6 +1228,7 @@ end
 ---@return boolean
 function Navigation:ValidateRoute(route, prepared, checkpoint, position)
     if #route.pathReferences > 0 and prepared.movementOnly then return false end
+    local phaseState = self:GetTravelPhaseState()
     for index, reference in ipairs(route.pathReferences) do
         checkpoint()
         local cost ---@type NavigationCalculatedPathCost?
@@ -1189,14 +1240,16 @@ function Navigation:ValidateRoute(route, prepared, checkpoint, position)
                 return false
             end
             ---@cast prepared NavigationPreparedData
-            local fresh = self:RefreshTaxiJourney(journey, prepared, checkpoint)
+            local fresh = self:RefreshTaxiJourney(journey, prepared, checkpoint, phaseState)
             if not fresh then return false end
             route.taxiJourneys[reference] = fresh
             cost = fresh.cost
         else
-            cost = self:GetFreshPathCost(reference)
+            cost = self:GetFreshPathCost(reference, phaseState)
         end
         if not cost then return false end
+        phaseState = self:AdvanceTravelPhase(route.graph, reference, phaseState)
+        if not phaseState then return false end
         route.pathCosts[index] = cost
         if reference > 0 and route.graph.pathTypes[reference] == "flighttaxi" then
             route.taxiJourneys[reference] = self:GetInferredTaxiJourney(route.graph, reference, cost)
@@ -1300,14 +1353,15 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
                 job.onFinish(nil, failure or "navigation data is not ready", job.checkpoint)
                 return
             end
-            job.preparedData = prepared
+            job.initialPhaseState = self:GetTravelPhaseState()
+            job.preparedData = self:PrepareTravelPhaseSearch(graph, prepared, job.checkpoint)
             job.checkpoint()
             for reference in pairs(avoidedPaths) do
                 job.avoidedPaths[reference] = true
                 job.checkpoint()
             end
             PrepareTransportCandidates(job, graph)
-            PrepareTaxiCandidates(job, graph)
+            PrepareTaxiCandidates(job, graph, prepared)
             PrepareMovementPoints(job, graph)
             SeedJob(job)
             local result = AdvanceJob(job)
