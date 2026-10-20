@@ -351,6 +351,12 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
         remaining = self:GetRemainingRouteCost(previous, currentInputs, checkpoint, position)
         currentRouteUnusable = remaining == nil
     end
+    if previous and remaining and route and #route.pathReferences == 0 then
+        local reference = previous.route.pathReferences[previous.pathIndex]
+        -- Entering the lift's map does not prove reaching its lower level. A
+        -- straight-line candidate cannot replace this unfinished ordered crossing.
+        if reference and previous.route.graph.pathTypes[reference] == "lift" then return end
+    end
     if route and prepared then
         if mapID and x and y and (not HasRouteOrigin(route) or mapID ~= route.originMapID) then
             self:StartCalculation(currentRouteUnusable)
@@ -950,6 +956,15 @@ function Navigation:PublishStep(progression)
     -- Waiting Steps have no arrival callback; a destination lock is not Step state.
     targetData.lock = false
     targetData.mapDistanceOnly = true
+    local arrivalMapID = RequiresDestinationMap(pathType,
+        fromPointIndex and graph.pointMapIDs[fromPointIndex], graph.pointMapIDs[toPointIndex]) and
+        graph.pointMapIDs[targetPointIndex] or nil
+    if pathType == "lift" and progression.phase == "approach" then
+        local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+        -- The upper ruins already report Undercity. Still require the boarding
+        -- position, but accept either authored map for this selected lift.
+        if playerMapID == graph.pointMapIDs[toPointIndex] then arrivalMapID = playerMapID end
+    end
     self:ApplyStepPresentation(targetData, onArrival, {
         changeNumber = presentationChangeNumber,
         arrivalIdentity = arrivalIdentity,
@@ -958,9 +973,7 @@ function Navigation:PublishStep(progression)
             (progression.phase == "approach" or progression.phase == "ready"),
         phase = progression.phase,
         arrivalMapID = (pathType == "floor" or pathType == "border" or pathType == "lift" or
-            progression.phase == "in-transit") and
-            RequiresDestinationMap(pathType, fromPointIndex and graph.pointMapIDs[fromPointIndex],
-                graph.pointMapIDs[toPointIndex]) and graph.pointMapIDs[targetPointIndex] or nil,
+            progression.phase == "in-transit") and arrivalMapID or nil,
         stepIndex = progression.pathIndex,
         stepCount = GetRouteStepCount(progression.route),
         instruction = self:GetPathInstruction(progression.route, progression.pathIndex, progression.phase),

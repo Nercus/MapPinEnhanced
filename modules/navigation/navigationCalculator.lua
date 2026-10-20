@@ -179,7 +179,13 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
             playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
         end
         if not playerMapID or not playerX or not playerY then return nil end
+        ---@type "automatic"|"ground"|"flight"|"border"
         local mode = self:GetPathApproachMode(pathType)
+        -- A lift's destination map can begin before its boarding point (Undercity's
+        -- upper ruins). Keep the selected approach reachable across that map seam.
+        if pathType == "lift" and playerMapID == graph.pointMapIDs[toPointIndex] then
+            mode = "border"
+        end
         local approachCost = self:GetPlayerTravelCost(preparedData, playerMapID, playerX, playerY,
             graph.pointMapIDs[targetPointIndex], graph.pointXs[targetPointIndex], graph.pointYs[targetPointIndex], mode)
         if not approachCost then return nil end
