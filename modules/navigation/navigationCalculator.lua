@@ -14,6 +14,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 ---@field defaultMountInfo NavigationMountInfo
 
 ---@class NavigationMovementCapabilities
+---@field walkingSpeed number
 ---@field groundSpeed number
 ---@field steadyFlightSpeed number
 ---@field skyridingSpeed number
@@ -23,6 +24,7 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 local MOVEMENT_SPEEDS = {
     walking = 7,
+    form = 9.1,
     ground = 11.2,
     fastGround = 14,
     steadyFlight = 29,
@@ -38,7 +40,9 @@ end
 
 ---@return NavigationMovementCapabilities
 function Navigation:GetMovementCapabilities()
-    local groundSpeed = MOVEMENT_SPEEDS.walking
+    -- Like mounting, using a learned Cat Form or Ghost Wolf is a planned travel assumption.
+    local walkingSpeed = (KnowsSpell(768) or KnowsSpell(2645)) and MOVEMENT_SPEEDS.form or MOVEMENT_SPEEDS.walking
+    local groundSpeed = walkingSpeed
     if KnowsSpell(33388) then groundSpeed = MOVEMENT_SPEEDS.ground end
     if KnowsSpell(33391) then groundSpeed = MOVEMENT_SPEEDS.fastGround end
 
@@ -60,6 +64,7 @@ function Navigation:GetMovementCapabilities()
     end
 
     return {
+        walkingSpeed = walkingSpeed,
         groundSpeed = groundSpeed,
         steadyFlightSpeed = steadyFlightSpeed,
         skyridingSpeed = canSkyriding and MOVEMENT_SPEEDS.skyriding or steadyFlightSpeed,
@@ -113,7 +118,7 @@ local function GetMovementSpeed(movement, travelMode, fromMapID, toMapID)
     -- graph's authored border Paths own those crossings instead.
     if fromMapID ~= toMapID and travelMode ~= "border" then return nil, nil end
     if fromMountInfo.ground and toMountInfo.ground then return "ground", movement.groundSpeed end
-    return "walking", MOVEMENT_SPEEDS.walking
+    return "walking", movement.walkingSpeed
 end
 
 ---@param preparedData {movement: NavigationMovementCapabilities}

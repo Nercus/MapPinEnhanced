@@ -968,7 +968,8 @@ end
 ---@param second NavigationMovementCapabilities
 ---@return boolean
 local function SameMovementCapabilities(first, second)
-    return first.groundSpeed == second.groundSpeed and
+    return first.walkingSpeed == second.walkingSpeed and
+        first.groundSpeed == second.groundSpeed and
         first.steadyFlightSpeed == second.steadyFlightSpeed and
         first.skyridingSpeed == second.skyridingSpeed and
         first.canFly == second.canFly and first.canSkyriding == second.canSkyriding and

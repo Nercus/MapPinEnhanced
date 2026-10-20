@@ -1373,7 +1373,8 @@ function Navigation:RefreshEligibility(events)
         local current = self:CreateDirectRoute(self.activeDestination.destinationID,
             self.activeDestination.changeNumber, self.activeDestination.routingData)
         if not current or current.originMapID ~= route.originMapID or
-            current.finalCost.explanation.mode ~= route.finalCost.explanation.mode then
+            current.finalCost.explanation.mode ~= route.finalCost.explanation.mode or
+            current.finalCost.explanation.speed ~= route.finalCost.explanation.speed then
             self:StartCalculation(true)
         end
         return
