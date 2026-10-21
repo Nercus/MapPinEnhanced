@@ -407,6 +407,7 @@ Pins.PIN_ICON_ALIASES = {
     ["Bonus-Objective-Star"] = "QuestBonusObjective",
     ["Worldquest-icon"] = "worldquest-capstone",
     ["worldquest-icon-boss"] = "vignettekillboss",
+    ["worldquest-prey-crystal"] = "UI-EventPoi-PreyCrystal",
     ["UI-EventPoi-Horn-small-corner"] = "minimap-genericevent-hornicon-small",
     ["UI-eventpoi-ulatekmajor-2x"] = "UI-eventpoi-ulatekmajor",
     ["UI-eventpoi-ulatekminor-2x"] = "UI-eventpoi-ulatekminor",
