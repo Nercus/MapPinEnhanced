@@ -87,6 +87,7 @@ function MapPinEnhancedPinMixin:SetPinData(pinData, groupWillPersist)
     if not self.initialized and self.pinID then
         self:Init(self.pinID) -- we need to recall init when the pin is reused as the frames are released back when reset
     end
+    if self.group then Groups:CancelNextPinPrediction(self.group) end
     self.pinData = pinData
     self.groupIsAddingPin = groupWillPersist and true or nil
     self.pinData.x = Pins:ConvertPercentCoordinate(self.pinData.x)

@@ -3,6 +3,8 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class Groups
 local Groups = MapPinEnhanced:GetModule("Groups")
+local Pins = MapPinEnhanced:GetModule("Pins")
+local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 local ARCHIVE_STATE_CLEARED = "cleared"
 local ARCHIVE_STATE_HIDDEN = "hidden"
@@ -43,8 +45,9 @@ function MapPinEnhancedGroupPinOperationsMixin:RemovePin(pinID)
 end
 
 ---@param pinID UUID
+---@param reached boolean? only the arrival owner supplies this
 ---@return boolean
-function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID)
+function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID, reached)
     if not self:CancelBatch() then return false end
     assert(pinID, "MapPinEnhancedGroupMixin:ClearPin: pinID is nil")
 
@@ -58,6 +61,9 @@ function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID)
     -- Manual clearing also advances an ordered group when another pin is tracked.
     local nextOrderedPin = ordered and self:GetOrderedTrackablePin(order, pinID) or nil
     local wasTracked = pin:IsTracked()
+    local prediction = reached and wasTracked and Groups:TakeNextPinPrediction(self, pinID) or nil
+    local predictionChangeNumber = self.predictionChangeNumber or 0
+    local groupID, lifetimeChangeNumber = self:GetGroupID(), self.lifetimeChangeNumber
     local data = CopyTable(pin:GetSaveableData())
     if self:IsRestorable() then
         if not self.pinState:ArchiveActive(pinID, ARCHIVE_STATE_CLEARED) then return false end
@@ -68,11 +74,19 @@ function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID)
 
     self:PersistPinChanges(true)
     MapPinEnhanced:FireCallback("PIN_CLEARED", nil, self, pinID, data)
+    -- Arrival releases its origin once. Reentrant mutation or selection during
+    -- release must not apply the old group's speculative winner.
+    if reached and wasTracked then
+        local owner = Navigation:GetActiveDestinationState()
+        if not self:IsSameGroup(groupID, lifetimeChangeNumber) or Pins:GetTrackedPin() or owner then return true end
+        if self.predictionChangeNumber ~= predictionChangeNumber + 1 or
+            prediction and not Navigation:IsDestinationPredictionFresh(prediction) then prediction = nil end
+    end
     if wasTracked or ordered then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then
             nextOrderedPin:TrackWithoutPersisting()
         else
-            Groups:TrackNextPinAfterGroup(self, order)
+            Groups:TrackNextPinAfterGroup(self, order, prediction)
         end
     end
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self)

@@ -202,6 +202,9 @@ end
 ---@return NavigationCalculatedPathCost?
 ---@return string? failure
 function Navigation:GetPathCost(graph, preparedData, pathReference)
+    if preparedData.frozenPathCosts then
+        return preparedData.frozenPathCosts[pathReference], preparedData.frozenPathFailures[pathReference]
+    end
     if preparedData.requirementStateByPath[pathReference] ~= "satisfied" then
         return nil, preparedData.exclusionReasonByPath[pathReference] or "requirement not satisfied"
     end

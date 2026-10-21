@@ -138,15 +138,20 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     end)
 
     local dropdown = self.trackingModeField.child
-    dropdown.options = Groups.TRACKING_MODE_OPTIONS
+    dropdown.options = protected and {
+        { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Distance"]), value = Groups.TRACKING_MODE_NEAREST },
+    } or Groups.TRACKING_MODE_OPTIONS
     local entries = {}
     -- Apply editor choices immediately; a delayed callback must not edit a previous group.
-    for _, option in ipairs(Groups.TRACKING_MODE_OPTIONS) do
+    for _, option in ipairs(dropdown.options) do
         local mode = option.value
         table.insert(entries, {
             type = "radio",
             label = option.label,
             isSelected = function() return group:GetTrackingMode() == mode end,
+            initializer = not protected and mode == Groups.TRACKING_MODE_NEAREST and function(_, description)
+                MenuUtil.SetTitleAndTextTooltip(description, L["Track by Travel Time"], L["Next Pin Travel Time Description"])
+            end or nil,
             setSelected = function()
                 if self.group == group and not protected then
                     group:SetTrackingMode(mode)

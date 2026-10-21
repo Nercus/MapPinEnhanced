@@ -160,6 +160,8 @@ end
 ---@field taxiObservation NavigationTaxiObservation?
 
 ---@class NavigationPreparedData : NavigationMovementData
+---@field frozenPathCosts table<integer, NavigationCalculatedPathCost>?
+---@field frozenPathFailures table<integer, string>?
 ---@field phaseRequirements table<integer, boolean>? Calculation-local phase-dependent requirements
 ---@field phaseObservations NavigationRequirementObservations?
 ---@field requirementStateByPath table<integer, NavigationRequirementState>
@@ -909,6 +911,22 @@ local SOFT_EVENTS = {
     CRITERIA_UPDATE = true,
 }
 
+-- Includes notifications that can change action prices without rebuilding requirements.
+local predictionChangeNumber = 0
+
+function Navigation:GetPredictionChangeNumber()
+    return predictionChangeNumber
+end
+
+local function InvalidatePrediction()
+    predictionChangeNumber = predictionChangeNumber + 1
+end
+
+for _, event in ipairs({ "SPELL_UPDATE_COOLDOWN", "SPELL_UPDATE_CHARGES", "BAG_UPDATE_COOLDOWN",
+    "PLAYER_EQUIPMENT_CHANGED" }) do
+    MapPinEnhanced:RegisterEvent(event, InvalidatePrediction)
+end
+
 function Navigation:ArePreparedInputsFresh()
     return not preparedDataDirty and preparedNavigationData ~= nil
 end
@@ -917,6 +935,7 @@ end
 -- must never be refilled while a Route or calculation still references them.
 ---@param event? WowEvent
 function Navigation:InvalidatePreparedData(event)
+    InvalidatePrediction()
     --@debug@
     MapPinEnhanced.profiler:InvalidatePreparation(event)
     --@end-debug@
@@ -943,7 +962,16 @@ function Navigation:InvalidatePreparedData(event)
     end
 end
 
+local predictionPreparation = false
+
+function Navigation:CancelPredictionPreparation()
+    if predictionPreparation and not self.activeCalculation and not self.pendingCalculationRestart then
+        self:CancelPreparedData()
+    end
+end
+
 function Navigation:CancelPreparedData()
+    predictionPreparation = false
     if cancelPreparation then
         --@debug@
         MapPinEnhanced.profiler:FinishPreparation(profilePreparation, "cancelled")
@@ -993,7 +1021,8 @@ end
 -- published atomically; cancelled workers never resume into a newer generation.
 ---@return NavigationPreparedData?
 ---@return string? failure
-function Navigation:EnsurePreparedData()
+---@param background boolean?
+function Navigation:EnsurePreparedData(background)
     if not navigationGraph then return nil, "navigation data is not ready" end
     if not preparedDataDirty then return preparedNavigationData end
     if self.routeNavigationEnabled and self.activeDestination and not cancelPreparation and not preparationFailure then
@@ -1004,12 +1033,13 @@ function Navigation:EnsurePreparedData()
         local profilePass = MapPinEnhanced.profiler:BeginPreparation(not preparedNavigationData or fullRefresh)
         profilePreparation = profilePass
         --@end-debug@
+        predictionPreparation = background == true
         cancelPreparation = MapPinEnhanced:BatchExecution({ function()
             --@debug@
             MapPinEnhanced.profiler:SetWorkerScope("Navigation.PreparationSlice", profilePass)
             MapPinEnhanced.profiler:SetWorkerPhase("Navigation.Preparation.Requirements")
             --@end-debug@
-            local checkpoint = self:CreateNavigationCheckpoint()
+            local checkpoint = self:CreateNavigationCheckpoint(nil, background and 0.1 or nil)
             -- The memo belongs only to this pass; published snapshots retain no observations.
             local observations = {} ---@type NavigationRequirementObservations
             local previous = preparedNavigationData
@@ -1126,9 +1156,10 @@ function Navigation:EnsurePreparedData()
             profilePreparation = nil
             --@end-debug@
             cancelPreparation = nil
+            predictionPreparation = false
             if preparedDataDirty then
-                self:EnsurePreparedData()
-            else
+                self:EnsurePreparedData(background)
+            elseif not background or self.activeCalculation or not self:IsDirectOnlyRoute() then
                 self:RefreshEligibility({})
             end
         end, 1, function(message)
@@ -1137,6 +1168,7 @@ function Navigation:EnsurePreparedData()
             profilePreparation = nil
             --@end-debug@
             cancelPreparation = nil
+            predictionPreparation = false
             allRequirementsDirty = true
             preparationFailure = message
             local restart = self.pendingCalculationRestart

@@ -13,7 +13,7 @@ MapPinEnhancedGroupTrackingMixin = {}
 Groups.TRACKING_MODE_NEAREST = "nearest"
 Groups.TRACKING_MODE_ORDERED = "ordered"
 Groups.TRACKING_MODE_OPTIONS = {
-    { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Distance"]), value = Groups.TRACKING_MODE_NEAREST },
+    { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Travel Time"]), value = Groups.TRACKING_MODE_NEAREST },
     { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Groups.TRACKING_MODE_ORDERED },
 }
 
@@ -82,6 +82,7 @@ function MapPinEnhancedGroupTrackingMixin:SetTrackingMode(mode)
 
     if self.trackingMode == mode then return true end
 
+    Groups:CancelNextPinPrediction(self)
     self.trackingMode = mode
     if mode == Groups.TRACKING_MODE_ORDERED then
         local trackedPin = Pins:GetTrackedPin()

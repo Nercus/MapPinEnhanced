@@ -346,6 +346,7 @@ local FLIGHT_PRUNABLE_TYPES = {
 ---@field wait fun()
 ---@field checkpoint fun()
 ---@field cancel fun()?
+---@field prediction NavigationDestinationPrediction?
 ---@field restart fun()?
 ---@field onFinish async fun(route: NavigationRoute?, failure: string?, checkpoint: fun())
 
@@ -1167,9 +1168,10 @@ end
 
 -- Awaiting observations resets the slice clock, excluding suspended frames.
 ---@param job NavigationCalculationJob?
+---@param milliseconds number?
 ---@return fun() checkpoint
 ---@return fun() wait
-function Navigation:CreateNavigationCheckpoint(job)
+function Navigation:CreateNavigationCheckpoint(job, milliseconds)
     local slice = debugprofilestop()
     local operations = 0
     ---@async
@@ -1181,7 +1183,7 @@ function Navigation:CreateNavigationCheckpoint(job)
     ---@async
     local function Checkpoint()
         operations = operations + 1
-        if operations >= MAX_OPERATIONS_PER_SLICE or debugprofilestop() - slice >= MAX_MILLISECONDS_PER_SLICE then
+        if operations >= MAX_OPERATIONS_PER_SLICE or debugprofilestop() - slice >= (milliseconds or MAX_MILLISECONDS_PER_SLICE) then
             Wait()
         end
         if job and job.cancelled then coroutine.yield() end
@@ -1192,13 +1194,20 @@ end
 ---@param destinationID string
 ---@param destinationChangeNumber integer
 ---@param data WayfinderData
+---@param origin WayfinderData? fixed prediction origin, otherwise current player position
+---@param movement NavigationMovementCapabilities? frozen prediction capabilities
 ---@return NavigationRoute?
-function Navigation:CreateDirectRoute(destinationID, destinationChangeNumber, data)
+function Navigation:CreateDirectRoute(destinationID, destinationChangeNumber, data, origin, movement)
     local graph = self:GetGraph()
-    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    local x, y, mapID ---@type number?, number?, number?
+    if origin then
+        x, y, mapID = origin.x, origin.y, origin.mapID
+    else
+        x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    end
     if not graph or not mapID or not x or not y then return nil end
     if not self:IsTravelPhaseMapAllowed(self:GetTravelPhaseState(), data.mapID) then return nil end
-    local inputs = { movement = self:GetMovementCapabilities(), movementOnly = true }
+    local inputs = { movement = movement or self:GetMovementCapabilities(), movementOnly = true }
     local cost = self:GetPlayerTravelCost(inputs, mapID, x, y, data.mapID, data.x, data.y, "automatic")
     if not cost or not MapPinEnhanced:IsReadableNumber(cost.comparisonSeconds) or
         not (cost.comparisonSeconds >= 0 and cost.comparisonSeconds < math.huge) then
@@ -1293,19 +1302,14 @@ function Navigation:ValidateRoute(route, prepared, checkpoint, position)
     return true
 end
 
+---@param graph NavigationGraph?
+---@param origin {mapID: number?, x: number?, y: number?}
 ---@param destinationID string
 ---@param destinationChangeNumber integer
 ---@param destinationData WayfinderData
----@param avoidedPaths table<integer, NavigationPathFailure>
----@param onFinish async fun(route: NavigationRoute?, failure: string?, checkpoint: fun())
----@param onRestart fun()
----@return NavigationCalculationJob?
-function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish,
-                                          onRestart)
-    local graph = self:GetGraph()
+---@return NavigationCalculationJob
+local function CreateCalculationJob(graph, origin, destinationID, destinationChangeNumber, destinationData)
     calculationNumber = calculationNumber + 1
-    local startedAt = GetTimePreciseSec()
-    local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
     local job = {
         graph = graph,
         baseGraph = graph,
@@ -1324,9 +1328,9 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         pathCostByReference = {},
         unavailablePathCosts = {},
         prunedPaths = {},
-        originMapID = playerMapID,
-        originX = playerX,
-        originY = playerY,
+        originMapID = origin.mapID,
+        originX = origin.x,
+        originY = origin.y,
         cancelled = false,
         worldPoints = {},
         attemptedWorldPoints = {},
@@ -1334,13 +1338,28 @@ function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber
         entrancesByInstanceX = {},
         entrancesByMap = {},
         entrancesByMapX = {},
-        startedAt = startedAt,
+        startedAt = GetTimePreciseSec(),
         calculationSlices = 0,
         movementCandidates = 0,
-        onFinish = onFinish,
-        restart = onRestart,
     }
     ---@cast job NavigationCalculationJob
+    return job
+end
+
+---@param destinationID string
+---@param destinationChangeNumber integer
+---@param destinationData WayfinderData
+---@param avoidedPaths table<integer, NavigationPathFailure>
+---@param onFinish async fun(route: NavigationRoute?, failure: string?, checkpoint: fun())
+---@param onRestart fun()
+---@return NavigationCalculationJob?
+function Navigation:StartRouteCalculation(destinationID, destinationChangeNumber, destinationData, avoidedPaths, onFinish,
+                                          onRestart)
+    local graph = self:GetGraph()
+    local playerX, playerY, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+    local job = CreateCalculationJob(graph, { mapID = playerMapID, x = playerX, y = playerY },
+        destinationID, destinationChangeNumber, destinationData)
+    job.onFinish, job.restart = onFinish, onRestart
     job.cancel = MapPinEnhanced:BatchExecution({
         ---@async
         function()
@@ -1415,4 +1434,266 @@ function Navigation:CancelRouteCalculation(job)
     -- when another owner still holds this terminal job handle.
     wipe(job)
     job.cancelled = true
+end
+
+---@class NavigationDestinationCandidate
+---@field id string
+---@field order number
+---@field data WayfinderData
+
+---@class NavigationDestinationPrediction
+---@field id string
+---@field comparisonSeconds number
+---@field changeNumber integer
+---@field expiresAt number
+---@field origin WayfinderData
+---@field destination WayfinderData
+---@field graph NavigationGraph
+---@field route NavigationRoute?
+
+---@param prediction NavigationDestinationPrediction
+---@return boolean
+function Navigation:IsDestinationPredictionFresh(prediction)
+    return self.routeNavigationEnabled == true and
+        prediction.changeNumber == self:GetPredictionChangeNumber() and GetTime() < prediction.expiresAt
+end
+
+-- Arrival already permits a 50-yard radius. Reuse additionally requires the
+-- same origin map so ordinary route validation can price its initial approach.
+---@param prediction NavigationDestinationPrediction
+---@param destination WayfinderData
+---@return boolean
+function Navigation:CanReuseDestinationPrediction(prediction, destination)
+    local route, origin, target = prediction.route, prediction.origin, prediction.destination
+    if not route or not self:IsDestinationPredictionFresh(prediction) or prediction.graph ~= self:GetGraph() or
+        target.mapID ~= destination.mapID or target.x ~= destination.x or target.y ~= destination.y or
+        #route.pathReferences > 0 and not self:ArePreparedInputsFresh() then
+        return false
+    end
+    local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
+    if mapID ~= origin.mapID or not x or not y then return false end
+    local distance = self:GetComparableDistance(mapID, x, y, origin.mapID, origin.x, origin.y)
+    return distance ~= nil and distance <= 50
+end
+
+-- The prediction is single-use. Reuse enters the same validation/publication
+-- path as a new search, with a smaller slice and ordinary cancellation ownership.
+---@param destination NavigationDestination
+---@param prediction NavigationDestinationPrediction
+---@return boolean accepted
+function Navigation:StartPredictedRoute(destination, prediction)
+    if destination.destinationID ~= prediction.id or destination.directGuidance or self:IsTaxiBookingPending() or
+        not self:CanReuseDestinationPrediction(prediction, destination.routingData) then return false end
+    local route = prediction.route
+    ---@cast route NavigationRoute
+    route.destinationID, route.destinationChangeNumber = destination.destinationID, destination.changeNumber
+    local job = CreateCalculationJob(prediction.graph, prediction.origin, destination.destinationID,
+        destination.changeNumber, destination.routingData)
+    job.prediction = prediction
+    job.restart = function()
+        if self.activeDestination == destination then self:StartCalculation(true) end
+    end
+    self.activeCalculation = job
+    self.lastCalculationFailure, self.lastCalculationExclusions, self.lastCalculationTermination = nil, nil, nil
+    job.cancel = MapPinEnhanced:BatchExecution({
+        ---@async
+        function()
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerScope("Navigation.NextPinValidationSlice")
+            --@end-debug@
+            local checkpoint = self:CreateNavigationCheckpoint(job, 0.1)
+            ---@async
+            local function Checkpoint()
+                checkpoint()
+                if not self:IsDestinationPredictionFresh(prediction) then
+                    self:StartCalculation(true)
+                    coroutine.yield()
+                end
+            end
+            Checkpoint()
+            self:ApplyCalculatedRoute(destination, route, nil, Checkpoint, true)
+        end,
+    }, nil, function()
+        if self.activeCalculation ~= job then return end
+        self:CancelRouteCalculation(job)
+        self:TryAutomaticTaxiSelection()
+    end, 1, function(message)
+        if self.activeCalculation == job then
+            self:CancelRouteCalculation(job)
+            if self.activeDestination == destination then self:StartCalculation(true) end
+        end
+        geterrorhandler()(message)
+    end)
+    return true
+end
+
+-- Detached estimates never publish routes or invoke travel handlers. Preparation
+-- and search each receive 0.1 ms, so their handoff cannot multiply pin budgets.
+---@param originData WayfinderData
+---@param candidates NavigationDestinationCandidate[] owned copies, in arbitrary order
+---@param onFinish fun(prediction: NavigationDestinationPrediction?)?
+---@return fun() cancel
+function Navigation:FindFastestDestination(originData, candidates, onFinish)
+    local cancelled = false
+    local cancelWorker ---@type fun()?
+    local function Cancel()
+        if cancelled then return end
+        cancelled = true
+        if cancelWorker then cancelWorker() end
+        cancelWorker = nil
+        candidates = {}
+        onFinish = nil
+        self:CancelPredictionPreparation()
+    end
+    local winner ---@type NavigationDestinationPrediction?
+    cancelWorker = MapPinEnhanced:BatchExecution({
+        ---@async
+        function()
+            --@debug@
+            MapPinEnhanced.profiler:SetWorkerScope("Navigation.NextPinSlice")
+            --@end-debug@
+            local sliceCheckpoint, wait = self:CreateNavigationCheckpoint(nil, 0.1)
+            local changeNumber ---@type integer?
+            local expiresAt = math.huge
+            ---@async
+            local function Checkpoint()
+                sliceCheckpoint()
+                while true do
+                    if not self.routeNavigationEnabled or changeNumber and
+                        (changeNumber ~= self:GetPredictionChangeNumber() or GetTime() >= expiresAt) then
+                        Cancel()
+                        coroutine.yield()
+                    end
+                    if not self.activeCalculation and not self.pendingCalculationRestart then return end
+                    wait()
+                end
+            end
+            Checkpoint()
+            local graph = self:GetGraph()
+            if not graph or #candidates < 2 then return end
+            local origin = self:CopyRoutingData(originData, originData.mapID)
+            if not MapPinEnhanced:IsZoneMap(origin.mapID) then return end
+            changeNumber = self:GetPredictionChangeNumber()
+            local phase = self:GetTravelPhaseState()
+            local bestOrder = -math.huge
+            ---@param candidate NavigationDestinationCandidate
+            ---@param seconds number?
+            ---@return boolean
+            local function Consider(candidate, seconds)
+                if seconds and (not winner or GetCostBucket(seconds) < GetCostBucket(winner.comparisonSeconds) or
+                    GetCostBucket(seconds) == GetCostBucket(winner.comparisonSeconds) and
+                    (candidate.order > bestOrder or candidate.order == bestOrder and candidate.id < winner.id)) then
+                    winner = { id = candidate.id, comparisonSeconds = seconds,
+                        changeNumber = changeNumber, expiresAt = expiresAt,
+                        origin = origin, destination = candidate.data, graph = graph }
+                    bestOrder = candidate.order
+                    return true
+                end
+                return false
+            end
+            -- Nearby groups use ordinary short-direct estimates without preparing
+            -- the transport graph at all. A distant candidate still gets a full search.
+            local movement = { movement = self:GetMovementCapabilities() }
+            local allDirect = true
+            for _, candidate in ipairs(candidates) do
+                Checkpoint()
+                candidate.data = self:CopyRoutingData(candidate.data, origin.mapID)
+                local data = candidate.data
+                local direct = self:GetPlayerTravelCost(movement, origin.mapID, origin.x, origin.y,
+                    data.mapID, data.x, data.y, "automatic")
+                if direct and direct.comparisonSeconds <= 60 and MapPinEnhanced:IsZoneMap(data.mapID) and
+                    self:IsTravelPhaseDestinationAllowed(phase, data.mapID, phase) then
+                    if Consider(candidate, direct.comparisonSeconds) then
+                        winner.route = self:CreateDirectRoute(candidate.id, 0, data, origin, movement.movement)
+                    end
+                else
+                    allDirect = false
+                end
+            end
+            Checkpoint()
+            if allDirect then return end
+            winner, bestOrder = nil, -math.huge
+            local prepared, failure = self:EnsurePreparedData(true)
+            while not prepared and not failure do
+                wait()
+                Checkpoint()
+                prepared, failure = self:EnsurePreparedData(true)
+            end
+            if not prepared or graph ~= self:GetGraph() then return end
+            Checkpoint()
+            local inputs = self:PrepareTravelPhaseSearch(graph, prepared, Checkpoint)
+            local costs, failures = {}, {} ---@type table<integer, NavigationCalculatedPathCost>, table<integer, string>
+            -- Freeze each path once for the entire comparison. Later candidates must
+            -- not gain a cheaper teleport merely because its cooldown counted down.
+            for reference = 1, graph.pathCount do
+                Checkpoint()
+                local observedAt = GetTime()
+                local cost, reason = self:GetPathCost(graph, inputs, reference)
+                costs[reference], failures[reference] = cost, reason
+                local cooldown = cost and cost.explanation.cooldownSeconds
+                if cooldown and cooldown > 0 then expiresAt = math.min(expiresAt, observedAt + cooldown) end
+            end
+            inputs = setmetatable({ frozenPathCosts = costs, frozenPathFailures = failures }, { __index = inputs })
+            local first = candidates[1].data
+            local shared = CreateCalculationJob(graph, origin, "prediction", 0, first)
+            shared.checkpoint, shared.wait = Checkpoint, wait
+            shared.preparedData, shared.initialPhaseState = inputs, phase
+            PrepareTransportCandidates(shared, graph)
+            PrepareTaxiCandidates(shared, graph, prepared)
+            PrepareMovementPoints(shared, shared.graph)
+            for _, candidate in ipairs(candidates) do
+                Checkpoint()
+                local destination = candidate.data
+                if MapPinEnhanced:IsZoneMap(destination.mapID) then
+                    local direct = self:GetPlayerTravelCost(inputs, origin.mapID, origin.x, origin.y,
+                        destination.mapID, destination.x, destination.y, "automatic")
+                    if direct and direct.comparisonSeconds <= 60 and
+                        self:IsTravelPhaseDestinationAllowed(phase, destination.mapID, phase) then
+                        if Consider(candidate, direct.comparisonSeconds) then
+                            ---@cast winner NavigationDestinationPrediction
+                            winner.route = self:CreateDirectRoute(candidate.id, 0, destination, origin, inputs.movement)
+                        end
+                    else
+                        local job = CreateCalculationJob(graph, origin, candidate.id, 0, destination)
+                        job.checkpoint, job.wait = Checkpoint, wait
+                        job.preparedData, job.initialPhaseState = inputs, phase
+                        job.graph, job.taxiJourneys, job.taxiOutgoing = shared.graph, shared.taxiJourneys, shared.taxiOutgoing
+                        job.prunedPaths = shared.prunedPaths
+                        job.pathCostByReference, job.unavailablePathCosts = shared.pathCostByReference, shared.unavailablePathCosts
+                        job.worldPoints, job.attemptedWorldPoints = shared.worldPoints, shared.attemptedWorldPoints
+                        job.entrancesByInstance, job.entrancesByMap = shared.entrancesByInstance, shared.entrancesByMap
+                        job.entrancesByInstanceX, job.entrancesByMapX = shared.entrancesByInstanceX, shared.entrancesByMapX
+                        local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
+                            destination.x, destination.y, destination.mapID)
+                        job.destinationWorldPoint = x and y and instanceID and
+                            { x = x, y = y, instanceID = instanceID, mapID = destination.mapID } or nil
+                        SeedJob(job)
+                        local result = AdvanceJob(job)
+                        if not result then
+                            SeedReverseFallback(job)
+                            result = AdvanceJob(job)
+                        end
+                        if result and Consider(candidate, result.cost) then
+                            local route = BuildRoute(job, result)
+                            -- Keep only the selected legs and the ordinary immutable
+                            -- snapshot, not the comparison's frozen all-path prices.
+                            route.preparedData = prepared
+                            ---@cast winner NavigationDestinationPrediction
+                            winner.route = route
+                        end
+                    end
+                end
+            end
+            Checkpoint()
+    end }, nil, function()
+        local finish = onFinish
+        Cancel()
+        if finish then finish(winner) end
+    end, 1, function(message)
+        local finish = onFinish
+        Cancel()
+        if finish then finish(nil) end
+        geterrorhandler()(message)
+    end)
+    return Cancel
 end

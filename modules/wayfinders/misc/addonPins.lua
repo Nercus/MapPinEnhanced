@@ -166,6 +166,7 @@ end
 local function onPinTrackingChanged(eventName, pinID, isTracked)
     local trackedPin = Pins:GetTrackedPin()
     if trackedPin and trackedPin.pinID == pinID and isTracked then
+        local prediction = MapPinEnhanced:GetModule("Groups"):TakeTrackedPinPrediction(trackedPin)
         -- The pin supersedes the old destination; restoring its quest can untrack this pin.
         Wayfinders:ClearStepSuperTracking(false)
         -- Selecting an existing pin must clear the native source just like placing
@@ -182,10 +183,11 @@ local function onPinTrackingChanged(eventName, pinID, isTracked)
         trackedTargetChangeNumber = nil
         local changeNumber = Navigation:SetDestination(TARGET_OWNER, pinID, wayfinderData, function(_, _, _)
             RemoveTrackedPin(pinID)
-        end)
+        end, prediction)
         if Navigation:IsDestinationActive(TARGET_OWNER, pinID, changeNumber) then
             trackedTargetChangeNumber = changeNumber
             SetupPinCallbacks(pinID)
+            MapPinEnhanced:GetModule("Groups"):PrepareNextPinPrediction(trackedPin)
         end
     elseif pinID == trackedPinID and not isTracked then
         ClearPinCallbacks()

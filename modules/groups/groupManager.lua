@@ -175,6 +175,7 @@ function Groups:DeleteGroup(group)
 
     if group.isDeleting then return false end
     local groupID = group:GetGroupID()
+    self:CancelNextPinPrediction(group)
     group.isDeleting = true
     group:CancelBatch(true)
     self:CancelGroupPersist(groupID)
@@ -294,14 +295,16 @@ end
 
 ---@param group MapPinEnhancedGroupMixin
 ---@param cursorOrder number?
+---@param prediction NavigationDestinationPrediction? completed arrival prediction consumed before pin release
 ---@return MapPinEnhancedPinMixin?
-function Groups:TrackNextPinAfterGroup(group, cursorOrder)
+function Groups:TrackNextPinAfterGroup(group, cursorOrder, prediction)
     assert(group, "Groups:TrackNextPinAfterGroup: group is nil")
 
-    local nextPin = group:GetNextTrackablePin(cursorOrder)
+    local predictedPin = prediction and group:GetPinByID(prediction.id)
+    local nextPin = predictedPin or group:GetNextTrackablePin(cursorOrder)
     if nextPin then
         -- The group was already saved, so tracking this pin must not save it again.
-        nextPin:TrackWithoutPersisting()
+        self:TrackPredictedPin(nextPin, predictedPin and prediction or nil)
         return nextPin
     end
 

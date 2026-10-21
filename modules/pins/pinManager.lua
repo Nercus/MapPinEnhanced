@@ -104,6 +104,7 @@ end
 
 ---@param pin MapPinEnhancedPinMixin | nil
 function Pins:SetTrackedPin(pin)
+    MapPinEnhanced:GetModule("Groups"):CancelNextPinPrediction()
     self.trackedPin = pin
 end
 

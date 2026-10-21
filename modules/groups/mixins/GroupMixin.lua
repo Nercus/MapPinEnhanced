@@ -28,6 +28,7 @@ local Groups = MapPinEnhanced:GetModule("Groups")
 ---@field groupType "ungrouped"|"way-back"|nil
 ---@field protected boolean
 ---@field trackingMode GroupTrackingMode
+---@field predictionChangeNumber number? session-only mutations relevant to next-pin prediction
 ---@field trackingCursorOrder number? runtime-only order cursor used for ordered tracking
 ---@field cancelBatch fun()?
 ---@field pinsUpdating boolean?
@@ -69,6 +70,7 @@ function MapPinEnhancedGroupMixin:CancelBatch(force)
 end
 
 function MapPinEnhancedGroupMixin:BeginPinChanges()
+    Groups:CancelNextPinPrediction(self)
     Groups:CancelGroupPersist(self:GetGroupID())
     self.pinsUpdating = true
     local batchLocked, cancelBatch = self.batchLocked, self.cancelBatch
@@ -87,6 +89,7 @@ function MapPinEnhancedGroupMixin:IsSameGroup(groupID, lifetimeChangeNumber)
 end
 
 function MapPinEnhancedGroupMixin:Reset()
+    Groups:CancelNextPinPrediction(self)
     self.lifetimeChangeNumber = self.lifetimeChangeNumber + 1
     self:CancelBatch(true)
     self.pinsUpdating, self.batchLocked, self.restoreData = nil, nil, nil
@@ -108,6 +111,7 @@ end
 
 ---@param groupInfo GroupInfo
 function MapPinEnhancedGroupMixin:ApplyGroupInfo(groupInfo)
+    Groups:CancelNextPinPrediction(self)
     self.groupID = groupInfo.groupID or self.groupID or MapPinEnhanced:GenerateUUID("group")
     self.name = Groups:CleanGroupName(groupInfo.name)
     self.source = groupInfo.source

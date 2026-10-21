@@ -2,6 +2,7 @@
 local MapPinEnhanced = select(2, ...)
 
 local Pins = MapPinEnhanced:GetModule("Pins")
+local Groups = MapPinEnhanced:GetModule("Groups")
 
 ---@class MapPinEnhancedGroupPinStateMixin
 ---@field group MapPinEnhancedGroupMixin
@@ -107,6 +108,7 @@ end
 ---@param order number?
 ---@return MapPinEnhancedPinMixin?, boolean shouldTrack
 function MapPinEnhancedGroupPinStateMixin:AddActive(pinData, overridePinID, order)
+    Groups:CancelNextPinPrediction(self.group)
     if overridePinID then
         assert(not self.pins[overridePinID] and not self.archive[overridePinID],
             "MapPinEnhancedGroupPinStateMixin:AddActive: pin ID is already retained by the group")
@@ -169,6 +171,7 @@ end
 ---@param pinID UUID
 ---@return MapPinEnhancedPinMixin?, ArchivedPinData?, number?
 function MapPinEnhancedGroupPinStateMixin:Remove(pinID)
+    Groups:CancelNextPinPrediction(self.group)
     if self:GetOrder(pinID) == self.maximumOrder then self.orderCacheValid = false end
     local pin = self.pins[pinID]
     if pin then
@@ -198,6 +201,7 @@ end
 ---@param state "cleared"|"hidden"
 ---@return boolean, SaveablePinData?, boolean?, number?
 function MapPinEnhancedGroupPinStateMixin:ArchiveActive(pinID, state)
+    Groups:CancelNextPinPrediction(self.group)
     assert(state == "cleared" or state == "hidden",
         "MapPinEnhancedGroupPinStateMixin:ArchiveActive: invalid archive state")
     local pin = self.pins[pinID]
@@ -218,6 +222,7 @@ end
 ---@param pinID UUID
 ---@return boolean
 function MapPinEnhancedGroupPinStateMixin:RestoreArchivedPin(pinID)
+    Groups:CancelNextPinPrediction(self.group)
     local archivedPin = self.archive[pinID]
     if not archivedPin then return false end
     -- Setup may fail or normalize its input. Keep the original archive until it succeeds.
@@ -242,6 +247,7 @@ end
 ---@param order number
 ---@return boolean
 function MapPinEnhancedGroupPinStateMixin:SetOrder(pinID, order)
+    Groups:CancelNextPinPrediction(self.group)
     self.orderCacheValid = false
     local archivedPin = self.archive[pinID]
     if archivedPin then
@@ -257,6 +263,7 @@ end
 ---@param pinIDs UUID[]
 ---@return boolean
 function MapPinEnhancedGroupPinStateMixin:Reorder(pinIDs)
+    Groups:CancelNextPinPrediction(self.group)
     if #pinIDs ~= self.count + self:GetArchiveCount() then return false end
     ---@type table<UUID, boolean>
     local seen = {}

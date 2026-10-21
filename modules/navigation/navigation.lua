@@ -133,8 +133,9 @@ local function HasParentMap(mapID, parentMapID)
 end
 
 ---@param data WayfinderData
+---@param originMapID number?
 ---@return WayfinderData
-local function CopyRoutingData(data)
+function Navigation:CopyRoutingData(data, originMapID)
     local copy = CopyWayfinderData(data)
     local hbd = MapPinEnhanced.HBD
     if not hbd or type(copy.mapID) ~= "number" or
@@ -145,7 +146,7 @@ local function CopyRoutingData(data)
     -- city pin placed on its surrounding zone gains an unnecessary exit leg.
     copy.mapID, copy.x, copy.y = MapPinEnhanced:ResolveZonePosition(copy.mapID, copy.x, copy.y)
     if copy.mapID ~= data.mapID then return copy end
-    local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()
+    local playerMapID = originMapID or select(3, MapPinEnhanced:GetPlayerMapPosition())
     if playerMapID == copy.mapID then return copy end
     local mapInfo = C_Map.GetMapInfo(copy.mapID)
     local playerMapInfo = playerMapID and C_Map.GetMapInfo(playerMapID)
@@ -372,6 +373,11 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
         route = nil
     end
     if not IsCurrentDestination(destination) or destination.directGuidance or self.progression ~= previous then return end
+    if job and job.prediction and
+        (not route or not self:CanReuseDestinationPrediction(job.prediction, destination.routingData)) then
+        self:StartCalculation(true)
+        return
+    end
     if not route and job and job.preparedData and job.preparedData ~= self:GetPreparedData() and
         self:ArePreparedInputsFresh() and (not previous or currentRouteUnusable) then
         self:StartCalculation(true)
@@ -410,6 +416,7 @@ function Navigation:ApplyCalculatedRoute(destination, route, failure, checkpoint
     end
     publicationNumber = publicationNumber + 1
     route.calculationID = publicationNumber
+    if job and job.prediction then self.lastCalculationTermination = "reused next-pin route" end
     self:DeactivatePathHandler()
     self.progression = {
         route = route,
@@ -425,7 +432,7 @@ end
 function Navigation:StartCalculation(currentRouteUnusable)
     local destination = self.activeDestination
     if not destination or not self.routeNavigationEnabled then return end
-    destination.routingData = CopyRoutingData(destination.data)
+    destination.routingData = self:CopyRoutingData(destination.data)
     if not MapPinEnhanced:IsZoneMap(destination.routingData.mapID) then
         self:CancelRouteCalculation(self.activeCalculation)
         self.progression = nil
@@ -470,8 +477,9 @@ end
 ---@param destinationID string
 ---@param destinationData WayfinderData
 ---@param removeDestination NavigationDestinationRemoval?
+---@param prediction NavigationDestinationPrediction? single-use arrival handoff
 ---@return integer changeNumber
-function Navigation:SetDestination(owner, destinationID, destinationData, removeDestination)
+function Navigation:SetDestination(owner, destinationID, destinationData, removeDestination, prediction)
     assert(type(owner) == "string" and owner ~= "", "Navigation:SetDestination: owner must be a non-empty string")
     assert(type(destinationID) == "string" and destinationID ~= "",
         "Navigation:SetDestination: destinationID must be a non-empty string")
@@ -501,7 +509,7 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
         destinationID = destinationID,
         changeNumber = self.destinationChangeNumber,
         data = CopyWayfinderData(destinationData),
-        routingData = CopyRoutingData(destinationData),
+        routingData = self:CopyRoutingData(destinationData),
         removeDestination = removeDestination,
         directGuidance = active and active.owner == owner and active.destinationID == destinationID and
             active.directGuidance or nil,
@@ -510,7 +518,9 @@ function Navigation:SetDestination(owner, destinationID, destinationData, remove
     self.transportationChangedDuringTravel = nil
     self.progression = nil
     if self.routeNavigationEnabled then
-        self:StartCalculation(true)
+        if not prediction or not self:StartPredictedRoute(self.activeDestination, prediction) then
+            self:StartCalculation(true)
+        end
     else
         self:ApplyDirectDestination(true)
     end
