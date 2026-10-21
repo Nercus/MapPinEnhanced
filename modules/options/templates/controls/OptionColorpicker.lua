@@ -1,5 +1,6 @@
 ---@class MapPinEnhancedOptionColorpickerTemplate : MapPinEnhancedFormElementTemplate
 ---@field child MapPinEnhancedColorpickerTemplate
+---@field gradient boolean?
 MapPinEnhancedOptionColorpickerMixin = {}
 
 function MapPinEnhancedOptionColorpickerMixin:OnMouseDown()
@@ -7,29 +8,26 @@ function MapPinEnhancedOptionColorpickerMixin:OnMouseDown()
 end
 
 function MapPinEnhancedOptionColorpickerMixin:GetValue()
-    return { r = self.child.r, g = self.child.g, b = self.child.b, a = self.child.a }
+    return self.child:GetValue()
 end
 
----@param value {r: number, g: number, b: number, a: number}
+---@param value MapPinEnhancedColorpickerColor|MapPinEnhancedColorpickerGradient
 ---@return boolean
 function MapPinEnhancedOptionColorpickerMixin:IsValueEqual(value)
-    return self.child.r == value.r
-        and self.child.g == value.g
-        and self.child.b == value.b
-        and self.child.a == value.a
+    return tCompare(self:GetValue(), value, 2)
 end
 
----@param value {r: number, g: number, b: number, a: number}
+---@param value MapPinEnhancedColorpickerColor|MapPinEnhancedColorpickerGradient
 function MapPinEnhancedOptionColorpickerMixin:SetValue(value)
-    self.child:SetColor(value.r, value.g, value.b, value.a, false)
+    self.child:SetValue(value)
 end
 
----@param initValue {r: number, g: number, b: number, a: number}
+---@param initValue MapPinEnhancedColorpickerColor|MapPinEnhancedColorpickerGradient
 function MapPinEnhancedOptionColorpickerMixin:Setup(initValue)
-    self.child:SetCallback(function(r, g, b, a)
-        self:NotifyChange({ r = r, g = g, b = b, a = a })
+    self.child.gradient = self.gradient == true
+    self.child:UpdateMode()
+    self.child:SetCallback(function()
+        self:NotifyChange(self:GetValue())
     end)
-    assert(initValue.r and initValue.g and initValue.b and initValue.a,
-        "Initial value for colorpicker must have r, g, b, a fields")
     self:SetValue(initValue)
 end

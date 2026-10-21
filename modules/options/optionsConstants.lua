@@ -25,6 +25,10 @@ Options.DEFAULTS = {
     ["General.FlightTimer.Enable"] = true,
     ["General.FlightTimer.Lock"] = false,
     ["General.FlightTimer.Scale"] = 1,
+    ["General.FlightTimer.Gradient"] = {
+        startColor = { r = 0.55, g = 0.40, b = 0.02, a = 1 },
+        endColor = { r = 0.28, g = 0.20, b = 0.01, a = 1 },
+    },
     ["Miscellaneous.Coords.ShowZone"] = false,
     ["Miscellaneous.Coords.ShowDecimals"] = true,
     ["Pins.Appearance.AlwaysPingTracked"] = false,

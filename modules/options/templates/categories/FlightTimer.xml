@@ -22,6 +22,12 @@
                     <KeyValue key="key" value="General.FlightTimer.Scale" />
                 </KeyValues>
             </Frame>
+            <Frame inherits="MapPinEnhancedOptionColorpickerTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="General.FlightTimer.Gradient" />
+                    <KeyValue key="gradient" value="true" type="boolean" />
+                </KeyValues>
+            </Frame>
         </Frames>
     </Frame>
 </Ui>

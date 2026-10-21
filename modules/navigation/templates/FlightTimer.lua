@@ -104,9 +104,16 @@ function MapPinEnhancedFlightTimerMixin:OnHide()
     self.lockButton.fadeIn:SetParentShownInstantly(false, self.lockButton.fadeOut)
 end
 
+function MapPinEnhancedFlightTimerMixin:ApplyGradient()
+    local gradient = Options:GetOptionValue("General.FlightTimer.Gradient") --[[@as MapPinEnhancedColorpickerGradient]]
+    local startColor, endColor = gradient.startColor, gradient.endColor
+    self.progress:SetFillGradient(CreateColor(startColor.r, startColor.g, startColor.b, startColor.a),
+        CreateColor(endColor.r, endColor.g, endColor.b, endColor.a))
+end
+
 function MapPinEnhancedFlightTimerMixin:OnLoad()
     self.progress:SetMinMaxValues(0, 1)
-    self.progress:SetFillGradient(CreateColor(0.55, 0.40, 0.02), CreateColor(0.28, 0.20, 0.01))
+    self:ApplyGradient()
     self.progress.progress:SetTextColor(1, 1, 1)
     MapPinEnhanced:RegisterDraggableFrame(self, "flightTimerFrame", self.dragHandle, function()
         return Options:GetOptionValue("General.FlightTimer.Lock") == true
@@ -211,3 +218,6 @@ end)
 for _, key in ipairs({ "General.FlightTimer.Enable", "General.FlightTimer.Lock", "General.FlightTimer.Scale" }) do
     Options:SubscribeToOptionChanges(key, RefreshDisplay)
 end
+Options:SubscribeToOptionChanges("General.FlightTimer.Gradient", function()
+    if frame then frame:ApplyGradient() end
+end)

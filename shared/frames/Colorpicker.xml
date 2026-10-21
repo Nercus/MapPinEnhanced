@@ -3,17 +3,21 @@
     <Script file="Colorpicker.lua" />
 
     <Button name="MapPinEnhancedColorpickerTemplate" mixin="MapPinEnhancedColorpickerMixin" virtual="true" enableMouse="true" propagateMouseInput="Motion">
-        <Size x="84" y="20" />
+        <Size x="105" y="25" />
+        <KeyValues>
+            <KeyValue key="gradient" value="false" type="boolean" />
+        </KeyValues>
         <Layers>
             <Layer level="BACKGROUND" textureSubLevel="-1">
                 <Texture parentKey="bg" file="Interface/AddOns/MapPinEnhanced/assets/shared/RepeatableCheckers.png" vertTile="true" horizTile="true">
-                    <Size x="84" y="20" />
+                    <Size x="105" y="25" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
                 <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png" parentKey="bgMask" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
-                    <Size x="84" y="20" />
+                    <!-- Match the full brush footprint so the cutouts stay aligned. -->
+                    <Size x="105" y="25" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
@@ -23,23 +27,89 @@
                 </MaskTexture>
             </Layer>
             <Layer level="BACKGROUND">
-                <Texture parentKey="color" file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png">
-                    <Size x="84" y="20" />
+                <!-- Crop contiguous brush sections so the endpoint colors remain visible. -->
+                <Texture parentKey="colorStart" file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png">
+                    <Size x="26.25" y="25" />
                     <Anchors>
-                        <Anchor point="CENTER" />
+                        <Anchor point="LEFT" />
                     </Anchors>
+                    <TexCoords left="0" right="0.25" top="0" bottom="1" />
+                </Texture>
+                <Texture parentKey="color" file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png">
+                    <Size x="42" y="25" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.colorStart" relativePoint="RIGHT" />
+                    </Anchors>
+                    <TexCoords left="0.25" right="0.65" top="0" bottom="1" />
+                </Texture>
+                <Texture parentKey="colorEnd" file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png">
+                    <Size x="36.75" y="25" />
+                    <Anchors>
+                        <Anchor point="LEFT" relativeKey="$parent.color" relativePoint="RIGHT" />
+                    </Anchors>
+                    <TexCoords left="0.65" right="1" top="0" bottom="1" />
                 </Texture>
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="highlight" file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png" alpha="0.3">
-                    <Size x="84" y="20" />
+                    <Size x="105" y="25" />
                     <Anchors>
                         <Anchor point="CENTER" />
                     </Anchors>
                 </Texture>
             </Layer>
         </Layers>
+        <Frames>
+            <Button parentKey="left" hidden="true" propagateMouseInput="Motion">
+                <Size x="52.5" y="25" />
+                <Anchors>
+                    <Anchor point="LEFT" />
+                </Anchors>
+                <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png" alpha="0.3">
+                    <Size x="70" y="25" />
+                    <Anchors>
+                        <Anchor point="LEFT" />
+                    </Anchors>
+                    <TexCoords left="0" right="0.6666667" top="0" bottom="1" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0.5" />
+                        <MaxColor r="1" g="1" b="1" a="0" />
+                    </Gradient>
+                </HighlightTexture>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():OpenPicker(false)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button parentKey="right" hidden="true" propagateMouseInput="Motion">
+                <Size x="52.5" y="25" />
+                <Anchors>
+                    <Anchor point="RIGHT" />
+                </Anchors>
+                <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/ColorpickerBody.png" alpha="0.3">
+                    <Size x="70" y="25" />
+                    <Anchors>
+                        <Anchor point="RIGHT" />
+                    </Anchors>
+                    <TexCoords left="0.3333333" right="1" top="0" bottom="1" />
+                    <Gradient orientation="HORIZONTAL">
+                        <MinColor r="1" g="1" b="1" a="0" />
+                        <MaxColor r="1" g="1" b="1" a="0.7" />
+                    </Gradient>
+                </HighlightTexture>
+                <Scripts>
+                    <OnClick>
+                        self:GetParent():OpenPicker(true)
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
         <Scripts>
+            <OnLoad method="UpdateMode" />
+            <OnHide method="ClosePicker" />
+            <OnEnable method="OnEnabledChanged" />
+            <OnDisable method="OnEnabledChanged" />
             <OnClick method="OnClick" />
         </Scripts>
     </Button>
