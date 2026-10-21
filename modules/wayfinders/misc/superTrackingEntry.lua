@@ -22,11 +22,46 @@ local Navigation = MapPinEnhanced:GetModule("Navigation")
 
 ---@type SuperTrackingEntryState?
 local entry
+local Options = MapPinEnhanced:GetModule("Options")
+---@type MapPinEnhancedSuperTrackingPinTemplate?
+local minimapPin
+---@param pool FramePool<MapPinEnhancedSuperTrackingPinTemplate>
+---@param frame MapPinEnhancedSuperTrackingPinTemplate
+local function ResetMinimapPin(pool, frame)
+    frame:Reset()
+end
+
+local minimapPinPool = CreateFramePool("Frame", Minimap, "MapPinEnhancedSuperTrackingPinTemplate",
+    ResetMinimapPin)
+
+local function RefreshMinimapPin()
+    local data = entry and entry.tracked and entry.pinData
+    local x, y, instanceID ---@type number?, number?, number?
+    if data and Options:GetOptionValue("Pins.Appearance.ShowMinimapPins") then
+        x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(data.x, data.y, data.mapID)
+    end
+    if not x or not y or not instanceID then
+        if minimapPin then minimapPinPool:Release(minimapPin) end
+        minimapPin = nil
+        return
+    end
+    if not minimapPin then minimapPin = minimapPinPool:Acquire() end
+    minimapPin:ApplyData(data)
+    -- The original source owns this marker even while a native Step is selected.
+    -- World coordinates keep nearby markers visible across zone boundaries.
+    MapPinEnhanced.HBDP:AddMinimapIconWorld(MapPinEnhanced, minimapPin, instanceID, x, y, false)
+end
+
+for _, key in ipairs({ "Pins.Appearance.ShowMinimapPins", "Pins.Appearance.MinimapScale" }) do
+    Options:SubscribeToOptionChanges(key, RefreshMinimapPin)
+end
+
 local changeNumber = 0
 local changingSelection = false
 local function UpdateEntryChangeNumber()
     changeNumber = changeNumber + 1
     if entry then entry.changeNumber = changeNumber end
+    RefreshMinimapPin()
 end
 
 ---@param source string
