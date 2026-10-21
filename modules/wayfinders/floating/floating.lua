@@ -21,6 +21,7 @@ local MapPinEnhancedWayfinderFloating = {}
 
 function MapPinEnhancedWayfinderFloating:Setup()
     if self.panel then return end
+    self:GetFrame()
     local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
     ---@cast panel MapPinEnhancedFloatingPanelTemplate
     self.panel = panel

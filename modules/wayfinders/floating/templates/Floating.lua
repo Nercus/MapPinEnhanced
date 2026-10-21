@@ -131,7 +131,6 @@ local function RegisterFallbackDragging(self)
     MapPinEnhanced:RegisterDraggableFrame(self.fallbackPosition, "floatingFallbackFrame", self.titleContainer, function()
         return not self.customDirection or self.visibilityHiding or not self.navigationReady
     end)
-    self.titleContainer:SetPropagateMouseClicks(false)
 end
 
 ---@param enabled boolean
@@ -435,6 +434,9 @@ function MapPinEnhancedWayfinderFloatingMixin:OnLoad()
     self.titleContainer = self.content.title
     self.readout = self.content.readout
 
+    -- Setup runs outside combat; later fallback activation only reuses the drag hooks.
+    RegisterFallbackDragging(self)
+    self.titleContainer:SetPropagateMouseClicks(false)
     self:SetEllipticalRadii(500, 200)
     self.pin:SetTracked(true)
     self:Reset()
