@@ -66,7 +66,18 @@ function Wayfinders:CanFollowNavigationTarget(mapID, x, y)
                 waypoint.position.x, waypoint.position.y, mapID, x, y)
             return type(distance) == "number" and distance <= 5
         end
-        if isQuest then return targetIsLocal and self:IsSuperTrackingDestination(mapID, x, y) end
+        if isQuest then
+            if not self:IsSuperTrackingDestination(mapID, x, y) then return false end
+            if targetIsLocal then return true end
+            -- A portal can leave the player on the parent zone while the quest
+            -- uses a child map. Require local bounds and the same world position.
+            if not MapPinEnhanced:IsZoneMap(playerMapID) then return false end
+            local hbd = MapPinEnhanced.HBD
+            local localX, localY = hbd:TranslateZoneCoordinates(x, y, mapID, playerMapID)
+            if not MapPinEnhanced:IsCoordinate(localX) or not MapPinEnhanced:IsCoordinate(localY) then return false end
+            local distance = hbd:GetZoneDistance(mapID, x, y, playerMapID, localX, localY)
+            return type(distance) == "number" and distance <= 5
+        end
         return targetIsLocal and C_SuperTrack.IsSuperTrackingAnything()
     end
     if type(nextX) ~= "number" or type(nextY) ~= "number" then return false end
