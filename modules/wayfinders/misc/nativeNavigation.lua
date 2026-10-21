@@ -68,15 +68,29 @@ function Wayfinders:CanFollowNavigationTarget(mapID, x, y)
         end
         if isQuest then
             if not self:IsSuperTrackingDestination(mapID, x, y) then return false end
-            if targetIsLocal then return true end
-            -- A portal can leave the player on the parent zone while the quest
-            -- uses a child map. Require local bounds and the same world position.
-            if not MapPinEnhanced:IsZoneMap(playerMapID) then return false end
             local hbd = MapPinEnhanced.HBD
-            local localX, localY = hbd:TranslateZoneCoordinates(x, y, mapID, playerMapID)
-            if not MapPinEnhanced:IsCoordinate(localX) or not MapPinEnhanced:IsCoordinate(localY) then return false end
-            local distance = hbd:GetZoneDistance(mapID, x, y, playerMapID, localX, localY)
-            return type(distance) == "number" and distance <= 5
+            local localMapID = C_Map.GetBestMapForUnit("player")
+            -- City maps can omit a marker that is visible on their parent zone.
+            -- Check that hierarchy, never the open map or a continent overview.
+            for _ = 1, 4 do
+                if not MapPinEnhanced:IsZoneMap(localMapID) then break end
+                local localX, localY = hbd:TranslateZoneCoordinates(x, y, mapID, localMapID)
+                if MapPinEnhanced:IsCoordinate(localX) and MapPinEnhanced:IsCoordinate(localY) then
+                    local distance = hbd:GetZoneDistance(mapID, x, y, localMapID, localX, localY)
+                    targetIsLocal = targetIsLocal or type(distance) == "number" and distance <= 5
+                end
+                local info = C_Map.GetMapInfo(localMapID)
+                localMapID = info and info.parentMapID
+                if not MapPinEnhanced:IsZoneMap(localMapID) then break end
+                nextX, nextY = Providers:GetNavigationWaypointForMap(localMapID)
+                if nextX ~= nil and nextY ~= nil then
+                    -- A parent waypoint still takes precedence over local bounds:
+                    -- its marker may be a portal rather than the quest objective.
+                    local distance = hbd:GetZoneDistance(localMapID, nextX, nextY, mapID, x, y)
+                    return type(distance) == "number" and distance <= 5
+                end
+            end
+            return targetIsLocal
         end
         return targetIsLocal and C_SuperTrack.IsSuperTrackingAnything()
     end
