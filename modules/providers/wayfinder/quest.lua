@@ -146,9 +146,7 @@ end
 ---@param mapID number
 ---@return number? x
 ---@return number? y
-local function GetQuestWaypointForMap(questID, mapID)
-    local x, y = C_QuestLog.GetNextWaypointForMap(questID, mapID)
-    if x and y then return x, y end
+local function GetQuestPositionForMap(questID, mapID)
     -- Blizzard renders objective POIs independently of navigation waypoints.
     -- Quest-start POIs can remain in progress; their giver is not an objective.
     for _, info in ipairs(C_QuestLog.GetQuestsOnMap(mapID) or {}) do
@@ -171,17 +169,18 @@ local function ReadQuest(previous)
         atlas, active, ready, directionDistance = Providers:ReadQuestState(questID)
     end
     local questMapID = questID and C_TaskQuest.GetQuestZoneID(questID)
-    if questID and (not questMapID or questMapID == 0) then questMapID = GetQuestUiMapID(questID) end
+    if questID and (not questMapID or questMapID == 0) then questMapID = GetQuestUiMapID(questID, true) end
     local questTitle = questID and (C_QuestLog.GetTitleForQuestID(questID) or
         C_TaskQuest.GetQuestInfoByQuestID(questID))
     if questID and not questTitle and not pendingQuestTitles[questID] then
         pendingQuestTitles[questID] = true
         C_QuestLog.RequestLoadQuestByID(questID)
     end
-    local x, y, mapID = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
-        return GetQuestWaypointForMap(questID, candidateMapID)
-    end or nil, questMapID, questID and function() return C_QuestLog.GetNextWaypoint(questID) end or nil)
-    if questID == nil or x == nil or y == nil or mapID == nil then
+    local x, y, mapID, _, traversalOnly = Providers:GetSuperTrackingWaypoint(questID and function(candidateMapID)
+        return GetQuestPositionForMap(questID, candidateMapID)
+    end or nil, questMapID)
+    -- Travel entrances guide a selected route; they never become the quest's destination.
+    if questID == nil or x == nil or y == nil or mapID == nil or traversalOnly then
         return
     end
     local titleAvailable = Providers:PlainDescription(questTitle) ~= nil

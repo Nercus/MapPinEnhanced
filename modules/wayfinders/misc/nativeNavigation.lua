@@ -7,6 +7,9 @@ local Providers = MapPinEnhanced:GetModule("Providers")
 ---@param target WayfinderData
 ---@return WayfinderData?
 function Wayfinders:GetNavigationTraversal(target)
+    -- A quest's native path may choose a different portal than our route. Keep
+    -- its actual objective; authored intermediate steps select their own waypoint.
+    if C_SuperTrack.GetHighestPrioritySuperTrackingType() == Enum.SuperTrackingType.Quest then return end
     local matches = self:IsSuperTrackingDestination(target.mapID, target.x, target.y)
     if not matches and C_SuperTrack.IsSuperTrackingUserWaypoint() then
         local waypoint = C_Map.GetUserWaypoint()
@@ -34,9 +37,10 @@ end
 function Wayfinders:CanFollowNavigationTarget(mapID, x, y)
     if not mapID or not x or not y then return false end
     if not C_Navigation.GetFrame() or not C_Navigation.HasValidScreenPosition() then return false end
-    -- Blizzard owns traversal for its selected destination. Its native guide may
-    -- point to an entrance on another map rather than the destination itself.
-    if self:IsSuperTrackingDestination(mapID, x, y) then return true end
+    -- Quest identity alone does not match a route step: Blizzard may be guiding
+    -- a different portal. Compare its current waypoint with the displayed target.
+    local isQuest = C_SuperTrack.GetHighestPrioritySuperTrackingType() == Enum.SuperTrackingType.Quest
+    if not isQuest and self:IsSuperTrackingDestination(mapID, x, y) then return true end
     local playerMapID = C_Map.GetBestMapForUnit("player")
     if not playerMapID then return false end
     local targetIsLocal = mapID == playerMapID
@@ -62,6 +66,7 @@ function Wayfinders:CanFollowNavigationTarget(mapID, x, y)
                 waypoint.position.x, waypoint.position.y, mapID, x, y)
             return type(distance) == "number" and distance <= 5
         end
+        if isQuest then return targetIsLocal and self:IsSuperTrackingDestination(mapID, x, y) end
         return targetIsLocal and C_SuperTrack.IsSuperTrackingAnything()
     end
     if type(nextX) ~= "number" or type(nextY) ~= "number" then return false end
