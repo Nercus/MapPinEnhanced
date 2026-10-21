@@ -3,7 +3,6 @@ local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
-local MORE_ICON_PATH = MapPinEnhanced.basePath .. "\\assets\\icons\\IconEllipsis.png"
 local BACKGROUND_COLOR = CreateColor(1, 1, 1, 0.5)
 local BACKGROUND_HOVER_COLOR = CreateColor(1, 1, 1, 0.75)
 local BACKGROUND_END_COLOR = CreateColor(1, 1, 1, 0)
@@ -42,7 +41,6 @@ MapPinEnhancedGroupEditorContentPinEntryMixin = {}
 ---@field name string
 ---@field search string
 
-local COLOR_PATTERN = "|T%s\\assets\\shared\\ColorpickerBody.png:16:64:0:0:256:64:0:256:0:64:%d:%d:%d|t"
 local mapCacheReady = false
 ---@type table<number, MapPinEnhancedEditorMapEntry>
 local mapCache = {}
@@ -181,79 +179,10 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:SetIcon(icon)
 end
 
 function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
-    local menu = {
-        {
-            type = "submenu",
-            entry = {
-                type = "button",
-                label = MapPinEnhanced:Iconize("palette", L["Change Color"]),
-            },
-            entries = function()
-                local entries = {}
-                for colorName, colorData in pairs(Pins.PIN_COLORS_BY_NAME) do
-                    local color = colorName
-                    table.insert(entries, {
-                        type = "radio",
-                        label = string.format(COLOR_PATTERN, MapPinEnhanced.basePath, colorData:GetRGBAsBytes()),
-                        style = "custom",
-                        isSelected = function() return Editor:GetPinData(self.pinNode).color == color end,
-                        setSelected = function() self:SetColor(color) end,
-                    })
-                end
-                return entries
-            end,
-        },
-        {
-            type = "submenu",
-            entry = { type = "button", label = MapPinEnhanced:Iconize("edit", L["Change Icon"]) },
-            options = { gridModeColumns = 4 },
-            entries = function()
-                local entries = {}
-                for _, iconData in ipairs(Pins.PIN_ICON_MENU_ICONS) do
-                    local icon = iconData
-                    table.insert(entries, {
-                        type = "template",
-                        template = "MapPinEnhancedMenuRadioCellTemplate",
-                        data = {
-                            owner = self.pinNode,
-                            icon = { path = Pins.PIN_ICONS[icon].icon, usesAtlas = false },
-                            isSelected = function()
-                                return Pins:ResolveIcon(Editor:GetPinData(self.pinNode).texture) == icon
-                            end,
-                            onClick = function() self:SetIcon({ path = icon, usesAtlas = true }) end,
-                        },
-                        initializer = function(_, _, dropdown)
-                            dropdown.minimumElementWidth = 36
-                            return 36, 36
-                        end,
-                    })
-                end
-                table.insert(entries, {
-                    type = "button",
-                    label = "",
-                    onClick = function()
-                        local pinData = Editor:GetPinData(self.pinNode)
-                        local currentIcon = not pinData.usesAtlas and pinData.texture or nil
-                        MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
-                            self:SetIcon({ path = path, usesAtlas = false })
-                        end)
-                    end,
-                    initializer = function(button, _, menu)
-                        ---@type Texture
-                        local texture = button:AttachTexture()
-                        texture:SetSize(18, 18)
-                        texture:SetPoint("CENTER")
-                        texture:SetTexture(MORE_ICON_PATH)
-                        texture:SetVertexColor(1, 0.82, 0)
-                        button.fontString:Hide()
-                        menu.minimumElementWidth = 36
-                        return 36, 36
-                    end,
-                })
-                return entries
-            end,
-        },
-    }
+    local menu = Pins:BuildPinStyleMenuEntries(self.pinNode,
+        function() return Editor:GetPinData(self.pinNode) end,
+        function(color) self:SetColor(color) end,
+        function(icon, usesAtlas) self:SetIcon({ path = icon, usesAtlas = usesAtlas }) end)
     MapPinEnhanced:GenerateMenu(self.pinFrame, menu)
 end
 

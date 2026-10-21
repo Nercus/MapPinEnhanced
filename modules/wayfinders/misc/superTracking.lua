@@ -99,18 +99,6 @@ local function CancelTargetRetry(source)
     waitingTargets[source] = nil
 end
 
----@param source string
-local function CancelOtherTargetRetries(source)
-    ---@type string[]
-    local sourcesToCancel = {}
-    for waitingSource in pairs(waitingTargets) do
-        if waitingSource ~= source then table.insert(sourcesToCancel, waitingSource) end
-    end
-    for _, waitingSource in ipairs(sourcesToCancel) do
-        CancelTargetRetry(waitingSource)
-    end
-end
-
 ---@param activeSource string?
 local function CancelInactiveTargetRetries(activeSource)
     ---@type string[]
@@ -373,7 +361,7 @@ end
 ---@return integer changeNumber
 function Wayfinders:SetSuperTrackingWayfinderData(source, targetID, targetData, removeDestination, textAvailable)
     CancelTargetRetry(source)
-    CancelOtherTargetRetries(source)
+    CancelInactiveTargetRetries(source)
     local provider = providersBySource[source]
     if textAvailable == nil and provider.readText then
         local title, description, available = provider.readText(targetID, targetData)

@@ -48,7 +48,6 @@
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="hideBlizzard">
                         <KeyValues>
                             <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
-                            <KeyValue key="requireReload" value="both" />
                         </KeyValues>
                     </Frame>
                     <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">

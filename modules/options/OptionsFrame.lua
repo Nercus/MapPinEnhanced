@@ -97,7 +97,7 @@ function MapPinEnhancedOptionsFrameMixin:OnLoad()
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnShow()
-    Options:RestorePendingReloadOptions()
+    Options:RestorePendingReloadOption()
     self:SetupOptionSearch()
     self.scrollFrame.Child.Wayfinder:RefreshDisplay()
 end

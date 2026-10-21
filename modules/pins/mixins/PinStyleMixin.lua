@@ -31,14 +31,6 @@ function MapPinEnhancedPinStyleMixin:SetColor(color)
     end
 end
 
-function MapPinEnhancedPinStyleMixin:HasColor(color)
-    if not self.pinData.color then
-        return false
-    end
-
-    return self.pinData.color == color
-end
-
 ---@param icon string|number? the icon to set; atlas names must be strings
 ---@param usesAtlas boolean? if true, the path is an atlas, otherwise it is a file path
 function MapPinEnhancedPinStyleMixin:SetIcon(icon, usesAtlas)

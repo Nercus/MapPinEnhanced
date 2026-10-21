@@ -14,7 +14,6 @@ local L = MapPinEnhanced.L
 ---@field key string
 ---@field requiredAddon string?
 ---@field scrollPadding number
----@field requireReload? OptionReloadRequirement
 ---@field optionEnabled boolean
 ---@field lastValue any
 ---@field callbacks function[]?
@@ -48,7 +47,7 @@ function MapPinEnhancedFormElementMixin:NotifyChange(value, skipReloadRequiremen
         for _, callback in ipairs(self.callbacks) do callback(value) end
     end
     if not skipReloadRequirement then
-        Options:HandleReloadRequiredChange(self, previousValue, value)
+        Options:HandleReloadRequiredChange(self, previousValue)
     end
 end
 

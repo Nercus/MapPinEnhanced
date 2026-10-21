@@ -25,24 +25,14 @@ function Pins:GetColorMenuLabel(colorName)
     return string.format(MENU_COLOR_BUTTON_PATTERN, MapPinEnhanced.basePath, color:GetRGBAsBytes())
 end
 
+-- The menu owns presentation; callers retain live-pin or archived-pin mutations.
+---@param owner table Identity used to refresh the icon radio cells
+---@param getData fun(): pinData|SaveablePinData
+---@param setColor fun(color: PinColor)
+---@param setIcon fun(icon: string|number, usesAtlas: boolean)
 ---@return AnyMenuEntry[]
-function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
-    local title = self.pinData.title or L["Map Pin"]
-    local entries = {
-        {
-            type = "template",
-            template = "MapPinEnhancedMenuTitleActionTemplate",
-            data = {
-                label = title,
-                icon = "edit",
-                onClick = function()
-                    MapPinEnhanced:ShowRenamePinDialog(self)
-                end,
-            },
-        },
-        {
-            type = "divider",
-        },
+function Pins:BuildPinStyleMenuEntries(owner, getData, setColor, setIcon)
+    return {
         {
             type = "submenu",
             entries = function()
@@ -54,10 +44,10 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         label = label,
                         style = "custom",
                         isSelected = function()
-                            return self:HasColor(colorName)
+                            return getData().color == colorName
                         end,
                         setSelected = function()
-                            self:SetColor(colorName)
+                            setColor(colorName)
                         end,
                         data = colorName
                     })
@@ -79,13 +69,13 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                         type = "template",
                         template = "MapPinEnhancedMenuRadioCellTemplate",
                         data = {
-                            owner = self,
+                            owner = owner,
                             icon = { path = Pins.PIN_ICONS[iconData].icon, usesAtlas = false },
                             isSelected = function()
-                                return Pins:ResolveIcon(self.pinData.texture) == iconData
+                                return Pins:ResolveIcon(getData().texture) == iconData
                             end,
                             onClick = function()
-                                self:SetIcon(iconData, true)
+                                setIcon(iconData, true)
                             end,
                         },
                         initializer = function(_, _, menu)
@@ -98,9 +88,10 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                     type = "button",
                     label = "",
                     onClick = function()
-                        local currentIcon = not self.pinData.usesAtlas and self.pinData.texture or nil
+                        local data = getData()
+                        local currentIcon = not data.usesAtlas and data.texture or nil
                         MapPinEnhanced:ShowIconPicker(currentIcon, function(path)
-                            self:SetIcon(path, false)
+                            setIcon(path, false)
                         end)
                     end,
                     initializer = function(button, _, menu)
@@ -125,6 +116,33 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 gridModeColumns = PIN_ICON_MENU_COLUMNS
             }
         },
+    }
+end
+
+---@return AnyMenuEntry[]
+function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
+    local styleEntries = Pins:BuildPinStyleMenuEntries(self,
+        function() return self:GetPinData() end,
+        function(color) self:SetColor(color) end,
+        function(icon, usesAtlas) self:SetIcon(icon, usesAtlas) end)
+    local title = self.pinData.title or L["Map Pin"]
+    local entries = {
+        {
+            type = "template",
+            template = "MapPinEnhancedMenuTitleActionTemplate",
+            data = {
+                label = title,
+                icon = "edit",
+                onClick = function()
+                    MapPinEnhanced:ShowRenamePinDialog(self)
+                end,
+            },
+        },
+        {
+            type = "divider",
+        },
+        styleEntries[1],
+        styleEntries[2],
         {
             type = "button",
             label = MapPinEnhanced:Iconize("map", MapPinEnhanced.L["Show on Map"]),

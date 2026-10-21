@@ -3,7 +3,8 @@ local MapPinEnhanced = select(2, ...)
 local L = MapPinEnhanced.L
 
 ---@alias MapPinEnhancedOptionValue number | string | boolean | table
----@alias OptionReloadRequirement "onEnable"|"onDisable"|"both"
+
+local RELOAD_OPTION_KEY = "Wayfinder.General.HideBlizzardFloatingDiamond"
 
 ---@class Options
 ---@field options table<string, MapPinEnhancedFormElementTemplate> A table mapping option keys to their corresponding frames.
@@ -35,14 +36,12 @@ end
 ---@param frame MapPinEnhancedFormElementTemplate
 function Options:RegisterOption(key, frame)
     assert(self.options[key] == nil, "Option with key " .. key .. " is already registered")
-    assert(frame.requireReload == nil or frame.requireReload == "onEnable" or frame.requireReload == "onDisable" or
-        frame.requireReload == "both", "Options:RegisterOption: invalid requireReload value for " .. key)
     self.options[key] = frame
     frame:Setup(self:GetOptionInitValue(key))
     frame.lastValue = frame:GetValue()
-    if frame.requireReload == "onEnable" or frame.requireReload == "onDisable" then
+    if key == RELOAD_OPTION_KEY then
         assert(type(frame:GetValue()) == "boolean",
-            "Options:RegisterOption: " .. frame.requireReload .. " requires a boolean option: " .. key)
+            "Options:RegisterOption: reload option must be boolean: " .. key)
     end
     self:SubscribeToOptionChanges(key, function(value)
         self:SaveOptionValue(key, value)
@@ -50,19 +49,16 @@ function Options:RegisterOption(key, frame)
 end
 
 ---@class PendingReloadOption
----@field value any
+---@field frame MapPinEnhancedFormElementTemplate
+---@field value boolean
 
----@type table<string, PendingReloadOption>
-local pendingReloadOptions = {}
----@type string[]
-local pendingReloadOrder = {}
+-- Only the Blizzard diamond preference requires a reload. Retain its original
+-- value until reload, reversal, or rollback when the options window reopens.
+---@type PendingReloadOption?
+local pendingReloadOption
 local reloadDialogOpen = false
 ---@type MapPinEnhancedStaticDialogFrame?
 local reloadDialog
-
-local function HasPendingReloadOptions()
-    return next(pendingReloadOptions) ~= nil
-end
 
 local function DismissReloadDialog()
     if reloadDialog then reloadDialog:Hide() end
@@ -88,54 +84,26 @@ end
 
 ---@param frame MapPinEnhancedFormElementTemplate
 ---@param previousValue any
----@param value any
-function Options:HandleReloadRequiredChange(frame, previousValue, value)
-    local requirement = frame.requireReload
-    if not requirement then return end
-    if requirement ~= "both" then
-        assert(type(value) == "boolean",
-            "Options:HandleReloadRequiredChange: transition requirement needs a boolean value")
-    end
-
-    local requiresReload = requirement == "both" or requirement == "onEnable" and value or
-        requirement == "onDisable" and not value
-    if requiresReload and not pendingReloadOptions[frame.key] then
-        pendingReloadOptions[frame.key] = { value = previousValue }
-        table.insert(pendingReloadOrder, frame.key)
-    end
-
-    local pending = pendingReloadOptions[frame.key]
-    if pending and frame:IsValueEqual(pending.value) then
-        pendingReloadOptions[frame.key] = nil
-    end
-
-    if requiresReload and pendingReloadOptions[frame.key] then
-        self:RequestReload()
-    elseif not HasPendingReloadOptions() then
+function Options:HandleReloadRequiredChange(frame, previousValue)
+    if frame.key ~= RELOAD_OPTION_KEY then return end
+    pendingReloadOption = pendingReloadOption or { frame = frame, value = previousValue }
+    if frame:IsValueEqual(pendingReloadOption.value) then
+        pendingReloadOption = nil
         DismissReloadDialog()
+    else
+        self:RequestReload()
     end
 end
 
-function Options:RestorePendingReloadOptions()
-    if not HasPendingReloadOptions() then return end
-
-    local optionsToRestore = pendingReloadOptions
-    local restoreOrder = pendingReloadOrder
-    pendingReloadOptions = {}
-    pendingReloadOrder = {}
+function Options:RestorePendingReloadOption()
+    local pending = pendingReloadOption
+    if not pending then return end
+    pendingReloadOption = nil
     DismissReloadDialog()
-
-    for index = #restoreOrder, 1, -1 do
-        local key = restoreOrder[index]
-        local pending = optionsToRestore[key]
-        if pending then
-            local frame = self.options[key]
-            assert(frame, "Options:RestorePendingReloadOptions: option not found: " .. key)
-            if not frame:IsValueEqual(pending.value) then
-                frame:SetValue(pending.value)
-                frame:NotifyChange(pending.value, true)
-            end
-        end
+    local frame = pending.frame
+    if not frame:IsValueEqual(pending.value) then
+        frame:SetValue(pending.value)
+        frame:NotifyChange(pending.value, true)
     end
 end
 
