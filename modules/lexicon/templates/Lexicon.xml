@@ -1,0 +1,63 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Lexicon.lua" />
+    <Frame name="MapPinEnhancedLexiconBackgroundTemplate" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" virtual="true">
+        <Layers><Layer level="BACKGROUND" textureSubLevel="0">
+            <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" setAllPoints="true" />
+        </Layer></Layers>
+    </Frame>
+    <Frame name="MapPinEnhancedLexiconTemplate" mixin="MapPinEnhancedLexiconMixin" inherits="MapPinEnhancedLexiconBackgroundTemplate" virtual="true" hidden="true" enableMouse="true" clampedToScreen="true" frameStrata="DIALOG" toplevel="true">
+        <Size x="520" y="56" />
+        <Anchors><Anchor point="CENTER" /></Anchors>
+        <Frames>
+            <EditBox parentKey="input" inherits="MapPinEnhancedInputTemplate">
+                <KeyValues><KeyValue key="icon" value="search" /></KeyValues>
+                <Anchors><Anchor point="TOPLEFT" x="4" y="-4" /><Anchor point="BOTTOMRIGHT" x="-4" y="4" /></Anchors>
+                <Scripts>
+                    <OnLoad>
+                        self:OnLoad()
+                        self.bg:Hide()
+                    </OnLoad>
+                    <OnTextChanged>
+                        self:UpdatePlaceholderVisibility()
+                        self:UpdateClearButtonVisibility()
+                        self:GetParent():OnInputChanged()
+                    </OnTextChanged>
+                    <OnKeyDown>self:GetParent():OnInputKey(key)</OnKeyDown>
+                    <OnEnterPressed>self:GetParent():ActivateSelection()</OnEnterPressed>
+                    <OnEscapePressed>self:GetParent():Close()</OnEscapePressed>
+                </Scripts>
+            </EditBox>
+            <Frame parentKey="results" inherits="MapPinEnhancedLexiconBackgroundTemplate" hidden="true" enableMouse="true">
+                <Size y="1" />
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
+                    <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
+                </Anchors>
+                <Layers><Layer level="OVERLAY">
+                    <FontString parentKey="message" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT" wordwrap="false">
+                        <Size y="20" />
+                        <Anchors><Anchor point="BOTTOMLEFT" x="14" y="8" /><Anchor point="BOTTOMRIGHT" x="-14" y="8" /></Anchors>
+                    </FontString>
+                </Layer></Layers>
+                <Frames>
+                    <Frame parentKey="scrollBox" inherits="WowScrollBoxList" enableMouse="true">
+                        <Size y="1" />
+                        <Anchors><Anchor point="TOPLEFT" x="10" y="-8" /><Anchor point="TOPRIGHT" x="-28" y="-8" /></Anchors>
+                    </Frame>
+                    <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
+                        <Anchors>
+                            <Anchor point="TOPRIGHT" relativeKey="$parent.scrollBox" x="18" />
+                            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.scrollBox" x="18" />
+                        </Anchors>
+                    </EventFrame>
+                </Frames>
+            </Frame>
+        </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+            <OnEvent method="OnEvent" />
+        </Scripts>
+    </Frame>
+</Ui>

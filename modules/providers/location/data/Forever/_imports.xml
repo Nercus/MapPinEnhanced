@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="auction.lua" />
+    <Script file="bank.lua" />
+    <Script file="city.lua" />
+    <Script file="inn.lua" />
+    <Script file="instance.lua" />
+    <Script file="mailbox.lua" />
+    <Script file="stable.lua" />
+    <Script file="town.lua" />
+    <Script file="trainer.lua" />
+    <Script file="vendor.lua" />
+</Ui>

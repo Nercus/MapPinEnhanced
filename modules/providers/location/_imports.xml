@@ -1,0 +1,5 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="location.lua" />
+    <Script file="blizzard.lua" />
+    <Include file="data/[Game]/_imports.xml" />
+</Ui>

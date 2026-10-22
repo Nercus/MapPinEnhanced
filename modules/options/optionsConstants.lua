@@ -22,6 +22,7 @@ Options.SCALE_PRESETS = {
 
 Options.DEFAULTS = {
     ["General.TooltipHelper"] = true,
+    ["General.Lexicon.Enable"] = true,
     ["General.FlightTimer.Enable"] = true,
     ["General.FlightTimer.Lock"] = false,
     ["General.FlightTimer.Scale"] = 1,

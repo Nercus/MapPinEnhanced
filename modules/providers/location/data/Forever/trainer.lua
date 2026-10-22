@@ -1,0 +1,3413 @@
+-- User-supplied forever catalog, imported 2026-10-22. See ../../README.md.
+-- Source IDs, native UIMapIDs, normalized coordinates and known translations are retained.
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+local Providers = MapPinEnhanced:GetModule("Providers")
+
+Providers:RegisterLocationCatalog({
+    {
+        id = 81, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5440, y = 0.4120, class = "WARLOCK",
+        name = { enUS = "Dhugru Gorelust", deDE = "Dhugru Gorelust", esES = "Dhugru Ansiagore", esMX = "Dhugru Ansiagore", frFR = "Dhugru Gorelust", koKR = "두그루 고어러스트", ptBR = "Dhugru Gostassangue", ruRU = "Дхугру Кровожадный", zhCN = "杜格鲁·血怒", zhTW = "杜格魯·血怒" },
+    },
+    {
+        id = 82, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4290, y = 0.6942, class = "WARRIOR",
+        name = { enUS = "Frang", deDE = "Frang", esES = "Frang", esMX = "Frang", frFR = "Frang", koKR = "프랑", ptBR = "Frang", ruRU = "Франг", zhCN = "弗朗恩", zhTW = "弗朗恩" },
+    },
+    {
+        id = 83, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5200, y = 0.4351, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Harruk", deDE = "Harruk", esES = "Harruk", esMX = "Harruk", frFR = "Harruk", koKR = "하루크", ptBR = "Harruk", ruRU = "Харрук", zhCN = "哈鲁克", zhTW = "哈魯克" },
+    },
+    {
+        id = 84, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4280, y = 0.6930, class = "HUNTER",
+        name = { enUS = "Jen'shan", deDE = "Jen'shan", esES = "Jen'shan", esMX = "Jen'shan", frFR = "Jen'shan", koKR = "젠샨", ptBR = "Jen'shan", ruRU = "Джен'шан", zhCN = "基沙", zhTW = "基沙" },
+    },
+    {
+        id = 85, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5200, y = 0.4370, class = "ROGUE",
+        name = { enUS = "Kaplak", deDE = "Kaplak", esES = "Kaplak", esMX = "Kaplak", frFR = "Kaplak", koKR = "카플라크", ptBR = "Kaplak", ruRU = "Каплак", zhCN = "卡普拉克", zhTW = "卡普拉克" },
+    },
+    {
+        id = 86, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4239, y = 0.6881, class = "PRIEST",
+        name = { enUS = "Ken'jai", deDE = "Ken'jai", esES = "Ken'jai", esMX = "Ken'jai", frFR = "Ken'jai", koKR = "켄자이", ptBR = "Ken'jai", ruRU = "Кен'джай", zhCN = "肯杰", zhTW = "肯傑" },
+    },
+    {
+        id = 87, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4249, y = 0.6900, class = "MAGE",
+        name = { enUS = "Mai'ah", deDE = "Mai'ah", esES = "Mai'ah", esMX = "Mai'ah", frFR = "Mai'ah", koKR = "마이아", ptBR = "Mai'ah", ruRU = "Май'ах", zhCN = "迈安", zhTW = "邁安" },
+    },
+    {
+        id = 88, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4070, y = 0.6851, class = "WARLOCK",
+        name = { enUS = "Nartok", deDE = "Nartok", esES = "Nartok", esMX = "Nartok", frFR = "Nartok", koKR = "나르톡", ptBR = "Nartok", ruRU = "Нарток", zhCN = "纳托克", zhTW = "納托克" },
+    },
+    {
+        id = 89, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4131, y = 0.6798, class = "ROGUE",
+        name = { enUS = "Rwag", deDE = "Rwag", esES = "Rwag", esMX = "Rwag", frFR = "Rwag", koKR = "르와그", ptBR = "Rwag", ruRU = "Руаг", zhCN = "鲁瓦格", zhTW = "魯瓦格" },
+    },
+    {
+        id = 90, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.4239, y = 0.6900, class = "SHAMAN",
+        name = { enUS = "Shikrik", deDE = "Shikrik", esES = "Shikrik", esMX = "Shikrik", frFR = "Shikrik", koKR = "시크리크", ptBR = "Shikrik", ruRU = "Шикрик", zhCN = "史克里克", zhTW = "史克里克" },
+    },
+    {
+        id = 91, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5440, y = 0.4260, class = "SHAMAN",
+        name = { enUS = "Swart", deDE = "Swart", esES = "Swart", esMX = "Swart", frFR = "Swart", koKR = "스워트", ptBR = "Swart", ruRU = "Злобр", zhCN = "斯瓦特", zhTW = "斯瓦特" },
+    },
+    {
+        id = 92, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5429, y = 0.4290, class = "PRIEST",
+        name = { enUS = "Tai'jin", deDE = "Tai'jin", esES = "Tai'jin", esMX = "Tai'jin", frFR = "Tai'jin", koKR = "타이진", ptBR = "Tai'jin", ruRU = "Тай'джин", zhCN = "泰金", zhTW = "泰金" },
+    },
+    {
+        id = 93, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5419, y = 0.4249, class = "WARRIOR",
+        name = { enUS = "Tarshaw Jaggedscar", deDE = "Tarshaw Jaggedscar", esES = "Tarshaw Marcauna", esMX = "Tarshaw Marcauna", frFR = "Tarshaw Jaggedscar", koKR = "타쇼 재기드스카", ptBR = "Tarshaw Zigatriz", ruRU = "Таршо Рваный Шрам", zhCN = "塔绍尔·锯痕", zhTW = "塔紹爾·鋸痕" },
+    },
+    {
+        id = 94, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5180, y = 0.4351, class = "HUNTER",
+        name = { enUS = "Thotar", deDE = "Thotar", esES = "Thotar", esMX = "Thotar", frFR = "Thotar", koKR = "소타르", ptBR = "Thotar", ruRU = "Тотар", zhCN = "索塔尔", zhTW = "索塔爾" },
+    },
+    {
+        id = 95, types = { "class" },
+        faction = "Horde", map = 1411, x = 0.5631, y = 0.7509, class = "MAGE",
+        name = { enUS = "Un'Thuwa", deDE = "Un'Thuwa", esES = "Un'Thuwa", esMX = "Un'Thuwa", frFR = "Un'Thuwa", koKR = "운투와", ptBR = "Un'Thuwa", ruRU = "Ун'Тува", zhCN = "安苏瓦", zhTW = "安蘇瓦" },
+    },
+    {
+        id = 96, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4460, y = 0.7661, class = "DRUID",
+        name = { enUS = "Gart Mistrunner", deDE = "Gart Mistrunner", esES = "Gart Correbruma", esMX = "Gart Correbruma", frFR = "Gart Mistrunner", koKR = "가트 미스트러너", ptBR = "Gart Corre com a Névoa", ruRU = "Гарт Вестник Туманов", zhCN = "加尔特·迷雾行者", zhTW = "加爾特·迷霧行者" },
+    },
+    {
+        id = 97, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4750, y = 0.6299, class = "DRUID",
+        name = { enUS = "Gennia Runetotem", deDE = "Gennia Runetotem", esES = "Gennia Tótem de Runa", esMX = "Gennia Tótem de Runa", frFR = "Gennia Runetotem", koKR = "제니아 룬토템", ptBR = "Gennia Runa Totem", ruRU = "Генния Рунический Тотем", zhCN = "根妮亚·符文图腾", zhTW = "根妮亞·符文圖騰" },
+    },
+    {
+        id = 98, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.3339, y = 0.2209, class = "DRUID",
+        name = { enUS = "Hana Lighthoof", deDE = "Hana Lighthoof", esES = "Hana Lighthoof", esMX = "Hana Lighthoof", frFR = "Hana Lighthoof", koKR = "Hana Lighthoof", ptBR = "Hana Lighthoof", ruRU = "Hana Lighthoof", zhCN = "Hana Lighthoof", zhTW = "Hana Lighthoof" },
+    },
+    {
+        id = 99, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.3343, y = 0.2216, class = "DRUID",
+        name = { enUS = "Hana Lighthoof", deDE = "Hana Lighthoof", esES = "Hana Lighthoof", esMX = "Hana Lighthoof", frFR = "Hana Lighthoof", koKR = "Hana Lighthoof", ptBR = "Hana Lighthoof", ruRU = "Hana Lighthoof", zhCN = "Hana Lighthoof", zhTW = "Hana Lighthoof" },
+    },
+    {
+        id = 100, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4371, y = 0.7671, class = "WARRIOR",
+        name = { enUS = "Harutt Thunderhorn", deDE = "Harutt Thunderhorn", esES = "Harutt Tronacuerno", esMX = "Harutt Tronacuerno", frFR = "Harutt Thunderhorn", koKR = "하루트 썬더혼", ptBR = "Harutt Chifre Troante", ruRU = "Харутт Громовой Рог", zhCN = "哈鲁特·雷角", zhTW = "哈魯特·雷角" },
+    },
+    {
+        id = 101, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4830, y = 0.6371, class = "WARRIOR",
+        name = { enUS = "Krang Stonehoof", deDE = "Krang Stonehoof", esES = "Krang Pezuña Pétrea", esMX = "Krang Pezuña Pétrea", frFR = "Krang Stonehoof", koKR = "크랑 스톤후프", ptBR = "Krang Casco de Pedra", ruRU = "Кранг Каменное Копыто", zhCN = "克朗·石蹄", zhTW = "克朗·石蹄" },
+    },
+    {
+        id = 102, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4399, y = 0.7638, class = "HUNTER",
+        name = { enUS = "Lanka Farshot", deDE = "Lanka Farshot", esES = "Lanka Tirolejano", esMX = "Lanka Tirolejano", frFR = "Lanka Farshot", koKR = "랑카 파샷", ptBR = "Lanka Tiro Distante", ruRU = "Ланко Дальний Выстрел", zhCN = "兰卡·远箭", zhTW = "蘭卡·遠箭" },
+    },
+    {
+        id = 103, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4458, y = 0.7656, class = "SHAMAN",
+        name = { enUS = "Meela Dawnstrider", deDE = "Meela Dawnstrider", esES = "Meela Caminalba", esMX = "Meela Caminalba", frFR = "Meela Dawnstrider", koKR = "밀라 던스트라이더", ptBR = "Meela Anda com a Aurora", ruRU = "Мила Рассветная Странница", zhCN = "米拉·晨行者", zhTW = "米拉·晨行者" },
+    },
+    {
+        id = 104, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4739, y = 0.6250, class = "SHAMAN",
+        name = { enUS = "Narm Skychaser", deDE = "Narm Skychaser", esES = "Narm Cazacielo", esMX = "Narm Cazacielo", frFR = "Narm Skychaser", koKR = "나름 스카이체이서", ptBR = "Narm Persegue-céus", ruRU = "Нарм Небесный Охотник", zhCN = "纳姆·逐星", zhTW = "納姆·逐星" },
+    },
+    {
+        id = 105, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.3358, y = 0.2232, class = "SHAMAN",
+        name = { enUS = "Palah Thunderhoof", deDE = "Palah Thunderhoof", esES = "Palah Thunderhoof", esMX = "Palah Thunderhoof", frFR = "Palah Thunderhoof", koKR = "Palah Thunderhoof", ptBR = "Palah Thunderhoof", ruRU = "Palah Thunderhoof", zhCN = "Palah Thunderhoof", zhTW = "Palah Thunderhoof" },
+    },
+    {
+        id = 106, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.3359, y = 0.2244, class = "SHAMAN",
+        name = { enUS = "Palah Thunderhoof", deDE = "Palah Thunderhoof", esES = "Palah Thunderhoof", esMX = "Palah Thunderhoof", frFR = "Palah Thunderhoof", koKR = "Palah Thunderhoof", ptBR = "Palah Thunderhoof", ruRU = "Palah Thunderhoof", zhCN = "Palah Thunderhoof", zhTW = "Palah Thunderhoof" },
+    },
+    {
+        id = 107, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.3367, y = 0.2242, class = "SHAMAN",
+        name = { enUS = "Palah Thunderhoof", deDE = "Palah Thunderhoof", esES = "Palah Thunderhoof", esMX = "Palah Thunderhoof", frFR = "Palah Thunderhoof", koKR = "Palah Thunderhoof", ptBR = "Palah Thunderhoof", ruRU = "Palah Thunderhoof", zhCN = "Palah Thunderhoof", zhTW = "Palah Thunderhoof" },
+    },
+    {
+        id = 108, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4681, y = 0.5971, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Reban Freerunner", deDE = "Reban Freerunner", esES = "Reban Corredor", esMX = "Reban Corredor", frFR = "Reban Freerunner", koKR = "레반 프리러너", ptBR = "Reban Caminho Liberto", ruRU = "Ребан Вольный Странник", zhCN = "瑞班", zhTW = "瑞班" },
+    },
+    {
+        id = 109, types = { "class" },
+        faction = "Horde", map = 1412, x = 0.4689, y = 0.5961, class = "HUNTER",
+        name = { enUS = "Yaw Sharpmane", deDE = "Yaw Sharpmane", esES = "Yaw Crinafilada", esMX = "Yaw Crinafilada", frFR = "Yaw Sharpmane", koKR = "요 샤프메인", ptBR = "Yaw Crina Cortante", ruRU = "Йо Колкая Грива", zhCN = "雅文·刺鬃", zhTW = "雅文·刺鬃" },
+    },
+    {
+        id = 110, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1174, y = 0.5651, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 111, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1174, y = 0.5672, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 112, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1179, y = 0.5661, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 113, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1180, y = 0.5655, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 114, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1182, y = 0.5647, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 115, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1184, y = 0.5668, class = "DRUID",
+        name = { enUS = "Alfina Nightgaze", deDE = "Alfina Nightgaze", esES = "Alfina Nightgaze", esMX = "Alfina Nightgaze", frFR = "Alfina Nightgaze", koKR = "Alfina Nightgaze", ptBR = "Alfina Nightgaze", ruRU = "Alfina Nightgaze", zhCN = "Alfina Nightgaze", zhTW = "Alfina Nightgaze" },
+    },
+    {
+        id = 116, types = { "class" },
+        faction = "Neutral", map = 1416, x = 0.8440, y = 0.8029, class = "ROGUE",
+        name = { enUS = "Fahrad", deDE = "Fahrad", esES = "Fahrad", esMX = "Fahrad", frFR = "Fahrad", koKR = "파라드", ptBR = "Fahrad", ruRU = "Фахрад", zhCN = "法拉德", zhTW = "法拉德" },
+    },
+    {
+        id = 117, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1771, y = 0.6956, class = "MAGE",
+        name = { enUS = "Jessa Weaver", deDE = "Jessa Weaver", esES = "Jessa Weaver", esMX = "Jessa Weaver", frFR = "Jessa Weaver", koKR = "Jessa Weaver", ptBR = "Jessa Weaver", ruRU = "Jessa Weaver", zhCN = "Jessa Weaver", zhTW = "Jessa Weaver" },
+    },
+    {
+        id = 118, types = { "class" },
+        faction = "Alliance", map = 1416, x = 0.1804, y = 0.7110, class = "MAGE",
+        name = { enUS = "Jessa Weaver", deDE = "Jessa Weaver", esES = "Jessa Weaver", esMX = "Jessa Weaver", frFR = "Jessa Weaver", koKR = "Jessa Weaver", ptBR = "Jessa Weaver", ruRU = "Jessa Weaver", zhCN = "Jessa Weaver", zhTW = "Jessa Weaver" },
+    },
+    {
+        id = 119, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5822, y = 0.6892, class = "PRIEST",
+        name = { enUS = "Aelthalyste", deDE = "Aelthalyste", esES = "Aelthalyste", esMX = "Aelthalyste", frFR = "Aelthalyste", koKR = "애살리스테", ptBR = "Aelthalyste", ruRU = "Эльталисте", zhCN = "艾萨莱斯特", zhTW = "艾薩萊斯特" },
+    },
+    {
+        id = 120, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6586, y = 0.6719, class = "MAGE",
+        name = { enUS = "Anastasia Hartwell", deDE = "Anastasia Hartwell", esES = "Anastasia Hartwell", esMX = "Anastasia Hartwell", frFR = "Anastasia Hartwell", koKR = "아나스타샤 하트웰", ptBR = "Anastácia Cordato", ruRU = "Анастасия Хартвелл", zhCN = "安娜斯塔西娅·哈特威尔", zhTW = "安娜斯塔西婭·哈特威爾" },
+    },
+    {
+        id = 121, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5807, y = 0.6843, class = "WARRIOR",
+        name = { enUS = "Angela Curthas", deDE = "Angela Curthas", esES = "Angela Curthas", esMX = "Angela Curthas", frFR = "Angela Curthas", koKR = "안젤라 컬타스", ptBR = "Ângela Curtas", ruRU = "Анжела Куртас", zhCN = "安吉拉·科萨斯", zhTW = "安吉拉·科薩斯" },
+    },
+    {
+        id = 122, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3110, y = 0.6641, class = "PALADIN",
+        name = { enUS = "Aramis Hammerhand", deDE = "Aramis Hammerhand", esES = "Aramis Hammerhand", esMX = "Aramis Hammerhand", frFR = "Aramis Hammerhand", koKR = "Aramis Hammerhand", ptBR = "Aramis Hammerhand", ruRU = "Aramis Hammerhand", zhCN = "Aramis Hammerhand", zhTW = "Aramis Hammerhand" },
+    },
+    {
+        id = 123, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6191, y = 0.5250, class = "WARRIOR",
+        name = { enUS = "Austil de Mon", deDE = "Austil de Mon", esES = "Austil de Mon", esMX = "Austil de Mon", frFR = "Austil de Mon", koKR = "오스틸 드 몽", ptBR = "Austil de Mon", ruRU = "Остил де Мон", zhCN = "奥斯蒂尔·德·蒙", zhTW = "奧斯蒂爾·德·蒙" },
+    },
+    {
+        id = 124, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5786, y = 0.6874, class = "WARRIOR",
+        name = { enUS = "Baltus Fowler", deDE = "Baltus Fowler", esES = "Baltus Fowler", esMX = "Baltus Fowler", frFR = "Baltus Fowler", koKR = "발터스 파울러", ptBR = "Dalto Flores", ruRU = "Балтус Птицелов", zhCN = "巴尔图斯·弗勒", zhTW = "巴爾圖斯·弗勒" },
+    },
+    {
+        id = 125, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6199, y = 0.5250, class = "MAGE",
+        name = { enUS = "Cain Firesong", deDE = "Cain Firesong", esES = "Cain Pirosón", esMX = "Cain Pirosón", frFR = "Cain Firesong", koKR = "케인 파이어송", ptBR = "Caio Cantígnea", ruRU = "Кейн Песнь Пламени", zhCN = "凯恩·火歌", zhTW = "凱恩·火歌" },
+    },
+    {
+        id = 126, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6562, y = 0.8038, class = "ROGUE",
+        name = { enUS = "Carolyn Ward", deDE = "Carolyn Ward", esES = "Carolyn Salar", esMX = "Carolyn Ward", frFR = "Carolyn Ward", koKR = "케럴린 워드", ptBR = "Capitolina Casmurro", ruRU = "Каролин Уорд", zhCN = "卡罗琳·瓦德", zhTW = "卡洛琳·瓦德" },
+    },
+    {
+        id = 127, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5777, y = 0.6830, class = "WARRIOR",
+        name = { enUS = "Christoph Walker", deDE = "Christoph Walker", esES = "Christoph Walker", esMX = "Christoph Walker", frFR = "Christoph Walker", koKR = "크리스토프 워커", ptBR = "Cristovão Ribeiro", ruRU = "Кристоф Уокер", zhCN = "克里斯托弗·沃克", zhTW = "克里斯多夫·沃克" },
+    },
+    {
+        id = 128, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3269, y = 0.6560, class = "WARRIOR",
+        name = { enUS = "Dannal Stern", deDE = "Dannal Stern", esES = "Dannal Stern", esMX = "Dannal Stern", frFR = "Dannal Stern", koKR = "다날 스턴", ptBR = "Dannal Stern", ruRU = "Даннал Штерн", zhCN = "丹纳尔·斯特恩", zhTW = "丹納爾·斯特恩" },
+    },
+    {
+        id = 129, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6161, y = 0.5219, class = "PRIEST",
+        name = { enUS = "Dark Cleric Beryl", deDE = "Dunkler Kleriker Beryl", esES = "Clérico oscuro Beryl", esMX = "Clérigo oscuro Beryl", frFR = "Sombre clerc Beryl", koKR = "어둠의사제 베릴", ptBR = "Clérigo das Trevas Beryl", ruRU = "Темный священник Берил", zhCN = "黑暗牧师贝里尔", zhTW = "黑暗教士貝里爾" },
+    },
+    {
+        id = 130, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3110, y = 0.6600, class = "PRIEST",
+        name = { enUS = "Dark Cleric Duesten", deDE = "Dunkler Kleriker Duesten", esES = "Clérico oscuro Duesten", esMX = "Clérigo oscuro Duesten", frFR = "Sombre clerc Duesten", koKR = "어둠의사제 듀스텐", ptBR = "Clérigo das Trevas Duesten", ruRU = "Темный священник Дьюстен", zhCN = "黑暗牧师杜斯滕", zhTW = "黑暗教士杜斯滕" },
+    },
+    {
+        id = 131, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3249, y = 0.6569, class = "ROGUE",
+        name = { enUS = "David Trias", deDE = "David Trias", esES = "David Trias", esMX = "David Trias", frFR = "David Trias", koKR = "데이비드 트리아스", ptBR = "Davi Trias", ruRU = "Давид Триас", zhCN = "大卫·提亚斯", zhTW = "大衛·提亞斯" },
+    },
+    {
+        id = 132, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5831, y = 0.6843, class = "PRIEST",
+        name = { enUS = "Father Lankester", deDE = "Vater Lankester", esES = "Padre Lankester", esMX = "Padre Lankester", frFR = "Père Lankester", koKR = "신부 랭커스터", ptBR = "Padre Gusmão", ruRU = "Отец Ланкастер", zhCN = "兰克斯特神父", zhTW = "蘭克斯特神父" },
+    },
+    {
+        id = 133, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.5792, y = 0.6905, class = "PRIEST",
+        name = { enUS = "Father Lazarus", deDE = "Vater Lazarus", esES = "Padre Lazarus", esMX = "Padre Lazarus", frFR = "Père Lazarus", koKR = "신부 라자러스", ptBR = "Padre Lázaro", ruRU = "Отец Лазарус", zhCN = "拉扎鲁斯神父", zhTW = "拉札魯斯神父" },
+    },
+    {
+        id = 134, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6583, y = 0.8065, class = "ROGUE",
+        name = { enUS = "Gregory Charles", deDE = "Gregory Charles", esES = "Gregory Charles", esMX = "Gregory Charles", frFR = "Gregory Charles", koKR = "그레고리 찰스", ptBR = "Bento Santiago", ruRU = "Грегори Чарльз", zhCN = "格雷戈·查尔斯", zhTW = "格雷戈·查理斯" },
+    },
+    {
+        id = 135, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.2196, y = 0.4725, class = "PALADIN",
+        name = { enUS = "Hilda the Breaker", deDE = "Hilda the Breaker", esES = "Hilda the Breaker", esMX = "Hilda the Breaker", frFR = "Hilda the Breaker", koKR = "Hilda the Breaker", ptBR = "Hilda the Breaker", ruRU = "Hilda the Breaker", zhCN = "Hilda the Breaker", zhTW = "Hilda the Breaker" },
+    },
+    {
+        id = 136, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3089, y = 0.6609, class = "MAGE",
+        name = { enUS = "Isabella", deDE = "Isabella", esES = "Isabella", esMX = "Isabella", frFR = "Isabella", koKR = "이자벨라", ptBR = "Isabella", ruRU = "Изабелла", zhCN = "伊莎贝拉", zhTW = "伊莎貝拉" },
+    },
+    {
+        id = 137, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6609, y = 0.6843, class = "WARLOCK",
+        name = { enUS = "Kaal Soulreaper", deDE = "Kaal Soulreaper", esES = "Revientalmas Kaal", esMX = "Revientalmas Kaal", frFR = "Kaal Soulreaper", koKR = "카알 소울리퍼", ptBR = "Kaal Ceifalma", ruRU = "Каел Жнец Душ", zhCN = "卡尔·噬灵", zhTW = "卡爾·噬靈" },
+    },
+    {
+        id = 138, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6586, y = 0.6803, class = "MAGE",
+        name = { enUS = "Kaelystia Hatebringer", deDE = "Kaelystia Hatebringer", esES = "Kaelystia Aversión", esMX = "Kaelystia Aversión", frFR = "Kaelystia Hatebringer", koKR = "캘리스티아 헤이트브링어", ptBR = "Kaelystia Odiosa", ruRU = "Келестия Ненавистница", zhCN = "凯利斯蒂亚", zhTW = "凱利斯蒂亞" },
+    },
+    {
+        id = 139, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6568, y = 0.6834, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Lexington Mortaim", deDE = "Lexington Mortaim", esES = "Lexington Tanafín", esMX = "Lexington Tanafín", frFR = "Lexington Mortaim", koKR = "렉싱턴 모테임", ptBR = "Licurgo Mortaim", ruRU = "Лексингтон Мортейм", zhCN = "莱克斯顿·莫泰姆", zhTW = "萊克斯頓·莫泰姆" },
+    },
+    {
+        id = 140, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6615, y = 0.6830, class = "WARLOCK",
+        name = { enUS = "Luther Pickman", deDE = "Luther Pickman", esES = "Luther Desalmado", esMX = "Luther Desalmado", frFR = "Luther Pickman", koKR = "루서 픽맨", ptBR = "Lutero Pegome", ruRU = "Лютер Рудокоп", zhCN = "卢瑟·匹克曼", zhTW = "盧瑟·匹克曼" },
+    },
+    {
+        id = 141, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6179, y = 0.5201, class = "ROGUE",
+        name = { enUS = "Marion Call", deDE = "Marion Call", esES = "Marion Call", esMX = "Marion Call", frFR = "Marion Call", koKR = "마리언 콜", ptBR = "Marion Calder", ruRU = "Марион Зов", zhCN = "马里恩·考尔", zhTW = "馬里恩·考爾" },
+    },
+    {
+        id = 142, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.3089, y = 0.6631, class = "WARLOCK",
+        name = { enUS = "Maximillion", deDE = "Maximillion", esES = "Maximillion", esMX = "Maximillion", frFR = "Maximillion", koKR = "맥시밀리언", ptBR = "Maximillion", ruRU = "Максимиллион", zhCN = "马克希米林", zhTW = "馬克希米林" },
+    },
+    {
+        id = 143, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6589, y = 0.8025, class = "ROGUE",
+        name = { enUS = "Miles Dexter", deDE = "Miles Dexter", esES = "Miles Dexter", esMX = "Miles Dexter", frFR = "Miles Dexter", koKR = "마일즈 덱스터", ptBR = "Ezequiel Escobar", ruRU = "Майлз Декстер", zhCN = "迈尔斯·迪克斯特", zhTW = "邁爾斯·迪克斯特" },
+    },
+    {
+        id = 144, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6595, y = 0.6790, class = "MAGE",
+        name = { enUS = "Pierce Shackleton", deDE = "Pierce Shackleton", esES = "Pierce Esqueletonio", esMX = "Pierce Esqueletonio", frFR = "Pierce Shackleton", koKR = "피어스 섀클턴", ptBR = "Frederico Grilhões", ruRU = "Пирс Шеклтон", zhCN = "皮尔斯·沙克尔顿", zhTW = "皮爾斯·沙克爾頓" },
+    },
+    {
+        id = 145, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6669, y = 0.6843, class = "WARLOCK",
+        name = { enUS = "Richard Kerwin", deDE = "Richard Kerwin", esES = "Richard Kerwin", esMX = "Richard Kerwin", frFR = "Richard Kerwin", koKR = "리차드 켈윈", ptBR = "Ricardo Curi", ruRU = "Ричард Кервин", zhCN = "理查德·科尔文", zhTW = "理查·科爾文" },
+    },
+    {
+        id = 146, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6161, y = 0.5241, class = "WARLOCK",
+        name = { enUS = "Rupert Boch", deDE = "Rupert Boch", esES = "Rupert Boch", esMX = "Rupert Boch", frFR = "Rupert Boch", koKR = "루퍼트 보흐", ptBR = "Rupertino Boch", ruRU = "Руперт Бош", zhCN = "鲁伯特·鲍什", zhTW = "魯伯特·鮑什" },
+    },
+    {
+        id = 147, types = { "class" },
+        faction = "Horde", map = 1420, x = 0.6022, y = 0.5266, class = "PALADIN",
+        name = { enUS = "Shari Stilwell", deDE = "Shari Stilwell", esES = "Shari Stilwell", esMX = "Shari Stilwell", frFR = "Shari Stilwell", koKR = "Shari Stilwell", ptBR = "Shari Stilwell", ruRU = "Shari Stilwell", zhCN = "Shari Stilwell", zhTW = "Shari Stilwell" },
+    },
+    {
+        id = 148, types = { "class" },
+        faction = "Alliance", map = 1425, x = 0.1440, y = 0.4300, class = "WARRIOR",
+        name = { enUS = "Bordolf Axegrim", deDE = "Bordolf Axegrim", esES = "Bordolf Axegrim", esMX = "Bordolf Axegrim", frFR = "Bordolf Axegrim", koKR = "Bordolf Axegrim", ptBR = "Bordolf Axegrim", ruRU = "Bordolf Axegrim", zhCN = "Bordolf Axegrim", zhTW = "Bordolf Axegrim" },
+    },
+    {
+        id = 149, types = { "class" },
+        faction = "Alliance", map = 1425, x = 0.1440, y = 0.4260, class = "SHAMAN",
+        name = { enUS = "Farseer Maret Firetend", deDE = "Farseer Maret Firetend", esES = "Farseer Maret Firetend", esMX = "Farseer Maret Firetend", frFR = "Farseer Maret Firetend", koKR = "Farseer Maret Firetend", ptBR = "Farseer Maret Firetend", ruRU = "Farseer Maret Firetend", zhCN = "Farseer Maret Firetend", zhTW = "Farseer Maret Firetend" },
+    },
+    {
+        id = 150, types = { "class" },
+        faction = "Alliance", map = 1425, x = 0.1460, y = 0.4300, class = "HUNTER",
+        name = { enUS = "Torin Treehame", deDE = "Torin Treehame", esES = "Torin Treehame", esMX = "Torin Treehame", frFR = "Torin Treehame", koKR = "Torin Treehame", ptBR = "Torin Treehame", ruRU = "Torin Treehame", zhCN = "Torin Treehame", zhTW = "Torin Treehame" },
+    },
+    {
+        id = 151, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2860, y = 0.6612, class = "WARLOCK",
+        name = { enUS = "Alamar Grimm", deDE = "Alamar Grimm", esES = "Alamar Grimm", esMX = "Alamar Grimm", frFR = "Alamar Grimm", koKR = "알라마 그림", ptBR = "Alamar Carranca", ruRU = "Аламар Мрачнн", zhCN = "阿拉玛尔·格里姆", zhTW = "阿拉瑪爾·格里姆" },
+    },
+    {
+        id = 152, types = { "class", "vendor-food" },
+        faction = "Alliance", map = 1426, x = 0.5912, y = 0.2230, class = "WARLOCK",
+        name = { enUS = "Alexander Calder", deDE = "Alexander Calder", esES = "Alexander Calder", esMX = "Alexander Calder", frFR = "Alexander Calder", koKR = "알렉산더 칼더", ptBR = "Alexander Caldeira", ruRU = "Александр Кальдер", zhCN = "亚历山大·考德尔", zhTW = "亞歷山大·考德爾" },
+    },
+    {
+        id = 153, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4761, y = 0.5211, class = "PALADIN",
+        name = { enUS = "Azar Stronghammer", deDE = "Azar Stronghammer", esES = "Azar Martillopujante", esMX = "Azar Martillopujante", frFR = "Azar Stronghammer", koKR = "아자르 스트롱해머", ptBR = "Avar Marroforte", ruRU = "Азар Мощный Молот", zhCN = "阿扎尔·战锤", zhTW = "阿札爾·戰錘" },
+    },
+    {
+        id = 154, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5500, y = 0.2181, class = "PALADIN",
+        name = { enUS = "Beldruk Doombrow", deDE = "Beldruk Doombrow", esES = "Beldruk Ceñomaldito", esMX = "Beldruk Ceñomaldito", frFR = "Beldruk Doombrow", koKR = "벨드룩 둠브로우", ptBR = "Beldruk Cenhomal", ruRU = "Белдрук Роковое Чело", zhCN = "贝尔杜克·凝眉", zhTW = "貝爾杜克·凝眉" },
+    },
+    {
+        id = 155, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6247, y = 0.3485, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Belia Thundergranite", deDE = "Belia Thundergranite", esES = "Belia Tronagranito", esMX = "Belia Tronagranito", frFR = "Belia Thundergranite", koKR = "빌리아 썬더그래니트", ptBR = "Bélia Granitrondo", ruRU = "Белия Громовой Гранит", zhCN = "贝莉亚·雷岩", zhTW = "貝莉亞·雷岩" },
+    },
+    {
+        id = 156, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6166, y = 0.3530, class = "WARRIOR",
+        name = { enUS = "Bilban Tosslespanner", deDE = "Bilban Tosslespanner", esES = "Bilban Tosslespanner", esMX = "Bilban Tosslespanner", frFR = "Bilban Tosslespanner", koKR = "빌반 토슬스패너", ptBR = "Bilban Lançachave", ruRU = "Бильбан Болтокрут", zhCN = "比尔班·飞钳", zhTW = "比爾班·飛鉗" },
+    },
+    {
+        id = 157, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5543, y = 0.2242, class = "MAGE",
+        name = { enUS = "Bink", deDE = "Bink", esES = "Bink", esMX = "Bink", frFR = "Bink", koKR = "빙크", ptBR = "Bink", ruRU = "Бинк", zhCN = "彬克", zhTW = "彬克" },
+    },
+    {
+        id = 158, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5500, y = 0.2255, class = "PRIEST",
+        name = { enUS = "Braenna Flintcrag", deDE = "Braenna Flintcrag", esES = "Braenna Riscosílex", esMX = "Braenna Riscosílex", frFR = "Braenna Flintcrag", koKR = "브레나 플린트크래그", ptBR = "Braenna Rochassílex", ruRU = "Браэнна Кремнескал", zhCN = "布莱纳·火崖", zhTW = "布萊納·火崖" },
+    },
+    {
+        id = 159, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5478, y = 0.2206, class = "PALADIN",
+        name = { enUS = "Brandur Ironhammer", deDE = "Brandur Ironhammer", esES = "Brandur Martiyerro", esMX = "Brandur Martiyerro", frFR = "Brandur Ironhammer", koKR = "브란두르 아이언해머", ptBR = "Brandur Ferromalho", ruRU = "Брандар Железный Молот", zhCN = "布兰度尔·铁锤", zhTW = "布蘭度爾·鐵錘" },
+    },
+    {
+        id = 160, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2860, y = 0.6640, class = "PRIEST",
+        name = { enUS = "Branstock Khalder", deDE = "Branstock Khalder", esES = "Silo Khalder", esMX = "Silo Khalder", frFR = "Branstock Khalder", koKR = "브란스토크 칼더", ptBR = "Branstock Khalder", ruRU = "Брансток Халдер", zhCN = "布兰斯托克·卡德尔", zhTW = "布蘭斯托克·卡德爾" },
+    },
+    {
+        id = 161, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5914, y = 0.2198, class = "WARLOCK",
+        name = { enUS = "Briarthorn", deDE = "Briarthorn", esES = "Briarthorn", esMX = "Briarthorn", frFR = "Briarthorn", koKR = "Briarthorn", ptBR = "Briarthorn", ruRU = "Briarthorn", zhCN = "Briarthorn", zhTW = "Briarthorn" },
+    },
+    {
+        id = 162, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2879, y = 0.6831, class = "PALADIN",
+        name = { enUS = "Bromos Grummner", deDE = "Bromos Grummner", esES = "Bromos Grummner", esMX = "Bromos Grummner", frFR = "Bromos Grummner", koKR = "브로모스 그럼너", ptBR = "Bromos Grummner", ruRU = "Бромос Груммнер", zhCN = "布罗莫斯·格鲁诺尔", zhTW = "布羅莫斯·格魯諾爾" },
+    },
+    {
+        id = 163, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6247, y = 0.3550, class = "HUNTER",
+        name = { enUS = "Daera Brightspear", deDE = "Daera Brightspear", esES = "Daera Relulanza", esMX = "Daera Lanza Reluciente", frFR = "Daera Brightspear", koKR = "데라 브라이트스피어", ptBR = "Daera Setalume", ruRU = "Дайра Яркое Копье", zhCN = "戴拉·锐矛", zhTW = "戴拉·銳矛" },
+    },
+    {
+        id = 164, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5543, y = 0.2246, class = "MAGE",
+        name = { enUS = "Dink", deDE = "Dink", esES = "Dink", esMX = "Dink", frFR = "Dink", koKR = "딩크", ptBR = "Dink", ruRU = "Динк", zhCN = "丁克", zhTW = "丁克" },
+    },
+    {
+        id = 165, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5936, y = 0.2352, class = "ROGUE",
+        name = { enUS = "Fenthwick", deDE = "Fenthwick", esES = "Fenthwick", esMX = "Fenthwick", frFR = "Fenthwick", koKR = "펜스윅", ptBR = "Degrauzinho", ruRU = "Иззаспинс", zhCN = "芬斯维克", zhTW = "芬斯維克" },
+    },
+    {
+        id = 166, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4731, y = 0.5369, class = "WARLOCK",
+        name = { enUS = "Gimrizz Shadowcog", deDE = "Gimrizz Shadowcog", esES = "Gimrizz Molaro", esMX = "Gimrizz Molaro", frFR = "Gimrizz Shadowcog", koKR = "김리즈 섀도코그", ptBR = "Gimrizz Umbrenagem", ruRU = "Гимризз Которышка", zhCN = "吉姆瑞兹·黑轮", zhTW = "吉姆瑞茲·影輪" },
+    },
+    {
+        id = 167, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4739, y = 0.5260, class = "WARRIOR",
+        name = { enUS = "Granis Swiftaxe", deDE = "Granis Swiftaxe", esES = "Granis Hachaveloz", esMX = "Granis Hachaveloz", frFR = "Granis Swiftaxe", koKR = "그라니스 스위프트액스", ptBR = "Granis Celeraxa", ruRU = "Гранис Быстрый Топор", zhCN = "格兰尼斯·快斧", zhTW = "格蘭尼斯·快斧" },
+    },
+    {
+        id = 168, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4580, y = 0.5300, class = "HUNTER",
+        name = { enUS = "Grif Wildheart", deDE = "Grif Wildheart", esES = "Grif Corazón Salvaje", esMX = "Grif Corazón Salvaje", frFR = "Grif Wildheart", koKR = "그리프 와일드하트", ptBR = "Grif Selvacuore", ruRU = "Гриф Дикое Сердце", zhCN = "格瑞夫", zhTW = "格瑞夫" },
+    },
+    {
+        id = 169, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5505, y = 0.2238, class = "PRIEST",
+        name = { enUS = "High Priest Rohan", deDE = "Hohepriester Rohan", esES = "Sumo Sacerdote Rohan", esMX = "Sumo sacerdote Rohan", frFR = "Grandprêtre Rohan", koKR = "대사제 로한", ptBR = "Sumo Sacerdote Rohan", ruRU = "Верховный жрец Рохан", zhCN = "高阶牧师洛汉", zhTW = "高階牧師洛漢" },
+    },
+    {
+        id = 170, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4761, y = 0.5260, class = "ROGUE",
+        name = { enUS = "Hogral Bakkan", deDE = "Hogral Bakkan", esES = "Hogral Bakkan", esMX = "Hogral Bakkan", frFR = "Hogral Bakkan", koKR = "호그럴 바칸", ptBR = "Hogral Bakkan", ruRU = "Хограл Баккан", zhCN = "霍格拉尔·巴坎", zhTW = "霍格拉爾·巴坎" },
+    },
+    {
+        id = 171, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5944, y = 0.2344, class = "ROGUE",
+        name = { enUS = "Hulfdan Blackbeard", deDE = "Hulfdan Blackbeard", esES = "Hulfdan Barbanegra", esMX = "Hulfdan Barbanegra", frFR = "Hulfdan Blackbeard", koKR = "훌프단 블랙비어드", ptBR = "Hulfdan Barbanegra", ruRU = "Хальфдан Чернобород", zhCN = "霍夫丹·黑须", zhTW = "霍夫丹·黑鬚" },
+    },
+    {
+        id = 172, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4758, y = 0.5195, class = "SHAMAN",
+        name = { enUS = "Ingrid Dunwald", deDE = "Ingrid Dunwald", esES = "Ingrid Dunwald", esMX = "Ingrid Dunwald", frFR = "Ingrid Dunwald", koKR = "Ingrid Dunwald", ptBR = "Ingrid Dunwald", ruRU = "Ingrid Dunwald", zhCN = "Ingrid Dunwald", zhTW = "Ingrid Dunwald" },
+    },
+    {
+        id = 173, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5530, y = 0.2218, class = "MAGE",
+        name = { enUS = "Juli Stormkettle", deDE = "Juli Stormkettle", esES = "Juli Tormentacaldera", esMX = "Juli Tormentacaldera", frFR = "Juli Stormkettle", koKR = "율리 스톰케틀", ptBR = "Juli Tachofundo", ruRU = "Джули Скороварга", zhCN = "朱莉·雷线", zhTW = "朱莉·雷線" },
+    },
+    {
+        id = 174, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6182, y = 0.3554, class = "WARRIOR",
+        name = { enUS = "Kelstrum Stonebreaker", deDE = "Kelstrum Stonebreaker", esES = "Kelstrum Rompepedras", esMX = "Kelstrum Rompepedras", frFR = "Kelstrum Stonebreaker", koKR = "켈스트럼 스톤브레이커", ptBR = "Kelstrum Quebrapedra", ruRU = "Кельструм Камнелом", zhCN = "克斯塔姆·碎石", zhTW = "克斯塔姆·碎石" },
+    },
+    {
+        id = 175, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6236, y = 0.3566, class = "WARRIOR",
+        name = { enUS = "Kelv Sternhammer", deDE = "Kelv Sternhammer", esES = "Kelv Martillodusto", esMX = "Kelv Martillodusto", frFR = "Kelv Sternhammer", koKR = "켈브 스턴해머", ptBR = "Kelv Severomalho", ruRU = "Кельв Суровый Молот", zhCN = "凯夫·重锤", zhTW = "凱夫·重錘" },
+    },
+    {
+        id = 176, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4750, y = 0.5211, class = "MAGE",
+        name = { enUS = "Magis Sparkmantle", deDE = "Magis Sparkmantle", esES = "Magis Chispamanto", esMX = "Magis Chispamanto", frFR = "Magis Sparkmantle", koKR = "마지스 스파크맨틀", ptBR = "Magis Fagulhamanto", ruRU = "Магис Искроплащ", zhCN = "玛济斯·石衣", zhTW = "瑪濟斯·石衣" },
+    },
+    {
+        id = 177, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2871, y = 0.6640, class = "MAGE",
+        name = { enUS = "Marryk Nurribit", deDE = "Marryk Nurribit", esES = "Marryk Nurribit", esMX = "Marryk Nurribit", frFR = "Marryk Nurribit", koKR = "마릭 너리빗", ptBR = "Marryk Nurribit", ruRU = "Маррик Нуррибит", zhCN = "玛瑞克·斯托纳尔", zhTW = "瑪瑞克·斯托納爾" },
+    },
+    {
+        id = 178, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4731, y = 0.5219, class = "PRIEST",
+        name = { enUS = "Maxan Anvol", deDE = "Maxan Anvol", esES = "Maxan Anvol", esMX = "Maxan Anvol", frFR = "Maxan Anvol", koKR = "막산 앤볼", ptBR = "Maxan Begurno", ruRU = "Максан Анвол", zhCN = "马克萨恩·安沃尔", zhTW = "馬克薩恩·安沃爾" },
+    },
+    {
+        id = 179, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5516, y = 0.2222, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Milstaff Stormeye", deDE = "Milstaff Stormeye", esES = "Milstaff Ojotrueno", esMX = "Milstaff Ojotrueno", frFR = "Milstaff Stormeye", koKR = "밀스타프 스톰아이", ptBR = "Milstaff Intempestivus", ruRU = "Мильстафф Штормоглаз", zhCN = "贝尔斯塔弗·风暴之眼", zhTW = "貝爾斯塔弗·風暴之眼" },
+    },
+    {
+        id = 180, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5524, y = 0.2206, class = "MAGE",
+        name = { enUS = "Nittlebur Sparkfizzle", deDE = "Nittlebur Sparkfizzle", esES = "Nittlebur Chispancio", esMX = "Nittlebur Chispancio", frFR = "Nittlebur Sparkfizzle", koKR = "니틀부르 스파크피즐", ptBR = "Nitlebur Faiscrispa", ruRU = "Ниттльбур Шумогам", zhCN = "尼特布尔·火花", zhTW = "尼特布林·火花" },
+    },
+    {
+        id = 181, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6247, y = 0.3453, class = "HUNTER",
+        name = { enUS = "Olmin Burningbeard", deDE = "Olmin Burningbeard", esES = "Olmin Barbanllamas", esMX = "Olmin Barbardiente", frFR = "Olmin Burningbeard", koKR = "올민 버닝비어드", ptBR = "Olmin Barbardente", ruRU = "Олмин Пламебород", zhCN = "奥尔明·燃须", zhTW = "奧爾明·燃鬚" },
+    },
+    {
+        id = 182, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5958, y = 0.2348, class = "ROGUE",
+        name = { enUS = "Ormyr Flinteye", deDE = "Ormyr Flinteye", esES = "Ormyr Ojílex", esMX = "Ormyr Ojílex", frFR = "Ormyr Flinteye", koKR = "오미르 플린트아이", ptBR = "Ormyr Pedernolho", ruRU = "Ормир Кремнеглаз", zhCN = "奥米尔·火眼", zhTW = "奧米爾·火眼" },
+    },
+    {
+        id = 183, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.4669, y = 0.5402, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Peria Lamenur", deDE = "Peria Lamenur", esES = "Peria Lamenur", esMX = "Peria Lamenur", frFR = "Peria Lamenur", koKR = "페리아 라메누르", ptBR = "Peria Lamenur", ruRU = "Перия Ламенур", zhCN = "派瑞亚·拉密诺尔", zhTW = "派瑞亞·拉密諾爾" },
+    },
+    {
+        id = 184, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.7100, y = 0.3802, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Peria Lamenur", deDE = "Peria Lamenur", esES = "Peria Lamenur", esMX = "Peria Lamenur", frFR = "Peria Lamenur", koKR = "페리아 라메누르", ptBR = "Peria Lamenur", ruRU = "Перия Ламенур", zhCN = "派瑞亚·拉密诺尔", zhTW = "派瑞亞·拉密諾爾" },
+    },
+    {
+        id = 185, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.6231, y = 0.3440, class = "HUNTER",
+        name = { enUS = "Regnus Thundergranite", deDE = "Regnus Thundergranite", esES = "Regnus Tronagranito", esMX = "Regnus Tronagranito", frFR = "Regnus Thundergranite", koKR = "레그누스 썬더그래니트", ptBR = "Regnus Granitrondo", ruRU = "Регнус Громовой Гранит", zhCN = "雷格努斯·雷石", zhTW = "雷格努斯·雷岩" },
+    },
+    {
+        id = 186, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2839, y = 0.6750, class = "ROGUE",
+        name = { enUS = "Solm Hargrin", deDE = "Solm Hargrin", esES = "Solm Hargrin", esMX = "Solm Hargrin", frFR = "Solm Hargrin", koKR = "솔름 하르그린", ptBR = "Solm Hargrin", ruRU = "Сольм Харгрин", zhCN = "索姆·哈格林", zhTW = "索姆·哈格林" },
+    },
+    {
+        id = 187, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2879, y = 0.6618, class = "SHAMAN",
+        name = { enUS = "Teo Hammerstorm", deDE = "Teo Hammerstorm", esES = "Teo Hammerstorm", esMX = "Teo Hammerstorm", frFR = "Teo Hammerstorm", koKR = "Teo Hammerstorm", ptBR = "Teo Hammerstorm", ruRU = "Teo Hammerstorm", zhCN = "Teo Hammerstorm", zhTW = "Teo Hammerstorm" },
+    },
+    {
+        id = 188, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5495, y = 0.2242, class = "PRIEST",
+        name = { enUS = "Theodrus Frostbeard", deDE = "Theodrus Frostbeard", esES = "Theodrus Barbagélida", esMX = "Theodrus Barbagélida", frFR = "Theodrus Frostbeard", koKR = "테오드루스 프로스트비어드", ptBR = "Theodrus Gelabarba", ruRU = "Теодрус Ледобород", zhCN = "塞欧杜斯·霜须", zhTW = "塞歐杜斯·霜鬚" },
+    },
+    {
+        id = 189, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5928, y = 0.2214, class = "WARLOCK",
+        name = { enUS = "Thistleheart", deDE = "Thistleheart", esES = "Corazón de Cardo", esMX = "Corazón de Cardo", frFR = "Thistleheart", koKR = "시슬하트", ptBR = "Cardossangue", ruRU = "Недотрогинс", zhCN = "瑟斯哈特", zhTW = "瑟斯哈特" },
+    },
+    {
+        id = 190, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2920, y = 0.6750, class = "HUNTER",
+        name = { enUS = "Thorgas Grimson", deDE = "Thorgas Grimson", esES = "Thorgas Grimson", esMX = "Thorgas Grimson", frFR = "Thorgas Grimson", koKR = "토르가스 그림슨", ptBR = "Thorgas Grimson", ruRU = "Торгас Мрачнон", zhCN = "索加斯·格瑞姆森", zhTW = "索加斯·格瑞姆森" },
+    },
+    {
+        id = 191, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.2879, y = 0.6722, class = "WARRIOR",
+        name = { enUS = "Thran Khorman", deDE = "Thran Khorman", esES = "Thran Khorman", esMX = "Thran Khorman", frFR = "Thran Khorman", koKR = "스란 코르만", ptBR = "Thran Khorman", ruRU = "Тран Корман", zhCN = "斯兰·库尔曼", zhTW = "斯蘭·庫爾曼" },
+    },
+    {
+        id = 192, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5514, y = 0.2283, class = "PRIEST",
+        name = { enUS = "Toldren Deepiron", deDE = "Toldren Deepiron", esES = "Toldren Acerhondo", esMX = "Toldren Acerhondo", frFR = "Toldren Deepiron", koKR = "톨드렌 딥아이언", ptBR = "Toldren Ferrofundo", ruRU = "Толдрен Котельник", zhCN = "托德雷·铁矿", zhTW = "陶德雷·鐵礦" },
+    },
+    {
+        id = 193, types = { "class" },
+        faction = "Alliance", map = 1426, x = 0.5489, y = 0.2190, class = "PALADIN",
+        name = { enUS = "Valgar Highforge", deDE = "Valgar Highforge", esES = "Valgar Forjalta", esMX = "Valgar Forjalta", frFR = "Valgar Highforge", koKR = "발가르 하이포지", ptBR = "Valgar Sumaforja", ruRU = "Вальгар Высшая Кузня", zhCN = "瓦尔加·高炉", zhTW = "瓦爾加·高爐" },
+    },
+    {
+        id = 194, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.5038, y = 0.4213, class = "PALADIN",
+        name = { enUS = "Brother Sammuel", deDE = "Bruder Sammuel", esES = "Hermano Sammuel", esMX = "Hermano Sammuel", frFR = "Frère Sammuel", koKR = "수사 사무엘", ptBR = "Irmão Samuel", ruRU = "Брат Самуэль", zhCN = "萨缪尔修士", zhTW = "薩繆爾修士" },
+    },
+    {
+        id = 195, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4109, y = 0.6598, class = "PALADIN",
+        name = { enUS = "Brother Wilhelm", deDE = "Bruder Wilhelm", esES = "Hermano Fijalontad", esMX = "Hermano Fijalontad", frFR = "Frère Wilhelm", koKR = "수사 빌헬름", ptBR = "Irmão Guilhermino", ruRU = "Брат Вильгельм", zhCN = "威尔海姆修士", zhTW = "威爾海姆修士" },
+    },
+    {
+        id = 196, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4988, y = 0.4259, class = "WARLOCK",
+        name = { enUS = "Drusilla La Salle", deDE = "Drusilla La Salle", esES = "Drusilla La Salle", esMX = "Drusilla La Salle", frFR = "Drusilla La Salle", koKR = "드루실라 라 살르", ptBR = "Drusilla La Salle", ruRU = "Друзилла ла Салле", zhCN = "杜希拉·拉萨雷", zhTW = "杜希拉·拉薩雷" },
+    },
+    {
+        id = 197, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.5031, y = 0.3988, class = "ROGUE",
+        name = { enUS = "Jorik Kerridan", deDE = "Jorik Kerridan", esES = "Jorik Kerridan", esMX = "Jorik Kerridan", frFR = "Jorik Kerridan", koKR = "요리크 케리던", ptBR = "Rufino Raposo", ruRU = "Джорик Керридан", zhCN = "乔里克·克里丹", zhTW = "喬里克·克里丹" },
+    },
+    {
+        id = 198, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4115, y = 0.6623, class = "HUNTER",
+        name = { enUS = "Josephine Carson", deDE = "Josephine Carson", esES = "Josephine Carson", esMX = "Josephine Carson", frFR = "Josephine Carson", koKR = "Josephine Carson", ptBR = "Josephine Carson", ruRU = "Josephine Carson", zhCN = "Josephine Carson", zhTW = "Josephine Carson" },
+    },
+    {
+        id = 199, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4389, y = 0.6592, class = "ROGUE",
+        name = { enUS = "Keryn Sylvius", deDE = "Keryn Sylvius", esES = "Keryn Sylvius", esMX = "Keryn Sylvius", frFR = "Keryn Sylvius", koKR = "케린 실비우스", ptBR = "Anabela Cabreira", ruRU = "Керин Сильвиус", zhCN = "科瑞恩·塞尔留斯", zhTW = "科瑞恩·塞爾留斯" },
+    },
+    {
+        id = 200, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4969, y = 0.3942, class = "MAGE",
+        name = { enUS = "Khelden Bremen", deDE = "Khelden Bremen", esES = "Khelden Bremen", esMX = "Khelden Bremen", frFR = "Khelden Bremen", koKR = "켈덴 브레멘", ptBR = "Gaspar Melchior", ruRU = "Кельден Бремен", zhCN = "凯尔登·布雷门", zhTW = "凱爾登·布雷門" },
+    },
+    {
+        id = 201, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.5019, y = 0.4230, class = "WARRIOR",
+        name = { enUS = "Llane Beshere", deDE = "Llane Beshere", esES = "Llane Beshere", esMX = "Llane Beshere", frFR = "Llane Beshere", koKR = "레인 비셰어", ptBR = "Hipólito Valentim", ruRU = "Ллан Бишер", zhCN = "莱尼·拜舍尔", zhTW = "萊尼·拜舍爾" },
+    },
+    {
+        id = 202, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4109, y = 0.6580, class = "WARRIOR",
+        name = { enUS = "Lyria Du Lac", deDE = "Lyria Du Lac", esES = "Lyria Du Lac", esMX = "Lyria Du Lac", frFR = "Lyria Du Lac", koKR = "리리아 뒤 라크", ptBR = "Lyria Du Lac", ruRU = "Лирия дю Лак", zhCN = "里瑞亚·杜拉克", zhTW = "里瑞亞·杜拉克" },
+    },
+    {
+        id = 203, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4439, y = 0.6621, class = "WARLOCK",
+        name = { enUS = "Maximillian Crowe", deDE = "Maximillian Crowe", esES = "Maximillian Crowe", esMX = "Maximillian Crowe", frFR = "Maximillian Crowe", koKR = "맥시밀리언 크로우", ptBR = "Wagner Nascimento", ruRU = "Максимилиан Кроу", zhCN = "玛克西米利安·克洛文", zhTW = "瑪克西米利安·克洛文" },
+    },
+    {
+        id = 204, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4981, y = 0.3948, class = "PRIEST",
+        name = { enUS = "Priestess Anetta", deDE = "Priesterin Anetta", esES = "Sacerdotisa Anetta", esMX = "Sacerdotisa Anetta", frFR = "Prêtresse Anetta", koKR = "여사제 아네타", ptBR = "Sacerdotisa Anita", ruRU = "Жрица Анетта", zhCN = "女牧师安妮塔", zhTW = "女牧師安妮塔" },
+    },
+    {
+        id = 205, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4332, y = 0.6569, class = "PRIEST",
+        name = { enUS = "Priestess Josetta", deDE = "Priesterin Josetta", esES = "Sacerdotisa Josetta", esMX = "Sacerdotisa Josetta", frFR = "Prêtresse Josetta", koKR = "여사제 조세타", ptBR = "Sacerdotisa Joselita", ruRU = "Жрица Жозетта", zhCN = "女牧师洁塞塔", zhTW = "女牧師潔塞塔" },
+    },
+    {
+        id = 206, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.5121, y = 0.4080, class = "HUNTER",
+        name = { enUS = "Tordrin Sternblade", deDE = "Tordrin Sternblade", esES = "Tordrin Sternblade", esMX = "Tordrin Sternblade", frFR = "Tordrin Sternblade", koKR = "Tordrin Sternblade", ptBR = "Tordrin Sternblade", ruRU = "Tordrin Sternblade", zhCN = "Tordrin Sternblade", zhTW = "Tordrin Sternblade" },
+    },
+    {
+        id = 207, types = { "class" },
+        faction = "Alliance", map = 1429, x = 0.4320, y = 0.6621, class = "MAGE",
+        name = { enUS = "Zaldimar Wefhellt", deDE = "Zaldimar Wefhellt", esES = "Zaldimar Wefhellt", esMX = "Zaldimar Wefhellt", frFR = "Zaldimar Wefhellt", koKR = "잘디마르 웨펠트", ptBR = "Zaldimar Wefhellt", ruRU = "Залдимар Вефхеллт", zhCN = "扎尔迪玛·维夫希尔特", zhTW = "札爾迪瑪·維夫希爾特" },
+    },
+    {
+        id = 208, types = { "class" },
+        faction = "Alliance", map = 1432, x = 0.8221, y = 0.6280, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Claude Erksine", deDE = "Claude Erksine", esES = "Claude Erksine", esMX = "Claude Erksine", frFR = "Claude Erksine", koKR = "클라우드 에르크신", ptBR = "Claude Senotorto", ruRU = "Клод Эрксин", zhCN = "克劳德·艾尔克辛", zhTW = "克勞德·艾爾克辛" },
+    },
+    {
+        id = 209, types = { "class" },
+        faction = "Alliance", map = 1432, x = 0.8240, y = 0.6243, class = "HUNTER",
+        name = { enUS = "Dargh Trueaim", deDE = "Dargh Trueaim", esES = "Dargh Endiana", esMX = "Dargh Tirojusto", frFR = "Dargh Trueaim", koKR = "다그 트루에임", ptBR = "Dargh Miracerta", ruRU = "Дарг Верный Прицел", zhCN = "达恩·准星", zhTW = "達恩·準星" },
+    },
+    {
+        id = 210, types = { "class" },
+        faction = "Neutral", map = 1434, x = 0.2680, y = 0.7711, class = "ROGUE",
+        name = { enUS = "Ian Strom", deDE = "Ian Strom", esES = "Ian Strom", esMX = "Ian Strom", frFR = "Ian Strom", koKR = "이안 스트롬", ptBR = "Ian Strom", ruRU = "Ян Шторм", zhCN = "伊安·斯托姆", zhTW = "伊安·斯托姆" },
+    },
+    {
+        id = 211, types = { "class" },
+        faction = "Horde", map = 1434, x = 0.3121, y = 0.2869, class = "HUNTER",
+        name = { enUS = "Kragg", deDE = "Kragg", esES = "Kragg", esMX = "Kragg", frFR = "Kragg", koKR = "크래그", ptBR = "Kragg", ruRU = "Крагг", zhCN = "克拉格", zhTW = "克拉格" },
+    },
+    {
+        id = 212, types = { "class" },
+        faction = "Horde", map = 1434, x = 0.3110, y = 0.2891, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Zudd", deDE = "Zudd", esES = "Zudd", esMX = "Zudd", frFR = "Zudd", koKR = "주드", ptBR = "Zudd", ruRU = "Зюдд", zhCN = "祖德", zhTW = "祖德" },
+    },
+    {
+        id = 213, types = { "class" },
+        faction = "Horde", map = 1435, x = 0.4742, y = 0.5287, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Grokor", deDE = "Grokor", esES = "Grokor", esMX = "Grokor", frFR = "Grokor", koKR = "그로코르", ptBR = "Grokor", ruRU = "Грокор", zhCN = "格罗科尔", zhTW = "格羅科爾" },
+    },
+    {
+        id = 214, types = { "class" },
+        faction = "Horde", map = 1435, x = 0.4818, y = 0.5793, class = "SHAMAN",
+        name = { enUS = "Haromm", deDE = "Haromm", esES = "Haromm", esMX = "Haromm", frFR = "Haromm", koKR = "하로옴", ptBR = "Haromm", ruRU = "Харомм", zhCN = "哈洛姆", zhTW = "哈洛姆" },
+    },
+    {
+        id = 215, types = { "class" },
+        faction = "Horde", map = 1435, x = 0.4870, y = 0.5557, class = "WARLOCK",
+        name = { enUS = "Kartosh", deDE = "Kartosh", esES = "Kartosh", esMX = "Kartosh", frFR = "Kartosh", koKR = "카르토쉬", ptBR = "Kartosh", ruRU = "Кертош", zhCN = "卡托什", zhTW = "卡托什" },
+    },
+    {
+        id = 216, types = { "class" },
+        faction = "Horde", map = 1435, x = 0.4492, y = 0.5758, class = "WARRIOR",
+        name = { enUS = "Malosh", deDE = "Malosh", esES = "Malosh", esMX = "Malosh", frFR = "Malosh", koKR = "말로쉬", ptBR = "Malosh", ruRU = "Малош", zhCN = "马尔罗什", zhTW = "馬爾羅什" },
+    },
+    {
+        id = 217, types = { "class" },
+        faction = "Horde", map = 1435, x = 0.4731, y = 0.5340, class = "HUNTER",
+        name = { enUS = "Ogromm", deDE = "Ogromm", esES = "Ogromm", esMX = "Ogromm", frFR = "Ogromm", koKR = "오그롬", ptBR = "Ogromm", ruRU = "Огромм", zhCN = "欧格鲁姆", zhTW = "歐格魯姆" },
+    },
+    {
+        id = 218, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5960, y = 0.3840, class = "WARRIOR",
+        name = { enUS = "Alyissia", deDE = "Alyissia", esES = "Alyissia", esMX = "Alyissia", frFR = "Alyissia", koKR = "알리시아", ptBR = "Alyissia", ruRU = "Алайссия", zhCN = "奥莉希亚", zhTW = "奧莉希亞" },
+    },
+    {
+        id = 219, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5871, y = 0.4041, class = "HUNTER",
+        name = { enUS = "Ayanna Everstride", deDE = "Ayanna Everstride", esES = "Ayanna Semprerguida", esMX = "Ayanna Semprerguida", frFR = "Ayanna Everstride", koKR = "아얀나 에버스트라이드", ptBR = "Ayanna Perenanda", ruRU = "Аянна Вечнобродка", zhCN = "阿亚娜·远途", zhTW = "阿亞娜·遠途" },
+    },
+    {
+        id = 220, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5669, y = 0.5950, class = "HUNTER",
+        name = { enUS = "Dazalar", deDE = "Dazalar", esES = "Dazalar", esMX = "Dazalar", frFR = "Dazalar", koKR = "다잘라", ptBR = "Dazalar", ruRU = "Дазалар", zhCN = "达扎拉", zhTW = "達札拉" },
+    },
+    {
+        id = 221, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5960, y = 0.3872, class = "ROGUE",
+        name = { enUS = "Frahun Shadewhisper", deDE = "Frahun Shadewhisper", esES = "Frahun Sombrusurro", esMX = "Frahun Sombrusurro", frFR = "Frahun Shadewhisper", koKR = "프라훈 섀이드위스퍼", ptBR = "Frahun Umbrurmúrio", ruRU = "Фрагун Шепот Тени", zhCN = "弗拉胡恩·影语者", zhTW = "弗拉胡恩·影語" },
+    },
+    {
+        id = 222, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5640, y = 0.6009, class = "ROGUE",
+        name = { enUS = "Jannok Breezesong", deDE = "Jannok Breezesong", esES = "Jannok Brisón", esMX = "Jannok Brisón", frFR = "Jannok Breezesong", koKR = "잔노크 브리즈송", ptBR = "Jannok Brisacanto", ruRU = "Джаннок Поющий Ветерок", zhCN = "詹诺克·柔歌", zhTW = "詹諾克·柔歌" },
+    },
+    {
+        id = 223, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5591, y = 0.6158, class = "DRUID",
+        name = { enUS = "Kal", deDE = "Kal", esES = "Kal", esMX = "Kal", frFR = "Kal", koKR = "칼", ptBR = "Kal", ruRU = "Каль", zhCN = "卡尔", zhTW = "卡爾" },
+    },
+    {
+        id = 224, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5680, y = 0.5981, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Keldas", deDE = "Keldas", esES = "Keldas", esMX = "Keldas", frFR = "Keldas", koKR = "켈다스", ptBR = "Keldas", ruRU = "Кельдас", zhCN = "凯尔达斯", zhTW = "凱爾達斯" },
+    },
+    {
+        id = 225, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5619, y = 0.5918, class = "WARRIOR",
+        name = { enUS = "Kyra Windblade", deDE = "Kyra Windblade", esES = "Kyra Espada del Viento", esMX = "Kyra Espada del Viento", frFR = "Kyra Windblade", koKR = "키라 윈드블레이드", ptBR = "Kyra Laminéola", ruRU = "Кайра Ветрорез", zhCN = "凯拉·风刃", zhTW = "凱拉·風刃" },
+    },
+    {
+        id = 226, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5559, y = 0.5671, class = "PRIEST",
+        name = { enUS = "Laurna Morninglight", deDE = "Laurna Morninglight", esES = "Laurna Luzdelalba", esMX = "Laurna Luzdelalba", frFR = "Laurna Morninglight", koKR = "라우르나 모닝라이트", ptBR = "Laurna Luzalbor", ruRU = "Лорна Утренний Свет", zhCN = "劳尔娜·晨光", zhTW = "勞爾娜·晨光" },
+    },
+    {
+        id = 227, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5860, y = 0.4029, class = "DRUID",
+        name = { enUS = "Mardant Strongoak", deDE = "Mardant Strongoak", esES = "Mardant Cebaforte", esMX = "Mardant Cebaforte", frFR = "Mardant Strongoak", koKR = "마르단트 스트롱오크", ptBR = "Mardant Carvalhaço", ruRU = "Мардант Крепкий Дуб", zhCN = "玛丹特·硬木", zhTW = "瑪丹特·硬木" },
+    },
+    {
+        id = 228, types = { "class" },
+        faction = "Alliance", map = 1438, x = 0.5921, y = 0.4041, class = "PRIEST",
+        name = { enUS = "Shanda", deDE = "Shanda", esES = "Shanda", esMX = "Shanda", frFR = "Shanda", koKR = "샨다", ptBR = "Shanda", ruRU = "Шанда", zhCN = "珊达", zhTW = "珊達" },
+    },
+    {
+        id = 229, types = { "class" },
+        faction = "Alliance", map = 1440, x = 0.1801, y = 0.5979, class = "HUNTER",
+        name = { enUS = "Alenndaar Lapidaar", deDE = "Alenndaar Lapidaar", esES = "Alenndaar Lapidaar", esMX = "Alenndaar Lapidaar", frFR = "Alenndaar Lapidaar", koKR = "알렌다르 라피다르", ptBR = "Alenndaar Lapidus", ruRU = "Алендаар Лаподаар", zhCN = "奥林达尔·石鹿", zhTW = "奧林達爾·石鹿" },
+    },
+    {
+        id = 230, types = { "class" },
+        faction = "Alliance", map = 1440, x = 0.1801, y = 0.6000, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Bolyun", deDE = "Bolyun", esES = "Bolyun", esMX = "Bolyun", frFR = "Bolyun", koKR = "볼윤", ptBR = "Bolyun", ruRU = "Больюн", zhCN = "波尔温", zhTW = "波爾溫" },
+    },
+    {
+        id = 231, types = { "class" },
+        faction = "Alliance", map = 1440, x = 0.4971, y = 0.6701, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Caelyb", deDE = "Caelyb", esES = "Caelyb", esMX = "Caelyb", frFR = "Caelyb", koKR = "캘리브", ptBR = "Caelyb", ruRU = "Калиб", zhCN = "凯尔林布", zhTW = "凱爾林布" },
+    },
+    {
+        id = 232, types = { "class" },
+        faction = "Alliance", map = 1440, x = 0.5010, y = 0.6791, class = "HUNTER",
+        name = { enUS = "Danlaar Nightstride", deDE = "Danlaar Nightstride", esES = "Danlaar Zancanoche", esMX = "Danlaar Zancanoche", frFR = "Danlaar Nightstride", koKR = "단라르 나이트스트라이드", ptBR = "Danlaar Noctandas", ruRU = "Данлаар Ночной странник", zhCN = "丹拉尔·夜路", zhTW = "丹拉爾·夜路" },
+    },
+    {
+        id = 233, types = { "class" },
+        faction = "Horde", map = 1444, x = 0.7600, y = 0.4230, class = "DRUID",
+        name = { enUS = "Jannos Lighthoof", deDE = "Jannos Lighthoof", esES = "Jannos Pezuña Ligera", esMX = "Jannos Pezuña Ligera", frFR = "Jannos Lighthoof", koKR = "얀노스 라이트후프", ptBR = "Jannos Casco Leve", ruRU = "Джаннос Легкое Копыто", zhCN = "加诺斯·轻蹄", zhTW = "加諾斯·輕蹄" },
+    },
+    {
+        id = 234, types = { "class" },
+        faction = "Alliance", map = 1445, x = 0.6740, y = 0.4739, class = "PALADIN",
+        name = { enUS = "Brother Karman", deDE = "Bruder Karman", esES = "Hermano Karman", esMX = "Hermano Karman", frFR = "Frère Karman", koKR = "수사 칼먼", ptBR = "Irmão Karman da Guia", ruRU = "Брат Кэрман", zhCN = "卡尔曼修士", zhTW = "卡爾曼修士" },
+    },
+    {
+        id = 235, types = { "class" },
+        faction = "Alliance", map = 1445, x = 0.6790, y = 0.4838, class = "WARRIOR",
+        name = { enUS = "Captain Evencane", deDE = "Captain Evencane", esES = "Capitán Sempremimbre", esMX = "Capitán Sempremimbre", frFR = "Capitaine Evencane", koKR = "대장 이븐케인", ptBR = "Capitão Canajusta", ruRU = "Капитан Ровноступ", zhCN = "伊文凯恩队长", zhTW = "伊文凱恩隊長" },
+    },
+    {
+        id = 236, types = { "class" },
+        faction = "Alliance", map = 1448, x = 0.6190, y = 0.2449, class = "DRUID",
+        name = { enUS = "Golhine the Hooded", deDE = "Golhine der Kapuzenträger", esES = "Golhine el Encapuchado", esMX = "Golhine el Encapuchado", frFR = "Golhine l'Encapuchonné", koKR = "두건의 골하인", ptBR = "Golhine, o Encapuzado", ruRU = "Голхайн-в-капюшоне", zhCN = "高赫尼", zhTW = "戴兜帽的高赫尼" },
+    },
+    {
+        id = 237, types = { "class" },
+        faction = "Alliance", map = 1448, x = 0.6190, y = 0.2362, class = "HUNTER",
+        name = { enUS = "Kaerbrus", deDE = "Kaerbrus", esES = "Kaerbrus", esMX = "Kaerbrus", frFR = "Kaerbrus", koKR = "캘브루스", ptBR = "Kaerbrus", ruRU = "Карбус", zhCN = "凯尔布鲁斯", zhTW = "凱爾布魯斯" },
+    },
+    {
+        id = 238, types = { "class" },
+        map = 1448, x = 0.6570, y = 0.0282,
+        name = { enUS = "Meilosh", deDE = "Meilosh", esES = "Meilosh", esMX = "Meilosh", frFR = "Meilosh", koKR = "메일로쉬", ptBR = "Meilosh", ruRU = "Мелиош", zhCN = "梅罗什", zhTW = "梅羅什" },
+    },
+    {
+        id = 239, types = { "class" },
+        faction = "Alliance", map = 1448, x = 0.6220, y = 0.2442, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Nalesette Wildbringer", deDE = "Nalesette Wildbringer", esES = "Nalesette Asilvestra", esMX = "Nalesette Asilvestra", frFR = "Nalesette Wildbringer", koKR = "날레세트 와일드브링어", ptBR = "Nalesette Frenesias", ruRU = "Налезетта Буйный Нрав", zhCN = "纳雷塞特", zhTW = "納雷塞特" },
+    },
+    {
+        id = 240, types = { "class" },
+        faction = "Neutral", map = 1450, x = 0.5251, y = 0.4060, class = "DRUID",
+        name = { enUS = "Loganaar", deDE = "Loganaar", esES = "Loganaar", esMX = "Loganaar", frFR = "Loganaar", koKR = "로가나르", ptBR = "Loganaar", ruRU = "Логанаар", zhCN = "洛甘纳尔", zhTW = "洛甘納爾" },
+    },
+    {
+        id = 241, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.8021, y = 0.6125, class = "WARRIOR",
+        name = { enUS = "Ander Germaine", deDE = "Ander Germaine", esES = "Ander Germaine", esMX = "Ander Germaine", frFR = "Ander Germaine", koKR = "앤더 저메인", ptBR = "Abner Germano", ruRU = "Андер Гермайн", zhCN = "安德尔·杰曼", zhTW = "安得爾·傑曼" },
+    },
+    {
+        id = 242, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4959, y = 0.4986, class = "PALADIN",
+        name = { enUS = "Arthur the Faithful", deDE = "Arthur der Treue", esES = "Arthur el Leal", esMX = "Arthur el Leal", frFR = "Arthur le Fidèle", koKR = "성기사 아서", ptBR = "Artur, o Fiel", ruRU = "Артур Верный", zhCN = "虔诚的亚瑟", zhTW = "虔誠的亞瑟" },
+    },
+    {
+        id = 243, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.5227, y = 0.4755, class = "PRIEST",
+        name = { enUS = "Brother Benjamin", deDE = "Bruder Benjamin", esES = "Hermano Benjamín", esMX = "Hermano Benjamin", frFR = "Frère Benjamin", koKR = "수사 벤자민", ptBR = "Irmão Benjamin", ruRU = "Брат Бенджамин", zhCN = "本杰明修士", zhTW = "本傑明修士" },
+    },
+    {
+        id = 244, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4951, y = 0.4525, class = "PRIEST",
+        name = { enUS = "Brother Joshua", deDE = "Bruder Joshua", esES = "Hermano Joshua", esMX = "Hermano Joshua", frFR = "Frère Joshua", koKR = "수사 조슈아", ptBR = "Irmão Josué", ruRU = "Брат Джошуа", zhCN = "乔舒修士", zhTW = "喬舒修士" },
+    },
+    {
+        id = 245, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3923, y = 0.8496, class = "WARLOCK",
+        name = { enUS = "Demisette Cloyce", deDE = "Demisette Cloyce", esES = "Demisette Cloyce", esMX = "Demisette Cloyce", frFR = "Demisette Cloyce", koKR = "드미제트 클로이스", ptBR = "Joyce Lopes", ruRU = "Демизетта Клойс", zhCN = "德米赛特·克劳斯", zhTW = "德米賽特·克勞斯" },
+    },
+    {
+        id = 246, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.6739, y = 0.3627, class = "HUNTER",
+        name = { enUS = "Einris Brightspear", deDE = "Einris Brightspear", esES = "Einris Relulanza", esMX = "Einris Lanza Reluciente", frFR = "Einris Brightspear", koKR = "아인리스 브라이트스피어", ptBR = "Einris Setalume", ruRU = "Эйнриса Яркошип", zhCN = "恩瑞斯·锐矛", zhTW = "恩瑞斯·銳矛" },
+    },
+    {
+        id = 247, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4821, y = 0.8715, class = "MAGE",
+        name = { enUS = "Elsharin", deDE = "Elsharin", esES = "Elsharin", esMX = "Elsharin", frFR = "Elsharin", koKR = "엘샤린", ptBR = "Elsharin", ruRU = "Эльшарина", zhCN = "艾尔莎林", zhTW = "艾爾莎林" },
+    },
+    {
+        id = 248, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4951, y = 0.4456, class = "PRIEST",
+        name = { enUS = "High Priestess Laurena", deDE = "Hohepriesterin Laurena", esES = "Suma Sacerdotisa Laurena", esMX = "Suma sacerdotisa Laurena", frFR = "Grande prêtresse Laurena", koKR = "대여사제 로레나", ptBR = "Alta-sacerdotisa Laurena", ruRU = "Верховная жрица Лорена", zhCN = "高阶牧师劳瑞娜", zhTW = "高階牧師勞瑞娜" },
+    },
+    {
+        id = 249, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.8044, y = 0.5976, class = "WARRIOR",
+        name = { enUS = "Ilsa Corbin", deDE = "Ilsa Corbin", esES = "Ilsa Corbin", esMX = "Ilsa Corbin", frFR = "Ilsa Corbin", koKR = "일사 코빈", ptBR = "Ilsa Cletes", ruRU = "Ильса Корбин", zhCN = "伊尔萨·考宾", zhTW = "伊爾莎·考賓" },
+    },
+    {
+        id = 250, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4959, y = 0.8577, class = "MAGE",
+        name = { enUS = "Jennea Cannon", deDE = "Jennea Cannon", esES = "Jennea Cannon", esMX = "Jennea Cannon", frFR = "Jennea Cannon", koKR = "제니아 캐논", ptBR = "Jana Catão", ruRU = "Джинния Пушка", zhCN = "詹妮亚·坎农", zhTW = "詹妮亞·坎農" },
+    },
+    {
+        id = 251, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.6731, y = 0.3685, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Karrina Mekenda", deDE = "Karrina Mekenda", esES = "Karrina Mekenda", esMX = "Karrina Mekenda", frFR = "Karrina Mekenda", koKR = "카리나 메켄다", ptBR = "Karrina Mekenda", ruRU = "Каррина Мекенда", zhCN = "卡瑞娜·麦肯达", zhTW = "卡瑞娜·麥肯達" },
+    },
+    {
+        id = 252, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4851, y = 0.4905, class = "PALADIN",
+        name = { enUS = "Katherine the Pure", deDE = "Katharina die Reine", esES = "Katherine la Pura", esMX = "Katherine la Pura", frFR = "Katherine la Pure", koKR = "성기사 캐서린", ptBR = "Katherine, a Pura", ruRU = "Катерина Чистая", zhCN = "纯洁的凯瑟琳", zhTW = "純潔的凱薩琳" },
+    },
+    {
+        id = 253, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.5043, y = 0.8600, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Larimaine Purdue", deDE = "Larimaine Purdue", esES = "Larimaine Purdue", esMX = "Larimaine Purdue", frFR = "Larimaine Purdue", koKR = "라리메인 퍼듀", ptBR = "Larimaine Purdue", ruRU = "Ларимейн Пардью", zhCN = "拉瑞麦尼·普尔度", zhTW = "拉瑞麥尼·普爾度" },
+    },
+    {
+        id = 254, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4844, y = 0.5020, class = "PALADIN",
+        name = { enUS = "Lord Grayson Shadowbreaker", deDE = "Lord Grayson Shadowbreaker", esES = "Lord Grisillo Quiebrasombras", esMX = "Lord Grisillo Quiebrasombras", frFR = "Seigneur Grayson Shadowbreaker", koKR = "그레이슨 섀도브레이커 경", ptBR = "Lorde Grayson Quebrassombra", ruRU = "Лорд Грейсон Тенелом", zhCN = "格雷森·沙东布瑞克公爵", zhTW = "格雷森·破影者領主" },
+    },
+    {
+        id = 255, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.8028, y = 0.6862, class = "ROGUE",
+        name = { enUS = "Lord Tony Romano", deDE = "Lord Tony Romano", esES = "Lord Tony Romano", esMX = "Lord Tony Romano", frFR = "Seigneur Tony Romano", koKR = "토니 로마노 경", ptBR = "Lorde Tony Romano", ruRU = "Лорд Тони Романо", zhCN = "托尼·罗曼诺", zhTW = "東尼·羅曼諾領主" },
+    },
+    {
+        id = 256, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.4928, y = 0.8784, class = "MAGE",
+        name = { enUS = "Maginor Dumas", deDE = "Maginor Dumas", esES = "Maginor Dumas", esMX = "Maginor Dumas", frFR = "Maginor Dumas", koKR = "마지노르 뒤마", ptBR = "Maginor Dumas", ruRU = "Магинор Дюма", zhCN = "玛吉诺·仲马", zhTW = "瑪姬諾·仲馬" },
+    },
+    {
+        id = 257, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3439, y = 0.6517, class = "DRUID",
+        name = { enUS = "Maldryn", deDE = "Maldryn", esES = "Maldryn", esMX = "Maldryn", frFR = "Maldryn", koKR = "맬드린", ptBR = "Maldryn", ruRU = "Малдрин", zhCN = "玛尔德利恩", zhTW = "瑪爾德利恩" },
+    },
+    {
+        id = 258, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3570, y = 0.6321, class = "PRIEST",
+        name = { enUS = "Nara Meideros", deDE = "Nara Meideros", esES = "Nara Meideros", esMX = "Nara Meideros", frFR = "Nara Meideros", koKR = "나라 마이데로스", ptBR = "Nara Midaras", ruRU = "Нара Мейдерос", zhCN = "娜拉·梅德隆", zhTW = "娜拉·梅德隆" },
+    },
+    {
+        id = 259, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.7737, y = 0.6528, class = "ROGUE",
+        name = { enUS = "Osborne the Night Man", deDE = "Osborne der Nachtmensch", esES = "Osborne", esMX = "Osborne el Nocturno", frFR = "Osborne l'homme de la nuit", koKR = "밤의 사나이 오스본", ptBR = "Osborne, o Homem da Madrugada", ruRU = "Осборн Дитя Ночи", zhCN = "夜行者奥斯伯", zhTW = "『夜行者』奧斯伯" },
+    },
+    {
+        id = 260, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3969, y = 0.8565, class = "WARLOCK",
+        name = { enUS = "Sandahl", deDE = "Sandahl", esES = "Sandahl", esMX = "Sandahl", frFR = "Sandahl", koKR = "샌달", ptBR = "Sandahl", ruRU = "Сандал", zhCN = "山达尔", zhTW = "山達爾" },
+    },
+    {
+        id = 261, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3577, y = 0.6735, class = "DRUID",
+        name = { enUS = "Sheldras Moontree", deDE = "Sheldras Moontree", esES = "Sheldras Moontree", esMX = "Sheldras Moontree", frFR = "Sheldras Moontree", koKR = "셸드라스 문트리", ptBR = "Sheldras Lunárvore", ruRU = "Шельдрас Лунное Древо", zhCN = "沙德拉斯·月树", zhTW = "沙德拉斯·月樹" },
+    },
+    {
+        id = 262, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3608, y = 0.6436, class = "DRUID",
+        name = { enUS = "Theridran", deDE = "Theridran", esES = "Theridran", esMX = "Theridran", frFR = "Theridran", koKR = "테리드란", ptBR = "Theridran", ruRU = "Теридан", zhCN = "塞瑞德兰", zhTW = "塞瑞德蘭" },
+    },
+    {
+        id = 263, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.6800, y = 0.3604, class = "HUNTER",
+        name = { enUS = "Thorfin Stoneshield", deDE = "Thorfin Stoneshield", esES = "Thorfin Petrescudo", esMX = "Thorfin Petrescudo", frFR = "Thorfin Stoneshield", koKR = "톨핀 스톤쉴드", ptBR = "Thorfin Escudopétreo", ruRU = "Торфин Камнещит", zhCN = "索尔芬·石盾", zhTW = "托爾芬·石盾" },
+    },
+    {
+        id = 264, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.6762, y = 0.3581, class = "HUNTER",
+        name = { enUS = "Ulfir Ironbeard", deDE = "Ulfir Ironbeard", esES = "Ulfir Barbaférrea", esMX = "Ulfir Barbaférrea", frFR = "Ulfir Ironbeard", koKR = "울피르 아이언비어드", ptBR = "Ulfir Barbaférrea", ruRU = "Ульфир Железнобород", zhCN = "奥菲尔·铁须", zhTW = "奧菲爾·鐵鬚" },
+    },
+    {
+        id = 265, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.3992, y = 0.8416, class = "WARLOCK",
+        name = { enUS = "Ursula Deline", deDE = "Ursula Deline", esES = "Ursula Deline", esMX = "Ursula Deline", frFR = "Ursula Deline", koKR = "울슐라 델린", ptBR = "Úrsula Deline", ruRU = "Урсула Делайн", zhCN = "厄苏拉·德林", zhTW = "厄蘇拉·德林" },
+    },
+    {
+        id = 266, types = { "class" },
+        faction = "Alliance", map = 1453, x = 0.8059, y = 0.5987, class = "WARRIOR",
+        name = { enUS = "Wu Shen", deDE = "Wu Shen", esES = "Wu Shen", esMX = "Wu Shen", frFR = "Wu Shen", koKR = "우 셴", ptBR = "Wu Shen", ruRU = "Ву Шен", zhCN = "武神", zhTW = "武神" },
+    },
+    {
+        id = 267, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3836, y = 0.8615, class = "MAGE",
+        name = { enUS = "Deino", deDE = "Deino", esES = "Deino", esMX = "Deino", frFR = "Deino", koKR = "다이노", ptBR = "Denya", ruRU = "Дейно", zhCN = "迪诺", zhTW = "迪諾" },
+    },
+    {
+        id = 268, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3884, y = 0.8572, class = "MAGE",
+        name = { enUS = "Enyo", deDE = "Enyo", esES = "Enyo", esMX = "Enyo", frFR = "Enyo", koKR = "엔요", ptBR = "Ênia", ruRU = "Энио", zhCN = "恩尤", zhTW = "恩尤" },
+    },
+    {
+        id = 269, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4273, y = 0.5151, class = "ROGUE",
+        name = { enUS = "Gest", deDE = "Gest", esES = "Gest", esMX = "Gest", frFR = "Gest", koKR = "게스트", ptBR = "Gest", ruRU = "Гест", zhCN = "盖斯特", zhTW = "蓋斯特" },
+    },
+    {
+        id = 270, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.7981, y = 0.3142, class = "WARRIOR",
+        name = { enUS = "Grezz Ragefist", deDE = "Grezz Ragefist", esES = "Grezz Puñofuria", esMX = "Grezz Puñofuria", frFR = "Grezz Ragefist", koKR = "그레즈 레이지피스트", ptBR = "Grezz Iracarpos", ruRU = "Грезз Десница Гнева", zhCN = "格雷兹·怒拳", zhTW = "格雷茲·怒拳" },
+    },
+    {
+        id = 271, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4796, y = 0.4596, class = "WARLOCK",
+        name = { enUS = "Grol'dar", deDE = "Grol'dar", esES = "Grol'dar", esMX = "Grol'dar", frFR = "Grol'dar", koKR = "그롤다르", ptBR = "Grol'dar", ruRU = "Гроль'дар", zhCN = "格罗达尔", zhTW = "格羅達爾" },
+    },
+    {
+        id = 272, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3884, y = 0.3641, class = "SHAMAN",
+        name = { enUS = "Kardris Dreamseeker", deDE = "Kardris Dreamseeker", esES = "Kardris Buscasueños", esMX = "Kardris Buscasueños", frFR = "Kardris Dreamseeker", koKR = "칼드리스 드림시커", ptBR = "Kardris Romanesca", ruRU = "Кардрис Сновидец", zhCN = "卡德里斯", zhTW = "卡德里斯" },
+    },
+    {
+        id = 273, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4863, y = 0.4695, class = "WARLOCK",
+        name = { enUS = "Mirket", deDE = "Mirket", esES = "Mirket", esMX = "Mirket", frFR = "Mirket", koKR = "미르켓", ptBR = "Mirket", ruRU = "Миркета", zhCN = "米尔科特", zhTW = "米爾科特" },
+    },
+    {
+        id = 274, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.6602, y = 0.1845, class = "HUNTER",
+        name = { enUS = "Ormak Grimshot", deDE = "Ormak Grimshot", esES = "Ormak Tirosiniestro", esMX = "Ormak Tirosiniestro", frFR = "Ormak Grimshot", koKR = "오르막 그림샷", ptBR = "Ormak Tiroatroz", ruRU = "Ормак Лютострел", zhCN = "奥玛克", zhTW = "奧瑪克" },
+    },
+    {
+        id = 275, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4388, y = 0.5465, class = "ROGUE",
+        name = { enUS = "Ormok", deDE = "Ormok", esES = "Ormok", esMX = "Ormok", frFR = "Ormok", koKR = "오르묵", ptBR = "Ormok", ruRU = "Ормок", zhCN = "奥莫克", zhTW = "奧莫克" },
+    },
+    {
+        id = 276, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3836, y = 0.8558, class = "MAGE",
+        name = { enUS = "Pephredo", deDE = "Pephredo", esES = "Pephredo", esMX = "Pephredo", frFR = "Pephredo", koKR = "페프레도", ptBR = "Pefreda", ruRU = "Пефредо", zhCN = "皮菲瑞多", zhTW = "皮菲瑞多" },
+    },
+    {
+        id = 277, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3874, y = 0.3584, class = "SHAMAN",
+        name = { enUS = "Sagorne Creststrider", deDE = "Sagorne Creststrider", esES = "Sagorne Zanca Cresta", esMX = "Sagorne Zanca Cresta", frFR = "Sagorne Creststrider", koKR = "사고른 크레스트스트라이더", ptBR = "Sagorne Monta Crista", ruRU = "Сагорн Гривастый Странник", zhCN = "萨格尼", zhTW = "薩格尼" },
+    },
+    {
+        id = 278, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4302, y = 0.5365, class = "ROGUE",
+        name = { enUS = "Shenthul", deDE = "Shenthul", esES = "Shenthul", esMX = "Shenthul", frFR = "Shenthul", koKR = "셴툴", ptBR = "Shenthul", ruRU = "Шентул", zhCN = "申苏尔", zhTW = "申蘇爾" },
+    },
+    {
+        id = 279, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.6802, y = 0.1773, class = "HUNTER",
+        name = { enUS = "Sian'dur", deDE = "Sian'dur", esES = "Sian'dur", esMX = "Sian'dur", frFR = "Sian'dur", koKR = "시안두르", ptBR = "Sian'dur", ruRU = "Шиан'дара", zhCN = "萨杜尔", zhTW = "薩杜爾" },
+    },
+    {
+        id = 280, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3779, y = 0.3655, class = "SHAMAN",
+        name = { enUS = "Sian'tsu", deDE = "Sian'tsu", esES = "Sian'tsu", esMX = "Sian'tsu", frFR = "Sian'tsu", koKR = "시안트수", ptBR = "Sian'tsu", ruRU = "Шиан'цу", zhCN = "萨祖", zhTW = "薩祖" },
+    },
+    {
+        id = 281, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.8038, y = 0.3241, class = "WARRIOR",
+        name = { enUS = "Sorek", deDE = "Sorek", esES = "Sorek", esMX = "Sorek", frFR = "Sorek", koKR = "소렉", ptBR = "Sorek", ruRU = "Сорек", zhCN = "索瑞克", zhTW = "索瑞克" },
+    },
+    {
+        id = 282, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3874, y = 0.8544, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Thuul", deDE = "Thuul", esES = "Thuul", esMX = "Thuul", frFR = "Thuul", koKR = "투울", ptBR = "Thuul", ruRU = "Туул", zhCN = "索乌", zhTW = "索烏" },
+    },
+    {
+        id = 283, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3561, y = 0.8786, class = "PRIEST",
+        name = { enUS = "Ur'kyo", deDE = "Ur'kyo", esES = "Ur'kyo", esMX = "Ur'kyo", frFR = "Ur'kyo", koKR = "우르쿄", ptBR = "Ur'kyo", ruRU = "Ур'кьо", zhCN = "乌尔库", zhTW = "烏爾庫" },
+    },
+    {
+        id = 284, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3922, y = 0.8629, class = "MAGE",
+        name = { enUS = "Uthel'nay", deDE = "Uthel'nay", esES = "Uthel'nay", esMX = "Uthel'nay", frFR = "Uthel'nay", koKR = "우텔나이", ptBR = "Uthel'nay", ruRU = "Утель'най", zhCN = "尤塞尔奈", zhTW = "尤塞爾奈" },
+    },
+    {
+        id = 285, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3599, y = 0.8772, class = "PRIEST",
+        name = { enUS = "X'yera", deDE = "X'yera", esES = "X'yera", esMX = "X'yera", frFR = "X'yera", koKR = "시예라", ptBR = "X'yera", ruRU = "Кса'йера", zhCN = "克塞拉", zhTW = "克塞拉" },
+    },
+    {
+        id = 286, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.6631, y = 0.1474, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Xao'tsu", deDE = "Xao'tsu", esES = "Xao'tsu", esMX = "Xao'tsu", frFR = "Xao'tsu", koKR = "샤오추", ptBR = "Xao'tsu", ruRU = "Ксао'цу", zhCN = "肖祖", zhTW = "肖祖" },
+    },
+    {
+        id = 287, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.6717, y = 0.2016, class = "HUNTER",
+        name = { enUS = "Xor'juul", deDE = "Xor'juul", esES = "Xor'juul", esMX = "Xor'juul", frFR = "Xor'juul", koKR = "소르줄", ptBR = "Xor'juul", ruRU = "Ксор'джуул", zhCN = "科索祖尔", zhTW = "科索祖爾" },
+    },
+    {
+        id = 288, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.3570, y = 0.8686, class = "PRIEST",
+        name = { enUS = "Zayus", deDE = "Zayus", esES = "Zayus", esMX = "Zayus", frFR = "Zayus", koKR = "제이우스", ptBR = "Zayus", ruRU = "Зайус", zhCN = "萨尤斯", zhTW = "薩尤斯" },
+    },
+    {
+        id = 289, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.8038, y = 0.2956, class = "WARRIOR",
+        name = { enUS = "Zel'mak", deDE = "Zel'mak", esES = "Zel'mak", esMX = "Zel'mak", frFR = "Zel'mak", koKR = "젤막", ptBR = "Zel'mak", ruRU = "Зел'мак", zhCN = "泽尔玛克", zhTW = "澤爾瑪克" },
+    },
+    {
+        id = 290, types = { "class" },
+        faction = "Horde", map = 1454, x = 0.4853, y = 0.4539, class = "WARLOCK",
+        name = { enUS = "Zevrost", deDE = "Zevrost", esES = "Zevrost", esMX = "Zevrost", frFR = "Zevrost", koKR = "제브로스트", ptBR = "Zevrost", ruRU = "Зеврост", zhCN = "泽弗洛斯特", zhTW = "澤弗洛斯特" },
+    },
+    {
+        id = 291, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.4710, y = 0.1379, class = "SHAMAN",
+        name = { enUS = "Eldrun Stormbreaker", deDE = "Eldrun Stormbreaker", esES = "Eldrun Stormbreaker", esMX = "Eldrun Stormbreaker", frFR = "Eldrun Stormbreaker", koKR = "Eldrun Stormbreaker", ptBR = "Eldrun Stormbreaker", ruRU = "Eldrun Stormbreaker", zhCN = "Eldrun Stormbreaker", zhTW = "Eldrun Stormbreaker" },
+    },
+    {
+        id = 292, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2476, y = 0.0999, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 293, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2484, y = 0.1016, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 294, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2486, y = 0.1005, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 295, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2489, y = 0.1023, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 296, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2497, y = 0.1004, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 297, types = { "class" },
+        faction = "Alliance", map = 1455, x = 0.2523, y = 0.1022, class = "PRIEST",
+        name = { enUS = "High Priestess Mims", deDE = "High Priestess Mims", esES = "High Priestess Mims", esMX = "High Priestess Mims", frFR = "High Priestess Mims", koKR = "High Priestess Mims", ptBR = "High Priestess Mims", ruRU = "High Priestess Mims", zhCN = "High Priestess Mims", zhTW = "High Priestess Mims" },
+    },
+    {
+        id = 298, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2262, y = 0.1991, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 299, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2391, y = 0.1544, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 300, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2499, y = 0.1463, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 301, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2503, y = 0.1475, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 302, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2505, y = 0.1428, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 303, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2508, y = 0.1459, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 304, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2508, y = 0.1471, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 305, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2519, y = 0.1436, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 306, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2521, y = 0.1455, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 307, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2528, y = 0.1476, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 308, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2529, y = 0.1511, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 309, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2530, y = 0.1461, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 310, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2535, y = 0.1463, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 311, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2540, y = 0.1475, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 312, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2544, y = 0.1437, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 313, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2544, y = 0.1466, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 314, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2548, y = 0.1486, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 315, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2552, y = 0.1454, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 316, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2559, y = 0.1502, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 317, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2560, y = 0.1491, class = "PALADIN",
+        name = { enUS = "Alodan the Hopeful", deDE = "Alodan the Hopeful", esES = "Alodan the Hopeful", esMX = "Alodan the Hopeful", frFR = "Alodan the Hopeful", koKR = "Alodan the Hopeful", ptBR = "Alodan the Hopeful", ruRU = "Alodan the Hopeful", zhCN = "Alodan the Hopeful", zhTW = "Alodan the Hopeful" },
+    },
+    {
+        id = 318, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2280, y = 0.1447, class = "MAGE",
+        name = { enUS = "Archmage Shymm", deDE = "Erzmagier Shymm", esES = "Archimago Shymm", esMX = "Archimago Shymm", frFR = "Archimage Shymm", koKR = "대마법사 심", ptBR = "Arquimago Shymm", ruRU = "Верховный маг Шимм", zhCN = "大法师山姆", zhTW = "大法師山姆" },
+    },
+    {
+        id = 319, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2204, y = 0.1887, class = "SHAMAN",
+        name = { enUS = "Beram Skychaser", deDE = "Beram Skychaser", esES = "Beram Cazacielo", esMX = "Beram Cazacielo", frFR = "Beram Skychaser", koKR = "베람 스카이체이서", ptBR = "Beram Persegue-céus", ruRU = "Берам Небесный Охотник", zhCN = "博拉姆·逐星", zhTW = "博拉姆·逐星" },
+    },
+    {
+        id = 320, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2255, y = 0.1696, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Birgitte Cranston", deDE = "Birgitte Cranston", esES = "Birgitte Cranston", esMX = "Birgitte Cranston", frFR = "Birgitte Cranston", koKR = "브리짓 크랭스턴", ptBR = "Brígida Cranston", ruRU = "Биргитта Кранстон", zhCN = "比尔吉特·克兰斯顿", zhTW = "比爾吉特·克蘭斯頓" },
+    },
+    {
+        id = 321, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.3944, y = 0.6582, class = "ROGUE",
+        name = { enUS = "Boarton Shadetotem", deDE = "Boarton Shadetotem", esES = "Boarton Shadetotem", esMX = "Boarton Shadetotem", frFR = "Boarton Shadetotem", koKR = "Boarton Shadetotem", ptBR = "Boarton Shadetotem", ruRU = "Boarton Shadetotem", zhCN = "Boarton Shadetotem", zhTW = "Boarton Shadetotem" },
+    },
+    {
+        id = 322, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2561, y = 0.2079, class = "PRIEST",
+        name = { enUS = "Father Cobb", deDE = "Vater Cobb", esES = "Padre Cobb", esMX = "Padre Cobb", frFR = "Père Cobb", koKR = "신부 콥", ptBR = "Padre Cobb", ruRU = "Отец Кобб", zhCN = "柯布神父", zhTW = "柯布神父" },
+    },
+    {
+        id = 323, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5410, y = 0.8402, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Hesuwa Thunderhorn", deDE = "Hesuwa Thunderhorn", esES = "Hesuwa Tronacuerno", esMX = "Hesuwa Tronacuerno", frFR = "Hesuwa Thunderhorn", koKR = "헤수와 썬더혼", ptBR = "Hesuwa Chifre Troante", ruRU = "Хесува Громовой Рог", zhCN = "赫苏瓦·雷角", zhTW = "赫蘇瓦·雷角" },
+    },
+    {
+        id = 324, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5729, y = 0.8977, class = "HUNTER",
+        name = { enUS = "Holt Thunderhorn", deDE = "Holt Thunderhorn", esES = "Holt Tronacuerno", esMX = "Holt Tronacuerno", frFR = "Holt Thunderhorn", koKR = "홀트 썬더혼", ptBR = "Holto Chifre Troante", ruRU = "Хольт Громовой Рог", zhCN = "浩特·雷角", zhTW = "浩特·雷角" },
+    },
+    {
+        id = 325, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5844, y = 0.8824, class = "HUNTER",
+        name = { enUS = "Kary Thunderhorn", deDE = "Kary Thunderhorn", esES = "Kary Tronacuerno", esMX = "Kary Tronacuerno", frFR = "Kary Thunderhorn", koKR = "캐리 썬더혼", ptBR = "Kari Chifre Troante", ruRU = "Кари Громовой Рог", zhCN = "卡瑞·雷角", zhTW = "卡瑞·雷角" },
+    },
+    {
+        id = 326, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5755, y = 0.8556, class = "WARRIOR",
+        name = { enUS = "Ker Ragetotem", deDE = "Ker Ragetotem", esES = "Ker Furiatótem", esMX = "Ker Tótem de Ira", frFR = "Ker Ragetotem", koKR = "케르 레이지토템", ptBR = "Ker Totem da Fúria", ruRU = "Кер Тотем Гнева", zhCN = "科尔·狂暴图腾", zhTW = "科爾·狂暴圖騰" },
+    },
+    {
+        id = 327, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.7709, y = 0.2980, class = "DRUID",
+        name = { enUS = "Kym Wildmane", deDE = "Kym Wildmane", esES = "Kym Bravacrín", esMX = "Kym Ferocrín", frFR = "Kym Wildmane", koKR = "킴 와일드메인", ptBR = "Kym Juba Agreste", ruRU = "Ким Буйногривая", zhCN = "凯姆·蛮鬃", zhTW = "凱姆·蠻鬃" },
+    },
+    {
+        id = 328, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2459, y = 0.2251, class = "PRIEST",
+        name = { enUS = "Malakai Cross", deDE = "Malakai Cross", esES = "Malakai Cruz", esMX = "Malakai Cruz", frFR = "Malakai Cross", koKR = "말라카이 크로스", ptBR = "Malaquias Cruz", ruRU = "Малакай Крест", zhCN = "马拉凯·克罗斯", zhTW = "馬拉凱·克羅斯" },
+    },
+    {
+        id = 329, types = { "class", "vendor-food" },
+        faction = "Horde", map = 1456, x = 0.2536, y = 0.1523, class = "PRIEST",
+        name = { enUS = "Miles Welsh", deDE = "Miles Welsh", esES = "Miles Welsh", esMX = "Miles Welsh", frFR = "Miles Welsh", koKR = "마일스 웰시", ptBR = "Milo Gálico", ruRU = "Майлз Уэльш", zhCN = "麦尔斯·威尔什", zhTW = "麥爾斯·威爾什" },
+    },
+    {
+        id = 330, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5704, y = 0.8958, class = "WARRIOR",
+        name = { enUS = "Sark Ragetotem", deDE = "Sark Ragetotem", esES = "Sark Furiatótem", esMX = "Sark Tótem de Ira", frFR = "Sark Ragetotem", koKR = "사크 레이지토템", ptBR = "Sark Totem da Fúria", ruRU = "Сарк Тотем Гнева", zhCN = "萨尔克·狂暴图腾", zhTW = "薩爾克·狂暴圖騰" },
+    },
+    {
+        id = 331, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.7709, y = 0.2692, class = "DRUID",
+        name = { enUS = "Sheal Runetotem", deDE = "Sheal Runetotem", esES = "Sheal Runatótem", esMX = "Sheal Tótem de Runa", frFR = "Sheal Runetotem", koKR = "시얼 룬토템", ptBR = "Sheal Runa Totem", ruRU = "Шеаль Рунический Тотем", zhCN = "希尔·符文图腾", zhTW = "希爾·符文圖騰" },
+    },
+    {
+        id = 332, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2280, y = 0.2117, class = "SHAMAN",
+        name = { enUS = "Siln Skychaser", deDE = "Siln Skychaser", esES = "Siln Cazacielo", esMX = "Siln Cazacielo", frFR = "Siln Skychaser", koKR = "슬린 스카이체이서", ptBR = "Siln Persegue-céus", ruRU = "Силина Небесная Охотница", zhCN = "希恩·逐星", zhTW = "希恩·逐星" },
+    },
+    {
+        id = 333, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2523, y = 0.2098, class = "MAGE",
+        name = { enUS = "Thurston Xane", deDE = "Thurston Xane", esES = "Thurston Xane", esMX = "Thurston Xane", frFR = "Thurston Xane", koKR = "더스턴 제인", ptBR = "Thurston Xane", ruRU = "Тюрстон Ксейн", zhCN = "瑟斯顿·科萨恩", zhTW = "瑟斯頓·科薩恩" },
+    },
+    {
+        id = 334, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2357, y = 0.1887, class = "SHAMAN",
+        name = { enUS = "Tigor Skychaser", deDE = "Tigor Skychaser", esES = "Tigor Cazacielo", esMX = "Tigor Cazacielo", frFR = "Tigor Skychaser", koKR = "티고르 스카이체이서", ptBR = "Tigor Persegue-céus", ruRU = "Тигор Небесный Охотник", zhCN = "提戈尔·逐星", zhTW = "提戈爾·逐星" },
+    },
+    {
+        id = 335, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5717, y = 0.8747, class = "WARRIOR",
+        name = { enUS = "Torm Ragetotem", deDE = "Torm Ragetotem", esES = "Torm Furiatótem", esMX = "Torm Tótem de Ira", frFR = "Torm Ragetotem", koKR = "토름 레이지토템", ptBR = "Torm Totem da Fúria", ruRU = "Торм Тотем Гнева", zhCN = "托姆·狂暴图腾", zhTW = "托姆·狂暴圖騰" },
+    },
+    {
+        id = 336, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.7646, y = 0.2711, class = "DRUID",
+        name = { enUS = "Turak Runetotem", deDE = "Turak Runetotem", esES = "Turak Runatótem", esMX = "Turak Tótem de Runa", frFR = "Turak Runetotem", koKR = "투락 룬토템", ptBR = "Turak Runa Totem", ruRU = "Тюрак Рунический Тотем", zhCN = "图拉克·符文图腾", zhTW = "圖拉克·符文圖騰" },
+    },
+    {
+        id = 337, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.5908, y = 0.8690, class = "HUNTER",
+        name = { enUS = "Urek Thunderhorn", deDE = "Urek Thunderhorn", esES = "Urek Tronacuerno", esMX = "Urek Tronacuerno", frFR = "Urek Thunderhorn", koKR = "우렉 썬더혼", ptBR = "Urek Chifre Troante", ruRU = "Урек Громовой Рог", zhCN = "乌瑞克·雷角", zhTW = "烏瑞克·雷角" },
+    },
+    {
+        id = 338, types = { "class" },
+        faction = "Horde", map = 1456, x = 0.2574, y = 0.1428, class = "MAGE",
+        name = { enUS = "Ursyn Ghull", deDE = "Ursyn Ghull", esES = "Ursyn Ghull", esMX = "Ursyn Ghull", frFR = "Ursyn Ghull", koKR = "울신 굴", ptBR = "Ursyn Karnissa", ruRU = "Урсин Гуль", zhCN = "奥松·格鲁尔", zhTW = "奧松·格盧爾" },
+    },
+    {
+        id = 339, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3789, y = 0.2092, class = "ROGUE",
+        name = { enUS = "Anishar", deDE = "Anishar", esES = "Anishar", esMX = "Anishar", frFR = "Anishar", koKR = "아니샤르", ptBR = "Anishar", ruRU = "Анишар", zhCN = "安尼沙尔", zhTW = "安妮莎爾" },
+    },
+    {
+        id = 340, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.5868, y = 0.3490, class = "WARRIOR",
+        name = { enUS = "Arias'ta Bladesinger", deDE = "Arias'ta Bladesinger", esES = "Arias'ta Filovoz", esMX = "Arias'ta Filovoz", frFR = "Arias'ta Bladesinger", koKR = "아리아스타 블레이드싱어", ptBR = "Arias'ta Cantalâmina", ruRU = "Ариас'та Певица Клинка", zhCN = "阿雷亚斯塔·刃歌", zhTW = "阿雷亞斯塔·刃歌" },
+    },
+    {
+        id = 341, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3827, y = 0.8100, class = "PRIEST",
+        name = { enUS = "Astarii Starseeker", deDE = "Astarii Starseeker", esES = "Astarii Buscaestelar", esMX = "Astarii Buscaestelar", frFR = "Astarii Starseeker", koKR = "아스타리 스타시커", ptBR = "Astarii Mirestela", ruRU = "Астария Ловец Звезд", zhCN = "阿斯塔利·逐星", zhTW = "阿斯塔利·逐星" },
+    },
+    {
+        id = 342, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.5893, y = 0.3528, class = "WARRIOR",
+        name = { enUS = "Darnath Bladesinger", deDE = "Darnath Bladesinger", esES = "Darnath Rugefilo", esMX = "Darnath Rugefilo", frFR = "Darnath Bladesinger", koKR = "다나스 블레이드싱어", ptBR = "Darnath Cantalâmina", ruRU = "Дарнат Певец Клинка", zhCN = "达纳斯·刃歌", zhTW = "達納斯·刃歌" },
+    },
+    {
+        id = 343, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3474, y = 0.0732, class = "DRUID",
+        name = { enUS = "Denatharion", deDE = "Denatharion", esES = "Denatharion", esMX = "Denatharion", frFR = "Denatharion", koKR = "데나타리온", ptBR = "Denatharion", ruRU = "Денатарион", zhCN = "德纳萨里安", zhTW = "德納薩里安" },
+    },
+    {
+        id = 344, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.4218, y = 0.0732, class = "HUNTER",
+        name = { enUS = "Dorion", deDE = "Dorion", esES = "Dorion", esMX = "Dorion", frFR = "Dorion", koKR = "도리온", ptBR = "Dorion", ruRU = "Дорион", zhCN = "多利安", zhTW = "多利安" },
+    },
+    {
+        id = 345, types = { "class", "vendor-food" },
+        faction = "Alliance", map = 1457, x = 0.4054, y = 0.8213, class = "MAGE", skill = "PORTALS",
+        name = { enUS = "Elissa Dumas", deDE = "Elissa Dumas", esES = "Elissa Dumas", esMX = "Elissa Dumas", frFR = "Elissa Dumas", koKR = "엘리사 뒤마", ptBR = "Elissa Dumas", ruRU = "Элисса Дюма", zhCN = "埃莉萨", zhTW = "埃麗莎" },
+    },
+    {
+        id = 346, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3449, y = 0.2583, class = "ROGUE",
+        name = { enUS = "Erion Shadewhisper", deDE = "Erion Shadewhisper", esES = "Erion Sombrusurro", esMX = "Erion Sombrusurro", frFR = "Erion Shadewhisper", koKR = "에리온 셰이드위스퍼", ptBR = "Erion Umbrurmúrio", ruRU = "Эрион Шепот Тени", zhCN = "艾瑞安·影语", zhTW = "艾里安·影語" },
+    },
+    {
+        id = 347, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3348, y = 0.0826, class = "DRUID",
+        name = { enUS = "Fylerian Nightwing", deDE = "Fylerian Nightwing", esES = "Fylerian Alanoche", esMX = "Fylerian Alanoche", frFR = "Fylerian Nightwing", koKR = "피렐리안 나이트윙", ptBR = "Fylerian Noturnala", ruRU = "Фалериан Крыло Ночи", zhCN = "菲勒里亚·夜翼", zhTW = "菲勒里亞·夜翼" },
+    },
+    {
+        id = 348, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3789, y = 0.8270, class = "PRIEST",
+        name = { enUS = "Jandria", deDE = "Jandria", esES = "Jandria", esMX = "Jandria", frFR = "Jandria", koKR = "잔드리아", ptBR = "Jandria", ruRU = "Джандрия", zhCN = "贾德莉亚", zhTW = "賈德莉亞" },
+    },
+    {
+        id = 349, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3966, y = 0.0543, class = "HUNTER",
+        name = { enUS = "Jeen'ra Nightrunner", deDE = "Jeen'ra Nightrunner", esES = "Jeen'ra Noctámbulus", esMX = "Jeen'ra Corredor de la Noche", frFR = "Jeen'ra Nightrunner", koKR = "진라 나이트러너", ptBR = "Jeen'ra Velonyx", ruRU = "Джин'ра Ночная Вестница", zhCN = "吉恩拉", zhTW = "吉恩拉" },
+    },
+    {
+        id = 350, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.4041, y = 0.0845, class = "HUNTER",
+        name = { enUS = "Jocaste", deDE = "Jocaste", esES = "Jocaste", esMX = "Jocaste", frFR = "Jocaste", koKR = "조카스테", ptBR = "Jocasta", ruRU = "Иокаста", zhCN = "祖卡斯特", zhTW = "祖卡斯特" },
+    },
+    {
+        id = 351, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.4029, y = 0.8875, class = "PRIEST",
+        name = { enUS = "Lariia", deDE = "Lariia", esES = "Lariia", esMX = "Lariia", frFR = "Lariia", koKR = "라리아", ptBR = "Lariia", ruRU = "Лария", zhCN = "拉瑞亚", zhTW = "拉瑞亞" },
+    },
+    {
+        id = 352, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3537, y = 0.0845, class = "DRUID",
+        name = { enUS = "Mathrengyl Bearwalker", deDE = "Mathrengyl Bearwalker", esES = "Mathrengyl Garroso", esMX = "Mathrengyl Garroso", frFR = "Mathrengyl Bearwalker", koKR = "마스렌길 베어워커", ptBR = "Mathrengyl Ursivagus", ruRU = "Матренгил Медвежья Лапа", zhCN = "玛斯雷·驭熊者", zhTW = "瑪斯雷·馭熊者" },
+    },
+    {
+        id = 353, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3953, y = 0.8119, class = "PRIEST",
+        name = { enUS = "Priestess Alathea", deDE = "Priesterin Alathea", esES = "Sacerdotisa Alathea", esMX = "Sacerdotisa Alathea", frFR = "Prêtresse Alathea", koKR = "여사제 알라시아", ptBR = "Sacerdotisa Alathea", ruRU = "Жрица Алатея", zhCN = "女祭司阿兰希雅", zhTW = "女祭司阿蘭希雅" },
+    },
+    {
+        id = 354, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.6183, y = 0.4227, class = "WARRIOR",
+        name = { enUS = "Sildanair", deDE = "Sildanair", esES = "Sildanair", esMX = "Sildanair", frFR = "Sildanair", koKR = "실단나이르", ptBR = "Sildanair", ruRU = "Сильданаира", zhCN = "希达奈尔", zhTW = "希達奈爾" },
+    },
+    {
+        id = 355, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.4255, y = 0.0921, class = "HUNTER", skill = "PET_TRAINING",
+        name = { enUS = "Silvaria", deDE = "Silvaria", esES = "Silvaria", esMX = "Silvaria", frFR = "Silvaria", koKR = "실바리아", ptBR = "Silvaria", ruRU = "Сильвария", zhCN = "西尔瓦莉雅", zhTW = "西爾瓦莉雅" },
+    },
+    {
+        id = 356, types = { "class" },
+        faction = "Alliance", map = 1457, x = 0.3701, y = 0.2187, class = "ROGUE",
+        name = { enUS = "Syurna", deDE = "Syurna", esES = "Syurna", esMX = "Syurna", frFR = "Syurna", koKR = "시우르나", ptBR = "Syurna", ruRU = "Сиарна", zhCN = "塞尤娜", zhTW = "塞尤娜" },
+    },
+    {
+        id = 357, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4708, y = 0.1590, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 358, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4709, y = 0.1548, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 359, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4716, y = 0.1530, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 360, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4718, y = 0.1560, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 361, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4720, y = 0.1544, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 362, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4726, y = 0.1520, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 363, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4731, y = 0.1505, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 364, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4734, y = 0.1521, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 365, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4734, y = 0.1625, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 366, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4738, y = 0.1535, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 367, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4740, y = 0.1518, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 368, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4746, y = 0.1569, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 369, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4747, y = 0.1488, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 370, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4749, y = 0.1502, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 371, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4750, y = 0.1524, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 372, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4758, y = 0.1483, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 373, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4760, y = 0.1511, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 374, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4761, y = 0.1506, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 375, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4762, y = 0.1460, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 376, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4765, y = 0.1473, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 377, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4766, y = 0.1480, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 378, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4770, y = 0.1494, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 379, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4770, y = 0.1513, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 380, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4771, y = 0.1500, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 381, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4775, y = 0.1473, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 382, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4776, y = 0.1491, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 383, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4777, y = 0.1463, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 384, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4780, y = 0.1481, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 385, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4789, y = 0.1484, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 386, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.4794, y = 0.1473, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 387, types = { "class" },
+        faction = "Horde", map = 1458, x = 0.5037, y = 0.1377, class = "PALADIN",
+        name = { enUS = "Garen Largo", deDE = "Garen Largo", esES = "Garen Largo", esMX = "Garen Largo", frFR = "Garen Largo", koKR = "Garen Largo", ptBR = "Garen Largo", ruRU = "Garen Largo", zhCN = "Garen Largo", zhTW = "Garen Largo" },
+    },
+    {
+        id = 388, types = { "class" },
+        faction = "Horde", map = 2521, x = 0.4345, y = 0.4487, class = "SHAMAN",
+        name = { enUS = "Aarnor Galestrike", deDE = "Aarnor Galestrike", esES = "Aarnor Galestrike", esMX = "Aarnor Galestrike", frFR = "Aarnor Galestrike", koKR = "Aarnor Galestrike", ptBR = "Aarnor Galestrike", ruRU = "Aarnor Galestrike", zhCN = "Aarnor Galestrike", zhTW = "Aarnor Galestrike" },
+    },
+    {
+        id = 389, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4374, y = 0.2436, class = "ROGUE",
+        name = { enUS = "Akeri Duskblade", deDE = "Akeri Duskblade", esES = "Akeri Duskblade", esMX = "Akeri Duskblade", frFR = "Akeri Duskblade", koKR = "Akeri Duskblade", ptBR = "Akeri Duskblade", ruRU = "Akeri Duskblade", zhCN = "Akeri Duskblade", zhTW = "Akeri Duskblade" },
+    },
+    {
+        id = 390, types = { "class" },
+        faction = "Alliance", map = 2521, x = 0.6591, y = 0.8057, class = "MAGE",
+        name = { enUS = "Anathamaas Aetherwind", deDE = "Anathamaas Aetherwind", esES = "Anathamaas Aetherwind", esMX = "Anathamaas Aetherwind", frFR = "Anathamaas Aetherwind", koKR = "Anathamaas Aetherwind", ptBR = "Anathamaas Aetherwind", ruRU = "Anathamaas Aetherwind", zhCN = "Anathamaas Aetherwind", zhTW = "Anathamaas Aetherwind" },
+    },
+    {
+        id = 391, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4365, y = 0.2411, class = "WARRIOR",
+        name = { enUS = "Blademaster Ren", deDE = "Blademaster Ren", esES = "Blademaster Ren", esMX = "Blademaster Ren", frFR = "Blademaster Ren", koKR = "Blademaster Ren", ptBR = "Blademaster Ren", ruRU = "Blademaster Ren", zhCN = "Blademaster Ren", zhTW = "Blademaster Ren" },
+    },
+    {
+        id = 392, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4495, y = 0.4510, class = "WARRIOR",
+        name = { enUS = "Corsan Earthrazer", deDE = "Corsan Earthrazer", esES = "Corsan Earthrazer", esMX = "Corsan Earthrazer", frFR = "Corsan Earthrazer", koKR = "Corsan Earthrazer", ptBR = "Corsan Earthrazer", ruRU = "Corsan Earthrazer", zhCN = "Corsan Earthrazer", zhTW = "Corsan Earthrazer" },
+    },
+    {
+        id = 393, types = { "class" },
+        faction = "Alliance", map = 2521, x = 0.4155, y = 0.2368, class = "MAGE",
+        name = { enUS = "Dorii Brightwhisper", deDE = "Dorii Brightwhisper", esES = "Dorii Brightwhisper", esMX = "Dorii Brightwhisper", frFR = "Dorii Brightwhisper", koKR = "Dorii Brightwhisper", ptBR = "Dorii Brightwhisper", ruRU = "Dorii Brightwhisper", zhCN = "Dorii Brightwhisper", zhTW = "Dorii Brightwhisper" },
+    },
+    {
+        id = 394, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4526, y = 0.4424, class = "HUNTER",
+        name = { enUS = "Elayaa Easewind", deDE = "Elayaa Easewind", esES = "Elayaa Easewind", esMX = "Elayaa Easewind", frFR = "Elayaa Easewind", koKR = "Elayaa Easewind", ptBR = "Elayaa Easewind", ruRU = "Elayaa Easewind", zhCN = "Elayaa Easewind", zhTW = "Elayaa Easewind" },
+    },
+    {
+        id = 395, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.5990, y = 0.7248, class = "ROGUE",
+        name = { enUS = "Eltheen Nightbreeze", deDE = "Eltheen Nightbreeze", esES = "Eltheen Nightbreeze", esMX = "Eltheen Nightbreeze", frFR = "Eltheen Nightbreeze", koKR = "Eltheen Nightbreeze", ptBR = "Eltheen Nightbreeze", ruRU = "Eltheen Nightbreeze", zhCN = "Eltheen Nightbreeze", zhTW = "Eltheen Nightbreeze" },
+    },
+    {
+        id = 396, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.6399, y = 0.7508, class = "DRUID",
+        name = { enUS = "Lotheluum Starbreeze", deDE = "Lotheluum Starbreeze", esES = "Lotheluum Starbreeze", esMX = "Lotheluum Starbreeze", frFR = "Lotheluum Starbreeze", koKR = "Lotheluum Starbreeze", ptBR = "Lotheluum Starbreeze", ruRU = "Lotheluum Starbreeze", zhCN = "Lotheluum Starbreeze", zhTW = "Lotheluum Starbreeze" },
+    },
+    {
+        id = 397, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4315, y = 0.4326, class = "ROGUE",
+        name = { enUS = "Miriaan Mistblade", deDE = "Miriaan Mistblade", esES = "Miriaan Mistblade", esMX = "Miriaan Mistblade", frFR = "Miriaan Mistblade", koKR = "Miriaan Mistblade", ptBR = "Miriaan Mistblade", ruRU = "Miriaan Mistblade", zhCN = "Miriaan Mistblade", zhTW = "Miriaan Mistblade" },
+    },
+    {
+        id = 398, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4516, y = 0.4422, class = "DRUID",
+        name = { enUS = "Naeluna Swiftmend", deDE = "Naeluna Swiftmend", esES = "Naeluna Swiftmend", esMX = "Naeluna Swiftmend", frFR = "Naeluna Swiftmend", koKR = "Naeluna Swiftmend", ptBR = "Naeluna Swiftmend", ruRU = "Naeluna Swiftmend", zhCN = "Naeluna Swiftmend", zhTW = "Naeluna Swiftmend" },
+    },
+    {
+        id = 399, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.5956, y = 0.7263, class = "HUNTER",
+        name = { enUS = "Quel'ana Quickgale", deDE = "Quel'ana Quickgale", esES = "Quel'ana Quickgale", esMX = "Quel'ana Quickgale", frFR = "Quel'ana Quickgale", koKR = "Quel'ana Quickgale", ptBR = "Quel'ana Quickgale", ruRU = "Quel'ana Quickgale", zhCN = "Quel'ana Quickgale", zhTW = "Quel'ana Quickgale" },
+    },
+    {
+        id = 400, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.5986, y = 0.7282, class = "WARRIOR",
+        name = { enUS = "Seena Skybreaker", deDE = "Seena Skybreaker", esES = "Seena Skybreaker", esMX = "Seena Skybreaker", frFR = "Seena Skybreaker", koKR = "Seena Skybreaker", ptBR = "Seena Skybreaker", ruRU = "Seena Skybreaker", zhCN = "Seena Skybreaker", zhTW = "Seena Skybreaker" },
+    },
+    {
+        id = 401, types = { "class" },
+        faction = "Horde", map = 2521, x = 0.5831, y = 0.7851, class = "SHAMAN",
+        name = { enUS = "Sessaria Skystride", deDE = "Sessaria Skystride", esES = "Sessaria Skystride", esMX = "Sessaria Skystride", frFR = "Sessaria Skystride", koKR = "Sessaria Skystride", ptBR = "Sessaria Skystride", ruRU = "Sessaria Skystride", zhCN = "Sessaria Skystride", zhTW = "Sessaria Skystride" },
+    },
+    {
+        id = 402, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4510, y = 0.4587, class = "MAGE",
+        name = { enUS = "Shenaan Spellwind", deDE = "Shenaan Spellwind", esES = "Shenaan Spellwind", esMX = "Shenaan Spellwind", frFR = "Shenaan Spellwind", koKR = "Shenaan Spellwind", ptBR = "Shenaan Spellwind", ruRU = "Shenaan Spellwind", zhCN = "Shenaan Spellwind", zhTW = "Shenaan Spellwind" },
+    },
+    {
+        id = 403, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4249, y = 0.2379, class = "HUNTER",
+        name = { enUS = "Tai'ree Farsight", deDE = "Tai'ree Farsight", esES = "Tai'ree Farsight", esMX = "Tai'ree Farsight", frFR = "Tai'ree Farsight", koKR = "Tai'ree Farsight", ptBR = "Tai'ree Farsight", ruRU = "Tai'ree Farsight", zhCN = "Tai'ree Farsight", zhTW = "Tai'ree Farsight" },
+    },
+    {
+        id = 404, types = { "class" },
+        faction = "Horde", map = 2521, x = 0.4279, y = 0.2358, class = "SHAMAN",
+        name = { enUS = "Windshaper Boro", deDE = "Windshaper Boro", esES = "Windshaper Boro", esMX = "Windshaper Boro", frFR = "Windshaper Boro", koKR = "Windshaper Boro", ptBR = "Windshaper Boro", ruRU = "Windshaper Boro", zhCN = "Windshaper Boro", zhTW = "Windshaper Boro" },
+    },
+    {
+        id = 405, types = { "class" },
+        faction = "Neutral", map = 2521, x = 0.4166, y = 0.2333, class = "DRUID",
+        name = { enUS = "Xyton Silverwind", deDE = "Xyton Silverwind", esES = "Xyton Silverwind", esMX = "Xyton Silverwind", frFR = "Xyton Silverwind", koKR = "Xyton Silverwind", ptBR = "Xyton Silverwind", ruRU = "Xyton Silverwind", zhCN = "Xyton Silverwind", zhTW = "Xyton Silverwind" },
+    },
+    {
+        id = 553, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5200, y = 0.4071, profession = "BLACKSMITHING",
+        name = { enUS = "Dwukk", deDE = "Dwukk", esES = "Dwukk", esMX = "Dwukk", frFR = "Dwukk", koKR = "드우크", ptBR = "Dwukk", ruRU = "Двукк", zhCN = "杜克", zhTW = "杜克" },
+    },
+    {
+        id = 554, types = { "profession", "vendor" },
+        faction = "Horde", map = 1411, x = 0.4078, y = 0.6786, profession = "SKINNING",
+        name = { enUS = "Kagil", deDE = "Kagil", esES = "Kagil", esMX = "Kagil", frFR = "Kagil", koKR = "Kagil", ptBR = "Kagil", ruRU = "Kagil", zhCN = "Kagil", zhTW = "Kagil" },
+    },
+    {
+        id = 555, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5180, y = 0.4090, profession = "MINING",
+        name = { enUS = "Krunn", deDE = "Krunn", esES = "Krunn", esMX = "Krunn", frFR = "Krunn", koKR = "크룬", ptBR = "Krunn", ruRU = "Крунн", zhCN = "克鲁恩", zhTW = "克魯恩" },
+    },
+    {
+        id = 556, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5321, y = 0.8160, profession = "FISHING",
+        name = { enUS = "Lau'Tiki", deDE = "Lau'Tiki", esES = "Lau'Tiki", esMX = "Lau'Tiki", frFR = "Lau'Tiki", koKR = "라우티키", ptBR = "Lau'Tiki", ruRU = "Лау'Тики", zhCN = "劳迪克", zhTW = "勞迪克" },
+    },
+    {
+        id = 557, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5540, y = 0.7388, profession = "ALCHEMY",
+        name = { enUS = "Miao'zan", deDE = "Miao'zan", esES = "Miao'zan", esMX = "Miao'zan", frFR = "Miao'zan", koKR = "미아오잔", ptBR = "Miao'zan", ruRU = "Мяо'зан", zhCN = "米奥赞", zhTW = "米奧贊" },
+    },
+    {
+        id = 558, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5540, y = 0.7509, profession = "HERBALISM",
+        name = { enUS = "Mishiki", deDE = "Mishiki", esES = "Mishiki", esMX = "Mishiki", frFR = "Mishiki", koKR = "미시키", ptBR = "Mishiki", ruRU = "Мишики", zhCN = "米什基", zhTW = "米什基" },
+    },
+    {
+        id = 559, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5220, y = 0.4078, profession = "ENGINEERING",
+        name = { enUS = "Mukdrak", deDE = "Mukdrak", esES = "Mukdrak", esMX = "Mukdrak", frFR = "Mukdrak", koKR = "머크드락", ptBR = "Mukdrak", ruRU = "Мукдрак", zhCN = "穆德拉克", zhTW = "穆德拉克" },
+    },
+    {
+        id = 560, types = { "profession", "vendor" },
+        faction = "Horde", map = 1411, x = 0.4053, y = 0.6814, profession = "MINING",
+        name = { enUS = "Norzsh", deDE = "Norzsh", esES = "Norzsh", esMX = "Norzsh", frFR = "Norzsh", koKR = "Norzsh", ptBR = "Norzsh", ruRU = "Norzsh", zhCN = "Norzsh", zhTW = "Norzsh" },
+    },
+    {
+        id = 561, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5669, y = 0.7374, profession = "ENCHANTING",
+        name = { enUS = "Pa'zula", deDE = "Pa'zula", esES = "Pa'zula", esMX = "Pa'zula", frFR = "Pa'zula", koKR = "Pa'zula", ptBR = "Pa'zula", ruRU = "Pa'zula", zhCN = "Pa'zula", zhTW = "Pa'zula" },
+    },
+    {
+        id = 562, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.5419, y = 0.4188, profession = "FIRST_AID",
+        name = { enUS = "Rawrk", deDE = "Rawrk", esES = "Rawrk", esMX = "Rawrk", frFR = "Rawrk", koKR = "로울크", ptBR = "Rawrk", ruRU = "Роурк", zhCN = "拉乌克", zhTW = "拉烏克" },
+    },
+    {
+        id = 563, types = { "profession" },
+        faction = "Horde", map = 1411, x = 0.4266, y = 0.6739, profession = "HERBALISM",
+        name = { enUS = "Zor'la", deDE = "Zor'la", esES = "Zor'la", esMX = "Zor'la", frFR = "Zor'la", koKR = "Zor'la", ptBR = "Zor'la", ruRU = "Zor'la", zhCN = "Zor'la", zhTW = "Zor'la" },
+    },
+    {
+        id = 564, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4490, y = 0.6150, profession = "LEATHERWORKING",
+        name = { enUS = "Chaw Stronghide", deDE = "Chaw Stronghide", esES = "Chaw Pellejofuerte", esMX = "Chaw Pellejofuerte", frFR = "Chaw Stronghide", koKR = "초우 스트롱하이드", ptBR = "Chau Couro Forte", ruRU = "Чоу Толстая Шкура", zhCN = "查尔·硬皮", zhTW = "查爾·硬皮" },
+    },
+    {
+        id = 565, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4413, y = 0.7797, profession = "HERBALISM",
+        name = { enUS = "Garan Sunstrider", deDE = "Garan Sunstrider", esES = "Garan Sunstrider", esMX = "Garan Sunstrider", frFR = "Garan Sunstrider", koKR = "Garan Sunstrider", ptBR = "Garan Sunstrider", ruRU = "Garan Sunstrider", zhCN = "Garan Sunstrider", zhTW = "Garan Sunstrider" },
+    },
+    {
+        id = 566, types = { "profession", "vendor" },
+        faction = "Horde", map = 1412, x = 0.4449, y = 0.7669, profession = "SKINNING",
+        name = { enUS = "Nawka Wildsong", deDE = "Nawka Wildsong", esES = "Nawka Wildsong", esMX = "Nawka Wildsong", frFR = "Nawka Wildsong", koKR = "Nawka Wildsong", ptBR = "Nawka Wildsong", ruRU = "Nawka Wildsong", zhCN = "Nawka Wildsong", zhTW = "Nawka Wildsong" },
+    },
+    {
+        id = 567, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4490, y = 0.6169, profession = "COOKING",
+        name = { enUS = "Pyall Silentstride", deDE = "Pyall Silentstride", esES = "Pyall Trancosilencio", esMX = "Pyall Trancosilencio", frFR = "Pyall Silentstride", koKR = "피알 사일런트스트라이드", ptBR = "Pyall Passo Tranquilo", ruRU = "Пиалл Тихая Поступь", zhCN = "派尔·沉默行者", zhTW = "派爾·沉默行者" },
+    },
+    {
+        id = 568, types = { "profession" },
+        faction = "Neutral", map = 1412, x = 0.5859, y = 0.3939, profession = "ENGINEERING",
+        name = { enUS = "Twizwick Sprocketgrind", deDE = "Twizwick Sprocketgrind", esES = "Tuizgüik Muelodentado", esMX = "Tuizgüik Muelodentado", frFR = "Twizwick Sprocketgrind", koKR = "트위직 스프로켓그라인드", ptBR = "Chacota Trincatreco", ruRU = "Твизвик Пружинаждак", zhCN = "图兹维克·斯普格林", zhTW = "圖茲維克·斯普格林" },
+    },
+    {
+        id = 569, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4421, y = 0.6380, profession = "FISHING",
+        name = { enUS = "Uthan Stillwater", deDE = "Uthan Stillwater", esES = "Uthan Aguasmansas", esMX = "Uthan Aguaserena", frFR = "Uthan Stillwater", koKR = "우탄 스틸워터", ptBR = "Uthan Águas Calmas", ruRU = "Утан Тихая Заводь", zhCN = "尤萨恩·静水", zhTW = "尤薩恩·靜水" },
+    },
+    {
+        id = 570, types = { "profession", "vendor" },
+        faction = "Horde", map = 1412, x = 0.4429, y = 0.7836, profession = "MINING",
+        name = { enUS = "Vartha Rockmane", deDE = "Vartha Rockmane", esES = "Vartha Rockmane", esMX = "Vartha Rockmane", frFR = "Vartha Rockmane", koKR = "Vartha Rockmane", ptBR = "Vartha Rockmane", ruRU = "Vartha Rockmane", zhCN = "Vartha Rockmane", zhTW = "Vartha Rockmane" },
+    },
+    {
+        id = 571, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4609, y = 0.6400, profession = "FIRST_AID",
+        name = { enUS = "Vira Younghoof", deDE = "Vira Younghoof", esES = "Vira Pezuña Joven", esMX = "Vira Pezuña Joven", frFR = "Vira Younghoof", koKR = "비라 영후프", ptBR = "Virra Casco Jovem", ruRU = "Вира Нежное Копыто", zhCN = "维尔拉·幼蹄", zhTW = "維爾拉·幼蹄" },
+    },
+    {
+        id = 572, types = { "profession" },
+        faction = "Horde", map = 1412, x = 0.4501, y = 0.6140, profession = "SKINNING",
+        name = { enUS = "Yonn Deepcut", deDE = "Yonn Deepcut", esES = "Yonn Corte Profundo", esMX = "Yonn Corte Profundo", frFR = "Yonn Deepcut", koKR = "욘 디프컷", ptBR = "Yonn Corte Profundo", ruRU = "Йонн Глубокий Надрез", zhCN = "姚恩·深刺", zhTW = "姚恩·深刺" },
+    },
+    {
+        id = 573, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.4509, y = 0.5909, profession = "SKINNING",
+        name = { enUS = "Dranh", deDE = "Dranh", esES = "Dranh", esMX = "Dranh", frFR = "Dranh", koKR = "드라안", ptBR = "Dranh", ruRU = "Дранх", zhCN = "德拉恩", zhTW = "德拉恩" },
+    },
+    {
+        id = 574, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.5531, y = 0.3180, profession = "COOKING",
+        name = { enUS = "Duhng", deDE = "Duhng", esES = "Duhng", esMX = "Duhng", frFR = "Duhng", koKR = "둔그", ptBR = "Barrão", ruRU = "Дунх", zhCN = "杜恩格", zhTW = "杜恩格" },
+    },
+    {
+        id = 575, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.5220, y = 0.3170, profession = "TAILORING",
+        name = { enUS = "Kil'hala", deDE = "Kil'hala", esES = "Kil'hala", esMX = "Kil'hala", frFR = "Kil'hala", koKR = "킬할라", ptBR = "Kil'hala", ruRU = "Кил'хала", zhCN = "基尔哈拉", zhTW = "基爾哈拉" },
+    },
+    {
+        id = 576, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.4481, y = 0.5951, profession = "LEATHERWORKING",
+        name = { enUS = "Krulmoo Fullmoon", deDE = "Krulmoo Fullmoon", esES = "Krulmoo Lunallena", esMX = "Krulmoo Lunallena", frFR = "Krulmoo Fullmoon", koKR = "크룰무 풀문", ptBR = "Krulmoo Lua Cheia", ruRU = "Крульмоо Полная Луна", zhCN = "克鲁姆·满月", zhTW = "克魯姆·滿月" },
+    },
+    {
+        id = 577, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.4490, y = 0.5941, profession = "TAILORING",
+        name = { enUS = "Mahani", deDE = "Mahani", esES = "Mahani", esMX = "Mahani", frFR = "Mahani", koKR = "마하니", ptBR = "Mahani", ruRU = "Махани", zhCN = "马哈尼", zhTW = "馬哈尼" },
+    },
+    {
+        id = 578, types = { "profession" },
+        faction = "Neutral", map = 1413, x = 0.6270, y = 0.3630, profession = "ENGINEERING",
+        name = { enUS = "Tinkerwiz", deDE = "Tinkerwiz", esES = "Manitas de Oro", esMX = "Manitas de Oro", frFR = "Tinkerwiz", koKR = "팅커위즈", ptBR = "Guariba", ruRU = "Оловень", zhCN = "廷克维斯", zhTW = "廷克維斯" },
+    },
+    {
+        id = 579, types = { "profession" },
+        faction = "Horde", map = 1413, x = 0.5131, y = 0.2890, profession = "BLACKSMITHING",
+        name = { enUS = "Traugh", deDE = "Traugh", esES = "Traugh", esMX = "Traugh", frFR = "Traugh", koKR = "트라우그", ptBR = "Traugh", ruRU = "Трауг", zhCN = "特劳弗", zhTW = "特勞弗" },
+    },
+    {
+        id = 580, types = { "profession" },
+        faction = "Neutral", map = 1413, x = 0.6269, y = 0.3625, profession = "ENGINEERING",
+        name = { enUS = "Vazario Linkgrease", deDE = "Vazario Linkgrease", esES = "Vazario Grasenlace", esMX = "Vazario Grasenlace", frFR = "Vazario Linkgrease", koKR = "바자리오 링크그리즈", ptBR = "Tucho Raspagraxa", ruRU = "Вазарио Цепесмаз", zhCN = "瓦萨里奥·林克格雷斯", zhTW = "瓦薩里奧·林克格雷斯" },
+    },
+    {
+        id = 581, types = { "profession" },
+        faction = "Neutral", map = 1413, x = 0.4600, y = 0.3581, profession = "LEATHERWORKING",
+        name = { enUS = "Waldor", deDE = "Waldor", esES = "Waldor", esMX = "Waldor", frFR = "Waldor", koKR = "왈도르", ptBR = "Waldor", ruRU = "Валдор", zhCN = "瓦多尔", zhTW = "瓦多爾" },
+    },
+    {
+        id = 582, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1713, y = 0.6101, profession = "FIRST_AID",
+        name = { enUS = "Angelique Butler", deDE = "Angelique Butler", esES = "Angelique Butler", esMX = "Angelique Butler", frFR = "Angelique Butler", koKR = "Angelique Butler", ptBR = "Angelique Butler", ruRU = "Angelique Butler", zhCN = "Angelique Butler", zhTW = "Angelique Butler" },
+    },
+    {
+        id = 583, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1717, y = 0.6108, profession = "FIRST_AID",
+        name = { enUS = "Angelique Butler", deDE = "Angelique Butler", esES = "Angelique Butler", esMX = "Angelique Butler", frFR = "Angelique Butler", koKR = "Angelique Butler", ptBR = "Angelique Butler", ruRU = "Angelique Butler", zhCN = "Angelique Butler", zhTW = "Angelique Butler" },
+    },
+    {
+        id = 584, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1770, y = 0.6035, profession = "TAILORING",
+        name = { enUS = "Charles Worth", deDE = "Charles Worth", esES = "Charles Worth", esMX = "Charles Worth", frFR = "Charles Worth", koKR = "Charles Worth", ptBR = "Charles Worth", ruRU = "Charles Worth", zhCN = "Charles Worth", zhTW = "Charles Worth" },
+    },
+    {
+        id = 585, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1775, y = 0.6027, profession = "TAILORING",
+        name = { enUS = "Charles Worth", deDE = "Charles Worth", esES = "Charles Worth", esMX = "Charles Worth", frFR = "Charles Worth", koKR = "Charles Worth", ptBR = "Charles Worth", ruRU = "Charles Worth", zhCN = "Charles Worth", zhTW = "Charles Worth" },
+    },
+    {
+        id = 586, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1819, y = 0.6492, profession = "HERBALISM",
+        name = { enUS = "Edward Egan", deDE = "Edward Egan", esES = "Edward Egan", esMX = "Edward Egan", frFR = "Edward Egan", koKR = "Edward Egan", ptBR = "Edward Egan", ruRU = "Edward Egan", zhCN = "Edward Egan", zhTW = "Edward Egan" },
+    },
+    {
+        id = 587, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1839, y = 0.6409, profession = "HERBALISM",
+        name = { enUS = "Edward Egan", deDE = "Edward Egan", esES = "Edward Egan", esMX = "Edward Egan", frFR = "Edward Egan", koKR = "Edward Egan", ptBR = "Edward Egan", ruRU = "Edward Egan", zhCN = "Edward Egan", zhTW = "Edward Egan" },
+    },
+    {
+        id = 588, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1842, y = 0.6324, profession = "HERBALISM",
+        name = { enUS = "Edward Egan", deDE = "Edward Egan", esES = "Edward Egan", esMX = "Edward Egan", frFR = "Edward Egan", koKR = "Edward Egan", ptBR = "Edward Egan", ruRU = "Edward Egan", zhCN = "Edward Egan", zhTW = "Edward Egan" },
+    },
+    {
+        id = 589, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1251, y = 0.6583, profession = "COOKING",
+        name = { enUS = "Katherine Lee", deDE = "Katherine Lee", esES = "Katherine Lee", esMX = "Katherine Lee", frFR = "Katherine Lee", koKR = "Katherine Lee", ptBR = "Katherine Lee", ruRU = "Katherine Lee", zhCN = "Katherine Lee", zhTW = "Katherine Lee" },
+    },
+    {
+        id = 590, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1677, y = 0.6230, profession = "ENCHANTING",
+        name = { enUS = "Vanessa Sellers", deDE = "Vanessa Sellers", esES = "Vanessa Sellers", esMX = "Vanessa Sellers", frFR = "Vanessa Sellers", koKR = "Vanessa Sellers", ptBR = "Vanessa Sellers", ruRU = "Vanessa Sellers", zhCN = "Vanessa Sellers", zhTW = "Vanessa Sellers" },
+    },
+    {
+        id = 591, types = { "profession" },
+        faction = "Alliance", map = 1416, x = 0.1678, y = 0.6217, profession = "ENCHANTING",
+        name = { enUS = "Vanessa Sellers", deDE = "Vanessa Sellers", esES = "Vanessa Sellers", esMX = "Vanessa Sellers", frFR = "Vanessa Sellers", koKR = "Vanessa Sellers", ptBR = "Vanessa Sellers", ruRU = "Vanessa Sellers", zhCN = "Vanessa Sellers", zhTW = "Vanessa Sellers" },
+    },
+    {
+        id = 592, types = { "profession" },
+        faction = "Horde", map = 1417, x = 0.2830, y = 0.4511, profession = "LEATHERWORKING",
+        name = { enUS = "Brumn Winterhoof", deDE = "Brumn Winterhoof", esES = "Brumm Pezuña Invernal", esMX = "Brumm Pezuña Invernal", frFR = "Brumn Winterhoof", koKR = "부룸 윈터후프", ptBR = "Brum Casco Invernal", ruRU = "Брумн Заиндевевшее Копыто", zhCN = "布鲁姆·白蹄", zhTW = "布魯姆·冰蹄" },
+    },
+    {
+        id = 593, types = { "profession" },
+        faction = "Horde", map = 1417, x = 0.7411, y = 0.3378, profession = "COOKING",
+        name = { enUS = "Slagg", deDE = "Slagg", esES = "Eskoria", esMX = "Eskoria", frFR = "Slagg", koKR = "슬래그", ptBR = "Slagg", ruRU = "Слагг", zhCN = "斯拉格", zhTW = "斯拉格" },
+    },
+    {
+        id = 594, types = { "profession" },
+        faction = "Horde", map = 1418, x = 0.6269, y = 0.5739, profession = "LEATHERWORKING",
+        name = { enUS = "Thorkaf Dragoneye", deDE = "Thorkaf Dragoneye", esES = "Thorkaf Dragonojo", esMX = "Thorkaf Dragonojo", frFR = "Thorkaf Dragoneye", koKR = "토르카프 드래곤아이", ptBR = "Thorkaf Olho-de-tigre", ruRU = "Торкаф Око Дракона", zhCN = "索卡夫·龙眼", zhTW = "索卡夫·龍眼" },
+    },
+    {
+        id = 595, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5996, y = 0.7202, skill = "WEAPON_SKILLS",
+        name = { enUS = "Archibald", deDE = "Archibald", esES = "Archibald", esMX = "Archibald", frFR = "Archibald", koKR = "아키발드", ptBR = "Arquibaldo", ruRU = "Арчибальд", zhCN = "阿基巴德", zhTW = "阿基巴德" },
+    },
+    {
+        id = 596, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6494, y = 0.7171, profession = "FISHING",
+        name = { enUS = "Armand Cromwell", deDE = "Armand Cromwell", esES = "Armand Cromaljibe", esMX = "Armand Cromaljibe", frFR = "Armand Cromwell", koKR = "알만드 크롬웰", ptBR = "Armando Tarrafa", ruRU = "Арман Кромвель", zhCN = "阿曼德·克伦威尔", zhTW = "阿曼德·克倫威爾" },
+    },
+    {
+        id = 597, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6270, y = 0.7724, profession = "LEATHERWORKING",
+        name = { enUS = "Arthur Moore", deDE = "Arthur Moore", esES = "Arthur Moore", esMX = "Arthur Moore", frFR = "Arthur Moore", koKR = "아서 무어", ptBR = "Arturo Moura", ruRU = "Артур Мур", zhCN = "亚瑟·摩尔", zhTW = "亞瑟·摩爾" },
+    },
+    {
+        id = 598, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6058, y = 0.7122, profession = "BLACKSMITHING",
+        name = { enUS = "Basil Frye", deDE = "Basil Frye", esES = "Basil Frye", esMX = "Basil Frye", frFR = "Basil Frye", koKR = "바실 프라이", ptBR = "Basílio Frias", ruRU = "Базиль Фрай", zhCN = "巴兹尔·弗莱伊", zhTW = "巴茲爾·弗萊伊" },
+    },
+    {
+        id = 599, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5261, y = 0.5551, profession = "TAILORING",
+        name = { enUS = "Bowen Brisboise", deDE = "Bowen Brisboise", esES = "Bowen Bribuesa", esMX = "Bowen Bribuesa", frFR = "Bowen Brisboise", koKR = "보웬 브리스부아즈", ptBR = "Bowen Brisboise", ruRU = "Боуэн Брисбойс", zhCN = "博文·布里斯博埃斯", zhTW = "博文·布里斯博埃斯" },
+    },
+    {
+        id = 600, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5969, y = 0.7303, profession = "MINING",
+        name = { enUS = "Brom Killian", deDE = "Brom Killian", esES = "Brom Killian", esMX = "Brom Killian", frFR = "Brom Killian", koKR = "브롬 킬리안", ptBR = "Brom Morgado", ruRU = "Бром Килиан", zhCN = "布罗姆·基里安", zhTW = "布羅姆·基里安" },
+    },
+    {
+        id = 601, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5940, y = 0.5219, profession = "ALCHEMY",
+        name = { enUS = "Carolai Anise", deDE = "Carolai Anise", esES = "Carolai Anís", esMX = "Carolai Anís", frFR = "Carolai Anise", koKR = "캐롤라이 아니즈", ptBR = "Carolai Anise", ruRU = "Каролай Аниса", zhCN = "卡罗莱·安尼斯", zhTW = "卡羅萊·大茴香" },
+    },
+    {
+        id = 602, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6719, y = 0.5099, profession = "FISHING",
+        name = { enUS = "Clyde Kellen", deDE = "Clyde Kellen", esES = "Clyde Kellen", esMX = "Clyde Kellen", frFR = "Clyde Kellen", koKR = "클리데 켈렌", ptBR = "Clívio Kellen", ruRU = "Клайд Келлен", zhCN = "克莱德·凯林", zhTW = "克萊德·凱林" },
+    },
+    {
+        id = 603, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6285, y = 0.7746, profession = "LEATHERWORKING",
+        name = { enUS = "Dan Golthas", deDE = "Dan Golthas", esES = "Dan Golthas", esMX = "Dan Golthas", frFR = "Dan Golthas", koKR = "단 골다스", ptBR = "Danilo Meira", ruRU = "Дэн Голтас", zhCN = "丹·戈萨斯", zhTW = "丹·戈薩斯" },
+    },
+    {
+        id = 604, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5795, y = 0.8060, profession = "ALCHEMY",
+        name = { enUS = "Doctor Herbert Halsey", deDE = "Doktor Herbert Halsey", esES = "Doctor Herbert Halsey", esMX = "Doctor Herbert Halsey", frFR = "Docteur Herbert Halsey", koKR = "학자 허버트 핼시", ptBR = "Doutor Herberto Vianna", ruRU = "Доктор Герберт Галси", zhCN = "赫伯特·哈尔希医生", zhTW = "赫伯特·哈爾希醫生" },
+    },
+    {
+        id = 605, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5860, y = 0.8091, profession = "ALCHEMY",
+        name = { enUS = "Doctor Marsh", deDE = "Doktor Marsh", esES = "Doctor Marsh", esMX = "Doctor Marsh", frFR = "Docteur Marsh", koKR = "학자 마쉬", ptBR = "Doutor Charco", ruRU = "Доктор Марш", zhCN = "马尔什医生", zhTW = "馬許醫生" },
+    },
+    {
+        id = 606, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5769, y = 0.8078, profession = "ALCHEMY",
+        name = { enUS = "Doctor Martin Felben", deDE = "Doktor Martin Felben", esES = "Doctor Martin Felben", esMX = "Doctor Martin Felben", frFR = "Docteur Martin Felben", koKR = "박사 마틴 펠벤", ptBR = "Doutor Martinho Nunes", ruRU = "Доктор Мартин Фелбен", zhCN = "马丁·费尔本", zhTW = "馬丁·費爾本醫生" },
+    },
+    {
+        id = 607, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6099, y = 0.7458, profession = "COOKING",
+        name = { enUS = "Eunice Burch", deDE = "Eunice Burch", esES = "Eunice Burch", esMX = "Eunice Burch", frFR = "Eunice Burch", koKR = "유니스 버치", ptBR = "Eunice Amora", ruRU = "Эвника Барч", zhCN = "尤奈斯·伯奇", zhTW = "尤奈斯·伯奇" },
+    },
+    {
+        id = 608, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5981, y = 0.5210, profession = "HERBALISM",
+        name = { enUS = "Faruza", deDE = "Faruza", esES = "Faruza", esMX = "Faruza", frFR = "Faruza", koKR = "파루자", ptBR = "Faruza", ruRU = "Фаруза", zhCN = "法鲁萨", zhTW = "法魯薩" },
+    },
+    {
+        id = 609, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.3246, y = 0.6514, profession = "HERBALISM",
+        name = { enUS = "Florence Nightshade", deDE = "Florence Nightshade", esES = "Florence Nightshade", esMX = "Florence Nightshade", frFR = "Florence Nightshade", koKR = "Florence Nightshade", ptBR = "Florence Nightshade", ruRU = "Florence Nightshade", zhCN = "Florence Nightshade", zhTW = "Florence Nightshade" },
+    },
+    {
+        id = 610, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6397, y = 0.8078, profession = "ENGINEERING",
+        name = { enUS = "Franklin Lloyd", deDE = "Franklin Lloyd", esES = "Franklin Lloyd", esMX = "Franklin Lloyd", frFR = "Franklin Lloyd", koKR = "프랭클린 로이드", ptBR = "Hiacinto Olio", ruRU = "Франклин Ллойд", zhCN = "弗兰克林·洛伊德", zhTW = "弗蘭克林·洛伊德" },
+    },
+    {
+        id = 611, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6379, y = 0.8056, profession = "ENGINEERING",
+        name = { enUS = "Graham Van Talen", deDE = "Graham Van Talen", esES = "Graham Van Talen", esMX = "Graham Van Talen", frFR = "Graham Van Talen", koKR = "그레이엄 반 탈렌", ptBR = "Gontrão Henriques", ruRU = "Грэхем ван Тален", zhCN = "格拉哈姆·范·塔伦", zhTW = "格拉哈姆·範·塔倫" },
+    },
+    {
+        id = 612, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6081, y = 0.7153, profession = "BLACKSMITHING",
+        name = { enUS = "James Van Brunt", deDE = "James Van Brunt", esES = "James Van Brunt", esMX = "James Van Brunt", frFR = "James Van Brunt", koKR = "제임스 반 브런트", ptBR = "Jaime Ferraz", ruRU = "Джеймс ван Брюнт", zhCN = "詹姆斯·范·布朗特", zhTW = "詹姆士·範·布朗特" },
+    },
+    {
+        id = 613, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6285, y = 0.7157, profession = "TAILORING",
+        name = { enUS = "Josef Gregorian", deDE = "Josef Gregorian", esES = "Josef Gregorian", esMX = "Josef Gregorian", frFR = "Josef Gregorian", koKR = "조셉 그레고리안", ptBR = "Josefo Gregório", ruRU = "Джозеф Грегориан", zhCN = "乔瑟夫·格里高利", zhTW = "喬瑟夫·格里高利" },
+    },
+    {
+        id = 614, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6621, y = 0.6976, profession = "TAILORING",
+        name = { enUS = "Josephine Lister", deDE = "Josephine Lister", esES = "Josephine Lister", esMX = "Josephine Lister", frFR = "Josephine Lister", koKR = "조세핀 리스터", ptBR = "Josefina Calisto", ruRU = "Джозефина Листер", zhCN = "约瑟芬·李斯特", zhTW = "約瑟芬·李斯特" },
+    },
+    {
+        id = 615, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6270, y = 0.7764, profession = "SKINNING",
+        name = { enUS = "Killian Hagey", deDE = "Killian Hagey", esES = "Killian Hagey", esMX = "Killian Hagey", frFR = "Killian Hagey", koKR = "킬리안 헤이지", ptBR = "Oscar Gomes", ruRU = "Киллиан Хаги", zhCN = "基里安·哈根", zhTW = "基里安·哈根" },
+    },
+    {
+        id = 616, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6108, y = 0.7817, profession = "ENCHANTING",
+        name = { enUS = "Lavinia Crowe", deDE = "Lavinia Crowe", esES = "Lavinia Crowe", esMX = "Lavinia Crowe", frFR = "Lavinia Crowe", koKR = "라비니아 크로위", ptBR = "Lavínia Queiroz", ruRU = "Лавиния Кроу", zhCN = "拉文尼亚·克洛文", zhTW = "拉文尼亞·克洛文" },
+    },
+    {
+        id = 617, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6108, y = 0.7786, profession = "ENCHANTING",
+        name = { enUS = "Malcomb Wynn", deDE = "Malcomb Wynn", esES = "Malcomb Wynn", esMX = "Malcomb Wynn", frFR = "Malcomb Wynn", koKR = "말콤 린", ptBR = "Augusto Incantum", ruRU = "Малькомб Уинн", zhCN = "玛考布·维恩", zhTW = "瑪考布·威恩" },
+    },
+    {
+        id = 618, types = { "profession", "vendor" },
+        faction = "Horde", map = 1420, x = 0.3260, y = 0.6581, profession = "SKINNING",
+        name = { enUS = "Margaret Weaver", deDE = "Margaret Weaver", esES = "Margaret Weaver", esMX = "Margaret Weaver", frFR = "Margaret Weaver", koKR = "Margaret Weaver", ptBR = "Margaret Weaver", ruRU = "Margaret Weaver", zhCN = "Margaret Weaver", zhTW = "Margaret Weaver" },
+    },
+    {
+        id = 619, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.5928, y = 0.7556, profession = "HERBALISM",
+        name = { enUS = "Martha Alliestar", deDE = "Martha Alliestar", esES = "Martha Alliestar", esMX = "Martha Alliestar", frFR = "Martha Alliestar", koKR = "마사 알리스타", ptBR = "Marta Basílico", ruRU = "Марта Альестар", zhCN = "马尔萨·奥列斯塔", zhTW = "馬爾薩·奧列斯塔" },
+    },
+    {
+        id = 620, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6335, y = 0.7675, profession = "FIRST_AID",
+        name = { enUS = "Mary Edras", deDE = "Mary Edras", esES = "Mary Edras", esMX = "Mary Edras", frFR = "Mary Edras", koKR = "메리 에드라스", ptBR = "Maria do Socorro", ruRU = "Мэри Эдрас", zhCN = "玛丽·艾塔斯", zhTW = "瑪麗·艾塔斯" },
+    },
+    {
+        id = 621, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6179, y = 0.5281, profession = "FIRST_AID",
+        name = { enUS = "Nurse Neela", deDE = "Schwester Neela", esES = "Enfermera Neela", esMX = "Enfermera Neela", frFR = "Infirmière Neela", koKR = "간호사 닐라", ptBR = "Enfermeira Nila", ruRU = "Сиделка Нила", zhCN = "妮拉", zhTW = "妮拉" },
+    },
+    {
+        id = 622, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6559, y = 0.6002, profession = "SKINNING",
+        name = { enUS = "Rand Rhobart", deDE = "Rand Rhobart", esES = "Rand Rhobart", esMX = "Rand Rhobart", frFR = "Rand Rhobart", koKR = "랜드 로버트", ptBR = "Rand Rhobart", ruRU = "Рэнд Робарт", zhCN = "兰德·洛巴尔特", zhTW = "蘭德·洛巴爾特" },
+    },
+    {
+        id = 623, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6267, y = 0.7153, profession = "TAILORING",
+        name = { enUS = "Rhiannon Davis", deDE = "Rhiannon Davis", esES = "Rhiannon Davis", esMX = "Rhiannon Davis", frFR = "Rhiannon Davis", koKR = "리안논 다비스", ptBR = "Renata Davis", ruRU = "Рианнон Дэвис", zhCN = "雷安诺·戴维斯", zhTW = "雷安諾·大衛斯" },
+    },
+    {
+        id = 624, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6539, y = 0.6011, profession = "LEATHERWORKING",
+        name = { enUS = "Shelene Rhobart", deDE = "Shelene Rhobart", esES = "Shelene Rhobart", esMX = "Shelene Rhobart", frFR = "Shelene Rhobart", koKR = "셸렌 로버트", ptBR = "Lenita Ravais", ruRU = "Шелена Робарт", zhCN = "舍伦尼·洛巴尔特", zhTW = "舍倫尼·洛巴爾特" },
+    },
+    {
+        id = 625, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6179, y = 0.5161, profession = "ENCHANTING",
+        name = { enUS = "Vance Undergloom", deDE = "Vance Undergloom", esES = "Vance Bajopenumbra", esMX = "Vance Bajopenumbra", frFR = "Vance Undergloom", koKR = "밴스 언더글룸", ptBR = "Vance Merencório", ruRU = "Ванс Мрачнейший", zhCN = "范斯·安德格鲁姆", zhTW = "范斯·安德格魯姆" },
+    },
+    {
+        id = 626, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6267, y = 0.7140, profession = "TAILORING",
+        name = { enUS = "Victor Ward", deDE = "Victor Ward", esES = "Víctor Tutor", esMX = "Víctor Tutor", frFR = "Victor Ward", koKR = "빅터 워드", ptBR = "Victor Guardia", ruRU = "Виктор Уорд", zhCN = "维克多·瓦德", zhTW = "維克多·瓦德" },
+    },
+    {
+        id = 627, types = { "profession", "vendor" },
+        faction = "Horde", map = 1420, x = 0.3222, y = 0.6582, profession = "MINING",
+        name = { enUS = "Walter Mason", deDE = "Walter Mason", esES = "Walter Mason", esMX = "Walter Mason", frFR = "Walter Mason", koKR = "Walter Mason", ptBR = "Walter Mason", ruRU = "Walter Mason", zhCN = "Walter Mason", zhTW = "Walter Mason" },
+    },
+    {
+        id = 628, types = { "profession" },
+        faction = "Horde", map = 1420, x = 0.6177, y = 0.5150, profession = "COOKING",
+        name = { enUS = "William Pickman", deDE = "William Pickman", esES = "William Pickman", esMX = "William Pickman", frFR = "William Pickman", koKR = "William Pickman", ptBR = "William Pickman", ruRU = "William Pickman", zhCN = "William Pickman", zhTW = "William Pickman" },
+    },
+    {
+        id = 629, types = { "profession" },
+        faction = "Horde", map = 1421, x = 0.4319, y = 0.4110, profession = "BLACKSMITHING",
+        name = { enUS = "Guillaume Sorouy", deDE = "Geraldine Sorouy", esES = "Guillaume Sorouy", esMX = "Guillaume Sorouy", frFR = "Guillemette Sorouy", koKR = "기욤 소로이", ptBR = "Guillaume Sorouy", ruRU = "Гийом Сорю", zhCN = "古拉摩·索洛伊", zhTW = "古拉摩·索洛伊" },
+    },
+    {
+        id = 630, types = { "profession" },
+        faction = "Horde", map = 1421, x = 0.4341, y = 0.4052, profession = "MINING",
+        name = { enUS = "Johan Focht", deDE = "Johan Focht", esES = "Johan Focht", esMX = "Johan Focht", frFR = "Johan Focht", koKR = "요한 폭히트", ptBR = "Jordão Focht", ruRU = "Йохан Фогт", zhCN = "乔汉·弗彻", zhTW = "喬漢·弗徹" },
+    },
+    {
+        id = 631, types = { "profession" },
+        faction = "Horde", map = 1424, x = 0.6171, y = 0.1950, profession = "HERBALISM",
+        name = { enUS = "Aranae Venomblood", deDE = "Aranae Venomblood", esES = "Sangreveneno Aranae", esMX = "Sangreveneno Aranae", frFR = "Aranae Venomblood", koKR = "아라네 베넘블러드", ptBR = "Arânea Noxissangue", ruRU = "Аранэ Отравительница", zhCN = "阿兰奈·维诺布拉德", zhTW = "阿蘭奈·毒血" },
+    },
+    {
+        id = 632, types = { "profession" },
+        faction = "Horde", map = 1424, x = 0.6371, y = 0.2081, profession = "TAILORING",
+        name = { enUS = "Daryl Stack", deDE = "Daryl Stack", esES = "Daryl Stack", esMX = "Daryl Stack", frFR = "Daryl Stack", koKR = "다릴 스택", ptBR = "Dario Pilha", ruRU = "Дэрил Стак", zhCN = "达瑞尔·斯塔克", zhTW = "達瑞爾·斯塔克" },
+    },
+    {
+        id = 633, types = { "profession" },
+        faction = "Alliance", map = 1424, x = 0.5079, y = 0.6100, profession = "FISHING",
+        name = { enUS = "Donald Rabonne", deDE = "Donald Rabonne", esES = "Donald Rabonne", esMX = "Donald Rabonne", frFR = "Donald Rabonne", koKR = "도날드 라본느", ptBR = "Donaldo Espinha-de-peixe", ruRU = "Дональд Рабонн", zhCN = "唐纳德·拉波尼", zhTW = "唐納德·拉波尼" },
+    },
+    {
+        id = 634, types = { "profession" },
+        faction = "Alliance", map = 1424, x = 0.5414, y = 0.8034, profession = "FISHING",
+        name = { enUS = "Hunter Moore", deDE = "Hunter Moore", esES = "Hunter Moore", esMX = "Hunter Moore", frFR = "Hunter Moore", koKR = "Hunter Moore", ptBR = "Hunter Moore", ruRU = "Hunter Moore", zhCN = "Hunter Moore", zhTW = "Hunter Moore" },
+    },
+    {
+        id = 635, types = { "profession" },
+        faction = "Alliance", map = 1424, x = 0.5576, y = 0.8189, profession = "FISHING",
+        name = { enUS = "Hunter Moore", deDE = "Hunter Moore", esES = "Hunter Moore", esMX = "Hunter Moore", frFR = "Hunter Moore", koKR = "Hunter Moore", ptBR = "Hunter Moore", ruRU = "Hunter Moore", zhCN = "Hunter Moore", zhTW = "Hunter Moore" },
+    },
+    {
+        id = 636, types = { "profession" },
+        faction = "Horde", map = 1424, x = 0.6158, y = 0.1919, profession = "ALCHEMY",
+        name = { enUS = "Serge Hinott", deDE = "Serge Hinott", esES = "Serge Hinott", esMX = "Serge Hinott", frFR = "Serge Hinott", koKR = "서지 히노트", ptBR = "Serguei Hinoto", ruRU = "Серж Хинотт", zhCN = "瑟尔格·希诺特", zhTW = "瑟爾格·希諾特" },
+    },
+    {
+        id = 637, types = { "profession" },
+        faction = "Alliance", map = 1425, x = 0.1339, y = 0.4348, profession = "LEATHERWORKING",
+        name = { enUS = "Drakk Stonehand", deDE = "Drakk Stonehand", esES = "Drakk Petramano", esMX = "Drakk Petramano", frFR = "Drakk Stonehand", koKR = "드라크 스톤핸드", ptBR = "Drakk Manopedra", ruRU = "Дракк Крепкорук", zhCN = "德拉克·石拳", zhTW = "德拉克·石拳" },
+    },
+    {
+        id = 638, types = { "profession", "vendor-fishing" },
+        faction = "Horde", map = 1425, x = 0.8030, y = 0.8151, profession = "FISHING",
+        name = { enUS = "Katoom the Angler", deDE = "Katoom der Angler", esES = "Katoom el Pescador", esMX = "Katoom el Pescador", frFR = "Katoom le pêcheur", koKR = "낚시꾼 카툼", ptBR = "Katum, o Pesqueiro", ruRU = "Катум Удильщик", zhCN = "钓鱼者卡图姆", zhTW = "『垂釣者』卡圖姆" },
+    },
+    {
+        id = 639, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5749, y = 0.2632, profession = "SKINNING",
+        name = { enUS = "Balthus Stoneflayer", deDE = "Balthus Stoneflayer", esES = "Balthus Cazarrocas", esMX = "Balthus Cazarrocas", frFR = "Ecorchepierre Balthus", koKR = "발투스 스톤플레이어", ptBR = "Balthus Esfolapedra", ruRU = "Балтус Шлифовальщик", zhCN = "巴尔萨斯·裂石", zhTW = "巴爾薩斯·剝石" },
+    },
+    {
+        id = 640, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5952, y = 0.2774, profession = "BLACKSMITHING",
+        name = { enUS = "Bengus Deepforge", deDE = "Bengus Deepforge", esES = "Bengus Forjahonda", esMX = "Bengus Forjahonda", frFR = "Bengus Deepforge", koKR = "벤구스 딥포지", ptBR = "Bengus Baixaforja", ruRU = "Бенгус Подземная Кузня", zhCN = "本古斯·深炉", zhTW = "本古斯·深爐" },
+    },
+    {
+        id = 641, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6106, y = 0.3546, skill = "WEAPON_SKILLS",
+        name = { enUS = "Bixi Wobblebonk", deDE = "Bixi Wobblebonk", esES = "Bixi Tambaleapié", esMX = "Bixi Tambaleapié", frFR = "Bixi Wobblebonk", koKR = "빅시 와블봉크", ptBR = "Bixi Bateagita", ruRU = "Бикси Пошатушка", zhCN = "比克斯", zhTW = "比克斯" },
+    },
+    {
+        id = 642, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1426, x = 0.2919, y = 0.6773, profession = "SKINNING",
+        name = { enUS = "Brighid Stormflayer", deDE = "Brighid Stormflayer", esES = "Brighid Stormflayer", esMX = "Brighid Stormflayer", frFR = "Brighid Stormflayer", koKR = "Brighid Stormflayer", ptBR = "Brighid Stormflayer", ruRU = "Brighid Stormflayer", zhCN = "Brighid Stormflayer", zhTW = "Brighid Stormflayer" },
+    },
+    {
+        id = 643, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5021, y = 0.5040, profession = "ENGINEERING",
+        name = { enUS = "Bronk Guzzlegear", deDE = "Bronk Guzzlegear", esES = "Bronk Comengranaje", esMX = "Bronk Comengranaje", frFR = "Bronk Guzzlegear", koKR = "브롱크 거즐기어", ptBR = "Bronk Gargrenagem", ruRU = "Бронк Пропойца", zhCN = "布隆克", zhTW = "布隆克·狂齒" },
+    },
+    {
+        id = 644, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6090, y = 0.3546, skill = "WEAPON_SKILLS",
+        name = { enUS = "Buliwyf Stonehand", deDE = "Buliwyf Stonehand", esES = "Buliwyf Petramano", esMX = "Buliwyf Petramano", frFR = "Buliwyf Stonehand", koKR = "불리위프 스톤헤드", ptBR = "Bulif Manopedra", ruRU = "Бульвайф Крепкорук", zhCN = "布里维夫·石拳", zhTW = "布里維夫·石拳" },
+    },
+    {
+        id = 645, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6840, y = 0.5451, profession = "COOKING",
+        name = { enUS = "Cook Ghilm", deDE = "Koch Ghilm", esES = "Cocinero Ghilm", esMX = "Cocinero Ghilm", frFR = "Cuisinier Ghilm", koKR = "요리사 길름", ptBR = "Cozinheiro Ghilm", ruRU = "Повар Гильм", zhCN = "厨师格瑞姆", zhTW = "廚師格瑞姆" },
+    },
+    {
+        id = 646, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6929, y = 0.5548, profession = "MINING",
+        name = { enUS = "Dank Drizzlecut", deDE = "Dank Drizzlecut", esES = "Dank Cortefiel", esMX = "Dank Cortefiel", frFR = "Dank Drizzlecut", koKR = "당크 드리즐컷", ptBR = "Dank Chuviscorte", ruRU = "Данк Дождерез", zhCN = "丹克·利刃", zhTW = "丹克·利刃" },
+    },
+    {
+        id = 647, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6074, y = 0.2693, profession = "COOKING",
+        name = { enUS = "Daryl Riknussun", deDE = "Daryl Riknussun", esES = "Daryl Riknussun", esMX = "Daryl Riknussun", frFR = "Daryl Riknussun", koKR = "다릴 리크너선", ptBR = "Daryl Ricinum", ruRU = "Дэрил Рикнуссун", zhCN = "达瑞尔·瑞克努索", zhTW = "達瑞爾·瑞克努索" },
+    },
+    {
+        id = 648, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.2895, y = 0.6659, profession = "HERBALISM",
+        name = { enUS = "Emrys Flintbeard", deDE = "Emrys Flintbeard", esES = "Emrys Flintbeard", esMX = "Emrys Flintbeard", frFR = "Emrys Flintbeard", koKR = "Emrys Flintbeard", ptBR = "Emrys Flintbeard", ruRU = "Emrys Flintbeard", zhCN = "Emrys Flintbeard", zhTW = "Emrys Flintbeard" },
+    },
+    {
+        id = 649, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5754, y = 0.2648, profession = "LEATHERWORKING",
+        name = { enUS = "Fimble Finespindle", deDE = "Fimble Finespindle", esES = "Fimble Bueneje", esMX = "Fimble Bueneje", frFR = "Fimble Finespindle", koKR = "핌블 파인스핀들", ptBR = "Fimble Fusofino", ruRU = "Фимбл Остроигл", zhCN = "费布·钢轴", zhTW = "費布·鋼軸" },
+    },
+    {
+        id = 650, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5912, y = 0.2531, profession = "MINING",
+        name = { enUS = "Geofram Bouldertoe", deDE = "Geofram Bouldertoe", esES = "Geofram Dedorroca", esMX = "Geofram Dedorroca", frFR = "Geofram Bouldertoe", koKR = "지오프람 보울더토", ptBR = "Geofram Digisseixo", ruRU = "Геофрам Твердопал", zhCN = "吉尔弗拉姆·石趾", zhTW = "吉爾弗拉姆·石趾" },
+    },
+    {
+        id = 651, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6069, y = 0.2839, profession = "ENCHANTING",
+        name = { enUS = "Gimble Thistlefuzz", deDE = "Gimble Thistlefuzz", esES = "Gimble Cardopelusa", esMX = "Gimble Cardopelusa", frFR = "Gimble Thistlefuzz", koKR = "김블 시슬퍼즈", ptBR = "Gimbo Cardunça", ruRU = "Гимбл Чертополуш", zhCN = "吉布·草须", zhTW = "吉布·草鬚" },
+    },
+    {
+        id = 652, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.4769, y = 0.5231, profession = "COOKING",
+        name = { enUS = "Gremlock Pilsnor", deDE = "Gremlock Pilsnor", esES = "Gremlock Pilsnor", esMX = "Gremlock Pilsnor", frFR = "Gremlock Pilsnor", koKR = "그렘록 필스노르", ptBR = "Gremlock Pilsnor", ruRU = "Гремлок Пилзнор", zhCN = "格雷姆罗克·匹斯诺尔", zhTW = "格雷姆羅克·匹斯諾爾" },
+    },
+    {
+        id = 653, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5730, y = 0.2636, profession = "LEATHERWORKING",
+        name = { enUS = "Gretta Finespindle", deDE = "Gretta Finespindle", esES = "Gretta Bueneje", esMX = "Gretta Bueneje", frFR = "Gretta Finespindle", koKR = "그레타 파인스핀들", ptBR = "Gretta Fusofino", ruRU = "Гретта Остроигл", zhCN = "格雷塔", zhTW = "格雷塔" },
+    },
+    {
+        id = 654, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5879, y = 0.2218, profession = "FISHING",
+        name = { enUS = "Grimnur Stonebrand", deDE = "Grimnur Stonebrand", esES = "Grimnur Marcapedra", esMX = "Grimnur Marcapedra", frFR = "Grimnur Stonebrand", koKR = "그림누르 스톤브랜드", ptBR = "Grimnur Marcapedra", ruRU = "Мрачнур Каменное Клеймо", zhCN = "格瑞诺尔·石印", zhTW = "格瑞諾爾·石印" },
+    },
+    {
+        id = 655, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5947, y = 0.2782, profession = "BLACKSMITHING",
+        name = { enUS = "Groum Stonebeard", deDE = "Groum Stonebeard", esES = "Groum Barbapétrea", esMX = "Groum Barbapétrea", frFR = "Groum Stonebeard", koKR = "그로움 스톤비어드", ptBR = "Groum Barbarrocha", ruRU = "Гроум Камнебород", zhCN = "格鲁姆·石须", zhTW = "格魯姆·石鬚" },
+    },
+    {
+        id = 656, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5912, y = 0.2795, profession = "BLACKSMITHING",
+        name = { enUS = "Grumnus Steelshaper", deDE = "Grumnus Steelshaper", esES = "Grumnus Forjacero", esMX = "Grumnus Forjacero", frFR = "Grumnus Steelshaper", koKR = "그룸누스 스틸셰이퍼", ptBR = "Grumnus Mold'aço", ruRU = "Грумнус Сталевар", zhCN = "格鲁努斯·削钢", zhTW = "格魯努斯·削鋼" },
+    },
+    {
+        id = 657, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5914, y = 0.2807, profession = "BLACKSMITHING",
+        name = { enUS = "Ironus Coldsteel", deDE = "Ironus Coldsteel", esES = "Ironus Acero Frío", esMX = "Ironus Acero Frío", frFR = "Ironus Coldsteel", koKR = "이로누스 콜드스틸", ptBR = "Ironus Açofrio", ruRU = "Железнус Хладосталь", zhCN = "埃隆努斯·冷钢", zhTW = "埃隆努斯·冷鋼" },
+    },
+    {
+        id = 658, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6196, y = 0.2819, profession = "ENGINEERING",
+        name = { enUS = "Jemma Quikswitch", deDE = "Jemma Quikswitch", esES = "Jemma Cambioveloz", esMX = "Jemma Clicveloz", frFR = "Jemma Quikswitch", koKR = "젬마 퀵스위치", ptBR = "Jemma Trocarrápida", ruRU = "Джема Быстросмен", zhCN = "耶玛", zhTW = "耶瑪·迅移" },
+    },
+    {
+        id = 659, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5801, y = 0.2579, profession = "TAILORING",
+        name = { enUS = "Jormund Stonebrow", deDE = "Jormund Stonebrow", esES = "Jormund Petrocejas", esMX = "Jormund Petrocejas", frFR = "Jormund Stonebrow", koKR = "요르문트 스톤브로우", ptBR = "Iormund Pedracenho", ruRU = "Джормунд Камнелоб", zhCN = "约莫德·石眉", zhTW = "約莫德·石眉" },
+    },
+    {
+        id = 660, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5993, y = 0.3046, profession = "FIRST_AID",
+        name = { enUS = "Nissa Firestone", deDE = "Nissa Firestone", esES = "Nissa Pirorroca", esMX = "Nissa Piedra de fuego", frFR = "Nissa Firestone", koKR = "니사 파이어스톤", ptBR = "Nissa Pederneira", ruRU = "Нисса Огневик", zhCN = "尼莎·火石", zhTW = "尼莎·火石" },
+    },
+    {
+        id = 661, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.3551, y = 0.4021, profession = "FISHING",
+        name = { enUS = "Paxton Ganter", deDE = "Paxton Ganter", esES = "Paxton Ganter", esMX = "Paxton Ganter", frFR = "Paxton Ganter", koKR = "팩스턴 간터", ptBR = "Paxton Ganter", ruRU = "Пакстон Гантер", zhCN = "帕克斯顿·冈特尔", zhTW = "帕克斯頓·岡特爾" },
+    },
+    {
+        id = 662, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6006, y = 0.3059, profession = "HERBALISM",
+        name = { enUS = "Reyna Stonebranch", deDE = "Reyna Stonebranch", esES = "Reyna Ramapiedra", esMX = "Reyna Ramapiedra", frFR = "Reyna Stonebranch", koKR = "레이나 스톤브랜치", ptBR = "Reyna Galhopétreo", ruRU = "Рейна Каменная Ветвь", zhCN = "雷纳·石枝", zhTW = "雷納·石枝" },
+    },
+    {
+        id = 663, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5949, y = 0.2795, profession = "BLACKSMITHING",
+        name = { enUS = "Rotgath Stonebeard", deDE = "Rotgath Stonebeard", esES = "Rotgath Barbapétrea", esMX = "Rotgath Barbapétrea", frFR = "Rotgath Stonebeard", koKR = "로트가스 스톤비어드", ptBR = "Rotgath Barbarrocha", ruRU = "Ротгат Камнебород", zhCN = "洛特加斯·石须", zhTW = "洛特加斯·石鬚" },
+    },
+    {
+        id = 664, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1426, x = 0.2893, y = 0.6772, profession = "MINING",
+        name = { enUS = "Sally Swiftwrench", deDE = "Sally Swiftwrench", esES = "Sally Swiftwrench", esMX = "Sally Swiftwrench", frFR = "Sally Swiftwrench", koKR = "Sally Swiftwrench", ptBR = "Sally Swiftwrench", ruRU = "Sally Swiftwrench", zhCN = "Sally Swiftwrench", zhTW = "Sally Swiftwrench" },
+    },
+    {
+        id = 665, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6207, y = 0.2807, profession = "ENGINEERING",
+        name = { enUS = "Springspindle Fizzlegear", deDE = "Springspindle Fizzlegear", esES = "Muello Saltarín", esMX = "Muello Saltarín", frFR = "Springspindle Fizzlegear", koKR = "스프링스핀들 피즐기어", ptBR = "Carretemola Fungrenagem", ruRU = "Пружиннер Шумотор", zhCN = "宾斯匹德", zhTW = "賓斯匹德" },
+    },
+    {
+        id = 666, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6177, y = 0.3002, profession = "ALCHEMY",
+        name = { enUS = "Tally Berryfizz", deDE = "Tally Berryfizz", esES = "Tally Burbubaya", esMX = "Tally Burbubaya", frFR = "Tally Berryfizz", koKR = "탈리 베리피즈", ptBR = "Altina Frisamora", ruRU = "Талли Гонобобельзз", zhCN = "塔雷·浆泡", zhTW = "塔利·漿泡" },
+    },
+    {
+        id = 667, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.4720, y = 0.5260, profession = "FIRST_AID",
+        name = { enUS = "Thamner Pol", deDE = "Thamner Pol", esES = "Thamner Pol", esMX = "Thamner Pol", frFR = "Thamner Pol", koKR = "탐네르 폴", ptBR = "Thamner Pol", ruRU = "Тамнер Пол", zhCN = "萨姆诺·普尔", zhTW = "薩姆諾·普爾" },
+    },
+    {
+        id = 668, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6077, y = 0.2839, profession = "ENCHANTING",
+        name = { enUS = "Thonys Pillarstone", deDE = "Thonys Pillarstone", esES = "Thonys Piedrapilar", esMX = "Thonys Piedrapilar", frFR = "Thonys Pillarstone", koKR = "토니스 필라스톤", ptBR = "Thonys Pedrapilar", ruRU = "Тонис Пилон", zhCN = "索恩斯·火石", zhTW = "索恩斯·火石" },
+    },
+    {
+        id = 669, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6223, y = 0.2916, profession = "ENGINEERING",
+        name = { enUS = "Tinkmaster Overspark", deDE = "Tüftlermeister Overspark", esES = "Maestro manitas Sobrechispa", esMX = "Maestro manitas Sobrechispa", frFR = "Maître-artisan Overspark", koKR = "수석땜장이 오버스파크", ptBR = "Mestre-faz-tudo Superchispa", ruRU = "Мехмастер Замыкалец", zhCN = "工匠大师欧沃斯巴克", zhTW = "技工大師歐沃斯巴克" },
+    },
+    {
+        id = 670, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.4531, y = 0.5191, profession = "BLACKSMITHING",
+        name = { enUS = "Tognus Flintfire", deDE = "Tognus Flintfire", esES = "Tognus Fuegosílex", esMX = "Tognus Fuegosílex", frFR = "Tognus Flintfire", koKR = "토그너스 플린트파이어", ptBR = "Tognus Pederfogo", ruRU = "Тогнус Огниво", zhCN = "托格努斯·燧火", zhTW = "托格努斯·燧火" },
+    },
+    {
+        id = 671, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6190, y = 0.2799, profession = "ENGINEERING",
+        name = { enUS = "Trixie Quikswitch", deDE = "Trixie Quikswitch", esES = "Trixie Cambioyá", esMX = "Trixie Clicveloz", frFR = "Trixie Quikswitch", koKR = "트리시 퀵스위치", ptBR = "Trixie Trocarrápida", ruRU = "Трикси Быстросмен", zhCN = "特里克希", zhTW = "崔克希·迅移" },
+    },
+    {
+        id = 672, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.5811, y = 0.2555, profession = "TAILORING",
+        name = { enUS = "Uthrar Threx", deDE = "Uthrar Threx", esES = "Uthrar Threx", esMX = "Uthrar Threx", frFR = "Uthrar Threx", koKR = "우슬라 스렉스", ptBR = "Uthrar Threx", ruRU = "Утрар Трекс", zhCN = "阿斯拉·瑞克斯", zhTW = "阿斯拉·瑞克斯" },
+    },
+    {
+        id = 673, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.6171, y = 0.3002, profession = "ALCHEMY",
+        name = { enUS = "Vosur Brakthel", deDE = "Vosur Brakthel", esES = "Vosur Brakthel", esMX = "Vosur Brakthel", frFR = "Vosur Brakthel", koKR = "보수르 브락셀", ptBR = "Vosur Brakthel", ruRU = "Восур Брактел", zhCN = "沃萨·布拉克塞尔", zhTW = "沃薩·布雷薩爾" },
+    },
+    {
+        id = 674, types = { "profession" },
+        faction = "Alliance", map = 1426, x = 0.4999, y = 0.5028, profession = "MINING",
+        name = { enUS = "Yarr Hammerstone", deDE = "Yarr Hammerstone", esES = "Yarr Martillal", esMX = "Yarr Martillal", frFR = "Yarr Hammerstone", koKR = "얄 해머스톤", ptBR = "Yarr Malhapedra", ruRU = "Ярр Камнедроб", zhCN = "亚尔·锤石", zhTW = "亞爾·錘石" },
+    },
+    {
+        id = 675, types = { "profession" },
+        faction = "Alliance", map = 1427, x = 0.6357, y = 0.7601, profession = "LEATHERWORKING",
+        name = { enUS = "Sarah Tanner", deDE = "Sarah Tanner", esES = "Sarah Peletera", esMX = "Sarah Peletera", frFR = "Sarah Tanner", koKR = "사라 터너", ptBR = "Sara Correia", ruRU = "Сара Дубильщица", zhCN = "萨拉·坦尼", zhTW = "薩拉·坦尼" },
+    },
+    {
+        id = 676, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4639, y = 0.6200, profession = "LEATHERWORKING",
+        name = { enUS = "Adele Fielder", deDE = "Adele Fielder", esES = "Adele Fielder", esMX = "Adele Fielder", frFR = "Adele Fielder", koKR = "아델레 필더", ptBR = "Adélia Campeira", ruRU = "Адель Филдер", zhCN = "艾德勒·费欧德", zhTW = "艾德勒·費歐德" },
+    },
+    {
+        id = 677, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.3978, y = 0.4818, profession = "ALCHEMY",
+        name = { enUS = "Alchemist Mallory", deDE = "Alchimist Mallory", esES = "Alquimista Mallory", esMX = "Alquimista Mallory", frFR = "Alchimiste Mallory", koKR = "연금술사 말로리", ptBR = "Alquimista Malheiro", ruRU = "Алхимик Маллори", zhCN = "炼金师玛洛瑞", zhTW = "鍊金師瑪洛瑞" },
+    },
+    {
+        id = 678, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.7920, y = 0.6897, profession = "TAILORING",
+        name = { enUS = "Eldrin", deDE = "Eldrin", esES = "Eldrin", esMX = "Eldrin", frFR = "Eldrin", koKR = "엘드린", ptBR = "Elgin", ruRU = "Элдрин", zhCN = "艾尔丁", zhTW = "艾爾丁" },
+    },
+    {
+        id = 679, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4620, y = 0.6217, profession = "SKINNING",
+        name = { enUS = "Helene Peltskinner", deDE = "Helene Peltskinner", esES = "Helene Desollapelambres", esMX = "Helene Desollapelambres", frFR = "Helene Peltskinner", koKR = "헬렌 펠트스키너", ptBR = "Helene Esfoladora", ruRU = "Хелена Меховяз", zhCN = "海伦尼·派特斯金纳", zhTW = "海倫尼·派特斯金納" },
+    },
+    {
+        id = 680, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4001, y = 0.4841, profession = "HERBALISM",
+        name = { enUS = "Herbalist Pomeroy", deDE = "Kräuterkundige Pomeroy", esES = "Herborista Pomarrosa", esMX = "Herborista Pomarrosa", frFR = "Herboriste Pomeroy", koKR = "약초상 포메로이", ptBR = "Herborista Pomeroy", ruRU = "Травница Померой", zhCN = "草药师博米洛伊", zhTW = "草藥師博米洛伊" },
+    },
+    {
+        id = 681, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1429, x = 0.4718, y = 0.3216, profession = "MINING",
+        name = { enUS = "Kelsey Fargo", deDE = "Kelsey Fargo", esES = "Kelsey Fargo", esMX = "Kelsey Fargo", frFR = "Kelsey Fargo", koKR = "Kelsey Fargo", ptBR = "Kelsey Fargo", ruRU = "Kelsey Fargo", zhCN = "Kelsey Fargo", zhTW = "Kelsey Fargo" },
+    },
+    {
+        id = 682, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.6491, y = 0.7070, profession = "ENCHANTING",
+        name = { enUS = "Kitta Firewind", deDE = "Kitta Firewind", esES = "Kitta Vientofuego", esMX = "Kitta Vientofuego", frFR = "Kitta Firewind", koKR = "키타 파이어윈드", ptBR = "Kitta Ventígnea", ruRU = "Китта Огневетер", zhCN = "基塔·费温德", zhTW = "基塔·費溫德" },
+    },
+    {
+        id = 683, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4762, y = 0.6229, profession = "FISHING",
+        name = { enUS = "Lee Brown", deDE = "Lee Brown", esES = "Lee Brown", esMX = "Lee Moreno", frFR = "Lee Brown", koKR = "리 브라운", ptBR = "Lee Pardo", ruRU = "Ли Браун", zhCN = "李·布朗", zhTW = "李·布朗" },
+    },
+    {
+        id = 684, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4339, y = 0.6557, profession = "FIRST_AID",
+        name = { enUS = "Michelle Belle", deDE = "Michelle Belle", esES = "Michelle Belle", esMX = "Michelle Belle", frFR = "Michelle Belle", koKR = "미셸 벨르", ptBR = "Michelle Belle", ruRU = "Мишель Белль", zhCN = "米歇尔·贝利", zhTW = "蜜雪兒·貝利" },
+    },
+    {
+        id = 685, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.5241, y = 0.4387, profession = "HERBALISM",
+        name = { enUS = "Nancy Songflower", deDE = "Nancy Songflower", esES = "Nancy Songflower", esMX = "Nancy Songflower", frFR = "Nancy Songflower", koKR = "Nancy Songflower", ptBR = "Nancy Songflower", ruRU = "Nancy Songflower", zhCN = "Nancy Songflower", zhTW = "Nancy Songflower" },
+    },
+    {
+        id = 686, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1429, x = 0.4696, y = 0.3992, profession = "SKINNING",
+        name = { enUS = "Riley Peltskinner", deDE = "Riley Peltskinner", esES = "Riley Peltskinner", esMX = "Riley Peltskinner", frFR = "Riley Peltskinner", koKR = "Riley Peltskinner", ptBR = "Riley Peltskinner", ruRU = "Riley Peltskinner", zhCN = "Riley Peltskinner", zhTW = "Riley Peltskinner" },
+    },
+    {
+        id = 687, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4170, y = 0.6552, profession = "BLACKSMITHING",
+        name = { enUS = "Smith Argus", deDE = "Schmied Argus", esES = "Herrero Argus", esMX = "Herrero Argus", frFR = "Argus le forgeron", koKR = "대장장이 아거스", ptBR = "Ferreiro Argus", ruRU = "Кузнец Аргус", zhCN = "铁匠阿古斯", zhTW = "鐵匠阿格斯" },
+    },
+    {
+        id = 688, types = { "profession" },
+        faction = "Alliance", map = 1429, x = 0.4439, y = 0.6598, profession = "COOKING",
+        name = { enUS = "Tomas", deDE = "Tomas", esES = "Tomas", esMX = "Tomas", frFR = "Tomas", koKR = "토마스", ptBR = "Tomas", ruRU = "Томас", zhCN = "厨师托马斯", zhTW = "廚師湯瑪斯" },
+    },
+    {
+        id = 689, types = { "profession" },
+        faction = "Alliance", map = 1431, x = 0.7398, y = 0.4848, profession = "BLACKSMITHING",
+        name = { enUS = "Clarise Gnarltree", deDE = "Clarise Gnarltree", esES = "Clarise Nudárbol", esMX = "Clarise Nudárbol", frFR = "Clarise Gnarltree", koKR = "클라리즈 나알트리", ptBR = "Clarissa Roecasca", ruRU = "Клариса Гнутодрев", zhCN = "克拉莉斯·纳尔特里", zhTW = "克拉莉斯·納爾特里" },
+    },
+    {
+        id = 690, types = { "profession" },
+        faction = "Alliance", map = 1431, x = 0.7738, y = 0.4878, profession = "ENGINEERING",
+        name = { enUS = "Finbus Geargrind", deDE = "Finbus Geargrind", esES = "Finbus Rompegranajes", esMX = "Finbus Rompegranajes", frFR = "Finbus Geargrind", koKR = "핀버스 기어그린드", ptBR = "Finbus Mancalfiado", ruRU = "Финбус Шестерлязг", zhCN = "芬布斯", zhTW = "芬布斯·齒輪磨碎" },
+    },
+    {
+        id = 691, types = { "profession" },
+        faction = "Alliance", map = 1431, x = 0.7412, y = 0.4959, profession = "MINING",
+        name = { enUS = "Matt Johnson", deDE = "Matt Johnson", esES = "Matt Johnson", esMX = "Matt Johnson", frFR = "Matt Johnson", koKR = "매트 존슨", ptBR = "Mateus João", ruRU = "Мэтт Джонсон", zhCN = "玛特·约翰森", zhTW = "瑪特·約翰森" },
+    },
+    {
+        id = 692, types = { "profession" },
+        faction = "Alliance", map = 1432, x = 0.3701, y = 0.4779, profession = "MINING",
+        name = { enUS = "Brock Stoneseeker", deDE = "Brock Stoneseeker", esES = "Brock Buscapiedras", esMX = "Brock Buscapiedras", frFR = "Brock Stoneseeker", koKR = "브록 스톤시커", ptBR = "Brock Buscapedra", ruRU = "Брок Камнекоп", zhCN = "布洛克·寻石者", zhTW = "布洛克·尋石者" },
+    },
+    {
+        id = 693, types = { "profession" },
+        faction = "Alliance", map = 1432, x = 0.4591, y = 0.1344, profession = "ENGINEERING",
+        name = { enUS = "Deek Fizzlebizz", deDE = "Deek Fizzlebizz", esES = "Deek Malnegocio", esMX = "Deek Malnegocio", frFR = "Deek Fizzlebizz", koKR = "디크 피즐비즈", ptBR = "Deek Crepitante", ruRU = "Сыщ Жужело", zhCN = "迪克", zhTW = "迪克" },
+    },
+    {
+        id = 694, types = { "profession" },
+        faction = "Alliance", map = 1432, x = 0.3711, y = 0.4939, profession = "ALCHEMY",
+        name = { enUS = "Ghak Healtouch", deDE = "Ghak Healtouch", esES = "Ghak Sanadón", esMX = "Ghak Sanadón", frFR = "Ghak Healtouch", koKR = "가크 힐터치", ptBR = "Ghak Toquecura", ruRU = "Гхак Целитель", zhCN = "加克", zhTW = "加克" },
+    },
+    {
+        id = 695, types = { "profession" },
+        faction = "Alliance", map = 1432, x = 0.3648, y = 0.4852, profession = "HERBALISM",
+        name = { enUS = "Kali Healtouch", deDE = "Kali Healtouch", esES = "Kali Sanatoque", esMX = "Kali Sanatoque", frFR = "Kali Healtouch", koKR = "칼리 힐터치", ptBR = "Kali Toquecura", ruRU = "Кали Целительница", zhCN = "卡利", zhTW = "卡利" },
+    },
+    {
+        id = 696, types = { "profession" },
+        faction = "Alliance", map = 1432, x = 0.4059, y = 0.3967, profession = "FISHING",
+        name = { enUS = "Warg Deepwater", deDE = "Warg Deepwater", esES = "Warg Aguahonda", esMX = "Warg Aguahonda", frFR = "Warg Deepwater", koKR = "워그 딥워터", ptBR = "Warg Aguafunda", ruRU = "Варг Рыбовод", zhCN = "瓦格·深水", zhTW = "瓦格·深水" },
+    },
+    {
+        id = 697, types = { "profession" },
+        faction = "Alliance", map = 1433, x = 0.1659, y = 0.4584, profession = "HERBALISM",
+        name = { enUS = "Alma Jainrose", deDE = "Alma Jainrose", esES = "Alma Jainrose", esMX = "Alma Jainrose", frFR = "Alma Jainrose", koKR = "알마 제인로즈", ptBR = "Alma Jainrose", ruRU = "Альма Жанруза", zhCN = "奥玛·詹洛斯", zhTW = "奧瑪·詹洛斯" },
+    },
+    {
+        id = 698, types = { "profession" },
+        faction = "Alliance", map = 1433, x = 0.1769, y = 0.4353, profession = "COOKING",
+        name = { enUS = "Crystal Boughman", deDE = "Crystal Boughman", esES = "Ramacho de cristal", esMX = "Ramacho de cristal", frFR = "Crystal Boughman", koKR = "크리스탈 바우맨", ptBR = "Christiane Justa", ruRU = "Кристал Боумен", zhCN = "克里斯托·鲍曼", zhTW = "克里斯托·鮑曼" },
+    },
+    {
+        id = 699, types = { "profession" },
+        faction = "Alliance", map = 1433, x = 0.2187, y = 0.5108, profession = "FISHING",
+        name = { enUS = "Matthew Hooper", deDE = "Matthew Hooper", esES = "Matías Arero", esMX = "Matías Arero", frFR = "Matthew Hooper", koKR = "매튜 후퍼", ptBR = "Matthew Hooper", ruRU = "Мэттью Хопер", zhCN = "马修·胡柏", zhTW = "馬修·胡柏" },
+    },
+    {
+        id = 700, types = { "profession" },
+        faction = "Alliance", map = 1433, x = 0.8372, y = 0.7134, profession = "SKINNING",
+        name = { enUS = "Wilma Ranthal", deDE = "Wilma Ranthal", esES = "Wilma Ranthal", esMX = "Wilma Ranthal", frFR = "Wilma Ranthal", koKR = "윌리마 엘리멘탈", ptBR = "Vilma Ramires", ruRU = "Вильма Рантал", zhCN = "Wilma Ranthal", zhTW = "威爾瑪·蘭薩爾" },
+    },
+    {
+        id = 701, types = { "profession" },
+        faction = "Horde", map = 1434, x = 0.3219, y = 0.2741, profession = "HERBALISM",
+        name = { enUS = "Angrun", deDE = "Angrun", esES = "Angrun", esMX = "Angrun", frFR = "Angrun", koKR = "앵그런", ptBR = "Angrun", ruRU = "Ангрун", zhCN = "安格伦", zhTW = "安葛蘭" },
+    },
+    {
+        id = 702, types = { "profession" },
+        faction = "Horde", map = 1434, x = 0.3171, y = 0.2891, profession = "LEATHERWORKING",
+        name = { enUS = "Brawn", deDE = "Brawn", esES = "Mole", esMX = "Mole", frFR = "Brawn", koKR = "브로운", ptBR = "Briggo", ruRU = "Браун", zhCN = "布劳恩", zhTW = "布勞恩" },
+    },
+    {
+        id = 703, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2899, y = 0.7561, profession = "BLACKSMITHING",
+        name = { enUS = "Brikk Keencraft", deDE = "Brikk Keencraft", esES = "Brikk Finoficio", esMX = "Brikk Finoficio", frFR = "Brikk Keencraft", koKR = "브리크 킨크래프트", ptBR = "Brikk Belofício", ruRU = "Брикк Мастерец", zhCN = "布里克·基克拉夫", zhTW = "布里克·基克拉夫" },
+    },
+    {
+        id = 704, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2770, y = 0.7790, profession = "HERBALISM",
+        name = { enUS = "Flora Silverwind", deDE = "Flora Silverwind", esES = "Flora Ventargento", esMX = "Flora Ventargento", frFR = "Flora Silverwind", koKR = "플로라 실버윈드", ptBR = "Flora Brisaprata", ruRU = "Флора Среброветрая", zhCN = "弗洛拉·希沃温德", zhTW = "芙羅拉·希沃溫德" },
+    },
+    {
+        id = 705, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2881, y = 0.7680, profession = "TAILORING",
+        name = { enUS = "Grarnik Goodstitch", deDE = "Grarnik Goodstitch", esES = "Grarnik Cortefino", esMX = "Grarnik Cortefino", frFR = "Grarnik Goodstitch", koKR = "그라닉 굿스티치", ptBR = "Grarnik Pontobom", ruRU = "Грарник Ладноскрой", zhCN = "格拉尼克·古斯提", zhTW = "格拉尼克·古斯提" },
+    },
+    {
+        id = 706, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2799, y = 0.7799, profession = "ALCHEMY",
+        name = { enUS = "Jaxin Chong", deDE = "Jaxin Chong", esES = "Jaxin Chong", esMX = "Jaxin Chong", frFR = "Jaxin Chong", koKR = "야신 총", ptBR = "Jaxin Chong", ruRU = "Джаксин Чонг", zhCN = "加克森", zhTW = "加克森·裘" },
+    },
+    {
+        id = 707, types = { "profession" },
+        faction = "Horde", map = 1434, x = 0.3129, y = 0.2800, profession = "COOKING",
+        name = { enUS = "Mudduk", deDE = "Mudduk", esES = "Mudduk", esMX = "Mudduk", frFR = "Mudduk", koKR = "머덕", ptBR = "Mudduk", ruRU = "Маддьюк", zhCN = "玛杜克", zhTW = "瑪杜克" },
+    },
+    {
+        id = 708, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2751, y = 0.7711, profession = "FISHING",
+        name = { enUS = "Myizz Luckycatch", deDE = "Myizz Luckycatch", esES = "Myizz Buenapieza", esMX = "Myizz Buenapieza", frFR = "Myizz Luckycatch", koKR = "마이즈 럭키캐치", ptBR = "Myizz Boapesca", ruRU = "Мизз Вечноклев", zhCN = "麦依兹·拉齐卡", zhTW = "麥依茲·拉齊卡" },
+    },
+    {
+        id = 709, types = { "profession" },
+        faction = "Neutral", map = 1434, x = 0.2841, y = 0.7639, profession = "ENGINEERING",
+        name = { enUS = "Oglethorpe Obnoticus", deDE = "Oglethorpe Obnoticus", esES = "Oglethorpe Obnoticus", esMX = "Oglethorpe Obnoticus", frFR = "Oglethorpe Obnoticus", koKR = "오글소프 오브노티쿠스", ptBR = "Olhatorto Obnótico", ruRU = "Карлс Пропеллерз", zhCN = "奥格索普·奥布诺提斯", zhTW = "奧格索普·奧布諾提斯" },
+    },
+    {
+        id = 710, types = { "profession" },
+        faction = "Horde", map = 1434, x = 0.3649, y = 0.3411, profession = "LEATHERWORKING",
+        name = { enUS = "Se'Jib", deDE = "Se'Jib", esES = "Se'Jib", esMX = "Se'Jib", frFR = "Se'Jib", koKR = "세지브", ptBR = "Se'Jib", ruRU = "Сех'Джиб", zhCN = "瑟伊布", zhTW = "瑟伊布" },
+    },
+    {
+        id = 711, types = { "profession" },
+        faction = "Horde", map = 1435, x = 0.4853, y = 0.5584, profession = "ALCHEMY",
+        name = { enUS = "Rogvar", deDE = "Rogvar", esES = "Rogvar", esMX = "Rogvar", frFR = "Rogvar", koKR = "로그바", ptBR = "Rogvar", ruRU = "Рогвар", zhCN = "罗格瓦尔", zhTW = "羅格瓦爾" },
+    },
+    {
+        id = 712, types = { "profession" },
+        faction = "Alliance", map = 1437, x = 0.1079, y = 0.6139, profession = "FIRST_AID",
+        name = { enUS = "Fremal Doohickey", deDE = "Fremal Doohickey", esES = "Fremal Tornichup", esMX = "Fremal Tornichup", frFR = "Fremal Doohickey", koKR = "프레말 두히키", ptBR = "Fremal Dotreco", ruRU = "Фремаль Ерундец", zhCN = "弗雷玛尔", zhTW = "弗雷瑪爾" },
+    },
+    {
+        id = 713, types = { "profession" },
+        faction = "Alliance", map = 1437, x = 0.0809, y = 0.5859, profession = "FISHING",
+        name = { enUS = "Harold Riggs", deDE = "Harold Riggs", esES = "Harold Riggs", esMX = "Harold Riggs", frFR = "Harold Riggs", koKR = "해럴드 리그스", ptBR = "Haroldo Reis", ruRU = "Гарольд Риггс", zhCN = "哈洛德·李格斯", zhTW = "哈洛德·李格斯" },
+    },
+    {
+        id = 714, types = { "profession" },
+        faction = "Alliance", map = 1437, x = 0.0799, y = 0.5578, profession = "HERBALISM",
+        name = { enUS = "Telurinon Moonshadow", deDE = "Telurinon Moonshadow", esES = "Telurinon Sombraluna", esMX = "Telurinon Umbraluna", frFR = "Telurinon Moonshadow", koKR = "텔루리논 문섀도", ptBR = "Telurinon Umbraluna", ruRU = "Телуринон Тень Луны", zhCN = "泰伦瑞诺·月影", zhTW = "泰倫瑞諾·月影" },
+    },
+    {
+        id = 715, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.3671, y = 0.3420, profession = "ENCHANTING",
+        name = { enUS = "Alanna Raveneye", deDE = "Alanna Raveneye", esES = "Alanna Cuervojo", esMX = "Alanna Cuervojo", frFR = "Alanna Raveneye", koKR = "알란나 레이븐아이", ptBR = "Aline Corvolhar", ruRU = "Аланна Око Ворона", zhCN = "奥兰纳·鸦眼", zhTW = "奧蘭納·鴉眼" },
+    },
+    {
+        id = 716, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5591, y = 0.9348, profession = "FISHING",
+        name = { enUS = "Androl Oakhand", deDE = "Androl Oakhand", esES = "Androl Manorroble", esMX = "Androl Manorroble", frFR = "Androl Oakhand", koKR = "안드롤 오크핸드", ptBR = "Androl Carvalmanos", ruRU = "Андрол Дубовая Длань", zhCN = "安多尔·橡木之手", zhTW = "安多爾·橡木之手" },
+    },
+    {
+        id = 717, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5530, y = 0.5679, profession = "FIRST_AID",
+        name = { enUS = "Byancie", deDE = "Byancie", esES = "Byancie", esMX = "Byancie", frFR = "Byancie", koKR = "비얀시", ptBR = "Byonsa", ruRU = "Бьянси", zhCN = "拜恩希", zhTW = "拜恩希" },
+    },
+    {
+        id = 718, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5761, y = 0.6080, profession = "ALCHEMY",
+        name = { enUS = "Cyndra Kindwhisper", deDE = "Cyndra Kindwhisper", esES = "Cyndra Suavesurro", esMX = "Cyndra Suavesurro", frFR = "Cyndra Kindwhisper", koKR = "킨드라 카인드위스퍼", ptBR = "Cyndra Murmuramável", ruRU = "Циндра Ласковый Шепот", zhCN = "塞恩德拉·细语者", zhTW = "塞恩德拉·細語者" },
+    },
+    {
+        id = 719, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5986, y = 0.4131, profession = "HERBALISM",
+        name = { enUS = "Eleyna Duskbreeze", deDE = "Eleyna Duskbreeze", esES = "Eleyna Duskbreeze", esMX = "Eleyna Duskbreeze", frFR = "Eleyna Duskbreeze", koKR = "Eleyna Duskbreeze", ptBR = "Eleyna Duskbreeze", ruRU = "Eleyna Duskbreeze", zhCN = "Eleyna Duskbreeze", zhTW = "Eleyna Duskbreeze" },
+    },
+    {
+        id = 720, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1438, x = 0.5816, y = 0.4142, profession = "MINING",
+        name = { enUS = "Fanorran Stilloak", deDE = "Fanorran Stilloak", esES = "Fanorran Stilloak", esMX = "Fanorran Stilloak", frFR = "Fanorran Stilloak", koKR = "Fanorran Stilloak", ptBR = "Fanorran Stilloak", ruRU = "Fanorran Stilloak", zhCN = "Fanorran Stilloak", zhTW = "Fanorran Stilloak" },
+    },
+    {
+        id = 721, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5769, y = 0.6060, profession = "HERBALISM",
+        name = { enUS = "Malorne Bladeleaf", deDE = "Malorne Bladeleaf", esES = "Malorne Filohoja", esMX = "Malorne Filohoja", frFR = "Malorne Bladeleaf", koKR = "말로른 블레이드리프", ptBR = "Malorne Folhâmina", ruRU = "Малорн Остролист", zhCN = "玛洛尼·刃叶", zhTW = "瑪洛尼·刃葉" },
+    },
+    {
+        id = 722, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.4190, y = 0.4940, profession = "LEATHERWORKING",
+        name = { enUS = "Nadyia Maneweaver", deDE = "Nadyia Maneweaver", esES = "Nadyia Tejecrín", esMX = "Nadyia Tejecrín", frFR = "Nadyia Maneweaver", koKR = "나디야 메인위버", ptBR = "Nadyia Tecegrenhas", ruRU = "Надайя Гривопряд", zhCN = "纳迪娅·织发", zhTW = "納迪婭·織髮" },
+    },
+    {
+        id = 723, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.4211, y = 0.4999, profession = "SKINNING",
+        name = { enUS = "Radnaal Maneweaver", deDE = "Radnaal Maneweaver", esES = "Radnaal Tejecrín", esMX = "Radnaal Tejecrín", frFR = "Radnaal Maneweaver", koKR = "래드날 메인위버", ptBR = "Radnaal Tecegrenhas", ruRU = "Раднаал Гривопряд", zhCN = "拉德纳尔·织发", zhTW = "拉德納爾·織髮" },
+    },
+    {
+        id = 724, types = { "profession", "vendor" },
+        faction = "Alliance", map = 1438, x = 0.5939, y = 0.3863, profession = "SKINNING",
+        name = { enUS = "Terunne Bearshaper", deDE = "Terunne Bearshaper", esES = "Terunne Bearshaper", esMX = "Terunne Bearshaper", frFR = "Terunne Bearshaper", koKR = "Terunne Bearshaper", ptBR = "Terunne Bearshaper", ruRU = "Terunne Bearshaper", zhCN = "Terunne Bearshaper", zhTW = "Terunne Bearshaper" },
+    },
+    {
+        id = 725, types = { "profession" },
+        faction = "Alliance", map = 1438, x = 0.5711, y = 0.6131, profession = "COOKING",
+        name = { enUS = "Zarrin", deDE = "Zarrin", esES = "Zarrin", esMX = "Zarrin", frFR = "Zarrin", koKR = "자린", ptBR = "Zarrin", ruRU = "Заррин", zhCN = "扎瑞恩", zhTW = "札瑞恩" },
+    },
+    {
+        id = 726, types = { "profession" },
+        faction = "Alliance", map = 1439, x = 0.3819, y = 0.4089, profession = "BLACKSMITHING",
+        name = { enUS = "Delfrum Flintbeard", deDE = "Delfrum Flintbeard", esES = "Delfrum Flintbeard", esMX = "Delfrum Flintbeard", frFR = "Delfrum Flintbeard", koKR = "델프룸 플린트비어드", ptBR = "Delfrum Barbagulha", ruRU = "Дельфрум Кремнебород", zhCN = "迪尔弗拉姆·火须", zhTW = "迪爾弗拉姆·火鬚" },
+    },
+    {
+        id = 727, types = { "profession" },
+        faction = "Alliance", map = 1439, x = 0.3819, y = 0.4049, profession = "TAILORING",
+        name = { enUS = "Grondal Moonbreeze", deDE = "Grondal Moonbreeze", esES = "Grondal Brisaluna", esMX = "Grondal Brisaluna", frFR = "Grondal Moonbreeze", koKR = "그론달 문브리즈", ptBR = "Grondal Brisaluna", ruRU = "Грондаль Лунный Бриз", zhCN = "格隆达尔·月风", zhTW = "格隆達爾·月風" },
+    },
+    {
+        id = 728, types = { "profession" },
+        faction = "Alliance", map = 1439, x = 0.3830, y = 0.4110, profession = "ENGINEERING",
+        name = { enUS = "Jenna Lemkenilli", deDE = "Jenna Lemkenilli", esES = "Jenna Lemkenilli", esMX = "Jenna Lemkenilli", frFR = "Jenna Lemkenilli", koKR = "지나 렘케닐리", ptBR = "Jenna Lemkenilli", ruRU = "Дженна Лемкенилли", zhCN = "洁娜·雷姆尼利", zhTW = "潔娜·雷姆尼利" },
+    },
+    {
+        id = 729, types = { "profession" },
+        faction = "Alliance", map = 1439, x = 0.3819, y = 0.4101, profession = "MINING",
+        name = { enUS = "Kurdram Stonehammer", deDE = "Kurdram Stonehammer", esES = "Kurdram Rocamartillo", esMX = "Kurdram Rocamartillo", frFR = "Kurdram Stonehammer", koKR = "쿠르트람 스톤해머", ptBR = "Kordram Rochamalho", ruRU = "Курдрам Камнемолот", zhCN = "库德拉姆·石锤", zhTW = "庫德拉姆·石錘" },
+    },
+    {
+        id = 730, types = { "profession" },
+        faction = "Alliance", map = 1440, x = 0.3600, y = 0.5209, profession = "LEATHERWORKING",
+        name = { enUS = "Aayndia Floralwind", deDE = "Aayndia Floralwind", esES = "Aayndia Vientofloral", esMX = "Aayndia Vientofloral", frFR = "Aayndia Floralwind", koKR = "아얀디아 플로럴윈드", ptBR = "Aayndia Floréolas", ruRU = "Айндия Душистый Ветер", zhCN = "艾蒂安·花丛之风", zhTW = "艾蒂安·花叢之風" },
+    },
+    {
+        id = 731, types = { "profession" },
+        faction = "Alliance", map = 1440, x = 0.5071, y = 0.6722, profession = "HERBALISM",
+        name = { enUS = "Cylania Rootstalker", deDE = "Cylania Rootstalker", esES = "Acecharaíces Cilania", esMX = "Acecharaíces Cilania", frFR = "Cylania Rootstalker", koKR = "사일라니아 루트스토커", ptBR = "Cylania Querrádix", ruRU = "Цилания Искательница Корней", zhCN = "塞兰妮娅·伏根", zhTW = "塞蘭妮婭·伏根" },
+    },
+    {
+        id = 732, types = { "profession" },
+        faction = "Alliance", map = 1440, x = 0.4999, y = 0.6728, profession = "SKINNING",
+        name = { enUS = "Jayla", deDE = "Jayla", esES = "Jayla", esMX = "Jayla", frFR = "Jayla", koKR = "자일라", ptBR = "Jayla", ruRU = "Джайла", zhCN = "杰拉", zhTW = "傑拉" },
+    },
+    {
+        id = 733, types = { "profession" },
+        faction = "Horde", map = 1440, x = 0.1080, y = 0.3371, profession = "FISHING",
+        name = { enUS = "Kil'Hiwana", deDE = "Kil'Hiwana", esES = "Kil'Hiwana", esMX = "Kil'Hiwana", frFR = "Kil'Hiwana", koKR = "킬히와나", ptBR = "Kil'Hiwana", ruRU = "Кил'Хивана", zhCN = "基尔希瓦纳", zhTW = "基爾希瓦納" },
+    },
+    {
+        id = 734, types = { "profession" },
+        faction = "Alliance", map = 1440, x = 0.5089, y = 0.6711, profession = "ALCHEMY",
+        name = { enUS = "Kylanna", deDE = "Kylanna", esES = "Kylanna", esMX = "Kylanna", frFR = "Kylanna", koKR = "킬란나", ptBR = "Kylanna", ruRU = "Кайланна", zhCN = "凯兰娜", zhTW = "凱蘭娜" },
+    },
+    {
+        id = 735, types = { "profession" },
+        faction = "Horde", map = 1442, x = 0.4921, y = 0.5718, profession = "ENCHANTING",
+        name = { enUS = "Hgarth", deDE = "Hgarth", esES = "Hgarth", esMX = "Hgarth", frFR = "Hgarth", koKR = "하가스", ptBR = "Hgarth", ruRU = "Хгарт", zhCN = "赫加斯", zhTW = "赫加斯" },
+    },
+    {
+        id = 736, types = { "profession" },
+        faction = "Horde", map = 1443, x = 0.2269, y = 0.7241, profession = "FISHING",
+        name = { enUS = "Lui'Mala", deDE = "Lui'Mala", esES = "Lui'Mala", esMX = "Lui'Mala", frFR = "Lui'Mala", koKR = "루이말라", ptBR = "Lui'Mala", ruRU = "Люи'Мала", zhCN = "鲁伊马拉", zhTW = "魯伊馬拉" },
+    },
+    {
+        id = 737, types = { "profession" },
+        faction = "Horde", map = 1443, x = 0.2319, y = 0.6970, profession = "SKINNING",
+        name = { enUS = "Malux", deDE = "Malux", esES = "Malux", esMX = "Malux", frFR = "Malux", koKR = "말룩스", ptBR = "Maluqs", ruRU = "Малюкс", zhCN = "马鲁克斯", zhTW = "馬魯克斯" },
+    },
+    {
+        id = 738, types = { "profession" },
+        faction = "Horde", map = 1443, x = 0.5519, y = 0.5631, profession = "LEATHERWORKING",
+        name = { enUS = "Narv Hidecrafter", deDE = "Narv Hidecrafter", esES = "Narv Curtepieles", esMX = "Narv Curtepieles", frFR = "Narv Hidecrafter", koKR = "나르브 하이드크래프터", ptBR = "Narv Artesão do Couro", ruRU = "Нарв Кожемяка", zhCN = "纳夫", zhTW = "納夫" },
+    },
+    {
+        id = 739, types = { "profession" },
+        faction = "Alliance", map = 1444, x = 0.3229, y = 0.4161, profession = "FISHING",
+        name = { enUS = "Brannock", deDE = "Brannock", esES = "Brannock", esMX = "Brannock", frFR = "Brannock", koKR = "브란노크", ptBR = "Brannock", ruRU = "Бреннок", zhCN = "布拉诺克", zhTW = "布拉諾克" },
+    },
+    {
+        id = 740, types = { "profession" },
+        faction = "Alliance", map = 1444, x = 0.8941, y = 0.4659, profession = "LEATHERWORKING",
+        name = { enUS = "Caryssia Moonhunter", deDE = "Caryssia Moonhunter", esES = "Caryssia Cazaluna", esMX = "Caryssia Cazaluna", frFR = "Caryssia Moonhunter", koKR = "카리시아 문헌터", ptBR = "Caryssia Caçaluna", ruRU = "Кариссия Лунная Охотница", zhCN = "凯雷希亚·猎月", zhTW = "凱雷希亞·獵月" },
+    },
+    {
+        id = 741, types = { "profession" },
+        faction = "Horde", map = 1444, x = 0.7440, y = 0.4311, profession = "LEATHERWORKING",
+        name = { enUS = "Hahrana Ironhide", deDE = "Hahrana Ironhide", esES = "Hahrana Pielférrea", esMX = "Hahrana Pielférrea", frFR = "Hahrana Ironhide", koKR = "하라나 아이언하이드", ptBR = "Hahrana Couro de Ferro", ruRU = "Нарана Железная Шкура", zhCN = "哈拉纳·铁皮", zhTW = "哈拉納·鐵皮" },
+    },
+    {
+        id = 742, types = { "profession" },
+        faction = "Horde", map = 1444, x = 0.7450, y = 0.4299, profession = "SKINNING",
+        name = { enUS = "Kulleg Stonehorn", deDE = "Kulleg Stonehorn", esES = "Kulleg Cuernopiedra", esMX = "Kulleg Cuernopiedra", frFR = "Kulleg Stonehorn", koKR = "쿨레그 스톤혼", ptBR = "Kulleg Chifre de Pedra", ruRU = "Куллег Каменный Рог", zhCN = "库雷格·石角", zhTW = "庫雷格·石角" },
+    },
+    {
+        id = 743, types = { "profession" },
+        faction = "Alliance", map = 1444, x = 0.3260, y = 0.4380, profession = "ALCHEMY",
+        name = { enUS = "Kylanna Windwhisper", deDE = "Kylanna Windwhisper", esES = "Kylanna Vientosusurro", esMX = "Kylanna Vientosusurro", frFR = "Kylanna Windwhisper", koKR = "킬란나 윈드위스퍼", ptBR = "Kylanna Murmúria", ruRU = "Кайланна Шепот Ветра", zhCN = "凯兰娜·风语", zhTW = "凱蘭娜·風語" },
+    },
+    {
+        id = 744, types = { "profession" },
+        faction = "Horde", map = 1444, x = 0.7600, y = 0.4331, profession = "HERBALISM",
+        name = { enUS = "Ruw", deDE = "Ruw", esES = "Ruw", esMX = "Ruw", frFR = "Ruw", koKR = "루우", ptBR = "Ruw", ruRU = "Рув", zhCN = "拉乌", zhTW = "拉烏" },
+    },
+    {
+        id = 745, types = { "profession" },
+        faction = "Alliance", map = 1444, x = 0.3151, y = 0.4429, profession = "ENCHANTING",
+        name = { enUS = "Xylinnia Starshine", deDE = "Xylinnia Starshine", esES = "Xylinnia Brillestelar", esMX = "Xylinnia Brillestelar", frFR = "Xylinnia Starshine", koKR = "실린니아 스타샤인", ptBR = "Xylinnia Reluztela", ruRU = "Ксилинния Звездное Сияние", zhCN = "辛琳妮亚·星光", zhTW = "辛琳妮亞·星光" },
+    },
+    {
+        id = 746, types = { "profession" },
+        faction = "Alliance", map = 1445, x = 0.6389, y = 0.4758, profession = "ALCHEMY",
+        name = { enUS = "Alchemist Narett", deDE = "Alchimist Narett", esES = "Alquimista Narett", esMX = "Alquimista Narett", frFR = "Alchimiste Narett", koKR = "연금술사 나레트", ptBR = "Alquimista Narett", ruRU = "Алхимик Наретт", zhCN = "炼金师纳瑞特", zhTW = "鍊金師納瑞特" },
+    },
+    {
+        id = 747, types = { "profession" },
+        faction = "Alliance", map = 1445, x = 0.6399, y = 0.4750, profession = "HERBALISM",
+        name = { enUS = "Brant Jasperbloom", deDE = "Brant Jasperbloom", esES = "Brant Brotojaspe", esMX = "Brant Brotojaspe", frFR = "Brant Jasperbloom", koKR = "브랜트 재스퍼블룸", ptBR = "Brant Brotajaspe", ruRU = "Брент Яшмоцвет", zhCN = "布兰特·加斯布鲁姆", zhTW = "布蘭特·加斯布魯姆" },
+    },
+    {
+        id = 748, types = { "profession" },
+        faction = "Alliance", map = 1445, x = 0.6620, y = 0.5181, profession = "TAILORING",
+        name = { enUS = "Timothy Worthington", deDE = "Timothy Worthington", esES = "Timoteo Valión", esMX = "Timoteo Valión", frFR = "Timothy Worthington", koKR = "티모시 워싱턴", ptBR = "Vítor Valenton", ruRU = "Тимоти Уортингтон", zhCN = "提莫斯·沃森特", zhTW = "提莫斯·沃森特" },
+    },
+    {
+        id = 749, types = { "profession" },
+        faction = "Neutral", map = 1446, x = 0.5231, y = 0.2770, profession = "ENGINEERING",
+        name = { enUS = "Buzzek Bracketswing", deDE = "Buzzek Bracketswing", esES = "Buzzek Giracorchete", esMX = "Buzzek Giracorchete", frFR = "Buzzek Bracketswing", koKR = "부젝 브라켓스윙", ptBR = "Zumbo Dobradiço", ruRU = "Жужжер Скрепокрыл", zhCN = "巴兹克·布拉斯温", zhTW = "巴茲克·布拉斯溫" },
+    },
+    {
+        id = 750, types = { "profession" },
+        faction = "Neutral", map = 1446, x = 0.5250, y = 0.2730, profession = "ENGINEERING",
+        name = { enUS = "Nixx Sprocketspring", deDE = "Nixx Sprocketspring", esES = "Nixx Muellepiñón", esMX = "Nixx Muellepiñón", frFR = "Nixx Sprocketspring", koKR = "닉스 스프로켓스프링", ptBR = "Nixx Molapinhão", ruRU = "Никс Шепружин", zhCN = "尼克斯·斯普克斯宾", zhTW = "尼克斯·斯普克斯賓" },
+    },
+    {
+        id = 751, types = { "profession" },
+        faction = "Neutral", map = 1446, x = 0.5109, y = 0.2811, profession = "MINING",
+        name = { enUS = "Pikkle", deDE = "Pikkle", esES = "Pikkle", esMX = "Pikkle", frFR = "Pikkle", koKR = "피클", ptBR = "Pikareta", ruRU = "Киркор", zhCN = "皮库尔", zhTW = "皮庫爾" },
+    },
+    {
+        id = 752, types = { "profession" },
+        faction = "Alliance", map = 1447, x = 0.3761, y = 0.6539, profession = "LEATHERWORKING",
+        name = { enUS = "Peter Galen", deDE = "Peter Galen", esES = "Peter Galen", esMX = "Peter Galen", frFR = "Peter Galen", koKR = "피터 갈렌", ptBR = "Pedro Galho", ruRU = "Питер Гален", zhCN = "彼得·加林", zhTW = "彼得·加林" },
+    },
+    {
+        id = 753, types = { "profession" },
+        faction = "Neutral", map = 1450, x = 0.4540, y = 0.4700, profession = "HERBALISM",
+        name = { enUS = "Malvor", deDE = "Malvor", esES = "Malvor", esMX = "Malvor", frFR = "Malvor", koKR = "말보르", ptBR = "Malvor", ruRU = "Мальвор", zhCN = "玛沃尔", zhTW = "瑪沃爾" },
+    },
+    {
+        id = 754, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5504, y = 0.6965, profession = "FISHING",
+        name = { enUS = "Arnold Leland", deDE = "Arnold Leland", esES = "Arnold Leland", esMX = "Arnold Leland", frFR = "Arnold Leland", koKR = "아놀드 리랜드", ptBR = "Arnoldo Gurjão", ruRU = "Арнольд Лиланд", zhCN = "阿诺德·利兰", zhTW = "阿諾德·利蘭" },
+    },
+    {
+        id = 755, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5296, y = 0.7368, profession = "ENCHANTING",
+        name = { enUS = "Betty Quin", deDE = "Betty Quin", esES = "Betty Quin", esMX = "Betty Quin", frFR = "Betty Quin", koKR = "베티 퀸", ptBR = "Betty Quin", ruRU = "Бетти Квин", zhCN = "贝蒂·奎恩", zhTW = "貝蒂·奎恩" },
+    },
+    {
+        id = 756, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5941, y = 0.3432, profession = "BLACKSMITHING",
+        name = { enUS = "Borgus Steelhand", deDE = "Borgus Steelhand", esES = "Borgus Mano de Acero", esMX = "Borgus Mano de Acero", frFR = "Borgus Steelhand", koKR = "보르구스 스틸핸드", ptBR = "Borgus Manácero", ruRU = "Боргус Сталерук", zhCN = "博古斯·钢拳", zhTW = "博古斯·鋼拳" },
+    },
+    {
+        id = 757, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.6409, y = 0.3696, profession = "BLACKSMITHING",
+        name = { enUS = "Dane Lindgren", deDE = "Dane Lindgren", esES = "Dane Lindgren", esMX = "Dane Lindgren", frFR = "Dane Lindgren", koKR = "데인 린드그렌", ptBR = "Bino Galizeu", ruRU = "Дейн Линдгрен", zhCN = "丹恩·林德雷", zhTW = "丹恩·林德雷" },
+    },
+    {
+        id = 758, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5933, y = 0.3777, profession = "MINING",
+        name = { enUS = "Gelman Stonehand", deDE = "Gelman Stonehand", esES = "Gelman Petramano", esMX = "Gelman Petramano", frFR = "Gelman Stonehand", koKR = "겔만 스톤핸드", ptBR = "Gelman Manopedra", ruRU = "Гельман Камнерук", zhCN = "吉尔曼·石手", zhTW = "吉爾曼·石手" },
+    },
+    {
+        id = 759, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5312, y = 0.8128, profession = "TAILORING",
+        name = { enUS = "Georgio Bolero", deDE = "Georgio Bolero", esES = "Georgio Bolero", esMX = "Georgio Bolero", frFR = "Georgio Bolero", koKR = "조르지오 볼레로", ptBR = "Georgio Bolero", ruRU = "Джорджио Болеро", zhCN = "乔吉奥·波利罗", zhTW = "喬吉奧·波利羅" },
+    },
+    {
+        id = 760, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.4038, y = 0.8462, profession = "TAILORING",
+        name = { enUS = "Jalane Ayrole", deDE = "Jalane Ayrole", esES = "Jalane Ayrole", esMX = "Jalane Ayrole", frFR = "Jalane Ayrole", koKR = "잘레인 에이롤", ptBR = "Lena Franz", ruRU = "Джелейна Айроль", zhCN = "嘉莱恩·艾罗", zhTW = "嘉萊恩·艾羅" },
+    },
+    {
+        id = 761, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5350, y = 0.8151, profession = "TAILORING",
+        name = { enUS = "Lawrence Schneider", deDE = "Lawrence Schneider", esES = "Lawrence Schneider", esMX = "Lawrence Schneider", frFR = "Lawrence Schneider", koKR = "로렌스 슈나이더", ptBR = "Lawrence Armarinho", ruRU = "Лоуренс Шнайдер", zhCN = "劳伦斯·瑟尼德", zhTW = "勞倫斯·瑟尼德" },
+    },
+    {
+        id = 762, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.6210, y = 0.3029, profession = "ENGINEERING",
+        name = { enUS = "Lilliam Sparkspindle", deDE = "Lilliam Sparkspindle", esES = "Lilliam Chispeje", esMX = "Lilliam Chispeje", frFR = "Lilliam Sparkspindle", koKR = "릴리암 스파크스핀들", ptBR = "Lilo Chispafuso", ruRU = "Лилиам Шпиндель", zhCN = "利廉姆·火轴", zhTW = "利廉姆·火軸" },
+    },
+    {
+        id = 763, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5573, y = 0.8611, profession = "ALCHEMY",
+        name = { enUS = "Lilyssia Nightbreeze", deDE = "Lilyssia Nightbreeze", esES = "Lilyssia Brisa Nocturna", esMX = "Lilyssia Brisa Nocturna", frFR = "Lilyssia Nightbreeze", koKR = "릴리시아 나이트브리즈", ptBR = "Lilyssa Umbrísia", ruRU = "Лилиссия Ночной Бриз", zhCN = "莉琳希亚·夜风", zhTW = "莉琳希亞·夜風" },
+    },
+    {
+        id = 764, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5289, y = 0.7449, profession = "ENCHANTING",
+        name = { enUS = "Lucan Cordell", deDE = "Lucan Cordell", esES = "Lucan Cordell", esMX = "Lucan Cordell", frFR = "Lucan Cordell", koKR = "루칸 코르델", ptBR = "Lucas Cordel", ruRU = "Лукан Корделл", zhCN = "鲁坎·考迪尔", zhTW = "魯坎·考迪爾" },
+    },
+    {
+        id = 765, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.7207, y = 0.6217, profession = "SKINNING",
+        name = { enUS = "Maris Granger", deDE = "Maris Granger", esES = "Maris Granger", esMX = "Maris Granger", frFR = "Maris Granger", koKR = "매리스 그랑거", ptBR = "Maris Granger", ruRU = "Мариса Гренжер", zhCN = "马瑞斯·格兰治", zhTW = "馬瑞斯·格蘭治" },
+    },
+    {
+        id = 766, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.7207, y = 0.6286, profession = "LEATHERWORKING",
+        name = { enUS = "Randal Worth", deDE = "Randal Worth", esES = "Randal Valor", esMX = "Randal Valor", frFR = "Randal Worth", koKR = "랜달 워스", ptBR = "Hubert Acosta", ruRU = "Рандал Ворт", zhCN = "兰达尔·沃斯", zhTW = "蘭達爾·沃斯" },
+    },
+    {
+        id = 767, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5220, y = 0.8312, profession = "TAILORING",
+        name = { enUS = "Sellandus", deDE = "Sellandus", esES = "Sellandus", esMX = "Sellandus", frFR = "Sellandus", koKR = "셀란두스", ptBR = "Sellandus", ruRU = "Селландус", zhCN = "塞拉多斯", zhTW = "塞拉多斯" },
+    },
+    {
+        id = 768, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5296, y = 0.4468, profession = "FIRST_AID",
+        name = { enUS = "Shaina Fuller", deDE = "Shaina Fuller", esES = "Shaina Fuller", esMX = "Shaina Fuller", frFR = "Shaina Fuller", koKR = "샤이나 풀러", ptBR = "Suzi Lira", ruRU = "Шайна Корпия", zhCN = "珊娜·弗勒", zhTW = "珊娜·弗勒" },
+    },
+    {
+        id = 769, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.3117, y = 0.6275, profession = "HERBALISM",
+        name = { enUS = "Shylamiir", deDE = "Shylamiir", esES = "Shylamiir", esMX = "Shylamiir", frFR = "Shylamiir", koKR = "샤이라미르", ptBR = "Shylamiir", ruRU = "Шайламиир", zhCN = "莎拉米尔", zhTW = "莎拉米爾" },
+    },
+    {
+        id = 770, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.7169, y = 0.6298, profession = "LEATHERWORKING",
+        name = { enUS = "Simon Tanner", deDE = "Simon Tanner", esES = "Simon Peletero", esMX = "Simon Peletero", frFR = "Simon Tanner", koKR = "시몬 터너", ptBR = "Simão Correia", ruRU = "Саймон Дубильщик", zhCN = "西蒙·坦纳尔", zhTW = "西蒙·坦納爾" },
+    },
+    {
+        id = 771, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.6187, y = 0.3063, profession = "ENGINEERING",
+        name = { enUS = "Sprite Jumpsprocket", deDE = "Sprite Jumpsprocket", esES = "Duendy Ruedadentada", esMX = "Duendy Ruedadentada", frFR = "Sprite Jumpsprocket", koKR = "스프라이트 점프스프로켓", ptBR = "Lorien Grenagem", ruRU = "Спрайт Прыгозубчик", zhCN = "斯普莱特", zhTW = "斯普萊特" },
+    },
+    {
+        id = 772, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.7821, y = 0.5308, profession = "COOKING",
+        name = { enUS = "Stephen Ryback", deDE = "Stephen Ryback", esES = "Stephen Lomocenteno", esMX = "Stephen Lomocenteno", frFR = "Stephen Ryback", koKR = "스테판 라이백", ptBR = "Stephen Ryback", ruRU = "Стивен Райбек", zhCN = "斯蒂芬·雷百克", zhTW = "斯蒂芬·雷百克" },
+    },
+    {
+        id = 773, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5427, y = 0.8404, profession = "HERBALISM",
+        name = { enUS = "Tannysa", deDE = "Tannysa", esES = "Tannysa", esMX = "Tannysa", frFR = "Tannysa", koKR = "타니사", ptBR = "Tannysa", ruRU = "Танниса", zhCN = "塔尼莎", zhTW = "塔尼莎" },
+    },
+    {
+        id = 774, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.5550, y = 0.8565, profession = "ALCHEMY",
+        name = { enUS = "Tel'Athir", deDE = "Tel'Athir", esES = "Tel'Athir", esMX = "Tel'Athir", frFR = "Tel'Athir", koKR = "텔아실", ptBR = "Tel'Athir", ruRU = "Тель'Атир", zhCN = "泰兰希尔", zhTW = "泰蘭希爾" },
+    },
+    {
+        id = 775, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.6371, y = 0.3696, profession = "BLACKSMITHING",
+        name = { enUS = "Therum Deepforge", deDE = "Therum Deepforge", esES = "Therum Forjahonda", esMX = "Therum Forjahonda", frFR = "Therum Deepforge", koKR = "테룸 딥포지", ptBR = "Therum Baixaforja", ruRU = "Терум Подземная Кузня", zhCN = "瑟鲁姆·深炉", zhTW = "瑟魯姆·深爐" },
+    },
+    {
+        id = 776, types = { "profession" },
+        faction = "Alliance", map = 1453, x = 0.6394, y = 0.6908, skill = "WEAPON_SKILLS",
+        name = { enUS = "Woo Ping", deDE = "Woo Ping", esES = "Woo Ping", esMX = "Woo Ping", frFR = "Woo Ping", koKR = "우 핑", ptBR = "Woo Ping", ruRU = "Ву Пинг", zhCN = "吴平", zhTW = "吳平" },
+    },
+    {
+        id = 777, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.3418, y = 0.8458, profession = "FIRST_AID",
+        name = { enUS = "Arnok", deDE = "Arnok", esES = "Arnok", esMX = "Arnok", frFR = "Arnok", koKR = "아르녹", ptBR = "Arnok", ruRU = "Арнок", zhCN = "阿诺克", zhTW = "阿諾克" },
+    },
+    {
+        id = 778, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7943, y = 0.2372, profession = "BLACKSMITHING",
+        name = { enUS = "Borgosh Corebender", deDE = "Borgosh Corebender", esES = "Borgosh Ramagma", esMX = "Borgosh Ramagma", frFR = "Borgosh Corebender", koKR = "보르고쉬 코어벤더", ptBR = "Borgosh Dobranúcleo", ruRU = "Боргош Сгибатель", zhCN = "伯古什", zhTW = "伯古西" },
+    },
+    {
+        id = 779, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5386, y = 0.3869, profession = "ENCHANTING",
+        name = { enUS = "Godan", deDE = "Godan", esES = "Godan", esMX = "Godan", frFR = "Godan", koKR = "고단", ptBR = "Godan", ruRU = "Годан", zhCN = "古丹", zhTW = "古丹" },
+    },
+    {
+        id = 780, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.8152, y = 0.1959, skill = "WEAPON_SKILLS",
+        name = { enUS = "Hanashi", deDE = "Hanashi", esES = "Hanashi", esMX = "Hanashi", frFR = "Hanashi", koKR = "하나시", ptBR = "Hanashi", ruRU = "Ханаши", zhCN = "哈纳什", zhTW = "哈納什" },
+    },
+    {
+        id = 781, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5557, y = 0.3954, profession = "HERBALISM",
+        name = { enUS = "Jandi", deDE = "Jandi", esES = "Jandi", esMX = "Jandi", frFR = "Jandi", koKR = "잔디", ptBR = "Jandi", ruRU = "Джанди", zhCN = "加迪", zhTW = "加迪" },
+    },
+    {
+        id = 782, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5348, y = 0.3854, profession = "ENCHANTING",
+        name = { enUS = "Jhag", deDE = "Jhag", esES = "Jhag", esMX = "Jhag", frFR = "Jhag", koKR = "자그", ptBR = "Jhag", ruRU = "Джаг", zhCN = "夏格", zhTW = "夏格" },
+    },
+    {
+        id = 783, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6327, y = 0.4467, profession = "LEATHERWORKING",
+        name = { enUS = "Kamari", deDE = "Kamari", esES = "Kamari", esMX = "Kamari", frFR = "Kamari", koKR = "카마리", ptBR = "Kamari", ruRU = "Камари", zhCN = "卡玛瑞", zhTW = "卡瑪瑞" },
+    },
+    {
+        id = 784, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6279, y = 0.4410, profession = "LEATHERWORKING",
+        name = { enUS = "Karolek", deDE = "Karolek", esES = "Karolek", esMX = "Karolek", frFR = "Karolek", koKR = "카롤렉", ptBR = "Karolek", ruRU = "Каролек", zhCN = "卡洛雷克", zhTW = "卡洛雷克" },
+    },
+    {
+        id = 785, types = { "profession", "vendor-weapons" },
+        faction = "Horde", map = 1454, x = 0.8190, y = 0.1802, profession = "BLACKSMITHING",
+        name = { enUS = "Kelgruk Bloodaxe", deDE = "Kelgruk Bloodaxe", esES = "Kelgruk Hacha de Sangre", esMX = "Kelgruk Hacha de Sangre", frFR = "Kelgruk Bloodaxe", koKR = "켈그룩 블러드액스", ptBR = "Kelgruk Machado Sangrento", ruRU = "Келгрук Кровавый Топор", zhCN = "克尔格鲁克·血斧", zhTW = "克爾格魯克·血斧" },
+    },
+    {
+        id = 786, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6983, y = 0.2914, profession = "FISHING",
+        name = { enUS = "Lumak", deDE = "Lumak", esES = "Lumak", esMX = "Lumak", frFR = "Lumak", koKR = "루막", ptBR = "Lumak", ruRU = "Лумак", zhCN = "鲁玛克", zhTW = "魯瑪克" },
+    },
+    {
+        id = 787, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6355, y = 0.4995, profession = "TAILORING",
+        name = { enUS = "Magar", deDE = "Magar", esES = "Magar", esMX = "Magar", frFR = "Magar", koKR = "마가르", ptBR = "Magar", ruRU = "Магар", zhCN = "玛加尔", zhTW = "瑪加爾" },
+    },
+    {
+        id = 788, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7306, y = 0.2614, profession = "MINING",
+        name = { enUS = "Makaru", deDE = "Makaru", esES = "Makaru", esMX = "Makaru", frFR = "Makaru", koKR = "마카루", ptBR = "Makaru", ruRU = "Макару", zhCN = "马卡鲁", zhTW = "馬卡魯" },
+    },
+    {
+        id = 789, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7601, y = 0.2543, profession = "ENGINEERING",
+        name = { enUS = "Nogg", deDE = "Nogg", esES = "Nogg", esMX = "Nogg", frFR = "Nogg", koKR = "노그", ptBR = "Nogg", ruRU = "Ногг", zhCN = "诺格", zhTW = "諾格" },
+    },
+    {
+        id = 790, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7981, y = 0.2415, profession = "BLACKSMITHING",
+        name = { enUS = "Okothos Ironrager", deDE = "Okothos Ironrager", esES = "Okothos Ira de Hierro", esMX = "Okothos Ira de Hierro", frFR = "Okothos Ironrager", koKR = "오코토스 아이언레이저", ptBR = "Okothos Furiferro", ruRU = "Окофус Жарбулат", zhCN = "奥克索斯·铁怒", zhTW = "奧克索斯·鐵怒" },
+    },
+    {
+        id = 791, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7620, y = 0.2515, profession = "ENGINEERING",
+        name = { enUS = "Roxxik", deDE = "Roxxik", esES = "Roxxik", esMX = "Roxxik", frFR = "Roxxik", koKR = "록시크", ptBR = "Roxxik", ruRU = "Роксик", zhCN = "罗克希克", zhTW = "羅克希克" },
+    },
+    {
+        id = 792, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.8228, y = 0.2301, profession = "BLACKSMITHING",
+        name = { enUS = "Saru Steelfury", deDE = "Saru Steelfury", esES = "Saru Furiacerada", esMX = "Saru Furiacerada", frFR = "Saru Steelfury", koKR = "사루 스틸퓨리", ptBR = "Saru Furiácero", ruRU = "Сару Холодная Ярость", zhCN = "萨鲁·钢怒", zhTW = "薩魯·鋼怒" },
+    },
+    {
+        id = 793, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.8171, y = 0.1944, skill = "WEAPON_SKILLS",
+        name = { enUS = "Sayoc", deDE = "Sayoc", esES = "Sayoc", esMX = "Sayoc", frFR = "Sayoc", koKR = "사요크", ptBR = "Sayoc", ruRU = "Сайок", zhCN = "塞尤克", zhTW = "塞尤克" },
+    },
+    {
+        id = 794, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.8019, y = 0.2343, profession = "BLACKSMITHING",
+        name = { enUS = "Shayis Steelfury", deDE = "Shayis Steelfury", esES = "Shayis Furiacerada", esMX = "Shayis Furiacerada", frFR = "Shayis Steelfury", koKR = "샤이스 스틸퓨리", ptBR = "Shayis Furiácero", ruRU = "Шайс Холодная Ярость", zhCN = "莎伊斯·钢怒", zhTW = "莎伊斯·鋼怒" },
+    },
+    {
+        id = 795, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6289, y = 0.4923, profession = "TAILORING",
+        name = { enUS = "Snang", deDE = "Snang", esES = "Snang", esMX = "Snang", frFR = "Snang", koKR = "스낭", ptBR = "Snang", ruRU = "Снанг", zhCN = "斯诺恩", zhTW = "斯諾恩" },
+    },
+    {
+        id = 796, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7962, y = 0.2329, profession = "BLACKSMITHING",
+        name = { enUS = "Snarl", deDE = "Snarl", esES = "Gruños", esMX = "Gruños", frFR = "Snarl", koKR = "스나알", ptBR = "Rosnado", ruRU = "Рык", zhCN = "斯纳尔", zhTW = "斯納爾" },
+    },
+    {
+        id = 797, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.7601, y = 0.2415, profession = "ENGINEERING",
+        name = { enUS = "Thund", deDE = "Thund", esES = "Thund", esMX = "Thund", frFR = "Thund", koKR = "선드", ptBR = "Tunda", ruRU = "Тунд", zhCN = "桑德", zhTW = "桑德" },
+    },
+    {
+        id = 798, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.6336, y = 0.4539, profession = "SKINNING",
+        name = { enUS = "Thuwd", deDE = "Thuwd", esES = "Thuwd", esMX = "Thuwd", frFR = "Thuwd", koKR = "투워드", ptBR = "Thuwd", ruRU = "Тьюд", zhCN = "苏尔德", zhTW = "蘇爾德" },
+    },
+    {
+        id = 799, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.8076, y = 0.2372, profession = "BLACKSMITHING",
+        name = { enUS = "Ug'thok", deDE = "Ug'thok", esES = "Ug'thok", esMX = "Ug'thok", frFR = "Ug'thok", koKR = "오그톡", ptBR = "Ug'thok", ruRU = "Уг'ток", zhCN = "乌格索克", zhTW = "烏格索克" },
+    },
+    {
+        id = 800, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5576, y = 0.3284, profession = "ALCHEMY",
+        name = { enUS = "Whuut", deDE = "Whuut", esES = "Whuut", esMX = "Whuut", frFR = "Whuut", koKR = "우트", ptBR = "Uqueê", ruRU = "Вуут", zhCN = "伍特", zhTW = "伍特" },
+    },
+    {
+        id = 801, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5680, y = 0.3298, profession = "ALCHEMY",
+        name = { enUS = "Yelmak", deDE = "Yelmak", esES = "Yelmak", esMX = "Yelmak", frFR = "Yelmak", koKR = "옐마크", ptBR = "Yelmak", ruRU = "Йелмак", zhCN = "耶尔玛克", zhTW = "耶爾瑪克" },
+    },
+    {
+        id = 802, types = { "profession" },
+        faction = "Horde", map = 1454, x = 0.5737, y = 0.5394, profession = "COOKING",
+        name = { enUS = "Zamja", deDE = "Zamja", esES = "Zamja", esMX = "Zamja", frFR = "Zamja", koKR = "잠자", ptBR = "Zamja", ruRU = "Замджа", zhCN = "扎姆沙", zhTW = "札姆沙" },
+    },
+    {
+        id = 803, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4094, y = 0.6275, skill = "WEAPON_SKILLS",
+        name = { enUS = "Ansekhwa", deDE = "Ansekhwa", esES = "Ansekhwa", esMX = "Ansekhwa", frFR = "Ansekhwa", koKR = "안세크화", ptBR = "Ansekhwa", ruRU = "Ансеква", zhCN = "安塞瓦", zhTW = "安塞瓦" },
+    },
+    {
+        id = 804, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.5065, y = 0.5317, profession = "COOKING",
+        name = { enUS = "Aska Mistrunner", deDE = "Aska Mistrunner", esES = "Aska Correbruma", esMX = "Aska Correbruma", frFR = "Aska Mistrunner", koKR = "아스카 미스트러너", ptBR = "Aska Corre com a Névoa", ruRU = "Аска Вестница Туманов", zhCN = "阿丝卡·迷雾行者", zhTW = "阿絲卡·迷霧行者" },
+    },
+    {
+        id = 805, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4656, y = 0.3325, profession = "ALCHEMY",
+        name = { enUS = "Bena Winterhoof", deDE = "Bena Winterhoof", esES = "Bena Pezuña Invernal", esMX = "Bena Pezuña Invernal", frFR = "Bena Winterhoof", koKR = "베나 윈터후프", ptBR = "Bena Casco Invernal", ruRU = "Бена Заиндевевшее Копыто", zhCN = "本娜·冰蹄", zhTW = "貝娜·冰蹄" },
+    },
+    {
+        id = 806, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.3443, y = 0.5796, profession = "MINING",
+        name = { enUS = "Brek Stonehoof", deDE = "Brek Stonehoof", esES = "Brek Pezuñapétrea", esMX = "Brek Pezuña Pétrea", frFR = "Brek Stonehoof", koKR = "브렉 스톤후프", ptBR = "Brek Casco de Pedra", ruRU = "Брек Каменное Копыто", zhCN = "布瑞克·石蹄", zhTW = "布瑞克·石蹄" },
+    },
+    {
+        id = 807, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.5614, y = 0.4647, profession = "FISHING",
+        name = { enUS = "Kah Mistrunner", deDE = "Kah Mistrunner", esES = "Kah Correbruma", esMX = "Kah Correbruma", frFR = "Kah Mistrunner", koKR = "카 미스트러너", ptBR = "Kah Corre com a Névoa", ruRU = "Ках Вестник Туманов", zhCN = "卡尔·迷雾行者", zhTW = "卡爾·迷霧行者" },
+    },
+    {
+        id = 808, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.3941, y = 0.5509, profession = "BLACKSMITHING",
+        name = { enUS = "Karn Stonehoof", deDE = "Karn Stonehoof", esES = "Karn Pezuñapétrea", esMX = "Karn Pezuña Pétrea", frFR = "Karn Stonehoof", koKR = "카른 스톤후프", ptBR = "Karn Casco de Pedra", ruRU = "Карн Каменное Копыто", zhCN = "卡恩·石蹄", zhTW = "卡恩·石蹄" },
+    },
+    {
+        id = 809, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.5001, y = 0.4034, profession = "HERBALISM",
+        name = { enUS = "Komin Winterhoof", deDE = "Komin Winterhoof", esES = "Komin Pezuña Invernal", esMX = "Komin Pezuña Invernal", frFR = "Komin Winterhoof", koKR = "코민 윈터후프", ptBR = "Komin Casco Invernal", ruRU = "Комин Заиндевевшее Копыто", zhCN = "克米恩·冰蹄", zhTW = "克米恩·冰蹄" },
+    },
+    {
+        id = 810, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4669, y = 0.3440, profession = "ALCHEMY",
+        name = { enUS = "Kray", deDE = "Kray", esES = "Kray", esMX = "Kray", frFR = "Kray", koKR = "크레이", ptBR = "Kray", ruRU = "Крей", zhCN = "克瑞", zhTW = "克瑞" },
+    },
+    {
+        id = 811, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4209, y = 0.4359, profession = "LEATHERWORKING",
+        name = { enUS = "Mak", deDE = "Mak", esES = "Mak", esMX = "Mak", frFR = "Mak", koKR = "마크", ptBR = "Mak", ruRU = "Мак", zhCN = "马克", zhTW = "麥克" },
+    },
+    {
+        id = 812, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4439, y = 0.4321, profession = "SKINNING",
+        name = { enUS = "Mooranta", deDE = "Mooranta", esES = "Mooranta", esMX = "Mooranta", frFR = "Mooranta", koKR = "무란타", ptBR = "Mooranta", ruRU = "Муранта", zhCN = "莫兰塔", zhTW = "莫蘭塔" },
+    },
+    {
+        id = 813, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4465, y = 0.3842, profession = "ENCHANTING",
+        name = { enUS = "Mot Dawnstrider", deDE = "Mot Dawnstrider", esES = "Mot Caminalba", esMX = "Mot Caminalba", frFR = "Mot Dawnstrider", koKR = "모트 던스트라이더", ptBR = "Mot Andarilho da Aurora", ruRU = "Мот Рассветный Странник", zhCN = "莫特·晨行者", zhTW = "莫特·晨行者" },
+    },
+    {
+        id = 814, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.2970, y = 0.2117, profession = "FIRST_AID",
+        name = { enUS = "Pand Stonebinder", deDE = "Pand Stonebinder", esES = "Pand Amarrapiedra", esMX = "Pand Amarrapiedra", frFR = "Pand Stonebinder", koKR = "판드 스톤바인더", ptBR = "Pand Junta Pedras", ruRU = "Панд Камневяз", zhCN = "潘德·缚石", zhTW = "潘德·縛石" },
+    },
+    {
+        id = 815, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4235, y = 0.4263, profession = "LEATHERWORKING",
+        name = { enUS = "Tarn", deDE = "Tarn", esES = "Tarn", esMX = "Tarn", frFR = "Tarn", koKR = "타른", ptBR = "Tarn", ruRU = "Тарн", zhCN = "塔恩", zhTW = "塔恩" },
+    },
+    {
+        id = 816, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4490, y = 0.3746, profession = "ENCHANTING",
+        name = { enUS = "Teg Dawnstrider", deDE = "Teg Dawnstrider", esES = "Teg Caminalba", esMX = "Teg Caminalba", frFR = "Teg Dawnstrider", koKR = "테그 던스트라이더", ptBR = "Teg Andarilho da Aurora", ruRU = "Тег Рассветный Странник", zhCN = "泰戈·黎明行者", zhTW = "泰戈·晨行者" },
+    },
+    {
+        id = 817, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4452, y = 0.4532, profession = "TAILORING",
+        name = { enUS = "Tepa", deDE = "Tepa", esES = "Tepa", esMX = "Tepa", frFR = "Tepa", koKR = "테파", ptBR = "Thepa", ruRU = "Тепа", zhCN = "坦帕", zhTW = "坦帕" },
+    },
+    {
+        id = 818, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.3941, y = 0.5662, profession = "BLACKSMITHING",
+        name = { enUS = "Thrag Stonehoof", deDE = "Thrag Stonehoof", esES = "Thrag Pezuñapétrea", esMX = "Thrag Pezuña Pétrea", frFR = "Thrag Stonehoof", koKR = "트라그 스톤후프", ptBR = "Thrag Casco de Pedra", ruRU = "Траг Каменное Копыто", zhCN = "瑟拉格·石蹄", zhTW = "瑟拉格·石蹄" },
+    },
+    {
+        id = 819, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4145, y = 0.4263, profession = "LEATHERWORKING",
+        name = { enUS = "Una", deDE = "Una", esES = "Una", esMX = "Una", frFR = "Una", koKR = "우나", ptBR = "Una", ruRU = "Уна", zhCN = "犹纳", zhTW = "猶納" },
+    },
+    {
+        id = 820, types = { "profession" },
+        faction = "Horde", map = 1456, x = 0.4426, y = 0.4436, profession = "TAILORING",
+        name = { enUS = "Vhan", deDE = "Vhan", esES = "Vhan", esMX = "Vhan", frFR = "Vhan", koKR = "반", ptBR = "Vhan", ruRU = "Вхан", zhCN = "范恩", zhTW = "樊恩" },
+    },
+    {
+        id = 821, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5490, y = 0.2394, profession = "ALCHEMY",
+        name = { enUS = "Ainethil", deDE = "Ainethil", esES = "Ainethil", esMX = "Ainethil", frFR = "Ainethil", koKR = "에이네실", ptBR = "Ainethil", ruRU = "Айнетиль", zhCN = "安尼希尔", zhTW = "安尼希爾" },
+    },
+    {
+        id = 822, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.4898, y = 0.2111, profession = "COOKING",
+        name = { enUS = "Alegorn", deDE = "Alegorn", esES = "Alegorn", esMX = "Alegorn", frFR = "Alegorn", koKR = "알레고른", ptBR = "Alegorn", ruRU = "Элегорн", zhCN = "阿雷贡", zhTW = "阿雷貢" },
+    },
+    {
+        id = 823, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.4785, y = 0.5663, profession = "FISHING",
+        name = { enUS = "Astaia", deDE = "Astaia", esES = "Astaia", esMX = "Astaia", frFR = "Astaia", koKR = "아스타이아", ptBR = "Astaia", ruRU = "Астайя", zhCN = "阿斯坦娅", zhTW = "阿斯坦婭" },
+    },
+    {
+        id = 824, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5175, y = 0.1223, profession = "FIRST_AID",
+        name = { enUS = "Dannelor", deDE = "Dannelor", esES = "Dannelor", esMX = "Dannelor", frFR = "Dannelor", koKR = "단넬로르", ptBR = "Dannelor", ruRU = "Даннелор", zhCN = "丹纳罗尔", zhTW = "丹納羅爾" },
+    },
+    {
+        id = 825, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6435, y = 0.2092, profession = "LEATHERWORKING",
+        name = { enUS = "Darianna", deDE = "Darianna", esES = "Darianna", esMX = "Darianna", frFR = "Darianna", koKR = "다리안나", ptBR = "Darianna", ruRU = "Дарианна", zhCN = "达丽亚娜", zhTW = "達麗亞娜" },
+    },
+    {
+        id = 826, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6410, y = 0.2224, profession = "SKINNING",
+        name = { enUS = "Eladriel", deDE = "Eladriel", esES = "Eladriel", esMX = "Eladriel", frFR = "Eladriel", koKR = "엘라드리엘", ptBR = "Eladriel", ruRU = "Эладриэль", zhCN = "艾拉迪尔", zhTW = "艾拉迪爾" },
+    },
+    {
+        id = 827, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6485, y = 0.2187, profession = "LEATHERWORKING",
+        name = { enUS = "Faldron", deDE = "Faldron", esES = "Faldron", esMX = "Faldron", frFR = "Faldron", koKR = "팔드론", ptBR = "Faldron", ruRU = "Фальдрон", zhCN = "法多恩", zhTW = "法多恩" },
+    },
+    {
+        id = 828, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.4785, y = 0.6797, profession = "HERBALISM",
+        name = { enUS = "Firodren Mooncaller", deDE = "Firodren Mooncaller", esES = "Firodren Llamaluna", esMX = "Firodren Llamaluna", frFR = "Firodren Mooncaller", koKR = "피로드렌 문콜러", ptBR = "Firodren Clamaluna", ruRU = "Фиродрен Зовущий Луну", zhCN = "菲罗迪恩·唤月", zhTW = "菲羅迪恩·喚月" },
+    },
+    {
+        id = 829, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5755, y = 0.4662, skill = "WEAPON_SKILLS",
+        name = { enUS = "Ilyenia Moonfire", deDE = "Ilyenia Moonfire", esES = "Ilyenia Fuegolunar", esMX = "Ilyenia Fuegolunar", frFR = "Ilyenia Moonfire", koKR = "일예니아 문파이어", ptBR = "Ilyenia Flameluna", ruRU = "Илиения Лунное Пламя", zhCN = "伊琳尼雅·月火", zhTW = "伊琳尼雅·月火" },
+    },
+    {
+        id = 830, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5881, y = 0.1261, profession = "ENCHANTING",
+        name = { enUS = "Lalina Summermoon", deDE = "Lalina Summermoon", esES = "Lalina Luna de Verano", esMX = "Lalina Luna de Verano", frFR = "Lalina Summermoon", koKR = "랄리나 서머문", ptBR = "Lalina Lunestio", ruRU = "Лалина Летняя Луна", zhCN = "拉琳娜·夏月", zhTW = "拉琳娜·夏月" },
+    },
+    {
+        id = 831, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6334, y = 0.2243, profession = "TAILORING",
+        name = { enUS = "Me'lynn", deDE = "Me'lynn", esES = "Me'lynn", esMX = "Me'lynn", frFR = "Me'lynn", koKR = "메린", ptBR = "Me'lynn", ruRU = "Ме'линн", zhCN = "迈里恩", zhTW = "邁里恩" },
+    },
+    {
+        id = 832, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5540, y = 0.2262, profession = "ALCHEMY",
+        name = { enUS = "Milla Fairancora", deDE = "Milla Fairancora", esES = "Milla Fairancora", esMX = "Milla Fairancora", frFR = "Milla Fairancora", koKR = "밀라 페어랜코라", ptBR = "Milla Fairancora", ruRU = "Милла Фаранкора", zhCN = "米拉·法拉科纳", zhTW = "米拉·法拉科納" },
+    },
+    {
+        id = 833, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5641, y = 0.2413, profession = "ALCHEMY",
+        name = { enUS = "Sylvanna Forestmoon", deDE = "Sylvanna Forestmoon", esES = "Sylvanna Bosqueluna", esMX = "Sylvanna Bosqueluna", frFR = "Sylvanna Forestmoon", koKR = "실반나 포레스트문", ptBR = "Sylvanna Silvoluna", ruRU = "Сильванна Лесная Луна", zhCN = "希尔瓦娜·林月", zhTW = "希爾瓦娜·林月" },
+    },
+    {
+        id = 834, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.5843, y = 0.1318, profession = "ENCHANTING",
+        name = { enUS = "Taladan", deDE = "Taladan", esES = "Taladan", esMX = "Taladan", frFR = "Taladan", koKR = "탈라단", ptBR = "Taladan", ruRU = "Таладан", zhCN = "塔兰丹", zhTW = "塔蘭丹" },
+    },
+    {
+        id = 835, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6435, y = 0.2149, profession = "LEATHERWORKING",
+        name = { enUS = "Telonis", deDE = "Telonis", esES = "Telonis", esMX = "Telonis", frFR = "Telonis", koKR = "텔로니스", ptBR = "Telonis", ruRU = "Телонис", zhCN = "泰龙尼斯", zhTW = "泰龍尼斯" },
+    },
+    {
+        id = 836, types = { "profession" },
+        faction = "Alliance", map = 1457, x = 0.6347, y = 0.2111, profession = "TAILORING",
+        name = { enUS = "Trianna", deDE = "Trianna", esES = "Trianna", esMX = "Trianna", frFR = "Trianna", koKR = "트리안나", ptBR = "Trianna", ruRU = "Трианна", zhCN = "蒂安娜", zhTW = "蒂安娜" },
+    },
+    {
+        id = 837, types = { "profession", "vendor-fishing", "vendor-food", "vendor-repair" },
+        faction = "Neutral", map = 2521, x = 0.4502, y = 0.4844, profession = "FISHING",
+        name = { enUS = "Fenn Fairweather", deDE = "Fenn Fairweather", esES = "Fenn Fairweather", esMX = "Fenn Fairweather", frFR = "Fenn Fairweather", koKR = "Fenn Fairweather", ptBR = "Fenn Fairweather", ruRU = "Fenn Fairweather", zhCN = "Fenn Fairweather", zhTW = "Fenn Fairweather" },
+    },
+    {
+        id = 838, types = { "profession" },
+        faction = "Neutral", map = 2521, x = 0.4296, y = 0.4354, profession = "HERBALISM",
+        name = { enUS = "Halassa Fernbreeze", deDE = "Halassa Fernbreeze", esES = "Halassa Fernbreeze", esMX = "Halassa Fernbreeze", frFR = "Halassa Fernbreeze", koKR = "Halassa Fernbreeze", ptBR = "Halassa Fernbreeze", ruRU = "Halassa Fernbreeze", zhCN = "Halassa Fernbreeze", zhTW = "Halassa Fernbreeze" },
+    },
+    {
+        id = 839, types = { "profession", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.6544, y = 0.8047, profession = "MINING",
+        name = { enUS = "Halavuul Cragwind", deDE = "Halavuul Cragwind", esES = "Halavuul Cragwind", esMX = "Halavuul Cragwind", frFR = "Halavuul Cragwind", koKR = "Halavuul Cragwind", ptBR = "Halavuul Cragwind", ruRU = "Halavuul Cragwind", zhCN = "Halavuul Cragwind", zhTW = "Halavuul Cragwind" },
+    },
+    {
+        id = 840, types = { "profession", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.5963, y = 0.7606, profession = "SKINNING",
+        name = { enUS = "Ishlee Breezewhisper", deDE = "Ishlee Breezewhisper", esES = "Ishlee Breezewhisper", esMX = "Ishlee Breezewhisper", frFR = "Ishlee Breezewhisper", koKR = "Ishlee Breezewhisper", ptBR = "Ishlee Breezewhisper", ruRU = "Ishlee Breezewhisper", zhCN = "Ishlee Breezewhisper", zhTW = "Ishlee Breezewhisper" },
+    },
+    {
+        id = 841, types = { "profession", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4329, y = 0.4337, profession = "SKINNING",
+        name = { enUS = "Mendalass Tattermend", deDE = "Mendalass Tattermend", esES = "Mendalass Tattermend", esMX = "Mendalass Tattermend", frFR = "Mendalass Tattermend", koKR = "Mendalass Tattermend", ptBR = "Mendalass Tattermend", ruRU = "Mendalass Tattermend", zhCN = "Mendalass Tattermend", zhTW = "Mendalass Tattermend" },
+    },
+    {
+        id = 842, types = { "profession", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4477, y = 0.4456, profession = "MINING",
+        name = { enUS = "Messana Crestwind", deDE = "Messana Crestwind", esES = "Messana Crestwind", esMX = "Messana Crestwind", frFR = "Messana Crestwind", koKR = "Messana Crestwind", ptBR = "Messana Crestwind", ruRU = "Messana Crestwind", zhCN = "Messana Crestwind", zhTW = "Messana Crestwind" },
+    },
+    {
+        id = 843, types = { "profession", "vendor-food" },
+        faction = "Neutral", map = 2521, x = 0.6064, y = 0.7266, profession = "COOKING",
+        name = { enUS = "Nyalah Brightfire", deDE = "Nyalah Brightfire", esES = "Nyalah Brightfire", esMX = "Nyalah Brightfire", frFR = "Nyalah Brightfire", koKR = "Nyalah Brightfire", ptBR = "Nyalah Brightfire", ruRU = "Nyalah Brightfire", zhCN = "Nyalah Brightfire", zhTW = "Nyalah Brightfire" },
+    },
+    {
+        id = 844, types = { "profession" },
+        faction = "Neutral", map = 2521, x = 0.5787, y = 0.7554, profession = "HERBALISM",
+        name = { enUS = "Syriel Nightrain", deDE = "Syriel Nightrain", esES = "Syriel Nightrain", esMX = "Syriel Nightrain", frFR = "Syriel Nightrain", koKR = "Syriel Nightrain", ptBR = "Syriel Nightrain", ruRU = "Syriel Nightrain", zhCN = "Syriel Nightrain", zhTW = "Syriel Nightrain" },
+    },
+    {
+        id = 845, types = { "profession", "vendor-food" },
+        faction = "Neutral", map = 2521, x = 0.4385, y = 0.4384, profession = "COOKING",
+        name = { enUS = "Zerril Softbreeze", deDE = "Zerril Softbreeze", esES = "Zerril Softbreeze", esMX = "Zerril Softbreeze", frFR = "Zerril Softbreeze", koKR = "Zerril Softbreeze", ptBR = "Zerril Softbreeze", ruRU = "Zerril Softbreeze", zhCN = "Zerril Softbreeze", zhTW = "Zerril Softbreeze" },
+    },
+    {
+        id = 846, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.6440, y = 0.8202, profession = "BLACKSMITHING",
+        name = { enUS = "Alphonse Dumas", deDE = "Alphonse Dumas", esES = "Alphonse Dumas", esMX = "Alphonse Dumas", frFR = "Alphonse Dumas", koKR = "Alphonse Dumas", ptBR = "Alphonse Dumas", ruRU = "Alphonse Dumas", zhCN = "Alphonse Dumas", zhTW = "Alphonse Dumas" },
+    },
+    {
+        id = 847, types = { "profession" },
+        faction = "Horde", map = 2548, x = 0.5860, y = 0.4460, profession = "COOKING",
+        name = { enUS = "Gorg", deDE = "Gorg", esES = "Gorg", esMX = "Gorg", frFR = "Gorg", koKR = "Gorg", ptBR = "Gorg", ruRU = "Gorg", zhCN = "Gorg", zhTW = "Gorg" },
+    },
+    {
+        id = 848, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.7778, y = 0.5197, profession = "MINING",
+        name = { enUS = "Grungle", deDE = "Grungle", esES = "Grungle", esMX = "Grungle", frFR = "Grungle", koKR = "Grungle", ptBR = "Grungle", ruRU = "Grungle", zhCN = "Grungle", zhTW = "Grungle" },
+    },
+    {
+        id = 849, types = { "profession" },
+        map = 2548, x = 0.5995, y = 0.4622, profession = "BLACKSMITHING",
+        name = { enUS = "Gur'dok", deDE = "Gur'dok", esES = "Gur'dok", esMX = "Gur'dok", frFR = "Gur'dok", koKR = "Gur'dok", ptBR = "Gur'dok", ruRU = "Gur'dok", zhCN = "Gur'dok", zhTW = "Gur'dok" },
+    },
+    {
+        id = 850, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.7926, y = 0.5487, profession = "FISHING",
+        name = { enUS = "Krix", deDE = "Krix", esES = "Krix", esMX = "Krix", frFR = "Krix", koKR = "Krix", ptBR = "Krix", ruRU = "Krix", zhCN = "Krix", zhTW = "Krix" },
+    },
+    {
+        id = 851, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.7927, y = 0.5478, profession = "FISHING",
+        name = { enUS = "Krix", deDE = "Krix", esES = "Krix", esMX = "Krix", frFR = "Krix", koKR = "Krix", ptBR = "Krix", ruRU = "Krix", zhCN = "Krix", zhTW = "Krix" },
+    },
+    {
+        id = 852, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.7933, y = 0.5472, profession = "FISHING",
+        name = { enUS = "Krix", deDE = "Krix", esES = "Krix", esMX = "Krix", frFR = "Krix", koKR = "Krix", ptBR = "Krix", ruRU = "Krix", zhCN = "Krix", zhTW = "Krix" },
+    },
+    {
+        id = 853, types = { "profession" },
+        faction = "Alliance", map = 2548, x = 0.7982, y = 0.5401, profession = "FISHING",
+        name = { enUS = "Krix", deDE = "Krix", esES = "Krix", esMX = "Krix", frFR = "Krix", koKR = "Krix", ptBR = "Krix", ruRU = "Krix", zhCN = "Krix", zhTW = "Krix" },
+    },
+    {
+        id = 854, types = { "profession" },
+        faction = "Neutral", map = 2548, x = 0.7775, y = 0.5087, profession = "ENGINEERING",
+        name = { enUS = "Melbin Powderfuse", deDE = "Melbin Powderfuse", esES = "Melbin Powderfuse", esMX = "Melbin Powderfuse", frFR = "Melbin Powderfuse", koKR = "Melbin Powderfuse", ptBR = "Melbin Powderfuse", ruRU = "Melbin Powderfuse", zhCN = "Melbin Powderfuse", zhTW = "Melbin Powderfuse" },
+    },
+    {
+        id = 855, types = { "profession" },
+        faction = "Neutral", map = 2548, x = 0.7782, y = 0.5089, profession = "ENGINEERING",
+        name = { enUS = "Melbin Powderfuse", deDE = "Melbin Powderfuse", esES = "Melbin Powderfuse", esMX = "Melbin Powderfuse", frFR = "Melbin Powderfuse", koKR = "Melbin Powderfuse", ptBR = "Melbin Powderfuse", ruRU = "Melbin Powderfuse", zhCN = "Melbin Powderfuse", zhTW = "Melbin Powderfuse" },
+    },
+    {
+        id = 936, types = { "trainer" },
+        faction = "Horde", map = 1411, x = 0.5528, y = 0.7549, skill = "RIDING",
+        name = { enUS = "Xar'Ti", deDE = "Xar'Ti", esES = "Xar'Ti", esMX = "Xar'Ti", frFR = "Xar'Ti", koKR = "살티", ptBR = "Xar'Ti", ruRU = "Ксар'Ти", zhCN = "克萨尔迪", zhTW = "札爾提" },
+    },
+    {
+        id = 937, types = { "trainer" },
+        faction = "Horde", map = 1412, x = 0.4679, y = 0.6197, skill = "RIDING",
+        name = { enUS = "Kar Stormsinger", deDE = "Kar Stormsinger", esES = "Kar Tormensón", esMX = "Kar Tormensón", frFR = "Kar Stormsinger", koKR = "카르 스톰싱어", ptBR = "Kar Tormenta Cantante", ruRU = "Кар Певец Бури", zhCN = "卡尔·雷歌", zhTW = "卡爾·雷歌" },
+    },
+    {
+        id = 938, types = { "trainer" },
+        faction = "Alliance", map = 1416, x = 0.1981, y = 0.6340, profession = "BLACKSMITHING",
+        name = { enUS = "Alard Schmied", deDE = "Alard Schmied", esES = "Alard Schmied", esMX = "Alard Schmied", frFR = "Alard Schmied", koKR = "Alard Schmied", ptBR = "Alard Schmied", ruRU = "Alard Schmied", zhCN = "Alard Schmied", zhTW = "Alard Schmied" },
+    },
+    {
+        id = 939, types = { "trainer" },
+        faction = "Alliance", map = 1416, x = 0.1855, y = 0.6240, profession = "ALCHEMY",
+        name = { enUS = "Linzy Blackbolt", deDE = "Linzy Blackbolt", esES = "Linzy Blackbolt", esMX = "Linzy Blackbolt", frFR = "Linzy Blackbolt", koKR = "Linzy Blackbolt", ptBR = "Linzy Blackbolt", ruRU = "Linzy Blackbolt", zhCN = "Linzy Blackbolt", zhTW = "Linzy Blackbolt" },
+    },
+    {
+        id = 940, types = { "trainer" },
+        faction = "Alliance", map = 1416, x = 0.1856, y = 0.6238, profession = "ALCHEMY",
+        name = { enUS = "Patricia Egan", deDE = "Patricia Egan", esES = "Patricia Egan", esMX = "Patricia Egan", frFR = "Patricia Egan", koKR = "Patricia Egan", ptBR = "Patricia Egan", ruRU = "Patricia Egan", zhCN = "Patricia Egan", zhTW = "Patricia Egan" },
+    },
+    {
+        id = 941, types = { "trainer" },
+        faction = "Horde", map = 1417, x = 0.7341, y = 0.3689, profession = "FIRST_AID",
+        name = { enUS = "Doctor Gregory Victor", deDE = "Doktor Gregory Victor", esES = "Doctor Gregory Victor", esMX = "Doctor Gregory Victor", frFR = "Docteur Gregory Victor", koKR = "의사 그레고리 빅터", ptBR = "Doutor Victor Zerbini", ruRU = "Доктор Грегори Виктор", zhCN = "格里高利·维克托医生", zhTW = "格里高利·維克托醫生" },
+    },
+    {
+        id = 942, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2075, y = 0.4635, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 943, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2086, y = 0.4618, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 944, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2114, y = 0.4580, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 945, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2122, y = 0.4598, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 946, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2128, y = 0.4658, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 947, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2129, y = 0.4587, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 948, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2130, y = 0.4595, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 949, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2131, y = 0.4612, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 950, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2157, y = 0.4670, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 951, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2161, y = 0.4664, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 952, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Horde", map = 1420, x = 0.2184, y = 0.4697, profession = "BLACKSMITHING",
+        name = { enUS = "Angus Hammerhand", deDE = "Angus Hammerhand", esES = "Angus Hammerhand", esMX = "Angus Hammerhand", frFR = "Angus Hammerhand", koKR = "Angus Hammerhand", ptBR = "Angus Hammerhand", ruRU = "Angus Hammerhand", zhCN = "Angus Hammerhand", zhTW = "Angus Hammerhand" },
+    },
+    {
+        id = 953, types = { "trainer" },
+        faction = "Horde", map = 1420, x = 0.6008, y = 0.5257, skill = "RIDING",
+        name = { enUS = "Velma Warnam", deDE = "Velma Warnam", esES = "Velma Warnam", esMX = "Velma Warnam", frFR = "Velma Warnam", koKR = "벨마 워넘", ptBR = "Vilma Warnam", ruRU = "Вельма Варнам", zhCN = "维尔玛·瓦纳姆", zhTW = "維爾瑪·瓦納姆" },
+    },
+    {
+        id = 954, types = { "trainer" },
+        map = 1421, x = 0.4672, y = 0.7244,
+        name = { enUS = "Moonrage Tailor", deDE = "Moonrage-Schneider", esES = "Sastre Furia Lunar", esMX = "Sastre Furia Lunar", frFR = "Tailleur Ragelune", koKR = "달의분노일족 재봉사", ptBR = "Alfaiate Lunafúria", ruRU = "Портной Лунной Ярости", zhCN = "月怒裁缝", zhTW = "月怒裁縫" },
+    },
+    {
+        id = 955, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Alliance", map = 1421, x = 0.4655, y = 0.7239,
+        name = { enUS = "Pyrewood Tailor", deDE = "Pyrewood-Schneider", esES = "Sastre Piroleño", esMX = "Sastre Piroleña", frFR = "Tailleur de Bois-du-Bûcher", koKR = "장작나무 마을 재봉사", ptBR = "Alfaiate de Lenhardente", ruRU = "Портной из деревни Погребальных Костров", zhCN = "焚木村裁缝", zhTW = "焚木村裁縫" },
+    },
+    {
+        id = 956, types = { "trainer", "vendor" },
+        faction = "Alliance", map = 1424, x = 0.3676, y = 0.4448,
+        name = { enUS = "Hillsbrad Tailor", deDE = "Schneider von Hillsbrad", esES = "Sastre de Trabalomas", esMX = "Sastre de Trabalomas", frFR = "Tailleur d'Hillsbrad", koKR = "힐스브래드 재봉사", ptBR = "Alfaiate de Eira dos Montes", ruRU = "Хилсбрадский портной", zhCN = "希尔斯布莱德裁缝", zhTW = "希爾斯布萊德裁縫" },
+    },
+    {
+        id = 957, types = { "trainer", "vendor" },
+        faction = "Alliance", map = 1424, x = 0.3682, y = 0.4426,
+        name = { enUS = "Hillsbrad Tailor", deDE = "Schneider von Hillsbrad", esES = "Sastre de Trabalomas", esMX = "Sastre de Trabalomas", frFR = "Tailleur d'Hillsbrad", koKR = "힐스브래드 재봉사", ptBR = "Alfaiate de Eira dos Montes", ruRU = "Хилсбрадский портной", zhCN = "希尔斯布莱德裁缝", zhTW = "希爾斯布萊德裁縫" },
+    },
+    {
+        id = 958, types = { "trainer" },
+        faction = "Alliance", map = 1426, x = 0.4915, y = 0.4813, skill = "RIDING",
+        name = { enUS = "Binjy Featherwhistle", deDE = "Binjy Featherwhistle", esES = "Binjy Plumasilba", esMX = "Binjy Plumasilba", frFR = "Binjy Featherwhistle", koKR = "빈지 페더휘슬", ptBR = "Binjy Penapita", ruRU = "Бинджи Перосвист", zhCN = "宾吉·羽哨", zhTW = "賓吉·羽哨" },
+    },
+    {
+        id = 959, types = { "trainer" },
+        faction = "Alliance", map = 1426, x = 0.6367, y = 0.5014, skill = "RIDING",
+        name = { enUS = "Ultham Ironhorn", deDE = "Ultham Ironhorn", esES = "Ulthaan Ferrocorno", esMX = "Ulthaan Ferrocorno", frFR = "Ultham Ironhorn", koKR = "울담 아이언혼", ptBR = "Ultham Chifrerro", ruRU = "Ультам Громовой Рог", zhCN = "奥萨姆·铁角", zhTW = "奧薩姆·鐵角" },
+    },
+    {
+        id = 960, types = { "trainer" },
+        faction = "Alliance", map = 1426, x = 0.6394, y = 0.5010, skill = "RIDING",
+        name = { enUS = "Ultham Ironhorn", deDE = "Ultham Ironhorn", esES = "Ulthaan Ferrocorno", esMX = "Ulthaan Ferrocorno", frFR = "Ultham Ironhorn", koKR = "울담 아이언혼", ptBR = "Ultham Chifrerro", ruRU = "Ультам Громовой Рог", zhCN = "奥萨姆·铁角", zhTW = "奧薩姆·鐵角" },
+    },
+    {
+        id = 961, types = { "trainer" },
+        faction = "Alliance", map = 1429, x = 0.8432, y = 0.6487, skill = "RIDING",
+        name = { enUS = "Randal Hunter", deDE = "Randal Hunter", esES = "Randal Predatio", esMX = "Randal Predatio", frFR = "Randal Hunter", koKR = "랜들 헌터", ptBR = "Randal Caçador", ruRU = "Рандал Охотник", zhCN = "兰达尔·亨特", zhTW = "蘭達爾·亨特" },
+    },
+    {
+        id = 962, types = { "trainer" },
+        faction = "Alliance", map = 1436, x = 0.4283, y = 0.7276,
+        name = { enUS = "Odd Child", deDE = "Odd Child", esES = "Odd Child", esMX = "Odd Child", frFR = "Odd Child", koKR = "Odd Child", ptBR = "Odd Child", ruRU = "Odd Child", zhCN = "Odd Child", zhTW = "Odd Child" },
+    },
+    {
+        id = 963, types = { "trainer" },
+        faction = "Alliance", map = 1437, x = 0.1083, y = 0.6023,
+        name = { enUS = "Junder Brokk", deDE = "Junder Brokk", esES = "Junder Arroal", esMX = "Junder Arroal", frFR = "Junder Brokk", koKR = "전더 브록", ptBR = "Iunder Brokk", ruRU = "Юндер Брокк", zhCN = "祖德尔·布鲁克", zhTW = "祖德爾·布魯克" },
+    },
+    {
+        id = 964, types = { "trainer" },
+        faction = "Alliance", map = 1445, x = 0.6776, y = 0.4897, profession = "FIRST_AID",
+        name = { enUS = "Doctor Gustaf VanHowzen", deDE = "Doktor Gustaf Van Howzen", esES = "Doctor Gustaf VanHowzen", esMX = "Doctor Gustaf VanHowzen", frFR = "Docteur Gustaf VanHowzen", koKR = "의사 구스타프 밴하우젠", ptBR = "Doutor Gregório Casagrande", ruRU = "Доктор Густав ван Склифф", zhCN = "古斯塔夫·范沃森医生", zhTW = "古斯塔夫·范沃森醫生" },
+    },
+    {
+        id = 965, types = { "trainer" },
+        map = 1448, x = 0.5131, y = 0.8213,
+        name = { enUS = "Master Mycologist Shurome", deDE = "Master Mycologist Shurome", esES = "Master Mycologist Shurome", esMX = "Master Mycologist Shurome", frFR = "Master Mycologist Shurome", koKR = "Master Mycologist Shurome", ptBR = "Master Mycologist Shurome", ruRU = "Master Mycologist Shurome", zhCN = "Master Mycologist Shurome", zhTW = "Master Mycologist Shurome" },
+    },
+    {
+        id = 966, types = { "trainer" },
+        map = 1448, x = 0.5147, y = 0.8202,
+        name = { enUS = "Master Mycologist Shurome", deDE = "Master Mycologist Shurome", esES = "Master Mycologist Shurome", esMX = "Master Mycologist Shurome", frFR = "Master Mycologist Shurome", koKR = "Master Mycologist Shurome", ptBR = "Master Mycologist Shurome", ruRU = "Master Mycologist Shurome", zhCN = "Master Mycologist Shurome", zhTW = "Master Mycologist Shurome" },
+    },
+    {
+        id = 967, types = { "trainer" },
+        faction = "Horde", map = 1454, x = 0.6941, y = 0.1310, skill = "RIDING",
+        name = { enUS = "Kildar", deDE = "Kildar", esES = "Kildar", esMX = "Kildar", frFR = "Kildar", koKR = "킬다르", ptBR = "Kildar", ruRU = "Кильдар", zhCN = "基尔达", zhTW = "基爾達" },
+    },
+    {
+        id = 968, types = { "trainer" },
+        faction = "Alliance", map = 1455, x = 0.5126, y = 0.1497,
+        name = { enUS = "Durtham Greldon", deDE = "Durtham Greldon", esES = "Durtham Greldon", esMX = "Durtham Greldon", frFR = "Durtham Greldon", koKR = "두르탐 그렐던", ptBR = "Durtham Greldon", ruRU = "Дартхем Грелдон", zhCN = "杜尔萨姆·格雷顿", zhTW = "杜爾薩姆·格雷頓" },
+    },
+    {
+        id = 969, types = { "trainer" },
+        faction = "Alliance", map = 1457, x = 0.3251, y = 0.2130,
+        name = { enUS = "Faelyssa", deDE = "Faelyssa", esES = "Faelyssa", esMX = "Faelyssa", frFR = "Faelyssa", koKR = "팰리샤", ptBR = "Faelyssa", ruRU = "Фоллиса", zhCN = "菲琳萨", zhTW = "菲琳薩" },
+    },
+    {
+        id = 970, types = { "trainer" },
+        faction = "Alliance", map = 1457, x = 0.3869, y = 0.1584, skill = "RIDING",
+        name = { enUS = "Jartsam", deDE = "Jartsam", esES = "Jartsam", esMX = "Jartsam", frFR = "Jartsam", koKR = "잘트삼", ptBR = "Jartsam", ruRU = "Джартсам", zhCN = "贾萨姆", zhTW = "賈薩姆" },
+    },
+    {
+        id = 971, types = { "trainer" },
+        map = 2482, x = 0.1540, y = 0.5000,
+        name = { enUS = "Hnaz Blunderflame", deDE = "Hnaz Blunderflame", esES = "Hnaz Blunderflame", esMX = "Hnaz Blunderflame", frFR = "Hnaz Blunderflame", koKR = "Hnaz Blunderflame", ptBR = "Hnaz Blunderflame", ruRU = "Hnaz Blunderflame", zhCN = "Hnaz Blunderflame", zhTW = "Hnaz Blunderflame" },
+    },
+    {
+        id = 972, types = { "trainer" },
+        map = 2482, x = 0.1560, y = 0.5020,
+        name = { enUS = "Hnaz Blunderflame", deDE = "Hnaz Blunderflame", esES = "Hnaz Blunderflame", esMX = "Hnaz Blunderflame", frFR = "Hnaz Blunderflame", koKR = "Hnaz Blunderflame", ptBR = "Hnaz Blunderflame", ruRU = "Hnaz Blunderflame", zhCN = "Hnaz Blunderflame", zhTW = "Hnaz Blunderflame" },
+    },
+    {
+        id = 973, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4488, y = 0.4437, profession = "BLACKSMITHING",
+        name = { enUS = "Aedi Thriceforged", deDE = "Aedi Thriceforged", esES = "Aedi Thriceforged", esMX = "Aedi Thriceforged", frFR = "Aedi Thriceforged", koKR = "Aedi Thriceforged", ptBR = "Aedi Thriceforged", ruRU = "Aedi Thriceforged", zhCN = "Aedi Thriceforged", zhTW = "Aedi Thriceforged" },
+    },
+    {
+        id = 974, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.6327, y = 0.7572, profession = "FISHING",
+        name = { enUS = "Baelann Swiftcurrent", deDE = "Baelann Swiftcurrent", esES = "Baelann Swiftcurrent", esMX = "Baelann Swiftcurrent", frFR = "Baelann Swiftcurrent", koKR = "Baelann Swiftcurrent", ptBR = "Baelann Swiftcurrent", ruRU = "Baelann Swiftcurrent", zhCN = "Baelann Swiftcurrent", zhTW = "Baelann Swiftcurrent" },
+    },
+    {
+        id = 975, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.6547, y = 0.8028, profession = "BLACKSMITHING",
+        name = { enUS = "Daeann Steelwind", deDE = "Daeann Steelwind", esES = "Daeann Steelwind", esMX = "Daeann Steelwind", frFR = "Daeann Steelwind", koKR = "Daeann Steelwind", ptBR = "Daeann Steelwind", ruRU = "Daeann Steelwind", zhCN = "Daeann Steelwind", zhTW = "Daeann Steelwind" },
+    },
+    {
+        id = 976, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.5919, y = 0.7640, profession = "ENCHANTING",
+        name = { enUS = "Eaysaa Brightgust", deDE = "Eaysaa Brightgust", esES = "Eaysaa Brightgust", esMX = "Eaysaa Brightgust", frFR = "Eaysaa Brightgust", koKR = "Eaysaa Brightgust", ptBR = "Eaysaa Brightgust", ruRU = "Eaysaa Brightgust", zhCN = "Eaysaa Brightgust", zhTW = "Eaysaa Brightgust" },
+    },
+    {
+        id = 977, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.6373, y = 0.8068, profession = "LEATHERWORKING",
+        name = { enUS = "Emerii Tallgust", deDE = "Emerii Tallgust", esES = "Emerii Tallgust", esMX = "Emerii Tallgust", frFR = "Emerii Tallgust", koKR = "Emerii Tallgust", ptBR = "Emerii Tallgust", ruRU = "Emerii Tallgust", zhCN = "Emerii Tallgust", zhTW = "Emerii Tallgust" },
+    },
+    {
+        id = 978, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.5383, y = 0.8133, skill = "RIDING",
+        name = { enUS = "Genn Fairweather", deDE = "Genn Fairweather", esES = "Genn Fairweather", esMX = "Genn Fairweather", frFR = "Genn Fairweather", koKR = "Genn Fairweather", ptBR = "Genn Fairweather", ruRU = "Genn Fairweather", zhCN = "Genn Fairweather", zhTW = "Genn Fairweather" },
+    },
+    {
+        id = 979, types = { "trainer", "vendor" },
+        faction = "Alliance", map = 2521, x = 0.6634, y = 0.7950, profession = "ALCHEMY",
+        name = { enUS = "Iaadaria Bitterwind", deDE = "Iaadaria Bitterwind", esES = "Iaadaria Bitterwind", esMX = "Iaadaria Bitterwind", frFR = "Iaadaria Bitterwind", koKR = "Iaadaria Bitterwind", ptBR = "Iaadaria Bitterwind", ruRU = "Iaadaria Bitterwind", zhCN = "Iaadaria Bitterwind", zhTW = "Iaadaria Bitterwind" },
+    },
+    {
+        id = 980, types = { "trainer", "vendor-repair", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4468, y = 0.4452, profession = "LEATHERWORKING",
+        name = { enUS = "Indari Sunseam", deDE = "Indari Sunseam", esES = "Indari Sunseam", esMX = "Indari Sunseam", frFR = "Indari Sunseam", koKR = "Indari Sunseam", ptBR = "Indari Sunseam", ruRU = "Indari Sunseam", zhCN = "Indari Sunseam", zhTW = "Indari Sunseam" },
+    },
+    {
+        id = 981, types = { "trainer" },
+        faction = "Neutral", map = 2521, x = 0.6317, y = 0.7256, profession = "FIRST_AID",
+        name = { enUS = "Melasa Fairmend", deDE = "Melasa Fairmend", esES = "Melasa Fairmend", esMX = "Melasa Fairmend", frFR = "Melasa Fairmend", koKR = "Melasa Fairmend", ptBR = "Melasa Fairmend", ruRU = "Melasa Fairmend", zhCN = "Melasa Fairmend", zhTW = "Melasa Fairmend" },
+    },
+    {
+        id = 982, types = { "trainer" },
+        faction = "Neutral", map = 2521, x = 0.4308, y = 0.4631, profession = "FIRST_AID",
+        name = { enUS = "Naleeia Tattermend", deDE = "Naleeia Tattermend", esES = "Naleeia Tattermend", esMX = "Naleeia Tattermend", frFR = "Naleeia Tattermend", koKR = "Naleeia Tattermend", ptBR = "Naleeia Tattermend", ruRU = "Naleeia Tattermend", zhCN = "Naleeia Tattermend", zhTW = "Naleeia Tattermend" },
+    },
+    {
+        id = 983, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4324, y = 0.4315, profession = "ENCHANTING",
+        name = { enUS = "Nasalanna Windsinger", deDE = "Nasalanna Windsinger", esES = "Nasalanna Windsinger", esMX = "Nasalanna Windsinger", frFR = "Nasalanna Windsinger", koKR = "Nasalanna Windsinger", ptBR = "Nasalanna Windsinger", ruRU = "Nasalanna Windsinger", zhCN = "Nasalanna Windsinger", zhTW = "Nasalanna Windsinger" },
+    },
+    {
+        id = 984, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4369, y = 0.4342, profession = "ALCHEMY",
+        name = { enUS = "Nyassa Swiftdraught", deDE = "Nyassa Swiftdraught", esES = "Nyassa Swiftdraught", esMX = "Nyassa Swiftdraught", frFR = "Nyassa Swiftdraught", koKR = "Nyassa Swiftdraught", ptBR = "Nyassa Swiftdraught", ruRU = "Nyassa Swiftdraught", zhCN = "Nyassa Swiftdraught", zhTW = "Nyassa Swiftdraught" },
+    },
+    {
+        id = 985, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.6441, y = 0.8117, profession = "TAILORING",
+        name = { enUS = "Othesia Evengale", deDE = "Othesia Evengale", esES = "Othesia Evengale", esMX = "Othesia Evengale", frFR = "Othesia Evengale", koKR = "Othesia Evengale", ptBR = "Othesia Evengale", ruRU = "Othesia Evengale", zhCN = "Othesia Evengale", zhTW = "Othesia Evengale" },
+    },
+    {
+        id = 986, types = { "trainer" },
+        faction = "Neutral", map = 2521, x = 0.5396, y = 0.3890,
+        name = { enUS = "Strange Hermit", deDE = "Strange Hermit", esES = "Strange Hermit", esMX = "Strange Hermit", frFR = "Strange Hermit", koKR = "Strange Hermit", ptBR = "Strange Hermit", ruRU = "Strange Hermit", zhCN = "Strange Hermit", zhTW = "Strange Hermit" },
+    },
+    {
+        id = 987, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.4488, y = 0.4418, profession = "TAILORING",
+        name = { enUS = "Taleen Shimmerthread", deDE = "Taleen Shimmerthread", esES = "Taleen Shimmerthread", esMX = "Taleen Shimmerthread", frFR = "Taleen Shimmerthread", koKR = "Taleen Shimmerthread", ptBR = "Taleen Shimmerthread", ruRU = "Taleen Shimmerthread", zhCN = "Taleen Shimmerthread", zhTW = "Taleen Shimmerthread" },
+    },
+    {
+        id = 988, types = { "trainer", "vendor" },
+        faction = "Neutral", map = 2521, x = 0.5925, y = 0.7632, profession = "ALCHEMY",
+        name = { enUS = "Valiena Swiftgale", deDE = "Valiena Swiftgale", esES = "Valiena Swiftgale", esMX = "Valiena Swiftgale", frFR = "Valiena Swiftgale", koKR = "Valiena Swiftgale", ptBR = "Valiena Swiftgale", ruRU = "Valiena Swiftgale", zhCN = "Valiena Swiftgale", zhTW = "Valiena Swiftgale" },
+    },
+})

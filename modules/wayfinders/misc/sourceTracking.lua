@@ -92,3 +92,21 @@ function Wayfinders:RemoveSuperTrackingDestination(source, targetID, changeNumbe
     if not self:ClearSuperTrackingWayfinderData(source, targetID, changeNumber) then return end
     self:UntrackSuperTrackingSource(source)
 end
+
+---Native selection stays with Wayfinders; the provider retains only a read hint.
+---@param poiID number
+---@param mapID number
+---@param texture string|number?
+---@param usesAtlas boolean?
+---@return boolean
+function Wayfinders:TrackAreaPOI(poiID, mapID, texture, usesAtlas)
+    if not C_SuperTrack.SetSuperTrackedMapPin or not Providers:ReadLocationAreaPOI(mapID, poiID) then return false end
+    -- Abandon any previous Step before establishing the new native source.
+    self:CancelAddonPinSelection()
+    self:ClearStepSuperTracking(false)
+    MapPinEnhanced:GetModule("Pins"):UntrackTrackedPin()
+    Providers:SetAreaPOILocationHint(poiID, mapID, texture, usesAtlas)
+    C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, poiID)
+    self:RefreshSuperTrackingProvider("mapPin")
+    return true
+end

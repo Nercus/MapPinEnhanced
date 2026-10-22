@@ -12,6 +12,59 @@ local requestedQuestMaps = {}
 ---@type table<number, boolean>
 local pendingQuestTitles = {}
 
+-- This hint belongs to one native source identity, never to a temporary Step.
+-- It is reconstructed from current Blizzard POIs after reload, not saved.
+---@type {poiID: number, mapID: number, texture: string|number?, usesAtlas: boolean?}?
+local areaPOIHint
+---@type fun()?
+local cancelAreaPOILookup
+---@type number?
+local lookupPoiID
+
+---@param poiID number
+---@param mapID number
+---@param texture string|number?
+---@param usesAtlas boolean?
+function Providers:SetAreaPOILocationHint(poiID, mapID, texture, usesAtlas)
+    areaPOIHint = { poiID = poiID, mapID = mapID, texture = texture, usesAtlas = usesAtlas }
+end
+
+---@param poiID number
+local function RequestAreaPOILocation(poiID)
+    if lookupPoiID == poiID then return end
+    if cancelAreaPOILookup then cancelAreaPOILookup() end
+    lookupPoiID = poiID
+    local foundMapID ---@type number?
+    local texture ---@type string?
+    cancelAreaPOILookup = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(2)
+        foundMapID, texture = Providers:FindCatalogAreaPOI(poiID, checkpoint)
+        if foundMapID then return end
+        for _, mapID in ipairs(Providers:GetLocationMapIDs(checkpoint)) do
+            if Providers:ReadLocationAreaPOI(mapID, poiID) then
+                foundMapID, texture = mapID, "Interface\\Icons\\INV_Misc_Map_01"
+                return
+            end
+            checkpoint()
+        end
+    end }, nil, function()
+        cancelAreaPOILookup = nil
+        local pinType, currentID = C_SuperTrack.GetSuperTrackedMapPin()
+        if currentID ~= poiID or pinType ~= Enum.SuperTrackingMapPinType.AreaPOI then return end
+        if foundMapID then
+            Providers:SetAreaPOILocationHint(poiID, foundMapID, texture, false)
+            Wayfinders:RefreshSuperTrackingProvider(SOURCE)
+        end
+    end)
+end
+
+MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", function()
+    local pinType, poiID = C_SuperTrack.GetSuperTrackedMapPin()
+    if pinType == Enum.SuperTrackingMapPinType.AreaPOI and poiID == lookupPoiID then return end
+    if cancelAreaPOILookup then cancelAreaPOILookup() end
+    cancelAreaPOILookup, lookupPoiID = nil, nil
+end)
+
 ---@param questID number
 ---@param mapID number
 ---@return number? x
@@ -139,10 +192,11 @@ local function ReadMapPinText(targetID, data)
     return title, description, true
 end
 
+---@param previous WayfinderData?
 ---@return WayfinderData?
 ---@return boolean? removable
 ---@return boolean? textAvailable
-local function ReadMapPin()
+local function ReadMapPin(previous)
     local pinType, typeID = C_SuperTrack.GetSuperTrackedMapPin()
     local hasPin = pinType ~= nil and typeID ~= nil
     local questOffer = pinType == Enum.SuperTrackingMapPinType.QuestOffer and
@@ -155,6 +209,10 @@ local function ReadMapPin()
         C_EventScheduler and C_EventScheduler.GetEventUiMapID then
         targetMapID = C_EventScheduler.GetEventUiMapID(typeID)
     end
+    if pinType == Enum.SuperTrackingMapPinType.AreaPOI then
+        if areaPOIHint and areaPOIHint.poiID == typeID then targetMapID = areaPOIHint.mapID end
+        targetMapID = targetMapID or previous and previous.mapID
+    end
     ---@type number?, string?, string|number?, boolean?, string?
     local resolvedMapID, title, texture, usesAtlas, description
     local x, y, mapID, waypointDescription, traversalOnly = Providers:GetSuperTrackingWaypoint(
@@ -164,12 +222,23 @@ local function ReadMapPin()
             resolvedMapID = candidateMapID
             return x, y
         end or nil, targetMapID)
+    if pinType == Enum.SuperTrackingMapPinType.AreaPOI and typeID and traversalOnly then
+        -- A portal waypoint is not the POI destination. Reconstruct the remote
+        -- identity first; normal source retries handle a disappeared POI.
+        RequestAreaPOILocation(typeID)
+        return
+    end
     if pinType == nil or typeID == nil or x == nil or y == nil or mapID == nil then
+        if pinType == Enum.SuperTrackingMapPinType.AreaPOI and typeID then RequestAreaPOILocation(typeID) end
         return
     end
     if resolvedMapID ~= mapID then
         local x, y
         x, y, title, texture, usesAtlas, description = Providers:GetMapPinInfo(pinType, typeID, mapID)
+    end
+    if pinType == Enum.SuperTrackingMapPinType.AreaPOI and areaPOIHint and areaPOIHint.poiID == typeID and
+        (not texture or texture == "") then
+        texture, usesAtlas = areaPOIHint.texture, areaPOIHint.usesAtlas
     end
     local textAvailable = Providers:PlainDescription(title) ~= nil and not issecretvalue(description)
     local superTrackedName, superTrackedDescription = C_SuperTrack.GetSuperTrackedItemName()

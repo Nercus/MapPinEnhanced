@@ -29,7 +29,7 @@ MapPinEnhanced:AddSlashCommand({ "clear", L["Clear"]:lower() }, ClearAllPins,
 
 ---@param owner Region
 local function ShowMinimapMenu(owner)
-    MapPinEnhanced:GenerateMenu(owner, {
+    local entries = {
         {
             type = "title",
             label = MapPinEnhanced.displayName .. " " .. MapPinEnhanced.version,
@@ -69,7 +69,14 @@ local function ShowMinimapMenu(owner)
                 Options:SetOptionValue(SHOW_BUTTON_OPTION, false)
             end,
         },
-    })
+    }
+    local Lexicon = MapPinEnhanced:GetModule("Lexicon")
+    if Lexicon:IsEnabled() then
+        table.insert(entries, 3, { type = "button",
+            label = MapPinEnhanced:Iconize("search", L["Location Lexicon"]),
+            onClick = function() Lexicon:Show() end })
+    end
+    MapPinEnhanced:GenerateMenu(owner, entries)
 end
 
 ---@param enabled boolean

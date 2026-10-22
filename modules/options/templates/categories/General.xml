@@ -10,6 +10,11 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
+                    <KeyValue key="key" value="General.Lexicon.Enable" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
                     <KeyValue key="key" value="General.TooltipHelper" />
                 </KeyValues>
             </Frame>

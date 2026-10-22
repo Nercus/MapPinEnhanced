@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="city.lua" />
+    <Script file="delve.lua" />
+    <Script file="instance.lua" />
+    <Script file="raidFinder.lua" />
+    <Script file="vault.lua" />
+</Ui>

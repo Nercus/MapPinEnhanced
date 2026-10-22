@@ -1,0 +1,29 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="LexiconRow.lua" />
+    <Button name="MapPinEnhancedLexiconRowTemplate" mixin="MapPinEnhancedLexiconRowMixin" virtual="true">
+        <Size x="1" y="42" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <FontString parentKey="title" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT" wordwrap="false">
+                    <Size y="18" />
+                    <Anchors><Anchor point="TOPLEFT" x="42" y="-3" /><Anchor point="TOPRIGHT" x="-8" y="-3" /></Anchors>
+                </FontString>
+                <FontString parentKey="subtitle" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT" wordwrap="false">
+                    <Size y="16" />
+                    <Anchors><Anchor point="BOTTOMLEFT" x="42" y="4" /><Anchor point="BOTTOMRIGHT" x="-8" y="4" /></Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Frame parentKey="pinFrame" inherits="MapPinEnhancedBasePinTemplate" enableMouse="false" frameStrata="DIALOG">
+                <Size x="30" y="30" />
+                <KeyValues><KeyValue key="hideHighlight" value="true" type="boolean" /></KeyValues>
+                <Anchors><Anchor point="LEFT" x="6" /></Anchors>
+            </Frame>
+        </Frames>
+        <HighlightTexture alphaMode="ADD" setAllPoints="true">
+            <Color r="0.25" g="0.22" b="0.15" a="0.35" />
+        </HighlightTexture>
+        <Scripts><OnClick method="OnClick" /></Scripts>
+    </Button>
+</Ui>

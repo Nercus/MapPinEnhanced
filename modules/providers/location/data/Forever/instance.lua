@@ -1,0 +1,148 @@
+-- User-supplied forever catalog, imported 2026-10-22. See ../../README.md.
+-- Source IDs, native UIMapIDs, normalized coordinates and known translations are retained.
+---@class MapPinEnhanced
+local MapPinEnhanced = select(2, ...)
+local Providers = MapPinEnhanced:GetModule("Providers")
+
+Providers:RegisterLocationCatalog({
+    {
+        id = 406, types = { "dungeon" },
+        map = 1411, x = 0.4554, y = 0.1211,
+        name = { enUS = "Ragefire Chasm", deDE = "Ragefire Chasm", esES = "Ragefire Chasm", esMX = "Ragefire Chasm", frFR = "Ragefire Chasm", koKR = "Ragefire Chasm", ptBR = "Ragefire Chasm", ruRU = "Ragefire Chasm", zhCN = "Ragefire Chasm", zhTW = "Ragefire Chasm" },
+    },
+    {
+        id = 407, types = { "dungeon" },
+        map = 1413, x = 0.5073, y = 0.9466,
+        name = { enUS = "Razorfen Downs", deDE = "Razorfen Downs", esES = "Razorfen Downs", esMX = "Razorfen Downs", frFR = "Razorfen Downs", koKR = "Razorfen Downs", ptBR = "Razorfen Downs", ruRU = "Razorfen Downs", zhCN = "Razorfen Downs", zhTW = "Razorfen Downs" },
+    },
+    {
+        id = 408, types = { "dungeon" },
+        map = 1413, x = 0.4283, y = 0.9022,
+        name = { enUS = "Razorfen Kraul", deDE = "Razorfen Kraul", esES = "Razorfen Kraul", esMX = "Razorfen Kraul", frFR = "Razorfen Kraul", koKR = "Razorfen Kraul", ptBR = "Razorfen Kraul", ruRU = "Razorfen Kraul", zhCN = "Razorfen Kraul", zhTW = "Razorfen Kraul" },
+    },
+    {
+        id = 409, types = { "dungeon" },
+        map = 1413, x = 0.4599, y = 0.3626,
+        name = { enUS = "Wailing Caverns", deDE = "Wailing Caverns", esES = "Wailing Caverns", esMX = "Wailing Caverns", frFR = "Wailing Caverns", koKR = "Wailing Caverns", ptBR = "Wailing Caverns", ruRU = "Wailing Caverns", zhCN = "Wailing Caverns", zhTW = "Wailing Caverns" },
+    },
+    {
+        id = 410, types = { "dungeon" },
+        map = 1416, x = 0.1902, y = 0.7407,
+        name = { enUS = "City of Dalaran", deDE = "City of Dalaran", esES = "City of Dalaran", esMX = "City of Dalaran", frFR = "City of Dalaran", koKR = "City of Dalaran", ptBR = "City of Dalaran", ruRU = "City of Dalaran", zhCN = "City of Dalaran", zhTW = "City of Dalaran" },
+    },
+    {
+        id = 411, types = { "dungeon" },
+        map = 1418, x = 0.4420, y = 0.1221,
+        name = { enUS = "Uldaman", deDE = "Uldaman", esES = "Uldaman", esMX = "Uldaman", frFR = "Uldaman", koKR = "Uldaman", ptBR = "Uldaman", ruRU = "Uldaman", zhCN = "Uldaman", zhTW = "Uldaman" },
+    },
+    {
+        id = 412, types = { "dungeon" },
+        map = 1420, x = 0.6158, y = 0.7370,
+        name = { enUS = "Ruins of Lordaeron", deDE = "Ruins of Lordaeron", esES = "Ruins of Lordaeron", esMX = "Ruins of Lordaeron", frFR = "Ruins of Lordaeron", koKR = "Ruins of Lordaeron", ptBR = "Ruins of Lordaeron", ruRU = "Ruins of Lordaeron", zhCN = "Ruins of Lordaeron", zhTW = "Ruins of Lordaeron" },
+    },
+    {
+        id = 413, types = { "dungeon" },
+        map = 1420, x = 0.7781, y = 0.3502,
+        name = { enUS = "Scarlet Monastery", deDE = "Scarlet Monastery", esES = "Scarlet Monastery", esMX = "Scarlet Monastery", frFR = "Scarlet Monastery", koKR = "Scarlet Monastery", ptBR = "Scarlet Monastery", ruRU = "Scarlet Monastery", zhCN = "Scarlet Monastery", zhTW = "Scarlet Monastery" },
+    },
+    {
+        id = 414, types = { "dungeon" },
+        map = 1421, x = 0.4363, y = 0.6729,
+        name = { enUS = "Shadowfang Keep", deDE = "Shadowfang Keep", esES = "Shadowfang Keep", esMX = "Shadowfang Keep", frFR = "Shadowfang Keep", koKR = "Shadowfang Keep", ptBR = "Shadowfang Keep", ruRU = "Shadowfang Keep", zhCN = "Shadowfang Keep", zhTW = "Shadowfang Keep" },
+    },
+    {
+        id = 415, types = { "dungeon" },
+        map = 1422, x = 0.6969, y = 0.7340,
+        name = { enUS = "Scholomance", deDE = "Scholomance", esES = "Scholomance", esMX = "Scholomance", frFR = "Scholomance", koKR = "Scholomance", ptBR = "Scholomance", ruRU = "Scholomance", zhCN = "Scholomance", zhTW = "Scholomance" },
+    },
+    {
+        id = 416, types = { "dungeon" },
+        map = 1423, x = 0.2699, y = 0.1306,
+        name = { enUS = "Stratholme", deDE = "Stratholme", esES = "Stratholme", esMX = "Stratholme", frFR = "Stratholme", koKR = "Stratholme", ptBR = "Stratholme", ruRU = "Stratholme", zhCN = "Stratholme", zhTW = "Stratholme" },
+    },
+    {
+        id = 417, types = { "dungeon" },
+        map = 1426, x = 0.2609, y = 0.3976,
+        name = { enUS = "Gnomeregan", deDE = "Gnomeregan", esES = "Gnomeregan", esMX = "Gnomeregan", frFR = "Gnomeregan", koKR = "Gnomeregan", ptBR = "Gnomeregan", ruRU = "Gnomeregan", zhCN = "Gnomeregan", zhTW = "Gnomeregan" },
+    },
+    {
+        id = 418, types = { "dungeon" },
+        map = 1426, x = 0.5354, y = 0.3485,
+        name = { enUS = "The Hall of Thanes", deDE = "The Hall of Thanes", esES = "The Hall of Thanes", esMX = "The Hall of Thanes", frFR = "The Hall of Thanes", koKR = "The Hall of Thanes", ptBR = "The Hall of Thanes", ruRU = "The Hall of Thanes", zhCN = "The Hall of Thanes", zhTW = "The Hall of Thanes" },
+    },
+    {
+        id = 419, types = { "dungeon" },
+        map = 1428, x = 0.2904, y = 0.4198,
+        name = { enUS = "Blackrock Depths", deDE = "Blackrock Depths", esES = "Blackrock Depths", esMX = "Blackrock Depths", frFR = "Blackrock Depths", koKR = "Blackrock Depths", ptBR = "Blackrock Depths", ruRU = "Blackrock Depths", zhCN = "Blackrock Depths", zhTW = "Blackrock Depths" },
+    },
+    {
+        id = 420, types = { "dungeon" },
+        map = 1428, x = 0.4042, y = 0.3173,
+        name = { enUS = "Blackrock Spire", deDE = "Blackrock Spire", esES = "Blackrock Spire", esMX = "Blackrock Spire", frFR = "Blackrock Spire", koKR = "Blackrock Spire", ptBR = "Blackrock Spire", ruRU = "Blackrock Spire", zhCN = "Blackrock Spire", zhTW = "Blackrock Spire" },
+    },
+    {
+        id = 421, types = { "dungeon" },
+        map = 1429, x = 0.3375, y = 0.5244,
+        name = { enUS = "The Stockade", deDE = "The Stockade", esES = "The Stockade", esMX = "The Stockade", frFR = "The Stockade", koKR = "The Stockade", ptBR = "The Stockade", ruRU = "The Stockade", zhCN = "The Stockade", zhTW = "The Stockade" },
+    },
+    {
+        id = 422, types = { "dungeon" },
+        map = 1435, x = 0.6998, y = 0.5287,
+        name = { enUS = "Temple of Atal'Hakkar", deDE = "Temple of Atal'Hakkar", esES = "Temple of Atal'Hakkar", esMX = "Temple of Atal'Hakkar", frFR = "Temple of Atal'Hakkar", koKR = "Temple of Atal'Hakkar", ptBR = "Temple of Atal'Hakkar", ruRU = "Temple of Atal'Hakkar", zhCN = "Temple of Atal'Hakkar", zhTW = "Temple of Atal'Hakkar" },
+    },
+    {
+        id = 423, types = { "dungeon" },
+        map = 1436, x = 0.4303, y = 0.6931,
+        name = { enUS = "Deadmines", deDE = "Deadmines", esES = "Deadmines", esMX = "Deadmines", frFR = "Deadmines", koKR = "Deadmines", ptBR = "Deadmines", ruRU = "Deadmines", zhCN = "Deadmines", zhTW = "Deadmines" },
+    },
+    {
+        id = 424, types = { "dungeon" },
+        map = 1437, x = 0.3369, y = 0.6294,
+        name = { enUS = "Excavation Site: Wetlands", deDE = "Excavation Site: Wetlands", esES = "Excavation Site: Wetlands", esMX = "Excavation Site: Wetlands", frFR = "Excavation Site: Wetlands", koKR = "Excavation Site: Wetlands", ptBR = "Excavation Site: Wetlands", ruRU = "Excavation Site: Wetlands", zhCN = "Excavation Site: Wetlands", zhTW = "Excavation Site: Wetlands" },
+    },
+    {
+        id = 425, types = { "dungeon" },
+        map = 1440, x = 0.1195, y = 0.3409,
+        name = { enUS = "Blackfathom Deeps", deDE = "Blackfathom Deeps", esES = "Blackfathom Deeps", esMX = "Blackfathom Deeps", frFR = "Blackfathom Deeps", koKR = "Blackfathom Deeps", ptBR = "Blackfathom Deeps", ruRU = "Blackfathom Deeps", zhCN = "Blackfathom Deeps", zhTW = "Blackfathom Deeps" },
+    },
+    {
+        id = 426, types = { "dungeon" },
+        map = 1443, x = 0.2924, y = 0.6254,
+        name = { enUS = "Maraudon", deDE = "Maraudon", esES = "Maraudon", esMX = "Maraudon", frFR = "Maraudon", koKR = "Maraudon", ptBR = "Maraudon", ruRU = "Maraudon", zhCN = "Maraudon", zhTW = "Maraudon" },
+    },
+    {
+        id = 427, types = { "dungeon" },
+        map = 1444, x = 0.5790, y = 0.4711,
+        name = { enUS = "Dire Maul", deDE = "Dire Maul", esES = "Dire Maul", esMX = "Dire Maul", frFR = "Dire Maul", koKR = "Dire Maul", ptBR = "Dire Maul", ruRU = "Dire Maul", zhCN = "Dire Maul", zhTW = "Dire Maul" },
+    },
+    {
+        id = 428, types = { "dungeon" },
+        map = 1445, x = 0.7763, y = 0.1764,
+        name = { enUS = "Alcaz Prison", deDE = "Alcaz Prison", esES = "Alcaz Prison", esMX = "Alcaz Prison", frFR = "Alcaz Prison", koKR = "Alcaz Prison", ptBR = "Alcaz Prison", ruRU = "Alcaz Prison", zhCN = "Alcaz Prison", zhTW = "Alcaz Prison" },
+    },
+    {
+        id = 429, types = { "dungeon" },
+        map = 1446, x = 0.3668, y = 0.1031,
+        name = { enUS = "Zul'Farrak", deDE = "Zul'Farrak", esES = "Zul'Farrak", esMX = "Zul'Farrak", frFR = "Zul'Farrak", koKR = "Zul'Farrak", ptBR = "Zul'Farrak", ruRU = "Zul'Farrak", zhCN = "Zul'Farrak", zhTW = "Zul'Farrak" },
+    },
+    {
+        id = 430, types = { "dungeon" },
+        map = 1447, x = 0.3955, y = 0.3227,
+        name = { enUS = "Blackmaw Hold", deDE = "Blackmaw Hold", esES = "Blackmaw Hold", esMX = "Blackmaw Hold", frFR = "Blackmaw Hold", koKR = "Blackmaw Hold", ptBR = "Blackmaw Hold", ruRU = "Blackmaw Hold", zhCN = "Blackmaw Hold", zhTW = "Blackmaw Hold" },
+    },
+    {
+        id = 431, types = { "dungeon" },
+        map = 2548, x = 0.4655, y = 0.3043,
+        name = { enUS = "Krol'dok Stronghold", deDE = "Krol'dok Stronghold", esES = "Krol'dok Stronghold", esMX = "Krol'dok Stronghold", frFR = "Krol'dok Stronghold", koKR = "Krol'dok Stronghold", ptBR = "Krol'dok Stronghold", ruRU = "Krol'dok Stronghold", zhCN = "Krol'dok Stronghold", zhTW = "Krol'dok Stronghold" },
+    },
+    {
+        id = 432, types = { "dungeon" },
+        map = nil, x = nil, y = nil,
+        name = { enUS = "The Shaper's Terrace", deDE = "The Shaper's Terrace", esES = "The Shaper's Terrace", esMX = "The Shaper's Terrace", frFR = "The Shaper's Terrace", koKR = "The Shaper's Terrace", ptBR = "The Shaper's Terrace", ruRU = "The Shaper's Terrace", zhCN = "The Shaper's Terrace", zhTW = "The Shaper's Terrace" },
+    },
+    {
+        id = 856, types = { "raid" },
+        map = 1445, x = 0.5229, y = 0.7615,
+        name = { enUS = "Onyxia's Lair", deDE = "Onyxia's Lair", esES = "Onyxia's Lair", esMX = "Onyxia's Lair", frFR = "Onyxia's Lair", koKR = "Onyxia's Lair", ptBR = "Onyxia's Lair", ruRU = "Onyxia's Lair", zhCN = "Onyxia's Lair", zhTW = "Onyxia's Lair" },
+    },
+})

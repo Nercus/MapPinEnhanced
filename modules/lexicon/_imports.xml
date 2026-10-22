@@ -1,0 +1,6 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="lexiconConstants.lua" />
+    <Include file="templates/LexiconRow.xml" />
+    <Include file="templates/Lexicon.xml" />
+    <Script file="lexiconManager.lua" />
+</Ui>

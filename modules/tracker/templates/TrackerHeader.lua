@@ -9,6 +9,7 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 ---@field hiddenGroupsMenu MapPinEnhancedTrackerHiddenGroupsTemplate
 ---@field hiddenGroupsButton MapPinEnhancedIconButtonTemplate
 ---@field closeButton MapPinEnhancedIconButtonTemplate
+---@field lexiconButton MapPinEnhancedIconButtonTemplate
 ---@field importButton MapPinEnhancedIconButtonTemplate
 ---@field headerTextureLeft Texture
 ---@field headerTextureRight Texture
@@ -17,6 +18,10 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 MapPinEnhancedTrackerHeaderMixin = {}
 
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()
+    MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("General.Lexicon.Enable", function(enabled)
+        self.lexiconButton:SetShown(enabled == true)
+    end)
+
     self.importButton:SetScript("OnClick", function()
         Transfer:ShowImportWindow()
     end)
@@ -36,4 +41,8 @@ end
 
 function MapPinEnhancedTrackerHeaderMixin:SetIcon(icon)
     self.icon:SetIconTexture(icon)
+end
+
+function MapPinEnhancedTrackerHeaderMixin:ShowLexicon()
+    MapPinEnhanced:GetModule("Lexicon"):Show()
 end
