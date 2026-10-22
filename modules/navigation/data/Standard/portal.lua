@@ -15658,16 +15658,16 @@ local PORTAL = {
             },
         },
     },
-    -- Silvermoon City M (map 2393 36.96,67.99) -> Harandar (map 2413 53.14,55.35) via portal
+    -- Silvermoon City M (map 2393 36.96,67.99) -> The Den (map 2576 61.15,69.18) via portal
     {
         fromPointID = 200659,
         fromMap = 2393,
         fromX = 0.3696,
         fromY = 0.6799,
         toPointID = 200699,
-        toMap = 2413,
-        toX = 0.5314,
-        toY = 0.5535,
+        toMap = 2576,
+        toX = 0.611505,
+        toY = 0.691774,
         type = "portal",
         requirement = {
             operation = "all",
@@ -25406,16 +25406,16 @@ local PORTAL = {
             },
         },
     },
-    -- Voidstorm (map 2405 51.71,70.40) -> Harandar (map 2413 53.14,55.35) via portal
+    -- Voidstorm (map 2405 51.71,70.40) -> The Den (map 2576 61.15,69.18) via portal
     {
         fromPointID = 200692,
         fromMap = 2405,
         fromX = 0.5171,
         fromY = 0.704,
         toPointID = 200699,
-        toMap = 2413,
-        toX = 0.5314,
-        toY = 0.5535,
+        toMap = 2576,
+        toX = 0.611505,
+        toY = 0.691774,
         type = "portal",
         requirement = {
             operation = "all",

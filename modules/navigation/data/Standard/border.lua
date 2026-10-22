@@ -1759,6 +1759,20 @@ local BORDER = {
         type = "border",
     },
 
+    -- Zone: Harandar (map 2413)
+    -- Harandar (map 2413 54.39,52.63) -> The Den (map 2576 71.37,49.92) via border
+    {
+        fromPointID = 1500200,
+        fromMap = 2413,
+        fromX = 0.543881,
+        fromY = 0.526273,
+        toPointID = 1500201,
+        toMap = 2576,
+        toX = 0.713656,
+        toY = 0.499194,
+        type = "border",
+    },
+
     -- Zone: Hellfire Peninsula (map 100)
     -- Hellfire Peninsula (map 100 4.70,50.60) -> Zangarmarsh (map 102 83.00,65.50) via border
     {
@@ -3968,6 +3982,20 @@ local BORDER = {
         toY = 0.649,
         type = "border",
         travelDuration = 48,
+    },
+
+    -- Zone: The Den (map 2576)
+    -- The Den (map 2576 71.37,49.92) -> Harandar (map 2413 54.39,52.63) via border
+    {
+        fromPointID = 1500201,
+        fromMap = 2576,
+        fromX = 0.713656,
+        fromY = 0.499194,
+        toPointID = 1500200,
+        toMap = 2413,
+        toX = 0.543881,
+        toY = 0.526273,
+        type = "border",
     },
 
     -- Zone: The Exodar (map 103)
