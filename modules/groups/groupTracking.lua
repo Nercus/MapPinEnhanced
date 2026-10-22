@@ -42,11 +42,16 @@ function Groups:PrepareNextPinPrediction(pin)
     local owner, destinationID = Navigation:GetActiveDestinationState()
     if owner ~= "addonPins" or destinationID ~= pin.pinID then return end
     if not Navigation.routeNavigationEnabled or not Navigation:GetGraph() or
-        not CanPredict(group) or Pins:GetTrackedPin() ~= pin then return end
+        not CanPredict(group) or Pins:GetTrackedPin() ~= pin then
+        return
+    end
     ---@cast group MapPinEnhancedGroupMixin
     ---@type GroupNextPinPrediction
-    local request = { groupID = group:GetGroupID(), lifetimeChangeNumber = group.lifetimeChangeNumber,
-        pinID = pin.pinID }
+    local request = {
+        groupID = group:GetGroupID(),
+        lifetimeChangeNumber = group.lifetimeChangeNumber,
+        pinID = pin.pinID
+    }
     pending = request
     request.cancel = MapPinEnhanced:BatchExecution({ function()
         local checkpoint = MapPinEnhanced:CreateBatchCheckpoint(0.1)
@@ -56,8 +61,11 @@ function Groups:PrepareNextPinPrediction(pin)
         for pinID, candidate in group:EnumeratePins() do
             if pinID ~= request.pinID then
                 local candidateData = candidate:GetPinData()
-                candidates[#candidates + 1] = { id = pinID, order = group:GetPinOrder(pinID),
-                    data = { mapID = candidateData.mapID, x = candidateData.x, y = candidateData.y } }
+                candidates[#candidates + 1] = {
+                    id = pinID,
+                    order = group:GetPinOrder(pinID),
+                    data = { mapID = candidateData.mapID, x = candidateData.x, y = candidateData.y }
+                }
             end
             checkpoint()
         end
@@ -105,8 +113,12 @@ function Groups:TrackPredictedPin(pin, prediction)
         return
     end
     local group = pin.group
-    local transfer = { pin = pin, group = group, lifetime = group and group.lifetimeChangeNumber,
-        prediction = prediction }
+    local transfer = {
+        pin = pin,
+        group = group,
+        lifetime = group and group.lifetimeChangeNumber,
+        prediction = prediction
+    }
     handoff = transfer
     local success, message = pcall(pin.TrackWithoutPersisting, pin)
     if handoff == transfer then handoff = nil end
@@ -120,7 +132,9 @@ function Groups:TakeTrackedPinPrediction(pin)
     handoff = nil
     if not transfer or transfer.pin ~= pin or transfer.prediction.id ~= pin.pinID or
         Pins:GetTrackedPin() ~= pin or pin.group ~= transfer.group or
-        not pin.group or pin.group.lifetimeChangeNumber ~= transfer.lifetime then return nil end
+        not pin.group or pin.group.lifetimeChangeNumber ~= transfer.lifetime then
+        return nil
+    end
     return transfer.prediction
 end
 

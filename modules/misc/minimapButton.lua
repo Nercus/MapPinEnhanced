@@ -72,9 +72,11 @@ local function ShowMinimapMenu(owner)
     }
     local Lexicon = MapPinEnhanced:GetModule("Lexicon")
     if Lexicon:IsEnabled() then
-        table.insert(entries, 3, { type = "button",
+        table.insert(entries, 3, {
+            type = "button",
             label = MapPinEnhanced:Iconize("search", L["Location Lexicon"]),
-            onClick = function() Lexicon:Show() end })
+            onClick = function() Lexicon:Show() end
+        })
     end
     MapPinEnhanced:GenerateMenu(owner, entries)
 end

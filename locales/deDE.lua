@@ -9,9 +9,11 @@ local L = MapPinEnhanced.L
 ------------------------------ Shared UI ------------------------------
 L["Cancel"] = "Abbrechen"
 L["Close"] = "Schließen"
-L["A new version (%s) for Map Pin Enhanced is available. You are on (%s)."] = "Eine neue Version (%s) von Map Pin Enhanced ist verfügbar. Du verwendest (%s)."
+L["A new version (%s) for Map Pin Enhanced is available. You are on (%s)."] =
+"Eine neue Version (%s) von Map Pin Enhanced ist verfügbar. Du verwendest (%s)."
 L["Addon conflicts"] = "Add-on-Konflikte"
-L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."] = "Die folgenden Addons verursachen Konflikte mit Map Pin Enhanced und sollten nicht zusammen verwendet werden:\n\n%s\n\nDeaktiviere sie im Addon-Menü und lade deine Benutzeroberfläche neu."
+L["The following addons interfere with Map Pin Enhanced and should not be used together:\n\n%s\n\nDisable them in the AddOns menu and reload your UI."] =
+"Die folgenden Addons verursachen Konflikte mit Map Pin Enhanced und sollten nicht zusammen verwendet werden:\n\n%s\n\nDeaktiviere sie im Addon-Menü und lade deine Benutzeroberfläche neu."
 L["Confirm"] = "Bestätigen"
 L["Icon Picker"] = "Symbolauswahl"
 L["Select an icon"] = "Symbol auswählen"
@@ -26,10 +28,12 @@ L["Remove"] = "Entfernen"
 
 L["Click to edit"] = "Zum Bearbeiten hier klicken"
 L["<x> <y> [title]"] = "<x> <y> [Titel]"
-L["Create and track a pin at percentage coordinates. Example: /mpe 50 50 My pin"] = "Erstelle und verfolge eine Markierung an Prozentkoordinaten. Beispiel: /mpe 50 50 Meine Markierung"
+L["Create and track a pin at percentage coordinates. Example: /mpe 50 50 My pin"] =
+"Erstelle und verfolge eine Markierung an Prozentkoordinaten. Beispiel: /mpe 50 50 Meine Markierung"
 L["You can also use /way instead of /mpe."] = "Du kannst auch /way anstelle von /mpe verwenden."
 
-L["Navigation Hearthstone Data Missing"] = "Zielort des Ruhesteins unbekannt. Benutze deinen Ruhestein einmal, um ihn zu speichern."
+L["Navigation Hearthstone Data Missing"] =
+"Zielort des Ruhesteins unbekannt. Benutze deinen Ruhestein einmal, um ihn zu speichern."
 L["Navigation Flight Data Missing"] = "Flugrouten noch nicht erfasst. Besuche einen Flugmeister, um sie zu erfassen."
 
 ------------------------------ Pins ------------------------------
@@ -51,9 +55,11 @@ L["Clear Pin"] = "Markierung entfernen"
 L["Delete Permanently"] = "Endgültig löschen"
 L["Delete pin \"%s\"?"] = "Markierung „%s“ löschen?"
 L["Share to Chat"] = "Im Chat teilen"
-L["Failed to place pin on the map. Please check if the coordinates are correct!"] = "Die Markierung konnte nicht auf der Karte gesetzt werden. Bitte prüfe, ob die Koordinaten stimmen!"
+L["Failed to place pin on the map. Please check if the coordinates are correct!"] =
+"Die Markierung konnte nicht auf der Karte gesetzt werden. Bitte prüfe, ob die Koordinaten stimmen!"
 L["Can't Show on Map in Combat"] = "Kann im Kampf nicht auf der Karte angezeigt werden"
-L["The world map cannot be opened automatically during combat. It will open after combat ends."] = "Die Weltkarte lässt sich während eines Kampfes nicht automatisch öffnen. Sie wird erst nach Ende des Kampfes geöffnet."
+L["The world map cannot be opened automatically during combat. It will open after combat ends."] =
+"Die Weltkarte lässt sich während eines Kampfes nicht automatisch öffnen. Sie wird erst nach Ende des Kampfes geöffnet."
 
 ------------------------------ Groups And Tracker ------------------------------
 L["Group"] = "Gruppe"
@@ -96,10 +102,12 @@ L["None"] = "Keine"
 L["No active pins"] = "Keine aktiven Markierungen"
 L["No coordinates available"] = "Keine Koordinaten verfügbar"
 L["Miscellaneous.Coords.Visibility_LABEL"] = "Automatisch ausblenden"
-L["Miscellaneous.Coords.Visibility_DESCRIPTION"] = "Die Koordinatenanzeige ausblenden, wenn eine der ausgewählten Bedingungen aktiv ist."
+L["Miscellaneous.Coords.Visibility_DESCRIPTION"] =
+"Die Koordinatenanzeige ausblenden, wenn eine der ausgewählten Bedingungen aktiv ist."
 L["Miscellaneous.Tracker_GROUPLABEL"] = "Tracker"
 L["Miscellaneous.Tracker.Visibility_LABEL"] = "Automatisch ausblenden"
-L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] = "Den Tracker ausblenden, wenn eine der ausgewählten Bedingungen erfüllt ist."
+L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] =
+"Den Tracker ausblenden, wenn eine der ausgewählten Bedingungen erfüllt ist."
 L["Toggle the group editor."] = "Den Gruppeneditor ein- bzw. ausschalten."
 
 ------------------------------ Editor ------------------------------
@@ -109,7 +117,8 @@ L["Search"] = "Suche"
 L["Rename Pin"] = "Markierung umbenennen"
 L["Create a new pin group."] = "Erstelle eine neue Gruppe für Markierungen."
 L["Choose an icon for this group."] = "Wähle ein Symbol für diese Gruppe."
-L["Delete this group and all of its pins. System groups are cleared instead."] = "Diese Gruppe und alle ihre Markierungen löschen. Systemgruppen werden stattdessen geleert."
+L["Delete this group and all of its pins. System groups are cleared instead."] =
+"Diese Gruppe und alle ihre Markierungen löschen. Systemgruppen werden stattdessen geleert."
 L["Hide or show this group."] = "Diese Gruppe ausblenden oder anzeigen."
 L["Permanently delete this pin."] = "Diese Markierung endgültig löschen."
 L["Create a copy of this pin."] = "Eine Kopie dieser Markierung erstellen."
@@ -119,16 +128,20 @@ L["Loading"] = "Wird geladen"
 ------------------------------ Dialogs ------------------------------
 L["Version: %s (%s)"] = "Version: %s (%s)"
 L["Build: %s"] = "Build: %s"
-L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs!"] = "Vielen Dank an Eminos für die unzähligen Stunden, die er damit verbracht hat, Texturen zu erstellen, „Rubber-Ducking“ zu betreiben und gemeinsam mit mir Ideen zu entwickeln. Vielen Dank an alle, die mir beim Testen neuer Versionen geholfen, Feedback gegeben und Fehler gemeldet haben!"
+L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs!"] =
+"Vielen Dank an Eminos für die unzähligen Stunden, die er damit verbracht hat, Texturen zu erstellen, „Rubber-Ducking“ zu betreiben und gemeinsam mit mir Ideen zu entwickeln. Vielen Dank an alle, die mir beim Testen neuer Versionen geholfen, Feedback gegeben und Fehler gemeldet haben!"
 L["Open the about dialog to view version information."] = "Öffne den Info-Dialog, um Versionsinformationen anzuzeigen."
 
 ------------------------------ Transfer ------------------------------
 L["Export"] = "Exportieren"
 L["Way commands"] = "Way-Befehle"
 L["Serialized data"] = "Serialisierte Daten"
-L["Open the import dialog to import map pins from a string."] = "Öffne den Importdialog, um Kartenmarkierungen aus einer Zeichenfolge zu importieren."
-L["You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"] = "Du kannst Markierungen importieren, indem du mehrere Slash-Befehle oder eine Exportzeichenfolge von Map Pin Enhanced (beginnend mit %s) einfügst."
-L["Click to paste export string or slash commands here"] = "Hier klicken, um eine Exportzeichenfolge oder Slash-Befehle einzufügen"
+L["Open the import dialog to import map pins from a string."] =
+"Öffne den Importdialog, um Kartenmarkierungen aus einer Zeichenfolge zu importieren."
+L["You can import pins by pasting multiple slash commands or a Map Pin Enhanced export string (starting with %s)"] =
+"Du kannst Markierungen importieren, indem du mehrere Slash-Befehle oder eine Exportzeichenfolge von Map Pin Enhanced (beginnend mit %s) einfügst."
+L["Click to paste export string or slash commands here"] =
+"Hier klicken, um eine Exportzeichenfolge oder Slash-Befehle einzufügen"
 L["Choose an export format, then copy the text below."] = "Wähle ein Exportformat und kopiere dann den folgenden Text."
 L["Command prefix:"] = "Befehlspräfix:"
 L["Exporting %d pins across %d maps"] = "Export von %d |4Markierung:Markierungen; auf %d |4Karte:Karten;"
@@ -136,15 +149,18 @@ L["%s: %d pins across %d maps"] = "%s: %d |4Markierung:Markierungen; auf %d |4Ka
 L["%d invalid entries will be skipped"] = "%d |4ungültiger Eintrag wird:ungültige Einträge werden; übersprungen"
 L["Invalid or corrupted serialized data."] = "Ungültige oder beschädigte serialisierte Daten."
 L["No valid pins were found to import."] = "Keine gültigen Markierungen zum Importieren gefunden."
-L["Importing %d pins; skipped %d invalid entries."] = "Import von %d |4Markierung:Markierungen;; %d |4ungültiger Eintrag:ungültige Einträge; übersprungen."
+L["Importing %d pins; skipped %d invalid entries."] =
+"Import von %d |4Markierung:Markierungen;; %d |4ungültiger Eintrag:ungültige Einträge; übersprungen."
 L["Import failed."] = "Der Import ist fehlgeschlagen."
-L["Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."] = "Warnung: Bei Slash-Befehlen bleiben Beschreibungen, benutzerdefinierte Symbole und Farben nicht erhalten. Bei /mappin werden zudem die Titel der Markierungen weggelassen."
+L["Warning: slash commands do not preserve descriptions, custom icons or colors. /mappin also omits pin titles."] =
+"Warnung: Bei Slash-Befehlen bleiben Beschreibungen, benutzerdefinierte Symbole und Farben nicht erhalten. Bei /mappin werden zudem die Titel der Markierungen weggelassen."
 
 ------------------------------ Providers ------------------------------
 L["%s added hidden group \"%s\"."] = "%s hat die versteckte Gruppe „%s“ hinzugefügt."
 L["TomTom Pins"] = "TomTom-Markierungen"
 L["TomTom Waypoint"] = "TomTom-Wegpunkt"
-L["TomTom Is Loaded! You may experience some unexpected behavior."] = "TomTom ist geladen! Es kann zu unerwartetem Verhalten kommen."
+L["TomTom Is Loaded! You may experience some unexpected behavior."] =
+"TomTom ist geladen! Es kann zu unerwartetem Verhalten kommen."
 L["\"%s\" reached at %s."] = "„%s“ bei %s erreicht."
 L["Location reached at %s."] = "Ziel bei %s erreicht."
 L["Equipped %s."] = "%s ausgerüstet."
@@ -164,11 +180,15 @@ L["%s's House"] = "Das Haus von %s"
 ------------------------------ Miscellaneous ------------------------------
 L["Back"] = "Zurück"
 L["Create a Pin at Your Current Location"] = "Markierung am aktuellen Standort erstellen"
-L["Unable to determine your current map location."] = "Dein aktueller Standort auf der Karte kann nicht ermittelt werden."
-L["Unable to determine your current position on the map."] = "Deine aktuelle Position auf der Karte kann nicht ermittelt werden."
+L["Unable to determine your current map location."] =
+"Dein aktueller Standort auf der Karte kann nicht ermittelt werden."
+L["Unable to determine your current position on the map."] =
+"Deine aktuelle Position auf der Karte kann nicht ermittelt werden."
 L["%s's Position"] = "Position von %s"
-L["You Are in an Instance or a Zone Where the Map Is Not Available"] = "Du befindest dich in einer Instanz oder einem Gebiet, in dem die Karte nicht verfügbar ist."
-L["My Way Back is unavailable on the map you are on right now."] = "„Mein Weg zurück“ ist auf deiner aktuellen Karte nicht verfügbar."
+L["You Are in an Instance or a Zone Where the Map Is Not Available"] =
+"Du befindest dich in einer Instanz oder einem Gebiet, in dem die Karte nicht verfügbar ist."
+L["My Way Back is unavailable on the map you are on right now."] =
+"„Mein Weg zurück“ ist auf deiner aktuellen Karte nicht verfügbar."
 
 ------------------------------ Options ------------------------------
 L["General"] = "Allgemein"
@@ -182,19 +202,22 @@ L["Open editor"] = "Editor öffnen"
 
 L["General.Minimap_GROUPLABEL"] = "Minikarte"
 L["Clear all pins"] = "Alle Markierungen entfernen"
-L["Some pins are still being updated. Try clearing again when the current operation finishes."] = "Einige Markierungen werden noch aktualisiert. Versuche das Entfernen erneut, sobald der aktuelle Vorgang abgeschlossen ist."
+L["Some pins are still being updated. Try clearing again when the current operation finishes."] =
+"Einige Markierungen werden noch aktualisiert. Versuche das Entfernen erneut, sobald der aktuelle Vorgang abgeschlossen ist."
 L["Hide minimap button"] = "Minikarten-Schaltfläche ausblenden"
 L["Toggle the minimap button visibility."] = "Die Sichtbarkeit der Minikarten-Schaltfläche umschalten."
 L["General.Minimap.ShowButton_LABEL"] = "Minikarten-Schaltfläche anzeigen"
 L["General.Minimap.ShowButton_DESCRIPTION"] = "Zeige die Add-on-Schaltfläche auf der Minikarte an."
 L["General.Minimap.CustomButton_LABEL"] = "Benutzerdefinierte Minikarten-Schaltfläche"
-L["General.Minimap.CustomButton_DESCRIPTION"] = "Verwende ein größeres Logo ohne den üblichen Rahmen und Hintergrund der Minikarten-Schaltfläche."
+L["General.Minimap.CustomButton_DESCRIPTION"] =
+"Verwende ein größeres Logo ohne den üblichen Rahmen und Hintergrund der Minikarten-Schaltfläche."
 L["General.Distance_GROUPLABEL"] = "Entfernung"
 L["General.Distance.ShowUnit_LABEL"] = "Entfernungseinheit anzeigen"
 L["General.Distance.ShowUnit_DESCRIPTION"] = "Zeige die Entfernungseinheit neben den Entfernungswerten an."
 L["General.Tracking_GROUPLABEL"] = "Verfolgung"
 L["Reload UI"] = "UI neu laden"
-L["This change requires a UI reload. Reload now?"] = "Diese Änderung erfordert eine Neuladung der Benutzeroberfläche. Jetzt neu laden?"
+L["This change requires a UI reload. Reload now?"] =
+"Diese Änderung erfordert eine Neuladung der Benutzeroberfläche. Jetzt neu laden?"
 
 L["Pins.Miscellaneous_GROUPLABEL"] = "Verschiedenes"
 L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Markierungen beim Darüberfahren vergrößern"
@@ -202,21 +225,25 @@ L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] = "Vergrößere Weltkartenmarki
 
 L["Miscellaneous.Coords_GROUPLABEL"] = "Anzeige der Koordinaten"
 L["Miscellaneous.Coords.Enable_LABEL"] = "Koordinatenanzeige aktivieren"
-L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Anzeige deiner aktuellen Koordinaten auf dem Bildschirm ein- oder ausschalten"
+L["Miscellaneous.Coords.Enable_DESCRIPTION"] =
+"Anzeige deiner aktuellen Koordinaten auf dem Bildschirm ein- oder ausschalten"
 L["Miscellaneous.Coords.Lock_LABEL"] = "Anzeige der Koordinaten sperren"
 L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Lege fest, ob sich die Koordinatenanzeige verschieben lässt."
 
 L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Blizzards schwebende Raute ausblenden"
-L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] = "Blizzards schwebende Navigationsraute ausblenden, wenn der schwebende Wegweiser von Map Pin Enhanced deaktiviert ist."
+L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
+"Blizzards schwebende Navigationsraute ausblenden, wenn der schwebende Wegweiser von Map Pin Enhanced deaktiviert ist."
 L["Wayfinder.General.Selection_LABEL"] = "Wegweiser"
 L["Wayfinder.General.Selection_DESCRIPTION"] = "Wähle den Wegweiser für die Navigation."
 L["Arrow"] = "Pfeil"
 L["Floating"] = "Schwebend"
 L["Wayfinder.Navigation_GROUPLABEL"] = "Navigation"
 L["Wayfinder.Navigation.Enable_LABEL"] = "Routennavigation aktivieren"
-L["Wayfinder.Navigation.Enable_DESCRIPTION"] = "Berechne Reiserouten unter Berücksichtigung der verfügbaren Bewegungsmöglichkeiten, Portale, Transportmittel, Zaubersprüche, Gegenstände und Spielzeuge."
+L["Wayfinder.Navigation.Enable_DESCRIPTION"] =
+"Berechne Reiserouten unter Berücksichtigung der verfügbaren Bewegungsmöglichkeiten, Portale, Transportmittel, Zaubersprüche, Gegenstände und Spielzeuge."
 L["Wayfinder.Navigation.AutomaticTravelSelection_LABEL"] = "Automatische Reiseauswahl"
-L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] = "Wähle automatisch die NPC-Dialogoptionen und Flugziele aus, die für deine aktuelle Route erforderlich sind. Halte die Umschalttaste gedrückt, wenn du die Flugkarte öffnest, um einen Flug manuell auszuwählen."
+L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] =
+"Wähle automatisch die NPC-Dialogoptionen und Flugziele aus, die für deine aktuelle Route erforderlich sind. Halte die Umschalttaste gedrückt, wenn du die Flugkarte öffnest, um einen Flug manuell auszuwählen."
 L["Wayfinder.Navigation.WorldMap_LABEL"] = "Route auf der Weltkarte anzeigen"
 L["Wayfinder.Navigation.WorldMap_DESCRIPTION"] = "Zeige die berechnete Route auf der Weltkarte an."
 L["Wayfinder.Navigation.Minimap_LABEL"] = "Route auf der Minikarte anzeigen"
@@ -224,8 +251,10 @@ L["Wayfinder.Navigation.Minimap_DESCRIPTION"] = "Zeige die berechnete Route auf 
 L["Navigation Calculating"] = "Route wird berechnet..."
 L["Navigation Direct Guidance"] = "Keine Route verfügbar. Begib dich direkt zum Ziel."
 L["Navigation No Direction"] = "Für dieses Ziel liegen keine Wegbeschreibungen vor."
-L["Navigation Step Waiting Combat"] = "Dieser Schritt ist möglicherweise nicht auf dem neuesten Stand. Er wird aktualisiert, sobald der Kampf beendet ist."
-L["Navigation Action Shift Combat"] = "Drücke die Umschalttaste und klicke mit der linken Maustaste, um die angezeigte Aktion im Kampf auszuführen."
+L["Navigation Step Waiting Combat"] =
+"Dieser Schritt ist möglicherweise nicht auf dem neuesten Stand. Er wird aktualisiert, sobald der Kampf beendet ist."
+L["Navigation Action Shift Combat"] =
+"Drücke die Umschalttaste und klicke mit der linken Maustaste, um die angezeigte Aktion im Kampf auszuführen."
 L["Navigation Action Unavailable Combat"] = "Diese Aktion steht nach dem Kampf zur Verfügung."
 L["Navigation Action Started"] = "Warte auf Ankunftsbestätigung."
 L["Navigation Action Failed"] = "Die Aktion wurde nicht abgeschlossen. Versuche es erneut oder berechne die Route neu."
@@ -237,7 +266,8 @@ L["Navigation Travel To Destination"] = "Reise nach %s."
 L["Navigation Fly To Destination"] = "Fliege nach %s."
 L["Navigation Route To"] = "Route nach: %s (%s)"
 L["Navigation Chat Header"] = "Route nach: %s (%s) — %s"
-L["Navigation Chat Unavailable"] = "Wähle einen verfügbaren Chatkanal oder einen Flüsterempfänger, bevor du die Route exportierst."
+L["Navigation Chat Unavailable"] =
+"Wähle einen verfügbaren Chatkanal oder einen Flüsterempfänger, bevor du die Route exportierst."
 L["Send"] = "Senden"
 L["Navigation Chat Choose Channel"] = "Wähle, wohin diese Route gesendet werden soll:"
 L["Navigation Chat Whisper To"] = "Flüstern an"
@@ -320,38 +350,49 @@ L["Navigation Traveling By Flight To"] = "Flug nach %s läuft."
 L["Recalculate Route"] = "Route neu berechnen"
 L["%s - %s"] = "%s – %s"
 L["System Groups"] = "Systemgruppen"
-L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."] = "Systemgruppen werden von „Map Pin Enhanced“ für spezielle Funktionen verwaltet. Ihre Grundeinstellungen können nicht geändert werden."
+L["System groups are managed by Map Pin Enhanced for special features. Their core settings cannot be changed."] =
+"Systemgruppen werden von „Map Pin Enhanced“ für spezielle Funktionen verwaltet. Ihre Grundeinstellungen können nicht geändert werden."
 
 
 L["Report"] = "Bericht"
 L["Report a navigation problem"] = "Ein Navigationsproblem melden"
 L["Help improve navigation"] = "Hilf mit, die Navigation zu verbessern"
-L["Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."] = "Beschreibe das Problem, kopiere den Bericht unten und veröffentliche ihn auf einer der beiden Fehlermeldungsseiten. Kopiere eine URL in deinen Browser, um zu beginnen."
+L["Describe the problem, then copy the report below and post it on either issue page. Copy a URL into your browser to get started."] =
+"Beschreibe das Problem, kopiere den Bericht unten und veröffentliche ihn auf einer der beiden Fehlermeldungsseiten. Kopiere eine URL in deinen Browser, um zu beginnen."
 L["What went wrong?"] = "Was ist schiefgelaufen?"
-L["What happened, what did you expect, and how can we reproduce it?"] = "Was ist passiert, was hast du erwartet und wie können wir das nachstellen?"
+L["What happened, what did you expect, and how can we reproduce it?"] =
+"Was ist passiert, was hast du erwartet und wie können wir das nachstellen?"
 L["Your report (description and debug data)"] = "Dein Bericht (Beschreibung und Debug-Daten)"
-L["Click the report or a URL to select it, then press Ctrl+C to copy."] = "Klicke auf den Bericht oder eine URL, um den Text auszuwählen, und drücke Strg+C zum Kopieren."
+L["Click the report or a URL to select it, then press Ctrl+C to copy."] =
+"Klicke auf den Bericht oder eine URL, um den Text auszuwählen, und drücke Strg+C zum Kopieren."
 L["Navigation Debug Dump"] = "Navigations-Debug-Dump"
 
 
 L["Description"] = "Beschreibung"
 L["Edit Description"] = "Beschreibung bearbeiten"
-L["Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."] = "Füge Notizen zu dieser Markierung hinzu. Beschreibungen erscheinen in den Tooltips der Markierungen und unter dem Titel des Wegweisers."
+L["Add notes for this pin. Descriptions appear in pin tooltips and below the wayfinder title."] =
+"Füge Notizen zu dieser Markierung hinzu. Beschreibungen erscheinen in den Tooltips der Markierungen und unter dem Titel des Wegweisers."
 L["This pin is no longer in this group."] = "Diese Markierung gehört nicht mehr zu dieser Gruppe."
 L["Apply"] = "Übernehmen"
 
 L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Skalierung mit der Entfernung"
-L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] = "Die schwebende Markierung und ihr Strahl wachsen beim Näherkommen von 75% auf 100%. Die Entfernungsbereiche richten sich nach deiner beim Laden des Addons erlernten Reit- oder Flugfähigkeit und bleiben bis zum Neuladen unverändert."
+L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
+"Die schwebende Markierung und ihr Strahl wachsen beim Näherkommen von 75% auf 100%. Die Entfernungsbereiche richten sich nach deiner beim Laden des Addons erlernten Reit- oder Flugfähigkeit und bleiben bis zum Neuladen unverändert."
 L["Wayfinder.Floating.ShowBeam_LABEL"] = "Strahl anzeigen"
-L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Zeige einen Strahl über der schwebenden Markierung an, wenn diese auf dem Bildschirm zu sehen ist."
+L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] =
+"Zeige einen Strahl über der schwebenden Markierung an, wenn diese auf dem Bildschirm zu sehen ist."
 L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Textkontur anzeigen"
-L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] = "Distanz, geschätzte Ankunftszeit und den beim Einblenden oder Darüberfahren angezeigten Titel der schwebenden Markierung mit einer Textkontur versehen."
+L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] =
+"Distanz, geschätzte Ankunftszeit und den beim Einblenden oder Darüberfahren angezeigten Titel der schwebenden Markierung mit einer Textkontur versehen."
 L["Wayfinder.General.ShowETA_LABEL"] = "Voraussichtliche Ankunftszeit anzeigen"
 L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Questziel-Rahmen anzeigen"
-L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] = "Questziele beim Betreten eines Zielgebiets anzeigen. Wenn deaktiviert, wird der schwebende Wegweiser ausgeblendet und der Pfeil bleibt in seiner Nahansicht."
-L["Wayfinder.General.ShowETA_DESCRIPTION"] = "Zeige die geschätzte Reisezeit zum aktuellen Ziel neben der Entfernung an, sofern verfügbar."
+L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =
+"Questziele beim Betreten eines Zielgebiets anzeigen. Wenn deaktiviert, wird der schwebende Wegweiser ausgeblendet und der Pfeil bleibt in seiner Nahansicht."
+L["Wayfinder.General.ShowETA_DESCRIPTION"] =
+"Zeige die geschätzte Reisezeit zum aktuellen Ziel neben der Entfernung an, sofern verfügbar."
 L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Transportmittel"
-L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] = "Wähle, welche Transportmittel die Navigation vorschlagen darf. Linienverkehr umfasst Boote, Zeppeline und Straßenbahnen. Persönliche Teleports umfassen Reisezauber, Gegenstände, Spielzeuge und den Dalaran-Ruhestein."
+L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] =
+"Wähle, welche Transportmittel die Navigation vorschlagen darf. Linienverkehr umfasst Boote, Zeppeline und Straßenbahnen. Persönliche Teleports umfassen Reisezauber, Gegenstände, Spielzeuge und den Dalaran-Ruhestein."
 L["Navigation Transportation Portals"] = "Portale"
 L["Navigation Transportation Flight paths"] = "Flugwege"
 L["Navigation Transportation Scheduled transport"] = "Linienverkehr"
@@ -367,47 +408,65 @@ L["Settings for Arrow; Floating is still selected."] = "Einstellungen für „Pf
 L["Clear Tracking"] = "Verfolgung beenden"
 L["In objective area"] = "Im Zielgebiet"
 L["Why do I see this navigation element?"] = "Warum wird dieses Navigationselement angezeigt?"
-L["Wayfinder.Floating.Fallback_DESCRIPTION"] = "Die Benutzeroberfläche von Blizzard kann für dieses Ziel in diesem Bereich keine verwertbaren Weltkoordinaten bereitstellen. Dieser Pfeil wird nur vorübergehend angezeigt und verschwindet wieder, sobald verwertbare Spielinformationen verfügbar sind."
+L["Wayfinder.Floating.Fallback_DESCRIPTION"] =
+"Die Benutzeroberfläche von Blizzard kann für dieses Ziel in diesem Bereich keine verwertbaren Weltkoordinaten bereitstellen. Dieser Pfeil wird nur vorübergehend angezeigt und verschwindet wieder, sobald verwertbare Spielinformationen verfügbar sind."
 
-L["Group sharing timed out. The sender must be online and the link must still be available."] = "Die Zeit für die Freigabe in der Gruppe ist abgelaufen. Der Absender muss online sein und der Link muss noch verfügbar sein."
+L["Group sharing timed out. The sender must be online and the link must still be available."] =
+"Die Zeit für die Freigabe in der Gruppe ist abgelaufen. Der Absender muss online sein und der Link muss noch verfügbar sein."
 L["Requesting shared group..."] = "Geteilte Gruppe wird angefordert..."
 L["Receiving shared group..."] = "Geteilte Gruppe wird empfangen..."
 L["Shared group \"%s\" received."] = "Die freigegebene Gruppe „%s“ wurde empfangen."
-L["This shared group is no longer available. Ask the sender for a new link."] = "Diese geteilte Gruppe ist nicht mehr verfügbar. Bitte den Absender um einen neuen Link."
+L["This shared group is no longer available. Ask the sender for a new link."] =
+"Diese geteilte Gruppe ist nicht mehr verfügbar. Bitte den Absender um einen neuen Link."
 
-L["Pin operation stopped after %d of %d pins. Completed changes were kept."] = "Die Aktion wurde nach %d von %d Markierungen gestoppt. Bereits abgeschlossene Änderungen wurden beibehalten."
+L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
+"Die Aktion wurde nach %d von %d Markierungen gestoppt. Bereits abgeschlossene Änderungen wurden beibehalten."
 
 -- Category options (0041).
 L["Miscellaneous.Coords.ShowZone_LABEL"] = "Gebiet anzeigen"
-L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Zeige den vollständigen Kartennamen zwischen deinen X- und Y-Koordinaten an."
+L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] =
+"Zeige den vollständigen Kartennamen zwischen deinen X- und Y-Koordinaten an."
 L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Dezimalstellen anzeigen"
-L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] = "Zwei Dezimalstellen anzeigen. Deaktivieren, um gekürzte ganzzahlige Koordinaten anzuzeigen."
+L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] =
+"Zwei Dezimalstellen anzeigen. Deaktivieren, um gekürzte ganzzahlige Koordinaten anzuzeigen."
 L["Pins.Appearance.AlwaysPingTracked_LABEL"] = "Verfolgte Markierung dauerhaft pulsieren lassen"
-L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] = "Lass den Marker auf der Weltkarte alle zwei Sekunden blinken, solange er sichtbar ist."
+L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] =
+"Lass den Marker auf der Weltkarte alle zwei Sekunden blinken, solange er sichtbar ist."
 L["Pins.Appearance.MinimapScale_LABEL"] = "Größe der Markierungen auf der Minikarte"
 L["Pins.Appearance.MinimapScale_DESCRIPTION"] = "Wähle die Größe normaler Minikartenmarkierungen."
 L["Pins.Appearance.WorldMapScale_LABEL"] = "Größe der Weltkartenmarkierungen"
-L["Pins.Appearance.WorldMapScale_DESCRIPTION"] = "Wähle die Größe normaler Weltkartenmarkierungen. Die Vergrößerung beim Darüberfahren wird zusätzlich angewendet."
+L["Pins.Appearance.WorldMapScale_DESCRIPTION"] =
+"Wähle die Größe normaler Weltkartenmarkierungen. Die Vergrößerung beim Darüberfahren wird zusätzlich angewendet."
 L["Pins.Appearance.DefaultColor_LABEL"] = "Standardfarbe der Markierungen"
-L["Pins.Appearance.DefaultColor_DESCRIPTION"] = "Farbe für neue Markierungen ohne ausdrücklich festgelegtes Symbol oder Farbe. Bestehende und importierte Markierungen behalten ihr Aussehen."
+L["Pins.Appearance.DefaultColor_DESCRIPTION"] =
+"Farbe für neue Markierungen ohne ausdrücklich festgelegtes Symbol oder Farbe. Bestehende und importierte Markierungen behalten ihr Aussehen."
 L["Pins.Appearance.FadeUntracked_LABEL"] = "Nicht verfolgte Markierungen abdunkeln"
-L["Pins.Appearance.FadeUntracked_DESCRIPTION"] = "Die Deckkraft der nicht verfolgten Kartenmarkierungen auf 40 % reduzieren. Beim Bewegen des Mauszeigers über die Markierung wird die volle Deckkraft wiederhergestellt."
+L["Pins.Appearance.FadeUntracked_DESCRIPTION"] =
+"Die Deckkraft der nicht verfolgten Kartenmarkierungen auf 40 % reduzieren. Beim Bewegen des Mauszeigers über die Markierung wird die volle Deckkraft wiederhergestellt."
 L["Pins.Appearance.ShowMinimapPins_LABEL"] = "Minikarten-Markierungen anzeigen"
-L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] = "Gewöhnliche Addon-Markierungen auf der Minikarte anzeigen. Minikarten-Markierungen erfordern Positionsaktualisierungen; Wegweiser und Routenmarkierungen bleiben davon unberührt."
+L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] =
+"Gewöhnliche Addon-Markierungen auf der Minikarte anzeigen. Minikarten-Markierungen erfordern Positionsaktualisierungen; Wegweiser und Routenmarkierungen bleiben davon unberührt."
 L["Pins.Miscellaneous.EnableLockedPins_LABEL"] = "Sperren von Markierungen erlauben"
-L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] = "Neue Sperren erlauben. Gesperrte Markierungen bleiben bestehen, bis du sie entfernst; vorhandene Markierungen lassen sich jederzeit entsperren."
+L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
+"Neue Sperren erlauben. Gesperrte Markierungen bleiben bestehen, bis du sie entfernst; vorhandene Markierungen lassen sich jederzeit entsperren."
 L["Pins.Tracking.ArrivalNotification_LABEL"] = "Benachrichtigung beim Erreichen der Markierung"
-L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] = "Einmal pro Verfolgung-Sitzung benachrichtigen, sobald das endgültige Add-on-Ziel physisch erreicht wurde."
+L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
+"Einmal pro Verfolgung-Sitzung benachrichtigen, sobald das endgültige Add-on-Ziel physisch erreicht wurde."
 L["Pins.Tracking.AutoUntrack_LABEL"] = "Verfolgung automatisch beenden"
-L["Pins.Tracking.AutoUntrack_DESCRIPTION"] = "Verfolgung durch das Addon und Blizzard beim Betreten eines Dungeons, Schlachtzugs, Szenarios, Schlachtfelds oder einer Arena beenden."
+L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
+"Verfolgung durch das Addon und Blizzard beim Betreten eines Dungeons, Schlachtzugs, Szenarios, Schlachtfelds oder einer Arena beenden."
 L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Bei neuer Markierung automatisch anzeigen"
-L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] = "Zeige den Tracker an und klappe ihn auf, nachdem eine eigene Markierung erstellt oder ein Import bestätigt wurde. Das Verfolgen eines Blizzard-Elements löst dies nicht aus. Die Regeln zum automatischen Ausblenden gelten weiterhin."
+L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
+"Zeige den Tracker an und klappe ihn auf, nachdem eine eigene Markierung erstellt oder ein Import bestätigt wurde. Das Verfolgen eines Blizzard-Elements löst dies nicht aus. Die Regeln zum automatischen Ausblenden gelten weiterhin."
 L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Tracker minimieren statt schließen"
-L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] = "Beim Minimieren des Trackers soll nur die Kopfzeile sichtbar bleiben."
+L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
+"Beim Minimieren des Trackers soll nur die Kopfzeile sichtbar bleiben."
 L["Miscellaneous.Tracker.ShowCoordinates_LABEL"] = "Koordinaten anzeigen"
-L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] = "Koordinaten neben dem Gebietsnamen in den Markierungseinträgen des Trackers anzeigen."
+L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] =
+"Koordinaten neben dem Gebietsnamen in den Markierungseinträgen des Trackers anzeigen."
 L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Maximale Anzahl sichtbarer Zeilen"
-L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] = "Maximale Anzahl an Gruppen- und Markierungszeilen vor dem Scrollen, ohne Kopfzeile."
+L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
+"Maximale Anzahl an Gruppen- und Markierungszeilen vor dem Scrollen, ohne Kopfzeile."
 L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Deckkraft des Tracker-Hintergrunds"
 L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] = "Deckkraft hinter der Markierungsliste, von 0% bis 100%."
 L["Miscellaneous.Tracker.Scale_LABEL"] = "Tracker-Größe"
@@ -438,12 +497,16 @@ L["Lock Pin"] = "Markierung sperren"
 L["Unlock Pin"] = "Markierung entsperren"
 
 ------------------------------ Legacy migration ------------------------------
-L["Legacy migration could not update groups. Original saved data was kept."] = "Bei der Migration aus dem Altsystem konnten die Gruppen nicht aktualisiert werden. Die ursprünglich gespeicherten Daten blieben erhalten."
-L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] = "%d alte Markierungen und %d gespeicherte Sets wurden migriert. Die ursprünglichen gespeicherten Daten blieben erhalten."
-L["%d legacy entries could not be migrated. Original saved data was kept."] = "%d alte Einträge konnten nicht migriert werden. Die ursprünglich gespeicherten Daten wurden beibehalten."
+L["Legacy migration could not update groups. Original saved data was kept."] =
+"Bei der Migration aus dem Altsystem konnten die Gruppen nicht aktualisiert werden. Die ursprünglich gespeicherten Daten blieben erhalten."
+L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
+"%d alte Markierungen und %d gespeicherte Sets wurden migriert. Die ursprünglichen gespeicherten Daten blieben erhalten."
+L["%d legacy entries could not be migrated. Original saved data was kept."] =
+"%d alte Einträge konnten nicht migriert werden. Die ursprünglich gespeicherten Daten wurden beibehalten."
 
 L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Ausrüstung nach der Reise wieder anlegen"
-L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] = "Ausrüstung, die durch Navigationselemente ersetzt wurde, wiederherstellen und Ausrüstungsbenachrichtigungen anzeigen. Auch wenn diese Option deaktiviert ist, wird bereits ersetzte Ausrüstung wiederhergestellt."
+L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
+"Ausrüstung, die durch Navigationselemente ersetzt wurde, wiederherstellen und Ausrüstungsbenachrichtigungen anzeigen. Auch wenn diese Option deaktiviert ist, wird bereits ersetzte Ausrüstung wiederhergestellt."
 
 L["Clear"] = "Löschen"
 L["Options"] = "Optionen"
@@ -456,10 +519,14 @@ L["Example pin"] = "Beispielmarkierung"
 L["Introduction"] = "Einleitung"
 L["Step %d of %d"] = "Schritt %d von %d"
 L["Reset the startup introduction."] = "Die Einführungssequenz beim Start zurücksetzen."
-L["This introduction covers some of the addon's core settings. You can change all of these choices later in settings."] = "Diese Einführung erklärt einige Grundeinstellungen des Addons. Du kannst diese Auswahl später jederzeit in den Einstellungen ändern."
-L["Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction."] = "„Schwebend“ zeigt eine Raute an deinem Ziel in der Spielwelt. „Pfeil“ zeigt die Richtung mit einem einfachen Zeiger an."
-L["Navigation shows the best available route to your target location."] = "Die Navigation zeigt die beste verfügbare Route zu deinem Ziel."
-L["Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction."] = "Halte die Strg-Taste gedrückt und klicke auf die Weltkarte, um eine Markierung zu setzen. Mit der Schaltfläche unten kannst du eine Testmarkierung in der Nähe deines Charakters setzen und die Einführung abschließen."
+L["This introduction covers some of the addon's core settings. You can change all of these choices later in settings."] =
+"Diese Einführung erklärt einige Grundeinstellungen des Addons. Du kannst diese Auswahl später jederzeit in den Einstellungen ändern."
+L["Floating shows a diamond in the world at your target. Arrow uses a simple pointer to show the direction."] =
+"„Schwebend“ zeigt eine Raute an deinem Ziel in der Spielwelt. „Pfeil“ zeigt die Richtung mit einem einfachen Zeiger an."
+L["Navigation shows the best available route to your target location."] =
+"Die Navigation zeigt die beste verfügbare Route zu deinem Ziel."
+L["Hold Ctrl and click the world map to place a pin. The button below creates a test pin near your character and finishes the introduction."] =
+"Halte die Strg-Taste gedrückt und klicke auf die Weltkarte, um eine Markierung zu setzen. Mit der Schaltfläche unten kannst du eine Testmarkierung in der Nähe deines Charakters setzen und die Einführung abschließen."
 L["Let's go!"] = "Los geht’s!"
 L["Finish"] = "Fertigstellen"
 L["Next"] = "Weiter"
@@ -487,7 +554,8 @@ L["General.TooltipHelper_LABEL"] = "Tooltip-Hilfsfunktion aktivieren"
 L["General.TooltipHelper_DESCRIPTION"] = "Verfügbare Klickaktionen in Tooltips anzeigen."
 
 L["Common options"] = "Häufige Optionen"
-L["Choose which helpers you want to enable. You can change these choices later in settings."] = "Wähle, welche Hilfsfunktionen du aktivieren möchtest. Du kannst diese Auswahl später in den Einstellungen ändern."
+L["Choose which helpers you want to enable. You can change these choices later in settings."] =
+"Wähle, welche Hilfsfunktionen du aktivieren möchtest. Du kannst diese Auswahl später in den Einstellungen ändern."
 
 --@debug@
 L["Profiler"] = "Profiler"
@@ -499,14 +567,17 @@ L["All modules"] = "Alle Module"
 L["Start"] = "Start"
 L["Stop"] = "Stopp"
 L["Reset"] = "Zurücksetzen"
-L["Recording. Closing this window stops capture."] = "Aufnahme. Durch Schließen dieses Fensters wird die Aufnahme beendet."
-L["Capture stopped: %.2f seconds. Export to inspect results."] = "Aufzeichnung beendet: %.2f Sekunden. Exportiere die Daten, um die Ergebnisse zu prüfen."
+L["Recording. Closing this window stops capture."] =
+"Aufnahme. Durch Schließen dieses Fensters wird die Aufnahme beendet."
+L["Capture stopped: %.2f seconds. Export to inspect results."] =
+"Aufzeichnung beendet: %.2f Sekunden. Exportiere die Daten, um die Ergebnisse zu prüfen."
 L["Select modules, then start a new capture."] = "Wähle Module und starte dann eine neue Aufzeichnung."
 L["Open the profiler."] = "Öffne den Profiler."
 --@end-debug@
 
 L["General.FlightTimer.Enable_LABEL"] = "Flug-Timer aktivieren"
-L["General.FlightTimer.Enable_DESCRIPTION"] = "Zeige bei Flügen über Flugmeister einen verschiebbaren Fortschrittsbalken und die geschätzte Restzeit an."
+L["General.FlightTimer.Enable_DESCRIPTION"] =
+"Zeige bei Flügen über Flugmeister einen verschiebbaren Fortschrittsbalken und die geschätzte Restzeit an."
 L["General.FlightTimer.Lock_LABEL"] = "Flug-Timer sperren"
 L["General.FlightTimer.Lock_DESCRIPTION"] = "Verhindere, dass der Flug-Timer verschoben wird."
 L["General.FlightTimer.Scale_LABEL"] = "Größe des Flug-Timers"
@@ -518,7 +589,8 @@ L["Flight remaining: %s"] = "%s verbleibend"
 L["Mode: baseline"] = "Modus: Basis"
 L["Mode: detailed"] = "Modus: detailliert"
 
-L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] = "Der Basismodus misst die gesamte vom Addon verbrauchte Rechenzeit. Der Detailmodus erfasst zusätzlich einzelne Funktionen und Vorbereitungsphasen. Beide zeigen den prozentualen Anteil und eine Zeitleiste. Vergleiche ähnliche Spielsituationen; die Messung verursacht zusätzlichen Aufwand und die Detailzeiten überschneiden sich."
+L["Baseline measures whole-addon engine time. Detailed adds function scopes and preparation phases. Both include percentage impact and a timeline. Compare matching gameplay; profiling adds overhead and detailed times overlap."] =
+"Der Basismodus misst die gesamte vom Addon verbrauchte Rechenzeit. Der Detailmodus erfasst zusätzlich einzelne Funktionen und Vorbereitungsphasen. Beide zeigen den prozentualen Anteil und eine Zeitleiste. Vergleiche ähnliche Spielsituationen; die Messung verursacht zusätzlichen Aufwand und die Detailzeiten überschneiden sich."
 
 L["Share location"] = "Standort teilen"
 L["Place a pin here"] = "Setze hier eine Markierung"

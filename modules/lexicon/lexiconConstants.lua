@@ -62,32 +62,97 @@ Lexicon.CATEGORIES = {
 
 Lexicon.CATEGORIES.town = { label = L["Town"], aliases = { "town", "village" }, texture = iconPath .. "poi-town.png" }
 Lexicon.CATEGORIES.mailbox = { label = L["Mailbox"], aliases = { "mail", "mailbox" }, texture = iconPath .. "mailbox.png", service = true }
-Lexicon.CATEGORIES.class = { label = L["Class Trainer"], aliases = { "class", "class trainer" }, texture = iconPath ..
-"class.png", service = true }
-Lexicon.CATEGORIES.profession = { label = L["Profession Trainer"], aliases = { "profession", "profession trainer" }, texture =
-iconPath .. "profession.png", service = true }
-Lexicon.CATEGORIES["vendor-ammo"] = { label = L["Ammunition Vendor"], aliases = { "ammo", "ammunition", "ammunition vendor" }, texture =
-iconPath .. "ammunition.png", service = true }
-Lexicon.CATEGORIES["vendor-armor"] = { label = L["Armor Vendor"], aliases = { "armor", "armour", "armor vendor" }, texture =
-iconPath .. "quartermaster.png", service = true }
-Lexicon.CATEGORIES["vendor-bags"] = { label = L["Bag Vendor"], aliases = { "bag", "bags", "bag vendor" }, texture =
-iconPath .. "quartermaster.png", service = true }
-Lexicon.CATEGORIES["vendor-fishing"] = { label = L["Fishing Vendor"], aliases = { "fishing supplies", "fishing vendor" }, texture =
-iconPath .. "professions_tracking_fish.png", service = true }
-Lexicon.CATEGORIES["vendor-food"] = { label = L["Food Vendor"], aliases = { "food", "drink", "food vendor" }, texture =
-iconPath .. "food.png", service = true }
-Lexicon.CATEGORIES["vendor-general"] = { label = L["General Goods Vendor"], aliases = { "general goods", "general goods vendor" }, texture =
-iconPath .. "quartermaster.png", service = true }
-Lexicon.CATEGORIES["vendor-poisons"] = { label = L["Poison Vendor"], aliases = { "poison", "poisons", "poison vendor" }, texture =
-iconPath .. "poisons.png", service = true }
-Lexicon.CATEGORIES["vendor-profsupplies"] = { label = L["Profession Supplies Vendor"], aliases = { "profession supplies", "profession supplies vendor" }, texture =
-iconPath .. "profession.png", service = true }
-Lexicon.CATEGORIES["vendor-reagents"] = { label = L["Reagent Vendor"], aliases = { "reagent", "reagents", "reagent vendor" }, texture =
-iconPath .. "reagents.png", service = true }
-Lexicon.CATEGORIES["vendor-trade"] = { label = L["Trade Goods Vendor"], aliases = { "trade goods", "trade goods vendor" }, texture =
-iconPath .. "quartermaster.png", service = true }
-Lexicon.CATEGORIES["vendor-weapons"] = { label = L["Weapon Vendor"], aliases = { "weapon", "weapons", "weapon vendor" }, texture =
-iconPath .. "quartermaster.png", service = true }
+Lexicon.CATEGORIES.class = {
+    label = L["Class Trainer"],
+    aliases = { "class", "class trainer" },
+    texture = iconPath ..
+        "class.png",
+    service = true
+}
+Lexicon.CATEGORIES.profession = {
+    label = L["Profession Trainer"],
+    aliases = { "profession", "profession trainer" },
+    texture =
+        iconPath .. "profession.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-ammo"] = {
+    label = L["Ammunition Vendor"],
+    aliases = { "ammo", "ammunition", "ammunition vendor" },
+    texture =
+        iconPath .. "ammunition.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-armor"] = {
+    label = L["Armor Vendor"],
+    aliases = { "armor", "armour", "armor vendor" },
+    texture =
+        iconPath .. "quartermaster.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-bags"] = {
+    label = L["Bag Vendor"],
+    aliases = { "bag", "bags", "bag vendor" },
+    texture =
+        iconPath .. "quartermaster.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-fishing"] = {
+    label = L["Fishing Vendor"],
+    aliases = { "fishing supplies", "fishing vendor" },
+    texture =
+        iconPath .. "professions_tracking_fish.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-food"] = {
+    label = L["Food Vendor"],
+    aliases = { "food", "drink", "food vendor" },
+    texture =
+        iconPath .. "food.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-general"] = {
+    label = L["General Goods Vendor"],
+    aliases = { "general goods", "general goods vendor" },
+    texture =
+        iconPath .. "quartermaster.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-poisons"] = {
+    label = L["Poison Vendor"],
+    aliases = { "poison", "poisons", "poison vendor" },
+    texture =
+        iconPath .. "poisons.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-profsupplies"] = {
+    label = L["Profession Supplies Vendor"],
+    aliases = { "profession supplies", "profession supplies vendor" },
+    texture =
+        iconPath .. "profession.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-reagents"] = {
+    label = L["Reagent Vendor"],
+    aliases = { "reagent", "reagents", "reagent vendor" },
+    texture =
+        iconPath .. "reagents.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-trade"] = {
+    label = L["Trade Goods Vendor"],
+    aliases = { "trade goods", "trade goods vendor" },
+    texture =
+        iconPath .. "quartermaster.png",
+    service = true
+}
+Lexicon.CATEGORIES["vendor-weapons"] = {
+    label = L["Weapon Vendor"],
+    aliases = { "weapon", "weapons", "weapon vendor" },
+    texture =
+        iconPath .. "quartermaster.png",
+    service = true
+}
 
 ---@type table<string, string>
 Lexicon.SPECIALTIES = {

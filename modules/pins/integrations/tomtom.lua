@@ -44,8 +44,10 @@ local function EnsureTomTomGroup()
     local group = groupID and Groups:GetGroupByID(groupID) or Groups:GetGroupByName(L["TomTom Pins"])
     if not group then
         group = Groups:RegisterGroup({
-            name = L["TomTom Pins"], source = MapPinEnhanced.name,
-            icon = "Interface\\Icons\\INV_Misc_Map_01", order = GetTime(),
+            name = L["TomTom Pins"],
+            source = MapPinEnhanced.name,
+            icon = "Interface\\Icons\\INV_Misc_Map_01",
+            order = GetTime(),
         })
     end
     groupID = group and group:GetGroupID()
@@ -58,7 +60,9 @@ end
 local function AddTomTomWaypoint(uid, existingOnly)
     if not MapPinEnhanced:IsReadableTable(uid) or MapPinEnhanced:IsSecretValue(uid.corpse) or uid.corpse then return end
     if not MapPinEnhanced:IsReadablePositiveInteger(uid[1]) or
-        not MapPinEnhanced:IsCoordinate(uid[2]) or not MapPinEnhanced:IsCoordinate(uid[3]) then return end
+        not MapPinEnhanced:IsCoordinate(uid[2]) or not MapPinEnhanced:IsCoordinate(uid[3]) then
+        return
+    end
     local boundGroup, boundPinID = GetBoundGroup(uid)
     if boundGroup then
         if not existingOnly and not boundGroup:GetPinByID(boundPinID) then boundGroup:RestorePin(boundPinID) end
@@ -146,7 +150,9 @@ end
 function tomTomShim:WaypointExists(mapID, x, y, title)
     if not ShimIsActive() or not MapPinEnhanced:IsReadablePositiveInteger(mapID) or
         not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) or
-        MapPinEnhanced:IsSecretValue(title) then return false end
+        MapPinEnhanced:IsSecretValue(title) then
+        return false
+    end
     for uid in pairs(bindings) do
         if uid[1] == mapID and uid[2] == x and uid[3] == y and uid.title == title and self:IsValidWaypoint(uid) then
             return true
@@ -157,7 +163,9 @@ end
 
 function tomTomShim:AddWaypoint(mapID, x, y, info)
     if not ShimIsActive() or not MapPinEnhanced:IsReadablePositiveInteger(mapID) or
-        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then return end
+        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
+        return
+    end
     if not MapPinEnhanced:IsReadableTable(info) then info = {} end
     local title = info.title
     if MapPinEnhanced:IsSecretValue(title) or type(title) ~= "string" then title = nil end
@@ -205,7 +213,9 @@ end
 
 function tomTomShim:GetDistanceToWaypoint(uid)
     if not self:IsValidWaypoint(uid) or not MapPinEnhanced:IsReadablePositiveInteger(uid[1]) or
-        not MapPinEnhanced:IsCoordinate(uid[2]) or not MapPinEnhanced:IsCoordinate(uid[3]) then return end
+        not MapPinEnhanced:IsCoordinate(uid[2]) or not MapPinEnhanced:IsCoordinate(uid[3]) then
+        return
+    end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     if not mapID or not x or not y then return end
     return MapPinEnhanced.HBD:GetZoneDistance(mapID, x, y, uid[1], uid[2], uid[3])
@@ -237,7 +247,9 @@ end
 
 function tomTomShim:AddWaypointToCurrentZone(x, y, title)
     if not ShimIsActive() or not MapPinEnhanced:IsReadableNumber(x) or
-        not MapPinEnhanced:IsReadableNumber(y) then return end
+        not MapPinEnhanced:IsReadableNumber(y) then
+        return
+    end
     local mapID = C_Map.GetBestMapForUnit("player")
     return self:AddWaypoint(mapID, x / 100, y / 100, { title = title })
 end
@@ -250,7 +262,9 @@ local nativeSelected
 local function HookTomTom()
     local native = TomTom
     if not native or not C_AddOns.IsAddOnLoaded("TomTom") or
-        not MapPinEnhanced:IsReadableTable(native) or native == tomTomShim then return end
+        not MapPinEnhanced:IsReadableTable(native) or native == tomTomShim then
+        return
+    end
     local methods = hookedMethods[native] or {}
     hookedMethods[native] = methods
     local function Hook(name, callback)
@@ -267,7 +281,9 @@ local function HookTomTom()
         -- TomTom rejects selection while its sticky corpse arrow is active.
         local profile = native.db and native.db.profile
         if nativeSelected and nativeSelected.corpse and profile and profile.arrow and profile.arrow.stickycorpse and
-            type(native.IsCrazyArrowEmpty) == "function" and not native:IsCrazyArrowEmpty() then return end
+            type(native.IsCrazyArrowEmpty) == "function" and not native:IsCrazyArrowEmpty() then
+            return
+        end
         nativeSelected = MapPinEnhanced:IsReadableTable(uid) and uid or nil
         if nativeSelected and MapPinEnhanced:IsSecretValue(nativeSelected.corpse) then
             nativeSelected = nil

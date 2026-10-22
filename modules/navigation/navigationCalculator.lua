@@ -250,7 +250,9 @@ function Navigation:GetRemainingRouteCost(progression, preparedData, checkpoint,
     end
 
     if not self:IsTravelPhaseDestinationAllowed(phaseState, destination.routingData.mapID,
-        progression.route.destinationPhaseState or phaseState) then return nil end
+            progression.route.destinationPhaseState or phaseState) then
+        return nil
+    end
     local finalPathReference = progression.route.pathReferences[#progression.route.pathReferences]
     local finalPointIndex = finalPathReference and graph.pathToPointIndexes[finalPathReference] or nil
     if not finalPointIndex then return total end
@@ -617,7 +619,7 @@ end
 ---@return boolean
 local function IsRetainedPath(job, reference)
     if job.reverseSearch and (job.graph.pathTypes[reference] == "phaseswitch" or
-        not Navigation:IsTravelPhasePathAllowed(job.graph, job.preparedData, reference, job.initialPhaseState)) then
+            not Navigation:IsTravelPhasePathAllowed(job.graph, job.preparedData, reference, job.initialPhaseState)) then
         return false
     end
     if job.avoidedPaths[reference] or job.prunedPaths[reference] or job.unavailablePathCosts[reference] or
@@ -685,7 +687,9 @@ local function OfferDestination(job, entry)
     local graph = job.graph
     if not graph or entry.pathCount == 0 then return end
     if not Navigation:IsTravelPhaseDestinationAllowed(entry.phaseState or job.initialPhaseState,
-        job.destinationData.mapID, job.initialPhaseState) then return end
+            job.destinationData.mapID, job.initialPhaseState) then
+        return
+    end
     local finalCost = GetFinalMovementCost(job, entry.pointIndex)
     if not finalCost then return end
     local costBucket = GetCostBucket(entry.cost + finalCost.comparisonSeconds)
@@ -886,7 +890,7 @@ local function OfferNextMovementPoint(job)
     job.movementCandidates = job.movementCandidates + 1
     if pointIndex == entry.pointIndex then return end
     local bestCostBucket = job.bestCostBuckets[pointIndex .. "/" ..
-        Navigation:GetTravelPhaseKey(entry.phaseState or job.initialPhaseState)]
+    Navigation:GetTravelPhaseKey(entry.phaseState or job.initialPhaseState)]
     if bestCostBucket and entry.costBucket > bestCostBucket then return end
     local target = job.worldPoints[pointIndex]
     local fromMapID = job.reverseSearch and target.mapID or origin.mapID
@@ -941,7 +945,7 @@ local function SeedJob(job)
         local directCost = Navigation:GetPlayerTravelCost(job.preparedData,
             playerMapID, playerX, playerY, destination.mapID, destination.x, destination.y, "automatic")
         if directCost and Navigation:IsTravelPhaseDestinationAllowed(job.initialPhaseState,
-            destination.mapID, job.initialPhaseState) then
+                destination.mapID, job.initialPhaseState) then
             job.destinationCostBucket = GetCostBucket(directCost.comparisonSeconds)
             HeapPush(job.heap, {
                 pointIndex = 0,
@@ -1483,7 +1487,9 @@ end
 ---@return boolean accepted
 function Navigation:StartPredictedRoute(destination, prediction)
     if destination.destinationID ~= prediction.id or destination.directGuidance or self:IsTaxiBookingPending() or
-        not self:CanReuseDestinationPrediction(prediction, destination.routingData) then return false end
+        not self:CanReuseDestinationPrediction(prediction, destination.routingData) then
+        return false
+    end
     local route = prediction.route
     ---@cast route NavigationRoute
     route.destinationID, route.destinationChangeNumber = destination.destinationID, destination.changeNumber
@@ -1581,11 +1587,17 @@ function Navigation:FindFastestDestination(originData, candidates, onFinish)
             ---@return boolean
             local function Consider(candidate, seconds)
                 if seconds and (not winner or GetCostBucket(seconds) < GetCostBucket(winner.comparisonSeconds) or
-                    GetCostBucket(seconds) == GetCostBucket(winner.comparisonSeconds) and
-                    (candidate.order > bestOrder or candidate.order == bestOrder and candidate.id < winner.id)) then
-                    winner = { id = candidate.id, comparisonSeconds = seconds,
-                        changeNumber = changeNumber, expiresAt = expiresAt,
-                        origin = origin, destination = candidate.data, graph = graph }
+                        GetCostBucket(seconds) == GetCostBucket(winner.comparisonSeconds) and
+                        (candidate.order > bestOrder or candidate.order == bestOrder and candidate.id < winner.id)) then
+                    winner = {
+                        id = candidate.id,
+                        comparisonSeconds = seconds,
+                        changeNumber = changeNumber,
+                        expiresAt = expiresAt,
+                        origin = origin,
+                        destination = candidate.data,
+                        graph = graph
+                    }
                     bestOrder = candidate.order
                     return true
                 end
@@ -1657,12 +1669,15 @@ function Navigation:FindFastestDestination(originData, candidates, onFinish)
                         local job = CreateCalculationJob(graph, origin, candidate.id, 0, destination)
                         job.checkpoint, job.wait = Checkpoint, wait
                         job.preparedData, job.initialPhaseState = inputs, phase
-                        job.graph, job.taxiJourneys, job.taxiOutgoing = shared.graph, shared.taxiJourneys, shared.taxiOutgoing
+                        job.graph, job.taxiJourneys, job.taxiOutgoing = shared.graph, shared.taxiJourneys,
+                            shared.taxiOutgoing
                         job.prunedPaths = shared.prunedPaths
-                        job.pathCostByReference, job.unavailablePathCosts = shared.pathCostByReference, shared.unavailablePathCosts
+                        job.pathCostByReference, job.unavailablePathCosts = shared.pathCostByReference,
+                            shared.unavailablePathCosts
                         job.worldPoints, job.attemptedWorldPoints = shared.worldPoints, shared.attemptedWorldPoints
                         job.entrancesByInstance, job.entrancesByMap = shared.entrancesByInstance, shared.entrancesByMap
-                        job.entrancesByInstanceX, job.entrancesByMapX = shared.entrancesByInstanceX, shared.entrancesByMapX
+                        job.entrancesByInstanceX, job.entrancesByMapX = shared.entrancesByInstanceX,
+                            shared.entrancesByMapX
                         local x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(
                             destination.x, destination.y, destination.mapID)
                         job.destinationWorldPoint = x and y and instanceID and
@@ -1685,7 +1700,7 @@ function Navigation:FindFastestDestination(originData, candidates, onFinish)
                 end
             end
             Checkpoint()
-    end }, nil, function()
+        end }, nil, function()
         local finish = onFinish
         Cancel()
         if finish then finish(winner) end

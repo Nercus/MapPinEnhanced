@@ -1,17 +1,26 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="Lexicon.lua" />
     <Frame name="MapPinEnhancedLexiconBackgroundTemplate" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" virtual="true">
-        <Layers><Layer level="BACKGROUND" textureSubLevel="0">
-            <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" setAllPoints="true" />
-        </Layer></Layers>
+        <Layers>
+            <Layer level="BACKGROUND" textureSubLevel="0">
+                <Texture inherits="MapPinEnhancedGenericFrameOpaqueTextureTemplate" setAllPoints="true" />
+            </Layer>
+        </Layers>
     </Frame>
     <Frame name="MapPinEnhancedLexiconTemplate" mixin="MapPinEnhancedLexiconMixin" inherits="MapPinEnhancedLexiconBackgroundTemplate" virtual="true" hidden="true" enableMouse="true" clampedToScreen="true" frameStrata="DIALOG" toplevel="true">
         <Size x="520" y="56" />
-        <Anchors><Anchor point="CENTER" /></Anchors>
+        <Anchors>
+            <Anchor point="CENTER" />
+        </Anchors>
         <Frames>
             <EditBox parentKey="input" inherits="MapPinEnhancedInputTemplate">
-                <KeyValues><KeyValue key="icon" value="search" /></KeyValues>
-                <Anchors><Anchor point="TOPLEFT" x="4" y="-4" /><Anchor point="BOTTOMRIGHT" x="-4" y="4" /></Anchors>
+                <KeyValues>
+                    <KeyValue key="icon" value="search" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="4" y="-4" />
+                    <Anchor point="BOTTOMRIGHT" x="-4" y="4" />
+                </Anchors>
                 <Scripts>
                     <OnLoad>
                         self:OnLoad()
@@ -33,16 +42,24 @@
                     <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" />
                     <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" />
                 </Anchors>
-                <Layers><Layer level="OVERLAY">
-                    <FontString parentKey="message" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT" wordwrap="false">
-                        <Size y="20" />
-                        <Anchors><Anchor point="BOTTOMLEFT" x="14" y="8" /><Anchor point="BOTTOMRIGHT" x="-14" y="8" /></Anchors>
-                    </FontString>
-                </Layer></Layers>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString parentKey="message" inherits="MapPinEnhancedFontDisabledSmall" justifyH="LEFT" wordwrap="false">
+                            <Size y="20" />
+                            <Anchors>
+                                <Anchor point="BOTTOMLEFT" x="14" y="8" />
+                                <Anchor point="BOTTOMRIGHT" x="-14" y="8" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
                 <Frames>
                     <Frame parentKey="scrollBox" inherits="WowScrollBoxList" enableMouse="true">
                         <Size y="1" />
-                        <Anchors><Anchor point="TOPLEFT" x="10" y="-8" /><Anchor point="TOPRIGHT" x="-28" y="-8" /></Anchors>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" x="10" y="-8" />
+                            <Anchor point="TOPRIGHT" x="-28" y="-8" />
+                        </Anchors>
                     </Frame>
                     <EventFrame parentKey="scrollBar" inherits="MinimalScrollBar">
                         <Anchors>

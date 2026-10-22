@@ -187,7 +187,7 @@ function Navigation:ShowDebugDump()
                 to = GetPoint(graph, graph.pathToPointIndexes[reference]),
                 requirement = graph.pathRequirements[reference],
                 gossip = (pathType == "gossip" or pathType == "phaseswitch" or pathType == "toy" or
-                    pathType == "spell") and
+                        pathType == "spell") and
                     graph.pathHandlerData[reference] or nil,
                 preparedState = prepared and prepared.requirementStateByPath[reference],
                 preparedExclusion = prepared and prepared.exclusionReasonByPath[reference],

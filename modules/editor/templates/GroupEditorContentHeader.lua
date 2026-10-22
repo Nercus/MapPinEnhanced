@@ -150,7 +150,8 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
             label = option.label,
             isSelected = function() return group:GetTrackingMode() == mode end,
             initializer = not protected and mode == Groups.TRACKING_MODE_NEAREST and function(_, description)
-                MenuUtil.SetTitleAndTextTooltip(description, L["Track by Travel Time"], L["Next Pin Travel Time Description"])
+                MenuUtil.SetTitleAndTextTooltip(description, L["Track by Travel Time"],
+                    L["Next Pin Travel Time Description"])
             end or nil,
             setSelected = function()
                 if self.group == group and not protected then

@@ -211,8 +211,11 @@ function Navigation:PrepareTravelPhaseSearch(graph, prepared, checkpoint)
             end
         end
     end
-    return setmetatable({ requirementStateByPath = states, phaseRequirements = phaseRequirements,
-        phaseObservations = observations }, { __index = prepared })
+    return setmetatable({
+        requirementStateByPath = states,
+        phaseRequirements = phaseRequirements,
+        phaseObservations = observations
+    }, { __index = prepared })
 end
 
 ---@param graph NavigationGraph
@@ -223,7 +226,8 @@ end
 function Navigation:IsTravelPhasePathAllowed(graph, prepared, reference, state)
     if reference < 0 then return true end
     if prepared.phaseRequirements and prepared.phaseRequirements[reference] then
-        return self:EvaluateRequirement(graph.pathRequirements[reference], prepared.phaseObservations, state) == "satisfied"
+        return self:EvaluateRequirement(graph.pathRequirements[reference], prepared.phaseObservations, state) ==
+            "satisfied"
     end
     return prepared.requirementStateByPath[reference] == "satisfied"
 end

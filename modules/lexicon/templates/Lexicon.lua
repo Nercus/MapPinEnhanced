@@ -68,8 +68,11 @@ end
 
 ---@param key string
 function MapPinEnhancedLexiconMixin:OnInputKey(key)
-    if key == "DOWN" then self:SelectIndex(self.selectedIndex + 1)
-    elseif key == "UP" then self:SelectIndex(self.selectedIndex - 1) end
+    if key == "DOWN" then
+        self:SelectIndex(self.selectedIndex + 1)
+    elseif key == "UP" then
+        self:SelectIndex(self.selectedIndex - 1)
+    end
 end
 
 function MapPinEnhancedLexiconMixin:ActivateSelection()

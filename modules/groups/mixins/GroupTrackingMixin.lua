@@ -14,7 +14,7 @@ Groups.TRACKING_MODE_NEAREST = "nearest"
 Groups.TRACKING_MODE_ORDERED = "ordered"
 Groups.TRACKING_MODE_OPTIONS = {
     { label = MapPinEnhanced:Iconize("arrowleftright", L["Track by Travel Time"]), value = Groups.TRACKING_MODE_NEAREST },
-    { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),              value = Groups.TRACKING_MODE_ORDERED },
+    { label = MapPinEnhanced:Iconize("list", L["Track by Order"]),                 value = Groups.TRACKING_MODE_ORDERED },
 }
 
 ---@type table<GroupTrackingMode, boolean>

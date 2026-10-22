@@ -61,13 +61,17 @@ end
 ---@return boolean? recovered
 function Navigation:ObserveActionTravelPosition()
     if not pendingTravelDestination or pendingTravelLoading or not pendingTravelSpellID or
-        travelSpells[pendingTravelSpellID] ~= true then return end
+        travelSpells[pendingTravelSpellID] ~= true then
+        return
+    end
     local x, y, mapID = MapPinEnhanced:GetPlayerMapPosition()
     local now = GetTime()
     local previous = previousPosition
     previousPosition = nil
     if not MapPinEnhanced:IsReadablePositiveInteger(mapID) or
-        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then return end
+        not MapPinEnhanced:IsCoordinate(x) or not MapPinEnhanced:IsCoordinate(y) then
+        return
+    end
     previousPosition = { mapID = mapID, x = x, y = y, sampledAt = now }
     -- A summoned menu can teleport within one map without loading. Only a
     -- recent discontinuity proves travel; menu selection and proximity do not.
@@ -91,7 +95,9 @@ function Navigation:ObserveActionTravel(unit, spellID)
     local itemID = itemsBySpell[spellID]
     local summons = itemID and travelItems[itemID] or travelSpells[spellID]
     if (summons == nil and not itemID) or not Navigation.routeNavigationEnabled or
-        not Navigation.activeDestination then return end
+        not Navigation.activeDestination then
+        return
+    end
     Navigation:CancelActionTravel()
     pendingTravelDestination = Navigation.activeDestination
     pendingTravelSpellID = spellID

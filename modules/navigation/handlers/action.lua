@@ -205,9 +205,14 @@ local function RegisterAction(pathType, icon, method, instructionKey)
         end
         if context and context.data and destination then
             if context.phase == "in-transit" then
-                return icon, method, string.format(L[pathType == "spell" and "Navigation Select Spell Destination" or "Navigation Select Toy Destination"], destination)
+                return icon, method,
+                    string.format(
+                        L[pathType == "spell" and "Navigation Select Spell Destination" or "Navigation Select Toy Destination"],
+                        destination)
             end
-            return icon, method, string.format(L[pathType == "spell" and "Navigation Cast And Select" or "Navigation Use Toy And Select"], name or method, destination)
+            return icon, method,
+                string.format(L[pathType == "spell" and "Navigation Cast And Select" or "Navigation Use Toy And Select"],
+                    name or method, destination)
         end
         if not name then
             local fallback = destination and string.format(L[instructionKey .. " To"], destination) or L[instructionKey]
@@ -295,7 +300,8 @@ local function RegisterAction(pathType, icon, method, instructionKey)
     local function ActionData(path)
         if path.gossip then return Navigation:GetGossipPathData(path) end
     end
-    Navigation:RegisterPathHandler(pathType, Presentation, (pathType == "toy" or pathType == "spell") and ActionData or nil,
+    Navigation:RegisterPathHandler(pathType, Presentation,
+        (pathType == "toy" or pathType == "spell") and ActionData or nil,
         CostCalculator, ActionActivator, ActionDeactivator)
 end
 

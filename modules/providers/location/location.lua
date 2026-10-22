@@ -61,7 +61,9 @@ function Providers:FindCatalogAreaPOI(poiID, checkpoint)
     for _, catalog in ipairs(catalogs) do
         for _, source in ipairs(catalog) do
             if source.map and (source.areaPoiID == poiID or source.areaPoiIDs and tContains(source.areaPoiIDs, poiID)) and
-                self:ReadLocationAreaPOI(source.map, poiID) then return source.map, GetCatalogTexture(source) end
+                self:ReadLocationAreaPOI(source.map, poiID) then
+                return source.map, GetCatalogTexture(source)
+            end
             checkpoint()
         end
     end
@@ -128,13 +130,24 @@ function Providers:ReadLocations(checkpoint)
             if vendor and not tContains(categories, "vendor") then categories[#categories + 1] = "vendor" end
             if trainer and not tContains(categories, "trainer") then categories[#categories + 1] = "trainer" end
             records[#records + 1] = {
-                id = flavor .. ":catalog:" .. source.id, catalogID = source.id,
-                source = "catalog", category = source.types[1], categories = categories,
+                id = flavor .. ":catalog:" .. source.id,
+                catalogID = source.id,
+                source = "catalog",
+                category = source.types[1],
+                categories = categories,
                 label = source.name[locale] or source.name.enUS,
-                aliases = { source.name.enUS }, mapID = source.map, x = source.x, y = source.y,
-                texture = GetCatalogTexture(source), usesAtlas = false,
-                faction = source.faction, class = source.class, profession = source.profession, skill = source.skill,
-                areaPoiID = source.areaPoiID, areaPoiIDs = source.areaPoiIDs and CopyTable(source.areaPoiIDs),
+                aliases = { source.name.enUS },
+                mapID = source.map,
+                x = source.x,
+                y = source.y,
+                texture = GetCatalogTexture(source),
+                usesAtlas = false,
+                faction = source.faction,
+                class = source.class,
+                profession = source.profession,
+                skill = source.skill,
+                areaPoiID = source.areaPoiID,
+                areaPoiIDs = source.areaPoiIDs and CopyTable(source.areaPoiIDs),
                 eligible = source.faction ~= nil and true or nil,
             }
             checkpoint()

@@ -59,9 +59,16 @@
             </Button>
             <Button parentKey="lexiconButton" inherits="MapPinEnhancedIconButtonTemplate">
                 <Size x="24" y="24" />
-                <KeyValues><KeyValue key="icon" value="search" /><KeyValue key="tooltip" value="Location Lexicon" /></KeyValues>
-                <Anchors><Anchor point="RIGHT" x="-1" relativeKey="$parent.importButton" relativePoint="LEFT" /></Anchors>
-                <Scripts><OnClick>self:GetParent():ShowLexicon()</OnClick></Scripts>
+                <KeyValues>
+                    <KeyValue key="icon" value="search" />
+                    <KeyValue key="tooltip" value="Location Lexicon" />
+                </KeyValues>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-1" relativeKey="$parent.importButton" relativePoint="LEFT" />
+                </Anchors>
+                <Scripts>
+                    <OnClick>self:GetParent():ShowLexicon()</OnClick>
+                </Scripts>
             </Button>
         </Frames>
         <Scripts>

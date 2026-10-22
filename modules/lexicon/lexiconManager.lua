@@ -51,7 +51,9 @@ end
 ---@return number?
 local function GetDistance(record, x, y, mapID)
     if not HasPosition(record) or not mapID or not MapPinEnhanced:IsCoordinate(x) or
-        not MapPinEnhanced:IsCoordinate(y) then return end
+        not MapPinEnhanced:IsCoordinate(y) then
+        return
+    end
     -- HBD returns nil across world spaces or missing geometry; never turn it into zero.
     local distance = MapPinEnhanced.HBD:GetZoneDistance(mapID, x, y, record.mapID, record.x, record.y)
     if MapPinEnhanced:IsReadableNumber(distance) and distance >= 0 then return distance end
@@ -71,7 +73,9 @@ end
 local function IsNearestEligible(record, category)
     if not HasCategory(record, category) or not IsCompatible(record) or record.eligible ~= true or
         not HasPosition(record) or (record.faction ~= "Alliance" and record.faction ~= "Horde" and
-            record.faction ~= "Neutral") then return false end
+            record.faction ~= "Neutral") then
+        return false
+    end
     if category == "class" then return record.class ~= nil and record.skill == nil end
     if category == "profession" then return record.profession ~= nil end
     return category ~= "trainer" or record.class ~= nil or record.profession ~= nil or record.skill ~= nil
@@ -98,8 +102,14 @@ local function ApplyLocation(record)
     if not group or not title or strlenutf8(title) > 64 then
         return false, L["Could not create a pin for this location."]
     end
-    local pin = group:AddPin({ mapID = record.mapID, x = record.x, y = record.y,
-        title = title, texture = Lexicon.PIN_ICON_KEYS[category.texture] or category.texture, usesAtlas = false })
+    local pin = group:AddPin({
+        mapID = record.mapID,
+        x = record.x,
+        y = record.y,
+        title = title,
+        texture = Lexicon.PIN_ICON_KEYS[category.texture] or category.texture,
+        usesAtlas = false
+    })
     if not pin then return false, L["Could not create a pin for this location."] end
     pin:Track()
     return true
@@ -194,12 +204,18 @@ local function Search()
                     local actionID = key .. ":" .. (specialtyMatch and specialty or "")
                     local action = nearest[actionID]
                     if not action then
-                        action = { id = "nearest:" .. actionID, category = key,
+                        action = {
+                            id = "nearest:" .. actionID,
+                            category = key,
                             specialty = specialtyMatch and specialty or nil,
                             label = string.format(L["Nearest %s"], specialtyMatch and
                                 string.format(L["%s Trainer"], entry.specialtyLabel) or Lexicon.CATEGORIES[key].label),
-                            subtitle = L["No suitable nearby location is available."], texture = Lexicon.CATEGORIES[key].texture,
-                            rank = 0, changeNumber = current, service = true }
+                            subtitle = L["No suitable nearby location is available."],
+                            texture = Lexicon.CATEGORIES[key].texture,
+                            rank = 0,
+                            changeNumber = current,
+                            service = true
+                        }
                         nearest[actionID] = action
                     end
                     if IsNearestEligible(record, key) and distance and
@@ -232,10 +248,17 @@ local function Search()
                     elseif record.eligible ~= true then
                         subtitle = subtitle .. " — " .. L["Availability unknown"]
                     end
-                    found[#found + 1] = { id = record.id, entry = entry, label = record.label,
-                        subtitle = subtitle, texture = category.texture, distance = distance,
+                    found[#found + 1] = {
+                        id = record.id,
+                        entry = entry,
+                        label = record.label,
+                        subtitle = subtitle,
+                        texture = category.texture,
+                        distance = distance,
                         rank = rank,
-                        service = category.service, changeNumber = current }
+                        service = category.service,
+                        changeNumber = current
+                    }
                 end
             end
             checkpoint()
@@ -278,7 +301,8 @@ local function BuildCatalog()
             local category = GetCategory(record)
             local map = record.mapID and C_Map.GetMapInfo(record.mapID)
             local zone = map and map.name or L["Unknown zone"]
-            local specialty = IsRoleCompatible(record, "trainer") and (record.skill or record.class or record.profession) or nil
+            local specialty = IsRoleCompatible(record, "trainer") and (record.skill or record.class or record.profession) or
+                nil
             local specialtyLabel = specialty and Lexicon.SPECIALTIES[specialty]
             local terms = { record.label, zone,
                 specialty and specialty:gsub("_", " ") or "", specialtyLabel or "" }
@@ -290,9 +314,14 @@ local function BuildCatalog()
                 end
             end
             for _, alias in ipairs(record.aliases or {}) do terms[#terms + 1] = alias end
-            copied[#copied + 1] = { record = record, category = category, zone = zone,
-                specialty = specialty, specialtyLabel = specialtyLabel,
-                text = table.concat(terms, " "):lower() }
+            copied[#copied + 1] = {
+                record = record,
+                category = category,
+                zone = zone,
+                specialty = specialty,
+                specialtyLabel = specialtyLabel,
+                text = table.concat(terms, " "):lower()
+            }
             checkpoint()
         end
     end }, nil, function()
@@ -332,7 +361,7 @@ function Lexicon:Activate(result)
                     IsNearestEligible(record, result.category) then
                     local distance = GetDistance(record, x, y, mapID)
                     if distance and (not bestDistance or distance < bestDistance or
-                        distance == bestDistance and entry and record.id < entry.record.id) then
+                            distance == bestDistance and entry and record.id < entry.record.id) then
                         entry, bestDistance = candidate, distance
                     end
                 end
@@ -387,11 +416,13 @@ function Lexicon:Show(text)
     view.input:SetFocus()
     self:Search(text or "")
     BuildCatalog()
-    unsubscribe = MapPinEnhanced:RegisterEventBucket({ "PLAYER_ENTERING_WORLD", "NEUTRAL_FACTION_SELECT_RESULT" }, BuildCatalog, 0.2)
+    unsubscribe = MapPinEnhanced:RegisterEventBucket({ "PLAYER_ENTERING_WORLD", "NEUTRAL_FACTION_SELECT_RESULT" },
+        BuildCatalog, 0.2)
 end
 
 scheduleSearch, cancelScheduledSearch = MapPinEnhanced:DebounceChange(Search, 0.2)
-MapPinEnhanced:AddSlashCommand("find", function(_, ...) Lexicon:Show(table.concat({ ... }, " ")) end, L["Open the Location Lexicon."])
+MapPinEnhanced:AddSlashCommand("find", function(_, ...) Lexicon:Show(table.concat({ ... }, " ")) end,
+    L["Open the Location Lexicon."])
 Options:SubscribeToOptionChanges(Lexicon.ENABLE_OPTION, function(enabled)
     if not enabled then Lexicon:Hide() end
 end)

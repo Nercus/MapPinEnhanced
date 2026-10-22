@@ -80,7 +80,9 @@ function MapPinEnhancedGroupPinOperationsMixin:ClearPin(pinID, reached)
         local owner = Navigation:GetActiveDestinationState()
         if not self:IsSameGroup(groupID, lifetimeChangeNumber) or Pins:GetTrackedPin() or owner then return true end
         if self.predictionChangeNumber ~= predictionChangeNumber + 1 or
-            prediction and not Navigation:IsDestinationPredictionFresh(prediction) then prediction = nil end
+            prediction and not Navigation:IsDestinationPredictionFresh(prediction) then
+            prediction = nil
+        end
     end
     if wasTracked or ordered then
         if nextOrderedPin and self:GetPinByID(nextOrderedPin.pinID) then

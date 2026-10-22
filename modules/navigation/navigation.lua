@@ -944,7 +944,7 @@ function Navigation:PublishStep(progression)
         end
     elseif pathType == "floor" or pathType == "border" or pathType == "lift" or self:IsMovementPath(pathType) or
         progression.phase == "in-transit" and pathType ~= "phaseswitch" and pathType ~= "flighttaxi" and
-            not isSummonedSpell then
+        not isSummonedSpell then
         onArrival = function()
             self:CompleteCurrentPath(progression)
         end
@@ -969,7 +969,7 @@ function Navigation:PublishStep(progression)
     targetData.lock = false
     targetData.mapDistanceOnly = true
     local arrivalMapID = RequiresDestinationMap(pathType,
-        fromPointIndex and graph.pointMapIDs[fromPointIndex], graph.pointMapIDs[toPointIndex]) and
+            fromPointIndex and graph.pointMapIDs[fromPointIndex], graph.pointMapIDs[toPointIndex]) and
         graph.pointMapIDs[targetPointIndex] or nil
     if pathType == "lift" and progression.phase == "approach" then
         local _, _, playerMapID = MapPinEnhanced:GetPlayerMapPosition()

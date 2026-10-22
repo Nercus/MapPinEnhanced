@@ -84,7 +84,7 @@ MapPinEnhanced:RegisterEvent("CHAT_MSG_ADDON", function(prefix, text, channel)
     if not notified and IsNewer(receivedVersion, installedVersion) then
         notified = true
         MapPinEnhanced:Print(string.format(MapPinEnhanced.L[
-            "A new version (%s) for Map Pin Enhanced is available. You are on (%s)."], text, version))
+        "A new version (%s) for Map Pin Enhanced is available. You are on (%s)."], text, version))
     end
 end)
 
