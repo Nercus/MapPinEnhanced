@@ -16,6 +16,7 @@ end
 
 ---@param initValue number
 function MapPinEnhancedOptionSliderMixin:Setup(initValue)
+    self.child.valueText:SetFontObject(MapPinEnhancedFontOptionsLeft)
     self.child:Setup({
         onChange = function(value)
             self:NotifyChange(value)

@@ -25,6 +25,7 @@ end
 
 ---@param initValue MapPinEnhancedMultiselectValue
 function MapPinEnhancedOptionMultiselectMixin:Setup(initValue)
+    if self.child.Text then self.child.Text:SetFontObject(MapPinEnhancedFontOptionsLeft) end
     local options = Options.OPTIONS_CONFIG[self.key]
     assert(options, "No multiselect options found for key: " .. tostring(self.key))
     ---@cast options MapPinEnhancedMultiselectOption[]

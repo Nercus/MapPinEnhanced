@@ -17,6 +17,7 @@ end
 
 ---@param initValue any
 function MapPinEnhancedOptionDropdownMixin:Setup(initValue)
+    if self.child.Text then self.child.Text:SetFontObject(MapPinEnhancedFontOptionsLeft) end
     local options = Options.OPTIONS_CONFIG[self.key]
     assert(options, "MapPinEnhancedOptionDropdownMixin:Setup: no options for " .. tostring(self.key))
     self.child:Setup({

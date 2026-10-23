@@ -15,4 +15,7 @@
     <Font name="MapPinEnhancedFontDisabled" inherits="GameFontDisable" virtual="true" />
     <Font name="MapPinEnhancedFontDisabledLarge" inherits="GameFontDisableLarge" virtual="true" />
     <Font name="MapPinEnhancedFontTooltip" inherits="GameTooltipText" virtual="true" />
+    <Font name="MapPinEnhancedFontOptionsLeft" inherits="OptionsFontLeft" virtual="true" />
+    <Font name="MapPinEnhancedFontOptionsHighlight" inherits="OptionsFontHighlight" virtual="true" />
+    <Font name="MapPinEnhancedFontOptionsLarge" inherits="OptionsFontLarge" virtual="true" />
 </Ui>

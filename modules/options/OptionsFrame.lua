@@ -78,6 +78,18 @@ function MapPinEnhancedOptionsFrameMixin:SetupOptionSearch()
 end
 
 function MapPinEnhancedOptionsFrameMixin:OnLoad()
+    -- Change inherited text in place so the search template retains its controls.
+    self.header.search.placeholderText:SetFontObject(MapPinEnhancedFontOptionsHighlight)
+    self.header.search.placeholderText:SetTextColor(0.5, 0.5, 0.5)
+    self.header.search.resultsFrame.message:SetFontObject(MapPinEnhancedFontOptionsHighlight)
+    self.header.search.resultsFrame.message:SetTextColor(0.5, 0.5, 0.5)
+
+    -- Search owns this pool for the session; apply the options font on every reuse.
+    ScrollUtil.AddInitializedFrameCallback(self.header.search.resultsFrame.scrollBox, function(_, entry)
+        ---@cast entry MapPinEnhancedAutocompleteEntryTemplate
+        entry.label:SetFontObject(MapPinEnhancedFontOptionsHighlight)
+    end, self)
+
     ---@type SettingsCategoryMixin
     local category = Settings.RegisterCanvasLayoutCategory(self, MapPinEnhanced.displayName)
     ---@type number

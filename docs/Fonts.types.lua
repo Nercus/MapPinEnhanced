@@ -46,3 +46,12 @@ MapPinEnhancedFontDisabledLarge = {}
 
 ---@type Font
 MapPinEnhancedFontTooltip = {}
+
+---@type Font
+MapPinEnhancedFontOptionsLeft = {}
+
+---@type Font
+MapPinEnhancedFontOptionsHighlight = {}
+
+---@type Font
+MapPinEnhancedFontOptionsLarge = {}

@@ -120,6 +120,10 @@ function MapPinEnhancedFormElementMixin:OnLoad()
     assert(self.key, "Form element must have a key")
     assert(self.GetValue and self.SetValue and self.OnChange and self.Setup,
         "Form element is missing its control implementation")
+    -- Keep the shared template's anchors; declaring these children again replaces them.
+    self.label:SetFontObject(MapPinEnhancedFontOptionsLeft)
+    self.description:SetFontObject(MapPinEnhancedFontOptionsHighlight)
+    self.description:SetTextColor(0.7, 0.7, 0.7)
     MapPinEnhancedFormFieldMixin.OnLoad(self)
     self.optionEnabled = true
     Options:RegisterOption(self.key, self)

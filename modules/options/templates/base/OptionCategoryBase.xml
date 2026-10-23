@@ -18,7 +18,7 @@
                 </Anchors>
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString parentKey="title" inherits="MapPinEnhancedFontNormalLarge" justifyH="LEFT">
+                        <FontString parentKey="title" inherits="MapPinEnhancedFontOptionsLarge" justifyH="LEFT">
                             <Anchors>
                                 <Anchor point="LEFT" relativePoint="LEFT" x="25" />
                             </Anchors>
