@@ -23,7 +23,7 @@
                                 <Anchor point="LEFT" relativePoint="LEFT" x="25" />
                             </Anchors>
                         </FontString>
-                        <Texture atlas="Options_HorizontalDivider" useAtlasSize="true">
+                        <Texture atlas="Options_HorizontalDivider" useAtlasSize="true" texelSnappingBias="0" snapToPixelGrid="false">
                             <Color r="1" g="0.82" b="0" />
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT" x="5" />
