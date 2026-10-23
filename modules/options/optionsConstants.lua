@@ -20,9 +20,13 @@ Options.SCALE_PRESETS = {
     { label = L["Huge (150%)"],    value = 1.5 },
 }
 
+---@type MapPinEnhancedMultiselectValue
+local lexiconDataTypes = {}
+
 Options.DEFAULTS = {
     ["General.TooltipHelper"] = true,
     ["General.Lexicon.Enable"] = true,
+    ["General.Lexicon.DataTypes"] = lexiconDataTypes,
     ["General.FlightTimer.Enable"] = true,
     ["General.FlightTimer.Lock"] = false,
     ["General.FlightTimer.Scale"] = 1,
@@ -83,6 +87,37 @@ Options.DEFAULTS = {
 -- config for radiogroups, dropdowns
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
+    ["General.Lexicon.DataTypes"] = {
+        { label = L["Point of interest"],           value = "poi" },
+        { label = L["City"],                       value = "city" },
+        { label = L["Town"],                       value = "town" },
+        { label = L["Dungeon"],                    value = "dungeon" },
+        { label = L["Raid"],                       value = "raid" },
+        { label = L["Delve"],                      value = "delve" },
+        { label = L["Vault"],                      value = "great-vault" },
+        { label = L["Raid Finder"],                value = "lfr-npc" },
+        { label = L["Auction House"],              value = "auctioneer" },
+        { label = L["Bank"],                       value = "banker" },
+        { label = L["Inn"],                        value = "innkeeper" },
+        { label = L["Mailbox"],                    value = "mailbox" },
+        { label = L["Stable Master"],              value = "stable" },
+        { label = L["Trainer"],                    value = "trainer" },
+        { label = L["Class Trainer"],              value = "class" },
+        { label = L["Profession Trainer"],         value = "profession" },
+        { label = L["Vendor"],                     value = "vendor" },
+        { label = L["Repair"],                     value = "vendor-repair" },
+        { label = L["Ammunition Vendor"],          value = "vendor-ammo" },
+        { label = L["Armor Vendor"],               value = "vendor-armor" },
+        { label = L["Bag Vendor"],                 value = "vendor-bags" },
+        { label = L["Fishing Vendor"],             value = "vendor-fishing" },
+        { label = L["Food Vendor"],                value = "vendor-food" },
+        { label = L["General Goods Vendor"],       value = "vendor-general" },
+        { label = L["Poison Vendor"],              value = "vendor-poisons" },
+        { label = L["Profession Supplies Vendor"], value = "vendor-profsupplies" },
+        { label = L["Reagent Vendor"],             value = "vendor-reagents" },
+        { label = L["Trade Goods Vendor"],         value = "vendor-trade" },
+        { label = L["Weapon Vendor"],              value = "vendor-weapons" },
+    },
     ["General.FlightTimer.Scale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.MinimapScale"] = Options.SCALE_PRESETS,
     ["Pins.Appearance.WorldMapScale"] = Options.SCALE_PRESETS,
@@ -133,6 +168,10 @@ Options.OPTIONS_CONFIG = {
         { label = L["No active pins"], value = "noActivePins" },
     },
 }
+
+for _, option in ipairs(Options.OPTIONS_CONFIG["General.Lexicon.DataTypes"]) do
+    lexiconDataTypes[option.value] = true
+end
 
 -- Options loads before Pins. Fill the swatches from its palette once that owner
 -- is ready, retaining the selected color and the normal dropdown change callback.

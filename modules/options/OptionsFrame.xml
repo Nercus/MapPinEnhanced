@@ -100,10 +100,16 @@
                                     <Anchor point="TOPRIGHT" relativeKey="$parent.Pins" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
-                            <Frame inherits="MapPinEnhancedOptionCategoryCoordinatesTemplate" parentKey="Coordinates">
+                            <Frame inherits="MapPinEnhancedOptionCategoryLexiconTemplate" parentKey="Lexicon">
                                 <Anchors>
                                     <Anchor point="TOPLEFT" relativeKey="$parent.Tracker" relativePoint="BOTTOMLEFT" x="0" y="-8" />
                                     <Anchor point="TOPRIGHT" relativeKey="$parent.Tracker" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
+                                </Anchors>
+                            </Frame>
+                            <Frame inherits="MapPinEnhancedOptionCategoryCoordinatesTemplate" parentKey="Coordinates">
+                                <Anchors>
+                                    <Anchor point="TOPLEFT" relativeKey="$parent.Lexicon" relativePoint="BOTTOMLEFT" x="0" y="-8" />
+                                    <Anchor point="TOPRIGHT" relativeKey="$parent.Lexicon" relativePoint="BOTTOMRIGHT" x="0" y="-8" />
                                 </Anchors>
                             </Frame>
                             <Frame inherits="MapPinEnhancedOptionCategoryFlightTimerTemplate" parentKey="FlightTimer">

@@ -6,6 +6,7 @@ local L = MapPinEnhanced.L
 local iconPath = MapPinEnhanced.assetsPath .. "\\pins\\icons\\"
 
 Lexicon.ENABLE_OPTION = "General.Lexicon.Enable"
+Lexicon.DATA_TYPES_OPTION = "General.Lexicon.DataTypes"
 Lexicon.ROW_HEIGHT = 42
 Lexicon.MAX_VISIBLE_RESULTS = 5
 

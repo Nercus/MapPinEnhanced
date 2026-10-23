@@ -11,6 +11,7 @@ local MapPinEnhanced = select(2, ...)
 
 ---@class MapPinEnhancedOptionsScrollChild : Frame
 ---@field General MapPinEnhancedOptionCategoryBaseTemplate
+---@field Lexicon MapPinEnhancedOptionCategoryBaseTemplate
 ---@field Coordinates MapPinEnhancedOptionCategoryBaseTemplate
 ---@field FlightTimer MapPinEnhancedOptionCategoryBaseTemplate
 ---@field Navigation MapPinEnhancedOptionCategoryBaseTemplate

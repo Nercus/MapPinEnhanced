@@ -7,14 +7,16 @@ local Options = MapPinEnhanced:GetModule("Options")
 local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Wayfinders = MapPinEnhanced:GetModule("Wayfinders")
+---@type MapPinEnhancedMultiselectValue
+local enabledDataTypes = Options:GetOptionValue(Lexicon.DATA_TYPES_OPTION)
 
 ---@param record LocationRecord
 ---@param category string
 ---@return boolean
-local function IsRoleCompatible(record, category)
+local function IsRoleEnabled(record, category)
     local _, class = UnitClass("player")
-    return not record.class or record.class == class or
-        (category ~= "class" and category ~= "trainer" and category ~= "profession")
+    return enabledDataTypes[category] == true and (not record.class or record.class == class or
+        (category ~= "class" and category ~= "trainer" and category ~= "profession"))
 end
 
 ---@param record LocationRecord
@@ -23,7 +25,7 @@ local function IsCompatible(record)
     local faction = UnitFactionGroup("player")
     if (record.faction == "Alliance" or record.faction == "Horde") and record.faction ~= faction then return false end
     for _, category in ipairs(record.categories or { record.category }) do
-        if IsRoleCompatible(record, category) then return true end
+        if IsRoleEnabled(record, category) then return true end
     end
     return false
 end
@@ -32,7 +34,7 @@ end
 ---@return LexiconCategory
 local function GetCategory(record)
     for _, key in ipairs(record.categories or { record.category }) do
-        if IsRoleCompatible(record, key) then return Lexicon.CATEGORIES[key] or Lexicon.CATEGORIES.poi end
+        if IsRoleEnabled(record, key) then return Lexicon.CATEGORIES[key] or Lexicon.CATEGORIES.poi end
     end
     return Lexicon.CATEGORIES.poi
 end
@@ -63,7 +65,7 @@ end
 ---@param category string
 ---@return boolean
 local function HasCategory(record, category)
-    return IsRoleCompatible(record, category) and (record.category == category or
+    return IsRoleEnabled(record, category) and (record.category == category or
         record.categories ~= nil and tContains(record.categories, category))
 end
 
@@ -199,7 +201,11 @@ local function Search()
                         if Lexicon.CATEGORIES[key].service then actions[#actions + 1] = key end
                     end
                 end
-                if specialtyMatch then actions[#actions + 1] = "trainer" end
+                if specialtyMatch then
+                    local key = HasCategory(record, "trainer") and "trainer" or
+                        HasCategory(record, "class") and "class" or "profession"
+                    if not tContains(actions, key) then actions[#actions + 1] = key end
+                end
                 for _, key in ipairs(actions) do
                     local actionID = key .. ":" .. (specialtyMatch and specialty or "")
                     local action = nearest[actionID]
@@ -301,14 +307,14 @@ local function BuildCatalog()
             local category = GetCategory(record)
             local map = record.mapID and C_Map.GetMapInfo(record.mapID)
             local zone = map and map.name or L["Unknown zone"]
-            local specialty = IsRoleCompatible(record, "trainer") and (record.skill or record.class or record.profession) or
-                nil
+            local specialty = (HasCategory(record, "trainer") or HasCategory(record, "class") or
+                HasCategory(record, "profession")) and (record.skill or record.class or record.profession) or nil
             local specialtyLabel = specialty and Lexicon.SPECIALTIES[specialty]
             local terms = { record.label, zone,
                 specialty and specialty:gsub("_", " ") or "", specialtyLabel or "" }
             for _, key in ipairs(record.categories or { record.category }) do
                 local kind = Lexicon.CATEGORIES[key] or Lexicon.CATEGORIES.poi
-                if IsRoleCompatible(record, key) then
+                if IsRoleEnabled(record, key) then
                     terms[#terms + 1] = kind.label
                     terms[#terms + 1] = table.concat(kind.aliases, " ")
                 end
@@ -425,4 +431,8 @@ MapPinEnhanced:AddSlashCommand("find", function(_, ...) Lexicon:Show(table.conca
     L["Open the Location Lexicon."])
 Options:SubscribeToOptionChanges(Lexicon.ENABLE_OPTION, function(enabled)
     if not enabled then Lexicon:Hide() end
+end)
+Options:SubscribeToOptionChanges(Lexicon.DATA_TYPES_OPTION, function(value)
+    enabledDataTypes = value
+    if view and view:IsShown() then BuildCatalog() end
 end)
