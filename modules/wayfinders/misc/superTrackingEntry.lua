@@ -97,6 +97,11 @@ function Wayfinders:IsChangingSuperTrackingEntry()
     return changingSelection
 end
 
+---@return SuperTrackingRestore?
+function Wayfinders:CaptureSuperTrackingEntryRestore()
+    return entry and entry.tracked and entry.track or nil
+end
+
 ---@param source string?
 ---@param targetID string?
 ---@param isUserWaypoint boolean

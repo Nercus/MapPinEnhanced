@@ -119,6 +119,8 @@ function Pins:UntrackTrackedPin()
 end
 
 local function OnSuperTrackingChanged()
+    -- Corpse guidance temporarily takes priority over the selected pin.
+    if C_SuperTrack.IsSuperTrackingCorpse() then return end
     local isTrackingAnything = C_SuperTrack.IsSuperTrackingAnything()
     local isTrackingUserWaypoint = C_SuperTrack.IsSuperTrackingUserWaypoint()
     local isNotTrackingWaypoint = isTrackingAnything and not isTrackingUserWaypoint

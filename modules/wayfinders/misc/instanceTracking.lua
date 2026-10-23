@@ -17,6 +17,7 @@ end
 local function ClearTrackingOnEntry()
     -- Invalidate deferred addon selection before releasing Steps. Native clear is last.
     clearingTracking = true
+    Wayfinders:CancelCorpseTrackingRestore()
     Wayfinders:CancelAddonPinSelection()
     Wayfinders:CancelSuperTrackingTargetRetries()
     Wayfinders:ClearStepSuperTracking(false)

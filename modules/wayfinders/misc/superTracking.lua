@@ -158,7 +158,11 @@ end
 
 ---@param selectionOnly boolean?
 function Wayfinders:RefreshSuperTrackingSelection(selectionOnly)
-    if self:IsChangingSuperTrackingEntry() or self:ShouldIgnoreStepTrackingChange() then return end
+    if self:IsChangingSuperTrackingEntry() then return end
+    local selectedProvider = GetActiveProvider()
+    self:UpdateCorpseTracking(selectedProvider and selectedProvider.source,
+        selectedProvider and selectedProvider.getTargetID())
+    if self:ShouldIgnoreStepTrackingChange() then return end
     local provider = GetActiveProvider()
     if selectionOnly then
         self:UpdateSuperTrackingEntrySelection(provider and provider.source,
@@ -177,6 +181,12 @@ end
 local function OnSourceEvents(events)
     if Wayfinders:IsClearingTracking() then return end
     if Wayfinders:IsChangingSuperTrackingEntry() then return end
+    -- Revival must reconcile the restored source even when Blizzard emits no
+    -- separate selection/path event, or its new provider is not the corpse.
+    if events.corpse then
+        Wayfinders:RefreshSuperTrackingSelection()
+        return
+    end
     if Wayfinders:ShouldIgnoreStepTrackingChange(true) then
         local owner = Navigation:GetActiveDestinationState()
         if owner and events[owner] then
@@ -223,6 +233,10 @@ local BUCKET_SOURCE_EVENTS = {
     QUEST_POI_UPDATE = true,
     QUEST_LOG_UPDATE = true,
     QUEST_WATCH_UPDATE = true,
+    -- Death events may precede Blizzard's final corpse/selection update.
+    PLAYER_DEAD = true,
+    PLAYER_ALIVE = true,
+    PLAYER_UNGHOST = true,
 }
 MapPinEnhanced:OnLoad(function()
     ---@type WowEvent[]

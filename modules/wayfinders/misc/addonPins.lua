@@ -83,7 +83,7 @@ local function OnUserWaypointUpdated()
         local expectedPinID = trackedPinID
         C_Timer.After(0, function()
             if trackedPinID ~= expectedPinID or placedUserWaypoint ~= expectedWaypoint or
-                Wayfinders:IsStepSuperTracking() then
+                Wayfinders:IsStepSuperTracking() or C_SuperTrack.IsSuperTrackingCorpse() then
                 return
             end
             local waypoint = C_Map.GetUserWaypoint()
@@ -207,6 +207,14 @@ MapPinEnhanced:OnLoad(function()
 end)
 
 MapPinEnhanced:RegisterEvent("USER_WAYPOINT_UPDATED", OnUserWaypointUpdated)
+
+---@return boolean
+function Wayfinders:RestoreTrackedPinWayfinder()
+    local pin = Pins:GetTrackedPin()
+    if not pin then return false end
+    onPinTrackingChanged("PIN_TRACKING_CHANGED", pin.pinID, true)
+    return true
+end
 
 function Wayfinders:CancelAddonPinSelection()
     shouldSuperTrackUserWaypoint = false
