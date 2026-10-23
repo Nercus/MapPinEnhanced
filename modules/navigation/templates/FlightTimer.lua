@@ -105,7 +105,7 @@ function MapPinEnhancedFlightTimerMixin:OnHide()
 end
 
 function MapPinEnhancedFlightTimerMixin:ApplyGradient()
-    local gradient = Options:GetOptionValue("General.FlightTimer.Gradient") --[[@as MapPinEnhancedColorpickerGradient]]
+    local gradient = Options:GetOptionValue("FlightTimer.Gradient") --[[@as MapPinEnhancedColorpickerGradient]]
     local startColor, endColor = gradient.startColor, gradient.endColor
     self.progress:SetFillGradient(CreateColor(startColor.r, startColor.g, startColor.b, startColor.a),
         CreateColor(endColor.r, endColor.g, endColor.b, endColor.a))
@@ -118,29 +118,29 @@ function MapPinEnhancedFlightTimerMixin:OnLoad()
     self.progress.name:SetFont(font, size, "OUTLINE")
     self.progress.progress:SetTextColor(1, 1, 1)
     MapPinEnhanced:RegisterDraggableFrame(self, "flightTimerFrame", self.dragHandle, function()
-        return Options:GetOptionValue("General.FlightTimer.Lock") == true
+        return Options:GetOptionValue("FlightTimer.Lock") == true
     end)
     MapPinEnhanced:RestoreFrame(self)
     self.closeButton:SetScript("OnClick", function()
-        Options:SetOptionValue("General.FlightTimer.Enable", false)
+        Options:SetOptionValue("FlightTimer.Enable", false)
     end)
     self.lockButton:SetScript("OnClick", function()
-        Options:SetOptionValue("General.FlightTimer.Lock",
-            Options:GetOptionValue("General.FlightTimer.Lock") ~= true)
+        Options:SetOptionValue("FlightTimer.Lock",
+            Options:GetOptionValue("FlightTimer.Lock") ~= true)
     end)
 end
 
 local function RefreshDisplay()
-    local shown = inWorld and flight ~= nil and Options:GetOptionValue("General.FlightTimer.Enable") == true
+    local shown = inWorld and flight ~= nil and Options:GetOptionValue("FlightTimer.Enable") == true
     if shown and not frame then
         frame = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFlightTimerTemplate") --[[@as MapPinEnhancedFlightTimer]]
     end
     if not frame then return end
-    local scale = Options:GetOptionValue("General.FlightTimer.Scale") --[[@as number]]
+    local scale = Options:GetOptionValue("FlightTimer.Scale") --[[@as number]]
     if frame:GetScale() ~= scale then
         MapPinEnhanced:SetFrameScale(frame, scale)
     end
-    frame.lockButton:SetIconTexture(Options:GetOptionValue("General.FlightTimer.Lock") == true and "lock" or "unlock")
+    frame.lockButton:SetIconTexture(Options:GetOptionValue("FlightTimer.Lock") == true and "lock" or "unlock")
     frame:SetShown(shown)
 end
 
@@ -217,9 +217,9 @@ MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", function()
     -- Do not expose saved data until a live taxi check after loading.
     WatchFlight()
 end)
-for _, key in ipairs({ "General.FlightTimer.Enable", "General.FlightTimer.Lock", "General.FlightTimer.Scale" }) do
+for _, key in ipairs({ "FlightTimer.Enable", "FlightTimer.Lock", "FlightTimer.Scale" }) do
     Options:SubscribeToOptionChanges(key, RefreshDisplay)
 end
-Options:SubscribeToOptionChanges("General.FlightTimer.Gradient", function()
+Options:SubscribeToOptionChanges("FlightTimer.Gradient", function()
     if frame then frame:ApplyGradient() end
 end)

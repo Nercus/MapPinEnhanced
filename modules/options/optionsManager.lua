@@ -4,7 +4,7 @@ local L = MapPinEnhanced.L
 
 ---@alias MapPinEnhancedOptionValue number | string | boolean | table
 
-local RELOAD_OPTION_KEY = "Wayfinder.General.HideBlizzardFloatingDiamond"
+local RELOAD_OPTION_KEY = "Wayfinder.HideBlizzardFloatingDiamond"
 
 ---@class Options
 ---@field options table<string, MapPinEnhancedFormElementTemplate> A table mapping option keys to their corresponding frames.
@@ -32,7 +32,7 @@ function Options:SaveOptionValue(key, value)
     MapPinEnhanced:SetVar("options", key, value)
 end
 
----@param key string The unique key for the option, used for saving values. Is of the format "category.optionName", e.g. "general.showMinimapPin".
+---@param key string The unique key for the option, used for saving values. Is of the format "Category.OptionName", e.g. "General.ShowMinimapButton".
 ---@param frame MapPinEnhancedFormElementTemplate
 function Options:RegisterOption(key, frame)
     assert(self.options[key] == nil, "Option with key " .. key .. " is already registered")

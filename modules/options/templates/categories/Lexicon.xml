@@ -4,18 +4,18 @@
     <Frame name="MapPinEnhancedOptionCategoryLexiconTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
             <KeyValue key="categoryName" value="Location Lexicon" />
-            <KeyValue key="enableKey" value="General.Lexicon.Enable" />
+            <KeyValue key="enableKey" value="Lexicon.Enable" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Lexicon.Enable" />
+                    <KeyValue key="key" value="Lexicon.Enable" />
                     <KeyValue key="padding" value="12" type="number" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Lexicon.DataTypes" />
+                    <KeyValue key="key" value="Lexicon.DataTypes" />
                 </KeyValues>
             </Frame>
         </Frames>

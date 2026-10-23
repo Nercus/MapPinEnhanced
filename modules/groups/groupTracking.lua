@@ -138,7 +138,7 @@ function Groups:TakeTrackedPinPrediction(pin)
     return transfer.prediction
 end
 
-MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function()
+MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Navigation.Enable", function()
     Groups:CancelNextPinPrediction()
 end)
 

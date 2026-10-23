@@ -39,7 +39,7 @@ function Wayfinders:RefreshSuperTrackingMinimapPin()
     -- Share the wayfinder's buffered area exit rather than flicker at blob edges.
     if entry and entry.source == "quest" and self:IsInsideObjectiveArea() then data = nil end
     local x, y, instanceID ---@type number?, number?, number?
-    if data and Options:GetOptionValue("Pins.Appearance.ShowMinimapPins") then
+    if data and Options:GetOptionValue("Pins.ShowMinimapPins") then
         x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(data.x, data.y, data.mapID)
     end
     if not x or not y or not instanceID then
@@ -54,7 +54,7 @@ function Wayfinders:RefreshSuperTrackingMinimapPin()
     MapPinEnhanced.HBDP:AddMinimapIconWorld(MapPinEnhanced, minimapPin, instanceID, x, y, false)
 end
 
-for _, key in ipairs({ "Pins.Appearance.ShowMinimapPins", "Pins.Appearance.MinimapScale" }) do
+for _, key in ipairs({ "Pins.ShowMinimapPins", "Pins.MinimapScale" }) do
     Options:SubscribeToOptionChanges(key, function() Wayfinders:RefreshSuperTrackingMinimapPin() end)
 end
 

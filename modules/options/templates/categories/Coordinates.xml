@@ -4,32 +4,32 @@
     <Frame name="MapPinEnhancedOptionCategoryCoordinatesTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
             <KeyValue key="categoryName" value="Coordinates" />
-            <KeyValue key="enableKey" value="Miscellaneous.Coords.Enable" />
+            <KeyValue key="enableKey" value="Coordinates.Enable" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords.Enable" />
+                    <KeyValue key="key" value="Coordinates.Enable" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords.Lock" />
+                    <KeyValue key="key" value="Coordinates.Lock" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords.ShowZone" />
+                    <KeyValue key="key" value="Coordinates.ShowZone" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords.ShowDecimals" />
+                    <KeyValue key="key" value="Coordinates.ShowDecimals" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Miscellaneous.Coords.Visibility" />
+                    <KeyValue key="key" value="Coordinates.Visibility" />
                 </KeyValues>
             </Frame>
         </Frames>

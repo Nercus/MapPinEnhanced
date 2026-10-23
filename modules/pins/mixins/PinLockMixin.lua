@@ -27,6 +27,6 @@ function MapPinEnhancedPinLockMixin:IsLocked()
 end
 
 function MapPinEnhancedPinLockMixin:ToggleLock()
-    if not self:IsLocked() and not MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") then return end
+    if not self:IsLocked() and not MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.EnableLockedPins") then return end
     self:SetLock(not self:IsLocked())
 end

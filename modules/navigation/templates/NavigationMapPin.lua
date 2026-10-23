@@ -99,7 +99,7 @@ end
 
 ---@param hovered boolean
 function MapPinEnhancedNavigationMapPinMixin:SetHoverScale(hovered)
-    local target = hovered and Options:GetOptionValue("Pins.Miscellaneous.ScaleOnHover") and HOVER_SCALE or 1
+    local target = hovered and Options:GetOptionValue("Pins.ScaleOnHover") and HOVER_SCALE or 1
     self.hoverScaleTarget = self:GetScale() ~= target and target or nil
     self:RefreshUpdateScript()
 end

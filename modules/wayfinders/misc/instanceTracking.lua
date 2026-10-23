@@ -42,7 +42,7 @@ local function UpdateInstance(isInitialLogin, isReloadingUi)
     previousInstance = identity
     baselineReady = true
     if isInitialLogin or isReloadingUi then return end
-    if entered and Options:GetOptionValue("Pins.Tracking.AutoUntrack") then ClearTrackingOnEntry() end
+    if entered and Options:GetOptionValue("Pins.AutoUntrack") then ClearTrackingOnEntry() end
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateInstance)

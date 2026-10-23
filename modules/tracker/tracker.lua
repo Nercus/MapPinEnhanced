@@ -75,7 +75,7 @@ MapPinEnhanced:AddVisibilityRule("noActivePins", {
 
 ---@param shouldShow boolean
 local function ApplyVisibility(shouldShow)
-    local minimizeMode = MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
+    local minimizeMode = MapPinEnhanced:GetModule("Options"):GetOptionValue("Tracker.CloseAction") == true
     if shouldShow or minimizeMode and MapPinEnhanced:GetVar("trackerVisible") == true then
         local frame = Tracker:GetTrackerFrame()
         frame.automaticallyMinimized = not shouldShow
@@ -86,14 +86,14 @@ local function ApplyVisibility(shouldShow)
 end
 
 MapPinEnhanced:RegisterVisibilityTarget("tracker", {
-    optionKey = "Miscellaneous.Tracker.Visibility",
+    optionKey = "Tracker.Visibility",
     rules = { "dungeon", "raid", "scenario", "battleground", "arena", "noActivePins" },
     isManuallyEnabled = function() return MapPinEnhanced:GetVar("trackerVisible") == true end,
     show = function() ApplyVisibility(true) end,
     hide = function() ApplyVisibility(false) end,
 })
 
-MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Miscellaneous.Tracker.CloseAction", function(value)
+MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Tracker.CloseAction", function(value)
     if not value then MapPinEnhanced:SetVar("trackerMinimized", false) end
     Tracker:RestoreTrackerVisibility()
 end)
@@ -118,13 +118,13 @@ end
 
 -- Explicit user creation/import calls this only after at least one accepted addition.
 function Tracker:OnUserPinsAdded()
-    if not MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.AutoShow") then return end
+    if not MapPinEnhanced:GetModule("Options"):GetOptionValue("Tracker.AutoShow") then return end
     self:SetMinimized(false)
     self:ShowTracker()
 end
 
 function Tracker:ApplyCloseAction()
-    if MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.CloseAction") == true then
+    if MapPinEnhanced:GetModule("Options"):GetOptionValue("Tracker.CloseAction") == true then
         self:SetMinimized(not self:GetTrackerFrame().minimized)
     else
         self:HideTracker()

@@ -92,7 +92,7 @@
             <Button parentKey="arrow" inherits="MapPinEnhancedOptionWayfinderCardTemplate" mixin="MapPinEnhancedStartupControlMixin">
                 <Size x="220" y="123.75" />
                 <KeyValues>
-                    <KeyValue key="optionKey" value="Wayfinder.General.Selection" />
+                    <KeyValue key="optionKey" value="Wayfinder.Selection" />
                     <KeyValue key="value" value="arrow" />
                     <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderArrow.png" />
                 </KeyValues>
@@ -106,7 +106,7 @@
             <Button parentKey="floating" inherits="MapPinEnhancedOptionWayfinderCardTemplate" mixin="MapPinEnhancedStartupControlMixin">
                 <Size x="220" y="123.75" />
                 <KeyValues>
-                    <KeyValue key="optionKey" value="Wayfinder.General.Selection" />
+                    <KeyValue key="optionKey" value="Wayfinder.Selection" />
                     <KeyValue key="value" value="floating" />
                     <KeyValue key="imagePath" value="Interface/AddOns/MapPinEnhanced/assets/options/OptionWayfinderFloating.png" />
                 </KeyValues>
@@ -120,7 +120,7 @@
             <Button parentKey="navigationOption" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate" mixin="MapPinEnhancedStartupControlMixin">
                 <Size x="452" y="48" />
                 <KeyValues>
-                    <KeyValue key="optionKey" value="Wayfinder.Navigation.Enable" />
+                    <KeyValue key="optionKey" value="Navigation.Enable" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOP" y="-322" />
@@ -159,7 +159,7 @@
             </Button>
             <Button parentKey="minimapButton" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="General.Minimap.ShowButton" />
+                    <KeyValue key="optionKey" value="General.ShowMinimapButton" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOP" y="-214" />
@@ -167,7 +167,7 @@
             </Button>
             <Button parentKey="lockedPins" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="Pins.Miscellaneous.EnableLockedPins" />
+                    <KeyValue key="optionKey" value="Pins.EnableLockedPins" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOP" y="-286" />
@@ -175,7 +175,7 @@
             </Button>
             <Button parentKey="coordinates" inherits="MapPinEnhancedStartupCheckboxOptionTemplate">
                 <KeyValues>
-                    <KeyValue key="optionKey" value="Miscellaneous.Coords.Enable" />
+                    <KeyValue key="optionKey" value="Coordinates.Enable" />
                 </KeyValues>
                 <Anchors>
                     <Anchor point="TOP" y="-358" />

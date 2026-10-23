@@ -54,12 +54,12 @@ if IsNumber(tracker.trackerScale) and tracker.trackerScale >= 0.5 and tracker.tr
     SaveMissing(tracker.trackerScale, "frames", "tracker", "scale")
 end
 if IsNumber(tracker.trackerHeight) then
-    SaveOption("Miscellaneous.Tracker.MaximumRows", math.max(3, math.min(12, math.floor(tracker.trackerHeight))),
+    SaveOption("Tracker.MaximumRows", math.max(3, math.min(12, math.floor(tracker.trackerHeight))),
         "number")
 end
 if IsNumber(tracker.backgroundOpacity) and tracker.backgroundOpacity >= 0 and tracker.backgroundOpacity <= 1 then
-    SaveOption("Miscellaneous.Tracker.BackgroundOpacity", tracker.backgroundOpacity * 100, "number")
+    SaveOption("Tracker.BackgroundOpacity", tracker.backgroundOpacity * 100, "number")
 end
-SaveOption("Wayfinder.General.ShowETA", floating.showEstimatedTime, "boolean")
+SaveOption("Wayfinder.ShowETA", floating.showEstimatedTime, "boolean")
 
 MapPinEnhanced:SetVar("legacyOptionsMigrated", true)

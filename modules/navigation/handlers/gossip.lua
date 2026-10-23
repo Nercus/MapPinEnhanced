@@ -143,7 +143,7 @@ end
 
 local function SelectTravelOption()
     local context, report = activeContext, activeReport
-    if Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true or IsShiftKeyDown() then
+    if Options:GetOptionValue("Navigation.AutomaticTravelSelection") ~= true or IsShiftKeyDown() then
         selectionSuppressed = true
     end
     local isSummoned = context and (context.pathType == "toy" or context.pathType == "spell")
@@ -192,7 +192,7 @@ end
 local function ScheduleTravelSelection()
     if not gossipOpen then return end
     -- Shift bypass lasts for this opening, including delayed route/menu updates.
-    if IsShiftKeyDown() or Options:GetOptionValue("Wayfinder.Navigation.AutomaticTravelSelection") ~= true then
+    if IsShiftKeyDown() or Options:GetOptionValue("Navigation.AutomaticTravelSelection") ~= true then
         selectionSuppressed = true
     end
     if not activeContext or not activeReport or selectionSuppressed or selectionTimer then return end
@@ -241,7 +241,7 @@ MapPinEnhanced:RegisterEvent("GOSSIP_CLOSED", function()
     wipe(selectedOptions)
     selectionSuppressed = false
 end)
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.AutomaticTravelSelection", function(value)
+Options:SubscribeToOptionChanges("Navigation.AutomaticTravelSelection", function(value)
     if value == true then return end
     if gossipOpen then selectionSuppressed = true end
     CancelSelection()

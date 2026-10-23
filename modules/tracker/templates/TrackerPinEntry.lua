@@ -100,7 +100,7 @@ end
 function MapPinEnhancedTrackerPinEntryMixin:SetLocationText(x, y, mapID)
     local mapInfo = C_Map.GetMapInfo(mapID)
     local mapName = mapInfo and mapInfo.name or ""
-    self.location:SetText(Options:GetOptionValue("Miscellaneous.Tracker.ShowCoordinates") and
+    self.location:SetText(Options:GetOptionValue("Tracker.ShowCoordinates") and
         string.format("%d, %d - %s", x * 100, y * 100, mapName) or mapName)
 end
 

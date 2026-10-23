@@ -5,7 +5,7 @@
     <Frame name="MapPinEnhancedOptionCategoryGeneralTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate" mixin="MapPinEnhancedOptionCategoryGeneralMixin">
         <KeyValues>
             <KeyValue key="categoryName" value="General" />
-            <KeyValue key="enableKey" value="General.Minimap.ShowButton" />
+            <KeyValue key="enableKey" value="General.ShowMinimapButton" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
@@ -15,12 +15,12 @@
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Minimap.ShowButton" />
+                    <KeyValue key="key" value="General.ShowMinimapButton" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="customButton">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Minimap.CustomButton" />
+                    <KeyValue key="key" value="General.CustomMinimapButton" />
                 </KeyValues>
             </Frame>
         </Frames>

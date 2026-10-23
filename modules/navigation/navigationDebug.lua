@@ -70,7 +70,7 @@ function Navigation:ShowDebugDump()
     })
     Add("Navigation enabled", Navigation.routeNavigationEnabled)
     Add("Automatic travel selection", MapPinEnhanced:GetModule("Options"):GetOptionValue(
-        "Wayfinder.Navigation.AutomaticTravelSelection"))
+        "Navigation.AutomaticTravelSelection"))
     Add("Prepared inputs fresh", Navigation:ArePreparedInputsFresh())
     Add("Gossip selection", Navigation:GetGossipSelectionState())
     Add("Gossip NPC", UnitGUID("npc"))

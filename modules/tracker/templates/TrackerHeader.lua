@@ -18,7 +18,7 @@ local Transfer = MapPinEnhanced:GetModule("Transfer")
 MapPinEnhancedTrackerHeaderMixin = {}
 
 function MapPinEnhancedTrackerHeaderMixin:OnLoad()
-    MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("General.Lexicon.Enable", function(enabled)
+    MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Lexicon.Enable", function(enabled)
         self.lexiconButton:SetShown(enabled == true)
     end)
 

@@ -8,57 +8,57 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.AlwaysPingTracked" />
+                    <KeyValue key="key" value="Pins.AlwaysPingTracked" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.FadeUntracked" />
+                    <KeyValue key="key" value="Pins.FadeUntracked" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.ShowMinimapPins" />
+                    <KeyValue key="key" value="Pins.ShowMinimapPins" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.MinimapScale" />
+                    <KeyValue key="key" value="Pins.MinimapScale" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.WorldMapScale" />
+                    <KeyValue key="key" value="Pins.WorldMapScale" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Appearance.DefaultColor" />
+                    <KeyValue key="key" value="Pins.DefaultColor" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Miscellaneous.ScaleOnHover" />
+                    <KeyValue key="key" value="Pins.ScaleOnHover" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Miscellaneous.EnableLockedPins" />
+                    <KeyValue key="key" value="Pins.EnableLockedPins" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Tracking.ArrivalNotification" />
+                    <KeyValue key="key" value="Pins.ArrivalNotification" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Tracking.AutoUntrack" />
+                    <KeyValue key="key" value="Pins.AutoUntrack" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Pins.Integrations.TomTom" />
+                    <KeyValue key="key" value="Pins.TomTom" />
                     <KeyValue key="requiredAddon" value="TomTom" />
                 </KeyValues>
             </Frame>

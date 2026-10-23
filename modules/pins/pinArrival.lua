@@ -12,7 +12,7 @@ function Pins:ApplyTrackedPinArrival(pinID, notify)
     if not pin or not pin:IsTracked() then return end
     local locked = pin:IsLocked()
     if notify then
-        local mode = Options:GetOptionValue("Pins.Tracking.ArrivalNotification") --[[@as string]]
+        local mode = Options:GetOptionValue("Pins.ArrivalNotification") --[[@as string]]
         if mode == "all" or mode == "locked" and locked then
             local data = pin:GetPinData()
             local location = string.format("%.2f, %.2f", data.x * 100, data.y * 100)

@@ -139,7 +139,7 @@ function MapPinEnhancedTrackerMixin:UpdateHeight()
     local numberOfEntries = self.dataProvider and self.dataProvider:GetSize(TreeDataProviderConstants.ExcludeCollapsed) or
         0
     local visibleEntries = self.minimized and 0 or math.min(numberOfEntries,
-        Options:GetOptionValue("Miscellaneous.Tracker.MaximumRows"))
+        Options:GetOptionValue("Tracker.MaximumRows"))
     local newHeight = visibleEntries * entryHeight
     self.desiredHeight = newHeight + headerHeight
     self:UpdateViewportHeight()
@@ -216,12 +216,12 @@ function MapPinEnhancedTrackerMixin:OnLoad()
     self.scrollBox:SetInterpolateScroll(true);
 
     ScrollUtil.InitScrollBoxListWithScrollBar(self.scrollBox, self.scrollBar, self.scrollView)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.MaximumRows", function() self:UpdateHeight() end)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.ShowCoordinates", function() self:RequestListUpdate() end)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.BackgroundOpacity", function(value)
+    Options:SubscribeToOptionChanges("Tracker.MaximumRows", function() self:UpdateHeight() end)
+    Options:SubscribeToOptionChanges("Tracker.ShowCoordinates", function() self:RequestListUpdate() end)
+    Options:SubscribeToOptionChanges("Tracker.BackgroundOpacity", function(value)
         self.contentBackground:SetAlpha(value / 100)
     end)
-    Options:SubscribeToOptionChanges("Miscellaneous.Tracker.Scale", function() self.position:ApplyTrackerScale() end)
+    Options:SubscribeToOptionChanges("Tracker.Scale", function() self.position:ApplyTrackerScale() end)
     -- The singleton owns these subscriptions for its full lifetime. OnShow also
     -- refreshes geometry if a display change happened while the tracker was hidden.
     local function RefreshViewport()
@@ -338,7 +338,7 @@ end
 
 ---@param skipRefresh boolean?
 function MapPinEnhancedTrackerMixin:ApplyMinimizedState(skipRefresh)
-    local minimizeMode = Options:GetOptionValue("Miscellaneous.Tracker.CloseAction") == true
+    local minimizeMode = Options:GetOptionValue("Tracker.CloseAction") == true
     local wasMinimized = self.minimized
     self.minimized = minimizeMode and (self.automaticallyMinimized or MapPinEnhanced:GetVar("trackerMinimized") == true) or
         false

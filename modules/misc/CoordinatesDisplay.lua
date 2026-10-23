@@ -82,7 +82,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
     end
     table.insert(entries, { type = "divider" })
     for _, suffix in ipairs({ "Lock", "ShowZone", "ShowDecimals" }) do
-        local key = "Miscellaneous.Coords." .. suffix
+        local key = "Coordinates." .. suffix
         table.insert(entries, {
             type = "checkbox",
             label = L[key .. "_LABEL"],
@@ -96,7 +96,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnMouseUp(button)
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
-    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    local showDecimals = Options:GetOptionValue("Coordinates.ShowDecimals") == true
     self.coordsXDec:SetShown(showDecimals)
     self.coordsYDec:SetShown(showDecimals)
     self.zoneName:SetWidth(0)
@@ -121,7 +121,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:UpdateCoordinateLayout()
 end
 
 function MapPinEnhancedCoordinatesDisplayMixin:SetUndefinedPosition()
-    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    local showDecimals = Options:GetOptionValue("Coordinates.ShowDecimals") == true
     if self.positionDefined == false and self.cachedDecimals == showDecimals then return end
     self.positionDefined = false
     self.cachedDecimals = showDecimals
@@ -136,7 +136,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:SetCoordinatesText(x, y)
     local xHundredths = floor(x * 10000)
     local yHundredths = floor(y * 10000)
 
-    local showDecimals = Options:GetOptionValue("Miscellaneous.Coords.ShowDecimals") == true
+    local showDecimals = Options:GetOptionValue("Coordinates.ShowDecimals") == true
     local displayedX = showDecimals and xHundredths or floor(xHundredths / 100)
     local displayedY = showDecimals and yHundredths or floor(yHundredths / 100)
     if self.positionDefined and self.cachedDecimals == showDecimals and
@@ -174,7 +174,7 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnUpdate(elapsed)
         self.cachedMapID, self.cachedMapName = playerMap, nil
     end
     local name = ""
-    if Options:GetOptionValue("Miscellaneous.Coords.ShowZone") and playerMap then
+    if Options:GetOptionValue("Coordinates.ShowZone") and playerMap then
         if not self.cachedMapName then
             local mapInfo = C_Map.GetMapInfo(playerMap)
             local name = mapInfo and mapInfo.name
@@ -229,15 +229,15 @@ function MapPinEnhancedCoordinatesDisplayMixin:OnLoad()
     end)
 
     self.lockButton:SetScript("OnClick", function()
-        Options:SetOptionValue("Miscellaneous.Coords.Lock", self:IsMovable())
+        Options:SetOptionValue("Coordinates.Lock", self:IsMovable())
     end)
 
     self.closeButton:SetScript("OnClick", function()
-        Options:SetOptionValue("Miscellaneous.Coords.Enable", false)
+        Options:SetOptionValue("Coordinates.Enable", false)
     end)
 
     ---@type boolean | nil
-    local isLocked = Options:GetOptionValue("Miscellaneous.Coords.Lock")
+    local isLocked = Options:GetOptionValue("Coordinates.Lock")
     if isLocked then
         self:LockPosition()
     else
@@ -307,7 +307,7 @@ end
 
 
 
-Options:SubscribeToOptionChanges("Miscellaneous.Coords.Enable", function(value)
+Options:SubscribeToOptionChanges("Coordinates.Enable", function(value)
     MapPinEnhanced:UpdateVisibilityTarget("coordinates")
 end)
 
@@ -326,10 +326,10 @@ MapPinEnhanced:AddVisibilityRule("noCoordinates", {
 })
 
 MapPinEnhanced:RegisterVisibilityTarget("coordinates", {
-    optionKey = "Miscellaneous.Coords.Visibility",
+    optionKey = "Coordinates.Visibility",
     rules = { "dungeon", "raid", "scenario", "battleground", "arena", "noCoordinates" },
     isManuallyEnabled = function()
-        return Options:GetOptionValue("Miscellaneous.Coords.Enable") == true
+        return Options:GetOptionValue("Coordinates.Enable") == true
     end,
     show = ShowCoordinatesDisplay,
     hide = HideCoordinatesDisplay,
@@ -348,7 +348,7 @@ local function UnlockCoordinatesDisplay()
 end
 
 
-Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
+Options:SubscribeToOptionChanges("Coordinates.Lock", function(value)
     if not coordinatesDisplayFrame then return end
     if value then
         LockCoordinatesDisplay()
@@ -357,12 +357,12 @@ Options:SubscribeToOptionChanges("Miscellaneous.Coords.Lock", function(value)
     end
 end)
 
-for _, key in ipairs({ "Miscellaneous.Coords.ShowZone", "Miscellaneous.Coords.ShowDecimals" }) do
+for _, key in ipairs({ "Coordinates.ShowZone", "Coordinates.ShowDecimals" }) do
     Options:SubscribeToOptionChanges(key, function()
         if not coordinatesDisplayFrame then return end
         coordinatesDisplayFrame.positionDefined, coordinatesDisplayFrame.cachedMapName = nil, nil
         coordinatesDisplayFrame:OnUpdate(1)
-        if key == "Miscellaneous.Coords.ShowDecimals" then
+        if key == "Coordinates.ShowDecimals" then
             coordinatesDisplayFrame:UpdateCoordinateLayout()
         end
     end)

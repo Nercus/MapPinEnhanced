@@ -311,7 +311,7 @@ function Navigation:ReconcileActionEquipment()
     end
 end
 
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.RestoreEquipment", function(value)
+Options:SubscribeToOptionChanges("Navigation.RestoreEquipment", function(value)
     enabled = value == true
     -- Disabling stops new snapshots; existing gear still belongs to this owner
     -- until restored or manually replaced, including an unconfirmed secure swap.

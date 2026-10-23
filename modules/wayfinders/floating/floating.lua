@@ -36,9 +36,9 @@ function MapPinEnhancedWayfinderFloating:GetFrame()
     if not self.frame then
         self.frame = CreateFrame("Frame", "MapPinEnhancedWayfinderFloating", nil,
             "MapPinEnhancedWayfinderFloatingTemplate")
-        self.frame:SetScaleWithDistance(Options:GetOptionValue("Wayfinder.Floating.ScaleWithDistance") == true)
-        self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.Floating.ShowBeam") == true)
-        self.frame.content:SetShowTextOutline(Options:GetOptionValue("Wayfinder.Floating.ShowTextOutline") == true)
+        self.frame:SetScaleWithDistance(Options:GetOptionValue("Wayfinder.ScaleWithDistance") == true)
+        self.frame.content:SetShowBeam(Options:GetOptionValue("Wayfinder.ShowBeam") == true)
+        self.frame.content:SetShowTextOutline(Options:GetOptionValue("Wayfinder.ShowTextOutline") == true)
     end
     return self.frame
 end
@@ -81,7 +81,7 @@ function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
     local inside = step and step.insideObjectiveArea
     if self.panel then
-        local showPanel = not inside or Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
+        local showPanel = not inside or Options:GetOptionValue("Wayfinder.ShowObjectiveFrame")
         self.panel:Apply(showPanel and step or nil, self.data)
     end
     -- Reset has released tracking; retain the last artwork until its fade ends.
@@ -178,14 +178,14 @@ function MapPinEnhancedWayfinderFloating:Enable()
     if self.runtimeEnabled then return end
     self.runtimeEnabled = true
     self:RestoreBlizzardForFloating()
-    self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ScaleWithDistance",
+    self.unsubscribeScaleOption = Options:SubscribeToOptionChanges("Wayfinder.ScaleWithDistance",
         function(value)
             if self.frame then self.frame:SetScaleWithDistance(value == true) end
         end)
-    self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowBeam", function(value)
+    self.unsubscribeBeamOption = Options:SubscribeToOptionChanges("Wayfinder.ShowBeam", function(value)
         if self.frame then self.frame.content:SetShowBeam(value == true) end
     end)
-    self.unsubscribeTextOutlineOption = Options:SubscribeToOptionChanges("Wayfinder.Floating.ShowTextOutline",
+    self.unsubscribeTextOutlineOption = Options:SubscribeToOptionChanges("Wayfinder.ShowTextOutline",
         function(value)
             if self.frame then self.frame.content:SetShowTextOutline(value == true) end
         end)

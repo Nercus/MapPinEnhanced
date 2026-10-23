@@ -105,7 +105,7 @@ end
 function MapPinEnhancedWayfinderFloatingTitleMixin:ShowInfoTooltip()
     GameTooltip:SetOwner(self.info, "ANCHOR_RIGHT")
     GameTooltip:SetText(L["Why do I see this navigation element?"], 1, 0.82, 0, 1, true)
-    GameTooltip:AddLine(L["Wayfinder.Floating.Fallback_DESCRIPTION"], 1, 1, 1, true)
+    GameTooltip:AddLine(L["Wayfinder.Fallback_DESCRIPTION"], 1, 1, 1, true)
     GameTooltip:Show()
 end
 

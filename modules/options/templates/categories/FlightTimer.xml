@@ -4,27 +4,27 @@
     <Frame name="MapPinEnhancedOptionCategoryFlightTimerTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
             <KeyValue key="categoryName" value="Flight Timer" />
-            <KeyValue key="enableKey" value="General.FlightTimer.Enable" />
+            <KeyValue key="enableKey" value="FlightTimer.Enable" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Enable" />
+                    <KeyValue key="key" value="FlightTimer.Enable" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Lock" />
+                    <KeyValue key="key" value="FlightTimer.Lock" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionDropdownTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Scale" />
+                    <KeyValue key="key" value="FlightTimer.Scale" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionColorpickerTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.FlightTimer.Gradient" />
+                    <KeyValue key="key" value="FlightTimer.Gradient" />
                     <KeyValue key="gradient" value="true" type="boolean" />
                 </KeyValues>
             </Frame>

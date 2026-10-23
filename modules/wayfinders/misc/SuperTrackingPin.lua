@@ -9,7 +9,7 @@ MapPinEnhancedSuperTrackingPinMixin = {}
 ---@param data pinData
 function MapPinEnhancedSuperTrackingPinMixin:ApplyData(data)
     self.data = data
-    local scale = Options:GetOptionValue("Pins.Appearance.MinimapScale") --[[@as number]]
+    local scale = Options:GetOptionValue("Pins.MinimapScale") --[[@as number]]
     self:SetSize(22 * scale, 22 * scale)
     self:SetTracked(true)
     if not self:SetIconTexture(data.texture, data.usesAtlas) then

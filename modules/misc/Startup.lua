@@ -152,9 +152,9 @@ local STEPS = {
 }
 
 local OPTION_KEYS = {
-    "Wayfinder.General.Selection", "Wayfinder.Navigation.Enable",
-    "General.TooltipHelper", "General.Minimap.ShowButton",
-    "Pins.Miscellaneous.EnableLockedPins", "Miscellaneous.Coords.Enable",
+    "Wayfinder.Selection", "Navigation.Enable",
+    "General.TooltipHelper", "General.ShowMinimapButton",
+    "Pins.EnableLockedPins", "Coordinates.Enable",
 }
 
 function MapPinEnhancedStartupMixin:OnLoad()
@@ -166,7 +166,7 @@ function MapPinEnhancedStartupMixin:OnLoad()
     self:SetTitle(L["Introduction"])
     self.arrow.title.label:SetText(L["Arrow"])
     self.floating.title.label:SetText(L["Floating"])
-    self.navigationOption.label:SetText(L["Wayfinder.Navigation.Enable_LABEL"])
+    self.navigationOption.label:SetText(L["Navigation.Enable_LABEL"])
     for _, name in ipairs(COMMON_OPTIONS) do
         local card = self[name] --[[@as MapPinEnhancedStartupCheckboxOption]]
         card.label:SetText(L[card.optionKey .. "_LABEL"])

@@ -364,7 +364,7 @@ MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
 
 function MapPinEnhanced:FormatDistance(distance)
     ---@type boolean
-    local showDistanceUnit = Options:GetOptionValue("General.Distance.ShowUnit")
+    local showDistanceUnit = Options:GetOptionValue("Wayfinder.ShowDistanceUnit")
     local distanceRound = Round(distance)
     ---@type string
     local distanceText
@@ -433,7 +433,7 @@ function MapPinEnhanced:GetPointDistance(left, right)
 end
 
 MapPinEnhanced:OnLoad(function()
-    Options:SubscribeToOptionChanges("General.Distance.ShowUnit", function()
+    Options:SubscribeToOptionChanges("Wayfinder.ShowDistanceUnit", function()
         if lastDistance ~= nil then
             NotifyDistanceCallbacks(lastDistance, lastTimeToTarget, true)
         end

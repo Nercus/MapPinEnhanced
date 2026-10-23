@@ -24,7 +24,7 @@ function MapPinEnhancedWorldmapPinMixin:ResetHoverScale()
 end
 
 function MapPinEnhancedWorldmapPinMixin:OnShow()
-    if Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then self:RefreshTrackingPulse() end
+    if Options:GetOptionValue("Pins.AlwaysPingTracked") then self:RefreshTrackingPulse() end
 end
 
 function MapPinEnhancedWorldmapPinMixin:OnHide()
@@ -75,13 +75,13 @@ end
 
 function MapPinEnhancedWorldmapPinMixin:ApplyHoverStyle()
     MapPinEnhancedBasePinMixin.ApplyHoverStyle(self)
-    self:SetAlpha(Options:GetOptionValue("Pins.Appearance.FadeUntracked") and
+    self:SetAlpha(Options:GetOptionValue("Pins.FadeUntracked") and
         not self.tracked and not self.hovered and 0.4 or 1)
 end
 
 function MapPinEnhancedWorldmapPinMixin:RefreshTrackingPulse()
     self:HidePulse()
-    if self.tracked and self:IsVisible() and Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then
+    if self.tracked and self:IsVisible() and Options:GetOptionValue("Pins.AlwaysPingTracked") then
         local fadeIn, scale, fadeOut = self.pulseHighlight.pulse:GetAnimations()
         fadeIn:SetDuration(0.5)
         scale:SetDuration(1.5)
@@ -106,5 +106,5 @@ end
 
 function MapPinEnhancedWorldmapPinMixin:SetTracked(skipAnimation)
     MapPinEnhancedBasePinMixin.SetTracked(self, skipAnimation)
-    if Options:GetOptionValue("Pins.Appearance.AlwaysPingTracked") then self:RefreshTrackingPulse() end
+    if Options:GetOptionValue("Pins.AlwaysPingTracked") then self:RefreshTrackingPulse() end
 end

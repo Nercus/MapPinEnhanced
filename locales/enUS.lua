@@ -103,12 +103,11 @@ L["Arena"] = "Arena"
 L["None"] = "None"
 L["No active pins"] = "No active pins"
 L["No coordinates available"] = "No coordinates available"
-L["Miscellaneous.Coords.Visibility_LABEL"] = "Automatic hide"
-L["Miscellaneous.Coords.Visibility_DESCRIPTION"] =
+L["Coordinates.Visibility_LABEL"] = "Automatic hide"
+L["Coordinates.Visibility_DESCRIPTION"] =
 "Hide the coordinate display when any selected condition is active."
-L["Miscellaneous.Tracker_GROUPLABEL"] = "Tracker"
-L["Miscellaneous.Tracker.Visibility_LABEL"] = "Automatic hide"
-L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] =
+L["Tracker.Visibility_LABEL"] = "Automatic hide"
+L["Tracker.Visibility_DESCRIPTION"] =
 "Hide the tracker when any selected condition is active."
 L["Toggle the group editor."] = "Toggle the group editor."
 
@@ -200,54 +199,49 @@ L["Open the options frame"] = "Open the options frame"
 L["Open options"] = "Open options"
 L["Open editor"] = "Open editor"
 
-L["General.Minimap_GROUPLABEL"] = "Minimap"
 L["Clear all pins"] = "Clear all pins"
 L["Some pins are still being updated. Try clearing again when the current operation finishes."] =
 "Some pins are still being updated. Try clearing again when the current operation finishes."
 L["Hide minimap button"] = "Hide minimap button"
 L["Toggle the minimap button visibility."] = "Toggle the minimap button visibility."
-L["General.Minimap.ShowButton_LABEL"] = "Show minimap button"
-L["General.Minimap.ShowButton_DESCRIPTION"] = "Show the addon button on the minimap."
-L["General.Minimap.CustomButton_LABEL"] = "Custom minimap button"
-L["General.Minimap.CustomButton_DESCRIPTION"] =
+L["General.ShowMinimapButton_LABEL"] = "Show minimap button"
+L["General.ShowMinimapButton_DESCRIPTION"] = "Show the addon button on the minimap."
+L["General.CustomMinimapButton_LABEL"] = "Custom minimap button"
+L["General.CustomMinimapButton_DESCRIPTION"] =
 "Use a larger logo without the standard minimap button border and background."
-L["General.Distance_GROUPLABEL"] = "Distance"
-L["General.Distance.ShowUnit_LABEL"] = "Show distance unit"
-L["General.Distance.ShowUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
-L["General.Tracking_GROUPLABEL"] = "Tracking"
+L["Wayfinder.ShowDistanceUnit_LABEL"] = "Show distance unit"
+L["Wayfinder.ShowDistanceUnit_DESCRIPTION"] = "Show the distance unit next to distance values."
 L["Reload UI"] = "Reload UI"
 L["This change requires a UI reload. Reload now?"] = "This change requires a UI reload. Reload now?"
 
-L["Pins.Miscellaneous_GROUPLABEL"] = "Miscellaneous"
-L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Scale pins on hover"
-L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] =
+L["Pins.ScaleOnHover_LABEL"] = "Scale pins on hover"
+L["Pins.ScaleOnHover_DESCRIPTION"] =
 "Enlarge world map pins when you hover over them."
 
-L["Miscellaneous.Coords_GROUPLABEL"] = "Coordinates Display"
-L["Miscellaneous.Coords.Enable_LABEL"] = "Enable coordinates display"
-L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Toggle the on-screen display of your current coordinates"
-L["Miscellaneous.Coords.Lock_LABEL"] = "Lock coordinates display"
-L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Toggle whether the coordinates display can be moved or not."
+L["Coordinates.Enable_LABEL"] = "Enable coordinates display"
+L["Coordinates.Enable_DESCRIPTION"] = "Toggle the on-screen display of your current coordinates"
+L["Coordinates.Lock_LABEL"] = "Lock coordinates display"
+L["Coordinates.Lock_DESCRIPTION"] = "Toggle whether the coordinates display can be moved or not."
 
-L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Hide Blizzard floating diamond"
-L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
+L["Wayfinder.HideBlizzardFloatingDiamond_LABEL"] = "Hide Blizzard floating diamond"
+L["Wayfinder.HideBlizzardFloatingDiamond_DESCRIPTION"] =
 "Hide Blizzard's floating navigation diamond when the Map Pin Enhanced floating wayfinder is disabled."
-L["Wayfinder.General.Selection_LABEL"] = "Wayfinder"
-L["Wayfinder.General.Selection_DESCRIPTION"] =
+L["Wayfinder.Selection_LABEL"] = "Wayfinder"
+L["Wayfinder.Selection_DESCRIPTION"] =
 "Choose the single wayfinder used for navigation."
 L["Arrow"] = "Arrow"
 L["Floating"] = "Floating"
-L["Wayfinder.Navigation_GROUPLABEL"] = "Navigation"
-L["Wayfinder.Navigation.Enable_LABEL"] = "Enable route navigation"
-L["Wayfinder.Navigation.Enable_DESCRIPTION"] =
+L["Navigation"] = "Navigation"
+L["Navigation.Enable_LABEL"] = "Enable route navigation"
+L["Navigation.Enable_DESCRIPTION"] =
 "Calculate travel routes using available movement, portals, transports, spells, items, and toys."
-L["Wayfinder.Navigation.AutomaticTravelSelection_LABEL"] = "Automatic travel selection"
-L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] =
+L["Navigation.AutomaticTravelSelection_LABEL"] = "Automatic travel selection"
+L["Navigation.AutomaticTravelSelection_DESCRIPTION"] =
 "Automatically select NPC dialogue options and flight destinations required by your current route. Hold Shift when opening the flight map to select a flight manually."
-L["Wayfinder.Navigation.WorldMap_LABEL"] = "Show route on world map"
-L["Wayfinder.Navigation.WorldMap_DESCRIPTION"] = "Show the calculated route on the World Map."
-L["Wayfinder.Navigation.Minimap_LABEL"] = "Show route on minimap"
-L["Wayfinder.Navigation.Minimap_DESCRIPTION"] = "Show the calculated route on the minimap."
+L["Navigation.WorldMap_LABEL"] = "Show route on world map"
+L["Navigation.WorldMap_DESCRIPTION"] = "Show the calculated route on the World Map."
+L["Navigation.Minimap_LABEL"] = "Show route on minimap"
+L["Navigation.Minimap_DESCRIPTION"] = "Show the calculated route on the minimap."
 L["Navigation Calculating"] = "Calculating a route..."
 L["Navigation Direct Guidance"] = "No route is available. Follow the destination directly."
 L["Navigation No Direction"] = "No direction is available for this destination."
@@ -410,22 +404,22 @@ L["Add notes for this pin. Descriptions appear in pin tooltips and below the way
 L["This pin is no longer in this group."] = "This pin is no longer in this group."
 L["Apply"] = "Apply"
 
-L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Scale with distance"
-L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
+L["Wayfinder.ScaleWithDistance_LABEL"] = "Scale with distance"
+L["Wayfinder.ScaleWithDistance_DESCRIPTION"] =
 "Grow the floating pin and beam from 75% to 100% as you approach. Distance ranges use your learned riding or flying ability at addon load and stay fixed until reload."
-L["Wayfinder.Floating.ShowBeam_LABEL"] = "Show beam"
-L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
-L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Show text outline"
-L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] =
+L["Wayfinder.ShowBeam_LABEL"] = "Show beam"
+L["Wayfinder.ShowBeam_DESCRIPTION"] = "Show a beam above the floating marker when it is on screen."
+L["Wayfinder.ShowTextOutline_LABEL"] = "Show text outline"
+L["Wayfinder.ShowTextOutline_DESCRIPTION"] =
 "Outline the floating marker's distance, estimated arrival time and intro or hover title."
-L["Wayfinder.General.ShowETA_LABEL"] = "Show estimated arrival time"
-L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Show quest objective frame"
-L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =
+L["Wayfinder.ShowETA_LABEL"] = "Show estimated arrival time"
+L["Wayfinder.ShowObjectiveFrame_LABEL"] = "Show quest objective frame"
+L["Wayfinder.ShowObjectiveFrame_DESCRIPTION"] =
 "Show quest objectives when entering an objective area. When disabled, the floating wayfinder is hidden and the arrow stays in its close state."
-L["Wayfinder.General.ShowETA_DESCRIPTION"] =
+L["Wayfinder.ShowETA_DESCRIPTION"] =
 "Show the movement time estimate to the current target alongside its distance, when available."
-L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Transportation"
-L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] =
+L["Navigation.TransportationGroups_LABEL"] = "Transportation"
+L["Navigation.TransportationGroups_DESCRIPTION"] =
 "Choose which transportation navigation can suggest. Scheduled transport includes boats, zeppelins, trams and lifts. Personal teleports include travel spells, items, toys and the Dalaran Hearthstone."
 L["Navigation Transportation Portals"] = "Portals"
 L["Navigation Transportation Flight paths"] = "Flight paths"
@@ -435,14 +429,13 @@ L["Navigation Transportation Phase changes"] = "Phase changes"
 L["Navigation Transportation Personal teleports"] = "Personal teleports"
 L["Navigation Transportation Dungeon teleports"] = "Dungeon teleports"
 
-L["Wayfinder.Display_GROUPLABEL"] = "Display"
 L["Settings for Floating; Arrow is still selected."] = "Settings for Floating; Arrow is still selected."
 L["Settings for Arrow; Floating is still selected."] = "Settings for Arrow; Floating is still selected."
 
 L["Clear Tracking"] = "Clear tracking"
 L["In objective area"] = "In objective area"
 L["Why do I see this navigation element?"] = "Why do I see this navigation element?"
-L["Wayfinder.Floating.Fallback_DESCRIPTION"] =
+L["Wayfinder.Fallback_DESCRIPTION"] =
 "Blizzard's UI cannot provide a usable world position for this target in this area. This arrow is only used temporarily and will be reverted back when usable game information is available."
 
 L["Group sharing timed out. The sender must be online and the link must still be available."] =
@@ -457,57 +450,55 @@ L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
 "Pin operation stopped after %d of %d pins. Completed changes were kept."
 
 -- Category options (0041).
-L["Miscellaneous.Coords.ShowZone_LABEL"] = "Show zone"
-L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Show the full map name between your X and Y coordinates."
-L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Show decimal points"
-L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] =
+L["Coordinates.ShowZone_LABEL"] = "Show zone"
+L["Coordinates.ShowZone_DESCRIPTION"] = "Show the full map name between your X and Y coordinates."
+L["Coordinates.ShowDecimals_LABEL"] = "Show decimal points"
+L["Coordinates.ShowDecimals_DESCRIPTION"] =
 "Display two decimal places. Turn off to show truncated whole coordinates."
-L["Pins.Appearance.AlwaysPingTracked_LABEL"] = "Always ping tracked pin"
-L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] = "Pulse the tracked world-map pin every two seconds while visible."
-L["Pins.Appearance.MinimapScale_LABEL"] = "Minimap pin size"
-L["Pins.Appearance.MinimapScale_DESCRIPTION"] = "Choose the size of ordinary minimap pins."
-L["Pins.Appearance.WorldMapScale_LABEL"] = "World-map pin size"
-L["Pins.Appearance.WorldMapScale_DESCRIPTION"] =
+L["Pins.AlwaysPingTracked_LABEL"] = "Always ping tracked pin"
+L["Pins.AlwaysPingTracked_DESCRIPTION"] = "Pulse the tracked world-map pin every two seconds while visible."
+L["Pins.MinimapScale_LABEL"] = "Minimap pin size"
+L["Pins.MinimapScale_DESCRIPTION"] = "Choose the size of ordinary minimap pins."
+L["Pins.WorldMapScale_LABEL"] = "World-map pin size"
+L["Pins.WorldMapScale_DESCRIPTION"] =
 "Choose the size of ordinary world-map pins. Hover scaling applies on top."
-L["Pins.Appearance.DefaultColor_LABEL"] = "Default pin color"
-L["Pins.Appearance.DefaultColor_DESCRIPTION"] =
+L["Pins.DefaultColor_LABEL"] = "Default pin color"
+L["Pins.DefaultColor_DESCRIPTION"] =
 "Color for new pins without an explicit icon or color. Existing and imported pins keep their appearance."
-L["Pins.Appearance.FadeUntracked_LABEL"] = "Fade out untracked pins"
-L["Pins.Appearance.FadeUntracked_DESCRIPTION"] = "Dim untracked map pins to 40% opacity. Hover restores full opacity."
-L["Pins.Appearance.ShowMinimapPins_LABEL"] = "Show minimap pins"
-L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] =
+L["Pins.FadeUntracked_LABEL"] = "Fade out untracked pins"
+L["Pins.FadeUntracked_DESCRIPTION"] = "Dim untracked map pins to 40% opacity. Hover restores full opacity."
+L["Pins.ShowMinimapPins_LABEL"] = "Show minimap pins"
+L["Pins.ShowMinimapPins_DESCRIPTION"] =
 "Show ordinary addon pins on the minimap. Minimap pins require position updates; guidance and route markers remain independent."
-L["Pins.Miscellaneous.EnableLockedPins_LABEL"] = "Enable locked pins"
-L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
+L["Pins.EnableLockedPins_LABEL"] = "Enable locked pins"
+L["Pins.EnableLockedPins_DESCRIPTION"] =
 "Allow new locks. Locked pins remain until you remove them; existing pins can always be unlocked."
-L["Pins.Tracking.ArrivalNotification_LABEL"] = "Notification when reaching pin"
-L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
+L["Pins.ArrivalNotification_LABEL"] = "Notification when reaching pin"
+L["Pins.ArrivalNotification_DESCRIPTION"] =
 "Notify once per tracking session when physically reaching the final addon destination."
-L["Pins.Integrations.TomTom_LABEL"] = "Enable TomTom integration"
-L["Pins.Integrations.TomTom_DESCRIPTION"] =
+L["Pins.TomTom_LABEL"] = "Enable TomTom integration"
+L["Pins.TomTom_DESCRIPTION"] =
 "Follow TomTom's selected waypoint and removals, or accept TomTom waypoints from other addons when TomTom is not installed. Disabling stops tracking the synced target and keeps existing pins. After enabling, select a waypoint again to resume."
-L["Pins.Tracking.AutoUntrack_LABEL"] = "Auto untrack"
-L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
+L["Pins.AutoUntrack_LABEL"] = "Auto untrack"
+L["Pins.AutoUntrack_DESCRIPTION"] =
 "Clear addon and Blizzard tracking when entering a dungeon, raid, scenario, battleground or arena."
-L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Auto show on new pin"
-L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
+L["Tracker.AutoShow_LABEL"] = "Auto show on new pin"
+L["Tracker.AutoShow_DESCRIPTION"] =
 "Show and expand Tracker after creating a user pin or confirming an import. Tracking a Blizzard element does not trigger this. Automatic hide rules still apply."
-L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Minimize tracker instead of closing"
-L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
+L["Tracker.CloseAction_LABEL"] = "Minimize tracker instead of closing"
+L["Tracker.CloseAction_DESCRIPTION"] =
 "Keep only the header visible when minimizing the tracker."
-L["Miscellaneous.Tracker.ShowCoordinates_LABEL"] = "Show coordinates"
-L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] =
+L["Tracker.ShowCoordinates_LABEL"] = "Show coordinates"
+L["Tracker.ShowCoordinates_DESCRIPTION"] =
 "Show coordinates next to the zone name in tracker pin entries."
-L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Maximum visible rows"
-L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
+L["Tracker.MaximumRows_LABEL"] = "Maximum visible rows"
+L["Tracker.MaximumRows_DESCRIPTION"] =
 "Maximum group and pin rows before scrolling, excluding the header."
-L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Tracker background opacity"
-L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] =
+L["Tracker.BackgroundOpacity_LABEL"] = "Tracker background opacity"
+L["Tracker.BackgroundOpacity_DESCRIPTION"] =
 "Opacity behind the pin list, from 0% to 100%."
-L["Miscellaneous.Tracker.Scale_LABEL"] = "Tracker size"
-L["Miscellaneous.Tracker.Scale_DESCRIPTION"] = "Choose the size of the tracker."
-L["Pins.Appearance_GROUPLABEL"] = "Appearance"
-L["Pins.Tracking_GROUPLABEL"] = "Tracking"
+L["Tracker.Scale_LABEL"] = "Tracker size"
+L["Tracker.Scale_DESCRIPTION"] = "Choose the size of the tracker."
 L["Coordinates"] = "Coordinates"
 L["Tracker"] = "Tracker"
 L["Small (90%)"] = "Small (90%)"
@@ -539,8 +530,8 @@ L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
 L["%d legacy entries could not be migrated. Original saved data was kept."] =
 "%d legacy entries could not be migrated. Original saved data was kept."
 
-L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Restore equipment after travel"
-L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
+L["Navigation.RestoreEquipment_LABEL"] = "Restore equipment after travel"
+L["Navigation.RestoreEquipment_DESCRIPTION"] =
 "Restore gear replaced by navigation items and show equipment notifications. Turning this off still restores gear already replaced."
 
 L["Clear"] = "Clear"
@@ -609,15 +600,15 @@ L["Select modules, then start a new capture."] = "Select modules, then start a n
 L["Open the profiler."] = "Open the profiler."
 --@end-debug@
 
-L["General.FlightTimer.Enable_LABEL"] = "Enable flight timer"
-L["General.FlightTimer.Enable_DESCRIPTION"] =
+L["FlightTimer.Enable_LABEL"] = "Enable flight timer"
+L["FlightTimer.Enable_DESCRIPTION"] =
 "Show a movable progress bar and estimated remaining time during flight-master flights."
-L["General.FlightTimer.Lock_LABEL"] = "Lock flight timer"
-L["General.FlightTimer.Lock_DESCRIPTION"] = "Prevent the flight timer from being moved."
-L["General.FlightTimer.Scale_LABEL"] = "Flight timer size"
-L["General.FlightTimer.Scale_DESCRIPTION"] = "Choose the size of the flight timer."
-L["General.FlightTimer.Gradient_LABEL"] = "Flight timer gradient"
-L["General.FlightTimer.Gradient_DESCRIPTION"] =
+L["FlightTimer.Lock_LABEL"] = "Lock flight timer"
+L["FlightTimer.Lock_DESCRIPTION"] = "Prevent the flight timer from being moved."
+L["FlightTimer.Scale_LABEL"] = "Flight timer size"
+L["FlightTimer.Scale_DESCRIPTION"] = "Choose the size of the flight timer."
+L["FlightTimer.Gradient_LABEL"] = "Flight timer gradient"
+L["FlightTimer.Gradient_DESCRIPTION"] =
 "Click the left or right half to change that end of the flight timer gradient."
 L["Flight Timer"] = "Flight Timer"
 L["Flight elapsed: %s"] = "Elapsed: %s"
@@ -668,10 +659,10 @@ L["Try a city, dungeon, or location name"] = "Try a city, dungeon, or location n
 L["Unknown zone"] = "Unknown zone"
 L["Vault"] = "Vault"
 L["Vendor"] = "Vendor"
-L["General.Lexicon.Enable_LABEL"] = "Enable Location Lexicon"
-L["General.Lexicon.Enable_DESCRIPTION"] = "Search locations and track them or create ordinary pins."
-L["General.Lexicon.DataTypes_LABEL"] = "Enabled data types"
-L["General.Lexicon.DataTypes_DESCRIPTION"] =
+L["Lexicon.Enable_LABEL"] = "Enable Location Lexicon"
+L["Lexicon.Enable_DESCRIPTION"] = "Search locations and track them or create ordinary pins."
+L["Lexicon.DataTypes_LABEL"] = "Enabled data types"
+L["Lexicon.DataTypes_DESCRIPTION"] =
 "Choose which location and service types appear in searches. Locations with multiple roles remain searchable while any role is enabled."
 L["%s Trainer"] = "%s Trainer"
 L["Alchemy"] = "Alchemy"

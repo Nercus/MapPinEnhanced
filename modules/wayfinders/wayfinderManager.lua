@@ -34,8 +34,8 @@ local AVAILABLE_WAYFINDERS = {
     WAYFINDER_ARROW = "WAYFINDER_ARROW",
 }
 
-local WAYFINDER_SELECTION_OPTION = "Wayfinder.General.Selection"
-local HIDE_BLIZZARD_OPTION = "Wayfinder.General.HideBlizzardFloatingDiamond"
+local WAYFINDER_SELECTION_OPTION = "Wayfinder.Selection"
+local HIDE_BLIZZARD_OPTION = "Wayfinder.HideBlizzardFloatingDiamond"
 local WAYFINDER_TYPES_BY_SELECTION = {
     [Options.WAYFINDER_SELECTION_ARROW] = AVAILABLE_WAYFINDERS.WAYFINDER_ARROW,
     [Options.WAYFINDER_SELECTION_FLOATING] = AVAILABLE_WAYFINDERS.WAYFINDER_FLOATING,
@@ -202,7 +202,7 @@ function Wayfinders:UpdateDestinationAreaState(inside, showDirection)
 end
 
 MapPinEnhanced:RegisterEvent("PLAYER_REGEN_ENABLED", ApplyActiveStep)
-Options:SubscribeToOptionChanges("Wayfinder.General.ShowObjectiveFrame", ApplyActiveStep)
+Options:SubscribeToOptionChanges("Wayfinder.ShowObjectiveFrame", ApplyActiveStep)
 
 ---@return WayfinderStepData?
 function Wayfinders:GetStepSnapshot()
@@ -232,7 +232,7 @@ function Wayfinders:BuildNavigationMenuEntries()
     local Navigation = MapPinEnhanced:GetModule("Navigation")
     local entries = {
         { type = "divider" },
-        { type = "title",  label = MapPinEnhanced.L["Wayfinder.Navigation_GROUPLABEL"] },
+        { type = "title",  label = MapPinEnhanced.L["Navigation"] },
         {
             type = "button",
             label = MapPinEnhanced:Iconize("arrowcircle", MapPinEnhanced.L["Recalculate Route"]),

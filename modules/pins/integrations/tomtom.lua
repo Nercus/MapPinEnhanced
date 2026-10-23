@@ -5,7 +5,7 @@ local L = MapPinEnhanced.L
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Pins = MapPinEnhanced:GetModule("Pins")
 local Options = MapPinEnhanced:GetModule("Options")
-local OPTION_KEY = "Pins.Integrations.TomTom"
+local OPTION_KEY = "Pins.TomTom"
 -- Capture absence before Options persists its initial values during addon setup.
 local needsInitialDefault = MapPinEnhanced:GetVar("options", OPTION_KEY) == nil
 local integrationEnabled = false

@@ -17,13 +17,13 @@ local L = MapPinEnhanced.L
 ---@field showNumber number?
 MapPinEnhancedOptionCategoryWayfinderMixin = CreateFromMixins(MapPinEnhancedOptionCategoryBaseMixin)
 
-local SELECTION_KEY = "Wayfinder.General.Selection"
+local SELECTION_KEY = "Wayfinder.Selection"
 ---@type table<string, WayfinderSelection>
 local PRESENTATION_BY_OPTION = {
-    ["Wayfinder.Floating.ScaleWithDistance"] = "floating",
-    ["Wayfinder.Floating.ShowBeam"] = "floating",
-    ["Wayfinder.Floating.ShowTextOutline"] = "floating",
-    ["Wayfinder.General.HideBlizzardFloatingDiamond"] = "arrow",
+    ["Wayfinder.ScaleWithDistance"] = "floating",
+    ["Wayfinder.ShowBeam"] = "floating",
+    ["Wayfinder.ShowTextOutline"] = "floating",
+    ["Wayfinder.HideBlizzardFloatingDiamond"] = "arrow",
 }
 
 function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshDisplay()

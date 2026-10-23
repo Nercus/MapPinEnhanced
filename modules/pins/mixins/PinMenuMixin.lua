@@ -175,7 +175,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
             end
         }
     }
-    if self:IsLocked() or MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") then
+    if self:IsLocked() or MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.EnableLockedPins") then
         table.insert(entries, #entries - 1, {
             type = "button",
             label = MapPinEnhanced:Iconize(self:IsLocked() and "unlock" or "lock",

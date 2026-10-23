@@ -21,7 +21,7 @@ end
 
 function MapPinEnhancedTrackerPositionMixin:ApplyTrackerScale()
     if not self.restored then return end
-    local scale = MapPinEnhanced:GetModule("Options"):GetOptionValue("Miscellaneous.Tracker.Scale") --[[@as number]]
+    local scale = MapPinEnhanced:GetModule("Options"):GetOptionValue("Tracker.Scale") --[[@as number]]
     local oldScale = self:GetScale()
     if scale == oldScale then return end
     local left, top = self:GetLeft(), self:GetTop()

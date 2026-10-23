@@ -102,12 +102,11 @@ L["Arena"] = "Арена"
 L["None"] = "Нет"
 L["No active pins"] = "Нет активных меток"
 L["No coordinates available"] = "Координаты отсутствуют"
-L["Miscellaneous.Coords.Visibility_LABEL"] = "Автоматическое скрытие"
-L["Miscellaneous.Coords.Visibility_DESCRIPTION"] =
+L["Coordinates.Visibility_LABEL"] = "Автоматическое скрытие"
+L["Coordinates.Visibility_DESCRIPTION"] =
 "Скрыть отображение координат, когда выполняется любое из выбранных условий."
-L["Miscellaneous.Tracker_GROUPLABEL"] = "Трекер"
-L["Miscellaneous.Tracker.Visibility_LABEL"] = "Автоматическое скрытие"
-L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] = "Скрыть трекер, когда выполняется любое из выбранных условий."
+L["Tracker.Visibility_LABEL"] = "Автоматическое скрытие"
+L["Tracker.Visibility_DESCRIPTION"] = "Скрыть трекер, когда выполняется любое из выбранных условий."
 L["Toggle the group editor."] = "Включить/выключить редактор групп."
 
 ------------------------------ Editor ------------------------------
@@ -203,53 +202,48 @@ L["Open the options frame"] = "Откройте окно настроек"
 L["Open options"] = "Открыть настройки"
 L["Open editor"] = "Открыть редактор"
 
-L["General.Minimap_GROUPLABEL"] = "Миникарта"
 L["Clear all pins"] = "Убрать все метки"
 L["Some pins are still being updated. Try clearing again when the current operation finishes."] =
 "Некоторые метки пока обновляются. Попробуйте выполнить очистку заново после завершения текущей операции."
 L["Hide minimap button"] = "Скрыть кнопку миникарты"
 L["Toggle the minimap button visibility."] = "Включить или выключить отображение кнопки миникарты."
-L["General.Minimap.ShowButton_LABEL"] = "Показать кнопку миникарты"
-L["General.Minimap.ShowButton_DESCRIPTION"] = "Отобразить кнопку аддона на миникарте."
-L["General.Minimap.CustomButton_LABEL"] = "Пользовательская кнопка миникарты"
-L["General.Minimap.CustomButton_DESCRIPTION"] =
+L["General.ShowMinimapButton_LABEL"] = "Показать кнопку миникарты"
+L["General.ShowMinimapButton_DESCRIPTION"] = "Отобразить кнопку аддона на миникарте."
+L["General.CustomMinimapButton_LABEL"] = "Пользовательская кнопка миникарты"
+L["General.CustomMinimapButton_DESCRIPTION"] =
 "Используйте логотип большего размера без стандартной рамки и фона кнопки миникарты."
-L["General.Distance_GROUPLABEL"] = "Расстояние"
-L["General.Distance.ShowUnit_LABEL"] = "Показать единицу измерения расстояния"
-L["General.Distance.ShowUnit_DESCRIPTION"] = "Отображать единицу измерения расстояния рядом со значениями расстояния."
-L["General.Tracking_GROUPLABEL"] = "Отслеживание"
+L["Wayfinder.ShowDistanceUnit_LABEL"] = "Показать единицу измерения расстояния"
+L["Wayfinder.ShowDistanceUnit_DESCRIPTION"] = "Отображать единицу измерения расстояния рядом со значениями расстояния."
 L["Reload UI"] = "Перезагрузить интерфейс"
 L["This change requires a UI reload. Reload now?"] =
 "Для этого изменения требуется перезагрузка интерфейса. Перезагрузить сейчас?"
 
-L["Pins.Miscellaneous_GROUPLABEL"] = "Разное"
-L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Увеличивать метки при наведении"
-L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] = "Увеличивайте значки на карте мира при наведении курсора на них."
+L["Pins.ScaleOnHover_LABEL"] = "Увеличивать метки при наведении"
+L["Pins.ScaleOnHover_DESCRIPTION"] = "Увеличивайте значки на карте мира при наведении курсора на них."
 
-L["Miscellaneous.Coords_GROUPLABEL"] = "Отображение координат"
-L["Miscellaneous.Coords.Enable_LABEL"] = "Включить отображение координат"
-L["Miscellaneous.Coords.Enable_DESCRIPTION"] = "Включить/выключить отображение текущих координат на экране"
-L["Miscellaneous.Coords.Lock_LABEL"] = "Закрепить окно координат"
-L["Miscellaneous.Coords.Lock_DESCRIPTION"] = "Включить или отключить возможность перемещения окна отображения координат."
+L["Coordinates.Enable_LABEL"] = "Включить отображение координат"
+L["Coordinates.Enable_DESCRIPTION"] = "Включить/выключить отображение текущих координат на экране"
+L["Coordinates.Lock_LABEL"] = "Закрепить окно координат"
+L["Coordinates.Lock_DESCRIPTION"] = "Включить или отключить возможность перемещения окна отображения координат."
 
-L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Скрыть парящий ромб Blizzard"
-L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
+L["Wayfinder.HideBlizzardFloatingDiamond_LABEL"] = "Скрыть парящий ромб Blizzard"
+L["Wayfinder.HideBlizzardFloatingDiamond_DESCRIPTION"] =
 "Скрывать парящий навигационный ромб Blizzard, когда парящий указатель Map Pin Enhanced отключён."
-L["Wayfinder.General.Selection_LABEL"] = "Указатель направления"
-L["Wayfinder.General.Selection_DESCRIPTION"] = "Выберите один навигатор, который будет использоваться для навигации."
+L["Wayfinder.Selection_LABEL"] = "Указатель направления"
+L["Wayfinder.Selection_DESCRIPTION"] = "Выберите один навигатор, который будет использоваться для навигации."
 L["Arrow"] = "Стрелка"
 L["Floating"] = "Парящий"
-L["Wayfinder.Navigation_GROUPLABEL"] = "Навигация"
-L["Wayfinder.Navigation.Enable_LABEL"] = "Включить навигацию по маршруту"
-L["Wayfinder.Navigation.Enable_DESCRIPTION"] =
+L["Navigation"] = "Навигация"
+L["Navigation.Enable_LABEL"] = "Включить навигацию по маршруту"
+L["Navigation.Enable_DESCRIPTION"] =
 "Рассчитайте маршруты путешествий с использованием доступных способов передвижения, порталов, транспортных средств, заклинаний, предметов и игрушек."
-L["Wayfinder.Navigation.AutomaticTravelSelection_LABEL"] = "Автоматический выбор маршрута"
-L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] =
+L["Navigation.AutomaticTravelSelection_LABEL"] = "Автоматический выбор маршрута"
+L["Navigation.AutomaticTravelSelection_DESCRIPTION"] =
 "Автоматически выбирайте варианты диалога с НИП и пункты назначения полета, необходимые для вашего текущего маршрута. Удерживайте клавишу Shift при открытии карты полета, чтобы выбрать маршрут вручную."
-L["Wayfinder.Navigation.WorldMap_LABEL"] = "Показать маршрут на карте мира"
-L["Wayfinder.Navigation.WorldMap_DESCRIPTION"] = "Показать рассчитанный маршрут на карте мира."
-L["Wayfinder.Navigation.Minimap_LABEL"] = "Показать маршрут на миникарте"
-L["Wayfinder.Navigation.Minimap_DESCRIPTION"] = "Показать рассчитанный маршрут на миникарте."
+L["Navigation.WorldMap_LABEL"] = "Показать маршрут на карте мира"
+L["Navigation.WorldMap_DESCRIPTION"] = "Показать рассчитанный маршрут на карте мира."
+L["Navigation.Minimap_LABEL"] = "Показать маршрут на миникарте"
+L["Navigation.Minimap_DESCRIPTION"] = "Показать рассчитанный маршрут на миникарте."
 L["Navigation Calculating"] = "Расчет маршрута..."
 L["Navigation Direct Guidance"] = "Маршрут отсутствует. Следуйте прямо к месту назначения."
 L["Navigation No Direction"] = "Для этой цели невозможно определить направление."
@@ -376,22 +370,22 @@ L["Add notes for this pin. Descriptions appear in pin tooltips and below the way
 L["This pin is no longer in this group."] = "Эта метка больше не входит в эту группу."
 L["Apply"] = "Применить"
 
-L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Масштаб в зависимости от расстояния"
-L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
+L["Wayfinder.ScaleWithDistance_LABEL"] = "Масштаб в зависимости от расстояния"
+L["Wayfinder.ScaleWithDistance_DESCRIPTION"] =
 "Парящая метка и луч увеличиваются с 75% до 100% по мере приближения. Диапазоны расстояний зависят от изученного навыка верховой езды или полёта на момент загрузки аддона и не меняются до перезагрузки."
-L["Wayfinder.Floating.ShowBeam_LABEL"] = "Показать луч"
-L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] = "Отображать луч над плавающим маркером, когда он находится на экране."
-L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Показать обводку текста"
-L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] =
+L["Wayfinder.ShowBeam_LABEL"] = "Показать луч"
+L["Wayfinder.ShowBeam_DESCRIPTION"] = "Отображать луч над плавающим маркером, когда он находится на экране."
+L["Wayfinder.ShowTextOutline_LABEL"] = "Показать обводку текста"
+L["Wayfinder.ShowTextOutline_DESCRIPTION"] =
 "Добавить обводку тексту расстояния, расчётного времени прибытия и заголовку парящей метки, который появляется при её показе или наведении курсора."
-L["Wayfinder.General.ShowETA_LABEL"] = "Показать примерное время прибытия"
-L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Показывать окно целей задания"
-L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =
+L["Wayfinder.ShowETA_LABEL"] = "Показать примерное время прибытия"
+L["Wayfinder.ShowObjectiveFrame_LABEL"] = "Показывать окно целей задания"
+L["Wayfinder.ShowObjectiveFrame_DESCRIPTION"] =
 "Показывать цели задания при входе в область их выполнения. Если отключено, парящий указатель скрывается, а стрелка остаётся в режиме близкой цели."
-L["Wayfinder.General.ShowETA_DESCRIPTION"] =
+L["Wayfinder.ShowETA_DESCRIPTION"] =
 "Отображать расчетное время движения до текущей цели вместе с расстоянием до неё, если такая информация доступна."
-L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Транспорт"
-L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] =
+L["Navigation.TransportationGroups_LABEL"] = "Транспорт"
+L["Navigation.TransportationGroups_DESCRIPTION"] =
 "Выберите, какие виды транспорта предложит вам система навигации. К регулярным видам транспорта относятся корабли, цеппелины и трамваи. К средствам индивидуальной телепортации относятся заклинания перемещения, предметы, игрушки и «Камень возвращения» в Даларане."
 L["Navigation Transportation Portals"] = "Порталы"
 L["Navigation Transportation Flight paths"] = "Маршруты полета"
@@ -401,14 +395,13 @@ L["Navigation Transportation Phase changes"] = "Фазовые переходы"
 L["Navigation Transportation Personal teleports"] = "Личные телепорты"
 L["Navigation Transportation Dungeon teleports"] = "Телепортация в подземельях"
 
-L["Wayfinder.Display_GROUPLABEL"] = "Отображение"
 L["Settings for Floating; Arrow is still selected."] = "Настройки режима «Парящий»; по-прежнему выбрана «Стрелка»."
 L["Settings for Arrow; Floating is still selected."] = "Настройки режима «Стрелка»; по-прежнему выбран «Парящий»."
 
 L["Clear Tracking"] = "Прекратить отслеживание"
 L["In objective area"] = "В области выполнения задания"
 L["Why do I see this navigation element?"] = "Почему я вижу этот элемент навигации?"
-L["Wayfinder.Floating.Fallback_DESCRIPTION"] =
+L["Wayfinder.Fallback_DESCRIPTION"] =
 "Пользовательский интерфейс Blizzard не может предоставить достоверные координаты этой цели в данной области. Эта стрелка используется лишь временно и исчезнет, как только появится достоверная игровая информация."
 
 L["Group sharing timed out. The sender must be online and the link must still be available."] =
@@ -423,54 +416,52 @@ L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
 "Операция остановлена после обработки %d из %d меток. Выполненные изменения сохранены."
 
 -- Category options (0041).
-L["Miscellaneous.Coords.ShowZone_LABEL"] = "Показать зону"
-L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Укажите полное название карты между координатами X и Y."
-L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Показать десятичные знаки"
-L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] =
+L["Coordinates.ShowZone_LABEL"] = "Показать зону"
+L["Coordinates.ShowZone_DESCRIPTION"] = "Укажите полное название карты между координатами X и Y."
+L["Coordinates.ShowDecimals_LABEL"] = "Показать десятичные знаки"
+L["Coordinates.ShowDecimals_DESCRIPTION"] =
 "Отображать два знака после запятой. Отключите эту функцию, чтобы отображать усеченные целые координаты."
-L["Pins.Appearance.AlwaysPingTracked_LABEL"] = "Постоянная пульсация отслеживаемой метки"
-L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] =
+L["Pins.AlwaysPingTracked_LABEL"] = "Постоянная пульсация отслеживаемой метки"
+L["Pins.AlwaysPingTracked_DESCRIPTION"] =
 "Мигайте маркером на карте мира, пока он отображается, каждые две секунды."
-L["Pins.Appearance.MinimapScale_LABEL"] = "Размер метки на миникарте"
-L["Pins.Appearance.MinimapScale_DESCRIPTION"] = "Выберите размер стандартных маркеров на миникарте."
-L["Pins.Appearance.WorldMapScale_LABEL"] = "Размер метки на карте мира"
-L["Pins.Appearance.WorldMapScale_DESCRIPTION"] =
+L["Pins.MinimapScale_LABEL"] = "Размер метки на миникарте"
+L["Pins.MinimapScale_DESCRIPTION"] = "Выберите размер стандартных маркеров на миникарте."
+L["Pins.WorldMapScale_LABEL"] = "Размер метки на карте мира"
+L["Pins.WorldMapScale_DESCRIPTION"] =
 "Выберите размер обычных меток на карте мира. Увеличение при наведении применяется дополнительно."
-L["Pins.Appearance.DefaultColor_LABEL"] = "Цвет меток по умолчанию"
-L["Pins.Appearance.DefaultColor_DESCRIPTION"] =
+L["Pins.DefaultColor_LABEL"] = "Цвет меток по умолчанию"
+L["Pins.DefaultColor_DESCRIPTION"] =
 "Цвет для новых меток, для которых явно не указан значок или цвет. Существующие и импортированные метки сохраняют свой внешний вид."
-L["Pins.Appearance.FadeUntracked_LABEL"] = "Приглушать неотслеживаемые метки"
-L["Pins.Appearance.FadeUntracked_DESCRIPTION"] =
+L["Pins.FadeUntracked_LABEL"] = "Приглушать неотслеживаемые метки"
+L["Pins.FadeUntracked_DESCRIPTION"] =
 "Снизить непрозрачность неотслеживаемых меток до 40%. При наведении восстанавливается полная непрозрачность."
-L["Pins.Appearance.ShowMinimapPins_LABEL"] = "Показать метки на миникарте"
-L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] =
+L["Pins.ShowMinimapPins_LABEL"] = "Показать метки на миникарте"
+L["Pins.ShowMinimapPins_DESCRIPTION"] =
 "Отображать обычные метки аддонов на миникарте. Метки на миникарте требуют обновления положения; метки навигации и маршрута остаются независимыми."
-L["Pins.Miscellaneous.EnableLockedPins_LABEL"] = "Разрешить блокировку меток"
-L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
+L["Pins.EnableLockedPins_LABEL"] = "Разрешить блокировку меток"
+L["Pins.EnableLockedPins_DESCRIPTION"] =
 "Разрешить новую блокировку меток. Заблокированные метки остаются, пока вы их не уберёте; существующие метки всегда можно разблокировать."
-L["Pins.Tracking.ArrivalNotification_LABEL"] = "Уведомление о достижении отметки"
-L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
+L["Pins.ArrivalNotification_LABEL"] = "Уведомление о достижении отметки"
+L["Pins.ArrivalNotification_DESCRIPTION"] =
 "Отправлять уведомление один раз за сеанс отслеживания при физическом достижении конечного пункта назначения дополнения."
-L["Pins.Tracking.AutoUntrack_LABEL"] = "Автоматически прекращать отслеживание"
-L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
+L["Pins.AutoUntrack_LABEL"] = "Автоматически прекращать отслеживание"
+L["Pins.AutoUntrack_DESCRIPTION"] =
 "Прекращать отслеживание аддона и Blizzard при входе в подземелье, рейд, сценарий, на поле боя или арену."
-L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Показывать автоматически при добавлении метки"
-L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
+L["Tracker.AutoShow_LABEL"] = "Показывать автоматически при добавлении метки"
+L["Tracker.AutoShow_DESCRIPTION"] =
 "Показывать и разворачивать трекер после создания метки или подтверждения импорта. Отслеживание элемента Blizzard не вызывает это действие. Правила автоматического скрытия продолжают действовать."
-L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Свернуть трекер вместо того, чтобы закрывать его"
-L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] = "При свертывании трекера оставлять видимым только заголовок."
-L["Miscellaneous.Tracker.ShowCoordinates_LABEL"] = "Показать координаты"
-L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] =
+L["Tracker.CloseAction_LABEL"] = "Свернуть трекер вместо того, чтобы закрывать его"
+L["Tracker.CloseAction_DESCRIPTION"] = "При свертывании трекера оставлять видимым только заголовок."
+L["Tracker.ShowCoordinates_LABEL"] = "Показать координаты"
+L["Tracker.ShowCoordinates_DESCRIPTION"] =
 "Отображать координаты рядом с названием зоны в записях о маркерах в трекере."
-L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Максимальное количество отображаемых строк"
-L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
+L["Tracker.MaximumRows_LABEL"] = "Максимальное количество отображаемых строк"
+L["Tracker.MaximumRows_DESCRIPTION"] =
 "Максимальное количество строк групп и меток до начала прокрутки, без учета заголовка."
-L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Непрозрачность фона трекера"
-L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] = "Непрозрачность фона списка меток: от 0% до 100%."
-L["Miscellaneous.Tracker.Scale_LABEL"] = "Размер трекера"
-L["Miscellaneous.Tracker.Scale_DESCRIPTION"] = "Выберите размер трекера."
-L["Pins.Appearance_GROUPLABEL"] = "Внешний вид"
-L["Pins.Tracking_GROUPLABEL"] = "Отслеживание"
+L["Tracker.BackgroundOpacity_LABEL"] = "Непрозрачность фона трекера"
+L["Tracker.BackgroundOpacity_DESCRIPTION"] = "Непрозрачность фона списка меток: от 0% до 100%."
+L["Tracker.Scale_LABEL"] = "Размер трекера"
+L["Tracker.Scale_DESCRIPTION"] = "Выберите размер трекера."
 L["Coordinates"] = "Координаты"
 L["Tracker"] = "Трекер"
 L["Small (90%)"] = "Маленький (90 %)"
@@ -502,8 +493,8 @@ L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
 L["%d legacy entries could not be migrated. Original saved data was kept."] =
 "%d устаревших записей не удалось перенести. Исходные сохраненные данные были сохранены."
 
-L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Восстанавливать снаряжение после перемещения"
-L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
+L["Navigation.RestoreEquipment_LABEL"] = "Восстанавливать снаряжение после перемещения"
+L["Navigation.RestoreEquipment_DESCRIPTION"] =
 "Восстанавливать снаряжение, заменённое предметами для перемещения, и показывать уведомления о снаряжении. При отключении уже заменённое снаряжение всё равно восстанавливается."
 
 L["Clear"] = "Очистить"
@@ -572,13 +563,13 @@ L["Select modules, then start a new capture."] = "Выберите модули,
 L["Open the profiler."] = "Откройте профилировщик."
 --@end-debug@
 
-L["General.FlightTimer.Enable_LABEL"] = "Включить таймер полета"
-L["General.FlightTimer.Enable_DESCRIPTION"] =
+L["FlightTimer.Enable_LABEL"] = "Включить таймер полета"
+L["FlightTimer.Enable_DESCRIPTION"] =
 "Показывать перемещаемую полосу прогресса и расчётное оставшееся время во время полётов у распорядителей полётов."
-L["General.FlightTimer.Lock_LABEL"] = "Блокировка таймера полета"
-L["General.FlightTimer.Lock_DESCRIPTION"] = "Запретить перемещение таймера полёта."
-L["General.FlightTimer.Scale_LABEL"] = "Размер таймера полёта"
-L["General.FlightTimer.Scale_DESCRIPTION"] = "Выберите размер таймера полета."
+L["FlightTimer.Lock_LABEL"] = "Блокировка таймера полета"
+L["FlightTimer.Lock_DESCRIPTION"] = "Запретить перемещение таймера полёта."
+L["FlightTimer.Scale_LABEL"] = "Размер таймера полёта"
+L["FlightTimer.Scale_DESCRIPTION"] = "Выберите размер таймера полета."
 L["Flight Timer"] = "Таймер полёта"
 L["Flight elapsed: %s"] = "Прошло: %s"
 L["Flight remaining: %s"] = "Осталось %s"

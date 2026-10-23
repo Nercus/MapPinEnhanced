@@ -9,7 +9,7 @@ local Pins = MapPinEnhanced:GetModule("Pins")
 local Groups = MapPinEnhanced:GetModule("Groups")
 local Transfer = MapPinEnhanced:GetModule("Transfer")
 local L = MapPinEnhanced.L
-local SHOW_BUTTON_OPTION = "General.Minimap.ShowButton"
+local SHOW_BUTTON_OPTION = "General.ShowMinimapButton"
 
 local init = false
 local logoPath = MapPinEnhanced.assetsPath .. "\\Logo.png"
@@ -139,7 +139,7 @@ local function InitMinimapIcon()
     LibDBIcon:AddButtonToCompartment(MapPinEnhanced.name, customLogoPath)
     init = true
     -- Subscribe after registration so both the initial value and later changes have a button to style.
-    Options:SubscribeToOptionChanges("General.Minimap.CustomButton", ApplyCustomMinimapButton)
+    Options:SubscribeToOptionChanges("General.CustomMinimapButton", ApplyCustomMinimapButton)
     Options:SubscribeToOptionChanges(SHOW_BUTTON_OPTION, ApplyMinimapButtonVisibility)
 end
 

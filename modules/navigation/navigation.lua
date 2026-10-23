@@ -1980,7 +1980,7 @@ MapPinEnhanced:RegisterEvent("PLAYER_LOGIN", function()
     end
 end)
 
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
+Options:SubscribeToOptionChanges("Navigation.Enable", function(value)
     Navigation:CancelActionTravel()
     Navigation.routeNavigationEnabled = value == true
     if Navigation.routeNavigationEnabled then
@@ -1995,18 +1995,18 @@ Options:SubscribeToOptionChanges("Wayfinder.Navigation.Enable", function(value)
     end
 end)
 
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.WorldMap", function(value)
+Options:SubscribeToOptionChanges("Navigation.WorldMap", function(value)
     Navigation.worldMapRouteEnabled = value == true
     RefreshWorldMapRouteLayer()
 end)
 
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.Minimap", function(value)
+Options:SubscribeToOptionChanges("Navigation.Minimap", function(value)
     Navigation.minimapRouteEnabled = value == true
     Navigation:ReleaseRouteLayers(false)
     if Navigation.minimapRouteEnabled then Navigation:BuildRouteLayer(false) end
 end)
 
-Options:SubscribeToOptionChanges("Wayfinder.Navigation.TransportationGroups", function(groups)
+Options:SubscribeToOptionChanges("Navigation.TransportationGroups", function(groups)
     Navigation:SetTransportationGroups(groups)
     local progression = Navigation.progression
     if progression and (progression.attempted or progression.phase == "in-transit" or

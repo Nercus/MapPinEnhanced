@@ -9,7 +9,7 @@
         <Frames>
             <Frame inherits="MapPinEnhancedOptionWayfinderTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.General.Selection" />
+                    <KeyValue key="key" value="Wayfinder.Selection" />
                 </KeyValues>
             </Frame>
             <Frame parentKey="searchNote" hidden="true">
@@ -27,37 +27,37 @@
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="scaleWithDistance">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Floating.ScaleWithDistance" />
+                    <KeyValue key="key" value="Wayfinder.ScaleWithDistance" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="beam">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Floating.ShowBeam" />
+                    <KeyValue key="key" value="Wayfinder.ShowBeam" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="textOutline">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Floating.ShowTextOutline" />
+                    <KeyValue key="key" value="Wayfinder.ShowTextOutline" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="hideBlizzard">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
+                    <KeyValue key="key" value="Wayfinder.HideBlizzardFloatingDiamond" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="General.Distance.ShowUnit" />
+                    <KeyValue key="key" value="Wayfinder.ShowDistanceUnit" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.General.ShowETA" />
+                    <KeyValue key="key" value="Wayfinder.ShowETA" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.General.ShowObjectiveFrame" />
+                    <KeyValue key="key" value="Wayfinder.ShowObjectiveFrame" />
                 </KeyValues>
             </Frame>
         </Frames>

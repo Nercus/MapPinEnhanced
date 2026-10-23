@@ -102,12 +102,11 @@ L["Arena"] = "Arena"
 L["None"] = "Nessuno"
 L["No active pins"] = "Nessun segnaposto attivo"
 L["No coordinates available"] = "Nessuna coordinata disponibile"
-L["Miscellaneous.Coords.Visibility_LABEL"] = "Nascondi automaticamente"
-L["Miscellaneous.Coords.Visibility_DESCRIPTION"] =
+L["Coordinates.Visibility_LABEL"] = "Nascondi automaticamente"
+L["Coordinates.Visibility_DESCRIPTION"] =
 "Nascondi la visualizzazione delle coordinate quando è attiva una qualsiasi delle condizioni selezionate."
-L["Miscellaneous.Tracker_GROUPLABEL"] = "Tracker"
-L["Miscellaneous.Tracker.Visibility_LABEL"] = "Nascondi automaticamente"
-L["Miscellaneous.Tracker.Visibility_DESCRIPTION"] =
+L["Tracker.Visibility_LABEL"] = "Nascondi automaticamente"
+L["Tracker.Visibility_DESCRIPTION"] =
 "Nascondi il tracker quando una qualsiasi delle condizioni selezionate è attiva."
 L["Toggle the group editor."] = "Attiva/disattiva l'editor di gruppo."
 
@@ -204,57 +203,52 @@ L["Open the options frame"] = "Apri la finestra delle opzioni"
 L["Open options"] = "Apri opzioni"
 L["Open editor"] = "Apri l'editor"
 
-L["General.Minimap_GROUPLABEL"] = "Minimappa"
 L["Clear all pins"] = "Rimuovi tutti i segnaposto"
 L["Some pins are still being updated. Try clearing again when the current operation finishes."] =
 "Alcuni segnaposto sono ancora in fase di aggiornamento. Prova a eseguire nuovamente la cancellazione al termine dell'operazione in corso."
 L["Hide minimap button"] = "Nascondi il pulsante della minimappa"
 L["Toggle the minimap button visibility."] = "Attiva o disattiva la visualizzazione del pulsante della minimappa."
-L["General.Minimap.ShowButton_LABEL"] = "Mostra il pulsante della minimappa"
-L["General.Minimap.ShowButton_DESCRIPTION"] = "Mostra il pulsante dell'add-on sulla minimappa."
-L["General.Minimap.CustomButton_LABEL"] = "Pulsante personalizzato per la minimappa"
-L["General.Minimap.CustomButton_DESCRIPTION"] =
+L["General.ShowMinimapButton_LABEL"] = "Mostra il pulsante della minimappa"
+L["General.ShowMinimapButton_DESCRIPTION"] = "Mostra il pulsante dell'add-on sulla minimappa."
+L["General.CustomMinimapButton_LABEL"] = "Pulsante personalizzato per la minimappa"
+L["General.CustomMinimapButton_DESCRIPTION"] =
 "Utilizza un logo più grande, senza il bordo e lo sfondo standard del pulsante della minimappa."
-L["General.Distance_GROUPLABEL"] = "Distanza"
-L["General.Distance.ShowUnit_LABEL"] = "Mostra l'unità di misura della distanza"
-L["General.Distance.ShowUnit_DESCRIPTION"] = "Visualizza l'unità di misura accanto ai valori di distanza."
-L["General.Tracking_GROUPLABEL"] = "Tracciamento"
+L["Wayfinder.ShowDistanceUnit_LABEL"] = "Mostra l'unità di misura della distanza"
+L["Wayfinder.ShowDistanceUnit_DESCRIPTION"] = "Visualizza l'unità di misura accanto ai valori di distanza."
 L["Reload UI"] = "Ricarica interfaccia"
 L["This change requires a UI reload. Reload now?"] =
 "Questa modifica richiede di ricaricare l'interfaccia. Ricaricare ora?"
 
-L["Pins.Miscellaneous_GROUPLABEL"] = "Varie"
-L["Pins.Miscellaneous.ScaleOnHover_LABEL"] = "Ingrandisci i segnaposto al passaggio del mouse"
-L["Pins.Miscellaneous.ScaleOnHover_DESCRIPTION"] =
+L["Pins.ScaleOnHover_LABEL"] = "Ingrandisci i segnaposto al passaggio del mouse"
+L["Pins.ScaleOnHover_DESCRIPTION"] =
 "Ingrandisci i segnaposto sulla mappa del mondo quando ci passi sopra con il mouse."
 
-L["Miscellaneous.Coords_GROUPLABEL"] = "Visualizzazione delle coordinate"
-L["Miscellaneous.Coords.Enable_LABEL"] = "Abilita la visualizzazione delle coordinate"
-L["Miscellaneous.Coords.Enable_DESCRIPTION"] =
+L["Coordinates.Enable_LABEL"] = "Abilita la visualizzazione delle coordinate"
+L["Coordinates.Enable_DESCRIPTION"] =
 "Attiva/disattiva la visualizzazione sullo schermo delle tue coordinate attuali"
-L["Miscellaneous.Coords.Lock_LABEL"] = "Blocca la visualizzazione delle coordinate"
-L["Miscellaneous.Coords.Lock_DESCRIPTION"] =
+L["Coordinates.Lock_LABEL"] = "Blocca la visualizzazione delle coordinate"
+L["Coordinates.Lock_DESCRIPTION"] =
 "Attiva o disattiva la possibilità di spostare la visualizzazione delle coordinate."
 
-L["Wayfinder.General.HideBlizzardFloatingDiamond_LABEL"] = "Nascondi il rombo fluttuante di Blizzard"
-L["Wayfinder.General.HideBlizzardFloatingDiamond_DESCRIPTION"] =
+L["Wayfinder.HideBlizzardFloatingDiamond_LABEL"] = "Nascondi il rombo fluttuante di Blizzard"
+L["Wayfinder.HideBlizzardFloatingDiamond_DESCRIPTION"] =
 "Nascondi il rombo di navigazione fluttuante di Blizzard quando è disattivato il sistema di orientamento fluttuante \"Map Pin Enhanced\"."
-L["Wayfinder.General.Selection_LABEL"] = "Indicatore di direzione"
-L["Wayfinder.General.Selection_DESCRIPTION"] =
+L["Wayfinder.Selection_LABEL"] = "Indicatore di direzione"
+L["Wayfinder.Selection_DESCRIPTION"] =
 "Scegliere il singolo indicatore di rotta da utilizzare per la navigazione."
 L["Arrow"] = "Freccia"
 L["Floating"] = "Fluttuante"
-L["Wayfinder.Navigation_GROUPLABEL"] = "Navigazione"
-L["Wayfinder.Navigation.Enable_LABEL"] = "Abilita la navigazione lungo il percorso"
-L["Wayfinder.Navigation.Enable_DESCRIPTION"] =
+L["Navigation"] = "Navigazione"
+L["Navigation.Enable_LABEL"] = "Abilita la navigazione lungo il percorso"
+L["Navigation.Enable_DESCRIPTION"] =
 "Calcola i percorsi di viaggio utilizzando gli spostamenti, i portali, i mezzi di trasporto, gli incantesimi, gli oggetti e i giocattoli a tua disposizione."
-L["Wayfinder.Navigation.AutomaticTravelSelection_LABEL"] = "Selezione automatica del percorso"
-L["Wayfinder.Navigation.AutomaticTravelSelection_DESCRIPTION"] =
+L["Navigation.AutomaticTravelSelection_LABEL"] = "Selezione automatica del percorso"
+L["Navigation.AutomaticTravelSelection_DESCRIPTION"] =
 "Seleziona automaticamente le opzioni di dialogo degli NPC e le destinazioni di volo richieste dal percorso attuale. Tieni premuto il tasto Maiusc quando apri la mappa di volo per selezionare manualmente un volo."
-L["Wayfinder.Navigation.WorldMap_LABEL"] = "Mostra il percorso sulla mappa del mondo"
-L["Wayfinder.Navigation.WorldMap_DESCRIPTION"] = "Mostra il percorso calcolato sulla mappa del mondo."
-L["Wayfinder.Navigation.Minimap_LABEL"] = "Mostra il percorso sulla minimappa"
-L["Wayfinder.Navigation.Minimap_DESCRIPTION"] = "Mostra il percorso calcolato sulla minimappa."
+L["Navigation.WorldMap_LABEL"] = "Mostra il percorso sulla mappa del mondo"
+L["Navigation.WorldMap_DESCRIPTION"] = "Mostra il percorso calcolato sulla mappa del mondo."
+L["Navigation.Minimap_LABEL"] = "Mostra il percorso sulla minimappa"
+L["Navigation.Minimap_DESCRIPTION"] = "Mostra il percorso calcolato sulla minimappa."
 L["Navigation Calculating"] = "Calcolo del percorso..."
 L["Navigation Direct Guidance"] = "Non è disponibile alcun percorso. Dirigiti direttamente a destinazione."
 L["Navigation No Direction"] = "Non sono disponibili indicazioni per questa destinazione."
@@ -382,23 +376,23 @@ L["Add notes for this pin. Descriptions appear in pin tooltips and below the way
 L["This pin is no longer in this group."] = "Questo segnaposto non fa più parte di questo gruppo."
 L["Apply"] = "Applica"
 
-L["Wayfinder.Floating.ScaleWithDistance_LABEL"] = "Scala in funzione della distanza"
-L["Wayfinder.Floating.ScaleWithDistance_DESCRIPTION"] =
+L["Wayfinder.ScaleWithDistance_LABEL"] = "Scala in funzione della distanza"
+L["Wayfinder.ScaleWithDistance_DESCRIPTION"] =
 "Il segnaposto fluttuante e il raggio crescono dal 75% al 100% mentre ti avvicini. Gli intervalli di distanza dipendono dall'abilità di cavalcatura o volo appresa al caricamento dell'addon e restano fissi fino al ricaricamento."
-L["Wayfinder.Floating.ShowBeam_LABEL"] = "Mostra il raggio"
-L["Wayfinder.Floating.ShowBeam_DESCRIPTION"] =
+L["Wayfinder.ShowBeam_LABEL"] = "Mostra il raggio"
+L["Wayfinder.ShowBeam_DESCRIPTION"] =
 "Mostra un raggio sopra il segnaposto fluttuante quando è visibile sullo schermo."
-L["Wayfinder.Floating.ShowTextOutline_LABEL"] = "Mostra contorno del testo"
-L["Wayfinder.Floating.ShowTextOutline_DESCRIPTION"] =
+L["Wayfinder.ShowTextOutline_LABEL"] = "Mostra contorno del testo"
+L["Wayfinder.ShowTextOutline_DESCRIPTION"] =
 "Aggiungi un contorno al testo di distanza, tempo di arrivo stimato e titolo del segnaposto fluttuante, mostrato all'apparizione o al passaggio del mouse."
-L["Wayfinder.General.ShowETA_LABEL"] = "Mostra l'orario di arrivo previsto"
-L["Wayfinder.General.ShowObjectiveFrame_LABEL"] = "Mostra la finestra degli obiettivi della missione"
-L["Wayfinder.General.ShowObjectiveFrame_DESCRIPTION"] =
+L["Wayfinder.ShowETA_LABEL"] = "Mostra l'orario di arrivo previsto"
+L["Wayfinder.ShowObjectiveFrame_LABEL"] = "Mostra la finestra degli obiettivi della missione"
+L["Wayfinder.ShowObjectiveFrame_DESCRIPTION"] =
 "Mostra gli obiettivi della missione quando entri nell'area obiettivo. Se disattivato, l'indicatore fluttuante viene nascosto e la freccia mantiene la visualizzazione per le brevi distanze."
-L["Wayfinder.General.ShowETA_DESCRIPTION"] =
+L["Wayfinder.ShowETA_DESCRIPTION"] =
 "Mostra la stima del tempo di percorrenza fino alla destinazione corrente insieme alla distanza, se disponibile."
-L["Wayfinder.Navigation.TransportationGroups_LABEL"] = "Trasporti"
-L["Wayfinder.Navigation.TransportationGroups_DESCRIPTION"] =
+L["Navigation.TransportationGroups_LABEL"] = "Trasporti"
+L["Navigation.TransportationGroups_DESCRIPTION"] =
 "Scegli quale mezzo di trasporto ti suggerisce il sistema di navigazione. I mezzi di trasporto di linea includono barche, dirigibili e tram. I teletrasporti personali includono incantesimi di viaggio, oggetti, giocattoli e la Pietra del Ritorno di Dalaran."
 L["Navigation Transportation Portals"] = "Portali"
 L["Navigation Transportation Flight paths"] = "Rotte di volo"
@@ -408,14 +402,13 @@ L["Navigation Transportation Phase changes"] = "Cambiamenti di fase"
 L["Navigation Transportation Personal teleports"] = "Teletrasporti personali"
 L["Navigation Transportation Dungeon teleports"] = "Teletrasporti nei dungeon"
 
-L["Wayfinder.Display_GROUPLABEL"] = "Visualizza"
 L["Settings for Floating; Arrow is still selected."] = "Impostazioni di Fluttuante; Freccia è ancora selezionata."
 L["Settings for Arrow; Floating is still selected."] = "Impostazioni di Freccia; Fluttuante è ancora selezionato."
 
 L["Clear Tracking"] = "Interrompi il tracciamento"
 L["In objective area"] = "Nell'area di obiettivo"
 L["Why do I see this navigation element?"] = "Perché vedo questo elemento di navigazione?"
-L["Wayfinder.Floating.Fallback_DESCRIPTION"] =
+L["Wayfinder.Fallback_DESCRIPTION"] =
 "L'interfaccia utente di Blizzard non è in grado di fornire una posizione nel mondo utilizzabile per questo bersaglio in quest'area. Questa freccia viene utilizzata solo temporaneamente e verrà rimossa non appena saranno disponibili informazioni di gioco utilizzabili."
 
 L["Group sharing timed out. The sender must be online and the link must still be available."] =
@@ -430,56 +423,54 @@ L["Pin operation stopped after %d of %d pins. Completed changes were kept."] =
 "L'operazione sui segnaposto si è interrotta dopo %d su %d segnaposto. Le modifiche completate sono state salvate."
 
 -- Category options (0041).
-L["Miscellaneous.Coords.ShowZone_LABEL"] = "Mostra zona"
-L["Miscellaneous.Coords.ShowZone_DESCRIPTION"] = "Indica il nome completo della mappa tra le coordinate X e Y."
-L["Miscellaneous.Coords.ShowDecimals_LABEL"] = "Mostra cifre decimali"
-L["Miscellaneous.Coords.ShowDecimals_DESCRIPTION"] =
+L["Coordinates.ShowZone_LABEL"] = "Mostra zona"
+L["Coordinates.ShowZone_DESCRIPTION"] = "Indica il nome completo della mappa tra le coordinate X e Y."
+L["Coordinates.ShowDecimals_LABEL"] = "Mostra cifre decimali"
+L["Coordinates.ShowDecimals_DESCRIPTION"] =
 "Visualizza due cifre decimali. Disattivare questa opzione per visualizzare le coordinate intere troncate."
-L["Pins.Appearance.AlwaysPingTracked_LABEL"] = "Fai pulsare sempre il segnaposto tracciato"
-L["Pins.Appearance.AlwaysPingTracked_DESCRIPTION"] =
+L["Pins.AlwaysPingTracked_LABEL"] = "Fai pulsare sempre il segnaposto tracciato"
+L["Pins.AlwaysPingTracked_DESCRIPTION"] =
 "Fai lampeggiare il segnaposto sulla mappa del mondo ogni due secondi finché è visibile."
-L["Pins.Appearance.MinimapScale_LABEL"] = "Dimensione dei segnaposto sulla minimappa"
-L["Pins.Appearance.MinimapScale_DESCRIPTION"] = "Scegli la dimensione dei normali segnaposto della minimappa."
-L["Pins.Appearance.WorldMapScale_LABEL"] = "Dimensioni dei segnaposto sulla mappa del mondo"
-L["Pins.Appearance.WorldMapScale_DESCRIPTION"] =
+L["Pins.MinimapScale_LABEL"] = "Dimensione dei segnaposto sulla minimappa"
+L["Pins.MinimapScale_DESCRIPTION"] = "Scegli la dimensione dei normali segnaposto della minimappa."
+L["Pins.WorldMapScale_LABEL"] = "Dimensioni dei segnaposto sulla mappa del mondo"
+L["Pins.WorldMapScale_DESCRIPTION"] =
 "Scegli le dimensioni dei normali segnaposto sulla mappa del mondo. L'ingrandimento al passaggio del mouse si applica in aggiunta."
-L["Pins.Appearance.DefaultColor_LABEL"] = "Colore predefinito del segnaposto"
-L["Pins.Appearance.DefaultColor_DESCRIPTION"] =
+L["Pins.DefaultColor_LABEL"] = "Colore predefinito del segnaposto"
+L["Pins.DefaultColor_DESCRIPTION"] =
 "Colore per i nuovi segnaposto privi di un'icona o di un colore specifico. I segnaposto esistenti e quelli importati mantengono il loro aspetto."
-L["Pins.Appearance.FadeUntracked_LABEL"] = "Attenua i segnaposto non tracciati"
-L["Pins.Appearance.FadeUntracked_DESCRIPTION"] =
+L["Pins.FadeUntracked_LABEL"] = "Attenua i segnaposto non tracciati"
+L["Pins.FadeUntracked_DESCRIPTION"] =
 "Riduci l'opacità dei segnaposto non tracciati al 40%. Passandoci sopra con il mouse, l'opacità torna al massimo."
-L["Pins.Appearance.ShowMinimapPins_LABEL"] = "Mostra i segnaposto sulla minimappa"
-L["Pins.Appearance.ShowMinimapPins_DESCRIPTION"] =
+L["Pins.ShowMinimapPins_LABEL"] = "Mostra i segnaposto sulla minimappa"
+L["Pins.ShowMinimapPins_DESCRIPTION"] =
 "Mostra i normali segnaposto degli add-on sulla minimappa. I segnaposto della minimappa richiedono aggiornamenti di posizione; le indicazioni e i marcatori di percorso rimangono indipendenti."
-L["Pins.Miscellaneous.EnableLockedPins_LABEL"] = "Abilita i segnaposto bloccati"
-L["Pins.Miscellaneous.EnableLockedPins_DESCRIPTION"] =
+L["Pins.EnableLockedPins_LABEL"] = "Abilita i segnaposto bloccati"
+L["Pins.EnableLockedPins_DESCRIPTION"] =
 "Consenti l'aggiunta di nuovi blocchi. I segnaposto bloccati rimangono tali finché non li rimuovi; i segnaposto esistenti possono sempre essere sbloccati."
-L["Pins.Tracking.ArrivalNotification_LABEL"] = "Notifica al raggiungimento del segnaposto"
-L["Pins.Tracking.ArrivalNotification_DESCRIPTION"] =
+L["Pins.ArrivalNotification_LABEL"] = "Notifica al raggiungimento del segnaposto"
+L["Pins.ArrivalNotification_DESCRIPTION"] =
 "Avvisare una volta per ogni sessione di tracciamento quando si raggiunge fisicamente la destinazione finale dell'add-on."
-L["Pins.Tracking.AutoUntrack_LABEL"] = "Interrompi automaticamente il tracciamento"
-L["Pins.Tracking.AutoUntrack_DESCRIPTION"] =
+L["Pins.AutoUntrack_LABEL"] = "Interrompi automaticamente il tracciamento"
+L["Pins.AutoUntrack_DESCRIPTION"] =
 "Interrompi il tracciamento dell'addon e di Blizzard quando entri in una spedizione, un'incursione, uno scenario, un campo di battaglia o un'arena."
-L["Miscellaneous.Tracker.AutoShow_LABEL"] = "Mostra automaticamente con un nuovo segnaposto"
-L["Miscellaneous.Tracker.AutoShow_DESCRIPTION"] =
+L["Tracker.AutoShow_LABEL"] = "Mostra automaticamente con un nuovo segnaposto"
+L["Tracker.AutoShow_DESCRIPTION"] =
 "Mostra ed espandi il tracker dopo la creazione di un segnaposto o la conferma di un'importazione. Tracciare un elemento di Blizzard non attiva questa funzione. Le regole di occultamento automatico restano valide."
-L["Miscellaneous.Tracker.CloseAction_LABEL"] = "Riduci a icona il tracker invece di chiuderlo"
-L["Miscellaneous.Tracker.CloseAction_DESCRIPTION"] =
+L["Tracker.CloseAction_LABEL"] = "Riduci a icona il tracker invece di chiuderlo"
+L["Tracker.CloseAction_DESCRIPTION"] =
 "Quando si riduce a icona il tracker, mantenere visibile solo l'intestazione."
-L["Miscellaneous.Tracker.ShowCoordinates_LABEL"] = "Mostra le coordinate"
-L["Miscellaneous.Tracker.ShowCoordinates_DESCRIPTION"] =
+L["Tracker.ShowCoordinates_LABEL"] = "Mostra le coordinate"
+L["Tracker.ShowCoordinates_DESCRIPTION"] =
 "Mostra le coordinate accanto al nome della zona nelle voci relative ai segnaposto del tracker."
-L["Miscellaneous.Tracker.MaximumRows_LABEL"] = "Numero massimo di righe visibili"
-L["Miscellaneous.Tracker.MaximumRows_DESCRIPTION"] =
+L["Tracker.MaximumRows_LABEL"] = "Numero massimo di righe visibili"
+L["Tracker.MaximumRows_DESCRIPTION"] =
 "Numero massimo di righe di gruppi e segnaposto prima dello scorrimento, esclusa l'intestazione."
-L["Miscellaneous.Tracker.BackgroundOpacity_LABEL"] = "Opacità dello sfondo del tracker"
-L["Miscellaneous.Tracker.BackgroundOpacity_DESCRIPTION"] =
+L["Tracker.BackgroundOpacity_LABEL"] = "Opacità dello sfondo del tracker"
+L["Tracker.BackgroundOpacity_DESCRIPTION"] =
 "Opacità dello sfondo della lista dei segnaposto, da 0% a 100%."
-L["Miscellaneous.Tracker.Scale_LABEL"] = "Dimensioni del tracker"
-L["Miscellaneous.Tracker.Scale_DESCRIPTION"] = "Scegli le dimensioni del tracker."
-L["Pins.Appearance_GROUPLABEL"] = "Aspetto"
-L["Pins.Tracking_GROUPLABEL"] = "Tracciamento"
+L["Tracker.Scale_LABEL"] = "Dimensioni del tracker"
+L["Tracker.Scale_DESCRIPTION"] = "Scegli le dimensioni del tracker."
 L["Coordinates"] = "Coordinate"
 L["Tracker"] = "Tracker"
 L["Small (90%)"] = "Piccolo (90%)"
@@ -511,8 +502,8 @@ L["Migrated %d legacy pins and %d saved sets. Original saved data was kept."] =
 L["%d legacy entries could not be migrated. Original saved data was kept."] =
 "Non è stato possibile migrare %d voci legacy. I dati originali salvati sono stati conservati."
 
-L["Wayfinder.Navigation.RestoreEquipment_LABEL"] = "Ripristina l'equipaggiamento dopo il viaggio"
-L["Wayfinder.Navigation.RestoreEquipment_DESCRIPTION"] =
+L["Navigation.RestoreEquipment_LABEL"] = "Ripristina l'equipaggiamento dopo il viaggio"
+L["Navigation.RestoreEquipment_DESCRIPTION"] =
 "Ripristina l'equipaggiamento sostituito dagli oggetti di navigazione e mostra le notifiche relative all'equipaggiamento. Anche se questa opzione è disattivata, l'equipaggiamento già sostituito viene comunque ripristinato."
 
 L["Clear"] = "Cancella"
@@ -582,13 +573,13 @@ L["Select modules, then start a new capture."] = "Seleziona i moduli, quindi avv
 L["Open the profiler."] = "Apri il profiler."
 --@end-debug@
 
-L["General.FlightTimer.Enable_LABEL"] = "Attiva il timer di volo"
-L["General.FlightTimer.Enable_DESCRIPTION"] =
+L["FlightTimer.Enable_LABEL"] = "Attiva il timer di volo"
+L["FlightTimer.Enable_DESCRIPTION"] =
 "Mostra una barra di avanzamento spostabile e il tempo rimanente stimato durante i voli dei maestri di volo."
-L["General.FlightTimer.Lock_LABEL"] = "Blocca il timer di volo"
-L["General.FlightTimer.Lock_DESCRIPTION"] = "Impedire che il timer di volo venga spostato."
-L["General.FlightTimer.Scale_LABEL"] = "Dimensioni del timer di volo"
-L["General.FlightTimer.Scale_DESCRIPTION"] = "Scegli la dimensione del timer di volo."
+L["FlightTimer.Lock_LABEL"] = "Blocca il timer di volo"
+L["FlightTimer.Lock_DESCRIPTION"] = "Impedire che il timer di volo venga spostato."
+L["FlightTimer.Scale_LABEL"] = "Dimensioni del timer di volo"
+L["FlightTimer.Scale_DESCRIPTION"] = "Scegli la dimensione del timer di volo."
 L["Flight Timer"] = "Timer di volo"
 L["Flight elapsed: %s"] = "Tempo trascorso: %s"
 L["Flight remaining: %s"] = "%s rimanenti"

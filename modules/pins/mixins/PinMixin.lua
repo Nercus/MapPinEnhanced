@@ -258,7 +258,7 @@ end
 ---@return boolean?
 function MapPinEnhancedPinMixin:UpdateMinimapVisibility()
     if not self.initialized or not self.pinData then return true end
-    if not Options:GetOptionValue("Pins.Appearance.ShowMinimapPins") then
+    if not Options:GetOptionValue("Pins.ShowMinimapPins") then
         HBDP:RemoveMinimapIcon(MapPinEnhanced, self.minimapPin)
         return true
     end

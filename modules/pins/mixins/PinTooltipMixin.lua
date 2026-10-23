@@ -44,7 +44,7 @@ function MapPinEnhancedPinTooltipMixin:ShowTooltip(owner, anchor)
     GameTooltip:AddLine(" ")
     GameTooltip:AddLine(string.format("%s: %s", groupName, progress), 0.65, 0.65, 0.65, true)
     if self:CanApplyChanges() then
-        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") ==
+        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.EnableLockedPins") ==
             true
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
             { L["Left Click"],         self:IsTracked() and L["Stop tracking"] or L["Track"] },

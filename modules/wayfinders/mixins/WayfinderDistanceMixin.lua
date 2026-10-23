@@ -1,7 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Options = MapPinEnhanced:GetModule("Options")
-local SHOW_ETA_OPTION = "Wayfinder.General.ShowETA"
+local SHOW_ETA_OPTION = "Wayfinder.ShowETA"
 
 ---@class MapPinEnhancedWayfinderDistanceMixin
 ---@field distanceCallback fun(distance: number, timeToTarget: number, closingSpeed: number, nextUpdateInterval: number, movementState: DistanceMovementState)?

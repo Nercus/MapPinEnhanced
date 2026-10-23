@@ -3,38 +3,38 @@
 
     <Frame name="MapPinEnhancedOptionCategoryNavigationTemplate" virtual="true" inherits="MapPinEnhancedOptionCategoryBaseTemplate">
         <KeyValues>
-            <KeyValue key="categoryName" value="Wayfinder.Navigation_GROUPLABEL" />
-            <KeyValue key="enableKey" value="Wayfinder.Navigation.Enable" />
+            <KeyValue key="categoryName" value="Navigation" />
+            <KeyValue key="enableKey" value="Navigation.Enable" />
         </KeyValues>
         <Frames>
             <Frame inherits="MapPinEnhancedOptionToggleTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.Enable" />
+                    <KeyValue key="key" value="Navigation.Enable" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.WorldMap" />
+                    <KeyValue key="key" value="Navigation.WorldMap" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.Minimap" />
+                    <KeyValue key="key" value="Navigation.Minimap" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.AutomaticTravelSelection" />
+                    <KeyValue key="key" value="Navigation.AutomaticTravelSelection" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.RestoreEquipment" />
+                    <KeyValue key="key" value="Navigation.RestoreEquipment" />
                 </KeyValues>
             </Frame>
             <Frame inherits="MapPinEnhancedOptionMultiselectTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Navigation.TransportationGroups" />
+                    <KeyValue key="key" value="Navigation.TransportationGroups" />
                 </KeyValues>
             </Frame>
         </Frames>

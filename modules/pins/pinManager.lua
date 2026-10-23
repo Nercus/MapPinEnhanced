@@ -131,7 +131,7 @@ end
 
 MapPinEnhanced:RegisterEvent("SUPER_TRACKING_CHANGED", OnSuperTrackingChanged)
 
-MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Pins.Appearance.ShowMinimapPins", function()
+MapPinEnhanced:GetModule("Options"):SubscribeToOptionChanges("Pins.ShowMinimapPins", function()
     for _, pin in pairs(activePins) do pin:UpdateMinimapVisibility() end
 end)
 
@@ -143,33 +143,33 @@ local Options = MapPinEnhanced:GetModule("Options")
 function Pins:ApplyPinAppearance(pin, changedKey)
     local worldmap, minimap = pin.worldmapPin, pin.minimapPin
     if not pin.initialized or not worldmap or not minimap then return end
-    if not changedKey or changedKey == "Pins.Appearance.WorldMapScale" then
-        local scale = Options:GetOptionValue("Pins.Appearance.WorldMapScale") --[[@as number]]
+    if not changedKey or changedKey == "Pins.WorldMapScale" then
+        local scale = Options:GetOptionValue("Pins.WorldMapScale") --[[@as number]]
         worldmap:SetSize(25 * scale, 25 * scale)
     end
-    if not changedKey or changedKey == "Pins.Appearance.MinimapScale" then
-        local scale = Options:GetOptionValue("Pins.Appearance.MinimapScale") --[[@as number]]
+    if not changedKey or changedKey == "Pins.MinimapScale" then
+        local scale = Options:GetOptionValue("Pins.MinimapScale") --[[@as number]]
         minimap:SetSize(22 * scale, 22 * scale)
     end
-    if not changedKey or changedKey == "Pins.Miscellaneous.ScaleOnHover" then
-        worldmap.hoverScaleEnabled = Options:GetOptionValue("Pins.Miscellaneous.ScaleOnHover") == true
+    if not changedKey or changedKey == "Pins.ScaleOnHover" then
+        worldmap.hoverScaleEnabled = Options:GetOptionValue("Pins.ScaleOnHover") == true
         if worldmap.hoverScaleEnabled then
             worldmap:SetHoverScale(worldmap.hovered == true)
         else
             worldmap:ResetHoverScale()
         end
     end
-    if not changedKey or changedKey == "Pins.Appearance.FadeUntracked" then
+    if not changedKey or changedKey == "Pins.FadeUntracked" then
         worldmap:ApplyHoverStyle()
         minimap:ApplyHoverStyle()
     end
-    if not changedKey or changedKey == "Pins.Appearance.AlwaysPingTracked" then
+    if not changedKey or changedKey == "Pins.AlwaysPingTracked" then
         worldmap:RefreshTrackingPulse()
     end
 end
 
-for _, key in ipairs({ "Pins.Appearance.WorldMapScale", "Pins.Appearance.MinimapScale",
-    "Pins.Appearance.FadeUntracked", "Pins.Appearance.AlwaysPingTracked", "Pins.Miscellaneous.ScaleOnHover" }) do
+for _, key in ipairs({ "Pins.WorldMapScale", "Pins.MinimapScale",
+    "Pins.FadeUntracked", "Pins.AlwaysPingTracked", "Pins.ScaleOnHover" }) do
     Options:SubscribeToOptionChanges(key, function()
         for _, pin in pairs(activePins) do Pins:ApplyPinAppearance(pin, key) end
     end)

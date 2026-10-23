@@ -3,7 +3,7 @@ local MapPinEnhanced = select(2, ...)
 local Options = MapPinEnhanced:GetModule("Options")
 
 -- Run after constants and released-save intake, before defaults and XML controls.
-local WAYFINDER_SELECTION_OPTION = "Wayfinder.General.Selection"
+local WAYFINDER_SELECTION_OPTION = "Wayfinder.Selection"
 local LEGACY_FLOATING_ENABLE_OPTION = "Wayfinder.Floating.Enable"
 local LEGACY_ARROW_ENABLE_OPTION = "Wayfinder.Arrow.Enable"
 
@@ -24,14 +24,14 @@ if savedWayfinderSelection ~= Options.WAYFINDER_SELECTION_ARROW and
 end
 
 -- Move retired Tiny selections to the smallest available preset before controls load.
-for _, key in ipairs({ "Pins.Appearance.MinimapScale", "Pins.Appearance.WorldMapScale", "Miscellaneous.Tracker.Scale" }) do
+for _, key in ipairs({ "Pins.MinimapScale", "Pins.WorldMapScale", "Tracker.Scale" }) do
     if MapPinEnhanced:GetVar("options", key) == 0.75 then
         MapPinEnhanced:SetVar("options", key, 0.9)
     end
 end
 
 -- The option becomes authoritative after importing the old frame scale once.
-local trackerScaleKey = "Miscellaneous.Tracker.Scale"
+local trackerScaleKey = "Tracker.Scale"
 local savedScale = MapPinEnhanced:GetVar("options", trackerScaleKey)
 local validScale = false
 for _, preset in ipairs(Options.SCALE_PRESETS) do
@@ -50,14 +50,14 @@ if not validScale then
 end
 
 -- Retain the saved Close/Minimize choice when replacing the radio group with a checkbox.
-local trackerCloseActionKey = "Miscellaneous.Tracker.CloseAction"
+local trackerCloseActionKey = "Tracker.CloseAction"
 local savedCloseAction = MapPinEnhanced:GetVar("options", trackerCloseActionKey)
 if type(savedCloseAction) ~= "boolean" then
     MapPinEnhanced:SetVar("options", trackerCloseActionKey, savedCloseAction == "minimize")
 end
 
 -- Preserve a button hidden before visibility became an option. The new preference wins thereafter.
-local minimapVisibilityKey = "General.Minimap.ShowButton"
+local minimapVisibilityKey = "General.ShowMinimapButton"
 if type(MapPinEnhanced:GetVar("options", minimapVisibilityKey)) ~= "boolean" then
     MapPinEnhanced:SetVar("options", minimapVisibilityKey,
         MapPinEnhanced:GetVar("minimapButton", "hide") ~= true)
@@ -65,21 +65,21 @@ end
 
 -- Normalize the replaced preferences before XML registers their controls. New
 -- values win on every later login, including false and an empty selection.
-local beamKey = "Wayfinder.Floating.ShowBeam"
+local beamKey = "Wayfinder.ShowBeam"
 if type(MapPinEnhanced:GetVar("options", beamKey)) ~= "boolean" then
     MapPinEnhanced:SetVar("options", beamKey,
         MapPinEnhanced:GetVar("options", "Wayfinder.Floating.Style") ~= "simple")
 end
 MapPinEnhanced:DeleteVar("options", "Wayfinder.Floating.Style")
 
-local etaKey = "Wayfinder.General.ShowETA"
+local etaKey = "Wayfinder.ShowETA"
 if type(MapPinEnhanced:GetVar("options", etaKey)) ~= "boolean" then
     MapPinEnhanced:SetVar("options", etaKey,
         MapPinEnhanced:GetVar("options", "Wayfinder.General.ReadoutMode") ~= "distance")
 end
 MapPinEnhanced:DeleteVar("options", "Wayfinder.General.ReadoutMode")
 
-local groupKey = "Wayfinder.Navigation.TransportationGroups"
+local groupKey = "Navigation.TransportationGroups"
 -- Retain removed method names here only to preserve legacy saved preferences.
 local oldGroupMembers = {
     portals = { "portal" },

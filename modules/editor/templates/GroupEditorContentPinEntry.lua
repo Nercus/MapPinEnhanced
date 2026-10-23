@@ -271,7 +271,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
 
     self.pinFrame:SetScript("OnEnter", function(frame)
         local data = Editor:GetPinData(pinNode)
-        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") ==
+        local showLockHint = MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.EnableLockedPins") ==
             true
         GameTooltip:SetOwner(frame, "ANCHOR_RIGHT")
         MapPinEnhanced:AddTooltipInteractions(GameTooltip, {
@@ -296,7 +296,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         if button == "LeftButton" then self:ShowStyleMenu() end
         if button == "MiddleButton" then
             local pinData = Editor:GetPinData(pinNode)
-            if not pinData.lock and not MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.Miscellaneous.EnableLockedPins") then return end
+            if not pinData.lock and not MapPinEnhanced:GetModule("Options"):GetOptionValue("Pins.EnableLockedPins") then return end
             pinNode.group:SetPinLock(pinNode.pinID, not pinData.lock)
             self:RefreshPreview()
         end
