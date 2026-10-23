@@ -251,8 +251,6 @@ local function Search()
                         category.label) .. ", " .. entry.zone
                     if not HasPosition(record) then
                         subtitle = subtitle .. ", " .. L["Location unavailable"]
-                    elseif record.eligible ~= true then
-                        subtitle = subtitle .. ", " .. L["Availability unknown"]
                     end
                     found[#found + 1] = {
                         id = record.id,

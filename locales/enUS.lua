@@ -629,7 +629,6 @@ L["Navigation Phase Present"] = "Talk to Zidormi and return to the present."
 
 ------------------------------ Location Lexicon ------------------------------
 L["Auction House"] = "Auction House"
-L["Availability unknown"] = "Availability unknown"
 L["Bank"] = "Bank"
 L["City"] = "City"
 L["Could not create a pin for this location."] = "Could not create a pin for this location."
