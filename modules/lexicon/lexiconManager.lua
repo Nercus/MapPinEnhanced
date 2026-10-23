@@ -228,7 +228,7 @@ local function Search()
                         (not action.distance or distance < action.distance or
                             distance == action.distance and action.entry and record.id < action.entry.record.id) then
                         action.distance, action.entry = distance, entry
-                        action.subtitle = record.label .. " — " .. entry.zone
+                        action.subtitle = record.label .. ", " .. entry.zone
                     end
                 end
                 local name = record.label:lower()
@@ -248,11 +248,11 @@ local function Search()
                     MapPinEnhanced:FuzzyMatch(text, entry.text, true) and 6
                 if rank then
                     local subtitle = (entry.specialtyLabel and string.format(L["%s Trainer"], entry.specialtyLabel) or
-                        category.label) .. " — " .. entry.zone
+                        category.label) .. ", " .. entry.zone
                     if not HasPosition(record) then
-                        subtitle = subtitle .. " — " .. L["Location unavailable"]
+                        subtitle = subtitle .. ", " .. L["Location unavailable"]
                     elseif record.eligible ~= true then
-                        subtitle = subtitle .. " — " .. L["Availability unknown"]
+                        subtitle = subtitle .. ", " .. L["Availability unknown"]
                     end
                     found[#found + 1] = {
                         id = record.id,

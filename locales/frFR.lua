@@ -268,7 +268,7 @@ L["Navigation Fly"] = "Volez vers le point suivant."
 L["Navigation Travel To Destination"] = "Rendez-vous à %s."
 L["Navigation Fly To Destination"] = "Volez vers %s."
 L["Navigation Route To"] = "Itinéraire vers : %s (%s)"
-L["Navigation Chat Header"] = "Itinéraire vers : %s (%s) — %s"
+L["Navigation Chat Header"] = "Itinéraire vers : %s (%s) - %s"
 L["Navigation Chat Unavailable"] =
 "Sélectionnez un canal de discussion disponible ou un destinataire de chuchotement avant d'exporter l'itinéraire."
 L["Send"] = "Envoyer"

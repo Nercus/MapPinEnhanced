@@ -266,7 +266,7 @@ L["Navigation Fly"] = "Перелетите к следующей точке."
 L["Navigation Travel To Destination"] = "Отправляйтесь в %s."
 L["Navigation Fly To Destination"] = "Летите в %s."
 L["Navigation Route To"] = "Маршрут до: %s (%s)"
-L["Navigation Chat Header"] = "Маршрут до: %s (%s) — %s"
+L["Navigation Chat Header"] = "Маршрут до: %s (%s) - %s"
 L["Navigation Chat Unavailable"] =
 "Перед экспортом маршрута выберите доступный канал чата или воспользуйтесь функцией «шепот»."
 L["Send"] = "Отправить"
