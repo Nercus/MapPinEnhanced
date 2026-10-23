@@ -36,9 +36,9 @@ Providers:RegisterLocationCatalog({
         id = 78,
         types = { "city" },
         faction = "Alliance",
-        map = 1429,
-        x = 0.3375,
-        y = 0.5244,
+        map = 1453,
+        x = 0.6310,
+        y = 0.7190,
         name = { enUS = "Stormwind", deDE = "Stormwind", esES = "Stormwind", esMX = "Stormwind", frFR = "Stormwind", koKR = "Stormwind", ptBR = "Stormwind", ruRU = "Stormwind", zhCN = "Stormwind", zhTW = "Stormwind" },
     },
     {
