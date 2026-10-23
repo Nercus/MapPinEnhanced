@@ -13,3 +13,7 @@ L["Import"] = "가져오기"
 L["Minimap"] = "미니맵"
 L["Help"] = "도움말"
 L["Back"] = "뒤로"
+
+------------------------------ Dialogs ------------------------------
+L["Special thanks to Byyrax and Pamoo for the help with translations"] =
+"번역에 도움을 주신 Byyrax 님과 Pamoo 님께 특별히 감사드립니다."

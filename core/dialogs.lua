@@ -380,6 +380,7 @@ function MapPinEnhanced:ShowAboutDialog()
         L
         ["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs!"] ..
         HeartIcon,
+        L["Special thanks to Byyrax and Pamoo for the help with translations"],
     }, "\n")
 
     return ShowStaticDialog(ABOUT_DIALOG_NAME, text, nil)

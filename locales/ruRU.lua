@@ -128,6 +128,8 @@ L["Loading"] = "Загрузка"
 ------------------------------ Dialogs ------------------------------
 L["Version: %s (%s)"] = "Версия: %s (%s)"
 L["Build: %s"] = "Сборка: %s"
+L["Special thanks to Byyrax and Pamoo for the help with translations"] =
+"Особая благодарность Byyrax и Pamoo за помощь с переводами"
 L["Thanks to Eminos for the countless hours creating textures, rubber-ducking and thinking about ideas with me. Thanks to all who helped me test new versions, gave feedback and reported bugs!"] =
 "Спасибо Eminos за бесчисленные часы, потраченные на создание текстур, обсуждение идей и совместное размышление со мной. Спасибо всем, кто помогал мне тестировать новые версии, делился отзывами и сообщал об ошибках!"
 L["Open the about dialog to view version information."] =
