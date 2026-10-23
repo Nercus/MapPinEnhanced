@@ -90,6 +90,13 @@ local TRANSPORTATION_GROUP_BY_PATH_TYPE = {
     dungeonteleport = "dungeonTeleports",
 }
 local disabledTransportationGroups = { dungeonTeleports = true } ---@type table<string, boolean>
+-- Home-return paths are created at graph setup, independently of static catalogs.
+local availableTransportationGroups = { personalTeleports = true } ---@type table<string, boolean>
+
+---@return table<string, boolean>
+function Navigation:GetAvailableTransportationGroups()
+    return CopyTable(availableTransportationGroups)
+end
 
 ---@param pathType string
 ---@return boolean
@@ -177,6 +184,8 @@ function Navigation:RegisterPathData(pathType, paths)
     assert(type(pathType) == "string" and pathType ~= "",
         "Navigation:RegisterPathData requires a Path type")
     assert(type(paths) == "table", "Navigation:RegisterPathData requires a Path table")
+    local group = TRANSPORTATION_GROUP_BY_PATH_TYPE[pathType]
+    if group and #paths > 0 then availableTransportationGroups[group] = true end
     if pathType == "flighttaxi" then
         -- Generated taxi requirements include both endpoints. The departure
         -- can be learned on arrival, so retain only the destination/access checks.

@@ -42,8 +42,8 @@ Options.DEFAULTS = {
     ["Pins.Appearance.DefaultColor"] = "Yellow",
     ["Pins.Appearance.FadeUntracked"] = false,
     ["Pins.Appearance.ShowMinimapPins"] = true,
-    ["Pins.Miscellaneous.EnableLockedPins"] = true,
-    ["Pins.Tracking.ArrivalNotification"] = "locked",
+    ["Pins.Miscellaneous.EnableLockedPins"] = false,
+    ["Pins.Tracking.ArrivalNotification"] = "disabled",
     ["Pins.Tracking.AutoUntrack"] = false,
     ["Pins.Integrations.TomTom"] = C_AddOns.IsAddOnLoaded("TomTom") and true or false,
     ["Miscellaneous.Tracker.AutoShow"] = true,
@@ -54,19 +54,19 @@ Options.DEFAULTS = {
     ["Miscellaneous.Tracker.Scale"] = 1,
     ["General.Minimap.ShowButton"] = true,
     ["General.Minimap.CustomButton"] = false,
-    ["General.Distance.ShowUnit"] = true,
+    ["General.Distance.ShowUnit"] = false,
     ["Pins.Miscellaneous.ScaleOnHover"] = false,
     ["Miscellaneous.Coords.Enable"] = false,
     ["Miscellaneous.Coords.Lock"] = false,
     ["Miscellaneous.Coords.Visibility"] = { noCoordinates = true },
     ["Miscellaneous.Tracker.Visibility"] = { noActivePins = true },
-    ["Wayfinder.General.HideBlizzardFloatingDiamond"] = false,
-    ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_ARROW,
+    ["Wayfinder.General.HideBlizzardFloatingDiamond"] = true,
+    ["Wayfinder.General.Selection"] = Options.WAYFINDER_SELECTION_FLOATING,
     ["Wayfinder.General.ShowETA"] = true,
     ["Wayfinder.General.ShowObjectiveFrame"] = true,
     ["Wayfinder.Navigation.Enable"] = true,
-    ["Wayfinder.Navigation.AutomaticTravelSelection"] = false,
-    ["Wayfinder.Navigation.RestoreEquipment"] = false,
+    ["Wayfinder.Navigation.AutomaticTravelSelection"] = true,
+    ["Wayfinder.Navigation.RestoreEquipment"] = true,
     ["Wayfinder.Navigation.WorldMap"] = true,
     ["Wayfinder.Navigation.Minimap"] = true,
     ["Wayfinder.Navigation.TransportationGroups"] = {
@@ -88,7 +88,7 @@ Options.DEFAULTS = {
 ---@type table<string, MapPinEnhancedRadioGroupOption[]>
 Options.OPTIONS_CONFIG = {
     ["General.Lexicon.DataTypes"] = {
-        { label = L["Point of interest"],           value = "poi" },
+        { label = L["Point of interest"],          value = "poi" },
         { label = L["City"],                       value = "city" },
         { label = L["Town"],                       value = "town" },
         { label = L["Dungeon"],                    value = "dungeon" },
@@ -173,9 +173,27 @@ for _, option in ipairs(Options.OPTIONS_CONFIG["General.Lexicon.DataTypes"]) do
     lexiconDataTypes[option.value] = true
 end
 
--- Options loads before Pins. Fill the swatches from its palette once that owner
--- is ready, retaining the selected color and the normal dropdown change callback.
+---@param key string
+---@param available table<string, boolean>
+local function FilterAvailableOptions(key, available)
+    local options = {} ---@type MapPinEnhancedRadioGroupOption[]
+    for _, option in ipairs(Options.OPTIONS_CONFIG[key]) do
+        if available[option.value] then options[#options + 1] = option end
+    end
+    Options.OPTIONS_CONFIG[key] = options
+    Options.options[key]:Setup(Options:GetOptionValue(key))
+end
+
+-- Options loads before feature data and palettes. Refresh menus once their owners
+-- are ready, retaining selected values and the normal change callbacks.
 MapPinEnhanced:OnLoad(function()
+    -- Flavor catalogs are registered by now. Filter choices without changing
+    -- saved selections or hiding methods that are only temporarily unusable.
+    local Navigation = MapPinEnhanced:GetModule("Navigation")
+    local Providers = MapPinEnhanced:GetModule("Providers")
+    FilterAvailableOptions("Wayfinder.Navigation.TransportationGroups", Navigation:GetAvailableTransportationGroups())
+    FilterAvailableOptions("General.Lexicon.DataTypes", Providers:GetAvailableLocationTypes())
+
     local Pins = MapPinEnhanced:GetModule("Pins")
     local key = "Pins.Appearance.DefaultColor"
     for _, option in ipairs(Options.OPTIONS_CONFIG[key]) do

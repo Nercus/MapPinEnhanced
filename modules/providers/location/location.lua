@@ -76,6 +76,21 @@ function Providers:RegisterLocationCatalog(records)
     catalogs[#catalogs + 1] = records
 end
 
+---@return table<string, boolean>
+function Providers:GetAvailableLocationTypes()
+    local types = {} ---@type table<string, boolean>
+    for _, catalog in ipairs(catalogs) do
+        for _, source in ipairs(catalog) do
+            for _, kind in ipairs(source.types) do
+                types[kind] = true
+                if kind:match("^vendor%-") then types.vendor = true end
+                if kind == "class" or kind == "profession" then types.trainer = true end
+            end
+        end
+    end
+    return types
+end
+
 ---Called inside the consumer's cancellable batch; providers never own UI work.
 ---@param checkpoint fun()
 ---@return number[]
