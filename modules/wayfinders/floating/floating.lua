@@ -9,7 +9,6 @@ local Options = MapPinEnhanced:GetModule("Options")
 ---@field data WayfinderData?
 ---@field frame MapPinEnhancedWayfinderFloatingTemplate?
 ---@field panel MapPinEnhancedFloatingPanelTemplate?
----@field objectivePanel MapPinEnhancedFloatingPanelTemplate?
 ---@field runtimeEnabled boolean?
 ---@field blizzardHiddenByOption boolean?
 ---@field unsubscribeBeamOption fun()?
@@ -23,11 +22,8 @@ function MapPinEnhancedWayfinderFloating:Setup()
     if self.panel then return end
     self:GetFrame()
     local panel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelTemplate")
-    ---@cast panel MapPinEnhancedFloatingPanelTemplate
-    self.panel = panel
-    local objectivePanel = CreateFrame("Frame", nil, UIParent, "MapPinEnhancedFloatingPanelDisplayTemplate")
-    ---@cast objectivePanel MapPinEnhancedFloatingPanelTemplate
-    self.objectivePanel = objectivePanel
+    ---@cast panel MapPinEnhancedFloatingPanelPositionTemplate
+    self.panel = panel.display
 end
 
 ---@return string
@@ -84,12 +80,9 @@ end
 function MapPinEnhancedWayfinderFloating:SetStep(step)
     self.step = step
     local inside = step and step.insideObjectiveArea
-    if self.panel then self.panel:Apply(not inside and step or nil, self.data) end
-    if self.objectivePanel then
-        local showObjectives = inside and Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
-        -- The protected travel panel retains its last Step until combat ends.
-        if InCombatLockdown() and self.panel and self.panel:IsShown() then showObjectives = false end
-        self.objectivePanel:Apply(showObjectives and step or nil, self.data)
+    if self.panel then
+        local showPanel = not inside or Options:GetOptionValue("Wayfinder.General.ShowObjectiveFrame")
+        self.panel:Apply(showPanel and step or nil, self.data)
     end
     -- Reset has released tracking; retain the last artwork until its fade ends.
     if not self.data then return end
@@ -119,7 +112,6 @@ end
 
 function MapPinEnhancedWayfinderFloating:Reset()
     if self.panel then self.panel:Apply(nil, nil) end
-    if self.objectivePanel then self.objectivePanel:Apply(nil, nil) end
     if self.frame then
         self.frame:Hide()
         self.frame:StopTracking()
@@ -229,5 +221,4 @@ function MapPinEnhancedWayfinderFloating:SetDestinationText(title, description)
     self:RefreshTitle()
     if self.frame then self.frame.readout:UpdateText() end
     if self.panel then self.panel:SetDestinationText(title) end
-    if self.objectivePanel then self.objectivePanel:SetDestinationText(title) end
 end

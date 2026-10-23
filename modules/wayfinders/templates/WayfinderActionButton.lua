@@ -7,6 +7,7 @@ local MapPinEnhanced = select(2, ...)
 ---@field combatWarning Texture?
 ---@field cooldown Cooldown
 ---@field unsubscribeCooldown fun()?
+---@field instructionOwner MapPinEnhancedWayfinderInstructionTemplate? for sibling controls
 MapPinEnhancedWayfinderActionButtonMixin = {}
 
 function MapPinEnhancedWayfinderActionButtonMixin:Setup()
@@ -18,7 +19,7 @@ end
 function MapPinEnhancedWayfinderActionButtonMixin:OnPreClick(button)
     if button ~= "LeftButton" or not self:IsVisible() or self:GetAlpha() <= 0 then return end
     if self.requiresShiftInCombat and InCombatLockdown() and not IsShiftKeyDown() then return end
-    local instruction = self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
+    local instruction = self.instructionOwner or self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
     MapPinEnhanced:GetModule("Navigation"):BeginActionEquipmentClick(instruction.preparedAction)
 end
 
@@ -31,7 +32,7 @@ function MapPinEnhancedWayfinderActionButtonMixin:UpdateCooldown()
         self.combatWarning:SetShown(InCombatLockdown())
         self.icon:SetDesaturated(InCombatLockdown())
     end
-    local instruction = self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
+    local instruction = self.instructionOwner or self:GetParent() --[[@as MapPinEnhancedWayfinderInstructionTemplate]]
     local action = self:IsVisible() and self:GetAlpha() > 0 and instruction.preparedAction
     if action then
         local remaining, startTime, duration, rate = MapPinEnhanced:GetModule("Navigation"):GetActionCooldown(
@@ -63,13 +64,13 @@ function MapPinEnhancedWayfinderActionButtonMixin:OnHide()
 end
 
 function MapPinEnhancedWayfinderActionButtonMixin:OnEnter()
-    local instruction = self:GetParent()
+    local instruction = self.instructionOwner or self:GetParent()
     ---@cast instruction MapPinEnhancedWayfinderInstructionTemplate
     instruction:OnActionEnter(self)
 end
 
 function MapPinEnhancedWayfinderActionButtonMixin:OnLeave()
-    local instruction = self:GetParent()
+    local instruction = self.instructionOwner or self:GetParent()
     ---@cast instruction MapPinEnhancedWayfinderInstructionTemplate
     instruction:OnActionLeave()
 end

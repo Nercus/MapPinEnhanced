@@ -4,7 +4,7 @@
     <Frame name="MapPinEnhancedFloatingPanelDisplayTemplate" virtual="true" hidden="true" inherits="MapPinEnhancedGenericFrameWithBottomLineTemplate, MapPinEnhancedWayfinderInstructionTemplate, MapPinEnhancedFadingFrameTemplate" mixin="MapPinEnhancedFloatingPanelMixin" enableMouse="true" frameStrata="LOW" frameLevel="20">
         <Size x="318" y="62" />
         <Anchors>
-            <Anchor point="TOP" relativeTo="UIParent" y="-280" />
+            <Anchor point="TOP" />
         </Anchors>
         <Layers>
             <Layer level="OVERLAY">
@@ -107,9 +107,13 @@
             <OnLeave method="OnLeave" />
         </Scripts>
     </Frame>
-    <!-- Only the travel variant owns protected action controls. All variants
-         inherit the same appearance, text layout and saved-position behavior. -->
-    <Frame name="MapPinEnhancedFloatingPanelTemplate" virtual="true" inherits="SecureHandlerStateTemplate, MapPinEnhancedFloatingPanelDisplayTemplate">
+    <!-- Keep the protected controls beside the display. Neither their parent nor
+         their anchors may depend on its combat-updated visibility or layout. -->
+    <Frame name="MapPinEnhancedFloatingPanelTemplate" virtual="true" inherits="SecureHandlerStateTemplate" mixin="MapPinEnhancedFloatingPanelPositionMixin" frameStrata="LOW" frameLevel="20" enableMouse="false">
+        <Size x="318" y="62" />
+        <Anchors>
+            <Anchor point="TOP" relativeTo="UIParent" y="-280" />
+        </Anchors>
         <Frames>
             <Button parentKey="actionButton" inherits="MapPinEnhancedWayfinderActionButtonTemplate">
                 <KeyValues>
@@ -132,9 +136,13 @@
             </Button>
             <Button parentKey="actionBlocker" inherits="MapPinEnhancedWayfinderActionBlockerTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" x="12" y="-11" />
+                    <Anchor point="TOPLEFT" relativeKey="$parent.actionButton" />
                 </Anchors>
             </Button>
+            <Frame parentKey="display" inherits="MapPinEnhancedFloatingPanelDisplayTemplate" />
         </Frames>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+        </Scripts>
     </Frame>
 </Ui>
