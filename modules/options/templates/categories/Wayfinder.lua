@@ -6,15 +6,12 @@ local L = MapPinEnhanced.L
 ---@class MapPinEnhancedWayfinderOptionsNote : Frame
 ---@field text FontString
 
----@class MapPinEnhancedWayfinderOptionsDisplay : MapPinEnhancedOptionGroupTemplate
+---@class MapPinEnhancedOptionCategoryWayfinderTemplate : MapPinEnhancedOptionCategoryBaseTemplate
 ---@field scaleWithDistance MapPinEnhancedFormElementTemplate
 ---@field beam MapPinEnhancedFormElementTemplate
 ---@field textOutline MapPinEnhancedFormElementTemplate
 ---@field hideBlizzard MapPinEnhancedFormElementTemplate
 ---@field searchNote MapPinEnhancedWayfinderOptionsNote
-
----@class MapPinEnhancedOptionCategoryWayfinderTemplate : MapPinEnhancedOptionCategoryBaseTemplate
----@field display MapPinEnhancedWayfinderOptionsDisplay
 ---@field searchPresentation WayfinderSelection?
 ---@field unsubscribeSelection fun()?
 ---@field showNumber number?
@@ -31,19 +28,18 @@ local PRESENTATION_BY_OPTION = {
 
 function MapPinEnhancedOptionCategoryWayfinderMixin:RefreshDisplay()
     local selection = Options:GetOptionValue(SELECTION_KEY) --[[@as WayfinderSelection]]
-    local display = self.display
     local showFloating = selection == "floating" or self.searchPresentation == "floating"
-    display.scaleWithDistance:SetShown(showFloating)
-    display.beam:SetShown(showFloating)
-    display.textOutline:SetShown(showFloating)
+    self.scaleWithDistance:SetShown(showFloating)
+    self.beam:SetShown(showFloating)
+    self.textOutline:SetShown(showFloating)
     local showArrow = selection == "arrow" or self.searchPresentation == "arrow"
-    display.hideBlizzard:SetShown(showArrow)
-    local note = display.searchNote
+    self.hideBlizzard:SetShown(showArrow)
+    local note = self.searchNote
     note:SetShown(self.searchPresentation ~= nil and self.searchPresentation ~= selection)
     note.text:SetText(self.searchPresentation == "floating" and
         L["Settings for Floating; Arrow is still selected."] or
         L["Settings for Arrow; Floating is still selected."])
-    note:SetWidth(math.max(1, display:GetWidth() - display.contentInsetX * 2))
+    note:SetWidth(math.max(1, self:GetWidth() - self.contentInsetX * 2))
     note:SetHeight(math.max(20, note.text:GetStringHeight()))
     if Options.frame then
         Options.frame:UpdateLayout()
@@ -76,5 +72,5 @@ function MapPinEnhancedOptionCategoryWayfinderMixin:OnHide()
     if self.unsubscribeSelection then self.unsubscribeSelection() end
     self.unsubscribeSelection = nil
     self.searchPresentation = nil
-    self.display.searchNote:Hide()
+    self.searchNote:Hide()
 end

@@ -7,65 +7,58 @@
             <KeyValue key="categoryName" value="Wayfinder" />
         </KeyValues>
         <Frames>
-            <Frame inherits="MapPinEnhancedOptionGroupTemplate" parentKey="display">
+            <Frame inherits="MapPinEnhancedOptionWayfinderTemplate">
                 <KeyValues>
-                    <KeyValue key="key" value="Wayfinder.Display" />
+                    <KeyValue key="key" value="Wayfinder.General.Selection" />
                 </KeyValues>
-                <Frames>
-                    <Frame inherits="MapPinEnhancedOptionWayfinderTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.General.Selection" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame parentKey="searchNote" hidden="true">
-                        <Size x="1" y="20" />
-                        <Layers>
-                            <Layer level="ARTWORK">
-                                <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT">
-                                    <Anchors>
-                                        <Anchor point="TOPLEFT" />
-                                        <Anchor point="TOPRIGHT" />
-                                    </Anchors>
-                                </FontString>
-                            </Layer>
-                        </Layers>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="scaleWithDistance">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Floating.ScaleWithDistance" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="beam">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Floating.ShowBeam" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="textOutline">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.Floating.ShowTextOutline" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="hideBlizzard">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="General.Distance.ShowUnit" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.General.ShowETA" />
-                        </KeyValues>
-                    </Frame>
-                    <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
-                        <KeyValues>
-                            <KeyValue key="key" value="Wayfinder.General.ShowObjectiveFrame" />
-                        </KeyValues>
-                    </Frame>
-                </Frames>
+            </Frame>
+            <Frame parentKey="searchNote" hidden="true">
+                <Size x="1" y="20" />
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <FontString parentKey="text" inherits="MapPinEnhancedFontHighlightSmall" justifyH="LEFT">
+                            <Anchors>
+                                <Anchor point="TOPLEFT" />
+                                <Anchor point="TOPRIGHT" />
+                            </Anchors>
+                        </FontString>
+                    </Layer>
+                </Layers>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="scaleWithDistance">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Floating.ScaleWithDistance" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="beam">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Floating.ShowBeam" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="textOutline">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.Floating.ShowTextOutline" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate" parentKey="hideBlizzard">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.General.HideBlizzardFloatingDiamond" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="General.Distance.ShowUnit" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.General.ShowETA" />
+                </KeyValues>
+            </Frame>
+            <Frame inherits="MapPinEnhancedOptionCheckboxTemplate">
+                <KeyValues>
+                    <KeyValue key="key" value="Wayfinder.General.ShowObjectiveFrame" />
+                </KeyValues>
             </Frame>
         </Frames>
         <Scripts>
