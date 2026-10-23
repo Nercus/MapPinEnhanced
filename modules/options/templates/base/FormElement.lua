@@ -8,6 +8,8 @@ local L = MapPinEnhanced.L
 
 ---@class MapPinEnhancedFormElementTemplate : MapPinEnhancedFormFieldTemplate
 ---@field child MapPinEnhancedOptionControl
+---@field hoverHighlight Texture
+---@field hideHoverHighlight boolean?
 ---@field searchHighlight Texture
 ---@field searchAnimation AnimationGroup
 ---@field searchHighlightTimer FunctionContainer?
@@ -114,6 +116,14 @@ function MapPinEnhancedFormElementMixin:OnSearchHighlightHide()
         self.searchHighlightTimer = nil
     end
     self.searchAnimation:Stop()
+end
+
+function MapPinEnhancedFormElementMixin:OnHoverEnter()
+    self.hoverHighlight:SetShown(not self.hideHoverHighlight)
+end
+
+function MapPinEnhancedFormElementMixin:OnHoverLeave()
+    self.hoverHighlight:Hide()
 end
 
 function MapPinEnhancedFormElementMixin:OnLoad()

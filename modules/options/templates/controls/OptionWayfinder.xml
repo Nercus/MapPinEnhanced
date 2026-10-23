@@ -34,6 +34,7 @@
     <Frame name="MapPinEnhancedOptionWayfinderTemplate" virtual="true" inherits="MapPinEnhancedFormElementTemplate" mixin="MapPinEnhancedOptionWayfinderMixin">
         <KeyValues>
             <KeyValue key="orientation" value="vertical" />
+            <KeyValue key="hideHoverHighlight" value="true" type="boolean" />
         </KeyValues>
         <Layers>
             <Layer level="ARTWORK">

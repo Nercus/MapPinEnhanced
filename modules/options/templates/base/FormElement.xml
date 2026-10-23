@@ -11,6 +11,9 @@
             <KeyValue key="scrollPadding" value="12" type="number" />
         </KeyValues>
         <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="hoverHighlight" file="Interface/AddOns/MapPinEnhanced/assets/shared/GradientHorizontal.png" alpha="0.04" setAllPoints="true" hidden="true" />
+            </Layer>
             <Layer level="BORDER">
                 <Texture parentKey="searchHighlight" scale="0.5" file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrame.png" alphaMode="ADD" hidden="true">
                     <Color r="1" g="0.82" b="0" />
@@ -39,6 +42,9 @@
         </Animations>
         <Scripts>
             <OnLoad method="OnLoad" />
+            <OnEnter method="OnHoverEnter" />
+            <OnLeave method="OnHoverLeave" />
+            <OnHide method="OnHoverLeave" />
         </Scripts>
     </Frame>
 </Ui>
