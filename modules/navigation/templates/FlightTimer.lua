@@ -114,6 +114,8 @@ end
 function MapPinEnhancedFlightTimerMixin:OnLoad()
     self.progress:SetMinMaxValues(0, 1)
     self:ApplyGradient()
+    local font, size = self.progress.name:GetFont()
+    self.progress.name:SetFont(font, size, "OUTLINE")
     self.progress.progress:SetTextColor(1, 1, 1)
     MapPinEnhanced:RegisterDraggableFrame(self, "flightTimerFrame", self.dragHandle, function()
         return Options:GetOptionValue("General.FlightTimer.Lock") == true
