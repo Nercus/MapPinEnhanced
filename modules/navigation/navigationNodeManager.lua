@@ -1209,7 +1209,8 @@ end
 ---@return NavigationCalculatedPathCost?
 ---@return string? failure
 ---@param phaseState table<string, number>?
-function Navigation:GetFreshPathCost(pathReference, phaseState)
+---@param taxiJourneyLeg boolean? Validate a journey's source leg rather than a standalone departure.
+function Navigation:GetFreshPathCost(pathReference, phaseState, taxiJourneyLeg)
     if pathReference < 0 then return nil, "taxi journey requires current interaction" end
     local graph = navigationGraph
     if not graph then return nil, "navigation data is not ready" end
@@ -1234,6 +1235,11 @@ function Navigation:GetFreshPathCost(pathReference, phaseState)
     }
     if graph.pathTypes[pathReference] == "flighttaxi" then
         fresh.taxiCosts, fresh.taxiFailures = self:PrepareTaxiCosts(graph, pathReference)
+        -- The enclosing journey validates the exact preview. Its source legs
+        -- still need fresh eligibility/prices, without standalone-departure suppression.
+        if taxiJourneyLeg then
+            return fresh.taxiCosts[pathReference], fresh.taxiFailures[pathReference]
+        end
     end
     return self:GetPathCost(graph, fresh, pathReference)
 end

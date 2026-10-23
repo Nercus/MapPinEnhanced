@@ -548,7 +548,7 @@ end
 function Navigation:IsTaxiJourneyEligible(journey, prepared, phaseState)
     for _, leg in ipairs(journey.legs) do
         for _, reference in ipairs(leg.sourceReferences) do
-            if phaseState and not self:GetFreshPathCost(reference, phaseState) or
+            if phaseState and not self:GetFreshPathCost(reference, phaseState, true) or
                 not phaseState and (not prepared.taxiCosts[reference] or
                     prepared.requirementStateByPath[reference] ~= "satisfied") then
                 return false
