@@ -4,6 +4,7 @@
     <Script file="TooltipMixin.lua" />
     <Include file="Icon.xml" />
     <Include file="Button.xml" />
+    <Include file="MacroButton.xml" />
     <Include file="IconButton.xml" />
     <Include file="Checkbox.xml" />
     <Include file="Radiogroup.xml" />

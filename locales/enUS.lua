@@ -663,6 +663,11 @@ L["Lexicon.Enable_DESCRIPTION"] = "Search locations and track them or create ord
 L["Lexicon.DataTypes_LABEL"] = "Enabled data types"
 L["Lexicon.DataTypes_DESCRIPTION"] =
 "Choose which location and service types appear in searches. Locations with multiple roles remain searchable while any role is enabled."
+L["Click to pick up the macro"] = "Click to pick up the macro"
+L["Lexicon.Macro_LABEL"] = "Location Lexicon macro"
+L["Lexicon.Macro_DESCRIPTION"] = "Click to pick up the macro and place it on an action bar."
+L["Macros cannot be picked up during combat."] = "Macros cannot be picked up during combat."
+L["No account macro slots available."] = "No account macro slots available."
 L["%s Trainer"] = "%s Trainer"
 L["Alchemy"] = "Alchemy"
 L["Ammunition Vendor"] = "Ammunition Vendor"

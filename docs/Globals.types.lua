@@ -5,6 +5,10 @@ MAP_PIN = "Map Pin"
 
 LE_PARTY_CATEGORY_HOME = 1
 
+-- Current Retail macro constants are newer than the installed editor annotations.
+---@type { MAX_ACCOUNT_MACROS: number, MAX_CHARACTER_MACROS: number }?
+Constants.MacroConsts = nil
+
 ---@param questLogIndex number
 ---@return string? text
 function GetQuestLogCompletionText(questLogIndex) end

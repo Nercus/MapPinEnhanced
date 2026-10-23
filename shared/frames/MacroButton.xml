@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="MacroButton.lua" />
+    <Button name="MapPinEnhancedMacroButtonTemplate" virtual="true" mixin="MapPinEnhancedMacroButtonMixin,MapPinEnhancedTooltipMixin" enableMouse="true">
+        <Size x="40" y="40" />
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture inherits="MapPinEnhancedGenericFrameTextureTemplate">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="-1" y="1" />
+                        <Anchor point="BOTTOMRIGHT" x="1" y="-1" />
+                    </Anchors>
+                    <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+                    <TextureSliceMode mode="Stretched" />
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="3" y="-3" />
+                        <Anchor point="BOTTOMRIGHT" x="-3" y="3" />
+                    </Anchors>
+                    <TexCoords left="0.07" right="0.93" top="0.07" bottom="0.93" />
+                </Texture>
+                <MaskTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" vWrapMode="CLAMPTOBLACKADDITIVE" hWrapMode="CLAMPTOBLACKADDITIVE">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" relativeKey="$parent.icon" />
+                        <Anchor point="BOTTOMRIGHT" relativeKey="$parent.icon" />
+                    </Anchors>
+                    <TextureSliceMargins left="32" top="26" right="32" bottom="38" />
+                    <TextureSliceMode mode="Stretched" />
+                    <MaskedTextures>
+                        <MaskedTexture childKey="icon" />
+                    </MaskedTextures>
+                </MaskTexture>
+            </Layer>
+        </Layers>
+        <HighlightTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" alphaMode="ADD" setAllPoints="true">
+            <Color r="1" g="1" b="1" a="0.08" />
+            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+            <TextureSliceMode mode="Stretched" />
+        </HighlightTexture>
+        <PushedTexture file="Interface/AddOns/MapPinEnhanced/assets/shared/GenericFrameMask.png" alphaMode="ADD" setAllPoints="true">
+            <Color r="1" g="0.82" b="0" a="0.12" />
+            <TextureSliceMargins left="30" right="30" top="30" bottom="30" />
+            <TextureSliceMode mode="Stretched" />
+        </PushedTexture>
+        <Scripts>
+            <OnLoad method="OnLoad" />
+            <OnShow method="OnShow" />
+            <OnHide method="OnHide" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+</Ui>
