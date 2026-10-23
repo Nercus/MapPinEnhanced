@@ -34,8 +34,10 @@ end
 local minimapPinPool = CreateFramePool("Frame", Minimap, "MapPinEnhancedSuperTrackingPinTemplate",
     ResetMinimapPin)
 
-local function RefreshMinimapPin()
+function Wayfinders:RefreshSuperTrackingMinimapPin()
     local data = entry and entry.tracked and entry.pinData
+    -- Share the wayfinder's buffered area exit rather than flicker at blob edges.
+    if entry and entry.source == "quest" and self:IsInsideObjectiveArea() then data = nil end
     local x, y, instanceID ---@type number?, number?, number?
     if data and Options:GetOptionValue("Pins.Appearance.ShowMinimapPins") then
         x, y, instanceID = MapPinEnhanced.HBD:GetWorldCoordinatesFromZone(data.x, data.y, data.mapID)
@@ -53,7 +55,7 @@ local function RefreshMinimapPin()
 end
 
 for _, key in ipairs({ "Pins.Appearance.ShowMinimapPins", "Pins.Appearance.MinimapScale" }) do
-    Options:SubscribeToOptionChanges(key, RefreshMinimapPin)
+    Options:SubscribeToOptionChanges(key, function() Wayfinders:RefreshSuperTrackingMinimapPin() end)
 end
 
 local changeNumber = 0
@@ -61,7 +63,7 @@ local changingSelection = false
 local function UpdateEntryChangeNumber()
     changeNumber = changeNumber + 1
     if entry then entry.changeNumber = changeNumber end
-    RefreshMinimapPin()
+    Wayfinders:RefreshSuperTrackingMinimapPin()
 end
 
 ---@param source string

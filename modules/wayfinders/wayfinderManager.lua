@@ -162,6 +162,7 @@ local function ApplyActiveStep()
     if Wayfinders.activeWayfinder then
         Wayfinders.activeWayfinder:SetStep(activeStep)
     end
+    Wayfinders:RefreshSuperTrackingMinimapPin()
 end
 
 ---@param texture string|number
@@ -206,6 +207,11 @@ Options:SubscribeToOptionChanges("Wayfinder.General.ShowObjectiveFrame", ApplyAc
 ---@return WayfinderStepData?
 function Wayfinders:GetStepSnapshot()
     return activeStep and CopyStep(activeStep) or nil
+end
+
+---@return boolean
+function Wayfinders:IsInsideObjectiveArea()
+    return activeStep ~= nil and activeStep.insideObjectiveArea == true
 end
 
 ---@return boolean
