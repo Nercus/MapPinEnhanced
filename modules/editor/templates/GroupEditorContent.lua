@@ -30,6 +30,7 @@ local PIN_INPUT_FIELDS = { "nameField", "mapField", "xField", "yField" }
 ---@field dropPlacement "before"|"after"|nil
 ---@field loadingOverlay MapPinEnhancedGroupEditorContentLoadingOverlay
 ---@field loadingPins boolean?
+---@field pendingFocusGroup MapPinEnhancedGroupMixin?
 MapPinEnhancedGroupEditorContentMixin = {}
 
 function MapPinEnhancedGroupEditorContentMixin:OnLoad()
@@ -102,8 +103,14 @@ end
 ---@param group MapPinEnhancedGroupMixin?
 ---@param focusName boolean?
 function MapPinEnhancedGroupEditorContentMixin:SetGroup(group, focusName)
+    focusName = focusName or group ~= nil and self.pendingFocusGroup == group
+    self.pendingFocusGroup = nil
     local loading = group and group.pinsUpdating and not group.isDeleting or false
     if group and (group.pinsUpdating or group.isDeleting) then group = nil end
+    if group and not Editor:GetMapOptions() then
+        self.pendingFocusGroup = focusName and group or nil
+        loading, group = true, nil
+    end
     if loading or self.loadingPins then self:SetLoading(loading) end
     self.loadingPins = loading
     local retainScrollPosition = group ~= nil and self.group == group

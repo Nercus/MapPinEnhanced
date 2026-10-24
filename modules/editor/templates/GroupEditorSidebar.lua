@@ -111,10 +111,8 @@ function MapPinEnhancedGroupEditorSidebarMixin:Refresh()
     table.sort(groups, function(group1, group2)
         return string.lower(group1:GetName()) < string.lower(group2:GetName())
     end)
-    self.dataProvider:Flush()
-    for _, group in ipairs(groups) do
-        self.dataProvider:Insert(group)
-    end
+    self.dataProvider = CreateDataProvider(groups)
+    self.scrollBox:SetDataProvider(self.dataProvider, true)
 
     ---@type {entry: MapPinEnhancedGroupEditorSidebarEntryTemplate, group: MapPinEnhancedGroupMixin?}[]
     local systemEntries = {

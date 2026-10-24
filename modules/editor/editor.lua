@@ -60,6 +60,86 @@ function Editor:GetSortedPins(group)
     return nodes
 end
 
+---@class MapPinEnhancedEditorMapEntry
+---@field mapID number
+---@field name string
+
+local mapCacheReady = false
+---@type table<number, MapPinEnhancedEditorMapEntry>
+local mapCache = {}
+---@type MapPinEnhancedEditorMapEntry[]
+local mapNames = {}
+---@type AutocompleteOption[]
+local mapOptions = {}
+local nextMapID = 1
+---@type fun()?
+local cancelMapCache
+
+---@return AutocompleteOption[]? options nil while the editor owns a pending build
+function Editor:GetMapOptions()
+    if mapCacheReady then return mapOptions end
+    if cancelMapCache or not self:IsShown() then return nil end
+    cancelMapCache = MapPinEnhanced:BatchExecution({ function()
+        local checkpoint = MapPinEnhanced:CreateBatchCheckpoint()
+        -- Sparse IDs retain the existing catalogue bounds. Only complete options
+        -- reach rows; closing the editor pauses this session's one-time scan.
+        while nextMapID <= 5000 do
+            local mapID = nextMapID
+            local mapInfo = C_Map.GetMapInfo(mapID)
+            if mapInfo and mapInfo.name and mapInfo.name ~= "" then
+                local entry = { mapID = mapID, name = mapInfo.name }
+                mapCache[mapID] = entry
+                table.insert(mapNames, entry)
+                table.insert(mapOptions, {
+                    label = string.format("%s (%d)", mapInfo.name, mapID),
+                    description = tostring(mapID),
+                    searchString = mapInfo.name .. " " .. mapID,
+                    value = mapID,
+                })
+            end
+            nextMapID = mapID + 1
+            checkpoint()
+        end
+    end }, nil, function()
+        cancelMapCache = nil
+        mapCacheReady = true
+        self:GetGroupEditorFrame():RequestRefresh()
+    end, nil, function(message)
+        cancelMapCache = nil
+        geterrorhandler()(message)
+    end)
+    return nil
+end
+
+function Editor:CancelMapOptions()
+    if cancelMapCache then cancelMapCache() end
+    cancelMapCache = nil
+end
+
+---@param mapID number
+---@return string
+function Editor:GetMapDisplay(mapID)
+    local entry = mapCache[mapID]
+    return entry and string.format("%s (%d)", entry.name, mapID) or tostring(mapID or "")
+end
+
+---@param text string
+---@return number?
+function Editor:FindExactMap(text)
+    local mapID = tonumber(text:match("^%s*(%d+)%s*$") or text:match("%((%d+)%)%s*$"))
+    if mapID and mapCache[mapID] then return mapID end
+    local lowered = string.lower(strtrim(text))
+    ---@type number?
+    local match
+    for _, entry in ipairs(mapNames) do
+        if string.lower(entry.name) == lowered then
+            if match then return nil end
+            match = entry.mapID
+        end
+    end
+    return match
+end
+
 function Editor:GetGroupEditorFrame()
     if not self.groupEditor then
         self.groupEditor = CreateFrame("Frame", "MapPinEnhancedGroupEditor", UIParent,

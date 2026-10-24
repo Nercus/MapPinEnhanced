@@ -194,10 +194,11 @@ end
 
 function MapPinEnhancedGroupEditorMixin:OnShow()
     MapPinEnhancedWindowMixin.OnShow(self)
-    self:RefreshUpdateHandler()
+    if self.selectedGroup then self:RequestRefresh() else self:RefreshUpdateHandler() end
 end
 
 function MapPinEnhancedGroupEditorMixin:OnHide()
+    Editor:CancelMapOptions()
     self:SetScript("OnUpdate", nil)
     self.focusCheckElapsed = nil
     Editor:CloseDescriptionEditor()

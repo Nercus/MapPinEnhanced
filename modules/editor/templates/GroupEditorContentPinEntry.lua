@@ -1,6 +1,7 @@
 ---@class MapPinEnhanced
 local MapPinEnhanced = select(2, ...)
 local Pins = MapPinEnhanced:GetModule("Pins")
+---@class Editor
 local Editor = MapPinEnhanced:GetModule("Editor")
 local L = MapPinEnhanced.L
 local BACKGROUND_COLOR = CreateColor(1, 1, 1, 0.5)
@@ -35,62 +36,6 @@ local BACKGROUND_END_COLOR = CreateColor(1, 1, 1, 0)
 ---@field dropLine Texture
 ---@field background Texture
 MapPinEnhancedGroupEditorContentPinEntryMixin = {}
-
----@class MapPinEnhancedEditorMapEntry
----@field mapID number
----@field name string
----@field search string
-
-local mapCacheReady = false
----@type table<number, MapPinEnhancedEditorMapEntry>
-local mapCache = {}
----@type MapPinEnhancedEditorMapEntry[]
-local mapNames = {}
----@type AutocompleteOption[]
-local mapOptions = {}
-
-local function EnsureMapCache()
-    if mapCacheReady then return end
-    mapCacheReady = true
-    mapCache, mapNames, mapOptions = {}, {}, {}
-    -- UI map IDs are sparse. GetMapInfo is cheap and this runs once, lazily on first editor use.
-    for mapID = 1, 5000 do
-        local mapInfo = C_Map.GetMapInfo(mapID)
-        if mapInfo and mapInfo.name and mapInfo.name ~= "" then
-            local entry = { mapID = mapID, name = mapInfo.name, search = mapInfo.name .. " " .. mapID }
-            mapCache[mapID] = entry
-            table.insert(mapNames, entry)
-            table.insert(mapOptions, {
-                label = string.format("%s (%d)", mapInfo.name, mapID),
-                description = tostring(mapID),
-                searchString = mapInfo.name .. " " .. mapID,
-                value = mapID,
-            })
-        end
-    end
-end
-
-local function GetMapDisplay(mapID)
-    EnsureMapCache()
-    local entry = mapCache[mapID]
-    return entry and string.format("%s (%d)", entry.name, mapID) or tostring(mapID or "")
-end
-
-local function FindExactMap(text)
-    EnsureMapCache()
-    local mapID = tonumber(text:match("^%s*(%d+)%s*$") or text:match("%((%d+)%)%s*$"))
-    if mapID and mapCache[mapID] then return mapID end
-    local lowered = string.lower(strtrim(text))
-    ---@type number?
-    local match
-    for _, entry in ipairs(mapNames) do
-        if string.lower(entry.name) == lowered then
-            if match then return nil end
-            match = entry.mapID
-        end
-    end
-    return match
-end
 
 ---@param input EditBox
 function MapPinEnhancedGroupEditorContentPinEntryMixin:OnInputTabPressed(input)
@@ -203,7 +148,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition()
     local node = assert(self.pinNode)
     local selectedMap = self.mapField.child.value
     local mapText = self.mapField.child:GetText() or ""
-    local mapID = selectedMap and selectedMap.label == mapText and selectedMap.value or FindExactMap(mapText)
+    local mapID = selectedMap and selectedMap.label == mapText and selectedMap.value or Editor:FindExactMap(mapText)
     local x, y =
         Editor:ParsePercent(self.xField.child:GetText()), Editor:ParsePercent(self.yField.child:GetText())
     if not mapID then
@@ -215,7 +160,7 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition()
     if not node.group:SetPinPosition(node.pinID, mapID, x, y) then return false end
     local applied = Editor:GetPinData(node)
     mapID, x, y = applied.mapID, applied.x, applied.y
-    self.mapField.child.appliedText = GetMapDisplay(mapID)
+    self.mapField.child.appliedText = Editor:GetMapDisplay(mapID)
     self.mapField.child.appliedMapID = mapID
     self.xField.child.appliedText, self.yField.child.appliedText =
         MapPinEnhanced:FormatPercent(x), MapPinEnhanced:FormatPercent(y)
@@ -237,13 +182,13 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
         return value
     end)
 
-    EnsureMapCache()
+    local mapOptions = assert(Editor:GetMapOptions(), "Editor: pin rows require completed map options")
     self.mapField.child:Setup({
         options = mapOptions,
         init = function() return pinData.mapID end,
         onChange = function() self:ApplyPosition() end,
     })
-    self.mapField.child.appliedText = GetMapDisplay(pinData.mapID)
+    self.mapField.child.appliedText = Editor:GetMapDisplay(pinData.mapID)
     self.mapField.child.appliedMapID = pinData.mapID
     self.xField.child.appliedText, self.yField.child.appliedText =
         MapPinEnhanced:FormatPercent(pinData.x), MapPinEnhanced:FormatPercent(pinData.y)
