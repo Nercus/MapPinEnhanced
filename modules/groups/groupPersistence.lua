@@ -14,6 +14,22 @@ function Groups:CancelGroupPersist(groupID)
     self.debouncedPersist[groupID] = nil
 end
 
+-- Logout cannot wait for another timer or rendered frame. Flush dirty groups,
+-- including completed bulk prefixes; GetSaveableData retains unfinished saved
+-- intake. Deleted and absent-source groups keep their existing saved-state policy.
+MapPinEnhanced:OnLoad(function()
+    -- Register after feature files, so native tracking restoration runs first.
+    MapPinEnhanced:RegisterEvent("PLAYER_LOGOUT", function()
+        for group in Groups:EnumerateGroups() do
+            local groupID = group:GetGroupID()
+            if Groups.debouncedPersist[groupID] or group.pinsUpdating or group.restoreData then
+                Groups:CancelGroupPersist(groupID)
+                MapPinEnhanced:SetVar("groups", groupID, group:GetSaveableData())
+            end
+        end
+    end)
+end)
+
 ---@param group MapPinEnhancedGroupMixin
 function Groups:PersistGroup(group)
     assert(group, "Groups:PersistGroup: group is nil")

@@ -91,7 +91,11 @@ function Groups:CreateGroupFromUngrouped(name)
     MapPinEnhanced:SetVar("groups", targetID, targetData)
     MapPinEnhanced:SetVar("groups", ungroupedGroup:GetGroupID(), sourceData)
     targetGroup.restoreData = ungroupedData
+    -- Ownership already moved in saved data. A logout during resource draining
+    -- must not serialize the source's remaining live frames a second time.
+    ungroupedGroup.restoreData = sourceData
     ungroupedGroup:ReleasePins(false, function()
+        ungroupedGroup.restoreData = nil
         if not targetGroup:IsSameGroup(targetID, targetLifetime) then return end
         targetGroup.restoreData = nil
         targetGroup:RestorePinState(ungroupedData)
