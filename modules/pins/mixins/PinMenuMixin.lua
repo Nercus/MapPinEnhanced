@@ -121,10 +121,13 @@ end
 
 ---@return AnyMenuEntry[]
 function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
+    local pinID = self.pinID
+    local data = self:GetPinData()
+    local function IsCurrent() return Pins:GetPinByID(pinID) == self and self.initialized end
     local styleEntries = Pins:BuildPinStyleMenuEntries(self,
-        function() return self:GetPinData() end,
-        function(color) self:SetColor(color) end,
-        function(icon, usesAtlas) self:SetIcon(icon, usesAtlas) end)
+        function() return IsCurrent() and self:GetPinData() or data end,
+        function(color) if IsCurrent() then self:SetColor(color) end end,
+        function(icon, usesAtlas) if IsCurrent() then self:SetIcon(icon, usesAtlas) end end)
     local title = self.pinData.title or L["Map Pin"]
     local entries = {
         {
@@ -134,7 +137,7 @@ function MapPinEnhancedPinMenuMixin:BuildPinMenuEntries()
                 label = title,
                 icon = "edit",
                 onClick = function()
-                    MapPinEnhanced:ShowRenamePinDialog(self)
+                    Pins:ShowRenameDialog(self)
                 end,
             },
         },
@@ -190,4 +193,13 @@ end
 function MapPinEnhancedPinMenuMixin:ShowMenu(parent)
     local menu = self:BuildPinMenuEntries()
     MapPinEnhanced:GenerateMenu(parent, menu)
+end
+
+---@param pin MapPinEnhancedPinMixin
+function Pins:ShowRenameDialog(pin)
+    local pinID = pin.pinID
+    MapPinEnhanced:ShowTextInputDialog(L["Rename Pin"], pin:GetPinData().title or "", 64, function(title)
+        local current = self:GetPinByID(pinID)
+        if current then current:SetTitle(title ~= "" and title or L["Map Pin"]) end
+    end)
 end

@@ -365,3 +365,18 @@ MapPinEnhanced:OnLoad(function()
     Groups:RestoreAllGroups()
     Groups:CreateDefaultGroups()
 end)
+
+---@param group MapPinEnhancedGroupMixin
+function Groups:ShowRenameDialog(group)
+    local groupID, lifetime = group:GetGroupID(), group.lifetimeChangeNumber
+    local L = MapPinEnhanced.L
+    MapPinEnhanced:ShowTextInputDialog(L["Rename Group"], group:GetName(), 32, function(name)
+        if not group:IsSameGroup(groupID, lifetime) then return end
+        if name == "" then return true end
+        if name == group:GetName() then return end
+        if not group:SetName(name) then
+            MapPinEnhanced:Notify(string.format(L["A group named \"%s\" already exists."], name), "ERROR")
+            return true
+        end
+    end)
+end

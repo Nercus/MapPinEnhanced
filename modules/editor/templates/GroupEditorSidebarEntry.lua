@@ -52,6 +52,7 @@ end
 ---@return AnyMenuEntry[]
 function MapPinEnhancedGroupEditorSidebarEntryMixin:BuildMenu()
     local group = assert(self.group)
+    local groupID, lifetime = group:GetGroupID(), group.lifetimeChangeNumber
     local editor = assert(self.editor)
     local protected = group:IsProtected()
     local menu = {
@@ -81,6 +82,7 @@ function MapPinEnhancedGroupEditorSidebarEntryMixin:BuildMenu()
         label = MapPinEnhanced:Iconize("trash", protected and L["Clear Group"] or L["Delete Group"]),
         onClick = function()
             local function destroy()
+                if not group:IsSameGroup(groupID, lifetime) then return end
                 if protected then
                     group:ClearGroup()
                     editor:RequestRefresh()

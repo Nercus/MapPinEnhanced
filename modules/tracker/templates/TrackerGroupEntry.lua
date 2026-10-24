@@ -181,21 +181,21 @@ function MapPinEnhancedTrackerGroupEntryMixin:OnLeave()
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmDeleteGroup()
-    local groupID = self.group:GetGroupID()
+    local groupID, lifetime = self.group:GetGroupID(), self.group.lifetimeChangeNumber
     MapPinEnhanced:ShowConfirmDialog(L["Delete Group"],
         string.format(L["Delete group \"%s\" and all of its pins?"], self.group:GetName()), function()
             local group = Groups:GetGroupByID(groupID)
-            if group then Groups:DeleteGroup(group) end
+            if group and group:IsSameGroup(groupID, lifetime) then Groups:DeleteGroup(group) end
         end)
 end
 
 function MapPinEnhancedTrackerGroupEntryMixin:ConfirmClearGroup()
-    local groupID = self.group:GetGroupID()
+    local groupID, lifetime = self.group:GetGroupID(), self.group.lifetimeChangeNumber
     MapPinEnhanced:ShowConfirmDialog(L["Clear Group"],
         string.format(L["Clear all pins from \"%s\"?"], self.group:GetName()),
         function()
             local group = Groups:GetGroupByID(groupID)
-            if group then group:ClearGroup() end
+            if group and group:IsSameGroup(groupID, lifetime) then group:ClearGroup() end
         end)
 end
 
@@ -229,7 +229,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
             type = "button",
             label = MapPinEnhanced:Iconize("plus", L["Add to New Group"]),
             onClick = function()
-                MapPinEnhanced:ShowRenameGroupDialog(group)
+                Groups:ShowRenameDialog(group)
             end
         })
     else
@@ -240,7 +240,7 @@ function MapPinEnhancedTrackerGroupEntryMixin:AddRenameMenuHeader(menu)
                 label = group:GetName(),
                 icon = "edit",
                 onClick = function()
-                    MapPinEnhanced:ShowRenameGroupDialog(group)
+                    Groups:ShowRenameDialog(group)
                 end,
             },
         })

@@ -49,11 +49,10 @@ local MapPinEnhanced = select(2, ...)
 ---@field onCancel function?
 ---@field onHide function?
 
----@class RenamePinDialogData
----@field pin MapPinEnhancedPinMixin
-
----@class RenameGroupDialogData
----@field group MapPinEnhancedGroupMixin
+---@class TextInputDialogData
+---@field value string
+---@field maxLetters number
+---@field onAccept fun(value: string): boolean? true keeps the dialog open
 
 ---@type table<string, MapPinEnhancedStaticDialogDefinition>
 local StaticDialogDefinitions = StaticPopupDialogs
@@ -71,8 +70,7 @@ local L = MapPinEnhanced.L
 
 local DIALOG_PREFIX = MapPinEnhanced.name .. "_DIALOG_"
 local CONFIRM_DIALOG_NAME = DIALOG_PREFIX .. "CONFIRM"
-local RENAME_PIN_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_PIN"
-local RENAME_GROUP_DIALOG_NAME = DIALOG_PREFIX .. "RENAME_GROUP"
+local TEXT_INPUT_DIALOG_NAME = DIALOG_PREFIX .. "TEXT_INPUT"
 local ABOUT_DIALOG_NAME = DIALOG_PREFIX .. "ABOUT"
 local COPY_TEXT_DIALOG_NAME = DIALOG_PREFIX .. "COPY_TEXT"
 local ADDON_CONFLICTS_DIALOG_NAME = DIALOG_PREFIX .. "ADDON_CONFLICTS"
@@ -153,15 +151,6 @@ local function ClickStaticDialogButtonForEditBox(editBox, buttonIndex)
     ClickStaticDialogButton(dialog, button:GetID())
 end
 
----@param pin MapPinEnhancedPinMixin?
----@return string
-local function GetPinTitle(pin)
-    if not pin then return "" end
-
-    local pinData = pin:GetPinData()
-    return pinData.title or ""
-end
-
 RegisterStaticDialog(CONFIRM_DIALOG_NAME, {
     text = "",
     button1 = L["Confirm"],
@@ -187,36 +176,26 @@ RegisterStaticDialog(CONFIRM_DIALOG_NAME, {
     end,
 })
 
-RegisterStaticDialog(RENAME_PIN_DIALOG_NAME, {
+RegisterStaticDialog(TEXT_INPUT_DIALOG_NAME, {
     text = "",
     button1 = L["Save"],
     button2 = L["Cancel"],
     hasEditBox = true,
     editBoxWidth = 320,
     OnShow = function(self, data)
-        ---@cast self MapPinEnhancedStaticDialogFrame
-        ---@cast data RenamePinDialogData
+        ---@cast data TextInputDialogData
         local editBox = GetStaticDialogEditBox(self)
-        if not editBox then return end
-
+        if not editBox or not data then return end
         editBox:SetNumeric(false)
-        editBox:SetMaxLetters(64)
-        editBox:SetText(GetPinTitle(data and data.pin))
+        editBox:SetMaxLetters(data.maxLetters)
+        editBox:SetText(data.value)
         editBox:SetFocus()
         editBox:HighlightText()
     end,
     OnAccept = function(self, data)
-        ---@cast self MapPinEnhancedStaticDialogFrame
-        ---@cast data RenamePinDialogData
-        if not data or not data.pin then return end
-
+        ---@cast data TextInputDialogData
         local editBox = GetStaticDialogEditBox(self)
-        local title = strtrim(editBox and editBox:GetText() or "")
-        if title == "" then
-            title = L["Map Pin"]
-        end
-
-        data.pin:SetTitle(title)
+        if data and editBox then return data.onAccept(strtrim(editBox:GetText())) end
     end,
     EditBoxOnEnterPressed = function(editBox)
         ClickStaticDialogButtonForEditBox(editBox, 1)
@@ -225,64 +204,8 @@ RegisterStaticDialog(RENAME_PIN_DIALOG_NAME, {
         ClickStaticDialogButtonForEditBox(editBox, 2)
     end,
     OnHide = function(self)
-        ---@cast self MapPinEnhancedStaticDialogFrame
         local editBox = GetStaticDialogEditBox(self)
-        if editBox then
-            editBox:ClearFocus()
-        end
-    end,
-})
-
-RegisterStaticDialog(RENAME_GROUP_DIALOG_NAME, {
-    text = "",
-    button1 = L["Save"],
-    button2 = L["Cancel"],
-    hasEditBox = true,
-    editBoxWidth = 320,
-    OnShow = function(self, data)
-        ---@cast self MapPinEnhancedStaticDialogFrame
-        ---@cast data RenameGroupDialogData
-        local editBox = GetStaticDialogEditBox(self)
-        if not editBox then return end
-
-        editBox:SetNumeric(false)
-        editBox:SetMaxLetters(32)
-        editBox:SetText(data and data.group and data.group:GetName() or "")
-        editBox:SetFocus()
-        editBox:HighlightText()
-    end,
-    OnAccept = function(self, data)
-        ---@cast self MapPinEnhancedStaticDialogFrame
-        ---@cast data RenameGroupDialogData
-        if not data or not data.group then return end
-
-        local editBox = GetStaticDialogEditBox(self)
-        local groupName = strtrim(editBox and editBox:GetText() or "")
-        if groupName == "" then
-            return true
-        end
-
-        if groupName == data.group:GetName() then
-            return
-        end
-
-        if not data.group:SetName(groupName) then
-            MapPinEnhanced:Notify(string.format(L["A group named \"%s\" already exists."], groupName), "ERROR")
-            return true
-        end
-    end,
-    EditBoxOnEnterPressed = function(editBox)
-        ClickStaticDialogButtonForEditBox(editBox, 1)
-    end,
-    EditBoxOnEscapePressed = function(editBox)
-        ClickStaticDialogButtonForEditBox(editBox, 2)
-    end,
-    OnHide = function(self)
-        ---@cast self MapPinEnhancedStaticDialogFrame
-        local editBox = GetStaticDialogEditBox(self)
-        if editBox then
-            editBox:ClearFocus()
-        end
+        if editBox then editBox:ClearFocus() end
     end,
 })
 
@@ -350,18 +273,14 @@ function MapPinEnhanced:ShowAddonConflictsDialog(addonNames)
     return ShowStaticDialog(ADDON_CONFLICTS_DIALOG_NAME, BuildDialogText(L["Addon conflicts"], message))
 end
 
----@param pin MapPinEnhancedPinMixin
+---@param title string
+---@param value string
+---@param maxLetters number
+---@param onAccept fun(value: string): boolean? true keeps the dialog open
 ---@return MapPinEnhancedStaticDialogFrame?
-function MapPinEnhanced:ShowRenamePinDialog(pin)
-    assert(pin, "MapPinEnhanced:ShowRenamePinDialog: pin is nil")
-    return ShowStaticDialog(RENAME_PIN_DIALOG_NAME, L["Rename Pin"], { pin = pin })
-end
-
----@param group MapPinEnhancedGroupMixin
----@return MapPinEnhancedStaticDialogFrame?
-function MapPinEnhanced:ShowRenameGroupDialog(group)
-    assert(group, "MapPinEnhanced:ShowRenameGroupDialog: group is nil")
-    return ShowStaticDialog(RENAME_GROUP_DIALOG_NAME, L["Rename Group"], { group = group })
+function MapPinEnhanced:ShowTextInputDialog(title, value, maxLetters, onAccept)
+    return ShowStaticDialog(TEXT_INPUT_DIALOG_NAME, title,
+        { value = value, maxLetters = maxLetters, onAccept = onAccept })
 end
 
 local MPHLogoSequence = "|T" .. MapPinEnhanced.assetsPath .. "\\LogoTransparent.png" .. ":64:64|t"

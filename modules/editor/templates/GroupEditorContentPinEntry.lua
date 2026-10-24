@@ -168,21 +168,34 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:RefreshPreview()
     self.pinFrame:SetLock(pinData.lock)
 end
 
-function MapPinEnhancedGroupEditorContentPinEntryMixin:SetColor(color)
-    self.pinNode.group:SetPinColor(self.pinNode.pinID, color)
-    self:RefreshPreview()
-end
-
-function MapPinEnhancedGroupEditorContentPinEntryMixin:SetIcon(icon)
-    self.pinNode.group:SetPinIcon(self.pinNode.pinID, icon.path, icon.usesAtlas)
-    self:RefreshPreview()
-end
-
 function MapPinEnhancedGroupEditorContentPinEntryMixin:ShowStyleMenu()
-    local menu = Pins:BuildPinStyleMenuEntries(self.pinNode,
-        function() return Editor:GetPinData(self.pinNode) end,
-        function(color) self:SetColor(color) end,
-        function(icon, usesAtlas) self:SetIcon({ path = icon, usesAtlas = usesAtlas }) end)
+    local node = assert(self.pinNode)
+    local group, pinID = node.group, node.pinID
+    local groupID, lifetime = group:GetGroupID(), group.lifetimeChangeNumber
+    local data = Editor:GetPinData(node)
+    local function IsCurrent()
+        return group:IsSameGroup(groupID, lifetime) and
+            (group:GetPinByID(pinID) ~= nil or group:GetArchivedPinByID(pinID) ~= nil)
+    end
+    -- The picker outlives recycled rows. Mutate the captured identity and only
+    -- refresh this row if it is still presenting that same node.
+    local menu = Pins:BuildPinStyleMenuEntries(node,
+        function()
+            if not IsCurrent() then return data end
+            local pin = group:GetPinByID(pinID)
+            local archived = not pin and group:GetArchivedPinByID(pinID)
+            return pin and pin:GetPinData() or archived and archived.data or data
+        end,
+        function(color)
+            if not IsCurrent() then return end
+            group:SetPinColor(pinID, color)
+            if self.pinNode == node then self:RefreshPreview() end
+        end,
+        function(icon, usesAtlas)
+            if not IsCurrent() then return end
+            group:SetPinIcon(pinID, icon, usesAtlas)
+            if self.pinNode == node then self:RefreshPreview() end
+        end)
     MapPinEnhanced:GenerateMenu(self.pinFrame, menu)
 end
 
@@ -304,8 +317,11 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:Init(pinNode, editor)
     self.duplicateButton:SetScript("OnClick", function()
         if pinNode.group:DuplicatePin(pinNode.pinID) then editor:RequestRefresh() end
     end)
+    local groupID, lifetime = pinNode.group:GetGroupID(), pinNode.group.lifetimeChangeNumber
     self.deleteButton:SetScript("OnClick", function()
-        local function remove() pinNode.group:RemovePin(pinNode.pinID) end
+        local function remove()
+            if pinNode.group:IsSameGroup(groupID, lifetime) then pinNode.group:RemovePin(pinNode.pinID) end
+        end
         if IsShiftKeyDown() then
             remove()
         else

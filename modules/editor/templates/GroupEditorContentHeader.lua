@@ -63,6 +63,7 @@ end
 
 function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
     local group = assert(self.group)
+    local groupID, lifetime = group:GetGroupID(), group.lifetimeChangeNumber
     local editor = assert(self.editor)
     local entries = {}
     for _, groupIcon in ipairs(Groups.GROUP_ICON_MENU_ICONS) do
@@ -75,8 +76,9 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
                 icon = icon,
                 isSelected = function() return group:GetIcon() == icon.path end,
                 onClick = function()
+                    if not group:IsSameGroup(groupID, lifetime) then return end
                     group:SetIcon(icon.path)
-                    self.iconButton.iconTexture:SetTexture(icon.path)
+                    if self.group == group then self.iconButton.iconTexture:SetTexture(icon.path) end
                     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
                     editor.groupEditorSidebar:Refresh()
                 end,
@@ -92,8 +94,9 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:ShowIconMenu()
         label = "",
         onClick = function()
             MapPinEnhanced:ShowIconPicker(group:GetIcon(), function(path)
+                if not group:IsSameGroup(groupID, lifetime) then return end
                 group:SetIcon(path)
-                self.iconButton.iconTexture:SetTexture(path)
+                if self.group == group then self.iconButton.iconTexture:SetTexture(path) end
                 MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, group)
                 editor.groupEditorSidebar:Refresh()
             end)
@@ -192,14 +195,16 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
         { L["Left Click"],         protected and L["Clear Group"] or L["Delete Group"] },
         { L["Shift + Left Click"], protected and L["Clear without confirmation"] or L["Delete without confirmation"] },
     }
+    local groupID, lifetime = group:GetGroupID(), group.lifetimeChangeNumber
     self.deleteButton:SetScript("OnClick", function()
         local function destroy()
+            if not group:IsSameGroup(groupID, lifetime) then return end
             if protected then
                 group:ClearGroup()
                 editor:RequestRefresh()
             else
                 Groups:DeleteGroup(group)
-                editor:SelectGroup(nil)
+                if editor.selectedGroup == group then editor:SelectGroup(nil) end
             end
         end
         if IsShiftKeyDown() then
