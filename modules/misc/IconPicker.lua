@@ -12,9 +12,7 @@ local L = MapPinEnhanced.L
 ---@field pathSearch string
 
 local COLUMN_COUNT = 8
-local CELL_SIZE = 42
-local CELL_SPACING = 4
-local ROW_HEIGHT = CELL_SIZE + CELL_SPACING
+local ROW_HEIGHT = 46
 local SEARCH_DEBOUNCE_SECONDS = 0.15
 local DOUBLE_CLICK_SECONDS = 0.35
 ---@type MapPinEnhancedIconPickerWindowTemplate?
@@ -22,20 +20,33 @@ local iconPickerWindow
 
 ---@class MapPinEnhancedIconPickerRowTemplate : Frame
 ---@field buttons MapPinEnhancedIconPickerButton[]
+---@field button1 MapPinEnhancedIconPickerButton
+---@field button2 MapPinEnhancedIconPickerButton
+---@field button3 MapPinEnhancedIconPickerButton
+---@field button4 MapPinEnhancedIconPickerButton
+---@field button5 MapPinEnhancedIconPickerButton
+---@field button6 MapPinEnhancedIconPickerButton
+---@field button7 MapPinEnhancedIconPickerButton
+---@field button8 MapPinEnhancedIconPickerButton
 MapPinEnhancedIconPickerRowMixin = {}
 
----@class MapPinEnhancedIconPickerButton : Button
+---@class MapPinEnhancedIconPickerButton : Button, MapPinEnhancedIconPickerButtonMixin
 ---@field icon Texture
 ---@field selected Texture
 ---@field iconData MapPinEnhancedIconPickerEntry?
 ---@field lastClickIcon MapPinEnhancedIconPickerEntry?
 ---@field lastClickTime number?
 
----@param button MapPinEnhancedIconPickerButton
-local function SetTooltip(button)
-    local icon = button.iconData
+---@class MapPinEnhancedIconPickerButtonMixin : Button
+---@field iconData MapPinEnhancedIconPickerEntry?
+---@field lastClickIcon MapPinEnhancedIconPickerEntry?
+---@field lastClickTime number?
+MapPinEnhancedIconPickerButtonMixin = {}
+
+function MapPinEnhancedIconPickerButtonMixin:OnEnter()
+    local icon = self.iconData
     if not icon then return end
-    GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
     GameTooltip:AddLine(icon.name)
     if tostring(icon.path) ~= icon.name then
         GameTooltip:AddLine(tostring(icon.path), 0.65, 0.65, 0.65, true)
@@ -43,42 +54,25 @@ local function SetTooltip(button)
     GameTooltip:Show()
 end
 
-function MapPinEnhancedIconPickerRowMixin:OnLoad()
-    ---@type MapPinEnhancedIconPickerButton[]
-    self.buttons = {}
-    for column = 1, COLUMN_COUNT do
-        ---@type MapPinEnhancedIconPickerButton
-        local button = CreateFrame("Button", nil, self)
-        button:SetSize(CELL_SIZE, CELL_SIZE)
-        button:SetPoint("LEFT", (column - 1) * (CELL_SIZE + CELL_SPACING), 0)
+function MapPinEnhancedIconPickerButtonMixin:OnLeave()
+    if GameTooltip:IsOwned(self) then GameTooltip:Hide() end
+end
 
-        button.icon = button:CreateTexture(nil, "ARTWORK")
-        button.icon:SetPoint("TOPLEFT", 2, -2)
-        button.icon:SetPoint("BOTTOMRIGHT", -2, 2)
-
-        button.selected = button:CreateTexture(nil, "OVERLAY")
-        button.selected:SetAtlas("UI-HUD-ActionBar-IconFrame-Mouseover")
-        button.selected:SetAllPoints()
-        button.selected:Hide()
-
-        button:SetHighlightAtlas("UI-HUD-ActionBar-IconFrame-Mouseover")
-        button:SetScript("OnEnter", SetTooltip)
-        button:SetScript("OnLeave", function() GameTooltip:Hide() end)
-        button:SetScript("OnClick", function(clicked)
-            ---@cast clicked MapPinEnhancedIconPickerButton
-            if not clicked.iconData then return end
-            local window = assert(iconPickerWindow, "Icon picker window is not loaded")
-            window:Select(clicked.iconData)
-            local now = GetTime()
-            if clicked.lastClickIcon == clicked.iconData and
-                now - (clicked.lastClickTime or 0) <= DOUBLE_CLICK_SECONDS then
-                window:Confirm()
-            end
-            clicked.lastClickIcon = clicked.iconData
-            clicked.lastClickTime = now
-        end)
-        self.buttons[column] = button
+function MapPinEnhancedIconPickerButtonMixin:OnClick()
+    if not self.iconData then return end
+    local window = assert(iconPickerWindow, "Icon picker window is not loaded")
+    window:Select(self.iconData)
+    local now = GetTime()
+    if self.lastClickIcon == self.iconData and now - (self.lastClickTime or 0) <= DOUBLE_CLICK_SECONDS then
+        window:Confirm()
     end
+    self.lastClickIcon = self.iconData
+    self.lastClickTime = now
+end
+
+function MapPinEnhancedIconPickerRowMixin:OnLoad()
+    self.buttons = { self.button1, self.button2, self.button3, self.button4,
+        self.button5, self.button6, self.button7, self.button8 }
 end
 
 ---@param rowIndex number

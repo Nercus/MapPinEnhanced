@@ -2,8 +2,58 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
     <Script file="IconPicker.lua" />
 
+    <Button name="MapPinEnhancedIconPickerButtonTemplate" mixin="MapPinEnhancedIconPickerButtonMixin" virtual="true">
+        <Size x="42" y="42" />
+        <Layers>
+            <Layer level="ARTWORK">
+                <Texture parentKey="icon">
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2" y="-2" />
+                        <Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="selected" atlas="UI-HUD-ActionBar-IconFrame-Mouseover" setAllPoints="true" hidden="true" />
+            </Layer>
+        </Layers>
+        <HighlightTexture atlas="UI-HUD-ActionBar-IconFrame-Mouseover" setAllPoints="true" />
+        <Scripts>
+            <OnEnter method="OnEnter" />
+            <OnLeave method="OnLeave" />
+            <OnHide method="OnLeave" />
+            <OnClick method="OnClick" />
+        </Scripts>
+    </Button>
+
     <Frame name="MapPinEnhancedIconPickerRowTemplate" mixin="MapPinEnhancedIconPickerRowMixin" virtual="true">
         <Size x="364" y="46" />
+        <Frames>
+            <Button parentKey="button1" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" /></Anchors>
+            </Button>
+            <Button parentKey="button2" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button1" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button3" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button2" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button4" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button3" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button5" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button4" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button6" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button5" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button7" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button6" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+            <Button parentKey="button8" inherits="MapPinEnhancedIconPickerButtonTemplate">
+                <Anchors><Anchor point="LEFT" relativeKey="$parent.button7" relativePoint="RIGHT" x="4" /></Anchors>
+            </Button>
+        </Frames>
         <Scripts>
             <OnLoad method="OnLoad" />
         </Scripts>
