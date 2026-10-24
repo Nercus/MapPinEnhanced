@@ -120,7 +120,8 @@ end
 ---@param editor MapPinEnhancedGroupEditorTemplate
 ---@param focusName boolean?
 function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, focusName)
-    self:Reset()
+    local groupChanged = self.group ~= group
+    if groupChanged then self:Reset() end
     self.group, self.editor = group, editor
     local protected = group:IsProtected()
     self.iconButton.iconTexture:SetTexture(group:GetIcon())
@@ -169,7 +170,10 @@ function MapPinEnhancedGroupEditorContentHeaderMixin:SetGroup(group, editor, foc
     dropdown:SetEnabled(not protected)
 
     self.restorableField:SetShown(not protected)
-    self.restorableField.child:SetValue(group:IsRestorable(), false, true)
+    -- GROUP_UPDATED refreshes the same header before the click animation finishes.
+    if groupChanged or self.restorableField.child:GetChecked() ~= group:IsRestorable() then
+        self.restorableField.child:SetValue(group:IsRestorable(), false, groupChanged)
+    end
     self.restorableField.child:SetScript("OnClick", function()
         if self.group ~= group or protected then return end
         group:SetRestorable(not group:IsRestorable())
