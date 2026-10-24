@@ -212,7 +212,9 @@ function MapPinEnhancedGroupEditorContentPinEntryMixin:ApplyPosition()
         return false
     end
     if not x or not y then return false end
-    node.group:SetPinPosition(node.pinID, mapID, x, y)
+    if not node.group:SetPinPosition(node.pinID, mapID, x, y) then return false end
+    local applied = Editor:GetPinData(node)
+    mapID, x, y = applied.mapID, applied.x, applied.y
     self.mapField.child.appliedText = GetMapDisplay(mapID)
     self.mapField.child.appliedMapID = mapID
     self.xField.child.appliedText, self.yField.child.appliedText =

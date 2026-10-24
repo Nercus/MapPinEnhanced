@@ -70,15 +70,16 @@ end
 ---@param y number
 ---@return boolean
 function MapPinEnhancedGroupPinEditingMixin:SetPinPosition(pinID, mapID, x, y)
-    if not self:CancelBatch() then return false end
     assert(type(mapID) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: mapID must be a number")
     assert(type(x) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: x must be a number")
     assert(type(y) == "number", "MapPinEnhancedGroupMixin:SetPinPosition: y must be a number")
-    x, y = Pins:ConvertPercentCoordinate(x), Pins:ConvertPercentCoordinate(y)
+    local resolvedMapID, resolvedX, resolvedY = Pins:ResolvePinPosition(mapID, x, y)
+    if not resolvedMapID then return false end
+    if not self:CancelBatch() then return false end
+    mapID, x, y = resolvedMapID, resolvedX, resolvedY
     local pin = self:GetPinByID(pinID)
     if pin then
-        pin:SetPinPosition(mapID, x, y)
-        return true
+        return pin:SetPinPosition(mapID, x, y)
     end
     return UpdateArchived(self, pinID, function(data)
         data.mapID, data.x, data.y = mapID, x, y

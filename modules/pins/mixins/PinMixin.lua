@@ -140,8 +140,9 @@ end
 ---@param mapID number
 ---@param x number
 ---@param y number
+---@return boolean applied
 function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
-    if not self:CanApplyChanges() then return end
+    if not self:CanApplyChanges() then return false end
     assert(mapID, "MapPinEnhancedPinMixin:SetPinPosition: mapID is nil")
     assert(type(mapID) == "number", "MapPinEnhancedPinMixin:SetPinPosition: mapID must be a number")
     assert(x, "MapPinEnhancedPinMixin:SetPinPosition: x is nil")
@@ -150,10 +151,10 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     assert(type(y) == "number", "MapPinEnhancedPinMixin:SetPinPosition: y must be a number")
 
     local resolvedMapID, resolvedX, resolvedY = Pins:ResolvePinPosition(mapID, x, y)
-    if not resolvedMapID then return end
+    if not resolvedMapID then return false end
     mapID, x, y = resolvedMapID, resolvedX, resolvedY
 
-    if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return end
+    if mapID == self.pinData.mapID and x == self.pinData.x and y == self.pinData.y then return true end
 
     local wasTracked = self:IsTracked()
     if wasTracked then
@@ -169,11 +170,14 @@ function MapPinEnhancedPinMixin:SetPinPosition(mapID, x, y)
     HBDP:RemoveWorldMapIcon(MapPinEnhanced, self.worldmapPin)
 
     self:SetPinData(self.pinData, true)
+    if not self.initialized then return false end
     if self.group then
         self.group:TouchOrder()
     end
     self:PersistPin()
+    MapPinEnhanced:FireCallback("PIN_UPDATED_POSITION", self.pinID)
     MapPinEnhanced:FireCallback("GROUP_UPDATED", nil, self.group)
+    return true
 end
 
 function MapPinEnhancedPinMixin:GetPinData()

@@ -124,6 +124,19 @@ local function onPinColorUpdated() UpdateTrackedPinTarget() end
 local function onPinIconUpdated() UpdateTrackedPinTarget() end
 local function onPinLockUpdated() UpdateTrackedPinTarget() end
 
+local function onPinPositionUpdated()
+    if not trackedPinID or not trackedTargetChangeNumber or
+        not Navigation:IsDestinationActive(TARGET_OWNER, trackedPinID, trackedTargetChangeNumber) then return end
+    local pin = Pins:GetPinByID(trackedPinID)
+    if not pin or not pin:IsTracked() or C_SuperTrack.IsSuperTrackingCorpse() then return end
+    -- Discard the old Step's saved waypoint before installing the new source.
+    -- Corpse interruption restores from current pin data through its own owner.
+    Wayfinders:ClearStepSuperTracking(false)
+    ClearTrackedPinUserWaypoint()
+    SetTrackedPinUserWaypoint(Providers:GetAddonPinWayfinderData(pin:GetPinData()))
+    UpdateTrackedPinTarget()
+end
+
 local function ClearPinCallbacks()
     if unsubscribePinCallbacks then
         unsubscribePinCallbacks()
@@ -147,6 +160,7 @@ local function SetupPinCallbacks(pinID)
         PIN_UPDATED_COLOR = onPinColorUpdated,
         PIN_UPDATED_ICON = onPinIconUpdated,
         PIN_UPDATED_LOCK = onPinLockUpdated,
+        PIN_UPDATED_POSITION = onPinPositionUpdated,
     })
     boundPinID = pinID
 end

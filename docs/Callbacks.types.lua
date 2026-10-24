@@ -8,6 +8,7 @@
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", func: fun(eventname: string, texture: string, usesAtlas: boolean), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", func: fun(eventname: string, color: PinColor), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", func: fun(eventname: string, lock: boolean), key: string)
+---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_POSITION", func: fun(eventname: string), key: string)
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pinID: UUID))
 ---@field RegisterCallback fun(self: MapPinEnhanced, event: "PIN_CLEARED", func: fun(eventname: string, group: MapPinEnhancedGroupMixin, pinID: UUID, savedData: SaveablePinData))
@@ -24,6 +25,7 @@ MapPinEnhanced = {}
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", key: string, texture: string, usesAtlas: boolean)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", key: string, color: PinColor)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", key: string, lock: boolean)
+---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_POSITION", key: string)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_ADDED", key: nil, group: MapPinEnhancedGroupMixin, pin: MapPinEnhancedPinMixin)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_REMOVED", key: nil, group: MapPinEnhancedGroupMixin, pinID: UUID)
 ---@field FireCallback fun(self: MapPinEnhanced, event: "PIN_CLEARED", key: nil, group: MapPinEnhancedGroupMixin, pinID: UUID, savedData: SaveablePinData)
@@ -39,4 +41,5 @@ MapPinEnhanced = {}
 ---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_ICON", func: fun(eventname: string, texture: string, usesAtlas: boolean), key: string)
 ---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_COLOR", func: fun(eventname: string, color: PinColor), key: string)
 ---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_LOCK", func: fun(eventname: string, lock: boolean), key: string)
+---@field UnregisterCallback fun(self: MapPinEnhanced, event: "PIN_UPDATED_POSITION", func: fun(eventname: string), key: string)
 MapPinEnhanced = {}
